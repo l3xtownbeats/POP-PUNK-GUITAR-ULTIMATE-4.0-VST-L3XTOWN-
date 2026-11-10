@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "GRAPHITE / BLACK LABEL",
+  "background": "ff0c0d0f",
+  "panel": "ff202328",
+  "panel2": "ff15171b",
+  "accent": "ffd8dbe2",
+  "text": "fff5f6f8",
+  "muted": "ffa4a8b1"
+}
