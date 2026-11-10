@@ -119,3 +119,14 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Внесены явные преобразования координат к `float` и переименование локальной переменной в `hostPlayHead`.
 - Это малые quality fixes, не закрывающие функциональные критерии M1–M3.
 - Свежая Windows Release build/CTest после этих изменений ещё не подтверждена; статус FIXED IN SOURCE / AWAITING CI.
+
+
+## 11 ноября 2026 — AutoChords и SOUND BANK: журнал продолжения
+
+- Source commits на ветке release/skin-packs-10: 0118bc431015ed13edaf4ff9f051b96bbf2b7fa9, 4af7856831c34be21da93d6740033e20329822cf, e43dd54a77ab12ccdc192c81df217bfa27da03e2.
+- AutoChords добавлен для PATTERN: выключатель, root C–B, Major/Minor; при включении одна удерживаемая клавиша преобразуется в трезвучие. MELODY остаётся прямым хроматическим режимом. Проверка CI/CTest и FL Studio 20 ещё не подтверждена.
+- Важные тесты: state restore; переключение ON/OFF; 12 корней × 2 типа; MIDI min/max; held-note reconfiguration; multi-note passthrough; MELODY isolation.
+- SOUND BANK: зафиксировано расширение библиотеки только проверенными по лицензии материалами. Не добавлять файлы без разрешения на commercial use + modification + embedding + redistribution. Вести SHA-256 и per-file provenance/attribution. CC0 кандидаты Meta Open Sound и FreePats требуют проверки конкретных архивов; SFZ Instruments, Stargate и Freesound требуют индивидуального аудита.
+- Архитектурные требования: unlimited bank registration subject to storage/system constraints, background indexing/loading, streaming/page cache, bounded voices/RAM, zero disk I/O/allocations/locks in audio callback. User-import libraries не смешивать с factory-distributable assets.
+- Версия 4.0 остаётся неприкосновенной; изменения 5.0 не заменяют её.
+- Next: проверить Windows CI run 42895504613; затем добавить AutoChords regression tests; провести sourcing audit и только потом добавлять approved sound files. M2 streaming integration и DAW acceptance остаются отдельными открытыми задачами.
