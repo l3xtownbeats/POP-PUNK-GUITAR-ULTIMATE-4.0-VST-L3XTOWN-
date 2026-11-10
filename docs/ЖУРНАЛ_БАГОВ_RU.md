@@ -148,3 +148,21 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
 - Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.
+
+
+## 11 ноября 2026 — UI / Preset Browser / Sounds Bank: требования и аудит реализации
+
+- Зафиксированы пользовательские решения PPGU 5.0: два утверждённых изображения являются единственной визуальной основой оболочки; сохранить их композицию/характер при адаптации под функции. Требуется 10 сменных тем в SKIN/Skin_01…Skin_10, единая кнопка SKINS и сохранение выбора; artwork MELODY/PATTERN хранить отдельно. Тема должна применяться также к FX Studio.
+- Главный UI target: единый PRESET BROWSER (MELODY/PATTERN/FAVORITES/USER), независимые SOUND CHARACTER и PLAYING STYLE в MELODY, base preset + совместимый performance-only Style Overlay в PATTERN; отдельные FX Studio, Bank Sounds и MIDI Piano Roll; 8 pattern quick slots; AMP & TONE, PLAYBACK, keyboard/chord/active-note feedback, CPU/RAM/voices/MIDI и Master Volume.
+- Bank Sounds target: Original + optimized Cache; категории/фильтры WAV/AIFF/FLAC/OGG/SFZ; сохранение SFZ mapping и relative paths; preview, metadata, import files/folders/ZIP/SFZ, duplicate detection, rescan, missing-file repair, import report. Factory bank read-only; user bank отдельно.
+- Аудит Source/PluginEditor.h рабочей ветки выявил только частичную UI основу: LOAD SFZ, MELODY/PATTERN, preset/category/search, 9 knobs и 7 FX toggles, keyboard component. Полная согласованная оболочка и theme packs в этой ветке не подтверждены.
+- Это запись требований/разрыва реализации, а не заявление о готовом GUI. Требуется отдельный UI acceptance checklist и подтверждение изображений/ресурсов в рабочей ветке.
+- Статус: DOCUMENTED / IMPLEMENTATION UNVERIFIED. Сборка и GUI host test в этом цикле не выполнялись.
+
+## 11 ноября 2026 — архитектурные риски M2/M3, повторная фиксация
+
+- M2 остаётся открытой: streaming/page-cache primitives существуют отдельно, но voice playback path использует RegionView::audio/full decoded buffers; до интеграции bounded page leases и реальных rendered-signal tests нельзя считать streaming реализованным.
+- M2 дополнительно требует runtime velocity crossfade, round-robin, palm-mute/articulation routing, safe library unload/reload и stress/concurrency/memory tests. Palm mute должен выбирать настоящую muted articulation/layer при наличии; снижение громкости не считается заменой.
+- M3 остаётся открытой: несколько смен аккорда в одном аудиоблоке могут схлопываться в один final snapshot; массив на 512 событий нуждается в явном overflow accounting/fail-safe. Нужны processor-level tests и проверки отсутствия stuck notes.
+- M3 fractional offset fix ранее отмечен как CI SUCCESS для конкретного commit/run; не переносить этот статус на новые изменения без CI актуального HEAD.
+- Статус записей: OPEN / NOT ACCEPTED до доказательства тестами.
