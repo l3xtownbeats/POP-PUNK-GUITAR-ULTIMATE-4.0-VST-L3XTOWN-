@@ -25,6 +25,7 @@ public:
     struct Statistics
     {
         std::uint64_t requestsSubmitted = 0;
+        std::uint64_t requestsProcessed = 0;
         std::uint64_t queueOverflows = 0;
         std::uint64_t invalidRequests = 0;
         std::uint64_t cacheHits = 0;
@@ -47,7 +48,8 @@ public:
     void stop() noexcept;
 
     // Single audio-thread producer. This function never allocates, locks,
-    // waits, opens files, or decodes audio.
+    // waits, opens files, or decodes audio. The producer must be quiescent
+    // before stop() is called; stop drains requests already in the queue.
     [[nodiscard]] bool requestPage(PageKey key) noexcept;
     [[nodiscard]] bool tryAcquire(PageKey key, PageCacheSlots::ReadLease& lease) noexcept;
     void release(PageCacheSlots::ReadLease& lease) noexcept;
@@ -72,6 +74,7 @@ private:
     std::thread worker;
 
     std::atomic<std::uint64_t> requestsSubmitted { 0 };
+    std::atomic<std::uint64_t> requestsProcessed { 0 };
     std::atomic<std::uint64_t> queueOverflows { 0 };
     std::atomic<std::uint64_t> invalidRequests { 0 };
     std::atomic<std::uint64_t> cacheHits { 0 };
