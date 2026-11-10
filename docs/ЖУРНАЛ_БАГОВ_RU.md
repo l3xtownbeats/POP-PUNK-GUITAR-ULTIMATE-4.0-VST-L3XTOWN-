@@ -226,3 +226,21 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Regression: проверка вычисленных checksum, manifest metadata и NCW unsupported warning в SampleLibraryImporterTests.
 - Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI.
 - Ограничения: ещё не реализованы UI для проверки целостности/repair, полное license inventory и тестовые аудиофайлы всех decoder formats.
+
+
+## IMP-003 — OPEN — Windows compile failure при добавлении SHA-256
+- **Дата:** 10.11.2026
+- **Milestone:** M1/M2, importer integrity metadata
+- **Commit:** `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
+- **Симптом:** MSVC C2039: `SHA256` не является членом `juce` в `Source/Sampler/SampleLibraryImporter.cpp` (строка 376); последующие ошибки C3861/C2737/C3536/C2088 являются каскадными.
+- **Доказательства:** Windows workflows 42868571549 и 42868571630 завершились FAILURE на compile step; CTest и pluginval не запускались.
+- **Предполагаемая причина:** выбран API `juce::SHA256`, которого нет в используемой конфигурации/версии JUCE 7.0.12 или он не включён соответствующим заголовком. Root cause нужно подтвердить проверкой JUCE API и include/target configuration.
+- **Исправление:** выбрать доступный переносимый SHA-256 API либо добавить самостоятельную проверенную реализацию; сохранить checksum source и converted WAV. Не отключать checksum и не удалять тесты.
+- **Regression acceptance:** известный SHA-256 test vector; одинаковый результат для source/converted bytes; Windows x64 Release build; полный CTest; затем pluginval strictness 5.
+- **Статус:** OPEN.
+
+## IMP-001 — статус проверки
+IMP-001 остаётся OPEN. В runs 42868571549 и 42868571630 сборка упала до CTest, поэтому ожидаемый результат importer test (3 imported / 2 mapped / 1 NEEDS MAPPING, Unknown_take.wav без выдуманного root key) не был перепроверен. Не закрывать до прохождения соответствующего regression test.
+
+## IMP-002 — статус реализации
+SHA-256 и аудиометаданные manifest добавлены в commit `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`, но Windows compile gate не пройден из-за IMP-003. Статус: IN PROGRESS / CI BLOCKED; не считать принятым.

@@ -1564,3 +1564,35 @@ CI: run 42855790840 на SHA e8f3baa завершился FAILURE: 11/12 tests p
 - Хеширование выполняется во время фонового импорта; аудиопоток не затрагивается.
 - Расширен regression test: проверяются присутствие и фактическое совпадение SHA-256 для source/converted sample, аудиометаданные manifest и предупреждение об отклонении NCW.
 - Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI. Проверка не закрывает поддержку реальных FLAC/OGG/MP3 fixture playback, Mapping Editor и license verification.
+
+
+## Обновление журнала — 10 ноября 2026
+
+### Подтверждённый порядок производства
+- M1–M5 — главная линия и максимальный приоритет.
+- M6–M10 — параллельно только небольшие, изолированные подготовительные задачи, не мешающие сборке и проверкам M1–M5.
+- M11–M13 — полноценный запуск после подтверждённого завершения M1–M5.
+- Связанные изменения, regression tests и документацию объединять в компактные пакеты.
+- Каждую обнаруженную ошибку регистрировать отдельным ID; после исправления фиксировать commit SHA, тесты и фактический результат CI.
+- Проверки не отключать, не ослаблять и не обходить ради ускорения.
+
+### Текущее состояние ветки
+Ветка: `fix/m1-m2-m3-release-gates`
+HEAD на момент записи: `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
+Последний пакет IMP-002 добавляет SHA-256 исходного и преобразованного sample в manifest, а также source format и аудиометаданные. Этот пакет пока НЕ принят: Windows CI на указанном HEAD завершился ошибкой компиляции до запуска CTest.
+
+### CI: фактический результат на HEAD
+- Workflow **POP PUNK GUITAR ULTIMATE - Windows VST3**, run [42868571549](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571549): **FAILURE** на шаге Build VST3 and test executables.
+- Workflow **PPGU v33 M1 + M2 Windows VST3**, run [42868571630](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571630): **FAILURE** на шаге Build Release VST3.
+- Оба запуска остановились на компиляции `Source/Sampler/SampleLibraryImporter.cpp`: MSVC сообщает `juce::SHA256` не является членом `juce` (C2039), затем связанные ошибки идентификатора/инициализации. Следовательно, CTest, VST3 bundle verification, pluginval и packaging в этих запусках были пропущены.
+- APVTS static audit в run 42868571630 прошёл: 91 уникальный статически объявленный ID, обязательные M1 controls присутствуют, 7 FX slots generated. Это не заменяет сборку.
+- Предыдущий run [42868018452](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868018452) отменён после нового push; это cancellation, не отдельная ошибка компиляции.
+- Последний успешный Windows baseline [42866520657](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42866520657) относится к более раннему commit `b6653ebd9ffe3a1b6e92ef42a85aec03775c9ab7`, поэтому не подтверждает HEAD `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`.
+
+### Баги и следующие действия
+- **IMP-001 — OPEN / NOT RE-VERIFIED:** несовпадение ожиданий теста импортера. Ожидаемое корректное поведение: 3 импортированных файла, 2 автоматически mapped, 1 NEEDS MAPPING; `Unknown_take.wav` не должен получать выдуманный root key. На HEAD 2a0f15b CTest не стартовал, поэтому IMP-001 нельзя закрыть.
+- **IMP-003 — OPEN:** Windows build break при вычислении SHA-256: используется недоступный в текущем JUCE build символ `juce::SHA256`. Требуется выбрать реально доступный и переносимый SHA-256 API/реализацию, добавить тесты checksum и повторить полный Windows Release build + CTest. Нельзя маскировать проблему отключением checksum или тестов.
+- IMP-002 остаётся **IN PROGRESS / CI BLOCKED** до исправления IMP-003 и прохождения regression tests.
+
+### Статус приёмки
+Ни M1, ни M2, ни M3, ни весь этап M1–M5 не объявляются завершёнными на основании этих запусков. После исправления требуется новый commit, полный Windows CI, CTest, pluginval strictness 5 и отдельная ручная проверка FL Studio 20 для host-visible поведения.

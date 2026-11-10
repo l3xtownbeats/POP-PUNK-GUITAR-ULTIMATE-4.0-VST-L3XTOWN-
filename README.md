@@ -256,3 +256,10 @@ ctest --test-dir build -C Release --output-on-failure
 ## Последняя работа: IMP-002 — SHA-256 и metadata manifest
 
 В importer добавлены source/converted SHA-256, source format, sample rate, channels, frames и duration в manifest. Regression test проверяет контрольные суммы и NCW warning. Реализация ожидает Windows CI; это не означает, что весь импортёр или все форматы приняты. Следующий приоритет основной линии — M1–M3, затем M4/M5 integration.
+
+
+## Производственный статус — 10.11.2026
+
+**Приоритет:** M1–M5 — основная линия; M6–M10 — только лёгкая подготовка параллельно; M11–M13 — после подтверждённой приёмки M1–M5. Связанные правки и regression tests объединяются в компактные пакеты. Проверки не отключаются ради скорости.
+
+**Последний HEAD:** `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`. Windows CI runs [42868571549](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571549) и [42868571630](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571630) завершились FAILURE на компиляции `SampleLibraryImporter.cpp`: недоступен символ `juce::SHA256`. CTest/pluginval/package в этих запусках не выполнялись. IMP-003 открыт; IMP-001 остаётся OPEN и не перепроверен, так как CTest не стартовал. Подробности и план исправления внесены в журналы ниже.

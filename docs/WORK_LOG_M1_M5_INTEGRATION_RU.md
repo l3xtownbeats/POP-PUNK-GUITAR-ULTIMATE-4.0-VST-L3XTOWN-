@@ -187,3 +187,12 @@ No secondary branch is merged yet. Unified integration requires current branch h
 - Хеширование выполняется во время фонового импорта; аудиопоток не затрагивается.
 - Расширен regression test: проверяются присутствие и фактическое совпадение SHA-256 для source/converted sample, аудиометаданные manifest и предупреждение об отклонении NCW.
 - Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI. Проверка не закрывает поддержку реальных FLAC/OGG/MP3 fixture playback, Mapping Editor и license verification.
+
+
+## 10.11.2026 — производственный порядок и CI-blocker IMP-003
+- Основная линия: M1–M5, без переключения приоритета на тяжёлые M6–M10 работы.
+- Параллельная работа M6–M10 ограничена лёгкими аудитами/подготовкой; M11–M13 ждут приёмки M1–M5.
+- Объединять связанные кодовые изменения, regression tests и журналы в компактные пакеты. Проверки не отключать.
+- HEAD `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`: оба Windows workflows 42868571549 и 42868571630 упали на compile step из-за `juce::SHA256` (C2039) в SampleLibraryImporter.cpp. CTest/pluginval/package пропущены.
+- IMP-003 открыт на исправление SHA-256 API. IMP-001 остаётся OPEN, так как тест импортера не запускался. IMP-002 не принят до зелёного Windows build и regression suite.
+- Следующий шаг: исправить IMP-003 без удаления checksum; добавить известный SHA-256 vector test; повторить Windows Release build + CTest. После успеха продолжить M1→M2→M3, затем M4/M5 и host acceptance в FL Studio 20.
