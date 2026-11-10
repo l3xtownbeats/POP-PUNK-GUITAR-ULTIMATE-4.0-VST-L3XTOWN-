@@ -20,7 +20,8 @@ private:
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "LOAD SFZ" };
-    juce::ComboBox presetBox, categoryBox;
+    juce::ComboBox presetBox, categoryBox, powerProfileBox;
+    juce::TextButton doubleTrackButton { "DOUBLE" };
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
     std::vector<FactoryPreset> factoryPresets;
@@ -40,7 +41,8 @@ private:
     std::array<juce::String, 7> fxParameterIDs { "compressorOn", "eqOn", "distortionOn", "chorusOn", "delayOn", "reverbOn", "cabinetOn" };
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment, powerProfileAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> doubleTrackAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
