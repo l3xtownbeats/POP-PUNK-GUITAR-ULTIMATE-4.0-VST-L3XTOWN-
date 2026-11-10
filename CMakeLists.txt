@@ -220,3 +220,13 @@ if(BUILD_TESTING)
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
+
+
+# Dependency-free M4 AutoChords and guitar fingering regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chords_tests
+        tests/AutoChordsTests.cpp
+    )
+    target_include_directories(ppgu_auto_chords_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chords_tests COMMAND ppgu_auto_chords_tests)
+endif()
