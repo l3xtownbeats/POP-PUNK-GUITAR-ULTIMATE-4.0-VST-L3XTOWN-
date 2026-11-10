@@ -236,6 +236,23 @@ int main()
         || renderedIntervals[3].count != 2 || renderedIntervals[3].notes[0] != 67 || renderedIntervals[3].notes[1] != 72)
         return 24;
 
+    // Dense pattern must report output-array exhaustion instead of silently
+    // dropping scheduled events. Processor consumes this status and performs
+    // all-notes-off as a deterministic fail-safe.
+    PatternScheduler overflowScheduler;
+    std::array<PatternEvent, 300> densePattern {};
+    for (std::size_t i = 0; i < densePattern.size(); ++i)
+        densePattern[i] = { 0.0, 0.01, static_cast<std::uint8_t>(36 + (i % 48)), 100, 1 };
+    const auto overflowClock = overflowScheduler.beginBlock(
+        { true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 48000);
+    const auto overflowCount = overflowScheduler.schedule(
+        densePattern, 4.0, 0.0, overflowClock, 48000.0, 48000, 0.0, 0, events);
+    if (overflowCount != PatternScheduler::maximumEventsPerBlock
+        || !overflowScheduler.consumePendingOverflow())
+        return 25;
+    if (overflowScheduler.consumePendingOverflow())
+        return 26; // The overflow indication is consumed exactly once.
+
     std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
     return 0;
 }
