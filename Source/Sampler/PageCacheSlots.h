@@ -23,6 +23,12 @@ public:
 
     struct ReadLease
     {
+        ReadLease() = default;
+        ReadLease(const ReadLease&) = delete;
+        ReadLease& operator=(const ReadLease&) = delete;
+        ReadLease(ReadLease&&) = delete;
+        ReadLease& operator=(ReadLease&&) = delete;
+
         const PageCacheSlots* owner = nullptr;
         std::size_t slot = 0;
         const float* samples = nullptr; // planar: channel * pageFrames + frame
