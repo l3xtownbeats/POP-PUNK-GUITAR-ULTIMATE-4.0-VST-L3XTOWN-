@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <iostream>
+#include <limits>
 #include <atomic>
 #include <thread>
 #include <vector>
@@ -222,6 +223,15 @@ int main()
     PageCacheSlots invalid(0, 0, 0);
     if (invalid.isValid() || invalid.tryBeginLoad({ 1, 1 }, first))
         return 1;
+
+    // Reject oversized configurations before attempting multi-gigabyte
+    // allocations. This also protects 32-bit size arithmetic and startup RAM.
+    PageCacheSlots oversized(1, std::numeric_limits<std::uint32_t>::max(), 2);
+    if (oversized.isValid())
+    {
+        std::cerr << "Page cache accepted a configuration above its memory budget.\\n";
+        return 1;
+    }
 
     std::cout << "Page cache slot tests passed: publish/acquire, planar data, pin protection, cancel, eviction and misses.\n";
     return 0;
