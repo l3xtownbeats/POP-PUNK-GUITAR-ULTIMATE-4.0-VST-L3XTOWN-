@@ -220,3 +220,15 @@ if(BUILD_TESTING)
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
+
+
+# M4 AutoChords/Fingering and M5 Style DNA regression suites.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chords_tests tests/AutoChordsTests.cpp)
+    target_include_directories(ppgu_auto_chords_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chords_tests COMMAND ppgu_auto_chords_tests)
+
+    add_executable(ppgu_style_engine_tests tests/StyleEngineTests.cpp)
+    target_include_directories(ppgu_style_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_style_engine_tests COMMAND ppgu_style_engine_tests)
+endif()
