@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "NEON PINK / APPROVED SIGNATURE",
+  "background": "ff0b0b10",
+  "panel": "ff1c1c25",
+  "panel2": "ff14141c",
+  "accent": "ffff2f9b",
+  "text": "fff7f3f8",
+  "muted": "ffaaa4b2"
+}
