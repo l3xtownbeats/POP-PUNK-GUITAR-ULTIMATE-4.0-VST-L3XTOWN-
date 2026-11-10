@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate the authored 300-preset catalog before packaging the VST3 build."""
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -41,6 +42,22 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
             errors.append(f'{preset.get("id")}: drive outside 0..1')
         if isinstance(params.get("reverb"), (int, float)) and not 0 <= params["reverb"] <= 1:
             errors.append(f'{preset.get("id")}: reverb outside 0..1')
+        for key in ("drive", "tone", "reverb"):
+            value = params.get(key)
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                errors.append(f'{preset.get("id")}: {key} must be numeric')
+            elif not math.isfinite(value):
+                errors.append(f'{preset.get("id")}: {key} must be finite')
+        for key in ("drive", "reverb"):
+            value = params.get(key)
+            if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and not 0 <= value <= 1:
+                errors.append(f'{preset.get("id")}: {key} outside 0..1')
+        tone = params.get("tone")
+        if isinstance(tone, (int, float)) and not isinstance(tone, bool) and math.isfinite(tone) and not 0 <= tone <= 10:
+            errors.append(f'{preset.get("id")}: tone outside 0..10')
+        sample_profile = preset.get("sampleProfile")
+        if expected_mode == "MELODY" and (not isinstance(sample_profile, str) or not sample_profile.strip()):
+            errors.append(f'{preset.get("id")}: missing sampleProfile')
         if expected_mode == "MELODY" and not preset.get("noteBehavior"):
             errors.append(f'{preset.get("id")}: missing noteBehavior')
         if expected_mode == "PATTERN" and not preset.get("groove"):
