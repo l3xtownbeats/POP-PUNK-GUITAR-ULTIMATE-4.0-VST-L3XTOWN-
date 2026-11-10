@@ -244,6 +244,7 @@ endif()
 if(BUILD_TESTING)
     add_executable(ppgu_sample_library_importer_tests
         Source/Sampler/SampleLibraryImporter.cpp
+        Source/Sampler/SfzParser.cpp
         tests/SampleLibraryImporterTests.cpp
     )
     target_include_directories(ppgu_sample_library_importer_tests PRIVATE Source/Sampler)
