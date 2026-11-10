@@ -102,3 +102,23 @@ No secondary branch is merged yet. Unified integration requires current branch h
 - При нажатии MIDI-клавиши/ноты слышен звук инструмента.
 
 **Результат:** базовый host-load + MIDI-trigger + audible-output smoke test пройден по подтверждению пользователя. Это важное подтверждение работоспособности реального VST3-хоста, но не закрывает все release gates M1–M3: сохранение/восстановление state, смену/перезагрузку библиотеки, повторные атаки и cache pressure, velocity crossfade/palm-mute articulation, транспорт/seek/loop и длительное воспроизведение ещё требуют отдельных проверок. Не приписывать этому тесту проверку Windows 10, если версия ОС отдельно не подтверждена.
+
+
+## Update — 10.11.2026: M4/M5 runtime integration pass 1
+
+- Перенесены Source/Performance/AutoChords.h и tests/AutoChordsTests.cpp из проверенной M4 ветки на интеграционную линию. Подключены тесты ppgu_auto_chords_tests в CMake.
+- Перенесены Source/Performance/StyleEngine.h и tests/StyleEngineTests.cpp из M5 ветки. Подключены тесты ppgu_style_engine_tests в CMake.
+- M4 первый runtime binding: в Pattern mode одиночная MIDI-нота при включённом singleMidiNoteAsChordRoot и выбранной Major/Minor scale преобразуется в scale-aware triad; voicing проходит через FingeringGenerator и ограничивается доступными позициями грифа.
+- M5 первый runtime binding: Style DNA преобразует velocity/beat accents детерминированно в Pattern scheduler dispatch. Все данные фиксированные; дополнительной аллокации в audio callback не вводится.
+- Важный незакрытый пункт M5: StyledEvent::articulation пока не маршрутизируется к отдельным palm-mute/hammer/pull sample groups; strumSpreadMs и fxTaste пока не управляют физическим таймингом голосов/FX. Не считать полную M5 интеграцию завершённой.
+- Новый CI для интеграционного commit 66a6644dab84e4d34d0016d8f2933e880a72423c: run 42848061281 (на момент записи in progress). Итог CTest/Pluginval/package будет записан после завершения.
+- M2 velocity crossfade branch run 42843931173 passed отдельно, но её реализация ещё не перенесена в интеграционную ветку. M1–M3 CI и пользовательский базовый FL Studio 20 audible MIDI smoke test остаются подтверждёнными; state/reopen, library reload и stress gates открыты.
+
+## Следующие обязательные задачи перед объединением M1–M5
+
+1. Получить текущий CI результат интеграционной ветки и исправить любые ошибки.
+2. Закончить M4: тесты mapping/voicing edge cases и сохранить поведение MIDI root key; затем подключить chord/fingering к UI и state.
+3. Закончить M5: articulation sample routing, event strum scheduling с bounded offsets, preset StyleDNA binding и end-to-end PatternSampler integration tests.
+4. Перенести M2 crossfade на интеграционную ветку, включить тест суммарного сигнала crossfade midpoint и проверить velocity-zone/RR взаимодействие.
+5. Запустить unified Windows x64 Release + полный CTest + VST3 locate + pluginval strictness 5 + package; только затем объединять M1–M5 в единую release ветку.
+6. Провести дополнительные ручные тесты FL Studio 20: project save/reopen, MIDI multi-note, Pattern host transport, preset/library reload, долгий playback.
