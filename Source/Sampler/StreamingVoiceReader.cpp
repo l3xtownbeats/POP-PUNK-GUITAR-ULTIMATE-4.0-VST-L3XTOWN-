@@ -168,9 +168,15 @@ bool StreamingVoiceReader::readHermite(std::uint64_t frame, float fraction,
         clampFrame(base - 1), clampFrame(base), clampFrame(base + 1), clampFrame(base + 2)
     };
 
-    for (const auto index : indices)
-        if (!ensurePage(index / stream->pageFrames()))
-            return false;
+    // The four Hermite taps are contiguous, so they can touch at most
+    // two adjacent streaming pages. Acquire each distinct page once instead
+    // of repeating a three-lease scan for every tap on every output sample.
+    const auto firstPage = indices.front() / stream->pageFrames();
+    const auto lastPage = indices.back() / stream->pageFrames();
+    if (!ensurePage(firstPage))
+        return false;
+    if (lastPage != firstPage && !ensurePage(lastPage))
+        return false;
 
     std::array<float, 4> l {}, r {};
     for (std::size_t i = 0; i < indices.size(); ++i)
