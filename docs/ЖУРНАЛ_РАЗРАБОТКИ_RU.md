@@ -1164,3 +1164,11 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - M4: отдельная ветка `work/m4-autochords-fingering`, PR #4; AutoChords/FingeringGenerator и CTest target добавлены. Run `42842050531` на момент записи ещё компилируется, поэтому M4 CI не объявляется успешным.
 - M5: ветка `work/m5-style-engine-tests`, commit `0cc36c7455edb3adcc5bde1f5bd690c831acf3cb`, run `42840410645` SUCCESS (build, CTest, pluginval, packaging). Runtime integration в Pattern Scheduler/UI ещё OPEN.
 - Подробные run/commit/artifact данные и условия merge: `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
+
+## 10 ноября 2026 — M3 integration test и обновление M4/M5
+
+- Создан `tests/PatternSamplerIntegrationTests.cpp` и CTest target `ppgu_pattern_sampler_integration_tests`: host transport → PatternScheduler → sample-offset NoteOn/NoteOff → SamplerEngine; generated WAV/SFZ fixture и audible output assertion.
+- Run `42843030370`, commit `4d13943f15352b87f3569524e2e5b4b8f9bbafda`: SUCCESS — Windows x64 Release, full CTest, VST3 locate, pluginval strictness 5, package/upload. Run `42843030228`: MSVC v143/APVTS/sampler tests SUCCESS.
+- M4: PR #4, AutoChords/FingeringGenerator, Major/Natural Minor scale mapping; run `42843127831` passed build/CTest/pluginval/package on commit `4327e54988bf42c87a86185b39a2ecd40609c3ae`. Added integer-overflow guards after that run; latest commits await fresh CI.
+- M5: PR #3, StyleEngine foundation and Mest Photographs catalog targets; run `42840410645` passed build/CTest/pluginval/package. Runtime Pattern/Processor/UI binding remains open.
+- M2: PR #5 implements SFZ xfin/xfout velocity-layer playback with gain/power curves and fixed-capacity multi-layer voices; latest CI run `42843931173` is still running. Palm mute, real-library stress and host checks remain open.
