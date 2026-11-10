@@ -100,3 +100,14 @@ Run 42704820544 прошёл этапы:
 ## Статус
 
 Это аудит кода и структуры пакета, не результат ручного прослушивания. Никакие отсутствующие runtime-функции не помечаются как готовые. Дальнейшая интеграция должна сопровождаться отдельными CI gates и фактической проверкой в FL Studio 20.
+
+
+## Дополнение — фактическое состояние M1–M5 на 10.11.2026
+
+- Windows x64 Release run `42841128991`: build, CTest, VST3 locate, pluginval strictness 5 и packaging/upload SUCCESS. Artifact опубликован. Отдельный MSVC M1/M2 run `42841133299`: SUCCESS.
+- M1 остаётся без ручной FL Studio 20 validation.
+- M2: bounded streaming/RR/cache tests подтверждены CI; velocity crossfade DSP, click/pop acceptance, palm-mute на реальном sample bank и stress validation остаются открытыми.
+- M3: unit/regression scheduler CI прошёл; end-to-end scheduler-to-sampler/DAW MIDI validation остаётся открытым.
+- M4 добавлен изолированно в PR #4 (AutoChords/FingeringGenerator + tests), CI run `42842050531` ожидает завершения build на момент записи.
+- M5 Style Engine + tests прошёл run `42840410645`; runtime Pattern integration ещё не выполнена. PR #3 исходно направлен в main и должен быть перенесён на интеграционную ветку, а не слит напрямую.
+- Полная таблица evidence, blockers и merge sequence: `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
