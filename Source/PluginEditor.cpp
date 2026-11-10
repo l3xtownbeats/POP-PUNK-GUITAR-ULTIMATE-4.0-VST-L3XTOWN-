@@ -541,7 +541,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
     auto panelArea = getLocalBounds().reduced(16);
     panelArea.removeFromTop(276);
-    panelArea.removeFromBottom(182);
+    panelArea.removeFromBottom(82);
     const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
     auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
     auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
@@ -554,12 +554,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 
     // Unified browser: preset, search, mode, sound character and playing style.
     auto browser = area.removeFromTop(46);
-    titleLabel.setBounds(browser.removeFromLeft(72));
-    presetBox.setBounds(browser.removeFromLeft(190).reduced(3, 5));
-    presetSearch.setBounds(browser.removeFromLeft(130).reduced(3, 7));
-    categoryBox.setBounds(browser.removeFromLeft(105).reduced(3, 7));
-    melodyFilterBox.setBounds(browser.removeFromLeft(150).reduced(3, 7));
-    styleFilterBox.setBounds(browser.removeFromLeft(150).reduced(3, 7));
+    titleLabel.setBounds(browser.removeFromLeft(52));
+    presetBox.setBounds(browser.removeFromLeft(170).reduced(3, 5));
+    presetSearch.setBounds(browser.removeFromLeft(110).reduced(3, 7));
+    categoryBox.setBounds(browser.removeFromLeft(115).reduced(3, 7));
+    melodyFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
+    styleFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
     subtitleLabel.setBounds(browser.reduced(4, 0));
 
     // Main action strip.
@@ -578,7 +578,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     auto status = area.removeFromTop(26);
     statusLabel.setBounds(status);
     area.removeFromTop(8);
-    auto panels = area.removeFromTop(300);
+    auto panels = area.removeFromTop(400);
     const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.39f), fxW=static_cast<int>(panels.getWidth()*0.39f);
     auto amp=panels.removeFromLeft(ampW); panels.removeFromLeft(gap);
     auto fx=panels.removeFromLeft(fxW); panels.removeFromLeft(gap); auto playback=panels;
@@ -599,10 +599,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         knobLabels[i].setBounds(cell.removeFromBottom(28));
         knobs[i].setBounds(cell.reduced(1, 4));
     }
-    auto autoChordRow = playback.removeFromTop(34);
-    autoChordsButton.setBounds(autoChordRow.removeFromLeft(112).reduced(3, 2));
-    autoChordKeyBox.setBounds(autoChordRow.removeFromLeft(62).reduced(2, 2));
-    autoChordScaleBox.setBounds(autoChordRow.removeFromLeft(90).reduced(2, 2));
+    auto autoChordRow = playback.removeFromTop(68);
+    autoChordsButton.setBounds(autoChordRow.removeFromTop(32).reduced(3, 2));
+    autoChordKeyBox.setBounds(autoChordRow.removeFromLeft(autoChordRow.getWidth() / 2).reduced(2, 2));
+    autoChordScaleBox.setBounds(autoChordRow.reduced(2, 2));
     startModeBox.setBounds(playback.removeFromTop(34).reduced(8, 2));
 }
 
