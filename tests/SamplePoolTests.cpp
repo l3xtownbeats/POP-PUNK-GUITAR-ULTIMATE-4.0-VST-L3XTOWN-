@@ -425,7 +425,7 @@ int main()
     if (!velocityPairSfz.replaceWithText(
         "<group> group=91\n"
         "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
-        "<region> sample=long-stream-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
     {
         std::cerr << "Could not write paired velocity crossfade fixture.\\n";
         return 1;
