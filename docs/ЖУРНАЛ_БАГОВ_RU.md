@@ -148,3 +148,14 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
 - Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.
+
+
+## 10 ноября 2026 — M2: velocity-triggered Palm Mute подтверждён Windows CI
+
+- Feature branch: `feature/m2-velocity-palm-mute`.
+- Commit исходной реализации: `7a23070c4a3c87b0e815aa44dedd9b889c6ffc9b`.
+- Windows Actions run `42806912201` завершился SUCCESS. Успешны: проверка 300 factory presets, APVTS registry/state validation, восстановление и license validation redistributable sample library, x64 Release configure, VST3 + test build, CTest, VST3 bundle discovery, pluginval strictness 5, packaging и artifact upload.
+- Реализация выбирает palm-mute DSP fallback по параметру articulation либо velocity threshold; фильтр и короткая огибающая подтверждены regression test. Это не эквивалентно отдельным palm-muted SFZ takes: выбор специализированных sample zones остаётся открытым.
+- Ограничение host validation: автоматический CI не подтверждает ручное открытие и игру в FL Studio 20. Этот критерий остаётся OPEN до проверки в DAW.
+- Следующий M2 этап: реальное velocity crossfade между SFZ velocity layers. Parser/runtime metadata уже присутствуют, но одновременное смешивание слоёв ещё не реализовано.
+- Статус: PALM-MUTE DSP FALLBACK — CI VERIFIED; M2 — NOT ACCEPTED.
