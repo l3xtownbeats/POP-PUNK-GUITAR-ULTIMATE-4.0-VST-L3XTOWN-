@@ -157,13 +157,23 @@ jobs:
           if (-not $plugin) { throw 'VST3 bundle not found after successful build.' }
           "path=$($plugin.FullName)" >> $env:GITHUB_OUTPUT
 
+      - name: Run pluginval strictness level 5
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'pluginval_Windows.zip'
+          $toolDir = Join-Path $env:RUNNER_TEMP 'pluginval'
+          Invoke-WebRequest -Uri 'https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip' -OutFile $archive -TimeoutSec 180
+          Expand-Archive -LiteralPath $archive -DestinationPath $toolDir -Force
+          $validator = Get-ChildItem -LiteralPath $toolDir -Recurse -File -Filter 'pluginval.exe' | Select-Object -First 1
+          if (-not $validator) { throw 'pluginval.exe was not found in the official Windows release archive.' }
+          & $validator.FullName --strictness-level 5 "${{ steps.vst3.outputs.path }}"
+          if ($LASTEXITCODE -ne 0) { throw "pluginval strictness level 5 failed with exit code $LASTEXITCODE." }
+
       - name: Record host validation limitation
         shell: pwsh
         run: |
-          # The repository does not currently vendor a pluginval executable or
-          # validate_windows_vst3.ps1. Do not call a nonexistent script or claim
-          # host validation. CMake, CTest and bundle structure are checked above.
-          Write-Host 'pluginval/DAW host validation is not configured in this repository; FL Studio 20 acceptance remains manual.'
+          Write-Host 'Automated pluginval strictness level 5 completed. FL Studio 20 manual host acceptance remains a separate required check.'
 
       - name: Package VST3, sample library and factory presets
         shell: pwsh
