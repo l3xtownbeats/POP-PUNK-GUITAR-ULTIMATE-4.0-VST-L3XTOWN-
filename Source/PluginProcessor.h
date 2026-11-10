@@ -43,6 +43,8 @@ public:
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
+    void setSelectedSkinIndex(int index) noexcept { selectedSkinIndex.store(juce::jlimit(0, 59, index), std::memory_order_relaxed); }
+    [[nodiscard]] int getSelectedSkinIndex() const noexcept { return selectedSkinIndex.load(std::memory_order_relaxed); }
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
@@ -52,6 +54,7 @@ public:
 
 private:
     std::atomic<bool> panicRequested { false };
+    std::atomic<int> selectedSkinIndex { 0 };
     double currentSampleRate = 44100.0;
     int maximumBlockSize = 512;
     ppgu::sampler::SamplerEngine sampler;
