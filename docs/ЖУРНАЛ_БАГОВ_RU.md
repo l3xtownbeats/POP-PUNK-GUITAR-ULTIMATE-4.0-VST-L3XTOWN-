@@ -55,3 +55,11 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Configure x64 Release, Build VST3 and test executables, Run CTest regression suite, Locate VST3 bundle, Package VST3/sample library/factory presets и Upload artifact — все шаги SUCCESS.
 - Artifact ID 13741929896, SHA-256 4cf7f5f59d6f04a12e7238b1c1c379ba2ae666ca8c096a940cc53cebd4e0b519.
 - M3-013 закрыт по автоматизированной CI-проверке. Ручная FL Studio 20 host acceptance не подразумевается и остаётся отдельным открытым критерием.
+
+
+## M3-015 — исправление внесено, ожидает CI
+- Root cause: цикл PatternScheduler завершался при заполнении output array без отдельного overflow-флага; часть событий могла быть отброшена незаметно.
+- Fix: добавлен `outputOverflow_`; `consumePendingOverflow()` объединяет output и pending-queue overflow. Существующий processor fail-safe вызывает `sampler.allNotesOff()`.
+- Regression: 300 событий в одном блоке должны заполнить 512-элементный output и выставить overflow; флаг потребляется ровно один раз.
+- Commits: `427a68506599b7f8ea8250b253dbc89ede4fe4fb`, `6a77e2d1f33f6a4ad730d4c5a6c7997d2a5112cf`.
+- Статус: FIXED IN SOURCE — AWAITING WINDOWS CI. Не закрывать до успешного CTest.
