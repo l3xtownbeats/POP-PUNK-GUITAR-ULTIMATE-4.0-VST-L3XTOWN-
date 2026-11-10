@@ -45,17 +45,17 @@ int main()
     CHECK(rrMetadata.regions[2].seqLength == 3 && rrMetadata.regions[2].seqPosition == 3);
     const auto velocityCrossfade = parseText(
         "<region> sample=xfade.wav key=60 lovel=1 hivel=127 "
-        "xfin_lovel=20 xfin_hivel=50 xfout_lovel=80 xfout_hivel=110\\n", base);
+        "xfin_lovel=20 xfin_hivel=50 xfout_lovel=80 xfout_hivel=110\n", base);
     CHECK(velocityCrossfade.succeeded());
     CHECK(velocityCrossfade.regions[0].xfinLowVelocity == 20);
     CHECK(velocityCrossfade.regions[0].xfinHighVelocity == 50);
     CHECK(velocityCrossfade.regions[0].xfoutLowVelocity == 80);
     CHECK(velocityCrossfade.regions[0].xfoutHighVelocity == 110);
     const auto incompleteCrossfade = parseText(
-        "<region> sample=xfade.wav key=60 xfin_lovel=20\\n", base);
+        "<region> sample=xfade.wav key=60 xfin_lovel=20\n", base);
     CHECK(!incompleteCrossfade.succeeded());
     const auto invertedCrossfade = parseText(
-        "<region> sample=xfade.wav key=60 xfout_lovel=100 xfout_hivel=80\\n", base);
+        "<region> sample=xfade.wav key=60 xfout_lovel=100 xfout_hivel=80\n", base);
     CHECK(!invertedCrossfade.succeeded());
 
     const auto rrInvalidZero = parseText(
