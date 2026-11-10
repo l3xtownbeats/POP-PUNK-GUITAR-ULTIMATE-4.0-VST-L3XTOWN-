@@ -1,0 +1,874 @@
+#include "PluginProcessor.h"
+#include "PluginEditor.h"
+#include <cmath>
+#include <algorithm>
+
+namespace
+{
+    constexpr int panicFadeMs = 30;
+
+    std::unique_ptr<juce::RangedAudioParameter> floatParameter(
+        const char* id, const char* name, float minimum, float maximum,
+        float defaultValue, float step = 0.001f)
+    {
+        return std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID { id, 1 }, name,
+            juce::NormalisableRange<float>(minimum, maximum, step), defaultValue);
+    }
+
+    std::unique_ptr<juce::RangedAudioParameter> boolParameter(
+        const char* id, const char* name, bool defaultValue)
+    {
+        return std::make_unique<juce::AudioParameterBool>(
+            juce::ParameterID { id, 1 }, name, defaultValue);
+    }
+}
+
+PopPunkGuitarUltimateAudioProcessor::~PopPunkGuitarUltimateAudioProcessor()
+{
+    // A worker job accesses sampler; wait before member destruction to avoid
+    // racing a long WAV decode against destruction of the processor.
+    sampleLoadPool.removeAllJobs(true, -1);
+}
+
+PopPunkGuitarUltimateAudioProcessor::PopPunkGuitarUltimateAudioProcessor()
+    : AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+      parameters(*this, nullptr, "PPGU_STATE", createParameterLayout())
+{
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout
+PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout p;
+
+    // Global / performance controls.
+    p.add(floatParameter("master", "Master", 0.0f, 1.0f, 0.8f));
+    p.add(floatParameter("voices", "Voices", 1.0f, 64.0f, 32.0f, 1.0f));
+    p.add(floatParameter("velocity", "Velocity Response", 0.0f, 2.0f, 1.0f));
+    p.add(floatParameter("dynamics", "Velocity Dynamics", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("palmMuteThreshold", "Palm Mute Threshold", 1.0f, 127.0f, 55.0f, 1.0f));
+    p.add(floatParameter("tuning", "Tuning", -12.0f, 12.0f, 0.0f, 0.01f));
+    p.add(floatParameter("pan", "Pan", -1.0f, 1.0f, 0.0f));
+    p.add(floatParameter("output", "Output", -24.0f, 12.0f, 0.0f, 0.01f));
+    p.add( std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "playMode", 1 }, "Play Mode",
+        juce::StringArray { "Melody", "Pattern" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "articulation", 1 }, "Articulation",
+        juce::StringArray { "Open", "Palm Mute", "Flageolet", "Tremolo" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "pickStyle", 1 }, "Pick Style",
+        juce::StringArray { "Pick", "Fingers" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "pitchBendTarget", 1 }, "Pitch Bend Target",
+        juce::StringArray { "All", "Lowest", "Highest", "Softest", "Loudest", "Latest" }, 0));
+    p.add(floatParameter("vibrato", "Vibrato", 0.0f, 1.0f, 0.0f));
+    p.add(floatParameter("slideTime", "Slide Time", 0.01f, 1.0f, 0.25f));
+    p.add(boolParameter("legato", "Legato", true));
+    p.add(boolParameter("hammerPull", "Hammer On Pull Off", true));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "scaleRoot", 1 }, "Scale Root",
+        juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
+        juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+
+    // Melody performance and articulation controls from v33 sections 8 and 13.
+    p.add(boolParameter("monoMode", "Monophonic Mode", true));
+    p.add(boolParameter("fretNoiseOnChordChange", "Fret Noise on Chord Change", true));
+    p.add(boolParameter("slideModifier", "Slide Modifier (B1)", false));
+    p.add(floatParameter("slideVelocitySensitivity", "Slide Velocity Sensitivity", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("modWheelVibrato", "Mod Wheel Vibrato Depth", 0.0f, 1.0f, 0.0f));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "melodyPatternSlot", 1 }, "Melody Pattern Slot",
+        juce::StringArray { "Off", "1", "2", "3", "4" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "endingLength", 1 }, "Ending Length",
+        juce::StringArray { "Short", "Medium", "Long" }, 1));
+    p.add(boolParameter("palmHitOnEnding", "Palm Hit Ending", false));
+    p.add(boolParameter("stringSlapOnEnding", "String Slap Ending", false));
+
+    // Pattern transport, playback feel, and chord interpretation (v33 section 9).
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "patternSlot", 1 }, "Pattern Slot",
+        juce::StringArray { "1", "2", "3", "4", "5", "6", "7", "8" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "patternLength", 1 }, "Pattern Length",
+        juce::StringArray { "1 Bar", "2 Bars", "4 Bars" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "syncMode", 1 }, "Sync Mode",
+        juce::StringArray { "Host", "Host Start", "Internal" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "swingBase", 1 }, "Swing Base",
+        juce::StringArray { "8th", "16th" }, 0));
+    p.add(floatParameter("globalPpqOffset", "Global PPQ Offset (CC111)", -16.0f, 16.0f, 0.0f, 0.001f));
+    p.add(boolParameter("chordSlashBass", "Respect Slash Chord Bass", true));
+    p.add(boolParameter("singleMidiNoteAsChordRoot", "Single MIDI Note as Chord Root", true));
+    p.add(boolParameter("preserveHumanTiming", "Preserve Recorded Human Timing", true));
+
+    // Editable Style DNA parameters (v33 section 7.4).
+    p.add(floatParameter("dnaChugDensity", "DNA Chug Density", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("dnaHammerPullProbability", "DNA Hammer/Pull Probability", 0.0f, 1.0f, 0.25f));
+    p.add(floatParameter("dnaStringSpread", "DNA String Spread", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("dnaBeatAccent", "DNA Beat Accent", 0.0f, 1.0f, 0.7f));
+    p.add(floatParameter("dnaFxTaste", "DNA FX Taste", 0.0f, 1.0f, 0.5f));
+
+    // Seven FX slots can be reordered without changing their parameter IDs.
+    const juce::StringArray fxNames { "Compressor", "EQ", "Distortion", "Chorus", "Delay", "Reverb", "Cabinet IR" };
+    for (int slot = 0; slot < 7; ++slot)
+        p.add(std::make_unique<juce::AudioParameterChoice>(
+            juce::ParameterID { "fxSlot" + juce::String(slot + 1), 1 },
+            "FX Slot " + juce::String(slot + 1), fxNames, slot));
+
+    // Expanded core controls for each of the seven fixed effects.
+    p.add(floatParameter("compressorThreshold", "Compressor Threshold", -60.0f, 0.0f, -18.0f, 0.1f));
+    p.add(floatParameter("compressorRatio", "Compressor Ratio", 1.0f, 20.0f, 3.0f, 0.1f));
+    p.add(floatParameter("compressorAttack", "Compressor Attack", 0.1f, 100.0f, 10.0f, 0.1f));
+    p.add(floatParameter("compressorRelease", "Compressor Release", 5.0f, 1000.0f, 120.0f, 0.1f));
+    p.add(floatParameter("eqLowFreq", "EQ Low Frequency", 20.0f, 500.0f, 100.0f, 1.0f));
+    p.add(floatParameter("eqMidFreq", "EQ Mid Frequency", 100.0f, 8000.0f, 1000.0f, 1.0f));
+    p.add(floatParameter("eqMidQ", "EQ Mid Q", 0.1f, 10.0f, 1.0f, 0.01f));
+    p.add(floatParameter("eqHighFreq", "EQ High Frequency", 2000.0f, 20000.0f, 8000.0f, 1.0f));
+    p.add(floatParameter("distortionMix", "Distortion Mix", 0.0f, 1.0f, 1.0f));
+    p.add(floatParameter("chorusRate", "Chorus Rate", 0.05f, 10.0f, 0.8f, 0.01f));
+    p.add(floatParameter("chorusDepth", "Chorus Depth", 0.0f, 1.0f, 0.35f));
+    p.add(floatParameter("delayFeedback", "Delay Feedback", 0.0f, 0.95f, 0.25f, 0.001f));
+    p.add(floatParameter("reverbRoomSize", "Reverb Room Size", 0.0f, 1.0f, 0.45f));
+    p.add(floatParameter("reverbDamping", "Reverb Damping", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("cabinetMix", "Cabinet IR Mix", 0.0f, 1.0f, 1.0f));
+    p.add(floatParameter("cabinetLowCut", "Cabinet Low Cut", 20.0f, 500.0f, 80.0f, 1.0f));
+    p.add(floatParameter("cabinetHighCut", "Cabinet High Cut", 2000.0f, 20000.0f, 12000.0f, 1.0f));
+
+    // Pattern playback.
+    p.add(floatParameter("bpm", "Fallback BPM", 20.0f, 300.0f, 120.0f, 0.1f));
+    p.add(floatParameter("swing", "Swing", 0.0f, 1.0f, 0.0f));
+    p.add(floatParameter("humanize", "Humanize", 0.0f, 1.0f, 0.0f));
+    p.add(floatParameter("accent", "Accent", 0.0f, 1.0f, 0.75f));
+    p.add(boolParameter("startOnFirstChord", "Start on First Chord", true));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "patternQuantize", 1 }, "Pattern Quantize",
+        juce::StringArray { "1/16", "1/32" }, 0));
+
+    // Amp / tone and fixed FX rack.
+    p.add(floatParameter("ampGain", "Amp Gain", 0.0f, 10.0f, 5.0f));
+    p.add(floatParameter("tone", "Tone", 0.0f, 10.0f, 7.0f));
+    p.add(boolParameter("compressorOn", "Compressor On", true));
+    p.add(floatParameter("compressorAmount", "Compressor Amount", 0.0f, 1.0f, 0.25f));
+    p.add(boolParameter("eqOn", "EQ On", true));
+    p.add(floatParameter("eqLow", "EQ Low", -12.0f, 12.0f, 0.0f, 0.1f));
+    p.add(floatParameter("eqMid", "EQ Mid", -12.0f, 12.0f, 0.0f, 0.1f));
+    p.add(floatParameter("eqHigh", "EQ High", -12.0f, 12.0f, 0.0f, 0.1f));
+    p.add(boolParameter("distortionOn", "Distortion On", true));
+    p.add(floatParameter("distortionDrive", "Distortion Drive", 0.0f, 1.0f, 0.55f));
+    p.add(floatParameter("distortionTone", "Distortion Tone", 0.0f, 1.0f, 0.65f));
+    p.add(boolParameter("chorusOn", "Chorus On", false));
+    p.add(boolParameter("flangerOn", "Flanger On", false));
+    p.add(floatParameter("flangerMix", "Flanger Mix", 0.0f, 1.0f, 0.2f));
+    p.add(floatParameter("flangerRate", "Flanger Rate", 0.05f, 5.0f, 0.25f, 0.01f));
+    p.add(floatParameter("flangerDepth", "Flanger Depth", 0.0f, 1.0f, 0.5f));
+    p.add(floatParameter("flangerFeedback", "Flanger Feedback", -0.7f, 0.7f, 0.15f, 0.01f));
+    p.add(floatParameter("chorusMix", "Chorus Mix", 0.0f, 1.0f, 0.15f));
+    p.add(boolParameter("delayOn", "Delay On", false));
+    p.add(floatParameter("delayTime", "Delay Time", 1.0f, 2000.0f, 320.0f, 1.0f));
+    p.add(floatParameter("delayMix", "Delay Mix", 0.0f, 1.0f, 0.15f));
+    p.add(boolParameter("reverbOn", "Reverb On", true));
+    p.add(floatParameter("reverbMix", "Reverb Mix", 0.0f, 1.0f, 0.12f));
+    p.add(boolParameter("cabinetOn", "Cabinet IR On", true));
+    p.add(boolParameter("doubleTrackOn", "Double Track On", false));
+    p.add(floatParameter("doubleTrackMix", "Double Track Mix", 0.0f, 1.0f, 0.5f));
+
+    return p;
+}
+
+void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int expectedBlockSize)
+{
+    currentSampleRate = juce::jlimit(8000.0, 384000.0, sampleRate);
+    maximumBlockSize = juce::jmax(1, expectedBlockSize);
+    sampler.prepare(currentSampleRate);
+    patternScheduler.reset();
+    for (auto& channel : patternHeldNotes) channel.fill(false);
+    patternCycleStarted = false;
+    previousPatternChordCount = 0;
+    previousPatternChordNotes.fill(-1);
+    previousPatternSlot = -1;
+    previousPatternLengthChoice = -1;
+    patternChordChangeSampleOffset = -1;
+    previousPlayMode = -1;
+
+    const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
+    const auto chorusCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
+    const auto flangerCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.02)) + 4;
+    for (int channel = 0; channel < 2; ++channel)
+    {
+        delayBuffers[static_cast<size_t>(channel)].assign(delayCapacity, 0.0f);
+        chorusBuffers[static_cast<size_t>(channel)].assign(chorusCapacity, 0.0f);
+        flangerBuffers[static_cast<size_t>(channel)].assign(flangerCapacity, 0.0f);
+        reverbDryBuffers[static_cast<size_t>(channel)].assign(static_cast<size_t>(maximumBlockSize), 0.0f);
+    }
+    delayWritePosition = 0;
+    chorusWritePosition = 0;
+    flangerWritePosition = 0;
+    flangerPhase = 0.0;
+    chorusPhase = 0.0;
+    eqLowState.fill(0.0f);
+    eqHighState.fill(0.0f);
+    compressorEnvelope.fill(0.0f);
+    for (auto& history : cabinetHistory) history.fill(0.0f);
+    cabinetWritePosition = 0;
+    // Compact original cabinet-style impulse: damped resonant response, generated once off the audio thread.
+    cabinetImpulse.fill(0.0f);
+    for (size_t tap = 0; tap < cabinetImpulse.size(); ++tap)
+    {
+        const float t = static_cast<float>(tap);
+        cabinetImpulse[tap] = std::exp(-t / 11.0f) * (0.72f * std::cos(0.31f * t) + 0.28f * std::cos(0.67f * t));
+    }
+    float impulseEnergy = 0.0f;
+    for (const auto coefficient : cabinetImpulse) impulseEnergy += std::abs(coefficient);
+    if (impulseEnergy > 0.0f) for (auto& coefficient : cabinetImpulse) coefficient /= impulseEnergy;
+
+    reverb.setSampleRate(currentSampleRate);
+    reverb.reset();
+}
+
+void PopPunkGuitarUltimateAudioProcessor::releaseResources()
+{
+    sampler.reset();
+    reverb.reset();
+    for (auto& line : delayBuffers)
+        std::fill(line.begin(), line.end(), 0.0f);
+    for (auto& line : chorusBuffers)
+        std::fill(line.begin(), line.end(), 0.0f);
+    for (auto& line : flangerBuffers)
+        std::fill(line.begin(), line.end(), 0.0f);
+    delayWritePosition = 0;
+    chorusWritePosition = 0;
+    flangerWritePosition = 0;
+    flangerPhase = 0.0;
+    chorusPhase = 0.0;
+    eqLowState.fill(0.0f);
+    eqHighState.fill(0.0f);
+    compressorEnvelope.fill(0.0f);
+    for (auto& history : cabinetHistory) history.fill(0.0f);
+    cabinetWritePosition = 0;
+}
+
+bool PopPunkGuitarUltimateAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono()
+        || layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
+}
+
+void PopPunkGuitarUltimateAudioProcessor::processBlock(
+    juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi)
+{
+    juce::ScopedNoDenormals noDenormals;
+    buffer.clear();
+
+    const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
+    const int samples = buffer.getNumSamples();
+    keyboardState.processNextMidiBuffer(midi, 0, samples, true);
+    const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
+        static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
+    const float velocityScale = juce::jlimit(0.0f, 2.0f,
+        parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
+    const int playMode = juce::jlimit(0, 1,
+        static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
+
+    // Read one immutable host-position snapshot per block. Pattern timing is
+    // derived from PPQ/sample-rate; the scheduler never calls the host from a
+    // worker thread and never allocates or locks.
+    ppgu::performance::TransportSnapshot hostTransport;
+    if (auto* playHead = getPlayHead())
+    {
+        if (const auto position = playHead->getPosition())
+        {
+            const auto bpm = position->getBpm();
+            const auto ppq = position->getPpqPosition();
+            const bool playing = position->getIsPlaying();
+            if (bpm.hasValue() && ppq.hasValue())
+            {
+                hostTransport.hostValid = true;
+                hostTransport.bpm = *bpm;
+                hostTransport.ppq = *ppq;
+                hostTransport.playing = playing;
+            }
+        }
+    }
+    const int syncMode = juce::jlimit(0, 2,
+        static_cast<int>(parameters.getRawParameterValue("syncMode")->load(std::memory_order_relaxed)));
+    const bool useInternalClock = syncMode == 2;
+    const double fallbackBpm = parameters.getRawParameterValue("bpm")->load(std::memory_order_relaxed);
+    patternTransportClock = patternScheduler.beginBlock(
+        hostTransport, useInternalClock, fallbackBpm, currentSampleRate, samples);
+
+    if (playMode != previousPlayMode)
+    {
+        sampler.allNotesOff();
+        patternScheduler.reset(patternTransportClock.startPpq);
+        for (auto& channel : patternHeldNotes) channel.fill(false);
+        patternCycleStarted = false;
+        previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
+        previousPlayMode = playMode;
+    }
+
+    // A host transport stop must release voices that were started by live MIDI
+    // or a pattern gate. The scheduler clears pending NoteOffs on stop.
+    if (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity)
+    {
+        sampler.allNotesOff();
+        patternScheduler.clearPendingNoteOffs();
+        patternCycleStarted = false;
+        previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
+        if (patternTransportClock.transportStopped)
+            for (auto& held : patternHeldNotes) held.fill(false);
+    }
+
+    const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
+        static_cast<double>(parameters.getRawParameterValue("tuning")->load(std::memory_order_relaxed)));
+
+    auto renderSegment = [&](int start, int length)
+    {
+        if (length > 0)
+            sampler.render(buffer, start, length);
+    };
+
+    if (playMode == 0)
+    {
+        // MELODY: one incoming MIDI key always plays its mapped chromatic note.
+        // No pattern scheduler or chord interpretation can intercept it.
+        int cursor = 0;
+        for (const auto metadata : midi)
+        {
+            const auto message = metadata.getMessage();
+            const int eventSample = juce::jlimit(cursor, samples, metadata.samplePosition);
+            renderSegment(cursor, eventSample - cursor);
+            cursor = eventSample;
+
+            if (message.isAllNotesOff() || message.isAllSoundOff())
+            {
+                panicRequested.store(true, std::memory_order_release);
+                sampler.panic(fadeLength);
+            }
+            else if (message.isNoteOn() && velocityScale > 0.0f)
+            {
+                const float normalizedVelocity = juce::jlimit<float>(
+                    0.0f, 1.0f, static_cast<float>(message.getVelocity()) / 127.0f);
+                const float dynamics = juce::jlimit(0.0f, 1.0f,
+                    parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
+                const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
+                const int scaledVelocity = juce::jlimit(1, 127,
+                    juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
+                                                      message.getChannel(), globalTuningSemitones);
+                juce::ignoreUnused(triggered);
+            }
+            else if (message.isNoteOff())
+                sampler.noteOff(message.getNoteNumber(), message.getChannel());
+        }
+        renderSegment(cursor, samples - cursor);
+    }
+    else
+    {
+        // PATTERN: held MIDI keys define the chord. Build a fixed-capacity
+        // strum/arpeggio pattern from that chord and feed scheduled MIDI into
+        // the same sampler voice engine used by Melody mode.
+        // Apply incoming MIDI before building the chord snapshot. The previous
+        // implementation updated held keys after scheduling, adding a full
+        // audio-block of latency and ignoring note sample positions.
+        patternChordChangeSampleOffset = -1;
+        for (const auto metadata : midi)
+        {
+            const auto message = metadata.getMessage();
+            const int channel = juce::jlimit(1, 16, message.getChannel()) - 1;
+            if (message.isAllNotesOff() || message.isAllSoundOff())
+            {
+                for (auto& held : patternHeldNotes) held.fill(false);
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+                panicRequested.store(true, std::memory_order_release);
+                sampler.panic(fadeLength);
+            }
+            else if (message.isNoteOn())
+            {
+                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = true;
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+            }
+            else if (message.isNoteOff())
+            {
+                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = false;
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+            }
+        }
+
+        std::array<int, 6> chordNotes {};
+        int chordCount = 0;
+        int chordChannel = 1;
+        for (int channel = 0; channel < 16 && chordCount < static_cast<int>(chordNotes.size()); ++channel)
+        {
+            for (int note = 0; note < 128 && chordCount < static_cast<int>(chordNotes.size()); ++note)
+            {
+                if (patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(note)])
+                {
+                    chordNotes[static_cast<size_t>(chordCount++)] = note;
+                    chordChannel = channel + 1;
+                }
+            }
+        }
+
+        patternEvents.fill(ppgu::performance::PatternEvent { -1.0, 0.0, 60, 0, 1 });
+        std::size_t patternEventCount = 0;
+        const int patternSlot = juce::jlimit(0, 7,
+            static_cast<int>(parameters.getRawParameterValue("patternSlot")->load(std::memory_order_relaxed)));
+        const int patternLengthChoice = juce::jlimit(0, 2,
+            static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
+        const double patternLengthBeats = patternLengthChoice == 0 ? 4.0
+            : (patternLengthChoice == 1 ? 8.0 : 16.0);
+        const float swing = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
+        const float accent = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
+        const std::array<std::uint16_t, 8> rhythmMasks {{
+            0x5555, // straight eighths
+            0x1111, // quarter-note downstrokes
+            0x3333, // paired eighths
+            0xffff, // driving sixteenths
+            0x9999, // syncopated stop/start
+            0x1111, // sparse half-time pulse
+            0x4444, // ska-style offbeat upstrokes
+            0xffff  // arpeggio picking
+        }};
+        const bool arpeggio = patternSlot == 7;
+        const bool chordChanged = chordCount != previousPatternChordCount
+            || !std::equal(chordNotes.begin(), chordNotes.begin() + chordCount,
+                           previousPatternChordNotes.begin());
+        const bool patternSettingsChanged =
+            (previousPatternSlot >= 0 && patternSlot != previousPatternSlot)
+            || (previousPatternLengthChoice >= 0 && patternLengthChoice != previousPatternLengthChoice);
+        const bool patternChanged = chordChanged || patternSettingsChanged;
+        int patternRenderStartSample = 0;
+        if (patternChanged)
+        {
+            const int changeOffset = chordChanged && patternChordChangeSampleOffset >= 0
+                ? patternChordChangeSampleOffset : 0;
+            // Render the pre-change portion first, then release the old chord
+            // at the actual MIDI sample position instead of block sample zero.
+            renderSegment(0, changeOffset);
+            sampler.allNotesOff();
+            patternRenderStartSample = changeOffset;
+            patternScheduler.clearPendingNoteOffs();
+            patternCycleStarted = chordCount > 0;
+            if (chordCount > 0)
+            {
+                const double changePpq = patternTransportClock.startPpq
+                    + static_cast<double>(changeOffset) * patternTransportClock.bpm
+                        / (60.0 * currentSampleRate);
+                const bool startOnFirstChord =
+                    parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
+                const bool firstChord = previousPatternChordCount == 0;
+                // Preserve immediate first-chord mode. Subsequent chord and
+                // pattern-setting changes quantize forward to the selected grid.
+                const int quantizeChoice = juce::jlimit(0, 1,
+                    static_cast<int>(parameters.getRawParameterValue("patternQuantize")->load(std::memory_order_relaxed)));
+                const double quantizeGridBeats = quantizeChoice == 0 ? 0.25 : 0.125;
+                patternCycleStartPpq = firstChord && startOnFirstChord
+                    ? changePpq
+                    : (firstChord
+                        ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
+                        : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, quantizeGridBeats));
+            }
+        }
+        previousPatternChordCount = chordCount;
+        previousPatternChordNotes = chordNotes;
+        previousPatternSlot = patternSlot;
+        previousPatternLengthChoice = patternLengthChoice;
+
+        if (chordCount > 0)
+        {
+
+            const int bars = static_cast<int>(patternLengthBeats / 4.0);
+            for (int bar = 0; bar < bars; ++bar)
+            {
+                for (int step = 0; step < 16; ++step)
+                {
+                    if ((rhythmMasks[static_cast<size_t>(patternSlot)] & (1u << step)) == 0)
+                        continue;
+                    const double swingOffset = (step % 4 == 2) ? 0.125 * swing : 0.0;
+                    const double beat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25 + swingOffset;
+                    const int notesThisStep = arpeggio ? 1 : chordCount;
+                    for (int strum = 0; strum < notesThisStep && patternEventCount < patternEvents.size(); ++strum)
+                    {
+                        const int chordIndex = arpeggio
+                            ? ((bar * 16 + step) % chordCount)
+                            : ((step % 2 == 0) ? strum : chordCount - 1 - strum);
+                        const int velocity = juce::jlimit(1, 127,
+                            juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
+                        patternEvents[patternEventCount++] = {
+                            beat + static_cast<double>(strum) * 0.012,
+                            0.20,
+                            static_cast<std::uint8_t>(chordNotes[static_cast<size_t>(chordIndex)]),
+                            static_cast<std::uint8_t>(velocity),
+                            static_cast<std::uint8_t>(chordChannel)
+                        };
+                    }
+                }
+            }
+        }
+        else
+        {
+            patternCycleStarted = false;
+        }
+
+        const auto scheduledCount = patternScheduler.schedule(
+            patternEvents, patternLengthBeats, patternCycleStartPpq,
+            patternTransportClock, currentSampleRate, samples, 0.0, 0,
+            scheduledPatternEvents);
+        // Dispatch the scheduler's fixed-capacity event array directly.
+        // Avoid juce::MidiBuffer::addEvent() here because a dense pattern can
+        // grow its internal storage on the audio thread.
+        // PatternScheduler already sorts events by sample offset and orders
+        // NoteOff before NoteOn at ties.
+        int cursor = patternRenderStartSample;
+        for (std::size_t i = 0; i < scheduledCount; ++i)
+        {
+            const auto& event = scheduledPatternEvents[i];
+            const int eventSample = juce::jlimit(cursor, samples, event.sampleOffset);
+            renderSegment(cursor, eventSample - cursor);
+            cursor = eventSample;
+
+            if (event.kind == ppgu::performance::EventKind::NoteOn)
+            {
+                if (velocityScale <= 0.0f)
+                    continue;
+
+                const float normalizedVelocity = juce::jlimit<float>(
+                    0.0f, 1.0f, static_cast<float>(event.velocity) / 127.0f);
+                const float dynamics = juce::jlimit(0.0f, 1.0f,
+                    parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
+                const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
+                const int scaledVelocity = juce::jlimit(1, 127,
+                    juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices,
+                                                      event.channel, globalTuningSemitones);
+                juce::ignoreUnused(triggered);
+            }
+            else
+                sampler.noteOff(event.note, event.channel);
+        }
+        renderSegment(cursor, samples - cursor);
+        if (patternScheduler.consumePendingOverflow())
+            sampler.allNotesOff();
+    }
+
+    // AMP & TONE: low/mid/high split with persistent one-pole filter states.
+    const float ampGainDb = (juce::jlimit(0.0f, 10.0f, parameters.getRawParameterValue("ampGain")->load(std::memory_order_relaxed)) - 5.0f) * 2.0f;
+    const float ampGain = juce::Decibels::decibelsToGain(ampGainDb);
+    const bool eqEnabled = parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) > 0.5f;
+    const float lowGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)));
+    const float midGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)));
+    const float highGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed)));
+    const float lowAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 250.0f / static_cast<float>(currentSampleRate));
+    const float highAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 2500.0f / static_cast<float>(currentSampleRate));
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        auto* data = buffer.getWritePointer(channel);
+        auto& lowState = eqLowState[static_cast<size_t>(channel)];
+        auto& highState = eqHighState[static_cast<size_t>(channel)];
+        for (int sample = 0; sample < samples; ++sample)
+        {
+            const float input = data[sample] * ampGain;
+            lowState += lowAlpha * (input - lowState);
+            highState += highAlpha * (input - highState);
+            if (eqEnabled)
+            {
+                const float low = lowState;
+                const float high = input - highState;
+                const float mid = input - low - high;
+                data[sample] = low * lowGain + mid * midGain + high * highGain;
+            }
+            else data[sample] = input;
+        }
+    }
+
+    // Feed-forward compressor with per-channel envelope follower. Attack/release
+    // coefficients are calculated once per block; no allocation or locking.
+    if (parameters.getRawParameterValue("compressorOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float thresholdDb = juce::jlimit(-60.0f, 0.0f, parameters.getRawParameterValue("compressorThreshold")->load(std::memory_order_relaxed));
+        const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
+        const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
+        const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
+        const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
+        const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+            auto* data = buffer.getWritePointer(channel);
+            auto& envelope = compressorEnvelope[static_cast<size_t>(channel)];
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                const float level = std::abs(data[sample]);
+                const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
+                envelope = coefficient * envelope + (1.0f - coefficient) * level;
+                const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
+                const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
+                const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
+                data[sample] *= gain;
+            }
+        }
+    }
+
+    // Flanger uses a dedicated preallocated ring buffer; it can run alongside chorus and delay.
+    if (parameters.getRawParameterValue("flangerOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerMix")->load(std::memory_order_relaxed));
+        const float depth = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerDepth")->load(std::memory_order_relaxed));
+        const float feedback = juce::jlimit(-0.7f, 0.7f, parameters.getRawParameterValue("flangerFeedback")->load(std::memory_order_relaxed));
+        const double rate = juce::jlimit(0.05, 5.0, static_cast<double>(parameters.getRawParameterValue("flangerRate")->load(std::memory_order_relaxed)));
+        const auto length = flangerBuffers[0].size();
+        if (mix > 0.0f && length > 2)
+        {
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& line = flangerBuffers[static_cast<size_t>(channel)];
+                    auto* data = buffer.getWritePointer(channel);
+                    const double phase = flangerPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
+                    const double delaySamples = currentSampleRate * (0.001 + 0.006 * depth * (0.5 + 0.5 * std::sin(phase)));
+                    double readPosition = static_cast<double>(flangerWritePosition) - delaySamples;
+                    while (readPosition < 0.0) readPosition += static_cast<double>(length);
+                    const auto a = static_cast<size_t>(readPosition) % length;
+                    const auto b = (a + 1) % length;
+                    const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
+                    const float delayed = line[a] + (line[b] - line[a]) * fraction;
+                    const float dry = data[sample];
+                    line[flangerWritePosition] = dry + delayed * feedback;
+                    data[sample] = dry + (delayed - dry) * mix;
+                }
+                flangerWritePosition = (flangerWritePosition + 1) % length;
+                flangerPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
+                if (flangerPhase >= juce::MathConstants<double>::twoPi) flangerPhase -= juce::MathConstants<double>::twoPi;
+            }
+        }
+    }
+
+    // Built-in cabinet convolution using a compact, original damped IR.
+    // This is a designed cabinet colour, not a third-party recorded cabinet capture.
+    if (parameters.getRawParameterValue("cabinetOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("cabinetMix")->load(std::memory_order_relaxed));
+        if (mix > 0.0f)
+        {
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& history = cabinetHistory[static_cast<size_t>(channel)];
+                    auto* data = buffer.getWritePointer(channel);
+                    history[cabinetWritePosition] = data[sample];
+                    float wet = 0.0f;
+                    size_t read = cabinetWritePosition;
+                    for (size_t tap = 0; tap < cabinetImpulse.size(); ++tap)
+                    {
+                        wet += history[read] * cabinetImpulse[tap];
+                        read = read == 0 ? cabinetImpulse.size() - 1 : read - 1;
+                    }
+                    const float dry = data[sample];
+                    data[sample] = dry + (wet - dry) * mix;
+                }
+                cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
+            }
+        }
+    }
+
+    // First production FX stage: bounded soft-clipping distortion. The
+    // processor runs in-place and performs no allocation on the audio thread.
+    if (parameters.getRawParameterValue("distortionOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float drive = 1.0f + 19.0f * parameters.getRawParameterValue("distortionDrive")->load(std::memory_order_relaxed);
+        const float wet = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
+        const float normalizer = std::tanh(drive);
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+            auto* data = buffer.getWritePointer(channel);
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                const float dry = data[sample];
+                const float shaped = std::tanh(dry * drive) / normalizer;
+                data[sample] = dry + (shaped - dry) * wet;
+            }
+        }
+    }
+
+    // Chorus: short modulated stereo delay. Delay memories are allocated in
+    // prepareToPlay; this loop performs no heap work on the audio thread.
+    if (parameters.getRawParameterValue("chorusOn")->load(std::memory_order_relaxed) > 0.5f
+        && buffer.getNumSamples() <= maximumBlockSize)
+    {
+        const float mix = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("chorusMix")->load(std::memory_order_relaxed));
+        const float depth = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("chorusDepth")->load(std::memory_order_relaxed));
+        const double rate = juce::jlimit(0.05, 10.0,
+            static_cast<double>(parameters.getRawParameterValue("chorusRate")->load(std::memory_order_relaxed)));
+        const auto chorusLength = chorusBuffers[0].size();
+        if (mix > 0.0f && chorusLength > 2)
+        {
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& line = chorusBuffers[static_cast<size_t>(channel)];
+                    auto* data = buffer.getWritePointer(channel);
+                    const double channelPhase = chorusPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
+                    const double modulation = 0.5 + 0.5 * std::sin(channelPhase);
+                    const double delaySamples = currentSampleRate * (0.008 + 0.012 * depth * modulation);
+                    double readPosition = static_cast<double>(chorusWritePosition) - delaySamples;
+                    while (readPosition < 0.0)
+                        readPosition += static_cast<double>(chorusLength);
+                    const auto indexA = static_cast<size_t>(readPosition) % chorusLength;
+                    const auto indexB = (indexA + 1) % chorusLength;
+                    const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
+                    const float delayed = line[indexA] + (line[indexB] - line[indexA]) * fraction;
+                    const float dry = data[sample];
+                    line[chorusWritePosition] = dry;
+                    data[sample] = dry + (delayed - dry) * mix;
+                }
+                chorusWritePosition = (chorusWritePosition + 1) % chorusLength;
+                chorusPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
+                if (chorusPhase >= juce::MathConstants<double>::twoPi)
+                    chorusPhase -= juce::MathConstants<double>::twoPi;
+            }
+        }
+    }
+
+    // Tempo-independent stereo delay with bounded feedback and a 2-second
+    // maximum delay. The same preallocated ring buffers are reused each block.
+    if (parameters.getRawParameterValue("delayOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float mix = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("delayMix")->load(std::memory_order_relaxed));
+        const float feedback = juce::jlimit(0.0f, 0.95f,
+            parameters.getRawParameterValue("delayFeedback")->load(std::memory_order_relaxed));
+        const double delayMs = juce::jlimit(1.0, 2000.0,
+            static_cast<double>(parameters.getRawParameterValue("delayTime")->load(std::memory_order_relaxed)));
+        const auto delayLength = delayBuffers[0].size();
+        const auto delaySamples = juce::jlimit<size_t>(1, delayLength - 1,
+            static_cast<size_t>(std::llround(delayMs * currentSampleRate / 1000.0)));
+        for (int sample = 0; sample < samples; ++sample)
+        {
+            for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+            {
+                auto& line = delayBuffers[static_cast<size_t>(channel)];
+                auto* data = buffer.getWritePointer(channel);
+                const auto readPosition = (delayWritePosition + line.size() - delaySamples) % line.size();
+                const float dry = data[sample];
+                const float delayed = line[readPosition];
+                line[delayWritePosition] = dry + delayed * feedback;
+                data[sample] = dry + delayed * mix;
+            }
+            delayWritePosition = (delayWritePosition + 1) % delayLength;
+        }
+    }
+
+    // JUCE's Schroeder reverb is configured wet-only; the dry/wet blend is
+    // applied from preallocated scratch buffers so bypass and mix=0 stay exact.
+    const float reverbMix = juce::jlimit(0.0f, 1.0f,
+        parameters.getRawParameterValue("reverbMix")->load(std::memory_order_relaxed));
+    if (parameters.getRawParameterValue("reverbOn")->load(std::memory_order_relaxed) > 0.5f
+        && reverbMix > 0.0f && samples <= maximumBlockSize)
+    {
+        juce::Reverb::Parameters reverbParameters;
+        reverbParameters.roomSize = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("reverbRoomSize")->load(std::memory_order_relaxed));
+        reverbParameters.damping = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("reverbDamping")->load(std::memory_order_relaxed));
+        reverbParameters.wetLevel = 1.0f;
+        reverbParameters.dryLevel = 0.0f;
+        reverbParameters.width = 1.0f;
+        reverbParameters.freezeMode = 0.0f;
+        reverb.setParameters(reverbParameters);
+
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+            std::copy_n(buffer.getReadPointer(channel), samples,
+                        reverbDryBuffers[static_cast<size_t>(channel)].begin());
+
+        if (buffer.getNumChannels() >= 2)
+            reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), samples);
+        else
+            reverb.processMono(buffer.getWritePointer(0), samples);
+
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+            auto* data = buffer.getWritePointer(channel);
+            const auto& dry = reverbDryBuffers[static_cast<size_t>(channel)];
+            for (int sample = 0; sample < samples; ++sample)
+                data[sample] = dry[static_cast<size_t>(sample)]
+                    + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+        }
+    }
+
+    // Global stereo balance and output trim are real post-FX controls.
+    const float globalPan = juce::jlimit(-1.0f, 1.0f,
+        parameters.getRawParameterValue("pan")->load(std::memory_order_relaxed));
+    if (buffer.getNumChannels() >= 2)
+    {
+        if (globalPan < 0.0f)
+            buffer.applyGain(1, 0, buffer.getNumSamples(), 1.0f + globalPan);
+        else if (globalPan > 0.0f)
+            buffer.applyGain(0, 0, buffer.getNumSamples(), 1.0f - globalPan);
+    }
+
+    const float masterGain = juce::jlimit(0.0f, 1.0f,
+        parameters.getRawParameterValue("master")->load(std::memory_order_relaxed));
+    const float outputDb = juce::jlimit(-24.0f, 12.0f,
+        parameters.getRawParameterValue("output")->load(std::memory_order_relaxed));
+    buffer.applyGain(masterGain * juce::Decibels::decibelsToGain(outputDb));
+}
+
+juce::AudioProcessorEditor* PopPunkGuitarUltimateAudioProcessor::createEditor()
+{
+    return new PopPunkGuitarUltimateAudioProcessorEditor(*this);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock& destinationData)
+{
+    auto state = parameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destinationData);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
+{
+    std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
+    if (xml != nullptr && xml->hasTagName(parameters.state.getType()))
+        parameters.replaceState(juce::ValueTree::fromXml(*xml));
+}
+
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new PopPunkGuitarUltimateAudioProcessor();
+}
+
+ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
+{
+    // Synchronous API for tests/tools only; never call from processBlock.
+    return sampler.loadSfz(sfzFile);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
+    const juce::File& sfzFile, std::function<void(ppgu::sampler::LoadReport)> completion)
+{
+    sampleLoadPool.addJob([this, sfzFile, completion = std::move(completion)]() mutable
+    {
+        auto report = sampler.loadSfz(sfzFile);
+        juce::MessageManager::callAsync(
+            [completion = std::move(completion), report = std::move(report)]() mutable
+            {
+                if (completion)
+                    completion(std::move(report));
+            });
+    });
+}

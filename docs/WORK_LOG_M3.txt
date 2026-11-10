@@ -1,0 +1,89 @@
+POP-PUNK-GUITAR-ULTIMATE — ЖУРНАЛ РАБОТ (M3)
+Дата: 10 ноября 2026
+Репозиторий: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
+Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
+Исходный HEAD перед записью: 56c507d844861b71e23c2c5c2b6b84287dde237a
+
+1. ЦЕЛЬ
+Довести M3 Pattern Transport/Runtime до приёмки; M4 не начинать до прохождения M1–M3. Следовать Promt.txt v33 FINAL и использовать существующую рабочую ветку.
+
+2. ВЫПОЛНЕННЫЕ ИЗМЕНЕНИЯ В КОДЕ (по текущему HEAD)
+- PatternScheduler: добавлена диагностика host transport discontinuity/seek, очистка pending NoteOff при stop/seek и переключении Host/Internal clock.
+- Internal clock рассчитывает PPQ по текущим sample rate, BPM и размеру блока; BPM ограничивается допустимым диапазоном.
+- Sample offset вычисляется как первый sample не раньше PPQ-события; добавлена forward quantize функция для 1/16 и 1/32.
+- Ограниченная очередь pending NoteOff увеличена; переполнение отмечается флагом, Processor использует all-notes-off fail-safe.
+- PluginProcessor: MIDI held-note state применяется до chord snapshot; учитывается MIDI samplePosition. Старый сегмент рендерится до позиции MIDI-события.
+- Смены аккорда/слота/длины паттерна используют выбранную сетку 1/16 или 1/32; swing не квантуется повторно. При transport stop held chord очищается.
+- APVTS validator: исправлены regex escaping; статическая сверка ранее обнаружила 97 уникальных объявленных ID и 48 аудио-обращений, все обращения имели объявления.
+- Добавлены headless тесты на host seek, смену clock source, tempo/block-size changes, near-tail sample mapping, 1/16 и 1/32 quantize, stop/restart и overflow queue.
+
+3. CI / ПРОВЕРКИ
+- Run 42769349946 (HEAD c8da085...) завершился failure; после него исправлялся APVTS validator.
+- Run 42769468136 (HEAD bd79b08...) завершился failure; после него исправлялось объявление clock-source transition.
+- Run 42769587683 для HEAD 56c507d... на момент фиксации имеет status=in_progress. Итог Windows build/CTest ещё не подтверждён.
+- Ручная проверка FL Studio 20 на Windows 10 не выполнена в рамках этой сессии.
+- Новые тесты нельзя считать пройденными до успешного CI/CTest на актуальном HEAD.
+
+4. ОСТАВШИЕСЯ РАБОТЫ ДЛЯ M3
+- Получить полный успешный Windows Release build и CTest на актуальном HEAD.
+- Исправить каждую ошибку CI и повторить workflow до зелёного результата.
+- Проверить интеграцию Scheduler → PluginProcessor → Sampler: NoteOn/NoteOff, границы блока, смена аккорда, слот/длина паттерна.
+- Проверить host start/stop/restart, seek вперёд/назад, потерю PlayHead данных, Host↔Internal clock handoff.
+- Проверить размеры буфера 64/128/256/512/1024 и изменение BPM на ходу.
+- Проверить overflow fail-safe и отсутствие зависших нот.
+- Провести ручную проверку FL Studio 20: синхронизация транспорта, MIDI аккорды, смена паттернов, automation и stop/panic.
+- Только после закрытия критериев обновить M3 на ACCEPTED.
+
+5. ТЕКУЩИЙ СТАТУС
+M3 = NOT ACCEPTED. M4 = BLOCKED. Причина: полный CI/CTest на актуальном HEAD и DAW integration acceptance ещё не подтверждены.
+
+6. ПРАВИЛО ДОКУМЕНТИРОВАНИЯ
+Каждый рабочий цикл обновляет этот TXT-файл, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md и docs/ЖУРНАЛ_БАГОВ_RU.md. Существенные streaming изменения дополнительно отражать в docs/ЖУРНАЛ_ИЗМЕНЕНИЙ_STREAMING_RU.md. Записи разделяют изменения, реально запущенные тесты, результаты и ограничения.
+
+
+
+## 10 ноября 2026 — полный аудит M1–M3 и исправление sample-accurate offset
+
+Проверена рабочая ветка `migration/full-copy-m3-transport-scheduler-v2`, исходный HEAD `3fc5832f471815e375e10c13f3572d53561fc13b`, спецификация `Promt.txt v33 FINAL`, processor, sampler, scheduler, CMake/CTest и Windows Actions run `42769587683`.
+
+### Подтверждённый результат CI до исправления
+- Windows Release compilation и создание VST3 bundle прошли до шага CTest.
+- CTest: 5 из 6 тестов Passed; `ppgu_pattern_scheduler_tests` Failed. Run conclusion: `failure`.
+- Ошибка локализована статически в тесте near-tail: PPQ 0.00265 при 48 kHz / 120 BPM соответствует sample 63.6. Код преобразовывал double в int усечением (63), хотя контракт требует первый sample НЕ раньше события (64). Ожидание теста 63 было неверным.
+
+### Изменения исходника в этом коммите
+- `Source/Performance/PatternScheduler.h`: sample offset теперь рассчитывается через `ceil(exactOffset - 1e-9)`, чтобы не запускать событие раньше его дробной sample-позиции и не сдвигать целочисленные позиции на один sample вперёд из-за погрешности float.
+- `tests/PatternSchedulerTests.cpp`: near-tail regression ожидает sample 64; добавлен тест точного целого sample 60, который защищает от лишнего смещения.
+
+### Полный аудит M1
+- APVTS state сериализуется и восстанавливается через JUCE XML; базовая параметрическая сериализация присутствует.
+- Критический пробел: путь/ID активной SFZ-библиотеки не включён в сериализуемое состояние. При повторном открытии проекта нельзя гарантировать восстановление выбранной библиотеки.
+- Не найдены подтверждённые тесты round-trip state, сохранения automation/parameter IDs в DAW, восстановления банка, host panic и смены пресета во время release-tail.
+- Pluginval и ручной acceptance во FL Studio 20 для текущего HEAD не подтверждены. M1 остаётся PARTIAL / NOT ACCEPTED.
+
+### Полный аудит M2
+- SFZ parser, WAV decode, key/velocity/channel zones, loop metadata, bounded voices и отдельные metadata/page-cache компоненты присутствуют.
+- Критический архитектурный разрыв: `SamplePool::loadSfz` декодирует целые WAV в `juce::AudioBuffer` и хранит их в `sampleStorage`; есть лимит 1 GiB и 128 snapshots, после достижения которых загрузка блокируется до перезапуска. Это не streaming/lazy paging по требованию v33.
+- `WavPageReader`, `SampleMetadataIndex` и `PageCacheSlots` существуют как отдельные модули, но текущий `SamplerEngine::Voice` читает полные `AudioBuffer`; интеграция page cache в voice playback не подтверждена.
+- Round-robin выбор и velocity crossfade в runtime не подтверждены; `findRegion` возвращает первый совпавший регион. Нет доказательства длительного stress/100-hit no-click, unload/reload и memory ceiling на целевой машине. M2 остаётся PARTIAL / NOT ACCEPTED.
+
+### Полный аудит M3
+- Scheduler подключён к `processBlock` и dispatch'ит NoteOn/NoteOff в SamplerEngine; MIDI sample positions частично учитываются.
+- Подтверждён дефект fractional sample mapping, исправление внесено выше.
+- Дополнительные найденные риски для следующих циклов: несколько смен аккорда внутри одного блока схлопываются в один финальный chord snapshot; pattern generation и scheduler имеют фиксированный лимит 512 событий, при заполнении часть событий может быть отброшена без явного overflow report; runtime-тестов полного маршрута MIDI → chord state → scheduler → sampler нет.
+- Stop/seek/clock handoff и quantize имеют unit coverage, но полный CTest текущей серии провалился, DAW validation отсутствует. M3 остаётся NOT ACCEPTED.
+
+### Новые записи баг-трекера
+- M1-001: не сохраняется и не восстанавливается активная sample library reference.
+- M1-002: отсутствует автоматизированный APVTS/DAW state round-trip и automation acceptance.
+- M1-003: pluginval / FL Studio 20 host acceptance не подтверждены.
+- M2-001: полные WAV декодируются в RAM вместо page streaming.
+- M2-002: нет интеграции PageCache/WavPageReader в SamplerEngine voice playback.
+- M2-003: нет подтверждённого round-robin и velocity crossfade в runtime.
+- M2-004: лимиты 1 GiB / 128 snapshots и отсутствие безопасного unload/reload ограничивают библиотеки.
+- M3-013: fractional PPQ-to-sample offset dispatch раньше требуемого sample; исправление внесено, CI ожидается.
+- M3-014: несколько chord transitions в одном audio block не сохраняются как отдельные sample-accurate события.
+- M3-015: scheduler output capacity может ограничить плотный pattern без явного overflow fail-safe.
+
+### Статус после анализа
+M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни один критерий не закрывается только по наличию исходника. Следующий шаг — CI на текущем commit, затем runtime tests и поочерёдные исправления M3-014/015, M2 streaming integration и M1 state restore.

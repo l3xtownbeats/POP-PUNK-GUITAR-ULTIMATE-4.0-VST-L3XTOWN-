@@ -1,0 +1,62 @@
+{
+  "format": "l3xtown-pop-punk-preset",
+  "formatVersion": "1.0.0",
+  "id": "USER-PATTERN-EXAMPLE-001",
+  "name": "Fast Down-Up Chorus",
+  "mode": "PATTERN",
+  "author": "L3XTOWN",
+  "description": "Illustrative Pattern preset file; requires the Pattern playback engine and mapped strum recordings.",
+  "tags": [
+    "pattern",
+    "chorus",
+    "down-up",
+    "fast",
+    "pop-punk"
+  ],
+  "sampleProfile": "electric-strummed",
+  "parameters": {
+    "drive": 0.74,
+    "tone": 7.4,
+    "reverb": 0.14,
+    "outputDb": -2,
+    "voices": 8
+  },
+  "pattern": {
+    "grooveId": "alternate-down-up-8ths",
+    "tempoSync": true,
+    "steps": [
+      {
+        "beat": 0,
+        "direction": "down",
+        "gate": 0.82,
+        "velocity": 112,
+        "articulation": "open"
+      },
+      {
+        "beat": 0.5,
+        "direction": "up",
+        "gate": 0.55,
+        "velocity": 84,
+        "articulation": "open"
+      },
+      {
+        "beat": 1,
+        "direction": "down",
+        "gate": 0.82,
+        "velocity": 104,
+        "articulation": "open"
+      },
+      {
+        "beat": 1.5,
+        "direction": "up",
+        "gate": 0.55,
+        "velocity": 82,
+        "articulation": "open"
+      }
+    ],
+    "chordFollow": "midi-chord",
+    "humanizeMs": 4,
+    "humanizeVelocity": 5
+  },
+  "status": "format-example-not-yet-loaded-by-plugin"
+}
