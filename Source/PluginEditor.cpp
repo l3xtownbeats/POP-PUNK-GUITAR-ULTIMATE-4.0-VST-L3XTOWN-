@@ -96,6 +96,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
+    const auto savedSfzPath = processor.getCurrentSfzFilePath();
+    if (savedSfzPath.isNotEmpty())
+    {
+        const juce::File savedSfzFile(savedSfzPath);
+        statusLabel.setText(savedSfzFile.existsAsFile()
+            ? "SAVED LIBRARY  /  " + savedSfzFile.getFileName()
+            : "LIBRARY FILE NOT FOUND  /  " + savedSfzFile.getFileName(),
+            juce::dontSendNotification);
+    }
     statusLabel.setColour(juce::Label::textColourId, muted);
     statusLabel.setFont(juce::Font(11.0f));
     addAndMakeVisible(statusLabel);
