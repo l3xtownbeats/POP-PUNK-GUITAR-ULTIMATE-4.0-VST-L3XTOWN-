@@ -68,6 +68,20 @@ class FxRackContent final : public juce::Component
                 sliders.push_back(std::move(slider));
             }
         }
+        void applyTheme() {
+            heading.setColour(juce::Label::textColourId, pink);
+            enabled.setColour(juce::TextButton::buttonColourId, panel2);
+            enabled.setColour(juce::TextButton::buttonOnColourId, pink);
+            enabled.setColour(juce::TextButton::textColourOffId, pale);
+            enabled.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+            for (auto& label : labels) label->setColour(juce::Label::textColourId, muted);
+            for (auto& slider : sliders) {
+                slider->setColour(juce::Slider::rotarySliderFillColourId, pink);
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, panel);
+                slider->setColour(juce::Slider::thumbColourId, pale);
+                slider->setColour(juce::Slider::textBoxTextColourId, pale);
+            }
+        }
         void resized() override {
             auto area = getLocalBounds().reduced(10, 5);
             auto header = area.removeFromTop(23);
@@ -106,11 +120,15 @@ public:
         addAndMakeVisible(viewport);
         setSize(960,820);
     }
+    void applyTheme() {
+        for (auto& module : modules) module->applyTheme();
+        repaint();
+    }
     void paint(juce::Graphics& g) override {
-        g.fillAll(juce::Colour(0xff111116));
-        g.setColour(juce::Colour(0xffed238b)); g.setFont(juce::Font(22.0f,juce::Font::bold));
+        g.fillAll(bg);
+        g.setColour(pink); g.setFont(juce::Font(22.0f,juce::Font::bold));
         g.drawText("FX STUDIO",20,10,300,30,juce::Justification::left);
-        g.setColour(juce::Colour(0xffaaa8b2)); g.setFont(juce::Font(11.0f));
+        g.setColour(muted); g.setFont(juce::Font(11.0f));
         g.drawText("TONE SHAPING  /  PER-PRESET PARAMETERS  /  HOST AUTOMATION",22,40,700,20,juce::Justification::left);
     }
     void resized() override {
@@ -128,6 +146,11 @@ class FxRackWindow final : public juce::DocumentWindow {
 public:
     explicit FxRackWindow(PopPunkGuitarUltimateAudioProcessor& p):DocumentWindow("PPGU 5.0 / FX STUDIO",juce::Colour(0xff111116),allButtons) {
         setUsingNativeTitleBar(true); setContentOwned(new FxRackContent(p),true); setResizable(true,true); centreWithSize(960,820);
+    }
+    void applyTheme() {
+        if (auto* content = dynamic_cast<FxRackContent*>(getContentComponent()))
+            content->applyTheme();
+        setBackgroundColour(bg);
     }
     void closeButtonPressed() override { setVisible(false); }
 };
@@ -416,12 +439,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, pink);
         addAndMakeVisible(*l);
     }
+    activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1,
+        static_cast<int>(processor.parameters.state.getProperty("uiSkinIndex", 0)));
     applySkin(activeSkinIndex);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
 {
     activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1, index);
+    processor.parameters.state.setProperty("uiSkinIndex", activeSkinIndex, nullptr);
     const auto& skin = skinPalettes[static_cast<size_t>(activeSkinIndex)];
     bg = juce::Colour(skin.background);
     panel = juce::Colour(skin.panel);
@@ -468,6 +494,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
         keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
         keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, panel2);
     }
+    if (fxWindow != nullptr) fxWindow->applyTheme();
     repaint();
 }
 
@@ -542,7 +569,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto panelArea = getLocalBounds().reduced(16);
     panelArea.removeFromTop(276);
     panelArea.removeFromBottom(82);
-    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
+    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.34f), fxW=static_cast<int>(panelArea.getWidth()*0.34f);
     auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
     auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
     drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,panelArea);
@@ -579,7 +606,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     statusLabel.setBounds(status);
     area.removeFromTop(8);
     auto panels = area.removeFromTop(400);
-    const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.39f), fxW=static_cast<int>(panels.getWidth()*0.39f);
+    const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.34f), fxW=static_cast<int>(panels.getWidth()*0.34f);
     auto amp=panels.removeFromLeft(ampW); panels.removeFromLeft(gap);
     auto fx=panels.removeFromLeft(fxW); panels.removeFromLeft(gap); auto playback=panels;
     ampTitle.setBounds(amp.removeFromTop(34).reduced(12,2));
