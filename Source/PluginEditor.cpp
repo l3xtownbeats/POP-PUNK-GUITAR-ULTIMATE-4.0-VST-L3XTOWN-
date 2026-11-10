@@ -133,6 +133,30 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     startModeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(startModeBox);
     startModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "syncMode", startModeBox);
+
+    // AutoChords is an explicitly opt-in PATTERN-only performance helper.
+    autoChordRootBox.addItemList(juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
+    autoChordRootBox.setTooltip("AutoChords root: the C4 key maps to this root; adjacent keys transpose the chord chromatically.");
+    autoChordTypeBox.addItem("MAJOR", 1);
+    autoChordTypeBox.addItem("MINOR", 2);
+    autoChordTypeBox.setTooltip("AutoChords triad quality");
+    for (auto* box : { &autoChordRootBox, &autoChordTypeBox })
+    {
+        box->setColour(juce::ComboBox::backgroundColourId, panel2);
+        box->setColour(juce::ComboBox::textColourId, pale);
+        box->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+        addAndMakeVisible(*box);
+    }
+    autoChordsButton.setClickingTogglesState(true);
+    autoChordsButton.setTooltip("PATTERN only. OFF = incoming Piano Roll notes pass through without chord substitution.");
+    autoChordsButton.setColour(juce::TextButton::buttonColourId, panel2);
+    autoChordsButton.setColour(juce::TextButton::buttonOnColourId, pink);
+    autoChordsButton.setColour(juce::TextButton::textColourOffId, pale);
+    autoChordsButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    addAndMakeVisible(autoChordsButton);
+    autoChordsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, "autoChordsOn", autoChordsButton);
+    autoChordRootAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "autoChordRoot", autoChordRootBox);
+    autoChordTypeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "autoChordType", autoChordTypeBox);
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
     keyboard->setKeyWidth(18.0f);
@@ -266,7 +290,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     auto tabs=area.removeFromTop(62);
     melodyTab.setBounds(tabs.removeFromLeft(220).reduced(2,4));
     patternTab.setBounds(tabs.removeFromLeft(190).reduced(6,4));
-    modeBox.setBounds(tabs.removeFromRight(140).reduced(2,8));
+    modeBox.setBounds(tabs.removeFromRight(120).reduced(2,8));
+    autoChordTypeBox.setBounds(tabs.removeFromRight(96).reduced(2,8));
+    autoChordRootBox.setBounds(tabs.removeFromRight(70).reduced(2,8));
+    autoChordsButton.setBounds(tabs.removeFromRight(132).reduced(2,8));
     area.removeFromTop(8);
     auto status=area.removeFromTop(28); statusLabel.setBounds(status);
     area.removeFromTop(12);
@@ -383,7 +410,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
         b.setColour(juce::TextButton::textColourOffId, activeSkin.text);
         b.setColour(juce::TextButton::textColourOnId, activeSkin.background);
     };
-    setCombo(presetBox); setCombo(categoryBox); setCombo(modeBox); setCombo(startModeBox);
+    setCombo(presetBox); setCombo(categoryBox); setCombo(modeBox); setCombo(startModeBox); setCombo(autoChordRootBox); setCombo(autoChordTypeBox);
+    setButton(autoChordsButton);
     presetSearch.setColour(juce::TextEditor::backgroundColourId, activeSkin.surface);
     presetSearch.setColour(juce::TextEditor::textColourId, activeSkin.text);
     presetSearch.setColour(juce::TextEditor::outlineColourId, activeSkin.accent.withAlpha(0.55f));
