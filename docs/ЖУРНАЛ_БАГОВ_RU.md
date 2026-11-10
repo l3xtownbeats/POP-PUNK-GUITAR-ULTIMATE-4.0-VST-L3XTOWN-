@@ -20,9 +20,23 @@ HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
 | M3-010 | High | Build verification | Промежуточные Windows CI запуски завершились failure; успешная сборка не подтверждена. | Исправления внесены; run 42769587683 ожидает завершения на момент записи. | OPEN |
 | M3-011 | High | DAW integration | Не подтверждены playback/stop/seek/pattern transitions в FL Studio 20. | Ручной acceptance test на Windows 10 / FL Studio 20. | OPEN |
 | M3-012 | Medium | Block-size stress | Полный runtime стресс при 64–1024 samples и BPM automation не подтверждён. | Проверить CTest/DAW при разных block sizes и изменениях темпа. | OPEN |
+| M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples усекался до 63, то есть NoteOn мог звучать раньше события. | Использовать ceil с epsilon; regression проверяет 63.6→64 и exact 60→60. | FIXED — AWAITING CI |
+| M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока сводятся к одному финальному chord snapshot; промежуточные аккорды теряются. | Сегментировать MIDI по samplePosition и планировать каждую смену chord отдельно. | OPEN |
+| M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может молча отсечь события плотного pattern; нет отдельного overflow flag для output array. | Явный overflow status + all-notes-off fail-safe и regression test. | OPEN |
+| M1-001 | High | State persistence | Активная sample library path/ID не входит в APVTS state; DAW restore не гарантирует возврат выбранной библиотеки. | Добавить versioned library reference и безопасное восстановление на worker thread. | OPEN |
+| M1-002 | High | State/automation acceptance | Нет автоматизированного round-trip теста параметров/state и DAW automation acceptance для текущего HEAD. | Добавить state serialization tests и проверить FL Studio automation/save/reopen. | OPEN |
+| M1-003 | High | Host validation | Pluginval и ручная FL Studio 20 acceptance не подтверждены. | Запустить pluginval strict и ручной host checklist; записать версии/настройки. | OPEN |
+| M2-001 | Critical | Sample streaming | SamplePool декодирует полные WAV в RAM; это не требуемый page streaming/lazy loading. | Подключить indexed WavPageReader + bounded PageCache к voice read path. | OPEN |
+| M2-002 | Critical | Streaming integration | PageCacheSlots/WavPageReader/MetadataIndex существуют отдельно; SamplerEngine::Voice читает полный AudioBuffer. | Реальная интеграция page request/prefetch/cache pinning в voice lifecycle. | OPEN |
+| M2-003 | High | Sample selection | Runtime round-robin и velocity crossfade не подтверждены; findRegion возвращает первый matching region. | Добавить RR groups/counters и velocity crossfade с тестами. | OPEN |
+| M2-004 | High | Library lifecycle | SamplePool ограничен 1 GiB и 128 snapshots; нет безопасного unload/reload и возврата памяти. | Ввести ref-counted immutable bank snapshots и audio-safe retirement. | OPEN |
 
 ## Правила закрытия багов
 1. Не закрывать баг только на основании изменения исходника.
 2. Для runtime-багов нужны regression tests; для build-багов — успешный Windows CI на актуальном commit.
 3. Для DAW integration нужны ручные результаты FL Studio 20 с версией хоста, sample rate, buffer size и сценарием.
 4. Если CI обнаруживает регрессию, добавить новый ID либо обновить существующий статус и указать commit/run.
+
+## Аудит M1–M3 — 10 ноября 2026
+
+См. полный технический разбор и план исправлений в корневом `Info.txt`. M1, M2 и M3 остаются NOT ACCEPTED. M3-013 исправлен в исходнике и ожидает повторного CI; M1-001…003, M2-001…004, M3-014…015 остаются OPEN.

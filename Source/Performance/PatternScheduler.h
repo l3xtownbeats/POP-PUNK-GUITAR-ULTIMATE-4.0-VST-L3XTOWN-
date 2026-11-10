@@ -151,9 +151,10 @@ namespace ppgu::performance
             {
                 if (count >= output.size() || eventPpq < clock.startPpq || eventPpq >= clock.endPpq)
                     return false;
-                // Floor to the first sample at or after the event time. Rounding
-                // can push an event at the block tail into the last sample early.
-                const int offset = static_cast<int>((eventPpq - clock.startPpq) * samplesPerBeat);
+                // Map to the first integer sample at or after the event time.
+                // Truncation/floor can dispatch a fractional-sample event early.
+                const double exactOffset = (eventPpq - clock.startPpq) * samplesPerBeat;
+                const int offset = static_cast<int>(std::ceil(exactOffset - 1.0e-9));
                 output[count++] = { clampInt(offset, 0, blockSamples - 1), kind,
                                     clampInt(note, 0, 127), clampInt(velocity, 0, 127),
                                     clampInt(channel, 1, 16) };

@@ -127,8 +127,18 @@ int main()
     std::array<PatternEvent, 1> edgePattern {{{ 0.00265, 0.0001, 60, 100, 1 }}};
     const auto edgeClock = edgeScheduler.beginBlock({ true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 64);
     const auto edgeCount = edgeScheduler.schedule(edgePattern, 1.0, 0.0, edgeClock, 48000.0, 64, 0.0, 0, events);
-    if (edgeCount != 1 || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 63)
+    if (edgeCount != 1 || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 64)
         return 17;
+
+    // An event exactly on an integer sample must not be advanced by ceil.
+    PatternScheduler exactSampleScheduler;
+    std::array<PatternEvent, 1> exactSamplePattern {{{ 0.0025, 0.0001, 62, 100, 1 }}};
+    const auto exactSampleClock = exactSampleScheduler.beginBlock(
+        { true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 64);
+    const auto exactSampleCount = exactSampleScheduler.schedule(
+        exactSamplePattern, 1.0, 0.0, exactSampleClock, 48000.0, 64, 0.0, 0, events);
+    if (exactSampleCount == 0 || events[0].sampleOffset != 60)
+        return 20;
 
     if (std::abs(PatternScheduler::quantizePpqForward(1.01, 0.25) - 1.25) > 1.0e-9
         || std::abs(PatternScheduler::quantizePpqForward(1.25, 0.25) - 1.25) > 1.0e-9
