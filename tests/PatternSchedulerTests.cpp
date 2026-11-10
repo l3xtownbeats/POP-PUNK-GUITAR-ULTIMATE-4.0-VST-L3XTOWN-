@@ -165,6 +165,31 @@ int main()
     if (!hostClock.usingHost || !internalClock.transportDiscontinuity || !hostAgain.transportDiscontinuity)
         return 19;
 
+
+    // Distinct chord snapshots in consecutive sample-accurate sub-blocks
+    // must each dispatch their own notes rather than collapsing to the last chord.
+    PatternScheduler chordTimelineScheduler;
+    std::array<PatternEvent, 1> firstChordPattern {{{ 0.0, 0.20, 60, 100, 1 }}};
+    std::array<PatternEvent, 1> secondChordPattern {{{ 0.0, 0.20, 64, 100, 1 }}};
+    const auto chordBlock = chordTimelineScheduler.beginBlock(
+        { true, true, 120.0, 20.0 }, false, 120.0, 48000.0, 480);
+    BlockClock firstChordInterval = chordBlock;
+    firstChordInterval.endPpq = chordBlock.startPpq + 120.0 * 240.0 / (60.0 * 48000.0);
+    const auto firstChordCount = chordTimelineScheduler.schedule(
+        firstChordPattern, 4.0, chordBlock.startPpq, firstChordInterval,
+        48000.0, 240, 0.0, 0, events);
+    if (firstChordCount == 0 || events[0].kind != EventKind::NoteOn
+        || events[0].note != 60 || events[0].sampleOffset != 0)
+        return 22;
+    BlockClock secondChordInterval = chordBlock;
+    secondChordInterval.startPpq = firstChordInterval.endPpq;
+    const auto secondChordCount = chordTimelineScheduler.schedule(
+        secondChordPattern, 4.0, secondChordInterval.startPpq,
+        secondChordInterval, 48000.0, 240, 0.0, 0, events);
+    if (secondChordCount == 0 || events[0].kind != EventKind::NoteOn
+        || events[0].note != 64 || events[0].sampleOffset != 0)
+        return 23;
+
     std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
     return 0;
 }
