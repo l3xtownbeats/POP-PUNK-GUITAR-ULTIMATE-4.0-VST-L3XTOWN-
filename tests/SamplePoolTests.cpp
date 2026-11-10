@@ -89,23 +89,23 @@ int main()
     // one another's cursors when their notes are interleaved.
     const auto independentRoundRobinSfz = directory.getChildFile("independent-round-robin.sfz");
     if (!independentRoundRobinSfz.replaceWithText(
-        "<group> group=77\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=1\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=2\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=3\\n"
-        "<group> group=78\\n"
-        "<region> sample=test.wav key=66 seq_length=3 seq_position=1\\n"
-        "<region> sample=test.wav key=66 seq_length=3 seq_position=2\\n"
-        "<region> sample=test.wav key=66 seq_length=3 seq_position=3\\n"))
+        "<group> group=77\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=3\n"
+        "<group> group=78\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=3\n"))
     {
-        std::cerr << "Could not write independent SFZ round-robin fixture.\\n";
+        std::cerr << "Could not write independent SFZ round-robin fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool independentRoundRobinPool;
     const auto independentLoad = independentRoundRobinPool.loadSfz(independentRoundRobinSfz);
     if (!independentLoad.success || independentLoad.loadedRegions != 6)
     {
-        std::cerr << "Independent SFZ round-robin sets failed to load.\\n";
+        std::cerr << "Independent SFZ round-robin sets failed to load.\n";
         return 1;
     }
     const auto* firstSetFirst = independentRoundRobinPool.findRegion(65, 100, 1);
@@ -115,7 +115,7 @@ int main()
         || firstSetFirst->seqPosition != 1 || secondSetFirst->seqPosition != 1
         || firstSetSecond->seqPosition != 2)
     {
-        std::cerr << "Independent SFZ round-robin groups shared a cursor.\\n";
+        std::cerr << "Independent SFZ round-robin groups shared a cursor.\n";
         return 1;
     }
 
