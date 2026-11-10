@@ -146,6 +146,63 @@ int main()
     voiceReader.prefetch(510);
     } // RAII must release all page pins before the stream is stopped.
 
+    // Compare the optimized reader against an independent Catmull-Rom
+    // reference at positions wholly inside a page and across several page
+    // boundaries. This guards the rendered signal, not just successful reads.
+    {
+        ppgu::sampler::StreamingVoiceReader signalReader;
+        signalReader.attach(&service, 0, sourceFrames);
+        const auto verifyInterpolation = [&](std::uint64_t frame, float fraction)
+        {
+            const auto clampIndex = [](std::int64_t index)
+            {
+                return static_cast<int>(std::clamp<std::int64_t>(index, 0, sourceFrames - 1));
+            };
+            const std::array<int, 4> tapIndices {
+                clampIndex(static_cast<std::int64_t>(frame) - 1),
+                clampIndex(static_cast<std::int64_t>(frame)),
+                clampIndex(static_cast<std::int64_t>(frame) + 1),
+                clampIndex(static_cast<std::int64_t>(frame) + 2)
+            };
+            const float t2 = fraction * fraction;
+            const float t3 = t2 * fraction;
+            const auto reference = [&](int channel)
+            {
+                std::array<float, 4> taps {};
+                for (std::size_t i = 0; i < taps.size(); ++i)
+                    taps[i] = source.getSample(channel, tapIndices[i]);
+                return 0.5f * ((2.0f * taps[1])
+                    + (-taps[0] + taps[2]) * fraction
+                    + (2.0f * taps[0] - 5.0f * taps[1] + 4.0f * taps[2] - taps[3]) * t2
+                    + (-taps[0] + 3.0f * taps[1] - 3.0f * taps[2] + taps[3]) * t3);
+            };
+
+            float actualLeft = 0.0f, actualRight = 0.0f;
+            bool ready = false;
+            const auto signalDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+            while (std::chrono::steady_clock::now() < signalDeadline && !ready)
+            {
+                ready = signalReader.readHermite(frame, fraction, 0, sourceFrames,
+                                                 actualLeft, actualRight);
+                if (!ready)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
+            return ready
+                && std::abs(actualLeft - reference(0)) < 0.00002f
+                && std::abs(actualRight - reference(1)) < 0.00002f;
+        };
+
+        for (const auto frame : { 17ULL, 253ULL, 254ULL, 255ULL, 256ULL,
+                                  511ULL, 512ULL, 1023ULL, 4094ULL })
+            for (const auto fraction : { 0.25f, 0.5f, 0.75f })
+                if (!verifyInterpolation(frame, fraction))
+                {
+                    std::cerr << "Optimized Hermite reader changed the rendered signal at frame "
+                              << frame << ".\\n";
+                    return 1;
+                }
+    }
+
     // Region-edge interpolation must clamp its support taps to the active
     // region, including the first and final source frames. Invalid regions and
     // out-of-region positions must fail without exposing stale output.
