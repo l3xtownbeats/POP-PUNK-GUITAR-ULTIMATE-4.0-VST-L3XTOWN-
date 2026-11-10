@@ -148,6 +148,56 @@ int main()
         return 1;
     }
 
+    // Streaming frame positions are 64-bit: a sample longer than the old
+    // arbitrary 120-second ceiling must remain loadable without decoding it
+    // into one giant AudioBuffer.
+    const auto longDurationDirectory = directory.getChildFile("long-duration-library");
+    if (!longDurationDirectory.createDirectory())
+    {
+        std::cerr << "Could not create long-duration streaming library root.\\n";
+        return 1;
+    }
+    const auto longDurationWav = longDurationDirectory.getChildFile("long-duration.wav");
+    const auto longDurationSfz = longDurationDirectory.getChildFile("long-duration.sfz");
+    constexpr int longDurationFrames = 8000 * 121;
+    juce::AudioBuffer<float> longDurationSource(1, longDurationFrames);
+    longDurationSource.clear();
+    std::unique_ptr<juce::OutputStream> longDurationOutput(longDurationWav.createOutputStream());
+    if (longDurationOutput == nullptr)
+    {
+        std::cerr << "Could not create long-duration WAV fixture.\\n";
+        return 1;
+    }
+    std::unique_ptr<juce::AudioFormatWriter> longDurationWriter(
+        wavFormat.createWriterFor(longDurationOutput.get(), 8000.0, 1, 16, {}, 0));
+    if (longDurationWriter == nullptr)
+    {
+        std::cerr << "Could not create long-duration WAV writer.\\n";
+        return 1;
+    }
+    longDurationOutput.release();
+    if (!longDurationWriter->writeFromAudioSampleBuffer(longDurationSource, 0, longDurationFrames))
+    {
+        std::cerr << "Could not write long-duration WAV fixture.\\n";
+        return 1;
+    }
+    longDurationWriter.reset();
+    if (!longDurationSfz.replaceWithText("<region> sample=long-duration.wav key=73\\n"))
+    {
+        std::cerr << "Could not write long-duration SFZ fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool longDurationPool;
+    const auto longDurationLoad = longDurationPool.loadSfz(longDurationSfz);
+    const auto* longDurationRegion = longDurationPool.findRegion(73, 100, 1);
+    if (!longDurationLoad.success || longDurationRegion == nullptr
+        || longDurationRegion->endFrame != static_cast<std::uint64_t>(longDurationFrames))
+    {
+        std::cerr << "Streaming sampler rejected or truncated a 121-second WAV.\\n";
+        for (const auto& error : longDurationLoad.errors) std::cerr << error << "\\n";
+        return 1;
+    }
+
     // Exercise real voice playback across multiple 4096-frame cache pages.
     // Use a distinct library root: SamplePool intentionally indexes a library
     // once and reuses its immutable metadata index for later SFZ banks.
