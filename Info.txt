@@ -1596,3 +1596,8 @@ HEAD на момент записи: `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
 
 ### Статус приёмки
 Ни M1, ни M2, ни M3, ни весь этап M1–M5 не объявляются завершёнными на основании этих запусков. После исправления требуется новый commit, полный Windows CI, CTest, pluginval strictness 5 и отдельная ручная проверка FL Studio 20 для host-visible поведения.
+
+
+SOUND BANK EXPANSION — 2026-11-11
+User requested a broader library using all suitable quality sources, not only the previously used libraries. Updated .github/workflows/vst3-build.yml to retain the existing Meta Steel/Nylon + FreePats Clean/Distortion banks and additionally package five CC0 collections: Karoryfer Emilyguitar (323 WAV), Shinyguitar (846 WAV), Black And Green Guitars (1,776 WAV), FreePats FSBS Direct DI (122 WAV), and FreePats FSBS Jazz (135 FLAC). Upstream repository trees and CC0-1.0 license identifiers were inspected. Workflow now changes the sample cache key, clones each source as a separate folder, checks license/SFZ presence and minimum audio counts, strips .git, and hashes WAV + FLAC. Exact final count, package size, and checksum remain CI-dependent.
+Important: source redistribution clearance is not the same as runtime SFZ compatibility. Current parser does not yet support all advanced include/default_path/random-region/articulation opcodes; SamplePool streaming is WAV-centric. User import can convert FLAC and create a simple root-key map, but does not preserve every original velocity layer/RR/articulation. Do not claim all added banks are fully playable factory presets until parser and per-bank tests pass. No audio audition was performed in this work cycle.
