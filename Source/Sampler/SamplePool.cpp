@@ -11,7 +11,6 @@ namespace ppgu::sampler
 {
 namespace
 {
-constexpr double maximumSampleSeconds = 120.0;
 std::string pathKey(const std::filesystem::path& path)
 {
 #if JUCE_WINDOWS
@@ -31,16 +30,18 @@ bool isWithinDirectory(const std::filesystem::path& root, const std::filesystem:
 
 // Кубическая интерполяция Hermite (Catmull–Rom). Индексы ограничены
 // границами региона, поэтому чтение не выходит за декодированный WAV.
-float hermiteSample(const float* data, int frame, float fraction, int regionStart, int regionEnd) noexcept
+float hermiteSample(const float* data, std::uint64_t frame, float fraction,
+                    std::uint64_t regionStart, std::uint64_t regionEnd) noexcept
 {
-    const int i0 = juce::jlimit(regionStart, regionEnd - 1, frame - 1);
-    const int i1 = juce::jlimit(regionStart, regionEnd - 1, frame);
-    const int i2 = juce::jlimit(regionStart, regionEnd - 1, frame + 1);
-    const int i3 = juce::jlimit(regionStart, regionEnd - 1, frame + 2);
-    const float y0 = data[i0];
-    const float y1 = data[i1];
-    const float y2 = data[i2];
-    const float y3 = data[i3];
+    const auto lastFrame = regionEnd - 1;
+    const auto i0 = frame > regionStart ? frame - 1 : regionStart;
+    const auto i1 = std::clamp(frame, regionStart, lastFrame);
+    const auto i2 = std::clamp(frame + 1, regionStart, lastFrame);
+    const auto i3 = std::clamp(frame + 2, regionStart, lastFrame);
+    const float y0 = data[static_cast<std::size_t>(i0)];
+    const float y1 = data[static_cast<std::size_t>(i1)];
+    const float y2 = data[static_cast<std::size_t>(i2)];
+    const float y3 = data[static_cast<std::size_t>(i3)];
     const float t2 = fraction * fraction;
     const float t3 = t2 * fraction;
     return 0.5f * ((2.0f * y1)
@@ -254,18 +255,20 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
         const auto& metadata = library->metadata[sampleId];
         if (metadata.frames == 0 || !std::isfinite(metadata.sampleRate)
             || metadata.sampleRate < 8000.0 || metadata.sampleRate > 384000.0
-            || metadata.frames > static_cast<std::uint64_t>(metadata.sampleRate * maximumSampleSeconds)
-            || metadata.frames > static_cast<std::uint64_t>(std::numeric_limits<int>::max()))
+            || metadata.frames > static_cast<std::uint64_t>(std::numeric_limits<juce::int64>::max()))
         {
-            report.errors.push_back("WAV sample has unsupported duration or invalid streaming metadata: " + canonicalSample.string());
+            report.errors.push_back("WAV sample has invalid or unsupported 64-bit streaming metadata: " + canonicalSample.string());
             continue;
         }
 
+        // Keep frame positions 64-bit throughout the streaming runtime. The
+        // page reader decodes bounded chunks, so total file duration is not
+        // constrained by JUCE AudioBuffer's int-sized in-memory sample count.
         const auto totalFrames = metadata.frames;
-        const int start = static_cast<int>(std::min<std::uint64_t>(region.offset, totalFrames));
-        const int end = region.end == 0
-            ? static_cast<int>(totalFrames)
-            : static_cast<int>(std::min<std::uint64_t>(region.end, totalFrames));
+        const std::uint64_t start = std::min<std::uint64_t>(region.offset, totalFrames);
+        const std::uint64_t end = region.end == 0
+            ? totalFrames
+            : std::min<std::uint64_t>(region.end, totalFrames);
         if (start >= end)
         {
             report.errors.push_back("SFZ offset/end produce an empty sample region: " + canonicalSample.string());
@@ -315,8 +318,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
         }
         view.startFrame = start;
         view.endFrame = end;
-        view.loopStartFrame = start + static_cast<int>(loopStartOffset);
-        view.loopEndFrame = start + static_cast<int>(loopEndOffset);
+        view.loopStartFrame = start + loopStartOffset;
+        view.loopEndFrame = start + loopEndOffset;
         view.loopMode = region.loopMode == "loop_continuous" ? 1
             : (region.loopMode == "loop_sustain" ? 2
                 : (region.loopMode == "loop_pingpong" ? 3 : (region.loopMode == "one_shot" ? 4 : 0)));
@@ -585,7 +588,7 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
         const auto& region = *voice.region;
         const auto* source = region.audio;
         const int sourceChannels = source != nullptr ? source->getNumChannels() : 2;
-        const int sourceEnd = region.endFrame;
+        const std::uint64_t sourceEnd = region.endFrame;
         const auto* left = source != nullptr ? source->getReadPointer(0) : nullptr;
         const auto* right = source != nullptr && sourceChannels > 1
             ? source->getReadPointer(1) : left;
@@ -610,7 +613,14 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             else if (loopActive && voice.position >= region.loopEndFrame)
                 voice.position = static_cast<double>(region.loopStartFrame);
 
-            const int frame = static_cast<int>(voice.position);
+            if (!std::isfinite(voice.position) || voice.position < 0.0
+                || voice.position >= static_cast<double>(sourceEnd))
+            {
+                streamReader.release();
+                voice = {};
+                break;
+            }
+            const auto frame = static_cast<std::uint64_t>(voice.position);
             if ((voice.direction > 0 && frame >= sourceEnd) || frame < region.startFrame)
             {
                 streamReader.release();
