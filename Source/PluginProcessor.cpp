@@ -48,6 +48,9 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     // Global / performance controls.
     p.add(floatParameter("master", "Master", 0.0f, 1.0f, 0.8f));
     p.add(floatParameter("voices", "Voices", 1.0f, 64.0f, 32.0f, 1.0f));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "powerProfile", 1 }, "Power Profile",
+        juce::StringArray { "GOOD", "NORMAL", "NIGHT" }, 1));
     p.add(floatParameter("velocity", "Velocity Response", 0.0f, 2.0f, 1.0f));
     p.add(floatParameter("dynamics", "Velocity Dynamics", 0.0f, 1.0f, 0.5f));
     p.add(floatParameter("palmMuteThreshold", "Palm Mute Threshold", 1.0f, 127.0f, 55.0f, 1.0f));
@@ -202,16 +205,19 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
     const auto chorusCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
     const auto flangerCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.02)) + 4;
+    const auto doubleTrackCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
     for (int channel = 0; channel < 2; ++channel)
     {
         delayBuffers[static_cast<size_t>(channel)].assign(delayCapacity, 0.0f);
         chorusBuffers[static_cast<size_t>(channel)].assign(chorusCapacity, 0.0f);
         flangerBuffers[static_cast<size_t>(channel)].assign(flangerCapacity, 0.0f);
+        doubleTrackBuffers[static_cast<size_t>(channel)].assign(doubleTrackCapacity, 0.0f);
         reverbDryBuffers[static_cast<size_t>(channel)].assign(static_cast<size_t>(maximumBlockSize), 0.0f);
     }
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
+    doubleTrackWritePosition = 0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
     eqLowState.fill(0.0f);
@@ -244,9 +250,12 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
         std::fill(line.begin(), line.end(), 0.0f);
     for (auto& line : flangerBuffers)
         std::fill(line.begin(), line.end(), 0.0f);
+    for (auto& line : doubleTrackBuffers)
+        std::fill(line.begin(), line.end(), 0.0f);
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
+    doubleTrackWritePosition = 0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
     eqLowState.fill(0.0f);
@@ -271,8 +280,14 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
     const int samples = buffer.getNumSamples();
     keyboardState.processNextMidiBuffer(midi, 0, samples, true);
-    const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
+    const int requestedVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
         static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
+    const int powerProfile = juce::jlimit(0, 2, static_cast<int>(
+        parameters.getRawParameterValue("powerProfile")->load(std::memory_order_relaxed)));
+    // GOOD prioritizes maximum polyphony; NORMAL balances load and headroom;
+    // NIGHT caps simultaneous voices to reduce sustained CPU demand on laptops.
+    const int profileVoiceLimit = powerProfile == 0 ? 64 : (powerProfile == 1 ? 32 : 12);
+    const int maximumVoices = juce::jmin(requestedVoices, profileVoiceLimit);
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
     const int playMode = juce::jlimit(0, 1,
@@ -626,6 +641,36 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 flangerWritePosition = (flangerWritePosition + 1) % length;
                 flangerPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
                 if (flangerPhase >= juce::MathConstants<double>::twoPi) flangerPhase -= juce::MathConstants<double>::twoPi;
+            }
+        }
+    }
+
+    // DOUBLE: compact second, slightly offset stereo layer. This bounded
+    // short-delay thickener uses preallocated memory; no allocation, locks,
+    // or file I/O occur in the audio callback.
+    if (parameters.getRawParameterValue("doubleTrackOn")->load(std::memory_order_relaxed) > 0.5f
+        && samples <= maximumBlockSize && !doubleTrackBuffers[0].empty())
+    {
+        const float mix = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("doubleTrackMix")->load(std::memory_order_relaxed));
+        if (mix > 0.0f)
+        {
+            const auto capacity = doubleTrackBuffers[0].size();
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& line = doubleTrackBuffers[static_cast<size_t>(channel)];
+                    const auto delayFrames = juce::jlimit<size_t>(1, capacity - 1,
+                        static_cast<size_t>(currentSampleRate * (channel == 0 ? 0.0137 : 0.0193)));
+                    const auto readIndex = (doubleTrackWritePosition + capacity - delayFrames) % capacity;
+                    auto* data = buffer.getWritePointer(channel);
+                    const float dry = data[sample];
+                    const float doubled = line[readIndex];
+                    line[doubleTrackWritePosition] = dry;
+                    data[sample] = dry * (1.0f - 0.18f * mix) + doubled * (0.42f * mix);
+                }
+                doubleTrackWritePosition = (doubleTrackWritePosition + 1) % doubleTrackBuffers[0].size();
             }
         }
     }
