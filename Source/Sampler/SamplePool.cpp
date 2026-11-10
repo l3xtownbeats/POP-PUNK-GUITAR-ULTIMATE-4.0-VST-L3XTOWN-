@@ -79,29 +79,84 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         return report;
     }
 
-    const auto root = std::filesystem::weakly_canonical(std::filesystem::path(sfzFile.getParentDirectory().getFullPathName().toStdString()));
+    std::error_code ec;
+    const auto root = std::filesystem::weakly_canonical(
+        std::filesystem::path(sfzFile.getParentDirectory().getFullPathName().toStdString()), ec);
+    if (ec)
+    {
+        report.errors.emplace_back("Could not resolve SFZ library directory: " + ec.message());
+        return report;
+    }
+    const auto rootKey = pathKey(root);
+
+    StreamingLibrary* library = nullptr;
+    for (const auto& existing : streamingLibraries)
+        if (existing->rootKey == rootKey)
+        {
+            library = existing.get();
+            break;
+        }
+
+    std::unique_ptr<StreamingLibrary> pendingLibrary;
+    if (library == nullptr)
+    {
+        if (streamingLibraries.size() >= maximumStreamingLibraries)
+        {
+            report.errors.emplace_back("Streaming library limit reached (8 library roots). Close/restart the plugin before loading another library.");
+            return report;
+        }
+
+        SampleMetadataIndex index;
+        auto indexed = index.scanDirectory(juce::File(root.string()));
+        report.warnings.insert(report.warnings.end(), indexed.warnings.begin(), indexed.warnings.end());
+        if (!indexed.success)
+        {
+            report.errors.insert(report.errors.end(), indexed.errors.begin(), indexed.errors.end());
+            if (report.errors.empty())
+                report.errors.emplace_back("No supported WAV files were found in the SFZ library directory.");
+            return report;
+        }
+        if (indexed.samples.size() > static_cast<std::size_t>(std::numeric_limits<std::uint32_t>::max()))
+        {
+            report.errors.emplace_back("The sample library contains more WAV files than the streaming index can address.");
+            return report;
+        }
+
+        pendingLibrary = std::make_unique<StreamingLibrary>();
+        pendingLibrary->rootKey = rootKey;
+        pendingLibrary->metadata = std::move(indexed.samples);
+        pendingLibrary->sampleIds.reserve(pendingLibrary->metadata.size());
+        for (std::size_t i = 0; i < pendingLibrary->metadata.size(); ++i)
+            pendingLibrary->sampleIds.emplace(
+                pathKey(std::filesystem::path(pendingLibrary->metadata[i].file.getFullPathName().toStdString())),
+                static_cast<std::uint32_t>(i));
+
+        // 192 planar pages * 4096 frames * stereo floats = 6 MiB per
+        // library root. Even the maximum eight roots stay well below the
+        // 256 MiB global page-cache ceiling.
+        pendingLibrary->service = std::make_unique<SampleStreamingService>(
+            pendingLibrary->metadata, streamingCacheSlots, streamingPageFrames);
+        if (!pendingLibrary->service->isValid())
+        {
+            report.errors.emplace_back("Could not allocate the bounded streaming page cache for this library.");
+            return report;
+        }
+        library = pendingLibrary.get();
+    }
+
     auto candidateSnapshot = std::make_unique<Snapshot>();
     candidateSnapshot->regions.reserve(parsed.regions.size());
     using RoundRobinKey = std::tuple<int, int, int, int, int, int, int, int>;
     std::map<RoundRobinKey, int> roundRobinSetIndices;
-
-    juce::AudioFormatManager formatManager;
-    formatManager.registerBasicFormats();
-
     std::set<std::string> samplesUsed;
-    // Keep newly decoded assets local until the entire SFZ map validates. A
-    // later bad region must not leave orphaned buffers in the long-lived pool.
-    std::map<std::string, std::unique_ptr<SampleAsset>> pendingSampleStorage;
-    std::size_t pendingSampleBytes = 0;
+
     for (const auto& region : parsed.regions)
     {
-        std::error_code ec;
+        ec.clear();
         auto sourceSamplePath = region.samplePath;
 
-        // Meta Open Sound's official SFZ maps refer to OGG preview filenames,
-        // while the production WAV release contains same-stem WAV files under
-        // a sibling wav/ directory. Prefer the original WAV release without
-        // modifying or discarding the upstream SFZ map.
+        // Meta Open Sound SFZ maps may refer to OGG preview names while the
+        // production WAV release stores same-stem files in a sibling wav/.
         if (juce::String(sourceSamplePath.extension().string()).toLowerCase() == ".ogg")
         {
             auto wavName = sourceSamplePath.filename();
@@ -124,17 +179,14 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
                 }
             }
 
-            // Some repackaged libraries place WAVs in a nested directory
-            // other than wav/. Search by exact filename only and reject
-            // ambiguous matches rather than silently choosing the wrong take.
             if (!resolvedWav)
             {
                 std::filesystem::path uniqueMatch;
                 bool ambiguous = false;
                 ec.clear();
                 for (std::filesystem::recursive_directory_iterator it(
-                         root, std::filesystem::directory_options::skip_permission_denied, ec), end;
-                     it != end && !ec; it.increment(ec))
+                         root, std::filesystem::directory_options::skip_permission_denied, ec), finish;
+                     it != finish && !ec; it.increment(ec))
                 {
                     if (it->is_regular_file(ec) && !ec && it->path().filename() == wavName)
                     {
@@ -176,90 +228,52 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         }
 
         const auto key = pathKey(canonicalSample);
-        const SampleAsset* assetPointer = nullptr;
-
-        if (const auto existing = sampleStorage.find(key); existing != sampleStorage.end())
-            assetPointer = existing->second.get();
-        else if (const auto pending = pendingSampleStorage.find(key); pending != pendingSampleStorage.end())
-            assetPointer = pending->second.get();
-        else
+        const auto indexedSample = library->sampleIds.find(key);
+        if (indexedSample == library->sampleIds.end())
         {
-            if (juce::String(canonicalSample.extension().string()).toLowerCase() != ".wav")
-            {
-                report.errors.push_back("Only WAV samples are accepted in this production loader: " + canonicalSample.string());
-                continue;
-            }
-
-            auto reader = std::unique_ptr<juce::AudioFormatReader>(
-                formatManager.createReaderFor(juce::File(canonicalSample.string())));
-            if (reader == nullptr)
-            {
-                report.errors.push_back("Could not decode WAV sample: " + canonicalSample.string());
-                continue;
-            }
-
-            if (!std::isfinite(reader->sampleRate) || reader->sampleRate < 8000.0
-                || reader->sampleRate > 384000.0 || reader->lengthInSamples <= 0
-                || reader->lengthInSamples > static_cast<juce::int64>(reader->sampleRate * maximumSampleSeconds)
-                || reader->numChannels == 0 || reader->numChannels > static_cast<unsigned int>(maximumSampleChannels))
-            {
-                report.errors.push_back("WAV sample must be mono or stereo, have a valid sample rate, and be non-empty and no longer than 120 seconds: "
-                                        + canonicalSample.string());
-                continue;
-            }
-
-            // Never silently discard channels from multichannel source material.
-            // The current sampler DSP is explicitly mono/stereo; unsupported
-            // layouts must fail validation until a channel-routing policy exists.
-            const int channels = static_cast<int>(reader->numChannels);
-            const int frames = static_cast<int>(reader->lengthInSamples);
-            const auto assetBytes = static_cast<std::size_t>(channels)
-                * static_cast<std::size_t>(frames) * sizeof(float);
-            if (sampleStorageBytes > maximumSampleStorageBytes
-                || pendingSampleBytes > maximumSampleStorageBytes - sampleStorageBytes
-                || assetBytes > maximumSampleStorageBytes - sampleStorageBytes - pendingSampleBytes)
-            {
-                report.errors.push_back("Sample bank exceeds the 1 GiB per-instance decoded WAV cache limit.");
-                continue;
-            }
-
-            auto asset = std::make_unique<SampleAsset>();
-            asset->audio.setSize(channels, frames, false, true, false);
-            if (!reader->read(&asset->audio, 0, frames, 0, true, channels > 1))
-            {
-                report.errors.push_back("Failed while reading WAV sample: " + canonicalSample.string());
-                continue;
-            }
-            asset->sampleRate = reader->sampleRate;
-            const auto inserted = pendingSampleStorage.emplace(key, std::move(asset));
-            pendingSampleBytes += assetBytes;
-            assetPointer = inserted.first->second.get();
+            report.errors.push_back("WAV sample is not present in the streaming metadata index: " + canonicalSample.string());
+            continue;
         }
 
-        const auto& asset = *assetPointer;
-        const int totalFrames = asset.audio.getNumSamples();
-        const int start = static_cast<int>(juce::jmin<std::uint64_t>(region.offset, static_cast<std::uint64_t>(totalFrames)));
+        const auto sampleId = indexedSample->second;
+        const auto& metadata = library->metadata[sampleId];
+        if (metadata.frames == 0 || !std::isfinite(metadata.sampleRate)
+            || metadata.sampleRate < 8000.0 || metadata.sampleRate > 384000.0
+            || metadata.frames > static_cast<std::uint64_t>(metadata.sampleRate * maximumSampleSeconds)
+            || metadata.frames > static_cast<std::uint64_t>(std::numeric_limits<int>::max()))
+        {
+            report.errors.push_back("WAV sample has unsupported duration or invalid streaming metadata: " + canonicalSample.string());
+            continue;
+        }
+
+        const auto totalFrames = metadata.frames;
+        const int start = static_cast<int>(std::min<std::uint64_t>(region.offset, totalFrames));
         const int end = region.end == 0
-            ? totalFrames
-            : static_cast<int>(juce::jmin<std::uint64_t>(region.end, static_cast<std::uint64_t>(totalFrames)));
+            ? static_cast<int>(totalFrames)
+            : static_cast<int>(std::min<std::uint64_t>(region.end, totalFrames));
         if (start >= end)
         {
             report.errors.push_back("SFZ offset/end produce an empty sample region: " + canonicalSample.string());
             continue;
         }
-        const auto loopStart = start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopStart, static_cast<std::uint64_t>(end - start - 1)));
-        const auto loopEnd = region.loopEnd == 0 ? end
-            : start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopEnd, static_cast<std::uint64_t>(end - start)));
+
+        const auto loopStartOffset = std::min<std::uint64_t>(
+            region.loopStart, static_cast<std::uint64_t>(end - start - 1));
+        const auto loopEndOffset = region.loopEnd == 0
+            ? static_cast<std::uint64_t>(end - start)
+            : std::min<std::uint64_t>(region.loopEnd, static_cast<std::uint64_t>(end - start));
         if (region.loopMode != "no_loop" && region.loopMode != "one_shot"
-            && (loopStart >= loopEnd || loopEnd - loopStart < 2))
+            && (loopStartOffset >= loopEndOffset || loopEndOffset - loopStartOffset < 2))
         {
             report.errors.push_back("SFZ loop points are invalid or shorter than two frames: " + canonicalSample.string());
             continue;
         }
 
-        SamplePool::RegionView view;
-        view.audio = &asset.audio;
-        view.sourceSampleRate = asset.sampleRate;
+        RegionView view;
+        view.streaming = library->service.get();
+        view.sampleId = sampleId;
+        view.totalFrames = totalFrames;
+        view.sourceSampleRate = metadata.sampleRate;
         view.lowKey = region.lowKey;
         view.highKey = region.highKey;
         view.rootKey = region.rootKey;
@@ -286,8 +300,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         }
         view.startFrame = start;
         view.endFrame = end;
-        view.loopStartFrame = start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopStart, static_cast<std::uint64_t>(end - start - 1)));
-        view.loopEndFrame = region.loopEnd == 0 ? end : start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopEnd, static_cast<std::uint64_t>(end - start)));
+        view.loopStartFrame = start + static_cast<int>(loopStartOffset);
+        view.loopEndFrame = start + static_cast<int>(loopEndOffset);
         view.loopMode = region.loopMode == "loop_continuous" ? 1
             : (region.loopMode == "loop_sustain" ? 2
                 : (region.loopMode == "loop_pingpong" ? 3 : (region.loopMode == "one_shot" ? 4 : 0)));
@@ -302,15 +316,18 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
     if (!report.errors.empty() || candidateSnapshot->regions.empty())
         return report;
 
-    // Allocate all RR cursors during loading; findRegion() performs no allocation.
     constexpr std::size_t cursorsPerSet = 16U * 128U;
     candidateSnapshot->roundRobinCounters.assign(roundRobinSetIndices.size() * cursorsPerSet, 0U);
 
-    // Commit decoded buffers only after every region has passed validation.
-    // std::map::merge transfers nodes without moving the SampleAsset objects,
-    // preserving the audio pointers already stored in the candidate snapshot.
-    sampleStorage.merge(pendingSampleStorage);
-    sampleStorageBytes += pendingSampleBytes;
+    if (pendingLibrary != nullptr)
+    {
+        if (!pendingLibrary->service->start())
+        {
+            report.errors.emplace_back("Could not start the background WAV streaming worker.");
+            return report;
+        }
+        streamingLibraries.push_back(std::move(pendingLibrary));
+    }
 
     report.loadedRegions = candidateSnapshot->regions.size();
     report.loadedSamples = samplesUsed.size();
