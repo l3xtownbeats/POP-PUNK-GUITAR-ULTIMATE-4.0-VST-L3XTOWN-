@@ -163,7 +163,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), hero.getX(), hero.getY(), juce::Colour(0xff101116), hero.getRight(), hero.getBottom(), false);
+    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
     g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
@@ -192,7 +192,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
     g.setColour(juce::Colour(0xffd8b77c));
     juce::Path neck;
-    neck.addQuadrilateral(guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getRight(),guitar.getY()+guitar.getHeight()*0.08f,guitar.getRight(),guitar.getY()+guitar.getHeight()*0.20f,guitar.getX()+guitar.getWidth()*0.66f,guitar.getY()+guitar.getHeight()*0.57f);
+    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
     g.fillPath(neck);
     g.setColour(pink.withAlpha(0.75f));
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
