@@ -93,6 +93,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     refreshPresetList();
     importButton.setColour(juce::TextButton::buttonColourId, panel2);
     importButton.setColour(juce::TextButton::textColourOffId, pale);
+    importButton.setTooltip("Import audio samples: WAV, AIFF/AIF, FLAC, OGG Vorbis and MP3. NCW requires conversion from Kontakt to WAV/AIFF first.");
     importButton.onClick = [this] { chooseAudioLibraryFolder(); };
     addAndMakeVisible(importButton);
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
