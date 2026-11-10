@@ -52,3 +52,19 @@ A `.ppgbank` is a versioned archive with a manifest and preset files. Import mus
 
 ## Current limitation
 The checked-in catalog and examples are data/specification, not a claim that the runtime browser, file loader or Pattern performance engine already exists. Do not label the release complete until all release gates above have evidence.
+
+## Current implementation evidence — 10 Nov 2026
+
+- [x] Windows x64 Release build, full CTest, VST3 locate, pluginval strictness 5 and package/upload: run `42843030370` SUCCESS.
+- [x] Additional MSVC v143 VST3/sampler validation: run `42843030228` SUCCESS.
+- [x] Scheduler-to-SamplerEngine module integration test included in CTest and passed.
+- [x] M4 AutoChords/FingeringGenerator scale-mapping foundation passed run `42843127831`; subsequent overflow-hardening commits require fresh CI.
+- [x] M5 StyleEngine foundation passed run `42840410645`.
+- [ ] M2 velocity crossfade latest branch run `42843931173` must pass before merge.
+- [ ] M1 FL Studio 20 save/reopen, automation, missing-library recovery, editor-close/load, device-change and long-playback checks.
+- [ ] M2 palm-mute mapping, real-library click/pop stress, cache/concurrency pressure and audio-thread allocation/lock/I/O proof.
+- [ ] M3 FL Studio 20 play/stop/loop/seek/tempo/chord transitions/live MIDI checks.
+- [ ] M4/M5 runtime binding into Pattern Scheduler, Processor, preset/state and UI.
+- [ ] Unified integration branch and final combined release run.
+
+CI success is not DAW acceptance. Keep the release marked incomplete while any host/runtime item above remains unchecked.
