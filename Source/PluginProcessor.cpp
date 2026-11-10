@@ -186,8 +186,6 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     currentSampleRate = juce::jlimit(8000.0, 384000.0, sampleRate);
     maximumBlockSize = juce::jmax(1, expectedBlockSize);
     sampler.prepare(currentSampleRate);
-    patternMidiBuffer.ensureSize(65536);
-    patternMidiBuffer.clear();
     patternScheduler.reset();
     for (auto& channel : patternHeldNotes) channel.fill(false);
     patternCycleStarted = false;
@@ -379,7 +377,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             }
         }
 
-        patternMidiBuffer.clear();
         patternEvents.fill(ppgu::performance::PatternEvent { -1.0, 0.0, 60, 0, 1 });
         std::size_t patternEventCount = 0;
         const int patternSlot = juce::jlimit(0, 7,
