@@ -304,7 +304,6 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     if (snapshot == nullptr) return nullptr;
 
     const RegionView* firstMatch = nullptr;
-    const RegionView* roundRobinMatch = nullptr;
     int sequenceLength = 1;
     int sequenceGroup = 0;
     for (const auto& region : snapshot->regions)
