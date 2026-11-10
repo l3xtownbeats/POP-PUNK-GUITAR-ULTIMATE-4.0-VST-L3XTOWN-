@@ -1,4 +1,5 @@
 #include "PatternScheduler.h"
+#include "ChordTransitionTimeline.h"
 
 #include <array>
 #include <cmath>
@@ -189,6 +190,51 @@ int main()
     if (secondChordCount == 0 || events[0].kind != EventKind::NoteOn
         || events[0].note != 64 || events[0].sampleOffset != 0)
         return 23;
+
+
+    // Sample-accurate processor timeline: simultaneous notes at sample 16
+    // form one chord, then two later transitions must retain their own spans.
+    struct TimelineMidiEvent { int samplePosition; int channel; int note; bool noteOn; };
+    const std::array<TimelineMidiEvent, 6> timelineMidi {{
+        { 16, 1, 60, true }, { 16, 1, 64, true },
+        { 80, 1, 60, false }, { 80, 1, 67, true },
+        { 120, 1, 64, false }, { 120, 1, 72, true }
+    }};
+    std::array<std::array<bool, 128>, 16> timelineHeld {};
+    struct RenderedChordInterval { int start; int end; std::array<int, 6> notes; int count; };
+    std::array<RenderedChordInterval, 4> renderedIntervals {};
+    int renderedIntervalCount = 0;
+    auto snapshotTimelineChord = [&]()
+    {
+        RenderedChordInterval snapshot {};
+        snapshot.notes.fill(-1);
+        for (int note = 0; note < 128 && snapshot.count < 6; ++note)
+            if (timelineHeld[0][static_cast<size_t>(note)])
+                snapshot.notes[static_cast<size_t>(snapshot.count++)] = note;
+        return snapshot;
+    };
+    processSampleAccurateMidiTimeline(
+        160, timelineMidi,
+        [&](int start, int end)
+        {
+            if (end <= start) return;
+            const auto snapshot = snapshotTimelineChord();
+            renderedIntervals[static_cast<size_t>(renderedIntervalCount++)] =
+                { start, end, snapshot.notes, snapshot.count };
+        },
+        [&](const TimelineMidiEvent& event, int)
+        {
+            timelineHeld[static_cast<size_t>(event.channel - 1)][static_cast<size_t>(event.note)] = event.noteOn;
+        });
+    if (renderedIntervalCount != 4
+        || renderedIntervals[0].start != 0 || renderedIntervals[0].end != 16
+        || renderedIntervals[1].start != 16 || renderedIntervals[1].end != 80
+        || renderedIntervals[1].count != 2 || renderedIntervals[1].notes[0] != 60 || renderedIntervals[1].notes[1] != 64
+        || renderedIntervals[2].start != 80 || renderedIntervals[2].end != 120
+        || renderedIntervals[2].count != 2 || renderedIntervals[2].notes[0] != 64 || renderedIntervals[2].notes[1] != 67
+        || renderedIntervals[3].start != 120 || renderedIntervals[3].end != 160
+        || renderedIntervals[3].count != 2 || renderedIntervals[3].notes[0] != 67 || renderedIntervals[3].notes[1] != 72)
+        return 24;
 
     std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
     return 0;

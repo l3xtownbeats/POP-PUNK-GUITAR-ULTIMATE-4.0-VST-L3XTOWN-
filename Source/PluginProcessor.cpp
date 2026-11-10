@@ -500,34 +500,37 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             renderSegment(cursor, intervalEnd - cursor);
         };
 
-        int intervalStart = 0;
-        for (const auto metadata : midi)
-        {
-            const auto message = metadata.getMessage();
-            const int eventSample = juce::jlimit(intervalStart, samples, metadata.samplePosition);
-            renderPatternInterval(intervalStart, eventSample);
-            intervalStart = eventSample;
-            const int channelIndex = juce::jlimit(1, 16, message.getChannel()) - 1;
-            if (message.isAllNotesOff() || message.isAllSoundOff())
+        // Render each interval before applying its MIDI event at the exact sample.
+        // Same-sample events retain order without inventing time between chord notes.
+        ppgu::performance::processSampleAccurateMidiTimeline(
+            samples, midi,
+            [&](int intervalStart, int intervalEnd)
             {
-                for (auto& held : patternHeldNotes) held.fill(false);
-                panicRequested.store(true, std::memory_order_release);
-                sampler.panic(fadeLength);
-                patternScheduler.clearPendingNoteOffs();
-                patternCycleStarted = false;
-                previousPatternChordCount = 0;
-                previousPatternChordNotes.fill(-1);
-                previousPatternChordChannel = 1;
-            }
-            else if (message.isNoteOn() || message.isNoteOff())
+                renderPatternInterval(intervalStart, intervalEnd);
+            },
+            [&](const auto& metadata, int eventSample)
             {
-                patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
-                const auto [nextNotes, nextCount, nextChannel] = readChord();
-                if (chordDiffers(nextNotes, nextCount, nextChannel))
-                    restartForChord(eventSample, nextNotes, nextCount, nextChannel);
-            }
-        }
-        renderPatternInterval(intervalStart, samples);
+                const auto message = metadata.getMessage();
+                const int channelIndex = juce::jlimit(1, 16, message.getChannel()) - 1;
+                if (message.isAllNotesOff() || message.isAllSoundOff())
+                {
+                    for (auto& held : patternHeldNotes) held.fill(false);
+                    panicRequested.store(true, std::memory_order_release);
+                    sampler.panic(fadeLength);
+                    patternScheduler.clearPendingNoteOffs();
+                    patternCycleStarted = false;
+                    previousPatternChordCount = 0;
+                    previousPatternChordNotes.fill(-1);
+                    previousPatternChordChannel = 1;
+                }
+                else if (message.isNoteOn() || message.isNoteOff())
+                {
+                    patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
+                    const auto [nextNotes, nextCount, nextChannel] = readChord();
+                    if (chordDiffers(nextNotes, nextCount, nextChannel))
+                        restartForChord(eventSample, nextNotes, nextCount, nextChannel);
+                }
+            });
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
     }
 

@@ -1254,3 +1254,14 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Ограничение: CI содержит шаг Record host validation limitation; это не подтверждает ручную работу в FL Studio 20. M3-011/M3-012 и M3-014/M3-015 остаются открытыми; M3 в целом NOT ACCEPTED, M4 BLOCKED.
 - Изменены только документационные статусы после завершения CI: Info.txt и docs/ЖУРНАЛ_БАГОВ_RU.md. Runtime source не менялся в этом цикле.
 - Следующий пункт по строгому порядку: M3-014 — сохранение всех MIDI chord transitions внутри одного audio block.
+
+
+## 10 ноября 2026 — M3-014: sample-accurate chord transition timeline
+
+- Начат отдельный цикл M3-014 после положительного Windows CI для M3-013.
+- Root cause: порядок «рендер интервала до MIDI-события → применение события» был встроен непосредственно в processBlock и не имел изолированного тестируемого контракта. Это оставляло регрессию, при которой промежуточные chord snapshots могут быть схлопнуты, без прямого timeline regression.
+- Добавлен Source/Performance/ChordTransitionTimeline.h: общий allocation-free walker разделяет блок на sample-accurate интервалы; перед каждым MIDI событием рендерит предыдущий интервал, затем применяет событие. События на одинаковом sample сохраняют порядок и не создают искусственного времени между частями одного аккорда.
+- PluginProcessor.cpp переведён на этот общий walker; chord state, panic, scheduler reset и sampler dispatch остаются в callback события.
+- PatternSchedulerTests.cpp расширен regression-сценарием: одновременный chord input на sample 16 и две последующие смены на samples 80 и 120. Проверяются четыре точные границы render intervals и snapshots [60,64], [64,67], [67,72].
+- Статус M3-014: FIXED IN SOURCE / AWAITING WINDOWS CI. Тест написан, но результат сборки/CTest ещё неизвестен; не считать пункт закрытым до успешного CI.
+- M3-013 остаётся FIXED — CI SUCCESS. M3-015, M3-011 и M3-012 не изменялись. M1/M2 не затрагивались; M4 остаётся BLOCKED.
