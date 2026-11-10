@@ -392,6 +392,46 @@ int main()
         return 1;
     }
 
+    // Verify SFZ velocity crossfade playback selects and weights both
+    // overlapping regions, then collapses cleanly to one region at each edge.
+    const auto crossfadePlaybackSfz = directory.getChildFile("crossfade-playback.sfz");
+    if (!crossfadePlaybackSfz.replaceWithText(
+        "<region> sample=test.wav key=70 lovel=1 hivel=127 xfout_lovel=32 xfout_hivel=96 xf_velcurve=power\n"
+        "<region> sample=test.wav key=70 lovel=1 hivel=127 xfin_lovel=32 xfin_hivel=96 xf_velcurve=power\n"))
+    {
+        std::cerr << "Could not write velocity crossfade playback fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool crossfadePlaybackPool;
+    const auto crossfadePlaybackLoad = crossfadePlaybackPool.loadSfz(crossfadePlaybackSfz);
+    std::array<ppgu::sampler::SamplePool::RegionSelection,
+               ppgu::sampler::SamplePool::maximumVelocityLayers> centerLayers {};
+    std::array<ppgu::sampler::SamplePool::RegionSelection,
+               ppgu::sampler::SamplePool::maximumVelocityLayers> lowLayers {};
+    std::array<ppgu::sampler::SamplePool::RegionSelection,
+               ppgu::sampler::SamplePool::maximumVelocityLayers> highLayers {};
+    const auto centerCount = crossfadePlaybackPool.findRegions(70, 64, 1, centerLayers);
+    const auto lowCount = crossfadePlaybackPool.findRegions(70, 32, 1, lowLayers);
+    const auto highCount = crossfadePlaybackPool.findRegions(70, 96, 1, highLayers);
+    if (!crossfadePlaybackLoad.success || centerCount != 2 || lowCount != 1 || highCount != 1
+        || std::abs(centerLayers[0].velocityGain - 0.7071067f) > 0.001f
+        || std::abs(centerLayers[1].velocityGain - 0.7071067f) > 0.001f
+        || std::abs(lowLayers[0].velocityGain - 1.0f) > 0.001f
+        || std::abs(highLayers[0].velocityGain - 1.0f) > 0.001f)
+    {
+        std::cerr << "SFZ velocity crossfade did not produce expected equal-power layer gains.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplerEngine crossfadePlaybackEngine;
+    crossfadePlaybackEngine.prepare(44100.0);
+    if (!crossfadePlaybackEngine.loadSfz(crossfadePlaybackSfz).success
+        || !crossfadePlaybackEngine.noteOn(70, 64)
+        || crossfadePlaybackEngine.getActiveVoiceCount() != 2)
+    {
+        std::cerr << "SamplerEngine did not start both velocity crossfade layers.\n";
+        return 1;
+    }
+
     const auto invalidRoundRobin = ppgu::sfz::parseText(
         "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
     if (!invalidRoundRobin.errors.size())

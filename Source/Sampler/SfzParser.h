@@ -25,6 +25,7 @@ struct Region
     int xfinHighVelocity = -1;
     int xfoutLowVelocity = -1;
     int xfoutHighVelocity = -1;
+    bool velocityCrossfadePower = true;
     float tuneCents = 0.0f;
     float volumeDb = 0.0f;
     float pan = 0.0f;

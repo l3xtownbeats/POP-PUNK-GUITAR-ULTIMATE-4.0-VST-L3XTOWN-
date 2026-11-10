@@ -167,6 +167,12 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
         if (opcode == "seq_length") target.values.seqLength = integer;
         if (opcode == "seq_position") target.values.seqPosition = integer;
     }
+    else if (opcode == "xf_velcurve")
+    {
+        if (value == "power") target.values.velocityCrossfadePower = true;
+        else if (value == "gain") target.values.velocityCrossfadePower = false;
+        else { bad(); return; }
+    }
     else if (opcode == "tune" || opcode == "volume" || opcode == "pan" || opcode == "ampeg_release")
     {
         if (!parseFloat(value, real)) { bad(); return; }
