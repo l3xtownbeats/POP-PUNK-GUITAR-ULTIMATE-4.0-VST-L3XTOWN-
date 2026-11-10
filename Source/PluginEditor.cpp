@@ -40,7 +40,7 @@ class FxRackContent final : public juce::Component
             setSize(900, 116);
             heading.setText(title, juce::dontSendNotification);
             heading.setFont(juce::Font(14.0f, juce::Font::bold));
-            heading.setColour(juce::Label::textColourId, juce::Colour(0xffed238b));
+            heading.setColour(juce::Label::textColourId, pink);
             addAndMakeVisible(heading);
             if (enableId.isNotEmpty()) {
                 enabled.setButtonText("ON");
@@ -52,17 +52,17 @@ class FxRackContent final : public juce::Component
                 auto label = std::make_unique<juce::Label>();
                 label->setText(item.label, juce::dontSendNotification);
                 label->setFont(juce::Font(10.0f, juce::Font::bold));
-                label->setColour(juce::Label::textColourId, juce::Colour(0xffaaa8b2));
+                label->setColour(juce::Label::textColourId, muted);
                 label->setJustificationType(juce::Justification::centred);
                 addAndMakeVisible(*label);
                 labels.push_back(std::move(label));
                 auto slider = std::make_unique<juce::Slider>();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
-                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffed238b));
-                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
-                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xfff4f0f4));
-                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xfff4f0f4));
+                slider->setColour(juce::Slider::rotarySliderFillColourId, pink);
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, panel);
+                slider->setColour(juce::Slider::thumbColourId, pale);
+                slider->setColour(juce::Slider::textBoxTextColourId, pale);
                 addAndMakeVisible(*slider);
                 attachments.push_back(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(state, item.parameter, *slider));
                 sliders.push_back(std::move(slider));
@@ -145,7 +145,7 @@ private:
 class FxRackWindow final : public juce::DocumentWindow {
 public:
     explicit FxRackWindow(PopPunkGuitarUltimateAudioProcessor& p):DocumentWindow("PPGU 5.0 / FX STUDIO",juce::Colour(0xff111116),allButtons) {
-        setUsingNativeTitleBar(true); setContentOwned(new FxRackContent(p),true); setResizable(true,true); centreWithSize(960,820);
+        setUsingNativeTitleBar(true); setContentOwned(new FxRackContent(p),true); setResizable(true,true); centreWithSize(960,820); applyTheme();
     }
     void applyTheme() {
         if (auto* content = dynamic_cast<FxRackContent*>(getContentComponent()))
@@ -165,7 +165,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     // Do not allow a window size that clips the keyboard or lower controls.
     setResizeLimits(800, 790, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
+    titleLabel.setFont(juce::Font(22.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
     addAndMakeVisible(titleLabel);
     subtitleLabel.setText("POP PUNK GUITAR ULTIMATE   /   PLAY. CREATE. ROCK.", juce::dontSendNotification);
@@ -581,7 +581,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 
     // Unified browser: preset, search, mode, sound character and playing style.
     auto browser = area.removeFromTop(46);
-    titleLabel.setBounds(browser.removeFromLeft(52));
+    titleLabel.setBounds(browser.removeFromLeft(60));
     presetBox.setBounds(browser.removeFromLeft(170).reduced(3, 5));
     presetSearch.setBounds(browser.removeFromLeft(110).reduced(3, 7));
     categoryBox.setBounds(browser.removeFromLeft(115).reduced(3, 7));
