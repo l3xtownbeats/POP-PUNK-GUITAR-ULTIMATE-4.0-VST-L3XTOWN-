@@ -1,4 +1,5 @@
 #include "SampleLibraryImporter.h"
+#include "Sha256.h"
 
 #include <algorithm>
 #include <array>
@@ -373,8 +374,17 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
         const auto sourceBytes = static_cast<std::uint64_t>(source.getSize());
         const auto outputBytes = static_cast<std::uint64_t>(output.getSize());
         // Hashing is intentionally performed on the import worker, never on the audio thread.
-        const auto sourceSha256 = juce::SHA256(source).toHexString().toStdString();
-        const auto convertedSha256 = juce::SHA256(output).toHexString().toStdString();
+        std::string sourceSha256;
+        std::string convertedSha256;
+        if (!crypto::sha256File(candidate, sourceSha256)
+            || !crypto::sha256File(std::filesystem::path(output.getFullPathName().toStdString()),
+                                   convertedSha256))
+        {
+            output.deleteFile();
+            stagingDirectory.deleteRecursively();
+            report.errors.emplace_back("Could not calculate SHA-256 for imported audio.");
+            return report;
+        }
         const auto sourceFormat = source.getFileExtension().toLowerCase().toStdString();
         const auto sourceSampleRate = reader->sampleRate;
         const auto sourceChannels = reader->numChannels;
