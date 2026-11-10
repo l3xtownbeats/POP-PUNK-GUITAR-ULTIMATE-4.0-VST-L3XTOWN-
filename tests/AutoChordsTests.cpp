@@ -34,6 +34,36 @@ int main()
     if (bounded.count > 4)
         return 7;
 
+    const auto dMajorDegreeTwo = AutoChordMap::mapScaleAware(62, 0, ScaleMode::Major);
+    if (!dMajorDegreeTwo.valid || !dMajorDegreeTwo.inputWasInScale
+        || dMajorDegreeTwo.degree != 1 || dMajorDegreeTwo.quality != ChordQuality::Minor
+        || dMajorDegreeTwo.rootMidi != 62)
+        return 8;
+
+    const auto bMajorLeadingTone = AutoChordMap::mapScaleAware(71, 0, ScaleMode::Major);
+    if (!bMajorLeadingTone.valid || bMajorLeadingTone.degree != 6
+        || bMajorLeadingTone.quality != ChordQuality::Diminished)
+        return 9;
+
+    const auto aMinorTonic = AutoChordMap::mapScaleAware(69, 9, ScaleMode::NaturalMinor);
+    if (!aMinorTonic.valid || aMinorTonic.degree != 0
+        || aMinorTonic.quality != ChordQuality::Minor)
+        return 10;
+
+    const auto chromaticTie = AutoChordMap::mapScaleAware(61, 0, ScaleMode::Major);
+    if (!chromaticTie.valid || chromaticTie.inputWasInScale
+        || chromaticTie.rootMidi != 60 || chromaticTie.degree != 0)
+        return 11;
+
+    const auto scaledChord = AutoChordMap::generateScaleChord(62, 0, ScaleMode::Major);
+    if (scaledChord.count != 3 || scaledChord.midi[0] != 62
+        || scaledChord.midi[1] != 65 || scaledChord.midi[2] != 69)
+        return 12;
+
+    if (AutoChordMap::mapScaleAware(-1, 0, ScaleMode::Major).valid
+        || AutoChordMap::mapScaleAware(128, 0, ScaleMode::Major).valid)
+        return 13;
+
     std::cout << "M4 AutoChords/FingeringGenerator tests passed\n";
     return 0;
 }
