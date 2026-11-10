@@ -165,6 +165,15 @@ jobs:
             }
           }
 
+          # The standalone acoustic SFZ map is authored relative to its Samples/ directory.
+          # Stage a runtime copy beside that directory so every sample path resolves inside
+          # the bank root and remains compatible with the sandboxed SFZ path validator.
+          $shinyRoot = Join-Path $sampleRoot 'Karoryfer-Shinyguitar'
+          $acousticSourceMap = Join-Path $shinyRoot 'Programs/acoustic.sfz'
+          $acousticRuntimeMap = Join-Path $shinyRoot 'Samples/acoustic.sfz'
+          if (-not (Test-Path $acousticSourceMap)) { throw 'Karoryfer acoustic SFZ source map is missing.' }
+          Copy-Item -LiteralPath $acousticSourceMap -Destination $acousticRuntimeMap -Force
+
           # Keep source licenses and SFZ maps, but strip cloned Git metadata
           # from the redistributable package and its reusable CI cache.
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |

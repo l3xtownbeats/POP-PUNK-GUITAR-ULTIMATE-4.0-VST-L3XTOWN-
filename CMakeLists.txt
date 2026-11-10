@@ -302,5 +302,5 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_factory_soundbank_audio_smoke
         COMMAND ppgu_factory_soundbank_tests
             "${CMAKE_SOURCE_DIR}/Samples/FreePats-Direct-DI/EGuitarFSBS-direct bridge 20220911.sfz"
-            "${CMAKE_SOURCE_DIR}/Samples/Karoryfer-Shinyguitar/Programs/acoustic.sfz")
+            "${CMAKE_SOURCE_DIR}/Samples/Karoryfer-Shinyguitar/Samples/acoustic.sfz")
 endif()
