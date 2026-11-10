@@ -108,3 +108,12 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Regression guard: `tools/validate_apvts_layout.py` проверяет критические элементы round-trip и async restore.
 - Проверка: статически сверены все ожидаемые участки в `PluginProcessor.h/.cpp` и validator. Windows compiler/CTest и DAW host test пока ожидают выполнения.
 - Статус: FIXED IN SOURCE / AWAITING CI.
+
+
+## 10 ноября 2026 — M2: первая реализация SFZ Round Robin
+
+- Найденный дефект: SFZ parser не распознавал `seq_length`/`seq_position`, а `SamplePool::findRegion()` всегда возвращал первую совпавшую область. Библиотеки с несколькими round-robin takes поэтому постоянно проигрывали один и тот же сэмпл.
+- Исправление: добавлены поля sequence metadata в SFZ Region/RegionView; parser принимает и проверяет диапазон `seq_length=1..256` и `seq_position=1..seq_length`. SamplePool выбирает следующий sequence position детерминированным циклом с отдельным курсором на MIDI channel/note; неполный RR set использует безопасный fallback на первую совпавшую область.
+- Regression: создан SFZ fixture с тремя sequence positions; проверяется цикл 1→2→3→1→2→3, а также отказ parser при seq_position > seq_length.
+- Commits: `e3ccbf428f513d5bd05e6b9b2d29496284d4978f`, `9cd4f47dc7fab6c03dcc811cf23deaa435d8f950`, `ea3fa563642203b88ba99e3b0481f14350e26192`, `99fcc2fda604508fb77e0c17a42571ae3c1c47d7`, `bd313f77a0172b5d80336ddfab2a9775f364725c`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI + CTest. Пока не подтверждены компиляция, исполнение теста и совместимость с реальными SFZ банками. M2 не закрывать: velocity crossfade ещё не реализован; дополнительно требуется проверить RR-группировку на реальных картах и поведение одновременных sequence sets.
