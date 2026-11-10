@@ -111,3 +111,11 @@ Run 42704820544 прошёл этапы:
 - M4 добавлен изолированно в PR #4 (AutoChords/FingeringGenerator + tests), CI run `42842050531` ожидает завершения build на момент записи.
 - M5 Style Engine + tests прошёл run `42840410645`; runtime Pattern integration ещё не выполнена. PR #3 исходно направлен в main и должен быть перенесён на интеграционную ветку, а не слит напрямую.
 - Полная таблица evidence, blockers и merge sequence: `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
+
+## Дополнение — результаты и открытые пункты
+
+- M3 теперь имеет автоматический module-level integration test scheduler→sampler; Windows run `42843030370` подтвердил build, full CTest, pluginval strictness 5 и packaging.
+- M2 velocity crossfade DSP находится в отдельной ветке PR #5 и ждёт собственного Windows CI. В основной ветке это изменение пока не интегрировано.
+- M4 algorithmic AutoChords/FingeringGenerator foundation прошёл CI; последние overflow guards ждут повторной проверки.
+- M5 StyleEngine foundation прошёл CI; runtime pipeline/UI integration отсутствует.
+- Ни один из этих результатов не заменяет ручную проверку FL Studio 20. Подробная схема M2 описана в `M2_VELOCITY_CROSSFADE_DESIGN_RU.md`.
