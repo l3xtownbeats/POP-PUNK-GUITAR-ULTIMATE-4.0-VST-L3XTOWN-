@@ -1087,3 +1087,6 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - В логах также присутствуют предупреждения C4244 в PluginEditor.cpp и C4458 для локального `playHead`; они не являются причиной текущего failure и остаются отдельными cleanup-кандидатами.
 - Статус исправления: FIXED IN SOURCE / AWAITING WINDOWS CI. Новый build и CTest ещё не запускались/не подтверждены. M3-014 и M3-015 не закрывать до успешного Release build + CTest.
 - Следующий шаг: дождаться CI на commit `6de1db...`; если появятся новые ошибки — разбирать по первой реальной compiler/test failure, не отключая тесты. После успешного CTest продолжить M3 stop/seek, block-size/tempo stress и fail-safe проверки. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
+
+
+10.11.2026 — лёгкий code-quality проход параллельно основной работе M1–M3: устранены в исходнике предупреждения MSVC C4244 (явные преобразования координат UI int→float) и C4458 (локальная переменная playHead переименована в hostPlayHead). Изменения внесены; свежий Windows CI/CTest ещё не подтверждён.
