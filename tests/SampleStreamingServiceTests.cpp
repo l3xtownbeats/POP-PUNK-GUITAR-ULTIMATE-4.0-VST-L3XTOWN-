@@ -9,6 +9,7 @@
 #include <cmath>
 #include <filesystem>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <thread>
 
@@ -45,6 +46,18 @@ int main()
     {
         std::cerr << "Streaming test could not index its WAV fixture.\\n";
         return 1;
+    }
+
+    // Oversized page geometry must fail closed before attempting a
+    // multi-gigabyte cache allocation or starting a worker thread.
+    {
+        ppgu::sampler::SampleStreamingService oversizedService(
+            scan.samples, 1, std::numeric_limits<std::uint32_t>::max());
+        if (oversizedService.isValid() || oversizedService.start())
+        {
+            std::cerr << "Streaming service accepted an oversized cache configuration.\\n";
+            return 1;
+        }
     }
 
     ppgu::sampler::SampleStreamingService service(std::move(scan.samples), 4, 256);
