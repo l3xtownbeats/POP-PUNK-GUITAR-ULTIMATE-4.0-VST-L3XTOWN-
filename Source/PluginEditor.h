@@ -18,8 +18,13 @@ private:
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
+    void applySkin(int skinIndex);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::Image coverImage;
+    juce::Colour bg { 0xff111116 }, panel { 0xff202027 }, panel2 { 0xff17171d };
+    juce::Colour pink { 0xffed238b }, pale { 0xfff4f0f4 }, muted { 0xffaaa8b2 };
+    int currentSkin = 0;
+    juce::ComboBox skinBox;
     juce::TextButton loadButton { "LOAD SFZ" };
     juce::ComboBox presetBox, categoryBox, powerProfileBox;
     juce::TextButton doubleTrackButton { "DOUBLE" };
