@@ -190,6 +190,10 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     for (auto& channel : patternHeldNotes) channel.fill(false);
     patternCycleStarted = false;
     previousPatternChordCount = 0;
+    previousPatternChordNotes.fill(-1);
+    previousPatternSlot = -1;
+    previousPatternLengthChoice = -1;
+    patternChordChangeSampleOffset = -1;
     previousPlayMode = -1;
 
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
