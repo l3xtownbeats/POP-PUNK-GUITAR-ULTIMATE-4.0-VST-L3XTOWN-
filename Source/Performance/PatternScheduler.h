@@ -145,7 +145,15 @@ namespace ppgu::performance
                 || !std::isfinite(clock.startPpq) || !std::isfinite(clock.endPpq)
                 || !std::isfinite(clock.bpm) || clock.bpm < 20.0 || clock.bpm > 300.0
                 || clock.endPpq <= clock.startPpq)
+            {
+                // A malformed running clock must not leave previously queued
+                // NoteOffs alive to fire against a later, unrelated timeline.
+                // Fail closed and let the processor's existing overflow path
+                // release voices rather than risk a stuck or mistimed note.
+                pendingCount_ = 0;
+                pendingOverflow_ = true;
                 return 0;
+            }
 
             std::size_t count = 0;
             const double samplesPerBeat = sampleRate * 60.0 / clock.bpm;
