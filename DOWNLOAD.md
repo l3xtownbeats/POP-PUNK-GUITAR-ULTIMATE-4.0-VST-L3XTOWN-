@@ -22,10 +22,10 @@ The plugin and sample library are currently delivered together in one archive. A
 
 ## Separate preset downloads
 
-- [Factory preset catalogue — 300 definitions (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_bank_300.json)
-- [Additional factory preset bank data (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_preset_bank_v1.json)
-- [Melody portable preset example (.ppgm)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Melody.ppgm)
-- [Pattern portable preset example (.ppgp)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Pattern.ppgp)
+- [Factory preset catalogue — 300 definitions (JSON)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/factory_bank_300.json?download=1)
+- [Additional factory preset bank data (JSON)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/factory_preset_bank_v1.json?download=1)
+- [Melody portable preset example (.ppgm)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/examples/Example-Melody.ppgm?download=1)
+- [Pattern portable preset example (.ppgp)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/examples/Example-Pattern.ppgp?download=1)
 
 **Preset status:** the 300-entry catalogue contains authored definitions; it does not mean every entry is fully integrated and playable in the current plugin build.
 
