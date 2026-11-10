@@ -31,24 +31,11 @@ The product target is a fast, expressive, commercial-grade pop-punk guitar instr
 
 ### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
 
-[Open all builds for the active development branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions?query=branch%3Amigration%2Ffull-copy-m3-transport-scheduler-v2)
-
 </div>
 
-**Package name:** `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`  
-**Intended contents:** Windows x64 VST3 bundle, `Samples/` (CC0 guitar WAV libraries, SFZ maps, licences and SHA-256 manifest), `presets/factory_bank_300.json` (300 preset definitions), portable preset examples and installation notes.
+**Download:** open the run, scroll to **Artifacts**, and download  
+`POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` (about 2.24 GB).
 
-**Download status:** the link above opens the build history for the one active branch. Download the named artifact from the newest run only after its status is **Success**. A failed or running workflow has no combined VST3/Samples/Presets artifact to download. The latest checked run before this correction failed during compilation; the package is not being presented as available until a new build and packaging step succeeds.
-
-The 300-entry JSON catalogue is preset-definition data; it is not a claim that all 300 presets are already integrated and selectable in the plugin. Automated build success also does not replace a manual FL Studio 20 host test.
-
-### Installation
-
-1. Download the named ZIP artifact from a successful workflow run and extract it.
-2. Copy the complete `.vst3` bundle to `C:\\Program Files\\Common Files\\VST3\\`.
-3. Keep the extracted `Samples/` folder with the package. If the plugin asks for a sample-library location, select that folder.
-4. In FL Studio 20, open Plugin Manager and rescan VST3 plugins.
-5. Load the instrument. Preset-browser/runtime availability is subject to the implementation status documented below.
 
 ## What is implemented
 
