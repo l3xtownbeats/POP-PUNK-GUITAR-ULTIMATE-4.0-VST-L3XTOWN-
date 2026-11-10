@@ -91,6 +91,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
+    fxOpenButton.setColour(juce::TextButton::buttonColourId, panel2);
+    fxOpenButton.setColour(juce::TextButton::textColourOffId, pink);
+    fxOpenButton.onClick = [this] {
+        if (fxWindow == nullptr)
+            fxWindow = std::make_unique<FxRackWindow>(processor);
+        fxWindow->setVisible(true);
+        fxWindow->toFront(true);
+    };
+    addAndMakeVisible(fxOpenButton);
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
@@ -250,7 +259,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     presetBox.setBounds(top.removeFromLeft(220).reduced(3, 5));
     presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
     categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
-    loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
+    fxOpenButton.setBounds(top.removeFromRight(112).reduced(2, 5));\n    loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(220);
     auto tabs=area.removeFromTop(62);
