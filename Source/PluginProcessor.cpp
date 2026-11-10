@@ -890,7 +890,7 @@ void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
         if (generationState->load(std::memory_order_acquire) != generation)
             return;
 
-        auto report = sampler.loadSfz(sfzFile);
+        auto report = sampler.loadSfz(sfzFile, generationState.get(), generation);
         if (generationState->load(std::memory_order_acquire) != generation)
             return;
 
