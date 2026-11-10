@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "BLOOD RED / STAGE",
+  "background": "ff10090d",
+  "panel": "ff28141c",
+  "panel2": "ff1b0f15",
+  "accent": "ffff405d",
+  "text": "fffff1f3",
+  "muted": "ffc5a0a8"
+}
