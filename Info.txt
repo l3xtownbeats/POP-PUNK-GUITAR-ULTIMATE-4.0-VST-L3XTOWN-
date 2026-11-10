@@ -1505,3 +1505,14 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - RAM-профилирование, host-level click test, Hermite playback из page cache, RR/velocity crossfade DSP и безопасный reload/unload не подтверждены.
 - Размер текущего пакета на этом run в этой записи не заявляется; лимит до 7 ГБ относится к дисковой библиотеке, не к RAM.
 - Следующий инженерный этап: заменить preload-путь SamplePool на metadata-backed sample IDs и закрепить service lifetime за неизменяемыми snapshot generations; затем подключить bounded page leases к фиксированным voice slots, реализовать Hermite boundary reads/prefetch/voice cleanup и regression tests. До успешного выполнения этого этапа не закрывать M2.
+
+
+ДОПОЛНЕНИЕ — 10 НОЯБРЯ 2026: ТРЁХЭТАПНАЯ ОРГАНИЗАЦИЯ И АКТУАЛЬНЫЙ CI
+
+Пользователь утвердил этапы: Stage 1 = M1–M5 (главный приоритет); Stage 2 = M6–M10 (до завершения Stage 1 только лёгкие подготовительные задачи); Stage 3 = M11–M13 (полноценный запуск после подтверждённого завершения M1–M5). README.md является главной страницей актуального статуса и обязан отражать изменения; jurnal.md ведёт хронологию, Info.txt сохраняет полный контекст, docs/ЖУРНАЛ_БАГОВ_RU.md ведёт дефекты, docs/WORK_LOG_M1_M5_INTEGRATION_RU.md фиксирует техническую работу.
+
+Ускорение: объединять связанные изменения в компактные коммиты; запускать целевые regression tests до общего CI; лёгкие задачи Stage 2 делать изолированно и без вмешательства в audio callback; не запускать тяжёлые конкурирующие сборки/stress jobs; не снимать проверки ради зелёного CI.
+
+CI: run 42855790840 на SHA e8f3baa завершился FAILURE: 11/12 tests passed, failed только ppgu_sample_library_importer_tests. Фактический отчёт импортера: Imported=3, mapped=2, needsMapping=1; Unknown_take.wav оставлен для ручной mapping, что выглядит как ожидаемое поведение, но тестовое ожидание не совпало. Необходимо проверить исходный fixture и контракт теста, исправить причину и добавить regression. Run 42855790775 отменён concurrency. Run 42856503154 на SHA bd6c703 находился IN_PROGRESS при записи; не считать его успешным до завершения.
+
+Текущий статус: Stage 1 ACTIVE; M1–M5 NOT ACCEPTED. Не путать ранее успешные отдельные CI на старых SHA с текущей проверкой HEAD.
