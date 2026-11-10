@@ -816,6 +816,7 @@ void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock&
     {
         const juce::ScopedLock lock(sampleStateLock);
         state.setProperty("sfzFilePath", currentSfzFilePath, nullptr);
+        state.setProperty("ppguSkinIndex", getSelectedSkinIndex(), nullptr);
     }
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     if (xml != nullptr)
@@ -833,6 +834,7 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         return;
 
     const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    setSelectedSkinIndex(static_cast<int>(restoredState.getProperty("ppguSkinIndex", 0)));
     // Even a state with no bank path supersedes an older pending load.
     sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     parameters.replaceState(restoredState);
