@@ -1076,3 +1076,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Проверки: исходники и regression test записаны в рабочую ветку. Windows Release build/CTest для нового HEAD ещё не получен; статус FIXED IN SOURCE / AWAITING CI.
 - M3-014 остаётся FIXED IN SOURCE / AWAITING CI; M3-015 теперь FIXED IN SOURCE / AWAITING CI. M1/M2 не затрагивались; M1, M2, M3 не приняты; M4 BLOCKED.
 - Следующий шаг: получить Windows CI для актуального HEAD, исправить все обнаруженные ошибки; после зелёного CTest продолжить интеграционные M3 проверки (stop/seek, variable block sizes, dense pattern fail-safe) и затем отдельный DAW acceptance.
+
+
+## 10 ноября 2026 — M3-015 CI failure: missing timeline helper include и исправление
+
+- Проверены Windows Actions runs `42774950334` (кодовый commit `6a77e2d1...`) и `42774991354` (документационный commit `efb30595...`). Оба завершились `failure` на шаге `Build VST3 and test executables`; CMake configure прошёл, CTest был пропущен, VST3 bundle/artifact не создан.
+- Точная ошибка MSVC: `PluginProcessor.cpp(505): processSampleAccurateMidiTimeline is not a member of ppgu::performance` / `identifier not found`.
+- Root cause: `PluginProcessor.cpp` вызывает helper из `Source/Performance/ChordTransitionTimeline.h`, но не включал этот заголовок. Тестовый файл включал его напрямую, поэтому дефект не обнаруживался unit-test compilation.
+- Исправление: добавлен прямой `#include "Performance/ChordTransitionTimeline.h"` в `Source/PluginProcessor.cpp`. Commit: `6de1db6777a7afa4dc818fab244c06b3dc099b4d`.
+- В логах также присутствуют предупреждения C4244 в PluginEditor.cpp и C4458 для локального `playHead`; они не являются причиной текущего failure и остаются отдельными cleanup-кандидатами.
+- Статус исправления: FIXED IN SOURCE / AWAITING WINDOWS CI. Новый build и CTest ещё не запускались/не подтверждены. M3-014 и M3-015 не закрывать до успешного Release build + CTest.
+- Следующий шаг: дождаться CI на commit `6de1db...`; если появятся новые ошибки — разбирать по первой реальной compiler/test failure, не отключая тесты. После успешного CTest продолжить M3 stop/seek, block-size/tempo stress и fail-safe проверки. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
