@@ -258,6 +258,11 @@ namespace ppgu::performance
                     else if (!emit(noteOffPpq, EventKind::NoteOff, note, 0, event.channel))
                         retainPending(noteOffPpq, EventKind::NoteOff, note, 0, event.channel);
                 }
+                // Once the fixed output array is full, the processor will
+                // execute the all-notes-off fail-safe. Do not continue walking
+                // further pattern cycles on the real-time audio thread.
+                if (outputOverflow_)
+                    break;
             }
 
             // Insertion sort is bounded and stable; NoteOff precedes NoteOn
