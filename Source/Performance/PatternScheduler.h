@@ -66,7 +66,7 @@ namespace ppgu::performance
             BlockClock result;
             result.bpm = clampBpm(fallbackBpm);
             result.usingHost = host.hostValid && !useInternalClock;
-            const clockSourceChanged = wasRunning_ && result.usingHost != previousUsingHost_;
+            const bool clockSourceChanged = wasRunning_ && result.usingHost != previousUsingHost_;
 
             if (result.usingHost)
             {
