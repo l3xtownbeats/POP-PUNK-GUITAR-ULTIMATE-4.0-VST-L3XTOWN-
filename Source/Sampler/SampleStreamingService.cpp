@@ -5,6 +5,7 @@
 #include <chrono>
 #include <limits>
 #include <string>
+#include <utility>
 
 namespace ppgu::sampler
 {
@@ -131,6 +132,8 @@ SampleStreamingService::Statistics SampleStreamingService::statistics() const no
 
 void SampleStreamingService::workerLoop() noexcept
 {
+    try
+    {
     WavPageReader reader;
     std::uint32_t openSampleId = std::numeric_limits<std::uint32_t>::max();
 
@@ -202,5 +205,13 @@ void SampleStreamingService::workerLoop() noexcept
     }
 
     reader.close();
+    }
+    catch (...)
+    {
+        // An allocation/decoder exception must never escape a std::thread
+        // entry point. Mark the worker stopped and expose the failure.
+        decodeFailures.fetch_add(1, std::memory_order_relaxed);
+        running.store(false, std::memory_order_release);
+    }
 }
 }
