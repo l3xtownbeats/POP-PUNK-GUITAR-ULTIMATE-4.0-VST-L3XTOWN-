@@ -131,6 +131,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("compressorRatio", "Compressor Ratio", 1.0f, 20.0f, 3.0f, 0.1f));
     p.add(floatParameter("compressorAttack", "Compressor Attack", 0.1f, 100.0f, 10.0f, 0.1f));
     p.add(floatParameter("compressorRelease", "Compressor Release", 5.0f, 1000.0f, 120.0f, 0.1f));
+    p.add(floatParameter("parallelCompMix", "Parallel Compression Mix", 0.0f, 1.0f, 0.35f));
     p.add(floatParameter("eqLowFreq", "EQ Low Frequency", 20.0f, 500.0f, 100.0f, 1.0f));
     p.add(floatParameter("eqMidFreq", "EQ Mid Frequency", 100.0f, 8000.0f, 1000.0f, 1.0f));
     p.add(floatParameter("eqMidQ", "EQ Mid Q", 0.1f, 10.0f, 1.0f, 0.01f));
@@ -624,6 +625,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
         const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
         const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
+        const float parallelMix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("parallelCompMix")->load(std::memory_order_relaxed));
         const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
         const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -632,13 +634,15 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             auto& envelope = compressorEnvelope[static_cast<size_t>(channel)];
             for (int sample = 0; sample < samples; ++sample)
             {
-                const float level = std::abs(data[sample]);
+                const float dry = data[sample];
+                const float level = std::abs(dry);
                 const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
                 envelope = coefficient * envelope + (1.0f - coefficient) * level;
                 const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
                 const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
                 const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                data[sample] *= gain;
+                const float compressed = dry * gain;
+                data[sample] = dry + (compressed - dry) * parallelMix;
             }
         }
     }
