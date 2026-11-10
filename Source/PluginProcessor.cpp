@@ -630,6 +630,27 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         }
     }
 
+    // First production FX stage: bounded soft-clipping distortion. The
+    // processor runs in-place and performs no allocation on the audio thread.
+    if (parameters.getRawParameterValue("distortionOn")->load(std::memory_order_relaxed) > 0.5f)
+    {
+        const float drive = 1.0f + 19.0f * parameters.getRawParameterValue("distortionDrive")->load(std::memory_order_relaxed);
+        const float wet = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
+        const float normalizer = std::tanh(drive);
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        {
+            auto* data = buffer.getWritePointer(channel);
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                const float dry = data[sample];
+                const float shaped = std::tanh(dry * drive) / normalizer;
+                data[sample] = dry + (shaped - dry) * wet;
+            }
+        }
+    }
+
+
     // Built-in cabinet convolution using a compact, original damped IR.
     // This is a designed cabinet colour, not a third-party recorded cabinet capture.
     if (parameters.getRawParameterValue("cabinetOn")->load(std::memory_order_relaxed) > 0.5f)
@@ -655,26 +676,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     data[sample] = dry + (wet - dry) * mix;
                 }
                 cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
-            }
-        }
-    }
-
-    // First production FX stage: bounded soft-clipping distortion. The
-    // processor runs in-place and performs no allocation on the audio thread.
-    if (parameters.getRawParameterValue("distortionOn")->load(std::memory_order_relaxed) > 0.5f)
-    {
-        const float drive = 1.0f + 19.0f * parameters.getRawParameterValue("distortionDrive")->load(std::memory_order_relaxed);
-        const float wet = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
-        const float normalizer = std::tanh(drive);
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-        {
-            auto* data = buffer.getWritePointer(channel);
-            for (int sample = 0; sample < samples; ++sample)
-            {
-                const float dry = data[sample];
-                const float shaped = std::tanh(dry * drive) / normalizer;
-                data[sample] = dry + (shaped - dry) * wet;
             }
         }
     }
