@@ -770,7 +770,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
             preset.noteBehavior = value.getProperty("noteBehavior", "").toString();
             preset.sampleRequirement = value.getProperty("sampleRequirement", "").toString();
-            if (auto* tracks = value.getProperty("referenceTracks", juce::var()).getArray())
+            const auto referenceTracksValue = value.getProperty("referenceTracks", juce::var());
+            if (auto* tracks = referenceTracksValue.getArray())
                 for (const auto& track : *tracks)
                     preset.referenceTracks += (preset.referenceTracks.isEmpty() ? juce::String{} : "  ") + track.toString();
             preset.parameters = value.getProperty("parameters", juce::var());
@@ -804,18 +805,22 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
     append(root.getProperty("patternPresets", juce::var()), "PATTERN");
 
     juce::StringArray ids;
+    int melodyCount = 0, patternCount = 0;
     bool catalogValid = factoryPresets.size() == 300;
     for (const auto& preset : factoryPresets)
     {
         if (preset.id.isEmpty() || preset.name.isEmpty() || ids.contains(preset.id)
             || (preset.mode != "MELODY" && preset.mode != "PATTERN"))
             catalogValid = false;
+        if (preset.mode == "MELODY") ++melodyCount;
+        if (preset.mode == "PATTERN") ++patternCount;
         ids.add(preset.id);
     }
+    catalogValid = catalogValid && melodyCount == 150 && patternCount == 150;
     if (!catalogValid)
     {
         factoryPresets.clear();
-        statusLabel.setText("FACTORY CATALOG ERROR  /  EXPECTED 300 UNIQUE VALID PRESETS", juce::dontSendNotification);
+        statusLabel.setText("FACTORY CATALOG ERROR  /  EXPECTED 150 MELODY + 150 PATTERN", juce::dontSendNotification);
         return;
     }
     statusLabel.setText("FACTORY CATALOG READY  /  150 MELODY + 150 PATTERN", juce::dontSendNotification);

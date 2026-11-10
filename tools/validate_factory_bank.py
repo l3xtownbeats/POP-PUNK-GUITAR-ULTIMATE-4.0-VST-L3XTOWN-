@@ -12,12 +12,12 @@ errors = []
 artists = {item["name"] for item in data.get("artists", [])}
 melody = data.get("melodyPresets", [])
 pattern = data.get("patternPresets", [])
-if len(melody) < 150:
-    errors.append(f"Melody bank has {len(melody)} presets; expected at least 150")
-if len(pattern) < 150:
-    errors.append(f"Pattern bank has {len(pattern)} presets; expected at least 150")
-if len(melody) + len(pattern) < 300:
-    errors.append("Combined bank contains fewer than 300 presets")
+if len(melody) != 150:
+    errors.append(f"Melody bank has {len(melody)} presets; expected exactly 150")
+if len(pattern) != 150:
+    errors.append(f"Pattern bank has {len(pattern)} presets; expected exactly 150")
+if len(melody) + len(pattern) != 300:
+    errors.append("Combined bank must contain exactly 300 presets")
 
 all_presets = melody + pattern
 ids = [p.get("id") for p in all_presets]
@@ -62,6 +62,32 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
             errors.append(f'{preset.get("id")}: missing noteBehavior')
         if expected_mode == "PATTERN" and not preset.get("groove"):
             errors.append(f'{preset.get("id")}: missing groove')
+        if not preset.get("tonalTarget"):
+            errors.append(f'{preset.get("id")}: missing tonalTarget')
+        if not preset.get("styleProfileId"):
+            errors.append(f'{preset.get("id")}: missing styleProfileId')
+        if not preset.get("sampleRequirement"):
+            errors.append(f'{preset.get("id")}: missing sampleRequirement')
+        output_db = params.get("outputDb")
+        if isinstance(output_db, bool) or not isinstance(output_db, (int, float)) or not math.isfinite(output_db):
+            errors.append(f'{preset.get("id')}: outputDb must be finite numeric')
+        elif not -24 <= output_db <= 12:
+            errors.append(f'{preset.get("id')}: outputDb outside -24..12')
+        if expected_mode == "PATTERN":
+            performance = preset.get("performance")
+            if not isinstance(performance, dict):
+                errors.append(f'{preset.get("id')}: missing performance object')
+            else:
+                for map_name in ("palmMuteMap", "accentMap"):
+                    step_map = performance.get(map_name)
+                    if not isinstance(step_map, list) or not 1 <= len(step_map) <= 16:
+                        errors.append(f'{preset.get("id')}: performance.{map_name} must contain 1..16 steps')
+                    elif any(not isinstance(v, (int, float, bool)) or isinstance(v, bool) and map_name == "accentMap"
+                             or isinstance(v, (int, float)) and not 0 <= float(v) <= 1 for v in step_map):
+                        errors.append(f'{preset.get("id')}: performance.{map_name} has invalid step values')
+                for flag in ("strokeVariation", "humanize", "velocityAccents"):
+                    if flag in performance and not isinstance(performance[flag], bool):
+                        errors.append(f'{preset.get("id')}: performance.{flag} must be boolean')
 
 if errors:
     print("Factory preset catalog validation FAILED:")
