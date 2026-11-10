@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Performance/ChordTransitionTimeline.h"
+#include "Performance/AutoChordScale.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
@@ -73,12 +74,13 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("slideTime", "Slide Time", 0.01f, 1.0f, 0.25f));
     p.add(boolParameter("legato", "Legato", true));
     p.add(boolParameter("hammerPull", "Hammer On Pull Off", true));
+    p.add(boolParameter("autoChords", "AutoChords", true));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleRoot", 1 }, "Scale Root",
         juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 0));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
-        juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+        juce::StringArray { "Chromatic", "Major", "Minor" }, 1));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
     p.add(boolParameter("monoMode", "Monophonic Mode", true));
@@ -292,6 +294,15 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
     const int playMode = juce::jlimit(0, 1,
         static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
+    const bool autoChordsEnabled = parameters.getRawParameterValue("autoChords")->load(std::memory_order_relaxed) > 0.5f;
+    const int selectedScaleRoot = juce::jlimit(0, 11, static_cast<int>(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
+    const int selectedScaleMode = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
+    const auto mapPerformanceNote = [&](int note) noexcept
+    {
+        return autoChordsEnabled
+            ? ppgu::performance::mapNoteToScale(note, selectedScaleRoot, selectedScaleMode)
+            : note;
+    };
 
     // Read one immutable host-position snapshot per block. Pattern timing is
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
@@ -383,12 +394,21 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
+                const int mappedNote = mapPerformanceNote(message.getNoteNumber());
+                melodyMappedNotes[static_cast<size_t>(message.getChannel() - 1)][static_cast<size_t>(message.getNoteNumber())] = mappedNote;
+                const bool triggered = sampler.noteOn(mappedNote, scaledVelocity, maximumVoices,
                                                       message.getChannel(), globalTuningSemitones);
                 juce::ignoreUnused(triggered);
             }
             else if (message.isNoteOff())
-                sampler.noteOff(message.getNoteNumber(), message.getChannel());
+            {
+                const auto channel = static_cast<size_t>(message.getChannel() - 1);
+                const auto sourceNote = static_cast<size_t>(message.getNoteNumber());
+                const int mappedNote = melodyMappedNotes[channel][sourceNote] >= 0
+                    ? melodyMappedNotes[channel][sourceNote] : message.getNoteNumber();
+                melodyMappedNotes[channel][sourceNote] = -1;
+                sampler.noteOff(mappedNote, message.getChannel());
+            }
         }
         renderSegment(cursor, samples - cursor);
     }
@@ -544,7 +564,15 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 }
                 else if (message.isNoteOn() || message.isNoteOff())
                 {
-                    patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
+                    const auto sourceNote = static_cast<size_t>(message.getNoteNumber());
+                    const auto channel = static_cast<size_t>(channelIndex);
+                    if (message.isNoteOn())
+                        patternMappedNotes[channel][sourceNote] = mapPerformanceNote(message.getNoteNumber());
+                    const int mappedNote = patternMappedNotes[channel][sourceNote] >= 0
+                        ? patternMappedNotes[channel][sourceNote] : message.getNoteNumber();
+                    patternHeldNotes[channel][static_cast<size_t>(mappedNote)] = message.isNoteOn();
+                    if (message.isNoteOff())
+                        patternMappedNotes[channel][sourceNote] = -1;
                     const auto [nextNotes, nextCount, nextChannel] = readChord();
                     if (chordDiffers(nextNotes, nextCount, nextChannel))
                         restartForChord(eventSample, nextNotes, nextCount, nextChannel);
