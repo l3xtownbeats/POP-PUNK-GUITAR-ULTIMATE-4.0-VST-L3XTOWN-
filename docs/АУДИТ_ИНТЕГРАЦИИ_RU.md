@@ -119,3 +119,16 @@ Run 42704820544 прошёл этапы:
 - M4 algorithmic AutoChords/FingeringGenerator foundation прошёл CI; последние overflow guards ждут повторной проверки.
 - M5 StyleEngine foundation прошёл CI; runtime pipeline/UI integration отсутствует.
 - Ни один из этих результатов не заменяет ручную проверку FL Studio 20. Подробная схема M2 описана в `M2_VELOCITY_CROSSFADE_DESIGN_RU.md`.
+
+
+## Интеграционный аудит — 10.11.2026 (M1–M5)
+
+| Модуль | Текущий статус | Что подтверждено | Что остаётся |
+|---|---|---|---|
+| M1 State / sample load | Частично подтверждён | CI на интеграционной ветке; пользователь подтвердил FL Studio 20 load + MIDI audible output | Save/reopen проекта, state restore, reload/missing library, automation, device change |
+| M2 Streaming | Частично подтверждён | Streaming/cache regression и отдельный M2 velocity crossfade PR CI pass | Crossfade ещё не перенесён в интеграционную ветку; summed midpoint/audio test, palm-mute sample routing, stress/no-alloc proof |
+| M3 Pattern scheduler | Частично подтверждён | Scheduler tests и Pattern→Sampler generated WAV integration test; базовый FL Studio audible output | Полный host transport/seek/loop и длительная DAW проверка |
+| M4 AutoChords | Runtime binding pass 1 | Scale-aware major/minor chord generation и bounded guitar fingering подключены к Pattern single-note chord-root path; тестовый target добавлен | Свежий CI, MIDI mapping UX/state, edge cases, chord transitions and end-to-end coverage |
+| M5 Style Engine | Runtime binding pass 1 | Deterministic velocity/beat accent transform подключён к Pattern dispatch; test target added | Palm/legato sample routing, bounded strum offsets, FX binding, preset StyleDNA mapping and end-to-end tests |
+
+**Merge gate:** не объединять отдельные PR в release/main до прохождения текущих head CI и общей сборки на одном SHA: Windows x64 Release, все CTest, VST3 locate, pluginval strictness 5, sample/license validation, package/artifact. После этого — ручной FL Studio 20 smoke/extended test и фиксация результата.
