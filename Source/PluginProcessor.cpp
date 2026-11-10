@@ -385,7 +385,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
                 const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
-                                                      message.getChannel(), globalTuningSemitones);
+                                                      message.getChannel(), globalTuningSemitones, scaledVelocity);
                 juce::ignoreUnused(triggered);
             }
             else if (message.isNoteOff())
@@ -554,7 +554,14 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     const float dynamics = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
                     const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                     const int scaledVelocity = juce::jlimit(1, 127, juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                    const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices, event.channel, globalTuningSemitones);
+                    const int articulationChoice = juce::jlimit(0, 3, static_cast<int>(
+                        parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)));
+                    const int palmMuteThreshold = juce::jlimit(1, 127, static_cast<int>(
+                        parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
+                    const int sampleVelocity = articulationChoice == 1
+                        ? juce::jmin(scaledVelocity, palmMuteThreshold - 1) : scaledVelocity;
+                    const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices,
+                        event.channel, globalTuningSemitones, sampleVelocity);
                     juce::ignoreUnused(triggered);
                 }
                 else sampler.noteOff(event.note, event.channel);
