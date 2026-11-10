@@ -2,6 +2,7 @@
 #include "PluginEditor.h"
 #include <cmath>
 #include <algorithm>
+#include <tuple>
 
 namespace
 {
@@ -194,7 +195,6 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     previousPatternChordChannel = 1;
     previousPatternSlot = -1;
     previousPatternLengthChoice = -1;
-    patternChordChangeSampleOffset = -1;
     previousPlayMode = -1;
 
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;

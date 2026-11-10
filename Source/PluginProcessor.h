@@ -65,7 +65,6 @@ private:
     int previousPatternSlot = -1;
     int previousPatternLengthChoice = -1;
     double patternCycleStartPpq = 0.0;
-    int patternChordChangeSampleOffset = 0;
 
     // Preallocated stereo effect memories. All resizing happens in prepareToPlay,
     // never in processBlock.
