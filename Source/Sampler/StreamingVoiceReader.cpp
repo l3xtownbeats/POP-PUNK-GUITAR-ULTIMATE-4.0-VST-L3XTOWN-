@@ -10,6 +10,8 @@ void StreamingVoiceReader::attach(SampleStreamingService* service,
                                   std::uint64_t totalFrames) noexcept
 {
     release();
+    if (service == nullptr || !service->isValid() || service->pageFrames() == 0 || totalFrames == 0)
+        return;
     stream = service;
     sourceSampleId = sampleId;
     sourceFrames = totalFrames;
@@ -39,8 +41,8 @@ int StreamingVoiceReader::findLease(std::uint64_t pageIndex) const noexcept
 
 bool StreamingVoiceReader::ensurePage(std::uint64_t pageIndex) noexcept
 {
-    if (stream == nullptr || pageIndex >= (sourceFrames + stream->pageFrames() - 1)
-                                               / stream->pageFrames())
+    if (stream == nullptr || stream->pageFrames() == 0
+        || pageIndex >= 1 + (sourceFrames - 1) / stream->pageFrames())
         return false;
     if (findLease(pageIndex) >= 0)
         return true;
@@ -79,7 +81,7 @@ void StreamingVoiceReader::prefetch(std::uint64_t frame) noexcept
     const auto page = frame / stream->pageFrames();
     (void) ensurePage(page);
     const auto nextPage = page + 1;
-    if (nextPage < (sourceFrames + stream->pageFrames() - 1) / stream->pageFrames())
+    if (nextPage < 1 + (sourceFrames - 1) / stream->pageFrames())
         (void) ensurePage(nextPage);
 }
 
@@ -110,6 +112,7 @@ bool StreamingVoiceReader::readHermite(std::uint64_t frame, float fraction,
                                        float& left, float& right) noexcept
 {
     if (stream == nullptr || regionStart >= regionEnd || regionEnd > sourceFrames
+        || regionEnd > static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max()) - 2
         || frame < regionStart || frame >= regionEnd || !std::isfinite(fraction))
         return false;
 
