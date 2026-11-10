@@ -884,3 +884,49 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Тест fixture: nested stereo WAV 24-bit/48 kHz, контроль количества кадров/каналов/bit depth/file size и отсутствующего каталога.
 - Статус: код и тест добавлены, но CI/build ещё не подтверждены. Это индексатор метаданных, не streaming playback; текущий SamplePool по-прежнему загружает WAV целиком и имеет лимиты 1 GiB/128 snapshots.
 - Следующий шаг: проверить сборку на Windows CI; затем спроектировать и реализовать page cache/streaming source с тестами cache miss, prefetch, shutdown и voice concurrency.
+
+
+## 10 ноября 2026 — M3: прямой dispatch событий планировщика в SamplerEngine
+
+- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2`.
+- Базовый commit новой ветки до изменения: `cacfcc16e1caf3d5d486cece58b934c7c84ba4d8`.
+- Предыдущий commit после проверки структуры и сохранения перенесённых пользовательских файлов: `7523be5d1fd620e3a039101598380713819dc50d`.
+- Новый commit с исправлением: `feb94fc65facf9ef12ad3a43d851e4a4764715f2`.
+- Изменены:
+  - `Source/PluginProcessor.cpp`
+  - `Source/PluginProcessor.h`
+
+### Что сделано
+- Повторно проверен фактический `processBlock()`: вызов `PatternScheduler::schedule()` и передача запланированных событий в sampler уже присутствовали. Поэтому не дублировали scheduler и не заявляем, что с нуля создан Pattern runtime.
+- Удалён промежуточный путь через `juce::MidiBuffer patternMidiBuffer` и `addEvent()`.
+- События теперь обрабатываются непосредственно из заранее выделенного массива `scheduledPatternEvents`.
+- Сохранено разбиение рендера на сегменты по точному `sampleOffset`; до каждого события отрисовывается предшествующий сегмент, затем вызывается `sampler.noteOn()` или `sampler.noteOff()`.
+- Сохранена обработка velocity shaping, dynamics, velocityScale, MIDI channel и global tuning.
+- Удалено неиспользуемое поле `patternMidiBuffer` из заголовка процессора.
+
+### Причина и ожидаемый эффект
+- Промежуточный `juce::MidiBuffer::addEvent()` мог потребовать увеличения внутреннего хранилища при плотной последовательности событий. Рост контейнера в аудиопотоке создаёт риск heap allocation и аудио-dropout.
+- Прямой dispatch убирает этот дополнительный контейнер и его потенциальное расширение из данного участка audio callback.
+- Это устраняет один выявленный риск, но само по себе НЕ доказывает отсутствие всех аллокаций/блокировок во всём audio callback.
+
+### Проверка и статус
+- GitHub commit создан и branch ref успешно обновлён.
+- Diff проверен: изменены только два указанных исходных файла; исходные пользовательские документы/архивы/обложка сохранены.
+- Для commit `feb94fc` автоматически запущен Windows CI workflow run `42762319535`.
+- На момент записи workflow находится в процессе: валидация каталога 300 пресетов и portable preset examples прошла; загрузка redistributable sample libraries выполняется; CMake configure, VST3 build, CTest и упаковка ещё не завершились.
+- Сборка, CTest и pluginval для этого commit пока НЕ подтверждены. M3 НЕ объявляется принятой.
+
+### Оставшиеся критерии M3
+- Дождаться полного результата CI и исправить ошибки, если они появятся.
+- Добавить/проверить regression tests для совпадающих NoteOff/NoteOn, границ блока, разных размеров host block, смены слота, chord changes, stop/reset, длинных gate/NoteOff и sample-accurate offsets.
+- Подтвердить, что note lifecycle не оставляет зависших нот и не теряет события при переходах между блоками.
+- Проверить восемь рабочих pattern slots и quantized switching; наличие каталога паттернов само по себе не является runtime acceptance.
+- Выполнить headless/offline render acceptance и отдельно ручную проверку в FL Studio 20.
+
+### План следующих работ
+1. Получить итог CI run `42762319535` именно для commit `feb94fc`; не переносить результат CI с другого SHA.
+2. Разобрать тестовое покрытие `PatternScheduler` и `processBlock`, добавить недостающие regression tests, не ослабляя критерии.
+3. Проверить остановку/сброс транспорта, MIDI panic и снятие всех нот при смене состояния.
+4. После прохождения M3 вернуться к незакрытым пунктам M2 (RR без повторов, velocity crossfade, плавное voice stealing, streaming/page cache, stress/no-click и лицензии).
+5. Не начинать M4 до фактической приёмки M1–M3 согласно v33 FINAL.
+
