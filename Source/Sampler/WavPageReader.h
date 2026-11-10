@@ -46,6 +46,15 @@ public:
     [[nodiscard]] PageReadReport readPage(std::uint64_t pageIndex,
                                           SamplePage& destination,
                                           std::uint32_t pageFrames = defaultPageFrames);
+    // Worker-only zero-intermediate-allocation path. The caller supplies
+    // preallocated planar channel pointers (for example, a reserved cache
+    // slot); samples are decoded directly into that storage.
+    [[nodiscard]] PageReadReport readPageInto(std::uint64_t pageIndex,
+                                              float* const* destinationChannels,
+                                              int destinationChannelCount,
+                                              int destinationOffset,
+                                              std::uint32_t& framesWritten,
+                                              std::uint32_t pageFrames = defaultPageFrames);
     void close() noexcept;
 
     [[nodiscard]] bool isOpen() const noexcept { return reader != nullptr; }
