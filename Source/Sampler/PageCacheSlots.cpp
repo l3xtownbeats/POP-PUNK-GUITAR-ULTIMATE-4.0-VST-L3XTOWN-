@@ -87,6 +87,23 @@ void PageCacheSlots::cancelLoad(std::size_t slot) noexcept
     }
 }
 
+bool PageCacheSlots::containsReady(PageKey key) const noexcept
+{
+    if (!isValid())
+        return false;
+    for (std::size_t i = 0; i < slotCount; ++i)
+    {
+        const auto& candidate = slots[i];
+        const auto access = candidate.access.load(std::memory_order_acquire);
+        if (access < readyAccess)
+            continue;
+        if (candidate.sampleId.load(std::memory_order_relaxed) == key.sampleId
+            && candidate.pageIndex.load(std::memory_order_relaxed) == key.pageIndex)
+            return true;
+    }
+    return false;
+}
+
 bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
 {
     // A lease is an owning pin. Never overwrite a live lease: doing so
