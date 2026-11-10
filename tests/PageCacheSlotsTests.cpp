@@ -53,6 +53,20 @@ int main()
     cache.release(lease);
     if (lease || cache.state(first) != PageCacheSlots::State::ready)
         return 1;
+    // A cache must not release another cache instance's lease even if
+    // both caches have a slot with the same numeric index.
+    PageCacheSlots otherCache(1, 8, 2);
+    if (!otherCache.isValid() || !cache.tryAcquire({ 10, 0 }, lease))
+        return 1;
+    otherCache.release(lease);
+    if (!lease || cache.state(first) != PageCacheSlots::State::reading)
+    {
+        std::cerr << "A foreign cache incorrectly released another cache's pin.\\n";
+        return 1;
+    }
+    cache.release(lease);
+    if (lease || cache.state(first) != PageCacheSlots::State::ready)
+        return 1;
     // Re-acquiring into an already-owned lease must fail without
     // discarding the original pin (otherwise the cache leaks a reader count).
     if (!cache.tryAcquire({ 10, 0 }, lease))
