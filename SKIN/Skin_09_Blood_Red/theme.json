@@ -1,0 +1,46 @@
+{
+  "id": "skin-09-blood-red",
+  "name": "Blood Red",
+  "version": 1,
+  "colors": {
+    "background": "#100708",
+    "surface": "#211014",
+    "accent": "#F12D45",
+    "text": "#FFF0F1",
+    "muted": "#B99A9E",
+    "panel": "#211014",
+    "panelRaised": "#211014",
+    "border": "#B99A9E",
+    "focus": "#F12D45",
+    "meter": "#F12D45"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#F12D45",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

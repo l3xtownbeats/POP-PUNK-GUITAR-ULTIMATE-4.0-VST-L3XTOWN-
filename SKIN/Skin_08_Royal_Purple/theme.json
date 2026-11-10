@@ -1,0 +1,46 @@
+{
+  "id": "skin-08-royal-purple",
+  "name": "Royal Purple",
+  "version": 1,
+  "colors": {
+    "background": "#0D0815",
+    "surface": "#1B1028",
+    "accent": "#B45CFF",
+    "text": "#F8F0FF",
+    "muted": "#B3A1C8",
+    "panel": "#1B1028",
+    "panelRaised": "#1B1028",
+    "border": "#B3A1C8",
+    "focus": "#B45CFF",
+    "meter": "#B45CFF"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#B45CFF",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

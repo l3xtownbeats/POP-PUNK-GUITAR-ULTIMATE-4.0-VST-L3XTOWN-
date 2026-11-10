@@ -1,0 +1,46 @@
+{
+  "id": "skin-06-vintage-studio",
+  "name": "Vintage Studio",
+  "version": 1,
+  "colors": {
+    "background": "#17130F",
+    "surface": "#29221A",
+    "accent": "#C69A62",
+    "text": "#F6EBDD",
+    "muted": "#B8A58F",
+    "panel": "#29221A",
+    "panelRaised": "#29221A",
+    "border": "#B8A58F",
+    "focus": "#C69A62",
+    "meter": "#C69A62"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#C69A62",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

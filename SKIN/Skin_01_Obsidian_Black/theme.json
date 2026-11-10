@@ -1,0 +1,46 @@
+{
+  "id": "skin-01-obsidian-black",
+  "name": "Obsidian Black",
+  "version": 1,
+  "colors": {
+    "background": "#09090D",
+    "surface": "#17171F",
+    "accent": "#D6B35B",
+    "text": "#FFFFFF",
+    "muted": "#A9A9B5",
+    "panel": "#17171F",
+    "panelRaised": "#17171F",
+    "border": "#A9A9B5",
+    "focus": "#D6B35B",
+    "meter": "#D6B35B"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#D6B35B",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

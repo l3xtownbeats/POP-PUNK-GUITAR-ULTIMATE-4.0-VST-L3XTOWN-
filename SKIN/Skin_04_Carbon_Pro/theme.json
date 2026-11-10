@@ -1,0 +1,46 @@
+{
+  "id": "skin-04-carbon-pro",
+  "name": "Carbon Pro",
+  "version": 1,
+  "colors": {
+    "background": "#0B0D10",
+    "surface": "#1A1E23",
+    "accent": "#FF3B36",
+    "text": "#F7F7F7",
+    "muted": "#A7ADB5",
+    "panel": "#1A1E23",
+    "panelRaised": "#1A1E23",
+    "border": "#A7ADB5",
+    "focus": "#FF3B36",
+    "meter": "#FF3B36"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#FF3B36",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

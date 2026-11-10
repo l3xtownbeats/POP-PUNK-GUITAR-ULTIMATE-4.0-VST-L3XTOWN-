@@ -1,0 +1,46 @@
+{
+  "id": "skin-03-neon-cyber",
+  "name": "Neon Cyber",
+  "version": 1,
+  "colors": {
+    "background": "#070D12",
+    "surface": "#101E27",
+    "accent": "#00D9FF",
+    "text": "#EAFBFF",
+    "muted": "#91A9B5",
+    "panel": "#101E27",
+    "panelRaised": "#101E27",
+    "border": "#91A9B5",
+    "focus": "#00D9FF",
+    "meter": "#00D9FF"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#00D9FF",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

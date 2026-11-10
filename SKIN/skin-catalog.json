@@ -1,0 +1,68 @@
+{
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "version": "4.0",
+  "packCount": 10,
+  "defaultSkin": "Skin_01_Obsidian_Black",
+  "skins": [
+    {
+      "folder": "Skin_01_Obsidian_Black",
+      "name": "Obsidian Black",
+      "config": "Skin_01_Obsidian_Black/theme.json",
+      "preview": "Skin_01_Obsidian_Black/preview.svg"
+    },
+    {
+      "folder": "Skin_02_Sunburst_Deluxe",
+      "name": "Sunburst Deluxe",
+      "config": "Skin_02_Sunburst_Deluxe/theme.json",
+      "preview": "Skin_02_Sunburst_Deluxe/preview.svg"
+    },
+    {
+      "folder": "Skin_03_Neon_Cyber",
+      "name": "Neon Cyber",
+      "config": "Skin_03_Neon_Cyber/theme.json",
+      "preview": "Skin_03_Neon_Cyber/preview.svg"
+    },
+    {
+      "folder": "Skin_04_Carbon_Pro",
+      "name": "Carbon Pro",
+      "config": "Skin_04_Carbon_Pro/theme.json",
+      "preview": "Skin_04_Carbon_Pro/preview.svg"
+    },
+    {
+      "folder": "Skin_05_Platinum",
+      "name": "Platinum",
+      "config": "Skin_05_Platinum/theme.json",
+      "preview": "Skin_05_Platinum/preview.svg"
+    },
+    {
+      "folder": "Skin_06_Vintage_Studio",
+      "name": "Vintage Studio",
+      "config": "Skin_06_Vintage_Studio/theme.json",
+      "preview": "Skin_06_Vintage_Studio/preview.svg"
+    },
+    {
+      "folder": "Skin_07_Electric_Blue",
+      "name": "Electric Blue",
+      "config": "Skin_07_Electric_Blue/theme.json",
+      "preview": "Skin_07_Electric_Blue/preview.svg"
+    },
+    {
+      "folder": "Skin_08_Royal_Purple",
+      "name": "Royal Purple",
+      "config": "Skin_08_Royal_Purple/theme.json",
+      "preview": "Skin_08_Royal_Purple/preview.svg"
+    },
+    {
+      "folder": "Skin_09_Blood_Red",
+      "name": "Blood Red",
+      "config": "Skin_09_Blood_Red/theme.json",
+      "preview": "Skin_09_Blood_Red/preview.svg"
+    },
+    {
+      "folder": "Skin_10_Arctic_White",
+      "name": "Arctic White",
+      "config": "Skin_10_Arctic_White/theme.json",
+      "preview": "Skin_10_Arctic_White/preview.svg"
+    }
+  ]
+}

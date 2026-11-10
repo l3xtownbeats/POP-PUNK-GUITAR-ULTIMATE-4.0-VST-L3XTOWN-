@@ -1,0 +1,46 @@
+{
+  "id": "skin-02-sunburst-deluxe",
+  "name": "Sunburst Deluxe",
+  "version": 1,
+  "colors": {
+    "background": "#100D08",
+    "surface": "#261B10",
+    "accent": "#FFB12B",
+    "text": "#FFF5E5",
+    "muted": "#B6A58A",
+    "panel": "#261B10",
+    "panelRaised": "#261B10",
+    "border": "#B6A58A",
+    "focus": "#FFB12B",
+    "meter": "#FFB12B"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#FFB12B",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}

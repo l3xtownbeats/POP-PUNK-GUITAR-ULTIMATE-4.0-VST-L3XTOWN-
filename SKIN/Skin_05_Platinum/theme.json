@@ -1,0 +1,46 @@
+{
+  "id": "skin-05-platinum",
+  "name": "Platinum",
+  "version": 1,
+  "colors": {
+    "background": "#101316",
+    "surface": "#20272C",
+    "accent": "#C9E4F2",
+    "text": "#F7FBFF",
+    "muted": "#AABBC5",
+    "panel": "#20272C",
+    "panelRaised": "#20272C",
+    "border": "#AABBC5",
+    "focus": "#C9E4F2",
+    "meter": "#C9E4F2"
+  },
+  "metrics": {
+    "cornerRadius": 12,
+    "controlHeight": 44,
+    "spacing": 10
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {},
+  "effects": {
+    "panelGlow": "#C9E4F2",
+    "accentGlowOpacity": 0.16,
+    "textureOpacity": 0.04
+  },
+  "compatibility": {
+    "melody": true,
+    "pattern": true,
+    "fx": [
+      "reverb",
+      "flanger",
+      "chorus",
+      "delay",
+      "distortion"
+    ],
+    "sameLayoutAcrossThemes": true
+  }
+}
