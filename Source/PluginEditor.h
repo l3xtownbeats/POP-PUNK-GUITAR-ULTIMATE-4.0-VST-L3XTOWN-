@@ -21,7 +21,7 @@ private:
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "LOAD SFZ" };
-    juce::TextButton importButton { "IMPORT AUDIO" };
+    juce::TextButton importButton { "IMPORT SOUNDS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
