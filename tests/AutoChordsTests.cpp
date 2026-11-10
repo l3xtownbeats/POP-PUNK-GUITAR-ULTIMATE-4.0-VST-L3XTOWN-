@@ -1,5 +1,6 @@
 #include "AutoChords.h"
 #include <iostream>
+#include <limits>
 
 using namespace ppgu::performance;
 
@@ -63,6 +64,12 @@ int main()
     if (AutoChordMap::mapScaleAware(-1, 0, ScaleMode::Major).valid
         || AutoChordMap::mapScaleAware(128, 0, ScaleMode::Major).valid)
         return 13;
+
+    const auto extreme = AutoChords::generate(
+        std::numeric_limits<int>::max(), ChordQuality::Major,
+        std::numeric_limits<int>::max());
+    if (extreme.count > 3)
+        return 14;
 
     std::cout << "M4 AutoChords/FingeringGenerator tests passed\n";
     return 0;
