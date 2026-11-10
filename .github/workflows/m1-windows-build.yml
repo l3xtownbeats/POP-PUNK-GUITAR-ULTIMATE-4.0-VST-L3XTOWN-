@@ -8,6 +8,7 @@ on:
       - feat/m2-sfz-loop-playback
       - feat/ui-approved-skin-functional
       - feat/m3-transport-scheduler-v2
+      - fix/m1-m2-m3-release-gates
     paths:
       - 'CMakeLists.txt'
       - 'Source/**'
