@@ -1388,3 +1388,16 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Проверка: исходники повторно считаны с `main` после записи и сверены. Локальная компиляция/CTest и Windows GitHub Actions для этих коммитов пока не подтверждены; не объявлять тест пройденным до получения CI результата.
 - Ограничение текущего этапа: `WavPageReader` и `PageCacheSlots` существуют как отдельные компоненты, но ещё не подключены к playback path `SamplerEngine`. Текущий `SamplePool::loadSfz()` по-прежнему декодирует WAV целиком и держит 1 GiB cache cap. Поэтому потоковая загрузка и preset-scoped lazy loading ещё не реализованы в runtime. Следующий шаг — безопасная интеграция page cache с голосами и worker loader, с тестами на одновременные голоса/cache miss/prefetch и старые release-хвосты.
 - Статус: CACHE CONCURRENCY BUG FIXED IN SOURCE / CI PENDING / STREAMING PLAYBACK INTEGRATION PENDING. M2 открыта.
+
+
+## 10 ноября 2026 — M2 пункты 2/3: prefetch и многоголосое чтение cache
+
+- Уточнены в Promt.txt требования к worker-only prefetch: запрос первой страницы при note-on, lookahead следующей страницы, поддержка loop pages, bounded queue, коалесцирование одинаковых запросов, отсутствие ожидания/дискового I/O/аллокаций на audio thread, диагностика cache miss/underrun/queue overflow/decode latency.
+- Уточнено требование к нескольким голосам: одна immutable page читается параллельно через независимые leases; eviction только при нулевом числе readers.
+- В tests/PageCacheSlotsTests.cpp добавлен многопоточный stress test: 4 reader threads выполняют до 20 000 acquire/read/release каждый, worker одновременно выполняет до 20 000 попыток eviction и публикации других страниц. Проверяются целостность читаемых данных и факт успешных чтений; cache misses допустимы, повреждение данных — нет.
+- Коммит теста: 5350faff5ccb8038a28268b1deed93fbc3f8c3be в main.
+- Предыдущие коммиты реализации совместных leases: 6b46a69a, 4a2f0d09; базовый regression test: a7911a33.
+- Проверка CI для коммитов не подтверждена: combined status вернул пустой список статусов; локальный CTest не запускался. Нельзя считать stress test пройденным только по факту добавления.
+- Текущий blocker: WavPageReader и PageCacheSlots ещё не интегрированы с реальным sampler voice playback; SamplePool::loadSfz() по-прежнему декодирует WAV целиком. Поэтому prefetch runtime, cache hit path, miss recovery и 100-hit no-click validation остаются незавершёнными.
+- Порядок дальнейшей работы: (1) интегрировать worker request queue + page reader/cache с реальным voice path без audio-thread blocking; (2) добавить deterministic prefetch/cache-miss/loop tests; (3) запустить Windows CI/CTest и исправить все ошибки; (4) выполнить 100-hit click validation и проверить переключение buffer sizes. M2 остаётся открытой до подтверждения этих критериев.
+- Статус: SPEC UPDATED / MULTI-READER STRESS TEST ADDED / TEST EXECUTION PENDING / RUNTIME INTEGRATION PENDING.
