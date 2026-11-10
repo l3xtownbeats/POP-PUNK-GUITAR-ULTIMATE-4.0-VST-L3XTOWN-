@@ -117,14 +117,17 @@ bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output
     }
 
     juce::WavAudioFormat wav;
-    std::unique_ptr<juce::AudioFormatWriter> writer(
-        wav.createWriterFor(stream.get(), reader.sampleRate, reader.numChannels, 32, {}, 0));
+    const auto writerOptions = juce::AudioFormatWriter::Options {}
+        .withSampleRate(reader.sampleRate)
+        .withNumChannels(static_cast<int>(reader.numChannels))
+        .withBitsPerSample(32)
+        .withSampleFormat(juce::AudioFormatWriter::Options::SampleFormat::floatingPoint);
+    auto writer = wav.createWriterFor(stream, writerOptions);
     if (!writer)
     {
-        error = "Could not initialize 32-bit float WAV encoder.";
+        error = "Could not initialize IEEE float32 WAV encoder.";
         return false;
     }
-    stream.release();
 
     juce::AudioBuffer<float> chunk(static_cast<int>(reader.numChannels),
                                    static_cast<int>(SampleLibraryImporter::conversionChunkFrames));
