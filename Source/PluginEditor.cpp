@@ -155,7 +155,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
     categoryBox.addItem("OFF", 1);
-    categoryBox.addItem("ALL GROUPS", 2);
+    categoryBox.addItem("PUNK GROUPS", 2);
     categoryBox.setSelectedId(2, juce::dontSendNotification);
     categoryBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     categoryBox.setColour(juce::ComboBox::textColourId, pale);
@@ -230,7 +230,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         const auto groupFilter = categoryBox.getText();
         for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
-            if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "ALL GROUPS"
+            if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "PUNK GROUPS"
                 && !item.category.equalsIgnoreCase(groupFilter)) continue;
             const auto melodyFilter = melodyFilterBox.getText();
             if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "ALL SOUNDS"
@@ -242,8 +242,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 
             const auto matchesQuery = query.isEmpty()
                 || item.name.toLowerCase().contains(query)
-                || item.category.toLowerCase().contains(query)
-                || item.category.toLowerCase().contains(query)
+                 || item.category.toLowerCase().contains(query)
                 || item.soundCharacter.toLowerCase().contains(query)
                 || item.styleProfileId.toLowerCase().contains(query)
                 || item.groove.toLowerCase().contains(query)
@@ -320,6 +319,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     autoChordsButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
     autoChordsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         processor.parameters, "autoChordsOn", autoChordsButton);
+    autoChordsButton.setButtonText(autoChordsButton.getToggleState() ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
     autoChordsButton.onClick = [this] {
         autoChordsButton.setButtonText(autoChordsButton.getToggleState() ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
         statusLabel.setText(autoChordsButton.getToggleState()
@@ -659,6 +659,16 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else if (styleText.contains("palm") || styleText.contains("muted")) patternStyle = 1;
     else if (styleText.contains("open") || styleText.contains("chorus")) patternStyle = 3;
     else if (styleText.contains("alternate")) patternStyle = 5;
+    if (preset.groove.isEmpty()) {
+        const auto profile = preset.styleProfileId.toLowerCase();
+        if (profile.contains("blink-182") || profile.contains("the-offspring") || profile.contains("green-day")) patternStyle = 0;
+        else if (profile.contains("sum-41") || profile.contains("mgk") || profile.contains("fenix")) patternStyle = 1;
+        else if (profile.contains("simple-plan") || profile.contains("new-found-glory") || profile.contains("good-charlotte")) patternStyle = 3;
+        else if (profile.contains("mest") || profile.contains("midtown") || profile.contains("my-chemical")) patternStyle = 6;
+        else if (profile.contains("angels-airwaves") || profile.contains("yellowcard")) patternStyle = 7;
+        else if (profile.contains("less-than-jake")) patternStyle = 4;
+        else patternStyle = 2;
+    }
     setParameter("patternSlot", static_cast<float>(patternStyle));
     if (preset.mode == "PATTERN")
     {
