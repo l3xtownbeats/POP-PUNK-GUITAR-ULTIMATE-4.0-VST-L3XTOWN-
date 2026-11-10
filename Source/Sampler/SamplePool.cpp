@@ -492,9 +492,13 @@ SamplePool::VelocityLayerSelection SamplePool::findVelocityLayers(
             && candidate.xfinHighVelocity > candidate.xfinLowVelocity;
         const bool candidateFadeOut = candidate.xfoutLowVelocity >= 0
             && candidate.xfoutHighVelocity > candidate.xfoutLowVelocity;
-        const bool complementary = (primaryFadeIn && candidateFadeOut)
-            || (primaryFadeOut && candidateFadeIn);
-        if (!complementary)
+        const bool fadeInPartnerMatches = primaryFadeOut && candidateFadeIn
+            && candidate.xfinLowVelocity == primary.xfoutLowVelocity
+            && candidate.xfinHighVelocity == primary.xfoutHighVelocity;
+        const bool fadeOutPartnerMatches = primaryFadeIn && candidateFadeOut
+            && candidate.xfoutLowVelocity == primary.xfinLowVelocity
+            && candidate.xfoutHighVelocity == primary.xfinHighVelocity;
+        if (!fadeInPartnerMatches && !fadeOutPartnerMatches)
             continue;
 
         const bool sameSource = primary.streaming == candidate.streaming
