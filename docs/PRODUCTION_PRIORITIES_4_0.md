@@ -82,3 +82,8 @@ The Pattern UI must expose the mode switch and, when Key/Scale mode is enabled, 
 ## Consolidated specification
 
 The complete Russian-language product requirements, including all previously agreed features and the clarified Melody/Pattern keyboard behavior, are maintained in [MASTER_PRODUCT_SPEC_4_0_RU.md](./MASTER_PRODUCT_SPEC_4_0_RU.md). Treat that document as the comprehensive user-facing scope; this file remains the concise production-priority and acceptance-gate summary.
+
+
+## Execution update — 10 Nov 2026
+
+Parallel M4/M5 work is allowed only on isolated branches and without modifying the active M1–M3 audio build. M5 foundation has passed Windows CI run `42840410645`; M4 AutoChords/FingeringGenerator foundation is in run `42842050531` and must not be marked complete until build, CTest and pluginval finish. M1–M3 Windows Release run `42841128991` and separate M1/M2 run `42841133299` passed, but host validation and specific M2/M3 end-to-end criteria remain open. See `WORK_LOG_M1_M5_INTEGRATION_RU.md` for exact evidence and merge gates.
