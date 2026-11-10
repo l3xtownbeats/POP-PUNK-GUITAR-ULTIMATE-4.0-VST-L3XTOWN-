@@ -53,6 +53,10 @@ public:
         int seqLength = 1;
         int seqPosition = 1;
         int roundRobinSetIndex = -1;
+        int xfinLowVelocity = -1;
+        int xfinHighVelocity = -1;
+        int xfoutLowVelocity = -1;
+        int xfoutHighVelocity = -1;
         int startFrame = 0;
         int endFrame = 0;
         int loopStartFrame = 0;
