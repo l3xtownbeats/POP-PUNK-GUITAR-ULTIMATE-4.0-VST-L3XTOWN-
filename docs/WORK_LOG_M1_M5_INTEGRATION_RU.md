@@ -91,3 +91,16 @@ CI SUCCESS фиксируется только для перечисленных
 - M2 PR #5 branch `work/m2-velocity-crossfade`, latest commit `ef1ee5b04c3dc6653f749d7602b92a683253d059`, run `42843931173` in progress.
 
 No secondary branch is merged yet. Unified integration requires current branch heads to pass, runtime binding to be completed, and a combined Release/CTest/pluginval/package run. FL Studio 20 remains a separate release gate.
+
+## 10 ноября 2026 — M6–M13 lightweight parallel work
+
+- Создана изолированная ветка `work/m6-m13-quickwins` от актуальной M1–M3 integration line; активные DSP/Processor файлы не затрагивались.
+- M7: `tools/validate_factory_bank.py` усилен проверками 150/150/300 declared minimums, core artist palette, уникальных непустых IDs, структуры и mode, конечных числовых параметров/диапазонов, Pattern performance/sample requirement metadata.
+- M11: `tools/validate_preset_files.py` усилен проверками object shape, extension/mode, ID/name, дублей, bool/NaN/Inf и диапазонов параметров, Pattern steps.
+- M8: аудит подтвердил, что bounded page cache уже имеет concurrent reader/worker eviction stress test; новую конкурирующую реализацию не добавляли.
+- M6: APVTS contract уже содержит voices/velocity/palmMuteThreshold/articulation IDs; реальное articulation-to-sample routing и FL Studio validation остаются открытыми.
+- M9: StyleEngine foundation остаётся в PR #3, runtime binding не объявлен готовым.
+- M10: утверждённый skin и FX APVTS controls зафиксированы; parameter→UI→processor QA остаётся открытым.
+- M12: существующий Windows Release/CTest/pluginval/package pipeline используется повторно без запуска лишних сборок.
+- M13: добавлен `docs/M13_CLEAN_INSTALL_SMOKE_CHECKLIST_RU.md` для Windows 10 x64 1809+/FL Studio 20, измерений cold start, RAM, CPU, preset switching и sustained playback.
+- Полная карта статусов: `docs/M6_M13_QUICK_WINS_AUDIT_RU.md`. Изменения ждут CI и не объединяются до прохождения проверок M1–M5 и unified release gates.
