@@ -2,10 +2,12 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cmath>
 #include <cctype>
 #include <filesystem>
 #include <fstream>
+#include <vector>
 #include <limits>
 #include <regex>
 #include <system_error>
@@ -109,25 +111,56 @@ bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output
         return false;
     }
 
-    std::unique_ptr<juce::OutputStream> stream(output.createOutputStream());
-    if (!stream)
+    const auto sampleRate = static_cast<std::uint32_t>(std::llround(reader.sampleRate));
+    const auto channelCount = static_cast<std::uint16_t>(reader.numChannels);
+    const auto dataBytes = static_cast<std::uint32_t>(frames * channels * sizeof(float));
+    const auto byteRate = sampleRate * static_cast<std::uint32_t>(channelCount) * 4U;
+    const auto blockAlign = static_cast<std::uint16_t>(channelCount * 4U);
+
+    // JUCE 7.0.12 does not expose the newer floating-point WAV writer option.
+    // Write a standards-compliant WAVE_FORMAT_IEEE_FLOAT (format tag 3) file
+    // directly so imported samples are genuinely 32-bit float, not PCM32.
+    std::ofstream file(output.getFullPathName().toStdString(),
+                       std::ios::binary | std::ios::trunc);
+    if (!file)
     {
         error = "Could not create converted WAV file.";
         return false;
     }
 
-    juce::WavAudioFormat wav;
-    auto writer = wav.createWriterFor(stream.get(), reader.sampleRate,
-                                       reader.numChannels, 24, {}, 0);
-    if (!writer)
+    const auto writeU16 = [&file](std::uint16_t value)
     {
-        error = "Could not initialize 24-bit PCM WAV encoder.";
-        return false;
-    }
-    stream.release();
+        const char bytes[2] { static_cast<char>(value & 0xffU),
+                              static_cast<char>((value >> 8U) & 0xffU) };
+        file.write(bytes, 2);
+    };
+    const auto writeU32 = [&file](std::uint32_t value)
+    {
+        const char bytes[4] { static_cast<char>(value & 0xffU),
+                              static_cast<char>((value >> 8U) & 0xffU),
+                              static_cast<char>((value >> 16U) & 0xffU),
+                              static_cast<char>((value >> 24U) & 0xffU) };
+        file.write(bytes, 4);
+    };
+
+    file.write("RIFF", 4);
+    writeU32(36U + dataBytes);
+    file.write("WAVEfmt ", 8);
+    writeU32(16U);
+    writeU16(3U); // WAVE_FORMAT_IEEE_FLOAT
+    writeU16(channelCount);
+    writeU32(sampleRate);
+    writeU32(byteRate);
+    writeU16(blockAlign);
+    writeU16(32U);
+    file.write("data", 4);
+    writeU32(dataBytes);
 
     juce::AudioBuffer<float> chunk(static_cast<int>(reader.numChannels),
                                    static_cast<int>(SampleLibraryImporter::conversionChunkFrames));
+    std::vector<std::uint8_t> interleaved(
+        static_cast<std::size_t>(SampleLibraryImporter::conversionChunkFrames)
+        * static_cast<std::size_t>(reader.numChannels) * sizeof(float));
     juce::int64 position = 0;
     while (position < reader.lengthInSamples)
     {
@@ -137,22 +170,38 @@ bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output
         if (!reader.read(&chunk, 0, count, position, true, true))
         {
             error = "Decoder failed while reading source audio.";
-            writer.reset();
+            file.close();
             output.deleteFile();
             return false;
         }
-        if (!writer->writeFromAudioSampleBuffer(chunk, 0, count))
+
+        std::size_t offset = 0;
+        for (int frame = 0; frame < count; ++frame)
+        {
+            for (unsigned int channel = 0; channel < reader.numChannels; ++channel)
+            {
+                const auto bits = std::bit_cast<std::uint32_t>(
+                    chunk.getSample(static_cast<int>(channel), frame));
+                interleaved[offset++] = static_cast<std::uint8_t>(bits & 0xffU);
+                interleaved[offset++] = static_cast<std::uint8_t>((bits >> 8U) & 0xffU);
+                interleaved[offset++] = static_cast<std::uint8_t>((bits >> 16U) & 0xffU);
+                interleaved[offset++] = static_cast<std::uint8_t>((bits >> 24U) & 0xffU);
+            }
+        }
+        file.write(reinterpret_cast<const char*>(interleaved.data()),
+                   static_cast<std::streamsize>(offset));
+        if (!file)
         {
             error = "WAV encoder failed while writing converted audio.";
-            writer.reset();
+            file.close();
             output.deleteFile();
             return false;
         }
         position += count;
     }
 
-    writer.reset();
-    return output.existsAsFile() && output.getSize() > 44;
+    file.close();
+    return file.good() && output.existsAsFile() && output.getSize() == 44 + dataBytes;
 }
 }
 
