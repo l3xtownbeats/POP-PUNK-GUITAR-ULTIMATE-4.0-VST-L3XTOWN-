@@ -1292,3 +1292,6 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 
 
 10 ноября 2026: в рабочей ветке выполнен небольшой cleanup двух предупреждений MSVC: C4244 в PluginEditor.cpp (явные преобразования координат в float) и C4458 в PluginProcessor.cpp (переименование host playhead local). Требуется подтверждение свежей Windows CI/CTest. Статусы M1/M2/M3 не меняются.
+
+
+2026-11-10: Added SFZ library path persistence to plugin state (`sfzFilePath`). Existing SFZ maps restore through the background sample loader; missing files do not block APVTS parameter restoration; legacy states remain accepted. A static CI guard was added to `tools/validate_apvts_layout.py`. Source implementation is committed; Windows Release build/CTest and FL Studio 20 validation are pending.
