@@ -167,3 +167,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - M4 scale-aware AutoChords/FingeringGenerator прошёл run `42843127831`; последующие integer-overflow guards требуют нового CI.
 - M5 StyleEngine foundation прошёл run `42840410645`; runtime integration остаётся открытой.
 - M1 DAW save/reopen, automation, missing-library recovery, device change и long-playback host test остаются открытыми.
+
+
+## Open integration risks — 10.11.2026
+
+- M4 scale chord generation must remain optional and must not alter the Melody one-key/one-note path.
+- FingeringGenerator currently uses a bounded greedy search; validate difficult inversions, low/high MIDI boundaries, and all guitar positions before relying on it for factory presets.
+- M5 StyleEngine currently modifies event velocity/accent only. Articulation enum is not yet connected to SFZ region selection, and strum spread/FX taste are not yet consumed by the processor.
+- M2 velocity crossfade has a passing isolated CI run but is not yet in the integration branch; verify summed crossfade level and preserve per-note voice grouping when porting.
+- The current sample-bank artifact is not evidence that new electric guitar takes were recorded. New audio needs source/license manifest and checksum.
+- The user's FL Studio report confirms plugin load and audible MIDI response only; save/reopen, project state restoration, transport, long playback and cache pressure remain unverified.
