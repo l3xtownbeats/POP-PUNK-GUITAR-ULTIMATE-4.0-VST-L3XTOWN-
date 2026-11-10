@@ -231,8 +231,13 @@ jobs:
           New-Item -ItemType Directory -Force -Path $vstRoot | Out-Null
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination $vstRoot -Recurse
 
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $productRoot 'BANK') -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $productRoot 'PRESETS') -Recurse
+          $bankRoot = Join-Path $productRoot 'BANK'
+          New-Item -ItemType Directory -Force -Path $bankRoot | Out-Null
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination $bankRoot -Recurse
+
+          $presetRoot = Join-Path $productRoot 'PRESETS'
+          New-Item -ItemType Directory -Force -Path $presetRoot | Out-Null
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination $presetRoot -Recurse
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN') -Destination (Join-Path $productRoot 'SKIN') -Recurse
 
           $resourceRoot = Join-Path $productRoot 'RESOURCE'
@@ -278,8 +283,3 @@ jobs:
           path: POP_PUNK_GUITAR_ULTIMATE_4_0_Windows_x64_VST3_FULL_PACKAGE.zip
           if-no-files-found: error
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
-          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
-          if-no-files-found: error
