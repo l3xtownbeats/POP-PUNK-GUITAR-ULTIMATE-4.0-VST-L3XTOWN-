@@ -511,3 +511,10 @@ VST3, запуск FL, загрузка банка, рендер 60 с.
 - Regression/stress acceptance: несколько параллельных reader threads читают одну страницу, worker одновременно пытается вытеснять/перезаполнять cache; ни одного повреждённого значения, use-after-free или блокировки audio-side API. Допускаются cache misses, но не повреждение данных и не blocking.
 - Host acceptance: 100 последовательных/параллельных note hits и переключения buffer size без clicks/dropouts; измерить cache hit/miss, prefetch hit, queue overflow, decode latency.
 - Эти требования дополняют, но не заменяют интеграцию WavPageReader/PageCacheSlots в реальный voice playback path.
+
+
+### M2 — владение cache read leases и защита от pin leaks (обязательное acceptance)
+- ReadLease является владением pin, а не просто view на память. Повторный tryAcquire() в уже активный lease обязан вернуть false и сохранить исходный lease/pin; запрещено обнулять/перезаписывать активный lease.
+- Каждый lease должен быть связан с экземпляром cache, который его выдал. release() через другой cache обязан быть безопасным no-op и не менять счётчики/данные ни одной cache-инстанции.
+- Регрессионные тесты обязательны: double-acquire в активный lease; release через неверный cache с тем же индексом слота; затем корректный release владельцем и успешная eviction.
+- Проверять отсутствие pin leaks, reader-counter underflow и невозможности eviction после ошибочного вызова API. Не удалять проверки и не превращать эти случаи в неопределённое поведение.
