@@ -1,0 +1,39 @@
+{
+  "id": "amber-rock",
+  "name": "Amber Rock",
+  "version": 1,
+  "colors": {
+    "background": "#100D08",
+    "surface": "#21180D",
+    "accent": "#FFB12B",
+    "text": "#FFF5E5",
+    "muted": "#B6A58A",
+    "panel": "#141419",
+    "panelRaised": "#202027",
+    "border": "#383840",
+    "focus": "#FFB12B",
+    "meter": "#FFB12B"
+  },
+  "metrics": {
+    "cornerRadius": 10,
+    "controlHeight": 42,
+    "spacing": 8
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {
+    "background": "assets/background@2x.png",
+    "logo": "assets/logo.svg",
+    "knob": "assets/knob@2x.png",
+    "panel": "assets/panel@2x.png"
+  },
+  "effects": {
+    "panelGlow": "#FFB12B",
+    "accentGlowOpacity": 0.18,
+    "textureOpacity": 0.08
+  }
+}
