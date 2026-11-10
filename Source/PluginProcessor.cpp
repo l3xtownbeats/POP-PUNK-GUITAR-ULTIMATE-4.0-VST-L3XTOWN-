@@ -202,16 +202,20 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
     const auto chorusCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
     const auto flangerCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.02)) + 4;
+    const auto doubleTrackCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
     for (int channel = 0; channel < 2; ++channel)
     {
         delayBuffers[static_cast<size_t>(channel)].assign(delayCapacity, 0.0f);
         chorusBuffers[static_cast<size_t>(channel)].assign(chorusCapacity, 0.0f);
         flangerBuffers[static_cast<size_t>(channel)].assign(flangerCapacity, 0.0f);
+        doubleTrackBuffers[static_cast<size_t>(channel)].assign(doubleTrackCapacity, 0.0f);
         reverbDryBuffers[static_cast<size_t>(channel)].assign(static_cast<size_t>(maximumBlockSize), 0.0f);
     }
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
+    doubleTrackWritePosition = 0;
+    doubleTrackPhase = 0.0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
     eqLowState.fill(0.0f);
@@ -244,9 +248,13 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
         std::fill(line.begin(), line.end(), 0.0f);
     for (auto& line : flangerBuffers)
         std::fill(line.begin(), line.end(), 0.0f);
+    for (auto& line : doubleTrackBuffers)
+        std::fill(line.begin(), line.end(), 0.0f);
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
+    doubleTrackWritePosition = 0;
+    doubleTrackPhase = 0.0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
     eqLowState.fill(0.0f);
@@ -676,6 +684,48 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     data[sample] = dry + (wet - dry) * mix;
                 }
                 cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
+            }
+        }
+    }
+
+    // DOUBLE: a dedicated, stereo double-tracking layer. Two independently
+    // modulated short takes create width/density without feeding the main delay
+    // or chorus buffers. The dry performance remains centered and intelligible.
+    if (parameters.getRawParameterValue("doubleTrackOn")->load(std::memory_order_relaxed) > 0.5f
+        && !doubleTrackBuffers[0].empty())
+    {
+        const float amount = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("doubleTrackMix")->load(std::memory_order_relaxed));
+        const size_t capacity = doubleTrackBuffers[0].size();
+        if (amount > 0.0f && samples <= maximumBlockSize)
+        {
+            constexpr double twoPi = juce::MathConstants<double>::twoPi;
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                const double slowDrift = std::sin(doubleTrackPhase);
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& line = doubleTrackBuffers[static_cast<size_t>(channel)];
+                    auto* data = buffer.getWritePointer(channel);
+                    const float dry = data[sample];
+                    const double side = channel == 0 ? -1.0 : 1.0;
+                    const double delayMs = 15.0 + side * 2.2 + side * 0.8 * slowDrift;
+                    const double delaySamples = juce::jlimit(1.0, static_cast<double>(capacity - 2),
+                        delayMs * currentSampleRate / 1000.0);
+                    double readPosition = static_cast<double>(doubleTrackWritePosition) - delaySamples;
+                    while (readPosition < 0.0) readPosition += static_cast<double>(capacity);
+                    const size_t indexA = static_cast<size_t>(readPosition) % capacity;
+                    const size_t indexB = (indexA + 1) % capacity;
+                    const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
+                    const float doubled = line[indexA] + (line[indexB] - line[indexA]) * fraction;
+                    line[doubleTrackWritePosition] = dry;
+                    const float wetGain = 0.48f * amount;
+                    const float dryGain = 1.0f - 0.10f * amount;
+                    data[sample] = dry * dryGain + doubled * wetGain;
+                }
+                doubleTrackWritePosition = (doubleTrackWritePosition + 1) % capacity;
+                doubleTrackPhase += twoPi * 0.17 / currentSampleRate;
+                if (doubleTrackPhase >= twoPi) doubleTrackPhase -= twoPi;
             }
         }
     }
