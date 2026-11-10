@@ -122,3 +122,15 @@ No secondary branch is merged yet. Unified integration requires current branch h
 4. Перенести M2 crossfade на интеграционную ветку, включить тест суммарного сигнала crossfade midpoint и проверить velocity-zone/RR взаимодействие.
 5. Запустить unified Windows x64 Release + полный CTest + VST3 locate + pluginval strictness 5 + package; только затем объединять M1–M5 в единую release ветку.
 6. Провести дополнительные ручные тесты FL Studio 20: project save/reopen, MIDI multi-note, Pattern host transport, preset/library reload, долгий playback.
+
+
+## 10.11.2026 — Audio Library Importer MVP
+
+- Добавлен Source/Sampler/SampleLibraryImporter.h/.cpp: сканирование выбранной папки, распознавание декодируемых форматов через JUCE Basic AudioFormatManager и chunked conversion в IEEE float32 WAV.
+- Конвертация сохраняет исходную sample rate и mono/stereo layout; исходники остаются нетронутыми. Все операции идут в worker pool.
+- Добавлен async processor entry point importAudioDirectoryAsync() и UI-кнопка IMPORT AUDIO.
+- Результат складывается в пользовательский Libraries folder, staging + atomic rename, manifest с provenance/license reminder, generated SFZ для файлов с note-name в filename.
+- Файлы без root note сохраняются в BANK и отображаются как needing mapping; не назначаются автоматически на общий key, чтобы не создавать многосэмпловый конфликт.
+- Добавлен тест tests/SampleLibraryImporterTests.cpp: WAV + AIFF fixtures, float32 output, key parsing, SFZ path validation, manifest and repeat import.
+- CI runs на SHA e905ec43710b3a44232d6b839f35e306edf3c451: runs 42850028375 (build) и 42850028356 (Windows VST3) на момент записи ещё выполняются. Итог не подтверждён.
+- Следующий этап: проверить текущий CI, исправить compile/test issues; затем добавить ручной Mapping Editor (key/velocity/articulation/RR), preview, rescan/remove, checksum and import cancellation. Не обещать поддержку форматов, не декодированных фактической сборкой.
