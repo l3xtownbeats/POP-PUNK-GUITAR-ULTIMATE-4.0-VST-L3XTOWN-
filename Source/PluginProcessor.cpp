@@ -336,6 +336,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         sampler.allNotesOff();
         patternScheduler.reset(patternTransportClock.startPpq);
         for (auto& channel : patternHeldNotes) channel.fill(false);
+        for (auto& channel : patternMappedNotes) channel.fill(-1);
+        for (auto& channel : melodyMappedNotes) channel.fill(-1);
         patternCycleStarted = false;
         previousPatternChordCount = 0;
         previousPatternChordNotes.fill(-1);
@@ -554,6 +556,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 if (message.isAllNotesOff() || message.isAllSoundOff())
                 {
                     for (auto& held : patternHeldNotes) held.fill(false);
+                    for (auto& mapped : patternMappedNotes) mapped.fill(-1);
                     panicRequested.store(true, std::memory_order_release);
                     sampler.panic(fadeLength);
                     patternScheduler.clearPendingNoteOffs();
