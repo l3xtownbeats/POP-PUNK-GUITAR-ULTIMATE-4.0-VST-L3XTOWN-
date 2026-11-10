@@ -117,3 +117,14 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Regression: создан SFZ fixture с тремя sequence positions; проверяется цикл 1→2→3→1→2→3, а также отказ parser при seq_position > seq_length.
 - Commits: `e3ccbf428f513d5bd05e6b9b2d29496284d4978f`, `9cd4f47dc7fab6c03dcc811cf23deaa435d8f950`, `ea3fa563642203b88ba99e3b0481f14350e26192`, `99fcc2fda604508fb77e0c17a42571ae3c1c47d7`, `bd313f77a0172b5d80336ddfab2a9775f364725c`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI + CTest. Пока не подтверждены компиляция, исполнение теста и совместимость с реальными SFZ банками. M2 не закрывать: velocity crossfade ещё не реализован; дополнительно требуется проверить RR-группировку на реальных картах и поведение одновременных sequence sets.
+
+
+## 10 ноября 2026 — M2: дополнительные SFZ проверки и CI
+
+- Расширен SFZ parser: добавлен разбор метаданных velocity crossfade `xfin_lovel`, `xfin_hivel`, `xfout_lovel`, `xfout_hivel`; добавлена валидация пар границ и порядка диапазонов. Это пока только чтение/проверка метаданных: реальное одновременное смешивание velocity-регионов в аудио-движке ещё НЕ реализовано.
+- Добавлены parser regression cases для корректных и некорректных crossfade opcode.
+- Добавлен тест повторных 100 ударов с меняющейся velocity: проверяет отсутствие non-finite значений, ненулевой выход и ограничение максимального соседнего скачка. Это автоматическая проверка, но не заменяет слуховой/host-тест и не доказывает абсолютное отсутствие кликов на всех библиотеках.
+- Поправлены newline escape в SFZ test fixtures после проверки исходников.
+- CI run `42778780300` (commit `ffea193c058644bb4f4807eb475707951a269e00`) подтвердил Windows x64 Release build, CTest, обнаружение VST3 и host-validation limitation step; на момент записи packaging ещё выполнялся. Этот run не включает все более поздние изменения.
+- CI run `42778986400` (HEAD `7c9dc1ff7453c6bab701a4589af85c96aa29a733`) повторно прошёл configure, build, CTest, locate VST3 и дошёл до packaging; packaging/upload ещё не завершены при последней проверке.
+- Ограничения M2 по-прежнему открыты: реальное velocity crossfade, полноценная RR-группировка без конфликтов между разными наборами, потоковый mmap/OVERLAPPED + hot/warm cache/ref-count/preload, измерение 100-hit click criteria на реальном банке и аудио/host-проверка. M2 не закрывать.
