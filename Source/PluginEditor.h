@@ -14,12 +14,14 @@ public:
 
 private:
     void chooseSfzFile();
+    void chooseAudioLibraryFolder();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "LOAD SFZ" };
+    juce::TextButton importButton { "IMPORT AUDIO" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
