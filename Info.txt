@@ -1505,3 +1505,50 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - RAM-профилирование, host-level click test, Hermite playback из page cache, RR/velocity crossfade DSP и безопасный reload/unload не подтверждены.
 - Размер текущего пакета на этом run в этой записи не заявляется; лимит до 7 ГБ относится к дисковой библиотеке, не к RAM.
 - Следующий инженерный этап: заменить preload-путь SamplePool на metadata-backed sample IDs и закрепить service lifetime за неизменяемыми snapshot generations; затем подключить bounded page leases к фиксированным voice slots, реализовать Hermite boundary reads/prefetch/voice cleanup и regression tests. До успешного выполнения этого этапа не закрывать M2.
+
+
+================ РАБОЧАЯ ЗАПИСЬ — 11 НОЯБРЯ 2026 / PPGU 5.0 UI, BANK SOUNDS, PRESETS И ПРИЁМКА ================
+
+Контекст и границы записи
+- Запись объединяет решения пользователя из рабочих обсуждений 10–11 ноября 2026 и аудит доступных исходников/документов. Она фиксирует требования и план приёмки; сама по себе не означает, что перечисленные элементы уже реализованы.
+- Рабочая ветка остаётся строго `migration/full-copy-m3-transport-scheduler-v2`. Ветка 5.0 содержит отдельные UI-материалы и расходится с рабочей веткой; автоматическое слияние/переключение не выполнялось. Не переносить бинарные skin-файлы или исходники из другой ветки без отдельной сверки.
+- В этой сессии не выполнялись изменения C++/CMake и не запускались сборка, CTest, pluginval или FL Studio. Не приписывать этой записи статус build/test pass.
+
+Подтверждённые решения пользователя по интерфейсу
+1. Два утверждённых изображения — единственная визуальная основа оболочки PPGU 5.0. Сохранять их характер, композицию и стиль; допускается перерисовка/адаптация только для размещения ранее согласованной функциональности. Не использовать дешёвые стандартные фоны, случайные градиенты или типовой JUCE skin. Файлы изображений в рабочую ветку этой записью не перенесены.
+2. Премиальная тёмная графитовая тема с магентовым акцентом #ff2d78; читаемая типографика, точная сетка/отступы, фактуры и контраст, состояния hover/pressed/disabled/focus; масштабирование 75/100/150%.
+3. Нужны 10 сменных тем в отдельной структуре SKIN/Skin_01…Skin_10 с ресурсами и manifest; одна кнопка SKINS, сохранение выбранной темы. Темы должны оформлять не только главный экран, но и отдельные окна, включая FX Studio. MELODY/PATTERN artwork — отдельные ресурсы RESOURCE/MELODY и RESOURCE/PATTERN, не смешивать с системными skin-паками.
+4. Главная оболочка: единый PRESET BROWSER; вкладки MELODY / PATTERN / FAVORITES / USER; поиск и фильтры. Для MELODY SOUND CHARACTER и PLAYING STYLE независимы. PATTERN использует базовый preset и необязательный совместимый Style Overlay.
+5. Основные зоны/действия: IMPORT SOUNDS, BANK SOUNDS, MELODY, PATTERN, FX STUDIO, SKINS, MIDI, DOUBLE, PROCESSOR, MULTICORE; AMP & TONE; PLAYBACK; MIDI keyboard; chord/active-note display; 8 быстрых pattern slots; CPU/RAM/voices/MIDI status и Master Volume.
+6. FX Studio — отдельное окно с Compressor, EQ, Distortion, Chorus, Delay, Reverb и Cabinet IR; предусмотреть включение/выключение, настройку и порядок эффектов. Не считать UI-кнопки доказательством готовности DSP.
+7. PATTERN: Lead/Solo/Melodic, Palm-Muted Rhythm, Open/Power Chords, Downstroke, Alternate Picking, Pop-Punk Strum, Acoustic Strum, Arpeggio, Octave/Hook, Tremolo/Fast Drive, Stop-Start, Ambient/Wide. Восемь быстрых слотов, поиск ритмов, AUTO/PRESET DEFAULT, Reset Overlay/Reset Preset. Overlay меняет только явно разрешённые performance/articulation поля; базовый звук, sample source, FX и музыкальная идентичность остаются у base preset.
+8. MIDI Piano Roll — отдельное плавающее/изменяемое окно; Import/Export MIDI, Save/Load Clip, Play/Stop, grid/snap/zoom, velocity lane и редактирование нот. В PATTERN MIDI-клип управляет onset/gate/velocity/articulation и транспонируется входящим аккордом; MELODY не должен перехватываться pattern-логикой.
+
+Preset / sound architecture
+- Одна модель preset и один индекс Sounds Bank; два режима исполнения MELODY и PATTERN.
+- MELODY: каждая клавиша MIDI запускает одну хроматическую ноту; никаких автоматически добавленных ритмов/аккордов. SOUND и STYLE независимы.
+- PATTERN: MIDI-клавиша/аккорд выбирает корень/аккорд и транспонирует заданный ритмический рисунок; rhythm/performance сохраняется. Неподдерживаемая артикуляция должна показывать предупреждение/оставаться AUTO, а не имитироваться молча.
+- Порядок разрешения: base preset → sample resolution → compatible style overlay → пользовательские изменения. Предпросмотр factory preset не меняет активное MIDI-исполнение; Save/Save As сохраняет только пользовательские правки.
+- Поиск включает имя, artist reference, sound character, playing style, tags, source; фильтры Mode, Sound Character, Playing Style, Artist, Source Format, Favorites, Factory/User. Строка preset показывает доступность источника и краткую FX-информацию.
+- Artist references — стилистические ориентиры, не копирование чужих записей/защищённых семплов: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, All-American Rejects, MGK, Avril Lavigne.
+
+BANK SOUNDS / импорт
+- Принята схема Original + optimized Cache: оригинальные пользовательские файлы сохраняются неизменными, оптимизированный playback cache строится отдельно. Библиотека пользователя отделена от read-only Factory Bank.
+- Организация/фильтрация по форматам WAV, AIFF, FLAC, OGG, SFZ; SFZ mappings и относительные пути сохраняются, не сплющиваются в один WAV. MP3 показывать как поддерживаемый только если декодер реально включён.
+- Импорт файлов, папок, ZIP и SFZ; preview/метаданные, прогресс/отмена, duplicate detection, отчёт, rescan, missing-file repair. ZIP extraction безопасен. Лицензии, атрибуция и SHA-256 фиксируются; запрещено распространять сэмплы без явного разрешения.
+- Индексация/декодирование/дисковый I/O выполняются вне audio callback. Голосовой streaming должен использовать bounded page cache/leases; никаких блокировок, аллокаций и disk I/O в аудиопотоке.
+
+Разделение фактического состояния и цели
+- В проверенном PluginEditor.h этой рабочей ветки видны LOAD SFZ, MELODY/PATTERN tabs, preset/category/search controls, 9 knobs (GAIN, TREBLE, MID, BASS, VELOCITY, DYNAMICS, SWING, HUMANIZE, ACCENT), 7 FX toggles и keyboard component. Это частичная существующая основа, а не полная реализация утверждённой оболочки.
+- Полная оболочка с кнопками IMPORT SOUNDS/BANK SOUNDS/SKINS/MIDI/DOUBLE/PROCESSOR/MULTICORE, раздельными окнами и темами, восемью pattern slots, полным браузером и всеми контролами не подтверждена текущим кодовым аудитом.
+- Документация и требования не доказывают рабочий playback. Каталог из 300 записей не доказывает, что 300 пресетов загружаются и звучат.
+
+Приоритеты приёмки / следующие инженерные шаги
+1. M1: сериализация/восстановление active library reference, APVTS state round-trip, automation, pluginval и FL Studio 20 host acceptance.
+2. M2: заменить full-WAV preload на metadata-backed sample IDs; подключить bounded page leases к реальному voice read path; Hermite boundary reads/prefetch; velocity crossfade DSP, RR, артикуляции; safe unload/reload и memory/concurrency/long-playback tests.
+3. M3: сохранить все chord transitions внутри блока, не терять события; явный overflow handling для 512-event capacity; processor-level MIDI→chord→scheduler→sampler tests, stop/seek/variable-block/stuck-note checks.
+4. Только после M1–M3 acceptance разрешать M4+. Затем подтверждать UI/theme integration, factory/user preset runtime, легальные samples, performance budgets и финальную упаковку.
+
+Фактические проверки этой записи
+- Исходники просмотрены: CMakeLists.txt и Source/PluginEditor.h рабочей ветки; также Info.txt, docs/ЖУРНАЛ_БАГОВ_RU.md и PatternSchedulerTests.cpp.
+- Изменения C++ не вносились. CI/CTest/pluginval/FL Studio не запускались. Текущие статусы M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
