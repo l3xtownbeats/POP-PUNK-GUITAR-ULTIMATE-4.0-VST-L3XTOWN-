@@ -82,10 +82,10 @@ int main()
         juce::AudioFormatManager formats;
         formats.registerBasicFormats();
         std::unique_ptr<juce::AudioFormatReader> reader(formats.createReaderFor(juce::File(region.samplePath.string())));
-        if (!reader || reader->bitsPerSample != 24 || reader->usesFloatingPointData
+        if (!reader || reader->bitsPerSample != 32 || !reader->usesFloatingPointData
             || reader->numChannels != 1 || std::abs(reader->sampleRate - 44100.0) > 0.01)
         {
-            std::cerr << "Converted sample is not the expected 24-bit PCM WAV.\n";
+            std::cerr << "Converted sample is not the expected 32-bit IEEE float WAV.\n";
             return 1;
         }
     }
