@@ -27,8 +27,9 @@ public:
                 std::uint64_t totalFrames) noexcept;
     void release() noexcept;
 
-    // Requests the current and following page without waiting. This should be
-    // called as soon as a voice is allocated and while it advances.
+    // Requests the current page and its previous/next neighbours without
+    // waiting. Neighbours keep Hermite taps safe at forward and reverse page
+    // boundaries. Call at voice allocation and whenever the cursor changes page.
     void prefetch(std::uint64_t frame) noexcept;
 
     // Returns false on a cache miss; the required page request is queued and
