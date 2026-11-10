@@ -117,17 +117,14 @@ bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output
     }
 
     juce::WavAudioFormat wav;
-    const auto writerOptions = juce::AudioFormatWriter::Options {}
-        .withSampleRate(reader.sampleRate)
-        .withNumChannels(static_cast<int>(reader.numChannels))
-        .withBitsPerSample(32)
-        .withSampleFormat(juce::AudioFormatWriter::Options::SampleFormat::floatingPoint);
-    auto writer = wav.createWriterFor(stream, writerOptions);
+    auto writer = wav.createWriterFor(stream.get(), reader.sampleRate,
+                                       reader.numChannels, 24, {}, 0);
     if (!writer)
     {
-        error = "Could not initialize IEEE float32 WAV encoder.";
+        error = "Could not initialize 24-bit PCM WAV encoder.";
         return false;
     }
+    stream.release();
 
     juce::AudioBuffer<float> chunk(static_cast<int>(reader.numChannels),
                                    static_cast<int>(SampleLibraryImporter::conversionChunkFrames));
@@ -137,8 +134,7 @@ bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output
         const int count = static_cast<int>(std::min<juce::int64>(
             SampleLibraryImporter::conversionChunkFrames, reader.lengthInSamples - position));
         chunk.clear(0, count);
-        if (!reader.read(chunk.getArrayOfWritePointers(), static_cast<int>(reader.numChannels),
-                         position, count, true, true))
+        if (!reader.read(&chunk, 0, count, position, true, true))
         {
             error = "Decoder failed while reading source audio.";
             writer.reset();
@@ -236,10 +232,10 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
     const auto displayName = safeName(sourceDirectory.getFileName().toStdString());
     juce::File finalDirectory = librariesRoot.getChildFile(displayName);
     for (int suffix = 2; finalDirectory.exists(); ++suffix)
-        finalDirectory = librariesRoot.getChildFile(displayName + "_" + juce::String(suffix));
+        finalDirectory = librariesRoot.getChildFile(displayName + "_" + std::to_string(suffix));
 
     const auto stagingDirectory = librariesRoot.getChildFile(
-        "." + displayName + ".staging-" + juce::Uuid().toString());
+        juce::String(".") + displayName + ".staging-" + juce::Uuid().toString());
     if (!stagingDirectory.createDirectory())
     {
         report.errors.emplace_back("Could not create isolated import staging directory.");
@@ -286,7 +282,7 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
         if (output.existsAsFile())
         {
             output = output.getSiblingFile(output.getFileNameWithoutExtension()
-                + "_" + juce::String(report.importedFiles + 1) + ".wav");
+                + "_" + juce::String(static_cast<int>(report.importedFiles + 1)) + ".wav");
         }
 
         std::string conversionError;
