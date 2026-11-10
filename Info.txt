@@ -1534,3 +1534,15 @@ CI: run 42855790840 на SHA e8f3baa завершился FAILURE: 11/12 tests p
 
 
 2026-11-10 — добавлен единый документ `docs/ПОЛНОЕ_ОПИСАНИЕ_ФУНКЦИЙ_И_ИЗМЕНЕНИЙ_ВЕТКИ_RU.md`. В нём сведены согласованные требования и отдельно помечено, что подтверждено исходниками, а что остаётся требованием/открытой приёмкой. Подробно описаны импорт WAV/AIFF/AIF/FLAC/OGG/MP3 → Float32 WAV, NCW как неподдерживаемый формат, SFZ/root-key mapping, manifest, пользовательские банки, лицензирование, Melody/Pattern, параметры, FX, производительность и этапы M1–M13. Ссылка добавлена в README. Документ не объявляет незавершённые функции принятыми.
+
+
+АКТУАЛИЗАЦИЯ ПО WINDOWS CI 42864523781 — 10 НОЯБРЯ 2026
+
+- Актуальная рабочая ветка: fix/m1-m2-m3-release-gates. Branch HEAD: 85a812902b236a7be287401b9a4633ece9fd99a5. Последний полный Windows workflow: 42864523781, source commit fcf8c56e9bea635134d00f0c7a4d4e01a4def370, SUCCESS.
+- В workflow прошли Windows x64 Release configure/build, полный CTest regression suite, VST3 bundle discovery, pluginval strictness 5, package и artifact upload. Артефакт 1,664,274,603 bytes, SHA-256 60beff58172b24e118c469e16fe38cf34e1aadfbd4119c262cb1966c9ae267bf, expires 2027-02-08.
+- README.md — главная страница — обновлена результатом этого CI и корректными остаточными gates. Последующие commits 0b4d0f4, 9143f23 и 85a8129 относятся к описанию/журналам; runtime source, проверенный run 42864523781, ими не менялся.
+- M2 аудит уточнён: streaming page reader уже подключён к production SamplerEngine voice path; audible cache-miss/multi-page playback и round-robin regressions прошли CTest. Не путать это с полной приёмкой Windows mmap/OVERLAPPED, safe snapshot retirement, crossfade DSP, palm-mute zones и 100-hit/long-run stress.
+- M3 уточнён: sample-accurate MIDI timeline walker интегрирован в PluginProcessor; scheduler output overflow имеет явный fail-safe и regression coverage. Оба набора тестов прошли CTest run 42864523781. Host/DAW acceptance остаётся открытой.
+- M1: pluginval strictness 5 теперь подтверждён run 42864523781. State round-trip/library reference restore, automation, panic и ручной FL Studio 20 acceptance остаются открытыми.
+- Исправление generated SFZ final path после atomic publish: commit 39626076a8ded975bdfb280a39880bad66f42b4c; M1/M2 workflow 42860937017 SUCCESS.
+- M1/M2/M3 остаются NOT ACCEPTED до закрытия всех соответствующих функциональных, стрессовых и host gates. Не трактовать успешную сборку как завершение вех.

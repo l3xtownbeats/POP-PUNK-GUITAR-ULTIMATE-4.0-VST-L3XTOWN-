@@ -135,16 +135,19 @@ Sample redistribution is subject to source and license verification. Commercial 
 
 | Milestone | Current status |
 |---|---|
-| **M1 — VST3 foundation** | Windows Release build and parameter audit pass. User previously confirmed the plugin opens in FL Studio 20; full state, automation and panic acceptance remains. |
-| **M2 — SFZ/WAV sampler** | SFZ/WAV regions now route through bounded background page streaming in SamplerEngine. Multi-page playback regression coverage is added; CI, long playback, 100-hit no-click, cache stress and full-library acceptance remain. |
-| **M3 — Pattern transport/runtime** | Scheduler unit tests pass. Full connection to real sampler playback and complete pattern runtime acceptance remain in progress. **NOT ACCEPTED.** |
-| **M4 — AutoChords / FingeringGenerator** | Foundation exists; runtime integration and acceptance remain open. |
+| **M1 — VST3 foundation** | Windows x64 Release VST3 build, APVTS registry/state static audit, CTest and pluginval strictness 5 pass in CI run [42864523781](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42864523781). Full state round-trip, library-reference restore, automation, panic and manual FL Studio 20 acceptance remain open. |
+| **M2 — SFZ/WAV sampler** | Production SamplerEngine voices use bounded background WAV page streaming and Hermite reads; multi-page audible playback and SFZ round-robin regressions pass CTest. Velocity crossfade is parsed/published as metadata but DSP blending is not yet verified. Windows mmap/OVERLAPPED, safe snapshot retirement, separate palm-mute zones, 100-hit no-click and sustained stress acceptance remain open. |
+| **M3 — Pattern transport/runtime** | Scheduler events are dispatched from the processor path; sample-accurate MIDI timeline and explicit output-overflow all-notes-off fail-safe have regression coverage passing CTest. Full musical/DAW acceptance across transport, tempo, loops, block sizes and long notes remains open. **NOT ACCEPTED.** |
+| **M4 — AutoChords / FingeringGenerator** | Foundation exists in isolated work; scale-aware mapping, full runtime integration and acceptance remain open. |
+| **M5 — Style Engine** | StyleEngine is invoked in the processor pattern path for velocity/accent transformation; complete Style DNA articulation/FX behavior and preset binding remain open. |
 
 ### Latest verified CI build
 
-The package was produced by a successful Windows x64 VST3 build and CTest workflow: [VIEW VERIFIED BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767).
+Latest verified Windows x64 VST3 package: [workflow run 42864523781](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42864523781), source commit `fcf8c56e9bea635134d00f0c7a4d4e01a4def370` (the current branch HEAD `85a8129` adds documentation-only commits after that source commit).
 
-This confirms compilation and automated workflow tests for that build. It does not replace manual host validation or milestone acceptance.
+**Passed in this run:** Windows x64 Release configure/build, complete CTest regression suite, VST3 bundle discovery, pluginval strictness level 5, package creation and artifact upload. The package artifact is `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` (1,664,274,603 bytes; SHA-256 `60beff58172b24e118c469e16fe38cf34e1aadfbd4119c262cb1966c9ae267bf`; expires 8 February 2027).
+
+This is a successful automated build/package gate, **not** full milestone acceptance. The workflow explicitly records the remaining host-validation limitation: manual FL Studio 20 save/reopen, automation, MIDI/transport and audio acceptance have not been performed.
 
 ## DEVELOPMENT EXECUTION — THREE STAGES (10 NOV 2026)
 
@@ -156,7 +159,7 @@ Development is organized into three controlled stages. The primary audio line al
 | **2 — Secondary product work** | **M6, M7, M8, M9, M10** | While Stage 1 is active, only lightweight isolated preparation: code audits, licensed sample-source research, preset catalogue validation, Style DNA planning and GUI/DSP audits. No heavy audio-thread integration or competing stress builds. Full implementation follows Stage 1 acceptance. |
 | **3 — QA and release infrastructure** | **M11, M12, M13** | Starts only after M1–M5 are confirmed complete. Bank tools, full stress/performance QA, clean Windows install, Pluginval and FL Studio 20 release acceptance. M13 closes only after all earlier gates pass. |
 
-**Current execution state:** Stage 1 remains active. The latest M1/M2 Windows run exposed one failing importer regression test; the full VST3 workflow for the documentation update is still running. This is not an accepted build. See the development journal and bug register below.
+**Current execution state (10 November 2026):** Stage 1 remains active. The latest full Windows VST3 workflow `42864523781` completed successfully, including CTest and pluginval strictness 5. The earlier importer regression/path issue is not present in this successful run; the published-SFZ-path fix is covered by the prior successful M1/M2 workflow. M1–M3 remain **NOT ACCEPTED** because host acceptance and the remaining runtime/stress gates are still open. No milestone is closed by this CI result alone.
 
 **Project journals:** [Chronological development journal](jurnal.md) · [Unified project INFO](Info.txt) · [Bug and fix register](docs/ЖУРНАЛ_БАГОВ_RU.md) · [M1–M5 integration work log](docs/WORK_LOG_M1_M5_INTEGRATION_RU.md).
 

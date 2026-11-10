@@ -1107,3 +1107,15 @@ CI факт на момент записи: run 42855790840 на SHA e8f3baa з�
 
 
 2026-11-10 — добавлен единый документ `docs/ПОЛНОЕ_ОПИСАНИЕ_ФУНКЦИЙ_И_ИЗМЕНЕНИЙ_ВЕТКИ_RU.md`. В нём сведены согласованные требования и отдельно помечено, что подтверждено исходниками, а что остаётся требованием/открытой приёмкой. Подробно описаны импорт WAV/AIFF/AIF/FLAC/OGG/MP3 → Float32 WAV, NCW как неподдерживаемый формат, SFZ/root-key mapping, manifest, пользовательские банки, лицензирование, Melody/Pattern, параметры, FX, производительность и этапы M1–M13. Ссылка добавлена в README. Документ не объявляет незавершённые функции принятыми.
+
+
+## 10 ноября 2026 — полный Windows VST3 CI прошёл; аудит статусов M1–M3 уточнён
+
+- Рабочая ветка: `fix/m1-m2-m3-release-gates`; актуальный HEAD после документационных commits: `85a812902b236a7be287401b9a4633ece9fd99a5`.
+- Последний полный workflow: [42864523781](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42864523781), проверенный source commit `fcf8c56e9bea635134d00f0c7a4d4e01a4def370`, итог **SUCCESS**.
+- Windows x64 Release build, полный CTest, VST3 bundle, pluginval strictness 5, package и upload artifact прошли. Артефакт: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, 1,664,274,603 bytes, SHA-256 `60beff58172b24e118c469e16fe38cf34e1aadfbd4119c262cb1966c9ae267bf`.
+- M2: подтверждён production streaming voice path (StreamingVoiceReader, worker page service, Hermite read), audible multi-page playback tests и round-robin tests. Не закрыты mmap/OVERLAPPED, snapshot retirement, velocity crossfade DSP, palm-mute zones, 100-hit no-click и долгие stress tests.
+- M3: подтверждены processor sample-accurate MIDI timeline, несколько chord transitions внутри блока и output-overflow all-notes-off fail-safe; соответствующие regressions прошли CTest. Полная ручная FL Studio 20 transport/MIDI acceptance остаётся открытой.
+- M1: pluginval strictness 5 прошёл. DAW save/reopen, state/library restore, automation, panic и host acceptance остаются открытыми.
+- Исправление пути SFZ после atomic publish прошло M1/M2 workflow `42860937017` на commit `39626076a8ded975bdfb280a39880bad66f42b4c`.
+- **Итог:** автоматический build/test/package gate пройден, но M1–M3 не приняты. README.md обновлён как главная страница; журнал багов и полное описание функций синхронизированы с фактическим состоянием кода.
