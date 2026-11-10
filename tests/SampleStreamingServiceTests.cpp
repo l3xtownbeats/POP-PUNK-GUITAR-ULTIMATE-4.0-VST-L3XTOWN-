@@ -133,6 +133,46 @@ int main()
     voiceReader.prefetch(510);
     } // RAII must release all page pins before the stream is stopped.
 
+    // Region-edge interpolation must clamp its support taps to the active
+    // region, including the first and final source frames. Invalid regions and
+    // out-of-region positions must fail without exposing stale output.
+    {
+        ppgu::sampler::StreamingVoiceReader edgeReader;
+        edgeReader.attach(&service, 0, sourceFrames);
+        const auto verifyEdge = [&](std::uint64_t frame, float expected)
+        {
+            float left = 123.0f, right = 456.0f;
+            bool ready = false;
+            const auto edgeDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+            while (std::chrono::steady_clock::now() < edgeDeadline && !ready)
+            {
+                ready = edgeReader.readHermite(frame, 0.0f, 0, sourceFrames, left, right);
+                if (!ready) std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
+            return ready && std::abs(left - expected) < 0.0001f
+                && std::abs(left + right) < 0.0001f;
+        };
+
+        const float firstExpected = 0.25f * std::sin(0.0);
+        const float lastExpected = 0.25f * std::sin(
+            2.0 * juce::MathConstants<double>::pi * 330.0 * (sourceFrames - 1) / 48000.0);
+        if (!verifyEdge(0, firstExpected) || !verifyEdge(sourceFrames - 1, lastExpected))
+        {
+            std::cerr << "Streaming voice reader failed interpolation at a sample-region edge.\\n";
+            return 1;
+        }
+
+        float untouchedLeft = 123.0f, untouchedRight = 456.0f;
+        if (edgeReader.readHermite(sourceFrames, 0.0f, 0, sourceFrames,
+                                   untouchedLeft, untouchedRight)
+            || edgeReader.readHermite(0, 0.0f, 10, 10, untouchedLeft, untouchedRight)
+            || untouchedLeft != 123.0f || untouchedRight != 456.0f)
+        {
+            std::cerr << "Streaming voice reader accepted an invalid region or changed outputs on failure.\\n";
+            return 1;
+        }
+    }
+
     service.stop();
     if (service.requestPage({ 0, 1 }))
     {
