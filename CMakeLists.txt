@@ -105,6 +105,12 @@ if(BUILD_TESTING)
     )
     target_include_directories(ppgu_pattern_scheduler_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_pattern_scheduler_tests COMMAND ppgu_pattern_scheduler_tests)
+
+    add_executable(ppgu_auto_chord_scale_tests
+        tests/AutoChordScaleTests.cpp
+    )
+    target_include_directories(ppgu_auto_chord_scale_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chord_scale_tests COMMAND ppgu_auto_chord_scale_tests)
 endif()
 
 
