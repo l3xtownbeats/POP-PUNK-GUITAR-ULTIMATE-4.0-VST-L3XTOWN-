@@ -3,6 +3,7 @@
 
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <cmath>
+#include <array>
 #include <filesystem>
 #include <iostream>
 #include <memory>
@@ -108,6 +109,29 @@ int main()
         || std::abs(page.audio.getSample(0, 100) + page.audio.getSample(1, 100)) > 0.0001f)
     {
         std::cerr << "WAV page reader returned incorrect decoded sample data.\n";
+        return 1;
+    }
+
+    // Decode a page directly into caller-owned planar cache memory. The
+    // non-zero offset verifies that the worker can write into a cache slot
+    // without allocating an intermediate AudioBuffer or disturbing its halo.
+    std::array<float, 310> directLeft {};
+    std::array<float, 310> directRight {};
+    float* directChannels[] { directLeft.data(), directRight.data() };
+    std::uint32_t directFrames = 0;
+    const auto directRead = pageReader.readPageInto(3, directChannels, 2, 7,
+                                                     directFrames, pageFrames);
+    if (!directRead.success || directFrames != 124
+        || std::abs(directLeft[7 + 100] - page.audio.getSample(0, 100)) > 0.00001f)
+    {
+        std::cerr << "WAV page reader failed direct preallocated planar decode.\\n";
+        return 1;
+    }
+    const auto wrongChannels = pageReader.readPageInto(0, directChannels, 1, 0,
+                                                         directFrames, pageFrames);
+    if (wrongChannels.success || directFrames != 0)
+    {
+        std::cerr << "WAV page reader accepted a mismatched preallocated channel layout.\\n";
         return 1;
     }
 
