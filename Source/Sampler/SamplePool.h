@@ -36,8 +36,9 @@ public:
     SamplePool(const SamplePool&) = delete;
     SamplePool& operator=(const SamplePool&) = delete;
 
-    // Call from a non-audio thread only. Published snapshots and sample buffers
-    // remain alive until SamplePool destruction, so audio-thread raw pointers stay valid.
+    // Call from a non-audio thread only. Published snapshots and streaming
+    // library services remain alive until SamplePool destruction, so audio-
+    // thread region and service pointers stay valid across bank replacement.
     [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile);
 
     struct RegionView
