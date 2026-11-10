@@ -349,6 +349,52 @@ int main()
         return 1;
     }
 
+    // M2 acceptance regression: 100 repeated guitar hits at changing
+    // velocities must remain finite and avoid abrupt discontinuities.
+    ppgu::sampler::SamplerEngine repeatedHitEngine;
+    repeatedHitEngine.prepare(44100.0);
+    if (!repeatedHitEngine.loadSfz(sfzFile).success)
+    {
+        std::cerr << "Could not load repeated-hit regression bank.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> repeatedHits(2, 12800);
+    repeatedHits.clear();
+    for (int hit = 0; hit < 100; ++hit)
+    {
+        const int velocity = 24 + ((hit * 37) % 104);
+        const int offset = hit * 128;
+        if (!repeatedHitEngine.noteOn(60, velocity, 64, 1))
+        {
+            std::cerr << "Repeated-hit regression failed to trigger note " << hit << ".\\n";
+            return 1;
+        }
+        repeatedHitEngine.render(repeatedHits, offset, 64);
+        repeatedHitEngine.noteOff(60, 1);
+        repeatedHitEngine.render(repeatedHits, offset + 64, 64);
+    }
+    float maximumAdjacentDelta = 0.0f;
+    float repeatedHitPeak = 0.0f;
+    for (int sample = 0; sample < repeatedHits.getNumSamples(); ++sample)
+    {
+        const float value = repeatedHits.getSample(0, sample);
+        if (!std::isfinite(value))
+        {
+            std::cerr << "Repeated-hit render produced a non-finite sample.\\n";
+            return 1;
+        }
+        repeatedHitPeak = juce::jmax(repeatedHitPeak, std::abs(value));
+        if (sample > 0)
+            maximumAdjacentDelta = juce::jmax(maximumAdjacentDelta,
+                std::abs(value - repeatedHits.getSample(0, sample - 1)));
+    }
+    if (repeatedHitPeak <= 0.001f || maximumAdjacentDelta > 0.20f)
+    {
+        std::cerr << "100 repeated hits produced silence or an audible discontinuity; max delta="
+                  << maximumAdjacentDelta << ".\\n";
+        return 1;
+    }
+
     std::cout << "SamplePool tests passed: WAV decode, SFZ load, MIDI playback, and polyphony cap.\n";
     return 0;
 }
