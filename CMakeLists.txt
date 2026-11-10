@@ -276,3 +276,31 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_mapping_editor_model_tests PRIVATE Source/Sampler)
     add_test(NAME ppgu_mapping_editor_model_tests COMMAND ppgu_mapping_editor_model_tests)
 endif()
+
+
+# Release gate: the two bundled factory sample profiles must load mapped
+# samples and produce non-silent audio through the production streaming engine.
+if(BUILD_TESTING)
+    add_executable(ppgu_factory_soundbank_tests
+        Source/Sampler/SfzParser.cpp
+        Source/Sampler/SamplePool.cpp
+        Source/Sampler/SampleMetadataIndex.cpp
+        Source/Sampler/WavPageReader.cpp
+        Source/Sampler/PageCacheSlots.cpp
+        Source/Sampler/SampleStreamingService.cpp
+        Source/Sampler/StreamingVoiceReader.cpp
+        tests/FactorySoundbankTests.cpp
+    )
+    target_include_directories(ppgu_factory_soundbank_tests PRIVATE Source)
+    target_link_libraries(ppgu_factory_soundbank_tests PRIVATE
+        juce::juce_audio_formats
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_factory_soundbank_audio_smoke
+        COMMAND ppgu_factory_soundbank_tests
+            "${CMAKE_SOURCE_DIR}/Samples/FreePats-Direct-DI/EGuitarFSBS-direct bridge 20220911.sfz"
+            "${CMAKE_SOURCE_DIR}/Samples/Karoryfer-Shinyguitar/Programs/acoustic.sfz")
+endif()

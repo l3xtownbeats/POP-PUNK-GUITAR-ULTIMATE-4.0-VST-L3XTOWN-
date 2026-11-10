@@ -3766,7 +3766,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight eighth-note down-up",
       "soundCharacter": "Clean",
@@ -3780,7 +3780,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P002",
@@ -3827,7 +3828,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast downstroke punk",
       "soundCharacter": "Crunch",
@@ -3841,7 +3842,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P003",
@@ -3888,7 +3890,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open chorus strums",
       "soundCharacter": "Drive",
@@ -3902,7 +3904,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P004",
@@ -3949,7 +3952,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chorus power chords",
       "soundCharacter": "Palm Mute",
@@ -3963,7 +3966,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P005",
@@ -4010,7 +4014,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "mid-tempo down-up eighths",
       "soundCharacter": "Open Chords",
@@ -4024,7 +4028,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P006",
@@ -4071,7 +4076,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse to ringing chorus",
       "soundCharacter": "Acoustic",
@@ -4085,7 +4090,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P007",
@@ -4132,7 +4138,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "ambient arpeggio",
       "soundCharacter": "Lead Drive",
@@ -4146,7 +4152,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P008",
@@ -4193,7 +4200,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse groove",
       "soundCharacter": "Muted Chugs",
@@ -4207,7 +4214,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P009",
@@ -4254,7 +4262,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright saturated eighth-note drive",
       "soundCharacter": "Clean",
@@ -4268,7 +4276,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P010",
@@ -4315,7 +4324,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse to wide chorus",
       "soundCharacter": "Crunch",
@@ -4329,7 +4338,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P011",
@@ -4373,7 +4383,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight power-chord eighths",
       "soundCharacter": "Drive",
@@ -4387,7 +4397,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P012",
@@ -4431,7 +4442,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "driving eighth-note punk",
       "soundCharacter": "Palm Mute",
@@ -4445,7 +4456,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P013",
@@ -4489,7 +4501,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "upbeat down-up eighths",
       "soundCharacter": "Open Chords",
@@ -4503,7 +4515,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P014",
@@ -4547,7 +4560,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide layered open chorus",
       "soundCharacter": "Acoustic",
@@ -4561,7 +4574,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P015",
@@ -4605,7 +4619,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chorus power chords",
       "soundCharacter": "Lead Drive",
@@ -4619,7 +4633,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P016",
@@ -4663,7 +4678,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open chorus accents",
       "soundCharacter": "Muted Chugs",
@@ -4677,7 +4692,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P017",
@@ -4721,7 +4737,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "picked arpeggio eighths",
       "soundCharacter": "Clean",
@@ -4735,7 +4751,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P018",
@@ -4779,7 +4796,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast downstroke wall",
       "soundCharacter": "Crunch",
@@ -4793,7 +4810,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P019",
@@ -4837,7 +4855,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "upstroke/downstroke ska groove",
       "soundCharacter": "Drive",
@@ -4851,7 +4869,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P020",
@@ -4895,7 +4914,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "alternate-picked melodic run",
       "soundCharacter": "Palm Mute",
@@ -4909,7 +4928,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P021",
@@ -4953,7 +4973,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "urgent eighth-note drive",
       "soundCharacter": "Open Chords",
@@ -4967,7 +4987,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P022",
@@ -5011,7 +5032,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast straight downstrokes",
       "soundCharacter": "Acoustic",
@@ -5025,7 +5046,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P023",
@@ -5069,7 +5091,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted gallop",
       "soundCharacter": "Lead Drive",
@@ -5083,7 +5105,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P024",
@@ -5127,7 +5150,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright alternate picking",
       "soundCharacter": "Muted Chugs",
@@ -5141,7 +5164,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P025",
@@ -5185,7 +5209,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast alternate eighths",
       "soundCharacter": "Clean",
@@ -5199,7 +5223,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P026",
@@ -5243,7 +5268,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse / open chorus",
       "soundCharacter": "Crunch",
@@ -5257,7 +5282,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P027",
@@ -5301,7 +5327,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chord accents",
       "soundCharacter": "Drive",
@@ -5315,7 +5341,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P028",
@@ -5359,7 +5386,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "layered clean-to-drive build",
       "soundCharacter": "Palm Mute",
@@ -5373,7 +5400,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P029",
@@ -5417,7 +5445,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight pop-rock eighths",
       "soundCharacter": "Open Chords",
@@ -5431,7 +5459,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P030",
@@ -5475,7 +5504,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse / explosive open chorus",
       "soundCharacter": "Acoustic",
@@ -5489,7 +5518,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P031",
@@ -5533,7 +5563,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chord strums",
       "soundCharacter": "Lead Drive",
@@ -5547,7 +5577,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P032",
@@ -5591,7 +5622,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start punk accents",
       "soundCharacter": "Muted Chugs",
@@ -5605,7 +5636,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P033",
@@ -5649,7 +5681,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "straight eighth-note downstrokes",
       "soundCharacter": "Clean",
@@ -5663,7 +5695,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P034",
@@ -5707,7 +5740,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright open chord strums",
       "soundCharacter": "Crunch",
@@ -5721,7 +5754,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P035",
@@ -5765,7 +5799,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse groove",
       "soundCharacter": "Drive",
@@ -5779,7 +5813,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P036",
@@ -5823,7 +5858,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave accents",
       "soundCharacter": "Palm Mute",
@@ -5837,7 +5872,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P037",
@@ -5881,7 +5917,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "syncopated octave riff",
       "soundCharacter": "Open Chords",
@@ -5895,7 +5931,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P038",
@@ -5939,7 +5976,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "acoustic down-up strums",
       "soundCharacter": "Acoustic",
@@ -5953,7 +5990,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P039",
@@ -5997,7 +6035,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave lead pulse",
       "soundCharacter": "Lead Drive",
@@ -6011,7 +6049,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P040",
@@ -6055,7 +6094,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "crunchy punk eighths",
       "soundCharacter": "Muted Chugs",
@@ -6069,7 +6108,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P041",
@@ -6113,7 +6153,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast skate-punk downstrokes",
       "soundCharacter": "Clean",
@@ -6127,7 +6167,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P042",
@@ -6171,7 +6212,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave hook rhythm",
       "soundCharacter": "Crunch",
@@ -6185,7 +6226,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P043",
@@ -6229,7 +6271,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse to open chorus",
       "soundCharacter": "Drive",
@@ -6243,7 +6285,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P044",
@@ -6287,7 +6330,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start power-chord hits",
       "soundCharacter": "Palm Mute",
@@ -6301,7 +6344,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P045",
@@ -6345,7 +6389,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "polished straight eighths",
       "soundCharacter": "Open Chords",
@@ -6359,7 +6403,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P046",
@@ -6403,7 +6448,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "continuous downstrokes",
       "soundCharacter": "Acoustic",
@@ -6417,7 +6462,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P047",
@@ -6461,7 +6507,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave-lead rhythm",
       "soundCharacter": "Lead Drive",
@@ -6475,7 +6521,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P048",
@@ -6519,7 +6566,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "picked melodic hook",
       "soundCharacter": "Muted Chugs",
@@ -6533,7 +6580,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P049",
@@ -6577,7 +6625,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "spacious dotted-eighth pulse",
       "soundCharacter": "Clean",
@@ -6591,7 +6639,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P050",
@@ -6635,7 +6684,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "clean arpeggio to crunch chorus",
       "soundCharacter": "Crunch",
@@ -6649,7 +6698,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P051",
@@ -6695,7 +6745,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave-hook rhythm",
       "soundCharacter": "Drive",
@@ -6709,7 +6759,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P052",
@@ -6755,7 +6806,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave accents",
       "soundCharacter": "Palm Mute",
@@ -6769,7 +6820,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P053",
@@ -6815,7 +6867,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast continuous downstrokes",
       "soundCharacter": "Open Chords",
@@ -6829,7 +6881,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P054",
@@ -6875,7 +6928,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight palm-muted verse",
       "soundCharacter": "Acoustic",
@@ -6889,7 +6942,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P055",
@@ -6935,7 +6989,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "light palm-muted verse",
       "soundCharacter": "Lead Drive",
@@ -6949,7 +7003,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P056",
@@ -6995,7 +7050,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave pulse",
       "soundCharacter": "Muted Chugs",
@@ -7009,7 +7064,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P057",
@@ -7055,7 +7111,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "polished down-up eighths",
       "soundCharacter": "Clean",
@@ -7069,7 +7125,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P058",
@@ -7115,7 +7172,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start eighth-note groove",
       "soundCharacter": "Crunch",
@@ -7129,7 +7186,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P059",
@@ -7175,7 +7233,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open electric chorus",
       "soundCharacter": "Drive",
@@ -7189,7 +7247,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P060",
@@ -7235,7 +7294,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted build to open chorus",
       "soundCharacter": "Palm Mute",
@@ -7249,7 +7308,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P061",
@@ -7293,7 +7353,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "ska offbeat upstrokes",
       "soundCharacter": "Open Chords",
@@ -7307,7 +7367,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P062",
@@ -7351,7 +7412,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight palm-muted eighths",
       "soundCharacter": "Acoustic",
@@ -7365,7 +7426,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P063",
@@ -7409,7 +7471,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse / open chorus",
       "soundCharacter": "Lead Drive",
@@ -7423,7 +7485,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P064",
@@ -7467,7 +7530,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "power-chord chorus accents",
       "soundCharacter": "Muted Chugs",
@@ -7481,7 +7544,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P065",
@@ -7525,7 +7589,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "aggressive alternate picking",
       "soundCharacter": "Clean",
@@ -7539,7 +7603,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P066",
@@ -7583,7 +7648,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse build",
       "soundCharacter": "Crunch",
@@ -7597,7 +7662,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P067",
@@ -7641,7 +7707,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted 16ths",
       "soundCharacter": "Drive",
@@ -7655,7 +7721,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P068",
@@ -7699,7 +7766,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "punchy power-chord hits",
       "soundCharacter": "Palm Mute",
@@ -7713,7 +7780,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P069",
@@ -7757,7 +7825,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic eighth-note drive",
       "soundCharacter": "Open Chords",
@@ -7771,7 +7839,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P070",
@@ -7815,7 +7884,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open sustained chords",
       "soundCharacter": "Acoustic",
@@ -7829,7 +7898,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P071",
@@ -7876,7 +7946,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chord accents",
       "soundCharacter": "Lead Drive",
@@ -7890,7 +7960,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P072",
@@ -7937,7 +8008,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open power-chord chorus",
       "soundCharacter": "Muted Chugs",
@@ -7951,7 +8022,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P073",
@@ -7998,7 +8070,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright pop-punk eighths",
       "soundCharacter": "Clean",
@@ -8012,7 +8084,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P074",
@@ -8059,7 +8132,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted punk gallop",
       "soundCharacter": "Crunch",
@@ -8073,7 +8146,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P075",
@@ -8120,7 +8194,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open power-chord chorus",
       "soundCharacter": "Drive",
@@ -8134,7 +8208,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P076",
@@ -8181,7 +8256,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bouncy power-chord groove",
       "soundCharacter": "Palm Mute",
@@ -8195,7 +8270,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P077",
@@ -8242,7 +8318,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "glossy alternate eighths",
       "soundCharacter": "Open Chords",
@@ -8256,7 +8332,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P078",
@@ -8303,7 +8380,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse build",
       "soundCharacter": "Acoustic",
@@ -8317,7 +8394,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P079",
@@ -8364,7 +8442,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted syncopation",
       "soundCharacter": "Lead Drive",
@@ -8378,7 +8456,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P080",
@@ -8425,7 +8504,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "hybrid acoustic/electric pulse",
       "soundCharacter": "Muted Chugs",
@@ -8439,7 +8518,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P081",
@@ -8487,7 +8567,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "dramatic stop-start riff",
       "soundCharacter": "Clean",
@@ -8501,7 +8581,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P082",
@@ -8549,7 +8630,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "short clean chord chops",
       "soundCharacter": "Crunch",
@@ -8563,7 +8644,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P083",
@@ -8611,7 +8693,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chorus power chords",
       "soundCharacter": "Drive",
@@ -8625,7 +8707,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P084",
@@ -8673,7 +8756,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "dynamic stop-start accents",
       "soundCharacter": "Palm Mute",
@@ -8687,7 +8770,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P085",
@@ -8735,7 +8819,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight eighth-note down-up",
       "soundCharacter": "Open Chords",
@@ -8749,7 +8833,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P086",
@@ -8797,7 +8882,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast downstroke punk",
       "soundCharacter": "Acoustic",
@@ -8811,7 +8896,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P087",
@@ -8859,7 +8945,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open chorus strums",
       "soundCharacter": "Lead Drive",
@@ -8873,7 +8959,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P088",
@@ -8921,7 +9008,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chorus power chords",
       "soundCharacter": "Muted Chugs",
@@ -8935,7 +9022,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P089",
@@ -8983,7 +9071,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "mid-tempo down-up eighths",
       "soundCharacter": "Clean",
@@ -8997,7 +9085,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P090",
@@ -9045,7 +9134,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse to ringing chorus",
       "soundCharacter": "Crunch",
@@ -9059,7 +9148,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P091",
@@ -9105,7 +9195,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "ambient arpeggio",
       "soundCharacter": "Drive",
@@ -9119,7 +9209,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P092",
@@ -9165,7 +9256,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse groove",
       "soundCharacter": "Palm Mute",
@@ -9179,7 +9270,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P093",
@@ -9225,7 +9317,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright saturated eighth-note drive",
       "soundCharacter": "Open Chords",
@@ -9239,7 +9331,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P094",
@@ -9285,7 +9378,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse to wide chorus",
       "soundCharacter": "Acoustic",
@@ -9299,7 +9392,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P095",
@@ -9345,7 +9439,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight power-chord eighths",
       "soundCharacter": "Lead Drive",
@@ -9359,7 +9453,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P096",
@@ -9405,7 +9500,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "driving eighth-note punk",
       "soundCharacter": "Muted Chugs",
@@ -9419,7 +9514,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P097",
@@ -9465,7 +9561,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "upbeat down-up eighths",
       "soundCharacter": "Clean",
@@ -9479,7 +9575,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P098",
@@ -9525,7 +9622,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide layered open chorus",
       "soundCharacter": "Crunch",
@@ -9539,7 +9636,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P099",
@@ -9585,7 +9683,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chorus power chords",
       "soundCharacter": "Drive",
@@ -9599,7 +9697,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P100",
@@ -9645,7 +9744,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "wide open chorus accents",
       "soundCharacter": "Palm Mute",
@@ -9659,7 +9758,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P101",
@@ -9703,7 +9803,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "picked arpeggio eighths",
       "soundCharacter": "Open Chords",
@@ -9717,7 +9817,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P102",
@@ -9761,7 +9862,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast downstroke wall",
       "soundCharacter": "Acoustic",
@@ -9775,7 +9876,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P103",
@@ -9819,7 +9921,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "upstroke/downstroke ska groove",
       "soundCharacter": "Lead Drive",
@@ -9833,7 +9935,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P104",
@@ -9877,7 +9980,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "alternate-picked melodic run",
       "soundCharacter": "Muted Chugs",
@@ -9891,7 +9994,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P105",
@@ -9935,7 +10039,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "urgent eighth-note drive",
       "soundCharacter": "Clean",
@@ -9949,7 +10053,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P106",
@@ -9993,7 +10098,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast straight downstrokes",
       "soundCharacter": "Crunch",
@@ -10007,7 +10112,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P107",
@@ -10051,7 +10157,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted gallop",
       "soundCharacter": "Drive",
@@ -10065,7 +10171,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P108",
@@ -10109,7 +10216,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright alternate picking",
       "soundCharacter": "Palm Mute",
@@ -10123,7 +10230,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P109",
@@ -10167,7 +10275,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast alternate eighths",
       "soundCharacter": "Open Chords",
@@ -10181,7 +10289,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P110",
@@ -10225,7 +10334,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse / open chorus",
       "soundCharacter": "Acoustic",
@@ -10239,7 +10348,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P111",
@@ -10283,7 +10393,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chord accents",
       "soundCharacter": "Lead Drive",
@@ -10297,7 +10407,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P112",
@@ -10341,7 +10452,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "layered clean-to-drive build",
       "soundCharacter": "Muted Chugs",
@@ -10355,7 +10466,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P113",
@@ -10399,7 +10511,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight pop-rock eighths",
       "soundCharacter": "Clean",
@@ -10413,7 +10525,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P114",
@@ -10457,7 +10570,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse / explosive open chorus",
       "soundCharacter": "Crunch",
@@ -10471,7 +10584,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P115",
@@ -10515,7 +10629,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open chord strums",
       "soundCharacter": "Drive",
@@ -10529,7 +10643,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P116",
@@ -10573,7 +10688,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start punk accents",
       "soundCharacter": "Palm Mute",
@@ -10587,7 +10702,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P117",
@@ -10631,7 +10747,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "straight eighth-note downstrokes",
       "soundCharacter": "Open Chords",
@@ -10645,7 +10761,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P118",
@@ -10689,7 +10806,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "bright open chord strums",
       "soundCharacter": "Acoustic",
@@ -10703,7 +10820,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P119",
@@ -10747,7 +10865,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "muted verse groove",
       "soundCharacter": "Lead Drive",
@@ -10761,7 +10879,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P120",
@@ -10805,7 +10924,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave accents",
       "soundCharacter": "Muted Chugs",
@@ -10819,7 +10938,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P121",
@@ -10863,7 +10983,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "syncopated octave riff",
       "soundCharacter": "Clean",
@@ -10877,7 +10997,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P122",
@@ -10921,7 +11042,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "acoustic down-up strums",
       "soundCharacter": "Crunch",
@@ -10935,7 +11056,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P123",
@@ -10979,7 +11101,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave lead pulse",
       "soundCharacter": "Drive",
@@ -10993,7 +11115,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P124",
@@ -11037,7 +11160,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "crunchy punk eighths",
       "soundCharacter": "Palm Mute",
@@ -11051,7 +11174,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P125",
@@ -11095,7 +11219,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast skate-punk downstrokes",
       "soundCharacter": "Open Chords",
@@ -11109,7 +11233,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P126",
@@ -11153,7 +11278,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave hook rhythm",
       "soundCharacter": "Acoustic",
@@ -11167,7 +11292,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P127",
@@ -11211,7 +11337,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse to open chorus",
       "soundCharacter": "Lead Drive",
@@ -11225,7 +11351,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P128",
@@ -11269,7 +11396,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start power-chord hits",
       "soundCharacter": "Muted Chugs",
@@ -11283,7 +11410,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P129",
@@ -11327,7 +11455,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "polished straight eighths",
       "soundCharacter": "Clean",
@@ -11341,7 +11469,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P130",
@@ -11385,7 +11514,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "continuous downstrokes",
       "soundCharacter": "Crunch",
@@ -11399,7 +11528,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P131",
@@ -11443,7 +11573,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave-lead rhythm",
       "soundCharacter": "Drive",
@@ -11457,7 +11587,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P132",
@@ -11501,7 +11632,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "picked melodic hook",
       "soundCharacter": "Palm Mute",
@@ -11515,7 +11646,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P133",
@@ -11559,7 +11691,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "spacious dotted-eighth pulse",
       "soundCharacter": "Open Chords",
@@ -11573,7 +11705,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P134",
@@ -11617,7 +11750,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "clean arpeggio to crunch chorus",
       "soundCharacter": "Acoustic",
@@ -11631,7 +11764,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P135",
@@ -11675,7 +11809,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "octave-hook rhythm",
       "soundCharacter": "Lead Drive",
@@ -11689,7 +11823,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P136",
@@ -11733,7 +11868,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave accents",
       "soundCharacter": "Muted Chugs",
@@ -11747,7 +11882,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P137",
@@ -11791,7 +11927,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "fast continuous downstrokes",
       "soundCharacter": "Clean",
@@ -11805,7 +11941,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P138",
@@ -11849,7 +11986,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight palm-muted verse",
       "soundCharacter": "Crunch",
@@ -11863,7 +12000,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P139",
@@ -11907,7 +12045,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "light palm-muted verse",
       "soundCharacter": "Drive",
@@ -11921,7 +12059,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P140",
@@ -11965,7 +12104,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "melodic octave pulse",
       "soundCharacter": "Palm Mute",
@@ -11979,7 +12118,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P141",
@@ -12023,7 +12163,7 @@
         "reverb": 0.18,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "polished down-up eighths",
       "soundCharacter": "Open Chords",
@@ -12037,7 +12177,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P142",
@@ -12081,7 +12222,7 @@
         "reverb": 0.06,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "stop-start eighth-note groove",
       "soundCharacter": "Acoustic",
@@ -12095,7 +12236,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P143",
@@ -12139,7 +12281,7 @@
         "reverb": 0.28,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "open electric chorus",
       "soundCharacter": "Lead Drive",
@@ -12153,7 +12295,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P144",
@@ -12197,7 +12340,7 @@
         "reverb": 0.34,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted build to open chorus",
       "soundCharacter": "Muted Chugs",
@@ -12211,7 +12354,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P145",
@@ -12255,7 +12399,7 @@
         "reverb": 0.1,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "ska offbeat upstrokes",
       "soundCharacter": "Clean",
@@ -12269,7 +12413,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P146",
@@ -12313,7 +12458,7 @@
         "reverb": 0.18,
         "outputDb": -3
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "tight palm-muted eighths",
       "soundCharacter": "Crunch",
@@ -12327,7 +12472,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P147",
@@ -12371,7 +12517,7 @@
         "reverb": 0.08,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse / open chorus",
       "soundCharacter": "Drive",
@@ -12385,7 +12531,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P148",
@@ -12429,7 +12576,7 @@
         "reverb": 0.04,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "power-chord chorus accents",
       "soundCharacter": "Palm Mute",
@@ -12443,7 +12590,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P149",
@@ -12487,7 +12635,7 @@
         "reverb": 0.24,
         "outputDb": -2
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "aggressive alternate picking",
       "soundCharacter": "Open Chords",
@@ -12501,7 +12649,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P150",
@@ -12545,7 +12694,7 @@
         "reverb": 0.03,
         "outputDb": -2.5
       },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "sampleRequirement": "mapped-multisample-guitar-bank; pattern-engine-generates-chord-note-events",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
       "playingStyle": "palm-muted verse build",
       "soundCharacter": "Acoustic",
@@ -12559,7 +12708,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "acoustic"
     }
   ],
   "patternSoundOptions": [

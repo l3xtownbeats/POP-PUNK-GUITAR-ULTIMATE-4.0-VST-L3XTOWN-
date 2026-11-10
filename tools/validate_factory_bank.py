@@ -56,8 +56,8 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
         if isinstance(tone, (int, float)) and not isinstance(tone, bool) and math.isfinite(tone) and not 0 <= tone <= 10:
             errors.append(f'{preset.get("id")}: tone outside 0..10')
         sample_profile = preset.get("sampleProfile")
-        if expected_mode == "MELODY" and (not isinstance(sample_profile, str) or not sample_profile.strip()):
-            errors.append(f'{preset.get("id")}: missing sampleProfile')
+        if not isinstance(sample_profile, str) or sample_profile not in {"electric", "acoustic"}:
+            errors.append(f'{preset.get("id")}: sampleProfile must be electric or acoustic')
         if expected_mode == "MELODY" and not preset.get("noteBehavior"):
             errors.append(f'{preset.get("id")}: missing noteBehavior')
         if expected_mode == "PATTERN" and not preset.get("groove"):
