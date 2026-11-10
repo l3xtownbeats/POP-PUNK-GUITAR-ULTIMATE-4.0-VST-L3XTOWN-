@@ -122,7 +122,9 @@ public:
             int bestString = -1;
             int bestFret = -1;
             int bestScore = 0x7fffffff;
-            for (int stringIndex = nextString; stringIndex < static_cast<int>(standardTuning.size()); ++stringIndex)
+            const int remainingNotes = static_cast<int>(notes.count - n);
+            const int lastAllowedString = static_cast<int>(standardTuning.size()) - remainingNotes;
+            for (int stringIndex = nextString; stringIndex <= lastAllowedString; ++stringIndex)
             {
                 const int fret = note - standardTuning[static_cast<std::size_t>(stringIndex)];
                 if (fret < 0 || fret > maximumFret)
