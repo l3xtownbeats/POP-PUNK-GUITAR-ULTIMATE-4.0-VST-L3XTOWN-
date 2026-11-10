@@ -784,12 +784,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
 
             const auto palmMapValue = preset.performance.getProperty("palmMuteMap", juce::var());
             if (auto* palmMap = palmMapValue.getArray())
-                for (int step = 0; step < 16 && !palmMap->empty(); ++step)
+                for (int step = 0; step < 16 && !palmMap->isEmpty(); ++step)
                     if (static_cast<bool>((*palmMap)[step % static_cast<int>(palmMap->size())]))
                         preset.palmMuteMask |= (1 << step);
             const auto accentMapValue = preset.performance.getProperty("accentMap", juce::var());
             if (auto* accentMap = accentMapValue.getArray())
-                for (int step = 0; step < 16 && !accentMap->empty(); ++step)
+                for (int step = 0; step < 16 && !accentMap->isEmpty(); ++step)
                 {
                     const auto valueAtStep = static_cast<float>((*accentMap)[step % static_cast<int>(accentMap->size())]);
                     if (valueAtStep >= 0.85f) preset.accentMaskHigh |= (1 << step);
