@@ -382,8 +382,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.setColour(pink);
     g.fillRect(0, 0, getWidth(), 3);
     auto hero = getLocalBounds().reduced(16);
-    hero.removeFromTop(72);
-    hero.setHeight(194);
+    hero.removeFromTop(88);
+    hero.setHeight(154);
     juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
@@ -391,14 +391,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
     g.setColour(pale);
-    g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
-    g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
+    g.setFont(juce::Font(juce::jmin(36.0f, getWidth() * 0.041f), juce::Font::bold));
+    g.drawText("POP PUNK", textArea.removeFromTop(42), juce::Justification::left);
     g.setColour(pink);
-    g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
-    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
+    g.setFont(juce::Font(juce::jmin(31.0f, getWidth() * 0.036f), juce::Font::italic | juce::Font::bold));
+    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(36), juce::Justification::left);
     g.setColour(pale.withAlpha(0.8f));
-    g.setFont(juce::Font(16.0f, juce::Font::italic));
-    g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
+    g.setFont(juce::Font(14.0f, juce::Font::italic));
+    g.drawText("Play. Create. Rock.", textArea.removeFromTop(22), juce::Justification::left);
     // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
     auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
     juce::Path body;
@@ -418,8 +418,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.setColour(pink.withAlpha(0.75f));
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
     auto panelArea = getLocalBounds().reduced(16);
-    panelArea.removeFromTop(355);
-    panelArea.removeFromBottom(80);
+    panelArea.removeFromTop(276);
+    panelArea.removeFromBottom(182);
     const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
     auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
     auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
