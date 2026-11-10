@@ -62,9 +62,9 @@ The 5.0 development branch consolidates the preset browser, sound-character and 
 The latest complete Windows x64 package is GitHub Actions artifact **13806808849**, produced by successful workflow run **42910485080** from code commit `6ff1f2680740da2ab45aa91fa0ec0e6a9930925d`. The ZIP is approximately 1.66 GB and contains the VST3 bundle, redistributable sample libraries, SFZ maps, licence files, checksums and factory preset catalogue.
 
 - [Download complete package — VST3 + Samples + Presets](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13806808849/zip)
-- [Download source-review archive](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13804522885/zip)
+- [Download source-review archive](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13807690666/zip)
 - [Factory preset catalogue — JSON, 300 definitions](presets/factory_bank_300.json)
-- [Factory preset catalogue — raw JSON download](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/feature/ppgu-5-import-sounds/presets/factory_bank_300.json)
+- [Factory preset catalogue — raw JSON download](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/5.0/presets/factory_bank_300.json)
 - [Portable MELODY preset example](presets/examples/Example-Melody.ppgm)
 - [Portable PATTERN preset example](presets/examples/Example-Pattern.ppgp)
 
@@ -84,7 +84,7 @@ GitHub Actions artifacts are temporary downloads and may require GitHub access. 
 
 [**OPEN WINDOWS VST3 BUILD — RUN 42910485080**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
 
-The run checked out code commit `6ff1f2680740da2ab45aa91fa0ec0e6a9930925d`. The following checks completed successfully: x64 Release CMake configuration, VST3 and test-executable compilation, CTest regression suite, VST3 bundle discovery and pluginval strictness level 5. The workflow then entered package creation and artifact upload. Commits after the tested code revision add the interface preview artwork and project-page documentation only; they do not change the compiled C++ source. The package upload completed successfully. The downloadable artifact is linked above. This automated result verifies compilation, CTest and pluginval; it does not replace a manual FL Studio 20 sound/host test.
+The run checked out code commit `6ff1f2680740da2ab45aa91fa0ec0e6a9930925d`. The following checks completed successfully: x64 Release CMake configuration, VST3 and test-executable compilation, CTest regression suite, VST3 bundle discovery and pluginval strictness level 5. Package creation and artifact upload also completed successfully. Commits after the tested code revision add the interface preview artwork and project-page documentation only; they do not change the compiled C++ source. The downloadable artifact is linked above. This automated result verifies compilation, CTest and pluginval; it does not replace a manual FL Studio 20 sound/host test.
 
 ---
 
@@ -298,13 +298,11 @@ The 5.0 branch is built with GitHub Actions on Windows Server 2022. The intended
 
 - Branch: [`feature/ppgu-5-import-sounds`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/feature/ppgu-5-import-sounds)
 - Dedicated 5.0 version branch: [`5.0`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/5.0)
-- Dedicated version branch: [`5.0`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/5.0)
 - Latest C++ implementation commit validated by CI: [`6ff1f268`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/6ff1f2680740da2ab45aa91fa0ec0e6a9930925d)
 - [Full-size interface preview SVG](assets/PPGU_5_0_INTERFACE_PREVIEW.svg)
 - [Full commit history for the 5.0 branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commits/feature/ppgu-5-import-sounds/)
 - [Current Windows VST3 workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml)
 - [Current build run 42910485080](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
-- [Last successful package run 42910485080](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
 
 A successful CMake build is not the same as a successful CTest run; pluginval is not the same as opening and playing the plugin in FL Studio 20. Final release acceptance also requires manual host tests, preset recall, MIDI input, no stuck notes, no clicks, sample-path verification, CPU/RAM profiling and long-playback testing.
 
