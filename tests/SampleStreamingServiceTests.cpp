@@ -95,10 +95,14 @@ int main()
     // Duplicate requests for a resident page must not decode and occupy
     // another cache slot. The worker processes the request asynchronously.
     if (!service.requestPage({ 0, 2 })) return 1;
-    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+    const auto duplicateDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    while (std::chrono::steady_clock::now() < duplicateDeadline
+           && service.statistics().requestsProcessed < 2)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     const auto stats = service.statistics();
     if (stats.pagesDecoded != 1 || stats.invalidRequests != 1
-        || stats.requestsSubmitted != 2 || stats.decodeFailures != 0)
+        || stats.requestsSubmitted != 2 || stats.requestsProcessed != 2
+        || stats.decodeFailures != 0)
     {
         std::cerr << "Streaming statistics or ready-page duplicate suppression failed.\\n";
         return 1;
