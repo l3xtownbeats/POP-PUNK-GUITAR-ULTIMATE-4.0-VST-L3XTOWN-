@@ -271,11 +271,11 @@ jobs:
           POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
           ========================================
           VST3 plugin: included in this archive.
-          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats electric clean + two distorted sets).
+          Multisample assets / sound bank: Samples/ (Meta steel + nylon; FreePats clean, distorted 1/2, direct DI and jazz; Karoryfer Emilyguitar, Shinyguitar, Black And Green).
           Factory presets: presets/factory_bank_300.json (150 Melody + 150 Pattern presets).
           Portable preset examples: presets/examples/.
           SFZ maps, original license files and source manifests are retained.
-          WAV SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
+          WAV + FLAC SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
           Preset catalog validation: 300 factory presets + portable preset examples.
 
           Install the .vst3 bundle to:
