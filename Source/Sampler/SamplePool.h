@@ -140,6 +140,7 @@ private:
         int direction = 1;
         std::uint64_t age = 0;
         std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();
+        std::uint64_t streamingMissSamples = 0;
         int note = -1;
         int midiChannel = 1;
     };
