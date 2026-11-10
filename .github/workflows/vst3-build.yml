@@ -1,0 +1,196 @@
+name: POP PUNK GUITAR ULTIMATE - Windows VST3
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'CMakeLists.txt'
+      - 'Source/**'
+      - 'tests/**'
+      - 'tools/**'
+      - '.github/workflows/vst3-build.yml'
+      - 'presets/factory_bank_300.json'
+      - 'tools/validate_factory_bank.py'
+      - 'tools/validate_preset_files.py'
+      - 'presets/examples/**'
+      - 'docs/**'
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate 300-preset factory catalog
+        shell: pwsh
+        run: python tools/validate_factory_bank.py presets/factory_bank_300.json
+      - name: Validate portable preset file examples
+        shell: pwsh
+        run: python tools/validate_preset_files.py presets/examples
+      - name: Select checked-out project source
+        shell: pwsh
+        run: |
+          # The repository root is the authoritative source tree. Do not require
+          # an externally uploaded source_bundle.zip (it is not part of this repo).
+          $project = Get-Item -LiteralPath $PWD
+          if (-not (Test-Path (Join-Path $project.FullName 'CMakeLists.txt'))) { throw 'Repository-root CMakeLists.txt was not found.' }
+          "PROJECT_DIR=$($project.FullName)" >> $env:GITHUB_ENV
+
+      # Preset catalog validation is performed from the checked-in JSON above.
+      # Do not mutate source files during CI; preset content belongs in reviewed commits.
+
+      - name: Publish extracted source for final implementation review
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "$env:PROJECT_DIR/*" -DestinationPath "$env:RUNNER_TEMP/POP_PUNK_GUITAR_SOURCE_REVIEW.zip" -Force
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-SOURCE-REVIEW
+          path: ${{ runner.temp }}/POP_PUNK_GUITAR_SOURCE_REVIEW.zip
+          if-no-files-found: error
+
+      - name: Download redistributable guitar sample libraries
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          New-Item -ItemType Directory -Force -Path $sampleRoot | Out-Null
+          $headers = @{ 'User-Agent' = 'POP-PUNK-GUITAR-ULTIMATE-build'; 'Accept' = 'application/vnd.github+json' }
+
+          # Release asset downloads occasionally return transient 502/503/504 responses.
+          # Retry with exponential backoff; never accept an empty/partial archive.
+          function Invoke-DownloadWithRetry([string]$Uri, [string]$OutFile, [hashtable]$RequestHeaders) {
+            $maxAttempts = 7
+            for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+              try {
+                if (Test-Path $OutFile) { Remove-Item -LiteralPath $OutFile -Force }
+                Invoke-WebRequest -Headers $RequestHeaders -Uri $Uri -OutFile $OutFile -TimeoutSec 600
+                if (-not (Test-Path $OutFile) -or (Get-Item -LiteralPath $OutFile).Length -lt 1048576) {
+                  throw 'Downloaded archive is missing or unexpectedly small.'
+                }
+                return
+              } catch {
+                if (Test-Path $OutFile) { Remove-Item -LiteralPath $OutFile -Force }
+                if ($attempt -eq $maxAttempts) {
+                  throw "Download failed after $maxAttempts attempts: $Uri. Last error: $($_.Exception.Message)"
+                }
+                $delay = [Math]::Min(90, 5 * [Math]::Pow(2, $attempt - 1))
+                Write-Warning "Download attempt $attempt/$maxAttempts failed: $($_.Exception.Message). Retrying in $delay seconds."
+                Start-Sleep -Seconds ([int]$delay)
+              }
+            }
+          }
+
+          # Meta Open Sound: original 24-bit/48 kHz multisamples, CC0 1.0.
+          # Release WAV archives contain audio only; SFZ maps and license metadata live in the source tree.
+          $metaRepo = Join-Path $env:RUNNER_TEMP 'Meta-open-sound'
+          git clone --depth 1 https://github.com/facebookincubator/Meta-open-sound.git $metaRepo
+          foreach ($id in @('meta-steel-guitar', 'meta-nylon-guitar')) {
+            $tag = "$id-v1.0.0"
+            $release = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/facebookincubator/Meta-open-sound/releases/tags/$tag"
+            $asset = $release.assets | Where-Object { $_.name -eq "meta-open-sound-$id-wav.zip" -or $_.name -eq "$id-wav.zip" } | Select-Object -First 1
+            if (-not $asset) { throw "WAV ZIP asset missing for $tag. Available: $($release.assets.name -join ', ')" }
+            $dest = Join-Path $sampleRoot "Meta-$id"
+            $zip = Join-Path $env:RUNNER_TEMP "$id.zip"
+            Invoke-DownloadWithRetry -Uri $asset.browser_download_url -OutFile $zip -RequestHeaders $headers
+            New-Item -ItemType Directory -Force -Path $dest | Out-Null
+            Expand-Archive -Path $zip -DestinationPath $dest -Force
+            $sourceDir = Join-Path $metaRepo "systems/instruments/$id"
+            foreach ($file in @("$id.sfz", 'LICENSE', 'SHA256SUMS', 'README.md', 'manifest.json')) {
+              $sourceFile = Join-Path $sourceDir $file
+              if (-not (Test-Path $sourceFile)) { throw "Meta source metadata missing: $sourceFile" }
+              Copy-Item -LiteralPath $sourceFile -Destination $dest
+            }
+            if (-not (Get-ChildItem $dest -Recurse -Filter '*.wav' | Select-Object -First 1)) { throw "No WAV samples extracted for $tag." }
+          }
+
+          # FreePats electric guitars: recorded clean and two distorted variants, CC0 1.0.
+          $freepats = @(
+            @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },
+            @{ repo='electric-guitar-FSBS-dist1'; folder='FreePats-Distortion-1' },
+            @{ repo='electric-guitar-FSBS-dist2'; folder='FreePats-Distortion-2' }
+          )
+          foreach ($item in $freepats) {
+            $dest = Join-Path $sampleRoot $item.folder
+            git clone --depth 1 "https://github.com/freepats/$($item.repo).git" $dest
+            if (-not (Get-ChildItem $dest -Recurse -Filter '*.sfz' | Select-Object -First 1)) { throw "SFZ map missing for $($item.repo)." }
+            if (-not (Test-Path (Join-Path $dest 'LICENSE.txt'))) { throw "License missing for $($item.repo)." }
+          }
+
+          $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
+          if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
+          $hashLines = foreach ($file in $wavFiles) {
+            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
+            $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
+            "$hash  $relative"
+          }
+          $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt')
+          @'
+          Sample library sources included in this package:
+          - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
+            https://github.com/facebookincubator/Meta-open-sound
+          - FreePats FSBS Clean, Distortion 1 and Distortion 2 electric guitars, CC0 1.0.
+            https://github.com/freepats/electric-guitar-FSBS-clean
+            https://github.com/freepats/electric-guitar-FSBS-dist1
+            https://github.com/freepats/electric-guitar-FSBS-dist2
+          Original license files, SFZ maps and source checksum manifests are retained beside the samples.
+          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
+          '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
+
+      - name: Configure x64 Release
+        shell: pwsh
+        run: cmake -S "$env:PROJECT_DIR" -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build VST3 and test executables
+        run: cmake --build build --config Release --parallel
+
+      - name: Run CTest regression suite
+        shell: pwsh
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Locate VST3 bundle
+        id: vst3
+        shell: pwsh
+        run: |
+          $plugin = Get-ChildItem build -Directory -Recurse -Filter '*.vst3' | Select-Object -First 1
+          if (-not $plugin) { throw 'VST3 bundle not found after successful build.' }
+          "path=$($plugin.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Record host validation limitation
+        shell: pwsh
+        run: |
+          # The repository does not currently vendor a pluginval executable or
+          # validate_windows_vst3.ps1. Do not call a nonexistent script or claim
+          # host validation. CMake, CTest and bundle structure are checked above.
+          Write-Host 'pluginval/DAW host validation is not configured in this repository; FL Studio 20 acceptance remains manual.'
+
+      - name: Package VST3, sample library and factory presets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination release -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $PWD 'release/Samples') -Recurse
+          # Include the validated 300-preset factory catalog and portable preset files.
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $PWD 'release/presets') -Recurse
+          @'
+          POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
+          ========================================
+          VST3 plugin: included in this archive.
+          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats electric clean + two distorted sets).
+          Factory presets: presets/factory_bank_300.json (150 Melody + 150 Pattern presets).
+          Portable preset examples: presets/examples/.
+          SFZ maps, original license files and source manifests are retained.
+          WAV SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
+          Preset catalog validation: 300 factory presets + portable preset examples.
+
+          Install the .vst3 bundle to:
+          C:\Program Files\Common Files\VST3\
+          Keep the Samples folder beside the extracted plugin package. If the plugin's
+          sample browser asks for a library folder, select this Samples directory.
+          This package does not claim DAW validation; test in FL Studio 20 after install.
+          '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
+          Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
+          if-no-files-found: error
