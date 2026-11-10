@@ -4,6 +4,7 @@
 #include <array>
 #include <cmath>
 #include <iostream>
+#include <limits>
 
 using namespace ppgu::performance;
 
@@ -105,6 +106,36 @@ int main()
     if (PatternScheduler::clampBpm(-50.0) != 120.0
         || PatternScheduler::clampBpm(900.0) != 120.0)
         return 8;
+
+    // Reject non-finite scheduler inputs and skip malformed pattern events.
+    PatternScheduler invalidInputScheduler;
+    const auto invalidRateClock = invalidInputScheduler.beginBlock(
+        { false, false, 0.0, 0.0 }, true, 120.0,
+        std::numeric_limits<double>::quiet_NaN(), 512);
+    if (!std::isfinite(invalidRateClock.startPpq)
+        || !std::isfinite(invalidRateClock.endPpq)
+        || invalidRateClock.endPpq != invalidRateClock.startPpq)
+        return 27;
+    if (invalidInputScheduler.schedule(pattern, 2.0,
+            std::numeric_limits<double>::quiet_NaN(), invalidRateClock,
+            48000.0, 512, 0.25, 0, events) != 0)
+        return 28;
+
+    PatternScheduler malformedEventScheduler;
+    const auto malformedClock = malformedEventScheduler.beginBlock(
+        { true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 12000);
+    std::array<PatternEvent, 2> malformedPattern {{{
+        std::numeric_limits<double>::quiet_NaN(), 0.25, 60, 100, 1
+    }, {
+        0.5, std::numeric_limits<double>::infinity(), 64, 100, 1
+    }}};
+    if (malformedEventScheduler.schedule(malformedPattern, 2.0, 0.0,
+            malformedClock, 48000.0, 12000, 0.0, 0, events) != 0)
+        return 29;
+
+    if (PatternScheduler::quantizePpqForward(
+            std::numeric_limits<double>::max(), 1.0) != std::numeric_limits<double>::max())
+        return 30;
 
     // A host seek must be reported as a discontinuity so the processor can
     // release voices and discard stale pending NoteOff events.
