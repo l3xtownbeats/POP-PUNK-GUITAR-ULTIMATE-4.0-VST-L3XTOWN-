@@ -57,7 +57,6 @@ private:
     std::array<std::array<bool, 128>, 16> patternHeldNotes {};
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};
     std::array<ppgu::performance::ScheduledEvent, ppgu::performance::PatternScheduler::maximumEventsPerBlock> scheduledPatternEvents {};
-    juce::MidiBuffer patternMidiBuffer;
     int previousPlayMode = -1;
     bool patternCycleStarted = false;
     int previousPatternChordCount = 0;

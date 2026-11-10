@@ -455,37 +455,37 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             patternEvents, patternLengthBeats, patternCycleStartPpq,
             patternTransportClock, currentSampleRate, samples, 0.0, 0,
             scheduledPatternEvents);
+        // Dispatch the scheduler's fixed-capacity event array directly.
+        // Avoid juce::MidiBuffer::addEvent() here because a dense pattern can
+        // grow its internal storage on the audio thread.
+        // PatternScheduler already sorts events by sample offset and orders
+        // NoteOff before NoteOn at ties.
+        int cursor = 0;
         for (std::size_t i = 0; i < scheduledCount; ++i)
         {
             const auto& event = scheduledPatternEvents[i];
-            const auto message = event.kind == ppgu::performance::EventKind::NoteOn
-                ? juce::MidiMessage::noteOn(event.channel, event.note, static_cast<juce::uint8>(event.velocity))
-                : juce::MidiMessage::noteOff(event.channel, event.note);
-            patternMidiBuffer.addEvent(message, event.sampleOffset);
-        }
-
-        int cursor = 0;
-        for (const auto metadata : patternMidiBuffer)
-        {
-            const auto message = metadata.getMessage();
-            const int eventSample = juce::jlimit(cursor, samples, metadata.samplePosition);
+            const int eventSample = juce::jlimit(cursor, samples, event.sampleOffset);
             renderSegment(cursor, eventSample - cursor);
             cursor = eventSample;
-            if (message.isNoteOn() && velocityScale > 0.0f)
+
+            if (event.kind == ppgu::performance::EventKind::NoteOn)
             {
+                if (velocityScale <= 0.0f)
+                    continue;
+
                 const float normalizedVelocity = juce::jlimit<float>(
-                    0.0f, 1.0f, static_cast<float>(message.getVelocity()) / 127.0f);
+                    0.0f, 1.0f, static_cast<float>(event.velocity) / 127.0f);
                 const float dynamics = juce::jlimit(0.0f, 1.0f,
                     parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
                 const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
-                                                      message.getChannel(), globalTuningSemitones);
+                const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices,
+                                                      event.channel, globalTuningSemitones);
                 juce::ignoreUnused(triggered);
             }
-            else if (message.isNoteOff())
-                sampler.noteOff(message.getNoteNumber(), message.getChannel());
+            else
+                sampler.noteOff(event.note, event.channel);
         }
         renderSegment(cursor, samples - cursor);
 
