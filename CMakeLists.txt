@@ -58,6 +58,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/Sampler/PageCacheSlots.h
     Source/Sampler/SampleStreamingService.cpp
     Source/Sampler/SampleStreamingService.h
+    Source/Sampler/StreamingVoiceReader.cpp
+    Source/Sampler/StreamingVoiceReader.h
 )
 
 target_compile_definitions(PopPunkGuitarUltimate PUBLIC
@@ -159,6 +161,7 @@ if(BUILD_TESTING)
         Source/Sampler/WavPageReader.cpp
         Source/Sampler/PageCacheSlots.cpp
         Source/Sampler/SampleStreamingService.cpp
+        Source/Sampler/StreamingVoiceReader.cpp
         tests/SampleStreamingServiceTests.cpp
     )
     target_include_directories(ppgu_sample_streaming_service_tests PRIVATE Source/Sampler)
