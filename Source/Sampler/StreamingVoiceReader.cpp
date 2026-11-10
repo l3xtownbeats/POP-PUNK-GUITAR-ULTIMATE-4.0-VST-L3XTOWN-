@@ -97,6 +97,11 @@ void StreamingVoiceReader::prefetch(std::uint64_t frame) noexcept
     if (stream == nullptr || sourceFrames == 0 || frame >= sourceFrames)
         return;
     const auto page = frame / stream->pageFrames();
+    // Keep the current page and both neighbours resident. The previous page
+    // is needed by Hermite taps during reverse/ping-pong playback; the next
+    // page prevents a forward boundary miss.
+    if (page > 0)
+        (void) ensurePage(page - 1);
     (void) ensurePage(page);
     const auto nextPage = page + 1;
     if (nextPage < 1 + (sourceFrames - 1) / stream->pageFrames())
