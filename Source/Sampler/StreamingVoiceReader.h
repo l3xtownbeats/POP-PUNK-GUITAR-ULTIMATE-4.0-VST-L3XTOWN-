@@ -32,6 +32,11 @@ public:
     // boundaries. Call at voice allocation and whenever the cursor changes page.
     void prefetch(std::uint64_t frame) noexcept;
 
+    // Queue loop-region pages ahead of time without pinning them in this
+    // voice's three-lease working set. This keeps attack pages resident while
+    // the worker warms loop-start/continuation pages for seamless wraparound.
+    void requestPrefetch(std::uint64_t frame) noexcept;
+
     // Returns false on a cache miss; the required page request is queued and
     // the caller should output silence for this sample rather than block.
     [[nodiscard]] bool readHermite(std::uint64_t frame, float fraction,
