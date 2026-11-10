@@ -9,7 +9,7 @@
 **PLAY. CREATE. ROCK.**
 
 [![Windows x64](https://img.shields.io/badge/Windows-x64-222222?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows)
-[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
+[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](#download)
 [![JUCE](https://img.shields.io/badge/Engine-JUCE_7-222222?style=for-the-badge)](https://juce.com/)
 [![C++20](https://img.shields.io/badge/Code-C%2B%2B20-222222?style=for-the-badge)](https://isocpp.org/)
 
@@ -29,12 +29,15 @@ The product target is a fast, expressive, commercial-grade pop-punk guitar instr
 
 <div align="center">
 
-### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
+### [⬇ DOWNLOAD COMPLETE PACKAGE — VST3 + SAMPLES + PRESETS (ZIP, 2.24 GB)](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
+
+**One click downloads the complete ZIP package.** The VST3 plugin, sample library and preset catalogue are inside this archive.
 
 </div>
 
-**Download:** open the run, scroll to **Artifacts**, and download  
-`POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` (about 2.24 GB).
+- **Install:** extract the ZIP, then copy the `.vst3` bundle to `C:\\Program Files\\Common Files\\VST3\\`.
+- Keep the extracted `Samples` folder available to the plugin. See `INSTALL_AND_CONTENTS.txt` inside the archive.
+- A separate standalone `.vst3` download is not published yet; use the complete ZIP above.
 
 
 ## What is implemented
@@ -181,11 +184,10 @@ These are acceptance requirements and targets. They are not all implemented or v
 | M3 — Pattern transport and runtime | Scheduler unit tests pass; connection to real sampler playback and full pattern runtime are still in progress |
 | M4 — AutoChords / FingeringGenerator | Not started for release; gated on M1–M3 acceptance |
 
-### Latest verified CI evidence
+### Latest verified build
 
-- M1/M2 Windows build: [run #162 — successful](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42729490984)
-- Pattern scheduler regression and sampler tests: 3/3 passed in [run #78](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42729491121); that workflow subsequently failed in a separate packaging/validation step referencing a missing script. The missing-script reference was removed in a later commit; the replacement workflow is being checked.
-- CI success confirms compilation and automated tests, not manual FL Studio 20 validation or measured CPU/RAM targets.
+The downloadable package was produced by a successful Windows x64 VST3 build and CTest workflow: [view build verification](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767). This verifies compilation and automated tests only; manual FL Studio 20 validation remains outstanding.
+
 
 ## Roadmap
 
@@ -209,7 +211,7 @@ ctest --test-dir build -C Release --output-on-failure
 
 - [Source repository](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-)
 - [Active development branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/migration/full-copy-m3-transport-scheduler-v2)
-- [Windows build actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE/actions)
+- [Windows build verification](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
 - [Russian development journal](docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md)
 - [300-entry factory catalogue](presets/factory_bank_300.json)
 

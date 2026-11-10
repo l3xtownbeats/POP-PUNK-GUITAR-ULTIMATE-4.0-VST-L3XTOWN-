@@ -978,3 +978,14 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - API отдаёт HTTP redirect на временный URL скачивания (срок действия redirect URL — около 1 минуты); постоянной является сама API-ссылка, пока артефакт и запуск существуют. GitHub может потребовать авторизацию в зависимости от доступности репозитория.
 - Изменены: `README.md`, `DOWNLOAD.md`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`.
 - M3 остаётся NOT ACCEPTED; M4 не начинается.
+
+
+## 10 ноября 2026 — главная страница и прямые загрузки
+
+- README download section and DOWNLOAD.md were simplified to one-click direct ZIP download, with the package contents and installation steps stated clearly.
+- Removed stale CI run links that returned 404 and corrected the Windows build verification link to the actual repository/run.
+- VST3 badge now links to the local download section rather than pretending to be a separate VST3 file download.
+- Verified artifact listing for run 42763253767: package artifact ID 13738701864, 2,242,880,406 bytes, not expired at check time. Direct archive endpoint: https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip
+- The archive includes the VST3 bundle, Samples folder and preset catalogue. There is no separately published standalone .vst3 asset; the page says so rather than exposing a nonexistent link.
+- Manual DAW validation remains outstanding; M3 remains NOT ACCEPTED and M4 remains gated.
+- Files changed: README.md, DOWNLOAD.md, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md.
