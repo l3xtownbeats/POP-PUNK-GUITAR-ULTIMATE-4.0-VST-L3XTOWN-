@@ -455,15 +455,68 @@ SamplePool::VelocityLayerSelection SamplePool::findVelocityLayers(
     int midiNote, int velocity, int midiChannel) noexcept
 {
     VelocityLayerSelection result;
-    result.primary = findRegion(midiNote, velocity, midiChannel);
-    if (result.primary == nullptr)
-        return result;
-
-    result.primaryGain = 1.0f;
+    // Resolve the primary region and its crossfade partner from one immutable
+    // snapshot. Loading activeSnapshot twice can otherwise mix pointers from
+    // different bank generations when a background bank swap occurs.
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr)
         return result;
 
+    const RegionView* firstMatch = nullptr;
+    const RegionView* firstSequenceMatch = nullptr;
+    int sequenceLength = 1;
+    int sequenceSetIndex = -1;
+    for (const auto& region : snapshot->regions)
+    {
+        if (midiNote < region.lowKey || midiNote > region.highKey
+            || velocity < region.lowVelocity || velocity > region.highVelocity
+            || midiChannel < region.lowChannel || midiChannel > region.highChannel)
+            continue;
+        if (firstMatch == nullptr)
+            firstMatch = &region;
+        if (region.roundRobinSetIndex >= 0)
+        {
+            if (sequenceSetIndex < 0)
+            {
+                sequenceLength = region.seqLength;
+                sequenceSetIndex = region.roundRobinSetIndex;
+            }
+            if (region.roundRobinSetIndex == sequenceSetIndex && firstSequenceMatch == nullptr)
+                firstSequenceMatch = &region;
+        }
+    }
+    if (firstMatch == nullptr)
+        return result;
+
+    result.primary = firstMatch;
+    if (sequenceSetIndex >= 0 && sequenceLength > 1)
+    {
+        const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
+        const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
+        constexpr std::size_t cursorsPerSet = 16U * 128U;
+        const auto cursorIndex = static_cast<std::size_t>(sequenceSetIndex) * cursorsPerSet
+            + channelIndex * 128U + noteIndex;
+        if (cursorIndex < snapshot->roundRobinCounters.size())
+        {
+            auto& cursor = snapshot->roundRobinCounters[cursorIndex];
+            const int wantedPosition = static_cast<int>(cursor % static_cast<std::uint32_t>(sequenceLength)) + 1;
+            ++cursor;
+            for (const auto& candidate : snapshot->regions)
+                if (candidate.roundRobinSetIndex == sequenceSetIndex
+                    && wantedPosition == candidate.seqPosition
+                    && midiNote >= candidate.lowKey && midiNote <= candidate.highKey
+                    && velocity >= candidate.lowVelocity && velocity <= candidate.highVelocity
+                    && midiChannel >= candidate.lowChannel && midiChannel <= candidate.highChannel)
+                {
+                    result.primary = &candidate;
+                    break;
+                }
+            if (result.primary == firstMatch && firstSequenceMatch != nullptr)
+                result.primary = firstSequenceMatch;
+        }
+    }
+
+    result.primaryGain = 1.0f;
     const auto& primary = *result.primary;
     const bool primaryFadeIn = primary.xfinLowVelocity >= 0
         && primary.xfinHighVelocity > primary.xfinLowVelocity;
