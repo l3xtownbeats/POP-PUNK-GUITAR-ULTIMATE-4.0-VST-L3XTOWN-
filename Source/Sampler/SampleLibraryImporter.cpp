@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <cctype>
 #include <filesystem>
 #include <fstream>
 #include <limits>
@@ -58,7 +59,7 @@ std::string safeName(std::string name)
 int noteFromFilename(const std::string& filename)
 {
     static const std::regex notePattern(R"(([A-Ga-g])([#b]?)(-?[0-9]))");
-    static const std::array<int, 7> natural { 0, 2, 4, 5, 7, 9, 11 };
+    static const std::array<int, 7> natural { 9, 11, 0, 2, 4, 5, 7 };
     std::smatch match;
     if (!std::regex_search(filename, match, notePattern))
         return -1;
