@@ -195,7 +195,7 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     maximumBlockSize = juce::jmax(1, expectedBlockSize);
     sampler.prepare(currentSampleRate);
     patternScheduler.reset();
-    for (auto& channel : patternHeldNotes) channel.fill(false);
+    patternNoteTracker.clear();
     patternCycleStarted = false;
     previousPatternChordCount = 0;
     previousPatternChordNotes.fill(-1);
@@ -335,7 +335,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     {
         sampler.allNotesOff();
         patternScheduler.reset(patternTransportClock.startPpq);
-        for (auto& channel : patternHeldNotes) channel.fill(false);
+        patternNoteTracker.clear();
         for (auto& channel : patternMappedNotes) channel.fill(-1);
         for (auto& channel : melodyMappedNotes) channel.fill(-1);
         patternCycleStarted = false;
@@ -439,7 +439,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             int channel = 1;
             for (int ch = 0; ch < 16 && count < static_cast<int>(notes.size()); ++ch)
                 for (int note = 0; note < 128 && count < static_cast<int>(notes.size()); ++note)
-                    if (patternHeldNotes[static_cast<size_t>(ch)][static_cast<size_t>(note)])
+                    if (patternNoteTracker.isHeld(ch, note))
                     {
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
@@ -568,15 +568,20 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 }
                 else if (message.isNoteOn() || message.isNoteOff())
                 {
-                    const auto sourceNote = static_cast<size_t>(message.getNoteNumber());
-                    const auto channel = static_cast<size_t>(channelIndex);
+                    const int sourceNote = message.getNoteNumber();
+                    const int channel = channelIndex;
                     if (message.isNoteOn())
-                        patternMappedNotes[channel][sourceNote] = mapPerformanceNote(message.getNoteNumber());
-                    const int mappedNote = patternMappedNotes[channel][sourceNote] >= 0
-                        ? patternMappedNotes[channel][sourceNote] : message.getNoteNumber();
-                    patternHeldNotes[channel][static_cast<size_t>(mappedNote)] = message.isNoteOn();
-                    if (message.isNoteOff())
-                        patternMappedNotes[channel][sourceNote] = -1;
+                    {
+                        const int mappedNote = mapPerformanceNote(sourceNote);
+                        // Repeated NoteOn for the same source key replaces its
+                        // previous ownership instead of leaking a reference.
+                        patternNoteTracker.noteOn(channel, sourceNote, mappedNote);
+                    }
+                    else
+                    {
+                        const int mappedNote = patternNoteTracker.noteOff(channel, sourceNote);
+                        juce::ignoreUnused(mappedNote);
+                    }
                     const auto [nextNotes, nextCount, nextChannel] = readChord();
                     if (chordDiffers(nextNotes, nextCount, nextChannel))
                         restartForChord(eventSample, nextNotes, nextCount, nextChannel);
