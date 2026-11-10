@@ -470,8 +470,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1,
         static_cast<int>(processor.parameters.state.getProperty("uiSkinIndex", 0)));
-    applySkin(activeSkinIndex);
     const auto savedSkinFile = processor.parameters.state.getProperty("uiSkinFile").toString();
+    applySkin(activeSkinIndex);
     if (savedSkinFile.isNotEmpty() && juce::File(savedSkinFile).existsAsFile())
         loadExternalSkin(juce::File(savedSkinFile));
 }
@@ -482,8 +482,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
     processor.parameters.state.setProperty("uiSkinIndex", activeSkinIndex, nullptr);
     processor.parameters.state.removeProperty("uiSkinFile", nullptr);
     processor.parameters.state.removeProperty("uiSkinName", nullptr);
-    externalSkinMelodyArtwork = {};
-    externalSkinPatternArtwork = {};
+    externalSkinMelodyArtwork = juce::Image();
+    externalSkinPatternArtwork = juce::Image();
     const auto& skin = skinPalettes[static_cast<size_t>(activeSkinIndex)];
     bg = juce::Colour(skin.background);
     panel = juce::Colour(skin.panel);
@@ -524,7 +524,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadExternalSkin(const juce::Fil
         const auto relativePath = object->getProperty(key).toString().trim();
         if (relativePath.isEmpty())
         {
-            destination = {};
+            destination = juce::Image();
             return true;
         }
         const auto imageFile = file.getParentDirectory().getChildFile(relativePath);
