@@ -6,5 +6,7 @@
   "panel2": "ff0e1929",
   "accent": "ff49baff",
   "text": "fff1f7ff",
-  "muted": "ff91a9c3"
+  "muted": "ff91a9c3",
+  "melodyArtwork": "../Resources/Artwork/APPROVED_STYLE_B.png",
+  "patternArtwork": "../Resources/Artwork/APPROVED_STYLE_A.png"
 }
