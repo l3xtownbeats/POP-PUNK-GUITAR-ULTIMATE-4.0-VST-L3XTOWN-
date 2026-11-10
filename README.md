@@ -59,7 +59,7 @@ The 5.0 development branch consolidates the preset browser, sound-character and 
 
 </div>
 
-The latest successful package currently available is GitHub Actions artifact **13804429027**, produced by workflow run **42905436604** from commit `ad7216845e1e33236241937c1aed1a8e33a22a96`. It is a real downloadable package, approximately 1.66 GB, and is not the same source revision as the newer interface work described on this branch.
+The last previously published complete package is GitHub Actions artifact **13804429027**, produced by workflow run **42905436604** from commit `ad7216845e1e33236241937c1aed1a8e33a22a96` (approximately 1.66 GB). A newer 5.0 build has since passed compilation, CTest and pluginval strictness level 5; its final package upload is being completed in workflow run **42910485080**. Until that upload finishes, the older package below is the only complete VST3 ZIP available for download and does not contain the newest interface changes.
 
 - [Download complete package — VST3 + Samples + Presets](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13804429027/zip)
 - [Download source-review archive](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13804522885/zip)
@@ -80,11 +80,11 @@ The latest successful package currently available is GitHub Actions artifact **1
 
 GitHub Actions artifacts are temporary downloads and may require GitHub access. The current successful package expires **8 February 2027**. A permanent versioned GitHub Release will be created only after the release candidate is frozen and validated.
 
-### Current build in progress
+### Latest 5.0 validation run
 
-[**OPEN CURRENT 5.0 WINDOWS BUILD — RUN 42910485080**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
+[**OPEN WINDOWS VST3 BUILD — RUN 42910485080**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
 
-This run checks out commit `6ff1f2680740da2ab45aa91fa0ec0e6a9930925d`. At the time this page was updated, CMake configuration had passed and the Windows VST3 build was running. The final CTest, pluginval strictness-level 5 and package steps had not yet completed. The page must not be read as a successful result for that in-progress run.
+The run checked out code commit `6ff1f2680740da2ab45aa91fa0ec0e6a9930925d`. The following checks completed successfully: x64 Release CMake configuration, VST3 and test-executable compilation, CTest regression suite, VST3 bundle discovery and pluginval strictness level 5. The workflow then entered package creation and artifact upload. The latest two branch commits after the tested code commit add only the interface preview artwork and this project-page documentation; they do not change the compiled C++ source. The downloadable package link will be switched to the new artifact as soon as GitHub reports the upload as complete.
 
 ---
 
@@ -297,7 +297,9 @@ The 5.0 branch is built with GitHub Actions on Windows Server 2022. The intended
 ### Current 5.0 branch
 
 - Branch: [`feature/ppgu-5-import-sounds`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/feature/ppgu-5-import-sounds)
-- Current implementation commit at the start of the latest build: [`6ff1f268`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/6ff1f2680740da2ab45aa91fa0ec0e6a9930925d)
+- Current 5.0 branch head (project page + interface artwork): [`d5249216`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/d52492161016e201343d8b94b5c06dab39c62eb2)
+- Latest C++ implementation commit validated by CI: [`6ff1f268`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/6ff1f2680740da2ab45aa91fa0ec0e6a9930925d)
+- [Full-size interface preview SVG](assets/PPGU_5_0_INTERFACE_PREVIEW.svg)
 - [Full commit history for the 5.0 branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commits/feature/ppgu-5-import-sounds/)
 - [Current Windows VST3 workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml)
 - [Current build run 42910485080](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
