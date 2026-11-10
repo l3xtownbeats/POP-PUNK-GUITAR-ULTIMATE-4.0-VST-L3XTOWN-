@@ -93,3 +93,8 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 Дополнительно закрыты два края транспортной логики: переключение Internal → Host теперь тоже считается discontinuity (раньше явно обрабатывался только Host → Internal), а порог определения seek снижен с 0.25 beat до адаптивного 0.01 beat / двух длительностей блока, чтобы короткие перемотки не оставляли устаревшие gate events. Очистка pending NoteOff одновременно сбрасывает overflow flag. Добавлен headless тест обеих сторон handoff.
 
 Эти изменения отправлены отдельным последующим commit; Windows CI ещё требуется.
+
+
+## Documentation control — 10 November 2026
+
+A dedicated plain-text work log (`docs/WORK_LOG_M3.txt`) and Russian defect register (`docs/ЖУРНАЛ_БАГОВ_RU.md`) were added. Scheduler/runtime changes must be accompanied by updates to both journals; only verified test evidence may close an issue or milestone.

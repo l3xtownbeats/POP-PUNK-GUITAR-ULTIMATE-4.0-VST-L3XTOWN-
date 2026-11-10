@@ -1042,3 +1042,8 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Исправлена причина предыдущего CI failure: в `tools/validate_apvts_layout.py` regex имели двойное экранирование. При повторной статической сверке найдено 97 уникальных объявленных APVTS ID (включая 7 FX slots) и 48 обращений аудиокода; все обращения имеют соответствующие объявления. Это статическая проверка, не замена DAW automation test.
 - Изменённые файлы: `Source/PluginProcessor.cpp`, `Source/PluginProcessor.h`, `tests/PatternSchedulerTests.cpp`, `tools/validate_apvts_layout.py`.
 - Проверка: на текущем HEAD `c8da085e45fdd11387d01a0f69538e771e92d967` шаги CI для валидатора пресетов и APVTS завершились успешно; Windows build/CTest ещё выполняются. M3 пока NOT ACCEPTED: требуется дождаться полного CI/CTest и закрыть оставшиеся критерии lookahead/preview и проверки в хосте. M4 остаётся заблокирован.
+
+
+## Журналирование и баг-трекинг — 10 ноября 2026
+
+Добавлены `docs/WORK_LOG_M3.txt` и `docs/ЖУРНАЛ_БАГОВ_RU.md`. В баг-журнале заведены M3-001…M3-012; исправления исходников помечены FIXED — AWAITING CI, непроверенная сборка и DAW integration остаются OPEN. M3 не принят.

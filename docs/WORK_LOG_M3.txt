@@ -1,0 +1,41 @@
+POP-PUNK-GUITAR-ULTIMATE — ЖУРНАЛ РАБОТ (M3)
+Дата: 10 ноября 2026
+Репозиторий: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
+Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
+Исходный HEAD перед записью: 56c507d844861b71e23c2c5c2b6b84287dde237a
+
+1. ЦЕЛЬ
+Довести M3 Pattern Transport/Runtime до приёмки; M4 не начинать до прохождения M1–M3. Следовать Promt.txt v33 FINAL и использовать существующую рабочую ветку.
+
+2. ВЫПОЛНЕННЫЕ ИЗМЕНЕНИЯ В КОДЕ (по текущему HEAD)
+- PatternScheduler: добавлена диагностика host transport discontinuity/seek, очистка pending NoteOff при stop/seek и переключении Host/Internal clock.
+- Internal clock рассчитывает PPQ по текущим sample rate, BPM и размеру блока; BPM ограничивается допустимым диапазоном.
+- Sample offset вычисляется как первый sample не раньше PPQ-события; добавлена forward quantize функция для 1/16 и 1/32.
+- Ограниченная очередь pending NoteOff увеличена; переполнение отмечается флагом, Processor использует all-notes-off fail-safe.
+- PluginProcessor: MIDI held-note state применяется до chord snapshot; учитывается MIDI samplePosition. Старый сегмент рендерится до позиции MIDI-события.
+- Смены аккорда/слота/длины паттерна используют выбранную сетку 1/16 или 1/32; swing не квантуется повторно. При transport stop held chord очищается.
+- APVTS validator: исправлены regex escaping; статическая сверка ранее обнаружила 97 уникальных объявленных ID и 48 аудио-обращений, все обращения имели объявления.
+- Добавлены headless тесты на host seek, смену clock source, tempo/block-size changes, near-tail sample mapping, 1/16 и 1/32 quantize, stop/restart и overflow queue.
+
+3. CI / ПРОВЕРКИ
+- Run 42769349946 (HEAD c8da085...) завершился failure; после него исправлялся APVTS validator.
+- Run 42769468136 (HEAD bd79b08...) завершился failure; после него исправлялось объявление clock-source transition.
+- Run 42769587683 для HEAD 56c507d... на момент фиксации имеет status=in_progress. Итог Windows build/CTest ещё не подтверждён.
+- Ручная проверка FL Studio 20 на Windows 10 не выполнена в рамках этой сессии.
+- Новые тесты нельзя считать пройденными до успешного CI/CTest на актуальном HEAD.
+
+4. ОСТАВШИЕСЯ РАБОТЫ ДЛЯ M3
+- Получить полный успешный Windows Release build и CTest на актуальном HEAD.
+- Исправить каждую ошибку CI и повторить workflow до зелёного результата.
+- Проверить интеграцию Scheduler → PluginProcessor → Sampler: NoteOn/NoteOff, границы блока, смена аккорда, слот/длина паттерна.
+- Проверить host start/stop/restart, seek вперёд/назад, потерю PlayHead данных, Host↔Internal clock handoff.
+- Проверить размеры буфера 64/128/256/512/1024 и изменение BPM на ходу.
+- Проверить overflow fail-safe и отсутствие зависших нот.
+- Провести ручную проверку FL Studio 20: синхронизация транспорта, MIDI аккорды, смена паттернов, automation и stop/panic.
+- Только после закрытия критериев обновить M3 на ACCEPTED.
+
+5. ТЕКУЩИЙ СТАТУС
+M3 = NOT ACCEPTED. M4 = BLOCKED. Причина: полный CI/CTest на актуальном HEAD и DAW integration acceptance ещё не подтверждены.
+
+6. ПРАВИЛО ДОКУМЕНТИРОВАНИЯ
+Каждый рабочий цикл обновляет этот TXT-файл, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md и docs/ЖУРНАЛ_БАГОВ_RU.md. Существенные streaming изменения дополнительно отражать в docs/ЖУРНАЛ_ИЗМЕНЕНИЙ_STREAMING_RU.md. Записи разделяют изменения, реально запущенные тесты, результаты и ограничения.
