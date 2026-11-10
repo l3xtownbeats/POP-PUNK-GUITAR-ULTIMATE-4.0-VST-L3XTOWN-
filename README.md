@@ -96,7 +96,7 @@ The presence of a parameter does not mean every associated articulation or perfo
 
 The project is designed for efficient startup and controlled resource use. Final CPU/RAM performance claims are withheld until repeatable profiling on the target hardware has been completed.
 
-**Large-library memory target:** the sound library may occupy up to 7 GB on disk; this is not a target for resident RAM usage. The standalone streaming page cache now rejects configurations above a hard 256 MiB cache budget. This limit applies to that cache only, not total plugin memory, and streaming playback is still being integrated into the main sampler. No claim of 7 GB streaming support or final RAM usage is made until that integration and stress profiling pass.
+**Large-library memory target:** the sound library may occupy up to 7 GB on disk; this is not a target for resident RAM usage. SFZ/WAV loading now indexes file metadata instead of decoding the whole bank, and production SamplerEngine voices read audio through the background WAV page streamer. The default cache is 256 pages × 4096 frames × stereo float samples (about 8 MiB per library root), with up to eight roots per sampler instance (about 64 MiB of configured page-cache storage). The underlying page-cache allocator independently rejects any single cache above its hard 256 MiB limit. These figures describe page-cache allocation only, not total plugin memory. Streaming integration and multi-page playback regression tests are in CI; 7 GB library acceptance and final RAM/CPU claims remain gated on successful stress profiling.
 
 ## FACTORY SOUND DIRECTION
 
@@ -136,7 +136,7 @@ Sample redistribution is subject to source and license verification. Commercial 
 | Milestone | Current status |
 |---|---|
 | **M1 — VST3 foundation** | Windows Release build and parameter audit pass. User previously confirmed the plugin opens in FL Studio 20; full state, automation and panic acceptance remains. |
-| **M2 — SFZ/WAV sampler** | Parser and SamplePool tests pass. Long playback, 100-hit no-click, streaming/cache and full-library acceptance remain. |
+| **M2 — SFZ/WAV sampler** | SFZ/WAV regions now route through bounded background page streaming in SamplerEngine. Multi-page playback regression coverage is added; CI, long playback, 100-hit no-click, cache stress and full-library acceptance remain. |
 | **M3 — Pattern transport/runtime** | Scheduler unit tests pass. Full connection to real sampler playback and complete pattern runtime acceptance remain in progress. **NOT ACCEPTED.** |
 | **M4 — AutoChords / FingeringGenerator** | Not started for release; gated on M1–M3 acceptance. |
 
