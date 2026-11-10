@@ -127,7 +127,7 @@ int main()
         || std::abs(directLeft[7 + 100] - expectedDirectSample) > 0.0001f
         || std::abs(directLeft[7 + 100] + directRight[7 + 100]) > 0.0001f)
     {
-        std::cerr << "WAV page reader failed direct preallocated planar decode.\\n";
+        std::cerr << "WAV page reader failed direct preallocated planar decode: " << directRead.error << " frames=" << directFrames << "\n";
         return 1;
     }
     const auto wrongChannels = pageReader.readPageInto(0, directChannels, 1, 0,
