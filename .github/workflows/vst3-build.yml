@@ -201,8 +201,15 @@ jobs:
           Expand-Archive -LiteralPath $archive -DestinationPath $toolDir -Force
           $validator = Get-ChildItem -LiteralPath $toolDir -Recurse -File -Filter 'pluginval.exe' | Select-Object -First 1
           if (-not $validator) { throw 'pluginval.exe was not found in the official Windows release archive.' }
-          & $validator.FullName --strictness-level 5 "${{ steps.vst3.outputs.path }}"
-          if ($LASTEXITCODE -ne 0) { throw "pluginval strictness level 5 failed with exit code $LASTEXITCODE." }
+          # Start-Process exposes the real native process exit code reliably on
+          # Windows PowerShell, including GUI-subsystem executables. The pluginval
+          # log must end in SUCCESS and the process must return zero.
+          $pluginPath = "${{ steps.vst3.outputs.path }}"
+          $arguments = @('--strictness-level', '5', ('"{0}"' -f $pluginPath))
+          $validationProcess = Start-Process -FilePath $validator.FullName -ArgumentList $arguments -NoNewWindow -Wait -PassThru
+          if ($validationProcess.ExitCode -ne 0) {
+            throw "pluginval strictness level 5 failed with exit code $($validationProcess.ExitCode)."
+          }
 
       - name: Record host validation limitation
         shell: pwsh
