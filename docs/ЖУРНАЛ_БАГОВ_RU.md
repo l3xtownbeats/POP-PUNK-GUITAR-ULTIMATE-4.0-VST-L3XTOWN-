@@ -159,3 +159,11 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - M4 blocker: новый AutoChords/FingeringGenerator foundation ожидает завершения Windows build/CTest/pluginval; scale-aware tonic mapping и runtime scheduler/state integration ещё не сделаны.
 - M5 blocker: StyleEngine foundation прошёл CI run `42840410645`, но пока не подключён к runtime Pattern event pipeline и preset/UI binding.
 - Не помечать M1–M5 полностью готовыми до закрытия перечисленных пунктов. Подробности в `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
+
+## 10 ноября 2026 — обновлённые M2/M3/M4/M5 статусы
+
+- M3 scheduler→SamplerEngine module integration regression добавлен и прошёл CTest в run `42843030370`; FL Studio 20 transport/MIDI validation остаётся открытой.
+- M2 velocity crossfade playback реализован в изолированном PR #5, run `42843931173` ожидает завершения. Palm-mute sample mapping и реальные click/pop/concurrency checks остаются открытыми.
+- M4 scale-aware AutoChords/FingeringGenerator прошёл run `42843127831`; последующие integer-overflow guards требуют нового CI.
+- M5 StyleEngine foundation прошёл run `42840410645`; runtime integration остаётся открытой.
+- M1 DAW save/reopen, automation, missing-library recovery, device change и long-playback host test остаются открытыми.
