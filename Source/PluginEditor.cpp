@@ -703,6 +703,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     setParameter("patternSlot", static_cast<float>(patternStyle));
     const int articulationIndex = preset.articulation.containsIgnoreCase("palm") ? 1 : 0;
     setParameter("articulation", static_cast<float>(articulationIndex));
+    setParameter("distortionOn", preset.drive > 0.25f ? 1.0f : 0.0f);
+    setParameter("reverbOn", preset.reverb > 0.01f ? 1.0f : 0.0f);
     if (preset.mode == "PATTERN")
     {
         const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
