@@ -432,6 +432,29 @@ int main()
         return 1;
     }
 
+    // Validate the actual rendered sum at the crossfade midpoint, not only
+    // the metadata gains and voice count. Both regions reference the same
+    // in-phase fixture WAV, so equal-power 0.707 gains must sum to a peak
+    // near 0.5 * (64 / 127) * sqrt(2), clearly above a single-layer result.
+    juce::AudioBuffer<float> crossfadeRendered(2, 128);
+    bool crossfadeBecameAudible = false;
+    float crossfadePeak = 0.0f;
+    for (int attempt = 0; attempt < 100 && !crossfadeBecameAudible; ++attempt)
+    {
+        crossfadeRendered.clear();
+        crossfadePlaybackEngine.render(crossfadeRendered, 0, crossfadeRendered.getNumSamples());
+        crossfadePeak = crossfadeRendered.getMagnitude(0, 0, crossfadeRendered.getNumSamples());
+        crossfadeBecameAudible = crossfadePeak > 0.001f;
+        if (!crossfadeBecameAudible)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!crossfadeBecameAudible || crossfadePeak < 0.25f || crossfadePeak > 0.42f)
+    {
+        std::cerr << "Rendered equal-power velocity crossfade is outside the expected summed-signal range; peak="
+                  << crossfadePeak << ".\\n";
+        return 1;
+    }
+
     const auto invalidRoundRobin = ppgu::sfz::parseText(
         "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
     if (!invalidRoundRobin.errors.size())
