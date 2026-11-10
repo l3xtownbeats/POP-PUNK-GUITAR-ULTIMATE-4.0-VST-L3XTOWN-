@@ -459,12 +459,12 @@ int main()
     // must never be blended merely because their MIDI/velocity ranges overlap.
     const auto incompatiblePairSfz = directory.getChildFile("velocity-pair-incompatible.sfz");
     if (!incompatiblePairSfz.replaceWithText(
-        "<group> group=91\\n"
-        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\\n"
-        "<group> group=92\\n"
-        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\\n"))
+        "<group> group=91\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<group> group=92\n"
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
     {
-        std::cerr << "Could not write incompatible velocity-layer fixture.\\n";
+        std::cerr << "Could not write incompatible velocity-layer fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool incompatiblePairPool;
@@ -473,8 +473,8 @@ int main()
     if (!incompatiblePairLoad.success || incompatiblePair.primary == nullptr
         || incompatiblePair.secondary != nullptr || std::abs(incompatiblePair.primaryGain - 1.0f) > 0.001f)
     {
-        std::cerr << "Sampler blended incompatible SFZ groups during velocity crossfade.\\n";
-        for (const auto& error : incompatiblePairLoad.errors) std::cerr << error << "\\n";
+        std::cerr << "Sampler blended incompatible SFZ groups during velocity crossfade.\n";
+        for (const auto& error : incompatiblePairLoad.errors) std::cerr << error << "\n";
         return 1;
     }
 
@@ -482,11 +482,11 @@ int main()
     // differently configured xfin/xfout pair is ambiguous and stays unpaired.
     const auto mismatchedWindowSfz = directory.getChildFile("velocity-pair-window-mismatch.sfz");
     if (!mismatchedWindowSfz.replaceWithText(
-        "<group> group=93\\n"
-        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\\n"
-        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=30 xfin_hivel=110\\n"))
+        "<group> group=93\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=30 xfin_hivel=110\n"))
     {
-        std::cerr << "Could not write mismatched velocity-window fixture.\\n";
+        std::cerr << "Could not write mismatched velocity-window fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool mismatchedWindowPool;
@@ -495,7 +495,7 @@ int main()
     if (!mismatchedWindowLoad.success || mismatchedWindow.primary == nullptr
         || mismatchedWindow.secondary != nullptr)
     {
-        std::cerr << "Sampler paired SFZ regions with mismatched crossfade windows.\\n";
+        std::cerr << "Sampler paired SFZ regions with mismatched crossfade windows.\n";
         return 1;
     }
 
