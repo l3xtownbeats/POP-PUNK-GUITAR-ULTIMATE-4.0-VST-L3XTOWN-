@@ -404,13 +404,14 @@ std::size_t SamplePool::getSampleCount() const noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr) return 0;
-    std::set<std::pair<const SampleStreamingService*, std::uint32_t>> unique;
+    std::set<std::pair<std::uintptr_t, std::uint64_t>> unique;
     for (const auto& region : snapshot->regions)
+    {
         if (region.streaming != nullptr)
-            unique.emplace(region.streaming, region.sampleId);
+            unique.emplace(reinterpret_cast<std::uintptr_t>(region.streaming), region.sampleId);
         else if (region.audio != nullptr)
-            unique.emplace(nullptr, static_cast<std::uint32_t>(
-                reinterpret_cast<std::uintptr_t>(region.audio) & 0xffffffffU));
+            unique.emplace(0U, reinterpret_cast<std::uintptr_t>(region.audio));
+    }
     return unique.size();
 }
 
