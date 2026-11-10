@@ -323,11 +323,21 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     importButton.onClick = [this] { chooseAudioLibraryFolder(); };
     addAndMakeVisible(importButton);
 
-    loadButton.setButtonText("LOAD SFZ");
-    loadButton.setTooltip("Load an SFZ instrument and its mapped sample files.");
+    loadButton.setButtonText("LOAD BANK");
+    loadButton.setTooltip("Load an SFZ file or select the bundled Samples folder to enable automatic electric/acoustic factory-bank switching.");
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-    loadButton.onClick = [this] { chooseSfzFile(); };
+    loadButton.onClick = [this] {
+        juce::PopupMenu menu;
+        menu.addItem(1, "LOAD SFZ FILE...");
+        menu.addItem(2, "SELECT FACTORY SAMPLES FOLDER...");
+        menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&loadButton),
+            [safeThis = juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor>(this)](int result) {
+                if (safeThis == nullptr || result == 0) return;
+                if (result == 1) safeThis->chooseSfzFile();
+                else if (result == 2) safeThis->chooseFactorySamplesDirectory();
+            });
+    };
     addAndMakeVisible(loadButton);
 
     skinsButton.setTooltip("Choose one of 10 interface skins. The selected theme is saved with this plugin instance.");
@@ -890,6 +900,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     processor.parameters.state.setProperty("factoryPresetId", preset.id, nullptr);
     processor.parameters.state.setProperty("factoryPresetName", preset.name, nullptr);
     processor.parameters.state.setProperty("factoryPresetMode", preset.mode, nullptr);
+    processor.parameters.state.setProperty("factoryPresetSampleProfile", preset.sampleProfile, nullptr);
 
     const auto detail = preset.soundCharacter
         + (preset.sampleProfile.isNotEmpty() ? "  /  " + preset.sampleProfile : juce::String{})
@@ -901,6 +912,25 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         : "NO SFZ BANK LOADED  /  PRESS LOAD SFZ";
     statusLabel.setText("PRESET SETTINGS APPLIED: " + preset.name + "  /  " + detail
         + "  /  " + preset.articulation + "  /  " + bankState, juce::dontSendNotification);
+
+    if (processor.getFactorySamplesDirectory().isDirectory())
+    {
+        statusLabel.setText("LOADING " + preset.sampleProfile.toUpperCase() + " FACTORY SOUND BANK...", juce::dontSendNotification);
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+        const auto presetName = preset.name;
+        processor.loadFactorySampleProfileAsync(preset.sampleProfile,
+            [safeThis, presetName](ppgu::sampler::LoadReport report)
+            {
+                if (safeThis == nullptr) return;
+                if (report.success)
+                    safeThis->statusLabel.setText("READY  /  " + presetName + "  /  "
+                        + juce::String(static_cast<int>(report.loadedRegions)) + " REGIONS  /  "
+                        + juce::String(static_cast<int>(report.loadedSamples)) + " SAMPLES", juce::dontSendNotification);
+                else
+                    safeThis->statusLabel.setText(report.errors.empty() ? "FACTORY BANK LOAD FAILED"
+                        : juce::String(report.errors.front()), juce::dontSendNotification);
+            });
+    }
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
 {
@@ -958,6 +988,35 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
         });
 }
 
+
+
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseFactorySamplesDirectory()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Select the bundled POP PUNK GUITAR ULTIMATE Samples folder",
+        juce::File::getSpecialLocation(juce::File::userHomeDirectory));
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode
+        | juce::FileBrowserComponent::canSelectDirectories,
+        [safeThis](const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr) return;
+            const auto selected = chooser.getResult();
+            if (!selected.isDirectory()) return;
+            if (!safeThis->processor.setFactorySamplesDirectory(selected))
+            {
+                safeThis->statusLabel.setText(
+                    "SAMPLES FOLDER INVALID  /  EXPECTED FREEPATS-DIRECT-DI AND KARORYFER-SHINYGUITAR",
+                    juce::dontSendNotification);
+                return;
+            }
+            const int selectedId = safeThis->presetBox.getSelectedId();
+            if (selectedId > 1 && selectedId - 2 < static_cast<int>(safeThis->visiblePresetIndices.size()))
+                safeThis->applyFactoryPreset(safeThis->visiblePresetIndices[static_cast<size_t>(selectedId - 2)]);
+            else
+                safeThis->statusLabel.setText("FACTORY SAMPLES FOLDER SAVED  /  SELECT A FACTORY PRESET", juce::dontSendNotification);
+        });
+}
 
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {

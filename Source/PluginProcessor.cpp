@@ -953,7 +953,19 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         const juce::File restoredSfzFile(restoredSfzPath);
         if (restoredSfzFile.existsAsFile()
             && restoredSfzFile.getFileExtension().equalsIgnoreCase(".sfz"))
+        {
             loadSfzFileAsync(restoredSfzFile, {});
+            return;
+        }
+    }
+
+    const auto savedSamplesRoot = restoredState.getProperty("factorySamplesDirectory").toString();
+    const auto savedProfile = restoredState.getProperty("factoryPresetSampleProfile").toString();
+    if (savedSamplesRoot.isNotEmpty() && savedProfile.isNotEmpty())
+    {
+        const juce::File samplesDirectory(savedSamplesRoot);
+        if (samplesDirectory.isDirectory())
+            loadFactorySampleProfileAsync(savedProfile, {});
     }
 }
 
@@ -973,6 +985,62 @@ ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const
         currentSfzFilePath = sfzFile.getFullPathName();
     }
     return report;
+}
+
+
+bool PopPunkGuitarUltimateAudioProcessor::setFactorySamplesDirectory(const juce::File& directory)
+{
+    if (!directory.isDirectory())
+        return false;
+
+    const auto electric = directory.getChildFile("FreePats-Direct-DI")
+        .getChildFile("EGuitarFSBS-direct bridge 20220911.sfz");
+    const auto acoustic = directory.getChildFile("Karoryfer-Shinyguitar")
+        .getChildFile("Samples").getChildFile("acoustic.sfz");
+    if (!electric.existsAsFile() || !acoustic.existsAsFile())
+        return false;
+
+    parameters.state.setProperty("factorySamplesDirectory", directory.getFullPathName(), nullptr);
+    return true;
+}
+
+juce::File PopPunkGuitarUltimateAudioProcessor::getFactorySamplesDirectory() const
+{
+    return juce::File(parameters.state.getProperty("factorySamplesDirectory").toString());
+}
+
+void PopPunkGuitarUltimateAudioProcessor::loadFactorySampleProfileAsync(
+    const juce::String& profile, std::function<void(ppgu::sampler::LoadReport)> completion)
+{
+    const auto root = getFactorySamplesDirectory();
+    juce::File sfzFile;
+    if (profile.equalsIgnoreCase("electric"))
+        sfzFile = root.getChildFile("FreePats-Direct-DI")
+            .getChildFile("EGuitarFSBS-direct bridge 20220911.sfz");
+    else if (profile.equalsIgnoreCase("acoustic"))
+        sfzFile = root.getChildFile("Karoryfer-Shinyguitar")
+            .getChildFile("Samples").getChildFile("acoustic.sfz");
+
+    ppgu::sampler::LoadReport failure;
+    if (sfzFile == juce::File{} || !sfzFile.existsAsFile())
+    {
+        failure.errors.push_back("Factory sample profile is unavailable. Select the product Samples folder.");
+        if (completion)
+            juce::MessageManager::callAsync([completion = std::move(completion), failure = std::move(failure)]() mutable
+                { completion(std::move(failure)); });
+        return;
+    }
+
+    if (getCurrentSfzFilePath() == sfzFile.getFullPathName())
+    {
+        failure.success = true;
+        if (completion)
+            juce::MessageManager::callAsync([completion = std::move(completion), failure = std::move(failure)]() mutable
+                { completion(std::move(failure)); });
+        return;
+    }
+
+    loadSfzFileAsync(sfzFile, std::move(completion));
 }
 
 void PopPunkGuitarUltimateAudioProcessor::importAudioDirectoryAsync(

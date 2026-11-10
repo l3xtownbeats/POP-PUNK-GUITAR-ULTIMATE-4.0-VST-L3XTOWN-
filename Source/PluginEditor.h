@@ -14,6 +14,7 @@ public:
 
 private:
     void chooseSfzFile();
+    void chooseFactorySamplesDirectory();
     void chooseAudioLibraryFolder();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
