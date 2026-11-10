@@ -67,6 +67,26 @@ int main()
     if (cache.tryAcquire({ 1234, 999 }, lease))
         return 1;
 
+    // Invalid page geometry must roll the worker reservation back so the
+    // bounded cache cannot leak capacity after a rejected publish.
+    std::size_t rejected = 99;
+    if (!cache.tryBeginLoad({ 77, 4 }, rejected))
+        return 1;
+    if (cache.publish(rejected, { 77, 4 }, 0, 8)
+        || cache.state(rejected) != PageCacheSlots::State::empty)
+        return 1;
+    if (!cache.tryBeginLoad({ 77, 4 }, rejected))
+        return 1;
+    cache.cancelLoad(rejected);
+
+    // A stale worker key must not cancel a different live reservation.
+    if (!cache.tryBeginLoad({ 88, 5 }, rejected))
+        return 1;
+    if (cache.publish(rejected, { 88, 6 }, 1, 8)
+        || cache.state(rejected) != PageCacheSlots::State::loading)
+        return 1;
+    cache.cancelLoad(rejected);
+
     PageCacheSlots invalid(0, 0, 0);
     if (invalid.isValid() || invalid.tryBeginLoad({ 1, 1 }, first))
         return 1;
