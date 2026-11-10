@@ -121,8 +121,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     statusLabel.setColour(juce::Label::textColourId, muted);
     statusLabel.setFont(juce::Font(11.0f));
     addAndMakeVisible(statusLabel);
-    melodyTab.setClickingTogglesState(false);
-    patternTab.setClickingTogglesState(false);
+    melodyTab.setClickingTogglesState(true);
+    patternTab.setClickingTogglesState(true);
+    melodyTab.setColour(juce::TextButton::buttonOnColourId, pink);
+    patternTab.setColour(juce::TextButton::buttonOnColourId, pink);
+    melodyTab.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    patternTab.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
     for (auto* b : { &melodyTab, &patternTab }) {
         b->setColour(juce::TextButton::buttonColourId, panel2);
         b->setColour(juce::TextButton::textColourOffId, pale);
@@ -130,6 +134,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     modeBox.addItem("MELODY", 1);
     modeBox.addItem("PATTERN", 2);
+    modeBox.addItem("OFF", 3);
     modeBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     modeBox.setColour(juce::ComboBox::textColourId, pale);
     modeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
@@ -174,8 +179,21 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
-    melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
-    patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    const auto syncModeButtons = [this] {
+        const int selected = modeBox.getSelectedId();
+        melodyTab.setToggleState(selected == 1, juce::dontSendNotification);
+        patternTab.setToggleState(selected == 2, juce::dontSendNotification);
+        melodyTab.setButtonText(selected == 1 ? "♫  MELODY  ✓" : "♫  MELODY");
+        patternTab.setButtonText(selected == 2 ? "PATTERN  ✓" : "PATTERN");
+    };
+    modeBox.onChange = syncModeButtons;
+    melodyTab.onClick = [this] {
+        modeBox.setSelectedId(modeBox.getSelectedId() == 1 ? 3 : 1, juce::sendNotification);
+    };
+    patternTab.onClick = [this] {
+        modeBox.setSelectedId(modeBox.getSelectedId() == 2 ? 3 : 2, juce::sendNotification);
+    };
+    syncModeButtons();
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
