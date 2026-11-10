@@ -151,25 +151,40 @@ namespace ppgu::performance
             {
                 if (count >= output.size() || eventPpq < clock.startPpq || eventPpq >= clock.endPpq)
                     return false;
-                // Map to the first integer sample at or after the event time.
-                // Truncation/floor can dispatch a fractional-sample event early.
+
+                // Dispatch at the first sample at or after the event. A
+                // fractional event may map to sample blockSamples (the first
+                // sample of the NEXT block); never clamp it back to the last
+                // sample of this block, because that would play it early.
                 const double exactOffset = (eventPpq - clock.startPpq) * samplesPerBeat;
                 const int offset = static_cast<int>(std::ceil(exactOffset - 1.0e-9));
-                output[count++] = { clampInt(offset, 0, blockSamples - 1), kind,
-                                    clampInt(note, 0, 127), clampInt(velocity, 0, 127),
-                                    clampInt(channel, 1, 16) };
+                if (offset < 0 || offset >= blockSamples)
+                    return false;
+
+                output[count++] = { offset, kind, clampInt(note, 0, 127),
+                                    clampInt(velocity, 0, 127), clampInt(channel, 1, 16) };
                 return true;
+            };
+
+            const auto retainPending = [&](double ppq, EventKind kind, int note,
+                                           int velocity, int channel)
+            {
+                if (pendingCount_ < pendingEvents_.size())
+                    pendingEvents_[pendingCount_++] = { ppq, kind, note, velocity, channel };
+                else
+                    pendingOverflow_ = true;
             };
 
             std::size_t retained = 0;
             for (std::size_t i = 0; i < pendingCount_; ++i)
             {
-                const auto pending = pendingNoteOffs_[i];
-                if (pending.ppq < clock.endPpq)
-                    emit(pending.ppq < clock.startPpq ? clock.startPpq : pending.ppq,
-                         EventKind::NoteOff, pending.note, 0, pending.channel);
-                else
-                    pendingNoteOffs_[retained++] = pending;
+                const auto pending = pendingEvents_[i];
+                const double duePpq = pending.ppq < clock.startPpq ? clock.startPpq : pending.ppq;
+                if (pending.ppq < clock.endPpq
+                    && emit(duePpq, pending.kind, pending.note, pending.velocity, pending.channel))
+                    continue;
+
+                pendingEvents_[retained++] = pending;
             }
             pendingCount_ = retained;
 
@@ -206,20 +221,19 @@ namespace ppgu::performance
                         continue;
 
                     const int note = clampInt(static_cast<int>(event.note) + transpose, 0, 127);
-                    if (!emit(onset, EventKind::NoteOn, note, clampInt(event.velocity, 1, 127), event.channel))
-                        continue;
+                    const int noteVelocity = clampInt(event.velocity, 1, 127);
+                    if (!emit(onset, EventKind::NoteOn, note, noteVelocity, event.channel))
+                        retainPending(onset, EventKind::NoteOn, note, noteVelocity, event.channel);
 
-                    if (noteOffPpq >= clock.endPpq)
-                    {
-                        if (pendingCount_ < pendingNoteOffs_.size())
-                            pendingNoteOffs_[pendingCount_++] = { noteOffPpq, note, event.channel };
-                        else
-                            pendingOverflow_ = true;
-                    }
-                    else
-                    {
-                        emit(noteOffPpq, EventKind::NoteOff, note, 0, event.channel);
-                    }
+                    // NoteOffs are queued by PPQ, not by a clamped sample
+                    // index. This also covers a gate whose endpoint lies
+                    // inside the PPQ block but rounds to the next block's
+                    // first sample.
+                    if (noteOffPpq >= clock.endPpq
+                        || (noteOffPpq - clock.startPpq) * samplesPerBeat >= blockSamples - 1.0e-9)
+                        retainPending(noteOffPpq, EventKind::NoteOff, note, 0, event.channel);
+                    else if (!emit(noteOffPpq, EventKind::NoteOff, note, 0, event.channel))
+                        retainPending(noteOffPpq, EventKind::NoteOff, note, 0, event.channel);
                 }
             }
 
@@ -308,8 +322,15 @@ namespace ppgu::performance
             return value < low ? low : (value > high ? high : value);
         }
 
-        struct PendingNoteOff { double ppq = 0.0; int note = 60; int channel = 1; };
-        std::array<PendingNoteOff, maximumEventsPerBlock * 4> pendingNoteOffs_ {};
+        struct PendingEvent
+        {
+            double ppq = 0.0;
+            EventKind kind = EventKind::NoteOff;
+            int note = 60;
+            int velocity = 0;
+            int channel = 1;
+        };
+        std::array<PendingEvent, maximumEventsPerBlock * 4> pendingEvents_ {};
         std::size_t pendingCount_ = 0;
         double internalPpq_ = 0.0;
         double lastHostEndPpq_ = 0.0;

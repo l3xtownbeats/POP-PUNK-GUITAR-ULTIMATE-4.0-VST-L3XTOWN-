@@ -121,14 +121,23 @@ int main()
     if (std::abs(resizeB.endPpq - (resizeB.startPpq + 1024.0 * 140.0 / (60.0 * 48000.0))) > 1.0e-9)
         return 16;
 
-    // A near-tail event maps to the first sample at/after its PPQ, not an
-    // earlier rounded sample. Its NoteOff is correctly retained for next block.
+    // A fractional event whose first eligible sample is outside this block
+    // must be deferred intact, never clamped to the previous block's tail.
     PatternScheduler edgeScheduler;
     std::array<PatternEvent, 1> edgePattern {{{ 0.00265, 0.0001, 60, 100, 1 }}};
     const auto edgeClock = edgeScheduler.beginBlock({ true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 64);
     const auto edgeCount = edgeScheduler.schedule(edgePattern, 1.0, 0.0, edgeClock, 48000.0, 64, 0.0, 0, events);
-    if (edgeCount != 1 || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 64)
-        return 17;
+    if (edgeCount != 0)
+        return 17; // The event belongs to sample 64, outside this 64-sample block.
+
+    const auto edgeNextClock = edgeScheduler.beginBlock(
+        { true, true, 120.0, edgeClock.endPpq }, false, 120.0, 48000.0, 64);
+    const auto edgeNextCount = edgeScheduler.schedule(
+        edgePattern, 1.0, 0.0, edgeNextClock, 48000.0, 64, 0.0, 0, events);
+    if (edgeNextCount != 2
+        || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 0
+        || events[1].kind != EventKind::NoteOff || events[1].sampleOffset != 2)
+        return 21; // Deferred NoteOn and its short gate must both survive the boundary.
 
     // An event exactly on an integer sample must not be advanced by ceil.
     PatternScheduler exactSampleScheduler;

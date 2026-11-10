@@ -1227,3 +1227,12 @@ M3 = NOT ACCEPTED. M4 = BLOCKED. Причина: полный CI/CTest на ак
 ### Статус после анализа
 M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни один критерий не закрывается только по наличию исходника. Следующий шаг — CI на текущем commit, затем runtime tests и поочерёдные исправления M3-014/015, M2 streaming integration и M1 state restore.
 
+
+
+## 10 ноября 2026 — M3-013: исправление переноса fractional event через границу блока
+
+- Проверен Windows Actions run `42770853146` для commit `09af439d82dd2330431d49a7b6d26eeeedbcf14d`: Release configure и сборка VST3 прошли; CTest завершился FAILURE, 5/6 тестов Passed, `ppgu_pattern_scheduler_tests` Failed. Упаковка пропущена из-за отказа CTest.
+- Root cause уточнён: для события PPQ 0.00265 при 48 kHz / 120 BPM точная позиция равна 63.6 samples. `ceil` корректно даёт sample 64, но прежний код затем ограничивал offset значением `blockSamples - 1` (63). Это снова запускало NoteOn раньше времени. Sample 64 уже относится к следующему блоку.
+- Исправление: scheduler больше не прижимает выходящий за блок offset к последнему sample. Такие NoteOn/NoteOff сохраняются в bounded pending-event queue с PPQ, типом события, velocity, note и channel; при следующем блоке событие отправляется на sample 0 или позже согласно PPQ. Очередь остаётся фиксированной и не выделяет память в audio callback.
+- Regression: near-tail событие в первом 64-sample блоке не должно быть отправлено; следующий блок должен получить NoteOn на sample 0 и соответствующий короткий NoteOff на sample 2. Существующий exact-integer test 60→60 сохранён.
+- Статус: FIXED IN SOURCE / AWAITING CI. Windows CI должен подтвердить compile и все 6 CTest targets. На этом шаге другие M3/M2/M1 пункты не изменялись.

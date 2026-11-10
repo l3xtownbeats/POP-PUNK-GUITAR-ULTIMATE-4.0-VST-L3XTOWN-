@@ -20,7 +20,7 @@ HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
 | M3-010 | High | Build verification | Промежуточные Windows CI запуски завершились failure; успешная сборка не подтверждена. | Исправления внесены; run 42769587683 ожидает завершения на момент записи. | OPEN |
 | M3-011 | High | DAW integration | Не подтверждены playback/stop/seek/pattern transitions в FL Studio 20. | Ручной acceptance test на Windows 10 / FL Studio 20. | OPEN |
 | M3-012 | Medium | Block-size stress | Полный runtime стресс при 64–1024 samples и BPM automation не подтверждён. | Проверить CTest/DAW при разных block sizes и изменениях темпа. | OPEN |
-| M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples усекался до 63, то есть NoteOn мог звучать раньше события. | Использовать ceil с epsilon; regression проверяет 63.6→64 и exact 60→60. | FIXED — AWAITING CI |
+| M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples после ceil прижимался к последнему sample текущего блока (63), хотя первый допустимый sample 64 уже в следующем блоке. | Не clamp к blockSamples-1; хранить deferred NoteOn/NoteOff в bounded PPQ event queue и отправлять в следующем блоке. Regression проверяет defer + NoteOn@0 + NoteOff@2 и exact 60→60. | FIXED IN SOURCE — AWAITING CI |
 | M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока сводятся к одному финальному chord snapshot; промежуточные аккорды теряются. | Сегментировать MIDI по samplePosition и планировать каждую смену chord отдельно. | OPEN |
 | M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может молча отсечь события плотного pattern; нет отдельного overflow flag для output array. | Явный overflow status + all-notes-off fail-safe и regression test. | OPEN |
 | M1-001 | High | State persistence | Активная sample library path/ID не входит в APVTS state; DAW restore не гарантирует возврат выбранной библиотеки. | Добавить versioned library reference и безопасное восстановление на worker thread. | OPEN |
@@ -40,3 +40,10 @@ HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
 ## Аудит M1–M3 — 10 ноября 2026
 
 См. полный технический разбор и план исправлений в корневом `Info.txt`. M1, M2 и M3 остаются NOT ACCEPTED. M3-013 исправлен в исходнике и ожидает повторного CI; M1-001…003, M2-001…004, M3-014…015 остаются OPEN.
+
+
+## M3-013 — уточнение root cause после run 42770853146
+- Run 42770853146: Windows Release configure и VST3 compilation успешны; CTest 5/6, failed: ppgu_pattern_scheduler_tests. Package steps skipped.
+- Причина: ceil(63.6)=64 был затем clamp'нут до 63 из-за диапазона [0, blockSamples-1]. Ожидание sample 64 внутри первого блока было ошибочным: индекс 64 — это sample 0 следующего блока.
+- Внесён source fix: deferred bounded queue теперь хранит NoteOn и NoteOff; выходящие за границу события не отправляются преждевременно.
+- Новая regression: в первом блоке count=0; во втором блоке NoteOn sample 0 и NoteOff sample 2. Статус остаётся FIXED IN SOURCE / AWAITING CI.
