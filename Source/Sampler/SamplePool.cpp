@@ -657,6 +657,11 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices,
             * std::pow(2.0, semitones / 12.0);
         voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain
             * selections[layer].velocityGain;
+        voice.envelopeLevel = 0.0f;
+        // A short linear attack prevents sample-start discontinuities from
+        // producing clicks while preserving a fast, playable guitar response.
+        constexpr double attackSeconds = 0.003;
+        voice.attackStep = static_cast<float>(1.0 / juce::jmax(1.0, attackSeconds * outputSampleRate));
         voice.age = nextAge++;
         if (region->streaming != nullptr)
         {
@@ -697,7 +702,7 @@ void SamplerEngine::panic(int fadeSamples) noexcept
     for (auto& voice : voices)
         if (voice.region != nullptr)
         {
-            voice.releaseStep = voice.gain / samples;
+            voice.releaseStep = voice.envelopeLevel / samples;
             voice.releasing = true;
         }
 }
@@ -706,7 +711,7 @@ void SamplerEngine::releaseVoice(Voice& voice) noexcept
 {
     if (voice.region == nullptr) return;
     const int releaseSamples = juce::jmax(1, static_cast<int>(voice.region->releaseSeconds * outputSampleRate));
-    voice.releaseStep = voice.gain / static_cast<float>(releaseSamples);
+    voice.releaseStep = voice.envelopeLevel / static_cast<float>(releaseSamples);
     voice.releasing = true;
 }
 
@@ -832,8 +837,8 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
                 // two-second page-unavailable timeout.
                 if (voice.releasing)
                 {
-                    voice.gain -= voice.releaseStep;
-                    if (voice.gain <= 0.0f)
+                    voice.envelopeLevel -= voice.releaseStep;
+                    if (voice.envelopeLevel <= 0.0f)
                     {
                         streamReader.release();
                         voice = {};
@@ -853,7 +858,7 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
 
             const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
             const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
-            const float envelope = voice.gain;
+            const float envelope = voice.gain * voice.envelopeLevel;
 
             if (channels == 1)
                 output.addSample(0, outIndex, 0.5f * (sampleL + sampleR) * envelope);
@@ -868,14 +873,16 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             voice.position += voice.increment * static_cast<double>(voice.direction);
             if (voice.releasing)
             {
-                voice.gain -= voice.releaseStep;
-                if (voice.gain <= 0.0f)
+                voice.envelopeLevel -= voice.releaseStep;
+                if (voice.envelopeLevel <= 0.0f)
                 {
                     streamReader.release();
                     voice = {};
                     break;
                 }
             }
+            else if (voice.envelopeLevel < 1.0f)
+                voice.envelopeLevel = juce::jmin(1.0f, voice.envelopeLevel + voice.attackStep);
         }
     }
 }
