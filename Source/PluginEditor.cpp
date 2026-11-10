@@ -154,6 +154,36 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetSearch.setColour(juce::TextEditor::outlineColourId, pink.withAlpha(0.4f));
     addAndMakeVisible(presetSearch);
     loadFactoryPresetCatalog();
+    melodyFilterBox.addItem("ALL MELODY", 1);
+    styleFilterBox.addItem("ALL STYLES", 1);
+    juce::StringArray melodyValues, styleValues;
+    for (const auto& item : factoryPresets)
+    {
+        if (item.soundCharacter.isNotEmpty() && !melodyValues.contains(item.soundCharacter))
+            melodyValues.add(item.soundCharacter);
+        if (item.groove.isNotEmpty() && !styleValues.contains(item.groove))
+            styleValues.add(item.groove);
+        if (item.articulation.isNotEmpty() && !styleValues.contains(item.articulation))
+            styleValues.add(item.articulation);
+    }
+    for (int i = 0; i < melodyValues.size(); ++i) melodyFilterBox.addItem(melodyValues[i], i + 2);
+    for (int i = 0; i < styleValues.size(); ++i) styleFilterBox.addItem(styleValues[i], i + 2);
+    for (auto* box : { &melodyFilterBox, &styleFilterBox, &processorBox })
+    {
+        box->setColour(juce::ComboBox::backgroundColourId, panel2);
+        box->setColour(juce::ComboBox::textColourId, pale);
+        box->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+        addAndMakeVisible(*box);
+    }
+    melodyFilterBox.setSelectedId(1, juce::dontSendNotification);
+    styleFilterBox.setSelectedId(1, juce::dontSendNotification);
+    processorBox.addItem("GOOD", 1);
+    processorBox.addItem("NORMAL", 2);
+    processorBox.addItem("NIGHT", 3);
+    processorBox.addItem("ECO", 4);
+    processorBox.setSelectedId(2, juce::dontSendNotification);
+    processorAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.parameters, "processorQuality", processorBox);
     presetBox.onChange = [this] { if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size())) applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId()-1)]); };
     auto refreshPresetList = [this] {
         // Keep the current sound selected when it remains in the filtered list.
@@ -171,6 +201,13 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             const auto& item = factoryPresets[i];
             if (category == 2 && item.mode != "MELODY") continue;
             if (category == 3 && item.mode != "PATTERN") continue;
+            const auto melodyFilter = melodyFilterBox.getText();
+            if (melodyFilter.isNotEmpty() && melodyFilter != "ALL MELODY"
+                && !item.soundCharacter.containsIgnoreCase(melodyFilter)) continue;
+            const auto styleFilter = styleFilterBox.getText();
+            const auto styleText = item.groove + " " + item.articulation;
+            if (styleFilter.isNotEmpty() && styleFilter != "ALL STYLES"
+                && !styleText.containsIgnoreCase(styleFilter)) continue;
 
             const auto matchesQuery = query.isEmpty()
                 || item.name.toLowerCase().contains(query)
@@ -194,8 +231,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             presetBox.setSelectedId(0, juce::dontSendNotification);
     };
     categoryBox.onChange = refreshPresetList;
+    melodyFilterBox.onChange = refreshPresetList;
+    styleFilterBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
+    fxOpenButton.setButtonText("FX STUDIO");
     fxOpenButton.setColour(juce::TextButton::buttonColourId, panel2);
     fxOpenButton.setColour(juce::TextButton::textColourOffId, pink);
     fxOpenButton.onClick = [this] {
@@ -205,10 +245,31 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         fxWindow->toFront(true);
     };
     addAndMakeVisible(fxOpenButton);
+    loadButton.setButtonText("IMPORT SOUNDS");
+    loadButton.setTooltip("Current build imports SFZ instruments and their referenced WAV samples.");
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
+
+    skinsButton.setTooltip("Skin packs are not connected in this build.");
+    midiButton.setTooltip("MIDI Piano Roll is not connected in this build.");
+    multicoreButton.setTooltip("Background multicore processing is not enabled in this build.");
+    for (auto* button : { &skinsButton, &midiButton, &multicoreButton })
+    {
+        button->setEnabled(false);
+        button->setColour(juce::TextButton::buttonColourId, panel2);
+        button->setColour(juce::TextButton::textColourOffId, muted);
+        addAndMakeVisible(*button);
+    }
+    doubleButton.setClickingTogglesState(true);
+    doubleButton.setColour(juce::TextButton::buttonColourId, panel2);
+    doubleButton.setColour(juce::TextButton::buttonOnColourId, pink);
+    doubleButton.setColour(juce::TextButton::textColourOffId, pale);
+    doubleButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    doubleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        processor.parameters, "doubleTrackOn", doubleButton);
+    addAndMakeVisible(doubleButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -236,6 +297,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     modeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(modeBox);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "playMode", modeBox);
+    modeBox.setVisible(false);
     startModeBox.addItem("HOST", 1);
     startModeBox.addItem("HOST START", 2);
     startModeBox.addItem("INTERNAL", 3);
@@ -358,24 +420,35 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
-    auto area=getLocalBounds().reduced(16);
-    auto top=area.removeFromTop(48); top.removeFromLeft(4);
-    titleLabel.setBounds(top.removeFromLeft(74));
-    presetBox.setBounds(top.removeFromLeft(220).reduced(3, 5));
-    presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
-    categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
-    fxOpenButton.setBounds(top.removeFromRight(112).reduced(2, 5));
-    loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
-    subtitleLabel.setBounds(top.reduced(4, 0));
-    area.removeFromTop(220);
-    auto tabs=area.removeFromTop(62);
-    melodyTab.setBounds(tabs.removeFromLeft(220).reduced(2,4));
-    patternTab.setBounds(tabs.removeFromLeft(190).reduced(6,4));
-    modeBox.setBounds(tabs.removeFromRight(140).reduced(2,8));
+    auto area = getLocalBounds().reduced(16);
+
+    // Unified browser: preset, search, mode, sound character and playing style.
+    auto browser = area.removeFromTop(46);
+    titleLabel.setBounds(browser.removeFromLeft(72));
+    presetBox.setBounds(browser.removeFromLeft(190).reduced(3, 5));
+    presetSearch.setBounds(browser.removeFromLeft(130).reduced(3, 7));
+    categoryBox.setBounds(browser.removeFromLeft(105).reduced(3, 7));
+    melodyFilterBox.setBounds(browser.removeFromLeft(150).reduced(3, 7));
+    styleFilterBox.setBounds(browser.removeFromLeft(150).reduced(3, 7));
+    subtitleLabel.setBounds(browser.reduced(4, 0));
+
+    // Main action strip.
+    auto toolbar = area.removeFromTop(42);
+    loadButton.setBounds(toolbar.removeFromLeft(132).reduced(2, 4));
+    melodyTab.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
+    patternTab.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
+    fxOpenButton.setBounds(toolbar.removeFromLeft(108).reduced(2, 4));
+    skinsButton.setBounds(toolbar.removeFromLeft(74).reduced(2, 4));
+    midiButton.setBounds(toolbar.removeFromLeft(68).reduced(2, 4));
+    doubleButton.setBounds(toolbar.removeFromLeft(88).reduced(2, 4));
+    processorBox.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
+    multicoreButton.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
+
+    area.removeFromTop(154);
+    auto status = area.removeFromTop(26);
+    statusLabel.setBounds(status);
     area.removeFromTop(8);
-    auto status=area.removeFromTop(28); statusLabel.setBounds(status);
-    area.removeFromTop(12);
-    auto panels=area.removeFromTop(300);
+    auto panels = area.removeFromTop(300);
     const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.39f), fxW=static_cast<int>(panels.getWidth()*0.39f);
     auto amp=panels.removeFromLeft(ampW); panels.removeFromLeft(gap);
     auto fx=panels.removeFromLeft(fxW); panels.removeFromLeft(gap); auto playback=panels;
@@ -385,7 +458,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     const int kw=amp.getWidth()/4;
     for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw); knobLabels[i].setBounds(cell.removeFromBottom(22)); knobs[i].setBounds(cell.reduced(4,0));}
     for(size_t i=0;i<fxButtons.size();++i){auto cell=fx.removeFromTop(fx.getHeight()/static_cast<int>(fxButtons.size()-i)); fxButtons[i].setBounds(cell.reduced(8,2));}
-    auto keyboardArea = area.removeFromBottom(78);
+    auto keyboardArea = area.removeFromBottom(72);
     if (keyboard != nullptr) keyboard->setBounds(keyboardArea.reduced(2, 4));
     auto playbackControls = playback.removeFromTop(190);
     const int pw = juce::jmax(1, playbackControls.getWidth() / 5);
