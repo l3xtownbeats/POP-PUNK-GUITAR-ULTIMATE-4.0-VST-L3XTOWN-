@@ -122,7 +122,7 @@ int main()
     const auto directRead = pageReader.readPageInto(3, directChannels, 2, 7,
                                                      directFrames, pageFrames);
     const float expectedDirectSample = 0.25f * std::sin(
-        2.0 * juce::MathConstants<double>::pi * 220.0 * 1100.0 / 48000.0);
+        2.0 * juce::MathConstants<double>::pi * 220.0 * 1000.0 / 48000.0);
     if (!directRead.success || directFrames != 124
         || std::abs(directLeft[7 + 100] - expectedDirectSample) > 0.0001f
         || std::abs(directLeft[7 + 100] + directRight[7 + 100]) > 0.0001f)
