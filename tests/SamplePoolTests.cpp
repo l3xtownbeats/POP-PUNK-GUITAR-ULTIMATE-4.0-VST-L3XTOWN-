@@ -2,9 +2,11 @@
 
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <cmath>
+#include <chrono>
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <thread>
 
 int main()
 {
@@ -92,6 +94,46 @@ int main()
     {
         std::cerr << "SamplePool failed to load generated WAV/SFZ fixture.\n";
         for (const auto& error : loaded.errors) std::cerr << error << "\n";
+        return 1;
+    }
+
+    // Production SFZ regions must reference the background streamer rather
+    // than retaining a fully decoded AudioBuffer for every source WAV.
+    ppgu::sampler::SamplePool streamingProbe;
+    const auto streamingProbeLoad = streamingProbe.loadSfz(sfzFile);
+    const auto* streamingRegion = streamingProbe.findRegion(60, 100, 1);
+    if (!streamingProbeLoad.success || streamingRegion == nullptr
+        || streamingRegion->audio != nullptr || streamingRegion->streaming == nullptr
+        || streamingRegion->totalFrames != 512
+        || streamingRegion->streaming->cacheBytes() > ppgu::sampler::PageCacheSlots::maximumCacheBytes)
+    {
+        std::cerr << "Sampler did not publish a bounded streaming WAV region.\n";
+        return 1;
+    }
+
+    // A cache miss must hold the sample cursor (not discard its attack) until
+    // the background worker publishes the first page.
+    ppgu::sampler::SamplerEngine streamingPlaybackEngine;
+    streamingPlaybackEngine.prepare(44100.0);
+    if (!streamingPlaybackEngine.loadSfz(sfzFile).success
+        || !streamingPlaybackEngine.noteOn(60, 100))
+    {
+        std::cerr << "Could not start the streaming playback regression fixture.\n";
+        return 1;
+    }
+    bool streamingBecameAudible = false;
+    juce::AudioBuffer<float> streamingOutput(2, 128);
+    for (int attempt = 0; attempt < 100 && !streamingBecameAudible; ++attempt)
+    {
+        streamingOutput.clear();
+        streamingPlaybackEngine.render(streamingOutput, 0, streamingOutput.getNumSamples());
+        streamingBecameAudible = streamingOutput.getMagnitude(0, 0, streamingOutput.getNumSamples()) > 0.001f;
+        if (!streamingBecameAudible)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!streamingBecameAudible)
+    {
+        std::cerr << "Background WAV streaming never became audible after a cache miss.\n";
         return 1;
     }
 
