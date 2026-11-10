@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cmath>
+#include <limits>
 
 namespace ppgu::performance
 {
@@ -140,6 +141,7 @@ namespace ppgu::performance
             }
             if (blockSamples <= 0 || !std::isfinite(sampleRate) || sampleRate <= 0.0
                 || !std::isfinite(patternLengthBeats) || patternLengthBeats <= 0.0
+                || !std::isfinite(cycleStartPpq) || !std::isfinite(quantizeBeats)
                 || !std::isfinite(clock.startPpq) || !std::isfinite(clock.endPpq)
                 || !std::isfinite(clock.bpm) || clock.bpm < 20.0 || clock.bpm > 300.0
                 || clock.endPpq <= clock.startPpq)
@@ -194,8 +196,12 @@ namespace ppgu::performance
             // The loop is bounded by the block's PPQ span and fixed output
             // capacity; no dynamic storage or host calls occur here.
             const double firstCycleValue = std::floor((clock.startPpq - cycleStartPpq) / patternLengthBeats);
-            const auto firstCycle = static_cast<long long>(firstCycleValue < 0.0 ? 0.0 : firstCycleValue);
             const double lastCycleValue = std::floor((clock.endPpq - cycleStartPpq) / patternLengthBeats);
+            constexpr double maxCycle = static_cast<double>(std::numeric_limits<long long>::max());
+            if (!std::isfinite(firstCycleValue) || !std::isfinite(lastCycleValue)
+                || firstCycleValue > maxCycle || lastCycleValue > maxCycle)
+                return 0;
+            const auto firstCycle = static_cast<long long>(firstCycleValue < 0.0 ? 0.0 : firstCycleValue);
             const auto lastCycle = static_cast<long long>(lastCycleValue < 0.0 ? 0.0 : lastCycleValue);
 
             for (long long cycle = firstCycle; cycle <= lastCycle; ++cycle)
@@ -211,7 +217,8 @@ namespace ppgu::performance
                         outputOverflow_ = true;
                         break;
                     }
-                    if (event.beat < 0.0 || event.beat >= patternLengthBeats || event.duration <= 0.0)
+                    if (!std::isfinite(event.beat) || !std::isfinite(event.duration)
+                        || event.beat < 0.0 || event.beat >= patternLengthBeats || event.duration <= 0.0)
                         continue;
 
                     double onset = cyclePpq + event.beat;
@@ -297,7 +304,7 @@ namespace ppgu::performance
     private:
         static double samplesToBeats(int samples, double sampleRate, double bpm) noexcept
         {
-            if (samples <= 0 || sampleRate <= 0.0)
+            if (samples <= 0 || !std::isfinite(sampleRate) || sampleRate <= 0.0)
                 return 0.0;
             return static_cast<double>(samples) * clampBpm(bpm) / (60.0 * sampleRate);
         }
@@ -306,7 +313,11 @@ namespace ppgu::performance
         {
             if (!std::isfinite(value) || !std::isfinite(grid) || grid <= 0.0)
                 return value;
-            return static_cast<double>(static_cast<long long>(value / grid + 0.5)) * grid;
+            const double steps = value / grid + 0.5;
+            constexpr double limit = static_cast<double>(std::numeric_limits<long long>::max());
+            if (!std::isfinite(steps) || steps >= limit || steps <= -limit)
+                return value;
+            return static_cast<double>(static_cast<long long>(steps)) * grid;
         }
 
     public:
@@ -314,7 +325,9 @@ namespace ppgu::performance
         {
             if (!std::isfinite(ppq) || !std::isfinite(gridBeats) || gridBeats <= 0.0)
                 return 0.0;
-            return std::ceil(ppq / gridBeats - 1.0e-9) * gridBeats;
+            const double steps = ppq / gridBeats;
+            if (!std::isfinite(steps)) return ppq;
+            return std::ceil(steps - 1.0e-9) * gridBeats;
         }
 
     private:
