@@ -22,7 +22,11 @@ if(WIN32)
         "Destination for the post-build VST3 bundle")
 endif()
 
-juce_add_binary_data(PPGUPresetData SOURCES presets/factory_bank_300.json)
+juce_add_binary_data(PPGUPresetData SOURCES
+    presets/factory_bank_300.json
+    Resources/Artwork/APPROVED_STYLE_A.png
+    Resources/Artwork/APPROVED_STYLE_B.png
+)
 
 juce_add_plugin(PopPunkGuitarUltimate
     COMPANY_NAME "L3XTOWN"
