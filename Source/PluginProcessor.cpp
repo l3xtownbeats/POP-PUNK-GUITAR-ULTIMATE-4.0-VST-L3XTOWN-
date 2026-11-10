@@ -76,6 +76,14 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
         juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+    // AutoChords is opt-in and only interpreted by the PATTERN MIDI path.
+    p.add(boolParameter("autoChordsOn", "AutoChords On", false));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "autoChordRoot", 1 }, "AutoChords Root",
+        juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 0));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "autoChordType", 1 }, "AutoChords Type",
+        juce::StringArray { "Major", "Minor" }, 0));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
     p.add(boolParameter("monoMode", "Monophonic Mode", true));
@@ -406,6 +414,21 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // AutoChords converts a single held PATTERN key into a triad.
+            // C4 (MIDI 60) maps to the selected root; neighbouring keys transpose
+            // that root chromatically. Multiple held MIDI notes remain untouched.
+            const bool autoChords = parameters.getRawParameterValue("autoChordsOn")->load(std::memory_order_relaxed) > 0.5f;
+            if (autoChords && count == 1)
+            {
+                const int selectedRoot = juce::jlimit(0, 11,
+                    static_cast<int>(parameters.getRawParameterValue("autoChordRoot")->load(std::memory_order_relaxed)));
+                const int chordType = juce::jlimit(0, 1,
+                    static_cast<int>(parameters.getRawParameterValue("autoChordType")->load(std::memory_order_relaxed)));
+                const int mappedRoot = 60 + selectedRoot + (notes[0] - 60);
+                const int third = chordType == 0 ? 4 : 3;
+                notes = { mappedRoot, mappedRoot + third, mappedRoot + 7, -1, -1, -1 };
+                count = 3;
+            }
             return std::make_tuple(notes, count, channel);
         };
 
