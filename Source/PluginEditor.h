@@ -19,7 +19,11 @@ private:
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
-    juce::TextButton loadButton { "LOAD SFZ" }, fxOpenButton { "FX  /  EDIT" };
+    juce::TextButton loadButton { "IMPORT SOUNDS" }, fxOpenButton { "FX STUDIO" };
+    juce::TextButton skinsButton { "SKINS" }, midiButton { "MIDI" }, doubleButton { "DOUBLE" }, multicoreButton { "MULTICORE" };
+    juce::ComboBox melodyFilterBox, styleFilterBox, processorBox;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> doubleAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> processorAttachment;
     std::unique_ptr<juce::DocumentWindow> fxWindow;
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
