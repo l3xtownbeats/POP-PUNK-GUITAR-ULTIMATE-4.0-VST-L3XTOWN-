@@ -40,6 +40,7 @@ public:
     [[nodiscard]] ppgu::sampler::LoadReport loadSfzFile(const juce::File& sfzFile);
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
+    [[nodiscard]] juce::String getCurrentSfzFilePath() const;
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
@@ -84,6 +85,9 @@ private:
     double flangerPhase = 0.0;
     double chorusPhase = 0.0;
     juce::Reverb reverb;
+    // Protect the serialized library path from concurrent UI/worker/state callbacks.
+    mutable juce::CriticalSection sampleStateLock;
+    juce::String currentSfzFilePath;
     // Declared after sampler so the worker pool is destroyed first; the destructor
     // also waits for in-flight loads before sampler storage is released.
     juce::ThreadPool sampleLoadPool { 1 };
