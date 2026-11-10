@@ -56,6 +56,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/Sampler/WavPageReader.h
     Source/Sampler/PageCacheSlots.cpp
     Source/Sampler/PageCacheSlots.h
+    Source/Sampler/SampleStreamingService.cpp
+    Source/Sampler/SampleStreamingService.h
 )
 
 target_compile_definitions(PopPunkGuitarUltimate PUBLIC
@@ -149,6 +151,25 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_bounded_spsc_queue_tests COMMAND ppgu_bounded_spsc_queue_tests)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(ppgu_sample_streaming_service_tests
+        Source/Sampler/SampleMetadataIndex.cpp
+        Source/Sampler/WavPageReader.cpp
+        Source/Sampler/PageCacheSlots.cpp
+        Source/Sampler/SampleStreamingService.cpp
+        tests/SampleStreamingServiceTests.cpp
+    )
+    target_include_directories(ppgu_sample_streaming_service_tests PRIVATE Source/Sampler)
+    target_link_libraries(ppgu_sample_streaming_service_tests PRIVATE
+        juce::juce_audio_formats
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_sample_streaming_service_tests COMMAND ppgu_sample_streaming_service_tests)
 endif()
 
 if(BUILD_TESTING)
