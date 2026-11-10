@@ -118,6 +118,7 @@ bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
                     break;
                 }
 
+                lease.owner = this;
                 lease.slot = i;
                 lease.samples = storage.get() + i * samplesPerSlot;
                 lease.channels = candidate.channels.load(std::memory_order_relaxed);
@@ -131,11 +132,10 @@ bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
 
 void PageCacheSlots::release(ReadLease& lease) noexcept
 {
-    if (!isValid() || !lease || lease.slot >= slotCount)
-    {
-        lease = {};
+    // A lease may only be released by the cache instance that issued it.
+    // A wrong-cache release must leave the original pin intact for its owner.
+    if (!lease || lease.owner != this || !isValid() || lease.slot >= slotCount)
         return;
-    }
     // Each successful acquire owns exactly one pin.
     slots[lease.slot].access.fetch_sub(1, std::memory_order_release);
     lease = {};
