@@ -82,6 +82,95 @@ private:
     }
 };
 
+enum class ScaleMode : std::uint8_t
+{
+    Major, NaturalMinor
+};
+
+struct ScaleChord
+{
+    int rootMidi = -1;
+    int degree = -1;
+    ChordQuality quality = ChordQuality::Major;
+    bool inputWasInScale = false;
+    bool valid = false;
+};
+
+class AutoChordMap final
+{
+public:
+    // Chromatic MIDI keys are mapped to the nearest scale tone. Equal-distance
+    // ties resolve downward, making the mapping deterministic and predictable.
+    static ScaleChord mapScaleAware(int midiNote, int tonicPitchClass,
+                                    ScaleMode mode) noexcept
+    {
+        ScaleChord result;
+        if (midiNote < 0 || midiNote > 127)
+            return result;
+
+        const int tonic = ((tonicPitchClass % 12) + 12) % 12;
+        constexpr std::array<int, 7> majorScale { 0, 2, 4, 5, 7, 9, 11 };
+        constexpr std::array<int, 7> minorScale { 0, 2, 3, 5, 7, 8, 10 };
+        constexpr std::array<ChordQuality, 7> majorChords {
+            ChordQuality::Major, ChordQuality::Minor, ChordQuality::Minor,
+            ChordQuality::Major, ChordQuality::Major, ChordQuality::Minor,
+            ChordQuality::Diminished
+        };
+        constexpr std::array<ChordQuality, 7> minorChords {
+            ChordQuality::Minor, ChordQuality::Diminished, ChordQuality::Major,
+            ChordQuality::Minor, ChordQuality::Minor, ChordQuality::Major,
+            ChordQuality::Major
+        };
+
+        const int pitchClass = midiNote % 12;
+        const int relative = (pitchClass - tonic + 12) % 12;
+        int bestDegree = 0;
+        int bestSignedDistance = 0;
+        int bestDistance = 13;
+        bool exact = false;
+
+        for (int degree = 0; degree < 7; ++degree)
+        {
+            const int scaleTone = mode == ScaleMode::Major
+                ? majorScale[static_cast<std::size_t>(degree)]
+                : minorScale[static_cast<std::size_t>(degree)];
+            int signedDistance = scaleTone - relative;
+            while (signedDistance > 6) signedDistance -= 12;
+            while (signedDistance < -6) signedDistance += 12;
+            const int distance = std::abs(signedDistance);
+            if (distance < bestDistance || (distance == bestDistance && signedDistance < bestSignedDistance))
+            {
+                bestDistance = distance;
+                bestDegree = degree;
+                bestSignedDistance = signedDistance;
+                exact = distance == 0;
+            }
+        }
+
+        const int mappedRoot = midiNote + bestSignedDistance;
+        if (mappedRoot < 0 || mappedRoot > 127)
+            return result;
+
+        result.rootMidi = mappedRoot;
+        result.degree = bestDegree;
+        result.quality = mode == ScaleMode::Major
+            ? majorChords[static_cast<std::size_t>(bestDegree)]
+            : minorChords[static_cast<std::size_t>(bestDegree)];
+        result.inputWasInScale = exact;
+        result.valid = true;
+        return result;
+    }
+
+    static ChordNotes generateScaleChord(int midiNote, int tonicPitchClass,
+                                         ScaleMode mode, int inversion = 0) noexcept
+    {
+        const auto mapped = mapScaleAware(midiNote, tonicPitchClass, mode);
+        if (!mapped.valid)
+            return {};
+        return AutoChords::generate(mapped.rootMidi, mapped.quality, 0, inversion);
+    }
+};
+
 struct GuitarPosition
 {
     int midiNote = -1;
