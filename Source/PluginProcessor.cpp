@@ -294,7 +294,10 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
     const int playMode = juce::jlimit(0, 2,
         static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
-    const bool autoChordsEnabled = parameters.getRawParameterValue("autoChords")->load(std::memory_order_relaxed) > 0.5f;
+    // AutoChords is a Pattern-only performance aid (Session Guitarist-style).
+    // Melody mode always passes the played MIDI pitch through unchanged.
+    const bool autoChordsEnabled = playMode == 1
+        && parameters.getRawParameterValue("autoChords")->load(std::memory_order_relaxed) > 0.5f;
     const int selectedScaleRoot = juce::jlimit(0, 11, static_cast<int>(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
     const int selectedScaleMode = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
     const auto mapPerformanceNote = [&](int note) noexcept
