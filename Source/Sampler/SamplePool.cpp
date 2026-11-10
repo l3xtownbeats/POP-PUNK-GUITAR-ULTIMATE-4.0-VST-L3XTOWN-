@@ -992,9 +992,12 @@ std::size_t SamplerEngine::getSampleCount() const noexcept
 
 int SamplerEngine::getActiveVoiceCount() const noexcept
 {
+    // Report user-polyphony voices only. Short-lived steal tails are internal
+    // de-click buffers and must not make the configured voice limit appear
+    // exceeded to the host/UI or regression checks.
     int count = 0;
-    for (const auto& voice : voices)
-        if (voice.region != nullptr) ++count;
+    for (int i = 0; i < maximumVoices; ++i)
+        if (voices[static_cast<std::size_t>(i)].region != nullptr) ++count;
     return count;
 }
 }
