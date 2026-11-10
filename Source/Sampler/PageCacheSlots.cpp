@@ -89,6 +89,10 @@ void PageCacheSlots::cancelLoad(std::size_t slot) noexcept
 
 bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
 {
+    // A lease is an owning pin. Never overwrite a live lease: doing so
+    // would leak its reader count and permanently prevent cache eviction.
+    if (lease)
+        return false;
     lease = {};
     if (!isValid())
         return false;
