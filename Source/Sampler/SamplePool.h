@@ -68,10 +68,10 @@ public:
         int xfinHighVelocity = -1;
         int xfoutLowVelocity = -1;
         int xfoutHighVelocity = -1;
-        int startFrame = 0;
-        int endFrame = 0;
-        int loopStartFrame = 0;
-        int loopEndFrame = 0;
+        std::uint64_t startFrame = 0;
+        std::uint64_t endFrame = 0;
+        std::uint64_t loopStartFrame = 0;
+        std::uint64_t loopEndFrame = 0;
         int loopMode = 0; // 0 none/one-shot, 1 continuous, 2 sustain, 3 ping-pong
         float tuneCents = 0.0f;
         float gain = 1.0f;
