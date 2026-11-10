@@ -150,3 +150,8 @@ Run 42704820544 прошёл этапы:
 | Preview / Mapping Editor / velocity zones / RR / ZIP | Ещё не реализовано |
 
 Gate: успешная компиляция importer + теста, полный CTest, Windows VST3 build, Pluginval 5, затем ручная проверка Import Audio в FL Studio 20. До этого — implementation pending CI.
+
+
+## Import Sounds CI correction — 10.11.2026
+
+Первый importer CI run 42850028356 failed на несовместимом JUCE writer Options API, вызове reader read(), преобразованиях строк и несуществующем TextButton::outlineColourId. Исправлено: 24-bit PCM writer через поддерживаемый overload, AudioBuffer read overload, явные JUCE string conversions, удалён неподдерживаемый colour ID. Повторный CI обязателен.
