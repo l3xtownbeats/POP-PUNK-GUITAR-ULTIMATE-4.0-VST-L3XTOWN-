@@ -323,10 +323,27 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     skinsButton.setColour(juce::TextButton::textColourOffId, pink);
     skinsButton.onClick = [this] {
         juce::PopupMenu menu;
+        menu.addSectionHeader("BUILT-IN PREMIUM THEMES");
         for (int i = 0; i < static_cast<int>(skinPalettes.size()); ++i)
             menu.addItem(i + 1, skinPalettes[static_cast<size_t>(i)].name, true, i == activeSkinIndex);
+        menu.addSeparator();
+        menu.addItem(100, "LOAD SKIN JSON...");
         menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinsButton),
-            [this](int result) { if (result > 0) applySkin(result - 1); });
+            [safeThis = juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor>(this)](int result) {
+                if (safeThis == nullptr || result == 0) return;
+                if (result >= 1 && result <= 10) { safeThis->applySkin(result - 1); return; }
+                if (result == 100) {
+                    safeThis->skinChooser = std::make_unique<juce::FileChooser>(
+                        "Load PPGU premium skin", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.json");
+                    safeThis->skinChooser->launchAsync(juce::FileBrowserComponent::openMode
+                        | juce::FileBrowserComponent::canSelectFiles,
+                        [safeThis](const juce::FileChooser& chooser) {
+                            if (safeThis == nullptr) return;
+                            const auto selected = chooser.getResult();
+                            if (selected.existsAsFile()) safeThis->loadExternalSkin(selected);
+                        });
+                }
+            });
     };
     midiButton.setTooltip("MIDI Piano Roll is not connected in this build.");
     multicoreButton.setTooltip("Background multicore processing is not enabled in this build.");
@@ -454,12 +471,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1,
         static_cast<int>(processor.parameters.state.getProperty("uiSkinIndex", 0)));
     applySkin(activeSkinIndex);
+    const auto savedSkinFile = processor.parameters.state.getProperty("uiSkinFile").toString();
+    if (savedSkinFile.isNotEmpty() && juce::File(savedSkinFile).existsAsFile())
+        loadExternalSkin(juce::File(savedSkinFile));
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
 {
     activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1, index);
     processor.parameters.state.setProperty("uiSkinIndex", activeSkinIndex, nullptr);
+    processor.parameters.state.removeProperty("uiSkinFile", nullptr);
     const auto& skin = skinPalettes[static_cast<size_t>(activeSkinIndex)];
     bg = juce::Colour(skin.background);
     panel = juce::Colour(skin.panel);
@@ -467,7 +488,45 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
     pink = juce::Colour(skin.accent);
     pale = juce::Colour(skin.text);
     muted = juce::Colour(skin.muted);
+    refreshSkinColours();
+}
 
+void PopPunkGuitarUltimateAudioProcessorEditor::loadExternalSkin(const juce::File& file)
+{
+    const auto parsed = juce::JSON::parse(file);
+    auto* object = parsed.getDynamicObject();
+    if (object == nullptr)
+    {
+        statusLabel.setText("SKIN ERROR  /  INVALID JSON OBJECT", juce::dontSendNotification);
+        return;
+    }
+    const auto readColour = [object](const juce::Identifier& key, juce::Colour fallback)
+    {
+        const auto value = object->getProperty(key).toString().trim();
+        const auto colour = juce::Colour::fromString(value);
+        return value.isNotEmpty() && colour.isTransparent() && value != "00000000" ? fallback : colour;
+    };
+    const auto nextBg = readColour("background", bg);
+    const auto nextPanel = readColour("panel", panel);
+    const auto nextPanel2 = readColour("panel2", panel2);
+    const auto nextAccent = readColour("accent", pink);
+    const auto nextText = readColour("text", pale);
+    const auto nextMuted = readColour("muted", muted);
+    if (nextBg == bg && nextPanel == panel && nextPanel2 == panel2 && nextAccent == pink
+        && nextText == pale && nextMuted == muted && !object->hasProperty("background"))
+    {
+        statusLabel.setText("SKIN ERROR  /  REQUIRED COLOUR FIELDS MISSING", juce::dontSendNotification);
+        return;
+    }
+    bg = nextBg; panel = nextPanel; panel2 = nextPanel2; pink = nextAccent; pale = nextText; muted = nextMuted;
+    processor.parameters.state.setProperty("uiSkinFile", file.getFullPathName(), nullptr);
+    processor.parameters.state.setProperty("uiSkinName", object->getProperty("name").toString(), nullptr);
+    refreshSkinColours();
+    statusLabel.setText("SKIN LOADED  /  " + object->getProperty("name").toString(), juce::dontSendNotification);
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::refreshSkinColours()
+{
     for (auto* label : { &titleLabel, &subtitleLabel, &statusLabel, &ampTitle, &fxTitle, &playbackTitle }) {
         label->setColour(juce::Label::textColourId, label == &subtitleLabel || label == &ampTitle
             || label == &fxTitle || label == &playbackTitle ? pink : pale);
@@ -614,15 +673,15 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     ampTitle.setBounds(amp.removeFromTop(34).reduced(12,2));
     fxTitle.setBounds(fx.removeFromTop(34).reduced(12,2));
     playbackTitle.setBounds(playback.removeFromTop(34).reduced(12,2));
-    const int kw=amp.getWidth()/4;
-    for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw); knobLabels[i].setBounds(cell.removeFromBottom(22)); knobs[i].setBounds(cell.reduced(4,0));}
+    const int kw=amp.getWidth()/5;
+    for(size_t i=0;i<5;++i){auto cell=amp.removeFromLeft(kw); knobLabels[i].setBounds(cell.removeFromBottom(22)); knobs[i].setBounds(cell.reduced(3,0));}
     for(size_t i=0;i<fxButtons.size();++i){auto cell=fx.removeFromTop(fx.getHeight()/static_cast<int>(fxButtons.size()-i)); fxButtons[i].setBounds(cell.reduced(8,2));}
     auto keyboardArea = area.removeFromBottom(72);
     if (keyboard != nullptr) keyboard->setBounds(keyboardArea.reduced(2, 4));
     auto playbackControls = playback.removeFromTop(164);
     playbackControls.removeFromTop(8);
     const int pw = juce::jmax(1, playbackControls.getWidth() / 5);
-    for (size_t i = 4; i < 9; ++i)
+    for (size_t i = 5; i < 10; ++i)
     {
         auto cell = playbackControls.removeFromLeft(pw);
         knobLabels[i].setBounds(cell.removeFromBottom(28));
