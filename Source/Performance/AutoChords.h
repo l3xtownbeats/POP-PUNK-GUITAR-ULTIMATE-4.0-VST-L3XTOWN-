@@ -57,7 +57,11 @@ public:
         if (chord.count == 0)
             return result;
 
-        const int root = clamp(rootMidi + (octave * 12), 0, 108);
+        // Bound inputs before arithmetic so hostile/extreme parameter values
+        // cannot overflow the integer octave calculation.
+        const int safeRoot = clamp(rootMidi, 0, 127);
+        const int safeOctave = clamp(octave, -10, 10);
+        const int root = clamp(safeRoot + (safeOctave * 12), 0, 108);
         const int rotation = ((inversion % static_cast<int>(chord.count))
                               + static_cast<int>(chord.count)) % static_cast<int>(chord.count);
         int previous = -1;
