@@ -50,6 +50,9 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     // Global / performance controls.
     p.add(floatParameter("master", "Master", 0.0f, 1.0f, 0.8f));
     p.add(floatParameter("voices", "Voices", 1.0f, 64.0f, 32.0f, 1.0f));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "processorQuality", 1 }, "Processor Quality",
+        juce::StringArray { "GOOD", "NORMAL", "NIGHT", "ECO" }, 1));
     p.add(floatParameter("velocity", "Velocity Response", 0.0f, 2.0f, 1.0f));
     p.add(floatParameter("dynamics", "Velocity Dynamics", 0.0f, 1.0f, 0.5f));
     p.add(floatParameter("palmMuteThreshold", "Palm Mute Threshold", 1.0f, 127.0f, 55.0f, 1.0f));
@@ -78,6 +81,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
         juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+    p.add(boolParameter("autoChordsOn", "AutoChords On", false));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
     p.add(boolParameter("monoMode", "Monophonic Mode", true));
@@ -274,8 +278,13 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
     const int samples = buffer.getNumSamples();
     keyboardState.processNextMidiBuffer(midi, 0, samples, true);
-    const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
+    const int requestedVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
         static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
+    const int qualityMode = juce::jlimit(0, 3, static_cast<int>(
+        parameters.getRawParameterValue("processorQuality")->load(std::memory_order_relaxed)));
+    // GOOD = full polyphony; NORMAL balances load; NIGHT/ECO reduce voice caps.
+    const int profileVoiceLimit = qualityMode == 0 ? 64 : (qualityMode == 1 ? 32 : (qualityMode == 2 ? 12 : 6));
+    const int maximumVoices = juce::jmin(requestedVoices, profileVoiceLimit);
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
     const int palmMuteThreshold = juce::jlimit(1, 127, static_cast<int>(
@@ -417,6 +426,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             // M4: in Pattern mode, a single held key can act as a scale-aware
             // chord root. Chromatic mode preserves the legacy single-note behavior.
             if (count == 1
+                && parameters.getRawParameterValue("autoChordsOn")->load(std::memory_order_relaxed) > 0.5f
                 && parameters.getRawParameterValue("singleMidiNoteAsChordRoot")->load(std::memory_order_relaxed) > 0.5f)
             {
                 const int scaleMode = juce::jlimit(0, 2,
