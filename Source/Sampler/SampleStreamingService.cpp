@@ -120,6 +120,7 @@ SampleStreamingService::Statistics SampleStreamingService::statistics() const no
 {
     return {
         requestsSubmitted.load(std::memory_order_relaxed),
+        requestsProcessed.load(std::memory_order_relaxed),
         queueOverflows.load(std::memory_order_relaxed),
         invalidRequests.load(std::memory_order_relaxed),
         cacheHits.load(std::memory_order_relaxed),
@@ -146,6 +147,7 @@ void SampleStreamingService::workerLoop() noexcept
             continue;
         }
 
+        requestsProcessed.fetch_add(1, std::memory_order_relaxed);
         const auto key = request.key;
         if (key.sampleId >= samples.size() || pages.containsReady(key))
             continue;
