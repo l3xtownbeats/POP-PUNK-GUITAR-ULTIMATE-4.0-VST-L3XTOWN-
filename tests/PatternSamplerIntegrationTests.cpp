@@ -5,7 +5,9 @@
 #include <cmath>
 #include <filesystem>
 #include <iostream>
-#include <memory>\n#include <thread>\n#include <chrono>
+#include <memory>
+#include <thread>
+#include <chrono>
 
 int main()
 {
