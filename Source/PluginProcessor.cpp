@@ -278,6 +278,10 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
+    const int palmMuteThreshold = juce::jlimit(1, 127, static_cast<int>(
+        parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
+    const bool forcePalmMute = static_cast<int>(
+        parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)) == 1;
     const int playMode = juce::jlimit(0, 1,
         static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
 
@@ -371,8 +375,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                const bool palmMute = forcePalmMute || scaledVelocity <= palmMuteThreshold;
                 const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
-                                                      message.getChannel(), globalTuningSemitones);
+                                                      message.getChannel(), globalTuningSemitones, palmMute);
                 juce::ignoreUnused(triggered);
             }
             else if (message.isNoteOff())
@@ -545,7 +550,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     const float dynamics = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
                     const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                     const int scaledVelocity = juce::jlimit(1, 127, juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                    const bool triggered = sampler.noteOn(styled.note, scaledVelocity, maximumVoices, styled.channel, globalTuningSemitones);
+                    const bool palmMute = forcePalmMute || scaledVelocity <= palmMuteThreshold;
+                    const bool triggered = sampler.noteOn(styled.note, scaledVelocity, maximumVoices, styled.channel, globalTuningSemitones, palmMute);
                     juce::ignoreUnused(triggered);
                 }
                 else sampler.noteOff(event.note, event.channel);
