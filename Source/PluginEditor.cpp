@@ -481,6 +481,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
     activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1, index);
     processor.parameters.state.setProperty("uiSkinIndex", activeSkinIndex, nullptr);
     processor.parameters.state.removeProperty("uiSkinFile", nullptr);
+    processor.parameters.state.removeProperty("uiSkinName", nullptr);
+    externalSkinMelodyArtwork = {};
+    externalSkinPatternArtwork = {};
     const auto& skin = skinPalettes[static_cast<size_t>(activeSkinIndex)];
     bg = juce::Colour(skin.background);
     panel = juce::Colour(skin.panel);
@@ -495,30 +498,62 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadExternalSkin(const juce::Fil
 {
     const auto parsed = juce::JSON::parse(file);
     auto* object = parsed.getDynamicObject();
-    if (object == nullptr)
+    if (object == nullptr || object->getProperty("schema").toString() != "ppgu.skin.v1")
     {
-        statusLabel.setText("SKIN ERROR  /  INVALID JSON OBJECT", juce::dontSendNotification);
+        statusLabel.setText("SKIN ERROR  /  INVALID PPGU SKIN JSON", juce::dontSendNotification);
         return;
     }
-    const auto readColour = [object](const juce::Identifier& key, juce::Colour fallback)
-    {
-        const auto value = object->getProperty(key).toString().trim();
-        const auto colour = juce::Colour::fromString(value);
-        return value.isNotEmpty() && colour.isTransparent() && value != "00000000" ? fallback : colour;
+
+    const std::array<juce::String, 6> requiredColours {
+        "background", "panel", "panel2", "accent", "text", "muted"
     };
-    const auto nextBg = readColour("background", bg);
-    const auto nextPanel = readColour("panel", panel);
-    const auto nextPanel2 = readColour("panel2", panel2);
-    const auto nextAccent = readColour("accent", pink);
-    const auto nextText = readColour("text", pale);
-    const auto nextMuted = readColour("muted", muted);
-    if (nextBg == bg && nextPanel == panel && nextPanel2 == panel2 && nextAccent == pink
-        && nextText == pale && nextMuted == muted && !object->hasProperty("background"))
+    for (const auto& field : requiredColours)
     {
-        statusLabel.setText("SKIN ERROR  /  REQUIRED COLOUR FIELDS MISSING", juce::dontSendNotification);
+        if (!object->hasProperty(field) || object->getProperty(field).toString().length() != 8)
+        {
+            statusLabel.setText("SKIN ERROR  /  INVALID OR MISSING COLOUR: " + field, juce::dontSendNotification);
+            return;
+        }
+    }
+
+    const auto resolveArtwork = [&file, object](const juce::Identifier& key, juce::Image& destination) -> bool
+    {
+        const auto relativePath = object->getProperty(key).toString().trim();
+        if (relativePath.isEmpty())
+        {
+            destination = {};
+            return true;
+        }
+        const auto imageFile = file.getParentDirectory().getChildFile(relativePath);
+        if (!imageFile.existsAsFile())
+            return false;
+        auto image = juce::ImageFileFormat::loadFrom(imageFile);
+        if (image.isNull())
+            return false;
+        destination = std::move(image);
+        return true;
+    };
+
+    juce::Image nextMelodyArtwork, nextPatternArtwork;
+    if (!resolveArtwork("melodyArtwork", nextMelodyArtwork)
+        || !resolveArtwork("patternArtwork", nextPatternArtwork))
+    {
+        statusLabel.setText("SKIN ERROR  /  ARTWORK FILE MISSING OR INVALID", juce::dontSendNotification);
         return;
     }
-    bg = nextBg; panel = nextPanel; panel2 = nextPanel2; pink = nextAccent; pale = nextText; muted = nextMuted;
+
+    const auto colour = [object](const juce::Identifier& key) {
+        return juce::Colour::fromString(object->getProperty(key).toString());
+    };
+    bg = colour("background");
+    panel = colour("panel");
+    panel2 = colour("panel2");
+    pink = colour("accent");
+    pale = colour("text");
+    muted = colour("muted");
+    externalSkinMelodyArtwork = std::move(nextMelodyArtwork);
+    externalSkinPatternArtwork = std::move(nextPatternArtwork);
+
     processor.parameters.state.setProperty("uiSkinFile", file.getFullPathName(), nullptr);
     processor.parameters.state.setProperty("uiSkinName", object->getProperty("name").toString(), nullptr);
     refreshSkinColours();
@@ -606,7 +641,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(88);
     hero.setHeight(154);
-    const auto& artwork = modeBox.getSelectedId() == 2 ? approvedPatternArtwork : approvedMelodyArtwork;
+    const bool patternArtworkActive = modeBox.getSelectedId() == 2;
+    const auto& artwork = patternArtworkActive
+        ? (externalSkinPatternArtwork.isNull() ? approvedPatternArtwork : externalSkinPatternArtwork)
+        : (externalSkinMelodyArtwork.isNull() ? approvedMelodyArtwork : externalSkinMelodyArtwork);
     if (!artwork.isNull())
         g.drawImage(artwork, hero.toFloat(), juce::RectanglePlacement::fillDestination);
     else
