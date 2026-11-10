@@ -87,6 +87,17 @@ int main()
         return 1;
     }
 
+    // A superseded async bank request must fail before publishing any
+    // immutable snapshot, leaving the currently selected bank untouched.
+    ppgu::sampler::SamplerEngine cancelledLoadEngine;
+    std::atomic<std::uint64_t> currentLoadGeneration { 2 };
+    const auto cancelledLoad = cancelledLoadEngine.loadSfz(sfzFile, &currentLoadGeneration, 1);
+    if (cancelledLoad.success || cancelledLoadEngine.getRegionCount() != 0)
+    {
+        std::cerr << "Sampler published a bank whose asynchronous request was superseded.\\n";
+        return 1;
+    }
+
     ppgu::sampler::SamplerEngine engine;
     engine.prepare(44100.0);
     const auto loaded = engine.loadSfz(sfzFile);
