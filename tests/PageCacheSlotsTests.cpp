@@ -53,6 +53,25 @@ int main()
     cache.release(lease);
     if (lease || cache.state(first) != PageCacheSlots::State::ready)
         return 1;
+    // Re-acquiring into an already-owned lease must fail without
+    // discarding the original pin (otherwise the cache leaks a reader count).
+    if (!cache.tryAcquire({ 10, 0 }, lease))
+        return 1;
+    const auto* originalLeaseData = lease.samples;
+    PageCacheSlots::ReadLease accidentalOverwrite;
+    if (cache.tryAcquire({ 10, 0 }, lease)
+        || !lease || lease.samples != originalLeaseData
+        || cache.state(first) != PageCacheSlots::State::reading)
+    {
+        std::cerr << "tryAcquire overwrote an active lease or lost its pin.\\n";
+        return 1;
+    }
+    cache.release(lease);
+    if (lease || cache.state(first) != PageCacheSlots::State::ready)
+    {
+        std::cerr << "Active lease was not released after rejected double acquire.\\n";
+        return 1;
+    }
 
     // Once unpinned, a ready page can be evicted and republished.
     if (!cache.tryBeginLoad({ 99, 7 }, second))
