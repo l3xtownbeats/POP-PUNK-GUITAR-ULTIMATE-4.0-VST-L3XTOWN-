@@ -1,4 +1,5 @@
 #include "SampleLibraryImporter.h"
+#include "Sha256.h"
 #include "SfzParser.h"
 
 #include <juce_audio_formats/juce_audio_formats.h>
@@ -34,6 +35,12 @@ bool writeFixture(const juce::File& file, juce::AudioFormat& format, int bits)
 
 int main()
 {
+    if (ppgu::sampler::crypto::sha256String("abc") != "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+    {
+        std::cerr << "SHA-256 known-vector test failed.\\n";
+        return 1;
+    }
+
     // Ensure all advertised common interchange formats are registered in this build.
     juce::AudioFormatManager registeredFormats;
     registeredFormats.registerBasicFormats();
@@ -109,10 +116,16 @@ int main()
 
     const auto manifest = report.libraryDirectory.getChildFile("manifest.json");
     const auto manifestText = manifest.loadFileAsString();
-    const auto sourceHash = juce::SHA256(source.getChildFile("Guitar_C3_Vel100.wav"))
-                                .toHexString().toStdString();
-    const auto convertedHash = juce::SHA256(
-        juce::File(parsed.regions.front().samplePath.string())).toHexString().toStdString();
+    std::string sourceHash;
+    std::string convertedHash;
+    if (!ppgu::sampler::crypto::sha256File(
+            std::filesystem::path(source.getChildFile("Guitar_C3_Vel100.wav").getFullPathName().toStdString()),
+            sourceHash)
+        || !ppgu::sampler::crypto::sha256File(parsed.regions.front().samplePath, convertedHash))
+    {
+        std::cerr << "Could not read importer checksum fixtures.\\n";
+        return 1;
+    }
     bool warnedAboutNcw = false;
     for (const auto& warning : report.warnings)
         warnedAboutNcw = warnedAboutNcw || warning.find("NCW is not supported") != std::string::npos;
