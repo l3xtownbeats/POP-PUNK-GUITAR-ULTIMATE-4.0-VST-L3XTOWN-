@@ -1172,3 +1172,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - M4: PR #4, AutoChords/FingeringGenerator, Major/Natural Minor scale mapping; run `42843127831` passed build/CTest/pluginval/package on commit `4327e54988bf42c87a86185b39a2ecd40609c3ae`. Added integer-overflow guards after that run; latest commits await fresh CI.
 - M5: PR #3, StyleEngine foundation and Mest Photographs catalog targets; run `42840410645` passed build/CTest/pluginval/package. Runtime Pattern/Processor/UI binding remains open.
 - M2: PR #5 implements SFZ xfin/xfout velocity-layer playback with gain/power curves and fixed-capacity multi-layer voices; latest CI run `42843931173` is still running. Palm mute, real-library stress and host checks remain open.
+
+
+## 10.11.2026 — M4/M5 integration pass 1
+
+- В интеграционную ветку перенесены AutoChords/FingeringGenerator и StyleEngine, добавлены отдельные CTest targets.
+- Pattern mode теперь может интерпретировать одну MIDI-ноту как корень диатонического аккорда при включённом Single MIDI Note as Chord Root и выборе Major/Minor.
+- Сгенерированный аккорд пропускается через ограниченный гитарный FingeringGenerator; недоступные формы не отправляются как chord voicing.
+- Style DNA подключён к Pattern dispatch: детерминированные beat accents и velocity shaping. Артикуляции пока не связаны с отдельными SFZ sample groups.
+- Sound library roadmap расширен: электрическая мультисэмплированная гитара, акустические банки, velocity/RR, записанные performance артикуляции, технические требования к мастерам и строгая лицензия.
+- CI текущей интеграционной линии: run 42848179490, SHA 2bbd04f1c8da03f4272038daa8bb0b15560f7c57; на момент обновления ещё выполняется.
+- Не объявлять M4/M5 завершёнными до прохождения свежего CI, end-to-end integration tests и DAW проверки. Не объявлять новые сэмплы записанными/включёнными: roadmap описывает критерии и sourcing, не наличие новых WAV.
