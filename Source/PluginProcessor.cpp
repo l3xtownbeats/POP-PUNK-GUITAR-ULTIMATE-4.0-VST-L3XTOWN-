@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Performance/ChordTransitionTimeline.h"
+#include "Performance/AutoChords.h"
+#include "Performance/StyleEngine.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
@@ -406,6 +408,32 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // M4: in Pattern mode, a single held key can act as a scale-aware
+            // chord root. Chromatic mode preserves the legacy single-note behavior.
+            if (count == 1
+                && parameters.getRawParameterValue("singleMidiNoteAsChordRoot")->load(std::memory_order_relaxed) > 0.5f)
+            {
+                const int scaleMode = juce::jlimit(0, 2,
+                    juce::roundToInt(parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
+                if (scaleMode > 0)
+                {
+                    const int tonic = juce::jlimit(0, 11,
+                        juce::roundToInt(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
+                    const auto mode = scaleMode == 1
+                        ? ppgu::performance::ScaleMode::Major
+                        : ppgu::performance::ScaleMode::NaturalMinor;
+                    const auto chord = ppgu::performance::AutoChordMap::generateScaleChord(
+                        notes[0], tonic, mode);
+                    const auto fingering = ppgu::performance::FingeringGenerator::generate(chord, 15);
+                    if (chord.count > 0 && fingering.complete)
+                    {
+                        notes.fill(-1);
+                        count = 0;
+                        for (std::size_t i = 0; i < fingering.count && i < notes.size(); ++i)
+                            notes[static_cast<std::size_t>(count++)] = fingering.positions[i].midiNote;
+                    }
+                }
+            }
             return std::make_tuple(notes, count, channel);
         };
 
@@ -492,11 +520,31 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 if (event.kind == ppgu::performance::EventKind::NoteOn)
                 {
                     if (velocityScale <= 0.0f) continue;
-                    const float normalizedVelocity = juce::jlimit<float>(0.0f, 1.0f, static_cast<float>(event.velocity) / 127.0f);
+                    // M5: deterministic Style DNA transforms accents/velocity on
+                    // the audio thread using fixed data only. Articulation routing to
+                    // dedicated palm/legato sample groups remains a separate gate.
+                    ppgu::performance::StyleDNA dna;
+                    dna.chugDensity = parameters.getRawParameterValue("dnaChugDensity")->load(std::memory_order_relaxed);
+                    const float legatoProbability = parameters.getRawParameterValue("dnaHammerPullProbability")->load(std::memory_order_relaxed);
+                    dna.hammerOnProbability = legatoProbability;
+                    dna.pullOffProbability = legatoProbability;
+                    dna.stringSpreadMs = parameters.getRawParameterValue("dnaStringSpread")->load(std::memory_order_relaxed) * 20.0f;
+                    const float beatAccent = parameters.getRawParameterValue("dnaBeatAccent")->load(std::memory_order_relaxed);
+                    dna.downbeatAccent = 1.0f + beatAccent * 0.35f;
+                    dna.backbeatAccent = 1.0f + beatAccent * 0.18f;
+                    dna.offbeatAccent = 1.0f - beatAccent * 0.10f;
+                    dna.fxTaste = parameters.getRawParameterValue("dnaFxTaste")->load(std::memory_order_relaxed);
+                    const double eventPpq = intervalClock.startPpq
+                        + static_cast<double>(event.sampleOffset) * ppqPerSample;
+                    const double beatInBar = std::fmod(std::max(0.0, eventPpq), 4.0);
+                    const auto styled = ppgu::performance::StyleEngine::process(dna,
+                        { beatInBar, 0.20, event.note, event.velocity, event.channel,
+                          static_cast<std::uint32_t>(i), false, true, true });
+                    const float normalizedVelocity = juce::jlimit<float>(0.0f, 1.0f, static_cast<float>(styled.velocity) / 127.0f);
                     const float dynamics = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
                     const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                     const int scaledVelocity = juce::jlimit(1, 127, juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                    const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices, event.channel, globalTuningSemitones);
+                    const bool triggered = sampler.noteOn(styled.note, scaledVelocity, maximumVoices, styled.channel, globalTuningSemitones);
                     juce::ignoreUnused(triggered);
                 }
                 else sampler.noteOff(event.note, event.channel);
