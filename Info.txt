@@ -1414,3 +1414,13 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Наблюдение CI: MSVC выдал warning C4324 из-за cache-line alignment у `BoundedSpscQueue`; build не прерван. Это ожидаемое padding alignment, но warning оставить в журнале и оценить позже, не убирать alignment без измерений.
 - Ссылки: run `https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42783354784`; commit `5350faff5ccb8038a28268b1deed93fbc3f8c3be`.
 - Статус: CACHE/QUEUE/WAV PAGE COMPONENT CI PASS; 100-HIT REGRESSION PASS; RUNTIME PREFETCH + STREAMING PLAYBACK INTEGRATION PENDING; M2 OPEN.
+
+
+## 10 ноября 2026 — M2: устранена утечка pin при повторном acquire одной ReadLease
+
+- Дополнительный аудит `PageCacheSlots::tryAcquire()` выявил edge-case: функция безусловно обнуляла переданный `ReadLease`. Если вызывающий код повторно вызывал acquire, пока lease ещё владел pin, указатель терялся без `release()`, reader counter оставался увеличенным, а слот мог навсегда стать неэвиктируемым.
+- Исправление в `Source/Sampler/PageCacheSlots.cpp`: `tryAcquire()` теперь отклоняет запрос, если переданный lease уже активен, сохраняя исходный lease и его pin. Для пустого lease поведение cache miss остаётся прежним.
+- Regression test в `tests/PageCacheSlotsTests.cpp`: повторный acquire в активный lease должен вернуть false, сохранить тот же pointer/lease, оставить слот в `reading`; после единственного корректного release слот возвращается в `ready`.
+- Коммиты на main: `52101005` (fix), `ed25607b` (test). GitHub Actions для них запущен: run #99 ID `42784602425` и run #100 ID `42784609174`; на момент записи оба ещё не завершены. Не считать исправление подтверждённым до Windows build + CTest.
+- Ранее run #98 подтвердил 6/6 CTest, включая multi-reader cache stress, SPSC stress, WAV page-reader tests и 100 repeated-hit test. Новый regression закрывает дополнительный pin-leak edge-case, которого в run #98 ещё не было.
+- Runtime prefetch и потоковое воспроизведение пока не интегрированы в `SamplerEngine`; `SamplePool::loadSfz()` всё ещё загружает целые WAV в RAM. Следующий этап остаётся worker request queue + reader/cache integration и настоящая проверка prefetch/miss recovery. M2 остаётся открытой.
