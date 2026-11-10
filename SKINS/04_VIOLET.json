@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "VIOLET / AFTERHOURS",
+  "background": "ff100b19",
+  "panel": "ff211832",
+  "panel2": "ff181126",
+  "accent": "ffb18aff",
+  "text": "fff8f2ff",
+  "muted": "ffb6a8ca"
+}
