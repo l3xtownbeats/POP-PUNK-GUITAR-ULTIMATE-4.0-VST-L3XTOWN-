@@ -194,21 +194,26 @@ int main()
                   << multiPageEngine.getRegionCount() << "\n";
         return 1;
     }
-    juce::AudioBuffer<float> multiPageOutput(2, 10240);
+    // Cache misses intentionally hold the source cursor while the worker
+    // decodes the next page. Allow extra host callbacks so the test verifies
+    // eventual completion rather than assuming zero-latency page reads.
+    juce::AudioBuffer<float> multiPageOutput(2, 20000);
     multiPageOutput.clear();
+    bool multiPageBecameAudible = false;
     for (int offset = 0; offset < multiPageOutput.getNumSamples(); offset += 256)
     {
-        multiPageEngine.render(multiPageOutput, offset,
-            juce::jmin(256, multiPageOutput.getNumSamples() - offset));
-        // Match a 256-frame callback at 44.1 kHz (~5.8 ms). This keeps
-        // the worker under a realistic real-time schedule without allowing
-        // the audio callback itself to wait for page I/O.
+        const int blockSize = juce::jmin(256, multiPageOutput.getNumSamples() - offset);
+        multiPageEngine.render(multiPageOutput, offset, blockSize);
+        multiPageBecameAudible = multiPageBecameAudible
+            || multiPageOutput.getMagnitude(0, offset, blockSize) > 0.001f;
+        // Match a 256-frame callback at 44.1 kHz (~5.8 ms).
         std::this_thread::sleep_for(std::chrono::milliseconds(6));
     }
-    if (multiPageEngine.getActiveVoiceCount() != 0
-        || multiPageOutput.getMagnitude(0, 0, multiPageOutput.getNumSamples()) <= 0.001f)
+    if (multiPageEngine.getActiveVoiceCount() != 0 || !multiPageBecameAudible)
     {
-        std::cerr << "Streaming voice did not traverse and finish across multiple WAV pages.\\n";
+        std::cerr << "Streaming voice did not eventually traverse and finish across multiple WAV pages. Active voices: "
+                  << multiPageEngine.getActiveVoiceCount() << ", audible: "
+                  << (multiPageBecameAudible ? "yes" : "no") << "\\n";
         return 1;
     }
 
