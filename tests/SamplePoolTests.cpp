@@ -292,6 +292,7 @@ int main()
         std::cerr << "Meta-style SFZ OGG-to-WAV fallback did not produce a playable region.\n";
         return 1;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     juce::AudioBuffer<float> metaRendered(2, 128);
     metaRendered.clear();
     metaFallbackEngine.render(metaRendered, 0, metaRendered.getNumSamples());
@@ -319,6 +320,9 @@ int main()
         return 1;
     }
 
+    // Give the non-real-time worker a short window to publish the first
+    // page; the render callback itself never waits for disk I/O.
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     juce::AudioBuffer<float> basePitch(2, 256);
     juce::AudioBuffer<float> octavePitch(2, 256);
     basePitch.clear();
