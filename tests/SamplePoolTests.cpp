@@ -182,7 +182,7 @@ int main()
         return 1;
     }
     longDurationWriter.reset();
-    if (!longDurationSfz.replaceWithText("<region> sample=long-duration.wav key=73\\n"))
+    if (!longDurationSfz.replaceWithText("<region> sample=long-duration.wav key=73\n"))
     {
         std::cerr << "Could not write long-duration SFZ fixture.\\n";
         return 1;
