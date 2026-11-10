@@ -77,6 +77,28 @@ int noteFromFilename(const std::string& filename)
     return midi >= 0 && midi <= 127 ? midi : -1;
 }
 
+enum class ImportedPlayMode { melody, pattern };
+
+ImportedPlayMode classifyPlayMode(const std::filesystem::path& relativePath)
+{
+    // Explicit naming hints classify riffs, loops and strumming material as PATTERN.
+    // Unlabelled one-shots default to MELODY and are marked for user review in the manifest.
+    std::string name = relativePath.generic_string();
+    std::transform(name.begin(), name.end(), name.begin(),
+        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    static const std::array<const char*, 12> terms {
+        "pattern", "riff", "strum", "strumming", "chord", "chords",
+        "loop", "groove", "phrase", "articulation", "rhythm", "beat"
+    };
+    for (const auto* term : terms)
+        if (name.find(term) != std::string::npos) return ImportedPlayMode::pattern;
+    return ImportedPlayMode::melody;
+}
+
+const char* playModeName(ImportedPlayMode mode)
+{
+    return mode == ImportedPlayMode::pattern ? "PATTERN" : "MELODY";
+}
 bool convertToFloatWav(juce::AudioFormatReader& reader, const juce::File& output,
                        std::string& error)
 {
@@ -315,8 +337,7 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
             auto extension = source.getFileExtension().toLowerCase();
             const auto filename = source.getFileName().toStdString();
             if (extension == ".ncw")
-                report.warnings.emplace_back(filename
-                    + ": NCW is Native Instruments Kontakt's compressed sample format and is not decoded natively yet. Export/convert it to WAV or AIFF in Kontakt, then import again.");
+                report.warnings.emplace_back(filename + ": NCW is not supported and was skipped.");
             else
                 report.warnings.emplace_back(filename
                     + ": unsupported or unreadable audio. Enabled import formats: WAV, AIFF/AIF, FLAC, OGG Vorbis, MP3.");
@@ -354,6 +375,7 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
         report.convertedBytes += outputBytes;
         ++report.importedFiles;
 
+        const auto playMode = classifyPlayMode(relative);
         const int rootKey = noteFromFilename(source.getFileNameWithoutExtension().toStdString());
         if (rootKey >= 0)
         {
