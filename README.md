@@ -96,6 +96,8 @@ The presence of a parameter does not mean every associated articulation or perfo
 
 The project is designed for efficient startup and controlled resource use. Final CPU/RAM performance claims are withheld until repeatable profiling on the target hardware has been completed.
 
+**Large-library memory target:** the sound library may occupy up to 7 GB on disk; this is not a target for resident RAM usage. The standalone streaming page cache now rejects configurations above a hard 256 MiB cache budget. This limit applies to that cache only, not total plugin memory, and streaming playback is still being integrated into the main sampler. No claim of 7 GB streaming support or final RAM usage is made until that integration and stress profiling pass.
+
 ## FACTORY SOUND DIRECTION
 
 ### 300 authored preset definitions
