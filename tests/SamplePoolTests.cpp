@@ -615,9 +615,29 @@ int main()
     juce::AudioBuffer<float> repeatedHits(2, 12800);
     repeatedHits.clear();
     // This is a voice-quality stress test, not a disk-latency test. Prime
-    // the first page on the worker before measuring 100 rapid retriggers;
-    // the separate cache-miss and multi-page tests cover asynchronous stalls.
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    // the first page through the real voice path before measuring 100 rapid
+    // retriggers; separate tests cover asynchronous cache misses and paging.
+    if (!repeatedHitEngine.noteOn(60, 100, 64, 1))
+    {
+        std::cerr << "Could not trigger repeated-hit cache warm-up note.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> warmupBlock(2, 128);
+    bool warmupAudible = false;
+    for (int attempt = 0; attempt < 100 && !warmupAudible; ++attempt)
+    {
+        warmupBlock.clear();
+        repeatedHitEngine.render(warmupBlock, 0, warmupBlock.getNumSamples());
+        warmupAudible = warmupBlock.getMagnitude(0, 0, warmupBlock.getNumSamples()) > 0.001f;
+        if (!warmupAudible)
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    if (!warmupAudible)
+    {
+        std::cerr << "Repeated-hit streaming cache warm-up never became audible.\\n";
+        return 1;
+    }
+    repeatedHitEngine.reset();
     for (int hit = 0; hit < 100; ++hit)
     {
         const int velocity = 24 + ((hit * 37) % 104);
