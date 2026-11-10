@@ -19,6 +19,7 @@ private:
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
+    juce::Image coverImage;
     juce::TextButton loadButton { "LOAD SFZ" };
     juce::ComboBox presetBox, categoryBox, powerProfileBox;
     juce::TextButton doubleTrackButton { "DOUBLE" };
