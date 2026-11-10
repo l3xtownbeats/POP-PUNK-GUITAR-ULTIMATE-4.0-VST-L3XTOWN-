@@ -18,16 +18,25 @@ private:
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
+    void applySkin(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "IMPORT SOUNDS" }, fxOpenButton { "FX STUDIO" };
     juce::TextButton skinsButton { "SKINS" }, midiButton { "MIDI" }, doubleButton { "DOUBLE" }, multicoreButton { "MULTICORE" };
+    juce::TextButton autoChordsButton { "AUTOCHORDS  OFF" };
+    juce::ComboBox autoChordKeyBox, autoChordScaleBox;
     juce::ComboBox melodyFilterBox, styleFilterBox, processorBox;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> doubleAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> processorAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> autoChordsAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> autoChordKeyAttachment, autoChordScaleAttachment;
+    int activeSkinIndex = 0;
     std::unique_ptr<juce::DocumentWindow> fxWindow;
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
-    struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
+    struct FactoryPreset {
+        juce::String id, name, category, mode, soundCharacter, groove, articulation, styleProfileId;
+        float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f;
+    };
     std::vector<FactoryPreset> factoryPresets;
     std::vector<int> visiblePresetIndices;
     juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle;
