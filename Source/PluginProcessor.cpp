@@ -918,6 +918,50 @@ ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const
     return report;
 }
 
+void PopPunkGuitarUltimateAudioProcessor::importAudioDirectoryAsync(
+    const juce::File& sourceDirectory,
+    std::function<void(ppgu::sampler::LibraryImportReport, ppgu::sampler::LoadReport)> completion)
+{
+    const auto generationState = sampleLoadGeneration;
+    const auto generation = generationState->fetch_add(1, std::memory_order_acq_rel) + 1;
+    sampleLoadPool.addJob([this, sourceDirectory, completion = std::move(completion),
+                           generationState, generation]() mutable
+    {
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
+        const auto librariesRoot = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
+            .getChildFile("L3XTOWN").getChildFile("POP PUNK GUITAR ULTIMATE")
+            .getChildFile("Libraries");
+        ppgu::sampler::SampleLibraryImporter importer;
+        auto importReport = importer.importDirectory(sourceDirectory, librariesRoot);
+        ppgu::sampler::LoadReport loadReport;
+
+        if (generationState->load(std::memory_order_acquire) == generation
+            && importReport.success && importReport.generatedSfz.existsAsFile())
+        {
+            loadReport = sampler.loadSfz(importReport.generatedSfz, generationState.get(), generation);
+            if (generationState->load(std::memory_order_acquire) == generation && loadReport.success)
+            {
+                importReport.activated = true;
+                const juce::ScopedLock lock(sampleStateLock);
+                currentSfzFilePath = importReport.generatedSfz.getFullPathName();
+            }
+        }
+
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
+        juce::MessageManager::callAsync(
+            [completion = std::move(completion), importReport = std::move(importReport),
+             loadReport = std::move(loadReport), generationState, generation]() mutable
+            {
+                if (generationState->load(std::memory_order_acquire) == generation && completion)
+                    completion(std::move(importReport), std::move(loadReport));
+            });
+    });
+}
+
 juce::String PopPunkGuitarUltimateAudioProcessor::getCurrentSfzFilePath() const
 {
     const juce::ScopedLock lock(sampleStateLock);
