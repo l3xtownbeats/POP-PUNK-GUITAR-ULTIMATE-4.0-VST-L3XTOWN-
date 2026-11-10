@@ -1,0 +1,32 @@
+{
+  "format": "l3xtown-pop-punk-preset",
+  "formatVersion": "1.0.0",
+  "id": "USER-MELODY-EXAMPLE-001",
+  "name": "Bright Pop-Punk Lead",
+  "mode": "MELODY",
+  "author": "L3XTOWN",
+  "description": "Illustrative Melody preset file for the approved preset-browser format.",
+  "tags": [
+    "melody",
+    "lead",
+    "bright",
+    "pop-punk"
+  ],
+  "sampleProfile": "electric",
+  "parameters": {
+    "drive": 0.68,
+    "tone": 7.8,
+    "reverb": 0.08,
+    "outputDb": -2,
+    "voices": 8
+  },
+  "melody": {
+    "midiNoteMapping": "chromatic",
+    "velocityLayers": "use-library-mapping",
+    "roundRobin": true,
+    "articulation": "open",
+    "palmMute": "velocity-or-articulation",
+    "releaseMs": 180
+  },
+  "status": "format-example-not-yet-loaded-by-plugin"
+}
