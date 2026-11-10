@@ -430,13 +430,20 @@ std::size_t SamplePool::findRegions(
     int midiNote, int velocity, int midiChannel,
     std::array<RegionSelection, maximumVelocityLayers>& output) noexcept
 {
-    output.fill({});
+    output.fill(RegionSelection {});
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr || velocity <= 0)
         return 0;
 
-    std::array<int, maximumVelocityLayers> visitedSets {};
-    std::size_t visitedSetCount = 0;
+    struct RoundRobinChoice
+    {
+        int setIndex = -1;
+        int wantedPosition = -1;
+        const RegionView* fallback = nullptr;
+        const RegionView* selected = nullptr;
+    };
+    std::array<RoundRobinChoice, maximumVelocityLayers> rrChoices {};
+    std::size_t rrChoiceCount = 0;
     std::size_t outputCount = 0;
 
     const auto append = [&](const RegionView* region)
@@ -479,6 +486,8 @@ std::size_t SamplePool::findRegions(
         output[outputCount++] = { region, gain };
     };
 
+    // One bounded pass over the immutable region snapshot. RR choices are
+    // accumulated in a fixed array, avoiding a second full scan per RR set.
     for (const auto& region : snapshot->regions)
     {
         if (midiNote < region.lowKey || midiNote > region.highKey
@@ -492,51 +501,46 @@ std::size_t SamplePool::findRegions(
             continue;
         }
 
-        bool alreadyVisited = false;
-        for (std::size_t i = 0; i < visitedSetCount; ++i)
-            if (visitedSets[i] == region.roundRobinSetIndex)
+        std::size_t choiceIndex = rrChoiceCount;
+        for (std::size_t i = 0; i < rrChoiceCount; ++i)
+            if (rrChoices[i].setIndex == region.roundRobinSetIndex)
             {
-                alreadyVisited = true;
+                choiceIndex = i;
                 break;
             }
-        if (alreadyVisited || visitedSetCount >= visitedSets.size())
-            continue;
 
-        visitedSets[visitedSetCount++] = region.roundRobinSetIndex;
-        const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
-        const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
-        constexpr std::size_t cursorsPerSet = 16U * 128U;
-        const auto cursorIndex = static_cast<std::size_t>(region.roundRobinSetIndex) * cursorsPerSet
-            + channelIndex * 128U + noteIndex;
-        if (cursorIndex >= snapshot->roundRobinCounters.size())
+        if (choiceIndex == rrChoiceCount)
         {
-            append(&region);
-            continue;
-        }
-
-        auto& cursor = snapshot->roundRobinCounters[cursorIndex];
-        const int wantedPosition = static_cast<int>(
-            cursor % static_cast<std::uint32_t>(region.seqLength)) + 1;
-        ++cursor;
-
-        const RegionView* selected = nullptr;
-        const RegionView* fallback = nullptr;
-        for (const auto& candidate : snapshot->regions)
-        {
-            if (candidate.roundRobinSetIndex != region.roundRobinSetIndex
-                || midiNote < candidate.lowKey || midiNote > candidate.highKey
-                || velocity < candidate.lowVelocity || velocity > candidate.highVelocity
-                || midiChannel < candidate.lowChannel || midiChannel > candidate.highChannel)
+            if (rrChoiceCount >= rrChoices.size())
                 continue;
-            if (fallback == nullptr)
-                fallback = &candidate;
-            if (candidate.seqPosition == wantedPosition)
+
+            auto& choice = rrChoices[rrChoiceCount++];
+            choice.setIndex = region.roundRobinSetIndex;
+            const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
+            const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
+            constexpr std::size_t cursorsPerSet = 16U * 128U;
+            const auto cursorIndex = static_cast<std::size_t>(region.roundRobinSetIndex) * cursorsPerSet
+                + channelIndex * 128U + noteIndex;
+            if (cursorIndex < snapshot->roundRobinCounters.size())
             {
-                selected = &candidate;
-                break;
+                auto& cursor = snapshot->roundRobinCounters[cursorIndex];
+                choice.wantedPosition = static_cast<int>(
+                    cursor % static_cast<std::uint32_t>(region.seqLength)) + 1;
+                ++cursor;
             }
         }
-        append(selected != nullptr ? selected : fallback);
+
+        auto& choice = rrChoices[choiceIndex];
+        if (choice.fallback == nullptr)
+            choice.fallback = &region;
+        if (choice.wantedPosition > 0 && region.seqPosition == choice.wantedPosition)
+            choice.selected = &region;
+    }
+
+    for (std::size_t i = 0; i < rrChoiceCount; ++i)
+    {
+        const auto& choice = rrChoices[i];
+        append(choice.selected != nullptr ? choice.selected : choice.fallback);
     }
 
     return outputCount;
