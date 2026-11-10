@@ -93,7 +93,6 @@ bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
     // would leak its reader count and permanently prevent cache eviction.
     if (lease)
         return false;
-    lease = {};
     if (!isValid())
         return false;
 
@@ -138,7 +137,11 @@ void PageCacheSlots::release(ReadLease& lease) noexcept
         return;
     // Each successful acquire owns exactly one pin.
     slots[lease.slot].access.fetch_sub(1, std::memory_order_release);
-    lease = {};
+    lease.owner = nullptr;
+    lease.slot = 0;
+    lease.samples = nullptr;
+    lease.channels = 0;
+    lease.frames = 0;
 }
 
 PageCacheSlots::State PageCacheSlots::state(std::size_t slot) const noexcept
