@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <cmath>
@@ -100,6 +101,11 @@ namespace ppgu::performance
             }
 
             result.usingHost = false;
+            if (hostWasRunning_)
+            {
+                result.transportDiscontinuity = true;
+                pendingCount_ = 0;
+            }
             hostWasRunning_ = false;
             haveHostPosition_ = false;
             result.running = true;
@@ -267,8 +273,20 @@ namespace ppgu::performance
 
         static double quantize(double value, double grid) noexcept
         {
+            if (!std::isfinite(value) || !std::isfinite(grid) || grid <= 0.0)
+                return value;
             return static_cast<double>(static_cast<long long>(value / grid + 0.5)) * grid;
         }
+
+    public:
+        static double quantizePpqForward(double ppq, double gridBeats) noexcept
+        {
+            if (!std::isfinite(ppq) || !std::isfinite(gridBeats) || gridBeats <= 0.0)
+                return 0.0;
+            return std::ceil(ppq / gridBeats - 1.0e-9) * gridBeats;
+        }
+
+    private:
 
         static double finiteOr(double value, double fallback) noexcept
         {

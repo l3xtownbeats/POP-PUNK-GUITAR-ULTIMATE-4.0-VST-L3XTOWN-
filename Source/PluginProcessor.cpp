@@ -316,6 +316,10 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         sampler.allNotesOff();
         patternScheduler.clearPendingNoteOffs();
         patternCycleStarted = false;
+        previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
+        if (patternTransportClock.transportStopped)
+            for (auto& held : patternHeldNotes) held.fill(false);
     }
 
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
@@ -435,25 +439,33 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const bool chordChanged = chordCount != previousPatternChordCount
             || !std::equal(chordNotes.begin(), chordNotes.begin() + chordCount,
                            previousPatternChordNotes.begin());
+        int patternRenderStartSample = 0;
         if (chordChanged)
         {
+            const int changeOffset = patternChordChangeSampleOffset >= 0
+                ? patternChordChangeSampleOffset : 0;
+            // Render the pre-change portion first, then release the old chord
+            // at the actual MIDI sample position instead of block sample zero.
+            renderSegment(0, changeOffset);
             sampler.allNotesOff();
+            patternRenderStartSample = changeOffset;
             patternScheduler.clearPendingNoteOffs();
             patternCycleStarted = chordCount > 0;
             if (chordCount > 0)
             {
-                const int changeOffset = patternChordChangeSampleOffset >= 0
-                    ? patternChordChangeSampleOffset : 0;
                 const double changePpq = patternTransportClock.startPpq
                     + static_cast<double>(changeOffset) * patternTransportClock.bpm
                         / (60.0 * currentSampleRate);
                 const bool startOnFirstChord =
                     parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
-                // First chord may start immediately when explicitly requested;
-                // subsequent chord changes are quantized forward to 1/16.
                 const bool firstChord = previousPatternChordCount == 0;
+                // Preserve immediate first-chord mode; all later chord changes
+                // are quantized forward to the next sixteenth-note boundary.
                 patternCycleStartPpq = firstChord && startOnFirstChord
-                    ? changePpq : std::ceil(changePpq * 4.0 - 1.0e-9) / 4.0;
+                    ? changePpq
+                    : (firstChord
+                        ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
+                        : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, 0.25));
             }
         }
         previousPatternChordCount = chordCount;
@@ -504,7 +516,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         // grow its internal storage on the audio thread.
         // PatternScheduler already sorts events by sample offset and orders
         // NoteOff before NoteOn at ties.
-        int cursor = 0;
+        int cursor = patternRenderStartSample;
         for (std::size_t i = 0; i < scheduledCount; ++i)
         {
             const auto& event = scheduledPatternEvents[i];

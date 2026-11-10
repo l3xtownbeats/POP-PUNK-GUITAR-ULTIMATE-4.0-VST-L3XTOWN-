@@ -1013,3 +1013,21 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Изменённые файлы: `tools/validate_apvts_layout.py`, `.github/workflows/vst3-build.yml`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`.
 - Проверка на момент записи: исходный код проаудирован по GitHub; CI будет запущен изменением workflow после push. Результат нового CI/CTest ещё не получен. M1 НЕ ПРИНЯТ: ручная проверка автоматизации параметров во FL Studio 20 остаётся обязательной.
 - Следующий шаг: дождаться Windows CI, исправить возможные ошибки проверки/сборки, затем провести host automation acceptance. После этого продолжить закрытие M2/M3; M4 остаётся заблокирован.
+
+
+## M3 — исправление транспорта и sample-accurate смены аккордов — 10 ноября 2026
+
+Проведён повторный разбор M3. Выявлены реальные дефекты production path: held MIDI chord обновлялся после планирования, из-за чего новый аккорд начинал звучать на один блок позже; samplePosition MIDI не учитывался при смене аккорда; смена аккорда не имела отдельного 1/16 quantize; seek/переключение источника транспорта могли оставить устаревшие NoteOff в очереди; тест near-block-edge был недостаточно точным.
+
+Исправления в текущей рабочей ветке:
+- MIDI held-state теперь применяется до построения chord snapshot; учитывается samplePosition последнего события изменения аккорда.
+- Старая нота/аккорд рендерится до MIDI sample offset, затем отпускается; новый chord cycle стартует в sample-accurate позиции либо на следующей 1/16 границе. Опция Start On First Chord сохраняет немедленный старт первого аккорда; при отключённой опции первый старт остаётся привязан к следующему такту.
+- На смене аккорда, transport stop и seek очищаются отложенные NoteOff и отпускаются прежние голоса; при stop также сбрасывается held chord, чтобы не возобновлять его самопроизвольно.
+- Scheduler сообщает о host PPQ discontinuity и о переключении Host/Internal источника; stale gates очищаются.
+- Sample offset переводится в индекс первого sample не раньше события (floor), вместо прежнего округления, которое могло сдвигать near-tail события на один sample назад.
+- Pending NoteOff queue увеличена в четыре раза; при переполнении выставляется флаг, а Processor выполняет all-notes-off fail-safe.
+- Добавлены headless regression cases на host seek, tempo/block-size change, near-tail sample mapping и forward 1/16 quantization.
+
+Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); последующий commit содержит корректировки и журналы.
+
+Статус M3: NOT ACCEPTED до успешного Windows CI, проверки integration на реальном PluginProcessor и дополнительных headless сценариев (Host Start/stop/restart, host↔internal fallback, pending gate cleanup, event-capacity overflow, buffer-size changes 64↔1024). Ручная проверка FL Studio 20 также обязательна. M4 остаётся заблокирован.

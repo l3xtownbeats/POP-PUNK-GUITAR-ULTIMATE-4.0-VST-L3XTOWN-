@@ -121,14 +121,18 @@ int main()
     if (std::abs(resizeB.endPpq - (resizeB.startPpq + 1024.0 * 140.0 / (60.0 * 48000.0))) > 1.0e-9)
         return 16;
 
-    // An event just before the block end must never be rounded backward to
-    // the final sample. Its offset is the first sample at/after its PPQ.
+    // A near-tail event maps to the first sample at/after its PPQ, not an
+    // earlier rounded sample. Its NoteOff is correctly retained for next block.
     PatternScheduler edgeScheduler;
-    std::array<PatternEvent, 1> edgePattern {{{ 0.0, 0.01, 60, 100, 1 }}};
+    std::array<PatternEvent, 1> edgePattern {{{ 0.00265, 0.0001, 60, 100, 1 }}};
     const auto edgeClock = edgeScheduler.beginBlock({ true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 64);
     const auto edgeCount = edgeScheduler.schedule(edgePattern, 1.0, 0.0, edgeClock, 48000.0, 64, 0.0, 0, events);
-    if (edgeCount != 2 || events[0].sampleOffset != 0 || events[1].sampleOffset < 0)
+    if (edgeCount != 1 || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 63)
         return 17;
+
+    if (std::abs(PatternScheduler::quantizePpqForward(1.01, 0.25) - 1.25) > 1.0e-9
+        || std::abs(PatternScheduler::quantizePpqForward(1.25, 0.25) - 1.25) > 1.0e-9)
+        return 18;
 
     std::cout << "PatternScheduler tests passed: transport, seek, tempo/block changes, gates, ordering.\n";
     return 0;
