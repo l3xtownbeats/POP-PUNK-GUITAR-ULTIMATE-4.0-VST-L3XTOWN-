@@ -198,7 +198,7 @@ namespace ppgu::performance
             const double lastCycleValue = std::floor((clock.endPpq - cycleStartPpq) / patternLengthBeats);
             const auto lastCycle = static_cast<long long>(lastCycleValue < 0.0 ? 0.0 : lastCycleValue);
 
-            for (long long cycle = firstCycle; cycle <= lastCycle && count + 2 <= output.size(); ++cycle)
+            for (long long cycle = firstCycle; cycle <= lastCycle; ++cycle)
             {
                 const double cyclePpq = cycleStartPpq + static_cast<double>(cycle) * patternLengthBeats;
                 if (cyclePpq >= clock.endPpq)
@@ -207,7 +207,10 @@ namespace ppgu::performance
                 for (const auto& event : pattern)
                 {
                     if (count + 2 > output.size())
+                    {
+                        outputOverflow_ = true;
                         break;
+                    }
                     if (event.beat < 0.0 || event.beat >= patternLengthBeats || event.duration <= 0.0)
                         continue;
 
@@ -261,10 +264,13 @@ namespace ppgu::performance
             pendingOverflow_ = false;
         }
 
+        // Treat output truncation like pending NoteOff exhaustion: the
+        // processor must release voices rather than risk a stuck note.
         bool consumePendingOverflow() noexcept
         {
-            const bool overflowed = pendingOverflow_;
+            const bool overflowed = pendingOverflow_ || outputOverflow_;
             pendingOverflow_ = false;
+            outputOverflow_ = false;
             return overflowed;
         }
 
@@ -277,6 +283,7 @@ namespace ppgu::performance
             previousUsingHost_ = false;
             pendingCount_ = 0;
             pendingOverflow_ = false;
+            outputOverflow_ = false;
         }
 
         double getInternalPpq() const noexcept { return internalPpq_; }
@@ -339,5 +346,6 @@ namespace ppgu::performance
         bool haveHostPosition_ = false;
         bool previousUsingHost_ = false;
         bool pendingOverflow_ = false;
+        bool outputOverflow_ = false;
     };
 }
