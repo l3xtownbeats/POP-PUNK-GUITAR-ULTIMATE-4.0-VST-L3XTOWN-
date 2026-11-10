@@ -19,6 +19,8 @@ struct Region
     int highChannel = 16;
     int group = 0;
     int offBy = 0;
+    int seqLength = 1;
+    int seqPosition = 1;
     float tuneCents = 0.0f;
     float volumeDb = 0.0f;
     float pan = 0.0f;
