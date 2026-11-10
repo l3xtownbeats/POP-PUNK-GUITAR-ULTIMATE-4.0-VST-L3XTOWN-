@@ -201,14 +201,17 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
             if (!std::isfinite(reader->sampleRate) || reader->sampleRate < 8000.0
                 || reader->sampleRate > 384000.0 || reader->lengthInSamples <= 0
                 || reader->lengthInSamples > static_cast<juce::int64>(reader->sampleRate * maximumSampleSeconds)
-                || reader->numChannels == 0 || reader->numChannels > 64)
+                || reader->numChannels == 0 || reader->numChannels > static_cast<unsigned int>(maximumSampleChannels))
             {
-                report.errors.push_back("WAV sample has an invalid sample rate/channel count, is empty, or exceeds the 120-second safety limit: "
+                report.errors.push_back("WAV sample must be mono or stereo, have a valid sample rate, and be non-empty and no longer than 120 seconds: "
                                         + canonicalSample.string());
                 continue;
             }
 
-            const int channels = juce::jmin(maximumSampleChannels, static_cast<int>(reader->numChannels));
+            // Never silently discard channels from multichannel source material.
+            // The current sampler DSP is explicitly mono/stereo; unsupported
+            // layouts must fail validation until a channel-routing policy exists.
+            const int channels = static_cast<int>(reader->numChannels);
             const int frames = static_cast<int>(reader->lengthInSamples);
             const auto assetBytes = static_cast<std::size_t>(channels)
                 * static_cast<std::size_t>(frames) * sizeof(float);
