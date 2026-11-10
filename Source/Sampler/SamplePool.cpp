@@ -129,8 +129,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
                 static_cast<std::uint32_t>(i));
 
         // 256 planar pages * 4096 frames * stereo floats = 8 MiB per
-        // library root. Even the maximum eight roots stay well below the
-        // 256 MiB global page-cache ceiling.
+        // library root. The eight-root limit therefore bounds these default
+        // sampler caches to 64 MiB in aggregate.
         pendingLibrary->service = std::make_unique<SampleStreamingService>(
             pendingLibrary->metadata, streamingCacheSlots, streamingPageFrames);
         if (!pendingLibrary->service->isValid())
