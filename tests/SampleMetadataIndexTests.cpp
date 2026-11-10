@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <limits>
 #include <string>
 
 int main()
@@ -196,7 +197,37 @@ int main()
     std::string invalidError;
     if (invalidReader.open(invalidMetadata, invalidError))
     {
-        std::cerr << "WAV page reader accepted a mismatched WAV header.\n";
+        std::cerr << "WAV page reader accepted a mismatched WAV header.\\n";
+        return 1;
+    }
+
+    // Public metadata inputs must reject non-finite sample rates. NaN
+    // previously slipped through because abs(actual - NaN) > tolerance is
+    // false, allowing an invalid playback increment into the streaming path.
+    for (const double invalidRate : {
+             std::numeric_limits<double>::quiet_NaN(),
+             std::numeric_limits<double>::infinity(),
+             -std::numeric_limits<double>::infinity(),
+             0.0, 500000.0 })
+    {
+        auto malformedRate = metadata;
+        malformedRate.sampleRate = invalidRate;
+        ppgu::sampler::WavPageReader malformedRateReader;
+        std::string malformedRateError;
+        if (malformedRateReader.open(malformedRate, malformedRateError))
+        {
+            std::cerr << "WAV page reader accepted invalid sample-rate metadata.\\n";
+            return 1;
+        }
+    }
+
+    auto emptyMetadata = metadata;
+    emptyMetadata.frames = 0;
+    ppgu::sampler::WavPageReader emptyReader;
+    std::string emptyError;
+    if (emptyReader.open(emptyMetadata, emptyError))
+    {
+        std::cerr << "WAV page reader accepted zero-frame metadata.\\n";
         return 1;
     }
 
