@@ -83,6 +83,14 @@ int main()
         return 1;
     }
 
+    // Repeated voices asking for one cold page must share one queued decode.
+    for (int duplicate = 0; duplicate < 64; ++duplicate)
+        if (!service.requestPage({ 0, 2 }))
+        {
+            std::cerr << "Streaming service rejected a coalesced page request.\\n";
+            return 1;
+        }
+
     ppgu::sampler::PageCacheSlots::ReadLease lease;
     const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
     while (std::chrono::steady_clock::now() < deadline
@@ -106,17 +114,16 @@ int main()
     }
     service.release(lease);
 
-    // Duplicate requests for a resident page must not decode and occupy
-    // another cache slot. The worker processes the request asynchronously.
+    // Re-requesting a resident page is a no-op and must not occupy another slot.
     if (!service.requestPage({ 0, 2 })) return 1;
     const auto duplicateDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
     while (std::chrono::steady_clock::now() < duplicateDeadline
-           && service.statistics().requestsProcessed < 2)
+           && service.statistics().requestsProcessed < 1)
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     const auto stats = service.statistics();
     if (stats.pagesDecoded != 1 || stats.invalidRequests != 1
-        || stats.requestsSubmitted != 2 || stats.requestsProcessed != 2
-        || stats.decodeFailures != 0)
+        || stats.requestsSubmitted != 1 || stats.requestsProcessed != 1
+        || stats.requestsCoalesced == 0 || stats.decodeFailures != 0)
     {
         std::cerr << "Streaming statistics or ready-page duplicate suppression failed.\\n";
         return 1;

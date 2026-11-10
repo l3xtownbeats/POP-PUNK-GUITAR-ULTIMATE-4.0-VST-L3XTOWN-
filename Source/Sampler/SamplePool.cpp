@@ -650,11 +650,14 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         singleRegion = selection.secondary;
 
     if (region->offBy > 0)
-        for (auto& activeVoice : voices)
+        for (int i = 0; i < maximumVoices; ++i)
+        {
+            auto& activeVoice = voices[static_cast<std::size_t>(i)];
             if (activeVoice.region != nullptr
                 && activeVoice.region->group == region->offBy
                 && activeVoice.midiChannel == midiChannel)
                 releaseVoice(activeVoice);
+        }
 
     const double safeGlobalTuning = std::isfinite(globalTuningSemitones)
         ? juce::jlimit(-48.0, 48.0, globalTuningSemitones) : 0.0;
@@ -692,7 +695,7 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         voice.region = layer;
         voice.attackEnvelope = 0.0f;
         voice.attackEnvelopeStep = 1.0f / static_cast<float>(
-            juce::jmax(1.0, std::ceil(outputSampleRate * 0.010)));
+            juce::jmax(1.0, std::ceil(outputSampleRate * 0.003)));
         voice.note = midiNote;
         voice.midiChannel = juce::jlimit(1, 16, midiChannel);
         voice.direction = 1;
@@ -735,14 +738,18 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
 
 void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept
 {
-    for (auto& voice : voices)
-        if (voice.region != nullptr && voice.note == midiNote && voice.midiChannel == midiChannel && !voice.releasing)
-            if (voice.region->loopMode != 4)
-            {
-                if (voice.region->loopMode == 2 || voice.region->loopMode == 3)
-                    voice.direction = 1;
-                releaseVoice(voice);
-            }
+    for (int i = 0; i < maximumVoices; ++i)
+    {
+        auto& voice = voices[static_cast<std::size_t>(i)];
+        if (voice.region != nullptr && voice.note == midiNote
+            && voice.midiChannel == midiChannel && !voice.releasing
+            && voice.region->loopMode != 4)
+        {
+            if (voice.region->loopMode == 2 || voice.region->loopMode == 3)
+                voice.direction = 1;
+            releaseVoice(voice);
+        }
+    }
 }
 
 void SamplerEngine::allNotesOff() noexcept
