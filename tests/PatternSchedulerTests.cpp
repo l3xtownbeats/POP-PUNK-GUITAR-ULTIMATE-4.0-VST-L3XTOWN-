@@ -120,6 +120,10 @@ int main()
             std::numeric_limits<double>::quiet_NaN(), invalidRateClock,
             48000.0, 512, 0.25, 0, events) != 0)
         return 28;
+    if (!invalidInputScheduler.consumePendingOverflow())
+        return 32; // Invalid running clock must trigger the processor fail-safe.
+    if (invalidInputScheduler.consumePendingOverflow())
+        return 33; // Fail-safe notification is one-shot.
 
     PatternScheduler malformedEventScheduler;
     const auto malformedClock = malformedEventScheduler.beginBlock(
