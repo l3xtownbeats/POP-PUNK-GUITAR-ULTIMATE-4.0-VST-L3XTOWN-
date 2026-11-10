@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "MIDNIGHT BLUE / STUDIO",
+  "background": "ff080e18",
+  "panel": "ff142338",
+  "panel2": "ff0e1929",
+  "accent": "ff49baff",
+  "text": "fff1f7ff",
+  "muted": "ff91a9c3"
+}
