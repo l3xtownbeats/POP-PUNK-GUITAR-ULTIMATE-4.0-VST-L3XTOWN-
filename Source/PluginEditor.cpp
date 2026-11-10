@@ -1,6 +1,8 @@
 #include "PluginEditor.h"
 #include "BinaryData.h"
 
+#include <algorithm>
+
 // Approved PPGU 4.0 dark/pink skin: all visible rotary and FX controls use APVTS attachments.
 
 namespace
