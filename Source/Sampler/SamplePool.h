@@ -86,7 +86,20 @@ public:
         mutable std::vector<std::uint32_t> roundRobinCounters;
     };
 
+    struct VelocityLayerSelection
+    {
+        const RegionView* primary = nullptr;
+        const RegionView* secondary = nullptr;
+        float primaryGain = 1.0f;
+        float secondaryGain = 0.0f;
+    };
+
     [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
+    // Returns at most two compatible, simultaneously playable velocity layers.
+    // RR selection is performed once by findRegion(); a partner must belong to
+    // the same SFZ group/RR take and have matching key/channel ranges.
+    [[nodiscard]] VelocityLayerSelection findVelocityLayers(
+        int midiNote, int velocity, int midiChannel = 1) noexcept;
     // SFZ equal-power velocity fade weight for one region.
     [[nodiscard]] static float calculateVelocityCrossfadeGain(int velocity,
         int xfinLowVelocity, int xfinHighVelocity,

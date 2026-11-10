@@ -450,6 +450,80 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     // earlier in the SFZ file.
     return firstSequenceMatch != nullptr ? firstSequenceMatch : firstMatch;
 }
+ 
+SamplePool::VelocityLayerSelection SamplePool::findVelocityLayers(
+    int midiNote, int velocity, int midiChannel) noexcept
+{
+    VelocityLayerSelection result;
+    result.primary = findRegion(midiNote, velocity, midiChannel);
+    if (result.primary == nullptr)
+        return result;
+
+    result.primaryGain = 1.0f;
+    const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
+    if (snapshot == nullptr)
+        return result;
+
+    const auto& primary = *result.primary;
+    const bool primaryFadeIn = primary.xfinLowVelocity >= 0
+        && primary.xfinHighVelocity > primary.xfinLowVelocity;
+    const bool primaryFadeOut = primary.xfoutLowVelocity >= 0
+        && primary.xfoutHighVelocity > primary.xfoutLowVelocity;
+    if (!primaryFadeIn && !primaryFadeOut)
+        return result;
+
+    const RegionView* partner = nullptr;
+    float partnerGain = 0.0f;
+    for (const auto& candidate : snapshot->regions)
+    {
+        if (&candidate == result.primary
+            || midiNote < candidate.lowKey || midiNote > candidate.highKey
+            || velocity < candidate.lowVelocity || velocity > candidate.highVelocity
+            || midiChannel < candidate.lowChannel || midiChannel > candidate.highChannel
+            || candidate.group != primary.group
+            || candidate.roundRobinSetIndex != primary.roundRobinSetIndex
+            || candidate.seqPosition != primary.seqPosition
+            || candidate.seqLength != primary.seqLength
+            || candidate.lowKey != primary.lowKey || candidate.highKey != primary.highKey
+            || candidate.lowChannel != primary.lowChannel || candidate.highChannel != primary.highChannel)
+            continue;
+
+        const bool candidateFadeIn = candidate.xfinLowVelocity >= 0
+            && candidate.xfinHighVelocity > candidate.xfinLowVelocity;
+        const bool candidateFadeOut = candidate.xfoutLowVelocity >= 0
+            && candidate.xfoutHighVelocity > candidate.xfoutLowVelocity;
+        const bool complementary = (primaryFadeIn && candidateFadeOut)
+            || (primaryFadeOut && candidateFadeIn);
+        if (!complementary)
+            continue;
+
+        const bool sameSource = primary.streaming == candidate.streaming
+            && primary.sampleId == candidate.sampleId && primary.audio == candidate.audio;
+        if (sameSource)
+            continue;
+
+        partner = &candidate;
+        partnerGain = calculateVelocityCrossfadeGain(velocity,
+            candidate.xfinLowVelocity, candidate.xfinHighVelocity,
+            candidate.xfoutLowVelocity, candidate.xfoutHighVelocity);
+        break;
+    }
+
+    if (partner == nullptr)
+        return result;
+
+    const float primaryWeight = calculateVelocityCrossfadeGain(velocity,
+        primary.xfinLowVelocity, primary.xfinHighVelocity,
+        primary.xfoutLowVelocity, primary.xfoutHighVelocity);
+    const float power = std::sqrt(primaryWeight * primaryWeight + partnerGain * partnerGain);
+    if (!std::isfinite(power) || power <= 0.000001f)
+        return result;
+
+    result.secondary = partner;
+    result.primaryGain = primaryWeight / power;
+    result.secondaryGain = partnerGain / power;
+    return result;
+}
 
 std::size_t SamplePool::getRegionCount() const noexcept
 {
@@ -496,12 +570,28 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
 
 bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones, bool palmMute) noexcept
 {
-    const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
+    const auto selection = pool.findVelocityLayers(midiNote, velocity, midiChannel);
+    const auto* region = selection.primary;
     if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
         return false;
 
-    // SFZ off_by groups implement guitar-string choking: a new note on the
-    // same string gently releases the previously ringing voice.
+    const int voiceLimit = juce::jlimit(1, maximumVoices, maximumActiveVoices);
+    int activeVoices = 0;
+    for (const auto& activeVoice : voices)
+        if (activeVoice.region != nullptr)
+            ++activeVoices;
+
+    // Do not steal an existing voice merely to create the second crossfade
+    // layer. If the configured polyphony has room for only one layer, use the
+    // stronger side at unity layer gain instead of attenuating the note.
+    const bool canRenderPair = selection.secondary != nullptr
+        && selection.primaryGain > 0.0001f && selection.secondaryGain > 0.0001f
+        && activeVoices + 2 <= voiceLimit;
+    const SamplePool::RegionView* singleRegion = region;
+    if (!canRenderPair && selection.secondary != nullptr
+        && selection.secondaryGain > selection.primaryGain)
+        singleRegion = selection.secondary;
+
     if (region->offBy > 0)
         for (auto& activeVoice : voices)
             if (activeVoice.region != nullptr
@@ -509,48 +599,58 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
                 && activeVoice.midiChannel == midiChannel)
                 releaseVoice(activeVoice);
 
-    const int voiceIndex = chooseVoice(juce::jlimit(1, maximumVoices, maximumActiveVoices));
-    auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
-    auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
-    streamReader.release();
-    voice = {};
-    voice.region = region;
-    voice.note = midiNote;
-    voice.midiChannel = juce::jlimit(1, 16, midiChannel);
-    voice.direction = 1;
-    voice.position = static_cast<double>(region->startFrame);
     const double safeGlobalTuning = std::isfinite(globalTuningSemitones)
         ? juce::jlimit(-48.0, 48.0, globalTuningSemitones) : 0.0;
-    const double semitones = static_cast<double>(midiNote - region->rootKey)
-        + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
-    voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
-    // Do not apply a fade curve until a compatible second region is
-    // selected and rendered alongside this one. Applying xfin/xfout to a
-    // lone selected region can attenuate it to silence; the curve helper is
-    // retained for the forthcoming paired-layer playback implementation.
-    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
-    voice.palmMuted = palmMute;
-    if (palmMute)
+    const auto startLayer = [&](const SamplePool::RegionView* layer, float layerGain) noexcept
     {
-        // Palm mute is a short, damped articulation fallback. Dedicated SFZ
-        // palm-muted sample zones can still be layered in a later sampler pass.
-        constexpr double palmMuteCutoffHz = 2200.0;
-        constexpr double palmMuteDurationSeconds = 0.12;
-        voice.palmMuteEnvelopeStep = 1.0f / static_cast<float>(juce::jmax(1.0,
-            outputSampleRate * palmMuteDurationSeconds));
-        voice.palmMuteFilterCoefficient = static_cast<float>(1.0 - std::exp(
-            -2.0 * juce::MathConstants<double>::pi * palmMuteCutoffHz / outputSampleRate));
-    }
-    voice.age = nextAge++;
-    if (region->streaming != nullptr)
+        if (layer == nullptr || layerGain <= 0.0001f
+            || (layer->audio == nullptr && layer->streaming == nullptr))
+            return false;
+
+        const int voiceIndex = chooseVoice(voiceLimit);
+        auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
+        auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
+        streamReader.release();
+        voice = {};
+        voice.region = layer;
+        voice.note = midiNote;
+        voice.midiChannel = juce::jlimit(1, 16, midiChannel);
+        voice.direction = 1;
+        voice.position = static_cast<double>(layer->startFrame);
+        const double semitones = static_cast<double>(midiNote - layer->rootKey)
+            + static_cast<double>(layer->tuneCents) / 100.0 + safeGlobalTuning;
+        voice.increment = (layer->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
+        voice.gain = (static_cast<float>(velocity) / 127.0f) * layer->gain * layerGain;
+        voice.palmMuted = palmMute;
+        if (palmMute)
+        {
+            constexpr double palmMuteCutoffHz = 2200.0;
+            constexpr double palmMuteDurationSeconds = 0.12;
+            voice.palmMuteEnvelopeStep = 1.0f / static_cast<float>(juce::jmax(1.0,
+                outputSampleRate * palmMuteDurationSeconds));
+            voice.palmMuteFilterCoefficient = static_cast<float>(1.0 - std::exp(
+                -2.0 * juce::MathConstants<double>::pi * palmMuteCutoffHz / outputSampleRate));
+        }
+        voice.age = nextAge++;
+        if (layer->streaming != nullptr)
+        {
+            streamReader.attach(layer->streaming, layer->sampleId, layer->totalFrames);
+            streamReader.prefetch(layer->startFrame);
+            if (layer->loopMode == 1 || layer->loopMode == 2 || layer->loopMode == 3)
+                streamReader.requestPrefetch(layer->loopStartFrame);
+            voice.prefetchedPage = layer->startFrame / layer->streaming->pageFrames();
+        }
+        return true;
+    };
+
+    if (canRenderPair)
     {
-        streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
-        streamReader.prefetch(region->startFrame);
-        if (region->loopMode == 1 || region->loopMode == 2 || region->loopMode == 3)
-            streamReader.requestPrefetch(region->loopStartFrame);
-        voice.prefetchedPage = region->startFrame / region->streaming->pageFrames();
+        const bool firstStarted = startLayer(selection.primary, selection.primaryGain);
+        const bool secondStarted = startLayer(selection.secondary, selection.secondaryGain);
+        return firstStarted || secondStarted;
     }
-    return true;
+
+    return startLayer(singleRegion, 1.0f);
 }
 
 void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept

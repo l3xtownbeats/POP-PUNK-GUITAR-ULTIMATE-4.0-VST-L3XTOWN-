@@ -418,6 +418,62 @@ int main()
         return 1;
     }
 
+    // Two compatible SFZ regions must be returned as a pair and mixed
+    // with equal-power weights; a one-voice polyphony limit must retain unity
+    // gain rather than starting a second voice that steals the first.
+    const auto velocityPairSfz = directory.getChildFile("velocity-pair.sfz");
+    if (!velocityPairSfz.replaceWithText(
+        "<group> group=91\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<region> sample=long-stream-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
+    {
+        std::cerr << "Could not write paired velocity crossfade fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool velocityPairPool;
+    const auto velocityPairLoad = velocityPairPool.loadSfz(velocityPairSfz);
+    const auto velocityPair = velocityPairPool.findVelocityLayers(69, 60, 1);
+    if (!velocityPairLoad.success || velocityPair.primary == nullptr || velocityPair.secondary == nullptr
+        || std::abs(velocityPair.primaryGain - 0.7071067f) > 0.002f
+        || std::abs(velocityPair.secondaryGain - 0.7071067f) > 0.002f
+        || std::abs(velocityPair.primaryGain * velocityPair.primaryGain
+            + velocityPair.secondaryGain * velocityPair.secondaryGain - 1.0f) > 0.002f)
+    {
+        std::cerr << "Compatible SFZ velocity regions were not paired with equal-power gains.\\n";
+        for (const auto& error : velocityPairLoad.errors) std::cerr << error << "\\n";
+        return 1;
+    }
+    const auto velocityPairStart = velocityPairPool.findVelocityLayers(69, 20, 1);
+    const auto velocityPairEnd = velocityPairPool.findVelocityLayers(69, 100, 1);
+    if (velocityPairStart.secondary == nullptr || velocityPairEnd.secondary == nullptr
+        || std::abs(velocityPairStart.primaryGain - 1.0f) > 0.001f
+        || std::abs(velocityPairStart.secondaryGain) > 0.001f
+        || std::abs(velocityPairEnd.primaryGain) > 0.001f
+        || std::abs(velocityPairEnd.secondaryGain - 1.0f) > 0.001f)
+    {
+        std::cerr << "SFZ velocity crossfade endpoints did not resolve to the expected layer.\\n";
+        return 1;
+    }
+
+    ppgu::sampler::SamplerEngine pairedPlaybackEngine;
+    pairedPlaybackEngine.prepare(44100.0);
+    if (!pairedPlaybackEngine.loadSfz(velocityPairSfz).success
+        || !pairedPlaybackEngine.noteOn(69, 60, 2)
+        || pairedPlaybackEngine.getActiveVoiceCount() != 2)
+    {
+        std::cerr << "Sampler did not start both compatible crossfade layers within polyphony 2.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplerEngine singleVoiceFallbackEngine;
+    singleVoiceFallbackEngine.prepare(44100.0);
+    if (!singleVoiceFallbackEngine.loadSfz(velocityPairSfz).success
+        || !singleVoiceFallbackEngine.noteOn(69, 60, 1)
+        || singleVoiceFallbackEngine.getActiveVoiceCount() != 1)
+    {
+        std::cerr << "Velocity crossfade did not safely fall back to one voice at polyphony 1.\\n";
+        return 1;
+    }
+
     // Velocity crossfade opcodes must survive SFZ parsing and reach the
     // immutable runtime region metadata (playback blending is a later step).
     const auto crossfadeMetadataSfz = directory.getChildFile("crossfade-metadata.sfz");
