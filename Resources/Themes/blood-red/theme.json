@@ -1,0 +1,39 @@
+{
+  "id": "blood-red",
+  "name": "Blood Red",
+  "version": 1,
+  "colors": {
+    "background": "#100708",
+    "surface": "#211014",
+    "accent": "#F12D45",
+    "text": "#FFF0F1",
+    "muted": "#B99A9E",
+    "panel": "#141419",
+    "panelRaised": "#202027",
+    "border": "#383840",
+    "focus": "#F12D45",
+    "meter": "#F12D45"
+  },
+  "metrics": {
+    "cornerRadius": 10,
+    "controlHeight": 42,
+    "spacing": 8
+  },
+  "typography": {
+    "family": "Inter",
+    "weightRegular": 400,
+    "weightSemibold": 600,
+    "weightBold": 700
+  },
+  "assets": {
+    "background": "assets/background@2x.png",
+    "logo": "assets/logo.svg",
+    "knob": "assets/knob@2x.png",
+    "panel": "assets/panel@2x.png"
+  },
+  "effects": {
+    "panelGlow": "#F12D45",
+    "accentGlowOpacity": 0.18,
+    "textureOpacity": 0.08
+  }
+}
