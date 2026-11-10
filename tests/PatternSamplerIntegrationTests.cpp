@@ -5,7 +5,7 @@
 #include <cmath>
 #include <filesystem>
 #include <iostream>
-#include <memory>
+#include <memory>\n#include <thread>\n#include <chrono>
 
 int main()
 {
@@ -44,6 +44,21 @@ int main()
         for (const auto& error : loaded.errors) std::cerr << error << "\n";
         return 5;
     }
+
+    // Warm the asynchronous page cache before measuring the sample-accurate
+    // dispatch path. A cold cache miss intentionally stalls the voice cursor.
+    if (!sampler.noteOn(60, 112)) return 6;
+    juce::AudioBuffer<float> warmup(2, 128);
+    bool warmed = false;
+    for (int attempt = 0; attempt < 100 && !warmed; ++attempt)
+    {
+        warmup.clear();
+        sampler.render(warmup, 0, warmup.getNumSamples());
+        warmed = warmup.getMagnitude(0, 0, warmup.getNumSamples()) > 0.001f;
+        if (!warmed) std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    sampler.allNotesOff();
+    if (!warmed) return 7;
 
     PatternScheduler scheduler;
     TransportSnapshot host;
