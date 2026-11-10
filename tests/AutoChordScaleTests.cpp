@@ -51,4 +51,14 @@ int main()
     assert(tracker.isHeld(1, 62));
     tracker.clear();
     assert(!tracker.isHeld(1, 62));
+
+    // All 128 source pitches may map to one target pitch. The counter must
+    // preserve the final held key instead of saturating at 127.
+    for (int source = 0; source < 128; ++source)
+        tracker.noteOn(0, source, 60);
+    for (int source = 0; source < 127; ++source)
+        tracker.noteOff(0, source);
+    assert(tracker.isHeld(0, 60));
+    tracker.noteOff(0, 127);
+    assert(!tracker.isHeld(0, 60));
 }
