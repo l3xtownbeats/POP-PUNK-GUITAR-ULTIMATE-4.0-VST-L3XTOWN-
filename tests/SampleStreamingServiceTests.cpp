@@ -250,6 +250,40 @@ int main()
         return 1;
     }
 
+    // stop() is idempotent, and a fully joined worker may be started again.
+    // A fresh page request after restart must be decoded and published.
+    service.stop();
+    const auto beforeRestart = service.statistics();
+    if (!service.start())
+    {
+        std::cerr << "Streaming service could not restart after a clean shutdown.\\n";
+        return 1;
+    }
+    if (!service.requestPage({ 0, 8 }))
+    {
+        std::cerr << "Restarted streaming service rejected a valid page request.\\n";
+        return 1;
+    }
+
+    ppgu::sampler::PageCacheSlots::ReadLease restartedLease;
+    const auto restartDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    while (std::chrono::steady_clock::now() < restartDeadline
+           && !service.tryAcquire({ 0, 8 }, restartedLease))
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+    const auto afterRestart = service.statistics();
+    if (!restartedLease
+        || afterRestart.requestsProcessed <= beforeRestart.requestsProcessed
+        || afterRestart.pagesDecoded <= beforeRestart.pagesDecoded
+        || std::abs(restartedLease.samples[0]
+                    - source.getSample(0, 8 * 256)) > 0.0001f)
+    {
+        std::cerr << "Restarted worker did not decode and publish the requested page.\\n";
+        return 1;
+    }
+    service.release(restartedLease);
+    service.stop();
+
     std::filesystem::remove_all(root);
     std::cout << "Streaming service tests passed: bounded cache, worker decode, audio-side acquire, duplicate suppression and shutdown.\\n";
     return 0;
