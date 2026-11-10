@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SfzParser.h"
+#include "SampleStreamingService.h"
+#include "StreamingVoiceReader.h"
 #include <juce_audio_formats/juce_audio_formats.h>
 
 #include <array>
@@ -39,7 +41,12 @@ public:
 
     struct RegionView
     {
+        // Exactly one source is active: decoded audio (legacy) or the
+        // background streaming service. Production SFZ loads use streaming.
         const juce::AudioBuffer<float>* audio = nullptr;
+        SampleStreamingService* streaming = nullptr;
+        std::uint32_t sampleId = 0;
+        std::uint64_t totalFrames = 0;
         double sourceSampleRate = 44100.0;
         int lowKey = 0;
         int highKey = 127;
@@ -80,19 +87,24 @@ public:
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 
 private:
-    struct SampleAsset
+    struct StreamingLibrary
     {
-        juce::AudioBuffer<float> audio;
-        double sampleRate = 44100.0;
+        std::string rootKey;
+        std::vector<SampleMetadata> metadata;
+        std::map<std::string, std::uint32_t> sampleIds;
+        std::unique_ptr<SampleStreamingService> service;
     };
 
     mutable std::mutex loaderMutex;
-    // Assets/snapshots are retained until destruction so audio-thread raw
-    // pointers never dangle. Explicit caps make that lifetime policy bounded.
-    static constexpr std::size_t maximumSampleStorageBytes = 1024ULL * 1024ULL * 1024ULL;
+    // Streaming services and immutable snapshots are retained until pool
+    // destruction so audio-thread region/service pointers never dangle.
+    // Repeated banks from one library root share one worker and one bounded
+    // page cache instead of spawning a thread per preset/bank.
     static constexpr std::size_t maximumSnapshots = 128;
-    std::size_t sampleStorageBytes = 0;
-    std::map<std::string, std::unique_ptr<SampleAsset>> sampleStorage;
+    static constexpr std::size_t maximumStreamingLibraries = 8;
+    static constexpr std::size_t streamingCacheSlots = 192;
+    static constexpr std::uint32_t streamingPageFrames = SampleStreamingService::defaultPageFrames;
+    std::vector<std::unique_ptr<StreamingLibrary>> streamingLibraries;
     std::vector<std::unique_ptr<Snapshot>> snapshots;
     std::atomic<const Snapshot*> activeSnapshot { nullptr };
 };
@@ -134,6 +146,9 @@ private:
     void releaseVoice(Voice& voice) noexcept;
 
     SamplePool pool;
+    // Declared after pool so readers are destroyed/released before their
+    // SampleStreamingService owners during SamplerEngine teardown.
+    std::array<StreamingVoiceReader, maximumVoices> streamingReaders {};
     std::array<Voice, maximumVoices> voices {};
     double outputSampleRate = 44100.0;
     std::uint64_t nextAge = 1;
