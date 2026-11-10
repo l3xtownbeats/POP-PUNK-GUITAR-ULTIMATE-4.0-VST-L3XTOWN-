@@ -503,9 +503,10 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     if (region->streaming != nullptr)
     {
         streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
-        streamReader.prefetch(static_cast<std::uint64_t>(region->startFrame));
-        voice.prefetchedPage = static_cast<std::uint64_t>(region->startFrame)
-            / region->streaming->pageFrames();
+        streamReader.prefetch(region->startFrame);
+        if (region->loopMode == 1 || region->loopMode == 2 || region->loopMode == 3)
+            streamReader.requestPrefetch(region->loopStartFrame);
+        voice.prefetchedPage = region->startFrame / region->streaming->pageFrames();
     }
     return true;
 }
