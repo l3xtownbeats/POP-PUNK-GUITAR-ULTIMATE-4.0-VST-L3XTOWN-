@@ -15,6 +15,111 @@ namespace
     const juce::Colour muted { 0xffaaa8b2 };
 }
 
+class FxRackContent final : public juce::Component
+{
+    struct Control { juce::String label, parameter; };
+    class Module final : public juce::Component
+    {
+    public:
+        Module(juce::AudioProcessorValueTreeState& state, const juce::String& title,
+               const juce::String& enableId, std::initializer_list<Control> controls)
+        {
+            setSize(900, 116);
+            heading.setText(title, juce::dontSendNotification);
+            heading.setFont(juce::Font(14.0f, juce::Font::bold));
+            heading.setColour(juce::Label::textColourId, juce::Colour(0xffed238b));
+            addAndMakeVisible(heading);
+            if (enableId.isNotEmpty()) {
+                enabled.setButtonText("ON");
+                enabled.setClickingTogglesState(true);
+                enabledAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(state, enableId, enabled);
+                addAndMakeVisible(enabled);
+            }
+            for (const auto& item : controls) {
+                auto label = std::make_unique<juce::Label>();
+                label->setText(item.label, juce::dontSendNotification);
+                label->setFont(juce::Font(10.0f, juce::Font::bold));
+                label->setColour(juce::Label::textColourId, juce::Colour(0xffaaa8b2));
+                label->setJustificationType(juce::Justification::centred);
+                addAndMakeVisible(*label);
+                labels.push_back(std::move(label));
+                auto slider = std::make_unique<juce::Slider>();
+                slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+                slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
+                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffed238b));
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
+                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xfff4f0f4));
+                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xfff4f0f4));
+                addAndMakeVisible(*slider);
+                attachments.push_back(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(state, item.parameter, *slider));
+                sliders.push_back(std::move(slider));
+            }
+        }
+        void resized() override {
+            auto area = getLocalBounds().reduced(10, 5);
+            auto header = area.removeFromTop(23);
+            heading.setBounds(header.removeFromLeft(240));
+            if (enabled.isVisible()) enabled.setBounds(header.removeFromRight(55));
+            const int count = juce::jmax(1, static_cast<int>(sliders.size()));
+            const int width = juce::jmax(88, area.getWidth() / count);
+            for (size_t i = 0; i < sliders.size(); ++i) {
+                auto cell = area.removeFromLeft(width);
+                labels[i]->setBounds(cell.removeFromTop(15));
+                sliders[i]->setBounds(cell);
+            }
+        }
+    private:
+        juce::Label heading;
+        juce::TextButton enabled;
+        std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> enabledAttachment;
+        std::vector<std::unique_ptr<juce::Label>> labels;
+        std::vector<std::unique_ptr<juce::Slider>> sliders;
+        std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> attachments;
+    };
+public:
+    explicit FxRackContent(PopPunkGuitarUltimateAudioProcessor& p) {
+        addModule(p,"COMPRESSOR","compressorOn",{{"AMOUNT","compressorAmount"},{"THRESHOLD","compressorThreshold"},{"RATIO","compressorRatio"},{"ATTACK","compressorAttack"},{"RELEASE","compressorRelease"}});
+        addModule(p,"EQUALIZER","eqOn",{{"LOW","eqLow"},{"MID","eqMid"},{"HIGH","eqHigh"},{"LOW FREQ","eqLowFreq"},{"MID FREQ","eqMidFreq"},{"MID Q","eqMidQ"},{"HIGH FREQ","eqHighFreq"}});
+        addModule(p,"AMP / DISTORTION","distortionOn",{{"DRIVE","distortionDrive"},{"TONE","distortionTone"},{"MIX","distortionMix"},{"AMP GAIN","ampGain"},{"AMP TONE","tone"}});
+        addModule(p,"CHORUS","chorusOn",{{"RATE","chorusRate"},{"DEPTH","chorusDepth"},{"MIX","chorusMix"}});
+        addModule(p,"FLANGER","flangerOn",{{"RATE","flangerRate"},{"DEPTH","flangerDepth"},{"FEEDBACK","flangerFeedback"},{"MIX","flangerMix"}});
+        addModule(p,"DELAY","delayOn",{{"TIME MS","delayTime"},{"FEEDBACK","delayFeedback"},{"MIX","delayMix"}});
+        addModule(p,"REVERB","reverbOn",{{"ROOM SIZE","reverbRoomSize"},{"DAMPING","reverbDamping"},{"MIX","reverbMix"}});
+        addModule(p,"CABINET","cabinetOn",{{"LOW CUT","cabinetLowCut"},{"HIGH CUT","cabinetHighCut"},{"MIX","cabinetMix"}});
+        addModule(p,"DOUBLE TRACK","doubleTrackOn",{{"DOUBLE MIX","doubleTrackMix"}});
+        addModule(p,"OUTPUT",{},{{"MASTER","master"},{"OUTPUT DB","output"},{"PAN","pan"}});
+        viewport.setViewedComponent(&body, false);
+        viewport.setScrollBarsShown(true, false);
+        addAndMakeVisible(viewport);
+        setSize(960,820);
+    }
+    void paint(juce::Graphics& g) override {
+        g.fillAll(juce::Colour(0xff111116));
+        g.setColour(juce::Colour(0xffed238b)); g.setFont(juce::Font(22.0f,juce::Font::bold));
+        g.drawText("FX STUDIO",20,10,300,30,juce::Justification::left);
+        g.setColour(juce::Colour(0xffaaa8b2)); g.setFont(juce::Font(11.0f));
+        g.drawText("TONE SHAPING  /  PER-PRESET PARAMETERS  /  HOST AUTOMATION",22,40,700,20,juce::Justification::left);
+    }
+    void resized() override {
+        auto area=getLocalBounds().reduced(14); area.removeFromTop(66); viewport.setBounds(area);
+        body.setSize(juce::jmax(600,area.getWidth()-14),static_cast<int>(modules.size())*122);
+        auto r=body.getLocalBounds(); for(auto& m:modules) m->setBounds(r.removeFromTop(122).reduced(0,3));
+    }
+private:
+    void addModule(PopPunkGuitarUltimateAudioProcessor& p,const juce::String& title,const juce::String& enable,std::initializer_list<Control> controls) {
+        auto m=std::make_unique<Module>(p.parameters,title,enable,controls); body.addAndMakeVisible(*m); modules.push_back(std::move(m));
+    }
+    juce::Viewport viewport; juce::Component body; std::vector<std::unique_ptr<Module>> modules;
+};
+class FxRackWindow final : public juce::DocumentWindow {
+public:
+    explicit FxRackWindow(PopPunkGuitarUltimateAudioProcessor& p):DocumentWindow("PPGU 5.0 / FX STUDIO",juce::Colour(0xff111116),allButtons) {
+        setUsingNativeTitleBar(true); setContentOwned(new FxRackContent(p),true); setResizable(true,true); centreWithSize(960,820);
+    }
+    void closeButtonPressed() override { setVisible(false); }
+};
+
+
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
     : AudioProcessorEditor(&p), processor(p)
 {
