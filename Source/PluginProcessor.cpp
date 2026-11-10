@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Performance/ChordTransitionTimeline.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
