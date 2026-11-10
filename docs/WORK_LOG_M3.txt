@@ -119,3 +119,11 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Внесены явные преобразования координат к `float` и переименование локальной переменной в `hostPlayHead`.
 - Это малые quality fixes, не закрывающие функциональные критерии M1–M3.
 - Свежая Windows Release build/CTest после этих изменений ещё не подтверждена; статус FIXED IN SOURCE / AWAITING CI.
+
+## 10 ноября 2026 — M3 scheduler → SamplerEngine integration regression
+
+- Добавлен `tests/PatternSamplerIntegrationTests.cpp`: generated WAV/SFZ fixture, warm streaming cache, host transport snapshot, PatternScheduler dispatch, sample-accurate NoteOn/NoteOff и проверка audible SamplerEngine output.
+- CMake зарегистрировал `ppgu_pattern_sampler_integration_tests`.
+- Windows run `42843030370`, commit `4d13943f15352b87f3569524e2e5b4b8f9bbafda`: SUCCESS — Release build, полный CTest (включая новый test), VST3 locate, pluginval strictness 5, package/upload.
+- Дополнительный MSVC run `42843030228`: SUCCESS.
+- Автоматический module-level scheduler→sampler gate пройден; ручная проверка FL Studio 20 MIDI/transport остаётся OPEN.
