@@ -177,3 +177,12 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - M2 velocity crossfade has a passing isolated CI run but is not yet in the integration branch; verify summed crossfade level and preserve per-note voice grouping when porting.
 - The current sample-bank artifact is not evidence that new electric guitar takes were recorded. New audio needs source/license manifest and checksum.
 - The user's FL Studio report confirms plugin load and audible MIDI response only; save/reopen, project state restoration, transport, long playback and cache pressure remain unverified.
+
+
+## 10 ноября 2026 — IMP-001: importer regression expectation mismatch
+
+- При CI run 42855790840 (SHA e8f3baa9b2b85007bab085bcc046fa0dc8721280) сборка VST3 прошла до CTest; 11/12 тестов прошли.
+- Упал только ppgu_sample_library_importer_tests. Сообщение: ожидание отчёта не совпало с фактическим: Imported=3, mapped=2, needsMapping=1. Файл Unknown_take.wav не содержит note/root key в имени и был импортирован с Needs Mapping.
+- Вероятная причина — устаревшее или неверное ожидание тестового fixture относительно корректного поведения importer. Это пока гипотеза; сначала проверить fixture, assertions и классификацию, затем изменить код/тест по установленному контракту.
+- Требование исправления: тест должен проверять mapped и needsMapping отдельно, в том числе Unknown_take.wav → Needs Mapping; не подменять неизвестный root догадкой и не удалять такой файл.
+- Статус: OPEN — ROOT CAUSE REVIEW REQUIRED. Исправление не внесено, тест не закрыт.
