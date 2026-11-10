@@ -7,13 +7,13 @@
 #include <vector>
 #include <type_traits>
 
+using ppgu::sampler::PageCacheSlots;
+using ppgu::sampler::PageKey;
+
 static_assert(!std::is_copy_constructible_v<PageCacheSlots::ReadLease>);
 static_assert(!std::is_copy_assignable_v<PageCacheSlots::ReadLease>);
 static_assert(!std::is_move_constructible_v<PageCacheSlots::ReadLease>);
 static_assert(!std::is_move_assignable_v<PageCacheSlots::ReadLease>);
-
-using ppgu::sampler::PageCacheSlots;
-using ppgu::sampler::PageKey;
 
 int main()
 {
