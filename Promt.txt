@@ -518,3 +518,14 @@ VST3, запуск FL, загрузка банка, рендер 60 с.
 - Каждый lease должен быть связан с экземпляром cache, который его выдал. release() через другой cache обязан быть безопасным no-op и не менять счётчики/данные ни одной cache-инстанции.
 - Регрессионные тесты обязательны: double-acquire в активный lease; release через неверный cache с тем же индексом слота; затем корректный release владельцем и успешная eviction.
 - Проверять отсутствие pin leaks, reader-counter underflow и невозможности eviction после ошибочного вызова API. Не удалять проверки и не превращать эти случаи в неопределённое поведение.
+
+
+### Performance + universal sample import requirements (10 Nov 2026)
+- Treat idle 50–150 MB and active selected-preset playback 400–700 MB as measurement targets, not achieved claims or hard caps. Aim lower where quality/stability permit; never sacrifice source quality, DSP quality, or voice reliability merely to hit a memory number.
+- Measure host baseline, plugin idle, selected preset loaded, peak polyphony/cache memory, CPU, startup time, preset-switch time, cache hit/miss, prefetch hit and underruns on a documented reference machine. Separate disk bank size from process RAM.
+- Allow import of every audio format for which a decoder is actually built and available. Verify JUCE AudioFormatManager registrations and codec/license terms; report unsupported formats honestly.
+- Preserve original input; perform conversion/import on background workers only. Internal representation must be lossless/high precision and stream/page friendly (initial option: float PCM WAV; evaluate lossless FLAC against CPU decode cost). Do not silently downsample, reduce bit depth, or fold stereo to mono.
+- Store metadata, source path, checksum, license/provenance, sample rate, channel count and frame count. Validate corrupt/unsupported files, duplicates, safe paths, disk space and cancellation.
+- Importer regression suite must cover each enabled decoder, sample metadata, waveform error/round-trip, corrupt input, duplicate assets, cancellation and failure paths. No audio-thread file I/O, allocation, decode, or blocking.
+- Large total library size is disk/index bounded, not RAM bounded. Keep only active-preset assets/pages plus bounded hot/warm cache and release-tail references resident.
+- Current implementation is WAV metadata/page-read foundation only; universal conversion and runtime streaming integration are NOT implemented until their code and tests exist.
