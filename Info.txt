@@ -1376,3 +1376,15 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Измерения должны выполняться в воспроизводимых сценариях (idle, выбранный пресет, типичная полифония, максимальная полифония, переключение пресета, 64/128/256/512 buffer), с фиксацией CPU/RAM и проверкой dropout/clicks. Не выдавать расчётные значения за измеренные.
 - Обновлён Promt.txt v33: строка RAM-бюджетов уточнена; исходный предел CPU <=10% сохранён.
 - Статус: REQUIREMENTS CLARIFIED / IMPLEMENTATION AND BENCHMARKS PENDING.
+
+
+## 10 ноября 2026 — M2: исправлена модель совместного чтения страниц Sample Bank
+
+- Аудит уже добавленных компонентов `SampleMetadataIndex`, `WavPageReader` и `PageCacheSlots` выявил критический дефект в cache: слот переходил из `ready` в эксклюзивное состояние `reading`, поэтому одновременно только один голос мог получить страницу сэмпла. При повторном использовании одной и той же ноты/сэмпла другими голосами это создавало cache miss, хотя нужная страница уже находилась в памяти.
+- Исправление: состояние доступа теперь кодирует число активных read leases. Несколько аудио-голосов могут одновременно читать одну неизменяемую страницу; worker может переиспользовать слот только атомарным переходом из `ready` с нулём читателей. Последний release возвращает слот в состояние, допускающее eviction. Audio-side операции по-прежнему не выделяют память, не блокируют поток и не выполняют файловый I/O.
+- Изменены: `Source/Sampler/PageCacheSlots.h`, `Source/Sampler/PageCacheSlots.cpp`, `tests/PageCacheSlotsTests.cpp`.
+- Добавлен regression test: два независимых voice lease одновременно получают один и тот же page; eviction запрещён после освобождения только первого lease; после освобождения обоих slot снова доступен для перезаписи.
+- Коммиты на `main`: `6b46a69a` (header), `4a2f0d09` (implementation), `a7911a33` (regression test). Все изменения — только `main`.
+- Проверка: исходники повторно считаны с `main` после записи и сверены. Локальная компиляция/CTest и Windows GitHub Actions для этих коммитов пока не подтверждены; не объявлять тест пройденным до получения CI результата.
+- Ограничение текущего этапа: `WavPageReader` и `PageCacheSlots` существуют как отдельные компоненты, но ещё не подключены к playback path `SamplerEngine`. Текущий `SamplePool::loadSfz()` по-прежнему декодирует WAV целиком и держит 1 GiB cache cap. Поэтому потоковая загрузка и preset-scoped lazy loading ещё не реализованы в runtime. Следующий шаг — безопасная интеграция page cache с голосами и worker loader, с тестами на одновременные голоса/cache miss/prefetch и старые release-хвосты.
+- Статус: CACHE CONCURRENCY BUG FIXED IN SOURCE / CI PENDING / STREAMING PLAYBACK INTEGRATION PENDING. M2 открыта.
