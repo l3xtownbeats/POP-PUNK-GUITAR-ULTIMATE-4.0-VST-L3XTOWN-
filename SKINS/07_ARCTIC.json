@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "ARCTIC / POLAR GLASS",
+  "background": "ff0b1419",
+  "panel": "ff1a2931",
+  "panel2": "ff111e25",
+  "accent": "ff69e0e2",
+  "text": "fff0ffff",
+  "muted": "ffa7c3c8"
+}
