@@ -263,6 +263,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         view.highChannel = region.highChannel;
         view.group = region.group;
         view.offBy = region.offBy;
+        view.seqLength = region.seqLength;
+        view.seqPosition = region.seqPosition;
         view.startFrame = start;
         view.endFrame = end;
         view.loopStartFrame = start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopStart, static_cast<std::uint64_t>(end - start - 1)));
@@ -296,17 +298,55 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
     return report;
 }
 
-const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) const noexcept
+const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr) return nullptr;
 
+    const RegionView* firstMatch = nullptr;
+    const RegionView* roundRobinMatch = nullptr;
+    int sequenceLength = 1;
+    int sequenceGroup = 0;
     for (const auto& region : snapshot->regions)
-        if (midiNote >= region.lowKey && midiNote <= region.highKey
+    {
+        if (midiNote < region.lowKey || midiNote > region.highKey
+            || velocity < region.lowVelocity || velocity > region.highVelocity
+            || midiChannel < region.lowChannel || midiChannel > region.highChannel)
+            continue;
+
+        if (firstMatch == nullptr)
+            firstMatch = &region;
+        if (region.seqLength > 1)
+        {
+            if (sequenceLength == 1)
+            {
+                sequenceLength = region.seqLength;
+                sequenceGroup = region.group;
+            }
+            if (region.seqLength == sequenceLength && region.group == sequenceGroup)
+        }
+    }
+
+    if (firstMatch == nullptr || sequenceLength == 1)
+        return firstMatch;
+
+    const int channelIndex = juce::jlimit(1, 16, midiChannel) - 1;
+    const int noteIndex = juce::jlimit(0, 127, midiNote);
+    auto& cursor = roundRobinCounters[static_cast<std::size_t>(channelIndex)][static_cast<std::size_t>(noteIndex)];
+    const int wantedPosition = static_cast<int>(cursor % static_cast<std::uint32_t>(sequenceLength)) + 1;
+    ++cursor;
+
+    for (const auto& region : snapshot->regions)
+        if (region.seqLength == sequenceLength && region.group == sequenceGroup
+            && wantedPosition == region.seqPosition
+            && midiNote >= region.lowKey && midiNote <= region.highKey
             && velocity >= region.lowVelocity && velocity <= region.highVelocity
             && midiChannel >= region.lowChannel && midiChannel <= region.highChannel)
             return &region;
-    return nullptr;
+
+    // Malformed/incomplete RR sets cannot silence a note: use the first valid
+    // matching region as a deterministic fallback.
+    return firstMatch;
 }
 
 std::size_t SamplePool::getRegionCount() const noexcept
