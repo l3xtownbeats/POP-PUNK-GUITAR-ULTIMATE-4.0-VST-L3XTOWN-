@@ -185,6 +185,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         patternTab.setToggleState(selected == 2, juce::dontSendNotification);
         melodyTab.setButtonText(selected == 1 ? "♫  MELODY  ✓" : "♫  MELODY");
         patternTab.setButtonText(selected == 2 ? "PATTERN  ✓" : "PATTERN");
+        const bool patternActive = selected == 2;
+        autoChordsButton.setEnabled(patternActive);
+        scaleRootBox.setEnabled(patternActive);
+        scaleModeBox.setEnabled(patternActive);
+        autoChordsButton.setTooltip(patternActive
+            ? "AutoChords: ON/OFF for Pattern mode"
+            : "AutoChords is available only in Pattern mode");
+        scaleRootBox.setTooltip(patternActive ? "AutoChords key" : "Available only in Pattern mode");
+        scaleModeBox.setTooltip(patternActive ? "AutoChords scale" : "Available only in Pattern mode");
     };
     modeBox.onChange = syncModeButtons;
     melodyTab.onClick = [this] {
