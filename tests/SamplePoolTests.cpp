@@ -119,6 +119,35 @@ int main()
         return 1;
     }
 
+    // An incomplete RR set must fall back to one of its own regions.
+    // A preceding non-RR region with the same key must not steal the fallback.
+    const auto incompleteRoundRobinSfz = directory.getChildFile("incomplete-round-robin.sfz");
+    if (!incompleteRoundRobinSfz.replaceWithText(
+        "<group> group=88\\n"
+        "<region> sample=test.wav key=68\\n"
+        "<group> group=79\\n"
+        "<region> sample=test.wav key=68 seq_length=3 seq_position=1\\n"
+        "<region> sample=test.wav key=68 seq_length=3 seq_position=3\\n"))
+    {
+        std::cerr << "Could not write incomplete SFZ round-robin fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool incompleteRoundRobinPool;
+    const auto incompleteLoad = incompleteRoundRobinPool.loadSfz(incompleteRoundRobinSfz);
+    if (!incompleteLoad.success || incompleteLoad.loadedRegions != 3)
+    {
+        std::cerr << "Incomplete SFZ round-robin fixture failed to load.\\n";
+        return 1;
+    }
+    const auto* incompleteFirst = incompleteRoundRobinPool.findRegion(68, 100, 1);
+    const auto* incompleteFallback = incompleteRoundRobinPool.findRegion(68, 100, 1);
+    if (incompleteFirst == nullptr || incompleteFallback == nullptr
+        || incompleteFirst->group != 79 || incompleteFallback->group != 79)
+    {
+        std::cerr << "Incomplete SFZ round-robin fallback selected an unrelated non-RR region.\\n";
+        return 1;
+    }
+
     // Velocity crossfade opcodes must survive SFZ parsing and reach the
     // immutable runtime region metadata (playback blending is a later step).
     const auto crossfadeMetadataSfz = directory.getChildFile("crossfade-metadata.sfz");

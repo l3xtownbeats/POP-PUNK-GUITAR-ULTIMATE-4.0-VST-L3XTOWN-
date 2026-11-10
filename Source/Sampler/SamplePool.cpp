@@ -324,6 +324,7 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     if (snapshot == nullptr) return nullptr;
 
     const RegionView* firstMatch = nullptr;
+    const RegionView* firstSequenceMatch = nullptr;
     int sequenceLength = 1;
     int sequenceSetIndex = -1;
     for (const auto& region : snapshot->regions)
@@ -335,10 +336,15 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
 
         if (firstMatch == nullptr)
             firstMatch = &region;
-        if (region.roundRobinSetIndex >= 0 && sequenceSetIndex < 0)
+        if (region.roundRobinSetIndex >= 0)
         {
-            sequenceLength = region.seqLength;
-            sequenceSetIndex = region.roundRobinSetIndex;
+            if (sequenceSetIndex < 0)
+            {
+                sequenceLength = region.seqLength;
+                sequenceSetIndex = region.roundRobinSetIndex;
+            }
+            if (region.roundRobinSetIndex == sequenceSetIndex && firstSequenceMatch == nullptr)
+                firstSequenceMatch = &region;
         }
     }
 
@@ -365,9 +371,10 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
             && midiChannel >= region.lowChannel && midiChannel <= region.highChannel)
             return &region;
 
-    // Malformed/incomplete RR sets cannot silence a note: use the first valid
-    // matching region as a deterministic fallback.
-    return firstMatch;
+    // Malformed/incomplete RR sets cannot silence a note: fall back within
+    // the selected RR set, never to an unrelated non-RR region encountered
+    // earlier in the SFZ file.
+    return firstSequenceMatch != nullptr ? firstSequenceMatch : firstMatch;
 }
 
 std::size_t SamplePool::getRegionCount() const noexcept
