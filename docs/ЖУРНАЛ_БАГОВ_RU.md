@@ -148,3 +148,14 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
 - Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.
+
+
+## 10 ноября 2026 — Проверка release gates и незакрытые M1–M5 критерии
+
+- Подтверждены Windows Release + CTest + pluginval strictness 5 + packaging в run `42841128991`; отдельный MSVC VST3/sampler test run `42841133299` также SUCCESS.
+- Это не закрывает ручную DAW-валидацию M1/M3: FL Studio 20 host test не выполнялся.
+- M2 blocker: SFZ velocity crossfade metadata уже хранится в runtime region, но смешивание соседних velocity layers в DSP ещё не подтверждено/не завершено; также остаются реальные click/pop, palm mute и concurrency stress проверки.
+- M3 blocker: нужны end-to-end тесты scheduler→sampler и DAW MIDI/transport (NoteOn/Off, stop/seek/loop, tempo, simultaneous chords, mode changes).
+- M4 blocker: новый AutoChords/FingeringGenerator foundation ожидает завершения Windows build/CTest/pluginval; scale-aware tonic mapping и runtime scheduler/state integration ещё не сделаны.
+- M5 blocker: StyleEngine foundation прошёл CI run `42840410645`, но пока не подключён к runtime Pattern event pipeline и preset/UI binding.
+- Не помечать M1–M5 полностью готовыми до закрытия перечисленных пунктов. Подробности в `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
