@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include <atomic>
+#include <cstdint>
 #include <functional>
 #include <array>
 #include <vector>
