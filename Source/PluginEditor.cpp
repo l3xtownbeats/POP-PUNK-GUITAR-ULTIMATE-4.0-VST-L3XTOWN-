@@ -160,6 +160,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     : AudioProcessorEditor(&p), processor(p)
 {
     setSize(1040, 790);
+    approvedMelodyArtwork = juce::ImageCache::getFromMemory(
+        BinaryData::APPROVED_STYLE_A_png, BinaryData::APPROVED_STYLE_A_pngSize);
+    approvedPatternArtwork = juce::ImageCache::getFromMemory(
+        BinaryData::APPROVED_STYLE_B_png, BinaryData::APPROVED_STYLE_B_pngSize);
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
@@ -543,10 +547,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(88);
     hero.setHeight(154);
-    juce::ColourGradient grad(panel, static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), bg, static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
-    g.setGradientFill(grad);
+    const auto& artwork = modeBox.getSelectedId() == 2 ? approvedPatternArtwork : approvedMelodyArtwork;
+    if (!artwork.isNull())
+        g.drawImage(artwork, hero.toFloat(), juce::RectanglePlacement::fillDestination);
+    else
+        g.fillRoundedRectangle(hero.toFloat(), 12.0f);
+    g.setColour(juce::Colours::black.withAlpha(0.56f));
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(pink.withAlpha(0.5f));
+    g.setColour(pink.withAlpha(0.75f));
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
     g.setColour(pale);
@@ -558,24 +566,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.setColour(pale.withAlpha(0.8f));
     g.setFont(juce::Font(14.0f, juce::Font::italic));
     g.drawText("Play. Create. Rock.", textArea.removeFromTop(22), juce::Justification::left);
-    // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
-    auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
-    juce::Path body;
-    body.startNewSubPath(guitar.getX() + guitar.getWidth()*0.48f, guitar.getY()+guitar.getHeight()*0.52f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.23f,guitar.getX()+guitar.getWidth()*0.12f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.68f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
-    body.closeSubPath();
-    g.setColour(pale);
-    g.fillPath(body);
-    g.setColour(panel2);
-    g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(pink.brighter(0.2f));
-    juce::Path neck;
-    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
-    g.fillPath(neck);
-    g.setColour(pink.withAlpha(0.75f));
-    g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
     auto panelArea = getLocalBounds().reduced(16);
     panelArea.removeFromTop(276);
     panelArea.removeFromBottom(82);
