@@ -623,8 +623,31 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
                 // this preserves the attack/transient while the worker loads
                 // the page. No wait or file access occurs on the audio thread.
                 streamReader.prefetch(static_cast<std::uint64_t>(frame));
+
+                // A failed/removed source must not pin a voice forever. If a
+                // note is already releasing, continue its envelope while the
+                // output is silent; otherwise retire a voice after a bounded
+                // two-second page-unavailable timeout.
+                if (voice.releasing)
+                {
+                    voice.gain -= voice.releaseStep;
+                    if (voice.gain <= 0.0f)
+                    {
+                        streamReader.release();
+                        voice = {};
+                        break;
+                    }
+                }
+                else if (++voice.streamingMissSamples
+                         > static_cast<std::uint64_t>(outputSampleRate * 2.0))
+                {
+                    streamReader.release();
+                    voice = {};
+                    break;
+                }
                 continue;
             }
+            voice.streamingMissSamples = 0;
 
             const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
             const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
