@@ -1434,3 +1434,10 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Коммиты на main: `08528734` (lease owner field), `d43fadea` (owner validation), `15b3ddef` (regression test). Windows CI запущен для последовательных коммитов #101/#102 и ожидается запуск для тестового коммита; результаты ещё не подтверждены.
 - В сочетании с предыдущим исправлением `tryAcquire()` теперь отклоняет повторный acquire в активный lease, не теряя исходный pin, и release защищён от вызова на неверном cache. Это снижает риск невосстановимого pin leak/underflow при ошибках вызывающего кода.
 - Статус: SOURCE + REGRESSION TEST COMMITTED / CI PENDING. Runtime streaming/prefetch integration remains pending; M2 open.
+
+
+## 10 ноября 2026 — дополнены acceptance criteria для владения ReadLease
+
+- В Promt.txt добавлен обязательный M2 раздел `M2 — владение cache read leases и защита от pin leaks`: активный lease нельзя перезаписывать повторным acquire; lease привязан к issuing cache; чужой cache release должен быть no-op; обязательны double-acquire/foreign-release/correct-release/eviction regression tests.
+- Коммит Promt.txt: `e3c41af3fcdfca5d451f523954ab1df88d40f776` (main).
+- Коммиты реализации/тестов: `52101005`, `ed25607b`, `08528734`, `d43fadea`, `15b3ddef`. Последний тестовый commit запускает Windows Actions run #103 (`42784697975`); на момент записи runs #99–#103 ещё выполнялись, поэтому новые fixes остаются CI PENDING.
