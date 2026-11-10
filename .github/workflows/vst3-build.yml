@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
+          key: ppgu-samples-expanded-cc0-guitar-v2
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -130,13 +130,39 @@ jobs:
             if (-not (Test-Path (Join-Path $dest 'LICENSE.txt'))) { throw "License missing for $($item.repo)." }
           }
 
+          # Additional CC0 electric-guitar collections. Keep each source as a
+          # separate bank: do not flatten or overwrite similarly named samples.
+          $additional = @(
+            @{ repo='sfzinstruments/karoryfer.emilyguitar'; folder='Karoryfer-Emilyguitar'; branch='master'; license='LICENSE'; minWav=300; minFlac=0; sfz='*.sfz' },
+            @{ repo='sfzinstruments/karoryfer.shinyguitar'; folder='Karoryfer-Shinyguitar'; branch='master'; license='LICENSE'; minWav=800; minFlac=0; sfz='Programs/*.sfz' },
+            @{ repo='sfzinstruments/karoryfer.black-and-green-guitars'; folder='Karoryfer-Black-And-Green'; branch='main'; license='LICENSE'; minWav=1700; minFlac=0; sfz='Programs/*.sfz' },
+            @{ repo='freepats/electric-guitar-FSBS-direct'; folder='FreePats-Direct-DI'; branch='main'; license='LICENSE.txt'; minWav=100; minFlac=0; sfz='*.sfz' },
+            @{ repo='freepats/electric-guitar-FSBS-jazz'; folder='FreePats-Jazz'; branch='main'; license='LICENSE.txt'; minWav=0; minFlac=100; sfz='*.sfz' }
+          )
+          foreach ($item in $additional) {
+            $dest = Join-Path $sampleRoot $item.folder
+            git clone --depth 1 --branch $item.branch "https://github.com/$($item.repo).git" $dest
+            if (-not (Test-Path (Join-Path $dest $item.license))) { throw "License missing for $($item.repo)." }
+            $wavCount = (Get-ChildItem $dest -Recurse -File -Filter '*.wav').Count
+            $flacCount = (Get-ChildItem $dest -Recurse -File -Filter '*.flac').Count
+            if ($wavCount -lt $item.minWav -or $flacCount -lt $item.minFlac) {
+              throw "Unexpectedly incomplete audio payload for $($item.repo): WAV=$wavCount FLAC=$flacCount"
+            }
+            if (-not (Get-ChildItem $dest -Recurse -File -Filter '*.sfz' | Select-Object -First 1)) {
+              throw "SFZ map missing for $($item.repo)."
+            }
+          }
+
           # Keep source licenses and SFZ maps, but strip cloned Git metadata
           # from the redistributable package and its reusable CI cache.
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
             Remove-Item -Recurse -Force
           $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
-          $hashLines = foreach ($file in $wavFiles) {
+          $flacFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.flac'
+          if ($wavFiles.Count -lt 3500) { throw "Expanded guitar library is incomplete: only $($wavFiles.Count) WAV files found." }
+          if ($flacFiles.Count -lt 100) { throw "FreePats Jazz FLAC bank is incomplete: only $($flacFiles.Count) files found." }
+          $audioFiles = @($wavFiles) + @($flacFiles)
+          $hashLines = foreach ($file in $audioFiles) {
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
             "$hash  $relative"
@@ -146,12 +172,20 @@ jobs:
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1 and Distortion 2 electric guitars, CC0 1.0.
+          - FreePats FSBS Clean, Distortion 1/2, Direct DI and Jazz electric guitars, CC0 1.0.
             https://github.com/freepats/electric-guitar-FSBS-clean
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
-          Original license files, SFZ maps and source checksum manifests are retained beside the samples.
-          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
+            https://github.com/freepats/electric-guitar-FSBS-direct
+            https://github.com/freepats/electric-guitar-FSBS-jazz
+          - Karoryfer Emilyguitar, Shinyguitar and Black And Green Guitars, CC0 1.0.
+            https://github.com/sfzinstruments/karoryfer.emilyguitar
+            https://github.com/sfzinstruments/karoryfer.shinyguitar
+            https://github.com/sfzinstruments/karoryfer.black-and-green-guitars
+          Original license files, SFZ maps, source manifests and complete upstream bank folders are retained.
+          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV and FLAC file.
+          Note: banks remain separate; SFZ opcodes unsupported by PPGU are not silently claimed as runtime-compatible.
+          Import a source bank through IMPORT SOUNDS for conversion/indexing; verify the resulting map and mapping report.
           '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
 
       - name: Validate restored sample library and licenses
@@ -159,13 +193,21 @@ jobs:
         run: |
           $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
           $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($wavFiles.Count) WAV files found." }
+          $flacFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.flac'
+          if ($wavFiles.Count -lt 3500 -or $flacFiles.Count -lt 100) {
+            throw "Expanded sample library is incomplete: WAV=$($wavFiles.Count), FLAC=$($flacFiles.Count)"
+          }
           foreach ($license in @(
             'Meta-meta-steel-guitar/LICENSE',
             'Meta-meta-nylon-guitar/LICENSE',
             'FreePats-Clean/LICENSE.txt',
             'FreePats-Distortion-1/LICENSE.txt',
-            'FreePats-Distortion-2/LICENSE.txt'
+            'FreePats-Distortion-2/LICENSE.txt',
+            'Karoryfer-Emilyguitar/LICENSE',
+            'Karoryfer-Shinyguitar/LICENSE',
+            'Karoryfer-Black-And-Green/LICENSE',
+            'FreePats-Direct-DI/LICENSE.txt',
+            'FreePats-Jazz/LICENSE.txt'
           )) {
             if (-not (Test-Path (Join-Path $sampleRoot $license))) { throw "Required sample license missing: $license" }
           }
