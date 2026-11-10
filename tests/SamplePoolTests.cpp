@@ -355,7 +355,7 @@ int main()
     repeatedHitEngine.prepare(44100.0);
     if (!repeatedHitEngine.loadSfz(sfzFile).success)
     {
-        std::cerr << "Could not load repeated-hit regression bank.\\n";
+        std::cerr << "Could not load repeated-hit regression bank.\n";
         return 1;
     }
     juce::AudioBuffer<float> repeatedHits(2, 12800);
@@ -366,7 +366,7 @@ int main()
         const int offset = hit * 128;
         if (!repeatedHitEngine.noteOn(60, velocity, 64, 1))
         {
-            std::cerr << "Repeated-hit regression failed to trigger note " << hit << ".\\n";
+            std::cerr << "Repeated-hit regression failed to trigger note " << hit << ".\n";
             return 1;
         }
         repeatedHitEngine.render(repeatedHits, offset, 64);
@@ -380,7 +380,7 @@ int main()
         const float value = repeatedHits.getSample(0, sample);
         if (!std::isfinite(value))
         {
-            std::cerr << "Repeated-hit render produced a non-finite sample.\\n";
+            std::cerr << "Repeated-hit render produced a non-finite sample.\n";
             return 1;
         }
         repeatedHitPeak = juce::jmax(repeatedHitPeak, std::abs(value));
@@ -391,7 +391,7 @@ int main()
     if (repeatedHitPeak <= 0.001f || maximumAdjacentDelta > 0.20f)
     {
         std::cerr << "100 repeated hits produced silence or an audible discontinuity; max delta="
-                  << maximumAdjacentDelta << ".\\n";
+                  << maximumAdjacentDelta << ".\n";
         return 1;
     }
 
