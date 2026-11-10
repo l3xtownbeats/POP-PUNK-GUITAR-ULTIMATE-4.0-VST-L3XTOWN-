@@ -113,6 +113,11 @@ if(BUILD_TESTING)
     add_executable(ppgu_sample_pool_tests
         Source/Sampler/SfzParser.cpp
         Source/Sampler/SamplePool.cpp
+        Source/Sampler/SampleMetadataIndex.cpp
+        Source/Sampler/WavPageReader.cpp
+        Source/Sampler/PageCacheSlots.cpp
+        Source/Sampler/SampleStreamingService.cpp
+        Source/Sampler/StreamingVoiceReader.cpp
         tests/SamplePoolTests.cpp
     )
     target_include_directories(ppgu_sample_pool_tests PRIVATE Source/Sampler)
