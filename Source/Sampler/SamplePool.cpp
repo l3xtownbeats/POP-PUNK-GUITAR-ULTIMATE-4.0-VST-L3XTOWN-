@@ -344,14 +344,19 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
             report.errors.emplace_back("Could not start the background WAV streaming worker.");
             return report;
         }
-        streamingLibraries.push_back(std::move(pendingLibrary));
+        // Keep ownership local until the final cancellation check so a
+        // superseded load cannot consume one of the bounded library slots.
+        if (abortIfSuperseded())
+            return report;
     }
+    else if (abortIfSuperseded())
+        return report;
 
     report.loadedRegions = candidateSnapshot->regions.size();
     report.loadedSamples = samplesUsed.size();
-    if (abortIfSuperseded())
-        return report;
     const auto* published = candidateSnapshot.get();
+    if (pendingLibrary != nullptr)
+        streamingLibraries.push_back(std::move(pendingLibrary));
     snapshots.push_back(std::move(candidateSnapshot));
     activeSnapshot.store(published, std::memory_order_release);
     report.success = true;
