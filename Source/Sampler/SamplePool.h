@@ -10,6 +10,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace ppgu::sampler
@@ -51,6 +52,7 @@ public:
         int offBy = 0;
         int seqLength = 1;
         int seqPosition = 1;
+        int roundRobinSetIndex = -1;
         int startFrame = 0;
         int endFrame = 0;
         int loopStartFrame = 0;
@@ -65,6 +67,8 @@ public:
     struct Snapshot
     {
         std::vector<RegionView> regions;
+        // Audio-thread-owned cursors: [RR set][MIDI channel][MIDI note].
+        mutable std::vector<std::uint32_t> roundRobinCounters;
     };
 
     [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
@@ -87,8 +91,6 @@ private:
     std::map<std::string, std::unique_ptr<SampleAsset>> sampleStorage;
     std::vector<std::unique_ptr<Snapshot>> snapshots;
     std::atomic<const Snapshot*> activeSnapshot { nullptr };
-    // Audio-thread-owned deterministic RR cursors, indexed by MIDI channel/note.
-    std::array<std::array<std::uint32_t, 128>, 16> roundRobinCounters {};
 };
 
 class SamplerEngine final
