@@ -509,7 +509,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadExternalSkin(const juce::Fil
     };
     for (const auto& field : requiredColours)
     {
-        if (!object->hasProperty(field) || object->getProperty(field).toString().length() != 8)
+        const juce::Identifier fieldId(field);
+        const auto colourText = object->getProperty(fieldId).toString();
+        if (!object->hasProperty(fieldId) || colourText.length() != 8
+            || !colourText.containsOnly("0123456789abcdefABCDEF"))
         {
             statusLabel.setText("SKIN ERROR  /  INVALID OR MISSING COLOUR: " + field, juce::dontSendNotification);
             return;

@@ -292,8 +292,47 @@ jobs:
           if ($skinFiles.Count -lt 10) { throw "Premium skin library incomplete: only $($skinFiles.Count) JSON skins found." }
           foreach ($skinFile in $skinFiles) {
             $skinData = Get-Content -Raw -LiteralPath $skinFile.FullName | ConvertFrom-Json
-            foreach ($field in @('name','background','panel','panel2','accent','text','muted')) {
+            foreach ($field in @('schema','name','background','panel','panel2','accent','text','muted')) {
               if (-not $skinData.$field) { throw "Skin $($skinFile.Name) missing field $field." }
+            }
+            if ($skinData.schema -ne 'ppgu.skin.v1') { throw "Unsupported skin schema in $($skinFile.Name)." }
+            foreach ($field in @('background','panel','panel2','accent','text','muted')) {
+              if ($skinData.$field -notmatch '^[0-9a-fA-F]{8}
+          @'
+          POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
+          ========================================
+          VST3 plugin: included in this archive.
+          Multisample assets / sound bank: Samples/ (Meta steel + nylon; FreePats clean, distorted 1/2, direct DI and jazz; Karoryfer Emilyguitar, Shinyguitar, Black And Green).
+          Factory presets: presets/factory_bank_300.json (150 Melody + 150 Pattern presets).
+          Portable preset examples: presets/examples/.
+          Approved source artwork: Resources/Artwork/ (also embedded in the VST3).
+          Superseded v3 preset JSON and legacy build.zip are intentionally excluded.
+          Premium external themes: SKINS/ (10 JSON themes; load from the SKINS button > LOAD SKIN JSON...).
+          The two approved visual artworks are embedded in the plugin hero area and also included in Resources/Artwork/.
+          SFZ maps, original license files and source manifests are retained.
+          WAV + FLAC SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
+          Preset catalog validation: 300 factory presets + portable preset examples.
+
+          Install the .vst3 bundle to:
+          C:\Program Files\Common Files\VST3\
+          Keep the Samples and SKINS folders from this package. Use SKINS in the plugin to load any included JSON theme.
+          If the sample browser asks for a library folder, select this Samples directory.
+          This package does not claim DAW validation; test in FL Studio 20 after install.
+          '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
+          Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
+          if-no-files-found: error
+) { throw "Invalid ARGB field $field in $($skinFile.Name)." }
+            }
+            foreach ($artField in @('melodyArtwork','patternArtwork')) {
+              if ($skinData.$artField) {
+                $artPath = Join-Path $skinFile.DirectoryName $skinData.$artField
+                if (-not (Test-Path -LiteralPath $artPath -PathType Leaf)) { throw "Skin artwork missing: $artPath" }
+              }
             }
           }
           @'
