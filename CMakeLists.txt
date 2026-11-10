@@ -108,6 +108,15 @@ if(BUILD_TESTING)
 endif()
 
 
+# Dependency-free M4 AutoChord and guitar fingering regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_autochord_tests
+        tests/AutoChordEngineTests.cpp
+    )
+    target_include_directories(ppgu_autochord_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_autochord_tests COMMAND ppgu_autochord_tests)
+endif()
+
 # JUCE-backed SamplePool integration test with a generated, license-neutral WAV fixture.
 if(BUILD_TESTING)
     add_executable(ppgu_sample_pool_tests
