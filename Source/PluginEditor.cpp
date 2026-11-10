@@ -838,6 +838,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     // Apply the actual instrument mode as part of the preset. Previously the
     // catalog displayed MELODY/PATTERN metadata but left the old mode active.
     setParameter("playMode", preset.mode == "PATTERN" ? 1.0f : 0.0f);
+    setParameter("autoChordsOn", preset.mode == "PATTERN" ? 1.0f : 0.0f);
+    if (preset.mode == "PATTERN"
+        && processor.parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed) < 0.5f)
+        setParameter("scaleMode", 1.0f); // Major triads are the safe first-use chord map.
     setParameter("distortionDrive", juce::jlimit(0.0f, 1.0f, preset.drive));
     setParameter("tone", juce::jlimit(0.0f, 10.0f, preset.tone));
     setParameter("reverbMix", juce::jlimit(0.0f, 1.0f, preset.reverb));
@@ -890,8 +894,13 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     const auto detail = preset.soundCharacter
         + (preset.sampleProfile.isNotEmpty() ? "  /  " + preset.sampleProfile : juce::String{})
         + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
-    statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + detail
-        + "  /  " + preset.articulation, juce::dontSendNotification);
+    const auto loadedBankPath = processor.getCurrentSfzFilePath();
+    const bool hasLoadedBank = loadedBankPath.isNotEmpty() && juce::File(loadedBankPath).existsAsFile();
+    const auto bankState = hasLoadedBank
+        ? "SOUND BANK: " + juce::File(loadedBankPath).getFileName()
+        : "NO SFZ BANK LOADED  /  PRESS LOAD SFZ";
+    statusLabel.setText("PRESET SETTINGS APPLIED: " + preset.name + "  /  " + detail
+        + "  /  " + preset.articulation + "  /  " + bankState, juce::dontSendNotification);
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
 {
