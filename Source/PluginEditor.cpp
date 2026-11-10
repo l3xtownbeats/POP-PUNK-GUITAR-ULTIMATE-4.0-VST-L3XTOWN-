@@ -47,18 +47,42 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadFactoryPresetCatalog();
     presetBox.onChange = [this] { if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size())) applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId()-1)]); };
     auto refreshPresetList = [this] {
+        // Keep the current sound selected when it remains in the filtered list.
+        // Filtering must never silently load a different preset.
+        int previouslySelectedPreset = -1;
+        const int oldSelectedId = presetBox.getSelectedId();
+        if (oldSelectedId > 0 && oldSelectedId <= static_cast<int>(visiblePresetIndices.size()))
+            previouslySelectedPreset = visiblePresetIndices[static_cast<size_t>(oldSelectedId - 1)];
+
         const auto query = presetSearch.getText().trim().toLowerCase();
         const int category = categoryBox.getSelectedId();
-        visiblePresetIndices.clear(); presetBox.clear(juce::dontSendNotification);
-        for (size_t i=0; i<factoryPresets.size(); ++i) {
+        visiblePresetIndices.clear();
+        presetBox.clear(juce::dontSendNotification);
+        for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
             if (category == 2 && item.mode != "MELODY") continue;
             if (category == 3 && item.mode != "PATTERN") continue;
-            if (query.isNotEmpty() && !item.name.toLowerCase().contains(query) && !item.category.toLowerCase().contains(query)) continue;
+
+            const auto matchesQuery = query.isEmpty()
+                || item.name.toLowerCase().contains(query)
+                || item.category.toLowerCase().contains(query)
+                || item.mode.toLowerCase().contains(query)
+                || item.soundCharacter.toLowerCase().contains(query)
+                || item.groove.toLowerCase().contains(query)
+                || item.articulation.toLowerCase().contains(query);
+            if (!matchesQuery) continue;
+
             visiblePresetIndices.push_back(static_cast<int>(i));
             presetBox.addItem(item.name, static_cast<int>(visiblePresetIndices.size()));
         }
-        if (!visiblePresetIndices.empty()) presetBox.setSelectedId(1, juce::sendNotification);
+
+        const auto selected = std::find(visiblePresetIndices.begin(), visiblePresetIndices.end(),
+                                        previouslySelectedPreset);
+        if (previouslySelectedPreset >= 0 && selected != visiblePresetIndices.end())
+            presetBox.setSelectedId(static_cast<int>(std::distance(visiblePresetIndices.begin(), selected)) + 1,
+                                    juce::dontSendNotification);
+        else
+            presetBox.setSelectedId(0, juce::dontSendNotification);
     };
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
