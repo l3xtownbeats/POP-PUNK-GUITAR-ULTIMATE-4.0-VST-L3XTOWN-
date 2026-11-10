@@ -138,8 +138,16 @@ int main()
     }
 
     // Exercise real voice playback across multiple 4096-frame cache pages.
-    const auto longStreamWav = directory.getChildFile("long-stream.wav");
-    const auto longStreamSfz = directory.getChildFile("long-stream.sfz");
+    // Use a distinct library root: SamplePool intentionally indexes a library
+    // once and reuses its immutable metadata index for later SFZ banks.
+    const auto longLibraryDirectory = directory.getChildFile("long-stream-library");
+    if (!longLibraryDirectory.createDirectory())
+    {
+        std::cerr << "Could not create isolated multi-page streaming library root.\\n";
+        return 1;
+    }
+    const auto longStreamWav = longLibraryDirectory.getChildFile("long-stream.wav");
+    const auto longStreamSfz = longLibraryDirectory.getChildFile("long-stream.sfz");
     juce::AudioBuffer<float> longSource(1, 10000);
     for (int i = 0; i < longSource.getNumSamples(); ++i)
         longSource.setSample(0, i, static_cast<float>(
