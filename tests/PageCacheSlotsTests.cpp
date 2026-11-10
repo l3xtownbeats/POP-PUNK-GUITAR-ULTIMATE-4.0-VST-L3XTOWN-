@@ -2,6 +2,9 @@
 
 #include <cstddef>
 #include <iostream>
+#include <atomic>
+#include <thread>
+#include <vector>
 
 using ppgu::sampler::PageCacheSlots;
 using ppgu::sampler::PageKey;
@@ -95,6 +98,72 @@ int main()
     if (!sharedPageCache.tryBeginLoad({ 8, 0 }, sharedSlot))
     {
         std::cerr << "Cache did not make a page evictable after all readers released it.\\n";
+        return 1;
+    }
+
+
+    // Concurrent stress: several audio-like readers repeatedly pin and read
+    // the same immutable page while a worker-like thread attempts eviction.
+    // A failed acquire is an allowed cache miss; a corrupted value is not.
+    PageCacheSlots stressCache(2, 16, 1);
+    std::size_t stressSlot = 0;
+    if (!stressCache.tryBeginLoad({ 42, 9 }, stressSlot)) return 1;
+    auto* stressData = stressCache.writableData(stressSlot);
+    if (stressData == nullptr) return 1;
+    for (int i = 0; i < 16; ++i) stressData[i] = 0.375f;
+    if (!stressCache.publish(stressSlot, { 42, 9 }, 1, 16)) return 1;
+
+    std::atomic<bool> startReaders { false };
+    std::atomic<int> corruptReads { 0 };
+    std::atomic<int> successfulReads { 0 };
+    std::vector<std::thread> readers;
+    for (int threadIndex = 0; threadIndex < 4; ++threadIndex)
+    {
+        readers.emplace_back([&]
+        {
+            while (!startReaders.load(std::memory_order_acquire))
+                std::this_thread::yield();
+            for (int iteration = 0; iteration < 20000; ++iteration)
+            {
+                PageCacheSlots::ReadLease concurrentLease;
+                if (stressCache.tryAcquire({ 42, 9 }, concurrentLease))
+                {
+                    if (concurrentLease.frames != 16
+                        || concurrentLease.samples[0] != 0.375f
+                        || concurrentLease.samples[15] != 0.375f)
+                        corruptReads.fetch_add(1, std::memory_order_relaxed);
+                    successfulReads.fetch_add(1, std::memory_order_relaxed);
+                    stressCache.release(concurrentLease);
+                }
+            }
+        });
+    }
+    std::thread evictor([&]
+    {
+        while (!startReaders.load(std::memory_order_acquire))
+            std::this_thread::yield();
+        for (int iteration = 0; iteration < 20000; ++iteration)
+        {
+            std::size_t workerSlot = 0;
+            if (stressCache.tryBeginLoad({ 100, static_cast<std::uint64_t>(iteration) }, workerSlot))
+            {
+                auto* workerData = stressCache.writableData(workerSlot);
+                if (workerData != nullptr)
+                {
+                    workerData[0] = -0.25f;
+                    (void) stressCache.publish(workerSlot,
+                        { 100, static_cast<std::uint64_t>(iteration) }, 1, 1);
+                }
+            }
+        }
+    });
+    startReaders.store(true, std::memory_order_release);
+    for (auto& readerThread : readers) readerThread.join();
+    evictor.join();
+    if (corruptReads.load(std::memory_order_relaxed) != 0
+        || successfulReads.load(std::memory_order_relaxed) == 0)
+    {
+        std::cerr << "Concurrent page-cache stress detected corrupted reads or no successful reads.\\n";
         return 1;
     }
 
