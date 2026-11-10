@@ -529,6 +529,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         }
         renderPatternInterval(intervalStart, samples);
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
+    }
+
     // AMP & TONE: low/mid/high split with persistent one-pole filter states.
     const float ampGainDb = (juce::jlimit(0.0f, 10.0f, parameters.getRawParameterValue("ampGain")->load(std::memory_order_relaxed)) - 5.0f) * 2.0f;
     const float ampGain = juce::Decibels::decibelsToGain(ampGainDb);
