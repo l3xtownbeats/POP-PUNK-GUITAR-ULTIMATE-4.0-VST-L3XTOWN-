@@ -1090,3 +1090,6 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 
 
 10.11.2026 — лёгкий code-quality проход параллельно основной работе M1–M3: устранены в исходнике предупреждения MSVC C4244 (явные преобразования координат UI int→float) и C4458 (локальная переменная playHead переименована в hostPlayHead). Изменения внесены; свежий Windows CI/CTest ещё не подтверждён.
+
+
+2026-11-10 — SFZ session persistence: `getStateInformation` stores `sfzFilePath` alongside APVTS state. `setStateInformation` restores an existing SFZ through the worker pool, and missing paths do not prevent parameter restoration. Shared path access is protected by `juce::CriticalSection`. Static validator now guards the serialization/restore route. Status: source fix committed; Windows CI/CTest and FL Studio 20 host validation pending.
