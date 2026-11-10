@@ -1265,3 +1265,16 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - PatternSchedulerTests.cpp расширен regression-сценарием: одновременный chord input на sample 16 и две последующие смены на samples 80 и 120. Проверяются четыре точные границы render intervals и snapshots [60,64], [64,67], [67,72].
 - Статус M3-014: FIXED IN SOURCE / AWAITING WINDOWS CI. Тест написан, но результат сборки/CTest ещё неизвестен; не считать пункт закрытым до успешного CI.
 - M3-013 остаётся FIXED — CI SUCCESS. M3-015, M3-011 и M3-012 не изменялись. M1/M2 не затрагивались; M4 остаётся BLOCKED.
+
+
+## 10 ноября 2026 — M3-015: явная обработка переполнения output scheduler
+
+- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2`.
+- Файлы: `Source/Performance/PatternScheduler.h`, `tests/PatternSchedulerTests.cpp`.
+- Root cause: output array scheduler ограничен 512 событиями, но цикл генерации мог завершиться при нехватке двух свободных мест без явного статуса. В результате часть событий могла быть отброшена молча, включая потенциально важные NoteOff.
+- Исправление: добавлен `outputOverflow_`; `consumePendingOverflow()` теперь возвращает общий статус переполнения output array или pending-event queue и очищает оба флага. Уже существующая обработка в PluginProcessor вызывает `sampler.allNotesOff()` при таком статусе.
+- Regression test: плотный pattern из 300 одновременных событий заполняет выходной массив до 512 событий; тест требует overflow=true и проверяет, что статус потребляется ровно один раз.
+- Commits: `427a68506599b7f8ea8250b253dbc89ede4fe4fb` (scheduler), `6a77e2d1f33f6a4ad730d4c5a6c7997d2a5112cf` (regression).
+- Проверки: исходник и тест опубликованы в рабочей ветке. Windows Release build/CTest для нового HEAD ещё выполняются; M3-015 = FIXED IN SOURCE / AWAITING CI.
+- M3-014 также остаётся FIXED IN SOURCE / AWAITING CI. M1/M2 не затрагивались. M1, M2, M3 остаются NOT ACCEPTED; M4 BLOCKED.
+- Следующий шаг: получить CI для актуального HEAD, устранить любые ошибки без отключения/ослабления тестов; после зелёного CTest продолжить M3 stop/seek, variable block size и stress/fail-safe проверки, затем отдельно выполнить DAW acceptance.
