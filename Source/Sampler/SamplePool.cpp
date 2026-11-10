@@ -52,10 +52,26 @@ float hermiteSample(const float* data, int frame, float fraction, int regionStar
 
 SamplePool::SamplePool() = default;
 
-LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
+LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
+                               const std::atomic<std::uint64_t>* requestGeneration,
+                               std::uint64_t expectedGeneration)
 {
     LoadReport report;
     std::lock_guard<std::mutex> guard(loaderMutex);
+    const auto requestWasSuperseded = [&]() noexcept
+    {
+        return requestGeneration != nullptr
+            && requestGeneration->load(std::memory_order_acquire) != expectedGeneration;
+    };
+    const auto abortIfSuperseded = [&]() 
+    {
+        if (!requestWasSuperseded())
+            return false;
+        report.errors.emplace_back("SFZ load superseded by a newer bank request.");
+        return true;
+    };
+    if (abortIfSuperseded())
+        return report;
 
     if (!sfzFile.existsAsFile())
     {
@@ -68,7 +84,7 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         report.errors.push_back("Line " + std::to_string(error.line) + ": " + error.message);
     for (const auto& warning : parsed.warnings)
         report.warnings.push_back("Line " + std::to_string(warning.line) + ": " + warning.message);
-    if (!parsed.succeeded())
+    if (!parsed.succeeded() || abortIfSuperseded())
         return report;
 
     if (snapshots.size() >= maximumSnapshots)
@@ -106,6 +122,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
 
         SampleMetadataIndex index;
         auto indexed = index.scanDirectory(juce::File(root.string()));
+        if (abortIfSuperseded())
+            return report;
         report.warnings.insert(report.warnings.end(), indexed.warnings.begin(), indexed.warnings.end());
         if (!indexed.success)
         {
@@ -310,11 +328,14 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         samplesUsed.insert(key);
     }
 
-    if (!report.errors.empty() || candidateSnapshot->regions.empty())
+    if (!report.errors.empty() || candidateSnapshot->regions.empty() || abortIfSuperseded())
         return report;
 
     constexpr std::size_t cursorsPerSet = 16U * 128U;
     candidateSnapshot->roundRobinCounters.assign(roundRobinSetIndices.size() * cursorsPerSet, 0U);
+
+    if (abortIfSuperseded())
+        return report;
 
     if (pendingLibrary != nullptr)
     {
@@ -328,6 +349,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
 
     report.loadedRegions = candidateSnapshot->regions.size();
     report.loadedSamples = samplesUsed.size();
+    if (abortIfSuperseded())
+        return report;
     const auto* published = candidateSnapshot.get();
     snapshots.push_back(std::move(candidateSnapshot));
     activeSnapshot.store(published, std::memory_order_release);
@@ -430,9 +453,11 @@ void SamplerEngine::reset() noexcept
     }
 }
 
-LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile)
+LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
+                                  const std::atomic<std::uint64_t>* requestGeneration,
+                                  std::uint64_t expectedGeneration)
 {
-    return pool.loadSfz(sfzFile);
+    return pool.loadSfz(sfzFile, requestGeneration, expectedGeneration);
 }
 
 bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
