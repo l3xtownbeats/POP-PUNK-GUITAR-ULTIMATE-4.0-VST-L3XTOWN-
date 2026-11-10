@@ -167,3 +167,14 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Это подтверждает положительный пользовательский host smoke test для проверенной сборки.
 - Точная версия FL Studio 20, Windows build, sample rate, buffer size и перечень MIDI/automation/state сценариев не указаны; не приписывать им значения и не считать все host acceptance cases автоматически закрытыми.
 - Статус: USER-REPORTED HOST SMOKE TEST — PASS; расширенный host acceptance checklist — PARTIALLY DOCUMENTED.
+
+
+## 10 ноября 2026 — M2: velocity fade gain и Windows CI
+
+- Feature branch: `feature/m2-velocity-crossfade-gain`.
+- Commit: `1dfb5907413d0e85bad7348e90f8f6920e1d72e0`.
+- Добавлен equal-power gain envelope для SFZ `xfin_lovel/xfin_hivel` и `xfout_lovel/xfout_hivel`; коэффициент применяется к голосу при Note On.
+- Добавлены regression assertions для начала, середины и конца fade-in/fade-out.
+- Windows CI run `42809962008` завершился SUCCESS: x64 Release configure, VST3/test build, CTest, VST3 bundle discovery, pluginval strictness 5, license validation и packaging/upload прошли.
+- Важно: тесты подтверждают коэффициенты fade, но runtime пока выбирает только один RegionView на Note On. Одновременное воспроизведение и смешивание двух velocity-регионов НЕ реализовано. Следующий подэтап M2 — безопасная пара слоёв на один MIDI-триггер с согласованной RR-селекцией и ограничением polyphony.
+- Статус: VELOCITY FADE GAIN — IMPLEMENTED / CI VERIFIED; MULTI-REGION VELOCITY CROSSFADE — NOT IMPLEMENTED; M2 — NOT ACCEPTED.
