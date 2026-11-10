@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "GOLD EDITION / SIGNATURE",
+  "background": "ff12110c",
+  "panel": "ff282318",
+  "panel2": "ff1c190f",
+  "accent": "ffe7c56e",
+  "text": "fffff8e8",
+  "muted": "ffbdb18e"
+}
