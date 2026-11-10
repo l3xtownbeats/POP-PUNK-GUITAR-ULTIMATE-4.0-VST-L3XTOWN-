@@ -70,24 +70,24 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
             errors.append(f'{preset.get("id")}: missing sampleRequirement')
         output_db = params.get("outputDb")
         if isinstance(output_db, bool) or not isinstance(output_db, (int, float)) or not math.isfinite(output_db):
-            errors.append(f'{preset.get("id')}: outputDb must be finite numeric')
+            errors.append(f'{preset.get("id")}: outputDb must be finite numeric')
         elif not -24 <= output_db <= 12:
-            errors.append(f'{preset.get("id')}: outputDb outside -24..12')
+            errors.append(f'{preset.get("id")}: outputDb outside -24..12')
         if expected_mode == "PATTERN":
             performance = preset.get("performance")
             if not isinstance(performance, dict):
-                errors.append(f'{preset.get("id')}: missing performance object')
+                errors.append(f'{preset.get("id")}: missing performance object')
             else:
                 for map_name in ("palmMuteMap", "accentMap"):
                     step_map = performance.get(map_name)
                     if not isinstance(step_map, list) or not 1 <= len(step_map) <= 16:
-                        errors.append(f'{preset.get("id')}: performance.{map_name} must contain 1..16 steps')
+                        errors.append(f'{preset.get("id")}: performance.{map_name} must contain 1..16 steps')
                     elif any(not isinstance(v, (int, float, bool)) or isinstance(v, bool) and map_name == "accentMap"
                              or isinstance(v, (int, float)) and not 0 <= float(v) <= 1 for v in step_map):
-                        errors.append(f'{preset.get("id')}: performance.{map_name} has invalid step values')
+                        errors.append(f'{preset.get("id")}: performance.{map_name} has invalid step values')
                 for flag in ("strokeVariation", "humanize", "velocityAccents"):
                     if flag in performance and not isinstance(performance[flag], bool):
-                        errors.append(f'{preset.get("id')}: performance.{flag} must be boolean')
+                        errors.append(f'{preset.get("id")}: performance.{flag} must be boolean')
 
 if errors:
     print("Factory preset catalog validation FAILED:")
