@@ -16,7 +16,7 @@ class StreamingVoiceReader final
 {
 public:
     StreamingVoiceReader() = default;
-    ~StreamingVoiceReader() = default;
+    ~StreamingVoiceReader() { release(); }
 
     StreamingVoiceReader(const StreamingVoiceReader&) = delete;
     StreamingVoiceReader& operator=(const StreamingVoiceReader&) = delete;
