@@ -72,6 +72,9 @@ for token in (
     'restoredSfzFile.existsAsFile()',
     'loadSfzFileAsync(restoredSfzFile, {})',
     'juce::ScopedLock lock(sampleStateLock)',
+    'sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel)',
+    'generationState->load(std::memory_order_acquire) != generation',
+    'generationState->load(std::memory_order_acquire) == generation',
 ):
     if token not in source:
         errors.append("SFZ session-path persistence/restore path missing: " + token)
