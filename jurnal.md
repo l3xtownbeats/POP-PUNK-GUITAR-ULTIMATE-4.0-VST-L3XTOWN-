@@ -884,3 +884,42 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Тест fixture: nested stereo WAV 24-bit/48 kHz, контроль количества кадров/каналов/bit depth/file size и отсутствующего каталога.
 - Статус: код и тест добавлены, но CI/build ещё не подтверждены. Это индексатор метаданных, не streaming playback; текущий SamplePool по-прежнему загружает WAV целиком и имеет лимиты 1 GiB/128 snapshots.
 - Следующий шаг: проверить сборку на Windows CI; затем спроектировать и реализовать page cache/streaming source с тестами cache miss, prefetch, shutdown и voice concurrency.
+
+
+## 10 ноября 2026 — продолжение M3: прямой dispatch событий PatternScheduler
+
+- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2` в целевом репозитории 4.0. Вся дальнейшая разработка, код, тесты и документация ведутся в этой ветке; `main` не изменяется.
+- HEAD до изменения кода: `7523be5d1fd620e3a039101598380713819dc50d`.
+- Коммит кода: `feb94fc65facf9ef12ad3a43d851e4a4764715f2`.
+- Коммит обновления журнала: `ccc5e88c91a21898d519c1f93f72dc4eb7073f9a` (подробная запись также находится в `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`).
+
+### Что проверено
+- Повторно просмотрены `Source/PluginProcessor.cpp`, `Source/PluginProcessor.h`, `Source/Performance/PatternScheduler.h`, sampler API и PROMPT v33.
+- Уточнён статус M3: текущий `processBlock()` уже вызывает `PatternScheduler::schedule()` и получает события в заранее выделенный массив. Старое утверждение, что вызов scheduler полностью отсутствует, устарело для HEAD перенесённой ветки.
+
+### Что изменено
+- `Source/PluginProcessor.cpp`: удалено промежуточное копирование scheduled events в `juce::MidiBuffer`; события обрабатываются непосредственно из фиксированного массива `scheduledPatternEvents`.
+- Сохранено разбиение аудиоблока по точному `sampleOffset`: рендерится участок до события, затем вызывается `sampler.noteOn()` или `sampler.noteOff()`.
+- Сохранены текущие velocity shaping, dynamics, velocityScale, MIDI channel и global tuning.
+- `Source/PluginProcessor.h`: удалён ненужный после изменения член `patternMidiBuffer`.
+- Причина: `juce::MidiBuffer::addEvent()` потенциально мог расширять внутреннее хранилище и выделять память в audio callback при плотном потоке событий. Прямой dispatch убирает эту промежуточную буферизацию; используется заранее выделенный массив scheduler.
+
+### Проверка
+- Git diff проверен: изменены только `Source/PluginProcessor.cpp` и `Source/PluginProcessor.h`; изменения соответствуют описанию.
+- Commit `feb94fc...` опубликован в рабочей ветке без force push.
+- Windows CI run `42762319535` запущен для точного commit `feb94fc...`. На момент последней проверки каталог 300 пресетов и portable preset examples прошли; скачивание redistributable sample libraries выполнялось; CMake configure, сборка VST3, CTest и bundle verification ещё ожидали выполнения.
+- Сборка/CTest/pluginval на этом commit пока не подтверждены. M3 НЕ принята.
+
+### Оставшиеся критерии M3
+1. Дождаться результата CI для `feb94fc...`; ошибки исправлять по первопричине с повторным запуском проверок.
+2. Проверить regression cases: точные sample offsets, совпадающие offsets (NoteOff перед NoteOn), границы блока, разные block sizes, длинные gate и отложенные NoteOff.
+3. Проверить lifecycle нот: смена MIDI-аккорда, удержание, stop/reset транспорта, panic/All Notes Off, отсутствие зависших нот.
+4. Проверить смену pattern slot и квантование; подтвердить восемь работающих runtime slots, а не только каталог metadata.
+5. Проверить отсутствие heap allocation, locks и file I/O в audio callback инструментально или тестовым allocator/audit call path.
+6. Выполнить headless/offline render acceptance и отдельно ручную проверку в FL Studio 20.
+7. Не переходить к M4 до фактической приёмки M1–M3 по PROMPT v33.
+
+### План следующих работ
+- Получить полный результат текущего Windows CI.
+- Провести аудит scheduler/sampler event lifecycle, добавить недостающие regression tests и устранить обнаруженные дефекты.
+- Продолжать M1–M13 строго по PROMPT v33; каждый коммит сопровождать записью в обоих журналах: что сделано, какие файлы изменены, почему, результаты тестов, известные ограничения и следующий план. Не выдавать roadmap за реализованную функцию.
