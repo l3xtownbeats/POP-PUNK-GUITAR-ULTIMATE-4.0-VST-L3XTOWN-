@@ -49,6 +49,8 @@ public:
         int highChannel = 16;
         int group = 0;
         int offBy = 0;
+        int seqLength = 1;
+        int seqPosition = 1;
         int startFrame = 0;
         int endFrame = 0;
         int loopStartFrame = 0;
@@ -65,7 +67,7 @@ public:
         std::vector<RegionView> regions;
     };
 
-    [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) const noexcept;
+    [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 
@@ -85,6 +87,8 @@ private:
     std::map<std::string, std::unique_ptr<SampleAsset>> sampleStorage;
     std::vector<std::unique_ptr<Snapshot>> snapshots;
     std::atomic<const Snapshot*> activeSnapshot { nullptr };
+    // Audio-thread-owned deterministic RR cursors, indexed by MIDI channel/note.
+    std::array<std::array<std::uint32_t, 128>, 16> roundRobinCounters {};
 };
 
 class SamplerEngine final
