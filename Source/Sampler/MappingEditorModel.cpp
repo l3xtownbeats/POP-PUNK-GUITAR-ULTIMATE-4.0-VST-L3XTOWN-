@@ -1,19 +1,25 @@
 #include "MappingEditorModel.h"
 #include <algorithm>
 #include <cmath>
+#include <unordered_set>
 
 namespace ppgu::sampler
 {
 bool MappingEditorModel::replace(std::vector<MappingRegion> incoming, std::string& error)
 {
+    std::unordered_set<std::size_t> ids;
     for (const auto& item : incoming)
     {
         const auto& r = item.region;
         if (r.lowKey < 0 || r.highKey > 127 || r.lowKey > r.highKey
             || r.rootKey < r.lowKey || r.rootKey > r.highKey
             || r.lowVelocity < 0 || r.highVelocity > 127 || r.lowVelocity > r.highVelocity
-            || item.roundRobinGroup < 0)
+            || item.roundRobinGroup < 0 || item.roundRobinGroup > 1024)
         { error = "Mapping contains an invalid key, velocity or round-robin range."; return false; }
+        if (r.samplePath.empty())
+        { error = "Mapping region has no sample path."; return false; }
+        if (!ids.insert(item.id).second)
+        { error = "Mapping region IDs must be unique."; return false; }
     }
     std::sort(incoming.begin(), incoming.end(), [](const auto& a, const auto& b) { return a.id < b.id; });
     std::lock_guard lock(mutex);
