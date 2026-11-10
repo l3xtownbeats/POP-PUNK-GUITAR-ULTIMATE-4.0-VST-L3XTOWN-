@@ -34,6 +34,17 @@ bool writeFixture(const juce::File& file, juce::AudioFormat& format, int bits)
 
 int main()
 {
+    // Ensure all advertised common interchange formats are registered in this build.
+    juce::AudioFormatManager registeredFormats;
+    registeredFormats.registerBasicFormats();
+    for (const auto* extension : { "wav", "aiff", "aif", "flac", "ogg", "mp3" })
+    {
+        if (registeredFormats.findFormatForFileExtension(extension) == nullptr)
+        {
+            std::cerr << "Required audio decoder is not registered for ." << extension << "\\n";
+            return 1;
+        }
+    }
     const auto root = std::filesystem::temp_directory_path() / "ppgu-library-import-tests";
     std::filesystem::remove_all(root);
     const juce::File source((root / "User Guitar Pack").string());
