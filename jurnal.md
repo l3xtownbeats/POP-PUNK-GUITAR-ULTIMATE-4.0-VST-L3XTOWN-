@@ -1093,3 +1093,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 
 
 2026-11-10 — SFZ session persistence: `getStateInformation` stores `sfzFilePath` alongside APVTS state. `setStateInformation` restores an existing SFZ through the worker pool, and missing paths do not prevent parameter restoration. Shared path access is protected by `juce::CriticalSection`. Static validator now guards the serialization/restore route. Status: source fix committed; Windows CI/CTest and FL Studio 20 host validation pending.
+
+
+## 10 ноября 2026 — ускорение работ и единая главная страница статуса
+
+По решению пользователя все изменения и актуальный статус должны отражаться на главной странице разработки README.md. README теперь содержит трёхэтапную модель M1–M5 / M6–M10 / M11–M13 и ссылки на четыре постоянных журнала. Это не заменяет подробные записи: README — краткая актуальная витрина статуса, jurnal.md — хронология, Info.txt — единый сквозной контекст, docs/ЖУРНАЛ_БАГОВ_RU.md — реестр дефектов, docs/WORK_LOG_M1_M5_INTEGRATION_RU.md — технический work log.
+
+Ускорение процесса: группировать связанные правки и regression tests в один небольшой commit; параллельно выполнять только низкорисковые подготовительные задачи этапа 2; не запускать конкурирующие тяжёлые CI/stress jobs во время критических проверок этапа 1; после каждого code change запускать целевой тест, затем общий Windows Release/CTest. Не отключать тесты и не ослаблять критерии ради скорости.
+
+CI факт на момент записи: run 42855790840 на SHA e8f3baa завершился FAILURE на шаге sampler tests. Единственный упавший тест — ppgu_sample_library_importer_tests: отчёт ожидал другую классификацию файлов; фактический отчёт Imported=3, mapped=2, needsMapping=1, Unknown_take.wav корректно оставлен для ручного mapping. Требуется проверить fixture/ожидание теста против фактического контракта импортера и добавить точную regression-проверку. Run 42855790775 отменён concurrency при следующем push. Workflow 42856503154 на коммите bd6c703 выполняется; результат ещё не подтверждён.
+
+Новая структура рабочего процесса зафиксирована в README и docs/M6_M13_IMPLEMENTATION_ACCEPTANCE_RU.md. Текущий этап — Stage 1; M1–M5 не объявлять завершёнными до закрытия тестов и host acceptance.
