@@ -47,6 +47,7 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginEditor.cpp
     Source/PluginEditor.h
     Source/Sampler/SampleLibraryImporter.cpp
+    Source/Sampler/MappingEditorModel.cpp
     Source/Sampler/SampleLibraryImporter.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
@@ -259,4 +260,14 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_sample_library_importer_tests COMMAND ppgu_sample_library_importer_tests)
+endif()
+
+# Editable key/velocity mapping and round-robin selection regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_mapping_editor_model_tests
+        Source/Sampler/MappingEditorModel.cpp
+        tests/MappingEditorModelTests.cpp
+    )
+    target_include_directories(ppgu_mapping_editor_model_tests PRIVATE Source/Sampler)
+    add_test(NAME ppgu_mapping_editor_model_tests COMMAND ppgu_mapping_editor_model_tests)
 endif()
