@@ -108,6 +108,24 @@ void StreamingVoiceReader::prefetch(std::uint64_t frame) noexcept
         (void) ensurePage(nextPage);
 }
 
+void StreamingVoiceReader::requestPrefetch(std::uint64_t frame) noexcept
+{
+    if (stream == nullptr || stream->pageFrames() == 0
+        || sourceFrames == 0 || frame >= sourceFrames)
+        return;
+
+    const auto page = frame / stream->pageFrames();
+    const auto pageCount = 1 + (sourceFrames - 1) / stream->pageFrames();
+    // Requests are bounded and non-blocking. Unlike ensurePage(), these do
+    // not acquire leases, so the active attack pages are not evicted from the
+    // voice's fixed three-page interpolation working set.
+    if (page > 0)
+        (void) stream->requestPage({ sourceSampleId, page - 1 });
+    (void) stream->requestPage({ sourceSampleId, page });
+    if (page + 1 < pageCount)
+        (void) stream->requestPage({ sourceSampleId, page + 1 });
+}
+
 bool StreamingVoiceReader::readFrame(std::uint64_t frame, float& left,
                                      float& right) const noexcept
 {
