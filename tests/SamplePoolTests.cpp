@@ -21,8 +21,8 @@ int main()
         using ppgu::sampler::PageCacheSlots;
         PageCacheSlots cache(1, 64, 2);
         PageCacheSlots unrelatedCache(1, 64, 2);
-        const PageCacheSlots::PageKey firstPage { 7, 0 };
-        const PageCacheSlots::PageKey replacementPage { 7, 1 };
+        const ppgu::sampler::PageKey firstPage { 7, 0 };
+        const ppgu::sampler::PageKey replacementPage { 7, 1 };
         std::size_t slot = 0;
         if (!cache.isValid() || !cache.tryBeginLoad(firstPage, slot))
         {
