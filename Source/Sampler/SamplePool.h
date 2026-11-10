@@ -123,7 +123,7 @@ public:
     [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
-    [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0) noexcept;
+    [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0, bool palmMute = false) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
     void allNotesOff() noexcept;
     void panic(int fadeSamples) noexcept;
@@ -142,6 +142,12 @@ private:
         float gain = 0.0f;
         float releaseStep = 0.0f;
         bool releasing = false;
+        bool palmMuted = false;
+        float palmMuteEnvelope = 1.0f;
+        float palmMuteEnvelopeStep = 0.0f;
+        float palmMuteFilterLeft = 0.0f;
+        float palmMuteFilterRight = 0.0f;
+        float palmMuteFilterCoefficient = 1.0f;
         int direction = 1;
         std::uint64_t age = 0;
         std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();

@@ -468,7 +468,7 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
     return pool.loadSfz(sfzFile, requestGeneration, expectedGeneration);
 }
 
-bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
+bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones, bool palmMute) noexcept
 {
     const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
     if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
@@ -499,6 +499,18 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
     voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
     voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
+    voice.palmMuted = palmMute;
+    if (palmMute)
+    {
+        // Palm mute is a short, damped articulation fallback. Dedicated SFZ
+        // palm-muted sample zones can still be layered in a later sampler pass.
+        constexpr double palmMuteCutoffHz = 2200.0;
+        constexpr double palmMuteDurationSeconds = 0.12;
+        voice.palmMuteEnvelopeStep = 1.0f / static_cast<float>(juce::jmax(1.0,
+            outputSampleRate * palmMuteDurationSeconds));
+        voice.palmMuteFilterCoefficient = static_cast<float>(1.0 - std::exp(
+            -2.0 * juce::MathConstants<double>::pi * palmMuteCutoffHz / outputSampleRate));
+    }
     voice.age = nextAge++;
     if (region->streaming != nullptr)
     {
@@ -690,9 +702,21 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
             voice.streamingMissSamples = 0;
 
+            if (voice.palmMuted)
+            {
+                voice.palmMuteFilterLeft += voice.palmMuteFilterCoefficient
+                    * (sampleL - voice.palmMuteFilterLeft);
+                voice.palmMuteFilterRight += voice.palmMuteFilterCoefficient
+                    * (sampleR - voice.palmMuteFilterRight);
+                sampleL = voice.palmMuteFilterLeft;
+                sampleR = voice.palmMuteFilterRight;
+                voice.palmMuteEnvelope = juce::jmax(0.0f,
+                    voice.palmMuteEnvelope - voice.palmMuteEnvelopeStep);
+            }
+
             const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
             const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
-            const float envelope = voice.gain;
+            const float envelope = voice.gain * (voice.palmMuted ? voice.palmMuteEnvelope : 1.0f);
 
             if (channels == 1)
                 output.addSample(0, outIndex, 0.5f * (sampleL + sampleR) * envelope);
@@ -705,6 +729,12 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
 
             voice.position += voice.increment * static_cast<double>(voice.direction);
+            if (voice.palmMuted && voice.palmMuteEnvelope <= 0.0f)
+            {
+                streamReader.release();
+                voice = {};
+                break;
+            }
             if (voice.releasing)
             {
                 voice.gain -= voice.releaseStep;

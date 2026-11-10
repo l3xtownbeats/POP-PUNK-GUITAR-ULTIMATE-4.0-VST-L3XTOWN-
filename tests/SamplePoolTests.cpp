@@ -161,7 +161,9 @@ int main()
     const auto longDurationSfz = longDurationDirectory.getChildFile("long-duration.sfz");
     constexpr int longDurationFrames = 8000 * 121;
     juce::AudioBuffer<float> longDurationSource(1, longDurationFrames);
-    longDurationSource.clear();
+    for (int i = 0; i < longDurationSource.getNumSamples(); ++i)
+        longDurationSource.setSample(0, i, static_cast<float>(
+            0.25 * std::sin(2.0 * juce::MathConstants<double>::pi * 220.0 * i / 8000.0)));
     std::unique_ptr<juce::OutputStream> longDurationOutput(longDurationWav.createOutputStream());
     if (longDurationOutput == nullptr)
     {
@@ -195,6 +197,34 @@ int main()
     {
         std::cerr << "Streaming sampler rejected or truncated a 121-second WAV.\\n";
         for (const auto& error : longDurationLoad.errors) std::cerr << error << "\\n";
+        return 1;
+    }
+
+    // Velocity/articulation-triggered palm mute must damp and retire a sustained
+    // streaming voice automatically, without requiring an early MIDI Note Off.
+    ppgu::sampler::SamplerEngine palmMuteEngine;
+    palmMuteEngine.prepare(44100.0);
+    const auto palmMuteLoad = palmMuteEngine.loadSfz(longDurationSfz);
+    if (!palmMuteLoad.success || !palmMuteEngine.noteOn(73, 110,
+            ppgu::sampler::SamplerEngine::maximumVoices, 1, 0.0, true))
+    {
+        std::cerr << "Could not start the palm-mute streaming regression fixture.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> palmMuteOutput(2, 128);
+    bool palmMuteBecameAudible = false;
+    for (int attempt = 0; attempt < 70; ++attempt)
+    {
+        palmMuteOutput.clear();
+        palmMuteEngine.render(palmMuteOutput, 0, palmMuteOutput.getNumSamples());
+        palmMuteBecameAudible = palmMuteBecameAudible
+            || palmMuteOutput.getMagnitude(0, 0, palmMuteOutput.getNumSamples()) > 0.001f;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!palmMuteBecameAudible || palmMuteEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Palm mute did not produce an audible, self-terminating damped note. Active voices: "
+                  << palmMuteEngine.getActiveVoiceCount() << "\\n";
         return 1;
     }
 
