@@ -53,5 +53,6 @@ private:
     std::array<PageCacheSlots::ReadLease, leaseCount> leases {};
     std::array<std::uint64_t, leaseCount> leasePages { noPage, noPage, noPage };
     std::array<std::uint64_t, leaseCount> pendingPages { noPage, noPage, noPage };
+    std::array<std::uint8_t, leaseCount> retryCountdown {};
 };
 }
