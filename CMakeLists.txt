@@ -108,6 +108,30 @@ if(BUILD_TESTING)
 endif()
 
 
+
+# End-to-end scheduler dispatch into the real streaming sampler using a generated WAV/SFZ fixture.
+if(BUILD_TESTING)
+    add_executable(ppgu_pattern_sampler_integration_tests
+        Source/Sampler/SfzParser.cpp
+        Source/Sampler/SamplePool.cpp
+        Source/Sampler/SampleMetadataIndex.cpp
+        Source/Sampler/WavPageReader.cpp
+        Source/Sampler/PageCacheSlots.cpp
+        Source/Sampler/SampleStreamingService.cpp
+        Source/Sampler/StreamingVoiceReader.cpp
+        tests/PatternSamplerIntegrationTests.cpp
+    )
+    target_include_directories(ppgu_pattern_sampler_integration_tests PRIVATE Source)
+    target_link_libraries(ppgu_pattern_sampler_integration_tests PRIVATE
+        juce::juce_audio_formats
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_pattern_sampler_integration_tests COMMAND ppgu_pattern_sampler_integration_tests)
+endif()
+
 # JUCE-backed SamplePool integration test with a generated, license-neutral WAV fixture.
 if(BUILD_TESTING)
     add_executable(ppgu_sample_pool_tests
