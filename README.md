@@ -23,9 +23,7 @@
 
 ## THE INSTRUMENT
 
-<img src="assets/PPGU_5_0_INTERFACE_PREVIEW.svg" alt="POP PUNK GUITAR ULTIMATE 5.0 interface preview" width="100%">
-
-*Interface preview rendering — a visual presentation of the 5.0 layout. The feature matrix below distinguishes implemented controls from functions still under development.*
+*The previous concept preview has been removed because it did not represent the approved visual direction or the actual plugin interface. A new preview will be published only after the production JUCE interface has been rebuilt and verified.*
 
 </div>
 
@@ -299,7 +297,6 @@ The 5.0 branch is built with GitHub Actions on Windows Server 2022. The intended
 - Branch: [`feature/ppgu-5-import-sounds`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/feature/ppgu-5-import-sounds)
 - Dedicated 5.0 version branch: [`5.0`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/5.0)
 - Latest C++ implementation commit validated by CI: [`6ff1f268`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/6ff1f2680740da2ab45aa91fa0ec0e6a9930925d)
-- [Full-size interface preview SVG](assets/PPGU_5_0_INTERFACE_PREVIEW.svg)
 - [Full commit history for the 5.0 branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commits/feature/ppgu-5-import-sounds/)
 - [Current Windows VST3 workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml)
 - [Current build run 42910485080](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42910485080)
