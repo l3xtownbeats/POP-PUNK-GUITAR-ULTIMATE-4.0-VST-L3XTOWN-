@@ -989,3 +989,16 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - The archive includes the VST3 bundle, Samples folder and preset catalogue. There is no separately published standalone .vst3 asset; the page says so rather than exposing a nonexistent link.
 - Manual DAW validation remains outstanding; M3 remains NOT ACCEPTED and M4 remains gated.
 - Files changed: README.md, DOWNLOAD.md, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md.
+
+
+## 10 November 2026 — premium README, promo download and creator contact links
+
+- По просьбе пользователя обновлена главная страница README: более выразительная продуктовая структура, крупный promo download CTA, блоки возможностей, sound engine, Melody/Pattern, preset catalogue, sample licensing, development status, roadmap, документация и контакты.
+- Добавлены прямые контакты автора: mailto:l3xtown@yandex.ru, https://beatmaker.tv/user/182573 и https://t.me/l3xtown.
+- Добавлена заметная ссылка **DOWNLOAD PROMO VST3 BUILD** в hero-блоке и большая кнопка скачивания в разделе DOWNLOAD. Обе ведут на проверенный ZIP artifact ID 13738701864 (run 42763253767), содержащий VST3 + Samples + Presets, размер около 2.24 GB.
+- Добавлены отдельные ссылки на доступные в репозитории JSON-каталоги пресетов и portable Melody/Pattern examples. Не опубликованные отдельно VST3 и Sample Bank не выданы за самостоятельные файлы: указано, что они входят в комплектный ZIP.
+- Сохранены точные ограничения проекта: 300 preset definitions не равны 300 готовым runtime presets; M3 остаётся NOT ACCEPTED; M4 заблокирован; ручная проверка в FL Studio 20 и performance benchmarks не заявлены как выполненные.
+- Изменены: README.md, DOWNLOAD.md, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md.
+- Проверки: структура Git tree подтверждает наличие JSON preset banks и двух portable example files; ссылка на artifact основана на ранее проверенном artifact ID и run. Новая сборка/CTest не запускались, так как изменялись только Markdown-документы.
+- Ограничение: GitHub Actions artifact временный; отдельные standalone VST3 и Sample Bank release assets отсутствуют. Не обещать бессрочную публичную загрузку.
+- Следующий шаг: продолжить M1–M3 по PROMPT v33 FINAL в этой же рабочей ветке; после acceptance подготовить постоянную Release-публикацию, если доступные права и upload-инструменты позволят.
