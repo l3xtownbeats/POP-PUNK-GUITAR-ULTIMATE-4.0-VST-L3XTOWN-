@@ -968,3 +968,13 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Изменены: `README.md`, `DOWNLOAD.md`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`. Исторические записи сохранены.
 - Ограничения: ссылка ведёт на страницу успешного GitHub Actions run, где сам ZIP доступен в секции Artifacts; GitHub может потребовать авторизацию. Artifact временный, не постоянный Release. M3 остаётся NOT ACCEPTED; M4 заблокирован.
 - Следующий шаг: продолжать аудит и исправления M1–M3 по PROMPT v33 FINAL в этой же ветке.
+
+
+## 10 ноября 2026 — прямая ссылка на ZIP
+
+- Пользователь запросил прямое скачивание без страницы GitHub Actions и без ручного поиска в Artifacts.
+- В README и DOWNLOAD.md основная кнопка заменена на официальный GitHub Actions artifact archive endpoint: https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip
+- Проверено через список артефактов запуска https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767: artifact ID `13738701864`, имя `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, размер `2,242,880,406` байт, `expired=false`, срок действия до `2027-02-08T05:37:05Z` на момент проверки.
+- API отдаёт HTTP redirect на временный URL скачивания (срок действия redirect URL — около 1 минуты); постоянной является сама API-ссылка, пока артефакт и запуск существуют. GitHub может потребовать авторизацию в зависимости от доступности репозитория.
+- Изменены: `README.md`, `DOWNLOAD.md`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`.
+- M3 остаётся NOT ACCEPTED; M4 не начинается.
