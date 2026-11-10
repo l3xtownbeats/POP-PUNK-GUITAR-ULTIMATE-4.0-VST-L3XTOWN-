@@ -244,3 +244,13 @@ IMP-001 остаётся OPEN. В runs 42868571549 и 42868571630 сборка �
 
 ## IMP-002 — статус реализации
 SHA-256 и аудиометаданные manifest добавлены в commit `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`, но Windows compile gate не пройден из-за IMP-003. Статус: IN PROGRESS / CI BLOCKED; не считать принятым.
+
+## 2026-11-11 — SOUND BANK EXPANSION / COMPATIBILITY GAPS
+- Updated release workflow to include five additional CC0-1.0 guitar libraries: Emilyguitar, Shinyguitar, Black And Green Guitars, FreePats Direct DI, FreePats Jazz.
+- Added checks for upstream licenses, SFZ maps, minimum WAV/FLAC payloads, no bundled .git folders, and SHA-256 for WAV + FLAC files.
+- Expanded bank assets are source-cleared candidates, not automatically approved playable factory presets.
+- OPEN: SFZ parser lacks complete include/variable/default_path/random-region semantics used by some upstream maps.
+- OPEN: importer maps samples by filename root-note only; it does not fully preserve velocity layers, RR, string choices or articulations.
+- OPEN: SamplePool streaming metadata/playback is WAV-focused; FLAC must pass through importer conversion before runtime use.
+- OPEN: per-bank note coverage, rendered-signal tests, listening QC, and FL Studio 20 acceptance are not yet performed.
+- CI status pending after workflow/cache-key update. No claim of a completed expanded installer until the artifact is uploaded and inspected.
