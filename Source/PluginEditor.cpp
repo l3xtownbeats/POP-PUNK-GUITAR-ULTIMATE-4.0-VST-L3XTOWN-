@@ -7,12 +7,25 @@
 
 namespace
 {
-    const juce::Colour bg { 0xff111116 };
-    const juce::Colour panel { 0xff202027 };
-    const juce::Colour panel2 { 0xff17171d };
-    const juce::Colour pink { 0xffed238b };
-    const juce::Colour pale { 0xfff4f0f4 };
-    const juce::Colour muted { 0xffaaa8b2 };
+    juce::Colour bg { 0xff111116 };
+    juce::Colour panel { 0xff202027 };
+    juce::Colour panel2 { 0xff17171d };
+    juce::Colour pink { 0xffed238b };
+    juce::Colour pale { 0xfff4f0f4 };
+    juce::Colour muted { 0xffaaa8b2 };
+    struct SkinPalette { const char* name; juce::uint32 background, panel, panel2, accent, text, muted; };
+    const std::array<SkinPalette, 10> skinPalettes {{
+        { "NEON PINK", 0xff111116, 0xff202027, 0xff17171d, 0xffed238b, 0xfff4f0f4, 0xffaaa8b2 },
+        { "MIDNIGHT BLUE", 0xff0b111b, 0xff172638, 0xff101d2c, 0xff38a9ff, 0xffeef6ff, 0xff91a9c0 },
+        { "BLOOD RED", 0xff160d10, 0xff2b171d, 0xff211116, 0xffff4058, 0xfffff0f0, 0xffc39da4 },
+        { "VIOLET", 0xff120d1b, 0xff241a35, 0xff1a1329, 0xffa77bff, 0xfff5efff, 0xffb3a5c8 },
+        { "CYBER GREEN", 0xff0b1512, 0xff172a23, 0xff102019, 0xff50e3a4, 0xffedfff7, 0xff9bb9aa },
+        { "AMBER", 0xff17120b, 0xff302518, 0xff21190f, 0xffffb347, 0xfffff7e8, 0xffc4b394 },
+        { "ARCTIC", 0xff10171b, 0xff1d2a31, 0xff152127, 0xff62d7d9, 0xfff0ffff, 0xffa4bec1 },
+        { "GRAPHITE", 0xff111214, 0xff24262a, 0xff191b1f, 0xffd2d5dc, 0xfff5f6f8, 0xffa4a7ae },
+        { "SUNSET", 0xff1a1011, 0xff35201f, 0xff241716, 0xffff765e, 0xfffff1e9, 0xffc8a59a },
+        { "GOLD EDITION", 0xff15130e, 0xff2b2619, 0xff201c13, 0xffe5c46a, 0xfffff8e8, 0xffbdb08c }
+    }};
 }
 
 class FxRackContent final : public juce::Component
@@ -141,10 +154,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetBox.setColour(juce::ComboBox::textColourId, pale);
     presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
-    categoryBox.addItem("ALL PRESETS", 1);
-    categoryBox.addItem("MELODY", 2);
-    categoryBox.addItem("PATTERN", 3);
-    categoryBox.setSelectedId(1, juce::dontSendNotification);
+    categoryBox.addItem("OFF", 1);
+    categoryBox.addItem("ALL GROUPS", 2);
+    categoryBox.setSelectedId(2, juce::dontSendNotification);
     categoryBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     categoryBox.setColour(juce::ComboBox::textColourId, pale);
     addAndMakeVisible(categoryBox);
@@ -154,8 +166,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetSearch.setColour(juce::TextEditor::outlineColourId, pink.withAlpha(0.4f));
     addAndMakeVisible(presetSearch);
     loadFactoryPresetCatalog();
-    melodyFilterBox.addItem("ALL MELODY", 1);
-    styleFilterBox.addItem("ALL STYLES", 1);
+    melodyFilterBox.addItem("OFF", 1);
+    melodyFilterBox.addItem("ALL SOUNDS", 2);
+    styleFilterBox.addItem("OFF", 1);
+    styleFilterBox.addItem("ALL STYLES", 2);
     juce::StringArray melodyValues, styleValues;
     for (const auto& item : factoryPresets)
     {
@@ -166,8 +180,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         if (item.articulation.isNotEmpty() && !styleValues.contains(item.articulation))
             styleValues.add(item.articulation);
     }
-    for (int i = 0; i < melodyValues.size(); ++i) melodyFilterBox.addItem(melodyValues[i], i + 2);
-    for (int i = 0; i < styleValues.size(); ++i) styleFilterBox.addItem(styleValues[i], i + 2);
+    for (int i = 0; i < melodyValues.size(); ++i) melodyFilterBox.addItem(melodyValues[i], i + 3);
+    for (int i = 0; i < styleValues.size(); ++i) styleFilterBox.addItem(styleValues[i], i + 3);
+    juce::StringArray artistGroups;
+    for (const auto& item : factoryPresets)
+        if (item.category.isNotEmpty() && !artistGroups.contains(item.category))
+            artistGroups.add(item.category);
+    artistGroups.sort(true);
+    for (int i = 0; i < artistGroups.size(); ++i)
+        categoryBox.addItem(artistGroups[i], i + 3);
     for (auto* box : { &melodyFilterBox, &styleFilterBox, &processorBox })
     {
         box->setColour(juce::ComboBox::backgroundColourId, panel2);
@@ -175,8 +196,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         box->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
         addAndMakeVisible(*box);
     }
-    melodyFilterBox.setSelectedId(1, juce::dontSendNotification);
-    styleFilterBox.setSelectedId(1, juce::dontSendNotification);
+    melodyFilterBox.setSelectedId(2, juce::dontSendNotification);
+    styleFilterBox.setSelectedId(2, juce::dontSendNotification);
     processorBox.addItem("GOOD", 1);
     processorBox.addItem("NORMAL", 2);
     processorBox.addItem("NIGHT", 3);
@@ -184,51 +205,63 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     processorBox.setSelectedId(2, juce::dontSendNotification);
     processorAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
         processor.parameters, "processorQuality", processorBox);
-    presetBox.onChange = [this] { if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size())) applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId()-1)]); };
+    presetBox.onChange = [this] {
+        const int selectedId = presetBox.getSelectedId();
+        if (selectedId <= 1) {
+            statusLabel.setText("PRESET OFF  /  NO FACTORY PRESET SELECTED", juce::dontSendNotification);
+            return;
+        }
+        const int index = selectedId - 2;
+        if (index >= 0 && index < static_cast<int>(visiblePresetIndices.size()))
+            applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(index)]);
+    };
     auto refreshPresetList = [this] {
         // Keep the current sound selected when it remains in the filtered list.
         // Filtering must never silently load a different preset.
         int previouslySelectedPreset = -1;
         const int oldSelectedId = presetBox.getSelectedId();
-        if (oldSelectedId > 0 && oldSelectedId <= static_cast<int>(visiblePresetIndices.size()))
-            previouslySelectedPreset = visiblePresetIndices[static_cast<size_t>(oldSelectedId - 1)];
+        if (oldSelectedId > 1 && oldSelectedId - 2 < static_cast<int>(visiblePresetIndices.size()))
+            previouslySelectedPreset = visiblePresetIndices[static_cast<size_t>(oldSelectedId - 2)];
 
         const auto query = presetSearch.getText().trim().toLowerCase();
         const int category = categoryBox.getSelectedId();
         visiblePresetIndices.clear();
         presetBox.clear(juce::dontSendNotification);
+        presetBox.addItem("OFF  /  NO PRESET", 1);
+        const auto groupFilter = categoryBox.getText();
         for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
-            if (category == 2 && item.mode != "MELODY") continue;
-            if (category == 3 && item.mode != "PATTERN") continue;
+            if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "ALL GROUPS"
+                && !item.category.equalsIgnoreCase(groupFilter)) continue;
             const auto melodyFilter = melodyFilterBox.getText();
-            if (melodyFilter.isNotEmpty() && melodyFilter != "ALL MELODY"
+            if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "ALL SOUNDS"
                 && !item.soundCharacter.containsIgnoreCase(melodyFilter)) continue;
             const auto styleFilter = styleFilterBox.getText();
             const auto styleText = item.groove + " " + item.articulation;
-            if (styleFilter.isNotEmpty() && styleFilter != "ALL STYLES"
+            if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "ALL STYLES"
                 && !styleText.containsIgnoreCase(styleFilter)) continue;
 
             const auto matchesQuery = query.isEmpty()
                 || item.name.toLowerCase().contains(query)
                 || item.category.toLowerCase().contains(query)
-                || item.mode.toLowerCase().contains(query)
+                || item.category.toLowerCase().contains(query)
                 || item.soundCharacter.toLowerCase().contains(query)
+                || item.styleProfileId.toLowerCase().contains(query)
                 || item.groove.toLowerCase().contains(query)
                 || item.articulation.toLowerCase().contains(query);
             if (!matchesQuery) continue;
 
             visiblePresetIndices.push_back(static_cast<int>(i));
-            presetBox.addItem(item.name, static_cast<int>(visiblePresetIndices.size()));
+            presetBox.addItem(item.name, static_cast<int>(visiblePresetIndices.size()) + 1);
         }
 
         const auto selected = std::find(visiblePresetIndices.begin(), visiblePresetIndices.end(),
                                         previouslySelectedPreset);
         if (previouslySelectedPreset >= 0 && selected != visiblePresetIndices.end())
-            presetBox.setSelectedId(static_cast<int>(std::distance(visiblePresetIndices.begin(), selected)) + 1,
+            presetBox.setSelectedId(static_cast<int>(std::distance(visiblePresetIndices.begin(), selected)) + 2,
                                     juce::dontSendNotification);
         else
-            presetBox.setSelectedId(0, juce::dontSendNotification);
+            presetBox.setSelectedId(1, juce::dontSendNotification);
     };
     categoryBox.onChange = refreshPresetList;
     melodyFilterBox.onChange = refreshPresetList;
@@ -252,10 +285,20 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
 
-    skinsButton.setTooltip("Skin packs are not connected in this build.");
+    skinsButton.setTooltip("Choose one of 10 interface skins.");
+    skinsButton.setEnabled(true);
+    skinsButton.setColour(juce::TextButton::buttonColourId, panel2);
+    skinsButton.setColour(juce::TextButton::textColourOffId, pink);
+    skinsButton.onClick = [this] {
+        juce::PopupMenu menu;
+        for (int i = 0; i < static_cast<int>(skinPalettes.size()); ++i)
+            menu.addItem(i + 1, skinPalettes[static_cast<size_t>(i)].name, true, i == activeSkinIndex);
+        menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinsButton),
+            [this](int result) { if (result > 0) applySkin(result - 1); });
+    };
     midiButton.setTooltip("MIDI Piano Roll is not connected in this build.");
     multicoreButton.setTooltip("Background multicore processing is not enabled in this build.");
-    for (auto* button : { &skinsButton, &midiButton, &multicoreButton })
+    for (auto* button : { &midiButton, &multicoreButton })
     {
         button->setEnabled(false);
         button->setColour(juce::TextButton::buttonColourId, panel2);
@@ -270,6 +313,32 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     doubleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         processor.parameters, "doubleTrackOn", doubleButton);
     addAndMakeVisible(doubleButton);
+    autoChordsButton.setClickingTogglesState(true);
+    autoChordsButton.setColour(juce::TextButton::buttonColourId, panel2);
+    autoChordsButton.setColour(juce::TextButton::buttonOnColourId, pink);
+    autoChordsButton.setColour(juce::TextButton::textColourOffId, pale);
+    autoChordsButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    autoChordsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        processor.parameters, "autoChordsOn", autoChordsButton);
+    autoChordsButton.onClick = [this] {
+        autoChordsButton.setButtonText(autoChordsButton.getToggleState() ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
+        statusLabel.setText(autoChordsButton.getToggleState()
+            ? "AUTOCHORDS ON  /  PATTERN MODE ONLY  /  SINGLE MIDI NOTE BUILDS A DIATONIC CHORD"
+            : "AUTOCHORDS OFF  /  PLAY CHORDS FROM MIDI INPUT", juce::dontSendNotification);
+    };
+    addAndMakeVisible(autoChordsButton);
+    autoChordKeyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
+    autoChordScaleBox.addItemList({ "CHROMATIC", "MAJOR", "MINOR" }, 1);
+    for (auto* box : { &autoChordKeyBox, &autoChordScaleBox }) {
+        box->setColour(juce::ComboBox::backgroundColourId, panel2);
+        box->setColour(juce::ComboBox::textColourId, pale);
+        box->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+        addAndMakeVisible(*box);
+    }
+    autoChordKeyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.parameters, "scaleRoot", autoChordKeyBox);
+    autoChordScaleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.parameters, "scaleMode", autoChordScaleBox);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -349,6 +418,58 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
+{
+    activeSkinIndex = juce::jlimit(0, static_cast<int>(skinPalettes.size()) - 1, index);
+    const auto& skin = skinPalettes[static_cast<size_t>(activeSkinIndex)];
+    bg = juce::Colour(skin.background);
+    panel = juce::Colour(skin.panel);
+    panel2 = juce::Colour(skin.panel2);
+    pink = juce::Colour(skin.accent);
+    pale = juce::Colour(skin.text);
+    muted = juce::Colour(skin.muted);
+
+    for (auto* label : { &titleLabel, &subtitleLabel, &statusLabel, &ampTitle, &fxTitle, &playbackTitle }) {
+        label->setColour(juce::Label::textColourId, label == &subtitleLabel || label == &ampTitle
+            || label == &fxTitle || label == &playbackTitle ? pink : pale);
+    }
+    for (auto* box : { &presetBox, &categoryBox, &melodyFilterBox, &styleFilterBox, &processorBox,
+                       &autoChordKeyBox, &autoChordScaleBox, &startModeBox }) {
+        box->setColour(juce::ComboBox::backgroundColourId, panel2);
+        box->setColour(juce::ComboBox::textColourId, pale);
+        box->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.55f));
+    }
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, panel2);
+    presetSearch.setColour(juce::TextEditor::textColourId, pale);
+    presetSearch.setColour(juce::TextEditor::outlineColourId, pink.withAlpha(0.5f));
+    for (auto* button : { &loadButton, &fxOpenButton, &skinsButton, &midiButton, &doubleButton,
+                          &multicoreButton, &melodyTab, &patternTab, &autoChordsButton }) {
+        button->setColour(juce::TextButton::buttonColourId, panel2);
+        button->setColour(juce::TextButton::buttonOnColourId, pink);
+        button->setColour(juce::TextButton::textColourOffId, pale);
+        button->setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    }
+    loadButton.setColour(juce::TextButton::buttonColourId, pink);
+    for (auto& button : fxButtons) {
+        button.setColour(juce::TextButton::buttonColourId, panel2);
+        button.setColour(juce::TextButton::buttonOnColourId, pink);
+        button.setColour(juce::TextButton::textColourOffId, pale);
+        button.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    }
+    for (size_t i = 0; i < knobs.size(); ++i) {
+        knobs[i].setColour(juce::Slider::rotarySliderFillColourId, pink);
+        knobs[i].setColour(juce::Slider::rotarySliderOutlineColourId, panel);
+        knobs[i].setColour(juce::Slider::thumbColourId, pale);
+        knobs[i].setColour(juce::Slider::textBoxTextColourId, pale);
+    }
+    if (keyboard != nullptr) {
+        keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
+        keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
+        keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, panel2);
+    }
+    repaint();
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
 {
     s.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -377,17 +498,17 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(bg);
-    g.setColour(juce::Colour(0xff08080b));
+    g.setColour(panel2);
     g.fillRect(0, 0, getWidth(), 62);
     g.setColour(pink);
     g.fillRect(0, 0, getWidth(), 3);
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(88);
     hero.setHeight(154);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
+    juce::ColourGradient grad(panel, static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), bg, static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
+    g.setColour(pink.withAlpha(0.5f));
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
     g.setColour(pale);
@@ -407,11 +528,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
     body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
     body.closeSubPath();
-    g.setColour(juce::Colour(0xffd9d9df));
+    g.setColour(pale);
     g.fillPath(body);
-    g.setColour(juce::Colour(0xff292932));
+    g.setColour(panel2);
     g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(juce::Colour(0xffd8b77c));
+    g.setColour(pink.brighter(0.2f));
     juce::Path neck;
     neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
     g.fillPath(neck);
@@ -442,15 +563,15 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 
     // Main action strip.
     auto toolbar = area.removeFromTop(42);
-    loadButton.setBounds(toolbar.removeFromLeft(132).reduced(2, 4));
-    melodyTab.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
-    patternTab.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
-    fxOpenButton.setBounds(toolbar.removeFromLeft(108).reduced(2, 4));
-    skinsButton.setBounds(toolbar.removeFromLeft(74).reduced(2, 4));
-    midiButton.setBounds(toolbar.removeFromLeft(68).reduced(2, 4));
-    doubleButton.setBounds(toolbar.removeFromLeft(88).reduced(2, 4));
-    processorBox.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
-    multicoreButton.setBounds(toolbar.removeFromLeft(104).reduced(2, 4));
+    loadButton.setBounds(toolbar.removeFromLeft(108).reduced(2, 4));
+    melodyTab.setBounds(toolbar.removeFromLeft(78).reduced(2, 4));
+    patternTab.setBounds(toolbar.removeFromLeft(78).reduced(2, 4));
+    fxOpenButton.setBounds(toolbar.removeFromLeft(88).reduced(2, 4));
+    skinsButton.setBounds(toolbar.removeFromLeft(64).reduced(2, 4));
+    midiButton.setBounds(toolbar.removeFromLeft(54).reduced(2, 4));
+    doubleButton.setBounds(toolbar.removeFromLeft(72).reduced(2, 4));
+    processorBox.setBounds(toolbar.removeFromLeft(88).reduced(2, 4));
+    multicoreButton.setBounds(toolbar.removeFromLeft(92).reduced(2, 4));
 
     area.removeFromTop(154);
     auto status = area.removeFromTop(26);
@@ -468,7 +589,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     for(size_t i=0;i<fxButtons.size();++i){auto cell=fx.removeFromTop(fx.getHeight()/static_cast<int>(fxButtons.size()-i)); fxButtons[i].setBounds(cell.reduced(8,2));}
     auto keyboardArea = area.removeFromBottom(72);
     if (keyboard != nullptr) keyboard->setBounds(keyboardArea.reduced(2, 4));
-    auto playbackControls = playback.removeFromTop(190);
+    auto playbackControls = playback.removeFromTop(164);
+    playbackControls.removeFromTop(8);
     const int pw = juce::jmax(1, playbackControls.getWidth() / 5);
     for (size_t i = 4; i < 9; ++i)
     {
@@ -476,6 +598,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         knobLabels[i].setBounds(cell.removeFromBottom(28));
         knobs[i].setBounds(cell.reduced(1, 4));
     }
+    auto autoChordRow = playback.removeFromTop(34);
+    autoChordsButton.setBounds(autoChordRow.removeFromLeft(112).reduced(3, 2));
+    autoChordKeyBox.setBounds(autoChordRow.removeFromLeft(62).reduced(2, 2));
+    autoChordScaleBox.setBounds(autoChordRow.removeFromLeft(90).reduced(2, 2));
     startModeBox.setBounds(playback.removeFromTop(34).reduced(8, 2));
 }
 
@@ -489,9 +615,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
         if (auto* values = array.getArray()) for (const auto& value : *values) {
             if (!value.isObject()) continue;
             FactoryPreset preset;
+            preset.id = value.getProperty("id", "").toString();
             preset.name = value.getProperty("name", "Unnamed").toString();
             preset.category = value.getProperty("referenceArtist", "Original").toString();
             preset.mode = mode;
+            preset.styleProfileId = value.getProperty("styleProfileId", "").toString();
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
@@ -520,14 +648,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     setParameter("tone", juce::jlimit(0.0f, 10.0f, preset.tone));
     setParameter("reverbMix", juce::jlimit(0.0f, 1.0f, preset.reverb));
     setParameter("output", juce::jlimit(-24.0f, 12.0f, preset.outputDb));
-    modeBox.setSelectedId(preset.mode == "PATTERN" ? 2 : 1, juce::sendNotification);
+    // Preset identity is independent of the performance mode. The user chooses MELODY or PATTERN.
+    const auto styleText = (preset.groove + " " + preset.articulation).toLowerCase();
+    int patternStyle = 2;
+    if (styleText.contains("arpeggio") || styleText.contains("picked melodic")) patternStyle = 7;
+    else if (styleText.contains("stop-start") || styleText.contains("syncopated")) patternStyle = 6;
+    else if (styleText.contains("ska") || styleText.contains("upstroke")) patternStyle = 4;
+    else if (styleText.contains("downstroke") || styleText.contains("eighth")) patternStyle = 0;
+    else if (styleText.contains("palm") || styleText.contains("muted")) patternStyle = 1;
+    else if (styleText.contains("open") || styleText.contains("chorus")) patternStyle = 3;
+    else if (styleText.contains("alternate")) patternStyle = 5;
+    setParameter("patternSlot", static_cast<float>(patternStyle));
     if (preset.mode == "PATTERN")
     {
         const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
-        statusLabel.setText("PATTERN STYLE: " + detail + "  /  " + preset.articulation + "  /  PERFORMANCE ENGINE REQUIRED", juce::dontSendNotification);
+        statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation + "  /  SELECT MELODY OR PATTERN", juce::dontSendNotification);
     }
     else
-        statusLabel.setText("MELODY TONE: " + preset.soundCharacter + "  /  ONE KEY = ONE NOTE  /  LOAD A LICENSED SFZ BANK", juce::dontSendNotification);
+        statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter + "  /  MELODY = SINGLE NOTES, PATTERN = STYLE PLAYBACK", juce::dontSendNotification);
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {
