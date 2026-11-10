@@ -810,15 +810,41 @@ juce::AudioProcessorEditor* PopPunkGuitarUltimateAudioProcessor::createEditor()
 void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock& destinationData)
 {
     auto state = parameters.copyState();
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        state.setProperty("sfzFilePath", currentSfzFilePath, nullptr);
+    }
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
-    copyXmlToBinary(*xml, destinationData);
+    if (xml != nullptr)
+        copyXmlToBinary(*xml, destinationData);
 }
 
 void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
-    if (xml != nullptr && xml->hasTagName(parameters.state.getType()))
-        parameters.replaceState(juce::ValueTree::fromXml(*xml));
+    if (xml == nullptr || !xml->hasTagName(parameters.state.getType()))
+        return;
+
+    auto restoredState = juce::ValueTree::fromXml(*xml);
+    if (!restoredState.isValid())
+        return;
+
+    const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    parameters.replaceState(restoredState);
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        currentSfzFilePath = restoredSfzPath;
+    }
+
+    // Legacy sessions have no path property. Missing libraries are deliberately
+    // not loaded; the saved path is retained so the user can locate the bank again.
+    if (restoredSfzPath.isNotEmpty())
+    {
+        const juce::File restoredSfzFile(restoredSfzPath);
+        if (restoredSfzFile.existsAsFile()
+            && restoredSfzFile.getFileExtension().equalsIgnoreCase(".sfz"))
+            loadSfzFileAsync(restoredSfzFile, {});
+    }
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
@@ -829,7 +855,19 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
 {
     // Synchronous API for tests/tools only; never call from processBlock.
-    return sampler.loadSfz(sfzFile);
+    auto report = sampler.loadSfz(sfzFile);
+    if (report.success)
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        currentSfzFilePath = sfzFile.getFullPathName();
+    }
+    return report;
+}
+
+juce::String PopPunkGuitarUltimateAudioProcessor::getCurrentSfzFilePath() const
+{
+    const juce::ScopedLock lock(sampleStateLock);
+    return currentSfzFilePath;
 }
 
 void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
@@ -838,6 +876,11 @@ void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
     sampleLoadPool.addJob([this, sfzFile, completion = std::move(completion)]() mutable
     {
         auto report = sampler.loadSfz(sfzFile);
+        if (report.success)
+        {
+            const juce::ScopedLock lock(sampleStateLock);
+            currentSfzFilePath = sfzFile.getFullPathName();
+        }
         juce::MessageManager::callAsync(
             [completion = std::move(completion), report = std::move(report)]() mutable
             {
