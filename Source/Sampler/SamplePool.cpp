@@ -131,7 +131,7 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
                 pathKey(std::filesystem::path(pendingLibrary->metadata[i].file.getFullPathName().toStdString())),
                 static_cast<std::uint32_t>(i));
 
-        // 192 planar pages * 4096 frames * stereo floats = 6 MiB per
+        // 256 planar pages * 4096 frames * stereo floats = 8 MiB per
         // library root. Even the maximum eight roots stay well below the
         // 256 MiB global page-cache ceiling.
         pendingLibrary->service = std::make_unique<SampleStreamingService>(
