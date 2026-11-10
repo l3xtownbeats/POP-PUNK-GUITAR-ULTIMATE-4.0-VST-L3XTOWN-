@@ -28,7 +28,8 @@ private:
     std::vector<int> visiblePresetIndices;
     juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle;
     juce::TextButton melodyTab { "♫  MELODY" }, patternTab { "PATTERN" };
-    juce::ComboBox modeBox, startModeBox;
+    juce::ComboBox modeBox, startModeBox, scaleRootBox, scaleModeBox;
+    juce::TextButton autoChordsButton { "AUTOCHORDS" };
     std::array<juce::Slider, 9> knobs;
     std::array<juce::Label, 9> knobLabels;
     std::array<juce::String, 9> knobNames { "GAIN", "TREBLE", "MID", "BASS", "VELOCITY", "DYNAMICS", "SWING", "HUMANIZE", "ACCENT" };
@@ -41,7 +42,8 @@ private:
     std::array<juce::String, 7> fxParameterIDs { "compressorOn", "eqOn", "distortionOn", "chorusOn", "delayOn", "reverbOn", "cabinetOn" };
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment, powerProfileAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment, powerProfileAttachment, scaleRootAttachment, scaleModeAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> autoChordsAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> doubleTrackAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
     std::unique_ptr<juce::FileChooser> fileChooser;
