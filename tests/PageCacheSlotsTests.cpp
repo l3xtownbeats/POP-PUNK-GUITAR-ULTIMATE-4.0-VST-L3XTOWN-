@@ -67,6 +67,37 @@ int main()
     if (cache.tryAcquire({ 1234, 999 }, lease))
         return 1;
 
+
+    // A sample page is shared by concurrent voices. Each reader pins the same
+    // slot independently; the worker must not evict it until every lease ends.
+    PageCacheSlots sharedPageCache(1, 4, 1);
+    std::size_t sharedSlot = 0;
+    if (!sharedPageCache.tryBeginLoad({ 7, 3 }, sharedSlot)) return 1;
+    auto* sharedData = sharedPageCache.writableData(sharedSlot);
+    if (sharedData == nullptr) return 1;
+    sharedData[0] = 0.75f;
+    if (!sharedPageCache.publish(sharedSlot, { 7, 3 }, 1, 1)) return 1;
+    PageCacheSlots::ReadLease voiceA, voiceB;
+    if (!sharedPageCache.tryAcquire({ 7, 3 }, voiceA)
+        || !sharedPageCache.tryAcquire({ 7, 3 }, voiceB)
+        || voiceA.samples != voiceB.samples || voiceA.samples[0] != 0.75f)
+    {
+        std::cerr << "Concurrent voices could not acquire the same cached page.\\n";
+        return 1;
+    }
+    sharedPageCache.release(voiceA);
+    if (sharedPageCache.tryBeginLoad({ 8, 0 }, sharedSlot))
+    {
+        std::cerr << "Cache evicted a page while a second voice still held a read lease.\\n";
+        return 1;
+    }
+    sharedPageCache.release(voiceB);
+    if (!sharedPageCache.tryBeginLoad({ 8, 0 }, sharedSlot))
+    {
+        std::cerr << "Cache did not make a page evictable after all readers released it.\\n";
+        return 1;
+    }
+
     PageCacheSlots invalid(0, 0, 0);
     if (invalid.isValid() || invalid.tryBeginLoad({ 1, 1 }, first))
         return 1;
