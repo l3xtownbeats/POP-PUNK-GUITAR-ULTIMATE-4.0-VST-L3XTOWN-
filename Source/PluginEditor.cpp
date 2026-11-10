@@ -272,6 +272,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
                  || item.category.toLowerCase().contains(query)
                 || item.soundCharacter.toLowerCase().contains(query)
                 || item.styleProfileId.toLowerCase().contains(query)
+                || item.referenceTracks.toLowerCase().contains(query)
+                || item.tonalTarget.toLowerCase().contains(query)
+                || item.sampleProfile.toLowerCase().contains(query)
                 || item.groove.toLowerCase().contains(query)
                 || item.articulation.toLowerCase().contains(query);
             if (!matchesQuery) continue;
@@ -293,6 +296,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     styleFilterBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
+    // Restore the selected factory preset by stable ID without re-applying it:
+    // APVTS already restored the saved parameter values from the host project.
+    const auto savedPresetId = processor.parameters.state.getProperty("factoryPresetId").toString();
+    if (savedPresetId.isNotEmpty())
+        for (size_t visible = 0; visible < visiblePresetIndices.size(); ++visible)
+            if (factoryPresets[static_cast<size_t>(visiblePresetIndices[visible])].id == savedPresetId)
+            {
+                presetBox.setSelectedId(static_cast<int>(visible) + 2, juce::dontSendNotification);
+                break;
+            }
     fxOpenButton.setButtonText("FX STUDIO");
     fxOpenButton.setColour(juce::TextButton::buttonColourId, panel2);
     fxOpenButton.setColour(juce::TextButton::textColourOffId, pink);
@@ -757,6 +770,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
             preset.noteBehavior = value.getProperty("noteBehavior", "").toString();
             preset.sampleRequirement = value.getProperty("sampleRequirement", "").toString();
+            if (auto* tracks = value.getProperty("referenceTracks", juce::var()).getArray())
+                for (const auto& track : *tracks)
+                    preset.referenceTracks += (preset.referenceTracks.isEmpty() ? juce::String{} : "  ") + track.toString();
             preset.parameters = value.getProperty("parameters", juce::var());
             preset.performance = value.getProperty("performance", juce::var());
             const auto params = preset.parameters;
@@ -765,11 +781,13 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.reverb = static_cast<float>(params.getProperty("reverb", 0.0));
             preset.outputDb = static_cast<float>(params.getProperty("outputDb", 0.0));
 
-            if (auto* palmMap = preset.performance.getProperty("palmMuteMap", juce::var()).getArray())
+            const auto palmMapValue = preset.performance.getProperty("palmMuteMap", juce::var());
+            if (auto* palmMap = palmMapValue.getArray())
                 for (int step = 0; step < 16 && !palmMap->empty(); ++step)
                     if (static_cast<bool>((*palmMap)[step % static_cast<int>(palmMap->size())]))
                         preset.palmMuteMask |= (1 << step);
-            if (auto* accentMap = preset.performance.getProperty("accentMap", juce::var()).getArray())
+            const auto accentMapValue = preset.performance.getProperty("accentMap", juce::var());
+            if (auto* accentMap = accentMapValue.getArray())
                 for (int step = 0; step < 16 && !accentMap->empty(); ++step)
                 {
                     const auto valueAtStep = static_cast<float>((*accentMap)[step % static_cast<int>(accentMap->size())]);
@@ -784,7 +802,23 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
     };
     append(root.getProperty("melodyPresets", juce::var()), "MELODY");
     append(root.getProperty("patternPresets", juce::var()), "PATTERN");
-    statusLabel.setText("FACTORY CATALOG: "+juce::String(static_cast<int>(factoryPresets.size()))+" PRESETS", juce::dontSendNotification);
+
+    juce::StringArray ids;
+    bool catalogValid = factoryPresets.size() == 300;
+    for (const auto& preset : factoryPresets)
+    {
+        if (preset.id.isEmpty() || preset.name.isEmpty() || ids.contains(preset.id)
+            || (preset.mode != "MELODY" && preset.mode != "PATTERN"))
+            catalogValid = false;
+        ids.add(preset.id);
+    }
+    if (!catalogValid)
+    {
+        factoryPresets.clear();
+        statusLabel.setText("FACTORY CATALOG ERROR  /  EXPECTED 300 UNIQUE VALID PRESETS", juce::dontSendNotification);
+        return;
+    }
+    statusLabel.setText("FACTORY CATALOG READY  /  150 MELODY + 150 PATTERN", juce::dontSendNotification);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)

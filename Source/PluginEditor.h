@@ -40,7 +40,7 @@ private:
     juce::TextEditor presetSearch;
     struct FactoryPreset {
         juce::String id, name, category, mode, soundCharacter, groove, articulation, styleProfileId;
-        juce::String sampleProfile, tonalTarget, noteBehavior, sampleRequirement;
+        juce::String sampleProfile, tonalTarget, noteBehavior, sampleRequirement, referenceTracks;
         juce::var parameters, performance;
         int palmMuteMask = 0, accentMaskHigh = 0, accentMaskLow = 0;
         bool humanizeEnabled = false, velocityAccents = false, strokeVariation = true;
