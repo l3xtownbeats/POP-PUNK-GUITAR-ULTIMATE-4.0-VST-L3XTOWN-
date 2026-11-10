@@ -1474,3 +1474,20 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - VST3 bundle найден; пакет VST3 + sample library + factory presets успешно создан и загружен как Actions artifact: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS.zip`, artifact ID `13747868646`, размер 2,242,888,272 bytes (примерно 2.24 GB).
 - В логе есть MSVC warning C4324 для cache-line alignment в `BoundedSpscQueue`; это warning, не ошибка сборки. Alignment оставлен, пока нет измерений, подтверждающих безопасное изменение.
 - Это подтверждает CI build/unit regression и packaging, но НЕ подтверждает runtime streaming playback: `SamplePool::loadSfz()` пока декодирует WAV целиком, а `WavPageReader`/ `PageCacheSlots` ещё не подключены к `SamplerEngine::render`. Velocity crossfade DSP и host-level 100-hit click/dropout/buffer-change acceptance остаются открытыми. M2 не закрыта; M3/M4 не начинать до M2 acceptance.
+
+
+## 10 ноября 2026 — Windows x64 Release CI run #108: PASS
+
+- Branch: main; commit under test: 0684764dd919820fac37b53ad520d6e24bc55801 (fix: qualify page cache lease compile-time tests).
+- GitHub Actions run #108, ID 42787572495: completed / success.
+- Windows x64 Release: CMake configure, VST3 build, test executable build, VST3 bundle discovery and packaging all completed successfully.
+- CTest: 6/6 passed, 0 failed, total 0.17 s. Tests: ppgu_sfz_parser_tests, ppgu_pattern_scheduler_tests, ppgu_sample_pool_tests, ppgu_page_cache_slots_tests, ppgu_bounded_spsc_queue_tests, ppgu_sample_metadata_index_tests.
+- Factory catalog 300 presets, portable preset examples, APVTS registry/state persistence: PASS.
+- Final artifact: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS.zip; artifact ID 13751030427; size 2,242,888,107 bytes (~2.24 GB). SHA256 of uploaded artifact zip: 4296dc48f73f786b63b54cf272e866da03e86aab793dacc078c90a718aecbcff.
+- Source-review artifact ID 13749693768 (568,027 bytes).
+- MSVC warning C4324 remains for intentional cache-line alignment in BoundedSpscQueue; it is not a build/test failure.
+- Scope limitation remains critical: this CI confirms build, current unit/regression suite and packaging only. WavPageReader/PageCacheSlots are not integrated into SamplerEngine render path; SamplePool::loadSfz() still decodes whole WAVs into RAM. No runtime streaming/prefetch, no host-level 100-hit streaming click/dropout test, and no real CPU/RAM profiling have been confirmed. M2 remains OPEN.
+- Run: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42787572495
+- Artifact: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42787572495/artifacts/13751030427
+
+Статус: CI #108 PASS / STREAMING PLAYBACK INTEGRATION PENDING / M2 OPEN.
