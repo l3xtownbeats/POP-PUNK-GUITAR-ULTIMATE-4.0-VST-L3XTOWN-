@@ -40,6 +40,39 @@ namespace ppgu::performance
         return bestNote;
     }
 
+
+    // Build a diatonic triad from one held root note. The root is expected
+    // to have already been snapped to the selected major/minor scale.
+    // Returns false for chromatic/invalid scale modes or out-of-range notes.
+    constexpr bool makeDiatonicTriad(int rootNote, int scaleRoot, int scaleMode,
+                                      std::array<int, 3>& chord) noexcept
+    {
+        constexpr std::array<int, 7> major { 0, 2, 4, 5, 7, 9, 11 };
+        constexpr std::array<int, 7> minor { 0, 2, 3, 5, 7, 8, 10 };
+        if (rootNote < 0 || rootNote > 127 || scaleMode < 1 || scaleMode > 2)
+            return false;
+        const auto& intervals = scaleMode == 1 ? major : minor;
+        const int root = ((scaleRoot % 12) + 12) % 12;
+        const int relativePitch = ((rootNote % 12) - root + 12) % 12;
+        int rootDegree = -1;
+        for (int degree = 0; degree < 7; ++degree)
+            if (intervals[static_cast<std::size_t>(degree)] == relativePitch)
+                rootDegree = degree;
+        if (rootDegree < 0)
+            return false;
+        chord[0] = rootNote;
+        for (int tone = 1; tone < 3; ++tone)
+        {
+            const int targetDegree = rootDegree + tone * 2;
+            const int semitones = intervals[static_cast<std::size_t>(targetDegree % 7)]
+                                + 12 * (targetDegree / 7) - intervals[static_cast<std::size_t>(rootDegree)];
+            const int target = rootNote + semitones;
+            if (target > 127) return false;
+            chord[static_cast<std::size_t>(tone)] = target;
+        }
+        return true;
+    }
+
     // Tracks the relationship between physical/source MIDI keys and mapped
     // pitches. Multiple source keys may snap to the same scale pitch; a
     // reference count prevents one NoteOff from releasing another held key.
