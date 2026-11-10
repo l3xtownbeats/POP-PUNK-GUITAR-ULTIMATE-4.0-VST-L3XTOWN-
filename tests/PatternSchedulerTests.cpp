@@ -131,7 +131,9 @@ int main()
         return 17;
 
     if (std::abs(PatternScheduler::quantizePpqForward(1.01, 0.25) - 1.25) > 1.0e-9
-        || std::abs(PatternScheduler::quantizePpqForward(1.25, 0.25) - 1.25) > 1.0e-9)
+        || std::abs(PatternScheduler::quantizePpqForward(1.25, 0.25) - 1.25) > 1.0e-9
+        || std::abs(PatternScheduler::quantizePpqForward(1.01, 0.125) - 1.125) > 1.0e-9
+        || std::abs(PatternScheduler::quantizePpqForward(1.125, 0.125) - 1.125) > 1.0e-9)
         return 18;
 
 
