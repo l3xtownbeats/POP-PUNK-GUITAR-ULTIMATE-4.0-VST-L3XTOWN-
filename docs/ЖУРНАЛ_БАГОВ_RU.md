@@ -187,3 +187,16 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Коэффициент равномощностной кривой и тесты сохранены как изолированная подготовительная часть. Прямое применение коэффициента к одиночному голосу отключено до реализации совместного выбора и рендеринга двух совместимых velocity-регионов.
 - Статус velocity crossfade: **PARTIAL / NOT COMPLETE**. Следующий шаг — парный выбор регионов, отдельные streaming readers и смешивание двух слоёв с соблюдением общего лимита голосов; затем тесты переходов на WAV/SFZ fixtures.
 - Запрещено объявлять velocity crossfade готовым только по успешной проверке математической кривой.
+
+
+## 10 ноября 2026 — M2: парное воспроизведение velocity crossfade и исправление тестовой fixture
+
+- Коммит реализации: `e61b1a7b54c72a6da5bd7a4e712a69713dc2b9b8`.
+- Добавлен runtime API `findVelocityLayers()`: выбирает основной SFZ-регион и максимум один совместимый partner с противоположным xfin/xfout opcode. Партнёр должен совпадать по group, RR set/position/length, key range и MIDI channel range; RR-счётчик продвигается только один раз на Note On.
+- Для двух слоёв создаются два независимых sampler voice / streaming reader. Equal-power веса нормализуются по сумме квадратов.
+- Если доступной полифонии недостаточно для пары, запускается один более сильный слой с unity layer gain; второй слой не вытесняет существующий голос.
+- Добавлены тесты equal-power середины, крайних точек, двух голосов и fallback при polyphony=1.
+- Первый Windows CI run `42819804497` собрал VST3 и test executables, но CTest выявил ошибку самой новой fixture: неверный относительный путь к существующему long-duration WAV (`long-stream-library/long-duration.wav`). Это не ошибка компиляции, а неверная ссылка тестового файла.
+- Исправлен путь на `long-duration-library/long-duration.wav`, commit `397b2ef7416e274752c7e18e6409cbdb10ee10e0`. Новый Windows CI run: `42820704615`; его результат ожидается.
+- До успешного CTest и pluginval не считать эту функцию CI-verified. Требуется дополнительно проверить несовместимые группы, независимые RR наборы, velocity ranges и реальные SFZ библиотеки.
+- Статус: IMPLEMENTED IN SOURCE / TEST FIX PUSHED / WINDOWS CI PENDING; M2 — NOT ACCEPTED.
