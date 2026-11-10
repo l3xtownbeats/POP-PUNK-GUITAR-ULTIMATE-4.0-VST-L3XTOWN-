@@ -292,8 +292,9 @@ int main()
     extremeSpanClock.bpm = 120.0;
     extremeSpanClock.startPpq = 0.0;
     extremeSpanClock.endPpq = 1.0e100;
+    const std::array<PatternEvent, 1> extremePattern {{{ 0.0, 0.25, 60, 100, 1 }}};
     const auto extremeSpanCount = extremeSpanScheduler.schedule(
-        std::array<PatternEvent, 1> {{{ 0.0, 0.25, 60, 100, 1 }}},
+        extremePattern,
         4.0, 0.0, extremeSpanClock, 48000.0, 512, 0.0, 0, events);
     if (extremeSpanCount != 0 || !extremeSpanScheduler.consumePendingOverflow())
         return 31;
