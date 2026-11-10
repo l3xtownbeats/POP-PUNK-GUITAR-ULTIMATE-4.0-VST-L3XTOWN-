@@ -145,3 +145,13 @@ No secondary branch is merged yet. Unified integration requires current branch h
 - исправлены явные преобразования juce::String/std::string;
 - кнопка переименована в IMPORT SOUNDS, основной UX — выбор целой папки через системный browser.
 Повторный Windows CI запущен на новом HEAD; результат будет внесён отдельно. Предыдущий run 42850028356 FAILED и считается диагностическим, не релизным.
+
+
+## Расширение форматов BANK SAMPLES — 10.11.2026
+
+- Включены декодеры JUCE для FLAC, OGG Vorbis и MP3; WAV и AIFF/AIF остаются базовыми форматами.
+- На кнопке IMPORT SOUNDS добавлена подсказка со списком поддерживаемых форматов и пояснением по NCW.
+- В импортере NCW теперь получает отдельное предупреждение с маршрутом экспорта из Kontakt в WAV/AIFF; не считается поддерживаемым декодером PPGU.
+- В тест добавлена проверка регистрации шести расширений: WAV, AIFF, AIF, FLAC, OGG, MP3.
+- Внутреннее представление — IEEE Float 32-bit WAV; это преобразование выполняется в worker-потоке.
+- Следующий gate: текущие Windows VST3 и build/CTest runs на новом HEAD. До успешного CI не отмечать поддержку как release-validated.
