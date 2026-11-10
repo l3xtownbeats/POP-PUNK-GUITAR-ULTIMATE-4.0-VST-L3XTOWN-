@@ -409,6 +409,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const int patternLengthChoice = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
         const double patternLengthBeats = patternLengthChoice == 0 ? 4.0 : (patternLengthChoice == 1 ? 8.0 : 16.0);
         const float swing = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
+        const int swingBase = juce::jlimit(0, 1, juce::roundToInt(parameters.getRawParameterValue("swingBase")->load(std::memory_order_relaxed)));
+        const float humanize = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("humanize")->load(std::memory_order_relaxed));
         const float accent = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
         const std::array<std::uint16_t, 8> rhythmMasks {{ 0x5555, 0x1111, 0x3333, 0xffff, 0x9999, 0x1111, 0x4444, 0xffff }};
         const bool arpeggio = patternSlot == 7;
@@ -475,9 +477,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             {
                 const double changePpq = patternTransportClock.startPpq + static_cast<double>(sampleOffset) * ppqPerSample;
                 const bool firstChord = previousPatternChordCount == 0;
-                patternCycleStartPpq = firstChord && startOnFirstChord ? changePpq
+                const double cycleOrigin = firstChord && startOnFirstChord ? changePpq
                     : (firstChord ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
                                   : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, quantizeGridBeats));
+                const double globalOffset = juce::jlimit(-16.0, 16.0,
+                    static_cast<double>(parameters.getRawParameterValue("globalPpqOffset")->load(std::memory_order_relaxed)));
+                patternCycleStartPpq = cycleOrigin + globalOffset;
             }
             previousPatternChordCount = count;
             previousPatternChordNotes = notes;
@@ -512,8 +517,17 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 for (int step = 0; step < 16; ++step)
                 {
                     if ((rhythmMasks[static_cast<size_t>(patternSlot)] & (1u << step)) == 0) continue;
-                    const double swingOffset = (step % 4 == 2) ? 0.125 * swing : 0.0;
-                    const double beat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25 + swingOffset;
+                    // Swing base selects eighth-note or sixteenth-note shuffle.
+                    const bool swungStep = swingBase == 0 ? (step % 4 == 2) : (step % 2 == 1);
+                    const double swingOffset = swungStep ? (swingBase == 0 ? 0.125 : 0.0625) * swing : 0.0;
+                    const double gridBeat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25 + swingOffset;
+                    // Deterministic bounded timing variation: stable across renders,
+                    // with no random-device, heap allocation, or mutable RNG on audio thread.
+                    const std::uint32_t timingHash = static_cast<std::uint32_t>(
+                        (bar * 16 + step + 1) * 2654435761u + static_cast<unsigned>(patternSlot * 97));
+                    const double timingUnit = static_cast<double>(timingHash % 2001u) / 1000.0 - 1.0;
+                    const double humanizeOffset = timingUnit * 0.02 * static_cast<double>(humanize);
+                    const double beat = juce::jlimit(0.0, patternLengthBeats - 0.001, gridBeat + humanizeOffset);
                     const int notesThisStep = arpeggio ? 1 : count;
                     for (int strum = 0; strum < notesThisStep && patternEventCount < patternEvents.size(); ++strum)
                     {
@@ -531,7 +545,11 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         // velocity so the existing velocity-threshold articulation
                         // path selects the muted envelope in the sampler.
                         if ((palmMuteMask & stepBit) != 0)
-                            velocity = juce::jmin(velocity, 42);
+                        {
+                            const int muteThreshold = juce::jlimit(1, 127,
+                                juce::roundToInt(parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
+                            velocity = juce::jmin(velocity, juce::jmax(1, muteThreshold / 2));
+                        }
                         patternEvents[patternEventCount++] = { beat + static_cast<double>(strum) * 0.012, 0.20,
                             static_cast<std::uint8_t>(notes[static_cast<size_t>(chordIndex)]),
                             static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel) };
