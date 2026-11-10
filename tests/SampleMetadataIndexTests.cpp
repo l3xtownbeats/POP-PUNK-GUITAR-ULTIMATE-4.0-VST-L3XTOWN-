@@ -121,8 +121,11 @@ int main()
     std::uint32_t directFrames = 0;
     const auto directRead = pageReader.readPageInto(3, directChannels, 2, 7,
                                                      directFrames, pageFrames);
+    const float expectedDirectSample = 0.25f * std::sin(
+        2.0 * juce::MathConstants<double>::pi * 220.0 * 1100.0 / 48000.0);
     if (!directRead.success || directFrames != 124
-        || std::abs(directLeft[7 + 100] - page.audio.getSample(0, 100)) > 0.00001f)
+        || std::abs(directLeft[7 + 100] - expectedDirectSample) > 0.0001f
+        || std::abs(directLeft[7 + 100] + directRight[7 + 100]) > 0.0001f)
     {
         std::cerr << "WAV page reader failed direct preallocated planar decode.\\n";
         return 1;
