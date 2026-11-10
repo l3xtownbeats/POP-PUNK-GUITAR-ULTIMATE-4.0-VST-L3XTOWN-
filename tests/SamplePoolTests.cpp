@@ -94,9 +94,9 @@ int main()
         "<region> sample=test.wav key=65 seq_length=3 seq_position=2\\n"
         "<region> sample=test.wav key=65 seq_length=3 seq_position=3\\n"
         "<group> group=78\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=1\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=2\\n"
-        "<region> sample=test.wav key=65 seq_length=3 seq_position=3\\n"))
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=1\\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=2\\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=3\\n"))
     {
         std::cerr << "Could not write independent SFZ round-robin fixture.\\n";
         return 1;
@@ -109,7 +109,7 @@ int main()
         return 1;
     }
     const auto* firstSetFirst = independentRoundRobinPool.findRegion(65, 100, 1);
-    const auto* secondSetFirst = independentRoundRobinPool.findRegion(65, 100, 1);
+    const auto* secondSetFirst = independentRoundRobinPool.findRegion(66, 100, 1);
     const auto* firstSetSecond = independentRoundRobinPool.findRegion(65, 100, 1);
     if (firstSetFirst == nullptr || secondSetFirst == nullptr || firstSetSecond == nullptr
         || firstSetFirst->seqPosition != 1 || secondSetFirst->seqPosition != 1
