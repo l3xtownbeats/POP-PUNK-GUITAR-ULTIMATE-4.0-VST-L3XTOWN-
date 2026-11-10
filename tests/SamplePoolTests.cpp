@@ -164,7 +164,7 @@ int main()
         return 1;
     }
     longWriter.reset();
-    if (!longStreamSfz.replaceWithText("<region> sample=long-stream.wav key=72\\n"))
+    if (!longStreamSfz.replaceWithText("<region> sample=long-stream.wav key=72\n"))
     {
         std::cerr << "Could not write multi-page streaming SFZ fixture.\n";
         return 1;
