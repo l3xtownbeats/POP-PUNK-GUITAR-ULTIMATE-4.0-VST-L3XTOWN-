@@ -316,9 +316,11 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         previousPlayMode = playMode;
     }
 
-    // A host transport stop must release voices that were started by live MIDI
-    // or a pattern gate. The scheduler clears pending NoteOffs on stop.
-    if (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity)
+    // Transport stop/seek owns only Pattern-generated voices. In Melody
+    // mode MIDI notes are played live and must not be cut merely because the
+    // DAW transport stops or seeks while a performer is holding a key.
+    if (playMode == 1
+        && (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity))
     {
         sampler.allNotesOff();
         patternScheduler.clearPendingNoteOffs();
