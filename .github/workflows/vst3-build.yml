@@ -250,13 +250,13 @@ jobs:
           }
 
           @'
-          POP PUNK GUITAR ULTIMATE 4.0 — WINDOWS x64 VST3
+          POP PUNK GUITAR ULTIMATE 5.0 — WINDOWS x64 VST3
           =================================================
           Folder layout:
             VST/       — VST3 plugin bundle
             BANK/      — redistributable multisample libraries, SFZ maps and licenses
             PRESETS/   — 300 factory presets (150 MELODY + 150 PATTERN) and portable examples
-            SKIN/      — 10 separate theme palette packs and SVG previews
+            SKIN/      — 60 separate theme palette packs and SVG previews
             RESOURCE/  — shared product artwork and license resources
             Readme.txt — installation and verification notes
 
@@ -265,7 +265,7 @@ jobs:
 
           Keep BANK/ beside the product folder. If the plugin requests a sample-library
           path, select BANK/. Factory preset data is in PRESETS/.
-          SKIN/ currently contains 10 separate palette packs and concept previews.
+          SKIN/ currently contains 60 separate palette packs and previews.
           The theme picker/runtime integration is not yet confirmed, so do not assume
           that these packs are switchable inside the current plugin build.
 
@@ -274,12 +274,12 @@ jobs:
           FL Studio 20 manual host acceptance remains a separate check.
           '@ | Set-Content -Encoding utf8 (Join-Path $productRoot 'Readme.txt')
 
-          $zip = 'POP_PUNK_GUITAR_ULTIMATE_4_0_Windows_x64_VST3_FULL_PACKAGE.zip'
+          $zip = 'POP_PUNK_GUITAR_ULTIMATE_5_0_Windows_x64_VST3_FULL_PACKAGE.zip'
           Compress-Archive -Path $productRoot -DestinationPath $zip -Force
 
       - uses: actions/upload-artifact@v4
         with:
-          name: POP-PUNK-GUITAR-ULTIMATE-4.0-Windows-x64-VST3-FULL-PACKAGE
+          name: POP-PUNK-GUITAR-ULTIMATE-5.0-Windows-x64-VST3-FULL-PACKAGE
           path: POP_PUNK_GUITAR_ULTIMATE_4_0_Windows_x64_VST3_FULL_PACKAGE.zip
           if-no-files-found: error
 
