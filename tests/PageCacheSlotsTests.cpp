@@ -147,6 +147,7 @@ int main()
     if (!stressCache.publish(stressSlot, { 42, 9 }, 1, 16)) return 1;
 
     std::atomic<bool> startReaders { false };
+    std::atomic<bool> startEvictor { false };
     std::atomic<int> corruptReads { 0 };
     std::atomic<int> successfulReads { 0 };
     std::vector<std::thread> readers;
@@ -173,7 +174,7 @@ int main()
     }
     std::thread evictor([&]
     {
-        while (!startReaders.load(std::memory_order_acquire))
+        while (!startEvictor.load(std::memory_order_acquire))
             std::this_thread::yield();
         for (int iteration = 0; iteration < 20000; ++iteration)
         {
@@ -190,7 +191,13 @@ int main()
             }
         }
     });
+    // First prove readers can acquire the published page before allowing the
+    // evictor to race them. This prevents a scheduler-dependent false failure
+    // where the worker evicts the page before any reader gets CPU time.
     startReaders.store(true, std::memory_order_release);
+    while (successfulReads.load(std::memory_order_acquire) < 4)
+        std::this_thread::yield();
+    startEvictor.store(true, std::memory_order_release);
     for (auto& readerThread : readers) readerThread.join();
     evictor.join();
     if (corruptReads.load(std::memory_order_relaxed) != 0
