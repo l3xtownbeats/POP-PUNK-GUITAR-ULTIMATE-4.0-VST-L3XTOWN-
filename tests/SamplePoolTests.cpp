@@ -137,6 +137,63 @@ int main()
         return 1;
     }
 
+    // Exercise real voice playback across multiple 4096-frame cache pages.
+    const auto longStreamWav = directory.getChildFile("long-stream.wav");
+    const auto longStreamSfz = directory.getChildFile("long-stream.sfz");
+    juce::AudioBuffer<float> longSource(1, 10000);
+    for (int i = 0; i < longSource.getNumSamples(); ++i)
+        longSource.setSample(0, i, static_cast<float>(
+            0.45 * std::sin(2.0 * juce::MathConstants<double>::pi * 330.0 * i / 44100.0)));
+    std::unique_ptr<juce::OutputStream> longOutput(longStreamWav.createOutputStream());
+    if (longOutput == nullptr)
+    {
+        std::cerr << "Could not create multi-page streaming WAV fixture.\n";
+        return 1;
+    }
+    std::unique_ptr<juce::AudioFormatWriter> longWriter(
+        wavFormat.createWriterFor(longOutput.get(), 44100.0, 1, 16, {}, 0));
+    if (longWriter == nullptr)
+    {
+        std::cerr << "Could not create multi-page streaming WAV writer.\n";
+        return 1;
+    }
+    longOutput.release();
+    if (!longWriter->writeFromAudioSampleBuffer(longSource, 0, longSource.getNumSamples()))
+    {
+        std::cerr << "Could not write multi-page streaming WAV fixture.\n";
+        return 1;
+    }
+    longWriter.reset();
+    if (!longStreamSfz.replaceWithText("<region> sample=long-stream.wav key=72\\n"))
+    {
+        std::cerr << "Could not write multi-page streaming SFZ fixture.\n";
+        return 1;
+    }
+
+    ppgu::sampler::SamplerEngine multiPageEngine;
+    multiPageEngine.prepare(44100.0);
+    if (!multiPageEngine.loadSfz(longStreamSfz).success || !multiPageEngine.noteOn(72, 110))
+    {
+        std::cerr << "Could not start multi-page streaming playback.\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> multiPageOutput(2, 10240);
+    multiPageOutput.clear();
+    for (int offset = 0; offset < multiPageOutput.getNumSamples(); offset += 256)
+    {
+        multiPageEngine.render(multiPageOutput, offset,
+            juce::jmin(256, multiPageOutput.getNumSamples() - offset));
+        // Approximate host callback spacing so the worker can service the
+        // next-page prefetch without making the audio callback wait.
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    if (multiPageEngine.getActiveVoiceCount() != 0
+        || multiPageOutput.getMagnitude(0, 0, multiPageOutput.getNumSamples()) <= 0.001f)
+    {
+        std::cerr << "Streaming voice did not traverse and finish across multiple WAV pages.\\n";
+        return 1;
+    }
+
     // SFZ seq_length/seq_position must rotate deterministically without
     // repeating a position until the complete round-robin cycle is consumed.
     const auto roundRobinSfz = directory.getChildFile("round-robin.sfz");
