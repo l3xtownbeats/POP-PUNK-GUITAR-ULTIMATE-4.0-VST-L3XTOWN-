@@ -35,6 +35,12 @@ int main()
     if (!cache.publish(first, { 10, 0 }, 2, 8))
         return 1;
 
+    if (!cache.containsReady({ 10, 0 }) || cache.containsReady({ 10, 1 }))
+    {
+        std::cerr << "Worker cache-ready lookup returned an incorrect key match.\\n";
+        return 1;
+    }
+
     PageCacheSlots::ReadLease lease;
     if (!cache.tryAcquire({ 10, 0 }, lease) || !lease
         || lease.channels != 2 || lease.frames != 8
