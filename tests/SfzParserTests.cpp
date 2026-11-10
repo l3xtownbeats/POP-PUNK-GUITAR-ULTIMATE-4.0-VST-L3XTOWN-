@@ -33,6 +33,38 @@ int main()
     CHECK(parsed.regions[1].loopMode == "one_shot");
     CHECK(parsed.regions[2].lowVelocity == 91 && parsed.regions[2].highVelocity == 127);
 
+    const auto rrMetadata = parseText(
+        "<group> group=12 seq_length=3\n"
+        "<region> sample=rr1.wav key=60 seq_position=1\n"
+        "<region> sample=rr2.wav key=60 seq_position=2\n"
+        "<region> sample=rr3.wav key=60 seq_position=3\n", base);
+    CHECK(rrMetadata.succeeded());
+    CHECK(rrMetadata.regions.size() == 3);
+    CHECK(rrMetadata.regions[0].seqLength == 3 && rrMetadata.regions[0].seqPosition == 1);
+    CHECK(rrMetadata.regions[1].seqLength == 3 && rrMetadata.regions[1].seqPosition == 2);
+    CHECK(rrMetadata.regions[2].seqLength == 3 && rrMetadata.regions[2].seqPosition == 3);
+    const auto velocityCrossfade = parseText(
+        "<region> sample=xfade.wav key=60 lovel=1 hivel=127 "
+        "xfin_lovel=20 xfin_hivel=50 xfout_lovel=80 xfout_hivel=110\n", base);
+    CHECK(velocityCrossfade.succeeded());
+    CHECK(velocityCrossfade.regions[0].xfinLowVelocity == 20);
+    CHECK(velocityCrossfade.regions[0].xfinHighVelocity == 50);
+    CHECK(velocityCrossfade.regions[0].xfoutLowVelocity == 80);
+    CHECK(velocityCrossfade.regions[0].xfoutHighVelocity == 110);
+    const auto incompleteCrossfade = parseText(
+        "<region> sample=xfade.wav key=60 xfin_lovel=20\n", base);
+    CHECK(!incompleteCrossfade.succeeded());
+    const auto invertedCrossfade = parseText(
+        "<region> sample=xfade.wav key=60 xfout_lovel=100 xfout_hivel=80\n", base);
+    CHECK(!invertedCrossfade.succeeded());
+
+    const auto rrInvalidZero = parseText(
+        "<region> sample=rr.wav key=60 seq_length=0 seq_position=1\n", base);
+    CHECK(!rrInvalidZero.succeeded());
+    const auto rrInvalidPosition = parseText(
+        "<region> sample=rr.wav key=60 seq_length=2 seq_position=3\n", base);
+    CHECK(!rrInvalidPosition.succeeded());
+
     auto traversal = parseText("<region> sample=../../outside.wav key=60\n", base);
     CHECK(!traversal.succeeded());
     CHECK(!traversal.errors.empty());

@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <limits>
 #include <set>
+#include <tuple>
 
 namespace ppgu::sampler
 {
@@ -81,6 +82,8 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
     const auto root = std::filesystem::weakly_canonical(std::filesystem::path(sfzFile.getParentDirectory().getFullPathName().toStdString()));
     auto candidateSnapshot = std::make_unique<Snapshot>();
     candidateSnapshot->regions.reserve(parsed.regions.size());
+    using RoundRobinKey = std::tuple<int, int, int, int, int, int, int, int>;
+    std::map<RoundRobinKey, int> roundRobinSetIndices;
 
     juce::AudioFormatManager formatManager;
     formatManager.registerBasicFormats();
@@ -263,6 +266,21 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         view.highChannel = region.highChannel;
         view.group = region.group;
         view.offBy = region.offBy;
+        view.seqLength = region.seqLength;
+        view.seqPosition = region.seqPosition;
+        view.xfinLowVelocity = region.xfinLowVelocity;
+        view.xfinHighVelocity = region.xfinHighVelocity;
+        view.xfoutLowVelocity = region.xfoutLowVelocity;
+        view.xfoutHighVelocity = region.xfoutHighVelocity;
+        if (region.seqLength > 1)
+        {
+            const RoundRobinKey rrKey { region.group, region.seqLength, region.lowKey, region.highKey,
+                                        region.lowVelocity, region.highVelocity,
+                                        region.lowChannel, region.highChannel };
+            const auto nextIndex = static_cast<int>(roundRobinSetIndices.size());
+            const auto inserted = roundRobinSetIndices.emplace(rrKey, nextIndex);
+            view.roundRobinSetIndex = inserted.first->second;
+        }
         view.startFrame = start;
         view.endFrame = end;
         view.loopStartFrame = start + static_cast<int>(juce::jmin<std::uint64_t>(region.loopStart, static_cast<std::uint64_t>(end - start - 1)));
@@ -281,6 +299,10 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
     if (!report.errors.empty() || candidateSnapshot->regions.empty())
         return report;
 
+    // Allocate all RR cursors during loading; findRegion() performs no allocation.
+    constexpr std::size_t cursorsPerSet = 16U * 128U;
+    candidateSnapshot->roundRobinCounters.assign(roundRobinSetIndices.size() * cursorsPerSet, 0U);
+
     // Commit decoded buffers only after every region has passed validation.
     // std::map::merge transfers nodes without moving the SampleAsset objects,
     // preserving the audio pointers already stored in the candidate snapshot.
@@ -296,17 +318,63 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
     return report;
 }
 
-const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) const noexcept
+const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr) return nullptr;
 
+    const RegionView* firstMatch = nullptr;
+    const RegionView* firstSequenceMatch = nullptr;
+    int sequenceLength = 1;
+    int sequenceSetIndex = -1;
     for (const auto& region : snapshot->regions)
-        if (midiNote >= region.lowKey && midiNote <= region.highKey
+    {
+        if (midiNote < region.lowKey || midiNote > region.highKey
+            || velocity < region.lowVelocity || velocity > region.highVelocity
+            || midiChannel < region.lowChannel || midiChannel > region.highChannel)
+            continue;
+
+        if (firstMatch == nullptr)
+            firstMatch = &region;
+        if (region.roundRobinSetIndex >= 0)
+        {
+            if (sequenceSetIndex < 0)
+            {
+                sequenceLength = region.seqLength;
+                sequenceSetIndex = region.roundRobinSetIndex;
+            }
+            if (region.roundRobinSetIndex == sequenceSetIndex && firstSequenceMatch == nullptr)
+                firstSequenceMatch = &region;
+        }
+    }
+
+    if (firstMatch == nullptr || sequenceSetIndex < 0 || sequenceLength <= 1)
+        return firstMatch;
+
+    const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
+    const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
+    constexpr std::size_t cursorsPerSet = 16U * 128U;
+    const auto cursorIndex = static_cast<std::size_t>(sequenceSetIndex) * cursorsPerSet
+        + channelIndex * 128U + noteIndex;
+    if (cursorIndex >= snapshot->roundRobinCounters.size())
+        return firstMatch;
+
+    auto& cursor = snapshot->roundRobinCounters[cursorIndex];
+    const int wantedPosition = static_cast<int>(cursor % static_cast<std::uint32_t>(sequenceLength)) + 1;
+    ++cursor;
+
+    for (const auto& region : snapshot->regions)
+        if (region.roundRobinSetIndex == sequenceSetIndex
+            && wantedPosition == region.seqPosition
+            && midiNote >= region.lowKey && midiNote <= region.highKey
             && velocity >= region.lowVelocity && velocity <= region.highVelocity
             && midiChannel >= region.lowChannel && midiChannel <= region.highChannel)
             return &region;
-    return nullptr;
+
+    // Malformed/incomplete RR sets cannot silence a note: fall back within
+    // the selected RR set, never to an unrelated non-RR region encountered
+    // earlier in the SFZ file.
+    return firstSequenceMatch != nullptr ? firstSequenceMatch : firstMatch;
 }
 
 std::size_t SamplePool::getRegionCount() const noexcept

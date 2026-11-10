@@ -139,13 +139,20 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
         if (opcode == "hikey") target.values.highKey = integer;
         if (opcode == "pitch_keycenter") target.values.rootKey = integer;
     }
-    else if (opcode == "lovel" || opcode == "hivel")
+    else if (opcode == "lovel" || opcode == "hivel"
+        || opcode == "xfin_lovel" || opcode == "xfin_hivel"
+        || opcode == "xfout_lovel" || opcode == "xfout_hivel")
     {
         if (!parseInteger(value, integer) || integer < 0 || integer > 127) { bad(); return; }
         if (opcode == "lovel") target.values.lowVelocity = integer;
-        else target.values.highVelocity = integer;
+        else if (opcode == "hivel") target.values.highVelocity = integer;
+        else if (opcode == "xfin_lovel") target.values.xfinLowVelocity = integer;
+        else if (opcode == "xfin_hivel") target.values.xfinHighVelocity = integer;
+        else if (opcode == "xfout_lovel") target.values.xfoutLowVelocity = integer;
+        else target.values.xfoutHighVelocity = integer;
     }
-    else if (opcode == "lochan" || opcode == "hichan" || opcode == "group" || opcode == "off_by")
+    else if (opcode == "lochan" || opcode == "hichan" || opcode == "group" || opcode == "off_by"
+        || opcode == "seq_length" || opcode == "seq_position")
     {
         if (!parseInteger(value, integer) || integer < 0
             || ((opcode == "lochan" || opcode == "hichan") && (integer < 1 || integer > 16)))
@@ -157,6 +164,8 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
         if (opcode == "hichan") target.values.highChannel = integer;
         if (opcode == "group") target.values.group = integer;
         if (opcode == "off_by") target.values.offBy = integer;
+        if (opcode == "seq_length") target.values.seqLength = integer;
+        if (opcode == "seq_position") target.values.seqPosition = integer;
     }
     else if (opcode == "tune" || opcode == "volume" || opcode == "pan" || opcode == "ampeg_release")
     {
@@ -218,6 +227,12 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
         {
             const auto& item = region.values;
             if (item.lowKey > item.highKey || item.lowVelocity > item.highVelocity
+                || item.seqLength < 1 || item.seqLength > 256
+                || item.seqPosition < 1 || item.seqPosition > item.seqLength
+                || ((item.xfinLowVelocity >= 0) != (item.xfinHighVelocity >= 0))
+                || ((item.xfoutLowVelocity >= 0) != (item.xfoutHighVelocity >= 0))
+                || (item.xfinLowVelocity >= 0 && item.xfinLowVelocity > item.xfinHighVelocity)
+                || (item.xfoutLowVelocity >= 0 && item.xfoutLowVelocity > item.xfoutHighVelocity)
                 || item.lowChannel > item.highChannel
                 || item.rootKey < item.lowKey || item.rootKey > item.highKey
                 || (item.loopEnd != 0 && item.loopStart >= item.loopEnd))

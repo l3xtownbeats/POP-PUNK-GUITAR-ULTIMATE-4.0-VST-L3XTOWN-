@@ -1,32 +1,38 @@
-# POP PUNK GUITAR ULTIMATE — Downloads
+<div align="center">
 
-## Windows x64 VST3 + Sound Bank + Factory Presets
+# POP PUNK GUITAR ULTIMATE
+### PROMO VST3 — WINDOWS x64
 
-The combined release package is built by GitHub Actions:
+## [⬇ DOWNLOAD PROMO VST3 + SAMPLE BANK + PRESETS]( https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip )
 
-**[Open the Windows VST3 + Samples + Presets build and download its artifact](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE/actions/runs/42747513529)**
+**Complete ZIP package · approximately 2.24 GB**
 
-Artifact name:
-`POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`
+</div>
 
-The archive is intended to contain:
-- `POP PUNK GUITAR ULTIMATE.vst3` — VST3 instrument bundle
-- `Samples/` — guitar sound bank, SFZ maps, license files and WAV SHA-256 manifest
-- `presets/factory_bank_300.json` — 300 factory presets (150 Melody + 150 Pattern)
-- `presets/examples/` — portable preset examples
-- `INSTALL_AND_CONTENTS.txt` — installation and package notes
+## Package contents
 
-## Build and validation status
+- Windows x64 VST3 plugin bundle
+- Guitar WAV sample library in `Samples/`
+- 300-entry factory preset definition catalogue
+- Portable Melody and Pattern preset examples
+- `INSTALL_AND_CONTENTS.txt` installation notes
 
-This link points to the build run for commit `f4647855f465d1b684b522cdcd8bb3b4cd310bed`. Wait for the run to finish successfully before downloading the combined archive. Automated Windows compilation and CTest do not replace a manual FL Studio 20 host test; DAW compatibility is not yet certified.
+## Separate downloads
 
-GitHub Actions artifacts are temporary and expire according to the repository's artifact-retention settings. This is a build-artifact download page, not a permanent GitHub Release.
+The VST3 binary and full Sample Bank are currently distributed together in the ZIP above; separate standalone archives are not published.
+
+- [Factory preset catalogue — 300 definitions (JSON)](presets/factory_bank_300.json)
+- [Additional preset bank data (JSON)](presets/factory_preset_bank_v1.json)
+- [Melody portable example (.ppgm)](presets/examples/Example-Melody.ppgm)
+- [Pattern portable example (.ppgp)](presets/examples/Example-Pattern.ppgp)
+
+**Note:** 300 catalogue entries are authored preset definitions, not a claim that all 300 presets are fully integrated and playable in the plugin.
 
 ## Installation
 
-1. Extract the ZIP archive.
-2. Copy `POP PUNK GUITAR ULTIMATE.vst3` to `C:\Program Files\Common Files\VST3\`.
-3. Keep the `Samples` folder with the extracted package; if the plugin asks for a sample-library location, point it to that folder.
-4. In FL Studio 20.7 or later, run Plugin Manager and rescan VST3 plugins.
-5. Load the instrument on a channel and select the factory preset bank if the current plugin build exposes its preset browser.
+1. Extract the ZIP.
+2. Copy the `.vst3` bundle into `C:\\Program Files\\Common Files\\VST3\\`.
+3. Keep the extracted `Samples` folder available to the plugin.
+4. Rescan plugins in your DAW.
 
+The current download is a GitHub Actions artifact, not a permanent GitHub Release asset. GitHub access may be required; artifacts can expire. The currently verified artifact expiry is 8 February 2027.

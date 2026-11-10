@@ -10,6 +10,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace ppgu::sampler
@@ -49,6 +50,13 @@ public:
         int highChannel = 16;
         int group = 0;
         int offBy = 0;
+        int seqLength = 1;
+        int seqPosition = 1;
+        int roundRobinSetIndex = -1;
+        int xfinLowVelocity = -1;
+        int xfinHighVelocity = -1;
+        int xfoutLowVelocity = -1;
+        int xfoutHighVelocity = -1;
         int startFrame = 0;
         int endFrame = 0;
         int loopStartFrame = 0;
@@ -63,9 +71,11 @@ public:
     struct Snapshot
     {
         std::vector<RegionView> regions;
+        // Audio-thread-owned cursors: [RR set][MIDI channel][MIDI note].
+        mutable std::vector<std::uint32_t> roundRobinCounters;
     };
 
-    [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) const noexcept;
+    [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 

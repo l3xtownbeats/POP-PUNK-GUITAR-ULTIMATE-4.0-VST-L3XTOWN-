@@ -1,8 +1,8 @@
 # POP PUNK GUITAR ULTIMATE — журнал разработки
 
 Обновлено: 10 ноября 2026 г.
-Репозиторий: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE
-Рабочая ветка: feat/m2-sfz-loop-playback
+Репозиторий: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
+Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
 
 ## Цель
 
@@ -884,3 +884,271 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Тест fixture: nested stereo WAV 24-bit/48 kHz, контроль количества кадров/каналов/bit depth/file size и отсутствующего каталога.
 - Статус: код и тест добавлены, но CI/build ещё не подтверждены. Это индексатор метаданных, не streaming playback; текущий SamplePool по-прежнему загружает WAV целиком и имеет лимиты 1 GiB/128 snapshots.
 - Следующий шаг: проверить сборку на Windows CI; затем спроектировать и реализовать page cache/streaming source с тестами cache miss, prefetch, shutdown и voice concurrency.
+
+
+## 10 ноября 2026 — продолжение M3: прямой dispatch событий PatternScheduler
+
+- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2` в целевом репозитории 4.0. Вся дальнейшая разработка, код, тесты и документация ведутся в этой ветке; `main` не изменяется.
+- HEAD до изменения кода: `7523be5d1fd620e3a039101598380713819dc50d`.
+- Коммит кода: `feb94fc65facf9ef12ad3a43d851e4a4764715f2`.
+- Коммит обновления журнала: `ccc5e88c91a21898d519c1f93f72dc4eb7073f9a` (подробная запись также находится в `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`).
+
+### Что проверено
+- Повторно просмотрены `Source/PluginProcessor.cpp`, `Source/PluginProcessor.h`, `Source/Performance/PatternScheduler.h`, sampler API и PROMPT v33.
+- Уточнён статус M3: текущий `processBlock()` уже вызывает `PatternScheduler::schedule()` и получает события в заранее выделенный массив. Старое утверждение, что вызов scheduler полностью отсутствует, устарело для HEAD перенесённой ветки.
+
+### Что изменено
+- `Source/PluginProcessor.cpp`: удалено промежуточное копирование scheduled events в `juce::MidiBuffer`; события обрабатываются непосредственно из фиксированного массива `scheduledPatternEvents`.
+- Сохранено разбиение аудиоблока по точному `sampleOffset`: рендерится участок до события, затем вызывается `sampler.noteOn()` или `sampler.noteOff()`.
+- Сохранены текущие velocity shaping, dynamics, velocityScale, MIDI channel и global tuning.
+- `Source/PluginProcessor.h`: удалён ненужный после изменения член `patternMidiBuffer`.
+- Причина: `juce::MidiBuffer::addEvent()` потенциально мог расширять внутреннее хранилище и выделять память в audio callback при плотном потоке событий. Прямой dispatch убирает эту промежуточную буферизацию; используется заранее выделенный массив scheduler.
+
+### Проверка
+- Git diff проверен: изменены только `Source/PluginProcessor.cpp` и `Source/PluginProcessor.h`; изменения соответствуют описанию.
+- Commit `feb94fc...` опубликован в рабочей ветке без force push.
+- Windows CI run `42762319535` запущен для точного commit `feb94fc...`. На момент последней проверки каталог 300 пресетов и portable preset examples прошли; скачивание redistributable sample libraries выполнялось; CMake configure, сборка VST3, CTest и bundle verification ещё ожидали выполнения.
+- Сборка/CTest/pluginval на этом commit пока не подтверждены. M3 НЕ принята.
+
+### Оставшиеся критерии M3
+1. Дождаться результата CI для `feb94fc...`; ошибки исправлять по первопричине с повторным запуском проверок.
+2. Проверить regression cases: точные sample offsets, совпадающие offsets (NoteOff перед NoteOn), границы блока, разные block sizes, длинные gate и отложенные NoteOff.
+3. Проверить lifecycle нот: смена MIDI-аккорда, удержание, stop/reset транспорта, panic/All Notes Off, отсутствие зависших нот.
+4. Проверить смену pattern slot и квантование; подтвердить восемь работающих runtime slots, а не только каталог metadata.
+5. Проверить отсутствие heap allocation, locks и file I/O в audio callback инструментально или тестовым allocator/audit call path.
+6. Выполнить headless/offline render acceptance и отдельно ручную проверку в FL Studio 20.
+7. Не переходить к M4 до фактической приёмки M1–M3 по PROMPT v33.
+
+### План следующих работ
+- Получить полный результат текущего Windows CI.
+- Провести аудит scheduler/sampler event lifecycle, добавить недостающие regression tests и устранить обнаруженные дефекты.
+- Продолжать M1–M13 строго по PROMPT v33; каждый коммит сопровождать записью в обоих журналах: что сделано, какие файлы изменены, почему, результаты тестов, известные ограничения и следующий план. Не выдавать roadmap за реализованную функцию.
+
+
+## 10 ноября 2026 — исправление страницы скачивания и compile blocker
+
+- Рабочий репозиторий: `l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-`.
+- Единственная рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2`. `main` не изменяется.
+- Проверенный HEAD до исправления: `1d3782d03b7b30709e88fa53da8feced67404575`.
+- Обнаружена причина 404: `README.md` и `DOWNLOAD.md` содержали ссылки на прежний репозиторий `POP-PUNK-GUITAR-ULTIMATE`, прежний workflow run и artifact ID. Эти адреса не относятся к текущей рабочей ветке.
+- Дополнительный блокер: Windows CI run `42762506212` завершился failure на этапе `Build VST3 and test executables`. MSVC C2065 подтвердил три оставшихся обращения к удалённому члену `patternMidiBuffer` в `Source/PluginProcessor.cpp`: строки 189, 190 (`prepareToPlay`) и 382 (`processBlock`). Удаление поля из заголовка уже было выполнено ранее, но эти вызовы остались.
+- Исправление исходника: удалены только три устаревших обращения к `patternMidiBuffer`. MIDI-вход хоста и прямой dispatch событий из фиксированного массива `scheduledPatternEvents` сохранены.
+- Исправление ссылок: страницы скачивания переведены на workflow текущего репозитория и единственной рабочей ветки. Добавлена инструкция брать только именованный artifact из последнего успешного workflow; несуществующий/устаревший прямой artifact URL удалён.
+- Уточнено описание содержимого: `factory_bank_300.json` — каталог из 300 определений пресетов; это не утверждение о полной runtime-интеграции всех 300 пресетов.
+- Изменяемые файлы: `Source/PluginProcessor.cpp`, `README.md`, `DOWNLOAD.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`, `jurnal.md`.
+- Проверки до коммита: поиск по исходнику должен вернуть 0 вхождений `patternMidiBuffer`; ссылки в обеих страницах должны вести в целевой репозиторий и рабочую ветку.
+- Статус сборки: после исправления требуется новый Windows CI. Пока новый run не завершился успешно, ZIP с VST3 + Samples + Presets не считается опубликованным. M3 остаётся NOT ACCEPTED; переход к M4 запрещён до критериев PROMPT v33.
+- Следующий шаг: дождаться нового CI, проверить компиляцию, CTest, наличие VST3 bundle и итогового artifact; затем заменить ссылку страницы скачивания на прямую ссылку к фактически созданному artifact, если API подтвердит его ID.
+
+
+## 10 ноября 2026 — исправление ссылки VST3 badge и публикация артефакта
+
+- Причина обращения: переход по бейджу VST3 в hero-блоке README открывал сайт Steinberg, поскольку бейдж был ошибочно привязан к https://www.steinberg.net/developers/; это была информационная ссылка, не скачивание.
+- Бейдж VST3 и основная кнопка DOWNLOAD теперь ведут прямо на успешный Windows workflow run #5: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767.
+- Подтверждён опубликованный артефакт: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, ID `13738701864`, размер 2,242,880,406 байт; не истёк на момент проверки.
+- Проверенный commit сборки: `0572fc214f615542ae594647e318422126f6d49d`; run завершён с conclusion `success`. Шаги компиляции VST3 и CTest успешны; host validation в FL Studio 20 не заявляется как выполненная.
+- В `README.md` и `DOWNLOAD.md` удалены вводящие в заблуждение ссылки на Steinberg/старые workflow destinations и обновлён статус доступности. В обоих журналах исправлены устаревшие строки репозитория и ветки; исторические записи сохранены.
+- Ограничения: Actions artifact временный, не является постоянным GitHub Release; 300 preset definitions в JSON не доказывают runtime-доступность всех 300 пресетов; M3 остаётся NOT ACCEPTED, M4 заблокирован до прохождения критериев PROMPT v33 FINAL.
+- Следующий шаг: продолжить аудит M1–M3 по acceptance checklist, исправлять подтверждённые блокеры в этой ветке и повторять Windows CI/CTest; после этого выполнить отдельную проверку VST3 в FL Studio 20.
+
+
+## 10 ноября 2026 — упрощение страницы скачивания
+
+- По просьбе пользователя удалены дополнительные ссылки и поясняющие блоки, которые не ведут непосредственно к получению архива: ссылка на список всех запусков, дублирующие описания workflow и лишние инструкции о статусах.
+- В `README.md` оставлена одна основная ссылка скачивания на проверенный успешный Windows run: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767.
+- В `DOWNLOAD.md` оставлена одна основная ссылка и короткая последовательность: открыть run → Artifacts → скачать именованный ZIP.
+- Имя опубликованного архива: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, artifact ID `13738701864`, размер около 2.24 GB. Успешная сборка/CTest подтверждены; ручная проверка в FL Studio 20 не заявляется.
+- Изменены: `README.md`, `DOWNLOAD.md`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`. Исторические записи сохранены.
+- Ограничения: ссылка ведёт на страницу успешного GitHub Actions run, где сам ZIP доступен в секции Artifacts; GitHub может потребовать авторизацию. Artifact временный, не постоянный Release. M3 остаётся NOT ACCEPTED; M4 заблокирован.
+- Следующий шаг: продолжать аудит и исправления M1–M3 по PROMPT v33 FINAL в этой же ветке.
+
+
+## 10 ноября 2026 — прямая ссылка на ZIP
+
+- Пользователь запросил прямое скачивание без страницы GitHub Actions и без ручного поиска в Artifacts.
+- В README и DOWNLOAD.md основная кнопка заменена на официальный GitHub Actions artifact archive endpoint: https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip
+- Проверено через список артефактов запуска https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767: artifact ID `13738701864`, имя `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, размер `2,242,880,406` байт, `expired=false`, срок действия до `2027-02-08T05:37:05Z` на момент проверки.
+- API отдаёт HTTP redirect на временный URL скачивания (срок действия redirect URL — около 1 минуты); постоянной является сама API-ссылка, пока артефакт и запуск существуют. GitHub может потребовать авторизацию в зависимости от доступности репозитория.
+- Изменены: `README.md`, `DOWNLOAD.md`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`.
+- M3 остаётся NOT ACCEPTED; M4 не начинается.
+
+
+## 10 ноября 2026 — главная страница и прямые загрузки
+
+- README download section and DOWNLOAD.md were simplified to one-click direct ZIP download, with the package contents and installation steps stated clearly.
+- Removed stale CI run links that returned 404 and corrected the Windows build verification link to the actual repository/run.
+- VST3 badge now links to the local download section rather than pretending to be a separate VST3 file download.
+- Verified artifact listing for run 42763253767: package artifact ID 13738701864, 2,242,880,406 bytes, not expired at check time. Direct archive endpoint: https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip
+- The archive includes the VST3 bundle, Samples folder and preset catalogue. There is no separately published standalone .vst3 asset; the page says so rather than exposing a nonexistent link.
+- Manual DAW validation remains outstanding; M3 remains NOT ACCEPTED and M4 remains gated.
+- Files changed: README.md, DOWNLOAD.md, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md.
+
+
+## 10 November 2026 — premium README, promo download and creator contact links
+
+- По просьбе пользователя обновлена главная страница README: более выразительная продуктовая структура, крупный promo download CTA, блоки возможностей, sound engine, Melody/Pattern, preset catalogue, sample licensing, development status, roadmap, документация и контакты.
+- Добавлены прямые контакты автора: mailto:l3xtown@yandex.ru, https://beatmaker.tv/user/182573 и https://t.me/l3xtown.
+- Добавлена заметная ссылка **DOWNLOAD PROMO VST3 BUILD** в hero-блоке и большая кнопка скачивания в разделе DOWNLOAD. Обе ведут на проверенный ZIP artifact ID 13738701864 (run 42763253767), содержащий VST3 + Samples + Presets, размер около 2.24 GB.
+- Добавлены отдельные ссылки на доступные в репозитории JSON-каталоги пресетов и portable Melody/Pattern examples. Не опубликованные отдельно VST3 и Sample Bank не выданы за самостоятельные файлы: указано, что они входят в комплектный ZIP.
+- Сохранены точные ограничения проекта: 300 preset definitions не равны 300 готовым runtime presets; M3 остаётся NOT ACCEPTED; M4 заблокирован; ручная проверка в FL Studio 20 и performance benchmarks не заявлены как выполненные.
+- Изменены: README.md, DOWNLOAD.md, jurnal.md, docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md.
+- Проверки: структура Git tree подтверждает наличие JSON preset banks и двух portable example files; ссылка на artifact основана на ранее проверенном artifact ID и run. Новая сборка/CTest не запускались, так как изменялись только Markdown-документы.
+- Ограничение: GitHub Actions artifact временный; отдельные standalone VST3 и Sample Bank release assets отсутствуют. Не обещать бессрочную публичную загрузку.
+- Следующий шаг: продолжить M1–M3 по PROMPT v33 FINAL в этой же рабочей ветке; после acceptance подготовить постоянную Release-публикацию, если доступные права и upload-инструменты позволят.
+
+
+## 10 ноября 2026 — M1: регрессионная защита APVTS
+
+- В ходе аудита M1 подтверждено: параметры создаются через APVTS в `createParameterLayout()`, аудиопоток читает 47 параметров через `getRawParameterValue()`, а сохранение/восстановление состояния использует JUCE XML binary helpers.
+- Выявленный риск: в CI отсутствовала проверка стабильности идентификаторов APVTS. При переименовании или удалении ID старые DAW-проекты и automation lanes могли перестать корректно связываться с параметрами, а несовпадение ID в аудиокоде могло остаться незамеченным до запуска плагина.
+- Добавлен `tools/validate_apvts_layout.py`: проверяет сохранение 96 текущих идентификаторов APVTS (включая 7 генерируемых FX slots), отсутствие дублирующихся литеральных ID, наличие каждого `getRawParameterValue()` в реестре и наличие полного пути сериализации/восстановления APVTS state.
+- Workflow `.github/workflows/vst3-build.yml` запускает проверку до конфигурации и сборки VST3. Проверка не подменяет ручную проверку automation в FL Studio 20 и не доказывает runtime-поведение хоста.
+- Изменённые файлы: `tools/validate_apvts_layout.py`, `.github/workflows/vst3-build.yml`, `jurnal.md`, `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`.
+- Проверка на момент записи: исходный код проаудирован по GitHub; CI будет запущен изменением workflow после push. Результат нового CI/CTest ещё не получен. M1 НЕ ПРИНЯТ: ручная проверка автоматизации параметров во FL Studio 20 остаётся обязательной.
+- Следующий шаг: дождаться Windows CI, исправить возможные ошибки проверки/сборки, затем провести host automation acceptance. После этого продолжить закрытие M2/M3; M4 остаётся заблокирован.
+
+
+## M3 — исправление транспорта и sample-accurate смены аккордов — 10 ноября 2026
+
+Проведён повторный разбор M3. Выявлены реальные дефекты production path: held MIDI chord обновлялся после планирования, из-за чего новый аккорд начинал звучать на один блок позже; samplePosition MIDI не учитывался при смене аккорда; смена аккорда не имела отдельного 1/16 quantize; seek/переключение источника транспорта могли оставить устаревшие NoteOff в очереди; тест near-block-edge был недостаточно точным.
+
+Исправления в текущей рабочей ветке:
+- MIDI held-state теперь применяется до построения chord snapshot; учитывается samplePosition последнего события изменения аккорда.
+- Старая нота/аккорд рендерится до MIDI sample offset, затем отпускается; новый chord cycle стартует в sample-accurate позиции либо на следующей 1/16 границе. Опция Start On First Chord сохраняет немедленный старт первого аккорда; при отключённой опции первый старт остаётся привязан к следующему такту.
+- На смене аккорда, transport stop и seek очищаются отложенные NoteOff и отпускаются прежние голоса; при stop также сбрасывается held chord, чтобы не возобновлять его самопроизвольно.
+- Scheduler сообщает о host PPQ discontinuity и о переключении Host/Internal источника; stale gates очищаются.
+- Sample offset переводится в индекс первого sample не раньше события (floor), вместо прежнего округления, которое могло сдвигать near-tail события на один sample назад.
+- Pending NoteOff queue увеличена в четыре раза; при переполнении выставляется флаг, а Processor выполняет all-notes-off fail-safe.
+- Добавлены headless regression cases на host seek, tempo/block-size change, near-tail sample mapping и forward 1/16 quantization.
+
+Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); последующий commit содержит корректировки и журналы.
+
+Статус M3: NOT ACCEPTED до успешного Windows CI, проверки integration на реальном PluginProcessor и дополнительных headless сценариев (Host Start/stop/restart, host↔internal fallback, pending gate cleanup, event-capacity overflow, buffer-size changes 64↔1024). Ручная проверка FL Studio 20 также обязательна. M4 остаётся заблокирован.
+
+
+## M3 follow-up — clock-source handoff and seek tolerance
+
+Дополнительно закрыты два края транспортной логики: переключение Internal → Host теперь тоже считается discontinuity (раньше явно обрабатывался только Host → Internal), а порог определения seek снижен с 0.25 beat до адаптивного 0.01 beat / двух длительностей блока, чтобы короткие перемотки не оставляли устаревшие gate events. Очистка pending NoteOff одновременно сбрасывает overflow flag. Добавлен headless тест обеих сторон handoff.
+
+Эти изменения отправлены отдельным последующим commit; Windows CI ещё требуется.
+
+
+## 10 November 2026 — M3: apply 1/16 and 1/32 pattern quantization
+
+- Найдена конкретная причина неполной реализации M3: APVTS-параметр `patternQuantize` существовал и предлагал 1/16 и 1/32, но аудиодвижок жёстко использовал только 1/16. Смена pattern slot и pattern length также не перезапускала фразу на квантованной границе.
+- Исправлено в `Source/PluginProcessor.cpp`: выбранная сетка теперь читается из APVTS (`0.25` четверти для 1/16, `0.125` для 1/32); последующие смены аккорда, слота и длины паттерна запускаются на ближайшей будущей границе. Событие MIDI по-прежнему учитывает точный sample offset; первый аккорд сохраняет настройку Start on First Chord. Свинг шагов не квантуется повторно.
+- В `Source/PluginProcessor.h` добавлено отслеживание предыдущего pattern slot и length; `prepareToPlay` очищает эти поля при повторной подготовке аудиодвижка.
+- В `tests/PatternSchedulerTests.cpp` добавлена headless-проверка сетки 1/32 наряду с проверкой 1/16.
+- Исправлена причина предыдущего CI failure: в `tools/validate_apvts_layout.py` regex имели двойное экранирование. При повторной статической сверке найдено 97 уникальных объявленных APVTS ID (включая 7 FX slots) и 48 обращений аудиокода; все обращения имеют соответствующие объявления. Это статическая проверка, не замена DAW automation test.
+- Изменённые файлы: `Source/PluginProcessor.cpp`, `Source/PluginProcessor.h`, `tests/PatternSchedulerTests.cpp`, `tools/validate_apvts_layout.py`.
+- Проверка: на текущем HEAD `c8da085e45fdd11387d01a0f69538e771e92d967` шаги CI для валидатора пресетов и APVTS завершились успешно; Windows build/CTest ещё выполняются. M3 пока NOT ACCEPTED: требуется дождаться полного CI/CTest и закрыть оставшиеся критерии lookahead/preview и проверки в хосте. M4 остаётся заблокирован.
+
+
+## Журналирование и баг-трекинг — 10 ноября 2026
+
+Добавлены `docs/WORK_LOG_M3.txt` и `docs/ЖУРНАЛ_БАГОВ_RU.md`. В баг-журнале заведены M3-001…M3-012; исправления исходников помечены FIXED — AWAITING CI, непроверенная сборка и DAW integration остаются OPEN. M3 не принят.
+
+
+## 10 ноября 2026 — Info: единый сквозной журнал и аудит M1–M3
+
+Создан корневой `Info.txt` как единый хронологический журнал разработки от исходного ТЗ до завершения проекта. В него включены исторические записи предыдущего `jurnal.md`, M3 work log, текущее состояние, аудит M1/M2/M3, результаты CI, выявленные дефекты и план последующих исправлений. Отдельный баг-трекер сохранён в `docs/ЖУРНАЛ_БАГОВ_RU.md`.
+
+По run `42769587683` Windows Release build/VST3 bundle прошли, но CTest завершился FAILURE: 5/6, упал `ppgu_pattern_scheduler_tests`. Найдено и исправлено дробное sample offset: 63.6 samples ошибочно усекались до 63 вместо 64; добавлен тест exact integer sample. Исправление ожидает нового CI.
+
+Аудит: M1 — не сохраняется sample-library reference и нет полного state/automation/host acceptance; M2 — WAV preload в RAM, page cache не подключён к voice read path, RR/velocity crossfade/unload не подтверждены; M3 — дробный offset исправлен в исходнике, но остаются потеря нескольких chord transitions в одном блоке и отсутствие явного scheduler output overflow handling. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
+
+
+## 10 ноября 2026 — M3-015: явная обработка переполнения output scheduler
+
+- Ветка: `migration/full-copy-m3-transport-scheduler-v2`
+- Изменения кода: `Source/Performance/PatternScheduler.h`, `tests/PatternSchedulerTests.cpp`.
+- Root cause: выходной массив scheduler ограничен 512 событиями, но цикл генерации завершался при нехватке двух мест без выставления статуса. Это могло молча отбросить NoteOn/NoteOff; потерянный NoteOff создаёт риск зависшей ноты.
+- Fix: при нехватке места выставляется `outputOverflow_`; `consumePendingOverflow()` теперь объединяет переполнение выходного массива и pending queue и сбрасывает оба флага после чтения. Processor уже обрабатывает этот статус через `sampler.allNotesOff()` как fail-safe.
+- Regression: плотный pattern из 300 одновременных событий заполняет output до 512 и обязан вернуть overflow status; повторное чтение статуса должно вернуть false.
+- Коммиты: `427a68506599b7f8ea8250b253dbc89ede4fe4fb` (scheduler), `6a77e2d1f33f6a4ad730d4c5a6c7997d2a5112cf` (test).
+- Проверки: исходники и regression test записаны в рабочую ветку. Windows Release build/CTest для нового HEAD ещё не получен; статус FIXED IN SOURCE / AWAITING CI.
+- M3-014 остаётся FIXED IN SOURCE / AWAITING CI; M3-015 теперь FIXED IN SOURCE / AWAITING CI. M1/M2 не затрагивались; M1, M2, M3 не приняты; M4 BLOCKED.
+- Следующий шаг: получить Windows CI для актуального HEAD, исправить все обнаруженные ошибки; после зелёного CTest продолжить интеграционные M3 проверки (stop/seek, variable block sizes, dense pattern fail-safe) и затем отдельный DAW acceptance.
+
+
+## 10 ноября 2026 — M3-015 CI failure: missing timeline helper include и исправление
+
+- Проверены Windows Actions runs `42774950334` (кодовый commit `6a77e2d1...`) и `42774991354` (документационный commit `efb30595...`). Оба завершились `failure` на шаге `Build VST3 and test executables`; CMake configure прошёл, CTest был пропущен, VST3 bundle/artifact не создан.
+- Точная ошибка MSVC: `PluginProcessor.cpp(505): processSampleAccurateMidiTimeline is not a member of ppgu::performance` / `identifier not found`.
+- Root cause: `PluginProcessor.cpp` вызывает helper из `Source/Performance/ChordTransitionTimeline.h`, но не включал этот заголовок. Тестовый файл включал его напрямую, поэтому дефект не обнаруживался unit-test compilation.
+- Исправление: добавлен прямой `#include "Performance/ChordTransitionTimeline.h"` в `Source/PluginProcessor.cpp`. Commit: `6de1db6777a7afa4dc818fab244c06b3dc099b4d`.
+- В логах также присутствуют предупреждения C4244 в PluginEditor.cpp и C4458 для локального `playHead`; они не являются причиной текущего failure и остаются отдельными cleanup-кандидатами.
+- Статус исправления: FIXED IN SOURCE / AWAITING WINDOWS CI. Новый build и CTest ещё не запускались/не подтверждены. M3-014 и M3-015 не закрывать до успешного Release build + CTest.
+- Следующий шаг: дождаться CI на commit `6de1db...`; если появятся новые ошибки — разбирать по первой реальной compiler/test failure, не отключая тесты. После успешного CTest продолжить M3 stop/seek, block-size/tempo stress и fail-safe проверки. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
+
+
+## 10 ноября 2026 — малые исправления качества кода
+
+В рамках параллельного лёгкого аудита без переключения с основной работы M1–M3 исправлены два подтверждённых предупреждения MSVC: явные float-преобразования координат в отрисовке редактора (C4244) и затенение члена класса локальным `playHead` (C4458). Код изменён в `PluginEditor.cpp` и `PluginProcessor.cpp`; проверка свежей Windows CI ещё ожидается. Основной приоритет остаётся за функциональными критериями M1–M3.
+
+
+## 10 ноября 2026 — небольшой фронтенд-фикс поиска пресетов
+
+- Поиск пресетов расширен на имя, категорию/референс, режим, характер звучания, groove и articulation.
+- При изменении фильтра текущий выбранный пресет сохраняется, если он остаётся в результатах; если не остаётся — список очищает выбор, но не переключает звучание на другой пресет автоматически.
+- Добавлен явный `<algorithm>` include для `std::find`/`std::distance`.
+- Изменение затрагивает только удобство браузера пресетов и не меняет аудиодвижок, параметры звука или основной план M1–M3.
+- Статус: FIXED IN SOURCE; ожидается Windows Release build и CTest после коммита.
+
+
+## 10 ноября 2026 — минимальный размер окна редактора
+
+- Исправлено несоответствие: редактор разрешал уменьшение до 650 px по высоте, хотя текущая фиксированная вертикальная компоновка требует около 788 px с внешними отступами.
+- Минимальная высота окна изменена на 790 px, чтобы клавиатура и нижние элементы не обрезались при допустимом размере окна.
+- Это ограничение согласовано с текущей геометрией `resized()`; адаптивная перестройка для компактных окон остаётся отдельной задачей, не блокирующей основную работу.
+- Статус: FIXED IN SOURCE; ожидается Windows Release build.
+
+
+## 10 ноября 2026 — сохранение выбранной SFZ-библиотеки в состоянии проекта
+
+- `getStateInformation` теперь сохраняет полный путь выбранной SFZ-карты в свойство `sfzFilePath` дерева APVTS вместе с параметрами.
+- `setStateInformation` восстанавливает параметры и запускает загрузку найденной SFZ-карты через существующий фоновый `ThreadPool`; загрузка не выполняется синхронно в callback восстановления состояния хоста.
+- Добавлена блокировка `CriticalSection` для доступа к пути из state callback, UI/test API и фонового загрузчика.
+- Старые проекты без свойства `sfzFilePath` продолжают загружаться как раньше. Если файл библиотеки отсутствует, восстановление параметров не прерывается, а сохранённый путь остаётся доступен для повторного поиска.
+- Расширен `tools/validate_apvts_layout.py`: CI проверяет наличие сериализации, восстановления, проверки файла и асинхронного вызова.
+- Статус: FIXED IN SOURCE; ожидает Windows Release build + CTest. Поведение в FL Studio 20 ещё не подтверждено.
+
+
+## 10 ноября 2026 — M2: первая реализация SFZ Round Robin
+
+- Найденный дефект: SFZ parser не распознавал `seq_length`/`seq_position`, а `SamplePool::findRegion()` всегда возвращал первую совпавшую область. Библиотеки с несколькими round-robin takes поэтому постоянно проигрывали один и тот же сэмпл.
+- Исправление: добавлены поля sequence metadata в SFZ Region/RegionView; parser принимает и проверяет диапазон `seq_length=1..256` и `seq_position=1..seq_length`. SamplePool выбирает следующий sequence position детерминированным циклом с отдельным курсором на MIDI channel/note; неполный RR set использует безопасный fallback на первую совпавшую область.
+- Regression: создан SFZ fixture с тремя sequence positions; проверяется цикл 1→2→3→1→2→3, а также отказ parser при seq_position > seq_length.
+- Commits: `e3ccbf428f513d5bd05e6b9b2d29496284d4978f`, `9cd4f47dc7fab6c03dcc811cf23deaa435d8f950`, `ea3fa563642203b88ba99e3b0481f14350e26192`, `99fcc2fda604508fb77e0c17a42571ae3c1c47d7`, `bd313f77a0172b5d80336ddfab2a9775f364725c`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI + CTest. Пока не подтверждены компиляция, исполнение теста и совместимость с реальными SFZ банками. M2 не закрывать: velocity crossfade ещё не реализован; дополнительно требуется проверить RR-группировку на реальных картах и поведение одновременных sequence sets.
+
+
+## 10 ноября 2026 — M2: дополнительные SFZ проверки и CI
+
+- Расширен SFZ parser: добавлен разбор метаданных velocity crossfade `xfin_lovel`, `xfin_hivel`, `xfout_lovel`, `xfout_hivel`; добавлена валидация пар границ и порядка диапазонов. Это пока только чтение/проверка метаданных: реальное одновременное смешивание velocity-регионов в аудио-движке ещё НЕ реализовано.
+- Добавлены parser regression cases для корректных и некорректных crossfade opcode.
+- Добавлен тест повторных 100 ударов с меняющейся velocity: проверяет отсутствие non-finite значений, ненулевой выход и ограничение максимального соседнего скачка. Это автоматическая проверка, но не заменяет слуховой/host-тест и не доказывает абсолютное отсутствие кликов на всех библиотеках.
+- Поправлены newline escape в SFZ test fixtures после проверки исходников.
+- CI run `42778780300` (commit `ffea193c058644bb4f4807eb475707951a269e00`) подтвердил Windows x64 Release build, CTest, обнаружение VST3 и host-validation limitation step; на момент записи packaging ещё выполнялся. Этот run не включает все более поздние изменения.
+- CI run `42778986400` (HEAD `7c9dc1ff7453c6bab701a4589af85c96aa29a733`) повторно прошёл configure, build, CTest, locate VST3 и дошёл до packaging; packaging/upload ещё не завершены при последней проверке.
+- Ограничения M2 по-прежнему открыты: реальное velocity crossfade, полноценная RR-группировка без конфликтов между разными наборами, потоковый mmap/OVERLAPPED + hot/warm cache/ref-count/preload, измерение 100-hit click criteria на реальном банке и аудио/host-проверка. M2 не закрывать.
+
+
+## 10 ноября 2026 — M2: изоляция Round Robin наборов
+
+- Устранена общая RR-корзина для всех SFZ регионов одного MIDI-канала/ноты. Теперь при загрузке формируются независимые RR set indices по SFZ group, seq_length, key/velocity/channel диапазонам.
+- Счётчики для каждого набора, MIDI-канала и ноты заранее выделяются при загрузке Snapshot. Вызов `findRegion()` не выделяет память и не создаёт контейнеры на аудиопотоке.
+- Добавлен regression test с двумя разными SFZ group и разными MIDI-нотами: вызов одного набора не должен сдвигать последовательность другого.
+- Проверка исходника выявила и исправила двойное экранирование переводов строк в новой тестовой SFZ fixture.
+- Изменения опубликованы в рабочей ветке коммитами: `8c91bc20`, `15960944`, `8d27214e`, `a11f8b88`, `d3336a32`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI. M2 не закрыта: velocity crossfade playback, потоковая загрузка, реальные 100-hit click validation и host validation остаются открытыми.
+
+
+## 10 ноября 2026 — M2: публикация velocity crossfade metadata в SamplePool
+
+- Четыре разобранных SFZ opcode (`xfin_lovel`, `xfin_hivel`, `xfout_lovel`, `xfout_hivel`) теперь копируются в опубликованный `RegionView`, а не остаются только в промежуточной структуре парсера.
+- Добавлен SamplePool regression test, который загружает SFZ с заданными границами и проверяет, что runtime-регион содержит те же значения.
+- Исправлено экранирование newline в тестовой fixture.
+- Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
+- Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.

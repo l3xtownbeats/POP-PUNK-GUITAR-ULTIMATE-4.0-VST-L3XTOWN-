@@ -1,7 +1,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Performance/ChordTransitionTimeline.h"
 #include <cmath>
 #include <algorithm>
+#include <tuple>
 
 namespace
 {
@@ -186,12 +188,14 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     currentSampleRate = juce::jlimit(8000.0, 384000.0, sampleRate);
     maximumBlockSize = juce::jmax(1, expectedBlockSize);
     sampler.prepare(currentSampleRate);
-    patternMidiBuffer.ensureSize(65536);
-    patternMidiBuffer.clear();
     patternScheduler.reset();
     for (auto& channel : patternHeldNotes) channel.fill(false);
     patternCycleStarted = false;
     previousPatternChordCount = 0;
+    previousPatternChordNotes.fill(-1);
+    previousPatternChordChannel = 1;
+    previousPatternSlot = -1;
+    previousPatternLengthChoice = -1;
     previousPlayMode = -1;
 
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
@@ -277,9 +281,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
     // worker thread and never allocates or locks.
     ppgu::performance::TransportSnapshot hostTransport;
-    if (auto* playHead = getPlayHead())
+    if (auto* hostPlayHead = getPlayHead())
     {
-        if (const auto position = playHead->getPosition())
+        if (const auto position = hostPlayHead->getPosition())
         {
             const auto bpm = position->getBpm();
             const auto ppq = position->getPpqPosition();
@@ -307,13 +311,24 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         for (auto& channel : patternHeldNotes) channel.fill(false);
         patternCycleStarted = false;
         previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
+        previousPatternChordChannel = 1;
         previousPlayMode = playMode;
     }
 
     // A host transport stop must release voices that were started by live MIDI
     // or a pattern gate. The scheduler clears pending NoteOffs on stop.
-    if (patternTransportClock.transportStopped)
+    if (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity)
+    {
         sampler.allNotesOff();
+        patternScheduler.clearPendingNoteOffs();
+        patternCycleStarted = false;
+        previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
+        previousPatternChordChannel = 1;
+        if (patternTransportClock.transportStopped)
+            for (auto& held : patternHeldNotes) held.fill(false);
+    }
 
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
         static_cast<double>(parameters.getRawParameterValue("tuning")->load(std::memory_order_relaxed)));
@@ -361,152 +376,163 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     }
     else
     {
-        // PATTERN: held MIDI keys define the chord. Build a fixed-capacity
-        // strum/arpeggio pattern from that chord and feed scheduled MIDI into
-        // the same sampler voice engine used by Melody mode.
-        std::array<int, 6> chordNotes {};
-        int chordCount = 0;
-        int chordChannel = 1;
-        for (int channel = 0; channel < 16 && chordCount < static_cast<int>(chordNotes.size()); ++channel)
-        {
-            for (int note = 0; note < 128 && chordCount < static_cast<int>(chordNotes.size()); ++note)
-            {
-                if (patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(note)])
-                {
-                    chordNotes[static_cast<size_t>(chordCount++)] = note;
-                    chordChannel = channel + 1;
-                }
-            }
-        }
-
-        patternMidiBuffer.clear();
-        patternEvents.fill(ppgu::performance::PatternEvent { -1.0, 0.0, 60, 0, 1 });
-        std::size_t patternEventCount = 0;
-        const int patternSlot = juce::jlimit(0, 7,
-            static_cast<int>(parameters.getRawParameterValue("patternSlot")->load(std::memory_order_relaxed)));
-        const int patternLengthChoice = juce::jlimit(0, 2,
-            static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
-        const double patternLengthBeats = patternLengthChoice == 0 ? 4.0
-            : (patternLengthChoice == 1 ? 8.0 : 16.0);
-        const float swing = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
-        const float accent = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
-        const std::array<std::uint16_t, 8> rhythmMasks {{
-            0x5555, // straight eighths
-            0x1111, // quarter-note downstrokes
-            0x3333, // paired eighths
-            0xffff, // driving sixteenths
-            0x9999, // syncopated stop/start
-            0x1111, // sparse half-time pulse
-            0x4444, // ska-style offbeat upstrokes
-            0xffff  // arpeggio picking
-        }};
+        // PATTERN: process every MIDI chord transition at its sample position.
+        // Each interval is scheduled independently, preserving every chord change.
+        const int patternSlot = juce::jlimit(0, 7, static_cast<int>(parameters.getRawParameterValue("patternSlot")->load(std::memory_order_relaxed)));
+        const int patternLengthChoice = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
+        const double patternLengthBeats = patternLengthChoice == 0 ? 4.0 : (patternLengthChoice == 1 ? 8.0 : 16.0);
+        const float swing = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
+        const float accent = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
+        const std::array<std::uint16_t, 8> rhythmMasks {{ 0x5555, 0x1111, 0x3333, 0xffff, 0x9999, 0x1111, 0x4444, 0xffff }};
         const bool arpeggio = patternSlot == 7;
-        if (chordCount > 0)
+        const int quantizeChoice = juce::jlimit(0, 1, static_cast<int>(parameters.getRawParameterValue("patternQuantize")->load(std::memory_order_relaxed)));
+        const double quantizeGridBeats = quantizeChoice == 0 ? 0.25 : 0.125;
+        const bool startOnFirstChord = parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
+        const double ppqPerSample = patternTransportClock.bpm / (60.0 * currentSampleRate);
+
+        auto readChord = [&]()
         {
-            if (!patternCycleStarted)
+            std::array<int, 6> notes {};
+            notes.fill(-1);
+            int count = 0;
+            int channel = 1;
+            for (int ch = 0; ch < 16 && count < static_cast<int>(notes.size()); ++ch)
+                for (int note = 0; note < 128 && count < static_cast<int>(notes.size()); ++note)
+                    if (patternHeldNotes[static_cast<size_t>(ch)][static_cast<size_t>(note)])
+                    {
+                        notes[static_cast<size_t>(count++)] = note;
+                        channel = ch + 1;
+                    }
+            return std::make_tuple(notes, count, channel);
+        };
+
+        auto chordDiffers = [&](const std::array<int, 6>& notes, int count, int channel)
+        {
+            return count != previousPatternChordCount || channel != previousPatternChordChannel
+                || !std::equal(notes.begin(), notes.begin() + count, previousPatternChordNotes.begin());
+        };
+
+        auto restartForChord = [&](int sampleOffset, const std::array<int, 6>& notes, int count, int channel)
+        {
+            sampler.allNotesOff();
+            patternScheduler.clearPendingNoteOffs();
+            patternCycleStarted = count > 0;
+            if (count > 0)
             {
-                const bool startOnFirstChord =
-                    parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
-                patternCycleStartPpq = startOnFirstChord
-                    ? patternTransportClock.startPpq
-                    : std::ceil(patternTransportClock.startPpq / 4.0) * 4.0;
-                patternCycleStarted = true;
+                const double changePpq = patternTransportClock.startPpq + static_cast<double>(sampleOffset) * ppqPerSample;
+                const bool firstChord = previousPatternChordCount == 0;
+                patternCycleStartPpq = firstChord && startOnFirstChord ? changePpq
+                    : (firstChord ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
+                                  : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, quantizeGridBeats));
+            }
+            previousPatternChordCount = count;
+            previousPatternChordNotes = notes;
+            previousPatternChordChannel = channel;
+        };
+
+        const auto [initialNotes, initialCount, initialChannel] = readChord();
+        const bool patternSettingsChanged =
+            (previousPatternSlot >= 0 && patternSlot != previousPatternSlot)
+            || (previousPatternLengthChoice >= 0 && patternLengthChoice != previousPatternLengthChoice);
+        if (chordDiffers(initialNotes, initialCount, initialChannel))
+            restartForChord(0, initialNotes, initialCount, initialChannel);
+        else if (patternSettingsChanged && initialCount > 0)
+            restartForChord(0, initialNotes, initialCount, initialChannel);
+        previousPatternSlot = patternSlot;
+        previousPatternLengthChoice = patternLengthChoice;
+
+        auto renderPatternInterval = [&](int intervalStart, int intervalEnd)
+        {
+            if (intervalEnd <= intervalStart) return;
+            const auto [notes, count, channel] = readChord();
+            if (count == 0)
+            {
+                renderSegment(intervalStart, intervalEnd - intervalStart);
+                return;
             }
 
+            patternEvents.fill(ppgu::performance::PatternEvent { -1.0, 0.0, 60, 0, 1 });
+            std::size_t patternEventCount = 0;
             const int bars = static_cast<int>(patternLengthBeats / 4.0);
             for (int bar = 0; bar < bars; ++bar)
-            {
                 for (int step = 0; step < 16; ++step)
                 {
-                    if ((rhythmMasks[static_cast<size_t>(patternSlot)] & (1u << step)) == 0)
-                        continue;
+                    if ((rhythmMasks[static_cast<size_t>(patternSlot)] & (1u << step)) == 0) continue;
                     const double swingOffset = (step % 4 == 2) ? 0.125 * swing : 0.0;
                     const double beat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25 + swingOffset;
-                    const int notesThisStep = arpeggio ? 1 : chordCount;
+                    const int notesThisStep = arpeggio ? 1 : count;
                     for (int strum = 0; strum < notesThisStep && patternEventCount < patternEvents.size(); ++strum)
                     {
-                        const int chordIndex = arpeggio
-                            ? ((bar * 16 + step) % chordCount)
-                            : ((step % 2 == 0) ? strum : chordCount - 1 - strum);
-                        const int velocity = juce::jlimit(1, 127,
-                            juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
-                        patternEvents[patternEventCount++] = {
-                            beat + static_cast<double>(strum) * 0.012,
-                            0.20,
-                            static_cast<std::uint8_t>(chordNotes[static_cast<size_t>(chordIndex)]),
-                            static_cast<std::uint8_t>(velocity),
-                            static_cast<std::uint8_t>(chordChannel)
-                        };
+                        const int chordIndex = arpeggio ? ((bar * 16 + step) % count)
+                            : ((step % 2 == 0) ? strum : count - 1 - strum);
+                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
+                        patternEvents[patternEventCount++] = { beat + static_cast<double>(strum) * 0.012, 0.20,
+                            static_cast<std::uint8_t>(notes[static_cast<size_t>(chordIndex)]),
+                            static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel) };
                     }
                 }
-            }
-        }
-        else
-        {
-            patternCycleStarted = false;
-            if (previousPatternChordCount > 0)
-                sampler.allNotesOff();
-        }
-        previousPatternChordCount = chordCount;
 
-        const auto scheduledCount = patternScheduler.schedule(
-            patternEvents, patternLengthBeats, patternCycleStartPpq,
-            patternTransportClock, currentSampleRate, samples, 0.0, 0,
-            scheduledPatternEvents);
-        for (std::size_t i = 0; i < scheduledCount; ++i)
-        {
-            const auto& event = scheduledPatternEvents[i];
-            const auto message = event.kind == ppgu::performance::EventKind::NoteOn
-                ? juce::MidiMessage::noteOn(event.channel, event.note, static_cast<juce::uint8>(event.velocity))
-                : juce::MidiMessage::noteOff(event.channel, event.note);
-            patternMidiBuffer.addEvent(message, event.sampleOffset);
-        }
+            auto intervalClock = patternTransportClock;
+            intervalClock.startPpq = patternTransportClock.startPpq + static_cast<double>(intervalStart) * ppqPerSample;
+            intervalClock.endPpq = patternTransportClock.startPpq + static_cast<double>(intervalEnd) * ppqPerSample;
+            const int intervalSamples = intervalEnd - intervalStart;
+            const auto scheduledCount = patternScheduler.schedule(patternEvents, patternLengthBeats, patternCycleStartPpq,
+                intervalClock, currentSampleRate, intervalSamples, 0.0, 0, scheduledPatternEvents);
 
-        int cursor = 0;
-        for (const auto metadata : patternMidiBuffer)
-        {
-            const auto message = metadata.getMessage();
-            const int eventSample = juce::jlimit(cursor, samples, metadata.samplePosition);
-            renderSegment(cursor, eventSample - cursor);
-            cursor = eventSample;
-            if (message.isNoteOn() && velocityScale > 0.0f)
+            int cursor = intervalStart;
+            for (std::size_t i = 0; i < scheduledCount; ++i)
             {
-                const float normalizedVelocity = juce::jlimit<float>(
-                    0.0f, 1.0f, static_cast<float>(message.getVelocity()) / 127.0f);
-                const float dynamics = juce::jlimit(0.0f, 1.0f,
-                    parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
-                const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
-                const int scaledVelocity = juce::jlimit(1, 127,
-                    juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
-                                                      message.getChannel(), globalTuningSemitones);
-                juce::ignoreUnused(triggered);
+                const auto& event = scheduledPatternEvents[i];
+                const int eventSample = juce::jlimit(cursor, intervalEnd, intervalStart + event.sampleOffset);
+                renderSegment(cursor, eventSample - cursor);
+                cursor = eventSample;
+                if (event.kind == ppgu::performance::EventKind::NoteOn)
+                {
+                    if (velocityScale <= 0.0f) continue;
+                    const float normalizedVelocity = juce::jlimit<float>(0.0f, 1.0f, static_cast<float>(event.velocity) / 127.0f);
+                    const float dynamics = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
+                    const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
+                    const int scaledVelocity = juce::jlimit(1, 127, juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                    const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices, event.channel, globalTuningSemitones);
+                    juce::ignoreUnused(triggered);
+                }
+                else sampler.noteOff(event.note, event.channel);
             }
-            else if (message.isNoteOff())
-                sampler.noteOff(message.getNoteNumber(), message.getChannel());
-        }
-        renderSegment(cursor, samples - cursor);
+            renderSegment(cursor, intervalEnd - cursor);
+        };
 
-        // Update the held-chord state after rendering this block. A chord first
-        // pressed in this block begins its pattern next block; a released chord
-        // cannot accidentally trigger a fresh pattern in the same block.
-        for (const auto metadata : midi)
-        {
-            const auto message = metadata.getMessage();
-            const int channel = juce::jlimit(1, 16, message.getChannel()) - 1;
-            if (message.isAllNotesOff() || message.isAllSoundOff())
+        // Render each interval before applying its MIDI event at the exact sample.
+        // Same-sample events retain order without inventing time between chord notes.
+        ppgu::performance::processSampleAccurateMidiTimeline(
+            samples, midi,
+            [&](int intervalStart, int intervalEnd)
             {
-                for (auto& held : patternHeldNotes) held.fill(false);
-                panicRequested.store(true, std::memory_order_release);
-                sampler.panic(fadeLength);
-            }
-            else if (message.isNoteOn())
-                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = true;
-            else if (message.isNoteOff())
-                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = false;
-        }
+                renderPatternInterval(intervalStart, intervalEnd);
+            },
+            [&](const auto& metadata, int eventSample)
+            {
+                const auto message = metadata.getMessage();
+                const int channelIndex = juce::jlimit(1, 16, message.getChannel()) - 1;
+                if (message.isAllNotesOff() || message.isAllSoundOff())
+                {
+                    for (auto& held : patternHeldNotes) held.fill(false);
+                    panicRequested.store(true, std::memory_order_release);
+                    sampler.panic(fadeLength);
+                    patternScheduler.clearPendingNoteOffs();
+                    patternCycleStarted = false;
+                    previousPatternChordCount = 0;
+                    previousPatternChordNotes.fill(-1);
+                    previousPatternChordChannel = 1;
+                }
+                else if (message.isNoteOn() || message.isNoteOff())
+                {
+                    patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
+                    const auto [nextNotes, nextCount, nextChannel] = readChord();
+                    if (chordDiffers(nextNotes, nextCount, nextChannel))
+                        restartForChord(eventSample, nextNotes, nextCount, nextChannel);
+                }
+            });
+        if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
     }
 
     // AMP & TONE: low/mid/high split with persistent one-pole filter states.
@@ -784,15 +810,41 @@ juce::AudioProcessorEditor* PopPunkGuitarUltimateAudioProcessor::createEditor()
 void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock& destinationData)
 {
     auto state = parameters.copyState();
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        state.setProperty("sfzFilePath", currentSfzFilePath, nullptr);
+    }
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
-    copyXmlToBinary(*xml, destinationData);
+    if (xml != nullptr)
+        copyXmlToBinary(*xml, destinationData);
 }
 
 void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
-    if (xml != nullptr && xml->hasTagName(parameters.state.getType()))
-        parameters.replaceState(juce::ValueTree::fromXml(*xml));
+    if (xml == nullptr || !xml->hasTagName(parameters.state.getType()))
+        return;
+
+    auto restoredState = juce::ValueTree::fromXml(*xml);
+    if (!restoredState.isValid())
+        return;
+
+    const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    parameters.replaceState(restoredState);
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        currentSfzFilePath = restoredSfzPath;
+    }
+
+    // Legacy sessions have no path property. Missing libraries are deliberately
+    // not loaded; the saved path is retained so the user can locate the bank again.
+    if (restoredSfzPath.isNotEmpty())
+    {
+        const juce::File restoredSfzFile(restoredSfzPath);
+        if (restoredSfzFile.existsAsFile()
+            && restoredSfzFile.getFileExtension().equalsIgnoreCase(".sfz"))
+            loadSfzFileAsync(restoredSfzFile, {});
+    }
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
@@ -803,7 +855,19 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
 {
     // Synchronous API for tests/tools only; never call from processBlock.
-    return sampler.loadSfz(sfzFile);
+    auto report = sampler.loadSfz(sfzFile);
+    if (report.success)
+    {
+        const juce::ScopedLock lock(sampleStateLock);
+        currentSfzFilePath = sfzFile.getFullPathName();
+    }
+    return report;
+}
+
+juce::String PopPunkGuitarUltimateAudioProcessor::getCurrentSfzFilePath() const
+{
+    const juce::ScopedLock lock(sampleStateLock);
+    return currentSfzFilePath;
 }
 
 void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
@@ -812,6 +876,11 @@ void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
     sampleLoadPool.addJob([this, sfzFile, completion = std::move(completion)]() mutable
     {
         auto report = sampler.loadSfz(sfzFile);
+        if (report.success)
+        {
+            const juce::ScopedLock lock(sampleStateLock);
+            currentSfzFilePath = sfzFile.getFullPathName();
+        }
         juce::MessageManager::callAsync(
             [completion = std::move(completion), report = std::move(report)]() mutable
             {

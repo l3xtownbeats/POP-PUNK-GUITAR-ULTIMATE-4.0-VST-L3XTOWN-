@@ -56,6 +56,128 @@ int main()
         return 1;
     }
 
+    // SFZ seq_length/seq_position must rotate deterministically without
+    // repeating a position until the complete round-robin cycle is consumed.
+    const auto roundRobinSfz = directory.getChildFile("round-robin.sfz");
+    if (!roundRobinSfz.replaceWithText(
+        "<group> group=77\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=3\n"))
+    {
+        std::cerr << "Could not write SFZ round-robin fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool roundRobinPool;
+    const auto rrLoad = roundRobinPool.loadSfz(roundRobinSfz);
+    if (!rrLoad.success || rrLoad.loadedRegions != 3)
+    {
+        std::cerr << "SFZ round-robin regions failed to load.\n";
+        return 1;
+    }
+    for (int expectedPosition = 1; expectedPosition <= 6; ++expectedPosition)
+    {
+        const auto* selected = roundRobinPool.findRegion(64, 100, 1);
+        const int expected = ((expectedPosition - 1) % 3) + 1;
+        if (selected == nullptr || selected->seqPosition != expected)
+        {
+            std::cerr << "SFZ round-robin repeated or skipped a sequence position.\n";
+            return 1;
+        }
+    }
+    // Independent RR sets with distinct SFZ group IDs must not advance
+    // one another's cursors when their notes are interleaved.
+    const auto independentRoundRobinSfz = directory.getChildFile("independent-round-robin.sfz");
+    if (!independentRoundRobinSfz.replaceWithText(
+        "<group> group=77\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=65 seq_length=3 seq_position=3\n"
+        "<group> group=78\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=66 seq_length=3 seq_position=3\n"))
+    {
+        std::cerr << "Could not write independent SFZ round-robin fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool independentRoundRobinPool;
+    const auto independentLoad = independentRoundRobinPool.loadSfz(independentRoundRobinSfz);
+    if (!independentLoad.success || independentLoad.loadedRegions != 6)
+    {
+        std::cerr << "Independent SFZ round-robin sets failed to load.\n";
+        return 1;
+    }
+    const auto* firstSetFirst = independentRoundRobinPool.findRegion(65, 100, 1);
+    const auto* secondSetFirst = independentRoundRobinPool.findRegion(66, 100, 1);
+    const auto* firstSetSecond = independentRoundRobinPool.findRegion(65, 100, 1);
+    if (firstSetFirst == nullptr || secondSetFirst == nullptr || firstSetSecond == nullptr
+        || firstSetFirst->seqPosition != 1 || secondSetFirst->seqPosition != 1
+        || firstSetSecond->seqPosition != 2)
+    {
+        std::cerr << "Independent SFZ round-robin groups shared a cursor.\n";
+        return 1;
+    }
+
+    // An incomplete RR set must fall back to one of its own regions.
+    // A preceding non-RR region with the same key must not steal the fallback.
+    const auto incompleteRoundRobinSfz = directory.getChildFile("incomplete-round-robin.sfz");
+    if (!incompleteRoundRobinSfz.replaceWithText(
+        "<group> group=88\n"
+        "<region> sample=test.wav key=68\n"
+        "<group> group=79\n"
+        "<region> sample=test.wav key=68 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=68 seq_length=3 seq_position=3\n"))
+    {
+        std::cerr << "Could not write incomplete SFZ round-robin fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool incompleteRoundRobinPool;
+    const auto incompleteLoad = incompleteRoundRobinPool.loadSfz(incompleteRoundRobinSfz);
+    if (!incompleteLoad.success || incompleteLoad.loadedRegions != 3)
+    {
+        std::cerr << "Incomplete SFZ round-robin fixture failed to load.\n";
+        return 1;
+    }
+    const auto* incompleteFirst = incompleteRoundRobinPool.findRegion(68, 100, 1);
+    const auto* incompleteFallback = incompleteRoundRobinPool.findRegion(68, 100, 1);
+    if (incompleteFirst == nullptr || incompleteFallback == nullptr
+        || incompleteFirst->group != 79 || incompleteFallback->group != 79)
+    {
+        std::cerr << "Incomplete SFZ round-robin fallback selected an unrelated non-RR region.\n";
+        return 1;
+    }
+
+    // Velocity crossfade opcodes must survive SFZ parsing and reach the
+    // immutable runtime region metadata (playback blending is a later step).
+    const auto crossfadeMetadataSfz = directory.getChildFile("crossfade-metadata.sfz");
+    if (!crossfadeMetadataSfz.replaceWithText(
+        "<region> sample=test.wav key=67 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=60 xfout_lovel=80 xfout_hivel=120\n"))
+    {
+        std::cerr << "Could not write velocity crossfade metadata fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool crossfadeMetadataPool;
+    const auto crossfadeMetadataLoad = crossfadeMetadataPool.loadSfz(crossfadeMetadataSfz);
+    const auto* crossfadeMetadataRegion = crossfadeMetadataPool.findRegion(67, 100, 1);
+    if (!crossfadeMetadataLoad.success || crossfadeMetadataRegion == nullptr
+        || crossfadeMetadataRegion->xfinLowVelocity != 20
+        || crossfadeMetadataRegion->xfinHighVelocity != 60
+        || crossfadeMetadataRegion->xfoutLowVelocity != 80
+        || crossfadeMetadataRegion->xfoutHighVelocity != 120)
+    {
+        std::cerr << "Velocity crossfade metadata was lost before runtime region publication.\n";
+        return 1;
+    }
+
+    const auto invalidRoundRobin = ppgu::sfz::parseText(
+        "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
+    if (!invalidRoundRobin.errors.size())
+    {
+        std::cerr << "SFZ parser accepted seq_position greater than seq_length.\n";
+        return 1;
+    }
+
     // Meta Open Sound's official SFZ maps reference .ogg preview names,
     // while the redistributable WAV release stores same-stem files under wav/.
     // Verify the production loader resolves that map without rewriting it.
@@ -103,7 +225,7 @@ int main()
     baseTuningEngine.prepare(44100.0);
     if (!baseTuningEngine.loadSfz(sfzFile).success || !baseTuningEngine.noteOn(60, 100))
     {
-        std::cerr << "Could not prepare base-pitch tuning regression fixture.\\n";
+        std::cerr << "Could not prepare base-pitch tuning regression fixture.\n";
         return 1;
     }
 
@@ -112,7 +234,7 @@ int main()
     if (!octaveTuningEngine.loadSfz(sfzFile).success
         || !octaveTuningEngine.noteOn(60, 100, ppgu::sampler::SamplerEngine::maximumVoices, 1, 12.0))
     {
-        std::cerr << "Could not prepare octave-tuning regression fixture.\\n";
+        std::cerr << "Could not prepare octave-tuning regression fixture.\n";
         return 1;
     }
 
@@ -140,7 +262,7 @@ int main()
     const int octaveCrossings = risingZeroCrossings(octavePitch);
     if (baseCrossings < 2 || octaveCrossings < baseCrossings + 2)
     {
-        std::cerr << "Global tuning did not raise the sample playback pitch by one octave.\\n";
+        std::cerr << "Global tuning did not raise the sample playback pitch by one octave.\n";
         return 1;
     }
 
@@ -309,6 +431,52 @@ int main()
     if (channelChokeEngine.getActiveVoiceCount() != 2)
     {
         std::cerr << "SFZ off_by incorrectly choked a voice on another MIDI channel.\n";
+        return 1;
+    }
+
+    // M2 acceptance regression: 100 repeated guitar hits at changing
+    // velocities must remain finite and avoid abrupt discontinuities.
+    ppgu::sampler::SamplerEngine repeatedHitEngine;
+    repeatedHitEngine.prepare(44100.0);
+    if (!repeatedHitEngine.loadSfz(sfzFile).success)
+    {
+        std::cerr << "Could not load repeated-hit regression bank.\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> repeatedHits(2, 12800);
+    repeatedHits.clear();
+    for (int hit = 0; hit < 100; ++hit)
+    {
+        const int velocity = 24 + ((hit * 37) % 104);
+        const int offset = hit * 128;
+        if (!repeatedHitEngine.noteOn(60, velocity, 64, 1))
+        {
+            std::cerr << "Repeated-hit regression failed to trigger note " << hit << ".\n";
+            return 1;
+        }
+        repeatedHitEngine.render(repeatedHits, offset, 64);
+        repeatedHitEngine.noteOff(60, 1);
+        repeatedHitEngine.render(repeatedHits, offset + 64, 64);
+    }
+    float maximumAdjacentDelta = 0.0f;
+    float repeatedHitPeak = 0.0f;
+    for (int sample = 0; sample < repeatedHits.getNumSamples(); ++sample)
+    {
+        const float value = repeatedHits.getSample(0, sample);
+        if (!std::isfinite(value))
+        {
+            std::cerr << "Repeated-hit render produced a non-finite sample.\n";
+            return 1;
+        }
+        repeatedHitPeak = juce::jmax(repeatedHitPeak, std::abs(value));
+        if (sample > 0)
+            maximumAdjacentDelta = juce::jmax(maximumAdjacentDelta,
+                std::abs(value - repeatedHits.getSample(0, sample - 1)));
+    }
+    if (repeatedHitPeak <= 0.001f || maximumAdjacentDelta > 0.20f)
+    {
+        std::cerr << "100 repeated hits produced silence or an audible discontinuity; max delta="
+                  << maximumAdjacentDelta << ".\n";
         return 1;
     }
 

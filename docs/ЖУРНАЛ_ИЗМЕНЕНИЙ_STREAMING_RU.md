@@ -68,3 +68,33 @@
   - `abd50fc9` — CMake wiring и включение реализации в VST3.
 - Проверка: изменения опубликованы. Локальный CMake/CTest и Windows CI ещё не запускались/не подтверждены.
 - Ограничения: пока нет фонового worker, очереди дедупликации, реестра открытых WAV readers, prefetch и интеграции с voice engine. Это безопасная основа хранения/lease, а не законченный streaming sampler. Контракт рассчитан на одного worker и один audio consumer.
+
+
+## M3 — исправление транспорта и sample-accurate смены аккордов — 10 ноября 2026
+
+Проведён повторный разбор M3. Выявлены реальные дефекты production path: held MIDI chord обновлялся после планирования, из-за чего новый аккорд начинал звучать на один блок позже; samplePosition MIDI не учитывался при смене аккорда; смена аккорда не имела отдельного 1/16 quantize; seek/переключение источника транспорта могли оставить устаревшие NoteOff в очереди; тест near-block-edge был недостаточно точным.
+
+Исправления в текущей рабочей ветке:
+- MIDI held-state теперь применяется до построения chord snapshot; учитывается samplePosition последнего события изменения аккорда.
+- Старая нота/аккорд рендерится до MIDI sample offset, затем отпускается; новый chord cycle стартует в sample-accurate позиции либо на следующей 1/16 границе. Опция Start On First Chord сохраняет немедленный старт первого аккорда; при отключённой опции первый старт остаётся привязан к следующему такту.
+- На смене аккорда, transport stop и seek очищаются отложенные NoteOff и отпускаются прежние голоса; при stop также сбрасывается held chord, чтобы не возобновлять его самопроизвольно.
+- Scheduler сообщает о host PPQ discontinuity и о переключении Host/Internal источника; stale gates очищаются.
+- Sample offset переводится в индекс первого sample не раньше события (floor), вместо прежнего округления, которое могло сдвигать near-tail события на один sample назад.
+- Pending NoteOff queue увеличена в четыре раза; при переполнении выставляется флаг, а Processor выполняет all-notes-off fail-safe.
+- Добавлены headless regression cases на host seek, tempo/block-size change, near-tail sample mapping и forward 1/16 quantization.
+
+Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); последующий commit содержит корректировки и журналы.
+
+Статус M3: NOT ACCEPTED до успешного Windows CI, проверки integration на реальном PluginProcessor и дополнительных headless сценариев (Host Start/stop/restart, host↔internal fallback, pending gate cleanup, event-capacity overflow, buffer-size changes 64↔1024). Ручная проверка FL Studio 20 также обязательна. M4 остаётся заблокирован.
+
+
+## M3 follow-up — clock-source handoff and seek tolerance
+
+Дополнительно закрыты два края транспортной логики: переключение Internal → Host теперь тоже считается discontinuity (раньше явно обрабатывался только Host → Internal), а порог определения seek снижен с 0.25 beat до адаптивного 0.01 beat / двух длительностей блока, чтобы короткие перемотки не оставляли устаревшие gate events. Очистка pending NoteOff одновременно сбрасывает overflow flag. Добавлен headless тест обеих сторон handoff.
+
+Эти изменения отправлены отдельным последующим commit; Windows CI ещё требуется.
+
+
+## Documentation control — 10 November 2026
+
+A dedicated plain-text work log (`docs/WORK_LOG_M3.txt`) and Russian defect register (`docs/ЖУРНАЛ_БАГОВ_RU.md`) were added. Scheduler/runtime changes must be accompanied by updates to both journals; only verified test evidence may close an issue or milestone.

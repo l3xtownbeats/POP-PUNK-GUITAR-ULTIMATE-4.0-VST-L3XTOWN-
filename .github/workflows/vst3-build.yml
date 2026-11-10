@@ -24,6 +24,10 @@ jobs:
       - name: Validate portable preset file examples
         shell: pwsh
         run: python tools/validate_preset_files.py presets/examples
+      - name: Validate APVTS parameter registry and state persistence
+        shell: pwsh
+        run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
+
       - name: Select checked-out project source
         shell: pwsh
         run: |

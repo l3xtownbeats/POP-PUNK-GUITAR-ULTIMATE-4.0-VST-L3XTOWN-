@@ -40,6 +40,7 @@ public:
     [[nodiscard]] ppgu::sampler::LoadReport loadSfzFile(const juce::File& sfzFile);
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
+    [[nodiscard]] juce::String getCurrentSfzFilePath() const;
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
@@ -57,10 +58,13 @@ private:
     std::array<std::array<bool, 128>, 16> patternHeldNotes {};
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};
     std::array<ppgu::performance::ScheduledEvent, ppgu::performance::PatternScheduler::maximumEventsPerBlock> scheduledPatternEvents {};
-    juce::MidiBuffer patternMidiBuffer;
     int previousPlayMode = -1;
     bool patternCycleStarted = false;
     int previousPatternChordCount = 0;
+    std::array<int, 6> previousPatternChordNotes {};
+    int previousPatternChordChannel = 1;
+    int previousPatternSlot = -1;
+    int previousPatternLengthChoice = -1;
     double patternCycleStartPpq = 0.0;
 
     // Preallocated stereo effect memories. All resizing happens in prepareToPlay,
@@ -81,6 +85,9 @@ private:
     double flangerPhase = 0.0;
     double chorusPhase = 0.0;
     juce::Reverb reverb;
+    // Protect the serialized library path from concurrent UI/worker/state callbacks.
+    mutable juce::CriticalSection sampleStateLock;
+    juce::String currentSfzFilePath;
     // Declared after sampler so the worker pool is destroyed first; the destructor
     // also waits for in-flight loads before sampler storage is released.
     juce::ThreadPool sampleLoadPool { 1 };

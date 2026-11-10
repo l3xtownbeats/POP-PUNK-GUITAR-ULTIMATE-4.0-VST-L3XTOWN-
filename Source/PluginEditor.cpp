@@ -1,6 +1,8 @@
 #include "PluginEditor.h"
 #include "BinaryData.h"
 
+#include <algorithm>
+
 // Approved PPGU 4.0 dark/pink skin: all visible rotary and FX controls use APVTS attachments.
 
 namespace
@@ -18,7 +20,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 {
     setSize(1040, 790);
     setResizable(true, true);
-    setResizeLimits(800, 650, 1600, 1100);
+    // The current fixed-height control stack needs ~788 px including outer margins.
+    // Do not allow a window size that clips the keyboard or lower controls.
+    setResizeLimits(800, 790, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
@@ -47,18 +51,42 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadFactoryPresetCatalog();
     presetBox.onChange = [this] { if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size())) applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId()-1)]); };
     auto refreshPresetList = [this] {
+        // Keep the current sound selected when it remains in the filtered list.
+        // Filtering must never silently load a different preset.
+        int previouslySelectedPreset = -1;
+        const int oldSelectedId = presetBox.getSelectedId();
+        if (oldSelectedId > 0 && oldSelectedId <= static_cast<int>(visiblePresetIndices.size()))
+            previouslySelectedPreset = visiblePresetIndices[static_cast<size_t>(oldSelectedId - 1)];
+
         const auto query = presetSearch.getText().trim().toLowerCase();
         const int category = categoryBox.getSelectedId();
-        visiblePresetIndices.clear(); presetBox.clear(juce::dontSendNotification);
-        for (size_t i=0; i<factoryPresets.size(); ++i) {
+        visiblePresetIndices.clear();
+        presetBox.clear(juce::dontSendNotification);
+        for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
             if (category == 2 && item.mode != "MELODY") continue;
             if (category == 3 && item.mode != "PATTERN") continue;
-            if (query.isNotEmpty() && !item.name.toLowerCase().contains(query) && !item.category.toLowerCase().contains(query)) continue;
+
+            const auto matchesQuery = query.isEmpty()
+                || item.name.toLowerCase().contains(query)
+                || item.category.toLowerCase().contains(query)
+                || item.mode.toLowerCase().contains(query)
+                || item.soundCharacter.toLowerCase().contains(query)
+                || item.groove.toLowerCase().contains(query)
+                || item.articulation.toLowerCase().contains(query);
+            if (!matchesQuery) continue;
+
             visiblePresetIndices.push_back(static_cast<int>(i));
             presetBox.addItem(item.name, static_cast<int>(visiblePresetIndices.size()));
         }
-        if (!visiblePresetIndices.empty()) presetBox.setSelectedId(1, juce::sendNotification);
+
+        const auto selected = std::find(visiblePresetIndices.begin(), visiblePresetIndices.end(),
+                                        previouslySelectedPreset);
+        if (previouslySelectedPreset >= 0 && selected != visiblePresetIndices.end())
+            presetBox.setSelectedId(static_cast<int>(std::distance(visiblePresetIndices.begin(), selected)) + 1,
+                                    juce::dontSendNotification);
+        else
+            presetBox.setSelectedId(0, juce::dontSendNotification);
     };
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
@@ -68,6 +96,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
+    const auto savedSfzPath = processor.getCurrentSfzFilePath();
+    if (savedSfzPath.isNotEmpty())
+    {
+        const juce::File savedSfzFile(savedSfzPath);
+        statusLabel.setText(savedSfzFile.existsAsFile()
+            ? "SAVED LIBRARY  /  " + savedSfzFile.getFileName()
+            : "LIBRARY FILE NOT FOUND  /  " + savedSfzFile.getFileName(),
+            juce::dontSendNotification);
+    }
     statusLabel.setColour(juce::Label::textColourId, muted);
     statusLabel.setFont(juce::Font(11.0f));
     addAndMakeVisible(statusLabel);
@@ -163,7 +200,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), hero.getX(), hero.getY(), juce::Colour(0xff101116), hero.getRight(), hero.getBottom(), false);
+    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
     g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
@@ -192,7 +229,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
     g.setColour(juce::Colour(0xffd8b77c));
     juce::Path neck;
-    neck.addQuadrilateral(guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getRight(),guitar.getY()+guitar.getHeight()*0.08f,guitar.getRight(),guitar.getY()+guitar.getHeight()*0.20f,guitar.getX()+guitar.getWidth()*0.66f,guitar.getY()+guitar.getHeight()*0.57f);
+    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
     g.fillPath(neck);
     g.setColour(pink.withAlpha(0.75f));
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
