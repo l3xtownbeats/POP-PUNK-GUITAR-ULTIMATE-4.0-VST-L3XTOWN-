@@ -13,7 +13,6 @@
 [![JUCE](https://img.shields.io/badge/ENGINE-JUCE%207-171717?style=for-the-badge)](https://juce.com/)
 [![C++20](https://img.shields.io/badge/BUILT%20WITH-C%2B%2B20-171717?style=for-the-badge)](https://isocpp.org/)
 
-### [⬇ DOWNLOAD PROMO VST3 BUILD](#download)
 
 </div>
 
@@ -38,13 +37,10 @@ Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument comb
 
 > **Development preview:** this is an actively developed engineering build, not a finished commercial release. The download is real, but some performance systems and preset definitions are still being integrated and acceptance-tested. This page distinguishes implemented code from planned or catalogued features.
 
-## DOWNLOAD
+
 
 <div align="center">
 
-### <a href="https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip">⬇ DOWNLOAD THE PROMO VST3 PACKAGE</a>
-
-**WINDOWS x64 · VST3 · SAMPLES · PRESET DATA**
 
 <sub>Complete ZIP package · approximately 2.24 GB · direct artifact download</sub>
 
