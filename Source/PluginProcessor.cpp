@@ -372,8 +372,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
     if (playMode == 0)
     {
-        // MELODY: one incoming MIDI key always plays its mapped chromatic note.
-        // No pattern scheduler or chord interpretation can intercept it.
+        // MELODY: one incoming MIDI key plays one note. AutoChords optionally snaps
+        // that pitch to the selected key/scale; when disabled Piano Roll pitches pass through.
         int cursor = 0;
         for (const auto metadata : midi)
         {
@@ -384,6 +384,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
             if (message.isAllNotesOff() || message.isAllSoundOff())
             {
+                for (auto& mapped : melodyMappedNotes) mapped.fill(-1);
                 panicRequested.store(true, std::memory_order_release);
                 sampler.panic(fadeLength);
             }
