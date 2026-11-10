@@ -366,6 +366,32 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
     return report;
 }
 
+float SamplePool::calculateVelocityCrossfadeGain(int velocity,
+    int xfinLowVelocity, int xfinHighVelocity,
+    int xfoutLowVelocity, int xfoutHighVelocity) noexcept
+{
+    const float safeVelocity = static_cast<float>(juce::jlimit(0, 127, velocity));
+    float gain = 1.0f;
+
+    if (xfinLowVelocity >= 0 && xfinHighVelocity > xfinLowVelocity)
+    {
+        const float position = juce::jlimit(0.0f, 1.0f,
+            (safeVelocity - static_cast<float>(xfinLowVelocity))
+                / static_cast<float>(xfinHighVelocity - xfinLowVelocity));
+        gain *= std::sin(position * juce::MathConstants<float>::halfPi);
+    }
+
+    if (xfoutLowVelocity >= 0 && xfoutHighVelocity > xfoutLowVelocity)
+    {
+        const float position = juce::jlimit(0.0f, 1.0f,
+            (safeVelocity - static_cast<float>(xfoutLowVelocity))
+                / static_cast<float>(xfoutHighVelocity - xfoutLowVelocity));
+        gain *= std::cos(position * juce::MathConstants<float>::halfPi);
+    }
+
+    return juce::jlimit(0.0f, 1.0f, gain);
+}
+
 const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
@@ -498,7 +524,10 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     const double semitones = static_cast<double>(midiNote - region->rootKey)
         + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
     voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
-    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
+    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain
+        * SamplePool::calculateVelocityCrossfadeGain(velocity,
+            region->xfinLowVelocity, region->xfinHighVelocity,
+            region->xfoutLowVelocity, region->xfoutHighVelocity);
     voice.palmMuted = palmMute;
     if (palmMute)
     {

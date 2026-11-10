@@ -87,6 +87,10 @@ public:
     };
 
     [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
+    // SFZ equal-power velocity fade weight for one region.
+    [[nodiscard]] static float calculateVelocityCrossfadeGain(int velocity,
+        int xfinLowVelocity, int xfinHighVelocity,
+        int xfoutLowVelocity, int xfoutHighVelocity) noexcept;
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 

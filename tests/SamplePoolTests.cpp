@@ -108,6 +108,24 @@ int main()
         return 1;
     }
 
+    // SFZ equal-power fade-in/fade-out weights are applied at note-on.
+    const auto fadeInStart = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(20, 20, 50, -1, -1);
+    const auto fadeInMid = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(35, 20, 50, -1, -1);
+    const auto fadeInEnd = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(50, 20, 50, -1, -1);
+    const auto fadeOutStart = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(80, -1, -1, 80, 110);
+    const auto fadeOutMid = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(95, -1, -1, 80, 110);
+    const auto fadeOutEnd = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(110, -1, -1, 80, 110);
+    if (std::abs(fadeInStart) > 0.0001f
+        || std::abs(fadeInMid - 0.7071067f) > 0.001f
+        || std::abs(fadeInEnd - 1.0f) > 0.0001f
+        || std::abs(fadeOutStart - 1.0f) > 0.0001f
+        || std::abs(fadeOutMid - 0.7071067f) > 0.001f
+        || std::abs(fadeOutEnd) > 0.0001f)
+    {
+        std::cerr << "SFZ velocity fade gain curve produced unexpected weights.\\n";
+        return 1;
+    }
+
     // Production SFZ regions must reference the background streamer rather
     // than retaining a fully decoded AudioBuffer for every source WAV.
     ppgu::sampler::SamplePool streamingProbe;
