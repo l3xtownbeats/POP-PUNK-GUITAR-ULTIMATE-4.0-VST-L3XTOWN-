@@ -18,6 +18,14 @@ int main()
     }
     std::string error;
     assert(model.replace(regions,error));
+    auto duplicateIds = regions;
+    duplicateIds[1].id = duplicateIds[0].id;
+    assert(!model.replace(duplicateIds, error));
+    auto missingSample = regions;
+    missingSample[0].region.samplePath.clear();
+    assert(!model.replace(missingSample, error));
+    // Failed replacement must leave the previously valid mapping intact.
+    assert(model.snapshot().size() == 3);
     auto a=model.select(54,100), b=model.select(54,100), c=model.select(54,100), d=model.select(54,100);
     assert(a && b && c && d);
     assert(a->regionId==1 && b->regionId==2 && c->regionId==3 && d->regionId==1);
