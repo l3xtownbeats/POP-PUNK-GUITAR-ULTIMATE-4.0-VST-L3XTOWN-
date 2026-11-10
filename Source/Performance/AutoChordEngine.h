@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cstdlib>
 #include <limits>
 
 namespace ppgu::performance
@@ -42,18 +43,17 @@ public:
         const int distinct = popcount(mask);
         if (distinct < 2) return {};
         struct Template { ChordQuality quality; std::uint16_t intervals; int minimum; };
-        constexpr std::array<Template, 11> templates {{
+        constexpr std::array<Template, 10> templates {{
             { ChordQuality::Major,      0b000010010001, 3 }, // 0,4,7
             { ChordQuality::Minor,      0b000010001001, 3 }, // 0,3,7
             { ChordQuality::Diminished,  0b000001001001, 3 }, // 0,3,6
-            { ChordQuality::Augmented,   0b000010010010, 3 }, // 0,4,8
+            { ChordQuality::Augmented,   0b000100010001, 3 }, // 0,4,8
             { ChordQuality::Sus2,        0b000010000101, 3 }, // 0,2,7
             { ChordQuality::Sus4,        0b000010100001, 3 }, // 0,5,7
-            { ChordQuality::Dominant7,   0b001010010001, 4 }, // 0,4,7,10
-            { ChordQuality::Major7,      0b010010010001, 4 }, // 0,4,7,11
-            { ChordQuality::Minor7,      0b001010001001, 4 }, // 0,3,7,10
-            { ChordQuality::Power,       0b000010000001, 2 }, // 0,7
-            { ChordQuality::Power,       0b000010000001, 2 }
+            { ChordQuality::Dominant7,   0b010010010001, 4 }, // 0,4,7,10
+            { ChordQuality::Major7,      0b100010010001, 4 }, // 0,4,7,11
+            { ChordQuality::Minor7,      0b010010001001, 4 }, // 0,3,7,10
+            { ChordQuality::Power,       0b000010000001, 2 } // 0,7
         }};
         for (int root = 0; root < 12; ++root)
         {
