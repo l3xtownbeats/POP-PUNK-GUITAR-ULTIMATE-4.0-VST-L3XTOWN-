@@ -1,0 +1,497 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE 5.0",
+  "purpose": "Canonical vocabulary for the unified preset browser. Taxonomy is metadata only until each profile is connected to verified samples, performance clips and DSP mappings.",
+  "axes": {
+    "playMode": [
+      {
+        "id": "melody",
+        "label": "MELODY",
+        "description": "One MIDI key triggers one chromatic note; no automatic rhythm."
+      },
+      {
+        "id": "pattern",
+        "label": "PATTERN",
+        "description": "MIDI keys select chord/root while a performance pattern plays."
+      }
+    ],
+    "sound": [
+      {
+        "id": "acoustic",
+        "label": "Acoustic",
+        "tags": [
+          "acoustic",
+          "steel-string",
+          "nylon"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "notes": "Requires a compatible acoustic bank/performance set."
+      },
+      {
+        "id": "clean",
+        "label": "Clean Electric",
+        "tags": [
+          "clean",
+          "bright-clean",
+          "warm-clean",
+          "chorus-clean",
+          "tremolo-clean"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ]
+      },
+      {
+        "id": "edge-crunch",
+        "label": "Edge / Crunch",
+        "tags": [
+          "edge-of-breakup",
+          "classic-crunch",
+          "pop-punk-crunch",
+          "tight-crunch"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ]
+      },
+      {
+        "id": "distortion",
+        "label": "Distortion / High Gain",
+        "tags": [
+          "modern-pop-punk",
+          "skate-punk",
+          "saturated"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ]
+      },
+      {
+        "id": "ambient",
+        "label": "Ambient / Wide",
+        "tags": [
+          "wide",
+          "spacious",
+          "modulated",
+          "sustain"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ]
+      },
+      {
+        "id": "special",
+        "label": "Special Tone",
+        "tags": [
+          "filtered",
+          "lo-fi",
+          "octave-tone"
+        ],
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "notes": "Only expose a special tone when the required sample or DSP process exists."
+      }
+    ],
+    "style": [
+      {
+        "id": "auto",
+        "label": "AUTO / Preset Default",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "override": false
+      },
+      {
+        "id": "lead",
+        "label": "Lead Guitar",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "lead",
+          "sustain",
+          "melodic"
+        ]
+      },
+      {
+        "id": "solo",
+        "label": "Solo Guitar",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "solo",
+          "vibrato",
+          "legato",
+          "slide"
+        ]
+      },
+      {
+        "id": "palm-mute",
+        "label": "Palm Mute",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "muted",
+          "chug",
+          "tight",
+          "short-gate"
+        ],
+        "requires": [
+          "palm_mute"
+        ]
+      },
+      {
+        "id": "open-ringing",
+        "label": "Open / Ringing",
+        "modes": [
+          "melody"
+        ],
+        "tags": [
+          "open",
+          "ringing",
+          "sustain"
+        ],
+        "requires": [
+          "picked_open"
+        ]
+      },
+      {
+        "id": "open-chords",
+        "label": "Open Chords",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "open-chords",
+          "ringing",
+          "wide"
+        ]
+      },
+      {
+        "id": "power-chords",
+        "label": "Power Chords",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "power-chords",
+          "two-note",
+          "three-note"
+        ]
+      },
+      {
+        "id": "downstroke",
+        "label": "Downstroke",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "down-pick",
+          "driving",
+          "tight"
+        ]
+      },
+      {
+        "id": "alternate-picking",
+        "label": "Alternate Picking",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "alternate-pick",
+          "fast-attack"
+        ]
+      },
+      {
+        "id": "pop-punk-strum",
+        "label": "Pop-Punk Strum",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "strum",
+          "upstroke",
+          "downstroke"
+        ]
+      },
+      {
+        "id": "acoustic-strum",
+        "label": "Acoustic Strum",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "acoustic-strum",
+          "chord-performance"
+        ],
+        "requires": [
+          "acoustic_performance"
+        ]
+      },
+      {
+        "id": "arpeggio",
+        "label": "Arpeggio",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "picked-arpeggio",
+          "broken-chord"
+        ]
+      },
+      {
+        "id": "octave-hook",
+        "label": "Octave Hook",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "octave",
+          "hook"
+        ]
+      },
+      {
+        "id": "tremolo-picking",
+        "label": "Tremolo Picking",
+        "modes": [
+          "melody",
+          "pattern"
+        ],
+        "tags": [
+          "tremolo",
+          "repeated-pick"
+        ],
+        "requires": [
+          "tremolo"
+        ]
+      },
+      {
+        "id": "flageolet",
+        "label": "Flageolet / Harmonic",
+        "modes": [
+          "melody"
+        ],
+        "tags": [
+          "harmonic",
+          "natural-harmonic",
+          "artificial-harmonic"
+        ],
+        "requires": [
+          "harmonic"
+        ]
+      },
+      {
+        "id": "staccato-stop-start",
+        "label": "Staccato / Stop-Start",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "staccato",
+          "stop-start",
+          "syncopated"
+        ]
+      },
+      {
+        "id": "ambient-wide",
+        "label": "Ambient / Wide Performance",
+        "modes": [
+          "pattern"
+        ],
+        "tags": [
+          "ambient",
+          "long-sustain",
+          "wide"
+        ]
+      }
+    ]
+  },
+  "compatibilityPolicy": {
+    "default": "auto",
+    "incompatibleOverride": "reject-and-explain",
+    "neverSilentlySubstitute": true,
+    "styleMayChange": [
+      "articulation",
+      "performanceClip",
+      "strumDirection",
+      "noteGate",
+      "accent",
+      "swing",
+      "chugDensity"
+    ],
+    "styleMustNotChange": [
+      "soundProfile",
+      "sampleBank",
+      "fxSnapshot",
+      "playMode"
+    ]
+  },
+  "artistReferences": [
+    {
+      "id": "blink-182",
+      "label": "Blink-182",
+      "toneTags": [
+        "bright",
+        "tight-muted-verse",
+        "wide-chorus"
+      ]
+    },
+    {
+      "id": "sum-41",
+      "label": "Sum 41",
+      "toneTags": [
+        "aggressive",
+        "skate-punk",
+        "tight-stop"
+      ]
+    },
+    {
+      "id": "simple-plan",
+      "label": "Simple Plan",
+      "toneTags": [
+        "polished",
+        "melodic",
+        "bright-attack"
+      ]
+    },
+    {
+      "id": "new-found-glory",
+      "label": "New Found Glory",
+      "toneTags": [
+        "fast",
+        "melodic-punk",
+        "downstroke"
+      ]
+    },
+    {
+      "id": "good-charlotte",
+      "label": "Good Charlotte",
+      "toneTags": [
+        "mid-forward",
+        "punchy",
+        "compact"
+      ]
+    },
+    {
+      "id": "mest",
+      "label": "Mest",
+      "toneTags": [
+        "melodic-lead",
+        "energetic-rhythm"
+      ]
+    },
+    {
+      "id": "angels-airwaves",
+      "label": "Angels & Airwaves",
+      "toneTags": [
+        "spacious",
+        "layered",
+        "modulation"
+      ]
+    },
+    {
+      "id": "all-american-rejects",
+      "label": "The All-American Rejects",
+      "toneTags": [
+        "radio-ready",
+        "pop-rock",
+        "defined-crunch"
+      ]
+    },
+    {
+      "id": "mgk",
+      "label": "MGK",
+      "toneTags": [
+        "modern",
+        "saturated",
+        "bright"
+      ]
+    },
+    {
+      "id": "avril-lavigne",
+      "label": "Avril Lavigne",
+      "toneTags": [
+        "bright",
+        "melodic",
+        "acoustic-to-crunch"
+      ]
+    },
+    {
+      "id": "the-offspring",
+      "label": "The Offspring",
+      "toneTags": [
+        "fast",
+        "aggressive",
+        "tight-distortion"
+      ]
+    },
+    {
+      "id": "green-day",
+      "label": "Green Day",
+      "toneTags": [
+        "midrange",
+        "focused-crunch"
+      ]
+    },
+    {
+      "id": "bowling-for-soup",
+      "label": "Bowling for Soup",
+      "toneTags": [
+        "bright",
+        "upbeat",
+        "light-crunch"
+      ]
+    },
+    {
+      "id": "sugarcult",
+      "label": "Sugarcult",
+      "toneTags": [
+        "glossy",
+        "wide",
+        "alternative-pop-punk"
+      ]
+    },
+    {
+      "id": "all-time-low",
+      "label": "All Time Low",
+      "toneTags": [
+        "polished",
+        "modern",
+        "melodic"
+      ]
+    }
+  ],
+  "browserFields": [
+    "id",
+    "name",
+    "mode",
+    "soundProfileId",
+    "sampleBankId",
+    "defaultStyleId",
+    "supportedStyleOverrides",
+    "referenceArtistId",
+    "fxSnapshot",
+    "performanceClipId",
+    "requiredArticulations",
+    "availability",
+    "licenseProvenance"
+  ]
+}
