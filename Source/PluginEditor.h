@@ -14,12 +14,20 @@ public:
 
 private:
     void chooseSfzFile();
+    void discoverSkins();
+    void applySkin(int index);
+    void cycleSkin();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "LOAD SFZ" };
+    juce::TextButton skinButton { "SKIN  01/60" };
+    struct SkinEntry { juce::String name, folder, layoutFamily; juce::Colour background, surface, accent, text, muted, panelRaised, border; int cornerRadius=12, spacing=10; };
+    std::vector<SkinEntry> skins;
+    SkinEntry activeSkin;
+    int activeSkinIndex = 0;
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
