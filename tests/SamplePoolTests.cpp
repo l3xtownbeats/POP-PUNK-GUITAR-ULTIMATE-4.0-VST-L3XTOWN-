@@ -469,23 +469,27 @@ int main()
     }
 
     juce::AudioBuffer<float> rendered(2, 128);
-    rendered.clear();
-    engine.render(rendered, 0, rendered.getNumSamples());
+    bool engineAudible = false;
+    for (int attempt = 0; attempt < 100 && !engineAudible; ++attempt)
+    {
+        rendered.clear();
+        engine.render(rendered, 0, rendered.getNumSamples());
+        engineAudible = rendered.getMagnitude(0, 0, rendered.getNumSamples()) > 0.001f;
+        if (!engineAudible)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!engineAudible)
+    {
+        std::cerr << "Sampler rendered silence for a valid MIDI note after waiting for streamed page data.\n";
+        return 1;
+    }
+
     juce::AudioBuffer<float> longRender(2, 600);
     longRender.clear();
     engine.render(longRender, 0, longRender.getNumSamples());
     if (engine.getActiveVoiceCount() == 0)
     {
         std::cerr << "Continuous SFZ loop ended before note-off.\n";
-        return 1;
-    }
-
-    float peak = 0.0f;
-    for (int ch = 0; ch < rendered.getNumChannels(); ++ch)
-        peak = juce::jmax(peak, rendered.getMagnitude(ch, 0, rendered.getNumSamples()));
-    if (peak <= 0.001f)
-    {
-        std::cerr << "Sampler rendered silence for a valid MIDI note.\n";
         return 1;
     }
 
