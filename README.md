@@ -194,6 +194,8 @@ cmake --build build --config Release --parallel 2
 ctest --test-dir build -C Release --output-on-failure
 ```
 
+- [Полное описание согласованных функций, форматов импорта и изменений ветки (RU)](docs/ПОЛНОЕ_ОПИСАНИЕ_ФУНКЦИЙ_И_ИЗМЕНЕНИЙ_ВЕТКИ_RU.md)
+
 ## PROJECT & DOCUMENTATION
 
 - [Source repository](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-)
