@@ -468,9 +468,14 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
     return pool.loadSfz(sfzFile, requestGeneration, expectedGeneration);
 }
 
-bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
+bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel,
+                           double globalTuningSemitones, int sampleSelectionVelocity) noexcept
 {
-    const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
+    // The layer-selection velocity can differ from the performed velocity:
+    // palm-muted samples may be selected without artificially lowering output gain.
+    const int layerVelocity = sampleSelectionVelocity >= 0
+        ? juce::jlimit(1, 127, sampleSelectionVelocity) : juce::jlimit(1, 127, velocity);
+    const auto* region = pool.findRegion(midiNote, layerVelocity, midiChannel);
     if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
         return false;
 
