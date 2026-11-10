@@ -312,7 +312,14 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
         std::unique_ptr<juce::AudioFormatReader> reader(formats.createReaderFor(source));
         if (!reader)
         {
-            report.warnings.emplace_back("Unsupported or unreadable format skipped: " + source.getFileName().toStdString());
+            auto extension = source.getFileExtension().toLowerCase();
+            const auto filename = source.getFileName().toStdString();
+            if (extension == ".ncw")
+                report.warnings.emplace_back(filename
+                    + ": NCW is Native Instruments Kontakt's compressed sample format and is not decoded natively yet. Export/convert it to WAV or AIFF in Kontakt, then import again.");
+            else
+                report.warnings.emplace_back(filename
+                    + ": unsupported or unreadable audio. Enabled import formats: WAV, AIFF/AIF, FLAC, OGG Vorbis, MP3.");
             continue;
         }
 
