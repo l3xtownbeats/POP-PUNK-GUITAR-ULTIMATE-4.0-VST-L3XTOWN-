@@ -79,6 +79,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
         juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+    p.add(boolParameter("autoChordsOn", "AutoChords On", false));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
     p.add(boolParameter("monoMode", "Monophonic Mode", true));
@@ -421,6 +422,48 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // AutoChords is deliberately applied only in PATTERN mode, inside this
+            // chord reader. A single incoming MIDI note becomes a diatonic triad;
+            // existing multi-note MIDI chords are passed through unchanged.
+            const bool autoChordsEnabled =
+                parameters.getRawParameterValue("autoChordsOn")->load(std::memory_order_relaxed) > 0.5f;
+            if (autoChordsEnabled && count == 1)
+            {
+                const int rootKey = juce::jlimit(0, 11, static_cast<int>(
+                    parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
+                const int scaleMode = juce::jlimit(0, 2, static_cast<int>(
+                    parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
+                const std::array<int, 7> majorScale {{ 0, 2, 4, 5, 7, 9, 11 }};
+                const std::array<int, 7> minorScale {{ 0, 2, 3, 5, 7, 8, 10 }};
+                const int midiRoot = notes[0];
+                const int relativePitch = (midiRoot - rootKey + 120) % 12;
+                int degree = 0;
+                int bestDistance = 13;
+                if (scaleMode == 0)
+                {
+                    notes[1] = juce::jlimit(0, 127, midiRoot + 4);
+                    notes[2] = juce::jlimit(0, 127, midiRoot + 7);
+                }
+                else
+                {
+                    const auto& scale = scaleMode == 1 ? majorScale : minorScale;
+                    for (int i = 0; i < 7; ++i)
+                    {
+                        const int distance = std::min((relativePitch - scale[static_cast<size_t>(i)] + 12) % 12,
+                                                       (scale[static_cast<size_t>(i)] - relativePitch + 12) % 12);
+                        if (distance < bestDistance) { bestDistance = distance; degree = i; }
+                    }
+                    const int thirdDegree = (degree + 2) % 7;
+                    const int fifthDegree = (degree + 4) % 7;
+                    const int third = scale[static_cast<size_t>(thirdDegree)] - scale[static_cast<size_t>(degree)]
+                        + (thirdDegree <= degree ? 12 : 0);
+                    const int fifth = scale[static_cast<size_t>(fifthDegree)] - scale[static_cast<size_t>(degree)]
+                        + (fifthDegree <= degree ? 12 : 0);
+                    notes[1] = juce::jlimit(0, 127, midiRoot + third);
+                    notes[2] = juce::jlimit(0, 127, midiRoot + fifth);
+                }
+                count = 3;
+            }
             return std::make_tuple(notes, count, channel);
         };
 
