@@ -132,3 +132,21 @@ Run 42704820544 прошёл этапы:
 | M5 Style Engine | Runtime binding pass 1 | Deterministic velocity/beat accent transform подключён к Pattern dispatch; test target added | Palm/legato sample routing, bounded strum offsets, FX binding, preset StyleDNA mapping and end-to-end tests |
 
 **Merge gate:** не объединять отдельные PR в release/main до прохождения текущих head CI и общей сборки на одном SHA: Windows x64 Release, все CTest, VST3 locate, pluginval strictness 5, sample/license validation, package/artifact. После этого — ручной FL Studio 20 smoke/extended test и фиксация результата.
+
+
+## Новый функциональный модуль — User Audio Import (MVP), 10.11.2026
+
+| Элемент | Состояние |
+|---|---|
+| UI import folder button | Код добавлен, ожидает CI |
+| Recursive scan + decoder detection | Код добавлен, JUCE Basic AudioFormatManager |
+| Internal format conversion | IEEE float32 WAV, chunked worker decode |
+| Root note filename auto-map | Базовый C3/D4-style note token → one-key SFZ region |
+| Unmapped samples | Сохраняются в BANK manifest, ждут Mapping Editor |
+| Manifest / license reminder | Добавлено |
+| Staging / no overwrite | Добавлено |
+| WAV + AIFF tests | Добавлены, ожидают CI |
+| FLAC / Ogg / MP3 | Не заявлять до подтверждения декодеров в конкретной сборке |
+| Preview / Mapping Editor / velocity zones / RR / ZIP | Ещё не реализовано |
+
+Gate: успешная компиляция importer + теста, полный CTest, Windows VST3 build, Pluginval 5, затем ручная проверка Import Audio в FL Studio 20. До этого — implementation pending CI.
