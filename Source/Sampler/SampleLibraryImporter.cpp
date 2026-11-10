@@ -230,12 +230,12 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
     }
 
     const auto displayName = safeName(sourceDirectory.getFileName().toStdString());
-    juce::File finalDirectory = librariesRoot.getChildFile(displayName);
+    juce::File finalDirectory = librariesRoot.getChildFile(juce::String::fromUTF8(displayName.c_str()));
     for (int suffix = 2; finalDirectory.exists(); ++suffix)
-        finalDirectory = librariesRoot.getChildFile(displayName + "_" + std::to_string(suffix));
+        finalDirectory = librariesRoot.getChildFile(juce::String::fromUTF8((displayName + "_" + std::to_string(suffix)).c_str()));
 
     const auto stagingDirectory = librariesRoot.getChildFile(
-        juce::String(".") + displayName + ".staging-" + juce::Uuid().toString());
+        juce::String(".") + juce::String::fromUTF8(displayName.c_str()) + ".staging-" + juce::Uuid().toString());
     if (!stagingDirectory.createDirectory())
     {
         report.errors.emplace_back("Could not create isolated import staging directory.");
