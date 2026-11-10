@@ -1,6 +1,7 @@
 #include "WavPageReader.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <limits>
 
@@ -114,9 +115,13 @@ PageReadReport WavPageReader::readPageInto(std::uint64_t pageIndex,
 
     // JUCE decodes directly into caller-owned planar storage. The caller must
     // reserve this memory before calling; this method performs no allocation.
-    if (!reader->read(destinationChannels, destinationChannelCount,
-                      destinationOffset, static_cast<juce::int64>(firstFrame),
-                      static_cast<int>(frames)))
+    std::array<float*, 2> adjustedDestinations {};
+    for (int channel = 0; channel < destinationChannelCount; ++channel)
+        adjustedDestinations[static_cast<std::size_t>(channel)] =
+            destinationChannels[channel] + destinationOffset;
+
+    if (!reader->read(adjustedDestinations.data(), destinationChannelCount,
+                      static_cast<juce::int64>(firstFrame), static_cast<int>(frames)))
     {
         report.error = "WAV page decode failed at page " + std::to_string(pageIndex) + ".";
         return report;
