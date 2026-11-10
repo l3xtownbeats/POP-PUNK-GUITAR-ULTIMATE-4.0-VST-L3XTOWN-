@@ -88,6 +88,10 @@ private:
     // Protect the serialized library path from concurrent UI/worker/state callbacks.
     mutable juce::CriticalSection sampleStateLock;
     juce::String currentSfzFilePath;
+    // Monotonic request token: only the newest requested bank may publish its
+    // path/callback. A single worker serializes sampler mutations; stale queued
+    // jobs are skipped before doing disk/index work.
+    std::atomic<std::uint64_t> sampleLoadGeneration { 0 };
     // Declared after sampler so the worker pool is destroyed first; the destructor
     // also waits for in-flight loads before sampler storage is released.
     juce::ThreadPool sampleLoadPool { 1 };
