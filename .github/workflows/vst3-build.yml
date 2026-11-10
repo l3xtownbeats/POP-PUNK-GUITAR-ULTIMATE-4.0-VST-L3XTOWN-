@@ -280,9 +280,12 @@ jobs:
           $presetDestination = Join-Path $PWD 'release/presets'
           New-Item -ItemType Directory -Force -Path (Join-Path $presetDestination 'examples') | Out-Null
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/factory_bank_300.json') -Destination $presetDestination
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/examples/*') -Destination (Join-Path $presetDestination 'examples') -Recurse
+          Get-ChildItem -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/examples') -File |
+            Copy-Item -Destination (Join-Path $presetDestination 'examples') -Force
           # Keep the two approved visual source assets beside the compiled plugin for future skin/resource work.
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Resources/Artwork') -Destination (Join-Path $PWD 'release/Resources/Artwork') -Recurse
+          $artworkDestination = Join-Path $PWD 'release/Resources'
+          New-Item -ItemType Directory -Force -Path $artworkDestination | Out-Null
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Resources/Artwork') -Destination $artworkDestination -Recurse -Force
           @'
           POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
           ========================================
