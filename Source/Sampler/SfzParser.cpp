@@ -145,7 +145,8 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
         if (opcode == "lovel") target.values.lowVelocity = integer;
         else target.values.highVelocity = integer;
     }
-    else if (opcode == "lochan" || opcode == "hichan" || opcode == "group" || opcode == "off_by")
+    else if (opcode == "lochan" || opcode == "hichan" || opcode == "group" || opcode == "off_by"
+        || opcode == "seq_length" || opcode == "seq_position")
     {
         if (!parseInteger(value, integer) || integer < 0
             || ((opcode == "lochan" || opcode == "hichan") && (integer < 1 || integer > 16)))
@@ -157,6 +158,8 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
         if (opcode == "hichan") target.values.highChannel = integer;
         if (opcode == "group") target.values.group = integer;
         if (opcode == "off_by") target.values.offBy = integer;
+        if (opcode == "seq_length") target.values.seqLength = integer;
+        if (opcode == "seq_position") target.values.seqPosition = integer;
     }
     else if (opcode == "tune" || opcode == "volume" || opcode == "pan" || opcode == "ampeg_release")
     {
@@ -218,6 +221,8 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
         {
             const auto& item = region.values;
             if (item.lowKey > item.highKey || item.lowVelocity > item.highVelocity
+                || item.seqLength < 1 || item.seqLength > 256
+                || item.seqPosition < 1 || item.seqPosition > item.seqLength
                 || item.lowChannel > item.highChannel
                 || item.rootKey < item.lowKey || item.rootKey > item.highKey
                 || (item.loopEnd != 0 && item.loopStart >= item.loopEnd))
