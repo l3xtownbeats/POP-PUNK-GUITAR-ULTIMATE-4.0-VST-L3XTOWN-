@@ -82,3 +82,43 @@ For every candidate asset/library:
 ## Status and acceptance
 
 This file is a research and engineering policy, not proof that any source has been downloaded, legally cleared, integrated, or tested. Every bundled library requires a separate completed asset manifest and legal review. No audio files are added by this commit.
+
+
+## Расширение звуковой библиотеки: production quality roadmap
+
+### Целевой набор материалов
+
+**Melody Electric — обязательный приоритет**
+- 6-струнная электрогитара, стандартный строй EADGBE; chromatic multisampling с плотным покрытием нот в рабочем диапазоне.
+- Минимум 4 velocity layers на основные ноты, 3–5 round-robin дублей на слой там, где доступны независимые исполнения.
+- Отдельные артикуляции: picked/open sustain, palm mute (несколько степеней длины/плотности), dead note, release/noise; hammer-on, pull-off, slide и harmonic добавлять только при наличии записанного материала.
+- Раздельные источники/профили Clean, Crunch и High Gain. Сырой DI и микрофонный/усилительный звук хранить как отдельные слои, если права на оба варианта позволяют.
+
+**Acoustic — отдельный банк**
+- Nylon и steel-string, не смешивать их в одну карту тембра.
+- 24-bit/48 kHz исходники предпочтительны; проверка фазовой согласованности, хвостов, шума, root key, tuning и loop points.
+
+**Pattern / Performance**
+- Оригинальные записанные downstroke/upstroke, power chords, open chords, palm-muted eighth/sixteenth, arpeggios, stops и chord transitions.
+- Метаданные: BPM, meter, chord/voicing, key, stroke direction, articulation, velocity, transient offset, tail length и license ID.
+- Не подменять multisampled performance phrase простым MIDI-генератором; каталог пресетов должен честно маркировать, какие рисунки требуют записанных chord/strum assets.
+
+### Критерии качества записи и приёмки
+
+- 24-bit/48 kHz WAV как production master; не повышать искусственно sample rate у источника с меньшим разрешением.
+- Одинаковая высота/строй по всему диапазону; настройка каждой ноты, удаление DC offset, аккуратные fades без срезания атаки и хвоста.
+- Контроль клиппинга, щелчков, фазовых проблем, шума и нежелательных резонансов; исходник сохранять отдельно от обработанной версии.
+- Velocity layers должны звучать как разные реальные исполнения, а не только разный gain; RR должны быть независимыми take, без повторяющихся копий.
+- Слепое сравнение на одинаковой громкости в чистом, crunch и high-gain трактах; отдельно тестировать palm mute и быстрые повторные ноты.
+- Нормализация громкости на уровне банка без чрезмерного peak normalization; сохранять естественную динамику атаки.
+
+### Правовой шлюз
+
+- Meta Open Sound Nylon/Steel (CC0) и FreePats FSBS Clean (CC0) — кандидаты для законного акустического/clean baseline только после сверки LICENSE, manifest и checksum конкретного архива.
+- Для профессионального pop-punk electric high-gain материала предпочтителен заказ оригинальных сессий у гитариста/студии с письменной передачей прав на embedding, переработку, коммерческое распространение и включение исходных сэмплов в пакет плагина.
+- Session Guitarist/Electric Sunburst, Kontakt, коммерческие soundkits и чужие рифф-паки не копировать и не извлекать. Покупка или royalty-free для музыки не даёт автоматически права на перепаковку сэмплов в VST.
+- Ни один новый сторонний WAV не считается включённым в release до license review + manifest + SHA256 + provenance.
+
+### Реальное состояние
+
+Этот roadmap расширяет план качества и покрытия. Он сам по себе не означает, что новые электрогитарные multisamples уже записаны или добавлены в текущий 1.66 GB artifact. До появления подтверждённых файлов и manifest их нельзя рекламировать как готовую библиотеку.
