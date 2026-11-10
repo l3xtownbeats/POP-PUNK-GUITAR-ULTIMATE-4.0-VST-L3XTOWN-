@@ -78,7 +78,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
         juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 0));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
-        juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+        juce::StringArray { "Chromatic", "Major", "Minor" }, 1));
     p.add(boolParameter("autoChordsOn", "AutoChords On", false));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
