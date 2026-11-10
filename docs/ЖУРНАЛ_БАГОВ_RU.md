@@ -1,7 +1,7 @@
 # Журнал багов — POP-PUNK-GUITAR-ULTIMATE
 
 Дата обновления: 10 ноября 2026
-Ветка: `migration/full-copy-m3-transport-scheduler-v2`
+Ветка текущего цикла: `fix/m1-m2-m3-release-gates`
 HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 
 Статусы: **FIXED — AWAITING CI** означает, что правка внесена, но успешный актуальный build/test не подтверждён; **OPEN** — исправление или приёмка не завершены.
@@ -186,3 +186,11 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Вероятная причина — устаревшее или неверное ожидание тестового fixture относительно корректного поведения importer. Это пока гипотеза; сначала проверить fixture, assertions и классификацию, затем изменить код/тест по установленному контракту.
 - Требование исправления: тест должен проверять mapped и needsMapping отдельно, в том числе Unknown_take.wav → Needs Mapping; не подменять неизвестный root догадкой и не удалять такой файл.
 - Статус: OPEN — ROOT CAUSE REVIEW REQUIRED. Исправление не внесено, тест не закрыт.
+
+
+## IMP-001 — устаревший SFZ путь после atomic publish
+- Root cause: `report.generatedSfz` ссылался на файл внутри staging directory; после успешного directory rename staging path исчезал, а условная проверка `existsAsFile()` не перепривязывала путь к final directory.
+- Исправление: после rename путь генерируется как `finalDirectory/Imported_Instrument.sfz`, если есть хотя бы один mapped region.
+- Regression: `ppgu_sample_library_importer_tests` проверяет существование SFZ по возвращённому пути, парсит его и валидирует ссылки на samples.
+- Commit: `39626076a8ded975bdfb280a39880bad66f42b4c`.
+- Статус: **FIXED — AWAITING CI**. Не закрывать до прохождения актуального Windows build и CTest.
