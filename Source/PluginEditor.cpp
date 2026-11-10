@@ -306,7 +306,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
 
-    skinsButton.setTooltip("Choose one of 10 interface skins.");
+    skinsButton.setTooltip("Choose one of 10 interface skins. The selected theme is saved with this plugin instance.");
     skinsButton.setEnabled(true);
     skinsButton.setColour(juce::TextButton::buttonColourId, panel2);
     skinsButton.setColour(juce::TextButton::textColourOffId, pink);
@@ -335,6 +335,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     doubleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         processor.parameters, "doubleTrackOn", doubleButton);
     addAndMakeVisible(doubleButton);
+    autoChordsButton.setTooltip("PATTERN mode only: one MIDI note becomes a diatonic triad in the selected key and scale. Turn OFF to use incoming MIDI chords.");
     autoChordsButton.setClickingTogglesState(true);
     autoChordsButton.setColour(juce::TextButton::buttonColourId, panel2);
     autoChordsButton.setColour(juce::TextButton::buttonOnColourId, pink);
@@ -494,7 +495,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
         keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
         keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, panel2);
     }
-    if (fxWindow != nullptr) fxWindow->applyTheme();
+    if (fxWindow != nullptr)
+        if (auto* rack = dynamic_cast<FxRackWindow*>(fxWindow.get()))
+            rack->applyTheme();
     repaint();
 }
 
@@ -587,6 +590,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     categoryBox.setBounds(browser.removeFromLeft(115).reduced(3, 7));
     melodyFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
     styleFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
+    subtitleLabel.setVisible(browser.getWidth() > 180);
     subtitleLabel.setBounds(browser.reduced(4, 0));
 
     // Main action strip.
