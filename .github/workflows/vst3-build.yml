@@ -71,7 +71,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-expanded-cc0-guitar-v2
+          key: ppgu-samples-expanded-cc0-guitar-v3
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
