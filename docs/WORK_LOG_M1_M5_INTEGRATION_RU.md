@@ -76,3 +76,18 @@
 ## Принцип достоверности
 
 CI SUCCESS фиксируется только для перечисленных run/commit. Непроверенные DAW, слуховые, runtime-интеграционные и библиотечные критерии остаются OPEN. Наличие класса, заголовка, каталожной записи или успешной компиляции не считается доказательством законченной пользовательской функции.
+
+## Update — 10.11.2026 (latest CI and implementation work)
+
+### Main M1–M3 branch
+- Windows x64 Release run `42843030370`, commit `4d13943f15352b87f3569524e2e5b4b8f9bbafda`: SUCCESS, including build, full CTest, VST3 locate, pluginval strictness 5, packaging and upload.
+- Separate MSVC v143 run `42843030228`: SUCCESS.
+- Added `tests/PatternSamplerIntegrationTests.cpp` / CTest target `ppgu_pattern_sampler_integration_tests`: generated WAV/SFZ fixture, host transport scheduling, sample-accurate NoteOn/NoteOff and audible SamplerEngine output.
+- M1 remains CI PASS / FL Studio host validation OPEN. M2 streaming/RR tests pass; velocity crossfade is isolated in PR #5 pending CI. Palm mute and real-library stress remain open. M3 module integration test passes; FL Studio transport/MIDI validation remains open.
+
+### M4 and M5
+- M4 PR #4: AutoChords qualities/inversions, FingeringGenerator and Major/Natural Minor scale mapping passed run `42843127831` on commit `4327e54988bf42c87a86185b39a2ecd40609c3ae`. Subsequent integer-overflow guards in commits `eccb48010d0fe2f87109ed6074afecf89f0ab659` and `30e970f657fdeb6ee229004e9022149ed948b50b` require fresh CI.
+- M5 PR #3: StyleEngine foundation passed run `42840410645` on commit `0cc36c7455edb3adcc5bde1f5bd690c831acf3cb`; runtime Pattern/Processor/UI binding remains open.
+- M2 PR #5 branch `work/m2-velocity-crossfade`, latest commit `ef1ee5b04c3dc6653f749d7602b92a683253d059`, run `42843931173` in progress.
+
+No secondary branch is merged yet. Unified integration requires current branch heads to pass, runtime binding to be completed, and a combined Release/CTest/pluginval/package run. FL Studio 20 remains a separate release gate.
