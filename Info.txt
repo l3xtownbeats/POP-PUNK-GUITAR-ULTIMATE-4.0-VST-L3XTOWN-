@@ -2,7 +2,7 @@ POP PUNK GUITAR ULTIMATE — INFO / ЕДИНЫЙ ЖУРНАЛ РАЗРАБОТК
 Версия журнала: 1.0
 Дата обновления: 10 ноября 2026
 Репозиторий: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
-Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
+Рабочая ветка: main (единственная разрешённая рабочая ветка; резервная migration/full-copy-m3-transport-scheduler-v2 не изменяется)
 Последний HEAD до записи CI: bdd540eb30aeef8d2f51768ef5bb7e63129a9920
 
 НАЗНАЧЕНИЕ INFO
@@ -1491,3 +1491,17 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Artifact: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42787572495/artifacts/13751030427
 
 Статус: CI #108 PASS / STREAMING PLAYBACK INTEGRATION PENDING / M2 OPEN.
+
+
+## АКТУАЛЬНОЕ ПРОДОЛЖЕНИЕ — 10 НОЯБРЯ 2026, CI RUN 42791804391
+
+- Рабочая ветка фактически и по действующему разрешению пользователя: main. Упоминания резервной ветки в исторических записях не являются инструкцией переключать работу.
+- Проверенный HEAD: 7a98c2569e76688318a187b2dde62b6089c9a419.
+- Windows x64 Release configure/build: SUCCESS.
+- CTest: 7/7 passed (ppgu_sfz_parser_tests, ppgu_pattern_scheduler_tests, ppgu_sample_pool_tests, ppgu_page_cache_slots_tests, ppgu_bounded_spsc_queue_tests, ppgu_sample_streaming_service_tests, ppgu_sample_metadata_index_tests); 0 failed; total 0.28 s.
+- VST3 bundle обнаружен и пакетирование выполнено. Workflow явно фиксирует, что pluginval/DAW host validation не настроены; FL Studio 20 acceptance остаётся ручной.
+- Factory catalogue validator: 300 presets (150 Melody + 150 Pattern), 21 reference artists. Это проверка каталога, не подтверждение того, что все 300 runtime-пресетов звучат.
+- Streaming service worker/page-cache primitives компилируются и проходят отдельный unit test. ВАЖНО: SamplePool::loadSfz всё ещё полностью декодирует WAV в AudioBuffer, а SamplerEngine::render читает RegionView::audio. Streaming service НЕ интегрирован в голосовой playback path; M2 остаётся NOT ACCEPTED.
+- RAM-профилирование, host-level click test, Hermite playback из page cache, RR/velocity crossfade DSP и безопасный reload/unload не подтверждены.
+- Размер текущего пакета на этом run в этой записи не заявляется; лимит до 7 ГБ относится к дисковой библиотеке, не к RAM.
+- Следующий инженерный этап: заменить preload-путь SamplePool на metadata-backed sample IDs и закрепить service lifetime за неизменяемыми snapshot generations; затем подключить bounded page leases к фиксированным voice slots, реализовать Hermite boundary reads/prefetch/voice cleanup и regression tests. До успешного выполнения этого этапа не закрывать M2.
