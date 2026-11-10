@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <limits>
 #include <mutex>
 #include <string>
 #include <tuple>
@@ -102,7 +103,7 @@ private:
     // page cache instead of spawning a thread per preset/bank.
     static constexpr std::size_t maximumSnapshots = 128;
     static constexpr std::size_t maximumStreamingLibraries = 8;
-    static constexpr std::size_t streamingCacheSlots = 192;
+    static constexpr std::size_t streamingCacheSlots = 256;
     static constexpr std::uint32_t streamingPageFrames = SampleStreamingService::defaultPageFrames;
     std::vector<std::unique_ptr<StreamingLibrary>> streamingLibraries;
     std::vector<std::unique_ptr<Snapshot>> snapshots;
@@ -138,6 +139,7 @@ private:
         bool releasing = false;
         int direction = 1;
         std::uint64_t age = 0;
+        std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();
         int note = -1;
         int midiChannel = 1;
     };
