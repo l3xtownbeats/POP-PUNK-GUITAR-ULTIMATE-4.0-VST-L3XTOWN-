@@ -14,13 +14,33 @@ PageCacheSlots::PageCacheSlots(std::size_t count, std::uint32_t pageFrames,
     if (static_cast<std::size_t>(pageFrames) >
         std::numeric_limits<std::size_t>::max() / static_cast<std::size_t>(maxChannels))
         return;
-    samplesPerSlot = static_cast<std::size_t>(pageFrames) * maxChannels;
-    if (count > std::numeric_limits<std::size_t>::max() / samplesPerSlot)
+    const auto candidateSamplesPerSlot =
+        static_cast<std::size_t>(pageFrames) * static_cast<std::size_t>(maxChannels);
+    if (count > std::numeric_limits<std::size_t>::max() / candidateSamplesPerSlot)
         return;
 
-    slots = std::make_unique<Slot[]>(count);
-    storage = std::make_unique<float[]>(count * samplesPerSlot);
-    std::fill_n(storage.get(), count * samplesPerSlot, 0.0f);
+    const auto totalSamples = count * candidateSamplesPerSlot;
+    if (totalSamples > maximumCacheBytes / sizeof(float))
+        return;
+
+    // Cache construction happens off the audio thread. Treat memory pressure
+    // as an invalid cache rather than allowing an allocation exception to
+    // escape plugin initialization or a background library-load operation.
+    try
+    {
+        auto candidateSlots = std::make_unique<Slot[]>(count);
+        auto candidateStorage = std::make_unique<float[]>(totalSamples);
+        std::fill_n(candidateStorage.get(), totalSamples, 0.0f);
+        slots = std::move(candidateSlots);
+        storage = std::move(candidateStorage);
+        samplesPerSlot = candidateSamplesPerSlot;
+    }
+    catch (...)
+    {
+        slots.reset();
+        storage.reset();
+        samplesPerSlot = 0;
+    }
 }
 
 bool PageCacheSlots::tryBeginLoad(PageKey key, std::size_t& resultSlot) noexcept
