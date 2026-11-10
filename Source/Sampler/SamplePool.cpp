@@ -473,6 +473,8 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     {
         streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
         streamReader.prefetch(static_cast<std::uint64_t>(region->startFrame));
+        voice.prefetchedPage = static_cast<std::uint64_t>(region->startFrame)
+            / region->streaming->pageFrames();
     }
     return true;
 }
@@ -586,6 +588,17 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
                 streamReader.release();
                 voice = {};
                 break;
+            }
+
+            if (region.streaming != nullptr)
+            {
+                const auto currentPage = static_cast<std::uint64_t>(frame)
+                    / region.streaming->pageFrames();
+                if (currentPage != voice.prefetchedPage)
+                {
+                    streamReader.prefetch(static_cast<std::uint64_t>(frame));
+                    voice.prefetchedPage = currentPage;
+                }
             }
 
             const float fraction = static_cast<float>(voice.position - static_cast<double>(frame));
