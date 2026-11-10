@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(PopPunkGuitarUltimate VERSION 0.1.0 LANGUAGES CXX)
+project(PopPunkGuitarUltimate VERSION 5.0.0 LANGUAGES CXX)
 
 include(FetchContent)
 set(CMAKE_CXX_STANDARD 20)
@@ -29,7 +29,7 @@ juce_add_plugin(PopPunkGuitarUltimate
     BUNDLE_ID "com.l3xtown.pop-punk-guitar-ultimate"
     PLUGIN_MANUFACTURER_CODE L3XT
     PLUGIN_CODE PPGU
-    PRODUCT_NAME "POP PUNK GUITAR ULTIMATE"
+    PRODUCT_NAME "POP PUNK GUITAR ULTIMATE 5.0"
     DESCRIPTION "Pop-punk guitar sampler instrument"
     FORMATS VST3
     IS_SYNTH TRUE
