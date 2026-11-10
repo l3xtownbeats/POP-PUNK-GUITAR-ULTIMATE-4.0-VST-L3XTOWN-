@@ -48,6 +48,9 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     // Global / performance controls.
     p.add(floatParameter("master", "Master", 0.0f, 1.0f, 0.8f));
     p.add(floatParameter("voices", "Voices", 1.0f, 64.0f, 32.0f, 1.0f));
+    p.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID { "processorQuality", 1 }, "Processor Quality",
+        juce::StringArray { "GOOD", "NORMAL", "NIGHT", "ECO" }, 1));
     p.add(floatParameter("velocity", "Velocity Response", 0.0f, 2.0f, 1.0f));
     p.add(floatParameter("dynamics", "Velocity Dynamics", 0.0f, 1.0f, 0.5f));
     p.add(floatParameter("palmMuteThreshold", "Palm Mute Threshold", 1.0f, 127.0f, 55.0f, 1.0f));
@@ -279,8 +282,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
     const int samples = buffer.getNumSamples();
     keyboardState.processNextMidiBuffer(midi, 0, samples, true);
-    const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
-        static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
+    const int requestedVoices = static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed));
+    const int qualityMode = juce::jlimit(0, 3,
+        static_cast<int>(parameters.getRawParameterValue("processorQuality")->load(std::memory_order_relaxed)));
+    constexpr std::array<int, 4> qualityVoiceCaps { 64, 32, 16, 8 };
+    const int maximumVoices = juce::jlimit(1, qualityVoiceCaps[static_cast<size_t>(qualityMode)],
+        juce::jmin(requestedVoices, ppgu::sampler::SamplerEngine::maximumVoices));
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
     const int playMode = juce::jlimit(0, 1,
