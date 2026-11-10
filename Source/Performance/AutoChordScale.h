@@ -67,7 +67,10 @@ namespace ppgu::performance
 
             previous = mappedNote;
             auto& count = counts[static_cast<std::size_t>(mappedNote)];
-            if (count < 127)
+            // There are 128 possible source pitches on each MIDI channel.
+            // unsigned char can represent 128, so never saturate early: doing
+            // so would release the mapped note while one source key remained held.
+            if (count < 128)
                 ++count;
         }
 
