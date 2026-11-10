@@ -117,6 +117,15 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_autochord_tests COMMAND ppgu_autochord_tests)
 endif()
 
+# Dependency-free M5 Style DNA transformation regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_style_engine_tests
+        tests/StyleEngineTests.cpp
+    )
+    target_include_directories(ppgu_style_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_style_engine_tests COMMAND ppgu_style_engine_tests)
+endif()
+
 # JUCE-backed SamplePool integration test with a generated, license-neutral WAV fixture.
 if(BUILD_TESTING)
     add_executable(ppgu_sample_pool_tests
