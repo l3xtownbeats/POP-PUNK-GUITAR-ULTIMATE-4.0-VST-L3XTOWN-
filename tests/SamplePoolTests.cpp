@@ -123,9 +123,9 @@ int main()
     // immutable runtime region metadata (playback blending is a later step).
     const auto crossfadeMetadataSfz = directory.getChildFile("crossfade-metadata.sfz");
     if (!crossfadeMetadataSfz.replaceWithText(
-        "<region> sample=test.wav key=67 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=60 xfout_lovel=80 xfout_hivel=120\\n"))
+        "<region> sample=test.wav key=67 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=60 xfout_lovel=80 xfout_hivel=120\n"))
     {
-        std::cerr << "Could not write velocity crossfade metadata fixture.\\n";
+        std::cerr << "Could not write velocity crossfade metadata fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool crossfadeMetadataPool;
@@ -137,7 +137,7 @@ int main()
         || crossfadeMetadataRegion->xfoutLowVelocity != 80
         || crossfadeMetadataRegion->xfoutHighVelocity != 120)
     {
-        std::cerr << "Velocity crossfade metadata was lost before runtime region publication.\\n";
+        std::cerr << "Velocity crossfade metadata was lost before runtime region publication.\n";
         return 1;
     }
 
