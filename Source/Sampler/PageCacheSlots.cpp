@@ -34,8 +34,8 @@ bool PageCacheSlots::tryBeginLoad(PageKey key, std::size_t& resultSlot) noexcept
     {
         for (std::size_t i = 0; i < slotCount; ++i)
         {
-            auto expected = pass == 0 ? State::empty : State::ready;
-            if (slots[i].state.compare_exchange_strong(expected, State::loading,
+            auto expected = pass == 0 ? emptyAccess : readyAccess;
+            if (slots[i].access.compare_exchange_strong(expected, loadingAccess,
                     std::memory_order_acq_rel, std::memory_order_acquire))
             {
                 slots[i].sampleId.store(key.sampleId, std::memory_order_relaxed);
@@ -53,7 +53,7 @@ bool PageCacheSlots::tryBeginLoad(PageKey key, std::size_t& resultSlot) noexcept
 float* PageCacheSlots::writableData(std::size_t slot) noexcept
 {
     if (!isValid() || slot >= slotCount
-        || slots[slot].state.load(std::memory_order_acquire) != State::loading)
+        || slots[slot].access.load(std::memory_order_acquire) != loadingAccess)
         return nullptr;
     return storage.get() + slot * samplesPerSlot;
 }
@@ -66,14 +66,14 @@ bool PageCacheSlots::publish(std::size_t slot, PageKey key,
         return false;
 
     auto& target = slots[slot];
-    if (target.state.load(std::memory_order_acquire) != State::loading
+    if (target.access.load(std::memory_order_acquire) != loadingAccess
         || target.sampleId.load(std::memory_order_relaxed) != key.sampleId
         || target.pageIndex.load(std::memory_order_relaxed) != key.pageIndex)
         return false;
 
     target.channels.store(channels, std::memory_order_relaxed);
     target.frames.store(frames, std::memory_order_relaxed);
-    target.state.store(State::ready, std::memory_order_release);
+    target.access.store(readyAccess, std::memory_order_release);
     return true;
 }
 
@@ -81,8 +81,8 @@ void PageCacheSlots::cancelLoad(std::size_t slot) noexcept
 {
     if (isValid() && slot < slotCount)
     {
-        auto expected = State::loading;
-        (void) slots[slot].state.compare_exchange_strong(expected, State::empty,
+        auto expected = loadingAccess;
+        (void) slots[slot].access.compare_exchange_strong(expected, emptyAccess,
             std::memory_order_release, std::memory_order_relaxed);
     }
 }
@@ -95,25 +95,32 @@ bool PageCacheSlots::tryAcquire(PageKey key, ReadLease& lease) noexcept
 
     for (std::size_t i = 0; i < slotCount; ++i)
     {
-        auto expected = State::ready;
-        if (!slots[i].state.compare_exchange_strong(expected, State::reading,
-                std::memory_order_acq_rel, std::memory_order_acquire))
-            continue;
-
         auto& candidate = slots[i];
-        const bool matches = candidate.sampleId.load(std::memory_order_relaxed) == key.sampleId
-            && candidate.pageIndex.load(std::memory_order_relaxed) == key.pageIndex;
-        if (!matches)
+        auto access = candidate.access.load(std::memory_order_acquire);
+        // Multiple voices may read the same immutable page concurrently.
+        // Increment the pin count atomically; eviction succeeds only from
+        // readyAccess (zero readers), so the page cannot be overwritten.
+        while (access >= readyAccess
+               && access < std::numeric_limits<std::uint32_t>::max())
         {
-            candidate.state.store(State::ready, std::memory_order_release);
-            continue;
-        }
+            if (candidate.access.compare_exchange_weak(access, access + 1,
+                    std::memory_order_acquire, std::memory_order_relaxed))
+            {
+                const bool matches = candidate.sampleId.load(std::memory_order_relaxed) == key.sampleId
+                    && candidate.pageIndex.load(std::memory_order_relaxed) == key.pageIndex;
+                if (!matches)
+                {
+                    candidate.access.fetch_sub(1, std::memory_order_release);
+                    break;
+                }
 
-        lease.slot = i;
-        lease.samples = storage.get() + i * samplesPerSlot;
-        lease.channels = candidate.channels.load(std::memory_order_relaxed);
-        lease.frames = candidate.frames.load(std::memory_order_relaxed);
-        return true;
+                lease.slot = i;
+                lease.samples = storage.get() + i * samplesPerSlot;
+                lease.channels = candidate.channels.load(std::memory_order_relaxed);
+                lease.frames = candidate.frames.load(std::memory_order_relaxed);
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -125,9 +132,8 @@ void PageCacheSlots::release(ReadLease& lease) noexcept
         lease = {};
         return;
     }
-    auto expected = State::reading;
-    (void) slots[lease.slot].state.compare_exchange_strong(expected, State::ready,
-        std::memory_order_release, std::memory_order_relaxed);
+    // Each successful acquire owns exactly one pin.
+    slots[lease.slot].access.fetch_sub(1, std::memory_order_release);
     lease = {};
 }
 
@@ -135,6 +141,9 @@ PageCacheSlots::State PageCacheSlots::state(std::size_t slot) const noexcept
 {
     if (!isValid() || slot >= slotCount)
         return State::empty;
-    return slots[slot].state.load(std::memory_order_acquire);
+    const auto access = slots[slot].access.load(std::memory_order_acquire);
+    if (access == emptyAccess) return State::empty;
+    if (access == loadingAccess) return State::loading;
+    return access == readyAccess ? State::ready : State::reading;
 }
 }
