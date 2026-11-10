@@ -54,3 +54,14 @@
 5. Ручная проверка FL Studio 20 x64 на Windows 10: проект save/reopen, automation, transport, длительный playback и смена аудиоустройства.
 
 **M1–M3 не объявлять закрытыми, пока пункты 2–5 не подтверждены.** CI не заменяет реальный тест в FL Studio.
+
+## CI evidence update — 10.11.2026
+
+- Main Windows x64 Release run `42843030370` on `4d13943f15352b87f3569524e2e5b4b8f9bbafda`: SUCCESS for configure, VST3/test build, full CTest, bundle locate, pluginval strictness 5, package and upload.
+- Additional MSVC v143 run `42843030228`: SUCCESS.
+- M3 now has a module-level scheduler→SamplerEngine integration test in `tests/PatternSamplerIntegrationTests.cpp`; CTest confirms sample-accurate NoteOn/NoteOff dispatch and audible output.
+- M1 FL Studio 20 state/automation/library/device/long-playback validation remains OPEN.
+- M2 velocity crossfade playback is being validated separately in PR #5/run `42843931173`; palm-mute mapping, click/pop and concurrency stress remain OPEN.
+- M3 FL Studio transport/MIDI validation remains OPEN.
+- M4 initial CI passed run `42843127831`; latest integer-overflow hardening needs a fresh run. M5 foundation passed run `42840410645`; runtime integration remains OPEN.
+- Do not mark M1–M5 complete or merge secondary branches until all current heads and the unified integration build pass.
