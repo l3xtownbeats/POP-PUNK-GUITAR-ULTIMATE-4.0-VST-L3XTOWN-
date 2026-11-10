@@ -407,9 +407,13 @@ std::size_t SamplePool::getSampleCount() const noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr) return 0;
-    std::set<const juce::AudioBuffer<float>*> unique;
+    std::set<std::pair<const SampleStreamingService*, std::uint32_t>> unique;
     for (const auto& region : snapshot->regions)
-        unique.insert(region.audio);
+        if (region.streaming != nullptr)
+            unique.emplace(region.streaming, region.sampleId);
+        else if (region.audio != nullptr)
+            unique.emplace(nullptr, static_cast<std::uint32_t>(
+                reinterpret_cast<std::uintptr_t>(region.audio) & 0xffffffffU));
     return unique.size();
 }
 
@@ -421,8 +425,11 @@ void SamplerEngine::prepare(double sampleRate) noexcept
 
 void SamplerEngine::reset() noexcept
 {
-    for (auto& voice : voices)
-        voice = {};
+    for (std::size_t i = 0; i < voices.size(); ++i)
+    {
+        streamingReaders[i].release();
+        voices[i] = {};
+    }
 }
 
 LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile)
@@ -433,7 +440,7 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile)
 bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
 {
     const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
-    if (region == nullptr || region->audio == nullptr || velocity <= 0)
+    if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
         return false;
 
     // SFZ off_by groups implement guitar-string choking: a new note on the
@@ -447,6 +454,8 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
 
     const int voiceIndex = chooseVoice(juce::jlimit(1, maximumVoices, maximumActiveVoices));
     auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
+    auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
+    streamReader.release();
     voice = {};
     voice.region = region;
     voice.note = midiNote;
@@ -460,6 +469,11 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
     voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
     voice.age = nextAge++;
+    if (region->streaming != nullptr)
+    {
+        streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
+        streamReader.prefetch(static_cast<std::uint64_t>(region->startFrame));
+    }
     return true;
 }
 
@@ -531,49 +545,78 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
 {
     const int channels = output.getNumChannels();
     const int endSample = juce::jmin(output.getNumSamples(), startSample + numSamples);
-    for (auto& voice : voices)
+    for (std::size_t voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
     {
-        if (voice.region == nullptr || voice.region->audio == nullptr)
+        auto& voice = voices[voiceIndex];
+        auto& streamReader = streamingReaders[voiceIndex];
+        if (voice.region == nullptr)
             continue;
 
-        const auto& source = *voice.region->audio;
-        const int sourceChannels = source.getNumChannels();
-        const int sourceEnd = voice.region->endFrame;
-        const auto* left = source.getReadPointer(0);
-        const auto* right = sourceChannels > 1 ? source.getReadPointer(1) : left;
+        const auto& region = *voice.region;
+        const auto* source = region.audio;
+        const int sourceChannels = source != nullptr ? source->getNumChannels() : 2;
+        const int sourceEnd = region.endFrame;
+        const auto* left = source != nullptr ? source->getReadPointer(0) : nullptr;
+        const auto* right = source != nullptr && sourceChannels > 1
+            ? source->getReadPointer(1) : left;
 
         for (int outIndex = startSample; outIndex < endSample; ++outIndex)
         {
-            const bool loopActive = voice.region->loopMode == 1
-                || ((voice.region->loopMode == 2 || voice.region->loopMode == 3) && !voice.releasing);
-            if (loopActive && voice.region->loopMode == 3)
+            const bool loopActive = region.loopMode == 1
+                || ((region.loopMode == 2 || region.loopMode == 3) && !voice.releasing);
+            if (loopActive && region.loopMode == 3)
             {
-                if (voice.direction > 0 && voice.position >= voice.region->loopEndFrame)
+                if (voice.direction > 0 && voice.position >= region.loopEndFrame)
                 {
                     voice.direction = -1;
-                    voice.position = static_cast<double>(voice.region->loopEndFrame - 1);
+                    voice.position = static_cast<double>(region.loopEndFrame - 1);
                 }
-                else if (voice.direction < 0 && voice.position < voice.region->loopStartFrame)
+                else if (voice.direction < 0 && voice.position < region.loopStartFrame)
                 {
                     voice.direction = 1;
-                    voice.position = static_cast<double>(voice.region->loopStartFrame);
+                    voice.position = static_cast<double>(region.loopStartFrame);
                 }
             }
-            else if (loopActive && voice.position >= voice.region->loopEndFrame)
-                voice.position = static_cast<double>(voice.region->loopStartFrame);
+            else if (loopActive && voice.position >= region.loopEndFrame)
+                voice.position = static_cast<double>(region.loopStartFrame);
 
             const int frame = static_cast<int>(voice.position);
-            if ((voice.direction > 0 && frame >= sourceEnd) || frame < voice.region->startFrame)
+            if ((voice.direction > 0 && frame >= sourceEnd) || frame < region.startFrame)
             {
+                streamReader.release();
                 voice = {};
                 break;
             }
 
             const float fraction = static_cast<float>(voice.position - static_cast<double>(frame));
-            const float sampleL = hermiteSample(left, frame, fraction, voice.region->startFrame, sourceEnd);
-            const float sampleR = hermiteSample(right, frame, fraction, voice.region->startFrame, sourceEnd);
-            const float panLeft = voice.region->pan > 0.0f ? 1.0f - voice.region->pan : 1.0f;
-            const float panRight = voice.region->pan < 0.0f ? 1.0f + voice.region->pan : 1.0f;
+            float sampleL = 0.0f;
+            float sampleR = 0.0f;
+            bool sampleReady = false;
+            if (source != nullptr)
+            {
+                sampleL = hermiteSample(left, frame, fraction, region.startFrame, sourceEnd);
+                sampleR = hermiteSample(right, frame, fraction, region.startFrame, sourceEnd);
+                sampleReady = true;
+            }
+            else if (region.streaming != nullptr)
+            {
+                sampleReady = streamReader.readHermite(
+                    static_cast<std::uint64_t>(frame), fraction,
+                    static_cast<std::uint64_t>(region.startFrame),
+                    static_cast<std::uint64_t>(sourceEnd), sampleL, sampleR);
+            }
+
+            if (!sampleReady)
+            {
+                // A cache miss is not allowed to advance the sample cursor:
+                // this preserves the attack/transient while the worker loads
+                // the page. No wait or file access occurs on the audio thread.
+                streamReader.prefetch(static_cast<std::uint64_t>(frame));
+                continue;
+            }
+
+            const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
+            const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
             const float envelope = voice.gain;
 
             if (channels == 1)
@@ -592,6 +635,7 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
                 voice.gain -= voice.releaseStep;
                 if (voice.gain <= 0.0f)
                 {
+                    streamReader.release();
                     voice = {};
                     break;
                 }
