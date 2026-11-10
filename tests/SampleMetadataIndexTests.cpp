@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <algorithm>
+#include <string>
 
 int main()
 {
@@ -32,6 +34,22 @@ int main()
     if (!writer->writeFromAudioSampleBuffer(audio, 0, audio.getNumSamples())) return 1;
     writer.reset();
 
+    // The metadata index must agree with the current cache/DSP channel
+    // contract. A four-channel file must be skipped, never indexed for a
+    // reader/cache path that can only represent mono or stereo.
+    const juce::File surroundWav((root / "surround.wav").string());
+    juce::AudioBuffer<float> surroundAudio(4, 128);
+    surroundAudio.clear();
+    std::unique_ptr<juce::OutputStream> surroundStream(surroundWav.createOutputStream());
+    if (!surroundStream) return 1;
+    std::unique_ptr<juce::AudioFormatWriter> surroundWriter(
+        format.createWriterFor(surroundStream.get(), 48000.0, 4, 16, {}, 0));
+    if (!surroundWriter) return 1;
+    surroundStream.release();
+    if (!surroundWriter->writeFromAudioSampleBuffer(surroundAudio, 0, surroundAudio.getNumSamples()))
+        return 1;
+    surroundWriter.reset();
+
     ppgu::sampler::SampleMetadataIndex index;
     const auto result = index.scanDirectory(juce::File(root.string()));
     if (!result.success || result.samples.size() != 1)
@@ -39,6 +57,14 @@ int main()
         std::cerr << "Metadata index failed to find nested WAV.\n";
         for (const auto& error : result.errors) std::cerr << error << "\n";
         for (const auto& warning : result.warnings) std::cerr << warning << "\n";
+        return 1;
+    }
+
+    const auto hasChannelWarning = std::any_of(result.warnings.begin(), result.warnings.end(),
+        [](const std::string& warning) { return warning.find("mono/stereo only") != std::string::npos; });
+    if (!hasChannelWarning || result.samples.size() != 1)
+    {
+        std::cerr << "Metadata index did not consistently reject multichannel WAV data.\\n";
         return 1;
     }
 
@@ -124,6 +150,16 @@ int main()
     if (staleReader.open(staleMetadata, staleError))
     {
         std::cerr << "WAV page reader accepted stale file-size metadata.\n";
+        return 1;
+    }
+
+    auto multichannelMetadata = metadata;
+    multichannelMetadata.channels = 4;
+    ppgu::sampler::WavPageReader multichannelReader;
+    std::string multichannelError;
+    if (multichannelReader.open(multichannelMetadata, multichannelError))
+    {
+        std::cerr << "WAV page reader accepted unsupported multichannel metadata.\\n";
         return 1;
     }
 
