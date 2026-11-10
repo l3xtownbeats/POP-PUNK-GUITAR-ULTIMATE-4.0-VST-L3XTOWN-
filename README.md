@@ -2,7 +2,7 @@
 
 <img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN" width="100%">
 
-# POP PUNK GUITAR ULTIMATE
+# POP PUNK GUITAR ULTIMATE 5.0
 ### BY L3XTOWN
 **THE POP-PUNK GUITAR INSTRUMENT FOR RIFFS THAT HIT HARD.**
 
@@ -40,7 +40,7 @@ Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument comb
 
 </div>
 
-### DOWNLOAD — WINDOWS x64 VST3
+### VERSION 5.0 — WINDOWS x64 VST3
 
 <div align="center">
 
