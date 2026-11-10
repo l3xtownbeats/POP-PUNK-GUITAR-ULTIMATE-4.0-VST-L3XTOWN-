@@ -524,10 +524,11 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     const double semitones = static_cast<double>(midiNote - region->rootKey)
         + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
     voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
-    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain
-        * SamplePool::calculateVelocityCrossfadeGain(velocity,
-            region->xfinLowVelocity, region->xfinHighVelocity,
-            region->xfoutLowVelocity, region->xfoutHighVelocity);
+    // Do not apply a fade curve until a compatible second region is
+    // selected and rendered alongside this one. Applying xfin/xfout to a
+    // lone selected region can attenuate it to silence; the curve helper is
+    // retained for the forthcoming paired-layer playback implementation.
+    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
     voice.palmMuted = palmMute;
     if (palmMute)
     {

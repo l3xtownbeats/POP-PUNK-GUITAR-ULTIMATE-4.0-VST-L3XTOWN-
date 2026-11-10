@@ -178,3 +178,12 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Windows CI run `42809962008` завершился SUCCESS: x64 Release configure, VST3/test build, CTest, VST3 bundle discovery, pluginval strictness 5, license validation и packaging/upload прошли.
 - Важно: тесты подтверждают коэффициенты fade, но runtime пока выбирает только один RegionView на Note On. Одновременное воспроизведение и смешивание двух velocity-регионов НЕ реализовано. Следующий подэтап M2 — безопасная пара слоёв на один MIDI-триггер с согласованной RR-селекцией и ограничением polyphony.
 - Статус: VELOCITY FADE GAIN — IMPLEMENTED / CI VERIFIED; MULTI-REGION VELOCITY CROSSFADE — NOT IMPLEMENTED; M2 — NOT ACCEPTED.
+
+
+## M2 — аудит SFZ velocity crossfade (2026-11-10)
+
+- CI для коммита `1dfb5907413d0e85bad7348e90f8f6920e1d72e0` завершился успешно: сборка x64, CTest, VST3 bundle и pluginval strictness 5 прошли.
+- Повторный аудит выявил функциональный пробел: runtime пока выбирает только один регион через `findRegion()`. Поэтому применять xfin/xfout gain к единственному голосу до реализации парного воспроизведения небезопасно — на краях диапазона одиночный слой мог бы стать практически неслышен.
+- Коэффициент равномощностной кривой и тесты сохранены как изолированная подготовительная часть. Прямое применение коэффициента к одиночному голосу отключено до реализации совместного выбора и рендеринга двух совместимых velocity-регионов.
+- Статус velocity crossfade: **PARTIAL / NOT COMPLETE**. Следующий шаг — парный выбор регионов, отдельные streaming readers и смешивание двух слоёв с соблюдением общего лимита голосов; затем тесты переходов на WAV/SFZ fixtures.
+- Запрещено объявлять velocity crossfade готовым только по успешной проверке математической кривой.
