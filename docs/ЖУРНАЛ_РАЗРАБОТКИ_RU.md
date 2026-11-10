@@ -1056,3 +1056,16 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 По run `42769587683` Windows Release build/VST3 bundle прошли, но CTest завершился FAILURE: 5/6, упал `ppgu_pattern_scheduler_tests`. Найдено и исправлено дробное sample offset: 63.6 samples ошибочно усекались до 63 вместо 64; добавлен тест exact integer sample. Исправление ожидает нового CI.
 
 Аудит: M1 — не сохраняется sample-library reference и нет полного state/automation/host acceptance; M2 — WAV preload в RAM, page cache не подключён к voice read path, RR/velocity crossfade/unload не подтверждены; M3 — дробный offset исправлен в исходнике, но остаются потеря нескольких chord transitions в одном блоке и отсутствие явного scheduler output overflow handling. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
+
+
+## 10 ноября 2026 — M3-015: явная обработка переполнения output scheduler
+
+- Ветка: `migration/full-copy-m3-transport-scheduler-v2`
+- Изменения кода: `Source/Performance/PatternScheduler.h`, `tests/PatternSchedulerTests.cpp`.
+- Root cause: выходной массив scheduler ограничен 512 событиями, но цикл генерации завершался при нехватке двух мест без выставления статуса. Это могло молча отбросить NoteOn/NoteOff; потерянный NoteOff создаёт риск зависшей ноты.
+- Fix: при нехватке места выставляется `outputOverflow_`; `consumePendingOverflow()` теперь объединяет переполнение выходного массива и pending queue и сбрасывает оба флага после чтения. Processor уже обрабатывает этот статус через `sampler.allNotesOff()` как fail-safe.
+- Regression: плотный pattern из 300 одновременных событий заполняет output до 512 и обязан вернуть overflow status; повторное чтение статуса должно вернуть false.
+- Коммиты: `427a68506599b7f8ea8250b253dbc89ede4fe4fb` (scheduler), `6a77e2d1f33f6a4ad730d4c5a6c7997d2a5112cf` (test).
+- Проверки: исходники и regression test записаны в рабочую ветку. Windows Release build/CTest для нового HEAD ещё не получен; статус FIXED IN SOURCE / AWAITING CI.
+- M3-014 остаётся FIXED IN SOURCE / AWAITING CI; M3-015 теперь FIXED IN SOURCE / AWAITING CI. M1/M2 не затрагивались; M1, M2, M3 не приняты; M4 BLOCKED.
+- Следующий шаг: получить Windows CI для актуального HEAD, исправить все обнаруженные ошибки; после зелёного CTest продолжить интеграционные M3 проверки (stop/seek, variable block sizes, dense pattern fail-safe) и затем отдельный DAW acceptance.
