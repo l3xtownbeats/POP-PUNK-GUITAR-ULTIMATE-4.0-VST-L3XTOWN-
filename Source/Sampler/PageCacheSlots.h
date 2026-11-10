@@ -61,6 +61,9 @@ public:
     void cancelLoad(std::size_t slot) noexcept;
 
     // Audio thread: acquire pins a ready page until release().
+    // Worker-side duplicate suppression; does not pin the page and must
+    // not be used as a substitute for tryAcquire() on the audio thread.
+    [[nodiscard]] bool containsReady(PageKey key) const noexcept;
     [[nodiscard]] bool tryAcquire(PageKey key, ReadLease& lease) noexcept;
     void release(ReadLease& lease) noexcept;
 
