@@ -317,7 +317,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
 
-    skinsButton.setTooltip("Choose one of 10 interface skins. The selected theme is saved with this plugin instance.");
+    skinsButton.setButtonText("THEMES");
+    skinsButton.setTooltip("Choose an interface colour palette. Full image-backed theme packs are a separate feature.");
     skinsButton.setEnabled(true);
     skinsButton.setColour(juce::TextButton::buttonColourId, panel2);
     skinsButton.setColour(juce::TextButton::textColourOffId, pink);
