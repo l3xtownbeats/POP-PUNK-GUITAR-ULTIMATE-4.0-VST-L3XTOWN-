@@ -155,3 +155,16 @@ Gate: успешная компиляция importer + теста, полный 
 ## Import Sounds CI correction — 10.11.2026
 
 Первый importer CI run 42850028356 failed на несовместимом JUCE writer Options API, вызове reader read(), преобразованиях строк и несуществующем TextButton::outlineColourId. Исправлено: 24-bit PCM writer через поддерживаемый overload, AudioBuffer read overload, явные JUCE string conversions, удалён неподдерживаемый colour ID. Повторный CI обязателен.
+
+## Audio import format matrix — update 10.11.2026
+
+| Формат | Статус в коде |
+|---|---|
+| WAV | Поддержка через JUCE decoder |
+| AIFF / AIF | Поддержка через JUCE decoder |
+| FLAC | Decoder включён флагом JUCE_USE_FLAC=1; ожидает CI |
+| OGG Vorbis | Decoder включён флагом JUCE_USE_OGGVORBIS=1; ожидает CI |
+| MP3 | Decoder включён флагом JUCE_USE_MP3AUDIOFORMAT=1; ожидает CI |
+| NCW | Не декодируется напрямую; распознаётся и сообщает об экспорте из Kontakt в WAV/AIFF |
+
+Тест импортёра теперь проверяет регистрацию WAV, AIFF, AIF, FLAC, OGG и MP3 в AudioFormatManager. Прямая поддержка NCW не заявляется: для неё нужен отдельный decoder и валидация на реальных файлах.
