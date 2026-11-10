@@ -200,9 +200,10 @@ int main()
     {
         multiPageEngine.render(multiPageOutput, offset,
             juce::jmin(256, multiPageOutput.getNumSamples() - offset));
-        // Approximate host callback spacing so the worker can service the
-        // next-page prefetch without making the audio callback wait.
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        // Match a 256-frame callback at 44.1 kHz (~5.8 ms). This keeps
+        // the worker under a realistic real-time schedule without allowing
+        // the audio callback itself to wait for page I/O.
+        std::this_thread::sleep_for(std::chrono::milliseconds(6));
     }
     if (multiPageEngine.getActiveVoiceCount() != 0
         || multiPageOutput.getMagnitude(0, 0, multiPageOutput.getNumSamples()) <= 0.001f)
