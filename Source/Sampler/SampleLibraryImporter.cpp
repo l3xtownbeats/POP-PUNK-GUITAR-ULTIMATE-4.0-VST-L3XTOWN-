@@ -452,7 +452,10 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
     }
 
     report.libraryDirectory = finalDirectory;
-    if (report.generatedSfz.existsAsFile())
+    // The staging path is invalid after the atomic directory rename. Rebuild the
+    // published SFZ path from the final library directory instead of probing the
+    // now-moved staging file (which would leave callers with a stale path).
+    if (report.mappedFiles > 0)
         report.generatedSfz = finalDirectory.getChildFile("Imported_Instrument.sfz");
     report.success = true;
     return report;
