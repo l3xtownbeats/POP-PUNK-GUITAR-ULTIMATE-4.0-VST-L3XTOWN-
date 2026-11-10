@@ -95,6 +95,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
+    skinButton.setTooltip("Cycle through installed interface themes");
+    skinButton.onClick = [this] { cycleSkin(); };
+    addAndMakeVisible(skinButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -163,6 +166,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, pink);
         addAndMakeVisible(*l);
     }
+    discoverSkins();
+    applySkin(processor.getSelectedSkinIndex());
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
@@ -184,35 +189,39 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
 
 void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juce::Rectangle<int> r)
 {
-    g.setColour(panel);
-    g.fillRoundedRectangle(r.toFloat(), 12.0f);
-    g.setColour(pink.withAlpha(0.45f));
-    g.drawRoundedRectangle(r.toFloat().reduced(0.5f), 12.0f, 1.0f);
+    g.setColour(activeSkin.surface.isTransparent() ? panel : activeSkin.surface);
+    g.fillRoundedRectangle(r.toFloat(), static_cast<float>(activeSkin.cornerRadius));
+    g.setColour((activeSkin.accent.isTransparent() ? pink : activeSkin.accent).withAlpha(0.45f));
+    g.drawRoundedRectangle(r.toFloat().reduced(0.5f), static_cast<float>(activeSkin.cornerRadius), 1.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(bg);
-    g.setColour(juce::Colour(0xff08080b));
+    const auto skinBg = activeSkin.background.isTransparent() ? bg : activeSkin.background;
+    const auto skinAccent = activeSkin.accent.isTransparent() ? pink : activeSkin.accent;
+    const auto skinText = activeSkin.text.isTransparent() ? pale : activeSkin.text;
+    g.fillAll(skinBg);
+    g.setColour(activeSkin.surface.isTransparent() ? panel2 : activeSkin.surface);
     g.fillRect(0, 0, getWidth(), 62);
-    g.setColour(pink);
+    g.setColour(skinAccent);
     g.fillRect(0, 0, getWidth(), 3);
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
+    const auto heroStart = activeSkin.panelRaised.isTransparent() ? juce::Colour(0xff30202f) : activeSkin.panelRaised;
+    juce::ColourGradient grad(heroStart, static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), skinBg, static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
+    g.setColour(activeSkin.border.isTransparent() ? juce::Colour(0xff7b526c).withAlpha(0.5f) : activeSkin.border.withAlpha(0.7f));
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
-    g.setColour(pale);
+    g.setColour(skinText);
     g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
     g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
-    g.setColour(pink);
+    g.setColour(skinAccent);
     g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
     g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
-    g.setColour(pale.withAlpha(0.8f));
+    g.setColour(skinText.withAlpha(0.8f));
     g.setFont(juce::Font(16.0f, juce::Font::italic));
     g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
     // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
@@ -250,6 +259,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     presetBox.setBounds(top.removeFromLeft(220).reduced(3, 5));
     presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
     categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
+    skinButton.setBounds(top.removeFromRight(82).reduced(2, 5));
     loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(220);
@@ -281,6 +291,132 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         knobs[i].setBounds(cell.reduced(1, 4));
     }
     startModeBox.setBounds(playback.removeFromTop(34).reduced(8, 2));
+}
+
+
+void PopPunkGuitarUltimateAudioProcessorEditor::discoverSkins()
+{
+    skins.clear();
+    juce::File skinRoot = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
+        .getChildFile("L3XTOWN").getChildFile("PPGU").getChildFile("Skin");
+    if (!skinRoot.isDirectory())
+    {
+        auto candidate = juce::File::getCurrentWorkingDirectory().getChildFile("SKIN");
+        if (!candidate.isDirectory()) candidate = juce::File::getCurrentWorkingDirectory().getChildFile("Skin");
+        if (candidate.isDirectory()) skinRoot = candidate;
+    }
+    const auto parseColour = [](const juce::var& value, juce::Colour fallback)
+    {
+        auto hex = value.toString().trim();
+        if (hex.startsWith("#")) hex = hex.substring(1);
+        return hex.length() == 6 ? juce::Colour::fromString("ff" + hex) : fallback;
+    };
+    const auto addTheme = [this, &parseColour](const juce::var& root, const juce::String& folder)
+    {
+        if (!root.isObject()) return;
+        const auto colours = root.getProperty("colors", juce::var());
+        const auto metrics = root.getProperty("metrics", juce::var());
+        const auto visual = root.getProperty("visualStyle", juce::var());
+        SkinEntry item;
+        item.name = root.getProperty("name", "Unnamed").toString();
+        item.folder = folder;
+        item.layoutFamily = visual.getProperty("layoutFamily", "premium-instrument").toString();
+        item.background = parseColour(colours.getProperty("background", ""), bg);
+        item.surface = parseColour(colours.getProperty("surface", ""), panel);
+        item.accent = parseColour(colours.getProperty("accent", ""), pink);
+        item.text = parseColour(colours.getProperty("text", ""), pale);
+        item.muted = parseColour(colours.getProperty("muted", ""), muted);
+        item.panelRaised = parseColour(colours.getProperty("panelRaised", ""), panel2);
+        item.border = parseColour(colours.getProperty("border", ""), muted);
+        item.cornerRadius = juce::jlimit(4, 24, static_cast<int>(metrics.getProperty("cornerRadius", 12)));
+        item.spacing = juce::jlimit(4, 18, static_cast<int>(metrics.getProperty("spacing", 10)));
+        skins.push_back(std::move(item));
+    };
+    if (skinRoot.isDirectory())
+    {
+        const auto catalog = juce::JSON::parse(skinRoot.getChildFile("skin-catalog.json").loadFileAsString());
+        if (auto* entries = catalog.getProperty("skins", juce::var()).getArray())
+            for (const auto& entry : *entries)
+            {
+                const auto folder = entry.getProperty("folder", "").toString();
+                const auto file = skinRoot.getChildFile(folder).getChildFile("theme.json");
+                if (file.existsAsFile()) addTheme(juce::JSON::parse(file.loadFileAsString()), folder);
+            }
+        const auto extendedFile = skinRoot.getChildFile("extended-themes.json");
+        if (extendedFile.existsAsFile())
+        {
+            const auto extended = juce::JSON::parse(extendedFile.loadFileAsString());
+            if (auto* entries = extended.getArray())
+                for (const auto& entry : *entries) addTheme(entry, entry.getProperty("id", "").toString());
+        }
+    }
+    if (skins.empty())
+    {
+        SkinEntry fallback;
+        fallback.name = "Obsidian Black"; fallback.background = bg; fallback.surface = panel;
+        fallback.accent = pink; fallback.text = pale; fallback.muted = muted;
+        fallback.panelRaised = panel2; fallback.border = muted;
+        skins.push_back(fallback);
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::cycleSkin()
+{
+    if (!skins.empty()) applySkin((activeSkinIndex + 1) % static_cast<int>(skins.size()));
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
+{
+    if (skins.empty()) return;
+    activeSkinIndex = juce::jlimit(0, static_cast<int>(skins.size()) - 1, index);
+    activeSkin = skins[static_cast<size_t>(activeSkinIndex)];
+    processor.setSelectedSkinIndex(activeSkinIndex);
+    const auto setCombo = [this](juce::ComboBox& c) {
+        c.setColour(juce::ComboBox::backgroundColourId, activeSkin.surface);
+        c.setColour(juce::ComboBox::textColourId, activeSkin.text);
+        c.setColour(juce::ComboBox::outlineColourId, activeSkin.accent.withAlpha(0.65f));
+        c.setColour(juce::ComboBox::arrowColourId, activeSkin.accent);
+    };
+    const auto setButton = [this](juce::TextButton& b) {
+        b.setColour(juce::TextButton::buttonColourId, activeSkin.surface);
+        b.setColour(juce::TextButton::buttonOnColourId, activeSkin.accent);
+        b.setColour(juce::TextButton::textColourOffId, activeSkin.text);
+        b.setColour(juce::TextButton::textColourOnId, activeSkin.background);
+    };
+    setCombo(presetBox); setCombo(categoryBox); setCombo(modeBox); setCombo(startModeBox);
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, activeSkin.surface);
+    presetSearch.setColour(juce::TextEditor::textColourId, activeSkin.text);
+    presetSearch.setColour(juce::TextEditor::outlineColourId, activeSkin.accent.withAlpha(0.55f));
+    presetSearch.setColour(juce::TextEditor::highlightColourId, activeSkin.accent.withAlpha(0.35f));
+    setButton(loadButton); setButton(skinButton); setButton(melodyTab); setButton(patternTab);
+    for (auto& button : fxButtons) setButton(button);
+    for (size_t i = 0; i < knobs.size(); ++i)
+    {
+        knobs[i].setColour(juce::Slider::rotarySliderFillColourId, activeSkin.accent);
+        knobs[i].setColour(juce::Slider::rotarySliderOutlineColourId, activeSkin.border);
+        knobs[i].setColour(juce::Slider::thumbColourId, activeSkin.text);
+        knobs[i].setColour(juce::Slider::textBoxTextColourId, activeSkin.text);
+        knobLabels[i].setColour(juce::Label::textColourId, activeSkin.muted);
+    }
+    titleLabel.setColour(juce::Label::textColourId, activeSkin.text);
+    subtitleLabel.setColour(juce::Label::textColourId, activeSkin.accent);
+    statusLabel.setColour(juce::Label::textColourId, activeSkin.muted);
+    for (auto* label : { &ampTitle, &fxTitle, &playbackTitle })
+        label->setColour(juce::Label::textColourId, activeSkin.accent);
+    if (keyboard != nullptr)
+    {
+        const auto keyWhite = activeSkin.background.getPerceivedBrightness() > 0.5f
+            ? activeSkin.surface : activeSkin.text;
+        keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, keyWhite);
+        keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, activeSkin.background);
+        keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, activeSkin.border);
+        keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, activeSkin.accent.withAlpha(0.35f));
+        keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, activeSkin.accent.withAlpha(0.85f));
+    }
+    skinButton.setButtonText("SKIN  " + juce::String(activeSkinIndex + 1).paddedLeft('0', 2)
+        + "/" + juce::String(static_cast<int>(skins.size())));
+    repaint();
+    resized();
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
