@@ -217,3 +217,12 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Статус: OPEN — REQUIREMENTS BASELINE; это не означает, что перечисленные функции реализованы.
 - Приёмка: реализация + regression tests + Windows Release/CTest + pluginval + host test по применимости. Для каждого требования вести отдельный статус и доказательства.
 - Форматный конфликт: Float32 WAV является согласованным требованием, но INFO содержит временную запись о 24-bit PCM. Проверить код и исправить несоответствие; до проверки не закрывать.
+
+
+## IMP-002 — manifest SHA-256 и аудиометаданные
+
+- Тип: улучшение целостности импортируемых библиотек.
+- Изменение: SHA-256 для исходного файла и converted WAV; source extension, sample rate, channels, frames, duration, byte sizes и hash algorithm записываются в manifest.
+- Regression: проверка вычисленных checksum, manifest metadata и NCW unsupported warning в SampleLibraryImporterTests.
+- Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI.
+- Ограничения: ещё не реализованы UI для проверки целостности/repair, полное license inventory и тестовые аудиофайлы всех decoder formats.

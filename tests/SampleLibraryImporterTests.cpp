@@ -56,7 +56,8 @@ int main()
     juce::AiffAudioFormat aiff;
     if (!writeFixture(source.getChildFile("Guitar_C3_Vel100.wav"), wav, 24)
         || !writeFixture(source.getChildFile("Clean_D4.aiff"), aiff, 16)
-        || !writeFixture(source.getChildFile("Unknown_take.wav"), wav, 24))
+        || !writeFixture(source.getChildFile("Unknown_take.wav"), wav, 24)
+        || !source.getChildFile("Unsupported.ncw").replaceWithText("NCW placeholder"))
     {
         std::cerr << "Could not create audio import fixtures.\n";
         return 1;
@@ -107,10 +108,24 @@ int main()
     }
 
     const auto manifest = report.libraryDirectory.getChildFile("manifest.json");
+    const auto manifestText = manifest.loadFileAsString();
+    const auto sourceHash = juce::SHA256(source.getChildFile("Guitar_C3_Vel100.wav"))
+                                .toHexString().toStdString();
+    const auto convertedHash = juce::SHA256(
+        juce::File(parsed.regions.front().samplePath.string())).toHexString().toStdString();
+    bool warnedAboutNcw = false;
+    for (const auto& warning : report.warnings)
+        warnedAboutNcw = warnedAboutNcw || warning.find("NCW is not supported") != std::string::npos;
     if (!manifest.existsAsFile()
-        || !manifest.loadFileAsString().contains("USER PROVIDED - VERIFY RIGHTS"))
+        || !manifestText.contains("USER PROVIDED - VERIFY RIGHTS")
+        || !manifestText.contains("SHA-256")
+        || !manifestText.contains(sourceHash)
+        || !manifestText.contains(convertedHash)
+        || !manifestText.contains("sourceSampleRate")
+        || !manifestText.contains("durationSeconds")
+        || !warnedAboutNcw)
     {
-        std::cerr << "Library manifest or license warning missing.\n";
+        std::cerr << "Manifest checksums/metadata, license warning or NCW rejection missing.\\n";
         return 1;
     }
 

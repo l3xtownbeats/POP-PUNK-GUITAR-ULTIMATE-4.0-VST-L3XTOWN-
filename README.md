@@ -251,3 +251,8 @@ ctest --test-dir build -C Release --output-on-failure
 Каждое новое утверждённое предложение заносится в backlog с ID, milestone, статусом и тестом; каждое изменение отражается в README, `jurnal.md`, `Info.txt`, `docs/ЖУРНАЛ_БАГОВ_RU.md` (или реестре требований) и `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md` по применимости. Наличие кода/параметра/кнопки не означает готовность: требуются regression tests, актуальный Windows CI/CTest, pluginval и ручная FL Studio 20 проверка, где применимо. Ничего не терять и не объявлять DONE без доказательств.
 
 **Открытая сверка:** в согласованном описании импорт должен нормализоваться в WAV IEEE Float 32-bit, однако INFO содержит запись о временном 24-bit PCM workaround. Реальный writer и тесты необходимо сверить и привести к утверждённому требованию либо запросить отдельное решение; до этого форматный пункт открыт.
+
+
+## Последняя работа: IMP-002 — SHA-256 и metadata manifest
+
+В importer добавлены source/converted SHA-256, source format, sample rate, channels, frames и duration в manifest. Regression test проверяет контрольные суммы и NCW warning. Реализация ожидает Windows CI; это не означает, что весь импортёр или все форматы приняты. Следующий приоритет основной линии — M1–M3, затем M4/M5 integration.

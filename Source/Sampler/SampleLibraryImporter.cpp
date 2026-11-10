@@ -324,6 +324,7 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
     std::string manifest = "{\n  \"schemaVersion\": 1,\n  \"displayName\": \"" +
         jsonEscape(displayName) + "\",\n  \"internalFormat\": \"WAV IEEE Float 32-bit\",\n"
         "  \"sampleRatePolicy\": \"preserve source rate\",\n"
+        "  \"checksumAlgorithm\": \"SHA-256\",\n"
         "  \"licenseStatus\": \"USER PROVIDED - VERIFY RIGHTS BEFORE REDISTRIBUTION\",\n"
         "  \"samples\": [\n";
     bool firstManifestEntry = true;
@@ -371,6 +372,13 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
 
         const auto sourceBytes = static_cast<std::uint64_t>(source.getSize());
         const auto outputBytes = static_cast<std::uint64_t>(output.getSize());
+        // Hashing is intentionally performed on the import worker, never on the audio thread.
+        const auto sourceSha256 = juce::SHA256(source).toHexString().toStdString();
+        const auto convertedSha256 = juce::SHA256(output).toHexString().toStdString();
+        const auto sourceFormat = source.getFileExtension().toLowerCase().toStdString();
+        const auto sourceSampleRate = reader->sampleRate;
+        const auto sourceChannels = reader->numChannels;
+        const auto sourceFrames = reader->lengthInSamples;
         report.sourceBytes += sourceBytes;
         report.convertedBytes += outputBytes;
         ++report.importedFiles;
@@ -408,8 +416,16 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
             + "\", \"mode\": \"" + playModeName(playMode) + "\""
             + ", \"classification\": \"" + (playMode == ImportedPlayMode::pattern ? "name_hint" : "default_review") + "\""
             + ", \"rootKey\": " + (rootKey >= 0 ? std::to_string(rootKey) : "null")
+            + ", \"sourceFormat\": \"" + jsonEscape(sourceFormat) + "\""
+            + ", \"sourceSampleRate\": " + std::to_string(sourceSampleRate)
+            + ", \"channels\": " + std::to_string(sourceChannels)
+            + ", \"frames\": " + std::to_string(sourceFrames)
+            + ", \"durationSeconds\": " + std::to_string(
+                static_cast<double>(sourceFrames) / sourceSampleRate)
             + ", \"sourceBytes\": " + std::to_string(sourceBytes)
-            + ", \"convertedBytes\": " + std::to_string(outputBytes) + "}";
+            + ", \"convertedBytes\": " + std::to_string(outputBytes)
+            + ", \"sourceSha256\": \"" + sourceSha256 + "\""
+            + ", \"convertedSha256\": \"" + convertedSha256 + "\"}";
         ec.clear();
     }
     manifest += "\n  ]\n}\n";

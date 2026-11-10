@@ -178,3 +178,12 @@ No secondary branch is merged yet. Unified integration requires current branch h
 Для основной линии M1–M5 сохраняется прежний порядок и gate. Все новые реализации должны получать regression tests и проходить Windows x64 Release/CTest; pluginval и ручные проверки FL Studio 20 — по применимости. M6–M10 остаются только лёгкой подготовкой, M11–M13 не интегрировать до принятия M1–M5.
 
 Открытая техническая сверка для следующего аудита: продуктовый контракт требует Float32 WAV после импорта, тогда как историческая запись фиксирует 24-bit PCM workaround. Проверить writer и fixture на реальном HEAD, согласовать код/тесты с Float32, не менять формат молча.
+
+
+## 10 ноября 2026 — IMP-002: контрольные суммы и метаданные импорта
+
+- В importer добавлен SHA-256 исходного файла и конвертированного WAV для каждой успешно импортированной записи manifest.
+- Manifest теперь фиксирует алгоритм checksum, исходное расширение, sample rate, число каналов, количество frames и duration, а также source/converted byte sizes.
+- Хеширование выполняется во время фонового импорта; аудиопоток не затрагивается.
+- Расширен regression test: проверяются присутствие и фактическое совпадение SHA-256 для source/converted sample, аудиометаданные manifest и предупреждение об отклонении NCW.
+- Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI. Проверка не закрывает поддержку реальных FLAC/OGG/MP3 fixture playback, Mapping Editor и license verification.
