@@ -111,6 +111,7 @@ int main()
 
     // Hermite reads that straddle a page boundary must pin both pages and
     // reproduce the continuous source waveform without reading outside either.
+    {
     ppgu::sampler::StreamingVoiceReader voiceReader;
     voiceReader.attach(&service, 0, sourceFrames);
     float streamedLeft = 0.0f, streamedRight = 0.0f;
@@ -130,7 +131,7 @@ int main()
         return 1;
     }
     voiceReader.prefetch(510);
-    voiceReader.release();
+    } // RAII must release all page pins before the stream is stopped.
 
     service.stop();
     if (service.requestPage({ 0, 1 }))
