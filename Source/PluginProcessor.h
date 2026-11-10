@@ -57,8 +57,7 @@ private:
     ppgu::sampler::SamplerEngine sampler;
     ppgu::performance::PatternScheduler patternScheduler;
     ppgu::performance::BlockClock patternTransportClock;
-    std::array<std::array<bool, 128>, 16> patternHeldNotes {};
-    std::array<std::array<int, 128>, 16> patternMappedNotes = [] { std::array<std::array<int, 128>, 16> a {}; for (auto& ch : a) ch.fill(-1); return a; }();
+    ppgu::performance::MappedNoteTracker patternNoteTracker;
     std::array<std::array<int, 128>, 16> melodyMappedNotes = [] { std::array<std::array<int, 128>, 16> a {}; for (auto& ch : a) ch.fill(-1); return a; }();
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};
     std::array<ppgu::performance::ScheduledEvent, ppgu::performance::PatternScheduler::maximumEventsPerBlock> scheduledPatternEvents {};
