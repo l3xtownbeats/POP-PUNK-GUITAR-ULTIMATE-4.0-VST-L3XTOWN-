@@ -91,3 +91,14 @@ CI SUCCESS фиксируется только для перечисленных
 - M2 PR #5 branch `work/m2-velocity-crossfade`, latest commit `ef1ee5b04c3dc6653f749d7602b92a683253d059`, run `42843931173` in progress.
 
 No secondary branch is merged yet. Unified integration requires current branch heads to pass, runtime binding to be completed, and a combined Release/CTest/pluginval/package run. FL Studio 20 remains a separate release gate.
+
+
+## Ручная проверка пользователя — FL Studio 20 / VST3 (10.11.2026)
+
+Пользователь подтвердил фактический smoke test на своей системе:
+- FL Studio 20 запускается.
+- VST3-файл плагина обнаруживается.
+- Плагин загружается в FL Studio 20 и добавляется в проект.
+- При нажатии MIDI-клавиши/ноты слышен звук инструмента.
+
+**Результат:** базовый host-load + MIDI-trigger + audible-output smoke test пройден по подтверждению пользователя. Это важное подтверждение работоспособности реального VST3-хоста, но не закрывает все release gates M1–M3: сохранение/восстановление state, смену/перезагрузку библиотеки, повторные атаки и cache pressure, velocity crossfade/palm-mute articulation, транспорт/seek/loop и длительное воспроизведение ещё требуют отдельных проверок. Не приписывать этому тесту проверку Windows 10, если версия ОС отдельно не подтверждена.
