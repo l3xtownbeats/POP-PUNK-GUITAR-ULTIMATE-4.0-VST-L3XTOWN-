@@ -15,6 +15,12 @@ bool WavPageReader::open(const SampleMetadata& metadata, std::string& error)
 {
     close();
 
+    if (metadata.channels == 0 || metadata.channels > 2)
+    {
+        error = "WAV page reader supports mono/stereo files only.";
+        return false;
+    }
+
     if (!metadata.file.existsAsFile())
     {
         error = "Indexed WAV file no longer exists: " + metadata.file.getFullPathName().toStdString();
