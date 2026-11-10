@@ -23,11 +23,12 @@ public:
 
     struct ReadLease
     {
+        const PageCacheSlots* owner = nullptr;
         std::size_t slot = 0;
         const float* samples = nullptr; // planar: channel * pageFrames + frame
         std::uint32_t channels = 0;
         std::uint32_t frames = 0;
-        explicit operator bool() const noexcept { return samples != nullptr; }
+        explicit operator bool() const noexcept { return samples != nullptr && owner != nullptr; }
     };
 
     PageCacheSlots(std::size_t slotCount, std::uint32_t pageFrames,
