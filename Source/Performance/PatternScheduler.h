@@ -197,10 +197,19 @@ namespace ppgu::performance
             // capacity; no dynamic storage or host calls occur here.
             const double firstCycleValue = std::floor((clock.startPpq - cycleStartPpq) / patternLengthBeats);
             const double lastCycleValue = std::floor((clock.endPpq - cycleStartPpq) / patternLengthBeats);
-            constexpr double maxCycle = static_cast<double>(std::numeric_limits<long long>::max());
+            constexpr long double maxCycle = static_cast<long double>(std::numeric_limits<long long>::max() - 1);
             if (!std::isfinite(firstCycleValue) || !std::isfinite(lastCycleValue)
-                || firstCycleValue > maxCycle || lastCycleValue > maxCycle)
+                || static_cast<long double>(firstCycleValue) > maxCycle
+                || static_cast<long double>(lastCycleValue) > maxCycle)
+            {
+                outputOverflow_ = true;
                 return 0;
+            }
+            if (lastCycleValue - firstCycleValue > static_cast<double>(maximumEventsPerBlock))
+            {
+                outputOverflow_ = true;
+                return 0;
+            }
             const auto firstCycle = static_cast<long long>(firstCycleValue < 0.0 ? 0.0 : firstCycleValue);
             const auto lastCycle = static_cast<long long>(lastCycleValue < 0.0 ? 0.0 : lastCycleValue);
 
@@ -224,7 +233,11 @@ namespace ppgu::performance
                     double onset = cyclePpq + event.beat;
                     if (quantizeBeats > 0.0)
                         onset = cyclePpq + quantize(onset - cyclePpq, quantizeBeats);
+                    if (!std::isfinite(onset))
+                        continue;
                     const double noteOffPpq = onset + event.duration;
+                    if (!std::isfinite(noteOffPpq))
+                        continue;
                     // Only the cycle whose onset lies in this block is emitted.
                     // Long gates retain their NoteOff in the bounded queue.
                     if (onset < clock.startPpq || onset >= clock.endPpq)
