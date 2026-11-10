@@ -138,3 +138,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Проверка исходника выявила и исправила двойное экранирование переводов строк в новой тестовой SFZ fixture.
 - Изменения опубликованы в рабочей ветке коммитами: `8c91bc20`, `15960944`, `8d27214e`, `a11f8b88`, `d3336a32`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI. M2 не закрыта: velocity crossfade playback, потоковая загрузка, реальные 100-hit click validation и host validation остаются открытыми.
+
+
+## 10 ноября 2026 — M2: публикация velocity crossfade metadata в SamplePool
+
+- Четыре разобранных SFZ opcode (`xfin_lovel`, `xfin_hivel`, `xfout_lovel`, `xfout_hivel`) теперь копируются в опубликованный `RegionView`, а не остаются только в промежуточной структуре парсера.
+- Добавлен SamplePool regression test, который загружает SFZ с заданными границами и проверяет, что runtime-регион содержит те же значения.
+- Исправлено экранирование newline в тестовой fixture.
+- Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
+- Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.
