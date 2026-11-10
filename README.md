@@ -40,9 +40,27 @@ Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument comb
 
 </div>
 
-### Included in the package
+### DOWNLOAD — WINDOWS x64 VST3
 
-**Important:** the VST3 binary and full Sample Bank are currently distributed together in the complete ZIP. There are no separate standalone VST3 or Sample Bank archive assets published at this time. Preset JSON and example files can be downloaded individually from the links above. The 300-entry catalogue is not a claim that all 300 presets are already playable in the plugin.
+<div align="center">
+
+## [⬇ DOWNLOAD VST3 + FULL GUITAR SAMPLE LIBRARY + FACTORY PRESETS](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+
+**Complete package · approximately 1.55 GiB · Windows x64**
+
+</div>
+
+The latest verified package is a single ZIP containing the VST3 plugin, the redistributable guitar WAV sample bank and the preset files. Keep the extracted `Samples` folder beside the plugin package as described in `INSTALL_AND_CONTENTS.txt`.
+
+**Separate preset downloads:**
+- [Factory preset catalogue — 300 definitions (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_bank_300.json)
+- [Additional factory preset bank data (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_preset_bank_v1.json)
+- [Melody portable preset example (.ppgm)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Melody.ppgm)
+- [Pattern portable preset example (.ppgp)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Pattern.ppgp)
+
+**Sample library:** currently included in the complete ZIP above; a separate standalone sample-library archive has not yet been published. The 300-entry catalogue is a set of preset definitions, not a claim that all 300 are fully playable in the current plugin build.
+
+**Download availability:** the ZIP is a GitHub Actions artifact, not a permanent Release asset. GitHub may require sign-in/repository access. This artifact is scheduled to expire on **8 February 2027**. A permanent release package will be published after the release build is frozen and validated.
 
 ### Installation
 
@@ -51,9 +69,7 @@ Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument comb
 3. Keep the extracted `Samples` folder available to the plugin.
 4. Open or rescan the plugin in your VST3 host.
 
-See `INSTALL_AND_CONTENTS.txt` inside the package for the package-specific instructions.
-
-<sub>The download is a GitHub Actions artifact, not a permanent GitHub Release asset. GitHub may require repository access/authentication, and artifacts can expire. The currently verified artifact is scheduled to expire on 8 February 2027.</sub>
+[Open the verified build workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125).
 
 ## INSTRUMENT ARCHITECTURE
 
