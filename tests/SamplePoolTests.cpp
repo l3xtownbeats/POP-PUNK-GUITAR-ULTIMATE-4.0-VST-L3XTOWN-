@@ -56,6 +56,43 @@ int main()
         return 1;
     }
 
+    // SFZ seq_length/seq_position must rotate deterministically without
+    // repeating a position until the complete round-robin cycle is consumed.
+    const auto roundRobinSfz = directory.getChildFile("round-robin.sfz");
+    if (!roundRobinSfz.replaceWithText(
+        "<group> group=77\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=1\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=2\n"
+        "<region> sample=test.wav key=64 seq_length=3 seq_position=3\n"))
+    {
+        std::cerr << "Could not write SFZ round-robin fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool roundRobinPool;
+    const auto rrLoad = roundRobinPool.loadSfz(roundRobinSfz);
+    if (!rrLoad.success || rrLoad.loadedRegions != 3)
+    {
+        std::cerr << "SFZ round-robin regions failed to load.\\n";
+        return 1;
+    }
+    for (int expectedPosition = 1; expectedPosition <= 6; ++expectedPosition)
+    {
+        const auto* selected = roundRobinPool.findRegion(64, 100, 1);
+        const int expected = ((expectedPosition - 1) % 3) + 1;
+        if (selected == nullptr || selected->seqPosition != expected)
+        {
+            std::cerr << "SFZ round-robin repeated or skipped a sequence position.\\n";
+            return 1;
+        }
+    }
+    const auto invalidRoundRobin = ppgu::sfz::parseText(
+        "<region> sample=test.wav key=64 seq_length=2 seq_position=3\\n", root);
+    if (!invalidRoundRobin.errors.size())
+    {
+        std::cerr << "SFZ parser accepted seq_position greater than seq_length.\\n";
+        return 1;
+    }
+
     // Meta Open Sound's official SFZ maps reference .ogg preview names,
     // while the redistributable WAV release stores same-stem files under wav/.
     // Verify the production loader resolves that map without rewriting it.
