@@ -37,16 +37,16 @@ REQUIRED_PARAMETER_IDS = {
     "fxSlot7",
 }
 
-declared = set(re.findall(r'(?:floatParameter|boolParameter)\\(\\s*"([^"]+)"', source))
-declared.update(re.findall(r'ParameterID\\s*\\{\\s*"([^"]+)"', source))
+declared = set(re.findall(r'(?:floatParameter|boolParameter)\(\s*"([^"]+)"', source))
+declared.update(re.findall(r'ParameterID\s*\{\s*"([^"]+)"', source))
 
 # FX slots are generated in a bounded loop rather than written as seven literals.
-if re.search(r'for\\s*\\(int\\s+slot\\s*=\\s*0;\\s*slot\\s*<\\s*7;\\s*\\+\\+slot\\)', source) and re.search(
-    r'ParameterID\\s*\\{\\s*"fxSlot"\\s*\\+\\s*juce::String\\(slot\\s*\\+\\s*1\\)', source
+if re.search(r'for\s*\(int\s+slot\s*=\s*0;\s*slot\s*<\s*7;\s*\+\+slot\)', source) and re.search(
+    r'ParameterID\s*\{\s*"fxSlot"\s*\+\s*juce::String\(slot\s*\+\s*1\)', source
 ):
     declared.update(f"fxSlot{i}" for i in range(1, 8))
 
-lookups = set(re.findall(r'getRawParameterValue\\(\\s*"([^"]+)"', source))
+lookups = set(re.findall(r'getRawParameterValue\(\s*"([^"]+)"', source))
 errors: list[str] = []
 
 missing_required = sorted(REQUIRED_PARAMETER_IDS - declared)
@@ -58,8 +58,8 @@ if missing_lookups:
     errors.append("Audio parameter lookups without a declared APVTS ID: " + ", ".join(missing_lookups))
 
 # Detect duplicate literal IDs across helper declarations and ParameterID choices.
-literal_ids = re.findall(r'(?:floatParameter|boolParameter)\\(\\s*"([^"]+)"', source)
-literal_ids += re.findall(r'ParameterID\\s*\\{\\s*"([^"]+)"', source)
+literal_ids = re.findall(r'(?:floatParameter|boolParameter)\(\s*"([^"]+)"', source)
+literal_ids += re.findall(r'ParameterID\s*\{\s*"([^"]+)"', source)
 duplicates = sorted({item for item in literal_ids if literal_ids.count(item) > 1})
 if duplicates:
     errors.append("Duplicate literal APVTS IDs: " + ", ".join(duplicates))
