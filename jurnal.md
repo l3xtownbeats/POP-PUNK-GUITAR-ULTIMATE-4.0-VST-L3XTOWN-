@@ -1119,3 +1119,12 @@ CI факт на момент записи: run 42855790840 на SHA e8f3baa з�
 - M1: pluginval strictness 5 прошёл. DAW save/reopen, state/library restore, automation, panic и host acceptance остаются открытыми.
 - Исправление пути SFZ после atomic publish прошло M1/M2 workflow `42860937017` на commit `39626076a8ded975bdfb280a39880bad66f42b4c`.
 - **Итог:** автоматический build/test/package gate пройден, но M1–M3 не приняты. README.md обновлён как главная страница; журнал багов и полное описание функций синхронизированы с фактическим состоянием кода.
+
+
+## 10 ноября 2026 — обязательное ТЗ на реализацию всего согласованного объёма
+
+По прямому подтверждению пользователя всё ранее согласованное в этой ветке — не справочный wishlist, а обязательный объём конечного продукта. Создан документ `docs/ТЗ_ПОЛНАЯ_РЕАЛИЗАЦИЯ_СОГЛАСОВАННЫХ_ФУНКЦИЙ_RU.md`. Он охватывает импорт WAV/AIFF/AIF/FLAC/OGG/MP3, NCW warning, Float32 WAV conversion, manifest/checksum/licensing, SFZ/mapping/editor/preview, sampler/streaming/mmap/OVERLAPPED/snapshot safety, Voices/multiprocessing, Melody/Pattern, AutoChords/Fingering, Style DNA, MIDI/transport/automation, FX, acoustic profile, 300 factory presets, bank formats, GUI, state restore и FL Studio 20 acceptance.
+
+Обязательное правило: каждый утверждённый пункт должен быть реализован и пройти тесты/CI/host acceptance по применимости. Документация не равна реализации; параметр/класс/кнопка без end-to-end результата не считается готовой функцией. README остаётся главной страницей статуса; все существенные решения, утверждения, изменения и результаты вносить в README, jurnal.md, Info.txt, bug/requirements journal и M1–M5 work log. Новые утверждённые предложения получать ID и попадать в backlog, чтобы ничего не потерялось.
+
+Важная открытая сверка: согласованное требование импорта — IEEE Float 32-bit WAV, но более поздняя техническая запись в Info/work log упоминает временный переход на 24-bit PCM из-за JUCE API compatibility. Не считать форматный пункт закрытым: проверить реальный writer и привести реализацию/тесты к утверждённому Float32 либо вынести альтернативу на явное согласование. Текущий runtime/CI статус не изменён этой документационной фиксацией; M1–M5 остаются по фактическим gates.

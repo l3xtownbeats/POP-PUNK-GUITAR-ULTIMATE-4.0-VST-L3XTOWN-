@@ -205,3 +205,15 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - M3: sample-accurate chord timeline и scheduler output overflow fail-safe покрыты CTest. Ручная FL Studio 20 transport/MIDI acceptance и расширенные host stress остаются OPEN.
 - M1: pluginval strictness 5 закрыт автоматизированным CI, но DAW save/reopen, automation, library reference restore и panic acceptance остаются OPEN.
 - Ни M1, M2, ни M3 не объявляются полностью принятыми.
+
+
+## REQ-BASELINE-001 — обязательная реализация всех утверждённых требований
+
+- Дата: 10.11.2026.
+- Тип: базовое требование продукта (не дефект кода).
+- Решение пользователя: все дополнения и изменения, ранее согласованные в этой ветке, должны быть реализованы.
+- Источник полного перечня и критериев: `docs/ТЗ_ПОЛНАЯ_РЕАЛИЗАЦИЯ_СОГЛАСОВАННЫХ_ФУНКЦИЙ_RU.md`.
+- Область: importer/formats, Float32 normalization, manifest/licensing/checksum, SFZ/mapping/preview, sampler/streaming/mmap/snapshot safety, Voices/multiprocessing, Melody/Pattern, AutoChords/Fingering, Style DNA, MIDI/transport/automation, FX/acoustic, presets/banks, GUI, state restore и FL Studio 20 acceptance.
+- Статус: OPEN — REQUIREMENTS BASELINE; это не означает, что перечисленные функции реализованы.
+- Приёмка: реализация + regression tests + Windows Release/CTest + pluginval + host test по применимости. Для каждого требования вести отдельный статус и доказательства.
+- Форматный конфликт: Float32 WAV является согласованным требованием, но INFO содержит временную запись о 24-bit PCM. Проверить код и исправить несоответствие; до проверки не закрывать.
