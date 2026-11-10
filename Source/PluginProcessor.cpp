@@ -446,6 +446,22 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // AutoChords follows the Session Guitarist-style workflow:
+            // a single held root key becomes a scale-aware triad. If the player
+            // holds two or more notes, preserve that explicit voicing (after
+            // scale snapping) rather than stacking extra chords on top.
+            if (autoChordsEnabled && count == 1)
+            {
+                std::array<int, 3> triad {};
+                if (ppgu::performance::makeDiatonicTriad(
+                        notes[0], selectedScaleRoot, selectedScaleMode, triad))
+                {
+                    notes[0] = triad[0];
+                    notes[1] = triad[1];
+                    notes[2] = triad[2];
+                    count = 3;
+                }
+            }
             return std::make_tuple(notes, count, channel);
         };
 
