@@ -196,3 +196,13 @@ if(BUILD_TESTING)
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
+
+
+# Dependency-free M5 Style DNA transformation regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_style_engine_tests
+        tests/StyleEngineTests.cpp
+    )
+    target_include_directories(ppgu_style_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_style_engine_tests COMMAND ppgu_style_engine_tests)
+endif()

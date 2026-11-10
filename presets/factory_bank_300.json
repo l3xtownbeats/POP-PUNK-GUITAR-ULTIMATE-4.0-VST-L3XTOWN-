@@ -261,14 +261,13 @@
     },
     {
       "id": "M006",
-      "name": "Mest — Palm-Mute Lead",
+      "name": "Mest — PHOTOGRAPHS Lead",
       "mode": "MELODY",
       "referenceArtist": "Mest",
       "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
+        "Photographs"
       ],
-      "tonalTarget": "melodic pop-punk lead and energetic rhythm",
+      "tonalTarget": "melodic pop-punk lead with bright, emotional sustain and tight rhythmic articulation",
       "sampleProfile": "electric",
       "parameters": {
         "drive": 0.84,
@@ -4028,15 +4027,14 @@
     },
     {
       "id": "P006",
-      "name": "Mest — Syncopated Stops",
+      "name": "Mest — PHOTOGRAPHS Rhythm",
       "mode": "PATTERN",
       "referenceArtist": "Mest",
       "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
+        "Photographs"
       ],
-      "tonalTarget": "melodic pop-punk lead and energetic rhythm",
-      "groove": "palm-muted verse to ringing chorus",
+      "tonalTarget": "melodic pop-punk rhythm with tight muted verses and ringing chorus changes",
+      "groove": "tight palm-muted verse into open ringing chorus",
       "articulation": "palm-muted",
       "performance": {
         "chordSource": "incoming-host-MIDI-chords",
@@ -4073,8 +4071,8 @@
       },
       "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
       "status": "catalog-definition-awaiting-pattern-engine-and-recorded-performance-library",
-      "playingStyle": "palm-muted verse to ringing chorus",
-      "soundCharacter": "Acoustic",
+      "playingStyle": "tight muted verse to open chorus",
+      "soundCharacter": "Crunch",
       "availableSoundCharacters": [
         "Clean",
         "Crunch",

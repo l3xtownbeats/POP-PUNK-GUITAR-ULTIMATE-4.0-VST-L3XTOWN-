@@ -20,6 +20,17 @@ if len(melody) + len(pattern) < 300:
     errors.append("Combined bank contains fewer than 300 presets")
 
 all_presets = melody + pattern
+
+# M9 release-content requirement: keep the Mest "Photographs" sound target
+# explicitly discoverable in both playable modes, without bundling protected audio.
+for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
+    if not any(
+        preset.get("referenceArtist") == "Mest"
+        and "Photographs" in preset.get("referenceTracks", [])
+        and preset.get("mode") == expected_mode
+        for preset in presets
+    ):
+        errors.append(f"Missing Mest Photographs reference preset in {expected_mode} bank")
 ids = [p.get("id") for p in all_presets]
 if len(ids) != len(set(ids)):
     errors.append("Preset IDs are not unique")
