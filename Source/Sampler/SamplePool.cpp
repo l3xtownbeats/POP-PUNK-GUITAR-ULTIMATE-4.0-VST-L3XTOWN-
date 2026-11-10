@@ -268,6 +268,10 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         view.offBy = region.offBy;
         view.seqLength = region.seqLength;
         view.seqPosition = region.seqPosition;
+        view.xfinLowVelocity = region.xfinLowVelocity;
+        view.xfinHighVelocity = region.xfinHighVelocity;
+        view.xfoutLowVelocity = region.xfoutLowVelocity;
+        view.xfoutHighVelocity = region.xfoutHighVelocity;
         if (region.seqLength > 1)
         {
             const RoundRobinKey rrKey { region.group, region.seqLength, region.lowKey, region.highKey,
