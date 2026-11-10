@@ -16,6 +16,9 @@ on:
       - 'tools/validate_factory_bank.py'
       - 'tools/validate_preset_files.py'
       - 'presets/examples/**'
+      - 'SKIN/**'
+      - 'assets/**'
+      - 'licenses/**'
       - 'docs/**'
 jobs:
   build:
@@ -216,33 +219,64 @@ jobs:
         run: |
           Write-Host 'Automated pluginval strictness level 5 completed. FL Studio 20 manual host acceptance remains a separate required check.'
 
-      - name: Package VST3, sample library and factory presets
+      - name: Package complete product folder
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          New-Item -ItemType Directory -Force -Path release | Out-Null
-          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination release -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $PWD 'release/Samples') -Recurse
-          # Include the validated 300-preset factory catalog and portable preset files.
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $PWD 'release/presets') -Recurse
-          @'
-          POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
-          ========================================
-          VST3 plugin: included in this archive.
-          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats electric clean + two distorted sets).
-          Factory presets: presets/factory_bank_300.json (150 Melody + 150 Pattern presets).
-          Portable preset examples: presets/examples/.
-          SFZ maps, original license files and source manifests are retained.
-          WAV SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
-          Preset catalog validation: 300 factory presets + portable preset examples.
+          $productRoot = Join-Path $PWD 'release/POP PUNK GUITAR ULTIMATE'
+          New-Item -ItemType Directory -Force -Path $productRoot | Out-Null
 
-          Install the .vst3 bundle to:
+          # Keep the user's requested distribution layout stable.
+          $vstRoot = Join-Path $productRoot 'VST'
+          New-Item -ItemType Directory -Force -Path $vstRoot | Out-Null
+          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination $vstRoot -Recurse
+
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $productRoot 'BANK') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $productRoot 'PRESETS') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN') -Destination (Join-Path $productRoot 'SKIN') -Recurse
+
+          $resourceRoot = Join-Path $productRoot 'RESOURCE'
+          New-Item -ItemType Directory -Force -Path $resourceRoot | Out-Null
+          if (Test-Path (Join-Path $env:PROJECT_DIR 'assets')) {
+            Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'assets') -Destination (Join-Path $resourceRoot 'assets') -Recurse
+          }
+          if (Test-Path (Join-Path $env:PROJECT_DIR 'licenses')) {
+            Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'licenses') -Destination (Join-Path $resourceRoot 'licenses') -Recurse
+          }
+
+          @'
+          POP PUNK GUITAR ULTIMATE 4.0 — WINDOWS x64 VST3
+          =================================================
+          Folder layout:
+            VST/       — VST3 plugin bundle
+            BANK/      — redistributable multisample libraries, SFZ maps and licenses
+            PRESETS/   — 300 factory presets (150 MELODY + 150 PATTERN) and portable examples
+            SKIN/      — 10 separate theme palette packs and SVG previews
+            RESOURCE/  — shared product artwork and license resources
+            Readme.txt — installation and verification notes
+
+          Install the .vst3 bundle from VST/ to:
           C:\Program Files\Common Files\VST3\
-          Keep the Samples folder beside the extracted plugin package. If the plugin's
-          sample browser asks for a library folder, select this Samples directory.
-          This package does not claim DAW validation; test in FL Studio 20 after install.
-          '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
-          Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
+
+          Keep BANK/ beside the product folder. If the plugin requests a sample-library
+          path, select BANK/. Factory preset data is in PRESETS/.
+          SKIN/ currently contains 10 separate palette packs and concept previews.
+          The theme picker/runtime integration is not yet confirmed, so do not assume
+          that these packs are switchable inside the current plugin build.
+
+          Sample source licenses and WAV SHA256 manifest are retained in BANK/.
+          Automated Release build, CTest and pluginval results are recorded in CI.
+          FL Studio 20 manual host acceptance remains a separate check.
+          '@ | Set-Content -Encoding utf8 (Join-Path $productRoot 'Readme.txt')
+
+          $zip = 'POP_PUNK_GUITAR_ULTIMATE_4_0_Windows_x64_VST3_FULL_PACKAGE.zip'
+          Compress-Archive -Path $productRoot -DestinationPath $zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-4.0-Windows-x64-VST3-FULL-PACKAGE
+          path: POP_PUNK_GUITAR_ULTIMATE_4_0_Windows_x64_VST3_FULL_PACKAGE.zip
+          if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
         with:
