@@ -46,6 +46,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginProcessor.h
     Source/PluginEditor.cpp
     Source/PluginEditor.h
+    Source/Sampler/SampleLibraryImporter.cpp
+    Source/Sampler/SampleLibraryImporter.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
@@ -231,4 +233,22 @@ if(BUILD_TESTING)
     add_executable(ppgu_style_engine_tests tests/StyleEngineTests.cpp)
     target_include_directories(ppgu_style_engine_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_style_engine_tests COMMAND ppgu_style_engine_tests)
+endif()
+
+
+# Audio library import regression tests: WAV + AIFF conversion, manifest and SFZ mapping.
+if(BUILD_TESTING)
+    add_executable(ppgu_sample_library_importer_tests
+        Source/Sampler/SampleLibraryImporter.cpp
+        tests/SampleLibraryImporterTests.cpp
+    )
+    target_include_directories(ppgu_sample_library_importer_tests PRIVATE Source/Sampler)
+    target_link_libraries(ppgu_sample_library_importer_tests PRIVATE
+        juce::juce_audio_formats
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_sample_library_importer_tests COMMAND ppgu_sample_library_importer_tests)
 endif()
