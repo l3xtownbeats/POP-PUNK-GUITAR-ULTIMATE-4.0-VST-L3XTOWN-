@@ -159,3 +159,11 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Ограничение host validation: автоматический CI не подтверждает ручное открытие и игру в FL Studio 20. Этот критерий остаётся OPEN до проверки в DAW.
 - Следующий M2 этап: реальное velocity crossfade между SFZ velocity layers. Parser/runtime metadata уже присутствуют, но одновременное смешивание слоёв ещё не реализовано.
 - Статус: PALM-MUTE DSP FALLBACK — CI VERIFIED; M2 — NOT ACCEPTED.
+
+
+## 10 ноября 2026 — ручная проверка FL Studio 20: пользователь подтвердил успех
+
+- Пользователь сообщил, что ручная проверка инструмента в FL Studio 20 завершилась успешно.
+- Это подтверждает положительный пользовательский host smoke test для проверенной сборки.
+- Точная версия FL Studio 20, Windows build, sample rate, buffer size и перечень MIDI/automation/state сценариев не указаны; не приписывать им значения и не считать все host acceptance cases автоматически закрытыми.
+- Статус: USER-REPORTED HOST SMOKE TEST — PASS; расширенный host acceptance checklist — PARTIALLY DOCUMENTED.
