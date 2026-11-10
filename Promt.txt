@@ -529,3 +529,11 @@ VST3, запуск FL, загрузка банка, рендер 60 с.
 - Importer regression suite must cover each enabled decoder, sample metadata, waveform error/round-trip, corrupt input, duplicate assets, cancellation and failure paths. No audio-thread file I/O, allocation, decode, or blocking.
 - Large total library size is disk/index bounded, not RAM bounded. Keep only active-preset assets/pages plus bounded hot/warm cache and release-tail references resident.
 - Current implementation is WAV metadata/page-read foundation only; universal conversion and runtime streaming integration are NOT implemented until their code and tests exist.
+
+
+### M2 — ReadLease не должен копироваться или перемещаться (защита от двойного release)
+- `PageCacheSlots::ReadLease` представляет единственный owning pin. Запретить copy construction/assignment и move construction/assignment, пока не реализована отдельная безопасная transfer-семантика владения.
+- Иначе копия lease может вызвать второй `release()`, уменьшить reader counter повторно и перевести ready slot в некорректное состояние, после чего worker не сможет безопасно evict/reuse страницу.
+- `release()` очищает только исходный lease после decrement; неверный owner остаётся no-op. `tryAcquire()` не должен очищать/перезаписывать активный lease.
+- Compile-time regression: static_assert, что ReadLease не copyable и не movable. Runtime regression: double-acquire, foreign-cache release, owner release, после release slot становится evictable.
+- Не вводить копирование/перемещение lease без доказанной move-transfer реализации и соответствующих тестов. Проверять все call sites при изменении API.
