@@ -1152,3 +1152,15 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Важно: это подготовка runtime-данных, а не готовый velocity crossfade DSP. Два слоя ещё не смешиваются; M2 остаётся открытой.
 - Коммиты: `991d05eb`, `1d82e302`, `21d9b576`, `6aa02483`.
 - Статус: FIXED IN SOURCE / AWAITING WINDOWS CI.
+
+
+## 10 ноября 2026 — Сводка M1–M5 и Windows release gates
+
+- Основной Windows x64 Release workflow run `42841128991`, commit `2159d5fb05dba22f84d312310953422ffbb4eea5`: SUCCESS; build, CTest, VST3 locate, pluginval strictness 5, package/upload завершены. Artifact `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` — 1,664,195,877 bytes.
+- Дополнительный M1/M2 run `42841133299`, commit `34f158e5e6fc162ca76bae9f9fc90eee36c6114d`: SUCCESS; MSVC v143, APVTS audit, VST3 build, sampler tests и bundle verification прошли.
+- M1: CI PASS, но FL Studio 20 save/reopen, missing-library recovery, automation, editor-close/load race, device-change и long-playback host validation ещё OPEN.
+- M2: streaming/RR/cache tests прошли; реальное velocity-layer crossfade DSP, palm-mute/velocity validation на целевой библиотеке, click criteria и audio-thread/concurrency stress ещё OPEN.
+- M3: scheduler tests/build прошли; полная end-to-end проверка MIDI ownership/transport/loop/seek/tempo и FL Studio 20 ещё OPEN.
+- M4: отдельная ветка `work/m4-autochords-fingering`, PR #4; AutoChords/FingeringGenerator и CTest target добавлены. Run `42842050531` на момент записи ещё компилируется, поэтому M4 CI не объявляется успешным.
+- M5: ветка `work/m5-style-engine-tests`, commit `0cc36c7455edb3adcc5bde1f5bd690c831acf3cb`, run `42840410645` SUCCESS (build, CTest, pluginval, packaging). Runtime integration в Pattern Scheduler/UI ещё OPEN.
+- Подробные run/commit/artifact данные и условия merge: `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`.
