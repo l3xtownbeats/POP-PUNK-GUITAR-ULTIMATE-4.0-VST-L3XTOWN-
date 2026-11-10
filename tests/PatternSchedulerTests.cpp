@@ -284,6 +284,20 @@ int main()
     if (overflowScheduler.consumePendingOverflow())
         return 26; // The overflow indication is consumed exactly once.
 
+    // Extreme but finite PPQ spans must fail closed in bounded time and
+    // report the same fail-safe signal as output-array exhaustion.
+    PatternScheduler extremeSpanScheduler;
+    BlockClock extremeSpanClock;
+    extremeSpanClock.running = true;
+    extremeSpanClock.bpm = 120.0;
+    extremeSpanClock.startPpq = 0.0;
+    extremeSpanClock.endPpq = 1.0e100;
+    const auto extremeSpanCount = extremeSpanScheduler.schedule(
+        std::array<PatternEvent, 1> {{{ 0.0, 0.25, 60, 100, 1 }}},
+        4.0, 0.0, extremeSpanClock, 48000.0, 512, 0.0, 0, events);
+    if (extremeSpanCount != 0 || !extremeSpanScheduler.consumePendingOverflow())
+        return 31;
+
     std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
     return 0;
 }
