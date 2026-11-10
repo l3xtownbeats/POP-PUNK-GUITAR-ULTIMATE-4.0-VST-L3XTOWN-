@@ -12,8 +12,6 @@ namespace ppgu::sampler
 namespace
 {
 constexpr double maximumSampleSeconds = 120.0;
-constexpr int maximumSampleChannels = 2;
-
 std::string pathKey(const std::filesystem::path& path)
 {
 #if JUCE_WINDOWS
@@ -125,7 +123,6 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile)
         pendingLibrary = std::make_unique<StreamingLibrary>();
         pendingLibrary->rootKey = rootKey;
         pendingLibrary->metadata = std::move(indexed.samples);
-        pendingLibrary->sampleIds.reserve(pendingLibrary->metadata.size());
         for (std::size_t i = 0; i < pendingLibrary->metadata.size(); ++i)
             pendingLibrary->sampleIds.emplace(
                 pathKey(std::filesystem::path(pendingLibrary->metadata[i].file.getFullPathName().toStdString())),
