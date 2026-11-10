@@ -119,6 +119,28 @@ int main()
         return 1;
     }
 
+    // Velocity crossfade opcodes must survive SFZ parsing and reach the
+    // immutable runtime region metadata (playback blending is a later step).
+    const auto crossfadeMetadataSfz = directory.getChildFile("crossfade-metadata.sfz");
+    if (!crossfadeMetadataSfz.replaceWithText(
+        "<region> sample=test.wav key=67 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=60 xfout_lovel=80 xfout_hivel=120\\n"))
+    {
+        std::cerr << "Could not write velocity crossfade metadata fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool crossfadeMetadataPool;
+    const auto crossfadeMetadataLoad = crossfadeMetadataPool.loadSfz(crossfadeMetadataSfz);
+    const auto* crossfadeMetadataRegion = crossfadeMetadataPool.findRegion(67, 100, 1);
+    if (!crossfadeMetadataLoad.success || crossfadeMetadataRegion == nullptr
+        || crossfadeMetadataRegion->xfinLowVelocity != 20
+        || crossfadeMetadataRegion->xfinHighVelocity != 60
+        || crossfadeMetadataRegion->xfoutLowVelocity != 80
+        || crossfadeMetadataRegion->xfoutHighVelocity != 120)
+    {
+        std::cerr << "Velocity crossfade metadata was lost before runtime region publication.\\n";
+        return 1;
+    }
+
     const auto invalidRoundRobin = ppgu::sfz::parseText(
         "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
     if (!invalidRoundRobin.errors.size())
