@@ -65,14 +65,14 @@ int main()
         "<region> sample=test.wav key=64 seq_length=3 seq_position=2\n"
         "<region> sample=test.wav key=64 seq_length=3 seq_position=3\n"))
     {
-        std::cerr << "Could not write SFZ round-robin fixture.\\n";
+        std::cerr << "Could not write SFZ round-robin fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool roundRobinPool;
     const auto rrLoad = roundRobinPool.loadSfz(roundRobinSfz);
     if (!rrLoad.success || rrLoad.loadedRegions != 3)
     {
-        std::cerr << "SFZ round-robin regions failed to load.\\n";
+        std::cerr << "SFZ round-robin regions failed to load.\n";
         return 1;
     }
     for (int expectedPosition = 1; expectedPosition <= 6; ++expectedPosition)
@@ -81,15 +81,15 @@ int main()
         const int expected = ((expectedPosition - 1) % 3) + 1;
         if (selected == nullptr || selected->seqPosition != expected)
         {
-            std::cerr << "SFZ round-robin repeated or skipped a sequence position.\\n";
+            std::cerr << "SFZ round-robin repeated or skipped a sequence position.\n";
             return 1;
         }
     }
     const auto invalidRoundRobin = ppgu::sfz::parseText(
-        "<region> sample=test.wav key=64 seq_length=2 seq_position=3\\n", root);
+        "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
     if (!invalidRoundRobin.errors.size())
     {
-        std::cerr << "SFZ parser accepted seq_position greater than seq_length.\\n";
+        std::cerr << "SFZ parser accepted seq_position greater than seq_length.\n";
         return 1;
     }
 
@@ -140,7 +140,7 @@ int main()
     baseTuningEngine.prepare(44100.0);
     if (!baseTuningEngine.loadSfz(sfzFile).success || !baseTuningEngine.noteOn(60, 100))
     {
-        std::cerr << "Could not prepare base-pitch tuning regression fixture.\\n";
+        std::cerr << "Could not prepare base-pitch tuning regression fixture.\n";
         return 1;
     }
 
@@ -149,7 +149,7 @@ int main()
     if (!octaveTuningEngine.loadSfz(sfzFile).success
         || !octaveTuningEngine.noteOn(60, 100, ppgu::sampler::SamplerEngine::maximumVoices, 1, 12.0))
     {
-        std::cerr << "Could not prepare octave-tuning regression fixture.\\n";
+        std::cerr << "Could not prepare octave-tuning regression fixture.\n";
         return 1;
     }
 
@@ -177,7 +177,7 @@ int main()
     const int octaveCrossings = risingZeroCrossings(octavePitch);
     if (baseCrossings < 2 || octaveCrossings < baseCrossings + 2)
     {
-        std::cerr << "Global tuning did not raise the sample playback pitch by one octave.\\n";
+        std::cerr << "Global tuning did not raise the sample playback pitch by one octave.\n";
         return 1;
     }
 
