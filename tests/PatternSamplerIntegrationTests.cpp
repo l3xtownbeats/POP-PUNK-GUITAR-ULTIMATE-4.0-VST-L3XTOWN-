@@ -70,7 +70,7 @@ int main()
     constexpr int blockSamples = 512;
     constexpr double sampleRate = 44100.0;
     const auto clock = scheduler.beginBlock(host, false, 120.0, sampleRate, blockSamples);
-    if (!clock.running || !clock.usingHost) return 6;
+    if (!clock.running || !clock.usingHost) return 8;
 
     const std::array<PatternEvent, 1> pattern {{
         PatternEvent { 0.0, 0.02, 60, 112, 1 }
@@ -96,7 +96,7 @@ int main()
         {
             if (!sampler.noteOn(events[i].note, events[i].velocity,
                                 SamplerEngine::maximumVoices, events[i].channel))
-                return 8;
+                return 10;
         }
         else
             sampler.noteOff(events[i].note, events[i].channel);
