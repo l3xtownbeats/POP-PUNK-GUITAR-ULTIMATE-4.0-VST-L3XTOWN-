@@ -1,0 +1,66 @@
+name: PPGU v33 M1 + M2 Windows VST3
+# M2 SFZ channel-map and loop playback are validated in the Windows x64 pipeline.
+on:
+  push:
+    branches:
+      - feat/v33-m1-audio-plugin-skeleton
+      - feat/m2-sampler-loader-ui
+      - feat/m2-sfz-loop-playback
+      - feat/ui-approved-skin-functional
+      - feat/m3-transport-scheduler-v2
+      - fix/m1-m2-m3-release-gates
+    paths:
+      - 'CMakeLists.txt'
+      - 'Source/**'
+      - 'tests/**'
+      - '.github/workflows/m1-windows-build.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ppgu-m1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows-vst3:
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake with MSVC v143
+        shell: pwsh
+        run: |
+          cmake --version
+          cmake -S . -B build -A x64 -DPPGU_FL_VST3_DIR="$env:RUNNER_TEMP\VST3"
+
+      - name: Audit M1 APVTS parameter IDs
+        shell: pwsh
+        run: |
+          python tools/audit_m1_parameters.py
+
+      - name: Build Release VST3
+        shell: pwsh
+        run: |
+          cmake --build build --config Release --parallel 2
+
+      - name: Run sampler unit and integration tests
+        shell: pwsh
+        run: |
+          ctest --test-dir build -C Release --output-on-failure
+
+      - name: Verify installed VST3 bundle
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP 'VST3/POP PUNK GUITAR ULTIMATE.vst3'
+          if (-not (Test-Path $bundle -PathType Container)) { throw "JUCE post-build copy did not create bundle: $bundle" }
+          $module = Get-ChildItem $bundle -Recurse -File | Where-Object { $_.Extension -eq '.vst3' -or $_.Name -match 'PopPunkGuitarUltimate' }
+          if (-not $module) { throw 'VST3 module binary was not found inside bundle.' }
+          Get-ChildItem $bundle -Recurse | Select-Object FullName,Length
+
+      - name: Upload M1 VST3 build
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-v33-M1-Windows-x64-VST3
+          path: ${{ runner.temp }}/VST3
+          if-no-files-found: error
+          retention-days: 30
