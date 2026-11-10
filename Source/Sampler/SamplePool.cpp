@@ -323,7 +323,6 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
                 sequenceLength = region.seqLength;
                 sequenceGroup = region.group;
             }
-            if (region.seqLength == sequenceLength && region.group == sequenceGroup)
         }
     }
 
