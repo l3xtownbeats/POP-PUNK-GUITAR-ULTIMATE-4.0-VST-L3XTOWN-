@@ -19,6 +19,10 @@ struct PageKey
 class PageCacheSlots final
 {
 public:
+    // Keep the streaming cache deliberately small and bounded even if a
+    // caller supplies unreasonable page/slot settings.
+    static constexpr std::size_t maximumCacheBytes = 256U * 1024U * 1024U;
+
     enum class State : std::uint8_t { empty, loading, ready, reading };
 
     struct ReadLease
