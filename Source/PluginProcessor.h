@@ -4,6 +4,7 @@
 #include <atomic>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <array>
 #include <vector>
 #include "Sampler/SamplePool.h"
@@ -92,7 +93,8 @@ private:
     // Monotonic request token: only the newest requested bank may publish its
     // path/callback. A single worker serializes sampler mutations; stale queued
     // jobs are skipped before doing disk/index work.
-    std::atomic<std::uint64_t> sampleLoadGeneration { 0 };
+    std::shared_ptr<std::atomic<std::uint64_t>> sampleLoadGeneration {
+        std::make_shared<std::atomic<std::uint64_t>>(0) };
     // Declared after sampler so the worker pool is destroyed first; the destructor
     // also waits for in-flight loads before sampler storage is released.
     juce::ThreadPool sampleLoadPool { 1 };
