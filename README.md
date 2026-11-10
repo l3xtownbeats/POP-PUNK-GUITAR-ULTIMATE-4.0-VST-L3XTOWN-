@@ -8,10 +8,6 @@
 
 **PLAY. CREATE. ROCK.**
 
-[![Windows x64](https://img.shields.io/badge/Windows-x64-222222?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows)
-[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://www.steinberg.net/developers/)
-[![JUCE](https://img.shields.io/badge/Engine-JUCE_7-222222?style=for-the-badge)](https://juce.com/)
-[![C++20](https://img.shields.io/badge/Code-C%2B%2B20-222222?style=for-the-badge)](https://isocpp.org/)
 
 </div>
 
@@ -25,11 +21,10 @@ The product target is a fast, expressive, commercial-grade pop-punk guitar instr
 
 > This is an actively developed instrument. The current build is an engineering preview, not a finished commercial release. The feature and preset status below separates working code from planned/catalogued functionality.
 
-## Download — Windows x64 VST3 + sound bank + presets
+
 
 <div align="center">
 
-### [DOWNLOAD VST3 + BANK SAMPLES + PRESETS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE/actions/runs/42747513529/artifacts/13732701092)
 
 [Open the build page if the direct artifact link does not start](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE/actions/runs/42747513529)
 
