@@ -20,7 +20,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 {
     setSize(1040, 790);
     setResizable(true, true);
-    setResizeLimits(800, 650, 1600, 1100);
+    // The current fixed-height control stack needs ~788 px including outer margins.
+    // Do not allow a window size that clips the keyboard or lower controls.
+    setResizeLimits(800, 790, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
