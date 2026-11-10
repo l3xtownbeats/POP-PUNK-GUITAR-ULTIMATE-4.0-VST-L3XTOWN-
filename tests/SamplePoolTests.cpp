@@ -13,6 +13,93 @@ int main()
     const auto root = std::filesystem::temp_directory_path() / "ppgu-sample-pool-tests";
     std::filesystem::create_directories(root);
     const juce::File directory(root.string());
+
+    // Cache slots must remain pinned while any audio reader owns a lease.
+    // A second reader may share the immutable page, but neither an unrelated
+    // cache nor a partial release may make the slot eligible for eviction.
+    {
+        using ppgu::sampler::PageCacheSlots;
+        PageCacheSlots cache(1, 64, 2);
+        PageCacheSlots unrelatedCache(1, 64, 2);
+        const PageCacheSlots::PageKey firstPage { 7, 0 };
+        const PageCacheSlots::PageKey replacementPage { 7, 1 };
+        std::size_t slot = 0;
+        if (!cache.isValid() || !cache.tryBeginLoad(firstPage, slot))
+        {
+            std::cerr << "Could not reserve the initial page-cache slot.\\n";
+            return 1;
+        }
+        auto* pageData = cache.writableData(slot);
+        if (pageData == nullptr)
+        {
+            std::cerr << "Page-cache reservation did not expose worker storage.\\n";
+            return 1;
+        }
+        for (int frame = 0; frame < 64; ++frame)
+        {
+            pageData[frame] = 0.25f;
+            pageData[64 + frame] = -0.25f;
+        }
+        if (!cache.publish(slot, firstPage, 2, 64))
+        {
+            std::cerr << "Could not publish the initial page-cache page.\\n";
+            return 1;
+        }
+
+        PageCacheSlots::ReadLease firstReader;
+        PageCacheSlots::ReadLease secondReader;
+        if (!cache.tryAcquire(firstPage, firstReader)
+            || !cache.tryAcquire(firstPage, secondReader)
+            || firstReader.samples[0] != 0.25f
+            || secondReader.samples[64] != -0.25f)
+        {
+            std::cerr << "Multiple readers could not safely acquire the same cached page.\\n";
+            return 1;
+        }
+
+        unrelatedCache.release(firstReader);
+        if (cache.tryBeginLoad(replacementPage, slot))
+        {
+            std::cerr << "An unrelated cache released another cache's live page lease.\\n";
+            return 1;
+        }
+        cache.release(firstReader);
+        if (cache.tryBeginLoad(replacementPage, slot))
+        {
+            std::cerr << "Page-cache slot was evicted while a second reader still held it.\\n";
+            return 1;
+        }
+        cache.release(secondReader);
+        if (!cache.tryBeginLoad(replacementPage, slot)
+            || cache.state(slot) != PageCacheSlots::State::loading)
+        {
+            std::cerr << "Page-cache slot remained pinned after all readers released it.\\n";
+            return 1;
+        }
+        pageData = cache.writableData(slot);
+        if (pageData == nullptr)
+        {
+            std::cerr << "Replacement page did not receive writable cache storage.\\n";
+            return 1;
+        }
+        pageData[0] = 0.5f;
+        if (!cache.publish(slot, replacementPage, 1, 1))
+        {
+            std::cerr << "Replacement page could not be published after lease release.\\n";
+            return 1;
+        }
+        PageCacheSlots::ReadLease replacementReader;
+        if (cache.tryAcquire(firstPage, replacementReader)
+            || !cache.tryAcquire(replacementPage, replacementReader)
+            || replacementReader.frames != 1
+            || replacementReader.channels != 1
+            || replacementReader.samples[0] != 0.5f)
+        {
+            std::cerr << "Page-cache replacement published incorrect page metadata or samples.\\n";
+            return 1;
+        }
+        cache.release(replacementReader);
+    }
     const auto wavFile = directory.getChildFile("test.wav");
     const auto sfzFile = directory.getChildFile("test.sfz");
 
