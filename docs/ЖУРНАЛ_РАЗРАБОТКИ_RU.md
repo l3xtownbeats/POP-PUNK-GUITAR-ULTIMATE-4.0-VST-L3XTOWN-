@@ -1188,3 +1188,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 ## 10.11.2026 — Импорт пользовательских аудиобиблиотек
 
 В движок и UI добавлена первая версия импорта: кнопка IMPORT AUDIO выбирает папку, worker сканирует форматы, которые доступны JUCE Basic AudioFormatManager в текущей сборке, и конвертирует mono/stereo в IEEE float32 WAV чанками. Исходная частота/канальность сохраняются. Создаются BANK folder, manifest, license reminder и SFZ mapping для root-note в имени файла. Неоднозначные файлы импортируются, но требуют ручного mapping. Добавлен regression test WAV + AIFF. CI run IDs: 42850028375 / 42850028356, ещё выполняются на момент записи. До CI pass функцию не считать release-validated.
+
+
+## Build correction — 10.11.2026
+
+Первый Windows CI importer выявил несовместимости с используемой версией JUCE: старый AudioFormatWriter не имеет Options API, а read() требует AudioBuffer overload. Исправлено:
+- выбран совместимый 24-bit PCM WAV как внутренний формат (не IEEE float32);
+- используется legacy WavAudioFormat::createWriterFor(stream, sampleRate, channels, 24, ...);
+- AudioFormatReader::read(&buffer, ...) вызван через поддерживаемую сигнатуру;
+- исправлены явные преобразования juce::String/std::string;
+- кнопка переименована в IMPORT SOUNDS, основной UX — выбор целой папки через системный browser.
+Повторный Windows CI запущен на новом HEAD; результат будет внесён отдельно. Предыдущий run 42850028356 FAILED и считается диагностическим, не релизным.
