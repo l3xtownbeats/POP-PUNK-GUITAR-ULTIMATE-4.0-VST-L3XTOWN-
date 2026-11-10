@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
+#include <limits>
 #include <system_error>
 
 namespace ppgu::sampler
@@ -106,9 +107,9 @@ SampleIndexReport SampleMetadataIndex::scanDirectory(const juce::File& directory
 
         if (!std::isfinite(reader->sampleRate) || reader->sampleRate < 8000.0
             || reader->sampleRate > 384000.0 || reader->lengthInSamples <= 0
-            || reader->numChannels == 0 || reader->numChannels > 64)
+            || reader->numChannels == 0 || reader->numChannels > 2)
         {
-            report.warnings.emplace_back("Invalid WAV metadata: " + canonical.string());
+            report.warnings.emplace_back("Invalid WAV metadata (sampler currently supports mono/stereo only): " + canonical.string());
             continue;
         }
 
@@ -121,6 +122,14 @@ SampleIndexReport SampleMetadataIndex::scanDirectory(const juce::File& directory
         metadata.floatingPoint = reader->usesFloatingPointData;
         metadata.fileBytes = bytes;
         metadata.modificationTimeMs = juce::File(canonical.string()).getLastModificationTime().toMilliseconds();
+
+        if (bytes > std::numeric_limits<std::uint64_t>::max() - report.totalFileBytes
+            || metadata.frames > std::numeric_limits<std::uint64_t>::max() - report.totalFrames)
+        {
+            report.warnings.emplace_back("Skipped WAV because aggregate library metadata would overflow 64-bit counters: "
+                                         + canonical.string());
+            continue;
+        }
 
         report.totalFileBytes += bytes;
         report.totalFrames += metadata.frames;
