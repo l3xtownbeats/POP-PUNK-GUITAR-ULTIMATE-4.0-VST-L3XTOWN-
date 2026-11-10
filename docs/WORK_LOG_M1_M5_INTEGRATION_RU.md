@@ -134,3 +134,14 @@ No secondary branch is merged yet. Unified integration requires current branch h
 - Добавлен тест tests/SampleLibraryImporterTests.cpp: WAV + AIFF fixtures, float32 output, key parsing, SFZ path validation, manifest and repeat import.
 - CI runs на SHA e905ec43710b3a44232d6b839f35e306edf3c451: runs 42850028375 (build) и 42850028356 (Windows VST3) на момент записи ещё выполняются. Итог не подтверждён.
 - Следующий этап: проверить текущий CI, исправить compile/test issues; затем добавить ручной Mapping Editor (key/velocity/articulation/RR), preview, rescan/remove, checksum and import cancellation. Не обещать поддержку форматов, не декодированных фактической сборкой.
+
+
+## Build correction — 10.11.2026
+
+Первый Windows CI importer выявил несовместимости с используемой версией JUCE: старый AudioFormatWriter не имеет Options API, а read() требует AudioBuffer overload. Исправлено:
+- выбран совместимый 24-bit PCM WAV как внутренний формат (не IEEE float32);
+- используется legacy WavAudioFormat::createWriterFor(stream, sampleRate, channels, 24, ...);
+- AudioFormatReader::read(&buffer, ...) вызван через поддерживаемую сигнатуру;
+- исправлены явные преобразования juce::String/std::string;
+- кнопка переименована в IMPORT SOUNDS, основной UX — выбор целой папки через системный browser.
+Повторный Windows CI запущен на новом HEAD; результат будет внесён отдельно. Предыдущий run 42850028356 FAILED и считается диагностическим, не релизным.
