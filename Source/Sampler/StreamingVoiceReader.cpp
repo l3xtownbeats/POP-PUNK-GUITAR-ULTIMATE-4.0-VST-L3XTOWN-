@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <utility>
 
 namespace ppgu::sampler
 {
@@ -23,7 +24,26 @@ void StreamingVoiceReader::release() noexcept
         for (auto& lease : leases)
             if (lease)
                 stream->release(lease);
+    leasePages.fill(noPage);
+    pendingPages.fill(noPage);
+    retryCountdown.fill(0);
+    stream = nullptr;
+    sourceSampleId = 0;
+    sourceFrames = 0;
+}
 
+void StreamingVoiceReader::transferTo(StreamingVoiceReader& destination) noexcept
+{
+    if (&destination == this) return;
+    destination.release();
+    destination.stream = stream;
+    destination.sourceSampleId = sourceSampleId;
+    destination.sourceFrames = sourceFrames;
+    for (std::size_t i = 0; i < leaseCount; ++i)
+        destination.leases[i] = std::move(leases[i]);
+    destination.leasePages = leasePages;
+    destination.pendingPages = pendingPages;
+    destination.retryCountdown = retryCountdown;
     leasePages.fill(noPage);
     pendingPages.fill(noPage);
     retryCountdown.fill(0);

@@ -33,6 +33,7 @@ public:
         std::uint64_t pagesDecoded = 0;
         std::uint64_t decodeFailures = 0;
         std::uint64_t cacheFull = 0;
+        std::uint64_t requestsCoalesced = 0;
     };
 
     SampleStreamingService(std::vector<SampleMetadata> samples,
@@ -63,6 +64,15 @@ private:
     struct Request
     {
         PageKey key;
+        std::uint16_t pendingSlot = 0;
+    };
+
+    struct PendingRequestSlot
+    {
+        // 0 = empty, 1 = published/in flight, 2 = producer reservation.
+        std::atomic<std::uint8_t> state { 0 };
+        std::atomic<std::uint32_t> sampleId { 0 };
+        std::atomic<std::uint64_t> pageIndex { 0 };
     };
 
     void workerLoop() noexcept;
@@ -70,6 +80,7 @@ private:
     const std::vector<SampleMetadata> samples;
     PageCacheSlots pages;
     BoundedSpscQueue<Request, requestQueueCapacity> requests;
+    std::array<PendingRequestSlot, requestQueueCapacity> pendingRequests {};
     std::atomic<bool> running { false };
     std::thread worker;
 
@@ -82,5 +93,6 @@ private:
     std::atomic<std::uint64_t> pagesDecoded { 0 };
     std::atomic<std::uint64_t> decodeFailures { 0 };
     std::atomic<std::uint64_t> cacheFull { 0 };
+    std::atomic<std::uint64_t> requestsCoalesced { 0 };
 };
 }

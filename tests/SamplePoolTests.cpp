@@ -108,6 +108,24 @@ int main()
         return 1;
     }
 
+    // SFZ equal-power fade-in/fade-out weights are applied at note-on.
+    const auto fadeInStart = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(20, 20, 50, -1, -1);
+    const auto fadeInMid = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(35, 20, 50, -1, -1);
+    const auto fadeInEnd = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(50, 20, 50, -1, -1);
+    const auto fadeOutStart = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(80, -1, -1, 80, 110);
+    const auto fadeOutMid = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(95, -1, -1, 80, 110);
+    const auto fadeOutEnd = ppgu::sampler::SamplePool::calculateVelocityCrossfadeGain(110, -1, -1, 80, 110);
+    if (std::abs(fadeInStart) > 0.0001f
+        || std::abs(fadeInMid - 0.7071067f) > 0.001f
+        || std::abs(fadeInEnd - 1.0f) > 0.0001f
+        || std::abs(fadeOutStart - 1.0f) > 0.0001f
+        || std::abs(fadeOutMid - 0.7071067f) > 0.001f
+        || std::abs(fadeOutEnd) > 0.0001f)
+    {
+        std::cerr << "SFZ velocity fade gain curve produced unexpected weights.\\n";
+        return 1;
+    }
+
     // Production SFZ regions must reference the background streamer rather
     // than retaining a fully decoded AudioBuffer for every source WAV.
     ppgu::sampler::SamplePool streamingProbe;
@@ -161,7 +179,9 @@ int main()
     const auto longDurationSfz = longDurationDirectory.getChildFile("long-duration.sfz");
     constexpr int longDurationFrames = 8000 * 121;
     juce::AudioBuffer<float> longDurationSource(1, longDurationFrames);
-    longDurationSource.clear();
+    for (int i = 0; i < longDurationSource.getNumSamples(); ++i)
+        longDurationSource.setSample(0, i, static_cast<float>(
+            0.25 * std::sin(2.0 * juce::MathConstants<double>::pi * 220.0 * i / 8000.0)));
     std::unique_ptr<juce::OutputStream> longDurationOutput(longDurationWav.createOutputStream());
     if (longDurationOutput == nullptr)
     {
@@ -195,6 +215,34 @@ int main()
     {
         std::cerr << "Streaming sampler rejected or truncated a 121-second WAV.\\n";
         for (const auto& error : longDurationLoad.errors) std::cerr << error << "\\n";
+        return 1;
+    }
+
+    // Velocity/articulation-triggered palm mute must damp and retire a sustained
+    // streaming voice automatically, without requiring an early MIDI Note Off.
+    ppgu::sampler::SamplerEngine palmMuteEngine;
+    palmMuteEngine.prepare(44100.0);
+    const auto palmMuteLoad = palmMuteEngine.loadSfz(longDurationSfz);
+    if (!palmMuteLoad.success || !palmMuteEngine.noteOn(73, 110,
+            ppgu::sampler::SamplerEngine::maximumVoices, 1, 0.0, true))
+    {
+        std::cerr << "Could not start the palm-mute streaming regression fixture.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> palmMuteOutput(2, 128);
+    bool palmMuteBecameAudible = false;
+    for (int attempt = 0; attempt < 70; ++attempt)
+    {
+        palmMuteOutput.clear();
+        palmMuteEngine.render(palmMuteOutput, 0, palmMuteOutput.getNumSamples());
+        palmMuteBecameAudible = palmMuteBecameAudible
+            || palmMuteOutput.getMagnitude(0, 0, palmMuteOutput.getNumSamples()) > 0.001f;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!palmMuteBecameAudible || palmMuteEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Palm mute did not produce an audible, self-terminating damped note. Active voices: "
+                  << palmMuteEngine.getActiveVoiceCount() << "\\n";
         return 1;
     }
 
@@ -367,6 +415,106 @@ int main()
         || incompleteFirst->group != 79 || incompleteFallback->group != 79)
     {
         std::cerr << "Incomplete SFZ round-robin fallback selected an unrelated non-RR region.\n";
+        return 1;
+    }
+
+    // Two compatible SFZ regions must be returned as a pair and mixed
+    // with equal-power weights; a one-voice polyphony limit must retain unity
+    // gain rather than starting a second voice that steals the first.
+    const auto velocityPairSfz = directory.getChildFile("velocity-pair.sfz");
+    if (!velocityPairSfz.replaceWithText(
+        "<group> group=91\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
+    {
+        std::cerr << "Could not write paired velocity crossfade fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool velocityPairPool;
+    const auto velocityPairLoad = velocityPairPool.loadSfz(velocityPairSfz);
+    const auto velocityPair = velocityPairPool.findVelocityLayers(69, 60, 1);
+    if (!velocityPairLoad.success || velocityPair.primary == nullptr || velocityPair.secondary == nullptr
+        || std::abs(velocityPair.primaryGain - 0.7071067f) > 0.002f
+        || std::abs(velocityPair.secondaryGain - 0.7071067f) > 0.002f
+        || std::abs(velocityPair.primaryGain * velocityPair.primaryGain
+            + velocityPair.secondaryGain * velocityPair.secondaryGain - 1.0f) > 0.002f)
+    {
+        std::cerr << "Compatible SFZ velocity regions were not paired with equal-power gains.\\n";
+        for (const auto& error : velocityPairLoad.errors) std::cerr << error << "\\n";
+        return 1;
+    }
+    const auto velocityPairStart = velocityPairPool.findVelocityLayers(69, 20, 1);
+    const auto velocityPairEnd = velocityPairPool.findVelocityLayers(69, 100, 1);
+    if (velocityPairStart.secondary == nullptr || velocityPairEnd.secondary == nullptr
+        || std::abs(velocityPairStart.primaryGain - 1.0f) > 0.001f
+        || std::abs(velocityPairStart.secondaryGain) > 0.001f
+        || std::abs(velocityPairEnd.primaryGain) > 0.001f
+        || std::abs(velocityPairEnd.secondaryGain - 1.0f) > 0.001f)
+    {
+        std::cerr << "SFZ velocity crossfade endpoints did not resolve to the expected layer.\\n";
+        return 1;
+    }
+
+    // Regions from different SFZ groups are independent articulations and
+    // must never be blended merely because their MIDI/velocity ranges overlap.
+    const auto incompatiblePairSfz = directory.getChildFile("velocity-pair-incompatible.sfz");
+    if (!incompatiblePairSfz.replaceWithText(
+        "<group> group=91\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<group> group=92\n"
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=20 xfin_hivel=100\n"))
+    {
+        std::cerr << "Could not write incompatible velocity-layer fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool incompatiblePairPool;
+    const auto incompatiblePairLoad = incompatiblePairPool.loadSfz(incompatiblePairSfz);
+    const auto incompatiblePair = incompatiblePairPool.findVelocityLayers(69, 60, 1);
+    if (!incompatiblePairLoad.success || incompatiblePair.primary == nullptr
+        || incompatiblePair.secondary != nullptr || std::abs(incompatiblePair.primaryGain - 1.0f) > 0.001f)
+    {
+        std::cerr << "Sampler blended incompatible SFZ groups during velocity crossfade.\n";
+        for (const auto& error : incompatiblePairLoad.errors) std::cerr << error << "\n";
+        return 1;
+    }
+
+    // The fade window must match on both regions. A merely overlapping but
+    // differently configured xfin/xfout pair is ambiguous and stays unpaired.
+    const auto mismatchedWindowSfz = directory.getChildFile("velocity-pair-window-mismatch.sfz");
+    if (!mismatchedWindowSfz.replaceWithText(
+        "<group> group=93\n"
+        "<region> sample=test.wav key=69 lovel=1 hivel=127 xfout_lovel=20 xfout_hivel=100\n"
+        "<region> sample=long-duration-library/long-duration.wav key=69 lovel=1 hivel=127 xfin_lovel=30 xfin_hivel=110\n"))
+    {
+        std::cerr << "Could not write mismatched velocity-window fixture.\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool mismatchedWindowPool;
+    const auto mismatchedWindowLoad = mismatchedWindowPool.loadSfz(mismatchedWindowSfz);
+    const auto mismatchedWindow = mismatchedWindowPool.findVelocityLayers(69, 60, 1);
+    if (!mismatchedWindowLoad.success || mismatchedWindow.primary == nullptr
+        || mismatchedWindow.secondary != nullptr)
+    {
+        std::cerr << "Sampler paired SFZ regions with mismatched crossfade windows.\n";
+        return 1;
+    }
+
+    ppgu::sampler::SamplerEngine pairedPlaybackEngine;
+    pairedPlaybackEngine.prepare(44100.0);
+    if (!pairedPlaybackEngine.loadSfz(velocityPairSfz).success
+        || !pairedPlaybackEngine.noteOn(69, 60, 2)
+        || pairedPlaybackEngine.getActiveVoiceCount() != 2)
+    {
+        std::cerr << "Sampler did not start both compatible crossfade layers within polyphony 2.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplerEngine singleVoiceFallbackEngine;
+    singleVoiceFallbackEngine.prepare(44100.0);
+    if (!singleVoiceFallbackEngine.loadSfz(velocityPairSfz).success
+        || !singleVoiceFallbackEngine.noteOn(69, 60, 1)
+        || singleVoiceFallbackEngine.getActiveVoiceCount() != 1)
+    {
+        std::cerr << "Velocity crossfade did not safely fall back to one voice at polyphony 1.\\n";
         return 1;
     }
 
@@ -734,6 +882,35 @@ int main()
         return 1;
     }
 
-    std::cout << "SamplePool tests passed: WAV decode, SFZ load, MIDI playback, and polyphony cap.\n";
+    ppgu::sampler::SamplerEngine stealEngine;
+    stealEngine.prepare(44100.0);
+    if (!stealEngine.loadSfz(sfzFile).success) return 1;
+    constexpr int stealHits = 40;
+    juce::AudioBuffer<float> stealAudio(2, stealHits * 128);
+    stealAudio.clear();
+    for (int hit = 0; hit < stealHits; ++hit)
+    {
+        const int offset = hit * 128;
+        const int velocity = 30 + ((hit * 29) % 96);
+        if (!stealEngine.noteOn(60, velocity, 1, 1)) return 1;
+        stealEngine.render(stealAudio, offset, 64);
+        stealEngine.noteOff(60, 1);
+        stealEngine.render(stealAudio, offset + 64, 64);
+    }
+    float stealPeak = 0.0f, stealMaxDelta = 0.0f;
+    for (int i = 0; i < stealAudio.getNumSamples(); ++i)
+    {
+        const float value = stealAudio.getSample(0, i);
+        if (!std::isfinite(value)) return 1;
+        stealPeak = juce::jmax(stealPeak, std::abs(value));
+        if (i > 0) stealMaxDelta = juce::jmax(stealMaxDelta,
+            std::abs(value - stealAudio.getSample(0, i - 1)));
+    }
+    if (stealPeak <= 0.001f || stealMaxDelta > 0.20f)
+    {
+        std::cerr << "Voice-steal click regression failed; max delta=" << stealMaxDelta << ".\n";
+        return 1;
+    }
+    std::cout << "SamplePool tests passed: WAV/SFZ, 100-hit continuity and bounded click-free voice stealing.\n";
     return 0;
 }

@@ -74,13 +74,45 @@ bool SampleStreamingService::requestPage(PageKey key) noexcept
         return false;
     }
 
-    if (!requests.tryPush(Request { key }))
+    // A published or already queued/in-flight page needs no duplicate disk read.
+    if (pages.containsReady(key))
+        return true;
+    for (const auto& pending : pendingRequests)
     {
-        queueOverflows.fetch_add(1, std::memory_order_relaxed);
-        return false;
+        if (pending.state.load(std::memory_order_acquire) != 1)
+            continue;
+        if (pending.sampleId.load(std::memory_order_relaxed) == key.sampleId
+            && pending.pageIndex.load(std::memory_order_relaxed) == key.pageIndex)
+        {
+            requestsCoalesced.fetch_add(1, std::memory_order_relaxed);
+            return true;
+        }
     }
-    requestsSubmitted.fetch_add(1, std::memory_order_relaxed);
-    return true;
+
+    // Single audio-thread producer reserves one fixed slot, publishes its key,
+    // then enqueues the slot index. Worker releases it only after decode/skip.
+    for (std::size_t i = 0; i < pendingRequests.size(); ++i)
+    {
+        auto& pending = pendingRequests[i];
+        std::uint8_t expected = 0;
+        if (!pending.state.compare_exchange_strong(expected, 2,
+                std::memory_order_acquire, std::memory_order_relaxed))
+            continue;
+        pending.sampleId.store(key.sampleId, std::memory_order_relaxed);
+        pending.pageIndex.store(key.pageIndex, std::memory_order_relaxed);
+        pending.state.store(1, std::memory_order_release);
+        if (!requests.tryPush(Request { key, static_cast<std::uint16_t>(i) }))
+        {
+            pending.state.store(0, std::memory_order_release);
+            queueOverflows.fetch_add(1, std::memory_order_relaxed);
+            return false;
+        }
+        requestsSubmitted.fetch_add(1, std::memory_order_relaxed);
+        return true;
+    }
+
+    queueOverflows.fetch_add(1, std::memory_order_relaxed);
+    return false;
 }
 
 bool SampleStreamingService::tryAcquire(PageKey key, PageCacheSlots::ReadLease& lease) noexcept
@@ -127,7 +159,8 @@ SampleStreamingService::Statistics SampleStreamingService::statistics() const no
         cacheMisses.load(std::memory_order_relaxed),
         pagesDecoded.load(std::memory_order_relaxed),
         decodeFailures.load(std::memory_order_relaxed),
-        cacheFull.load(std::memory_order_relaxed)
+        cacheFull.load(std::memory_order_relaxed),
+        requestsCoalesced.load(std::memory_order_relaxed)
     };
 }
 
@@ -146,6 +179,14 @@ void SampleStreamingService::workerLoop() noexcept
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
         }
+
+        if (request.pendingSlot >= pendingRequests.size())
+            continue;
+        struct PendingSlotGuard
+        {
+            std::atomic<std::uint8_t>* state;
+            ~PendingSlotGuard() { state->store(0, std::memory_order_release); }
+        } pendingSlotGuard { &pendingRequests[request.pendingSlot].state };
 
         requestsProcessed.fetch_add(1, std::memory_order_relaxed);
         const auto key = request.key;

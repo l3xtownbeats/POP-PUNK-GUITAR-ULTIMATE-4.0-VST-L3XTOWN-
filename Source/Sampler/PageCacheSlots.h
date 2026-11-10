@@ -30,10 +30,10 @@ public:
         ReadLease() = default;
         ReadLease(const ReadLease&) = delete;
         ReadLease& operator=(const ReadLease&) = delete;
-        ReadLease(ReadLease&&) = delete;
-        ReadLease& operator=(ReadLease&&) = delete;
+        ReadLease(ReadLease&& other) noexcept;
+        ReadLease& operator=(ReadLease&& other) noexcept;
 
-        const PageCacheSlots* owner = nullptr;
+        PageCacheSlots* owner = nullptr;
         std::size_t slot = 0;
         const float* samples = nullptr; // planar: channel * pageFrames + frame
         std::uint32_t channels = 0;

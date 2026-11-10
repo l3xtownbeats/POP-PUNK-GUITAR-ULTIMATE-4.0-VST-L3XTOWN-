@@ -86,7 +86,24 @@ public:
         mutable std::vector<std::uint32_t> roundRobinCounters;
     };
 
+    struct VelocityLayerSelection
+    {
+        const RegionView* primary = nullptr;
+        const RegionView* secondary = nullptr;
+        float primaryGain = 1.0f;
+        float secondaryGain = 0.0f;
+    };
+
     [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
+    // Returns at most two compatible, simultaneously playable velocity layers.
+    // RR selection is performed once by findRegion(); a partner must belong to
+    // the same SFZ group/RR take and have matching key/channel ranges.
+    [[nodiscard]] VelocityLayerSelection findVelocityLayers(
+        int midiNote, int velocity, int midiChannel = 1) noexcept;
+    // SFZ equal-power velocity fade weight for one region.
+    [[nodiscard]] static float calculateVelocityCrossfadeGain(int velocity,
+        int xfinLowVelocity, int xfinHighVelocity,
+        int xfoutLowVelocity, int xfoutHighVelocity) noexcept;
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 
@@ -117,13 +134,15 @@ class SamplerEngine final
 {
 public:
     static constexpr int maximumVoices = 64;
+    static constexpr int maximumStealTails = 32;
+    static constexpr int totalVoiceSlots = maximumVoices + maximumStealTails;
 
     void prepare(double outputSampleRate) noexcept;
     void reset() noexcept;
     [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
-    [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0) noexcept;
+    [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0, bool palmMute = false) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
     void allNotesOff() noexcept;
     void panic(int fadeSamples) noexcept;
@@ -142,6 +161,16 @@ private:
         float gain = 0.0f;
         float releaseStep = 0.0f;
         bool releasing = false;
+        bool palmMuted = false;
+        float palmMuteEnvelope = 1.0f;
+        float palmMuteEnvelopeStep = 0.0f;
+        float palmMuteFilterLeft = 0.0f;
+        float palmMuteFilterRight = 0.0f;
+        float palmMuteFilterCoefficient = 1.0f;
+        float attackEnvelope = 1.0f;
+        float attackEnvelopeStep = 0.0f;
+        float stealEnvelope = 1.0f;
+        float stealEnvelopeStep = 0.0f;
         int direction = 1;
         std::uint64_t age = 0;
         std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();
@@ -156,8 +185,8 @@ private:
     SamplePool pool;
     // Declared after pool so readers are destroyed/released before their
     // SampleStreamingService owners during SamplerEngine teardown.
-    std::array<StreamingVoiceReader, maximumVoices> streamingReaders {};
-    std::array<Voice, maximumVoices> voices {};
+    std::array<StreamingVoiceReader, totalVoiceSlots> streamingReaders {};
+    std::array<Voice, totalVoiceSlots> voices {};
     double outputSampleRate = 44100.0;
     std::uint64_t nextAge = 1;
 };

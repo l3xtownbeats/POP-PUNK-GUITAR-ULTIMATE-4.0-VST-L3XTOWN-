@@ -7,14 +7,15 @@
 #include <thread>
 #include <vector>
 #include <type_traits>
+#include <utility>
 
 using ppgu::sampler::PageCacheSlots;
 using ppgu::sampler::PageKey;
 
 static_assert(!std::is_copy_constructible_v<PageCacheSlots::ReadLease>);
 static_assert(!std::is_copy_assignable_v<PageCacheSlots::ReadLease>);
-static_assert(!std::is_move_constructible_v<PageCacheSlots::ReadLease>);
-static_assert(!std::is_move_assignable_v<PageCacheSlots::ReadLease>);
+static_assert(std::is_move_constructible_v<PageCacheSlots::ReadLease>);
+static_assert(std::is_move_assignable_v<PageCacheSlots::ReadLease>);
 
 int main()
 {
@@ -66,6 +67,18 @@ int main()
     cache.release(lease);
     if (lease || cache.state(first) != PageCacheSlots::State::ready)
         return 1;
+    // Move construction and assignment transfer the unique owning pin.
+    PageCacheSlots::ReadLease moveSource;
+    if (!cache.tryAcquire({ 10, 0 }, moveSource)) return 1;
+    PageCacheSlots::ReadLease moveConstructed(std::move(moveSource));
+    if (moveSource || !moveConstructed
+        || cache.state(first) != PageCacheSlots::State::reading) return 1;
+    PageCacheSlots::ReadLease moveAssigned;
+    moveAssigned = std::move(moveConstructed);
+    if (moveConstructed || !moveAssigned) return 1;
+    cache.release(moveAssigned);
+    if (moveAssigned || cache.state(first) != PageCacheSlots::State::ready) return 1;
+
     // A cache must not release another cache instance's lease even if
     // both caches have a slot with the same numeric index.
     PageCacheSlots otherCache(1, 8, 2);
