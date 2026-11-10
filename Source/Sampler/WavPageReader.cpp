@@ -22,6 +22,16 @@ bool WavPageReader::open(const SampleMetadata& metadata, std::string& error)
         return false;
     }
 
+    // SampleMetadata is a public input boundary. NaN bypasses ordinary
+    // difference/range comparisons, so validate it before opening the file.
+    if (metadata.frames == 0 || !std::isfinite(metadata.sampleRate)
+        || metadata.sampleRate < 8000.0 || metadata.sampleRate > 384000.0
+        || metadata.fileBytes == 0)
+    {
+        error = "Indexed WAV metadata contains invalid frame, sample-rate, or file-size values.";
+        return false;
+    }
+
     if (!metadata.file.existsAsFile())
     {
         error = "Indexed WAV file no longer exists: " + metadata.file.getFullPathName().toStdString();
@@ -50,6 +60,8 @@ bool WavPageReader::open(const SampleMetadata& metadata, std::string& error)
     if (candidate->lengthInSamples <= 0
         || static_cast<std::uint64_t>(candidate->lengthInSamples) != metadata.frames
         || candidate->numChannels != metadata.channels
+        || !std::isfinite(candidate->sampleRate)
+        || candidate->sampleRate < 8000.0 || candidate->sampleRate > 384000.0
         || std::abs(candidate->sampleRate - metadata.sampleRate) > 0.01)
     {
         error = "WAV header no longer matches indexed metadata: " + metadata.file.getFullPathName().toStdString();
