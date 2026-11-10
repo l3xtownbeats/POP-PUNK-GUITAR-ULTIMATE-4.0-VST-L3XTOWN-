@@ -2,7 +2,7 @@
 
 Дата обновления: 10 ноября 2026
 Ветка: `migration/full-copy-m3-transport-scheduler-v2`
-HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
+HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 
 Статусы: **FIXED — AWAITING CI** означает, что правка внесена, но успешный актуальный build/test не подтверждён; **OPEN** — исправление или приёмка не завершены.
 
@@ -20,7 +20,7 @@ HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
 | M3-010 | High | Build verification | Промежуточные Windows CI запуски завершились failure; успешная сборка не подтверждена. | Исправления внесены; run 42769587683 ожидает завершения на момент записи. | OPEN |
 | M3-011 | High | DAW integration | Не подтверждены playback/stop/seek/pattern transitions в FL Studio 20. | Ручной acceptance test на Windows 10 / FL Studio 20. | OPEN |
 | M3-012 | Medium | Block-size stress | Полный runtime стресс при 64–1024 samples и BPM automation не подтверждён. | Проверить CTest/DAW при разных block sizes и изменениях темпа. | OPEN |
-| M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples после ceil прижимался к последнему sample текущего блока (63), хотя первый допустимый sample 64 уже в следующем блоке. | Не clamp к blockSamples-1; хранить deferred NoteOn/NoteOff в bounded PPQ event queue и отправлять в следующем блоке. Regression проверяет defer + NoteOn@0 + NoteOff@2 и exact 60→60. | FIXED IN SOURCE — AWAITING CI |
+| M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples после ceil прижимался к последнему sample текущего блока (63), хотя первый допустимый sample 64 уже в следующем блоке. | Не clamp к blockSamples-1; bounded pending queue переносит NoteOn/NoteOff в следующий блок. Regression: defer + NoteOn@0 + NoteOff@2 и exact 60→60. Windows CI run 42772172657 / commit bdd540e: Release build, CTest, VST3 package и artifact upload SUCCESS. | FIXED — CI SUCCESS |
 | M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока сводятся к одному финальному chord snapshot; промежуточные аккорды теряются. | Сегментировать MIDI по samplePosition и планировать каждую смену chord отдельно. | OPEN |
 | M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может молча отсечь события плотного pattern; нет отдельного overflow flag для output array. | Явный overflow status + all-notes-off fail-safe и regression test. | OPEN |
 | M1-001 | High | State persistence | Активная sample library path/ID не входит в APVTS state; DAW restore не гарантирует возврат выбранной библиотеки. | Добавить versioned library reference и безопасное восстановление на worker thread. | OPEN |
@@ -47,3 +47,11 @@ HEAD до записи: `56c507d844861b71e23c2c5c2b6b84287dde237a`
 - Причина: ceil(63.6)=64 был затем clamp'нут до 63 из-за диапазона [0, blockSamples-1]. Ожидание sample 64 внутри первого блока было ошибочным: индекс 64 — это sample 0 следующего блока.
 - Внесён source fix: deferred bounded queue теперь хранит NoteOn и NoteOff; выходящие за границу события не отправляются преждевременно.
 - Новая regression: в первом блоке count=0; во втором блоке NoteOn sample 0 и NoteOff sample 2. Статус остаётся FIXED IN SOURCE / AWAITING CI.
+
+
+## M3-013 — подтверждение исправления CI
+- Commit: bdd540eb30aeef8d2f51768ef5bb7e63129a9920.
+- Windows Actions run 42772172657 завершился SUCCESS (2026-11-10 07:06:15 UTC).
+- Configure x64 Release, Build VST3 and test executables, Run CTest regression suite, Locate VST3 bundle, Package VST3/sample library/factory presets и Upload artifact — все шаги SUCCESS.
+- Artifact ID 13741929896, SHA-256 4cf7f5f59d6f04a12e7238b1c1c379ba2ae666ca8c096a940cc53cebd4e0b519.
+- M3-013 закрыт по автоматизированной CI-проверке. Ручная FL Studio 20 host acceptance не подразумевается и остаётся отдельным открытым критерием.

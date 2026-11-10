@@ -3,7 +3,7 @@ POP PUNK GUITAR ULTIMATE — INFO / ЕДИНЫЙ ЖУРНАЛ РАЗРАБОТК
 Дата обновления: 10 ноября 2026
 Репозиторий: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
 Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
-Исходный HEAD перед текущим исправлением: 3fc5832f471815e375e10c13f3572d53561fc13b
+Последний HEAD до записи CI: bdd540eb30aeef8d2f51768ef5bb7e63129a9920
 
 НАЗНАЧЕНИЕ INFO
 Этот файл — единый сквозной журнал проекта от первоначального ТЗ и первых решений до финальной сборки, релизной проверки и поддержки. Все последующие изменения, тесты, результаты CI, ошибки, решения, ограничения и переходы между вехами фиксируются здесь хронологически. Журнал багов остаётся отдельным реестром дефектов с ID и статусами.
@@ -60,7 +60,7 @@ M2-001 whole WAV preload instead of streaming — OPEN.
 M2-002 page-cache modules not integrated into SamplerEngine voices — OPEN.
 M2-003 runtime round-robin and velocity crossfade unverified/missing — OPEN.
 M2-004 1 GiB/128-snapshot limits and no safe unload/reload — OPEN.
-M3-013 fractional sample mapping dispatched early — FIXED IN SOURCE / AWAITING CI.
+M3-013 fractional sample mapping dispatched early — FIXED / CI SUCCESS (run 42772172657, commit bdd540e).
 M3-014 multiple chord changes in one block collapse into one snapshot — OPEN.
 M3-015 scheduler output capacity can truncate dense patterns without explicit overflow — OPEN.
 
@@ -1236,3 +1236,21 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Исправление: scheduler больше не прижимает выходящий за блок offset к последнему sample. Такие NoteOn/NoteOff сохраняются в bounded pending-event queue с PPQ, типом события, velocity, note и channel; при следующем блоке событие отправляется на sample 0 или позже согласно PPQ. Очередь остаётся фиксированной и не выделяет память в audio callback.
 - Regression: near-tail событие в первом 64-sample блоке не должно быть отправлено; следующий блок должен получить NoteOn на sample 0 и соответствующий короткий NoteOff на sample 2. Существующий exact-integer test 60→60 сохранён.
 - Статус: FIXED IN SOURCE / AWAITING CI. Windows CI должен подтвердить compile и все 6 CTest targets. На этом шаге другие M3/M2/M1 пункты не изменялись.
+
+
+## 10 ноября 2026 — M3-013: положительный Windows CI и пакет VST3
+
+- Проверен GitHub Actions run 42772172657 для commit bdd540eb30aeef8d2f51768ef5bb7e63129a9920 в рабочей ветке migration/full-copy-m3-transport-scheduler-v2.
+- Итог workflow: SUCCESS; job build: SUCCESS.
+- Windows x64 Release configure: SUCCESS.
+- Build VST3 and test executables: SUCCESS.
+- CTest regression suite: SUCCESS (шаг завершён с conclusion success; все тестовые проверки workflow прошли).
+- Locate VST3 bundle: SUCCESS.
+- Package VST3, sample library and factory presets: SUCCESS.
+- Upload artifact: SUCCESS; workflow завершился 2026-11-10 07:06:15 UTC.
+- Итоговый артефакт: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS; artifact ID 13741929896; размер 2,242,881,507 bytes; SHA-256 4cf7f5f59d6f04a12e7238b1c1c379ba2ae666ca8c096a940cc53cebd4e0b519; доступен через Actions run 42772172657.
+- Source review artifact: POP-PUNK-GUITAR-SOURCE-REVIEW; artifact ID 13742551465.
+- M3-013 закрыт по критерию Windows Release build + regression CTest: fractional event за границей блока переносится в bounded pending queue и отправляется в следующем блоке, без раннего dispatch.
+- Ограничение: CI содержит шаг Record host validation limitation; это не подтверждает ручную работу в FL Studio 20. M3-011/M3-012 и M3-014/M3-015 остаются открытыми; M3 в целом NOT ACCEPTED, M4 BLOCKED.
+- Изменены только документационные статусы после завершения CI: Info.txt и docs/ЖУРНАЛ_БАГОВ_RU.md. Runtime source не менялся в этом цикле.
+- Следующий пункт по строгому порядку: M3-014 — сохранение всех MIDI chord transitions внутри одного audio block.
