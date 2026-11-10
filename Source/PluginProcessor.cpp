@@ -281,9 +281,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
     // worker thread and never allocates or locks.
     ppgu::performance::TransportSnapshot hostTransport;
-    if (auto* playHead = getPlayHead())
+    if (auto* hostPlayHead = getPlayHead())
     {
-        if (const auto position = playHead->getPosition())
+        if (const auto position = hostPlayHead->getPosition())
         {
             const auto bpm = position->getBpm();
             const auto ppq = position->getPpqPosition();
