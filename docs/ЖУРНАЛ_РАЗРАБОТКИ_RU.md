@@ -1132,3 +1132,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - CI run `42778780300` (commit `ffea193c058644bb4f4807eb475707951a269e00`) подтвердил Windows x64 Release build, CTest, обнаружение VST3 и host-validation limitation step; на момент записи packaging ещё выполнялся. Этот run не включает все более поздние изменения.
 - CI run `42778986400` (HEAD `7c9dc1ff7453c6bab701a4589af85c96aa29a733`) повторно прошёл configure, build, CTest, locate VST3 и дошёл до packaging; packaging/upload ещё не завершены при последней проверке.
 - Ограничения M2 по-прежнему открыты: реальное velocity crossfade, полноценная RR-группировка без конфликтов между разными наборами, потоковый mmap/OVERLAPPED + hot/warm cache/ref-count/preload, измерение 100-hit click criteria на реальном банке и аудио/host-проверка. M2 не закрывать.
+
+
+## 10 ноября 2026 — M2: изоляция Round Robin наборов
+
+- Устранена общая RR-корзина для всех SFZ регионов одного MIDI-канала/ноты. Теперь при загрузке формируются независимые RR set indices по SFZ group, seq_length, key/velocity/channel диапазонам.
+- Счётчики для каждого набора, MIDI-канала и ноты заранее выделяются при загрузке Snapshot. Вызов `findRegion()` не выделяет память и не создаёт контейнеры на аудиопотоке.
+- Добавлен regression test с двумя разными SFZ group и разными MIDI-нотами: вызов одного набора не должен сдвигать последовательность другого.
+- Проверка исходника выявила и исправила двойное экранирование переводов строк в новой тестовой SFZ fixture.
+- Изменения опубликованы в рабочей ветке коммитами: `8c91bc20`, `15960944`, `8d27214e`, `a11f8b88`, `d3336a32`.
+- Статус: FIXED IN SOURCE / AWAITING WINDOWS CI. M2 не закрыта: velocity crossfade playback, потоковая загрузка, реальные 100-hit click validation и host validation остаются открытыми.
