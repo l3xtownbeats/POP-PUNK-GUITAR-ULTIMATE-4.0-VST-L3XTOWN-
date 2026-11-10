@@ -63,6 +63,70 @@ bool WavPageReader::open(const SampleMetadata& metadata, std::string& error)
     return true;
 }
 
+PageReadReport WavPageReader::readPageInto(std::uint64_t pageIndex,
+                                                   float* const* destinationChannels,
+                                                   int destinationChannelCount,
+                                                   int destinationOffset,
+                                                   std::uint32_t& framesWritten,
+                                                   std::uint32_t pageFrames)
+{
+    PageReadReport report;
+    framesWritten = 0;
+    if (reader == nullptr)
+    {
+        report.error = "WAV page reader is not open.";
+        return report;
+    }
+    if (pageFrames == 0 || destinationOffset < 0
+        || destinationChannels == nullptr
+        || destinationChannelCount != static_cast<int>(channels))
+    {
+        report.error = "Invalid preallocated WAV page destination.";
+        return report;
+    }
+    for (int channel = 0; channel < destinationChannelCount; ++channel)
+    {
+        if (destinationChannels[channel] == nullptr)
+        {
+            report.error = "A preallocated WAV destination channel is null.";
+            return report;
+        }
+    }
+
+    const auto pageCount = getPageCount(pageFrames);
+    if (pageIndex >= pageCount)
+    {
+        report.error = "Requested WAV page is outside the indexed file.";
+        return report;
+    }
+
+    const auto firstFrame = pageIndex * static_cast<std::uint64_t>(pageFrames);
+    const auto remaining = frameCount - firstFrame;
+    const auto frames = static_cast<std::uint32_t>(
+        std::min<std::uint64_t>(remaining, pageFrames));
+    if (frames == 0 || firstFrame > static_cast<std::uint64_t>(
+            std::numeric_limits<juce::int64>::max())
+        || frames > static_cast<std::uint32_t>(std::numeric_limits<int>::max() - destinationOffset))
+    {
+        report.error = "Requested WAV page has invalid destination or source bounds.";
+        return report;
+    }
+
+    // JUCE decodes directly into caller-owned planar storage. The caller must
+    // reserve this memory before calling; this method performs no allocation.
+    if (!reader->read(destinationChannels, destinationChannelCount,
+                      destinationOffset, static_cast<juce::int64>(firstFrame),
+                      static_cast<int>(frames)))
+    {
+        report.error = "WAV page decode failed at page " + std::to_string(pageIndex) + ".";
+        return report;
+    }
+
+    framesWritten = frames;
+    report.success = true;
+    return report;
+}
+
 PageReadReport WavPageReader::readPage(std::uint64_t pageIndex,
                                        SamplePage& destination,
                                        std::uint32_t pageFrames)
