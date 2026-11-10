@@ -138,13 +138,27 @@ Sample redistribution is subject to source and license verification. Commercial 
 | **M1 — VST3 foundation** | Windows Release build and parameter audit pass. User previously confirmed the plugin opens in FL Studio 20; full state, automation and panic acceptance remains. |
 | **M2 — SFZ/WAV sampler** | SFZ/WAV regions now route through bounded background page streaming in SamplerEngine. Multi-page playback regression coverage is added; CI, long playback, 100-hit no-click, cache stress and full-library acceptance remain. |
 | **M3 — Pattern transport/runtime** | Scheduler unit tests pass. Full connection to real sampler playback and complete pattern runtime acceptance remain in progress. **NOT ACCEPTED.** |
-| **M4 — AutoChords / FingeringGenerator** | Not started for release; gated on M1–M3 acceptance. |
+| **M4 — AutoChords / FingeringGenerator** | Foundation exists; runtime integration and acceptance remain open. |
 
 ### Latest verified CI build
 
 The package was produced by a successful Windows x64 VST3 build and CTest workflow: [VIEW VERIFIED BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767).
 
 This confirms compilation and automated workflow tests for that build. It does not replace manual host validation or milestone acceptance.
+
+## DEVELOPMENT EXECUTION — THREE STAGES (10 NOV 2026)
+
+Development is organized into three controlled stages. The primary audio line always has priority; secondary work must not overload its build/test cycle.
+
+| Stage | Milestones | Execution rule |
+|---|---|---|
+| **1 — Core audio line** | **M1, M2, M3, M4, M5** | Highest priority. Stabilize state/loading, streaming sampler, MIDI/transport, AutoChords/fingering and Style Engine; close tests and integration gates before declaring completion. |
+| **2 — Secondary product work** | **M6, M7, M8, M9, M10** | While Stage 1 is active, only lightweight isolated preparation: code audits, licensed sample-source research, preset catalogue validation, Style DNA planning and GUI/DSP audits. No heavy audio-thread integration or competing stress builds. Full implementation follows Stage 1 acceptance. |
+| **3 — QA and release infrastructure** | **M11, M12, M13** | Starts only after M1–M5 are confirmed complete. Bank tools, full stress/performance QA, clean Windows install, Pluginval and FL Studio 20 release acceptance. M13 closes only after all earlier gates pass. |
+
+**Current execution state:** Stage 1 remains active. The latest M1/M2 Windows run exposed one failing importer regression test; the full VST3 workflow for the documentation update is still running. This is not an accepted build. See the development journal and bug register below.
+
+**Project journals:** [Chronological development journal](jurnal.md) · [Unified project INFO](Info.txt) · [Bug and fix register](docs/ЖУРНАЛ_БАГОВ_RU.md) · [M1–M5 integration work log](docs/WORK_LOG_M1_M5_INTEGRATION_RU.md).
 
 ## TECHNICAL SPECIFICATION
 
