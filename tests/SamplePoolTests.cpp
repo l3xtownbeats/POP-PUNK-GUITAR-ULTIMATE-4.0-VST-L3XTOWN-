@@ -172,9 +172,18 @@ int main()
 
     ppgu::sampler::SamplerEngine multiPageEngine;
     multiPageEngine.prepare(44100.0);
-    if (!multiPageEngine.loadSfz(longStreamSfz).success || !multiPageEngine.noteOn(72, 110))
+    const auto multiPageLoad = multiPageEngine.loadSfz(longStreamSfz);
+    if (!multiPageLoad.success)
     {
-        std::cerr << "Could not start multi-page streaming playback.\n";
+        std::cerr << "Could not load multi-page streaming SFZ fixture.\n";
+        for (const auto& error : multiPageLoad.errors) std::cerr << error << "\n";
+        for (const auto& warning : multiPageLoad.warnings) std::cerr << "warning: " << warning << "\n";
+        return 1;
+    }
+    if (!multiPageEngine.noteOn(72, 110))
+    {
+        std::cerr << "Could not trigger note 72 in multi-page streaming fixture. Regions: "
+                  << multiPageEngine.getRegionCount() << "\n";
         return 1;
     }
     juce::AudioBuffer<float> multiPageOutput(2, 10240);
