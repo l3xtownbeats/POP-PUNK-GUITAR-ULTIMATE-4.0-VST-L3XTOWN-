@@ -1,0 +1,10 @@
+{
+  "schema": "ppgu.skin.v1",
+  "name": "CYBER GREEN / NEON CLUB",
+  "background": "ff08120f",
+  "panel": "ff14271f",
+  "panel2": "ff0d1b16",
+  "accent": "ff58e6a8",
+  "text": "ffeffff7",
+  "muted": "ff9abbaa"
+}
