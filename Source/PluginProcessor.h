@@ -8,6 +8,7 @@
 #include <array>
 #include <vector>
 #include "Sampler/SamplePool.h"
+#include "Sampler/SampleLibraryImporter.h"
 #include "Performance/PatternScheduler.h"
 
 class PopPunkGuitarUltimateAudioProcessor final : public juce::AudioProcessor
@@ -42,6 +43,8 @@ public:
     [[nodiscard]] ppgu::sampler::LoadReport loadSfzFile(const juce::File& sfzFile);
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
+    void importAudioDirectoryAsync(const juce::File& sourceDirectory,
+        std::function<void(ppgu::sampler::LibraryImportReport, ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
 
     juce::AudioProcessorValueTreeState parameters;
