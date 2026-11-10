@@ -1,5 +1,6 @@
 #include "SampleMetadataIndex.h"
 #include "SampleStreamingService.h"
+#include "StreamingVoiceReader.h"
 
 #include <juce_audio_formats/juce_audio_formats.h>
 
@@ -107,6 +108,29 @@ int main()
         std::cerr << "Streaming statistics or ready-page duplicate suppression failed.\\n";
         return 1;
     }
+
+    // Hermite reads that straddle a page boundary must pin both pages and
+    // reproduce the continuous source waveform without reading outside either.
+    ppgu::sampler::StreamingVoiceReader voiceReader;
+    voiceReader.attach(&service, 0, sourceFrames);
+    float streamedLeft = 0.0f, streamedRight = 0.0f;
+    bool hermiteReady = false;
+    const auto hermiteDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    while (std::chrono::steady_clock::now() < hermiteDeadline && !hermiteReady)
+    {
+        hermiteReady = voiceReader.readHermite(255, 0.5f, 0, sourceFrames,
+                                               streamedLeft, streamedRight);
+        if (!hermiteReady)
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    if (!hermiteReady || std::abs(streamedLeft + streamedRight) > 0.0001f
+        || std::abs(streamedLeft) < 0.01f)
+    {
+        std::cerr << "Streaming voice reader failed Hermite interpolation across a page boundary.\\n";
+        return 1;
+    }
+    voiceReader.prefetch(510);
+    voiceReader.release();
 
     service.stop();
     if (service.requestPage({ 0, 1 }))
