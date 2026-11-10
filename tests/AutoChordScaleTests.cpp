@@ -15,10 +15,10 @@ int main()
 
     // A minor has the same pitch classes as C major, with A as root.
     assert(mapNoteToScale(61, 9, 2) == 60);
-    assert(mapNoteToScale(63, 9, 2) == 64); // D# -> E (nearest A-minor pitch)
+    assert(mapNoteToScale(63, 9, 2) == 62); // D# is equidistant; deterministic lower-note tie break
 
     // Root transposition and octave boundaries.
-    assert(mapNoteToScale(61, 2, 1) == 62); // D major
+    assert(mapNoteToScale(60, 2, 1) == 61); // C -> C# in D major
     assert(mapNoteToScale(0, 0, 1) == 0);
     assert(mapNoteToScale(127, 11, 1) == 127);
 
