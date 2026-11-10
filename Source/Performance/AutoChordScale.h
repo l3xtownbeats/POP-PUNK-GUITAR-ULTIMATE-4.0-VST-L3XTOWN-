@@ -39,4 +39,76 @@ namespace ppgu::performance
 
         return bestNote;
     }
+
+    // Tracks the relationship between physical/source MIDI keys and mapped
+    // pitches. Multiple source keys may snap to the same scale pitch; a
+    // reference count prevents one NoteOff from releasing another held key.
+    // Fixed-size storage keeps all operations allocation- and lock-free.
+    class MappedNoteTracker
+    {
+    public:
+        void clear() noexcept
+        {
+            for (auto& channel : sourceToMapped)
+                channel.fill(-1);
+            for (auto& channel : mappedRefCounts)
+                channel.fill(0);
+        }
+
+        void noteOn(int channel, int sourceNote, int mappedNote) noexcept
+        {
+            if (!valid(channel, sourceNote) || !valid(channel, mappedNote))
+                return;
+
+            auto& previous = sourceToMapped[static_cast<std::size_t>(channel)][static_cast<std::size_t>(sourceNote)];
+            auto& counts = mappedRefCounts[static_cast<std::size_t>(channel)];
+            if (previous >= 0)
+                decrement(counts[static_cast<std::size_t>(previous)]);
+
+            previous = mappedNote;
+            auto& count = counts[static_cast<std::size_t>(mappedNote)];
+            if (count < 127)
+                ++count;
+        }
+
+        int noteOff(int channel, int sourceNote) noexcept
+        {
+            if (!valid(channel, sourceNote))
+                return sourceNote;
+
+            auto& mapped = sourceToMapped[static_cast<std::size_t>(channel)][static_cast<std::size_t>(sourceNote)];
+            if (mapped < 0)
+                return sourceNote;
+
+            const int result = mapped;
+            decrement(mappedRefCounts[static_cast<std::size_t>(channel)][static_cast<std::size_t>(mapped)]);
+            mapped = -1;
+            return result;
+        }
+
+        bool isHeld(int channel, int mappedNote) const noexcept
+        {
+            return valid(channel, mappedNote)
+                && mappedRefCounts[static_cast<std::size_t>(channel)][static_cast<std::size_t>(mappedNote)] > 0;
+        }
+
+    private:
+        static constexpr bool valid(int channel, int note) noexcept
+        {
+            return channel >= 0 && channel < 16 && note >= 0 && note < 128;
+        }
+
+        static void decrement(unsigned char& value) noexcept
+        {
+            if (value > 0)
+                --value;
+        }
+
+        std::array<std::array<int, 128>, 16> sourceToMapped = [] {
+            std::array<std::array<int, 128>, 16> values {};
+            for (auto& channel : values) channel.fill(-1);
+            return values;
+        }();
+        std::array<std::array<unsigned char, 128>, 16> mappedRefCounts {};
+    };
 }
