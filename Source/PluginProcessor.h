@@ -74,6 +74,10 @@ private:
     std::array<std::vector<float>, 2> delayBuffers;
     std::array<std::vector<float>, 2> chorusBuffers;
     std::array<std::vector<float>, 2> flangerBuffers;
+    // Dedicated preallocated double-tracking delay lines (independent of FX delay).
+    std::array<std::vector<float>, 2> doubleTrackBuffers;
+    size_t doubleTrackWritePosition = 0;
+    double doubleTrackPhase = 0.0;
     std::array<float, 2> eqLowState {};
     std::array<float, 2> eqHighState {};
     std::array<float, 2> compressorEnvelope {};
