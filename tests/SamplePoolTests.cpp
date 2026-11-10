@@ -46,6 +46,45 @@ int main()
         return 1;
     }
 
+    // Multichannel WAVs are currently unsupported by the mono/stereo sampler.
+    // Reject them explicitly instead of silently truncating channels.
+    const auto surroundWav = directory.getChildFile("surround.wav");
+    const auto surroundSfz = directory.getChildFile("surround.sfz");
+    juce::AudioBuffer<float> surroundSource(4, 64);
+    surroundSource.clear();
+    std::unique_ptr<juce::OutputStream> surroundOutput(surroundWav.createOutputStream());
+    if (surroundOutput == nullptr)
+    {
+        std::cerr << "Could not create multichannel test WAV file.\\n";
+        return 1;
+    }
+    std::unique_ptr<juce::AudioFormatWriter> surroundWriter(
+        wavFormat.createWriterFor(surroundOutput.get(), 44100.0, 4, 16, {}, 0));
+    if (surroundWriter == nullptr)
+    {
+        std::cerr << "Could not create multichannel WAV writer.\\n";
+        return 1;
+    }
+    surroundOutput.release();
+    if (!surroundWriter->writeFromAudioSampleBuffer(surroundSource, 0, surroundSource.getNumSamples()))
+    {
+        std::cerr << "Could not write multichannel WAV data.\\n";
+        return 1;
+    }
+    surroundWriter.reset();
+    if (!surroundSfz.replaceWithText("<region> sample=surround.wav key=60\\n"))
+    {
+        std::cerr << "Could not write multichannel SFZ fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool surroundPool;
+    const auto surroundLoad = surroundPool.loadSfz(surroundSfz);
+    if (surroundLoad.success || surroundLoad.errors.empty())
+    {
+        std::cerr << "Sampler silently accepted/truncated unsupported multichannel WAV data.\\n";
+        return 1;
+    }
+
     ppgu::sampler::SamplerEngine engine;
     engine.prepare(44100.0);
     const auto loaded = engine.loadSfz(sfzFile);
