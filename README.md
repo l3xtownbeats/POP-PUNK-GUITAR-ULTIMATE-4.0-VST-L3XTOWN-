@@ -9,7 +9,7 @@
 **PLAY. CREATE. ROCK.**
 
 [![Windows x64](https://img.shields.io/badge/Windows-x64-222222?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows)
-[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://www.steinberg.net/developers/)
+[![VST3](https://img.shields.io/badge/Plugin-VST3-ea238b?style=for-the-badge)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
 [![JUCE](https://img.shields.io/badge/Engine-JUCE_7-222222?style=for-the-badge)](https://juce.com/)
 [![C++20](https://img.shields.io/badge/Code-C%2B%2B20-222222?style=for-the-badge)](https://isocpp.org/)
 
@@ -29,7 +29,7 @@ The product target is a fast, expressive, commercial-grade pop-punk guitar instr
 
 <div align="center">
 
-### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml?query=branch%3Amigration%2Ffull-copy-m3-transport-scheduler-v2)
+### [DOWNLOAD VST3 + BANK SAMPLES + PRESET CATALOGUE](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
 
 [Open all builds for the active development branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions?query=branch%3Amigration%2Ffull-copy-m3-transport-scheduler-v2)
 
@@ -197,7 +197,7 @@ These are acceptance requirements and targets. They are not all implemented or v
 ### Latest verified CI evidence
 
 - M1/M2 Windows build: [run #162 — successful](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42729490984)
-- Pattern scheduler regression and sampler tests: 3/3 passed in [run #78](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE/actions/runs/42729491121); that workflow subsequently failed in a separate packaging/validation step referencing a missing script. The missing-script reference was removed in a later commit; the replacement workflow is being checked.
+- Pattern scheduler regression and sampler tests: 3/3 passed in [run #78](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42729491121); that workflow subsequently failed in a separate packaging/validation step referencing a missing script. The missing-script reference was removed in a later commit; the replacement workflow is being checked.
 - CI success confirms compilation and automated tests, not manual FL Studio 20 validation or measured CPU/RAM targets.
 
 ## Roadmap

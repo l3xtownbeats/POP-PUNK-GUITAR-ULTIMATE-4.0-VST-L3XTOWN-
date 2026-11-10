@@ -1,8 +1,8 @@
 # POP PUNK GUITAR ULTIMATE — журнал разработки
 
 Обновлено: 10 ноября 2026 г.
-Репозиторий: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE
-Рабочая ветка: feat/m2-sfz-loop-playback
+Репозиторий: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
+Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
 
 ## Цель
 
@@ -886,50 +886,43 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Следующий шаг: проверить сборку на Windows CI; затем спроектировать и реализовать page cache/streaming source с тестами cache miss, prefetch, shutdown и voice concurrency.
 
 
-## 10 ноября 2026 — M3: прямой dispatch событий планировщика в SamplerEngine
+## 10 ноября 2026 — продолжение M3: прямой dispatch событий PatternScheduler
 
-- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2`.
-- Базовый commit новой ветки до изменения: `cacfcc16e1caf3d5d486cece58b934c7c84ba4d8`.
-- Предыдущий commit после проверки структуры и сохранения перенесённых пользовательских файлов: `7523be5d1fd620e3a039101598380713819dc50d`.
-- Новый commit с исправлением: `feb94fc65facf9ef12ad3a43d851e4a4764715f2`.
-- Изменены:
-  - `Source/PluginProcessor.cpp`
-  - `Source/PluginProcessor.h`
+- Рабочая ветка: `migration/full-copy-m3-transport-scheduler-v2` в целевом репозитории 4.0. Вся дальнейшая разработка, код, тесты и документация ведутся в этой ветке; `main` не изменяется.
+- HEAD до изменения кода: `7523be5d1fd620e3a039101598380713819dc50d`.
+- Коммит кода: `feb94fc65facf9ef12ad3a43d851e4a4764715f2`.
+- Коммит обновления журнала: `ccc5e88c91a21898d519c1f93f72dc4eb7073f9a` (подробная запись также находится в `docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md`).
 
-### Что сделано
-- Повторно проверен фактический `processBlock()`: вызов `PatternScheduler::schedule()` и передача запланированных событий в sampler уже присутствовали. Поэтому не дублировали scheduler и не заявляем, что с нуля создан Pattern runtime.
-- Удалён промежуточный путь через `juce::MidiBuffer patternMidiBuffer` и `addEvent()`.
-- События теперь обрабатываются непосредственно из заранее выделенного массива `scheduledPatternEvents`.
-- Сохранено разбиение рендера на сегменты по точному `sampleOffset`; до каждого события отрисовывается предшествующий сегмент, затем вызывается `sampler.noteOn()` или `sampler.noteOff()`.
-- Сохранена обработка velocity shaping, dynamics, velocityScale, MIDI channel и global tuning.
-- Удалено неиспользуемое поле `patternMidiBuffer` из заголовка процессора.
+### Что проверено
+- Повторно просмотрены `Source/PluginProcessor.cpp`, `Source/PluginProcessor.h`, `Source/Performance/PatternScheduler.h`, sampler API и PROMPT v33.
+- Уточнён статус M3: текущий `processBlock()` уже вызывает `PatternScheduler::schedule()` и получает события в заранее выделенный массив. Старое утверждение, что вызов scheduler полностью отсутствует, устарело для HEAD перенесённой ветки.
 
-### Причина и ожидаемый эффект
-- Промежуточный `juce::MidiBuffer::addEvent()` мог потребовать увеличения внутреннего хранилища при плотной последовательности событий. Рост контейнера в аудиопотоке создаёт риск heap allocation и аудио-dropout.
-- Прямой dispatch убирает этот дополнительный контейнер и его потенциальное расширение из данного участка audio callback.
-- Это устраняет один выявленный риск, но само по себе НЕ доказывает отсутствие всех аллокаций/блокировок во всём audio callback.
+### Что изменено
+- `Source/PluginProcessor.cpp`: удалено промежуточное копирование scheduled events в `juce::MidiBuffer`; события обрабатываются непосредственно из фиксированного массива `scheduledPatternEvents`.
+- Сохранено разбиение аудиоблока по точному `sampleOffset`: рендерится участок до события, затем вызывается `sampler.noteOn()` или `sampler.noteOff()`.
+- Сохранены текущие velocity shaping, dynamics, velocityScale, MIDI channel и global tuning.
+- `Source/PluginProcessor.h`: удалён ненужный после изменения член `patternMidiBuffer`.
+- Причина: `juce::MidiBuffer::addEvent()` потенциально мог расширять внутреннее хранилище и выделять память в audio callback при плотном потоке событий. Прямой dispatch убирает эту промежуточную буферизацию; используется заранее выделенный массив scheduler.
 
-### Проверка и статус
-- GitHub commit создан и branch ref успешно обновлён.
-- Diff проверен: изменены только два указанных исходных файла; исходные пользовательские документы/архивы/обложка сохранены.
-- Для commit `feb94fc` автоматически запущен Windows CI workflow run `42762319535`.
-- На момент записи workflow находится в процессе: валидация каталога 300 пресетов и portable preset examples прошла; загрузка redistributable sample libraries выполняется; CMake configure, VST3 build, CTest и упаковка ещё не завершились.
-- Сборка, CTest и pluginval для этого commit пока НЕ подтверждены. M3 НЕ объявляется принятой.
+### Проверка
+- Git diff проверен: изменены только `Source/PluginProcessor.cpp` и `Source/PluginProcessor.h`; изменения соответствуют описанию.
+- Commit `feb94fc...` опубликован в рабочей ветке без force push.
+- Windows CI run `42762319535` запущен для точного commit `feb94fc...`. На момент последней проверки каталог 300 пресетов и portable preset examples прошли; скачивание redistributable sample libraries выполнялось; CMake configure, сборка VST3, CTest и bundle verification ещё ожидали выполнения.
+- Сборка/CTest/pluginval на этом commit пока не подтверждены. M3 НЕ принята.
 
 ### Оставшиеся критерии M3
-- Дождаться полного результата CI и исправить ошибки, если они появятся.
-- Добавить/проверить regression tests для совпадающих NoteOff/NoteOn, границ блока, разных размеров host block, смены слота, chord changes, stop/reset, длинных gate/NoteOff и sample-accurate offsets.
-- Подтвердить, что note lifecycle не оставляет зависших нот и не теряет события при переходах между блоками.
-- Проверить восемь рабочих pattern slots и quantized switching; наличие каталога паттернов само по себе не является runtime acceptance.
-- Выполнить headless/offline render acceptance и отдельно ручную проверку в FL Studio 20.
+1. Дождаться результата CI для `feb94fc...`; ошибки исправлять по первопричине с повторным запуском проверок.
+2. Проверить regression cases: точные sample offsets, совпадающие offsets (NoteOff перед NoteOn), границы блока, разные block sizes, длинные gate и отложенные NoteOff.
+3. Проверить lifecycle нот: смена MIDI-аккорда, удержание, stop/reset транспорта, panic/All Notes Off, отсутствие зависших нот.
+4. Проверить смену pattern slot и квантование; подтвердить восемь работающих runtime slots, а не только каталог metadata.
+5. Проверить отсутствие heap allocation, locks и file I/O в audio callback инструментально или тестовым allocator/audit call path.
+6. Выполнить headless/offline render acceptance и отдельно ручную проверку в FL Studio 20.
+7. Не переходить к M4 до фактической приёмки M1–M3 по PROMPT v33.
 
 ### План следующих работ
-1. Получить итог CI run `42762319535` именно для commit `feb94fc`; не переносить результат CI с другого SHA.
-2. Разобрать тестовое покрытие `PatternScheduler` и `processBlock`, добавить недостающие regression tests, не ослабляя критерии.
-3. Проверить остановку/сброс транспорта, MIDI panic и снятие всех нот при смене состояния.
-4. После прохождения M3 вернуться к незакрытым пунктам M2 (RR без повторов, velocity crossfade, плавное voice stealing, streaming/page cache, stress/no-click и лицензии).
-5. Не начинать M4 до фактической приёмки M1–M3 согласно v33 FINAL.
-
+- Получить полный результат текущего Windows CI.
+- Провести аудит scheduler/sampler event lifecycle, добавить недостающие regression tests и устранить обнаруженные дефекты.
+- Продолжать M1–M13 строго по PROMPT v33; каждый коммит сопровождать записью в обоих журналах: что сделано, какие файлы изменены, почему, результаты тестов, известные ограничения и следующий план. Не выдавать roadmap за реализованную функцию.
 
 
 ## 10 ноября 2026 — исправление страницы скачивания и compile blocker
@@ -946,3 +939,14 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 - Проверки до коммита: поиск по исходнику должен вернуть 0 вхождений `patternMidiBuffer`; ссылки в обеих страницах должны вести в целевой репозиторий и рабочую ветку.
 - Статус сборки: после исправления требуется новый Windows CI. Пока новый run не завершился успешно, ZIP с VST3 + Samples + Presets не считается опубликованным. M3 остаётся NOT ACCEPTED; переход к M4 запрещён до критериев PROMPT v33.
 - Следующий шаг: дождаться нового CI, проверить компиляцию, CTest, наличие VST3 bundle и итогового artifact; затем заменить ссылку страницы скачивания на прямую ссылку к фактически созданному artifact, если API подтвердит его ID.
+
+
+## 10 ноября 2026 — исправление ссылки VST3 badge и публикация артефакта
+
+- Причина обращения: переход по бейджу VST3 в hero-блоке README открывал сайт Steinberg, поскольку бейдж был ошибочно привязан к https://www.steinberg.net/developers/; это была информационная ссылка, не скачивание.
+- Бейдж VST3 и основная кнопка DOWNLOAD теперь ведут прямо на успешный Windows workflow run #5: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767.
+- Подтверждён опубликованный артефакт: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, ID `13738701864`, размер 2,242,880,406 байт; не истёк на момент проверки.
+- Проверенный commit сборки: `0572fc214f615542ae594647e318422126f6d49d`; run завершён с conclusion `success`. Шаги компиляции VST3 и CTest успешны; host validation в FL Studio 20 не заявляется как выполненная.
+- В `README.md` и `DOWNLOAD.md` удалены вводящие в заблуждение ссылки на Steinberg/старые workflow destinations и обновлён статус доступности. В обоих журналах исправлены устаревшие строки репозитория и ветки; исторические записи сохранены.
+- Ограничения: Actions artifact временный, не является постоянным GitHub Release; 300 preset definitions в JSON не доказывают runtime-доступность всех 300 пресетов; M3 остаётся NOT ACCEPTED, M4 заблокирован до прохождения критериев PROMPT v33 FINAL.
+- Следующий шаг: продолжить аудит M1–M3 по acceptance checklist, исправлять подтверждённые блокеры в этой ветке и повторять Windows CI/CTest; после этого выполнить отдельную проверку VST3 в FL Studio 20.

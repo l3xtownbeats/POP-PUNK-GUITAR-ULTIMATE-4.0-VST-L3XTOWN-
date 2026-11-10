@@ -2,7 +2,7 @@
 
 ## Windows x64 VST3 + Sound Bank + Preset Catalogue
 
-**[OPEN VST3 + SAMPLES + PRESETS BUILDS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml?query=branch%3Amigration%2Ffull-copy-m3-transport-scheduler-v2)**
+**[OPEN VST3 + SAMPLES + PRESETS BUILDS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)**
 
 [All workflow runs for the active branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions?query=branch%3Amigration%2Ffull-copy-m3-transport-scheduler-v2)
 
@@ -10,7 +10,7 @@ The workflow artifact to download is named:
 
 `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`
 
-It is created only after the Windows VST3 build, CTest and packaging steps succeed. Open the newest **successful** run on the active branch and download that artifact from its Artifacts section. A failed/in-progress run does not contain the combined package.
+It is created only after the Windows VST3 build, CTest and packaging steps succeed. The verified successful build is [run #5]( https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767 ). In its Artifacts section, download **POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS** (artifact ID: 13738701864, approximately 2.24 GB). This is a temporary GitHub Actions artifact, not a permanent release.
 
 ## Expected archive contents
 
@@ -20,7 +20,7 @@ It is created only after the Windows VST3 build, CTest and packaging steps succe
 - `presets/examples/` — portable preset examples
 - `INSTALL_AND_CONTENTS.txt` — package contents and installation notes
 
-**Important status note:** the 300-entry JSON file is a validated preset catalogue, not a claim that all 300 definitions are already integrated as selectable factory presets in the plugin. The combined download is not available until a successful workflow publishes the named artifact. FL Studio 20 manual host validation remains a separate acceptance step.
+**Important status note:** the 300-entry JSON file is a validated preset catalogue, not a claim that all 300 definitions are already integrated as selectable factory presets in the plugin. The combined artifact is currently published in the successful run linked above. GitHub Actions artifacts are temporary and may require you to be signed in to GitHub. FL Studio 20 manual host validation remains a separate acceptance step.
 
 ## Installation
 
