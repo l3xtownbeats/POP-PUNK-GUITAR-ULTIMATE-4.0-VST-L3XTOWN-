@@ -130,6 +130,10 @@ jobs:
             if (-not (Test-Path (Join-Path $dest 'LICENSE.txt'))) { throw "License missing for $($item.repo)." }
           }
 
+          # Keep source licenses and SFZ maps, but strip cloned Git metadata
+          # from the redistributable package and its reusable CI cache.
+          Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
+            Remove-Item -Recurse -Force
           $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
           if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
           $hashLines = foreach ($file in $wavFiles) {
