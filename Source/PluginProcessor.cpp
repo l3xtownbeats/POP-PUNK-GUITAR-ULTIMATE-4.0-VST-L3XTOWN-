@@ -336,7 +336,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         sampler.allNotesOff();
         patternScheduler.reset(patternTransportClock.startPpq);
         patternNoteTracker.clear();
-        for (auto& channel : patternMappedNotes) channel.fill(-1);
         for (auto& channel : melodyMappedNotes) channel.fill(-1);
         patternCycleStarted = false;
         previousPatternChordCount = 0;
@@ -358,7 +357,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         previousPatternChordNotes.fill(-1);
         previousPatternChordChannel = 1;
         if (patternTransportClock.transportStopped)
-            for (auto& held : patternHeldNotes) held.fill(false);
+            patternNoteTracker.clear();
     }
 
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
@@ -556,8 +555,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const int channelIndex = juce::jlimit(1, 16, message.getChannel()) - 1;
                 if (message.isAllNotesOff() || message.isAllSoundOff())
                 {
-                    for (auto& held : patternHeldNotes) held.fill(false);
-                    for (auto& mapped : patternMappedNotes) mapped.fill(-1);
+                    patternNoteTracker.clear();
                     panicRequested.store(true, std::memory_order_release);
                     sampler.panic(fadeLength);
                     patternScheduler.clearPendingNoteOffs();
