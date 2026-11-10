@@ -74,3 +74,11 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - В логах также присутствуют предупреждения C4244 в PluginEditor.cpp и C4458 для локального `playHead`; они не являются причиной текущего failure и остаются отдельными cleanup-кандидатами.
 - Статус исправления: FIXED IN SOURCE / AWAITING WINDOWS CI. Новый build и CTest ещё не запускались/не подтверждены. M3-014 и M3-015 не закрывать до успешного Release build + CTest.
 - Следующий шаг: дождаться CI на commit `6de1db...`; если появятся новые ошибки — разбирать по первой реальной compiler/test failure, не отключая тесты. После успешного CTest продолжить M3 stop/seek, block-size/tempo stress и fail-safe проверки. M1/M2/M3 остаются NOT ACCEPTED; M4 BLOCKED.
+
+
+## 10 ноября 2026 — cleanup предупреждений MSVC после успешной сборки
+
+- В `Source/PluginEditor.cpp` устранены неявные преобразования координат `int` → `float` в `ColourGradient` и `Path::addQuadrilateral` явными `static_cast<float>`; причина — C4244 в отрисовке UI.
+- В `Source/PluginProcessor.cpp` локальная переменная `playHead` переименована в `hostPlayHead`, чтобы не скрывать член класса; причина — C4458.
+- Изменения внесены в рабочую ветку `migration/full-copy-m3-transport-scheduler-v2`.
+- Статус: FIXED IN SOURCE. Повторная Windows Release build/CTest для этих изменений ожидается; предупреждения пока не объявляются устранёнными до проверки свежего лога.
