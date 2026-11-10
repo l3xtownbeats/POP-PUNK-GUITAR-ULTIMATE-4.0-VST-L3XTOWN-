@@ -66,6 +66,7 @@ namespace ppgu::performance
             BlockClock result;
             result.bpm = clampBpm(fallbackBpm);
             result.usingHost = host.hostValid && !useInternalClock;
+            const clockSourceChanged = wasRunning_ && result.usingHost != previousUsingHost_;
 
             if (result.usingHost)
             {
@@ -78,9 +79,10 @@ namespace ppgu::performance
                 if (result.running)
                 {
                     const double expectedSpan = samplesToBeats(blockSamples, sampleRate, result.bpm);
-                    const double tolerance = std::max(0.25, expectedSpan * 2.0 + 0.01);
-                    result.transportDiscontinuity = hostWasRunning_ && haveHostPosition_
-                        && std::abs(result.startPpq - lastHostEndPpq_) > tolerance;
+                    const double tolerance = std::max(0.01, expectedSpan * 2.0 + 0.001);
+                    result.transportDiscontinuity = clockSourceChanged
+                        || (hostWasRunning_ && haveHostPosition_
+                            && std::abs(result.startPpq - lastHostEndPpq_) > tolerance);
                     if (result.transportDiscontinuity)
                         pendingCount_ = 0;
                     lastHostEndPpq_ = result.endPpq;
@@ -97,11 +99,12 @@ namespace ppgu::performance
                     internalPpq_ = result.startPpq;
                 }
                 wasRunning_ = result.running;
+                previousUsingHost_ = result.usingHost;
                 return result;
             }
 
             result.usingHost = false;
-            if (hostWasRunning_)
+            if (hostWasRunning_ || clockSourceChanged)
             {
                 result.transportDiscontinuity = true;
                 pendingCount_ = 0;
@@ -113,6 +116,7 @@ namespace ppgu::performance
             result.endPpq = internalPpq_ + samplesToBeats(blockSamples, sampleRate, result.bpm);
             internalPpq_ = result.endPpq;
             wasRunning_ = true;
+            previousUsingHost_ = false;
             return result;
         }
 
@@ -236,7 +240,11 @@ namespace ppgu::performance
             return count;
         }
 
-        void clearPendingNoteOffs() noexcept { pendingCount_ = 0; }
+        void clearPendingNoteOffs() noexcept
+        {
+            pendingCount_ = 0;
+            pendingOverflow_ = false;
+        }
 
         bool consumePendingOverflow() noexcept
         {
@@ -251,6 +259,7 @@ namespace ppgu::performance
             wasRunning_ = false;
             hostWasRunning_ = false;
             haveHostPosition_ = false;
+            previousUsingHost_ = false;
             pendingCount_ = 0;
             pendingOverflow_ = false;
         }
@@ -306,6 +315,7 @@ namespace ppgu::performance
         bool wasRunning_ = false;
         bool hostWasRunning_ = false;
         bool haveHostPosition_ = false;
+        bool previousUsingHost_ = false;
         bool pendingOverflow_ = false;
     };
 }

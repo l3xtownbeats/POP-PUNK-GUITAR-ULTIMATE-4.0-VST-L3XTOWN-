@@ -1031,3 +1031,10 @@ M4–M6 относятся к шагу «Интеллект»: AutoChords, Finge
 Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); последующий commit содержит корректировки и журналы.
 
 Статус M3: NOT ACCEPTED до успешного Windows CI, проверки integration на реальном PluginProcessor и дополнительных headless сценариев (Host Start/stop/restart, host↔internal fallback, pending gate cleanup, event-capacity overflow, buffer-size changes 64↔1024). Ручная проверка FL Studio 20 также обязательна. M4 остаётся заблокирован.
+
+
+## M3 follow-up — clock-source handoff and seek tolerance
+
+Дополнительно закрыты два края транспортной логики: переключение Internal → Host теперь тоже считается discontinuity (раньше явно обрабатывался только Host → Internal), а порог определения seek снижен с 0.25 beat до адаптивного 0.01 beat / двух длительностей блока, чтобы короткие перемотки не оставляли устаревшие gate events. Очистка pending NoteOff одновременно сбрасывает overflow flag. Добавлен headless тест обеих сторон handoff.
+
+Эти изменения отправлены отдельным последующим commit; Windows CI ещё требуется.

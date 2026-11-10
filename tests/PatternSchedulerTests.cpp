@@ -134,6 +134,16 @@ int main()
         || std::abs(PatternScheduler::quantizePpqForward(1.25, 0.25) - 1.25) > 1.0e-9)
         return 18;
 
-    std::cout << "PatternScheduler tests passed: transport, seek, tempo/block changes, gates, ordering.\n";
+
+    // Switching between host and internal clocks is a discontinuity in both
+    // directions, even when the newly selected source happens to be running.
+    PatternScheduler sourceSwitchScheduler;
+    const auto hostClock = sourceSwitchScheduler.beginBlock({ true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 4800);
+    const auto internalClock = sourceSwitchScheduler.beginBlock({ true, true, 120.0, 0.1 }, true, 120.0, 48000.0, 4800);
+    const auto hostAgain = sourceSwitchScheduler.beginBlock({ true, true, 120.0, 0.2 }, false, 120.0, 48000.0, 4800);
+    if (!hostClock.usingHost || !internalClock.transportDiscontinuity || !hostAgain.transportDiscontinuity)
+        return 19;
+
+    std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
     return 0;
 }
