@@ -1,32 +1,33 @@
 <div align="center">
 
 # POP PUNK GUITAR ULTIMATE
-### PROMO VST3 — WINDOWS x64
+### WINDOWS x64 · VST3 DOWNLOADS
 
-## [⬇ DOWNLOAD PROMO VST3 + SAMPLE BANK + PRESETS]( https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip )
+## [⬇ DOWNLOAD VST3 + FULL SAMPLE LIBRARY + FACTORY PRESETS](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
 
-**Complete ZIP package · approximately 2.24 GB**
+**Complete ZIP package · approximately 1.55 GiB**
+
+[View verified build and test results](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
 
 </div>
 
-## Package contents
+## What's inside
 
 - Windows x64 VST3 plugin bundle
-- Guitar WAV sample library in `Samples/`
-- 300-entry factory preset definition catalogue
-- Portable Melody and Pattern preset examples
+- Redistributable guitar WAV sample library in `Samples/`
+- Factory preset files and portable examples
 - `INSTALL_AND_CONTENTS.txt` installation notes
 
-## Separate downloads
+The plugin and sample library are currently delivered together in one archive. A separate standalone sample-bank ZIP is not published yet.
 
-The VST3 binary and full Sample Bank are currently distributed together in the ZIP above; separate standalone archives are not published.
+## Separate preset downloads
 
-- [Factory preset catalogue — 300 definitions (JSON)](presets/factory_bank_300.json)
-- [Additional preset bank data (JSON)](presets/factory_preset_bank_v1.json)
-- [Melody portable example (.ppgm)](presets/examples/Example-Melody.ppgm)
-- [Pattern portable example (.ppgp)](presets/examples/Example-Pattern.ppgp)
+- [Factory preset catalogue — 300 definitions (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_bank_300.json)
+- [Additional factory preset bank data (JSON)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/factory_preset_bank_v1.json)
+- [Melody portable preset example (.ppgm)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Melody.ppgm)
+- [Pattern portable preset example (.ppgp)](https://raw.githubusercontent.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/main/presets/examples/Example-Pattern.ppgp)
 
-**Note:** 300 catalogue entries are authored preset definitions, not a claim that all 300 presets are fully integrated and playable in the plugin.
+**Preset status:** the 300-entry catalogue contains authored definitions; it does not mean every entry is fully integrated and playable in the current plugin build.
 
 ## Installation
 
@@ -35,4 +36,10 @@ The VST3 binary and full Sample Bank are currently distributed together in the Z
 3. Keep the extracted `Samples` folder available to the plugin.
 4. Rescan plugins in your DAW.
 
-The current download is a GitHub Actions artifact, not a permanent GitHub Release asset. GitHub access may be required; artifacts can expire. The currently verified artifact expiry is 8 February 2027.
+## Important download notes
+
+- The current ZIP is a GitHub Actions artifact, not a permanent GitHub Release asset.
+- GitHub may require repository access or sign-in.
+- This artifact is scheduled to expire on **8 February 2027**.
+- A permanent GitHub Release will be published after the release package is frozen and validated.
+
