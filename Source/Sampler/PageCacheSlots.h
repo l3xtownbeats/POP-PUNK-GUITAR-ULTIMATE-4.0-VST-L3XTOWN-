@@ -62,7 +62,10 @@ public:
 private:
     struct Slot
     {
-        std::atomic<State> state { State::empty };
+        // Encoded access word: 0=empty, 1=loading, 2=ready/unpinned,
+        // values >2 are ready pages with (value - 2) concurrent readers.
+        // A worker can evict only by CAS from exactly 2 to 1.
+        std::atomic<std::uint32_t> access { 0 };
         std::atomic<std::uint32_t> sampleId { 0 };
         std::atomic<std::uint64_t> pageIndex { 0 };
         std::atomic<std::uint32_t> channels { 0 };
@@ -75,5 +78,8 @@ private:
     std::unique_ptr<Slot[]> slots;
     std::unique_ptr<float[]> storage;
     std::size_t samplesPerSlot = 0;
+    static constexpr std::uint32_t emptyAccess = 0;
+    static constexpr std::uint32_t loadingAccess = 1;
+    static constexpr std::uint32_t readyAccess = 2;
 };
 }
