@@ -17,6 +17,7 @@ on:
       - 'tools/validate_factory_bank.py'
       - 'tools/validate_preset_files.py'
       - 'presets/examples/**'
+      - 'SKINS/**'
       - 'docs/**'
 jobs:
   build:
@@ -282,10 +283,19 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/factory_bank_300.json') -Destination $presetDestination
           Get-ChildItem -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/examples') -File |
             Copy-Item -Destination (Join-Path $presetDestination 'examples') -Force
-          # Keep the two approved visual source assets beside the compiled plugin for future skin/resource work.
+          # Include the ten curated external skin definitions for user-switchable UI themes.
           $artworkDestination = Join-Path $PWD 'release/Resources'
           New-Item -ItemType Directory -Force -Path $artworkDestination | Out-Null
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Resources/Artwork') -Destination $artworkDestination -Recurse -Force
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKINS') -Destination (Join-Path $PWD 'release/SKINS') -Recurse -Force
+          $skinFiles = Get-ChildItem -LiteralPath (Join-Path $PWD 'release/SKINS') -File -Filter '*.json'
+          if ($skinFiles.Count -lt 10) { throw "Premium skin library incomplete: only $($skinFiles.Count) JSON skins found." }
+          foreach ($skinFile in $skinFiles) {
+            $skinData = Get-Content -Raw -LiteralPath $skinFile.FullName | ConvertFrom-Json
+            foreach ($field in @('name','background','panel','panel2','accent','text','muted')) {
+              if (-not $skinData.$field) { throw "Skin $($skinFile.Name) missing field $field." }
+            }
+          }
           @'
           POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
           ========================================
@@ -295,15 +305,16 @@ jobs:
           Portable preset examples: presets/examples/.
           Approved source artwork: Resources/Artwork/ (also embedded in the VST3).
           Superseded v3 preset JSON and legacy build.zip are intentionally excluded.
-          Note: ten skin palettes are currently compiled into the plugin; external SKIN files are not yet runtime-loaded.
+          Premium external themes: SKINS/ (10 JSON themes; load from the SKINS button > LOAD SKIN JSON...).
+          The two approved visual artworks are embedded in the plugin hero area and also included in Resources/Artwork/.
           SFZ maps, original license files and source manifests are retained.
           WAV + FLAC SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
           Preset catalog validation: 300 factory presets + portable preset examples.
 
           Install the .vst3 bundle to:
           C:\Program Files\Common Files\VST3\
-          Keep the Samples folder beside the extracted plugin package. If the plugin's
-          sample browser asks for a library folder, select this Samples directory.
+          Keep the Samples and SKINS folders from this package. Use SKINS in the plugin to load any included JSON theme.
+          If the sample browser asks for a library folder, select this Samples directory.
           This package does not claim DAW validation; test in FL Studio 20 after install.
           '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
           Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
