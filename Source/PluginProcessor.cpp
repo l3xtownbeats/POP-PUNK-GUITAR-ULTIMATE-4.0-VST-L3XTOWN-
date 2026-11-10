@@ -439,10 +439,14 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const bool chordChanged = chordCount != previousPatternChordCount
             || !std::equal(chordNotes.begin(), chordNotes.begin() + chordCount,
                            previousPatternChordNotes.begin());
+        const bool patternSettingsChanged =
+            (previousPatternSlot >= 0 && patternSlot != previousPatternSlot)
+            || (previousPatternLengthChoice >= 0 && patternLengthChoice != previousPatternLengthChoice);
+        const bool patternChanged = chordChanged || patternSettingsChanged;
         int patternRenderStartSample = 0;
-        if (chordChanged)
+        if (patternChanged)
         {
-            const int changeOffset = patternChordChangeSampleOffset >= 0
+            const int changeOffset = chordChanged && patternChordChangeSampleOffset >= 0
                 ? patternChordChangeSampleOffset : 0;
             // Render the pre-change portion first, then release the old chord
             // at the actual MIDI sample position instead of block sample zero.
@@ -459,17 +463,22 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const bool startOnFirstChord =
                     parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
                 const bool firstChord = previousPatternChordCount == 0;
-                // Preserve immediate first-chord mode; all later chord changes
-                // are quantized forward to the next sixteenth-note boundary.
+                // Preserve immediate first-chord mode. Subsequent chord and
+                // pattern-setting changes quantize forward to the selected grid.
+                const int quantizeChoice = juce::jlimit(0, 1,
+                    static_cast<int>(parameters.getRawParameterValue("patternQuantize")->load(std::memory_order_relaxed)));
+                const double quantizeGridBeats = quantizeChoice == 0 ? 0.25 : 0.125;
                 patternCycleStartPpq = firstChord && startOnFirstChord
                     ? changePpq
                     : (firstChord
                         ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
-                        : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, 0.25));
+                        : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, quantizeGridBeats));
             }
         }
         previousPatternChordCount = chordCount;
         previousPatternChordNotes = chordNotes;
+        previousPatternSlot = patternSlot;
+        previousPatternLengthChoice = patternLengthChoice;
 
         if (chordCount > 0)
         {
