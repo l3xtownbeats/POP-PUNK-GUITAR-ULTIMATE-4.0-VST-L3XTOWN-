@@ -292,7 +292,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int maximumVoices = juce::jmin(requestedVoices, profileVoiceLimit);
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
-    const int playMode = juce::jlimit(0, 1,
+    const int playMode = juce::jlimit(0, 2,
         static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
     const bool autoChordsEnabled = parameters.getRawParameterValue("autoChords")->load(std::memory_order_relaxed) > 0.5f;
     const int selectedScaleRoot = juce::jlimit(0, 11, static_cast<int>(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
@@ -414,7 +414,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         }
         renderSegment(cursor, samples - cursor);
     }
-    else
+    else if (playMode == 1)
     {
         // PATTERN: process every MIDI chord transition at its sample position.
         // Each interval is scheduled independently, preserving every chord change.
