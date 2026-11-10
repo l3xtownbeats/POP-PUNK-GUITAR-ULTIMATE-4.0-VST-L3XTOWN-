@@ -614,6 +614,10 @@ int main()
     }
     juce::AudioBuffer<float> repeatedHits(2, 12800);
     repeatedHits.clear();
+    // This is a voice-quality stress test, not a disk-latency test. Prime
+    // the first page on the worker before measuring 100 rapid retriggers;
+    // the separate cache-miss and multi-page tests cover asynchronous stalls.
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
     for (int hit = 0; hit < 100; ++hit)
     {
         const int velocity = 24 + ((hit * 37) % 104);
