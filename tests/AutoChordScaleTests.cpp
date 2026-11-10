@@ -28,6 +28,17 @@ int main()
     assert(mapNoteToScale(-1, 0, 1) == -1);
     assert(mapNoteToScale(128, 0, 1) == 128);
 
+
+    // AutoChords: one root key generates a diatonic triad in Pattern mode.
+    std::array<int, 3> triad {};
+    assert(ppgu::performance::makeDiatonicTriad(60, 0, 1, triad));
+    assert((triad == std::array<int, 3> { 60, 64, 67 })); // C major
+    assert(ppgu::performance::makeDiatonicTriad(69, 9, 2, triad));
+    assert((triad == std::array<int, 3> { 69, 72, 76 })); // A minor
+    assert(ppgu::performance::makeDiatonicTriad(67, 0, 1, triad));
+    assert((triad == std::array<int, 3> { 67, 71, 74 })); // G major
+    assert(!ppgu::performance::makeDiatonicTriad(60, 0, 0, triad));
+
     // Two physical keys can snap to the same pitch. Releasing one must not
     // clear the mapped pitch while the other source key is still held.
     ppgu::performance::MappedNoteTracker tracker;
