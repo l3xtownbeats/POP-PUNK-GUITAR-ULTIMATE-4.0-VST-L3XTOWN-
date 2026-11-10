@@ -405,7 +405,9 @@ LibraryImportReport SampleLibraryImporter::importDirectory(const juce::File& sou
             + "\", \"converted\": \"" + jsonEscape(
                 std::filesystem::relative(std::filesystem::path(output.getFullPathName().toStdString()),
                                           std::filesystem::path(stagingDirectory.getFullPathName().toStdString()), ec).generic_string())
-            + "\", \"rootKey\": " + (rootKey >= 0 ? std::to_string(rootKey) : "null")
+            + "\", \"mode\": \"" + playModeName(playMode) + "\""
+            + ", \"classification\": \"" + (playMode == ImportedPlayMode::pattern ? "name_hint" : "default_review") + "\""
+            + ", \"rootKey\": " + (rootKey >= 0 ? std::to_string(rootKey) : "null")
             + ", \"sourceBytes\": " + std::to_string(sourceBytes)
             + ", \"convertedBytes\": " + std::to_string(outputBytes) + "}";
         ec.clear();
