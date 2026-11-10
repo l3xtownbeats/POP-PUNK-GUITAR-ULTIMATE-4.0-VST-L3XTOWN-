@@ -61,6 +61,8 @@ private:
     bool patternCycleStarted = false;
     int previousPatternChordCount = 0;
     std::array<int, 6> previousPatternChordNotes {};
+    int previousPatternSlot = -1;
+    int previousPatternLengthChoice = -1;
     double patternCycleStartPpq = 0.0;
     int patternChordChangeSampleOffset = 0;
 
