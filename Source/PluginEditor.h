@@ -34,6 +34,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> autoChordKeyAttachment, autoChordScaleAttachment;
     int activeSkinIndex = 0;
     juce::Image approvedMelodyArtwork, approvedPatternArtwork;
+    juce::Image externalSkinMelodyArtwork, externalSkinPatternArtwork;
     std::unique_ptr<juce::DocumentWindow> fxWindow;
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
