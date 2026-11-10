@@ -26,6 +26,7 @@ void StreamingVoiceReader::release() noexcept
 
     leasePages.fill(noPage);
     pendingPages.fill(noPage);
+    retryCountdown.fill(0);
     stream = nullptr;
     sourceSampleId = 0;
     sourceFrames = 0;
@@ -54,24 +55,41 @@ bool StreamingVoiceReader::ensurePage(std::uint64_t pageIndex) noexcept
         leasePages[slot] = noPage;
     }
 
-    if (pendingPages[slot] != pageIndex)
+    if (pendingPages[slot] == pageIndex)
     {
-        pendingPages[slot] = noPage;
-        if (!stream->tryAcquire({ sourceSampleId, pageIndex }, leases[slot]))
+        if (stream->tryAcquire({ sourceSampleId, pageIndex }, leases[slot]))
         {
-            if (stream->requestPage({ sourceSampleId, pageIndex }))
-                pendingPages[slot] = pageIndex;
-            return false;
+            pendingPages[slot] = noPage;
+            retryCountdown[slot] = 0;
+            leasePages[slot] = pageIndex;
+            return true;
         }
+
+        // A worker may have dropped a request because the cache was fully
+        // pinned or decoding failed. Retry at a bounded cadence, not once per
+        // output sample, and never let a stale pending marker deadlock a voice.
+        if (retryCountdown[slot] > 0)
+            --retryCountdown[slot];
+        if (retryCountdown[slot] == 0)
+        {
+            (void) stream->requestPage({ sourceSampleId, pageIndex });
+            retryCountdown[slot] = 64;
+        }
+        return false;
     }
 
-    if (!leases[slot]
-        && !stream->tryAcquire({ sourceSampleId, pageIndex }, leases[slot]))
-        return false;
-
     pendingPages[slot] = noPage;
-    leasePages[slot] = pageIndex;
-    return true;
+    retryCountdown[slot] = 0;
+    if (stream->tryAcquire({ sourceSampleId, pageIndex }, leases[slot]))
+    {
+        leasePages[slot] = pageIndex;
+        return true;
+    }
+
+    (void) stream->requestPage({ sourceSampleId, pageIndex });
+    pendingPages[slot] = pageIndex;
+    retryCountdown[slot] = 64;
+    return false;
 }
 
 void StreamingVoiceReader::prefetch(std::uint64_t frame) noexcept
