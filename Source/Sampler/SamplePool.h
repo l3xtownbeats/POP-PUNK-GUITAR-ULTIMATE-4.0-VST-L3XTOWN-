@@ -134,6 +134,8 @@ class SamplerEngine final
 {
 public:
     static constexpr int maximumVoices = 64;
+    static constexpr int maximumStealTails = 32;
+    static constexpr int totalVoiceSlots = maximumVoices + maximumStealTails;
 
     void prepare(double outputSampleRate) noexcept;
     void reset() noexcept;
@@ -165,6 +167,10 @@ private:
         float palmMuteFilterLeft = 0.0f;
         float palmMuteFilterRight = 0.0f;
         float palmMuteFilterCoefficient = 1.0f;
+        float attackEnvelope = 1.0f;
+        float attackEnvelopeStep = 0.0f;
+        float stealEnvelope = 1.0f;
+        float stealEnvelopeStep = 0.0f;
         int direction = 1;
         std::uint64_t age = 0;
         std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();
@@ -179,8 +185,8 @@ private:
     SamplePool pool;
     // Declared after pool so readers are destroyed/released before their
     // SampleStreamingService owners during SamplerEngine teardown.
-    std::array<StreamingVoiceReader, maximumVoices> streamingReaders {};
-    std::array<Voice, maximumVoices> voices {};
+    std::array<StreamingVoiceReader, totalVoiceSlots> streamingReaders {};
+    std::array<Voice, totalVoiceSlots> voices {};
     double outputSampleRate = 44100.0;
     std::uint64_t nextAge = 1;
 };

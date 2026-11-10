@@ -634,8 +634,8 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
 
     const int voiceLimit = juce::jlimit(1, maximumVoices, maximumActiveVoices);
     int activeVoices = 0;
-    for (const auto& activeVoice : voices)
-        if (activeVoice.region != nullptr)
+    for (int i = 0; i < maximumVoices; ++i)
+        if (voices[static_cast<std::size_t>(i)].region != nullptr)
             ++activeVoices;
 
     // Do not steal an existing voice merely to create the second crossfade
@@ -667,9 +667,32 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         const int voiceIndex = chooseVoice(voiceLimit);
         auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
         auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
-        streamReader.release();
-        voice = {};
+        if (voice.region != nullptr)
+        {
+            int tailIndex = -1;
+            for (int i = maximumVoices; i < totalVoiceSlots; ++i)
+                if (voices[static_cast<std::size_t>(i)].region == nullptr)
+                { tailIndex = i; break; }
+            // Refuse only when the bounded tail pool is saturated; never
+            // overwrite an audible voice and create a discontinuity.
+            if (tailIndex < 0) return false;
+            auto& tail = voices[static_cast<std::size_t>(tailIndex)];
+            tail = voice;
+            streamReader.transferTo(streamingReaders[static_cast<std::size_t>(tailIndex)]);
+            tail.stealEnvelope = 1.0f;
+            tail.stealEnvelopeStep = 1.0f / static_cast<float>(
+                juce::jmax(1.0, std::ceil(outputSampleRate * 0.010)));
+            voice = {};
+        }
+        else
+        {
+            streamReader.release();
+            voice = {};
+        }
         voice.region = layer;
+        voice.attackEnvelope = 0.0f;
+        voice.attackEnvelopeStep = 1.0f / static_cast<float>(
+            juce::jmax(1.0, std::ceil(outputSampleRate * 0.010)));
         voice.note = midiNote;
         voice.midiChannel = juce::jlimit(1, 16, midiChannel);
         voice.direction = 1;
@@ -903,7 +926,9 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
 
             const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
             const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
-            const float envelope = voice.gain * (voice.palmMuted ? voice.palmMuteEnvelope : 1.0f);
+            const float envelope = voice.gain
+                * (voice.palmMuted ? voice.palmMuteEnvelope : 1.0f)
+                * voice.attackEnvelope * voice.stealEnvelope;
 
             if (channels == 1)
                 output.addSample(0, outIndex, 0.5f * (sampleL + sampleR) * envelope);
@@ -916,6 +941,20 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
 
             voice.position += voice.increment * static_cast<double>(voice.direction);
+            if (voice.attackEnvelope < 1.0f)
+                voice.attackEnvelope = juce::jmin(1.0f,
+                    voice.attackEnvelope + voice.attackEnvelopeStep);
+            if (voice.stealEnvelopeStep > 0.0f)
+            {
+                voice.stealEnvelope = juce::jmax(0.0f,
+                    voice.stealEnvelope - voice.stealEnvelopeStep);
+                if (voice.stealEnvelope <= 0.0f)
+                {
+                    streamReader.release();
+                    voice = {};
+                    break;
+                }
+            }
             if (voice.palmMuted && voice.palmMuteEnvelope <= 0.0f)
             {
                 streamReader.release();

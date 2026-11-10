@@ -882,6 +882,35 @@ int main()
         return 1;
     }
 
-    std::cout << "SamplePool tests passed: WAV decode, SFZ load, MIDI playback, and polyphony cap.\n";
+    ppgu::sampler::SamplerEngine stealEngine;
+    stealEngine.prepare(44100.0);
+    if (!stealEngine.loadSfz(sfzFile).success) return 1;
+    constexpr int stealHits = 40;
+    juce::AudioBuffer<float> stealAudio(2, stealHits * 128);
+    stealAudio.clear();
+    for (int hit = 0; hit < stealHits; ++hit)
+    {
+        const int offset = hit * 128;
+        const int velocity = 30 + ((hit * 29) % 96);
+        if (!stealEngine.noteOn(60, velocity, 1, 1)) return 1;
+        stealEngine.render(stealAudio, offset, 64);
+        stealEngine.noteOff(60, 1);
+        stealEngine.render(stealAudio, offset + 64, 64);
+    }
+    float stealPeak = 0.0f, stealMaxDelta = 0.0f;
+    for (int i = 0; i < stealAudio.getNumSamples(); ++i)
+    {
+        const float value = stealAudio.getSample(0, i);
+        if (!std::isfinite(value)) return 1;
+        stealPeak = juce::jmax(stealPeak, std::abs(value));
+        if (i > 0) stealMaxDelta = juce::jmax(stealMaxDelta,
+            std::abs(value - stealAudio.getSample(0, i - 1)));
+    }
+    if (stealPeak <= 0.001f || stealMaxDelta > 0.20f)
+    {
+        std::cerr << "Voice-steal click regression failed; max delta=" << stealMaxDelta << ".\n";
+        return 1;
+    }
+    std::cout << "SamplePool tests passed: WAV/SFZ, 100-hit continuity and bounded click-free voice stealing.\n";
     return 0;
 }

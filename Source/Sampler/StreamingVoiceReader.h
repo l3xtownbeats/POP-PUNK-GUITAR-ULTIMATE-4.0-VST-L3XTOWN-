@@ -26,6 +26,8 @@ public:
     void attach(SampleStreamingService* service, std::uint32_t sampleId,
                 std::uint64_t totalFrames) noexcept;
     void release() noexcept;
+    // Transfer reader state and leases without changing cache pin counts.
+    void transferTo(StreamingVoiceReader& destination) noexcept;
 
     // Requests the current page and its previous/next neighbours without
     // waiting. Neighbours keep Hermite taps safe at forward and reverse page

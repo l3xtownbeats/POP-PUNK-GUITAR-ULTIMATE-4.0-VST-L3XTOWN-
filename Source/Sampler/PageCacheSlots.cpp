@@ -6,6 +6,22 @@
 
 namespace ppgu::sampler
 {
+PageCacheSlots::ReadLease::ReadLease(ReadLease&& other) noexcept
+{
+    *this = std::move(other);
+}
+
+PageCacheSlots::ReadLease& PageCacheSlots::ReadLease::operator=(ReadLease&& other) noexcept
+{
+    if (this == &other) return *this;
+    if (owner != nullptr) owner->release(*this);
+    owner = other.owner; slot = other.slot; samples = other.samples;
+    channels = other.channels; frames = other.frames;
+    other.owner = nullptr; other.slot = 0; other.samples = nullptr;
+    other.channels = 0; other.frames = 0;
+    return *this;
+}
+
 PageCacheSlots::PageCacheSlots(std::size_t count, std::uint32_t pageFrames,
                                std::uint32_t maxChannels)
     : slotCount(count), framesPerPage(pageFrames), channelLimit(maxChannels)
