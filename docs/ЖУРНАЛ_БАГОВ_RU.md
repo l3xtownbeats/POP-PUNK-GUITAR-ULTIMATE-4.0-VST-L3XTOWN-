@@ -157,3 +157,19 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Необходимо проверить: фактический theme manager/selector, безопасную загрузку ресурсов из SKIN, fallback при отсутствующем/повреждённом skin manifest, сохранение/восстановление skin ID, масштабирование графики, независимость режима и темы, а также включение SKIN/RESOURCE в итоговый ZIP.
 - Критерии закрытия: 10 тем обнаруживаются и переключаются одной кнопкой; текущая тема переживает перезапуск и восстановление проекта; MELODY/PATTERN отображают собственные обложки независимо от темы; отсутствующие ресурсы не приводят к падению; package contents и Windows x64 Release CI подтверждают корректную структуру.
 - Статус: OPEN / SOURCE AUDIT + IMPLEMENTATION + CI + FL STUDIO 20 CHECK REQUIRED.
+
+
+## PPGU-AC-001 — PATTERN AutoChords acceptance
+- Приоритет: P1. Статус: IMPLEMENTED IN SOURCE / CI AND HOST VALIDATION PENDING.
+- Проверить APVTS state round-trip, ON/OFF отображение, все 12 root choices, Major/Minor, MIDI bounds, смену настроек при удерживаемой клавише, многоклавишный passthrough и изоляцию MELODY.
+- Закрытие: Windows Release build + CTest PASS и ручной тест FL Studio 20 без зависших нот/ошибок.
+
+## PPGU-BANK-001 — SOUND BANK sourcing and provenance
+- Приоритет: P1. Статус: OPEN / SOURCING AND LICENSE AUDIT.
+- Ни один внешний файл не добавлять в factory bundle до подтверждения прав на коммерческое распространение внутри VST3 и sample bank.
+- Для каждого файла обязательны provenance, license text/reference, attribution, version/date, SHA-256 и статус Approved Bundled / User-Import Only / Review Required / Rejected.
+- Проверить реальные SFZ/WAV mapping, velocity layers, RR, sample rate/bit depth и отсутствие дублей; не декларировать качество/полноту без прослушивания и runtime тестов.
+
+## PPGU-4X-001 — сохранность версии 4.0
+- Приоритет: BLOCKER. Статус: POLICY LOCKED.
+- Запрещено удалять или перезаписывать исходники, сборки, пресеты, sample bank, лицензии и журналы стабильной 4.0 при развитии 5.0. Все изменения — отдельные commits/branches с возможностью отката.
