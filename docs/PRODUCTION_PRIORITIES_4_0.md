@@ -87,3 +87,11 @@ The complete Russian-language product requirements, including all previously agr
 ## Execution update — 10 Nov 2026
 
 Parallel M4/M5 work is allowed only on isolated branches and without modifying the active M1–M3 audio build. M5 foundation has passed Windows CI run `42840410645`; M4 AutoChords/FingeringGenerator foundation is in run `42842050531` and must not be marked complete until build, CTest and pluginval finish. M1–M3 Windows Release run `42841128991` and separate M1/M2 run `42841133299` passed, but host validation and specific M2/M3 end-to-end criteria remain open. See `WORK_LOG_M1_M5_INTEGRATION_RU.md` for exact evidence and merge gates.
+
+## Execution update — 10 Nov 2026
+
+- M3 scheduler-to-SamplerEngine integration test is now part of CTest and passed Windows run `42843030370`; manual FL Studio 20 transport/MIDI remains open.
+- M2 SFZ velocity crossfade playback is implemented in isolated PR #5 and awaits Windows build/CTest/pluginval. Palm-mute mapping and audio stress gates remain open.
+- M4 AutoChords/FingeringGenerator scale mapping passed run `42843127831`; latest integer-overflow guards need a fresh run.
+- M5 StyleEngine foundation passed run `42840410645`; runtime Pattern/Processor/UI integration remains open.
+- Keep M4/M5/M2 branches isolated until current heads pass and all modules are ready for a single combined integration branch.
