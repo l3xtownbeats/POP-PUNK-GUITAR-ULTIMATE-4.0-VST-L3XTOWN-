@@ -42,6 +42,7 @@ namespace ppgu::performance
         bool running = false;
         bool usingHost = false;
         bool transportStopped = false;
+        bool transportDiscontinuity = false;
         double bpm = 120.0;
         double startPpq = 0.0;
         double endPpq = 0.0;
@@ -74,14 +75,33 @@ namespace ppgu::performance
                     + (result.running ? samplesToBeats(blockSamples, sampleRate, result.bpm) : 0.0);
                 result.transportStopped = wasRunning_ && !result.running;
                 if (result.running)
+                {
+                    const double expectedSpan = samplesToBeats(blockSamples, sampleRate, result.bpm);
+                    const double tolerance = std::max(0.25, expectedSpan * 2.0 + 0.01);
+                    result.transportDiscontinuity = hostWasRunning_ && haveHostPosition_
+                        && std::abs(result.startPpq - lastHostEndPpq_) > tolerance;
+                    if (result.transportDiscontinuity)
+                        pendingCount_ = 0;
+                    lastHostEndPpq_ = result.endPpq;
+                    haveHostPosition_ = true;
+                    hostWasRunning_ = true;
                     internalPpq_ = result.endPpq;
+                }
                 else
+                {
+                    result.transportDiscontinuity = hostWasRunning_;
+                    pendingCount_ = 0;
+                    hostWasRunning_ = false;
+                    haveHostPosition_ = false;
                     internalPpq_ = result.startPpq;
+                }
                 wasRunning_ = result.running;
                 return result;
             }
 
             result.usingHost = false;
+            hostWasRunning_ = false;
+            haveHostPosition_ = false;
             result.running = true;
             result.startPpq = internalPpq_;
             result.endPpq = internalPpq_ + samplesToBeats(blockSamples, sampleRate, result.bpm);
@@ -108,8 +128,11 @@ namespace ppgu::performance
                 pendingCount_ = 0;
                 return 0;
             }
-            if (blockSamples <= 0 || sampleRate <= 0.0
-                || patternLengthBeats <= 0.0 || clock.endPpq <= clock.startPpq)
+            if (blockSamples <= 0 || !std::isfinite(sampleRate) || sampleRate <= 0.0
+                || !std::isfinite(patternLengthBeats) || patternLengthBeats <= 0.0
+                || !std::isfinite(clock.startPpq) || !std::isfinite(clock.endPpq)
+                || !std::isfinite(clock.bpm) || clock.bpm < 20.0 || clock.bpm > 300.0
+                || clock.endPpq <= clock.startPpq)
                 return 0;
 
             std::size_t count = 0;
@@ -118,7 +141,9 @@ namespace ppgu::performance
             {
                 if (count >= output.size() || eventPpq < clock.startPpq || eventPpq >= clock.endPpq)
                     return false;
-                const int offset = static_cast<int>((eventPpq - clock.startPpq) * samplesPerBeat + 0.5);
+                // Floor to the first sample at or after the event time. Rounding
+                // can push an event at the block tail into the last sample early.
+                const int offset = static_cast<int>((eventPpq - clock.startPpq) * samplesPerBeat);
                 output[count++] = { clampInt(offset, 0, blockSamples - 1), kind,
                                     clampInt(note, 0, 127), clampInt(velocity, 0, 127),
                                     clampInt(channel, 1, 16) };
@@ -177,6 +202,8 @@ namespace ppgu::performance
                     {
                         if (pendingCount_ < pendingNoteOffs_.size())
                             pendingNoteOffs_[pendingCount_++] = { noteOffPpq, note, event.channel };
+                        else
+                            pendingOverflow_ = true;
                     }
                     else
                     {
@@ -203,11 +230,23 @@ namespace ppgu::performance
             return count;
         }
 
+        void clearPendingNoteOffs() noexcept { pendingCount_ = 0; }
+
+        bool consumePendingOverflow() noexcept
+        {
+            const bool overflowed = pendingOverflow_;
+            pendingOverflow_ = false;
+            return overflowed;
+        }
+
         void reset(double ppq = 0.0) noexcept
         {
             internalPpq_ = finiteOr(ppq, 0.0);
             wasRunning_ = false;
+            hostWasRunning_ = false;
+            haveHostPosition_ = false;
             pendingCount_ = 0;
+            pendingOverflow_ = false;
         }
 
         double getInternalPpq() const noexcept { return internalPpq_; }
@@ -242,9 +281,13 @@ namespace ppgu::performance
         }
 
         struct PendingNoteOff { double ppq = 0.0; int note = 60; int channel = 1; };
-        std::array<PendingNoteOff, maximumEventsPerBlock> pendingNoteOffs_ {};
+        std::array<PendingNoteOff, maximumEventsPerBlock * 4> pendingNoteOffs_ {};
         std::size_t pendingCount_ = 0;
         double internalPpq_ = 0.0;
+        double lastHostEndPpq_ = 0.0;
         bool wasRunning_ = false;
+        bool hostWasRunning_ = false;
+        bool haveHostPosition_ = false;
+        bool pendingOverflow_ = false;
     };
 }

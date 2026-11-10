@@ -105,6 +105,31 @@ int main()
         || PatternScheduler::clampBpm(900.0) != 120.0)
         return 8;
 
-    std::cout << "PatternScheduler tests passed: host PPQ, stop, internal fallback, quantize, ordering.\n";
+    // A host seek must be reported as a discontinuity so the processor can
+    // release voices and discard stale pending NoteOff events.
+    PatternScheduler seekScheduler;
+    const auto seekA = seekScheduler.beginBlock({ true, true, 120.0, 12.0 }, false, 120.0, 48000.0, 12000);
+    if (!seekA.running || seekA.transportDiscontinuity) return 14;
+    const auto seekB = seekScheduler.beginBlock({ true, true, 120.0, 2.0 }, false, 120.0, 48000.0, 12000);
+    if (!seekB.transportDiscontinuity) return 15;
+
+    // Tempo and host block-size changes are reflected immediately without
+    // accumulating drift from the previous block's size.
+    PatternScheduler resizeScheduler;
+    const auto resizeA = resizeScheduler.beginBlock({ true, true, 100.0, 0.0 }, false, 120.0, 48000.0, 64);
+    const auto resizeB = resizeScheduler.beginBlock({ true, true, 140.0, resizeA.endPpq }, false, 120.0, 48000.0, 1024);
+    if (std::abs(resizeB.endPpq - (resizeB.startPpq + 1024.0 * 140.0 / (60.0 * 48000.0))) > 1.0e-9)
+        return 16;
+
+    // An event just before the block end must never be rounded backward to
+    // the final sample. Its offset is the first sample at/after its PPQ.
+    PatternScheduler edgeScheduler;
+    std::array<PatternEvent, 1> edgePattern {{{ 0.0, 0.01, 60, 100, 1 }}};
+    const auto edgeClock = edgeScheduler.beginBlock({ true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 64);
+    const auto edgeCount = edgeScheduler.schedule(edgePattern, 1.0, 0.0, edgeClock, 48000.0, 64, 0.0, 0, events);
+    if (edgeCount != 2 || events[0].sampleOffset != 0 || events[1].sampleOffset < 0)
+        return 17;
+
+    std::cout << "PatternScheduler tests passed: transport, seek, tempo/block changes, gates, ordering.\n";
     return 0;
 }

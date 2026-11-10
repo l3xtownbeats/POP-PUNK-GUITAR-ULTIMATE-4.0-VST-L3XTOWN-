@@ -60,7 +60,9 @@ private:
     int previousPlayMode = -1;
     bool patternCycleStarted = false;
     int previousPatternChordCount = 0;
+    std::array<int, 6> previousPatternChordNotes {};
     double patternCycleStartPpq = 0.0;
+    int patternChordChangeSampleOffset = 0;
 
     // Preallocated stereo effect memories. All resizing happens in prepareToPlay,
     // never in processBlock.

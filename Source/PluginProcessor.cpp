@@ -305,13 +305,18 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         for (auto& channel : patternHeldNotes) channel.fill(false);
         patternCycleStarted = false;
         previousPatternChordCount = 0;
+        previousPatternChordNotes.fill(-1);
         previousPlayMode = playMode;
     }
 
     // A host transport stop must release voices that were started by live MIDI
     // or a pattern gate. The scheduler clears pending NoteOffs on stop.
-    if (patternTransportClock.transportStopped)
+    if (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity)
+    {
         sampler.allNotesOff();
+        patternScheduler.clearPendingNoteOffs();
+        patternCycleStarted = false;
+    }
 
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
         static_cast<double>(parameters.getRawParameterValue("tuning")->load(std::memory_order_relaxed)));
@@ -362,6 +367,33 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         // PATTERN: held MIDI keys define the chord. Build a fixed-capacity
         // strum/arpeggio pattern from that chord and feed scheduled MIDI into
         // the same sampler voice engine used by Melody mode.
+        // Apply incoming MIDI before building the chord snapshot. The previous
+        // implementation updated held keys after scheduling, adding a full
+        // audio-block of latency and ignoring note sample positions.
+        patternChordChangeSampleOffset = -1;
+        for (const auto metadata : midi)
+        {
+            const auto message = metadata.getMessage();
+            const int channel = juce::jlimit(1, 16, message.getChannel()) - 1;
+            if (message.isAllNotesOff() || message.isAllSoundOff())
+            {
+                for (auto& held : patternHeldNotes) held.fill(false);
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+                panicRequested.store(true, std::memory_order_release);
+                sampler.panic(fadeLength);
+            }
+            else if (message.isNoteOn())
+            {
+                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = true;
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+            }
+            else if (message.isNoteOff())
+            {
+                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = false;
+                patternChordChangeSampleOffset = juce::jlimit(0, juce::jmax(0, samples - 1), metadata.samplePosition);
+            }
+        }
+
         std::array<int, 6> chordNotes {};
         int chordCount = 0;
         int chordChannel = 1;
@@ -400,17 +432,35 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             0xffff  // arpeggio picking
         }};
         const bool arpeggio = patternSlot == 7;
-        if (chordCount > 0)
+        const bool chordChanged = chordCount != previousPatternChordCount
+            || !std::equal(chordNotes.begin(), chordNotes.begin() + chordCount,
+                           previousPatternChordNotes.begin());
+        if (chordChanged)
         {
-            if (!patternCycleStarted)
+            sampler.allNotesOff();
+            patternScheduler.clearPendingNoteOffs();
+            patternCycleStarted = chordCount > 0;
+            if (chordCount > 0)
             {
+                const int changeOffset = patternChordChangeSampleOffset >= 0
+                    ? patternChordChangeSampleOffset : 0;
+                const double changePpq = patternTransportClock.startPpq
+                    + static_cast<double>(changeOffset) * patternTransportClock.bpm
+                        / (60.0 * currentSampleRate);
                 const bool startOnFirstChord =
                     parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
-                patternCycleStartPpq = startOnFirstChord
-                    ? patternTransportClock.startPpq
-                    : std::ceil(patternTransportClock.startPpq / 4.0) * 4.0;
-                patternCycleStarted = true;
+                // First chord may start immediately when explicitly requested;
+                // subsequent chord changes are quantized forward to 1/16.
+                const bool firstChord = previousPatternChordCount == 0;
+                patternCycleStartPpq = firstChord && startOnFirstChord
+                    ? changePpq : std::ceil(changePpq * 4.0 - 1.0e-9) / 4.0;
             }
+        }
+        previousPatternChordCount = chordCount;
+        previousPatternChordNotes = chordNotes;
+
+        if (chordCount > 0)
+        {
 
             const int bars = static_cast<int>(patternLengthBeats / 4.0);
             for (int bar = 0; bar < bars; ++bar)
@@ -443,10 +493,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         else
         {
             patternCycleStarted = false;
-            if (previousPatternChordCount > 0)
-                sampler.allNotesOff();
         }
-        previousPatternChordCount = chordCount;
 
         const auto scheduledCount = patternScheduler.schedule(
             patternEvents, patternLengthBeats, patternCycleStartPpq,
@@ -485,25 +532,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 sampler.noteOff(event.note, event.channel);
         }
         renderSegment(cursor, samples - cursor);
-
-        // Update the held-chord state after rendering this block. A chord first
-        // pressed in this block begins its pattern next block; a released chord
-        // cannot accidentally trigger a fresh pattern in the same block.
-        for (const auto metadata : midi)
-        {
-            const auto message = metadata.getMessage();
-            const int channel = juce::jlimit(1, 16, message.getChannel()) - 1;
-            if (message.isAllNotesOff() || message.isAllSoundOff())
-            {
-                for (auto& held : patternHeldNotes) held.fill(false);
-                panicRequested.store(true, std::memory_order_release);
-                sampler.panic(fadeLength);
-            }
-            else if (message.isNoteOn())
-                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = true;
-            else if (message.isNoteOff())
-                patternHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(message.getNoteNumber())] = false;
-        }
+        if (patternScheduler.consumePendingOverflow())
+            sampler.allNotesOff();
     }
 
     // AMP & TONE: low/mid/high split with persistent one-pole filter states.
