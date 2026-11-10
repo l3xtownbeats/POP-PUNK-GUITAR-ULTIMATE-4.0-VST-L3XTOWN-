@@ -64,6 +64,18 @@ duplicates = sorted({item for item in literal_ids if literal_ids.count(item) > 1
 if duplicates:
     errors.append("Duplicate literal APVTS IDs: " + ", ".join(duplicates))
 
+# The selected SFZ bank path is part of the saved session and must restore
+# asynchronously without blocking the host's state-loading callback.
+for token in (
+    'state.setProperty("sfzFilePath"',
+    'restoredState.getProperty("sfzFilePath")',
+    'restoredSfzFile.existsAsFile()',
+    'loadSfzFileAsync(restoredSfzFile, {})',
+    'juce::ScopedLock lock(sampleStateLock)',
+):
+    if token not in source:
+        errors.append("SFZ session-path persistence/restore path missing: " + token)
+
 # APVTS state must continue to round-trip through JUCE's binary XML helpers.
 for token in (
     "parameters.copyState()", "state.createXml()", "copyXmlToBinary",
