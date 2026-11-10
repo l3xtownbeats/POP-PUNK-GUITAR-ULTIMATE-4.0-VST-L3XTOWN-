@@ -8,10 +8,6 @@
 
 *PLAY. CREATE. ROCK.*
 
-[![Windows x64](https://img.shields.io/badge/PLATFORM-WINDOWS%20x64-171717?style=for-the-badge&logo=windows)](#download)
-[![VST3](https://img.shields.io/badge/FORMAT-VST3-cb2b83?style=for-the-badge)](#download)
-[![JUCE](https://img.shields.io/badge/ENGINE-JUCE%207-171717?style=for-the-badge)](https://juce.com/)
-[![C++20](https://img.shields.io/badge/BUILT%20WITH-C%2B%2B20-171717?style=for-the-badge)](https://isocpp.org/)
 
 
 </div>
@@ -42,23 +38,9 @@ Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument comb
 <div align="center">
 
 
-<sub>Complete ZIP package · approximately 2.24 GB · direct artifact download</sub>
-
-[![Download package](https://img.shields.io/badge/DOWNLOAD-PROMO%20VST3%20%2B%20BANK%20%2B%20PRESETS-cb2b83?style=for-the-badge&logo=github)](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip)
-
 </div>
 
 ### Included in the package
-
-| Download | What you get | Availability |
-|---|---|---|
-| **Promo VST3** | Windows x64 VST3 plugin bundle | [Download complete package]( https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13738701864/zip ) |
-| **Sample Bank** | WAV guitar sample library in `Samples/` | Included in complete package |
-| **Factory Preset Bank** | 300-entry preset definition catalogue | [Download JSON](presets/factory_bank_300.json) |
-| **Melody example** | Portable `.ppgm` example | [Download](presets/examples/Example-Melody.ppgm) |
-| **Pattern example** | Portable `.ppgp` example | [Download](presets/examples/Example-Pattern.ppgp) |
-| **Preset bank v1** | Additional preset catalogue data | [Download JSON](presets/factory_preset_bank_v1.json) |
-| **Install guide** | Package contents and installation notes | Included in ZIP |
 
 **Important:** the VST3 binary and full Sample Bank are currently distributed together in the complete ZIP. There are no separate standalone VST3 or Sample Bank archive assets published at this time. Preset JSON and example files can be downloaded individually from the links above. The 300-entry catalogue is not a claim that all 300 presets are already playable in the plugin.
 
