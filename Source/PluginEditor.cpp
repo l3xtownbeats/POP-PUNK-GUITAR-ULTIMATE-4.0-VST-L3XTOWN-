@@ -93,7 +93,6 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     refreshPresetList();
     importButton.setColour(juce::TextButton::buttonColourId, panel2);
     importButton.setColour(juce::TextButton::textColourOffId, pale);
-    importButton.setColour(juce::TextButton::outlineColourId, pink);
     importButton.onClick = [this] { chooseAudioLibraryFolder(); };
     addAndMakeVisible(importButton);
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
@@ -342,7 +341,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
 {
     fileChooser = std::make_unique<juce::FileChooser>(
-        "Choose a folder containing guitar audio samples",
+        "Import Sounds - choose a folder with audio samples",
         juce::File::getSpecialLocation(juce::File::userHomeDirectory));
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
     fileChooser->launchAsync(juce::FileBrowserComponent::openMode
