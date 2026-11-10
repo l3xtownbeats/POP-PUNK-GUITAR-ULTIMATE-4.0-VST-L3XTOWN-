@@ -315,8 +315,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
+    melodyTab.setColour(juce::TextButton::buttonOnColourId, pink);
+    patternTab.setColour(juce::TextButton::buttonOnColourId, pink);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    modeBox.onChange = [this] {
+        const bool isPattern = modeBox.getSelectedId() == 2;
+        melodyTab.setToggleState(!isPattern, juce::dontSendNotification);
+        patternTab.setToggleState(isPattern, juce::dontSendNotification);
+    };
+    modeBox.onChange();
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
