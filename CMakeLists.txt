@@ -68,6 +68,9 @@ target_compile_definitions(PopPunkGuitarUltimate PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_USE_FLAC=1
+    JUCE_USE_OGGVORBIS=1
+    JUCE_USE_MP3AUDIOFORMAT=1
 )
 
 target_link_libraries(PopPunkGuitarUltimate PRIVATE
@@ -243,6 +246,11 @@ if(BUILD_TESTING)
         tests/SampleLibraryImporterTests.cpp
     )
     target_include_directories(ppgu_sample_library_importer_tests PRIVATE Source/Sampler)
+    target_compile_definitions(ppgu_sample_library_importer_tests PRIVATE
+        JUCE_USE_FLAC=1
+        JUCE_USE_OGGVORBIS=1
+        JUCE_USE_MP3AUDIOFORMAT=1
+    )
     target_link_libraries(ppgu_sample_library_importer_tests PRIVATE
         juce::juce_audio_formats
         juce::juce_audio_basics
