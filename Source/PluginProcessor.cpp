@@ -28,8 +28,9 @@ namespace
 
 PopPunkGuitarUltimateAudioProcessor::~PopPunkGuitarUltimateAudioProcessor()
 {
-    // A worker job accesses sampler; wait before member destruction to avoid
-    // racing a long WAV decode against destruction of the processor.
+    // Invalidate queued worker and message-thread completions before waiting
+    // for any active bank scan/decode to finish.
+    sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     sampleLoadPool.removeAllJobs(true, -1);
 }
 
@@ -832,6 +833,8 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         return;
 
     const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    // Even a state with no bank path supersedes an older pending load.
+    sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     parameters.replaceState(restoredState);
     {
         const juce::ScopedLock lock(sampleStateLock);
@@ -856,7 +859,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
 {
-    // Synchronous API for tests/tools only; never call from processBlock.
+    // Synchronous API for tests/tools only; supersede any queued async request.
+    sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     auto report = sampler.loadSfz(sfzFile);
     if (report.success)
     {
@@ -875,18 +879,32 @@ juce::String PopPunkGuitarUltimateAudioProcessor::getCurrentSfzFilePath() const
 void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
     const juce::File& sfzFile, std::function<void(ppgu::sampler::LoadReport)> completion)
 {
-    sampleLoadPool.addJob([this, sfzFile, completion = std::move(completion)]() mutable
+    const auto generationState = sampleLoadGeneration;
+    const auto generation = generationState->fetch_add(1, std::memory_order_acq_rel) + 1;
+    sampleLoadPool.addJob([this, sfzFile, completion = std::move(completion),
+                           generationState, generation]() mutable
     {
+        // A newer request may arrive while this job waits in the single-worker
+        // queue. Skip stale scans entirely; if superseded during decode, do
+        // not publish its path or completion (the newer queued job follows).
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
         auto report = sampler.loadSfz(sfzFile);
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
         if (report.success)
         {
             const juce::ScopedLock lock(sampleStateLock);
             currentSfzFilePath = sfzFile.getFullPathName();
         }
+
         juce::MessageManager::callAsync(
-            [completion = std::move(completion), report = std::move(report)]() mutable
+            [completion = std::move(completion), report = std::move(report),
+             generationState, generation]() mutable
             {
-                if (completion)
+                if (generationState->load(std::memory_order_acquire) == generation && completion)
                     completion(std::move(report));
             });
     });
