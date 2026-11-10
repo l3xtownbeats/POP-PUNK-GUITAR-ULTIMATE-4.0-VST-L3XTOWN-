@@ -39,7 +39,9 @@ public:
     // Call from a non-audio thread only. Published snapshots and streaming
     // library services remain alive until SamplePool destruction, so audio-
     // thread region and service pointers stay valid across bank replacement.
-    [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile);
+    [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
+        const std::atomic<std::uint64_t>* requestGeneration = nullptr,
+        std::uint64_t expectedGeneration = 0);
 
     struct RegionView
     {
@@ -118,7 +120,9 @@ public:
 
     void prepare(double outputSampleRate) noexcept;
     void reset() noexcept;
-    [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile);
+    [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
+        const std::atomic<std::uint64_t>* requestGeneration = nullptr,
+        std::uint64_t expectedGeneration = 0);
     [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
     void allNotesOff() noexcept;
