@@ -155,6 +155,13 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("swing", "Swing", 0.0f, 1.0f, 0.0f));
     p.add(floatParameter("humanize", "Humanize", 0.0f, 1.0f, 0.0f));
     p.add(floatParameter("accent", "Accent", 0.0f, 1.0f, 0.75f));
+    p.add(std::make_unique<juce::AudioParameterInt>(
+        juce::ParameterID { "factoryPalmMuteMask", 1 }, "Factory Palm Mute Step Map", 0, 65535, 0));
+    p.add(std::make_unique<juce::AudioParameterInt>(
+        juce::ParameterID { "factoryAccentMaskHigh", 1 }, "Factory Accent High Step Map", 0, 65535, 0));
+    p.add(std::make_unique<juce::AudioParameterInt>(
+        juce::ParameterID { "factoryAccentMaskLow", 1 }, "Factory Accent Low Step Map", 0, 65535, 0));
+    p.add(boolParameter("factoryStrokeVariationOn", "Factory Stroke Variation", true));
     p.add(boolParameter("startOnFirstChord", "Start on First Chord", true));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "patternQuantize", 1 }, "Pattern Quantize",
@@ -510,9 +517,21 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     const int notesThisStep = arpeggio ? 1 : count;
                     for (int strum = 0; strum < notesThisStep && patternEventCount < patternEvents.size(); ++strum)
                     {
+                        const bool strokeVariation = parameters.getRawParameterValue("factoryStrokeVariationOn")->load(std::memory_order_relaxed) > 0.5f;
                         const int chordIndex = arpeggio ? ((bar * 16 + step) % count)
-                            : ((step % 2 == 0) ? strum : count - 1 - strum);
-                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
+                            : (strokeVariation && (step % 2 != 0) ? count - 1 - strum : strum);
+                        const int palmMuteMask = juce::roundToInt(parameters.getRawParameterValue("factoryPalmMuteMask")->load(std::memory_order_relaxed));
+                        const int accentMaskHigh = juce::roundToInt(parameters.getRawParameterValue("factoryAccentMaskHigh")->load(std::memory_order_relaxed));
+                        const int accentMaskLow = juce::roundToInt(parameters.getRawParameterValue("factoryAccentMaskLow")->load(std::memory_order_relaxed));
+                        const int stepBit = 1 << step;
+                        int velocity = juce::jlimit(1, 127, juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
+                        if ((accentMaskHigh & stepBit) != 0) velocity = juce::jmin(127, velocity + 12);
+                        else if ((accentMaskLow & stepBit) != 0) velocity = juce::jmin(127, velocity + 5);
+                        // Palm-mute map is encoded as a deliberately low MIDI
+                        // velocity so the existing velocity-threshold articulation
+                        // path selects the muted envelope in the sampler.
+                        if ((palmMuteMask & stepBit) != 0)
+                            velocity = juce::jmin(velocity, 42);
                         patternEvents[patternEventCount++] = { beat + static_cast<double>(strum) * 0.012, 0.20,
                             static_cast<std::uint8_t>(notes[static_cast<size_t>(chordIndex)]),
                             static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel) };

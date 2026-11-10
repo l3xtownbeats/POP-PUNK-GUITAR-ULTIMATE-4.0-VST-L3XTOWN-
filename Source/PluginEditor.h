@@ -40,6 +40,10 @@ private:
     juce::TextEditor presetSearch;
     struct FactoryPreset {
         juce::String id, name, category, mode, soundCharacter, groove, articulation, styleProfileId;
+        juce::String sampleProfile, tonalTarget, noteBehavior, sampleRequirement;
+        juce::var parameters, performance;
+        int palmMuteMask = 0, accentMaskHigh = 0, accentMaskLow = 0;
+        bool humanizeEnabled = false, velocityAccents = false, strokeVariation = true;
         float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f;
     };
     std::vector<FactoryPreset> factoryPresets;

@@ -753,11 +753,32 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
-            const auto params = value.getProperty("parameters", juce::var());
+            preset.sampleProfile = value.getProperty("sampleProfile", "").toString();
+            preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
+            preset.noteBehavior = value.getProperty("noteBehavior", "").toString();
+            preset.sampleRequirement = value.getProperty("sampleRequirement", "").toString();
+            preset.parameters = value.getProperty("parameters", juce::var());
+            preset.performance = value.getProperty("performance", juce::var());
+            const auto params = preset.parameters;
             preset.drive = static_cast<float>(params.getProperty("drive", 0.0));
             preset.tone = static_cast<float>(params.getProperty("tone", 5.0));
             preset.reverb = static_cast<float>(params.getProperty("reverb", 0.0));
             preset.outputDb = static_cast<float>(params.getProperty("outputDb", 0.0));
+
+            if (auto* palmMap = preset.performance.getProperty("palmMuteMap", juce::var()).getArray())
+                for (int step = 0; step < 16 && !palmMap->empty(); ++step)
+                    if (static_cast<bool>((*palmMap)[step % static_cast<int>(palmMap->size())]))
+                        preset.palmMuteMask |= (1 << step);
+            if (auto* accentMap = preset.performance.getProperty("accentMap", juce::var()).getArray())
+                for (int step = 0; step < 16 && !accentMap->empty(); ++step)
+                {
+                    const auto valueAtStep = static_cast<float>((*accentMap)[step % static_cast<int>(accentMap->size())]);
+                    if (valueAtStep >= 0.85f) preset.accentMaskHigh |= (1 << step);
+                    else if (valueAtStep >= 0.70f) preset.accentMaskLow |= (1 << step);
+                }
+            preset.humanizeEnabled = static_cast<bool>(preset.performance.getProperty("humanize", false));
+            preset.velocityAccents = static_cast<bool>(preset.performance.getProperty("velocityAccents", false));
+            preset.strokeVariation = static_cast<bool>(preset.performance.getProperty("strokeVariation", true));
             factoryPresets.push_back(std::move(preset));
         }
     };
@@ -774,11 +795,15 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         if (auto* parameter = processor.parameters.getParameter(id))
             parameter->setValueNotifyingHost(parameter->convertTo0to1(value));
     };
+
+    // Apply the actual instrument mode as part of the preset. Previously the
+    // catalog displayed MELODY/PATTERN metadata but left the old mode active.
+    setParameter("playMode", preset.mode == "PATTERN" ? 1.0f : 0.0f);
     setParameter("distortionDrive", juce::jlimit(0.0f, 1.0f, preset.drive));
     setParameter("tone", juce::jlimit(0.0f, 10.0f, preset.tone));
     setParameter("reverbMix", juce::jlimit(0.0f, 1.0f, preset.reverb));
     setParameter("output", juce::jlimit(-24.0f, 12.0f, preset.outputDb));
-    // Preset identity is independent of the performance mode. The user chooses MELODY or PATTERN.
+
     const auto styleText = (preset.groove + " " + preset.articulation).toLowerCase();
     int patternStyle = 2;
     if (styleText.contains("arpeggio") || styleText.contains("picked melodic")) patternStyle = 7;
@@ -796,20 +821,38 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         else if (profile.contains("mest") || profile.contains("midtown") || profile.contains("my-chemical")) patternStyle = 6;
         else if (profile.contains("angels-airwaves") || profile.contains("yellowcard")) patternStyle = 7;
         else if (profile.contains("less-than-jake")) patternStyle = 4;
-        else patternStyle = 2;
     }
     setParameter("patternSlot", static_cast<float>(patternStyle));
-    const int articulationIndex = preset.articulation.containsIgnoreCase("palm") ? 1 : 0;
+
+    const auto articulationText = preset.articulation.toLowerCase();
+    const int articulationIndex = articulationText.contains("palm") || articulationText.contains("mute") ? 1
+        : articulationText.contains("flageolet") || articulationText.contains("harmonic") ? 2
+        : articulationText.contains("tremolo") ? 3 : 0;
     setParameter("articulation", static_cast<float>(articulationIndex));
     setParameter("distortionOn", preset.drive > 0.25f ? 1.0f : 0.0f);
     setParameter("reverbOn", preset.reverb > 0.01f ? 1.0f : 0.0f);
-    if (preset.mode == "PATTERN")
-    {
-        const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
-        statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation + "  /  SELECT MELODY OR PATTERN", juce::dontSendNotification);
-    }
-    else
-        statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter + "  /  MELODY = SINGLE NOTES, PATTERN = STYLE PLAYBACK", juce::dontSendNotification);
+
+    // Performance maps are translated into stable APVTS parameters consumed
+    // by the real-time pattern generator; no JSON parsing occurs on audio thread.
+    setParameter("factoryPalmMuteMask", static_cast<float>(preset.palmMuteMask));
+    setParameter("factoryAccentMaskHigh", static_cast<float>(preset.accentMaskHigh));
+    setParameter("factoryAccentMaskLow", static_cast<float>(preset.accentMaskLow));
+    setParameter("factoryStrokeVariationOn", preset.strokeVariation ? 1.0f : 0.0f);
+    setParameter("humanize", preset.humanizeEnabled ? 0.14f : 0.0f);
+    if (preset.velocityAccents)
+        setParameter("accent", 0.82f);
+    else if (preset.mode == "PATTERN")
+        setParameter("accent", 0.65f);
+
+    processor.parameters.state.setProperty("factoryPresetId", preset.id, nullptr);
+    processor.parameters.state.setProperty("factoryPresetName", preset.name, nullptr);
+    processor.parameters.state.setProperty("factoryPresetMode", preset.mode, nullptr);
+
+    const auto detail = preset.soundCharacter
+        + (preset.sampleProfile.isNotEmpty() ? "  /  " + preset.sampleProfile : juce::String{})
+        + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
+    statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + detail
+        + "  /  " + preset.articulation, juce::dontSendNotification);
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
 {
