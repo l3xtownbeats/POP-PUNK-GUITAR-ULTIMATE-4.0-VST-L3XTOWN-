@@ -224,7 +224,6 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             previouslySelectedPreset = visiblePresetIndices[static_cast<size_t>(oldSelectedId - 2)];
 
         const auto query = presetSearch.getText().trim().toLowerCase();
-        const int category = categoryBox.getSelectedId();
         visiblePresetIndices.clear();
         presetBox.clear(juce::dontSendNotification);
         presetBox.addItem("OFF  /  NO PRESET", 1);
@@ -298,6 +297,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     };
     midiButton.setTooltip("MIDI Piano Roll is not connected in this build.");
     multicoreButton.setTooltip("Background multicore processing is not enabled in this build.");
+    addAndMakeVisible(skinsButton);
     for (auto* button : { &midiButton, &multicoreButton })
     {
         button->setEnabled(false);
@@ -416,6 +416,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, pink);
         addAndMakeVisible(*l);
     }
+    applySkin(activeSkinIndex);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int index)
