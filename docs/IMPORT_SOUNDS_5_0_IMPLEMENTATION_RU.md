@@ -151,3 +151,33 @@ User-imported material is local/private by default and is not automatically adde
 - Переименование/удаление User preset не удаляет Sounds Bank и не затрагивает Factory content.
 - Favorites — отдельная коллекция ссылок; удаление избранного не удаляет сам пресет.
 - JSON валидируется по schemaVersion; повреждённый файл помещается в quarantine и не блокирует запуск плагина.
+
+## 5.3 Logical organization by guitar character and file format
+
+The importer stores two independent facets for every discovered asset:
+
+**Sound character / genre**
+- Clean
+- Drive
+- Crunch
+- Distortion
+- Palm Mute
+- Acoustic
+- Bass
+- Unsorted
+
+**Original file format**
+- WAV
+- AIFF
+- FLAC
+- OGG
+- MP3
+- SFZ
+
+These are metadata facets in the BANK SOUNDS index, not destructive folder moves. Original relative paths are preserved so SFZ sample references continue to resolve. The manifest records category, format, SHA-256, byte size and playback capability status per asset, plus category/format counters for fast browser filters.
+
+Category detection is deliberately conservative and explainable: it uses explicit folder/file-name hints such as "clean", "drive", "crunch", "distortion", "palm-mute", "acoustic", "nylon" and "bass". If no reliable hint exists, the item is Unsorted; the user can later confirm or change its category. The importer must not infer tone solely from waveform loudness or spectral brightness.
+
+Format is always derived from the actual extension, normalized for display (AIF -> AIFF). Format presence does not imply decoder support: the current playback engine's verified path is WAV/SFZ. FLAC, OGG, MP3 and AIFF remain catalogued with an explicit pending/unsupported playback state until a decoder and playback/cache test is included in the build. They must never be advertised as playable merely because they were copied.
+
+The BANK SOUNDS browser should expose independent filters: Category, Format, Bank and Playback Status, with search and sorting by name/date/size. This avoids duplicate copies and lets a user find, for example, every Clean WAV or every Distortion FLAC without moving originals.
