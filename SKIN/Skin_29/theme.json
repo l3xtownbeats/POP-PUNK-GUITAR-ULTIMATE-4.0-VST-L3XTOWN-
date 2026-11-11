@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-29",
+  "index": 29,
+  "name": "Prism Deck",
+  "description": "Layered premium panels with restrained spectral accent colors",
+  "cluster": "A",
+  "identity": {
+    "material": "smoked glass and satin polymer",
+    "lighting": "subtle multi-angle prism light",
+    "mood": "creative, dimensional, modern"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#151923",
+      "inset": "#1F2634"
+    },
+    "surfaces": {
+      "primary": "#1F2634",
+      "secondary": "#293347",
+      "raised": "#38445C",
+      "overlay": "#151923"
+    },
+    "borders": {
+      "subtle": "#58647B",
+      "strong": "#D4A6FF",
+      "focus": "#A1E0FF"
+    },
+    "typography": {
+      "primary": "#F5F7FC",
+      "secondary": "#C0C8D8",
+      "disabled": "#85858B",
+      "onAccent": "#151923"
+    },
+    "rotary": {
+      "body": "#38445C",
+      "ring": "#D4A6FF",
+      "track": "#58647B",
+      "value": "#A1E0FF",
+      "pointer": "#FFB98B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#58647B",
+      "fill": "#A1E0FF",
+      "thumb": "#FFB98B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#A1E0FF",
+        "foreground": "#151923",
+        "hover": "#FFB98B",
+        "pressed": "#D4A6FF",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#293347",
+        "foreground": "#F5F7FC",
+        "hover": "#38445C",
+        "pressed": "#D4A6FF",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#A1E0FF",
+      "activeText": "#151923",
+      "inactiveBackground": "#293347",
+      "inactiveText": "#C0C8D8",
+      "indicator": "#D4A6FF"
+    },
+    "comboBoxes": {
+      "background": "#293347",
+      "foreground": "#F5F7FC",
+      "border": "#58647B",
+      "hover": "#38445C",
+      "menuBackground": "#1F2634",
+      "selection": "#A1E0FF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#A1E0FF",
+      "blackPressed": "#D4A6FF",
+      "keyBorder": "#58647B",
+      "octaveLabel": "#C0C8D8"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#A1E0FF",
+      "high": "#F06A58",
+      "background": "#151923"
+    },
+    "icons": {
+      "primary": "#F5F7FC",
+      "secondary": "#C0C8D8",
+      "accent": "#A1E0FF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#293347",
+      "border": "#58647B",
+      "selected": "#A1E0FF",
+      "caption": "#F5F7FC"
+    },
+    "windowChrome": {
+      "background": "#151923",
+      "title": "#F5F7FC",
+      "border": "#58647B",
+      "close": "#FFB98B"
+    },
+    "hero": {
+      "background": "#151923",
+      "accent": "#A1E0FF",
+      "secondaryAccent": "#D4A6FF",
+      "highlight": "#FFB98B"
+    },
+    "accents": {
+      "primary": "#A1E0FF",
+      "secondary": "#D4A6FF",
+      "tertiary": "#FFB98B"
+    },
+    "texture": {
+      "material": "smoked glass and satin polymer",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "subtle multi-angle prism light",
+      "glow": "#A1E0FF",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#D4A6FF"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Prism Deck thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original smoked glass and satin polymer abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast smoked glass and satin polymer material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
