@@ -73,7 +73,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
                 || item.mode.toLowerCase().contains(query)
                 || item.soundCharacter.toLowerCase().contains(query)
                 || item.groove.toLowerCase().contains(query)
-                || item.articulation.toLowerCase().contains(query);
+                || item.articulation.toLowerCase().contains(query)
+                || item.searchMetadata.toLowerCase().contains(query);
             if (!matchesQuery) continue;
 
             visiblePresetIndices.push_back(static_cast<int>(i));
@@ -286,19 +287,44 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
 {
     factoryPresets.clear();
-    const auto jsonText = juce::String::fromUTF8(BinaryData::factory_bank_300_json, BinaryData::factory_bank_300_jsonSize);
+    const auto jsonText = juce::String::fromUTF8(BinaryData::factory_bank_432_json, BinaryData::factory_bank_432_jsonSize);
     const auto root = juce::JSON::parse(jsonText);
     if (!root.isObject()) { statusLabel.setText("FACTORY PRESET CATALOG ERROR", juce::dontSendNotification); return; }
     const auto append = [this](const juce::var& array, const juce::String& mode) {
         if (auto* values = array.getArray()) for (const auto& value : *values) {
             if (!value.isObject()) continue;
             FactoryPreset preset;
+            const auto joinStringArray = [](const juce::var& source) {
+                juce::String joined;
+                if (auto* items = source.getArray())
+                    for (const auto& item : *items)
+                    {
+                        if (joined.isNotEmpty()) joined += " ";
+                        joined += item.toString();
+                    }
+                return joined;
+            };
+            preset.id = value.getProperty("id", "").toString();
             preset.name = value.getProperty("name", "Unnamed").toString();
             preset.category = value.getProperty("referenceArtist", "Original").toString();
+            preset.artistReference = preset.category;
+            preset.referenceTracks = joinStringArray(value.getProperty("referenceTracks", juce::var()));
             preset.mode = mode;
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
+            preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
+            preset.sampleProfile = value.getProperty("sampleProfile", "").toString();
+            preset.sampleRequirement = value.getProperty("sampleRequirement", "").toString();
+            preset.noteBehavior = value.getProperty("noteBehavior", "").toString();
+            preset.catalogStatus = value.getProperty("status", "").toString();
+            preset.styleProfileId = value.getProperty("styleProfileId", "").toString();
+            preset.playingStyle = value.getProperty("playingStyle", "").toString();
+            preset.availableSoundCharacters = joinStringArray(value.getProperty("availableSoundCharacters", juce::var()));
+            preset.searchMetadata = preset.id + " " + preset.artistReference + " " + preset.referenceTracks
+                + " " + preset.tonalTarget + " " + preset.sampleProfile + " " + preset.sampleRequirement
+                + " " + preset.noteBehavior + " " + preset.catalogStatus + " " + preset.styleProfileId
+                + " " + preset.playingStyle + " " + preset.availableSoundCharacters;
             const auto params = value.getProperty("parameters", juce::var());
             preset.drive = static_cast<float>(params.getProperty("drive", 0.0));
             preset.tone = static_cast<float>(params.getProperty("tone", 5.0));
