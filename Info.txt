@@ -1558,3 +1558,29 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Commit: a9ae1c4233b78eaf50a6dac24462ded2a52ae5b3.
 - Это source change, ещё не подтверждённый Windows CI, CTest, pluginval или ручной проверкой FL Studio 20. Статус: FIXED — AWAITING CI.
 
+## 11 ноября 2026 — аудит соответствия текущего UI пользовательскому макету
+
+Проверены Source/PluginEditor.cpp и Source/PluginEditor.h ветки 5.0, а также Cover Interface.jpg, два разрешённых PNG-референса и утверждённые UI-документы.
+
+Подтверждено в коде:
+- Есть единый preset list с поиском и фильтрами группы / sound character / playing style.
+- Есть отдельный OFF в списке пресетов и OFF/ALL значения фильтров.
+- MELODY/PATTERN переключаются отдельно от выбора пресета.
+- Есть AutoChords toggle, Key и Scale parameters.
+- Есть FX Studio window, базовые основные регуляторы, MIDI keyboard и выбор Processor Quality.
+- Preset selection уже применяет параметры стиля независимо от текущего playMode.
+
+Выявленные несоответствия / TODO:
+- Skin system сейчас содержит только 10 цветовых палитр в коде; это НЕ 20 полноценных графических оболочек и не runtime package loader.
+- Кнопки MIDI и MULTICORE сейчас disabled; Piano Roll и реальный multicore control не реализованы в этом Editor.
+- Нет подтверждённого полного SETTINGS/APPEARANCE window, масштаба 75/100/150 и отдельного mode-cover resource switch.
+- Нет полного правого Pattern Sequencer с восемью слотами, Rhythm Search, preview и MIDI Drag Out.
+- Нет полной нижней навигации Browser/Presets/Settings/About, реальных CPU/RAM meters и всех элементов header strip (save, prev/next, editable preset name).
+- Нет Guitar Type selector Electric/Acoustic/Hybrid.
+- Внешний вид текущего Editor остаётся преимущественно стандартными JUCE controls; утверждённый hero artwork / Cover Interface.jpg не встроен как полная рабочая оболочка.
+- Эти пункты нельзя объявлять реализованными только потому, что они внесены в спецификацию.
+
+Дополнено ТЗ: docs/PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md — добавлены точные элементы approved 1402x1122 mockup, preset audition, Guitar Type, Pitch/Mod wheels, bottom navigation и разделы SETTINGS.
+
+Статус: SPEC RECORDED; preset OFF and AutoChords UI source fixes committed; remaining visual/functional UI scope IN PROGRESS / NOT VERIFIED. Windows CI run 42934841825 для AutoChords UI commit a9ae1c4233b78eaf50a6dac24462ded2a52ae5b3 ещё выполняется на момент записи.
+
