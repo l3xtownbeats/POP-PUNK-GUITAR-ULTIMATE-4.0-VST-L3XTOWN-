@@ -1,15 +1,15 @@
-POP PUNK GUITAR ULTIMATE — INFO / ЕДИНЫЙ ЖУРНАЛ РАЗРАБОТКИ
+POP PUNK GUITAR ULTIMATE REV 6.0 VST3 — INFO / ЕДИНЫЙ ЖУРНАЛ РАЗРАБОТКИ
 Версия журнала: 1.0
-Дата обновления: 10 ноября 2026
+Дата обновления: 11 ноября 2026
 Репозиторий: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
-Рабочая ветка: main (единственная разрешённая рабочая ветка; резервная migration/full-copy-m3-transport-scheduler-v2 не изменяется)
-Последний HEAD до записи CI: bdd540eb30aeef8d2f51768ef5bb7e63129a9920
+Рабочая ветка: main (подтверждена пользователем; резервные и UI-ветки не изменяются)
+Последний проверенный HEAD main: 27abf1313d707f9df4c0da0b77c044c18e8977ab (11.11.2026); CI для этого HEAD не найден
 
 НАЗНАЧЕНИЕ INFO
 Этот файл — единый сквозной журнал проекта от первоначального ТЗ и первых решений до финальной сборки, релизной проверки и поддержки. Все последующие изменения, тесты, результаты CI, ошибки, решения, ограничения и переходы между вехами фиксируются здесь хронологически. Журнал багов остаётся отдельным реестром дефектов с ID и статусами.
 
 ПРОЕКТ И БАЗОВЫЕ ТРЕБОВАНИЯ
-- Продукт: POP PUNK GUITAR ULTIMATE by L3XTOWN — самостоятельный Windows x64 VST3 guitar sampler/rompler/performance instrument для FL Studio 20 и Windows 10 1809+.
+- Продукт/релиз: POP PUNK GUITAR ULTIMATE REV 6.0 VST3 by L3XTOWN — самостоятельный Windows x64 VST3 guitar sampler/rompler/performance instrument для FL Studio 20 и Windows 10 1809+.
 - Основной документ: Promt.txt v33 FINAL. Приоритет — обязательные правила Части 0, вехи M1–M13, критерии приёмки и запрет перехода к следующей вехе до фактического прохождения текущей.
 - Стек: JUCE 7.0.12, C++20, CMake >=3.22, Visual Studio 2022/MSVC v143, VST3.
 - Звуковая модель: ROMpler/sample-based; реальные WAV/SFZ сэмплы, не синусоидальная подмена. Melody: клавиша = хроматическая нота. Pattern: MIDI chord = гитарное исполнение/ритм.
@@ -1538,3 +1538,18 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - В README проекта подтверждено, что текущий статус — engineering preview. Melody описан как прямой chromatic workflow; Pattern runtime и его связь с реальным sampler playback остаются незавершёнными. Каталог 300 preset definitions не считать 300 полностью готовыми/проверенными звучащими пресетами.
 - Приоритет оптимизации: сначала достоверная сборка/регрессии и M2 streaming playback integration, затем полноценная Pattern-to-sampler интеграция и acceptance, затем UI polish/skin package validation. Не подменять реальные тесты косметическими изменениями и не ослаблять критерии качества ради скорости.
 - Статус: AUDIT NOTES RECORDED; source-level implementation and fresh Windows build/CTest/pluginval/FL Studio 20 checks still required.
+
+
+## 11 ноября 2026 — REV 6.0 VST3: синхронизация и ускоренный инженерный аудит
+
+- Официальное название целевого релиза подтверждено пользователем: **POP PUNK GUITAR ULTIMATE REV 6.0 VST3**. Это релизное имя; оно не меняет порядок milestone acceptance.
+- Рабочая ветка: `main`. Пользователь отдельно подтвердил «Ветка Майн». Устаревшие исторические записи о запрете main и migration branch не являются действующей инструкцией; резервные ветки не изменять.
+- Текущий проверенный HEAD: `27abf1313d707f9df4c0da0b77c044c18e8977ab`. Combined commit status пуст; workflow runs, возвращённые для этого SHA, отсутствуют. Следовательно, актуальный Windows Release CI/CTest не подтверждён.
+- Повторно проверены свежие blob SHA: PluginProcessor.cpp `b9e86e1d05a92507d2333c5628150fd62f75e286`; PluginProcessor.h `d0c5fe5044fc5b2b623cbde3fdec75795f5b4dfb`; ChordTransitionTimeline.h `38bc015a83b8c7dd8a2a6ec55579901ba36fcaec`; PatternScheduler.h `32d3f7630cb7280830112b61c84a375dabe7a132`; PatternSchedulerTests.cpp `750107877c83f09157c383844846dffde2303ba7`; CMakeLists.txt `d89c8fb02a59a5fc8dff79a892f486b9a305da5d`.
+- M3-014: в PluginProcessor присутствует sample-accurate timeline: каждый MIDI-интервал рендерится до применения события, held chord обновляется на точном sample offset, а scheduler отправляет NoteOn/NoteOff в sampler. Тест [16,80,120] подтверждает snapshots на уровне helper/timeline, но пока не является полноценным processor→scheduler→sampler integration test. Поэтому M3-014 остаётся **OPEN / SOURCE PATH PRESENT / INTEGRATION TEST + CI REQUIRED**.
+- Важный риск M3-014: смены аккорда перезапускают pattern cycle и очищают pending NoteOff; при нескольких сменах внутри одной 1/16 или 1/32 quantize window разные chord snapshots могут получить одинаковую будущую quantize boundary. Требуется отдельный тест и решение, согласованное с музыкальным контрактом; не менять quantization семантику вслепую.
+- M3-015: scheduler содержит fixed output capacity 512, overflow flags и processor fail-safe через allNotesOff; unit test проверяет переполнение. Полный актуальный CI для HEAD отсутствует, поэтому статус — **SOURCE IMPLEMENTATION PRESENT / CI REQUIRED**.
+- CMake регистрирует PatternSchedulerTests, но не регистрирует processor-level integration test. PatternScheduler.cpp как отдельный файл отсутствует; scheduler реализован в header.
+- GUI blueprint и PPGU 5.0 UI/UX acceptance document в main при проверке не найдены. Не считать их синхронизированными; не начинать UI implementation до приёмки M1–M3.
+- Текущая сессия: аудит и синхронизация документации; production source code не менялся, сборка не запускалась, pluginval и FL Studio 20 не проверялись.
+- Следующий строго разрешённый шаг: завершить M3-014 integration regression test, проверить quantize-window transitions и pending NoteOff, затем M3-015 acceptance; пользователь запускает GitHub Actions и присылает результат. M1/M2 остаются NOT ACCEPTED; M4+ и UI/UX 5.0 заблокированы до полной приёмки M1–M3.
