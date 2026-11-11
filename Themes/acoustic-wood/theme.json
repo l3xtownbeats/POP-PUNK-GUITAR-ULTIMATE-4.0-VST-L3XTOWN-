@@ -1,0 +1,60 @@
+{
+  "name": "Acoustic Wood",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#302317",
+    "background.bottom": "#1c140e",
+    "accent.primary": "#d79a42",
+    "accent.secondary": "#f0c477",
+    "text.main": "#fff2d8",
+    "text.dim": "#c1a47a",
+    "knob.face": "#503a25",
+    "knob.ring": "#cf9140",
+    "button.normal": "#1c140e",
+    "button.active": "#d79a42",
+    "button.hover": "#302317",
+    "slider.track": "#c1a47a",
+    "slider.fill": "#d79a42",
+    "led.on": "#d79a42",
+    "led.off": "#c1a47a",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#d79a42",
+    "meter.fill": "#d79a42",
+    "meter.peak": "#ff4444",
+    "panel.border": "#c1a47a",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#1c140e",
+    "list.row.selected": "#d79a42",
+    "tooltip.background": "#1c140e",
+    "tooltip.text": "#fff2d8"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Merriweather-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "acoustic_wood"
+  }
+}
