@@ -1572,3 +1572,18 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Новый target ppgu_chord_transition_tests зарегистрирован в CMake/CTest.
 - ВАЖНО: исходники и CMake изменены, но тестовый target ещё не запускался; Windows build/CTest/FL Studio host test не подтверждены. Это не является закрытием M3-014.
 - M3-014 остаётся OPEN — требуется успешная сборка и запуск всего CTest на Windows, затем processor/host integration verification. M1/M2 и M3 в целом не приняты; UI/UX 5.0 и M4+ остаются заблокированы.
+
+
+[2026-11-11] REV 6.0 / 5.0 SELECTIVE PORT — INTEGRATION BRANCH
+- Created integration/rev6-5.0-catalog from main; no direct changes to main.
+- Imported the 5.0 432-profile catalog (216 Melody + 216 Pattern; 21 artist references) as presets/factory_bank_432.json.
+- Wired the catalog into CMake BinaryData and expanded PluginEditor preset metadata/search fields.
+- Strengthened the factory catalog validator to enforce the file's declared minimum counts and 5.0 track-study constraints.
+- IMPORTANT: these 432 entries are authored metadata/profile definitions, not 432 verified playable presets. Pattern runtime/sample mapping remains a separate blocker.
+- Main baseline CI at ae67940720dd406a0f1043c2d938d2766358053c passed Windows Release build, CTest, VST3 bundle validation and pluginval strictness 5. Integration branch requires its own CI.
+- Detailed decision and acceptance gates: docs/REV6_5_0_SELECTIVE_PORT_RU.md
+
+[2026-11-11] REV 6.0 PRESET BROWSER LABEL CLEANUP
+- Corrected the empty preset selector label from the obsolete 300 count to FACTORY PROFILES / 432.
+- Terminology is deliberate: the 432 catalog entries are metadata/performance profiles, not 432 verified playable instruments. Melody still requires a compatible licensed SFZ bank; Pattern playback remains dependent on the performance runtime.
+- Windows CI on the preceding catalog integration commit 5801ab1 passed Release build, CTest, VST3 bundle validation and pluginval strictness 5. The label-only follow-up commit requires its own CI run.

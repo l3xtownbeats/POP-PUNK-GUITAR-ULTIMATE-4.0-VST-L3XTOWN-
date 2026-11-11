@@ -12,7 +12,7 @@ on:
       - 'tests/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
-      - 'presets/factory_bank_300.json'
+      - 'presets/factory_bank_432.json'
       - 'tools/validate_factory_bank.py'
       - 'tools/validate_preset_files.py'
       - 'presets/examples/**'
@@ -22,9 +22,9 @@ jobs:
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
-      - name: Validate 300-preset factory catalog
+      - name: Validate 432-profile factory catalog
         shell: pwsh
-        run: python tools/validate_factory_bank.py presets/factory_bank_300.json
+        run: python tools/validate_factory_bank.py presets/factory_bank_432.json
       - name: Validate portable preset file examples
         shell: pwsh
         run: python tools/validate_preset_files.py presets/examples

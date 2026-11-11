@@ -1196,3 +1196,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Добавлен сценарий с реальным PatternScheduler: ранее поставленный NoteOff старого аккорда должен пережить переход к новому аккорду и быть выдан на исходной PPQ-границе.
 - Новый CTest target ppgu_chord_transition_tests зарегистрирован в CMakeLists.txt.
 - Статус: тестовый код добавлен в main, но не запускался. Нет подтверждённой сборки, CTest или DAW проверки. M3-014 остаётся OPEN; не объявлять результат рабочим до получения Windows CI/CTest и processor-level/host evidence.
+
+
+## 11 ноября 2026 — выборочный перенос каталога 5.0 в REV 6.0
+
+Создана отдельная интеграционная ветка integration/rev6-5.0-catalog от main. Полный merge 5.0 отклонён из-за расхождения аудиоархитектуры и UI. Перенесён независимый каталог 432 профилей (216 MELODY + 216 PATTERN; 21 референсная группа) в presets/factory_bank_432.json. Обновлены CMake BinaryData, PluginEditor metadata loader/search, validator и Windows workflow. Поиск использует artist, reference tracks, tonal target, sample profile/requirement, note behavior, status и style profile. Это каталожные профили, а не доказательство наличия 432 звучащих инструментов. CI этой интеграционной ветки ещё должен подтвердить сборку, CTest и pluginval. FL Studio 20 acceptance остаётся отдельной проверкой.
+
+
+## 11 ноября 2026 — корректировка счётчика каталога REV 6.0
+- В `Source/PluginEditor.cpp` заменена устаревшая надпись `FACTORY PRESETS / 300` на `FACTORY PROFILES / 432`.
+- Использовано слово «профили», чтобы не создавать ложного впечатления, будто все 432 записи уже являются готовыми звучащими инструментами.
+- Предыдущий интеграционный commit `5801ab1` прошёл Windows Release build, CTest, VST3 bundle validation и pluginval strictness 5 (Actions run `42985809085`). Новый commit с изменением подписи ожидает отдельного CI.

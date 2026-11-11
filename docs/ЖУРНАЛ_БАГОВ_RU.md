@@ -183,3 +183,14 @@
 - Добавлен ppgu_chord_transition_tests для policy и сохранения pending NoteOff при переходе между непустыми аккордами.
 - Это закрывает пробел в отсутствии отдельного теста для ChordTransitionPolicy, но НЕ подтверждает end-to-end поведение PluginProcessor.
 - Статус M3-014: OPEN — AWAITING WINDOWS BUILD/CTest + PROCESSOR/HOST INTEGRATION. Тесты не запускались, дефект не закрыт.
+
+
+## 11 ноября 2026 — контрольный статус интеграции 5.0
+
+Не закрыты новые дефекты и не изменён статус M1–M3. Новый 432-профильный каталог и расширенный поиск ожидают CI и ручной проверки browser в FL Studio 20. Профили без подтверждённой runtime sample/performance map не должны отображаться как полностью готовые звучащие пресеты. Полный перенос старого UI/processor не выполнялся, чтобы не вернуть известные проблемы Pattern dispatch, streaming voice path и неподтверждённые UI controls.
+
+
+## 11 ноября 2026 — устранена устаревшая подпись каталога
+- Дефект: пустой preset selector продолжал показывать `FACTORY PRESETS / 300`, хотя загружается каталог из 432 профилей.
+- Исправление: подпись заменена на `FACTORY PROFILES / 432`; слово «profiles» сохраняет корректное различие между метаданными каталога и фактически playable sounds.
+- Commit `2f8ec8e081cb29c234f9a8dccdfb98b9f87781d6`. Статус: FIXED IN SOURCE — AWAITING CI. Предыдущий commit прошёл Windows build/CTest/pluginval, но это изменение ещё не проверено свежим CI.
