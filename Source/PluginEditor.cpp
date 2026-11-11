@@ -216,13 +216,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     };
     for (int i = 0; i < styleValues.size(); ++i)
         styleFilterBox.addItem(styleValues[i], i + 3);
-    juce::StringArray artistGroups;
-    for (const auto& item : factoryPresets)
-        if (item.category.isNotEmpty() && !artistGroups.contains(item.category))
-            artistGroups.add(item.category);
-    artistGroups.sort(true);
-    for (int i = 0; i < artistGroups.size(); ++i)
-        categoryBox.addItem(artistGroups[i], i + 3);
+    // PUNK GROUP choices come from the catalogue's authoritative artists list,
+    // not from mode/category labels or whichever presets happen to be present.
+    for (int i = 0; i < catalogArtists.size(); ++i)
+        categoryBox.addItem(catalogArtists[i], i + 3);
     for (auto* box : { &melodyFilterBox, &styleFilterBox, &processorBox })
     {
         box->setColour(juce::ComboBox::backgroundColourId, panel2);
@@ -266,7 +263,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
             if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "PUNK GROUP"
-                && !item.category.equalsIgnoreCase(groupFilter)) continue;
+                && !item.artistReference.equalsIgnoreCase(groupFilter)) continue;
             const auto melodyFilter = melodyFilterBox.getText();
             const auto melodyText = (item.soundCharacter + " " + item.tonalTarget + " "
                                      + item.sampleProfile + " " + item.artistReference + " "
@@ -769,6 +766,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
     const auto jsonText = juce::String::fromUTF8(BinaryData::factory_bank_300_json, BinaryData::factory_bank_300_jsonSize);
     const auto root = juce::JSON::parse(jsonText);
     if (!root.isObject()) { statusLabel.setText("FACTORY PRESET CATALOG ERROR", juce::dontSendNotification); return; }
+    catalogArtists.clear();
+    if (auto* artistArray = root.getProperty("artists", juce::var()).getArray())
+        for (const auto& artist : *artistArray)
+        {
+            const auto artistName = artist.getProperty("name", "").toString().trim();
+            if (artistName.isNotEmpty() && !catalogArtists.contains(artistName))
+                catalogArtists.add(artistName);
+        }
     const auto append = [this](const juce::var& array, const juce::String& mode) {
         if (auto* values = array.getArray()) for (const auto& value : *values) {
             if (!value.isObject()) continue;
