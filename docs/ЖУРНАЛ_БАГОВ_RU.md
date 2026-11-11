@@ -175,3 +175,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - При ON одна MIDI-клавиша может быть преобразована в аккорд по выбранным KEY и MAJOR/MINOR.
 - Спецификация: commit `94cf692c5879d8555e89e467f54ac72d669c2e8f`.
 - Это уточнение критерия приёмки, а не подтверждённый code fix. Связанный runtime-критерий остаётся OPEN до проверки Processor и тестов обоих сценариев (PATTERN/OFF и PATTERN/ON).
+
+
+## 11 ноября 2026 — OPEN: Pattern playback выходит за границу MIDI note length
+
+- Зафиксирован acceptance defect/risk: PATTERN не должен продолжать играть ритмический аккомпанемент после MIDI note-off, соответствующего концу нарисованной ноты в Piano Roll.
+- Требуется проверить PatternScheduler: отмену будущих событий после note-off последней управляющей ноты, завершение активных голосов, обработку перекрывающихся нот/legato и очистку при stop/seek/loop/cycle jump.
+- Скрытый latch-tail запрещён как поведение по умолчанию. Любая будущая опция Latch должна быть явной и не нарушать точную остановку в default/off состоянии.
+- Одинаковое поведение требуется при PATTERN + AUTOCHORDS OFF и PATTERN + AUTOCHORDS ON.
+- Спецификация: `360b852079ac0d84ba23a804c0ce176910d13000`.
+- Статус: OPEN / SOURCE AUDIT + IMPLEMENTATION + REGRESSION TESTS + WINDOWS CI + FL STUDIO 20 HOST TEST REQUIRED. Не закрывать без подтверждения отсутствия атак после note-off.
