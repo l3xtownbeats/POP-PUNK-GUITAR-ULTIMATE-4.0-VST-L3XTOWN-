@@ -1,5 +1,6 @@
 #include "ThemeManager.h"
 #include <cmath>
+#include <algorithm>
 
 namespace ppgu
 {
@@ -33,7 +34,7 @@ bool ThemeManager::loadCatalogText (const juce::String& jsonText, const juce::Fi
     const auto root = juce::JSON::parse(jsonText);
     if (! root.isObject()) return false;
 
-    defaultId = root.getProperty("default_theme_id", "neon_riot").toString();
+    defaultId = root.getProperty("default_theme_id", "neon-riot").toString();
     const auto themeArray = root.getProperty("themes", juce::var());
     const auto* entries = themeArray.getArray();
     if (entries == nullptr) return false;
@@ -52,7 +53,10 @@ bool ThemeManager::loadCatalogText (const juce::String& jsonText, const juce::Fi
         if (const auto* tagArray = tags.getArray())
             for (const auto& tag : *tagArray) theme->styleTags.add(tag.toString());
 
-        const auto palette = propertyOrEmpty(entry, "palette");
+        // Accept both the original catalog schema ("palette") and the shipped
+        // per-folder schema ("colors").
+        auto palette = propertyOrEmpty(entry, "palette");
+        if (! palette.isObject()) palette = propertyOrEmpty(entry, "colors");
         if (const auto* object = palette.getDynamicObject())
             for (const auto& item : object->getProperties())
                 theme->palette.colours[item.name.toString()] =
@@ -64,7 +68,6 @@ bool ThemeManager::loadCatalogText (const juce::String& jsonText, const juce::Fi
             for (const auto& item : object->getProperties())
             {
                 const auto relative = item.value.toString();
-                // Reject absolute paths and traversal outside the theme folder.
                 if (relative.isEmpty() || juce::File::isAbsolutePath(relative)
                     || relative.contains("..")) continue;
                 const auto file = theme->rootDir.getChildFile(relative);
@@ -80,6 +83,67 @@ bool ThemeManager::loadCatalogText (const juce::String& jsonText, const juce::Fi
     }
 
     if (themes.empty()) return false;
+    applyTheme(defaultId);
+    if (currentTheme == nullptr) applyTheme(0);
+    return true;
+}
+
+bool ThemeManager::loadFromDirectory (const juce::File& themesDirectory)
+{
+    themes.clear();
+    currentTheme = nullptr;
+    if (! themesDirectory.isDirectory()) return false;
+
+    const auto folders = themesDirectory.findChildFiles(juce::File::findDirectories, false);
+    for (const auto& folder : folders)
+    {
+        const auto config = folder.getChildFile("theme.json");
+        if (! config.existsAsFile()) continue;
+
+        const auto parsed = juce::JSON::parse(config.loadFileAsString());
+        if (! parsed.isObject()) continue;
+
+        auto theme = std::make_unique<Theme>();
+        theme->id = folder.getFileName();
+        theme->name = parsed.getProperty("name", theme->id).toString();
+        theme->author = parsed.getProperty("author", "Unknown").toString();
+        theme->version = parsed.getProperty("version", "1.0").toString();
+        theme->rootDir = folder;
+
+        auto colors = propertyOrEmpty(parsed, "colors");
+        if (! colors.isObject()) colors = propertyOrEmpty(parsed, "palette");
+        if (const auto* object = colors.getDynamicObject())
+            for (const auto& item : object->getProperties())
+                theme->palette.colours[item.name.toString()] =
+                    parseThemeColour(item.value.toString(), juce::Colours::transparentBlack);
+
+        const auto assets = propertyOrEmpty(parsed, "assets");
+        if (const auto* object = assets.getDynamicObject())
+            for (const auto& item : object->getProperties())
+            {
+                const auto relative = item.value.toString();
+                if (relative.isEmpty() || juce::File::isAbsolutePath(relative)
+                    || relative.contains("..")) continue;
+                const auto file = folder.getChildFile(relative);
+                if (file.existsAsFile()) theme->assets[item.name.toString()] = file;
+            }
+
+        const auto fonts = propertyOrEmpty(parsed, "fonts");
+        if (const auto* object = fonts.getDynamicObject())
+            for (const auto& item : object->getProperties())
+                theme->fonts[item.name.toString()] = item.value.toString();
+
+        if (! theme->palette.colours.empty())
+            themes.push_back(std::move(theme));
+    }
+
+    std::sort(themes.begin(), themes.end(), [](const auto& a, const auto& b)
+    {
+        return a->name.compareIgnoreCase(b->name) < 0;
+    });
+    if (themes.empty()) return false;
+
+    defaultId = "neon-riot";
     applyTheme(defaultId);
     if (currentTheme == nullptr) applyTheme(0);
     return true;
