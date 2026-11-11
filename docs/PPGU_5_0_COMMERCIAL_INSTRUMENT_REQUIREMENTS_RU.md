@@ -223,3 +223,26 @@ A feature is not complete because a button, parameter, tooltip or specification 
 ### Development policy
 
 Before every implementation pass, inspect the current branch and identify existing runtime code. Mark each requirement IMPLEMENTED+TESTED, IMPLEMENTED+UNVERIFIED, PARTIAL, UI-ONLY, SPECIFIED-ONLY or MISSING. Preserve verified code; fix only demonstrated defects or missing connections. Never delete user content or run cleanup scripts that recursively remove project/library directories.
+
+## UX and product-feel target — Omnisphere breadth, Nexus simplicity, Session Guitarist playability
+
+The intended product experience combines three complementary references:
+
+- **Omnisphere 3 — breadth and depth:** a substantial sound/content ecosystem, rich sound-shaping, layers, modulation and effects, searchable categories and room for future expansions. Translate this into guitar-relevant depth; do not turn the main screen into a wall of controls.
+- **Nexus — immediacy and simplicity:** fast startup, clear preset browsing, one-click sound selection, obvious macro controls, low-friction navigation and a polished instrument-first interface. A user should be able to load a preset and play immediately.
+- **Session Guitarist Electric Sunburst Deluxe — guitar performance workflow:** playable guitar behavior, articulation/performance logic, pattern-oriented playing, chord handling and clear performance controls.
+
+### Main-screen hierarchy
+
+- Keep the default view clean and immediately playable: mode, preset browser, current sound/style, key performance controls, live MIDI/chord feedback and essential mix controls.
+- Put deeper editing behind clearly named focused pages/panels: Guitar/Articulation, Pattern, MIDI Tools/Sequencer, FX Studio, SoundBank/Import, Skin/Theme and Content/Updates.
+- Use one consistent browser/search language across factory, user and imported presets; expose meaningful filters without making users navigate a maze.
+- Provide sensible macro controls and quality presets for quick results, while retaining detailed editing for advanced users.
+- Keep MELODY and PATTERN behavior explicit and visible. Never let a preset silently switch the user's performance mode.
+- Theme/skin changes may fully reskin the presentation layer, but all themes must expose the same complete feature set and accessible control names.
+- Avoid clutter: advanced functionality should be discoverable through organized panels, not omitted from the product.
+- Preserve fast preset switching and low CPU use; expensive analysis, import and content operations remain asynchronous.
+
+### Product identity
+
+PPGU should feel like a focused premium guitar instrument with the breadth and upgrade potential of a large workstation, the immediacy of a preset instrument, and the playability of a dedicated guitar performance engine. These are product/UX inspirations only; no proprietary UI assets, code, presets, sounds or internal implementations are copied.
