@@ -148,3 +148,22 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 
 **Статус:** DOCUMENTATION CLEANUP.  
 Создан единый компактный журнал `Info.txt`. В него перенесены актуальные статусы, ключевые технические риски, решения Guitar/Bass, REV 10.1 и ближайшие приоритеты. Дублирующие журналы удаляются из текущего дерева; их содержимое остаётся в истории Git. Технические спецификации и отчёты-аудиты не удаляются.
+
+
+## 2026-11-11 — GitHub product presentation refresh
+
+**Статус:** DOCUMENTATION / PRODUCT PRESENTATION UPDATED.  
+Обновлены `README.md` и `DOWNLOAD.md`: оформлена фирменная шапка с существующим SVG cover, название и позиционирование VST3-инструмента, badges, разделы о продукте, архитектуре MELODY/PATTERN, sampler, DSP, характеристиках Windows x64/JUCE/C++20, установке, пресетах, SoundBank, лицензиях, skins, ресурсах и технической документации.
+
+Добавлены прямые ссылки на:
+- предыдущий успешный VST3 + samples + presets artifact (run `42821580125`, artifact `13766348419`);
+- текущую сборку и упаковку (run `43017263448`);
+- каталог 300 preset definitions и portable examples;
+- SKIN/theme manifests, product cover и interface artwork;
+- архитектурные документы и политику лицензирования.
+
+В описании явно разграничены реализованные компоненты и незавершённые функции: 300 записей — definitions, а не 300 подтверждённых playable presets; Pattern runtime и runtime skin switching не приняты; FL Studio 20 acceptance для текущего HEAD и CPU/RAM profiling не подтверждены. Предыдущий artifact помечен как старый пакет с прежней структурой; новый ZIP не объявлен готовым до успешного CI run `43017263448`.
+
+Векторная обложка `assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` уже существовала в репозитории и используется как cover/header; отдельный новый растровый cover не добавлялся. Поле GitHub repository Description / Topics не менялось: доступные GitHub actions в этой сессии не предоставляют запись метаданных репозитория.
+
+Документационные commits: README `353eda0e727820f353c731b4800512f8eb57bfcb`; DOWNLOAD `9c91efc53ea73242fd660cdc96c3b27bd761b554`.
