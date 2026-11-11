@@ -231,10 +231,10 @@ jobs:
           }
 
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/*') -Destination (Join-Path $release 'SKINS') -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'SKIN/*') -Destination (Join-Path $release 'SKINS') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
@@ -286,8 +286,3 @@ jobs:
           path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip
           if-no-files-found: error
 
-
-        with:
-          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
-          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
-          if-no-files-found: error
