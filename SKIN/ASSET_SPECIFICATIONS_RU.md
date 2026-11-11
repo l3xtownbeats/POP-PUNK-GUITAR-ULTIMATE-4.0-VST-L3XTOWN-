@@ -100,3 +100,14 @@
 | 50 Platinum Room | Светлая платиновая студия с графитовыми контролами | Чистые алюминиевые плоскости и холодный showroom light | Platinum brushed-metal micrograin |
 
 В каждой теме сохранять свободные зоны вокруг контролов, заголовков, параметрических значений и tooltips. Ни один ассет не копирует известные бренды или продуктовые интерфейсы.
+
+
+## Skin_01 Neon Riot — default
+
+| Файл | Размер | Формат | Точное задание |
+|---|---:|---|---|
+| `assets/preview.png` | 480×300 | PNG | Полная оболочка PPGU: графитовый корпус, magenta/cyan акценты, читаемые блоки и контролы |
+| `assets/hero.webp` | 1200×420 | WebP | Оригинальный абстрактный силуэт электрогитары и brushed-metal аппаратная композиция; не копировать Cover Interface и чужие обложки |
+| `assets/texture.png` | 1024×1024 | PNG | Seamless brushed-charcoal microtexture, очень низкий контраст |
+
+Все rotary, slider, tabs, icons, labels, readouts, focus/hover/pressed states — JUCE-drawn; герой не размещается под плотными подписями.
