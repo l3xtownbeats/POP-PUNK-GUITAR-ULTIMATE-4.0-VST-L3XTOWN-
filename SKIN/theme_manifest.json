@@ -365,6 +365,87 @@
       "path": "Skin_41/theme.json",
       "preview": "Skin_41/assets/preview.png",
       "hero": "Skin_41/assets/hero.webp"
+    },
+    {
+      "id": "skin-42",
+      "index": 42,
+      "name": "Moss Circuit",
+      "cluster": "C",
+      "path": "Skin_42/theme.json",
+      "preview": "Skin_42/assets/preview.png",
+      "hero": "Skin_42/assets/hero.webp"
+    },
+    {
+      "id": "skin-43",
+      "index": 43,
+      "name": "Copper Workshop",
+      "cluster": "C",
+      "path": "Skin_43/theme.json",
+      "preview": "Skin_43/assets/preview.png",
+      "hero": "Skin_43/assets/hero.webp"
+    },
+    {
+      "id": "skin-44",
+      "index": 44,
+      "name": "Mono Blueprint",
+      "cluster": "C",
+      "path": "Skin_44/theme.json",
+      "preview": "Skin_44/assets/preview.png",
+      "hero": "Skin_44/assets/hero.webp"
+    },
+    {
+      "id": "skin-45",
+      "index": 45,
+      "name": "Rose Quartz",
+      "cluster": "C",
+      "path": "Skin_45/theme.json",
+      "preview": "Skin_45/assets/preview.png",
+      "hero": "Skin_45/assets/hero.webp"
+    },
+    {
+      "id": "skin-46",
+      "index": 46,
+      "name": "Solar Bronze",
+      "cluster": "C",
+      "path": "Skin_46/theme.json",
+      "preview": "Skin_46/assets/preview.png",
+      "hero": "Skin_46/assets/hero.webp"
+    },
+    {
+      "id": "skin-47",
+      "index": 47,
+      "name": "Teal Machine",
+      "cluster": "C",
+      "path": "Skin_47/theme.json",
+      "preview": "Skin_47/assets/preview.png",
+      "hero": "Skin_47/assets/hero.webp"
+    },
+    {
+      "id": "skin-48",
+      "index": 48,
+      "name": "Concrete Stage",
+      "cluster": "C",
+      "path": "Skin_48/theme.json",
+      "preview": "Skin_48/assets/preview.png",
+      "hero": "Skin_48/assets/hero.webp"
+    },
+    {
+      "id": "skin-49",
+      "index": 49,
+      "name": "Ultraviolet Club",
+      "cluster": "B",
+      "path": "Skin_49/theme.json",
+      "preview": "Skin_49/assets/preview.png",
+      "hero": "Skin_49/assets/hero.webp"
+    },
+    {
+      "id": "skin-50",
+      "index": 50,
+      "name": "Platinum Room",
+      "cluster": "C",
+      "path": "Skin_50/theme.json",
+      "preview": "Skin_50/assets/preview.png",
+      "hero": "Skin_50/assets/hero.webp"
     }
   ]
 }
