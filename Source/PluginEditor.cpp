@@ -31,7 +31,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     subtitleLabel.setFont(juce::Font(13.0f, juce::Font::bold));
     subtitleLabel.setColour(juce::Label::textColourId, pink);
     addAndMakeVisible(subtitleLabel);
-    presetBox.setTextWhenNothingSelected("FACTORY PRESETS  /  300");
+    presetBox.setTextWhenNothingSelected("FACTORY PROFILES  /  432");
     presetBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     presetBox.setColour(juce::ComboBox::textColourId, pale);
     presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
