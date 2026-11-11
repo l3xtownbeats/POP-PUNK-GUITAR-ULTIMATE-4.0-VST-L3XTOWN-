@@ -193,18 +193,19 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     melodyFilterBox.addItem("ALL SOUNDS", 2);
     styleFilterBox.addItem("OFF", 1);
     styleFilterBox.addItem("ALL STYLES", 2);
-    juce::StringArray melodyValues, styleValues;
+    juce::StringArray melodyValues;
     for (const auto& item : factoryPresets)
-    {
         if (item.soundCharacter.isNotEmpty() && !melodyValues.contains(item.soundCharacter))
             melodyValues.add(item.soundCharacter);
-        if (item.groove.isNotEmpty() && !styleValues.contains(item.groove))
-            styleValues.add(item.groove);
-        if (item.articulation.isNotEmpty() && !styleValues.contains(item.articulation))
-            styleValues.add(item.articulation);
-    }
-    for (int i = 0; i < melodyValues.size(); ++i) melodyFilterBox.addItem(melodyValues[i], i + 3);
-    for (int i = 0; i < styleValues.size(); ++i) styleFilterBox.addItem(styleValues[i], i + 3);
+    for (int i = 0; i < melodyValues.size(); ++i)
+        melodyFilterBox.addItem(melodyValues[i], i + 3);
+
+    // STYLE is a playing-technique taxonomy, not a dump of 300 individual groove names.
+    const juce::StringArray styleValues {
+        "Lead Guitar", "Solo Guitar", "Palm Mute", "Open Chords", "Rhythm Guitar", "Arpeggio", "Ska Upstrokes"
+    };
+    for (int i = 0; i < styleValues.size(); ++i)
+        styleFilterBox.addItem(styleValues[i], i + 3);
     juce::StringArray artistGroups;
     for (const auto& item : factoryPresets)
         if (item.category.isNotEmpty() && !artistGroups.contains(item.category))
@@ -260,9 +261,30 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "ALL SOUNDS"
                 && !item.soundCharacter.containsIgnoreCase(melodyFilter)) continue;
             const auto styleFilter = styleFilterBox.getText();
-            const auto styleText = item.groove + " " + item.articulation;
-            if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "ALL STYLES"
-                && !styleText.containsIgnoreCase(styleFilter)) continue;
+            const auto styleText = (item.name + " " + item.groove + " " + item.articulation + " "
+                                    + item.tonalTarget + " " + item.styleProfileId).toLowerCase();
+            bool matchesStyle = true;
+            if (styleFilter == "Lead Guitar")
+                matchesStyle = styleText.contains("lead") || styleText.contains("octave") || styleText.contains("hook");
+            else if (styleFilter == "Solo Guitar")
+                matchesStyle = styleText.contains("solo") || styleText.contains("melodic run")
+                            || styleText.contains("alternate-picked") || styleText.contains("flageolet");
+            else if (styleFilter == "Palm Mute")
+                matchesStyle = styleText.contains("palm") || styleText.contains("muted") || styleText.contains("chug");
+            else if (styleFilter == "Open Chords")
+                matchesStyle = styleText.contains("open chord") || styleText.contains("open chorus")
+                            || styleText.contains("acoustic-strum");
+            else if (styleFilter == "Rhythm Guitar")
+                matchesStyle = styleText.contains("rhythm") || styleText.contains("downstroke")
+                            || styleText.contains("eighth") || styleText.contains("strum");
+            else if (styleFilter == "Arpeggio")
+                matchesStyle = styleText.contains("arpeggio") || styleText.contains("picked melodic")
+                            || styleText.contains("picked arpeggios");
+            else if (styleFilter == "Ska Upstrokes")
+                matchesStyle = styleText.contains("ska") || styleText.contains("upstroke");
+            else if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "ALL STYLES")
+                matchesStyle = styleText.containsIgnoreCase(styleFilter);
+            if (!matchesStyle) continue;
 
             const auto matchesQuery = query.isEmpty()
                 || item.name.toLowerCase().contains(query)
