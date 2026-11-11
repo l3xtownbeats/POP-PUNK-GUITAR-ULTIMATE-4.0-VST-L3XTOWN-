@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-33",
+  "index": 33,
+  "name": "Checker Riot",
+  "description": "Luxury checker micro-details over a restrained dark hardware shell",
+  "cluster": "B",
+  "identity": {
+    "material": "matte rubber and ceramic checker inlay",
+    "lighting": "precise white edge light with magenta signal",
+    "mood": "graphic, energetic, disciplined"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#17191B",
+      "inset": "#222629"
+    },
+    "surfaces": {
+      "primary": "#222629",
+      "secondary": "#2D3336",
+      "raised": "#3B4447",
+      "overlay": "#17191B"
+    },
+    "borders": {
+      "subtle": "#60696A",
+      "strong": "#F04E83",
+      "focus": "#F0F0EA"
+    },
+    "typography": {
+      "primary": "#F7F7F2",
+      "secondary": "#C6C9C5",
+      "disabled": "#85858B",
+      "onAccent": "#17191B"
+    },
+    "rotary": {
+      "body": "#3B4447",
+      "ring": "#F04E83",
+      "track": "#60696A",
+      "value": "#F0F0EA",
+      "pointer": "#A7D84B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#60696A",
+      "fill": "#F0F0EA",
+      "thumb": "#A7D84B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F0F0EA",
+        "foreground": "#17191B",
+        "hover": "#A7D84B",
+        "pressed": "#F04E83",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#2D3336",
+        "foreground": "#F7F7F2",
+        "hover": "#3B4447",
+        "pressed": "#F04E83",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F0F0EA",
+      "activeText": "#17191B",
+      "inactiveBackground": "#2D3336",
+      "inactiveText": "#C6C9C5",
+      "indicator": "#F04E83"
+    },
+    "comboBoxes": {
+      "background": "#2D3336",
+      "foreground": "#F7F7F2",
+      "border": "#60696A",
+      "hover": "#3B4447",
+      "menuBackground": "#222629",
+      "selection": "#F0F0EA"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#F0F0EA",
+      "blackPressed": "#F04E83",
+      "keyBorder": "#60696A",
+      "octaveLabel": "#C6C9C5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F0F0EA",
+      "high": "#F06A58",
+      "background": "#17191B"
+    },
+    "icons": {
+      "primary": "#F7F7F2",
+      "secondary": "#C6C9C5",
+      "accent": "#F0F0EA",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2D3336",
+      "border": "#60696A",
+      "selected": "#F0F0EA",
+      "caption": "#F7F7F2"
+    },
+    "windowChrome": {
+      "background": "#17191B",
+      "title": "#F7F7F2",
+      "border": "#60696A",
+      "close": "#A7D84B"
+    },
+    "hero": {
+      "background": "#17191B",
+      "accent": "#F0F0EA",
+      "secondaryAccent": "#F04E83",
+      "highlight": "#A7D84B"
+    },
+    "accents": {
+      "primary": "#F0F0EA",
+      "secondary": "#F04E83",
+      "tertiary": "#A7D84B"
+    },
+    "texture": {
+      "material": "matte rubber and ceramic checker inlay",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "precise white edge light with magenta signal",
+      "glow": "#F0F0EA",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#F04E83"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Checker Riot preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original matte rubber and ceramic checker inlay hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle matte rubber and ceramic checker inlay texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
