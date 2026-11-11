@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-04",
+  "index": 4,
+  "name": "Punk Rock",
+  "description": "Rough vinyl and high-energy gig graphics",
+  "cluster": "B",
+  "identity": {
+    "material": "printed-vinyl",
+    "lighting": "warm",
+    "mood": "Rough vinyl and high-energy gig graphics"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#19151B",
+      "inset": "#19151B"
+    },
+    "surfaces": {
+      "primary": "#19151B",
+      "secondary": "#19151B",
+      "raised": "#F04458",
+      "overlay": "#19151B"
+    },
+    "borders": {
+      "subtle": "#F2E9E1",
+      "strong": "#F04458",
+      "focus": "#B9D94A"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#19151B",
+      "ring": "#F2E9E1",
+      "track": "#49434F",
+      "value": "#F04458",
+      "pointer": "#B9D94A",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#F04458",
+      "thumb": "#B9D94A",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F04458",
+        "foreground": "#101116",
+        "hover": "#B9D94A",
+        "pressed": "#F2E9E1",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#19151B",
+        "foreground": "#F4F0F4",
+        "hover": "#F2E9E1",
+        "pressed": "#F04458",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F04458",
+      "activeText": "#101116",
+      "inactiveBackground": "#19151B",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#B9D94A"
+    },
+    "comboBoxes": {
+      "background": "#19151B",
+      "foreground": "#F4F0F4",
+      "border": "#F2E9E1",
+      "hover": "#F04458",
+      "menuBackground": "#19151B",
+      "selection": "#F04458"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#F04458",
+      "blackPressed": "#B9D94A",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#B9D94A",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#F04458",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#19151B",
+      "title": "#F4F0F4",
+      "border": "#F2E9E1",
+      "close": "#F04458"
+    },
+    "hero": {
+      "background": "#19151B",
+      "accent": "#F04458",
+      "secondaryAccent": "#F2E9E1",
+      "highlight": "#B9D94A"
+    },
+    "accents": {
+      "primary": "#F04458",
+      "secondary": "#F2E9E1",
+      "tertiary": "#B9D94A"
+    },
+    "texture": {
+      "material": "printed-vinyl",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "warm",
+      "glow": "#F04458",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#F2E9E1"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
