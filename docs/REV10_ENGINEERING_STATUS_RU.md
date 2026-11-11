@@ -53,3 +53,13 @@ SB1 должен быть control-thread-only и не менять SamplePool/Sa
 - Commits: `4217a644baa1b302f96a0b57c60ecfa8ba2fe8f9` (validation hardening), `7fdaaaec31057bd578d6a48d057cbdc628e3b0bb` (tests).
 - Status remains IMPLEMENTED / CI PENDING; no successful Windows build or CTest result is claimed.
 - Previous workflow run `43011601549` conclusively ended CANCELLED: configure passed, build was cancelled, CTest/pluginval/package steps were skipped. It is not a passing run.
+
+
+## Guitar-only BankScanner requirement (PLANNED / NOT IMPLEMENTED)
+- Принято продуктовое ограничение: PPGU SoundBank содержит только гитарные звуки.
+- SB1 scanner обязан разделять кандидатов на GUITAR_CONFIRMED, GUITAR_REVIEW, NON_GUITAR и UNSUPPORTED_FORMAT.
+- Негитарные источники (drums, bass, keys/piano, vocals, synths, orchestral и прочее) исключаются из основного Guitar SoundBank.
+- Одного расширения WAV/FLAC/OGG/AIFF или расположения в папке Sounds недостаточно для классификации как гитары.
+- Неоднозначные файлы направляются на ручную проверку/прослушивание; без подтверждения не добавляются в основной индекс.
+- Документированный контракт обновлён в `SB1_BANK_SCANNER_IMPLEMENTATION_PLAN_RU.md`.
+- Это изменение требований/плана, не реализация сканера и не подтверждение сборки.
