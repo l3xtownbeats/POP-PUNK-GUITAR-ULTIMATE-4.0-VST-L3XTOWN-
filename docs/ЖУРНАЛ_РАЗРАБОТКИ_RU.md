@@ -1267,3 +1267,18 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - ThemeManager, реальная галерея SKIN, применение цветов к компонентам, persistence, графические preview/hero/texture и FL Studio 20 acceptance по-прежнему не реализованы/не подтверждены.
 - Scope соблюдён: PluginProcessor/audio DSP/sampler/scheduler не изменялись.
 - Следующий шаг: получить Windows CMake/CTest на актуальном main; исправить все обнаруженные расхождения манифестов без ослабления теста; после зелёного gate перейти к ThemeManager и gallery runtime.
+
+
+================ 11 НОЯБРЯ 2026 — SKIN REV 5.0 / THEMEMANAGER CONTRACT RUNTIME MILESTONE ================
+
+- В main добавлен `PPGUThemeManager` как data-only runtime contract loader в `Source/UI/ThemeManager.h/.cpp`.
+- Реализованы проверки schemaVersion, точного соответствия skin-ID и index, имени/описания/кластера, identity metadata, всех 18 token groups и обязательных nested keys, HEX цветов, числовых диапазонов texture/lighting, путей assets, размеров/форматов preview/hero, compatibility flags и validation metadata.
+- Ошибка JSON, неполный манифест, неверный цвет, несоответствие ID/index или нарушение visual-only contract возвращает безопасную палитру Neon Riot. Ошибка сохраняется через `getLastError()`.
+- Добавлен `loadFromFile()` для чтения манифеста на UI/control thread. Код не подключён к audio callback и не изменяет PluginProcessor/APVTS/DSP/sampler/scheduler.
+- Добавлен `tests/ThemeManagerTests.cpp`: тест должен пройти по всем 50 реальным theme.json и проверить fallback на malformed JSON, пустом объекте, неверном HEX, нарушении compatibility и несовпадении ID/index.
+- CMake зарегистрировал `ppgu_theme_manager_contract` в CTest и связал тест с JUCE Core/Graphics. Working directory установлен на корень репозитория, чтобы тест читал реальные SKIN-файлы.
+- Коммиты файлов: ThemeManager header `238fc6a8688fbe84de094bd9621561cc94db9f92`; ThemeManager validator `f963626f6be8f8626ff4edd17fe6bea0dfb24de7`; CMake test target `f3e05c2e604d65dc2eaf83344b0ddfd4c65239b4`; tests `8ccd9972077cd15187a3d3d9a4871dfe21f9c8ba`.
+- Важно: исходники записаны в GitHub main, но Windows/MSVC compilation и CTest в этом цикле НЕ запускались. 50 манифестов пока не переводятся в MANIFEST VALIDATED до успешного запуска теста на актуальном HEAD.
+- ThemeManager пока не подключён к PluginEditor; SKIN button/gallery, live preview/apply/cancel, theme persistence, packaged resource discovery, graphics assets и FL Studio 20 runtime acceptance остаются открытыми.
+- Состояния: ThemeManager source authored; runtime contract test authored / awaiting execution; RUNTIME APPLIED 0/50; USER-CONFIRMED 0/50; ACCEPTED 0/50; CI AWAITING CI.
+- Следующий шаг: получить компиляцию и CTest на Windows. После зелёного gate — интегрировать palette в Editor, затем реализовать полноценную SKIN Gallery и безопасное сохранение skin ID.
