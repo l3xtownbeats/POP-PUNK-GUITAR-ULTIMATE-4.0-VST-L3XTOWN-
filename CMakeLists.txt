@@ -205,6 +205,25 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
 
+# JUCE-backed runtime contract tests for all 50 skin manifests and safe fallback.
+if(BUILD_TESTING)
+    add_executable(ppgu_theme_manager_tests
+        Source/UI/ThemeManager.cpp
+        tests/ThemeManagerTests.cpp
+    )
+    target_include_directories(ppgu_theme_manager_tests PRIVATE Source/UI)
+    target_link_libraries(ppgu_theme_manager_tests PRIVATE
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    juce_generate_juce_header(ppgu_theme_manager_tests)
+    add_test(NAME ppgu_theme_manager_contract COMMAND ppgu_theme_manager_tests)
+    set_tests_properties(ppgu_theme_manager_contract PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+endif()
+
 # Data-contract validation for the 50 interchangeable UI skins.
 # Python is optional for developers, but the validator is registered whenever
 # a standard interpreter is available (including the Windows CI runner).
