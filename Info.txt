@@ -18,7 +18,7 @@ POP PUNK GUITAR ULTIMATE REV 6.0 VST3 — INFO / ЕДИНЫЙ ЖУРНАЛ РА�
 - Sample licensing: распространять только сэмплы с явным правом включения/распространения; сохранять лицензии, атрибуцию и SHA-256. Не использовать закрытые NI/Session Guitarist samples, коммерческие riff packs или чужие записи.
 - Фабричный каталог содержит 300 записей, но JSON catalogue не доказывает runtime-ready presets. Нужна реальная загрузка и playback каждого пресета.
 - Жёсткое правило: не выключать/ослаблять тесты ради зелёного CI; на каждую исправленную ошибку — regression test.
-- Только одна рабочая ветка: migration/full-copy-m3-transport-scheduler-v2. Не изменять main и не создавать дополнительные ветки/репозитории без прямого разрешения.
+- Единственная рабочая ветка: `main` (пользователь подтвердил «Ветка Майн»). Не переключаться на migration/UI/резервные ветки и не изменять их.
 
 ПОРЯДОК ПРИЁМКИ
 M1 — VST3 foundation, parameter/state/automation, pluginval, host integration.
@@ -1553,3 +1553,13 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - GUI blueprint и PPGU 5.0 UI/UX acceptance document в main при проверке не найдены. Не считать их синхронизированными; не начинать UI implementation до приёмки M1–M3.
 - Текущая сессия: аудит и синхронизация документации; production source code не менялся, сборка не запускалась, pluginval и FL Studio 20 не проверялись.
 - Следующий строго разрешённый шаг: завершить M3-014 integration regression test, проверить quantize-window transitions и pending NoteOff, затем M3-015 acceptance; пользователь запускает GitHub Actions и присылает результат. M1/M2 остаются NOT ACCEPTED; M4+ и UI/UX 5.0 заблокированы до полной приёмки M1–M3.
+
+
+================ ДОПОЛНЕНИЕ 11 НОЯБРЯ 2026 — M3-014 SOURCE AUDIT ================
+
+- Актуальный HEAD на момент аудита: `c0cd94eb897bd22fdcc13f0b78050d0d13a7c5a3` (main). Combined status пуст; workflow runs для этого SHA не возвращены.
+- Production call path подтверждён в PluginProcessor.cpp: sample-accurate timeline → renderPatternInterval → PatternScheduler::schedule → sampler.noteOn/noteOff. Но текущие unit tests не создают PluginProcessor и не подтверждают весь end-to-end путь.
+- Выявлен риск: restartForChord немедленно вызывает sampler.allNotesOff() и clearPendingNoteOffs(), но следующая patternCycleStartPpq может быть назначена на будущую quantize boundary. Это потенциально обрывает текущий pattern до момента, когда новый аккорд начнёт играть. Несколько chord changes внутри одной сетки могут coalesce к последнему chord snapshot.
+- Это пока не исправление: действующий v33 FINAL документ не найден по точному пути в main, поэтому ожидаемая музыкальная семантика должна быть подтверждена до изменения кода.
+- В этом цикле обновлён только баг-реестр и журнал разработки; production source, тесты, CMake и CI не менялись/не запускались. M3-014 OPEN; M3-015 FIXED IN SOURCE / AWAITING CI; M1/M2/M3 NOT ACCEPTED.
+- Следующий шаг: обнаружить фактический путь к Promt.txt v33 FINAL; зафиксировать quantize-window contract regression; реализовать минимальный fix и полноценный processor-level integration harness.
