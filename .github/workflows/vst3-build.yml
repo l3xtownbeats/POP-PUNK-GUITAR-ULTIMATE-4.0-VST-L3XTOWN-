@@ -260,8 +260,29 @@ jobs:
           '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
           Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
 
+          # Standalone, source-audited sample library archive requested by the project owner.
+          $samplePackage = Join-Path $PWD 'PPGU_SampleLibrary'
+          New-Item -ItemType Directory -Force -Path $samplePackage | Out-Null
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $samplePackage 'Samples') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples/SoundBank/LICENSES.md') -Destination (Join-Path $samplePackage 'LICENSES.md')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples/SoundBank/PPGU_SAMPLE_LIBRARY_REPORT.md') -Destination (Join-Path $samplePackage 'REPORT.md')
+          @'
+          PPGU Sample Library
+          See LICENSES.md for source-by-source rights and exclusions.
+          See REPORT.md for category coverage and limitations.
+          Samples/SoundBank/catalog.json and BUILD_REPORT.txt are generated during the build.
+          SHA256SUMS-POP-PUNK.txt covers WAV files in the upstream sample set.
+          '@ | Set-Content -Encoding utf8 (Join-Path $samplePackage 'README.txt')
+          Compress-Archive -Path (Join-Path $samplePackage '*') -DestinationPath PPGU_SampleLibrary.zip -Force
+
       - uses: actions/upload-artifact@v4
         with:
           name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
           path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SampleLibrary
+          path: PPGU_SampleLibrary.zip
           if-no-files-found: error
