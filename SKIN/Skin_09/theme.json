@@ -125,6 +125,12 @@
       "glow": "#E8EAF0",
       "glowIntensity": 0.18,
       "edgeHighlight": "#A7ADB7"
+    },
+    "thumbnails": {
+      "background": "#0C0D10",
+      "border": "#E8EAF0",
+      "selected": "#E8EAF0",
+      "caption": "#F4F0F4"
     }
   },
   "assets": {
