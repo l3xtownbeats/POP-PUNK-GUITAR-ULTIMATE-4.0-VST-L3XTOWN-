@@ -256,3 +256,29 @@
 7. Window lifecycle test выполняется на message thread; 1000 циклов open/close + host shutdown.
 
 **Статус:** это ревью присланных эскизов и уточнение архитектурного контракта. Оно не означает, что перечисленные новые классы уже добавлены в C++ runtime. Следующая реализация должна расширять существующие `PageCacheSlots` / `SampleStreamingService` / `SamplerEngine`, а не создавать конкурирующую подсистему.
+
+
+## 10. E1 call-graph spot-check — подтверждённые исходники базовой ветки
+
+Проверены реальные файлы `PluginProcessor.cpp`, `SamplePool.cpp`, `StreamingVoiceReader.cpp`, `SampleStreamingService.cpp`, `PageCacheSlots.cpp` на `5.0-audio-integration`.
+
+### Что уже подтверждается исходниками
+
+- `processBlock()` получает параметры через `AudioProcessorValueTreeState::getRawParameterValue()->load()`; MIDI обрабатывается по sample position, Melody и Pattern разделены.
+- `SamplerEngine::noteOn()` выбирает SFZ region и заранее выделенный voice; streaming reader очищает старые page leases при повторном использовании голоса.
+- `StreamingVoiceReader` держит фиксированный набор page leases, ограничивает повторные cache-miss requests cadence-счётчиком и запрашивает соседние страницы для интерполяции.
+- `PageCacheSlots` использует фиксированное хранилище, атомарный pin count и eviction только через CAS из ready/unpinned состояния. Это существенно ближе к нужному RT-контракту, чем предложенный mutex/map cache.
+- `SampleStreamingService` имеет один worker и bounded SPSC request queue; файловое открытие и WAV decode выполняются в worker.
+
+### Что ещё нельзя объявить доказанным
+
+- `processBlock()` вызывает `buffer.clear()` и продолжает выполнять parameter/MIDI/transport path даже при отсутствии нот. Следовательно, буквальный «CPU idle 0%» не реализован; требуется измерить bounded early-exit, учитывая FX tails и host MIDI/state.
+- В `StreamingVoiceReader` cache miss возвращает отсутствие данных для текущего чтения, а page request асинхронен. Требуется проверить, как render path маскирует miss на выходе: тишина/hold/interpolation fallback, отсутствие click и отсутствие потери атаки при холодном cache.
+- SPSC queue требует одного producer. Нельзя вызывать `requestPage()` одновременно с нескольких независимых потоков без отдельной маршрутизации.
+- `SampleStreamingService::stop()` документирован как требующий quiescent producer до остановки; это условие должно быть обеспечено владельцем sampler при смене банка и shutdown.
+- Полный call graph FX и всех ветвей `processBlock()` ещё не прошёл инструментированный allocation/lock/I/O audit. Наличие комментариев о preallocation не является доказательством.
+- В этом проходе не запускались Windows build, CTest, ThreadSanitizer, pluginval или FL Studio 20.
+
+### Следующий source-level шаг
+
+Добавить RT audit harness для audio callback и streaming miss path: фиксировать allocation/deallocation, lock acquisition, file I/O, queue overflow, cache miss и block duration; затем покрыть тестом холодную атаку, границу страницы, eviction при одновременном чтении и stop/load/shutdown. До этого не менять рабочий cache protocol и не увеличивать количество worker threads.
