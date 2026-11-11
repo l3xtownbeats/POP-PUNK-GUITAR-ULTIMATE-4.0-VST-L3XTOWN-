@@ -1,7 +1,6 @@
 #include "GuitarBankImporter.h"
 #include <algorithm>
 #include <filesystem>
-#include <juce_core/cryptography/juce_SHA256.h>
 
 namespace ppgu::sampler
 {
