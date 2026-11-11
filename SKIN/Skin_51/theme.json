@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-51",
+  "index": 51,
+  "name": "Blackout Voltage",
+  "description": "Deep-black studio hardware with acid-lime controls and electric-teal signal accents; visual-only skin.",
+  "cluster": "B",
+  "identity": {
+    "material": "matte black anodized aluminium and fine graphite",
+    "lighting": "restrained acid-lime edge indicators with electric-teal secondary signal",
+    "mood": "minimal, fast, high-contrast pop-punk control room"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#090C10",
+      "inset": "#101820"
+    },
+    "surfaces": {
+      "primary": "#17232B",
+      "secondary": "#101820",
+      "raised": "#22313B",
+      "overlay": "#090C10"
+    },
+    "borders": {
+      "subtle": "#3D5360",
+      "strong": "#526875",
+      "focus": "#B7F34A"
+    },
+    "typography": {
+      "primary": "#F4FAFC",
+      "secondary": "#B5C4CB",
+      "disabled": "#7D8A91",
+      "onAccent": "#090C10"
+    },
+    "rotary": {
+      "body": "#22313B",
+      "ring": "#3D5360",
+      "track": "#3D5360",
+      "value": "#B7F34A",
+      "pointer": "#F4FAFC",
+      "disabled": "#4A5C63"
+    },
+    "sliders": {
+      "track": "#3D5360",
+      "fill": "#B7F34A",
+      "thumb": "#F4FAFC",
+      "disabled": "#4A5C63"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#B7F34A",
+        "foreground": "#090C10",
+        "hover": "#D1FF79",
+        "pressed": "#83B92D",
+        "disabled": "#3D5360"
+      },
+      "secondary": {
+        "background": "#17232B",
+        "foreground": "#F4FAFC",
+        "hover": "#22313B",
+        "pressed": "#3D5360",
+        "disabled": "#3D5360"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#B7F34A",
+      "activeText": "#090C10",
+      "inactiveBackground": "#101820",
+      "inactiveText": "#B5C4CB",
+      "indicator": "#35D7C5"
+    },
+    "comboBoxes": {
+      "background": "#101820",
+      "foreground": "#F4FAFC",
+      "border": "#3D5360",
+      "hover": "#22313B",
+      "menuBackground": "#17232B",
+      "selection": "#B7F34A"
+    },
+    "keyboard": {
+      "whiteKey": "#EAF0F2",
+      "blackKey": "#101820",
+      "whitePressed": "#B7F34A",
+      "blackPressed": "#35D7C5",
+      "keyBorder": "#35454E",
+      "octaveLabel": "#B5C4CB"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E8E34A",
+      "high": "#F06A58",
+      "background": "#101820"
+    },
+    "icons": {
+      "primary": "#F4FAFC",
+      "secondary": "#B5C4CB",
+      "accent": "#B7F34A",
+      "disabled": "#7D8A91"
+    },
+    "thumbnails": {
+      "background": "#101820",
+      "border": "#3D5360",
+      "selected": "#B7F34A",
+      "caption": "#F4FAFC"
+    },
+    "windowChrome": {
+      "background": "#090C10",
+      "title": "#F4FAFC",
+      "border": "#3D5360",
+      "close": "#B7F34A"
+    },
+    "hero": {
+      "background": "#090C10",
+      "accent": "#B7F34A",
+      "secondaryAccent": "#35D7C5",
+      "highlight": "#E8E34A"
+    },
+    "accents": {
+      "primary": "#B7F34A",
+      "secondary": "#35D7C5",
+      "tertiary": "#E8E34A"
+    },
+    "texture": {
+      "material": "brushed charcoal metal",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "controlled magenta/cyan edge lighting",
+      "glow": "#B7F34A",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#35D7C5"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Default Neon Riot full-shell preview, including all functional areas and readable controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract guitar-hardware hero composition, graphite and brushed metal with restrained magenta/cyan light; no trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle brushed charcoal metal texture, optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
