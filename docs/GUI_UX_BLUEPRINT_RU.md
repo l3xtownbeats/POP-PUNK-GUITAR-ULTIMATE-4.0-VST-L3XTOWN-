@@ -1,11 +1,11 @@
 # POP PUNK GUITAR ULTIMATE — GUI / UX blueprint
 **Target:** JUCE 7 · VST3 · Windows 10 x64 · FL Studio 20  
-**Design direction:** modern dark stage-console, high-contrast typography, restrained neon accent, tactile guitar/amp details.  
+**Design direction:** unmistakable 2000s pop-punk / skate-punk visual identity, with the energy of Blink-182 and Sum 41-era gig flyers: DIY photocopied posters, checkerboard details, torn-paper/tape labels, marker underlines, sticker typography, stage lights, guitar hardware and a hot-pink / cyan / acid-yellow accent system. These are broad stylistic references only; do not copy band logos, album covers, photographs, trademarks or protected artwork.  
 **Status:** implementation specification and theme-token foundation; this document does not claim that every described panel is already implemented.
 
 ## 1. Visual language
 
-The default skin is **Neon Riot**: near-black graphite canvas, raised charcoal cards, electric magenta primary accent, cyan secondary accent, crisp off-white text, subtle 1 px outlines, restrained gradients and soft highlights. The interface should feel like a premium instrument, not a web dashboard. Use consistent 8 px spacing, 10–14 px card radii, clear section headings, compact labels, readable numeric values and large hit targets. Avoid visual noise, excessive glow, tiny text and decorative elements that compete with controls.
+The default skin is **Neon Riot**: near-black graphite canvas, raised charcoal cards, electric magenta primary accent, cyan secondary accent, acid-yellow poster accents, crisp off-white text, subtle 1 px outlines, photocopy-grain dots, checkerboard trims, cut-out sticker labels, marker strokes and stylised stage/guitar motifs. The interface should feel like a premium instrument crossed with a 2000s skate-punk tour poster, not a web dashboard. Keep controls highly legible; decoration stays behind controls and never competes with parameter labels. Use consistent 8 px spacing, 10–14 px card radii, clear section headings, compact labels, readable numeric values and large hit targets. Use bold condensed/italic display typography for section headers, small uppercase gig-poster labels, asymmetrical poster composition and restrained distressed textures. Avoid excessive glow, tiny text and decorative elements that compete with controls.
 
 The top-level layout is responsive and resizable. At normal desktop size target 1280×860; minimum usable size 1040×760. Below the wide breakpoint, panels reflow into two columns and the right-side browser becomes a collapsible drawer. No control may be clipped at the minimum size. Tooltips explain every non-obvious control. Parameter values remain visible while dragging and are editable by double-click where appropriate.
 
@@ -105,7 +105,7 @@ At narrower widths:
 Theme manifest is data-only and contains color tokens. Runtime UI components consume tokens through a single ThemeManager / LookAndFeel layer. A theme changes the complete shell: canvas, card surfaces, borders, typography colors, rotary controls, sliders, buttons, tabs, combo boxes, keyboard, meters, icons, thumbnails and window chrome. Themes must not alter parameter ranges, parameter IDs, layout semantics, preset content or audio routing.
 
 The initial 20 theme identities are:
-1. Neon Riot (default)
+1. Neon Riot (default pop-punk poster skin)
 2. Dark Metal
 3. Modern Studio
 4. Punk Rock
@@ -153,6 +153,10 @@ Theme loading must validate tokens and fall back to Neon Riot on malformed or mi
 - [ ] Windows Release VST3 builds; CTest and pluginval pass.
 - [ ] Manual FL Studio 20 checks cover resize, state recall, MIDI, automation, keyboard, dialogs and theme changes during playback.
 
-## 8. Current repository baseline / honesty note
+## 8. Pop-punk art direction / legal boundaries
+
+The main skin should evoke the fast, irreverent, melodic energy associated with early-2000s pop-punk and skate-punk scenes, particularly the broad visual language surrounding Blink-182 and Sum 41: checkerboard patterns, photocopied gig flyers, marker scrawls, sticker/collage layouts, distressed paper edges, stage-light contrast and bold high-impact typography. Use original vector shapes, original textures and commissioned/original artwork only. Do not reproduce band logos, album art, signature illustrations, photographs, exact merchandise graphics or imply endorsement. Preset names may describe broad musical traits (e.g. melodic skate-punk, tight palm-muted chorus, octave lead) without claiming official affiliation.
+
+## 9. Current repository baseline / honesty note
 
 The current `Source/PluginEditor.cpp` is an early dark/magenta editor with a preset combo/search, SFZ load, Melody/Pattern selector, nine rotary controls, seven FX bypass buttons and a keyboard. It does **not** yet implement the complete layout, all APVTS controls, pattern editor, sample browser, preview workflow or runtime theme gallery described above. The manifest in `Themes/theme_manifest.json` establishes the 20 palette tokens; it is not itself a finished runtime theme manager. Do not mark the GUI milestone accepted until the implementation and checks above pass.
