@@ -23,7 +23,7 @@ private:
 
     void chooseSfzFile();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
-    void drawPanel(juce::Graphics&, juce::Rectangle<int>, const juce::String& section = {});
+    void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     void loadThemes();
