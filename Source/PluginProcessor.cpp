@@ -439,12 +439,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             previousPatternChordChannel = channel;
         };
 
-        auto restartPatternForSettings = [&]()
+        auto restartPatternForSettings = [&](int count)
         {
             sampler.allNotesOff();
             patternScheduler.clearPendingNoteOffs();
-            patternCycleStarted = initialCount > 0;
-            if (initialCount > 0)
+            patternCycleStarted = count > 0;
+            if (count > 0)
             {
                 const double changePpq = patternTransportClock.startPpq;
                 patternCycleStartPpq = ppgu::performance::PatternScheduler::quantizePpqForward(
@@ -459,7 +459,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         if (chordDiffers(initialNotes, initialCount, initialChannel))
             updateChordState(0, initialNotes, initialCount, initialChannel);
         if (patternSettingsChanged && initialCount > 0)
-            restartPatternForSettings();
+            restartPatternForSettings(initialCount);
         previousPatternSlot = patternSlot;
         previousPatternLengthChoice = patternLengthChoice;
 
