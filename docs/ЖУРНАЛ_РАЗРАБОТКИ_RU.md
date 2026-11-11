@@ -1243,3 +1243,11 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Добавлена отдельная ветвь PATTERN / SONG: Pop / Pop-Rock, Pop-Punk / Punk, Electronic, Riffs, Arpeggios, Strumming.
 - Зафиксировано разделение тембра и способа исполнения, правило NOT SOUND first и лицензионное ограничение: только оригинальные профили и собственные/лицензированные sample/performance assets.
 - Статус: структура taxonomy и документация обновлены; визуальная интеграция в браузер и проверка реальных sample/DSP/performance mappings ещё не подтверждены.
+
+
+## 2026-11-11 — расширение PATTERN / SONG и требования к Tone/FX
+- Добавлены папки Power Chords Rock, Pop Punk Strum, Arpeggio Pop, Palm Mute Groove, Intro / Bridge / Outro и Reverse Patterns.
+- Добавлена группировка Genres / Performance / Song Sections / Creative и схема метаданных для клипов.
+- Число 237 записано только как внешний ориентир из пользовательского описания Electric Sunburst Deluxe; оно не заявляется как существующее число пресетов PPGU и не подразумевает копирование контента NI.
+- Зафиксированы требования Bridge/Neck Blend, Condenser Mic Blend и FX-модули Chorus, Flanger, Phaser, Compressor, EQ, Saturator, Reverb, Amp, Cabinet с обязательной проверкой реальных источников/DSP.
+- Статус: taxonomy и документация обновлены; GUI, performance assets, источники pickup/mic и дополнительные DSP-модули требуют отдельной реализации и тестирования.
