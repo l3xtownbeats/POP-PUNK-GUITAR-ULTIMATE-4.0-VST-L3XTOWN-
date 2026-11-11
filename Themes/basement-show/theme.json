@@ -1,0 +1,60 @@
+{
+  "name": "Basement Show",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#241216",
+    "background.bottom": "#12090c",
+    "accent.primary": "#c94a55",
+    "accent.secondary": "#f08b80",
+    "text.main": "#fff0ee",
+    "text.dim": "#b99a9a",
+    "knob.face": "#3b2026",
+    "knob.ring": "#bd3949",
+    "button.normal": "#12090c",
+    "button.active": "#c94a55",
+    "button.hover": "#241216",
+    "slider.track": "#b99a9a",
+    "slider.fill": "#c94a55",
+    "led.on": "#c94a55",
+    "led.off": "#b99a9a",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#c94a55",
+    "meter.fill": "#c94a55",
+    "meter.peak": "#ff4444",
+    "panel.border": "#b99a9a",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#12090c",
+    "list.row.selected": "#c94a55",
+    "tooltip.background": "#12090c",
+    "tooltip.text": "#fff0ee"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Oswald-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "industrial_grit"
+  }
+}
