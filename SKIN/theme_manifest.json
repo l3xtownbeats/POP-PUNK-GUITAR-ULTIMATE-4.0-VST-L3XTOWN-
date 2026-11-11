@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
-  "totalSkins": 50,
+  "totalSkins": 51,
   "defaultSkin": "skin-01",
   "selector": "SKIN",
   "status": "specification",
@@ -455,6 +455,15 @@
       "path": "Skin_50/theme.json",
       "preview": "Skin_50/assets/preview.png",
       "hero": "Skin_50/assets/hero.webp"
+    },
+    {
+      "id": "skin-51",
+      "index": 51,
+      "name": "Blackout Voltage",
+      "cluster": "B",
+      "path": "Skin_51/theme.json",
+      "preview": "Skin_51/assets/preview.png",
+      "hero": "Skin_51/assets/hero.webp"
     }
   ]
 }
