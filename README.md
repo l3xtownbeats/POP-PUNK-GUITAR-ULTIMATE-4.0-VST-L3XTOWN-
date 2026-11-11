@@ -73,7 +73,7 @@ The latest complete Windows x64 package is GitHub Actions artifact **13806808849
 | VST3 plugin | Included in the complete Windows package above. |
 | Guitar sample library | Included in the complete package under `Samples/`. A separate standalone library ZIP has not been published. |
 | Factory presets | The 300-definition JSON catalogue is available separately. The complete package also contains the preset directory. |
-| Interface skins | 10 theme palettes are built into the plugin UI code. A separate external skin-pack ZIP is not currently published. |
+| Interface skins | 20 selectable colour palettes are built into the plugin UI code in the `work/5.0-twenty-skin-palettes` development branch. These are palette-based skins, not yet full image-backed external shell packs; a user-loadable `Themes/` folder and full-layout artwork packs remain a separate implementation/release gate. |
 | Latest 5.0 interface build | Included in artifact 13806808849. The C++ revision passed Windows x64 build, CTest and pluginval strictness level 5. Manual FL Studio 20 host acceptance remains. |
 
 GitHub Actions artifacts are temporary downloads and may require GitHub access. This Actions artifact expires **8 February 2027**. A permanent versioned GitHub Release will be created only after the release candidate is frozen and validated.
