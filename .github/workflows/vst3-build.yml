@@ -28,9 +28,9 @@ jobs:
       - name: Generate all portable factory preset files
         shell: pwsh
         run: python tools/generate_factory_preset_files.py presets/factory_bank_300.json presets/Factory
-      - name: Validate all 482 generated factory preset files
+      - name: Validate all 480 generated factory preset files
         shell: pwsh
-        run: python tools/validate_preset_files.py presets/Factory 482
+        run: python tools/validate_preset_files.py presets/Factory 480
       - name: Validate portable preset file examples
         shell: pwsh
         run: python tools/validate_preset_files.py presets/examples 2
@@ -247,18 +247,18 @@ jobs:
           New-Item -ItemType Directory -Force -Path release | Out-Null
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination release -Recurse
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $PWD 'release/Samples') -Recurse
-          # Include the validated 432-preset factory catalog and portable preset files.
+          # Include the validated 480-preset factory catalog and portable preset files.
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $PWD 'release/presets') -Recurse
           @'
           POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
           ========================================
           VST3 plugin: included in this archive.
           Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats clean, jazz-clean, direct DI + two distorted sets; Karoryfer CC0 guitars).
-          Factory presets: presets/factory_bank_300.json (216 Melody + 216 Pattern presets; 432 total).
+          Factory presets: presets/factory_bank_300.json (240 Melody + 240 Pattern presets; 480 total).
           Portable preset examples: presets/examples/.
           SFZ maps, original license files and source manifests are retained.
           WAV SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
-          Preset catalog validation: 432 factory presets + portable preset examples.
+          Preset catalog validation: 480 factory presets + portable preset examples.
 
           Install the .vst3 bundle to:
           C:\Program Files\Common Files\VST3\
