@@ -207,10 +207,8 @@ ctest --test-dir build -C Release --output-on-failure
 - [Preset bank readiness](docs/PRESET_BANK_4_0_READINESS_RU.md)
 - [Sampler / streaming design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
 - [Sample source and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
-- [Complete development journal — Info.txt](Info.txt)
-- [Development journal (legacy archive)](docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md)
-- [Historical M3 work log](docs/WORK_LOG_M3.txt)
-- [Bug log (RU)](docs/ЖУРНАЛ_БАГОВ_RU.md)
+- [INFO — Development Journal](Info.txt)
+- [BUILD & RELEASE — Bugs, Fixes and Build Log](BUILD_RELEASE.md)
 
 ## CONTACT & OFFICIAL LINKS
 
