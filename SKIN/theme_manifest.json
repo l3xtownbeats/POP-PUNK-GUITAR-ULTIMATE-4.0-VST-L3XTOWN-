@@ -7,6 +7,15 @@
   "status": "specification",
   "themes": [
     {
+      "id": "skin-01",
+      "index": 1,
+      "name": "Neon Riot",
+      "cluster": "B",
+      "path": "Skin_01/theme.json",
+      "preview": "Skin_01/assets/preview.png",
+      "hero": "Skin_01/assets/hero.webp"
+    },
+    {
       "id": "skin-02",
       "index": 2,
       "name": "Dark Metal",
