@@ -1215,3 +1215,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - При неоднозначном/неполном voicing нельзя угадывать: показать фактические ноты и AMBIGUOUS. Результат не зависит от выбранного preset; в PATTERN + AUTOCHORDS ON распознаётся фактически сформированный аккорд.
 - Спецификация уточнена: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `bbe6759a267a6520d178f612b4ab681fe4eee0e4`.
 - Статус: SPECIFIED / CHORD RECOGNIZER + UI + TESTS PENDING.
+
+
+## 11 ноября 2026 — цель качества звучания электрогитары и акустики
+
+- Добавлена отдельная спецификация качества: реалистичные электрические и акустические инструменты должны строиться на легально распространяемых исходных записях, многосэмплинге по нотам/velocity, round-robin, реальных артикуляциях, корректном note-off/release, музыкальном PATTERN engine и отдельных электрическом/акустическом сигнальных трактах.
+- Зафиксированы цели по palm mute, dead notes, harmonics, slides, hammer-ons/pull-offs, bends/vibrato и акустическим picking/strumming — только при наличии подходящих исходных записей и корректной реализации.
+- Добавлены критерии QA: MIDI render suite, sample/articulation coverage, CPU/RAM/latency, clipping/loudness, лицензии, слепые level-matched сравнения с референсами и ручная проверка FL Studio 20.
+- Session Guitarist Electric Sunburst Deluxe и Ample Sound Guitar указаны как референсы для сравнения, а не как доказательство превосходства. Заявлять, что наш продукт звучит лучше, можно только после воспроизводимых сравнительных тестов.
+- Спецификация: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `95d53067d5fac72b14e37a9a133381c535ce4ef5`.
+- Статус: QUALITY TARGET SPECIFIED; source recording coverage, engine, articulation DSP, QA and blind comparisons remain pending / must be audited.
