@@ -1206,3 +1206,12 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Предусмотрен lock-free/preallocated snapshot от audio thread к UI; распознавание и форматирование выполняются вне processBlock. Обновление по note-on/off, включая velocity-zero note-on, перекрытия, stop/seek/panic.
 - Спецификация: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
 - Статус: SPECIFIED / SOURCE IMPLEMENTATION AND MIDI REGRESSION TESTS PENDING.
+
+
+## 11 ноября 2026 — LIVE NOTE / CHORD: уточнено распознавание качества аккорда
+
+- Уточнено, что табло обязано точно распознавать не только набор нот, но и качество/характер аккорда: MAJOR, MINOR, diminished, augmented, sus, power chord и основные seventh-типы.
+- Для одной ноты показывается точное имя ноты и октава; для аккорда — корректный символ и подпись качества (например C — MAJOR, Am — MINOR). Распознавание учитывает корень, интервалы, обращения, басовую ноту и дубли нот в разных октавах.
+- При неоднозначном/неполном voicing нельзя угадывать: показать фактические ноты и AMBIGUOUS. Результат не зависит от выбранного preset; в PATTERN + AUTOCHORDS ON распознаётся фактически сформированный аккорд.
+- Спецификация уточнена: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `bbe6759a267a6520d178f612b4ab681fe4eee0e4`.
+- Статус: SPECIFIED / CHORD RECOGNIZER + UI + TESTS PENDING.
