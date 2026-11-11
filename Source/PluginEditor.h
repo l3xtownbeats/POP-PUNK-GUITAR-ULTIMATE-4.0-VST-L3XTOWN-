@@ -2,24 +2,48 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "UI/ThemeManager.h"
 #include <array>
+
+class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
+{
+public:
+    void setPalette(const PPGUThemeManager::Palette& value) { palette = value; }
+    void drawRotarySlider(juce::Graphics&, int, int, int, int, float, float, float, juce::Slider&) override;
+    void drawButtonBackground(juce::Graphics&, juce::Button&, const juce::Colour&, bool, bool) override;
+    void drawComboBox(juce::Graphics&, int, int, bool, int, int, int, int, juce::ComboBox&) override;
+private:
+    PPGUThemeManager::Palette palette;
+};
 
 class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
     explicit PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor&);
-    ~PopPunkGuitarUltimateAudioProcessorEditor() override = default;
+    ~PopPunkGuitarUltimateAudioProcessorEditor() override;
+    bool keyPressed(const juce::KeyPress&) override;
     void paint(juce::Graphics&) override;
     void resized() override;
 
 private:
     void chooseSfzFile();
+    juce::File getRuntimeSkinRoot() const;
+    juce::File getSkinManifest(int index) const;
+    void loadSavedSkin();
+    bool loadSkinByIndex(int index, bool persist);
+    void showSkinMenu();
+    void applyPalette();
+    void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
-    juce::TextButton loadButton { "LOAD SFZ" };
+    PPGUThemeManager themeManager;
+    PPGUPremiumLookAndFeel premiumLookAndFeel;
+    juce::ApplicationProperties uiProperties;
+    juce::File runtimeSkinRoot;
+    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };

@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 51,
-  "defaultSkin": "skin-01",
+  "defaultSkin": "skin-51",
   "selector": "SKIN",
-  "status": "specification",
+  "status": "runtime-palette-switching-implemented-pending-validation",
   "themes": [
     {
       "id": "skin-01",

@@ -259,15 +259,12 @@ jobs:
             $manifestPath = Join-Path $runtimeSkins $theme.path
             if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Registered runtime skin manifest missing: $($theme.path)" }
             $themeData = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-            $themeRoot = Split-Path -Parent $manifestPath
-            foreach ($assetKey in @('preview', 'hero')) {
-              $assetPath = [string]$themeData.assets.$assetKey
-              if ([string]::IsNullOrWhiteSpace($assetPath) -or -not (Test-Path -LiteralPath (Join-Path $themeRoot $assetPath))) {
-                throw "Runtime skin '$($theme.id)' is incomplete: required $assetKey asset '$assetPath' is missing. Runtime Skins package is blocked until artwork is present."
-              }
+            if ($themeData.id -ne $theme.id -or $themeData.index -ne $theme.index) {
+              throw "Runtime skin identity mismatch for $($theme.path)."
             }
-            if (-not [string]::IsNullOrWhiteSpace([string]$themeData.assets.texture) -and -not (Test-Path -LiteralPath (Join-Path $themeRoot ([string]$themeData.assets.texture)))) {
-              throw "Runtime skin '$($theme.id)' declares a texture asset that is missing."
+            $compatibility = $themeData.compatibility
+            if ($compatibility.apvtsChanges -or $compatibility.layoutChanges -or $compatibility.audioChanges) {
+              throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
             }
           }
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
@@ -283,7 +280,7 @@ jobs:
           VST3/       The compiled VST3 plugin bundle.
           SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
           PRESETS/    Factory catalog (300 entries) and portable preset examples.
-          Skins/      Runtime theme manifests and artwork; copy beside the VST3 bundle.
+          Skins/      51 visual palette manifests; copy beside the VST3 bundle. Hero artwork is drawn by the editor.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
@@ -295,8 +292,8 @@ jobs:
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
-          4. Skins/ is the runtime theme directory and must remain beside the .vst3 bundle.
-             Runtime skin switching still requires separate host acceptance.
+          4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
+             Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 
           Automated CMake build, CTest and pluginval results are reported by this workflow.

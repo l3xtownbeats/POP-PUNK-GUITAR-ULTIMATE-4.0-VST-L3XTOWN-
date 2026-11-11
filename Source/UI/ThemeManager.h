@@ -9,26 +9,26 @@ class PPGUThemeManager final
 public:
     struct Palette
     {
-        juce::String id { "skin-01" };
-        juce::String name { "Neon Riot" };
-        juce::Colour canvas { 0xff111116 };
-        juce::Colour canvasInset { 0xff17171d };
-        juce::Colour surface { 0xff202027 };
-        juce::Colour surfaceSecondary { 0xff17171d };
-        juce::Colour surfaceRaised { 0xff292932 };
-        juce::Colour text { 0xfff4f0f4 };
-        juce::Colour textSecondary { 0xffaaa8b2 };
-        juce::Colour accent { 0xffed238b };
-        juce::Colour accentSecondary { 0xff39d8e8 };
-        juce::Colour border { 0xff49434f };
-        juce::Colour focus { 0xffed238b };
+        juce::String id { "skin-51" };
+        juce::String name { "Blackout Voltage" };
+        juce::Colour canvas { 0xff090c10 };
+        juce::Colour canvasInset { 0xff101820 };
+        juce::Colour surface { 0xff17232b };
+        juce::Colour surfaceSecondary { 0xff101820 };
+        juce::Colour surfaceRaised { 0xff22313b };
+        juce::Colour text { 0xfff4fafc };
+        juce::Colour textSecondary { 0xffb5c4cb };
+        juce::Colour accent { 0xffb7f34a };
+        juce::Colour accentSecondary { 0xff35d7c5 };
+        juce::Colour border { 0xff526875 };
+        juce::Colour focus { 0xffb7f34a };
         bool usedFallback = true;
     };
 
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the safe Neon Riot palette.
+    // A failed load always restores the safe Blackout Voltage palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;

@@ -173,7 +173,7 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
     if (id.length() != 7 || !id.startsWith("skin-")
         || !juce::CharacterFunctions::isDigit(id[5])
         || !juce::CharacterFunctions::isDigit(id[6])
-        || index < 1 || index > 50
+        || index < 1 || index > 51
         || id.substring(5).getIntValue() != index)
     {
         error = "Invalid theme ID/index pair";

@@ -2,6 +2,14 @@
 #include "BinaryData.h"
 
 #include <algorithm>
+#include <cmath>
+#include <cstdint>
+#if JUCE_WINDOWS
+ #ifndef NOMINMAX
+  #define NOMINMAX
+ #endif
+ #include <windows.h>
+#endif
 
 // Approved PPGU 4.0 dark/pink skin: all visible rotary and FX controls use APVTS attachments.
 
@@ -15,14 +23,41 @@ namespace
     const juce::Colour muted { 0xffaaa8b2 };
 }
 
+
+namespace { void getPluginModuleAnchor() {} constexpr int ppguSkinCount = 51; }
+
+void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
+{
+ const float d=juce::jmin((float)w,(float)h)*.76f,r=d*.5f,cx=x+w*.5f,cy=y+h*.5f-2,angle=start+pos*(end-start);
+ g.setColour(juce::Colours::black.withAlpha(.34f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
+ juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.border);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+ juce::Path value;value.addCentredArc(cx,cy,r+5,r+5,0,start,angle,true);g.setColour(slider.isEnabled()?palette.accent:palette.textSecondary.withAlpha(.4f));g.strokePath(value,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+ g.setGradientFill(juce::ColourGradient(palette.surfaceRaised.brighter(.12f),cx,cy-r,palette.canvasInset.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
+ juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.text);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.accentSecondary);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
+}
+void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool hi,bool down)
+{
+ auto r=b.getLocalBounds().toFloat().reduced(.5f);auto c=b.getToggleState()?palette.accent:base;if(!b.isEnabled())c=palette.surfaceSecondary;else if(down)c=c.darker(.18f);else if(hi)c=c.brighter(.12f);
+ g.setGradientFill(juce::ColourGradient(c.brighter(.08f),r.getX(),r.getY(),c.darker(.16f),r.getX(),r.getBottom(),false));g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
+ if(b.getToggleState()&&b.isEnabled()){g.setColour(palette.accentSecondary);g.fillRoundedRectangle(r.removeFromLeft(3),1.5f);}
+}
+void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g,int w,int h,bool down,int,int,int,int,juce::ComboBox& box)
+{
+ auto r=juce::Rectangle<float>(.5f,.5f,(float)w-1,(float)h-1);auto c=box.findColour(juce::ComboBox::backgroundColourId);g.setColour(down?c.brighter(.08f):c);g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
+ float cx=r.getRight()-17,cy=r.getCentreY();juce::Path p;p.startNewSubPath(cx-4,cy-2);p.lineTo(cx,cy+2);p.lineTo(cx+4,cy-2);g.setColour(palette.accent);g.strokePath(p,juce::PathStrokeType(1.8f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+}
+
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
     : AudioProcessorEditor(&p), processor(p)
 {
-    setSize(1040, 790);
+    setWantsKeyboardFocus(true);
+    setLookAndFeel(&premiumLookAndFeel);
+    runtimeSkinRoot = getRuntimeSkinRoot();
+    setSize(1120, 840);
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(800, 790, 1600, 1100);
+    setResizeLimits(980, 800, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
@@ -95,6 +130,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
+    skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
+    skinButton.onClick = [this] { showSkinMenu(); };
+    addAndMakeVisible(skinButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -163,6 +201,18 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, pink);
         addAndMakeVisible(*l);
     }
+    juce::PropertiesFile::Options options;
+    options.applicationName = "PPGU";
+    options.filenameSuffix = "settings";
+    options.folderName = "L3XTOWN";
+    uiProperties.setStorageParameters(options);
+    loadSavedSkin();
+    applyPalette();
+}
+
+PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
+{
+    setLookAndFeel(nullptr);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
@@ -192,96 +242,90 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(bg);
-    g.setColour(juce::Colour(0xff08080b));
-    g.fillRect(0, 0, getWidth(), 62);
-    g.setColour(pink);
-    g.fillRect(0, 0, getWidth(), 3);
-    auto hero = getLocalBounds().reduced(16);
-    hero.removeFromTop(72);
-    hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
-    g.setGradientFill(grad);
-    g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
-    g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
-    auto textArea = hero.reduced(28, 18);
-    g.setColour(pale);
-    g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
-    g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
-    g.setColour(pink);
-    g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
-    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
-    g.setColour(pale.withAlpha(0.8f));
-    g.setFont(juce::Font(16.0f, juce::Font::italic));
-    g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
-    // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
-    auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
-    juce::Path body;
-    body.startNewSubPath(guitar.getX() + guitar.getWidth()*0.48f, guitar.getY()+guitar.getHeight()*0.52f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.23f,guitar.getX()+guitar.getWidth()*0.12f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.68f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
-    body.closeSubPath();
-    g.setColour(juce::Colour(0xffd9d9df));
-    g.fillPath(body);
-    g.setColour(juce::Colour(0xff292932));
-    g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(juce::Colour(0xffd8b77c));
-    juce::Path neck;
-    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
-    g.fillPath(neck);
-    g.setColour(pink.withAlpha(0.75f));
-    g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
-    auto panelArea = getLocalBounds().reduced(16);
-    panelArea.removeFromTop(355);
-    panelArea.removeFromBottom(80);
-    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
-    auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
-    auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
-    drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,panelArea);
+ const auto& p=themeManager.getPalette();g.fillAll(p.canvas);g.setColour(p.canvasInset.withAlpha(.35f));
+ for(int x=16;x<getWidth();x+=32)g.drawVerticalLine(x,0,(float)getHeight());
+ for(int y=16;y<getHeight();y+=32)g.drawHorizontalLine(y,0,(float)getWidth());
+ g.setGradientFill(juce::ColourGradient(p.canvasInset,0,0,p.canvas,0,74,false));g.fillRect(0,0,getWidth(),76);g.setColour(p.accent);g.fillRect(0,0,getWidth(),3);
+ auto hero=getLocalBounds().reduced(18);hero.removeFromTop(66);hero.setHeight(184);
+ g.setGradientFill(juce::ColourGradient(p.surfaceRaised.brighter(.08f),(float)hero.getX(),(float)hero.getY(),p.canvasInset,(float)hero.getRight(),(float)hero.getBottom(),false));
+ g.fillRoundedRectangle(hero.toFloat(),13);g.setColour(p.border);g.drawRoundedRectangle(hero.toFloat().reduced(.5f),13,1);
+ auto t=hero.reduced(28,17);g.setColour(p.accentSecondary);g.setFont(juce::Font(9.5f,juce::Font::bold));g.drawText("L3XTOWN AUDIO LAB  /  SIGNATURE INSTRUMENT",t.removeFromTop(18),juce::Justification::left);
+ g.setColour(p.text);g.setFont(juce::Font(33,juce::Font::bold));g.drawText("POP PUNK GUITAR",t.removeFromTop(43),juce::Justification::left);
+ g.setColour(p.accent);g.setFont(juce::Font(39,juce::Font::bold));g.drawText("ULTIMATE",t.removeFromTop(45),juce::Justification::left);
+ g.setColour(p.textSecondary);g.setFont(juce::Font(10.5f));g.drawText("RIFFS  /  HOOKS  /  POWER CHORDS  /  MELODY",t.removeFromTop(17),juce::Justification::left);
+ auto gr=hero.removeFromRight((int)(hero.getWidth()*.39f)).reduced(24,12);float x=(float)gr.getX(),y=(float)gr.getY(),w=(float)gr.getWidth(),h=(float)gr.getHeight();
+ juce::Path neck;neck.addQuadrilateral(x+w*.56f,y+h*.43f,x+w*.96f,y+h*.05f,x+w*.99f,y+h*.17f,x+w*.65f,y+h*.57f);
+ g.setGradientFill(juce::ColourGradient(juce::Colour(0xff8e9299),x+w*.5f,y,juce::Colour(0xff292d35),x+w,y+h,false));g.fillPath(neck);
+ juce::Path body;body.startNewSubPath(x+w*.48f,y+h*.48f);body.cubicTo(x+w*.28f,y+h*.24f,x+w*.12f,y+h*.44f,x+w*.27f,y+h*.67f);body.cubicTo(x+w*.37f,y+h*.86f,x+w*.61f,y+h*.83f,x+w*.70f,y+h*.62f);body.cubicTo(x+w*.83f,y+h*.58f,x+w*.84f,y+h*.40f,x+w*.68f,y+h*.39f);body.closeSubPath();
+ g.setGradientFill(juce::ColourGradient(juce::Colour(0xffc5c8ce),x+w*.2f,y+h*.3f,juce::Colour(0xff353a43),x+w*.8f,y+h*.8f,false));g.fillPath(body);g.setColour(p.border);g.strokePath(body,juce::PathStrokeType(1.2f));
+ g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
+ for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
+ g.setColour(p.accent);g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
+ auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(92);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
+ auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
-    auto area=getLocalBounds().reduced(16);
-    auto top=area.removeFromTop(48); top.removeFromLeft(4);
-    titleLabel.setBounds(top.removeFromLeft(74));
-    presetBox.setBounds(top.removeFromLeft(220).reduced(3, 5));
-    presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
-    categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
-    loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
-    subtitleLabel.setBounds(top.reduced(4, 0));
-    area.removeFromTop(220);
-    auto tabs=area.removeFromTop(62);
-    melodyTab.setBounds(tabs.removeFromLeft(220).reduced(2,4));
-    patternTab.setBounds(tabs.removeFromLeft(190).reduced(6,4));
-    modeBox.setBounds(tabs.removeFromRight(140).reduced(2,8));
-    area.removeFromTop(8);
-    auto status=area.removeFromTop(28); statusLabel.setBounds(status);
-    area.removeFromTop(12);
-    auto panels=area.removeFromTop(300);
-    const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.39f), fxW=static_cast<int>(panels.getWidth()*0.39f);
-    auto amp=panels.removeFromLeft(ampW); panels.removeFromLeft(gap);
-    auto fx=panels.removeFromLeft(fxW); panels.removeFromLeft(gap); auto playback=panels;
-    ampTitle.setBounds(amp.removeFromTop(34).reduced(12,2));
-    fxTitle.setBounds(fx.removeFromTop(34).reduced(12,2));
-    playbackTitle.setBounds(playback.removeFromTop(34).reduced(12,2));
-    const int kw=amp.getWidth()/4;
-    for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw); knobLabels[i].setBounds(cell.removeFromBottom(22)); knobs[i].setBounds(cell.reduced(4,0));}
-    for(size_t i=0;i<fxButtons.size();++i){auto cell=fx.removeFromTop(fx.getHeight()/static_cast<int>(fxButtons.size()-i)); fxButtons[i].setBounds(cell.reduced(8,2));}
-    auto keyboardArea = area.removeFromBottom(78);
-    if (keyboard != nullptr) keyboard->setBounds(keyboardArea.reduced(2, 4));
-    auto playbackControls = playback.removeFromTop(190);
-    const int pw = juce::jmax(1, playbackControls.getWidth() / 5);
-    for (size_t i = 4; i < 9; ++i)
-    {
-        auto cell = playbackControls.removeFromLeft(pw);
-        knobLabels[i].setBounds(cell.removeFromBottom(28));
-        knobs[i].setBounds(cell.reduced(1, 4));
-    }
-    startModeBox.setBounds(playback.removeFromTop(34).reduced(8, 2));
+ auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
+ presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
+ loadButton.setBounds(head.removeFromRight(106).reduced(2,8));skinButton.setBounds(head.removeFromRight(94).reduced(2,8));
+ a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
+ a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
+ int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
+ ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
+ int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
+ for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
+ auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
+ startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
 }
+
+juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
+{
+#if JUCE_WINDOWS
+ HMODULE module=nullptr;auto address=reinterpret_cast<LPCWSTR>(reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
+ DWORD flags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
+ if(GetModuleHandleExW(flags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
+  if(n>0&&n<path.size()){juce::File f(juce::String::fromWideCharPointer(path.data()));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
+#endif
+ auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
+ auto dev=juce::File::getCurrentWorkingDirectory().getChildFile("SKIN");return dev.isDirectory()?dev:beside;
+}
+juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int i) const
+{return runtimeSkinRoot.getChildFile(juce::String::formatted("Skin_%02d",i)).getChildFile("theme.json");}
+void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
+{
+ auto* s=uiProperties.getUserSettings();auto id=s?s->getValue("skinId","skin-51"):juce::String("skin-51");int i=id.startsWith("skin-")?id.substring(5).getIntValue():0;
+ if(i<1||i>ppguSkinCount||!loadSkinByIndex(i,false)){themeManager.resetToDefault();applyPalette();}
+}
+bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int i,bool save)
+{
+ if(i<1||i>ppguSkinCount)return false;bool ok=themeManager.loadFromFile(getSkinManifest(i));if(!ok)themeManager.resetToDefault();applyPalette();if(save)persistSkinPreference();return ok;
+}
+void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
+{
+ juce::PopupMenu menu;menu.addSectionHeader("SELECT VISUAL SHELL");for(int i=1;i<=ppguSkinCount;++i){PPGUThemeManager candidate;if(candidate.loadFromFile(getSkinManifest(i))){auto p=candidate.getPalette();menu.addItem(i,p.name,true,p.id==themeManager.getPalette().id);}}
+ if(menu.getNumItems()==0)menu.addItem(ppguSkinCount,"BLACKOUT VOLTAGE  /  DEFAULT",true,true);
+ juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+ menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinButton),[safe](int id){if(safe&&id>=1&&id<=ppguSkinCount)safe->loadSkinByIndex(id,true);});
+}
+void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
+{
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);
+ titleLabel.setColour(juce::Label::textColourId,p.text);subtitleLabel.setColour(juce::Label::textColourId,p.textSecondary);statusLabel.setColour(juce::Label::textColourId,p.textSecondary);
+ ampTitle.setColour(juce::Label::textColourId,p.accent);fxTitle.setColour(juce::Label::textColourId,p.accent);playbackTitle.setColour(juce::Label::textColourId,p.accent);
+ for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.surfaceSecondary);b->setColour(juce::ComboBox::textColourId,p.text);b->setColour(juce::ComboBox::outlineColourId,p.border);b->setColour(juce::ComboBox::arrowColourId,p.accent);}
+ presetSearch.setColour(juce::TextEditor::backgroundColourId,p.surfaceSecondary);presetSearch.setColour(juce::TextEditor::textColourId,p.text);presetSearch.setColour(juce::TextEditor::outlineColourId,p.border);presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.focus);presetSearch.setColour(juce::TextEditor::highlightColourId,p.accent.withAlpha(.3f));
+ loadButton.setColour(juce::TextButton::buttonColourId,p.accent);loadButton.setColour(juce::TextButton::textColourOffId,p.canvas);skinButton.setColour(juce::TextButton::buttonColourId,p.surfaceRaised);skinButton.setColour(juce::TextButton::textColourOffId,p.text);skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
+ for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.surfaceSecondary);b->setColour(juce::TextButton::buttonOnColourId,p.accent);b->setColour(juce::TextButton::textColourOffId,p.text);b->setColour(juce::TextButton::textColourOnId,p.canvas);}
+ for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.accent);s.setColour(juce::Slider::rotarySliderOutlineColourId,p.border);s.setColour(juce::Slider::thumbColourId,p.text);s.setColour(juce::Slider::textBoxTextColourId,p.text);}
+ for(auto& l:knobLabels)l.setColour(juce::Label::textColourId,p.textSecondary);
+ for(auto& b:fxButtons){b.setColour(juce::TextButton::buttonColourId,p.surfaceSecondary);b.setColour(juce::TextButton::buttonOnColourId,p.accent);b.setColour(juce::TextButton::textColourOffId,p.text);b.setColour(juce::TextButton::textColourOnId,p.canvas);}
+ if(keyboard){keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId,juce::Colour(0xffeaf0f2));keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId,p.surfaceSecondary);keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId,p.border);keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId,p.accentSecondary.withAlpha(.3f));keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId,p.accent.withAlpha(.88f));}
+ repaint();
+}
+void PopPunkGuitarUltimateAudioProcessorEditor::persistSkinPreference(){if(auto* s=uiProperties.getUserSettings()){s->setValue("skinId",themeManager.getPalette().id);s->saveIfNeeded();}}
+bool PopPunkGuitarUltimateAudioProcessorEditor::keyPressed(const juce::KeyPress& k){if(k.getKeyCode()=='K'&&k.getModifiers().isCtrlDown()){showSkinMenu();return true;}return juce::AudioProcessorEditor::keyPressed(k);}
 
 void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
 {
@@ -293,8 +337,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
         if (auto* values = array.getArray()) for (const auto& value : *values) {
             if (!value.isObject()) continue;
             FactoryPreset preset;
-            preset.name = value.getProperty("name", "Unnamed").toString();
-            preset.category = value.getProperty("referenceArtist", "Original").toString();
+            auto reference = value.getProperty("referenceArtist", "").toString();
+            auto displayName = value.getProperty("name", "Unnamed").toString();
+            if (reference.isNotEmpty() && displayName.startsWithIgnoreCase(reference))
+                displayName = displayName.substring(reference.length()).trimStartCharacters(" —-:");
+            preset.name = displayName;
+            preset.category = "Original";
             preset.mode = mode;
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();

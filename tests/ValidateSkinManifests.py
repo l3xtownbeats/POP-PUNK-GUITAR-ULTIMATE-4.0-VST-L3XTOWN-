@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-01"
+DEFAULT_ID = "skin-51"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -204,7 +204,7 @@ def main() -> int:
         return 1
 
     if registry.get("defaultSkin") != DEFAULT_ID:
-        fail(errors, "SKIN/theme_manifest.json", "defaultSkin must be skin-01")
+        fail(errors, "SKIN/theme_manifest.json", "defaultSkin must be skin-51")
     if registry.get("selector") != "SKIN":
         fail(errors, "SKIN/theme_manifest.json", "selector must be SKIN")
 
