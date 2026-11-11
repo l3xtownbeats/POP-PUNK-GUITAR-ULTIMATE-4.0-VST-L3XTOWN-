@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-22",
+  "index": 22,
+  "name": "Deep Space Studio",
+  "description": "Cinematic layered studio depth with restrained indigo light",
+  "cluster": "A",
+  "identity": {
+    "material": "layered smoked glass and satin alloy",
+    "lighting": "deep indigo cinematic edge light",
+    "mood": "immersive, focused, expansive"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#111226",
+      "inset": "#191B35"
+    },
+    "surfaces": {
+      "primary": "#191B35",
+      "secondary": "#222447",
+      "raised": "#30325B",
+      "overlay": "#111226"
+    },
+    "borders": {
+      "subtle": "#555A91",
+      "strong": "#4ED9D0",
+      "focus": "#7D82FF"
+    },
+    "typography": {
+      "primary": "#F4F3FF",
+      "secondary": "#C1C0DD",
+      "disabled": "#85858B",
+      "onAccent": "#111226"
+    },
+    "rotary": {
+      "body": "#30325B",
+      "ring": "#4ED9D0",
+      "track": "#555A91",
+      "value": "#7D82FF",
+      "pointer": "#D8C9FF",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#555A91",
+      "fill": "#7D82FF",
+      "thumb": "#D8C9FF",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#7D82FF",
+        "foreground": "#111226",
+        "hover": "#D8C9FF",
+        "pressed": "#4ED9D0",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#222447",
+        "foreground": "#F4F3FF",
+        "hover": "#30325B",
+        "pressed": "#4ED9D0",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#7D82FF",
+      "activeText": "#111226",
+      "inactiveBackground": "#222447",
+      "inactiveText": "#C1C0DD",
+      "indicator": "#4ED9D0"
+    },
+    "comboBoxes": {
+      "background": "#222447",
+      "foreground": "#F4F3FF",
+      "border": "#555A91",
+      "hover": "#30325B",
+      "menuBackground": "#191B35",
+      "selection": "#7D82FF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#7D82FF",
+      "blackPressed": "#4ED9D0",
+      "keyBorder": "#555A91",
+      "octaveLabel": "#C1C0DD"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#7D82FF",
+      "high": "#F06A58",
+      "background": "#111226"
+    },
+    "icons": {
+      "primary": "#F4F3FF",
+      "secondary": "#C1C0DD",
+      "accent": "#7D82FF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#222447",
+      "border": "#555A91",
+      "selected": "#7D82FF",
+      "caption": "#F4F3FF"
+    },
+    "windowChrome": {
+      "background": "#111226",
+      "title": "#F4F3FF",
+      "border": "#555A91",
+      "close": "#D8C9FF"
+    },
+    "hero": {
+      "background": "#111226",
+      "accent": "#7D82FF",
+      "secondaryAccent": "#4ED9D0",
+      "highlight": "#D8C9FF"
+    },
+    "accents": {
+      "primary": "#7D82FF",
+      "secondary": "#4ED9D0",
+      "tertiary": "#D8C9FF"
+    },
+    "texture": {
+      "material": "layered smoked glass and satin alloy",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "deep indigo cinematic edge light",
+      "glow": "#7D82FF",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#4ED9D0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Deep Space Studio thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original layered smoked glass and satin alloy abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast layered smoked glass and satin alloy material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
