@@ -223,3 +223,11 @@
 - Авторинг 50-слотового каталога завершён на уровне манифестов: 49 новых theme.json (Skin_02–Skin_50) и Skin_01 Neon Riot как default slot.
 - Открытые дефекты/блокеры сохраняются: графические ассеты не поставлены; runtime ThemeManager/gallery не подтверждены; JSON Schema и contrast validator не запускались; полная UI/APVTS matrix отсутствует; PR #24 не слит и требует review; Windows CI/FL Studio 20 не проверены.
 - Не объявлять ни одну тему MANIFEST VALIDATED, RUNTIME APPLIED или ACCEPTED до соответствующих тестов.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / PR #24 integration blocker
+
+- SKIN-REV5-006 (OPEN): PR #24 нельзя сливать целиком: несоответствие SKIN label/gallery contract, несовместимый старый embedded manifest, FX labels/layout bounds drift, плюс аудио-изменения вне scope. Review записан в SKIN/PR24_INTEGRATION_REVIEW_RU.md.
+- SKIN-REV5-007 (OPEN): отдельный PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md не найден в main и PR #24; матрица собрана по GUI_UX_BLUEPRINT_RU.md и текущим исходникам, но источник §9 acceptance отсутствует.
+- SKIN-REV5-008 (OPEN): 50 манифестов и registry authored, но preview/hero/texture assets отсутствуют.
+- SKIN-REV5-009 (OPEN): ThemeManager/полная галерея не реализованы на main; все runtime/host acceptance статусы остаются незакрытыми.
