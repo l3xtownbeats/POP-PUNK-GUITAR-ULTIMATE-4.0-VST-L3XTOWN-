@@ -170,3 +170,13 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 
 
 Дополнение к оформлению: в верхнюю часть README добавлен показ существующего изображения `Cover Interface.jpg` рядом с фирменной SVG-обложкой. Commit: `68b26e4c66d84c3b0382f7f0ec02c7db0f4a90f6`.
+
+
+## 2026-11-11 — Packaging CI result and download page correction
+
+**Статус:** BUILD ATTEMPT FAILED; DOCUMENTATION UPDATED.  
+Run `43017263448` / workflow run #826 завершился с `failure` на шаге **Build VST3 and test executables**. Компиляция target `ppgu_processor_pattern_tests` остановилась с ошибкой MSVC C1083: не найден generated JUCE header `BinaryData.h`. CTest, locate VST3, pluginval strictness 5 и packaging были пропущены. Artifact с новым полным layout не опубликован.
+
+README и DOWNLOAD.md обновлены: текущая попытка помечена как failed, предыдущий artifact `13766348419` указан как единственная доступная старая успешная сборка с прежней структурой. Исправление исходного build error и повторный запуск требуют отдельного изменения workflow/source; в рамках оформления документации код сборки не менялся.
+
+README commit: `5271d65f597c3b35ab18993c92850fd93f9703ad`; DOWNLOAD commit: `72fc9d88b6f8a3acacc2ca58d7c4083fe50b700e`.
