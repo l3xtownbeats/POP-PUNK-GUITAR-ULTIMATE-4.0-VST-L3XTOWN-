@@ -46,6 +46,11 @@ public:
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
+    [[nodiscard]] std::array<std::uint64_t, 2> getLiveMidiNoteMask() const noexcept
+    {
+        return { liveMidiNoteMask[0].load(std::memory_order_relaxed),
+                 liveMidiNoteMask[1].load(std::memory_order_relaxed) };
+    }
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     bool consumePanicRequest() noexcept { return panicRequested.exchange(false, std::memory_order_acq_rel); }
@@ -58,6 +63,9 @@ private:
     ppgu::performance::PatternScheduler patternScheduler;
     ppgu::performance::BlockClock patternTransportClock;
     std::array<std::array<bool, 128>, 16> patternHeldNotes {};
+    // Audio-thread-owned held-note state; published as two lock-free 64-bit masks for the UI.
+    std::array<std::array<bool, 128>, 16> displayHeldNotes {};
+    std::array<std::atomic<std::uint64_t>, 2> liveMidiNoteMask {};
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};
     std::array<ppgu::performance::ScheduledEvent, ppgu::performance::PatternScheduler::maximumEventsPerBlock> scheduledPatternEvents {};
     int previousPlayMode = -1;
