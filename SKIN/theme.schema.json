@@ -66,7 +66,8 @@
           "type": "string",
           "minLength": 1
         }
-      }
+      },
+      "additionalProperties": false
     },
     "tokens": {
       "type": "object",
@@ -93,75 +94,571 @@
       "properties": {
         "canvas": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "base",
+            "inset"
+          ],
+          "properties": {
+            "base": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inset": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "surfaces": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "primary",
+            "secondary",
+            "raised",
+            "overlay"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "raised": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "overlay": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "borders": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "subtle",
+            "strong",
+            "focus"
+          ],
+          "properties": {
+            "subtle": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "strong": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "focus": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "typography": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "primary",
+            "secondary",
+            "disabled",
+            "onAccent"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "onAccent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "rotary": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "body",
+            "ring",
+            "track",
+            "value",
+            "pointer",
+            "disabled"
+          ],
+          "properties": {
+            "body": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "ring": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "track": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "pointer": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "sliders": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "track",
+            "fill",
+            "thumb",
+            "disabled"
+          ],
+          "properties": {
+            "track": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "fill": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "thumb": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "buttons": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "primary",
+            "secondary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "object",
+              "required": [
+                "background",
+                "foreground",
+                "hover",
+                "pressed",
+                "disabled"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "foreground": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "hover": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "pressed": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "disabled": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "secondary": {
+              "type": "object",
+              "required": [
+                "background",
+                "foreground",
+                "hover",
+                "pressed",
+                "disabled"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "foreground": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "hover": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "pressed": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "disabled": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
         },
         "tabs": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "activeBackground",
+            "activeText",
+            "inactiveBackground",
+            "inactiveText",
+            "indicator"
+          ],
+          "properties": {
+            "activeBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "activeText": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inactiveBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inactiveText": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "indicator": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "comboBoxes": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "background",
+            "foreground",
+            "border",
+            "hover",
+            "menuBackground",
+            "selection"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "foreground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "hover": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "menuBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "selection": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "keyboard": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "whiteKey",
+            "blackKey",
+            "whitePressed",
+            "blackPressed",
+            "keyBorder",
+            "octaveLabel"
+          ],
+          "properties": {
+            "whiteKey": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "blackKey": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "whitePressed": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "blackPressed": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "keyBorder": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "octaveLabel": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "meters": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "low",
+            "medium",
+            "high",
+            "background"
+          ],
+          "properties": {
+            "low": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "medium": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "high": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "icons": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "primary",
+            "secondary",
+            "accent",
+            "disabled"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "thumbnails": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "background",
+            "border",
+            "selected",
+            "caption"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "selected": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "caption": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "windowChrome": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "background",
+            "title",
+            "border",
+            "close"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "title": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "close": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "hero": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "background",
+            "accent",
+            "secondaryAccent",
+            "highlight"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondaryAccent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "highlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "accents": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "tertiary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
         "texture": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "material",
+            "enabled",
+            "intensity",
+            "asset"
+          ],
+          "properties": {
+            "material": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "asset": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
         },
         "lighting": {
           "type": "object",
-          "minProperties": 1
+          "required": [
+            "profile",
+            "glow",
+            "glowIntensity",
+            "edgeHighlight"
+          ],
+          "properties": {
+            "profile": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "glowIntensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "edgeHighlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -187,7 +684,8 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "assetSpec": {
       "type": "object",
@@ -202,7 +700,18 @@
             "width",
             "height",
             "format"
-          ]
+          ],
+          "properties": {
+            "width": {
+              "const": 480
+            },
+            "height": {
+              "const": 300
+            },
+            "format": {
+              "const": "png"
+            }
+          }
         },
         "hero": {
           "type": "object",
@@ -210,7 +719,32 @@
             "width",
             "height",
             "format"
-          ]
+          ],
+          "properties": {
+            "width": {
+              "const": 1200
+            },
+            "height": {
+              "const": 420
+            },
+            "format": {
+              "const": "webp"
+            }
+          }
+        },
+        "texture": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "const": 1024
+            },
+            "height": {
+              "const": 1024
+            },
+            "format": {
+              "const": "png"
+            }
+          }
         }
       }
     },
@@ -235,7 +769,8 @@
         "audioChanges": {
           "const": false
         }
-      }
+      },
+      "additionalProperties": false
     },
     "validation": {
       "type": "object",
