@@ -321,7 +321,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             const auto styleFilter = styleFilterBox.getText();
             const auto styleText = (item.name + " " + item.groove + " " + item.articulation + " "
                                     + item.tonalTarget + " " + item.styleProfileId + " "
-                                    + item.referenceArtist + " " + item.referenceTracks + " " + item.tags).toLowerCase();
+                                    + item.artistReference + " " + item.referenceTracks + " " + item.tags).toLowerCase();
             bool matchesStyle = true;
             if (styleFilter == "Lead Guitar" || styleFilter == "Solo Guitar")
                 matchesStyle = containsAny(styleText, {"lead", "solo", "octave", "hook", "melodic run", "alternate-picked"});
