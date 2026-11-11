@@ -185,6 +185,96 @@
       "path": "Skin_21/theme.json",
       "preview": "Skin_21/assets/preview.png",
       "hero": "Skin_21/assets/hero.webp"
+    },
+    {
+      "id": "skin-22",
+      "index": 22,
+      "name": "Deep Space Studio",
+      "cluster": "A",
+      "path": "Skin_22/theme.json",
+      "preview": "Skin_22/assets/preview.png",
+      "hero": "Skin_22/assets/hero.webp"
+    },
+    {
+      "id": "skin-23",
+      "index": 23,
+      "name": "Velvet Circuit",
+      "cluster": "A",
+      "path": "Skin_23/theme.json",
+      "preview": "Skin_23/assets/preview.png",
+      "hero": "Skin_23/assets/hero.webp"
+    },
+    {
+      "id": "skin-24",
+      "index": 24,
+      "name": "Amber Tube Room",
+      "cluster": "A",
+      "path": "Skin_24/theme.json",
+      "preview": "Skin_24/assets/preview.png",
+      "hero": "Skin_24/assets/hero.webp"
+    },
+    {
+      "id": "skin-25",
+      "index": 25,
+      "name": "Acoustic Atelier",
+      "cluster": "A",
+      "path": "Skin_25/theme.json",
+      "preview": "Skin_25/assets/preview.png",
+      "hero": "Skin_25/assets/hero.webp"
+    },
+    {
+      "id": "skin-26",
+      "index": 26,
+      "name": "Ivory Session",
+      "cluster": "A",
+      "path": "Skin_26/theme.json",
+      "preview": "Skin_26/assets/preview.png",
+      "hero": "Skin_26/assets/hero.webp"
+    },
+    {
+      "id": "skin-27",
+      "index": 27,
+      "name": "Chrome Velocity",
+      "cluster": "A",
+      "path": "Skin_27/theme.json",
+      "preview": "Skin_27/assets/preview.png",
+      "hero": "Skin_27/assets/hero.webp"
+    },
+    {
+      "id": "skin-28",
+      "index": 28,
+      "name": "Clear Signal",
+      "cluster": "A",
+      "path": "Skin_28/theme.json",
+      "preview": "Skin_28/assets/preview.png",
+      "hero": "Skin_28/assets/hero.webp"
+    },
+    {
+      "id": "skin-29",
+      "index": 29,
+      "name": "Prism Deck",
+      "cluster": "A",
+      "path": "Skin_29/theme.json",
+      "preview": "Skin_29/assets/preview.png",
+      "hero": "Skin_29/assets/hero.webp"
+    },
+    {
+      "id": "skin-30",
+      "index": 30,
+      "name": "Pure Control",
+      "cluster": "A",
+      "path": "Skin_30/theme.json",
+      "preview": "Skin_30/assets/preview.png",
+      "hero": "Skin_30/assets/hero.webp"
+    },
+    {
+      "id": "skin-31",
+      "index": 31,
+      "name": "Skate Voltage",
+      "cluster": "B",
+      "path": "Skin_31/theme.json",
+      "preview": "Skin_31/assets/preview.png",
+      "hero": "Skin_31/assets/hero.webp"
     }
   ]
 }
