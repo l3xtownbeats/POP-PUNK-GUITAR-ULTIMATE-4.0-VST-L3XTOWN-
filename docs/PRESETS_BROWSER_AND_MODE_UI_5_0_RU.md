@@ -245,3 +245,70 @@
 - [ ] Проверить обращения, басовую ноту, дубли в октавах и неполные гитарные voicings.
 - [ ] Проверить одинаковые результаты при любом factory/user preset и во всех режимах, с оговорённым различием источника нот для PATTERN + AUTOCHORDS ON.
 - [ ] Для каждого теста сверять chord symbol и MAJOR/MINOR/quality label с ожидаемым результатом; неоднозначные наборы должны явно оставаться неоднозначными, без ложной уверенности.
+
+# SOUND QUALITY TARGET — REALISTIC ELECTRIC & ACOUSTIC GUITAR
+
+## Product ambition and honest acceptance criteria
+
+POP PUNK GUITAR ULTIMATE must aim for exceptionally convincing, mix-ready electric and acoustic guitar performance, with the ambition to compete with and, in defined use cases, surpass the perceived realism and usability of commercial instruments such as Session Guitarist – Electric Sunburst Deluxe and Ample Sound Guitar products. This is a development target, not a claim that the current build already exceeds those products. No superiority claim is allowed until controlled listening tests and independent host validation support it.
+
+A convincing result must come from the complete instrument: source recordings, multisampling, articulation selection, performance engine, transitions, amp/cabinet processing, dynamics, stereo behavior and mix-ready presets. Reverb, distortion or EQ alone cannot make a static/limited sample set sound like a live guitar.
+
+## 1. Source recordings and sample-library integrity
+
+- Prefer high-quality, cleanly recorded DI electric guitar and dedicated acoustic guitar recordings, with documented instrument, pickup/microphone, string, tuning, playing technique, recording chain, sample rate/bit depth and license provenance.
+- Record or acquire separate, genuinely different performances for articulations and dynamics; do not create fake velocity layers by merely changing gain or pitch.
+- Build note-by-note multisampling across the useful fretboard range, with multiple velocity layers and round-robin variations where source material permits.
+- Electric and acoustic instruments must have separate source sets and articulation maps. Acoustic must not be an electric DI passed through an EQ preset.
+- Never redistribute commercial reference-library samples or extracted content. Every bundled sample must have explicit redistribution rights, attribution/notice requirements recorded, and a reproducible license audit.
+- Preserve original recordings and create optimized derived cache files separately. Do not destructively rewrite source assets.
+
+## 2. Electric guitar performance realism
+
+Target articulations, only when corresponding real source material and mappings exist:
+- picked open notes and sustained notes; downstroke/upstroke where recorded;
+- palm mute with multiple mute depths and velocity/dynamics response;
+- dead notes / muted scratches; natural harmonics and pinch harmonics;
+- slides, legato transitions, hammer-ons, pull-offs, bends and vibrato;
+- fret/string position variation, alternate picking and round-robin selection;
+- realistic note release, string/fret noises and transitions without excessive or repetitive noise.
+
+The engine must avoid the obvious sampler effect: repeated identical attacks, abrupt sample cuts, unnatural sustain, identical timbre at every velocity and inconsistent transitions. Articulation switching must be deterministic and sample-accurate enough for MIDI performance.
+
+## 3. Acoustic guitar realism
+
+- Use dedicated steel-string and nylon-string acoustic source material, not an electric-guitar approximation.
+- Support realistic picked notes, fingerstyle, strumming, muted/percussive hits and natural decay where source recordings allow.
+- Preserve transient attack, string resonance, body resonance and natural note decay; do not impose an artificial electric-guitar sustain envelope.
+- Provide separate acoustic presets and performance behavior; acoustic strum patterns must use recorded or convincingly modeled strokes, not simply repeat a single sample.
+- Keep acoustic dynamics and stereo image natural and controllable.
+
+## 4. Performance engine and musical behavior
+
+- Velocity must select meaningful recorded dynamics/articulations as well as control level; low velocity may select palm-mute only when the selected articulation map explicitly supports that behavior.
+- Round robin must avoid immediate repetition where alternatives exist; selection must be reproducible for offline rendering and project recall.
+- Handle overlapping notes, note-off, sustain, voice stealing, all-notes-off, transport stop/seek and pattern cancellation without stuck notes or cut-off tails.
+- PATTERN mode must produce convincing strumming/picking timing with adjustable humanization, stroke direction, accents, timing variation and chord transitions. Humanization must be bounded, tempo-aware and reproducible.
+- MELODY mode remains true chromatic note playing; it must not inject automatic rhythm or chord tones.
+- Chord transitions should use legato/voice-leading only when musically and MIDI-duration appropriate; no hidden extension beyond Piano Roll note-off.
+- Provide useful playable presets, but do not mask weak source recordings with excessive FX.
+
+## 5. Tone chain and mix readiness
+
+- Electric path: DI/sample source → amp stage → cabinet/IR → EQ/dynamics → modulation/time FX → output, with documented routing and sensible gain staging.
+- Acoustic path: dedicated acoustic source → restrained tone shaping/dynamics → optional room/reverb, avoiding an obligatory distorted amp/cab chain.
+- Cabinet/IR loading, oversampling and expensive effects must be optional and quality/CPU scalable.
+- Presets must have controlled peak level, no unintended clipping, consistent loudness ranges and useful dry/wet variants.
+- Double-track must create a genuinely differentiated second performance/voice or a clearly documented approximation; simple duplicated identical samples with a small delay must not be marketed as real double tracking.
+
+## 6. Quality assurance gates — no subjective claims without evidence
+
+- [ ] Verify sample coverage, velocity layers, round-robin counts, articulation maps and license records for every shipped bank.
+- [ ] Build automated tests for key/velocity mapping, articulation selection, note-off/release, round robin, sample boundaries and voice cleanup.
+- [ ] Render repeatable MIDI test suites covering single notes, chords, palm mutes, sustained notes, slides/bends where implemented, acoustic picking and PATTERN strumming at multiple tempos.
+- [ ] Measure peak/RMS/loudness, clipping, latency, CPU and memory at defined polyphony levels on documented Windows hardware.
+- [ ] Conduct level-matched blind listening comparisons against reference instruments using the same MIDI, musical phrase, mix and loudness. Evaluate attack, articulation, transitions, dynamics, realism and mix placement separately.
+- [ ] Test in FL Studio 20 on Windows 10 x64, including project save/reopen, automation, offline render and transport behavior.
+- [ ] Mark each articulation and instrument family as implemented only when its source assets, mapping, DSP path and tests are present. Unsupported techniques must be clearly identified rather than simulated deceptively.
+
+**Acceptance principle:** sound quality is demonstrated per instrument, articulation and performance scenario. A single good preset or a large sample count does not prove that the whole instrument is realistic.
