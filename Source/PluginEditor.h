@@ -18,6 +18,7 @@ private:
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
+    void clearFactoryPreset();
     void applySkin(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     juce::TextButton loadButton { "IMPORT SOUNDS" }, fxOpenButton { "FX STUDIO" };
