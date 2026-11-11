@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-21",
+  "index": 21,
+  "name": "Neon Flagship",
+  "description": "High-clarity flagship surface with layered glass and precise luminous accents",
+  "cluster": "A",
+  "identity": {
+    "material": "smoked glass over anodized aluminium",
+    "lighting": "controlled cyan-magenta edge lighting",
+    "mood": "premium, fast, precise"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#0D111C",
+      "inset": "#151D2B"
+    },
+    "surfaces": {
+      "primary": "#151D2B",
+      "secondary": "#1C2738",
+      "raised": "#29394D",
+      "overlay": "#0D111C"
+    },
+    "borders": {
+      "subtle": "#496174",
+      "strong": "#F45EA9",
+      "focus": "#5BF0E5"
+    },
+    "typography": {
+      "primary": "#F5FAFC",
+      "secondary": "#B8C8D2",
+      "disabled": "#85858B",
+      "onAccent": "#0D111C"
+    },
+    "rotary": {
+      "body": "#29394D",
+      "ring": "#F45EA9",
+      "track": "#496174",
+      "value": "#5BF0E5",
+      "pointer": "#E9F07B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#496174",
+      "fill": "#5BF0E5",
+      "thumb": "#E9F07B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#5BF0E5",
+        "foreground": "#0D111C",
+        "hover": "#E9F07B",
+        "pressed": "#F45EA9",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#1C2738",
+        "foreground": "#F5FAFC",
+        "hover": "#29394D",
+        "pressed": "#F45EA9",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#5BF0E5",
+      "activeText": "#0D111C",
+      "inactiveBackground": "#1C2738",
+      "inactiveText": "#B8C8D2",
+      "indicator": "#F45EA9"
+    },
+    "comboBoxes": {
+      "background": "#1C2738",
+      "foreground": "#F5FAFC",
+      "border": "#496174",
+      "hover": "#29394D",
+      "menuBackground": "#151D2B",
+      "selection": "#5BF0E5"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#5BF0E5",
+      "blackPressed": "#F45EA9",
+      "keyBorder": "#496174",
+      "octaveLabel": "#B8C8D2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#5BF0E5",
+      "high": "#F06A58",
+      "background": "#0D111C"
+    },
+    "icons": {
+      "primary": "#F5FAFC",
+      "secondary": "#B8C8D2",
+      "accent": "#5BF0E5",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#1C2738",
+      "border": "#496174",
+      "selected": "#5BF0E5",
+      "caption": "#F5FAFC"
+    },
+    "windowChrome": {
+      "background": "#0D111C",
+      "title": "#F5FAFC",
+      "border": "#496174",
+      "close": "#E9F07B"
+    },
+    "hero": {
+      "background": "#0D111C",
+      "accent": "#5BF0E5",
+      "secondaryAccent": "#F45EA9",
+      "highlight": "#E9F07B"
+    },
+    "accents": {
+      "primary": "#5BF0E5",
+      "secondary": "#F45EA9",
+      "tertiary": "#E9F07B"
+    },
+    "texture": {
+      "material": "smoked glass over anodized aluminium",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "controlled cyan-magenta edge lighting",
+      "glow": "#5BF0E5",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#F45EA9"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Neon Flagship interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract smoked glass over anodized aluminium hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original smoked glass over anodized aluminium texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
