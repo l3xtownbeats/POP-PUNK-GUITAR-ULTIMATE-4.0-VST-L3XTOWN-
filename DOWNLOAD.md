@@ -30,7 +30,7 @@ This is a verified earlier package from a previous development commit. It does n
 
 [**View current build and packaging run #826**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448)
 
-The new package will be published only after Windows x64 Release build, CTest, pluginval strictness 5 and packaging assertions pass.
+The latest attempt (run #826) failed during compilation: the pattern integration test target could not find generated JUCE header BinaryData.h. CTest, pluginval strictness 5 and packaging were skipped. No new complete ZIP was published. A new successful run is required before the new package can be downloaded.
 
 Planned ZIP layout:
 
@@ -45,7 +45,7 @@ POP_PUNK_GUITAR_ULTIMATE/
 └── INSTALL_AND_CONTENTS.txt
 ```
 
-The new ZIP is **not yet available** while the current workflow is running.
+The new ZIP is **not available**: the latest workflow attempt failed before tests and packaging.
 
 ## Presets
 
