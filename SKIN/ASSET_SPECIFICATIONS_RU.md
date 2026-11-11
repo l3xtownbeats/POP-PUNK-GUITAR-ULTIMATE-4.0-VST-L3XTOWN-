@@ -65,3 +65,21 @@
 | 31 Skate Voltage | Street-energy подача без логотипов и чужих стикеров | Оригинальные диагонали, графика и типографика | Низкоконтрастная grip-rubber фактура |
 
 Для всех десяти: весь текст и UI-контролы остаются JUCE-drawn; hero не заходит в зоны плотных подписей и readouts; никакие сторонние марки и фото не используются.
+
+
+## Дополнение: Skin_32–Skin_41
+
+| Skin | Preview 480×300 PNG | Hero 1200×420 WebP | Texture 1024×1024 PNG |
+|---|---|---|---|
+| 32 Gig Poster Luxe | Полноценная оболочка с редакционной иерархией и коралловыми акцентами | Оригинальная gig-poster композиция без чужих логотипов | Матовая poster stock фактура |
+| 33 Checker Riot | Тёмная hardware оболочка с checker micro-details | Геометрический checker pattern, не перекрывающий рабочие панели | Тонкая rubber/ceramic фактура |
+| 34 Midnight City | Ночной синий интерфейс с тёплыми сигналами | Абстрактная городская архитектура и сдержанный blue rim light | Smoked-glass grain |
+| 35 Arena Pulse | Тёмная сценическая оболочка, красный и янтарный акценты | Широкая абстрактная арена с направленным сценическим светом | Stage-black composite |
+| 36 Sticker Luxe | Оригинальные sticker labels как малые акценты, не как брендинг | Авторские типографические формы и мягкие цветовые метки | Soft-touch polymer grain |
+| 37 Carbon Sprint | Карбоновые поверхности, техническая иерархия | Carbon geometry с оранжевой направленной полосой | Seamless carbon weave |
+| 38 Electric Boulevard | Глубокий violet-blue неон без bloom noise | Абстрактная ночная архитектура и световые плоскости | Smoked acrylic grain |
+| 39 Aftershow Gold | Тёплая backstage оболочка с бронзовыми деталями | Янтарный закулисный свет и тёмный walnut | Walnut/bronze microtexture |
+| 40 Signal Redline | Графитовая оболочка с точной красной линией сигнала | Тонкая красная диагональ на чёрненом алюминии | Blackened aluminium grain |
+| 41 Arctic Glasshouse | Светлая ледяная стеклянная оболочка | Frosted-glass плоскости и холодный дневной свет | Seamless frosted-glass texture |
+
+Векторные контролы, подписи, readouts и состояния остаются JUCE-drawn; hero-арт не должен закрывать функциональные области.
