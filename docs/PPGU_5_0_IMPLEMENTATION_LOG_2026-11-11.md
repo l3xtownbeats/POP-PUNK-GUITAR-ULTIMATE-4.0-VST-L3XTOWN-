@@ -136,3 +136,10 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Main functional benchmark remains Session Guitarist Electric Sunburst Deluxe. Only general interaction/architecture principles are used; all implementation and assets remain original.
 - This is an architecture/specification change only. It does not claim that missing engine modules have been implemented.
 - Requirements document commit: `a334f27a5683801accd259c0c6da6280a89a3405`.
+
+## 2026-11-11 — product UX direction
+
+- Added the combined product-feel target: Omnisphere 3 for breadth/depth and content ecosystem, Nexus for immediate preset-first simplicity and fast workflow, Session Guitarist Electric Sunburst Deluxe for guitar performance/playability.
+- Defined a clean playable default screen with deeper functions organized into focused panels; every theme must retain the same full feature set.
+- This records the product direction only; it is not a claim that the interface has already been redesigned or that every feature is implemented.
+- Requirements document commit: `099256b768775fee868af925e321ca9a78a26496`.
