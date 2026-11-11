@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-20",
+  "index": 20,
+  "name": "Studio Olive",
+  "description": "Muted olive studio hardware with warm neutral controls",
+  "cluster": "C",
+  "identity": {
+    "material": "olive powder-coated metal and canvas",
+    "lighting": "soft warm studio light",
+    "mood": "organic, grounded, understated"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#20251B",
+      "inset": "#2A3022"
+    },
+    "surfaces": {
+      "primary": "#2A3022",
+      "secondary": "#343B2A",
+      "raised": "#46503A",
+      "overlay": "#20251B"
+    },
+    "borders": {
+      "subtle": "#69735A",
+      "strong": "#8BA6A0",
+      "focus": "#B6B887"
+    },
+    "typography": {
+      "primary": "#F4F3E8",
+      "secondary": "#C6C7B5",
+      "disabled": "#85858B",
+      "onAccent": "#20251B"
+    },
+    "rotary": {
+      "body": "#46503A",
+      "ring": "#8BA6A0",
+      "track": "#69735A",
+      "value": "#B6B887",
+      "pointer": "#D7C99A",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#69735A",
+      "fill": "#B6B887",
+      "thumb": "#D7C99A",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#B6B887",
+        "foreground": "#20251B",
+        "hover": "#D7C99A",
+        "pressed": "#8BA6A0",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#343B2A",
+        "foreground": "#F4F3E8",
+        "hover": "#46503A",
+        "pressed": "#8BA6A0",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#B6B887",
+      "activeText": "#20251B",
+      "inactiveBackground": "#343B2A",
+      "inactiveText": "#C6C7B5",
+      "indicator": "#8BA6A0"
+    },
+    "comboBoxes": {
+      "background": "#343B2A",
+      "foreground": "#F4F3E8",
+      "border": "#69735A",
+      "hover": "#46503A",
+      "menuBackground": "#2A3022",
+      "selection": "#B6B887"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#B6B887",
+      "blackPressed": "#8BA6A0",
+      "keyBorder": "#69735A",
+      "octaveLabel": "#C6C7B5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#B6B887",
+      "high": "#F06A58",
+      "background": "#20251B"
+    },
+    "icons": {
+      "primary": "#F4F3E8",
+      "secondary": "#C6C7B5",
+      "accent": "#B6B887",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#343B2A",
+      "border": "#69735A",
+      "selected": "#B6B887",
+      "caption": "#F4F3E8"
+    },
+    "windowChrome": {
+      "background": "#20251B",
+      "title": "#F4F3E8",
+      "border": "#69735A",
+      "close": "#D7C99A"
+    },
+    "hero": {
+      "background": "#20251B",
+      "accent": "#B6B887",
+      "secondaryAccent": "#8BA6A0",
+      "highlight": "#D7C99A"
+    },
+    "accents": {
+      "primary": "#B6B887",
+      "secondary": "#8BA6A0",
+      "tertiary": "#D7C99A"
+    },
+    "texture": {
+      "material": "olive powder-coated metal and canvas",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "soft warm studio light",
+      "glow": "#B6B887",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#8BA6A0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Studio Olive interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract olive powder-coated metal and canvas hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original olive powder-coated metal and canvas texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
