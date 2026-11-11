@@ -1538,3 +1538,18 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - В README проекта подтверждено, что текущий статус — engineering preview. Melody описан как прямой chromatic workflow; Pattern runtime и его связь с реальным sampler playback остаются незавершёнными. Каталог 300 preset definitions не считать 300 полностью готовыми/проверенными звучащими пресетами.
 - Приоритет оптимизации: сначала достоверная сборка/регрессии и M2 streaming playback integration, затем полноценная Pattern-to-sampler интеграция и acceptance, затем UI polish/skin package validation. Не подменять реальные тесты косметическими изменениями и не ослаблять критерии качества ради скорости.
 - Статус: AUDIT NOTES RECORDED; source-level implementation and fresh Windows build/CTest/pluginval/FL Studio 20 checks still required.
+
+
+============================================================
+2026-11-11 — PUBLIC PROFILE / SOUNDS BANK / SESSION GUITARIST COMPATIBILITY
+============================================================
+
+- Обновлена публичная шапка README: вместо прежнего общего SVG-баннера используется утверждённый внешний вид плагина Cover Interface.jpg.
+- Полностью переписаны краткое описание продукта, назначение, режимы MELODY/PATTERN, технические характеристики, performance philosophy и ссылки на каталог пресетов, Sounds Bank, аудит и CI.
+- Подтверждённый основной каталог: 300 определений (150 Melody + 150 Pattern), 21 style-family. factory_preset_bank_v1.json — предыдущая 300-записная версия/схема, а не дополнительные 300 уникальных пресетов. Публично не заявлять 600.
+- Sounds Bank: в текущем CI pipeline названы Meta Steel (375 WAV), Meta Nylon (348 WAV), FreePats Clean #1, Distorted #1 и Distorted #2. Подтверждённый Meta subtotal — 723 WAV; точный FreePats count берётся только из manifest готового artifact.
+- Добавлен расширенный каталог кандидатов: Karoryfer Emilyguitar, Shinyguitar, Black And Green Guitars, FreePats Direct DI, Clean #2/Jazz, Spanish Classical. Они обозначены как кандидаты, а не уже скачанные или интегрированные библиотеки.
+- Добавлено требование пользователя по Session Guitarist Electric Sunburst Deluxe и Electric Vintage/Vintage Deluxe. Граница совместимости: NI Kontakt instrument можно запускать отдельно в FL Studio и смешивать с PPGU. Нельзя извлекать/дешифровать/перепаковывать защищённые NI samples из NKI/NKX/NKC или распространять их внутри PPGU. Собственные записи и WAV/SFZ источники с разрешающей лицензией допускаются в user bank.
+- Новые документы: docs/PRODUCT_PROFILE_TECHNICAL_RU.md и docs/SOUND_BANK_CATALOG_RU.md. Обновлены README.md, SOUND_ASSET_SOURCES_AND_LICENSE_POLICY_RU.md, docs/CHANGELOG.md.
+- CI run #618 (42958088120): compile, CTest и pluginval strictness 5 завершились успешно; упаковка и загрузка artifact ещё выполнялись на момент записи. Ручная проверка FL Studio 20 и целевой Windows 10 остаётся открытой.
+- Статус: документация/каталоги обновлены; новые sample libraries не добавлялись этим изменением.
