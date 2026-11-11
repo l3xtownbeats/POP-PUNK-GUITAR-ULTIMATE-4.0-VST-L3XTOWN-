@@ -100,12 +100,14 @@ int main()
     const juce::File directory(root.string());
     const auto firstTone = directory.getChildFile("first-chord.wav");
     const auto secondTone = directory.getChildFile("second-chord.wav");
+    const auto thirdTone = directory.getChildFile("third-chord.wav");
     const auto sfz = directory.getChildFile("pattern-test.sfz");
 
     // Different source levels make the chord identity observable in rendered
     // audio: chord A is deliberately 3x louder than chord B.
     if (!writeTone(firstTone, 0.60f, 220.0)
-        || !writeTone(secondTone, 0.20f, 330.0))
+        || !writeTone(secondTone, 0.40f, 330.0)
+        || !writeTone(thirdTone, 0.20f, 440.0))
     {
         std::cerr << "Could not create deterministic WAV fixtures.\n";
         return 1;
@@ -117,7 +119,10 @@ int main()
         "<region> sample=first-chord.wav key=67 ampeg_release=0.01\n"
         "<region> sample=second-chord.wav key=62 ampeg_release=0.01\n"
         "<region> sample=second-chord.wav key=66 ampeg_release=0.01\n"
-        "<region> sample=second-chord.wav key=69 ampeg_release=0.01\n";
+        "<region> sample=second-chord.wav key=69 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=55 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=59 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=62 ampeg_release=0.01\n";
     if (!sfz.replaceWithText(sfzText))
     {
         std::cerr << "Could not create SFZ fixture.\n";
@@ -156,43 +161,41 @@ int main()
         {
             const std::array<int, 3> chordA { 60, 64, 67 };
             const std::array<int, 3> chordB { 62, 66, 69 };
+            const std::array<int, 3> chordC { 55, 59, 62 };
 
-            // Block A: establish chord A at sample 16. The streaming cache miss
-            // is intentional; the reader must retain the attack cursor.
-            juce::AudioBuffer<float> blockA(2, 128);
+            // One real processor block contains two distinct chord replacements.
+            // The second replacement must not expose a transient empty chord or
+            // restart the pattern cycle. The third chord should drive step 2.
+            juce::AudioBuffer<float> blockA(2, 13000);
             juce::MidiBuffer midiA;
             addChordOn(midiA, 16, chordA);
+            addChordOff(midiA, 6000, chordA);
+            addChordOn(midiA, 6000, chordB);
+            addChordOff(midiA, 9000, chordB);
+            addChordOn(midiA, 9000, chordC);
             processor.processBlock(blockA, midiA);
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
 
-            // Block B: change to chord B at an exact sample position. The first
-            // chord's scheduled NoteOffs must still be honored independently.
-            juce::AudioBuffer<float> blockB(2, 5872);
+            // The first step of the next 8th-note slot is at absolute sample
+            // 12016. Its source page may have missed the cache in block A, so
+            // the streaming reader must retain the cursor into this block.
+            juce::AudioBuffer<float> blockB(2, 13000);
             juce::MidiBuffer midiB;
-            addChordOff(midiB, 5800, chordA);
-            addChordOn(midiB, 5800, chordB);
             processor.processBlock(blockB, midiB);
-            std::this_thread::sleep_for(std::chrono::milliseconds(30));
 
-            // Block C crosses the next 8th-note pattern step. The new chord B,
-            // not the earlier chord A snapshot, must drive the actual sampler.
-            juce::AudioBuffer<float> blockC(2, 7000);
-            juce::MidiBuffer midiC;
-            processor.processBlock(blockC, midiC);
-
-            const double firstChordRms = rms(blockB, 256, 4500);
-            const double secondChordRms = rms(blockC, 6100, 850);
+            const double firstChordRms = rms(blockA, 256, 4200);
+            const double finalChordRms = rms(blockB, 1000, 7000);
             if (!(firstChordRms > 0.04))
             {
                 std::cerr << "First chord did not reach the real sampler output; RMS="
                           << firstChordRms << "\n";
                 result = 1;
             }
-            if (!(secondChordRms > 0.008 && secondChordRms < firstChordRms * 0.65))
+            if (!(finalChordRms > 0.008 && finalChordRms < firstChordRms * 0.65))
             {
-                std::cerr << "Second chord snapshot was not rendered as the expected lower-level source; "
+                std::cerr << "Final chord snapshot was not rendered after two same-block chord replacements; "
                           << "first RMS=" << firstChordRms
-                          << ", second RMS=" << secondChordRms << "\n";
+                          << ", final RMS=" << finalChordRms << "\n";
                 result = 1;
             }
         }
