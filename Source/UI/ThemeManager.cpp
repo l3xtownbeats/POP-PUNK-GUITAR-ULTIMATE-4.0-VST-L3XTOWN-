@@ -82,16 +82,18 @@ namespace
             return false;
         }
 
-        return validateGroup(
-            juce::var(new juce::DynamicObject([&]() {
-                auto* wrapper = new juce::DynamicObject();
-                wrapper->setProperty("style", style);
-                return wrapper;
-            }())),
-            "style",
-            { "background", "foreground", "hover", "pressed", "disabled" },
-            { "background", "foreground", "hover", "pressed", "disabled" },
-            error);
+        const juce::StringArray keys {
+            "background", "foreground", "hover", "pressed", "disabled"
+        };
+        for (const auto& key : keys)
+        {
+            if (!isHexColour(style.getProperty(key, juce::var())))
+            {
+                error = "Invalid button colour: " + styleName.toString() + "." + key;
+                return false;
+            }
+        }
+        return true;
     }
 
     bool validateAssetSpec(const juce::var& assetSpec,
@@ -233,7 +235,7 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
     }
 
     const auto textureAsset = texture.getProperty("asset", juce::var());
-    if (!textureAsset.isString() && !textureAsset.isVoid() && !textureAsset.isUndefined())
+    if (!textureAsset.isString() && !textureAsset.isVoid())
     {
         error = "Texture asset must be a string or null";
         return false;
@@ -260,7 +262,7 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
     }
 
     const auto optionalTexturePath = assets.getProperty("texture", juce::var());
-    if (!optionalTexturePath.isVoid() && !optionalTexturePath.isNull() && !optionalTexturePath.isString())
+    if (!optionalTexturePath.isVoid() && !optionalTexturePath.isString())
     {
         error = "Theme texture path must be a string or null";
         return false;
