@@ -1,0 +1,60 @@
+{
+  "name": "High Contrast",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#000000",
+    "background.bottom": "#000000",
+    "accent.primary": "#ffff00",
+    "accent.secondary": "#00ffff",
+    "text.main": "#ffffff",
+    "text.dim": "#eeeeee",
+    "knob.face": "#171717",
+    "knob.ring": "#ffff00",
+    "button.normal": "#000000",
+    "button.active": "#ffff00",
+    "button.hover": "#000000",
+    "slider.track": "#eeeeee",
+    "slider.fill": "#ffff00",
+    "led.on": "#ffff00",
+    "led.off": "#eeeeee",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#ffff00",
+    "meter.fill": "#ffff00",
+    "meter.peak": "#ff4444",
+    "panel.border": "#eeeeee",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#000000",
+    "list.row.selected": "#ffff00",
+    "tooltip.background": "#000000",
+    "tooltip.text": "#ffffff"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "AtkinsonHyperlegible-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": false,
+    "background_effects": "high_contrast"
+  }
+}
