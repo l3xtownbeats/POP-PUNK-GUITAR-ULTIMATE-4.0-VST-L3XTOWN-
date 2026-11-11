@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-32",
+  "index": 32,
+  "name": "Gig Poster Luxe",
+  "description": "Premium concert-poster energy with refined type hierarchy",
+  "cluster": "B",
+  "identity": {
+    "material": "matte poster stock and satin aluminium",
+    "lighting": "controlled coral stage lighting",
+    "mood": "bold, editorial, premium"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#20141B",
+      "inset": "#2D1B25"
+    },
+    "surfaces": {
+      "primary": "#2D1B25",
+      "secondary": "#3A2430",
+      "raised": "#503342",
+      "overlay": "#20141B"
+    },
+    "borders": {
+      "subtle": "#805465",
+      "strong": "#8C9EEB",
+      "focus": "#FF6C86"
+    },
+    "typography": {
+      "primary": "#FFF4F1",
+      "secondary": "#D6B8C0",
+      "disabled": "#85858B",
+      "onAccent": "#20141B"
+    },
+    "rotary": {
+      "body": "#503342",
+      "ring": "#8C9EEB",
+      "track": "#805465",
+      "value": "#FF6C86",
+      "pointer": "#F1D6A6",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#805465",
+      "fill": "#FF6C86",
+      "thumb": "#F1D6A6",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF6C86",
+        "foreground": "#20141B",
+        "hover": "#F1D6A6",
+        "pressed": "#8C9EEB",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#3A2430",
+        "foreground": "#FFF4F1",
+        "hover": "#503342",
+        "pressed": "#8C9EEB",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF6C86",
+      "activeText": "#20141B",
+      "inactiveBackground": "#3A2430",
+      "inactiveText": "#D6B8C0",
+      "indicator": "#8C9EEB"
+    },
+    "comboBoxes": {
+      "background": "#3A2430",
+      "foreground": "#FFF4F1",
+      "border": "#805465",
+      "hover": "#503342",
+      "menuBackground": "#2D1B25",
+      "selection": "#FF6C86"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF6C86",
+      "blackPressed": "#8C9EEB",
+      "keyBorder": "#805465",
+      "octaveLabel": "#D6B8C0"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF6C86",
+      "high": "#F06A58",
+      "background": "#20141B"
+    },
+    "icons": {
+      "primary": "#FFF4F1",
+      "secondary": "#D6B8C0",
+      "accent": "#FF6C86",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#3A2430",
+      "border": "#805465",
+      "selected": "#FF6C86",
+      "caption": "#FFF4F1"
+    },
+    "windowChrome": {
+      "background": "#20141B",
+      "title": "#FFF4F1",
+      "border": "#805465",
+      "close": "#F1D6A6"
+    },
+    "hero": {
+      "background": "#20141B",
+      "accent": "#FF6C86",
+      "secondaryAccent": "#8C9EEB",
+      "highlight": "#F1D6A6"
+    },
+    "accents": {
+      "primary": "#FF6C86",
+      "secondary": "#8C9EEB",
+      "tertiary": "#F1D6A6"
+    },
+    "texture": {
+      "material": "matte poster stock and satin aluminium",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "controlled coral stage lighting",
+      "glow": "#FF6C86",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#8C9EEB"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Gig Poster Luxe preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original matte poster stock and satin aluminium hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle matte poster stock and satin aluminium texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
