@@ -231,3 +231,11 @@
 - SKIN-REV5-007 (OPEN): отдельный PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md не найден в main и PR #24; матрица собрана по GUI_UX_BLUEPRINT_RU.md и текущим исходникам, но источник §9 acceptance отсутствует.
 - SKIN-REV5-008 (OPEN): 50 манифестов и registry authored, но preview/hero/texture assets отсутствуют.
 - SKIN-REV5-009 (OPEN): ThemeManager/полная галерея не реализованы на main; все runtime/host acceptance статусы остаются незакрытыми.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / structural check result
+
+- SKIN-REV5-010: исправлено/закрыто на уровне данных — обязательные token groups и nested keys отсутствуют в 0 из 50 theme.json; все 50 проходят JSON parsing и ручной структурный key check.
+- SKIN-REV5-011 (OPEN): полноценный JSON Schema validator и HEX-format automated test ещё не выполнялись; текущая проверка не заменяет CI test.
+- SKIN-REV5-012 (OPEN): контрастные пары всех UI states ещё не измерены; требуется automated contrast test.
+- Остальные блокеры: assets missing, runtime ThemeManager/gallery pending, fallback test pending, full FL Studio 20 acceptance pending.
