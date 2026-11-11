@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-26",
+  "index": 26,
+  "name": "Ivory Session",
+  "description": "Light premium session surface with warm ivory and dark controls",
+  "cluster": "A",
+  "identity": {
+    "material": "ivory-coated metal and soft-touch polymer",
+    "lighting": "warm neutral studio daylight",
+    "mood": "clear, tactile, welcoming"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#E8E4DA",
+      "inset": "#F1EEE6"
+    },
+    "surfaces": {
+      "primary": "#F1EEE6",
+      "secondary": "#DCD7CC",
+      "raised": "#C9C2B4",
+      "overlay": "#E8E4DA"
+    },
+    "borders": {
+      "subtle": "#9D978B",
+      "strong": "#B47D54",
+      "focus": "#3A4248"
+    },
+    "typography": {
+      "primary": "#20272C",
+      "secondary": "#4D565B",
+      "disabled": "#85858B",
+      "onAccent": "#E8E4DA"
+    },
+    "rotary": {
+      "body": "#C9C2B4",
+      "ring": "#B47D54",
+      "track": "#9D978B",
+      "value": "#3A4248",
+      "pointer": "#6D9D9A",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#9D978B",
+      "fill": "#3A4248",
+      "thumb": "#6D9D9A",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#3A4248",
+        "foreground": "#E8E4DA",
+        "hover": "#6D9D9A",
+        "pressed": "#B47D54",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#DCD7CC",
+        "foreground": "#20272C",
+        "hover": "#C9C2B4",
+        "pressed": "#B47D54",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#3A4248",
+      "activeText": "#E8E4DA",
+      "inactiveBackground": "#DCD7CC",
+      "inactiveText": "#4D565B",
+      "indicator": "#B47D54"
+    },
+    "comboBoxes": {
+      "background": "#DCD7CC",
+      "foreground": "#20272C",
+      "border": "#9D978B",
+      "hover": "#C9C2B4",
+      "menuBackground": "#F1EEE6",
+      "selection": "#3A4248"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#3A4248",
+      "blackPressed": "#B47D54",
+      "keyBorder": "#9D978B",
+      "octaveLabel": "#4D565B"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#3A4248",
+      "high": "#F06A58",
+      "background": "#E8E4DA"
+    },
+    "icons": {
+      "primary": "#20272C",
+      "secondary": "#4D565B",
+      "accent": "#3A4248",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#DCD7CC",
+      "border": "#9D978B",
+      "selected": "#3A4248",
+      "caption": "#20272C"
+    },
+    "windowChrome": {
+      "background": "#E8E4DA",
+      "title": "#20272C",
+      "border": "#9D978B",
+      "close": "#6D9D9A"
+    },
+    "hero": {
+      "background": "#E8E4DA",
+      "accent": "#3A4248",
+      "secondaryAccent": "#B47D54",
+      "highlight": "#6D9D9A"
+    },
+    "accents": {
+      "primary": "#3A4248",
+      "secondary": "#B47D54",
+      "tertiary": "#6D9D9A"
+    },
+    "texture": {
+      "material": "ivory-coated metal and soft-touch polymer",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "warm neutral studio daylight",
+      "glow": "#3A4248",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#B47D54"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Ivory Session thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original ivory-coated metal and soft-touch polymer abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast ivory-coated metal and soft-touch polymer material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
