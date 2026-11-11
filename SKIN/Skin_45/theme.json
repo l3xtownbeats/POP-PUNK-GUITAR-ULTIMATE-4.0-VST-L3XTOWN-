@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-45",
+  "index": 45,
+  "name": "Rose Quartz",
+  "description": "Soft rose and quartz palette grounded by dark plum hardware",
+  "cluster": "C",
+  "identity": {
+    "material": "satin polymer and rose-tinted glass",
+    "lighting": "soft rose studio light",
+    "mood": "gentle, premium, expressive"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#261B22",
+      "inset": "#34232D"
+    },
+    "surfaces": {
+      "primary": "#34232D",
+      "secondary": "#42303B",
+      "raised": "#59404D",
+      "overlay": "#261B22"
+    },
+    "borders": {
+      "subtle": "#806A78",
+      "strong": "#C8B2D6",
+      "focus": "#E6A3BA"
+    },
+    "typography": {
+      "primary": "#FFF5F7",
+      "secondary": "#D6C2CC",
+      "disabled": "#85858B",
+      "onAccent": "#261B22"
+    },
+    "rotary": {
+      "body": "#59404D",
+      "ring": "#C8B2D6",
+      "track": "#806A78",
+      "value": "#E6A3BA",
+      "pointer": "#F0DCCF",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#806A78",
+      "fill": "#E6A3BA",
+      "thumb": "#F0DCCF",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#E6A3BA",
+        "foreground": "#261B22",
+        "hover": "#F0DCCF",
+        "pressed": "#C8B2D6",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#42303B",
+        "foreground": "#FFF5F7",
+        "hover": "#59404D",
+        "pressed": "#C8B2D6",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#E6A3BA",
+      "activeText": "#261B22",
+      "inactiveBackground": "#42303B",
+      "inactiveText": "#D6C2CC",
+      "indicator": "#C8B2D6"
+    },
+    "comboBoxes": {
+      "background": "#42303B",
+      "foreground": "#FFF5F7",
+      "border": "#806A78",
+      "hover": "#59404D",
+      "menuBackground": "#34232D",
+      "selection": "#E6A3BA"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#E6A3BA",
+      "blackPressed": "#C8B2D6",
+      "keyBorder": "#806A78",
+      "octaveLabel": "#D6C2CC"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E6A3BA",
+      "high": "#F06A58",
+      "background": "#261B22"
+    },
+    "icons": {
+      "primary": "#FFF5F7",
+      "secondary": "#D6C2CC",
+      "accent": "#E6A3BA",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#42303B",
+      "border": "#806A78",
+      "selected": "#E6A3BA",
+      "caption": "#FFF5F7"
+    },
+    "windowChrome": {
+      "background": "#261B22",
+      "title": "#FFF5F7",
+      "border": "#806A78",
+      "close": "#F0DCCF"
+    },
+    "hero": {
+      "background": "#261B22",
+      "accent": "#E6A3BA",
+      "secondaryAccent": "#C8B2D6",
+      "highlight": "#F0DCCF"
+    },
+    "accents": {
+      "primary": "#E6A3BA",
+      "secondary": "#C8B2D6",
+      "tertiary": "#F0DCCF"
+    },
+    "texture": {
+      "material": "satin polymer and rose-tinted glass",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft rose studio light",
+      "glow": "#E6A3BA",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#C8B2D6"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Rose Quartz preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original satin polymer and rose-tinted glass hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle satin polymer and rose-tinted glass material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
