@@ -1,8 +1,8 @@
-# IMPORT SOUNDS / BANK SOUNDS — PPGU 5.0
+# IMPORT GUITAR / BANK SOUNDS — PPGU 5.1
 
 ## Главная особенность продукта
 
-**IMPORT SOUNDS — центральная функция POP PUNK GUITAR ULTIMATE.** Пользователь импортирует собственные гитарные сэмплы, multisample-наборы, SFZ-инструменты или целые банки. Плагин не просто запоминает путь к внешней папке: он проверяет исходники, сохраняет оригиналы, преобразует поддерживаемые аудиоданные в оптимизированные playback-ресурсы внутреннего формата Bank Sounds и регистрирует их в собственной библиотеке.
+**IMPORT GUITAR — центральная функция POP PUNK GUITAR ULTIMATE.** Пользователь импортирует собственные гитарные сэмплы, multisample-наборы, SFZ-инструменты или целые банки. Плагин не просто запоминает путь к внешней папке: он проверяет исходники, сохраняет оригиналы, преобразует поддерживаемые аудиоданные в оптимизированные playback-ресурсы внутреннего формата Bank Sounds и регистрирует их в собственной библиотеке.
 
 Для пользователя результат выглядит как единая библиотека **BANK SOUNDS**: импортированные банки можно находить, прослушивать, выбирать и использовать в пресетах так же, как factory-звуки. Источник остаётся сохранённым, а производные ресурсы можно пересоздать при обновлении движка.
 
@@ -10,7 +10,7 @@
 
 ## Пользовательский сценарий
 
-1. Нажать IMPORT SOUNDS и выбрать файлы, папку, ZIP или SFZ.
+1. Нажать IMPORT GUITAR и выбрать файлы, папку, ZIP или SFZ.
 2. Указать имя банка и категорию либо подтвердить предложенную классификацию.
 3. Прослушать найденные звуки и проверить назначение нот/velocity layers.
 4. Запустить импорт: исходники копируются в Original, аудио декодируется/приводится к внутреннему playback cache, карта инструмента записывается в manifest.
@@ -20,7 +20,7 @@
 Импорт не должен означать автоматическую публикацию пользовательских звуков в Factory Bank или разрешение распространять их вместе с плагином. Локальная пользовательская библиотека и redistributable factory content — два разных хранилища с разными правилами доступа.
 
 
-Status: implementation branch created from the intact `main` source tree. This document is a design/acceptance contract; it does not claim the importer is already coded.
+Status: import entry point renamed to IMPORT GUITAR and factory bank connection remains available. The full managed importer pipeline below is the implementation contract; file/folder ingestion, transactional copy, format conversion, and User Sounds indexing are still staged work and must not be represented as complete.
 
 ## Product decision: preserve originals + build an optimized Bank Sounds cache
 
@@ -72,7 +72,7 @@ Preferred cache: WAV PCM/float at the source sample rate and channel count, with
 
 ## UI acceptance
 
-The single main button is labelled IMPORT SOUNDS. It opens a modal/resizable import panel:
+The single main button is labelled IMPORT GUITAR. It opens a modal/resizable import panel:
 - Add Files, Add Folder, Add ZIP; drag-and-drop.
 - Preview selected file; format, duration, sample rate, bit depth, channels and file size.
 - Bank name and category; progress, current file, total files, cancel.
@@ -98,3 +98,52 @@ User-imported material is local/private by default and is not automatically adde
 - Audio thread remains free of disk access and blocking locks.
 - User bank survives plugin/DAW restart; Factory bank cannot be removed from UI.
 - Importing a bank does not alter version 4.0 assets or currently playing audio.
+
+## 5.1 implementation decision — keep originals, create playback cache
+
+Выбран гибридный вариант: **оригиналы сохраняются в исходном формате и в папке формата, а для движка создаётся отдельный производный playback cache только при необходимости**. Это надёжнее, чем массово перекодировать всё в один формат и терять исходную структуру SFZ.
+
+Рекомендуемая структура пользовательского банка:
+
+```text
+%LOCALAPPDATA%/L3XTOWN/POP PUNK GUITAR ULTIMATE/Library/User/<bank-id>/
+  Original/WAV/...
+  Original/AIFF/...
+  Original/FLAC/...
+  Original/OGG/...
+  Original/MP3/...
+  Original/SFZ/...
+  Cache/WAV32F/<content-id>.wav
+  Instruments/<instrument-id>.sfz
+  bank.json
+  import-report.json
+```
+
+- WAV/AIFF остаются без потерь; WAV не перекодируется без необходимости.
+- FLAC декодируется в WAV/float cache только после проверки декодера и успешного теста round-trip metadata.
+- OGG/MP3 декодируются в cache для движка; исходный lossy-файл сохраняется отдельно, повторного lossy-кодирования нет.
+- SFZ импортируется как карта инструмента: сохраняются относительные пути, key/velocity ranges, root key, round-robin/sequence и поддержанные articulation/loop данные. Нельзя превращать multisample SFZ в набор несвязанных one-shot файлов.
+- Одиночный WAV становится самостоятельным Sound Asset с назначаемой пользователем Root Key и диапазоном нот. Автоматически угадывать root key по имени файла запрещено без подтверждённого naming convention; если ключ не определён, импортёр просит назначить его.
+- Для набора отдельных WAV без SFZ создаётся черновой инструмент, но карта нот/velocity не публикуется до подтверждения пользователем.
+- Дубликаты определяются по SHA-256 и используют общий content asset; названия банков и пользовательские метаданные остаются независимыми.
+- В индекс попадает только полностью проверенный банк; отмена или ошибка откатывает staging transaction.
+- Текущий playback engine гарантированно читает WAV SFZ assets. Остальные декодеры включаются по capability test; неподдерживаемый формат отображается как «обнаружен, но пока не готов к playback», а не как успешно импортированный звук.
+
+## 5.2 User presets and Favorites
+
+Пресеты пользователя отделены от Factory Bank:
+
+```text
+%LOCALAPPDATA%/L3XTOWN/POP PUNK GUITAR ULTIMATE/Presets/
+  User/<preset-id>.ppgu.json
+  Favorites/favorites.json
+```
+
+- В браузере должны быть отдельные источники Factory, User и Favorites; фильтр не должен менять активный пресет.
+- Кнопка-звезда на выбранной карточке переключает Favorite; состояние сохраняется по стабильному preset ID, не по display name.
+- Save и Save As сохраняют полное состояние параметров, режим MELODY/PATTERN, sample asset references, FX snapshot, style/artist metadata и пользовательские теги.
+- Factory-пресет никогда не перезаписывается: Save для Factory означает Save As в User.
+- User preset ссылается на bank-id и asset-id, а не на абсолютный путь к исходнику. При отсутствующем банке браузер показывает Missing Asset и предлагает Relink.
+- Переименование/удаление User preset не удаляет Sounds Bank и не затрагивает Factory content.
+- Favorites — отдельная коллекция ссылок; удаление избранного не удаляет сам пресет.
+- JSON валидируется по schemaVersion; повреждённый файл помещается в quarantine и не блокирует запуск плагина.
