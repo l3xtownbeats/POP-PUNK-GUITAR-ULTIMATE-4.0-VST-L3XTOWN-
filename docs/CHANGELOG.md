@@ -116,3 +116,18 @@ Only mark a feature **Implemented** when code or content has actually been added
 4. For tests, record environment (Windows version, FL Studio version, plugin build, sample rate, buffer size), result, and any logs.
 5. Never mark a planned or specified feature as implemented.
 6. Do not delete earlier entries; append corrections with a new dated entry.
+
+
+## 2026-11-11 — Public product profile, repository presentation and expanded Sounds Bank catalog
+- Date: 2026-11-11
+- Version / area: Product identity, README, technical profile, Sounds Bank, licensing
+- Change: Replaced the README hero image with the approved `Cover Interface.jpg`; rewrote the public product overview and technical specifications; added direct links to the main preset bank, Sounds Bank catalog, technical profile, audit and current CI run. Added a separate detailed Sounds Bank catalog with the five source families named in the CI workflow, the confirmed 723 Meta WAV subtotal, and six clearly marked candidate libraries.
+- Change: Added the Native Instruments Session Guitarist compatibility boundary. Electric Sunburst/Vintage Deluxe can be used as separate Kontakt instruments in FL Studio; protected NI samples are not extracted, copied, repackaged or distributed in PPGU. Similar functional sounds are sourced from original or explicitly compatible libraries.
+- Preset count: 300 definitions (150 Melody + 150 Pattern) in the current primary JSON. The older v1 JSON is another 300-entry schema/version, not 300 additional unique presets; public count remains 300 until a deduplicated larger bank is committed and validated.
+- Files: `README.md`, `docs/PRODUCT_PROFILE_TECHNICAL_RU.md`, `docs/SOUND_BANK_CATALOG_RU.md`, `docs/SOUND_ASSET_SOURCES_AND_LICENSE_POLICY_RU.md`, `docs/CHANGELOG.md`, `Info.txt`.
+- Status: Documentation and catalog organization updated; NI direct sample extraction intentionally unsupported; additional library candidates are not yet downloaded or integrated.
+- Validation: Reviewed repository tree, current factory JSON files, current CI workflow and NI official product/EULA/support pages. No new audio library assets were bundled by these documentation changes.
+- Follow-up: Implement a rights-safe WAV/SFZ user-bank import workflow and metadata editor; resolve preset sampleProfile to actual installed bank manifests; validate each candidate library before adding it to CI.
+
+## 2026-11-11 — CI run #618 correction
+- The current run `42958088120` has completed compile, CTest regression suite and pluginval strictness 5 successfully. At the time of this entry, package creation and artifact upload were still in progress. This supersedes any earlier status that said the run was still configuring/building. Manual FL Studio 20 acceptance and target-system performance measurements remain outstanding.
