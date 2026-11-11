@@ -1,7 +1,7 @@
 # Журнал багов — POP-PUNK-GUITAR-ULTIMATE
 
 Дата обновления: 10 ноября 2026
-Ветка: `migration/full-copy-m3-transport-scheduler-v2`
+Ветка текущего цикла: `fix/m1-m2-m3-release-gates`
 HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 
 Статусы: **FIXED — AWAITING CI** означает, что правка внесена, но успешный актуальный build/test не подтверждён; **OPEN** — исправление или приёмка не завершены.
@@ -17,18 +17,18 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 | M3-007 | Medium | Event timing | Округление sample offset могло поставить событие раньше фактического времени у границы блока. | Используется первый sample не раньше события; добавлен near-tail test. | FIXED — AWAITING CI |
 | M3-008 | High | Pending gate capacity | Переполнение очереди NoteOff могло потерять событие и вызвать hanging note. | Увеличена bounded queue; overflow вызывает all-notes-off fail-safe; тест добавлен. | FIXED — AWAITING CI |
 | M3-009 | Medium | APVTS validation | Regex валидатора неверно экранированы и давали ложные ошибки. | Экранирование исправлено; статическая проверка ID ранее прошла. | FIXED — AWAITING CI |
-| M3-010 | High | Build verification | Промежуточные Windows CI запуски завершились failure; успешная сборка не подтверждена. | Исправления внесены; run 42769587683 ожидает завершения на момент записи. | OPEN |
+| M3-010 | High | Build verification | Ранее были промежуточные неуспешные Windows CI. | Последний полный Windows Release VST3 workflow 42864523781 на source commit fcf8c56 завершился SUCCESS: CTest, pluginval strictness 5, VST3 package и artifact upload. | FIXED — CI SUCCESS; host acceptance отдельна |
 | M3-011 | High | DAW integration | Не подтверждены playback/stop/seek/pattern transitions в FL Studio 20. | Ручной acceptance test на Windows 10 / FL Studio 20. | OPEN |
 | M3-012 | Medium | Block-size stress | Полный runtime стресс при 64–1024 samples и BPM automation не подтверждён. | Проверить CTest/DAW при разных block sizes и изменениях темпа. | OPEN |
 | M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples после ceil прижимался к последнему sample текущего блока (63), хотя первый допустимый sample 64 уже в следующем блоке. | Не clamp к blockSamples-1; bounded pending queue переносит NoteOn/NoteOff в следующий блок. Regression: defer + NoteOn@0 + NoteOff@2 и exact 60→60. Windows CI run 42772172657 / commit bdd540e: Release build, CTest, VST3 package и artifact upload SUCCESS. | FIXED — CI SUCCESS |
-| M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока сводятся к одному финальному chord snapshot; промежуточные аккорды теряются. | Общий allocation-free sample-accurate timeline walker рендерит каждый интервал до MIDI события и применяет событие в его sample; regression проверяет chord snapshots и точные границы интервалов. | FIXED IN SOURCE — AWAITING CI |
-| M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может молча отсечь события плотного pattern; нет отдельного overflow flag для output array. | Явный overflow status + all-notes-off fail-safe и regression test. | OPEN |
+| M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока могли сводиться к одному финальному chord snapshot. | Allocation-free sample-accurate timeline walker интегрирован в PluginProcessor; regression проверяет интервалы 0–16, 16–80, 80–120 и 120–160 samples с разными chord snapshots. Release build + CTest run 42864523781 SUCCESS. | FIXED — CI SUCCESS; DAW acceptance OPEN |
+| M3-015 | High | Scheduler capacity | Переполнение fixed scheduler output array могло молча отсекать события и оставлять зависшие ноты. | Scheduler выставляет outputOverflow_, consumePendingOverflow() передаёт fail-safe; PluginProcessor вызывает sampler.allNotesOff(). Dense-pattern и extreme-PPQ regression tests проверяют overflow signal. Release CTest run 42864523781 SUCCESS. | FIXED — CI SUCCESS; плотность/host stress ещё требуется |
 | M1-001 | High | State persistence | Активная sample library path/ID не входит в APVTS state; DAW restore не гарантирует возврат выбранной библиотеки. | Добавить versioned library reference и безопасное восстановление на worker thread. | OPEN |
 | M1-002 | High | State/automation acceptance | Нет автоматизированного round-trip теста параметров/state и DAW automation acceptance для текущего HEAD. | Добавить state serialization tests и проверить FL Studio automation/save/reopen. | OPEN |
-| M1-003 | High | Host validation | Pluginval и ручная FL Studio 20 acceptance не подтверждены. | Запустить pluginval strict и ручной host checklist; записать версии/настройки. | OPEN |
-| M2-001 | Critical | Sample streaming | SamplePool декодирует полные WAV в RAM; это не требуемый page streaming/lazy loading. | Подключить indexed WavPageReader + bounded PageCache к voice read path. | OPEN |
-| M2-002 | Critical | Streaming integration | PageCacheSlots/WavPageReader/MetadataIndex существуют отдельно; SamplerEngine::Voice читает полный AudioBuffer. | Реальная интеграция page request/prefetch/cache pinning в voice lifecycle. | OPEN |
-| M2-003 | High | Sample selection | Runtime round-robin и velocity crossfade не подтверждены; findRegion возвращает первый matching region. | Добавить RR groups/counters и velocity crossfade с тестами. | OPEN |
+| M1-003 | High | Host validation | Ручная FL Studio 20 acceptance не подтверждена; pluginval strictness 5 ранее не был зафиксирован для текущего цикла. | Pluginval strictness 5 и VST3 bundle прошли в run 42864523781. Открытым остаётся ручной FL Studio 20 checklist: load, MIDI, automation, save/reopen, panic и recovery. | OPEN — DAW ACCEPTANCE |
+| M2-001 | Critical | Sample streaming | Исторически SamplePool декодировал WAV целиком; требуется bounded page streaming/lazy loading. | Текущий runtime индексирует WAV metadata, публикует streaming regions; SamplerEngine voices читают через StreamingVoiceReader/page service с Hermite interpolation. Многополосный playback regression проходит CTest run 42864523781. Остались Windows mmap/OVERLAPPED и production stress acceptance. | FIXED — CI SUCCESS (core streaming path); platform/stress gates OPEN |
+| M2-002 | Critical | Streaming integration | Риск отсутствия реальной интеграции page reader в voice lifecycle. | Подтверждено в Source/Sampler/SamplePool.cpp: noteOn attaches StreamingVoiceReader, prefetches pages; render reads Hermite samples from stream service. Multi-page audible playback regression проходит CTest run 42864523781. Safe snapshot retirement/cache lifecycle остаются отдельным M2-004 gate. | FIXED — CI SUCCESS (voice-path integration) |
+| M2-003 | High | Sample selection | Velocity crossfade DSP blending не подтверждено; RR runtime требует изоляции наборов и regression coverage. | Runtime round-robin set indexing/counters и независимые sequence tests добавлены; CI coverage проходит. SFZ xfin/xfout metadata парсится и публикуется в RegionView, но одновременное DSP-смешивание velocity layers ещё не подтверждено/не закрыто. | PARTIAL — RR CI SUCCESS; CROSSFADE DSP OPEN |
 | M2-004 | High | Library lifecycle | SamplePool ограничен 1 GiB и 128 snapshots; нет безопасного unload/reload и возврата памяти. | Ввести ref-counted immutable bank snapshots и audio-safe retirement. | OPEN |
 
 ## Правила закрытия багов
@@ -167,3 +167,100 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - M4 scale-aware AutoChords/FingeringGenerator прошёл run `42843127831`; последующие integer-overflow guards требуют нового CI.
 - M5 StyleEngine foundation прошёл run `42840410645`; runtime integration остаётся открытой.
 - M1 DAW save/reopen, automation, missing-library recovery, device change и long-playback host test остаются открытыми.
+
+
+## Open integration risks — 10.11.2026
+
+- M4 scale chord generation must remain optional and must not alter the Melody one-key/one-note path.
+- FingeringGenerator currently uses a bounded greedy search; validate difficult inversions, low/high MIDI boundaries, and all guitar positions before relying on it for factory presets.
+- M5 StyleEngine currently modifies event velocity/accent only. Articulation enum is not yet connected to SFZ region selection, and strum spread/FX taste are not yet consumed by the processor.
+- M2 velocity crossfade has a passing isolated CI run but is not yet in the integration branch; verify summed crossfade level and preserve per-note voice grouping when porting.
+- The current sample-bank artifact is not evidence that new electric guitar takes were recorded. New audio needs source/license manifest and checksum.
+- The user's FL Studio report confirms plugin load and audible MIDI response only; save/reopen, project state restoration, transport, long playback and cache pressure remain unverified.
+
+
+## 10 ноября 2026 — IMP-001: importer regression expectation mismatch
+
+- При CI run 42855790840 (SHA e8f3baa9b2b85007bab085bcc046fa0dc8721280) сборка VST3 прошла до CTest; 11/12 тестов прошли.
+- Упал только ppgu_sample_library_importer_tests. Сообщение: ожидание отчёта не совпало с фактическим: Imported=3, mapped=2, needsMapping=1. Файл Unknown_take.wav не содержит note/root key в имени и был импортирован с Needs Mapping.
+- Вероятная причина — устаревшее или неверное ожидание тестового fixture относительно корректного поведения importer. Это пока гипотеза; сначала проверить fixture, assertions и классификацию, затем изменить код/тест по установленному контракту.
+- Требование исправления: тест должен проверять mapped и needsMapping отдельно, в том числе Unknown_take.wav → Needs Mapping; не подменять неизвестный root догадкой и не удалять такой файл.
+- Статус: OPEN — ROOT CAUSE REVIEW REQUIRED. Исправление не внесено, тест не закрыт.
+
+
+## IMP-001 — устаревший SFZ путь после atomic publish
+- Root cause: `report.generatedSfz` ссылался на файл внутри staging directory; после успешного directory rename staging path исчезал, а условная проверка `existsAsFile()` не перепривязывала путь к final directory.
+- Исправление: после rename путь генерируется как `finalDirectory/Imported_Instrument.sfz`, если есть хотя бы один mapped region.
+- Regression: `ppgu_sample_library_importer_tests` проверяет существование SFZ по возвращённому пути, парсит его и валидирует ссылки на samples.
+- Commit: `39626076a8ded975bdfb280a39880bad66f42b4c`.
+- Статус: **FIXED — AWAITING CI**. Не закрывать до прохождения актуального Windows build и CTest.
+
+
+## 10 ноября 2026 — актуализация по Windows VST3 workflow 42864523781
+
+- Source commit: `fcf8c56e9bea635134d00f0c7a4d4e01a4def370`; branch HEAD после документационных commits: `85a812902b236a7be287401b9a4633ece9fd99a5`.
+- Полный Windows x64 Release workflow завершился SUCCESS: build, CTest regression suite, VST3 bundle, pluginval strictness 5, package и artifact upload.
+- Исправление пути SFZ после atomic publish ранее прошло M1/M2 workflow `42860937017` на commit `39626076a8ded975bdfb280a39880bad66f42b4c`; полный workflow также проходит importer regression tests.
+- M2: streaming в production voice path и round-robin покрыты CI; velocity crossfade пока только metadata, DSP blending остаётся OPEN. Windows mmap/OVERLAPPED, safe snapshot retirement, отдельные palm-mute SFZ zones, 100-hit no-click и sustained stress остаются OPEN.
+- M3: sample-accurate chord timeline и scheduler output overflow fail-safe покрыты CTest. Ручная FL Studio 20 transport/MIDI acceptance и расширенные host stress остаются OPEN.
+- M1: pluginval strictness 5 закрыт автоматизированным CI, но DAW save/reopen, automation, library reference restore и panic acceptance остаются OPEN.
+- Ни M1, M2, ни M3 не объявляются полностью принятыми.
+
+
+## REQ-BASELINE-001 — обязательная реализация всех утверждённых требований
+
+- Дата: 10.11.2026.
+- Тип: базовое требование продукта (не дефект кода).
+- Решение пользователя: все дополнения и изменения, ранее согласованные в этой ветке, должны быть реализованы.
+- Источник полного перечня и критериев: `docs/ТЗ_ПОЛНАЯ_РЕАЛИЗАЦИЯ_СОГЛАСОВАННЫХ_ФУНКЦИЙ_RU.md`.
+- Область: importer/formats, Float32 normalization, manifest/licensing/checksum, SFZ/mapping/preview, sampler/streaming/mmap/snapshot safety, Voices/multiprocessing, Melody/Pattern, AutoChords/Fingering, Style DNA, MIDI/transport/automation, FX/acoustic, presets/banks, GUI, state restore и FL Studio 20 acceptance.
+- Статус: OPEN — REQUIREMENTS BASELINE; это не означает, что перечисленные функции реализованы.
+- Приёмка: реализация + regression tests + Windows Release/CTest + pluginval + host test по применимости. Для каждого требования вести отдельный статус и доказательства.
+- Форматный конфликт: Float32 WAV является согласованным требованием, но INFO содержит временную запись о 24-bit PCM. Проверить код и исправить несоответствие; до проверки не закрывать.
+
+
+## IMP-002 — manifest SHA-256 и аудиометаданные
+
+- Тип: улучшение целостности импортируемых библиотек.
+- Изменение: SHA-256 для исходного файла и converted WAV; source extension, sample rate, channels, frames, duration, byte sizes и hash algorithm записываются в manifest.
+- Regression: проверка вычисленных checksum, manifest metadata и NCW unsupported warning в SampleLibraryImporterTests.
+- Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI.
+- Ограничения: ещё не реализованы UI для проверки целостности/repair, полное license inventory и тестовые аудиофайлы всех decoder formats.
+
+
+## IMP-003 — OPEN — Windows compile failure при добавлении SHA-256
+- **Дата:** 10.11.2026
+- **Milestone:** M1/M2, importer integrity metadata
+- **Commit:** `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
+- **Симптом:** MSVC C2039: `SHA256` не является членом `juce` в `Source/Sampler/SampleLibraryImporter.cpp` (строка 376); последующие ошибки C3861/C2737/C3536/C2088 являются каскадными.
+- **Доказательства:** Windows workflows 42868571549 и 42868571630 завершились FAILURE на compile step; CTest и pluginval не запускались.
+- **Предполагаемая причина:** выбран API `juce::SHA256`, которого нет в используемой конфигурации/версии JUCE 7.0.12 или он не включён соответствующим заголовком. Root cause нужно подтвердить проверкой JUCE API и include/target configuration.
+- **Исправление:** выбрать доступный переносимый SHA-256 API либо добавить самостоятельную проверенную реализацию; сохранить checksum source и converted WAV. Не отключать checksum и не удалять тесты.
+- **Regression acceptance:** известный SHA-256 test vector; одинаковый результат для source/converted bytes; Windows x64 Release build; полный CTest; затем pluginval strictness 5.
+- **Статус:** OPEN.
+
+## IMP-001 — статус проверки
+IMP-001 остаётся OPEN. В runs 42868571549 и 42868571630 сборка упала до CTest, поэтому ожидаемый результат importer test (3 imported / 2 mapped / 1 NEEDS MAPPING, Unknown_take.wav без выдуманного root key) не был перепроверен. Не закрывать до прохождения соответствующего regression test.
+
+## IMP-002 — статус реализации
+SHA-256 и аудиометаданные manifest добавлены в commit `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`, но Windows compile gate не пройден из-за IMP-003. Статус: IN PROGRESS / CI BLOCKED; не считать принятым.
+
+## Последняя подтверждённая Windows CI-проверка — 11.11.2026
+
+Текущая ветка: `fix/m1-m2-m3-release-gates`  
+Проверенный HEAD: `2e9356b729e3daba6a5c62c31fed7257072c6f12` — `test(import): verify SHA-256 against known vector`.
+
+- Основной Windows VST3 workflow: [run 42871881934 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881934).
+- Дополнительный Windows VST3 M1/M2 workflow: [run 42871881954 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881954).
+- Основной workflow: Windows 2022 / MSVC x64 Release configure и VST3 build — SUCCESS; все 12 CTest regression tests — PASS (0 failed); VST3 bundle найден; pluginval strictness 5 — SUCCESS; package и artifact upload — SUCCESS.
+- Дополнительный M1/M2 workflow: APVTS audit — PASS (91 уникальный ID, обязательные M1 controls, 7 FX slots); Release VST3 build, sampler unit/integration tests, bundle verification и artifact upload — SUCCESS.
+- CTest включает SFZ parser, Pattern scheduler, Pattern/Sampler integration, SamplePool, page-cache slots, bounded SPSC queue, streaming service, sample metadata index, AutoChords, StyleEngine, SampleLibraryImporter и Mapping Editor model.
+- Importer regression на этом HEAD проверяет ровно 3 imported / 2 mapped / 1 needs mapping; SFZ содержит только две автоматически сопоставленные regions (C3 и D4), а файл без root note остаётся без автоматически придуманного ключа. Также проверяются Float32 WAV conversion, SHA-256 известный вектор, source/converted hashes в manifest, аудиометаданные и NCW warning.
+- Несколько более ранних runs со статусом `cancelled` были остановлены concurrency при новых push; это не считать failure. Исторические compile failures на HEAD `2a0f15b` исправлены и перекрыты успешными runs выше.
+
+**Границы доказанного результата:** это подтверждает зелёную автоматизированную Windows build/test/package цепочку на HEAD `2e9356b`, но не закрывает M1–M5 как milestones. Остаются отдельные runtime/stress и host acceptance gates: полное сохранение/восстановление состояния и библиотеки, FL Studio 20 automation/save-reopen и transport acceptance, M2 velocity crossfade DSP/palm-mute/audio stress, а также полная M4/M5 runtime/preset binding. M3 остаётся NOT ACCEPTED. Stage 3 (M11–M13) не запускать до формальной приёмки M1–M5.
+
+### Баги импортера после успешной проверки
+- **IMP-001 — FIXED / REGRESSION PASS:** fixture подтверждает 3/2/1, два валидных SFZ regions и отсутствие выдуманного root key для unmapped take; CTest importer test прошёл в run 42871881934.
+- **IMP-003 — FIXED / WINDOWS CI PASS:** недоступный `juce::SHA256` заменён переносимой реализацией SHA-256; известный вектор `abc` проверяется регрессионным тестом; Windows build прошёл.
+- **IMP-002 — IMPLEMENTED / WINDOWS CI PASS:** manifest source/converted SHA-256 и аудиометаданные проверяются importer regression test. Это не означает, что все возможные внешние decoder files и license provenance уже прошли полноценную проверку.

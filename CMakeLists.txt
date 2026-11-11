@@ -46,6 +46,9 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginProcessor.h
     Source/PluginEditor.cpp
     Source/PluginEditor.h
+    Source/Sampler/SampleLibraryImporter.cpp
+    Source/Sampler/MappingEditorModel.cpp
+    Source/Sampler/SampleLibraryImporter.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
@@ -66,6 +69,9 @@ target_compile_definitions(PopPunkGuitarUltimate PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_USE_FLAC=1
+    JUCE_USE_OGGVORBIS=1
+    JUCE_USE_MP3AUDIOFORMAT=1
 )
 
 target_link_libraries(PopPunkGuitarUltimate PRIVATE
@@ -219,4 +225,50 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
+endif()
+
+
+# M4 AutoChords/Fingering and M5 Style DNA regression suites.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chords_tests tests/AutoChordsTests.cpp)
+    target_include_directories(ppgu_auto_chords_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chords_tests COMMAND ppgu_auto_chords_tests)
+
+    add_executable(ppgu_style_engine_tests tests/StyleEngineTests.cpp)
+    target_include_directories(ppgu_style_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_style_engine_tests COMMAND ppgu_style_engine_tests)
+endif()
+
+
+# Audio library import regression tests: WAV + AIFF conversion, manifest and SFZ mapping.
+if(BUILD_TESTING)
+    add_executable(ppgu_sample_library_importer_tests
+        Source/Sampler/SampleLibraryImporter.cpp
+        Source/Sampler/SfzParser.cpp
+        tests/SampleLibraryImporterTests.cpp
+    )
+    target_include_directories(ppgu_sample_library_importer_tests PRIVATE Source/Sampler)
+    target_compile_definitions(ppgu_sample_library_importer_tests PRIVATE
+        JUCE_USE_FLAC=1
+        JUCE_USE_OGGVORBIS=1
+        JUCE_USE_MP3AUDIOFORMAT=1
+    )
+    target_link_libraries(ppgu_sample_library_importer_tests PRIVATE
+        juce::juce_audio_formats
+        juce::juce_audio_basics
+        juce::juce_core
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_sample_library_importer_tests COMMAND ppgu_sample_library_importer_tests)
+endif()
+
+# Editable key/velocity mapping and round-robin selection regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_mapping_editor_model_tests
+        Source/Sampler/MappingEditorModel.cpp
+        tests/MappingEditorModelTests.cpp
+    )
+    target_include_directories(ppgu_mapping_editor_model_tests PRIVATE Source/Sampler)
+    add_test(NAME ppgu_mapping_editor_model_tests COMMAND ppgu_mapping_editor_model_tests)
 endif()

@@ -1093,3 +1093,100 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 
 
 2026-11-10 — SFZ session persistence: `getStateInformation` stores `sfzFilePath` alongside APVTS state. `setStateInformation` restores an existing SFZ through the worker pool, and missing paths do not prevent parameter restoration. Shared path access is protected by `juce::CriticalSection`. Static validator now guards the serialization/restore route. Status: source fix committed; Windows CI/CTest and FL Studio 20 host validation pending.
+
+
+## 10 ноября 2026 — ускорение работ и единая главная страница статуса
+
+По решению пользователя все изменения и актуальный статус должны отражаться на главной странице разработки README.md. README теперь содержит трёхэтапную модель M1–M5 / M6–M10 / M11–M13 и ссылки на четыре постоянных журнала. Это не заменяет подробные записи: README — краткая актуальная витрина статуса, jurnal.md — хронология, Info.txt — единый сквозной контекст, docs/ЖУРНАЛ_БАГОВ_RU.md — реестр дефектов, docs/WORK_LOG_M1_M5_INTEGRATION_RU.md — технический work log.
+
+Ускорение процесса: группировать связанные правки и regression tests в один небольшой commit; параллельно выполнять только низкорисковые подготовительные задачи этапа 2; не запускать конкурирующие тяжёлые CI/stress jobs во время критических проверок этапа 1; после каждого code change запускать целевой тест, затем общий Windows Release/CTest. Не отключать тесты и не ослаблять критерии ради скорости.
+
+CI факт на момент записи: run 42855790840 на SHA e8f3baa завершился FAILURE на шаге sampler tests. Единственный упавший тест — ppgu_sample_library_importer_tests: отчёт ожидал другую классификацию файлов; фактический отчёт Imported=3, mapped=2, needsMapping=1, Unknown_take.wav корректно оставлен для ручного mapping. Требуется проверить fixture/ожидание теста против фактического контракта импортера и добавить точную regression-проверку. Run 42855790775 отменён concurrency при следующем push. Workflow 42856503154 на коммите bd6c703 выполняется; результат ещё не подтверждён.
+
+Новая структура рабочего процесса зафиксирована в README и docs/M6_M13_IMPLEMENTATION_ACCEPTANCE_RU.md. Текущий этап — Stage 1; M1–M5 не объявлять завершёнными до закрытия тестов и host acceptance.
+
+
+2026-11-10 — добавлен единый документ `docs/ПОЛНОЕ_ОПИСАНИЕ_ФУНКЦИЙ_И_ИЗМЕНЕНИЙ_ВЕТКИ_RU.md`. В нём сведены согласованные требования и отдельно помечено, что подтверждено исходниками, а что остаётся требованием/открытой приёмкой. Подробно описаны импорт WAV/AIFF/AIF/FLAC/OGG/MP3 → Float32 WAV, NCW как неподдерживаемый формат, SFZ/root-key mapping, manifest, пользовательские банки, лицензирование, Melody/Pattern, параметры, FX, производительность и этапы M1–M13. Ссылка добавлена в README. Документ не объявляет незавершённые функции принятыми.
+
+
+## 10 ноября 2026 — полный Windows VST3 CI прошёл; аудит статусов M1–M3 уточнён
+
+- Рабочая ветка: `fix/m1-m2-m3-release-gates`; актуальный HEAD после документационных commits: `85a812902b236a7be287401b9a4633ece9fd99a5`.
+- Последний полный workflow: [42864523781](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42864523781), проверенный source commit `fcf8c56e9bea635134d00f0c7a4d4e01a4def370`, итог **SUCCESS**.
+- Windows x64 Release build, полный CTest, VST3 bundle, pluginval strictness 5, package и upload artifact прошли. Артефакт: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS`, 1,664,274,603 bytes, SHA-256 `60beff58172b24e118c469e16fe38cf34e1aadfbd4119c262cb1966c9ae267bf`.
+- M2: подтверждён production streaming voice path (StreamingVoiceReader, worker page service, Hermite read), audible multi-page playback tests и round-robin tests. Не закрыты mmap/OVERLAPPED, snapshot retirement, velocity crossfade DSP, palm-mute zones, 100-hit no-click и долгие stress tests.
+- M3: подтверждены processor sample-accurate MIDI timeline, несколько chord transitions внутри блока и output-overflow all-notes-off fail-safe; соответствующие regressions прошли CTest. Полная ручная FL Studio 20 transport/MIDI acceptance остаётся открытой.
+- M1: pluginval strictness 5 прошёл. DAW save/reopen, state/library restore, automation, panic и host acceptance остаются открытыми.
+- Исправление пути SFZ после atomic publish прошло M1/M2 workflow `42860937017` на commit `39626076a8ded975bdfb280a39880bad66f42b4c`.
+- **Итог:** автоматический build/test/package gate пройден, но M1–M3 не приняты. README.md обновлён как главная страница; журнал багов и полное описание функций синхронизированы с фактическим состоянием кода.
+
+
+## 10 ноября 2026 — обязательное ТЗ на реализацию всего согласованного объёма
+
+По прямому подтверждению пользователя всё ранее согласованное в этой ветке — не справочный wishlist, а обязательный объём конечного продукта. Создан документ `docs/ТЗ_ПОЛНАЯ_РЕАЛИЗАЦИЯ_СОГЛАСОВАННЫХ_ФУНКЦИЙ_RU.md`. Он охватывает импорт WAV/AIFF/AIF/FLAC/OGG/MP3, NCW warning, Float32 WAV conversion, manifest/checksum/licensing, SFZ/mapping/editor/preview, sampler/streaming/mmap/OVERLAPPED/snapshot safety, Voices/multiprocessing, Melody/Pattern, AutoChords/Fingering, Style DNA, MIDI/transport/automation, FX, acoustic profile, 300 factory presets, bank formats, GUI, state restore и FL Studio 20 acceptance.
+
+Обязательное правило: каждый утверждённый пункт должен быть реализован и пройти тесты/CI/host acceptance по применимости. Документация не равна реализации; параметр/класс/кнопка без end-to-end результата не считается готовой функцией. README остаётся главной страницей статуса; все существенные решения, утверждения, изменения и результаты вносить в README, jurnal.md, Info.txt, bug/requirements journal и M1–M5 work log. Новые утверждённые предложения получать ID и попадать в backlog, чтобы ничего не потерялось.
+
+Важная открытая сверка: согласованное требование импорта — IEEE Float 32-bit WAV, но более поздняя техническая запись в Info/work log упоминает временный переход на 24-bit PCM из-за JUCE API compatibility. Не считать форматный пункт закрытым: проверить реальный writer и привести реализацию/тесты к утверждённому Float32 либо вынести альтернативу на явное согласование. Текущий runtime/CI статус не изменён этой документационной фиксацией; M1–M5 остаются по фактическим gates.
+
+
+## 10 ноября 2026 — IMP-002: контрольные суммы и метаданные импорта
+
+- В importer добавлен SHA-256 исходного файла и конвертированного WAV для каждой успешно импортированной записи manifest.
+- Manifest теперь фиксирует алгоритм checksum, исходное расширение, sample rate, число каналов, количество frames и duration, а также source/converted byte sizes.
+- Хеширование выполняется во время фонового импорта; аудиопоток не затрагивается.
+- Расширен regression test: проверяются присутствие и фактическое совпадение SHA-256 для source/converted sample, аудиометаданные manifest и предупреждение об отклонении NCW.
+- Статус: IMPLEMENTED IN SOURCE / AWAITING WINDOWS CI. Проверка не закрывает поддержку реальных FLAC/OGG/MP3 fixture playback, Mapping Editor и license verification.
+
+
+## Обновление журнала — 10 ноября 2026
+
+### Подтверждённый порядок производства
+- M1–M5 — главная линия и максимальный приоритет.
+- M6–M10 — параллельно только небольшие, изолированные подготовительные задачи, не мешающие сборке и проверкам M1–M5.
+- M11–M13 — полноценный запуск после подтверждённого завершения M1–M5.
+- Связанные изменения, regression tests и документацию объединять в компактные пакеты.
+- Каждую обнаруженную ошибку регистрировать отдельным ID; после исправления фиксировать commit SHA, тесты и фактический результат CI.
+- Проверки не отключать, не ослаблять и не обходить ради ускорения.
+
+### Текущее состояние ветки
+Ветка: `fix/m1-m2-m3-release-gates`
+HEAD на момент записи: `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
+Последний пакет IMP-002 добавляет SHA-256 исходного и преобразованного sample в manifest, а также source format и аудиометаданные. Этот пакет пока НЕ принят: Windows CI на указанном HEAD завершился ошибкой компиляции до запуска CTest.
+
+### CI: фактический результат на HEAD
+- Workflow **POP PUNK GUITAR ULTIMATE - Windows VST3**, run [42868571549](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571549): **FAILURE** на шаге Build VST3 and test executables.
+- Workflow **PPGU v33 M1 + M2 Windows VST3**, run [42868571630](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571630): **FAILURE** на шаге Build Release VST3.
+- Оба запуска остановились на компиляции `Source/Sampler/SampleLibraryImporter.cpp`: MSVC сообщает `juce::SHA256` не является членом `juce` (C2039), затем связанные ошибки идентификатора/инициализации. Следовательно, CTest, VST3 bundle verification, pluginval и packaging в этих запусках были пропущены.
+- APVTS static audit в run 42868571630 прошёл: 91 уникальный статически объявленный ID, обязательные M1 controls присутствуют, 7 FX slots generated. Это не заменяет сборку.
+- Предыдущий run [42868018452](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868018452) отменён после нового push; это cancellation, не отдельная ошибка компиляции.
+- Последний успешный Windows baseline [42866520657](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42866520657) относится к более раннему commit `b6653ebd9ffe3a1b6e92ef42a85aec03775c9ab7`, поэтому не подтверждает HEAD `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`.
+
+### Баги и следующие действия
+- **IMP-001 — OPEN / NOT RE-VERIFIED:** несовпадение ожиданий теста импортера. Ожидаемое корректное поведение: 3 импортированных файла, 2 автоматически mapped, 1 NEEDS MAPPING; `Unknown_take.wav` не должен получать выдуманный root key. На HEAD 2a0f15b CTest не стартовал, поэтому IMP-001 нельзя закрыть.
+- **IMP-003 — OPEN:** Windows build break при вычислении SHA-256: используется недоступный в текущем JUCE build символ `juce::SHA256`. Требуется выбрать реально доступный и переносимый SHA-256 API/реализацию, добавить тесты checksum и повторить полный Windows Release build + CTest. Нельзя маскировать проблему отключением checksum или тестов.
+- IMP-002 остаётся **IN PROGRESS / CI BLOCKED** до исправления IMP-003 и прохождения regression tests.
+
+### Статус приёмки
+Ни M1, ни M2, ни M3, ни весь этап M1–M5 не объявляются завершёнными на основании этих запусков. После исправления требуется новый commit, полный Windows CI, CTest, pluginval strictness 5 и отдельная ручная проверка FL Studio 20 для host-visible поведения.
+
+
+## Последняя подтверждённая Windows CI-проверка — 11.11.2026
+
+Текущая ветка: `fix/m1-m2-m3-release-gates`  
+Проверенный HEAD: `2e9356b729e3daba6a5c62c31fed7257072c6f12` — `test(import): verify SHA-256 against known vector`.
+
+- Основной Windows VST3 workflow: [run 42871881934 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881934).
+- Дополнительный Windows VST3 M1/M2 workflow: [run 42871881954 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881954).
+- Основной workflow: Windows 2022 / MSVC x64 Release configure и VST3 build — SUCCESS; все 12 CTest regression tests — PASS (0 failed); VST3 bundle найден; pluginval strictness 5 — SUCCESS; package и artifact upload — SUCCESS.
+- Дополнительный M1/M2 workflow: APVTS audit — PASS (91 уникальный ID, обязательные M1 controls, 7 FX slots); Release VST3 build, sampler unit/integration tests, bundle verification и artifact upload — SUCCESS.
+- CTest включает SFZ parser, Pattern scheduler, Pattern/Sampler integration, SamplePool, page-cache slots, bounded SPSC queue, streaming service, sample metadata index, AutoChords, StyleEngine, SampleLibraryImporter и Mapping Editor model.
+- Importer regression на этом HEAD проверяет ровно 3 imported / 2 mapped / 1 needs mapping; SFZ содержит только две автоматически сопоставленные regions (C3 и D4), а файл без root note остаётся без автоматически придуманного ключа. Также проверяются Float32 WAV conversion, SHA-256 известный вектор, source/converted hashes в manifest, аудиометаданные и NCW warning.
+- Несколько более ранних runs со статусом `cancelled` были остановлены concurrency при новых push; это не считать failure. Исторические compile failures на HEAD `2a0f15b` исправлены и перекрыты успешными runs выше.
+
+**Границы доказанного результата:** это подтверждает зелёную автоматизированную Windows build/test/package цепочку на HEAD `2e9356b`, но не закрывает M1–M5 как milestones. Остаются отдельные runtime/stress и host acceptance gates: полное сохранение/восстановление состояния и библиотеки, FL Studio 20 automation/save-reopen и transport acceptance, M2 velocity crossfade DSP/palm-mute/audio stress, а также полная M4/M5 runtime/preset binding. M3 остаётся NOT ACCEPTED. Stage 3 (M11–M13) не запускать до формальной приёмки M1–M5.
+
+### Баги импортера после успешной проверки
+- **IMP-001 — FIXED / REGRESSION PASS:** fixture подтверждает 3/2/1, два валидных SFZ regions и отсутствие выдуманного root key для unmapped take; CTest importer test прошёл в run 42871881934.
+- **IMP-003 — FIXED / WINDOWS CI PASS:** недоступный `juce::SHA256` заменён переносимой реализацией SHA-256; известный вектор `abc` проверяется регрессионным тестом; Windows build прошёл.
+- **IMP-002 — IMPLEMENTED / WINDOWS CI PASS:** manifest source/converted SHA-256 и аудиометаданные проверяются importer regression test. Это не означает, что все возможные внешние decoder files и license provenance уже прошли полноценную проверку.

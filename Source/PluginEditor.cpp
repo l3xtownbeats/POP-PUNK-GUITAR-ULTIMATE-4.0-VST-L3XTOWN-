@@ -91,6 +91,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
+    importButton.setColour(juce::TextButton::buttonColourId, panel2);
+    importButton.setColour(juce::TextButton::textColourOffId, pale);
+    importButton.setTooltip("Import audio samples: WAV, AIFF/AIF, FLAC, OGG Vorbis and MP3. NCW requires conversion from Kontakt to WAV/AIFF first.");
+    importButton.onClick = [this] { chooseAudioLibraryFolder(); };
+    addAndMakeVisible(importButton);
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
@@ -251,6 +256,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
     categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
     loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
+    importButton.setBounds(top.removeFromRight(142).reduced(2, 5));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(220);
     auto tabs=area.removeFromTop(62);
@@ -333,6 +339,62 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else
         statusLabel.setText("MELODY TONE: " + preset.soundCharacter + "  /  ONE KEY = ONE NOTE  /  LOAD A LICENSED SFZ BANK", juce::dontSendNotification);
 }
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseAudioLibraryFolder()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Import Sounds - choose a folder with audio samples",
+        juce::File::getSpecialLocation(juce::File::userHomeDirectory));
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode
+        | juce::FileBrowserComponent::canSelectDirectories,
+        [safeThis](const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr) return;
+            const auto selected = chooser.getResult();
+            if (!selected.isDirectory()) return;
+
+            safeThis->loadButton.setEnabled(false);
+            safeThis->importButton.setEnabled(false);
+            safeThis->statusLabel.setText(
+                "SCANNING + CONVERTING AUDIO IN BACKGROUND...", juce::dontSendNotification);
+            safeThis->processor.importAudioDirectoryAsync(selected,
+                [safeThis](ppgu::sampler::LibraryImportReport imported,
+                          ppgu::sampler::LoadReport loaded)
+                {
+                    if (safeThis == nullptr) return;
+                    safeThis->loadButton.setEnabled(true);
+                    safeThis->importButton.setEnabled(true);
+
+                    if (!imported.success)
+                    {
+                        const auto message = imported.errors.empty()
+                            ? juce::String("AUDIO IMPORT FAILED")
+                            : juce::String(imported.errors.front());
+                        safeThis->statusLabel.setText(message, juce::dontSendNotification);
+                        return;
+                    }
+
+                    if (imported.activated && loaded.success)
+                    {
+                        safeThis->statusLabel.setText(
+                            "BANK READY  /  " + juce::String(static_cast<int>(imported.importedFiles))
+                            + " FILES  /  " + juce::String(static_cast<int>(loaded.loadedRegions))
+                            + " MAPPED REGIONS  /  FLOAT WAV",
+                            juce::dontSendNotification);
+                    }
+                    else
+                    {
+                        safeThis->statusLabel.setText(
+                            "IMPORTED " + juce::String(static_cast<int>(imported.importedFiles))
+                            + " FILES  /  " + juce::String(static_cast<int>(imported.needsMapping))
+                            + " NEED KEY MAPPING  /  BANK: "
+                            + imported.libraryDirectory.getFileName(),
+                            juce::dontSendNotification);
+                    }
+                });
+        });
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {
     fileChooser=std::make_unique<juce::FileChooser>("Choose an SFZ guitar instrument",juce::File::getSpecialLocation(juce::File::userHomeDirectory),"*.sfz");

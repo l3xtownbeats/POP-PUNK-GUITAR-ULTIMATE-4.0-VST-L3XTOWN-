@@ -46,3 +46,32 @@ M1–M5 остаются главным релизным потоком. M6–M1
 4. unified Windows x64 Release + full CTest + VST3 locate + Pluginval strictness 5 + package run не пройдёт.
 
 После CI можно перенести только проверенные коммиты валидаторов и документации; не делать merge M6–M13 как будто это готовые runtime features.
+
+
+## CI/PR snapshot — 11.11.2026
+
+| Target | Current head | Windows workflow | Gate result | PR state |
+|---|---|---|---|---|
+| M1–M3 integration | `98d7c65f86427449cbd83968306f0388054b1aa3` | [42963660168](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42963660168) | Release configure/build, CTest, VST3 locate, Pluginval 5, cached library/license validation, package/upload: PASS | Base CI green |
+| M4 PR #4 | `30e970f657fdeb6ee229004e9022149ed948b50b` | [42844161921](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42844161921) | All listed Windows gates: PASS on exact head | Draft; dirty base conflict |
+| M5 PR #3 | `0cc36c7455edb3adcc5bde1f5bd690c831acf3cb` | [42840410645](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42840410645) | All listed Windows gates: PASS on exact head | Draft; dirty against main |
+| M2 velocity PR #5 | `ef1ee5b04c3dc6653f749d7602b92a683253d059` | [42843931173](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42843931173) | All listed Windows gates: PASS on exact head | Draft; mergeable clean |
+| M6–M13 PR #6 | `79df94351ccfee7b5e12b02608d6f98194cdb3ae` | [42879024401](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42879024401) | All listed Windows gates: PASS on exact head | Draft; dirty against current integration |
+
+Main HEAD `cf851de3b6d63a19080d319cedd404e7e0440789` run [42996098554](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42996098554) had passed configure/build, full CTest, VST3 locate and Pluginval 5; package was still running and upload pending at snapshot time. Do not record final success until completion.
+
+### Reviewed PR #6 diff
+Exactly six paths: this audit, the M13 clean-install checklist, bank-library requirements, M1–M5 work log, factory-bank validator and portable-preset validator. No active DSP/Processor source is included. The integration branch has newer content in the bank-library and work-log files; those changes must be retained during refresh. The validator files were unchanged on integration relative to PR #6's base. PR #6 validator does not yet include the M5 Photographs assertion from PR #3, so combine the checks when M5 is integrated.
+
+### Integration decision
+Do not merge while PR #6 is dirty. Refresh its head on current integration without force-push, preserve newer documentation, then require a new full Windows workflow on that refreshed SHA. PR #3 and #4 remain blocked by dirty base state; PR #5 is independently green and clean but remains unmerged. No runtime milestone is closed by these validator/docs checks.
+
+### Runtime gates still open
+- M6: articulation-to-sample routing and MIDI note-on/note-off lifecycle.
+- M8: real redistributable/user libraries and sustained streaming-cache stress.
+- M9: StyleEngine runtime binding to Pattern scheduler and sample groups.
+- M10: UI/FX parameter-to-control-to-processor QA.
+- M11: actual browser, import/export, favorites and MIDI Learn behavior.
+- M13: clean Windows 10 x64 installation and performance smoke test in FL Studio 20.
+
+The Windows CI package run restores the cached redistributable sample library and validates its manifest/licenses; the library-download step is skipped. This is not evidence that new external libraries were downloaded. CI is not a substitute for manual FL Studio 20 validation.

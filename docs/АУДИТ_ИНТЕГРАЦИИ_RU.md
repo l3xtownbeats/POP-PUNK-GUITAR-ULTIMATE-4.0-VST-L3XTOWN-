@@ -119,3 +119,57 @@ Run 42704820544 прошёл этапы:
 - M4 algorithmic AutoChords/FingeringGenerator foundation прошёл CI; последние overflow guards ждут повторной проверки.
 - M5 StyleEngine foundation прошёл CI; runtime pipeline/UI integration отсутствует.
 - Ни один из этих результатов не заменяет ручную проверку FL Studio 20. Подробная схема M2 описана в `M2_VELOCITY_CROSSFADE_DESIGN_RU.md`.
+
+
+## Интеграционный аудит — 10.11.2026 (M1–M5)
+
+| Модуль | Текущий статус | Что подтверждено | Что остаётся |
+|---|---|---|---|
+| M1 State / sample load | Частично подтверждён | CI на интеграционной ветке; пользователь подтвердил FL Studio 20 load + MIDI audible output | Save/reopen проекта, state restore, reload/missing library, automation, device change |
+| M2 Streaming | Частично подтверждён | Streaming/cache regression и отдельный M2 velocity crossfade PR CI pass | Crossfade ещё не перенесён в интеграционную ветку; summed midpoint/audio test, palm-mute sample routing, stress/no-alloc proof |
+| M3 Pattern scheduler | Частично подтверждён | Scheduler tests и Pattern→Sampler generated WAV integration test; базовый FL Studio audible output | Полный host transport/seek/loop и длительная DAW проверка |
+| M4 AutoChords | Runtime binding pass 1 | Scale-aware major/minor chord generation и bounded guitar fingering подключены к Pattern single-note chord-root path; тестовый target добавлен | Свежий CI, MIDI mapping UX/state, edge cases, chord transitions and end-to-end coverage |
+| M5 Style Engine | Runtime binding pass 1 | Deterministic velocity/beat accent transform подключён к Pattern dispatch; test target added | Palm/legato sample routing, bounded strum offsets, FX binding, preset StyleDNA mapping and end-to-end tests |
+
+**Merge gate:** не объединять отдельные PR в release/main до прохождения текущих head CI и общей сборки на одном SHA: Windows x64 Release, все CTest, VST3 locate, pluginval strictness 5, sample/license validation, package/artifact. После этого — ручной FL Studio 20 smoke/extended test и фиксация результата.
+
+
+## Новый функциональный модуль — User Audio Import (MVP), 10.11.2026
+
+| Элемент | Состояние |
+|---|---|
+| UI import folder button | Код добавлен, ожидает CI |
+| Recursive scan + decoder detection | Код добавлен, JUCE Basic AudioFormatManager |
+| Internal format conversion | IEEE float32 WAV, chunked worker decode |
+| Root note filename auto-map | Базовый C3/D4-style note token → one-key SFZ region |
+| Unmapped samples | Сохраняются в BANK manifest, ждут Mapping Editor |
+| Manifest / license reminder | Добавлено |
+| Staging / no overwrite | Добавлено |
+| WAV + AIFF tests | Добавлены, ожидают CI |
+| FLAC / Ogg / MP3 | Не заявлять до подтверждения декодеров в конкретной сборке |
+| Preview / Mapping Editor / velocity zones / RR / ZIP | Ещё не реализовано |
+
+Gate: успешная компиляция importer + теста, полный CTest, Windows VST3 build, Pluginval 5, затем ручная проверка Import Audio в FL Studio 20. До этого — implementation pending CI.
+
+
+## Import Sounds CI correction — 10.11.2026
+
+Первый importer CI run 42850028356 failed на несовместимом JUCE writer Options API, вызове reader read(), преобразованиях строк и несуществующем TextButton::outlineColourId. Исправлено: 24-bit PCM writer через поддерживаемый overload, AudioBuffer read overload, явные JUCE string conversions, удалён неподдерживаемый colour ID. Повторный CI обязателен.
+
+## Audio import format matrix — update 10.11.2026
+
+| Формат | Статус в коде |
+|---|---|
+| WAV | Поддержка через JUCE decoder |
+| AIFF / AIF | Поддержка через JUCE decoder |
+| FLAC | Decoder включён флагом JUCE_USE_FLAC=1; ожидает CI |
+| OGG Vorbis | Decoder включён флагом JUCE_USE_OGGVORBIS=1; ожидает CI |
+| MP3 | Decoder включён флагом JUCE_USE_MP3AUDIOFORMAT=1; ожидает CI |
+| NCW | Не декодируется напрямую; распознаётся и сообщает об экспорте из Kontakt в WAV/AIFF |
+
+Тест импортёра теперь проверяет регистрацию WAV, AIFF, AIF, FLAC, OGG и MP3 в AudioFormatManager. Прямая поддержка NCW не заявляется: для неё нужен отдельный decoder и валидация на реальных файлах.
+
+
+## Решение по NCW — 10.11.2026
+
+Прямой импорт NCW исключён из объёма PPGU 4.0 по решению пользователя. Не разрабатывать NCW decoder. Поддерживаемая матрица BANK SAMPLES: WAV, AIFF/AIF, FLAC, OGG Vorbis, MP3.

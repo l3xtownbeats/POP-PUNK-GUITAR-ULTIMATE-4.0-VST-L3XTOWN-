@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Performance/ChordTransitionTimeline.h"
+#include "Performance/AutoChords.h"
+#include "Performance/StyleEngine.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
@@ -129,6 +131,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("compressorRatio", "Compressor Ratio", 1.0f, 20.0f, 3.0f, 0.1f));
     p.add(floatParameter("compressorAttack", "Compressor Attack", 0.1f, 100.0f, 10.0f, 0.1f));
     p.add(floatParameter("compressorRelease", "Compressor Release", 5.0f, 1000.0f, 120.0f, 0.1f));
+    p.add(floatParameter("parallelCompMix", "Parallel Compression Mix", 0.0f, 1.0f, 0.35f));
     p.add(floatParameter("eqLowFreq", "EQ Low Frequency", 20.0f, 500.0f, 100.0f, 1.0f));
     p.add(floatParameter("eqMidFreq", "EQ Mid Frequency", 100.0f, 8000.0f, 1000.0f, 1.0f));
     p.add(floatParameter("eqMidQ", "EQ Mid Q", 0.1f, 10.0f, 1.0f, 0.01f));
@@ -406,6 +409,32 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // M4: in Pattern mode, a single held key can act as a scale-aware
+            // chord root. Chromatic mode preserves the legacy single-note behavior.
+            if (count == 1
+                && parameters.getRawParameterValue("singleMidiNoteAsChordRoot")->load(std::memory_order_relaxed) > 0.5f)
+            {
+                const int scaleMode = juce::jlimit(0, 2,
+                    juce::roundToInt(parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
+                if (scaleMode > 0)
+                {
+                    const int tonic = juce::jlimit(0, 11,
+                        juce::roundToInt(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
+                    const auto mode = scaleMode == 1
+                        ? ppgu::performance::ScaleMode::Major
+                        : ppgu::performance::ScaleMode::NaturalMinor;
+                    const auto chord = ppgu::performance::AutoChordMap::generateScaleChord(
+                        notes[0], tonic, mode);
+                    const auto fingering = ppgu::performance::FingeringGenerator::generate(chord, 15);
+                    if (chord.count > 0 && fingering.complete)
+                    {
+                        notes.fill(-1);
+                        count = 0;
+                        for (std::size_t i = 0; i < fingering.count && i < notes.size(); ++i)
+                            notes[static_cast<std::size_t>(count++)] = fingering.positions[i].midiNote;
+                    }
+                }
+            }
             return std::make_tuple(notes, count, channel);
         };
 
@@ -492,11 +521,31 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 if (event.kind == ppgu::performance::EventKind::NoteOn)
                 {
                     if (velocityScale <= 0.0f) continue;
-                    const float normalizedVelocity = juce::jlimit<float>(0.0f, 1.0f, static_cast<float>(event.velocity) / 127.0f);
+                    // M5: deterministic Style DNA transforms accents/velocity on
+                    // the audio thread using fixed data only. Articulation routing to
+                    // dedicated palm/legato sample groups remains a separate gate.
+                    ppgu::performance::StyleDNA dna;
+                    dna.chugDensity = parameters.getRawParameterValue("dnaChugDensity")->load(std::memory_order_relaxed);
+                    const float legatoProbability = parameters.getRawParameterValue("dnaHammerPullProbability")->load(std::memory_order_relaxed);
+                    dna.hammerOnProbability = legatoProbability;
+                    dna.pullOffProbability = legatoProbability;
+                    dna.stringSpreadMs = parameters.getRawParameterValue("dnaStringSpread")->load(std::memory_order_relaxed) * 20.0f;
+                    const float beatAccent = parameters.getRawParameterValue("dnaBeatAccent")->load(std::memory_order_relaxed);
+                    dna.downbeatAccent = 1.0f + beatAccent * 0.35f;
+                    dna.backbeatAccent = 1.0f + beatAccent * 0.18f;
+                    dna.offbeatAccent = 1.0f - beatAccent * 0.10f;
+                    dna.fxTaste = parameters.getRawParameterValue("dnaFxTaste")->load(std::memory_order_relaxed);
+                    const double eventPpq = intervalClock.startPpq
+                        + static_cast<double>(event.sampleOffset) * ppqPerSample;
+                    const double beatInBar = std::fmod(std::max(0.0, eventPpq), 4.0);
+                    const auto styled = ppgu::performance::StyleEngine::process(dna,
+                        { beatInBar, 0.20, event.note, event.velocity, event.channel,
+                          static_cast<std::uint32_t>(i), false, true, true });
+                    const float normalizedVelocity = juce::jlimit<float>(0.0f, 1.0f, static_cast<float>(styled.velocity) / 127.0f);
                     const float dynamics = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
                     const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                     const int scaledVelocity = juce::jlimit(1, 127, juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                    const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices, event.channel, globalTuningSemitones);
+                    const bool triggered = sampler.noteOn(styled.note, scaledVelocity, maximumVoices, styled.channel, globalTuningSemitones);
                     juce::ignoreUnused(triggered);
                 }
                 else sampler.noteOff(event.note, event.channel);
@@ -576,6 +625,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
         const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
         const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
+        const float parallelMix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("parallelCompMix")->load(std::memory_order_relaxed));
         const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
         const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -584,13 +634,15 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             auto& envelope = compressorEnvelope[static_cast<size_t>(channel)];
             for (int sample = 0; sample < samples; ++sample)
             {
-                const float level = std::abs(data[sample]);
+                const float dry = data[sample];
+                const float level = std::abs(dry);
                 const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
                 envelope = coefficient * envelope + (1.0f - coefficient) * level;
                 const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
                 const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
                 const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                data[sample] *= gain;
+                const float compressed = dry * gain;
+                data[sample] = dry + (compressed - dry) * parallelMix;
             }
         }
     }
@@ -868,6 +920,50 @@ ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const
         currentSfzFilePath = sfzFile.getFullPathName();
     }
     return report;
+}
+
+void PopPunkGuitarUltimateAudioProcessor::importAudioDirectoryAsync(
+    const juce::File& sourceDirectory,
+    std::function<void(ppgu::sampler::LibraryImportReport, ppgu::sampler::LoadReport)> completion)
+{
+    const auto generationState = sampleLoadGeneration;
+    const auto generation = generationState->fetch_add(1, std::memory_order_acq_rel) + 1;
+    sampleLoadPool.addJob([this, sourceDirectory, completion = std::move(completion),
+                           generationState, generation]() mutable
+    {
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
+        const auto librariesRoot = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
+            .getChildFile("L3XTOWN").getChildFile("POP PUNK GUITAR ULTIMATE")
+            .getChildFile("Libraries");
+        ppgu::sampler::SampleLibraryImporter importer;
+        auto importReport = importer.importDirectory(sourceDirectory, librariesRoot);
+        ppgu::sampler::LoadReport loadReport;
+
+        if (generationState->load(std::memory_order_acquire) == generation
+            && importReport.success && importReport.generatedSfz.existsAsFile())
+        {
+            loadReport = sampler.loadSfz(importReport.generatedSfz, generationState.get(), generation);
+            if (generationState->load(std::memory_order_acquire) == generation && loadReport.success)
+            {
+                importReport.activated = true;
+                const juce::ScopedLock lock(sampleStateLock);
+                currentSfzFilePath = importReport.generatedSfz.getFullPathName();
+            }
+        }
+
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+
+        juce::MessageManager::callAsync(
+            [completion = std::move(completion), importReport = std::move(importReport),
+             loadReport = std::move(loadReport), generationState, generation]() mutable
+            {
+                if (generationState->load(std::memory_order_acquire) == generation && completion)
+                    completion(std::move(importReport), std::move(loadReport));
+            });
+    });
 }
 
 juce::String PopPunkGuitarUltimateAudioProcessor::getCurrentSfzFilePath() const
