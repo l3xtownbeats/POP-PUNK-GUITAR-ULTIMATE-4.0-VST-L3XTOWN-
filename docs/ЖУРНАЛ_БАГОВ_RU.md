@@ -239,3 +239,11 @@
 - SKIN-REV5-011 (OPEN): полноценный JSON Schema validator и HEX-format automated test ещё не выполнялись; текущая проверка не заменяет CI test.
 - SKIN-REV5-012 (OPEN): контрастные пары всех UI states ещё не измерены; требуется automated contrast test.
 - Остальные блокеры: assets missing, runtime ThemeManager/gallery pending, fallback test pending, full FL Studio 20 acceptance pending.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / ThemeManager contract loader
+
+- SKIN-REV5-013 (OPEN / AWAITING CI): ThemeManager parser и CTest harness добавлены, но ещё не собраны/запущены. До прохождения теста 50 манифестов и fallback runtime не считаются MANIFEST VALIDATED.
+- SKIN-REV5-014 (OPEN): ThemeManager пока не интегрирован с PluginEditor; нет применения палитры к текущим контролам, единой кнопки SKIN и полноценной галереи.
+- SKIN-REV5-015 (OPEN): отсутствуют packaged theme discovery/custom theme validation/persistence выбранной темы и реальные preview/hero/texture assets.
+- Scope: PluginProcessor, APVTS parameter IDs, DSP, sampler и scheduler не менялись.
