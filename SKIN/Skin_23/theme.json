@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-23",
+  "index": 23,
+  "name": "Velvet Circuit",
+  "description": "Soft premium surfaces with a tactile velvet-inspired palette",
+  "cluster": "A",
+  "identity": {
+    "material": "matte velvet polymer and satin metal",
+    "lighting": "soft plum studio lighting",
+    "mood": "intimate, refined, expressive"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#211727",
+      "inset": "#2B1E32"
+    },
+    "surfaces": {
+      "primary": "#2B1E32",
+      "secondary": "#382640",
+      "raised": "#4A3454",
+      "overlay": "#211727"
+    },
+    "borders": {
+      "subtle": "#765A78",
+      "strong": "#8D7ACB",
+      "focus": "#D78BBE"
+    },
+    "typography": {
+      "primary": "#FBF3FA",
+      "secondary": "#D2BED0",
+      "disabled": "#85858B",
+      "onAccent": "#211727"
+    },
+    "rotary": {
+      "body": "#4A3454",
+      "ring": "#8D7ACB",
+      "track": "#765A78",
+      "value": "#D78BBE",
+      "pointer": "#E8C7A4",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#765A78",
+      "fill": "#D78BBE",
+      "thumb": "#E8C7A4",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D78BBE",
+        "foreground": "#211727",
+        "hover": "#E8C7A4",
+        "pressed": "#8D7ACB",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#382640",
+        "foreground": "#FBF3FA",
+        "hover": "#4A3454",
+        "pressed": "#8D7ACB",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D78BBE",
+      "activeText": "#211727",
+      "inactiveBackground": "#382640",
+      "inactiveText": "#D2BED0",
+      "indicator": "#8D7ACB"
+    },
+    "comboBoxes": {
+      "background": "#382640",
+      "foreground": "#FBF3FA",
+      "border": "#765A78",
+      "hover": "#4A3454",
+      "menuBackground": "#2B1E32",
+      "selection": "#D78BBE"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#D78BBE",
+      "blackPressed": "#8D7ACB",
+      "keyBorder": "#765A78",
+      "octaveLabel": "#D2BED0"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D78BBE",
+      "high": "#F06A58",
+      "background": "#211727"
+    },
+    "icons": {
+      "primary": "#FBF3FA",
+      "secondary": "#D2BED0",
+      "accent": "#D78BBE",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#382640",
+      "border": "#765A78",
+      "selected": "#D78BBE",
+      "caption": "#FBF3FA"
+    },
+    "windowChrome": {
+      "background": "#211727",
+      "title": "#FBF3FA",
+      "border": "#765A78",
+      "close": "#E8C7A4"
+    },
+    "hero": {
+      "background": "#211727",
+      "accent": "#D78BBE",
+      "secondaryAccent": "#8D7ACB",
+      "highlight": "#E8C7A4"
+    },
+    "accents": {
+      "primary": "#D78BBE",
+      "secondary": "#8D7ACB",
+      "tertiary": "#E8C7A4"
+    },
+    "texture": {
+      "material": "matte velvet polymer and satin metal",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft plum studio lighting",
+      "glow": "#D78BBE",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#8D7ACB"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Velvet Circuit thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original matte velvet polymer and satin metal abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast matte velvet polymer and satin metal material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
