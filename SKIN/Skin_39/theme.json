@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-39",
+  "index": 39,
+  "name": "Aftershow Gold",
+  "description": "Warm backstage luxury with bronze reflections and muted stage tones",
+  "cluster": "B",
+  "identity": {
+    "material": "brushed bronze and dark walnut",
+    "lighting": "warm backstage tungsten glow",
+    "mood": "intimate, mature, celebratory"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#241C1A",
+      "inset": "#30231F"
+    },
+    "surfaces": {
+      "primary": "#30231F",
+      "secondary": "#3D2D26",
+      "raised": "#514035",
+      "overlay": "#241C1A"
+    },
+    "borders": {
+      "subtle": "#806653",
+      "strong": "#E58A68",
+      "focus": "#E9BC72"
+    },
+    "typography": {
+      "primary": "#FFF7ED",
+      "secondary": "#D5C4B3",
+      "disabled": "#85858B",
+      "onAccent": "#241C1A"
+    },
+    "rotary": {
+      "body": "#514035",
+      "ring": "#E58A68",
+      "track": "#806653",
+      "value": "#E9BC72",
+      "pointer": "#B5C3BC",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#806653",
+      "fill": "#E9BC72",
+      "thumb": "#B5C3BC",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#E9BC72",
+        "foreground": "#241C1A",
+        "hover": "#B5C3BC",
+        "pressed": "#E58A68",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#3D2D26",
+        "foreground": "#FFF7ED",
+        "hover": "#514035",
+        "pressed": "#E58A68",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#E9BC72",
+      "activeText": "#241C1A",
+      "inactiveBackground": "#3D2D26",
+      "inactiveText": "#D5C4B3",
+      "indicator": "#E58A68"
+    },
+    "comboBoxes": {
+      "background": "#3D2D26",
+      "foreground": "#FFF7ED",
+      "border": "#806653",
+      "hover": "#514035",
+      "menuBackground": "#30231F",
+      "selection": "#E9BC72"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#E9BC72",
+      "blackPressed": "#E58A68",
+      "keyBorder": "#806653",
+      "octaveLabel": "#D5C4B3"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E9BC72",
+      "high": "#F06A58",
+      "background": "#241C1A"
+    },
+    "icons": {
+      "primary": "#FFF7ED",
+      "secondary": "#D5C4B3",
+      "accent": "#E9BC72",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#3D2D26",
+      "border": "#806653",
+      "selected": "#E9BC72",
+      "caption": "#FFF7ED"
+    },
+    "windowChrome": {
+      "background": "#241C1A",
+      "title": "#FFF7ED",
+      "border": "#806653",
+      "close": "#B5C3BC"
+    },
+    "hero": {
+      "background": "#241C1A",
+      "accent": "#E9BC72",
+      "secondaryAccent": "#E58A68",
+      "highlight": "#B5C3BC"
+    },
+    "accents": {
+      "primary": "#E9BC72",
+      "secondary": "#E58A68",
+      "tertiary": "#B5C3BC"
+    },
+    "texture": {
+      "material": "brushed bronze and dark walnut",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "warm backstage tungsten glow",
+      "glow": "#E9BC72",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#E58A68"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Aftershow Gold preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original brushed bronze and dark walnut hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle brushed bronze and dark walnut texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
