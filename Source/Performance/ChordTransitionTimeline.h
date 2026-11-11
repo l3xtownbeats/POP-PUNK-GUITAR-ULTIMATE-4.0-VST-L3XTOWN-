@@ -23,7 +23,7 @@ namespace ppgu::performance
 
         while (iterator != end)
         {
-            const int eventSample = (std::clamp)(static_cast<int>(iterator->samplePosition),
+            const int eventSample = (std::clamp)(static_cast<int>((*iterator).samplePosition),
                                                  intervalStart, boundedBlockSamples);
             renderInterval(intervalStart, eventSample);
 
