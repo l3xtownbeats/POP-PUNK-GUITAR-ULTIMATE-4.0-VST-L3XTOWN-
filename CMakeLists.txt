@@ -52,6 +52,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/Sampler/SamplePool.h
     Source/Sampler/SampleMetadataIndex.cpp
     Source/Sampler/SampleMetadataIndex.h
+    Source/Sampler/GuitarBankImporter.cpp
+    Source/Sampler/GuitarBankImporter.h
     Source/Sampler/WavPageReader.cpp
     Source/Sampler/WavPageReader.h
     Source/Sampler/PageCacheSlots.cpp
