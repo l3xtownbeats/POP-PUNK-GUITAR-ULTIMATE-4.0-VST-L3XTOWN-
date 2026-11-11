@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-18",
+  "index": 18,
+  "name": "Mono Chrome",
+  "description": "Strict monochrome interface with layered graphite and chrome",
+  "cluster": "C",
+  "identity": {
+    "material": "brushed chrome and matte black polymer",
+    "lighting": "neutral studio rim light",
+    "mood": "focused, restrained, technical"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#17191D",
+      "inset": "#22252A"
+    },
+    "surfaces": {
+      "primary": "#22252A",
+      "secondary": "#2B2F35",
+      "raised": "#3A4048",
+      "overlay": "#17191D"
+    },
+    "borders": {
+      "subtle": "#626A73",
+      "strong": "#A4A9B0",
+      "focus": "#F2F2F2"
+    },
+    "typography": {
+      "primary": "#F5F6F7",
+      "secondary": "#C0C4C9",
+      "disabled": "#85858B",
+      "onAccent": "#17191D"
+    },
+    "rotary": {
+      "body": "#3A4048",
+      "ring": "#A4A9B0",
+      "track": "#626A73",
+      "value": "#F2F2F2",
+      "pointer": "#626A73",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#626A73",
+      "fill": "#F2F2F2",
+      "thumb": "#626A73",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F2F2F2",
+        "foreground": "#17191D",
+        "hover": "#626A73",
+        "pressed": "#A4A9B0",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#2B2F35",
+        "foreground": "#F5F6F7",
+        "hover": "#3A4048",
+        "pressed": "#A4A9B0",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F2F2F2",
+      "activeText": "#17191D",
+      "inactiveBackground": "#2B2F35",
+      "inactiveText": "#C0C4C9",
+      "indicator": "#A4A9B0"
+    },
+    "comboBoxes": {
+      "background": "#2B2F35",
+      "foreground": "#F5F6F7",
+      "border": "#626A73",
+      "hover": "#3A4048",
+      "menuBackground": "#22252A",
+      "selection": "#F2F2F2"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#F2F2F2",
+      "blackPressed": "#A4A9B0",
+      "keyBorder": "#626A73",
+      "octaveLabel": "#C0C4C9"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F2F2F2",
+      "high": "#F06A58",
+      "background": "#17191D"
+    },
+    "icons": {
+      "primary": "#F5F6F7",
+      "secondary": "#C0C4C9",
+      "accent": "#F2F2F2",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2B2F35",
+      "border": "#626A73",
+      "selected": "#F2F2F2",
+      "caption": "#F5F6F7"
+    },
+    "windowChrome": {
+      "background": "#17191D",
+      "title": "#F5F6F7",
+      "border": "#626A73",
+      "close": "#626A73"
+    },
+    "hero": {
+      "background": "#17191D",
+      "accent": "#F2F2F2",
+      "secondaryAccent": "#A4A9B0",
+      "highlight": "#626A73"
+    },
+    "accents": {
+      "primary": "#F2F2F2",
+      "secondary": "#A4A9B0",
+      "tertiary": "#626A73"
+    },
+    "texture": {
+      "material": "brushed chrome and matte black polymer",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "neutral studio rim light",
+      "glow": "#F2F2F2",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#A4A9B0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Mono Chrome interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract brushed chrome and matte black polymer hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original brushed chrome and matte black polymer texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
