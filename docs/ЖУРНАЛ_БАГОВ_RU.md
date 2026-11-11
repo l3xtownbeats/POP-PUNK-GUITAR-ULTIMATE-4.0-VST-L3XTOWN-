@@ -176,3 +176,10 @@
 - Выявлен конкретный quantize-window риск в `restartForChord`: на каждом chord change немедленно вызывается `sampler.allNotesOff()` и `clearPendingNoteOffs()`, а новый `patternCycleStartPpq` назначается на следующую quantize boundary. Следовательно, при quantized change текущая фраза может быть немедленно оборвана до будущей границы; несколько переходов в одной quantize window также теряют предыдущие ожидающие состояния. Требуется согласовать ожидаемую музыкальную семантику с v33 FINAL и покрыть её тестом до изменения кода.
 - Не вносить speculative fix: возможные контракты различаются (немедленный retrigger, переход на следующей сетке с продолжением старого паттерна, либо coalescing к последнему удерживаемому аккорду). Нужен явный контракт, после чего regression должен проверять фактические sampler dispatch offsets и pending NoteOff.
 - M3-014 остаётся OPEN. M3-015 остаётся FIXED IN SOURCE / AWAITING CI. Для HEAD `c0cd94eb897bd22fdcc13f0b78050d0d13a7c5a3` combined status пуст, workflow runs не возвращены; CI не подтверждён.
+
+
+## 11 ноября 2026 — M3-014: regression harness добавлен, не исполнен
+
+- Добавлен ppgu_chord_transition_tests для policy и сохранения pending NoteOff при переходе между непустыми аккордами.
+- Это закрывает пробел в отсутствии отдельного теста для ChordTransitionPolicy, но НЕ подтверждает end-to-end поведение PluginProcessor.
+- Статус M3-014: OPEN — AWAITING WINDOWS BUILD/CTest + PROCESSOR/HOST INTEGRATION. Тесты не запускались, дефект не закрыт.
