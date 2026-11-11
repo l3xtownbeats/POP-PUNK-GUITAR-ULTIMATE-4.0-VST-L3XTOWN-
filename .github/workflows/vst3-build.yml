@@ -25,9 +25,15 @@ jobs:
       - name: Validate 432-preset factory catalog
         shell: pwsh
         run: python tools/validate_factory_bank.py presets/factory_bank_300.json
+      - name: Generate all portable factory preset files
+        shell: pwsh
+        run: python tools/generate_factory_preset_files.py presets/factory_bank_300.json presets/Factory
+      - name: Validate all 432 generated factory preset files
+        shell: pwsh
+        run: python tools/validate_preset_files.py presets/Factory 432
       - name: Validate portable preset file examples
         shell: pwsh
-        run: python tools/validate_preset_files.py presets/examples
+        run: python tools/validate_preset_files.py presets/examples 2
       - name: Validate APVTS parameter registry and state persistence
         shell: pwsh
         run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
@@ -59,7 +65,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.1.0-freepats-fsbs-direct-cc0-v2
+          key: ppgu-samples-meta-v1.1.0-freepats-fsbs-jazz-cc0-v3
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -117,9 +123,9 @@ jobs:
             if (-not (Get-ChildItem $dest -Recurse -Filter '*.wav' | Select-Object -First 1)) { throw "No WAV samples extracted for $tag." }
           }
 
-          # FreePats electric guitars: recorded clean and two distorted variants, CC0 1.0.
+          # FreePats electric guitars: clean, jazz-clean, two distorted variants and direct DI; CC0 1.0.
           $freepats = @(
-            @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },
+            @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },\n            @{ repo='electric-guitar-FSBS-jazz'; folder='FreePats-Jazz-Clean' },
             @{ repo='electric-guitar-FSBS-dist1'; folder='FreePats-Distortion-1' },
             @{ repo='electric-guitar-FSBS-dist2'; folder='FreePats-Distortion-2' },
             @{ repo='electric-guitar-FSBS-direct'; folder='FreePats-Direct-DI' }
@@ -245,7 +251,7 @@ jobs:
           POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
           ========================================
           VST3 plugin: included in this archive.
-          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats electric clean + two distorted sets).
+          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats clean, jazz-clean, direct DI + two distorted sets; Karoryfer CC0 guitars).
           Factory presets: presets/factory_bank_300.json (216 Melody + 216 Pattern presets; 432 total).
           Portable preset examples: presets/examples/.
           SFZ maps, original license files and source manifests are retained.
