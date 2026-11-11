@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the authored 300-preset catalog before packaging the VST3 build."""
+"""Validate the authored 432-preset catalog before packaging the VST3 build."""
 import json
 import math
 import sys
@@ -14,12 +14,12 @@ artists = {item["name"] for item in artist_items}
 artist_tracks = {item["name"]: set(item.get("tracks", [])) for item in artist_items}
 melody = data.get("melodyPresets", [])
 pattern = data.get("patternPresets", [])
-if len(melody) < 150:
-    errors.append(f"Melody bank has {len(melody)} presets; expected at least 150")
-if len(pattern) < 150:
-    errors.append(f"Pattern bank has {len(pattern)} presets; expected at least 150")
-if len(melody) + len(pattern) < 300:
-    errors.append("Combined bank contains fewer than 300 presets")
+if len(melody) < 216:
+    errors.append(f"Melody bank has {len(melody)} presets; expected at least 216")
+if len(pattern) < 216:
+    errors.append(f"Pattern bank has {len(pattern)} presets; expected at least 216")
+if len(melody) + len(pattern) < 432:
+    errors.append("Combined bank contains fewer than 432 presets")
 
 all_presets = melody + pattern
 ids = [p.get("id") for p in all_presets]
