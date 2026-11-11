@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Structural and accessibility checks for the PPGU 50-skin data contract.
+"""Structural and accessibility checks for the registry-driven PPGU skin data contract.
 
 Uses only the Python standard library so it can run on Windows CI without
 installing packages. This is a focused contract validator, not a complete
@@ -16,7 +16,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
 DEFAULT_ID = "skin-01"
-EXPECTED_COUNT = 50
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -204,28 +203,40 @@ def main() -> int:
         print("\n".join(errors))
         return 1
 
-    if registry.get("totalSkins") != EXPECTED_COUNT:
-        fail(errors, "SKIN/theme_manifest.json", "totalSkins must be 50")
     if registry.get("defaultSkin") != DEFAULT_ID:
         fail(errors, "SKIN/theme_manifest.json", "defaultSkin must be skin-01")
     if registry.get("selector") != "SKIN":
         fail(errors, "SKIN/theme_manifest.json", "selector must be SKIN")
 
     entries = registry.get("themes")
-    if not isinstance(entries, list) or len(entries) != EXPECTED_COUNT:
-        fail(errors, "SKIN/theme_manifest.json", "themes must contain exactly 50 entries")
+    if not isinstance(entries, list) or not entries:
+        fail(errors, "SKIN/theme_manifest.json", "themes must be a non-empty registry array")
         entries = entries if isinstance(entries, list) else []
+
+    expected_count = len(entries)
+    if registry.get("totalSkins") != expected_count:
+        fail(errors, "SKIN/theme_manifest.json", "totalSkins must equal registry entry count")
 
     ids = [entry.get("id") for entry in entries if isinstance(entry, dict)]
     indices = [entry.get("index") for entry in entries if isinstance(entry, dict)]
-    if len(set(ids)) != EXPECTED_COUNT:
+    if len(set(ids)) != expected_count:
         fail(errors, "SKIN/theme_manifest.json", "theme ids must be unique")
-    if sorted(indices) != list(range(1, EXPECTED_COUNT + 1)):
-        fail(errors, "SKIN/theme_manifest.json", "indices must be unique and cover 1..50")
+    if sorted(indices) != list(range(1, expected_count + 1)):
+        fail(errors, "SKIN/theme_manifest.json", "indices must be unique and cover the registry range")
 
     by_index = {entry.get("index"): entry for entry in entries if isinstance(entry, dict)}
-    for index in range(1, EXPECTED_COUNT + 1):
+    for index in range(1, expected_count + 1):
         validate_theme(index, by_index.get(index, {}), errors)
+
+    registered_folders = {f"Skin_{index:02d}" for index in range(1, expected_count + 1)}
+    actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
+    if actual_folders != registered_folders:
+        missing = sorted(registered_folders - actual_folders)
+        unregistered = sorted(actual_folders - registered_folders)
+        if missing:
+            fail(errors, "SKIN", "registered skin folders missing: " + ", ".join(missing))
+        if unregistered:
+            fail(errors, "SKIN", "unregistered skin folders present: " + ", ".join(unregistered))
 
     if errors:
         print(f"SKIN CONTRACT: FAIL ({len(errors)} issue(s))")
@@ -234,7 +245,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print("50 manifests, 18 token groups, nested control tokens, registry, compatibility flags and selected WCAG contrast pairs verified.")
+    print(f"{expected_count} registry manifests, exact folder parity, 18 token groups, nested control tokens, compatibility flags and selected WCAG contrast pairs verified.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 
