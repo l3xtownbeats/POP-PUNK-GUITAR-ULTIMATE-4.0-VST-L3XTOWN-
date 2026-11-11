@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-24",
+  "index": 24,
+  "name": "Amber Tube Room",
+  "description": "Warm tube-room character with amber glass and walnut tones",
+  "cluster": "A",
+  "identity": {
+    "material": "walnut veneer and amber tube glass",
+    "lighting": "warm amber vacuum-tube glow",
+    "mood": "warm, organic, intimate"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#251B13",
+      "inset": "#302217"
+    },
+    "surfaces": {
+      "primary": "#302217",
+      "secondary": "#3D2B1D",
+      "raised": "#523A25",
+      "overlay": "#251B13"
+    },
+    "borders": {
+      "subtle": "#79583B",
+      "strong": "#A86D42",
+      "focus": "#E9A34D"
+    },
+    "typography": {
+      "primary": "#FFF6E9",
+      "secondary": "#D9C2A4",
+      "disabled": "#85858B",
+      "onAccent": "#251B13"
+    },
+    "rotary": {
+      "body": "#523A25",
+      "ring": "#A86D42",
+      "track": "#79583B",
+      "value": "#E9A34D",
+      "pointer": "#F4D08A",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#79583B",
+      "fill": "#E9A34D",
+      "thumb": "#F4D08A",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#E9A34D",
+        "foreground": "#251B13",
+        "hover": "#F4D08A",
+        "pressed": "#A86D42",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#3D2B1D",
+        "foreground": "#FFF6E9",
+        "hover": "#523A25",
+        "pressed": "#A86D42",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#E9A34D",
+      "activeText": "#251B13",
+      "inactiveBackground": "#3D2B1D",
+      "inactiveText": "#D9C2A4",
+      "indicator": "#A86D42"
+    },
+    "comboBoxes": {
+      "background": "#3D2B1D",
+      "foreground": "#FFF6E9",
+      "border": "#79583B",
+      "hover": "#523A25",
+      "menuBackground": "#302217",
+      "selection": "#E9A34D"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#E9A34D",
+      "blackPressed": "#A86D42",
+      "keyBorder": "#79583B",
+      "octaveLabel": "#D9C2A4"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E9A34D",
+      "high": "#F06A58",
+      "background": "#251B13"
+    },
+    "icons": {
+      "primary": "#FFF6E9",
+      "secondary": "#D9C2A4",
+      "accent": "#E9A34D",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#3D2B1D",
+      "border": "#79583B",
+      "selected": "#E9A34D",
+      "caption": "#FFF6E9"
+    },
+    "windowChrome": {
+      "background": "#251B13",
+      "title": "#FFF6E9",
+      "border": "#79583B",
+      "close": "#F4D08A"
+    },
+    "hero": {
+      "background": "#251B13",
+      "accent": "#E9A34D",
+      "secondaryAccent": "#A86D42",
+      "highlight": "#F4D08A"
+    },
+    "accents": {
+      "primary": "#E9A34D",
+      "secondary": "#A86D42",
+      "tertiary": "#F4D08A"
+    },
+    "texture": {
+      "material": "walnut veneer and amber tube glass",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "warm amber vacuum-tube glow",
+      "glow": "#E9A34D",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#A86D42"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Amber Tube Room thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original walnut veneer and amber tube glass abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast walnut veneer and amber tube glass material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
