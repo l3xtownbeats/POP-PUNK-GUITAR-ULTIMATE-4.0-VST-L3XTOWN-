@@ -95,6 +95,96 @@
       "path": "Skin_11/theme.json",
       "preview": "Skin_11/assets/preview.png",
       "hero": "Skin_11/assets/hero.webp"
+    },
+    {
+      "id": "skin-12",
+      "index": 12,
+      "name": "Arctic Blue",
+      "cluster": "C",
+      "path": "Skin_12/theme.json",
+      "preview": "Skin_12/assets/preview.png",
+      "hero": "Skin_12/assets/hero.webp"
+    },
+    {
+      "id": "skin-13",
+      "index": 13,
+      "name": "Toxic Green",
+      "cluster": "B",
+      "path": "Skin_13/theme.json",
+      "preview": "Skin_13/assets/preview.png",
+      "hero": "Skin_13/assets/hero.webp"
+    },
+    {
+      "id": "skin-14",
+      "index": 14,
+      "name": "Purple Voltage",
+      "cluster": "B",
+      "path": "Skin_14/theme.json",
+      "preview": "Skin_14/assets/preview.png",
+      "hero": "Skin_14/assets/hero.webp"
+    },
+    {
+      "id": "skin-15",
+      "index": 15,
+      "name": "Blood Red",
+      "cluster": "B",
+      "path": "Skin_15/theme.json",
+      "preview": "Skin_15/assets/preview.png",
+      "hero": "Skin_15/assets/hero.webp"
+    },
+    {
+      "id": "skin-16",
+      "index": 16,
+      "name": "Ocean Stage",
+      "cluster": "C",
+      "path": "Skin_16/theme.json",
+      "preview": "Skin_16/assets/preview.png",
+      "hero": "Skin_16/assets/hero.webp"
+    },
+    {
+      "id": "skin-17",
+      "index": 17,
+      "name": "Golden Era",
+      "cluster": "C",
+      "path": "Skin_17/theme.json",
+      "preview": "Skin_17/assets/preview.png",
+      "hero": "Skin_17/assets/hero.webp"
+    },
+    {
+      "id": "skin-18",
+      "index": 18,
+      "name": "Mono Chrome",
+      "cluster": "C",
+      "path": "Skin_18/theme.json",
+      "preview": "Skin_18/assets/preview.png",
+      "hero": "Skin_18/assets/hero.webp"
+    },
+    {
+      "id": "skin-19",
+      "index": 19,
+      "name": "Festival Lights",
+      "cluster": "B",
+      "path": "Skin_19/theme.json",
+      "preview": "Skin_19/assets/preview.png",
+      "hero": "Skin_19/assets/hero.webp"
+    },
+    {
+      "id": "skin-20",
+      "index": 20,
+      "name": "Studio Olive",
+      "cluster": "C",
+      "path": "Skin_20/theme.json",
+      "preview": "Skin_20/assets/preview.png",
+      "hero": "Skin_20/assets/hero.webp"
+    },
+    {
+      "id": "skin-21",
+      "index": 21,
+      "name": "Neon Flagship",
+      "cluster": "A",
+      "path": "Skin_21/theme.json",
+      "preview": "Skin_21/assets/preview.png",
+      "hero": "Skin_21/assets/hero.webp"
     }
   ]
 }
