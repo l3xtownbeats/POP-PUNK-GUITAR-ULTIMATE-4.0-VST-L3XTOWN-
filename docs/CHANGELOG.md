@@ -44,6 +44,17 @@ Only mark a feature **Implemented** when code or content has actually been added
 - Validation: Documentation commit inspected; no pattern content was generated or audio-tested.
 - Commit: `a1ff2dc6b253d37d0f263bac8176989779498466`
 
+## 2026-11-11 — Lightweight loading and runtime optimization made a core requirement
+
+- Date: 2026-11-11
+- Version / area: Performance architecture; Windows/host compatibility
+- Change: Added a non-negotiable performance-first section to the feature specification. It covers fast plug-in startup, selective sample loading/streaming, shared assets, bounded polyphony and voice stealing, optional FX quality/bypass, real-time-safe audio processing, background indexing, UI/skin memory isolation, measured rather than speculative multiprocessing, Eco/Normal/High trade-offs, package size, and a benchmark/acceptance checklist.
+- Reason: The instrument must stay simple and lightweight both while loading and during playback on Windows 10 Enterprise 1809 x64 with FL Studio 20. New features must not compromise responsiveness or system load.
+- Files: `docs/CURATED_FEATURE_SPEC.md`; `docs/CHANGELOG.md`
+- Status: Specified (optimization implementation and benchmarking are not yet verified).
+- Validation: Documentation updated and read back through GitHub. No Windows 10 / FL Studio build, profiling, or audio stress test was run in this step.
+- Follow-up: Audit the actual source/build tree, implement the audio-thread and sample-loading safeguards, then benchmark cold/warm load, CPU, RAM, preset switching, and low-buffer stability on the target setup.
+
 ---
 
 ## Rules for future entries
