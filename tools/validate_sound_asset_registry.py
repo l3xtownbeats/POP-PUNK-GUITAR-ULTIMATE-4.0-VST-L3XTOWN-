@@ -41,8 +41,11 @@ def _valid_date(value) -> bool:
 def _valid_url(value) -> bool:
     if not _nonempty(value):
         return False
-    parsed = urlparse(value)
-    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+    try:
+        parsed = urlparse(value)
+        return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+    except ValueError:
+        return False
 
 
 def _sha256(path: Path) -> str:
@@ -78,20 +81,26 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
     if not _nonempty(relative):
         reasons.append("local relativePath is missing")
     else:
-        candidate = (root / relative).resolve()
         try:
+            candidate = (root / relative).resolve()
             candidate.relative_to(root.resolve())
-        except ValueError:
-            reasons.append("sample path escapes registry root")
+        except (OSError, ValueError, RuntimeError):
+            reasons.append("sample path is invalid or escapes registry root")
         else:
             if not candidate.is_file():
                 reasons.append("sample file is missing")
             else:
                 expected = file_info.get("sha256", "")
-                if not re.fullmatch(r"[0-9a-fA-F]{64}", expected or ""):
+                if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", expected):
                     reasons.append("SHA-256 is missing or malformed")
-                elif _sha256(candidate).lower() != expected.lower():
-                    reasons.append("SHA-256 does not match the local sample")
+                else:
+                    try:
+                        actual_hash = _sha256(candidate).lower()
+                    except OSError:
+                        reasons.append("sample file cannot be read for SHA-256 verification")
+                    else:
+                        if actual_hash != expected.lower():
+                            reasons.append("SHA-256 does not match the local sample")
     if not _nonempty(source.get("name")) or not _nonempty(source.get("assetId")):
         reasons.append("source name and source asset ID are required")
     if not _valid_date(source.get("retrievedAt")):
@@ -103,11 +112,11 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
     if not _nonempty(license_info.get("evidencePath")):
         reasons.append("archived license evidence path is missing")
     else:
-        evidence = (root / license_info["evidencePath"]).resolve()
         try:
+            evidence = (root / license_info["evidencePath"]).resolve()
             evidence.relative_to(root.resolve())
-        except ValueError:
-            reasons.append("license evidence path escapes registry root")
+        except (OSError, ValueError, RuntimeError):
+            reasons.append("license evidence path is invalid or escapes registry root")
         else:
             if not evidence.is_file():
                 reasons.append("archived license evidence file is missing")
@@ -142,7 +151,8 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
     if classification.get("guitarStatus") != "GUITAR_CONFIRMED":
         reasons.append("guitar content is not confirmed")
     profiles = classification.get("profiles")
-    if not isinstance(profiles, list) or not profiles or any(p not in PROFILES for p in profiles):
+    if not isinstance(profiles, list) or not profiles or any(
+            not isinstance(profile, str) or profile not in PROFILES for profile in profiles):
         reasons.append("one or more valid style profiles are required")
     if classification.get("reviewRequired") is not False:
         reasons.append("classification requires manual review")
