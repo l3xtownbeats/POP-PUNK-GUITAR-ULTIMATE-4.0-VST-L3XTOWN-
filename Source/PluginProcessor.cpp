@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Performance/ChordTransitionTimeline.h"
+#include "Performance/ChordTransitionPolicy.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
@@ -415,22 +416,40 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 || !std::equal(notes.begin(), notes.begin() + count, previousPatternChordNotes.begin());
         };
 
-        auto restartForChord = [&](int sampleOffset, const std::array<int, 6>& notes, int count, int channel)
+        auto updateChordState = [&](int sampleOffset, const std::array<int, 6>& notes, int count, int channel)
         {
-            sampler.allNotesOff();
-            patternScheduler.clearPendingNoteOffs();
-            patternCycleStarted = count > 0;
-            if (count > 0)
+            const double changePpq = patternTransportClock.startPpq + static_cast<double>(sampleOffset) * ppqPerSample;
+            const auto decision = ppgu::performance::makeChordTransitionDecision(
+                previousPatternChordCount, count, changePpq, patternCycleStartPpq, startOnFirstChord);
+
+            if (decision.releaseVoices)
+                sampler.allNotesOff();
+            if (decision.clearPendingNoteOffs)
+                patternScheduler.clearPendingNoteOffs();
+            if (decision.startPatternCycle)
             {
-                const double changePpq = patternTransportClock.startPpq + static_cast<double>(sampleOffset) * ppqPerSample;
-                const bool firstChord = previousPatternChordCount == 0;
-                patternCycleStartPpq = firstChord && startOnFirstChord ? changePpq
-                    : (firstChord ? std::ceil(changePpq / 4.0 - 1.0e-9) * 4.0
-                                  : ppgu::performance::PatternScheduler::quantizePpqForward(changePpq, quantizeGridBeats));
+                patternCycleStarted = true;
+                patternCycleStartPpq = decision.patternCycleStartPpq;
             }
+            else if (count == 0)
+                patternCycleStarted = false;
+
             previousPatternChordCount = count;
             previousPatternChordNotes = notes;
             previousPatternChordChannel = channel;
+        };
+
+        auto restartPatternForSettings = [&]()
+        {
+            sampler.allNotesOff();
+            patternScheduler.clearPendingNoteOffs();
+            patternCycleStarted = initialCount > 0;
+            if (initialCount > 0)
+            {
+                const double changePpq = patternTransportClock.startPpq;
+                patternCycleStartPpq = ppgu::performance::PatternScheduler::quantizePpqForward(
+                    changePpq, quantizeGridBeats);
+            }
         };
 
         const auto [initialNotes, initialCount, initialChannel] = readChord();
@@ -438,9 +457,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             (previousPatternSlot >= 0 && patternSlot != previousPatternSlot)
             || (previousPatternLengthChoice >= 0 && patternLengthChoice != previousPatternLengthChoice);
         if (chordDiffers(initialNotes, initialCount, initialChannel))
-            restartForChord(0, initialNotes, initialCount, initialChannel);
-        else if (patternSettingsChanged && initialCount > 0)
-            restartForChord(0, initialNotes, initialCount, initialChannel);
+            updateChordState(0, initialNotes, initialCount, initialChannel);
+        if (patternSettingsChanged && initialCount > 0)
+            restartPatternForSettings();
         previousPatternSlot = patternSlot;
         previousPatternLengthChoice = patternLengthChoice;
 
@@ -532,7 +551,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
                     const auto [nextNotes, nextCount, nextChannel] = readChord();
                     if (chordDiffers(nextNotes, nextCount, nextChannel))
-                        restartForChord(eventSample, nextNotes, nextCount, nextChannel);
+                        updateChordState(eventSample, nextNotes, nextCount, nextChannel);
                 }
             });
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
