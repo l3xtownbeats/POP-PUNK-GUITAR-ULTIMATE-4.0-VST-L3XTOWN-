@@ -202,3 +202,16 @@ if(BUILD_TESTING)
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
+
+# Data-contract validation for the 50 interchangeable UI skins.
+# Python is optional for developers, but the validator is registered whenever
+# a standard interpreter is available (including the Windows CI runner).
+if(BUILD_TESTING)
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(Python3_Interpreter_FOUND)
+        add_test(
+            NAME ppgu_skin_manifest_contract
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/ValidateSkinManifests.py
+        )
+    endif()
+endif()
