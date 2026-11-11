@@ -56,3 +56,15 @@ Latest source commits:
 - `56a7eb6` — playing-style taxonomy filters.
 
 The earlier CI run for `e02298c` was cancelled before compilation. The current branch revision requires a fresh Windows x64 build and tests; no build pass is claimed yet.
+
+
+## 2026-11-11 — уточнение mode/browser behavior и FX EDIT navigation
+
+Документационная синхронизация с актуальными решениями пользователя:
+
+- При выборе режима исполнения MELODY AUTOCHORDS автоматически bypass-ится; функция не строит аккорды и не изменяет входящие ноты в MELODY. Ручное OFF отключает автодостраивание в PATTERN.
+- В режиме исполнения MELODY доступны пресеты из всех разделов PUNK GROUPS, MELODY, STYLE и USER. Загрузка пресета не должна сама включать PATTERN.
+- FX EDIT закрывается красной кнопкой X в правом верхнем углу; небольшая вспомогательная надпись BACK допустима внизу сбоку и, если кликабельна, возвращает на главный экран. Надпись MAIN не нужна.
+- Полная спецификация находится в `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`.
+- Документационные commits: `e78cd252330abd32206315ffb1cf5dab6ef0d003`, `b21205a93149205c2fa85e8f1cf9ae3a641201d8`.
+- Эти коммиты изменяют Markdown-документы; исходный код плагина ими не менялся. Build/CTest/pluginval/FL Studio 20 validation для новых требований не подтверждены.
