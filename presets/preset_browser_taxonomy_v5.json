@@ -686,9 +686,157 @@
             "pattern"
           ],
           "availability": "performance-library-dependent"
+        },
+        {
+          "id": "power-chords-rock",
+          "label": "Power Chords Rock",
+          "tags": [
+            "power-chords",
+            "rock",
+            "straight",
+            "syncopated"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "performanceTypes": [
+            "straight",
+            "syncopated"
+          ],
+          "description": "Пауэр-аккорды с прямыми и синкопированными рисунками.",
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "pop-punk-strum",
+          "label": "Pop Punk Strum",
+          "tags": [
+            "pop-punk",
+            "strumming",
+            "eighth-notes",
+            "sixteenth-notes"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "performanceTypes": [
+            "down-up-strum"
+          ],
+          "description": "Быстрые восьмые/шестнадцатые удары вниз-вверх в pop-punk манере.",
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "arpeggio-pop",
+          "label": "Arpeggio Pop",
+          "tags": [
+            "pop",
+            "arpeggio",
+            "picked",
+            "broken-chord"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "performanceTypes": [
+            "ascending",
+            "descending",
+            "alternating"
+          ],
+          "description": "Поп-арпеджио и переборы аккордов.",
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "palm-mute-groove",
+          "label": "Palm Mute Groove",
+          "tags": [
+            "palm-mute",
+            "muted-riff",
+            "chug",
+            "groove"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "requires": [
+            "palm_mute_performance"
+          ],
+          "description": "Риффы и грувы с записанными приглушёнными ударами и разной плотностью.",
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "song-sections",
+          "label": "Intro / Bridge / Outro",
+          "tags": [
+            "intro",
+            "bridge",
+            "outro",
+            "transitions",
+            "fills"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "performanceTypes": [
+            "intro",
+            "bridge",
+            "outro"
+          ],
+          "description": "Короткие вступления, переходы/проигрыши и концовки. Хранить как отдельные section-фразы с ясной длиной и точкой перехода.",
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "reverse-patterns",
+          "label": "Reverse Patterns",
+          "tags": [
+            "reverse",
+            "backward",
+            "creative"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "description": "Отдельная экспериментальная категория обратных/реверсных исполнений. Требует специально подготовленных и проверенных клипов; не реверсировать автоматически произвольный аудиофайл в реальном времени.",
+          "availability": "performance-library-dependent"
         }
       ],
-      "ordering": "NOT SOUND first, then genre/performance folders"
+      "ordering": "NOT SOUND first, then genre/performance folders",
+      "subfolderGroups": [
+        {
+          "id": "genres",
+          "label": "Genres",
+          "folderIds": [
+            "pop-patterns",
+            "pop-punk-patterns",
+            "electronic-patterns"
+          ]
+        },
+        {
+          "id": "performance",
+          "label": "Performance",
+          "folderIds": [
+            "riff-patterns",
+            "power-chords-rock",
+            "pop-punk-strum",
+            "arpeggio-patterns",
+            "arpeggio-pop",
+            "palm-mute-groove",
+            "strum-patterns"
+          ]
+        },
+        {
+          "id": "song-sections",
+          "label": "Song Sections",
+          "folderIds": [
+            "song-sections"
+          ]
+        },
+        {
+          "id": "creative",
+          "label": "Creative",
+          "folderIds": [
+            "reverse-patterns"
+          ]
+        }
+      ]
     }
   },
   "browserFolderPolicy": {
@@ -697,5 +845,50 @@
     "availabilityRule": "Taxonomy entries are browser organization/profile definitions only. Mark playable only after matching sample bank, DSP/FX mapping, performance data and licensing are verified.",
     "separationRule": "MELODY tone folders are sound/tone profiles; PATTERN / SONG folders are performance-pattern collections. Never mix them.",
     "notSound": "NOT SOUND remains the first selectable item in every browser tab/folder."
+  },
+  "patternLibraryPolicy": {
+    "referencePatternCount": 237,
+    "referenceNote": "237 is the count stated in the user's description of Electric Sunburst Deluxe. It is a reference for breadth, not a claim that this project contains or reproduces 237 NI patterns.",
+    "projectTarget": "Build an original, license-cleared performance library with its own MIDI/performance clips and recorded guitar articulations. Counts must reflect actually present, validated assets.",
+    "requiredMetadata": [
+      "patternId",
+      "genreFolderId",
+      "performanceFolderId",
+      "sectionType",
+      "meter",
+      "tempoRange",
+      "bars",
+      "chordInputMode",
+      "articulationRequirements",
+      "sampleBankId",
+      "licenseProvenance",
+      "availability"
+    ],
+    "reversePatterns": "Store as explicit original reverse-performance assets or validated reverse-rendered clips; never label a pattern reverse unless the playable asset really is reversed."
+  },
+  "instrumentToneControls": {
+    "pickupBlend": {
+      "id": "pickupBlend",
+      "label": "Bridge / Neck Blend",
+      "description": "Независимый баланс бриджевого и некового звукоснимателей; показывать/активировать только при наличии двух соответствующих записанных источников или корректной модели.",
+      "availability": "sample-source-dependent"
+    },
+    "condenserMic": {
+      "id": "condenserMic",
+      "label": "Condenser Mic Blend",
+      "description": "Дополнительный микрофонный канал/слой для детализации; не имитировать несуществующую запись.",
+      "availability": "sample-source-dependent"
+    },
+    "fxModules": [
+      "Chorus",
+      "Flanger",
+      "Phaser",
+      "Compressor",
+      "EQ",
+      "Saturator",
+      "Reverb",
+      "Amp",
+      "Cabinet"
+    ]
   }
 }
