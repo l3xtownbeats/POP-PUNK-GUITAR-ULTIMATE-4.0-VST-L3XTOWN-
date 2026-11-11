@@ -549,10 +549,17 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 else if (message.isNoteOn() || message.isNoteOff())
                 {
                     patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
-                    const auto [nextNotes, nextCount, nextChannel] = readChord();
-                    if (chordDiffers(nextNotes, nextCount, nextChannel))
-                        updateChordState(eventSample, nextNotes, nextCount, nextChannel);
                 }
+            },
+            [&](int eventSample)
+            {
+                // Publish exactly one chord snapshot after every event at this
+                // sample has been applied. In particular, a same-sample
+                // note-off(old chord)+note-on(new chord) must not look like an
+                // intermediate empty chord and reset the pattern cycle.
+                const auto [nextNotes, nextCount, nextChannel] = readChord();
+                if (chordDiffers(nextNotes, nextCount, nextChannel))
+                    updateChordState(eventSample, nextNotes, nextCount, nextChannel);
             });
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
     }
