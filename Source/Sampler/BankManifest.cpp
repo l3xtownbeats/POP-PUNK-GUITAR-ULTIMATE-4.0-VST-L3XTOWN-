@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cctype>
 #include <memory>
+#include <set>
 #include <filesystem>
 namespace ppgu::sampler {
 namespace {
@@ -52,11 +53,17 @@ bool BankManifest::fromJson(const juce::var& v,BankManifest& dst,std::string& er
  const auto a=o->getProperty("samples"); if(!a.isArray()){err="Samples must be an array.";return false;}
  for(const auto& vEntry:*a.getArray()){if(!vEntry.isObject()){err="Sample entry must be an object.";return false;}
   const auto* x=vEntry.getDynamicObject(); BankSampleRecord s; s.sampleId=get(*x,"sampleId"); s.relativePath=get(*x,"relativePath");
-  s.sha256=get(*x,"sha256"); s.status=get(*x,"status"); s.fileBytes=static_cast<std::uint64_t>(static_cast<juce::int64>(x->getProperty("fileBytes")));
-  s.frames=static_cast<std::uint64_t>(static_cast<juce::int64>(x->getProperty("frames")));
-  s.modificationTimeMs=static_cast<std::int64_t>(static_cast<juce::int64>(x->getProperty("modificationTimeMs")));
-  s.sampleRate=static_cast<double>(x->getProperty("sampleRate")); s.channels=static_cast<unsigned int>(static_cast<int>(x->getProperty("channels")));
-  s.bitsPerSample=static_cast<unsigned int>(static_cast<int>(x->getProperty("bitsPerSample"))); s.floatingPoint=static_cast<bool>(x->getProperty("floatingPoint"));
+  s.sha256=get(*x,"sha256"); s.status=get(*x,"status");
+  const auto bytesValue=x->getProperty("fileBytes"), framesValue=x->getProperty("frames");
+  const auto timeValue=x->getProperty("modificationTimeMs"), channelsValue=x->getProperty("channels");
+  const auto bitsValue=x->getProperty("bitsPerSample");
+  const auto bytesSigned=static_cast<juce::int64>(bytesValue), framesSigned=static_cast<juce::int64>(framesValue);
+  const auto channelsSigned=static_cast<int>(channelsValue), bitsSigned=static_cast<int>(bitsValue);
+  if(bytesSigned<=0||framesSigned<=0||channelsSigned<=0||bitsSigned<0){err="Sample numeric metadata contains negative or zero values.";return false;}
+  s.fileBytes=static_cast<std::uint64_t>(bytesSigned); s.frames=static_cast<std::uint64_t>(framesSigned);
+  s.modificationTimeMs=static_cast<std::int64_t>(static_cast<juce::int64>(timeValue));
+  s.sampleRate=static_cast<double>(x->getProperty("sampleRate")); s.channels=static_cast<unsigned int>(channelsSigned);
+  s.bitsPerSample=static_cast<unsigned int>(bitsSigned); s.floatingPoint=static_cast<bool>(x->getProperty("floatingPoint"));
   c.samples.push_back(std::move(s));}
  if(!c.validate(err))return false; dst=std::move(c); return true;
 }
@@ -64,8 +71,11 @@ bool BankManifest::validate(std::string& err) const {
  if(schemaVersion!=currentSchemaVersion){err="Unsupported manifest schema version.";return false;}
  if(bankId.empty()||displayName.empty()||canonicalRoot.empty()){err="Bank identity, display name and root are required.";return false;}
  if(license.licenseId.empty()){err="License must be explicit; use UNKNOWN when unverified.";return false;}
+ std::set<std::string> sampleIds, relativePaths;
  for(const auto& s:samples){
   if(s.sampleId.empty()||!safePath(s.relativePath)){err="Sample ID/path is invalid or escapes bank root.";return false;}
+  if(!sampleIds.insert(s.sampleId).second||!relativePaths.insert(s.relativePath).second){err="Duplicate sample ID or relative path.";return false;}
+  if(s.modificationTimeMs<0){err="Sample modification timestamp is invalid.";return false;}
   if(!hashOk(s.sha256)){err="SHA-256 must contain 64 hexadecimal characters.";return false;}
   if(s.fileBytes==0||s.frames==0||!std::isfinite(s.sampleRate)||s.sampleRate<8000.0||s.sampleRate>384000.0||s.channels==0||s.channels>2){
    err="Sample metadata is invalid for current mono/stereo WAV playback.";return false;}
