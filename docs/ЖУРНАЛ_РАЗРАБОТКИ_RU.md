@@ -1251,3 +1251,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Число 237 записано только как внешний ориентир из пользовательского описания Electric Sunburst Deluxe; оно не заявляется как существующее число пресетов PPGU и не подразумевает копирование контента NI.
 - Зафиксированы требования Bridge/Neck Blend, Condenser Mic Blend и FX-модули Chorus, Flanger, Phaser, Compressor, EQ, Saturator, Reverb, Amp, Cabinet с обязательной проверкой реальных источников/DSP.
 - Статус: taxonomy и документация обновлены; GUI, performance assets, источники pickup/mic и дополнительные DSP-модули требуют отдельной реализации и тестирования.
+
+
+## 11 ноября 2026 — SoundBank: подтверждена загрузка доступных CC0-гитарных библиотек
+
+- Проверен последний Windows workflow run `42969939920` на ветке `5.0-import-guitar-library-user-presets`, commit `dc047d6e12bfbe2f4429e61a8f004ed37ccb063d`.
+- Успешно завершены загрузка и лицензионная проверка Meta Open Sound Steel Guitar + Nylon Guitar; FreePats FSBS Clean, Distortion 1, Distortion 2 и Direct DI; Karoryfer Black and Green Guitars, Emilyguitar и Shinyguitar — всего 9 официальных наборов/релизов.
+- Успешно завершён license-aware SoundBank index. Содержимое сохранено в GitHub Actions cache, а не закоммичено в репозиторий бинарными файлами.
+- Важно: шаг сборки VST3 после индексации завершился ошибкой; CTest, pluginval и release packaging были пропущены. Поэтому скачивание и индексирование подтверждены, но готовый архив SoundBank ещё не опубликован.
+- Session Guitarist — Electric Sunburst Deluxe учитывается как ориентир по UX/играбельности (мультисэмплы, velocity/articulation zones, round robin, note-off/release, pattern performance), не как источник контента. Материалы NI не копировать; использовать только разрешённые CC0 и оригинальные PPGU performance assets.
+- Следующий шаг: устранить compile failure, повторно запустить Windows x64 build, затем проверить SampleBank import/playback coverage и собрать отдельный SoundBank ZIP вместе с VST3/presets.
