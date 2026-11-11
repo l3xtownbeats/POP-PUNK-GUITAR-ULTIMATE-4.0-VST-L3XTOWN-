@@ -78,7 +78,7 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
     report = []
     for item in GITHUB_LIBRARIES:
         repo = item["repo"]
-        print(f"[GitHub] Проверка лицензии: {repo}")
+        print(f"[GitHub] License check: {repo}")
         metadata = request_json(f"https://api.github.com/repos/{repo}", headers)
         license_spdx = ((metadata.get("license") or {}).get("spdx_id") or "").upper()
         if license_spdx != item["license"]:
@@ -98,7 +98,7 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
                 old = json.loads(marker.read_text(encoding="utf-8"))
                 if old.get("asset_url") == asset["browser_download_url"] and old.get("license") == item["license"]:
                     report.append(old | {"status": "already-installed"})
-                    print(f"  Уже установлена: {target}")
+                    print(f"  Already installed: {target}")
                     continue
             except Exception:
                 pass
@@ -108,7 +108,7 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
             shutil.rmtree(temp)
         temp.mkdir(parents=True)
         archive_path = temp / item["asset"]
-        print(f"  Загрузка {asset.get('size', 0) / (1024*1024):.1f} MiB ...")
+        print(f"  Downloading {asset.get('size', 0) / (1024*1024):.1f} MiB ...")
         req = urllib.request.Request(asset["browser_download_url"], headers={"User-Agent": headers["User-Agent"]})
         with urllib.request.urlopen(req, timeout=180) as response, archive_path.open("wb") as out:
             shutil.copyfileobj(response, out)
@@ -139,7 +139,7 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
         (target / "SOURCE_PROVENANCE.json").write_text(json.dumps(provenance, indent=2), encoding="utf-8")
         shutil.rmtree(temp, ignore_errors=True)
         report.append(provenance)
-        print(f"  Готово: {len(audio_files)} audio, {len(sfz_files)} SFZ -> {target}")
+        print(f"  Done: {len(audio_files)} audio, {len(sfz_files)} SFZ -> {target}")
     return report
 
 def main() -> int:
