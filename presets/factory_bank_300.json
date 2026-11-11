@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR L3XTOWN VST3",
   "minimumPresetCounts": {
-    "melody": 217,
-    "pattern": 217,
-    "total": 434
+    "melody": 216,
+    "pattern": 216,
+    "total": 432
   },
   "note": "Factory presets are authored tonal/performance targets. Track-study entries are original high-level style-reference profiles, not note-for-note transcriptions or included recordings. Their section-level details remain subject to audio validation and performance-library mapping. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are used as style references only.",
   "artists": [
@@ -3914,41 +3914,6 @@
       ],
       "trackBreakdown": {
         "trackTitle": "Papercuts",
-        "scope": "section-level tonal and articulation study",
-        "transcription": "not included",
-        "recording": "not included"
-      }
-    },
-    {
-      "id": "M158",
-      "name": "MGK — TRACK BREAKDOWN — Tickets to My Downfall — Melody",
-      "mode": "MELODY",
-      "referenceArtist": "MGK",
-      "referenceTracks": [],
-      "tonalTarget": "Track-focused tonal study for Tickets to My Downfall: modern saturated pop-punk; aggressive bright rhythm. Section-level sound profile only; not a note-for-note transcription.",
-      "sampleProfile": "electric",
-      "parameters": {
-        "drive": 0.88,
-        "tone": 6.8,
-        "reverb": 0.1,
-        "outputDb": -2,
-        "velocityResponse": "multi-layer-if-library-available",
-        "palmMute": "optional",
-        "roundRobin": "use-mapped-round-robins"
-      },
-      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
-      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
-      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
-      "styleProfileId": "mgk",
-      "soundCharacter": "Clean",
-      "tags": [
-        "track-breakdown",
-        "track-specific",
-        "style-reference-only",
-        "section-level-study"
-      ],
-      "trackBreakdown": {
-        "trackTitle": "Tickets to My Downfall",
         "scope": "section-level tonal and articulation study",
         "transcription": "not included",
         "recording": "not included"
@@ -15636,76 +15601,6 @@
       ],
       "trackBreakdown": {
         "trackTitle": "Papercuts",
-        "scope": "section-level groove, dynamics and articulation study",
-        "transcription": "not included",
-        "recording": "not included"
-      }
-    },
-    {
-      "id": "P158",
-      "name": "MGK — TRACK BREAKDOWN — Tickets to My Downfall — Pattern",
-      "mode": "PATTERN",
-      "referenceArtist": "MGK",
-      "referenceTracks": [],
-      "tonalTarget": "Track-focused rhythm and arrangement study for Tickets to My Downfall: modern saturated pop-punk; aggressive bright rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
-      "groove": "bright saturated eighth-note drive",
-      "articulation": "clean-picked",
-      "performance": {
-        "chordSource": "incoming-host-MIDI-chords",
-        "chordChanges": "follow-MIDI-progression",
-        "strokeVariation": true,
-        "palmMuteMap": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "humanize": true,
-        "velocityAccents": true,
-        "accentMap": [
-          1,
-          0.65,
-          0.8,
-          0.65,
-          0.95,
-          0.65,
-          0.8,
-          0.65
-        ]
-      },
-      "parameters": {
-        "drive": 0.88,
-        "tone": 6.8,
-        "reverb": 0.1,
-        "outputDb": -2
-      },
-      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
-      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
-      "playingStyle": "bright saturated eighth-note drive",
-      "soundCharacter": "Clean",
-      "availableSoundCharacters": [
-        "Clean",
-        "Crunch",
-        "Drive",
-        "Palm Mute",
-        "Open Chords",
-        "Acoustic",
-        "Lead Drive",
-        "Muted Chugs"
-      ],
-      "styleProfileId": "mgk",
-      "tags": [
-        "track-breakdown",
-        "track-specific",
-        "style-reference-only",
-        "section-level-study"
-      ],
-      "trackBreakdown": {
-        "trackTitle": "Tickets to My Downfall",
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
