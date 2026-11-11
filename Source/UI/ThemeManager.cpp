@@ -2,6 +2,13 @@
 
 namespace
 {
+    bool isAsciiHexDigit(juce_wchar character) noexcept
+    {
+        return (character >= '0' && character <= '9')
+            || (character >= 'a' && character <= 'f')
+            || (character >= 'A' && character <= 'F');
+    }
+
     bool isHexColour(const juce::var& value)
     {
         const auto text = value.toString();
@@ -9,7 +16,7 @@ namespace
             return false;
 
         for (int i = 1; i < text.length(); ++i)
-            if (!juce::CharacterFunctions::isHexDigit(text[i]))
+            if (!isAsciiHexDigit(text[i]))
                 return false;
 
         return true;
