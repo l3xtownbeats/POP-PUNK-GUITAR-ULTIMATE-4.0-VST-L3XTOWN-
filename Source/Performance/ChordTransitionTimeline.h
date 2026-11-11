@@ -35,7 +35,7 @@ namespace ppgu::performance
                 ++iterator;
             }
             while (iterator != end
-                   && (std::clamp)(static_cast<int>(iterator->samplePosition),
+                   && (std::clamp)(static_cast<int>((*iterator).samplePosition),
                                    eventSample, boundedBlockSamples) == eventSample);
 
             afterEventGroup(eventSample);
