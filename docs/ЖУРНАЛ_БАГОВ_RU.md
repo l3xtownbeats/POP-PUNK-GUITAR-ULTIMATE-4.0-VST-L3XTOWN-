@@ -183,3 +183,12 @@
 - Добавлен ppgu_chord_transition_tests для policy и сохранения pending NoteOff при переходе между непустыми аккордами.
 - Это закрывает пробел в отсутствии отдельного теста для ChordTransitionPolicy, но НЕ подтверждает end-to-end поведение PluginProcessor.
 - Статус M3-014: OPEN — AWAITING WINDOWS BUILD/CTest + PROCESSOR/HOST INTEGRATION. Тесты не запускались, дефект не закрыт.
+
+
+## 11 ноября 2026 — SKIN REV 5 audit findings
+
+- SKIN-REV5-001 (OPEN): preview.png / hero.webp / optional texture assets are referenced but absent from the repository; manifests cannot be marked asset-complete.
+- SKIN-REV5-002 (OPEN): no runtime ThemeManager/gallery implementation was verified on main; the open PR #24 is a separate, unmerged implementation and must be reviewed before integration.
+- SKIN-REV5-003 (OPEN): schema file currently checks required top-level groups but does not yet enforce complete nested token keys or HEX formats; strengthen schema and add automated validation tests before MANIFEST VALIDATED.
+- SKIN-REV5-004 (OPEN): complete APVTS-to-GUI inventory matrix is not available from the current UI source alone; Blueprint/acceptance documents must be recovered and reconciled.
+- No audio callback, DSP, sampler, scheduler or APVTS implementation was modified in this cycle.
