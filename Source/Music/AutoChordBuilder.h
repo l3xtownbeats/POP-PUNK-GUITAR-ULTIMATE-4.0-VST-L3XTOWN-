@@ -63,6 +63,8 @@ inline AutoChordResult buildAutoChord(int midiRoot, int scaleRoot, int scaleMode
             - scale[static_cast<std::size_t>(degree)] + (fifthDegree <= degree ? 12 : 0);
     }
 
+    while (chordRoot < 0)
+        chordRoot += 12;
     while (chordRoot + fifth > 127)
         chordRoot -= 12;
     if (chordRoot < 0)
