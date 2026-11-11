@@ -39,6 +39,7 @@ private:
         juce::String artistReference, referenceTracks, tonalTarget, sampleProfile, catalogStatus, tags;
         float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f;
     };
+    juce::StringArray catalogArtists;
     std::vector<FactoryPreset> factoryPresets;
     std::vector<int> visiblePresetIndices;
     juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle;
