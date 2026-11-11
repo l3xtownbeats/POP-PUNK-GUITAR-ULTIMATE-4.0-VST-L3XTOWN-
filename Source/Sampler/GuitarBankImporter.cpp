@@ -76,6 +76,7 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
     }
 
     juce::Array<juce::var> assets;
+    int wavSourceCount = 0;
     juce::DynamicObject::Ptr categoryCounts = new juce::DynamicObject();
     juce::DynamicObject::Ptr formatCounts = new juce::DynamicObject();
     juce::File selectedSfz;
@@ -105,6 +106,7 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
         asset->setProperty("bytes", static_cast<juce::int64>(bytes));
         asset->setProperty("sha256", juce::SHA256(target).toHexString());
         asset->setProperty("sourceName", source.getFileName());
+        if (source.hasFileExtension("wav")) ++wavSourceCount;
         const auto category = classifyCategory(source);
         const auto format = formatLabel(source);
         asset->setProperty("category", category);
@@ -125,14 +127,16 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
         const auto indexed = index.scanDirectory(staging);
         for (const auto& warning : indexed.warnings) report.warnings.add(warning);
         report.indexedWavFiles = static_cast<int>(indexed.samples.size());
-        if (!indexed.success)
+        if (!indexed.success && wavSourceCount > 0)
         {
             for (const auto& error : indexed.errors) report.errors.add(error);
-            report.errors.add("The copied bank contains no valid WAV playback assets.");
+            report.errors.add("The bank contains WAV files, but none passed playback metadata validation.");
             failed = true;
         }
         else
         {
+            if (wavSourceCount == 0)
+                report.warnings.add("Assets were catalogued, but this build has no verified WAV playback asset in the imported bank.");
             juce::DynamicObject::Ptr manifest = new juce::DynamicObject();
             manifest->setProperty("schemaVersion", 1);
             manifest->setProperty("bankId", bankId);
