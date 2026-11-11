@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <cmath>
 
 // UI theme changes run on the message thread and never touch audio processing.
 
