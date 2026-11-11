@@ -66,6 +66,30 @@ The supplied Electric Sunburst analysis describes a hybrid instrument: a multisa
 ### Comparative performance rule
 The product goal is to be lighter than Session Guitarist and Nexus 5 in both load time and runtime resource use, but this is a target to verify, not a claim already established. Benchmark all products on the same Windows 10 Enterprise 1809 x64 machine, FL Studio 20 version, sample rate, buffer size, project, preset, voice count and playback duration. Record cold/warm load time, idle/active CPU, peak/private working-set memory, disk reads, preset-switch latency and audio glitches. Compare equivalent musical output and quality settings; publish results only after repeatable measurements.
 
+
+## 0.2 Product direction — preserve our visual identity and standalone VST3 advantage
+
+The primary product direction is to preserve and refine the established POP PUNK GUITAR ULTIMATE visual style and the feature layout already defined in the project journal/specification. Engine improvements must support this identity, not replace it with a generic Kontakt-style interface.
+
+Core product principles:
+- **Standalone instrument:** the plug-in runs as its own VST3 instrument and must not require Kontakt 6, Kontakt Player, or a Kontakt library wrapper. This independence is a key product advantage.
+- **Visual continuity:** retain the approved interface structure, visual language, controls, sections, preset browser, and switchable skin system. New features must fit the existing layout and remain accessible; do not remove established controls or redesign the interface without approval.
+- **Useful upgrades only:** add a feature only when it improves sound quality, playability, workflow, reliability, or resource efficiency. Avoid feature inflation, duplicate controls, decorative processing, and complex options with little practical value.
+- **Sound quality with a lean engine:** prioritize high-quality source samples, careful mapping, velocity response, clean note-off/release behavior, useful articulations, and a small efficient FX chain. Optimize the implementation rather than reducing sound quality indiscriminately.
+- **Fast startup and loading:** initialize the DSP and essential state quickly; defer preset indexing, skin decoding, waveform generation, and nonessential asset work to safe background tasks. Load only the active preset's required sound resources.
+- **Low memory and CPU:** shared sample assets, bounded cache/preload, configurable polyphony, efficient voice management, optional FX bypass, and strict real-time-safe audio processing remain mandatory.
+- **Skin/UI isolation:** the selected skin changes the appearance of the complete interface without changing DSP behavior or increasing audio-thread workload. Load only the active skin's assets and release replaced skin resources safely.
+- **No Kontakt dependency by design:** avoid architecture or packaging choices that make Kontakt a runtime requirement. Use a native VST3 codebase and independently distributable, license-cleared sound assets.
+
+Priority order:
+1. Preserve and complete the approved visual style and full functional interface.
+2. Ensure the standalone VST3 architecture and reliable FL Studio 20 loading.
+3. Deliver excellent core guitar sound and dependable Melody/Pattern playback.
+4. Optimize load time, RAM, CPU, disk streaming and preset switching without audible degradation.
+5. Add only proven, useful enhancements after measurement and regression testing.
+
+Acceptance rule: the plug-in must be evaluated as a complete standalone product: visual/interface regression, sound/playability tests, VST3 host compatibility, and measured CPU/RAM/load-time benchmarks. Do not claim superiority to Kontakt-based products or Nexus 5 until comparable tests have been run on the same system and settings.
+
 ## 1. One unified preset browser
 Keep one browser for the entire instrument. Each preset is tagged with:
 - Sound character: Clean, Crunch, Lead, Distortion, Acoustic, Muted, Ambient.
