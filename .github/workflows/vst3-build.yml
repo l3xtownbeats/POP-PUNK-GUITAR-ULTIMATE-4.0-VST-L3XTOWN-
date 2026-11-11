@@ -161,7 +161,7 @@ jobs:
         run: |
           $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
           $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($wavFiles.Count) WAV files found." }
+          if ($wavFiles.Count -lt 200) { throw "Sample cache is incomplete: only $($wavFiles.Count) WAV files found." }
           foreach ($license in @(
             'Meta-meta-steel-guitar/LICENSE',
             'Meta-meta-nylon-guitar/LICENSE',
