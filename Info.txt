@@ -243,3 +243,5 @@ Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sam
 - Info.txt refresh record: `6293460630a9a2da58e94ef68dbba9ac068c25ae`
 
 **Scope boundary:** these commits are on `main`. The repository inventory contains 41 branches; the other 40 branch heads have not yet received this docs-only refresh. No code from those branches was merged, rebased or overwritten. Repository-level Description/Topics metadata also remains unchanged because the connected GitHub actions do not expose repository-metadata writes. Suggested public description: “POP PUNK GUITAR ULTIMATE — Windows x64 VST3 pop-punk guitar instrument built with JUCE/C++20. SFZ/WAV sample engine, MIDI Melody & Pattern workflows, 300 preset definitions. Active development; current build and release gates tracked in Info.txt.”
+
+README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b22330c7` to state explicitly that run #827 validates main only, not the other 40 branches.
