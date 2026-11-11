@@ -14,6 +14,7 @@ struct ChordAnalysis
     int bassPitchClass=-1;
     ChordQuality quality=ChordQuality::Unknown;
     std::string symbol;
+    std::string displayText; // Single note includes octave (e.g. C4); chords use chord symbol.
     std::string qualityLabel;
     std::vector<int> midiNotes;
     std::vector<int> pitchClasses;
