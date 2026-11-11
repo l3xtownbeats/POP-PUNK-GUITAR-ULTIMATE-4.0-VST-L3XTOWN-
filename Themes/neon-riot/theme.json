@@ -1,0 +1,60 @@
+{
+  "name": "Neon Riot",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#1a1a1f",
+    "background.bottom": "#0f0f12",
+    "accent.primary": "#ff00b8",
+    "accent.secondary": "#00e5ff",
+    "text.main": "#ffffff",
+    "text.dim": "#888888",
+    "knob.face": "#2a2a33",
+    "knob.ring": "#ff00b8",
+    "button.normal": "#0f0f12",
+    "button.active": "#ff00b8",
+    "button.hover": "#1a1a1f",
+    "slider.track": "#888888",
+    "slider.fill": "#ff00b8",
+    "led.on": "#ff00b8",
+    "led.off": "#888888",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#ff00b8",
+    "meter.fill": "#ff00b8",
+    "meter.peak": "#ff4444",
+    "panel.border": "#888888",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#0f0f12",
+    "list.row.selected": "#ff00b8",
+    "tooltip.background": "#0f0f12",
+    "tooltip.text": "#ffffff"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "graffiti_bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "spray_paint"
+  }
+}
