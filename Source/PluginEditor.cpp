@@ -316,7 +316,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
 
-    skinsButton.setTooltip("Choose one of 20 interface skins. The selected theme is saved with this plugin instance.");
+    skinsButton.setButtonText("SKIN");
+    skinsButton.setTooltip("Choose one of 20 original graphic skins. Selection is saved with this plugin instance.");
     skinsButton.setEnabled(true);
     skinsButton.setColour(juce::TextButton::buttonColourId, panel2);
     skinsButton.setColour(juce::TextButton::textColourOffId, pink);
@@ -539,6 +540,69 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(bg);
+
+    // Original procedural skin artwork: distinct graphic language per palette.
+    // Drawn only on the UI thread; no audio-thread work or external asset dependency.
+    {
+        juce::ColourGradient backdrop(bg.brighter(0.10f), 0.0f, 0.0f,
+                                      bg.darker(0.62f), (float)getWidth(), (float)getHeight(), false);
+        g.setGradientFill(backdrop);
+        g.fillAll();
+        const int motif = activeSkinIndex % 20;
+        const auto ink = pink.withAlpha(0.16f);
+        g.setColour(ink);
+        if (motif == 0 || motif == 11 || motif == 18) {
+            for (int i = -5; i < 13; ++i) {
+                juce::Path beam;
+                const float x = (float)i * (float)getWidth() / 8.0f;
+                beam.addQuadrilateral(x, 0.0f, x + 54.0f, 0.0f,
+                    x - (float)getHeight() * 0.38f + 54.0f, (float)getHeight(),
+                    x - (float)getHeight() * 0.38f, (float)getHeight());
+                g.fillPath(beam);
+            }
+        } else if (motif == 1 || motif == 6 || motif == 16 || motif == 19) {
+            for (int x = 0; x < getWidth(); x += 32)
+                g.drawLine((float)x, 0.0f, (float)x, (float)getHeight(), 0.8f);
+            for (int y = 0; y < getHeight(); y += 32)
+                g.drawLine(0.0f, (float)y, (float)getWidth(), (float)y, 0.8f);
+            for (int x = -getHeight(); x < getWidth(); x += 96)
+                g.drawLine((float)x, 0.0f, (float)(x + getHeight()), (float)getHeight(), 1.0f);
+        } else if (motif == 2 || motif == 13 || motif == 17) {
+            for (int x = -getHeight(); x < getWidth(); x += 24)
+                g.drawLine((float)x, 0.0f, (float)(x + getHeight()), (float)getHeight(),
+                           (x % 4 == 0) ? 2.2f : 0.8f);
+        } else if (motif == 3 || motif == 8 || motif == 14) {
+            for (int row = 0; row < 8; ++row) {
+                juce::Path wave;
+                const float baseY = (float)getHeight() * (0.12f + row * 0.105f);
+                wave.startNewSubPath(0.0f, baseY);
+                for (int x = 0; x <= getWidth(); x += 8)
+                    wave.lineTo((float)x, baseY + std::sin((float)x * 0.012f + row * 0.8f) * 13.0f);
+                g.strokePath(wave, juce::PathStrokeType(1.1f));
+            }
+        } else if (motif == 4 || motif == 9 || motif == 12 || motif == 15) {
+            for (int y = 10; y < getHeight(); y += 17)
+                for (int x = 10; x < getWidth(); x += 17)
+                    g.fillEllipse((float)x, (float)y, 2.0f, 2.0f);
+            for (int i = 0; i < 14; ++i)
+                g.drawEllipse((float)getWidth() * 0.60f + i * 8.0f,
+                              (float)getHeight() * 0.15f + i * 5.0f,
+                              80.0f + i * 12.0f, 80.0f + i * 12.0f, 1.0f);
+        } else {
+            for (int i = 0; i < 22; ++i) {
+                const float d = 28.0f + i * 24.0f;
+                const float x = (float)getWidth() * (0.12f + (i % 5) * 0.19f);
+                const float y = (float)getHeight() * (0.18f + (i % 4) * 0.21f);
+                g.drawEllipse(x - d * 0.5f, y - d * 0.5f, d, d, 1.0f);
+                juce::Path shard;
+                shard.startNewSubPath(x, y - d * 0.55f);
+                shard.lineTo(x + d * 0.48f, y + d * 0.35f);
+                shard.lineTo(x - d * 0.42f, y + d * 0.42f);
+                shard.closeSubPath();
+                g.strokePath(shard, juce::PathStrokeType(1.0f));
+            }
+        }
+    }
     g.setColour(panel2);
     g.fillRect(0, 0, getWidth(), 62);
     g.setColour(pink);
