@@ -93,3 +93,44 @@
 
 ### Следующее действие
 Сначала проверить существующие тесты `SamplePoolTests` и `SampleStreamingServiceTests` на покрытие перечисленных граничных случаев; добавлять тесты до изменения snapshot/service ownership. Никакой production refactor в этой записи не выполнялся.
+
+
+---
+
+## 2026-11-11 — REV 10.1 SOUND HUNTER & PRESET CURATION
+
+**Ветка:** `main`  
+**Базовый HEAD перед изменением:** `74c7df1b0ba7b6307d759400592adec61f788e7f`  
+**Коммит спецификации:** `cdcb02dea03d2098bb1c515089191be3f330ee0f`  
+**Документ:** `docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md`  
+**Статус:** DESIGN SPECIFICATION / DESIGNED. Исходники и production pipeline не менялись.
+
+### Что зафиксировано
+- SOUND HUNTER расширяет только существующий S6.5 DiscoveryEngine; второй импортный pipeline запрещён.
+- GREEN/YELLOW/RED применяются на уровне конкретного asset. Само наличие источника в каталоге не является доказательством лицензии.
+- AUTO ADD требует подтверждённой CC0/PD лицензии конкретного файла, прямого скачивания, provenance, SHA-256, технического screening и guitar-only gate.
+- YELLOW требует ручного импорта; RED исключён и не может быть переопределён куратором.
+- Deep Search ограничен API/site terms, rate limits, bounded concurrency, checkpoint/cancel, download limits и disk quota.
+- Network, file I/O, hashing, scanning и decoding не допускаются в audio callback; предпочтительная граница — отдельный worker/companion curator service.
+- StyleClassifier использует PP-ROOT, PP-NEO2000, PP-MODERN, PP-EMO и UNCATEGORIZED; сомнительный материал не проходит guitar-confirmed gate.
+- GOLD требует технического pass и человеческого прослушивания. COPYRIGHT SUSPECT блокирует commit до ручной проверки.
+- MELODY 30, PATTERN 50, PUNK GROUP 40 зафиксированы как цели; счётчики должны учитывать только реально playable и validated presets.
+- Attribution/provenance является обязательным release gate.
+
+### Важные архитектурные уточнения
+1. Список сайтов — список мест поиска, а не whitelist всех файлов; asset-level license evidence обязателен.
+2. Автоматическое распознавание узнаваемых риффов не считается надёжным юридическим clearance; нужен manual review.
+3. Наличие loop WAV не означает, что PATTERN playback уже реализован.
+4. Bass layer не добавляется в Guitar SoundBank автоматически; сохраняется разделение Guitar/Bass Product Profiles.
+5. Пороговые показатели качества — цели спецификации до реализации и тестирования измерительного алгоритма.
+
+### Что НЕ выполнено
+- DiscoveryEngine DEEP SEARCH и production DeepSearchWorker не реализованы.
+- StyleClassifier и CuratorPanel не реализованы.
+- GREEN source registry и проверка лицензий отдельных assets не созданы.
+- Новые sounds/presets не найдены, не загружены и не добавлены этим этапом.
+- H9 tests не добавлены и не запускались.
+- Windows Release build, CTest, pluginval и FL Studio 20 host verification не выполнялись.
+
+### Следующий инженерный шаг
+Проверить точное состояние S6.5/DiscoveryEngine в исходниках и CMake, затем определить минимальный существующий контракт/точку расширения и добавить тестируемую policy model для GREEN/YELLOW/RED и provenance — до сетевого обхода и автоматического импорта.
