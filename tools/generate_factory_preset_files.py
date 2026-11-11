@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Expand the authored 432-entry catalog into portable factory .ppgm/.ppgp files.
+"""Expand the authored factory catalog into portable factory .ppgm/.ppgp files.
 
 Pattern files contain original MIDI-style event recipes derived from the catalog's
 groove, accent and mute metadata. They do not claim to be recorded guitar audio.
@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -68,8 +67,9 @@ def main() -> int:
     if len(melody) < 216 or len(pattern) < 216:
         raise SystemExit("Factory catalog must contain at least 216 Melody and 216 Pattern definitions.")
 
-    if DEST.exists():
-        shutil.rmtree(DEST)
+    # Never delete the destination: it may contain user-added presets or sound assets.
+    # Deterministic catalog IDs are overwritten in place; unrelated files are preserved.
+    DEST.mkdir(parents=True, exist_ok=True)
     counts = {"MELODY": 0, "PATTERN": 0}
     index = []
     for mode, entries in (("MELODY", melody), ("PATTERN", pattern)):
