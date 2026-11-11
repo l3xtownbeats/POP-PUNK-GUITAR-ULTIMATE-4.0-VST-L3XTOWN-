@@ -35,7 +35,7 @@ private:
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset {
-        juce::String id, name, category, mode, soundCharacter, groove, articulation, styleProfileId;
+        juce::String id, name, category, mode, soundCharacter, groove, articulation, styleProfileId;\n        juce::String artistReference, referenceTracks, tonalTarget, sampleProfile, catalogStatus, tags;
         float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f;
     };
     std::vector<FactoryPreset> factoryPresets;
