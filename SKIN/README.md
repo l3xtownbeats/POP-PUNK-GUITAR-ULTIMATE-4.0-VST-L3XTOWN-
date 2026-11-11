@@ -1,50 +1,35 @@
-# PPGU SKIN packs
+# PPGU — единый визуальный интерфейс и графические ресурсы
 
-The repository contains authored theme manifests and a visual-token contract. These files are not, by themselves, finished graphical skins or proof of runtime theme switching.
+## Текущий продуктовый принцип
 
-## Runtime installation rule
+PPGU использует **один фиксированный фирменный интерфейс** — реальный JUCE editor из Source/PluginEditor.cpp и Source/PluginEditor.h. В текущей реализации задана палитра dark charcoal / magenta. В продукте не должно быть переключателя графических тем, галереи скинов или демонстрации фиктивного runtime hot-swap.
 
-**The installed plugin must use a sibling folder named Skins next to the installed .vst3 bundle.** The primary runtime source is not %APPDATA%, Documents, or a separate system theme directory.
+Фактические элементы редактора: выбор/поиск/фильтр factory presets, режимы MELODY и PATTERN, загрузка SFZ и статус библиотеки, девять rotary controls, семь FX switches и MIDI keyboard. Внешний вид и расположение элементов должны соответствовать работающему editor source, а не придуманному концепту.
 
-Expected installed layout:
+## Важное различие: artwork ≠ runtime UI
 
-```text
-VST3 install directory/
-├── POP PUNK GUITAR ULTIMATE.vst3/
-└── Skins/
-    ├── default/
-    │   ├── theme.json
-    │   ├── assets/
-    │   ├── svg/
-    │   └── textures/
-    ├── skin-02/
-    └── ...
-```
+- assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg — брендовая обложка репозитория.
+- assets/PPGU_BLACKOUT_VOLTAGE_SKIN.svg — отдельный дизайн-концепт, не текущий runtime UI и не скриншот VST3.
+- Cover Interface.jpg — artwork/визуальный материал; не маркировать его как подтверждённый host capture без проверки происхождения.
+- Единственное доказательство реального вида плагина — свежий screenshot/capture из собранного VST3 в совместимом host.
 
-The source folder SKIN/ is a development/catalogue folder. Packaging and installation must transform/copy its accepted theme packs into the runtime sibling folder Skins/. The plugin must resolve the installed VST3 bundle path, not use the DAW current working directory. Do not silently substitute AppData as the main theme location.
+## Каталог старых skin manifests
 
-## User and designer guide
+Каталог SKIN/ и его manifests сохраняются как инженерные/исторические материалы. Они не доказывают наличие законченных selectable skins и не должны рекламироваться как продуктовая функция. Не копировать незавершённые manifests в runtime package и не создавать искусственные preview/hero/texture assets для видимости готовности.
 
-See [PPGU User & Designer Skin Guide (Russian)](USER_SKIN_GUIDE_RU.md) for the full authoring instructions, manifest contract, safe asset rules, installation layout and current feature status.
+## Что должно быть проверено перед публикацией UI-скриншота
 
-## Catalogue and current gaps
+1. Текущий Windows x64 VST3 собран из зафиксированного commit SHA.
+2. Плагин открыт в FL Studio 20 или другом явно названном host.
+3. На изображении показан именно запущенный editor, а не SVG-концепт или графический макет.
+4. Скриншот соответствует актуальному build и не скрывает отсутствующие элементы.
+5. В README указан commit/run, с которого сделан capture.
 
-- The registry and validator define 50 canonical slots (skin-01 through skin-50).
-- The current source tree also contains Skin_51 / skin-51, which is outside the schema/registry range and is not an accepted catalogue entry.
-- Theme manifests exist, but the specified preview.png, hero.webp and texture.png files are not present in the theme folders. Control artwork, sprite sheets, fonts and SVG layers are also not complete.
-- Runtime switching, SKIN button/browser, Ctrl+K, preview, hot-swap, persistence, directory scanning, full token application, LRU texture loading and ECO behavior are not implemented/accepted in the current main editor.
-- The current ThemeManager is a partial manifest/palette validator and is not connected to PluginEditor.
+## Связанные документы
 
-See [SKIN Engine gap audit](SKIN_ENGINE_GAP_AUDIT_RU.md) for the source-by-source findings, test gaps and implementation priorities.
+- [Главная страница продукта](../README.md)
+- [Аудит текущего UI / прежнего Skin Engine](SKIN_ENGINE_GAP_AUDIT_RU.md)
+- [Матрица фактических контролов](CONTROL_INVENTORY_MATRIX_RU.md)
+- [Техническая спецификация](../docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
 
-## Runtime contract
-
-- The SKIN selector is the only user-facing theme entry point.
-- Theme changes are presentation-only: no APVTS parameter, audio engine, preset, MELODY/PATTERN or layout changes.
-- Preserve hit areas, control IDs, attachment bindings, focus/hover/pressed/disabled states and scaling.
-- Missing/invalid theme data must fall back to the built-in default without interrupting audio; log the issue and mark the incompatible theme in the browser.
-- Do not mark a theme accepted until Windows x64 build, automated tests and FL Studio 20 host checks pass.
-
-## Status
-
-**SPECIFIED / PARTIALLY SCAFFOLDED / NOT RUNTIME-INTEGRATED.** Manifests are authored; artwork assets and runtime integration are pending.
+**Правило:** не называть концепт-арт готовой темой и не называть manifest полноценным runtime skin.
