@@ -405,3 +405,13 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - **Validate PPGU REV 14 skin pack (G1–G4) — PASS.**
 - Confirmed by workflow job step summary; run #859 overall Windows build is still in progress at the time of this entry.
 - Therefore Skin_052 status is now **PACK GENERATED / VALIDATION PASS / NOT MERGED / NOT INTEGRATED**. This validation result applies to source SHA `d0eecea...`; subsequent commits require a new run for refreshed CI evidence.
+
+
+### REV 14 — Step 0: control inventory audit (12 November 2026)
+- Актуализирован `SKIN/control_schema.json`: сохранён существующий JSON Schema-контракт темы и расширен его `x-ppgu-contract.runtimeControlInventory` фактическими типами контролов, APVTS ID, диапазонами, шагами, значениями по умолчанию и источниками.
+- Инвентаризированы `Source/PluginEditor.h`, `Source/PluginEditor.cpp` и `Source/PluginProcessor.cpp:createParameterLayout`. Зафиксированы 27 обязательных control-ID; дополнительно сохранены `sync_selector`, фильтр категории, поиск и статус библиотеки.
+- Девять rotary имеют точные параметры: `ampGain 0..10 (default 5)`; `eqHigh/eqMid/eqLow -12..12 (0)`; `velocity 0..2 (1)`; `dynamics 0..1 (0.5)`; `swing 0..1 (0)`; `humanize 0..1 (0)`; `accent 0..1 (0.75)`. FX switches привязаны к семи APVTS bool-параметрам.
+- Честные ограничения реализации: `PUNK GROUP` отсутствует в текущем `playMode` (только MELODY/PATTERN); `LED_indicator` не реализован; `Auto_Discover`, `Curator`, `Settings`, `About` не реализованы. `LCD_display` пока отображается через status label. Эти ID остаются в parity-контракте, но не считаются реализованными.
+- MIDI keyboard: MIDI state component, доступный диапазон нот 36–84. `SKIN_button` открывает существующее меню и доступен через Ctrl+K; `Import_Guitar` привязан к LOAD SFZ.
+- Изменения только в документации/контракте скинов; `PluginEditor`, AudioProcessor, APVTS, MIDI, пресеты и аудио-код не изменялись.
+- Commit control inventory: `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`. Новый CI run ожидается для этого commit; до его завершения свежий G1–G4 PASS не заявляется.
