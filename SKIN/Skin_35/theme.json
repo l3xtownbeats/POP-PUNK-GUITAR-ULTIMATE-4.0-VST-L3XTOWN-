@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-35",
+  "index": 35,
+  "name": "Arena Pulse",
+  "description": "Large-stage energy translated into clean, readable performance hardware",
+  "cluster": "B",
+  "identity": {
+    "material": "stage-black composite and satin steel",
+    "lighting": "broad red and amber arena wash",
+    "mood": "powerful, live, immediate"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#1C1419",
+      "inset": "#291A22"
+    },
+    "surfaces": {
+      "primary": "#291A22",
+      "secondary": "#36232D",
+      "raised": "#4A303D",
+      "overlay": "#1C1419"
+    },
+    "borders": {
+      "subtle": "#76525D",
+      "strong": "#FFB84D",
+      "focus": "#FF4F68"
+    },
+    "typography": {
+      "primary": "#FFF5F5",
+      "secondary": "#D4BEC5",
+      "disabled": "#85858B",
+      "onAccent": "#1C1419"
+    },
+    "rotary": {
+      "body": "#4A303D",
+      "ring": "#FFB84D",
+      "track": "#76525D",
+      "value": "#FF4F68",
+      "pointer": "#D4E0F1",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#76525D",
+      "fill": "#FF4F68",
+      "thumb": "#D4E0F1",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF4F68",
+        "foreground": "#1C1419",
+        "hover": "#D4E0F1",
+        "pressed": "#FFB84D",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#36232D",
+        "foreground": "#FFF5F5",
+        "hover": "#4A303D",
+        "pressed": "#FFB84D",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF4F68",
+      "activeText": "#1C1419",
+      "inactiveBackground": "#36232D",
+      "inactiveText": "#D4BEC5",
+      "indicator": "#FFB84D"
+    },
+    "comboBoxes": {
+      "background": "#36232D",
+      "foreground": "#FFF5F5",
+      "border": "#76525D",
+      "hover": "#4A303D",
+      "menuBackground": "#291A22",
+      "selection": "#FF4F68"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF4F68",
+      "blackPressed": "#FFB84D",
+      "keyBorder": "#76525D",
+      "octaveLabel": "#D4BEC5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF4F68",
+      "high": "#F06A58",
+      "background": "#1C1419"
+    },
+    "icons": {
+      "primary": "#FFF5F5",
+      "secondary": "#D4BEC5",
+      "accent": "#FF4F68",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#36232D",
+      "border": "#76525D",
+      "selected": "#FF4F68",
+      "caption": "#FFF5F5"
+    },
+    "windowChrome": {
+      "background": "#1C1419",
+      "title": "#FFF5F5",
+      "border": "#76525D",
+      "close": "#D4E0F1"
+    },
+    "hero": {
+      "background": "#1C1419",
+      "accent": "#FF4F68",
+      "secondaryAccent": "#FFB84D",
+      "highlight": "#D4E0F1"
+    },
+    "accents": {
+      "primary": "#FF4F68",
+      "secondary": "#FFB84D",
+      "tertiary": "#D4E0F1"
+    },
+    "texture": {
+      "material": "stage-black composite and satin steel",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "broad red and amber arena wash",
+      "glow": "#FF4F68",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#FFB84D"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Arena Pulse preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original stage-black composite and satin steel hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle stage-black composite and satin steel texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
