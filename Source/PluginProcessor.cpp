@@ -573,7 +573,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     if (parameters.getRawParameterValue("compressorOn")->load(std::memory_order_relaxed) > 0.5f)
     {
         const float thresholdDb = juce::jlimit(-60.0f, 0.0f, parameters.getRawParameterValue("compressorThreshold")->load(std::memory_order_relaxed));
+        const float thresholdLinear = juce::Decibels::decibelsToGain(thresholdDb);
         const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
+        const float compressionExponent = 1.0f - 1.0f / ratio;
         const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
         const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
         const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
@@ -587,10 +589,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float level = std::abs(data[sample]);
                 const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
                 envelope = coefficient * envelope + (1.0f - coefficient) * level;
-                const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
-                const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
-                const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                data[sample] *= gain;
+
+                // Algebraically equivalent to the dB-domain static curve, but
+                // avoids two logarithmic/decibel conversions for every sample.
+                // All expensive parameter conversions are performed once/block.
+                if (compressionExponent > 0.0f && envelope > thresholdLinear)
+                    data[sample] *= std::pow(thresholdLinear / envelope, compressionExponent);
             }
         }
     }
