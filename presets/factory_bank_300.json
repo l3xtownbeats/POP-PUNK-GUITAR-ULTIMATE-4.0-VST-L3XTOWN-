@@ -2,11 +2,11 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR L3XTOWN VST3",
   "minimumPresetCounts": {
-    "melody": 150,
-    "pattern": 150,
-    "total": 300
+    "melody": 159,
+    "pattern": 159,
+    "total": 318
   },
-  "note": "Preset definitions are authored tonal/performance targets. They are not represented as fully playable in-plugin presets until connected to the plugin loader and verified against mapped sample/performance libraries. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are style references only. No commercial recordings, stems, riffs, or protected samples are included.",
+  "note": "Preset definitions are authored tonal/performance targets. Track breakdown entries are section-level style-reference studies, not note-for-note transcriptions. They are not represented as fully playable in-plugin presets until connected to the plugin loader and verified against mapped sample/performance libraries. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are style references only. No commercial recordings, stems, riffs, or protected samples are included.",
   "artists": [
     {
       "name": "Blink-182",
@@ -160,10 +160,7 @@
       "name": "Sum 41 — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -186,10 +183,7 @@
       "name": "Simple Plan — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "sampleProfile": "electric",
       "parameters": {
@@ -212,10 +206,7 @@
       "name": "New Found Glory — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "sampleProfile": "electric",
       "parameters": {
@@ -238,10 +229,7 @@
       "name": "Good Charlotte — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -264,10 +252,7 @@
       "name": "Mest — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -290,10 +275,7 @@
       "name": "Angels & Airwaves — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "sampleProfile": "electric",
       "parameters": {
@@ -316,10 +298,7 @@
       "name": "The All-American Rejects — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -342,10 +321,7 @@
       "name": "MGK — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -368,10 +344,7 @@
       "name": "Avril Lavigne — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -1314,9 +1287,7 @@
       "name": "MGK — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1339,9 +1310,7 @@
       "name": "Avril Lavigne — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1364,9 +1333,7 @@
       "name": "The Offspring — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1389,9 +1356,7 @@
       "name": "Green Day — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -1414,9 +1379,7 @@
       "name": "Bowling for Soup — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1439,9 +1402,7 @@
       "name": "Sugarcult — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -1464,9 +1425,7 @@
       "name": "All Time Low — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -1489,9 +1448,7 @@
       "name": "Fall Out Boy — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -1514,9 +1471,7 @@
       "name": "Yellowcard — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "sampleProfile": "electric",
       "parameters": {
@@ -1539,9 +1494,7 @@
       "name": "My Chemical Romance — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -1820,10 +1773,7 @@
       "name": "MGK — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1846,10 +1796,7 @@
       "name": "Avril Lavigne — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1872,10 +1819,7 @@
       "name": "The Offspring — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1898,10 +1842,7 @@
       "name": "Green Day — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -1924,10 +1865,7 @@
       "name": "Bowling for Soup — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1950,10 +1888,7 @@
       "name": "Sugarcult — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -1976,10 +1911,7 @@
       "name": "All Time Low — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2002,10 +1934,7 @@
       "name": "Fall Out Boy — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2028,10 +1957,7 @@
       "name": "Yellowcard — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -2054,11 +1980,7 @@
       "name": "My Chemical Romance — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "sampleProfile": "electric",
       "parameters": {
@@ -2081,11 +2003,7 @@
       "name": "Less Than Jake — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Less Than Jake",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "upbeat ska-punk guitar; crisp offbeat upstrokes; short chord chops; bright clean-to-crunch tone",
       "sampleProfile": "electric",
       "parameters": {
@@ -2108,11 +2026,7 @@
       "name": "Fenix TX — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Fenix TX",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright fast melodic skate-punk; tight eighth-note downstrokes; punchy palm-muted verses and open choruses",
       "sampleProfile": "electric",
       "parameters": {
@@ -2135,11 +2049,7 @@
       "name": "Midtown — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "Midtown",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "urgent melodic emo-pop-punk; ringing octave leads; tight rhythm attacks; energetic dynamic changes",
       "sampleProfile": "electric",
       "parameters": {
@@ -2162,11 +2072,7 @@
       "name": "Blink-182 — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Blink-182",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright modern pop-punk crunch; tight muted verses; wide open choruses",
       "sampleProfile": "electric",
       "parameters": {
@@ -2189,11 +2095,7 @@
       "name": "Sum 41 — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -2216,11 +2118,7 @@
       "name": "Simple Plan — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "sampleProfile": "electric",
       "parameters": {
@@ -2243,11 +2141,7 @@
       "name": "New Found Glory — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "sampleProfile": "electric",
       "parameters": {
@@ -2270,11 +2164,7 @@
       "name": "Good Charlotte — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -2297,11 +2187,7 @@
       "name": "Mest — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -2324,9 +2210,7 @@
       "name": "Angels & Airwaves — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "sampleProfile": "electric",
       "parameters": {
@@ -2349,9 +2233,7 @@
       "name": "The All-American Rejects — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2374,9 +2256,7 @@
       "name": "MGK — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2424,9 +2304,7 @@
       "name": "The Offspring — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2449,9 +2327,7 @@
       "name": "Green Day — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -2474,9 +2350,7 @@
       "name": "Bowling for Soup — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2499,9 +2373,7 @@
       "name": "Sugarcult — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -2524,9 +2396,7 @@
       "name": "All Time Low — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2549,9 +2419,7 @@
       "name": "Fall Out Boy — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -3718,6 +3586,339 @@
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
       "soundCharacter": "Crunch"
+    },
+    {
+      "id": "M151",
+      "name": "Blink-182 — TRACK BREAKDOWN — Bad News — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Blink-182",
+      "referenceTracks": [
+        "Bad News"
+      ],
+      "tonalTarget": "Track-focused tonal study for Bad News: bright modern pop-punk crunch; tight muted verses; wide open choruses. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.68,
+        "tone": 7.8,
+        "reverb": 0.08,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "blink-182",
+      "soundCharacter": "Clean",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bad News",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M152",
+      "name": "Blink-182 — TRACK BREAKDOWN — Anthem Part Three — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Blink-182",
+      "referenceTracks": [
+        "Anthem Part Three"
+      ],
+      "tonalTarget": "Track-focused tonal study for Anthem Part Three: bright modern pop-punk crunch; tight muted verses; wide open choruses. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.68,
+        "tone": 7.8,
+        "reverb": 0.08,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "blink-182",
+      "soundCharacter": "Clean",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Anthem Part Three",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M153",
+      "name": "Mest — TRACK BREAKDOWN — Photographs (0:13–0:37) — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Mest",
+      "referenceTracks": [
+        "Photographs (0:13–0:37)"
+      ],
+      "tonalTarget": "Track-focused tonal study for Photographs (0:13–0:37): melodic pop-punk lead and energetic rhythm. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.84,
+        "tone": 6.4,
+        "reverb": 0.06,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "mest",
+      "soundCharacter": "Crunch",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Photographs (0:13–0:37)",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M154",
+      "name": "The All-American Rejects — TRACK BREAKDOWN — Dirty Little Secret — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "The All-American Rejects",
+      "referenceTracks": [
+        "Dirty Little Secret"
+      ],
+      "tonalTarget": "Track-focused tonal study for Dirty Little Secret: radio-ready pop-rock/pop-punk; defined crunch. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.22,
+        "tone": 8.8,
+        "reverb": 0.34,
+        "outputDb": -3,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "the-all-american-rejects",
+      "soundCharacter": "Lead Drive",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Dirty Little Secret",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M155",
+      "name": "The All-American Rejects — TRACK BREAKDOWN — Move Along — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "The All-American Rejects",
+      "referenceTracks": [
+        "Move Along"
+      ],
+      "tonalTarget": "Track-focused tonal study for Move Along: radio-ready pop-rock/pop-punk; defined crunch. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.22,
+        "tone": 8.8,
+        "reverb": 0.34,
+        "outputDb": -3,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "the-all-american-rejects",
+      "soundCharacter": "Lead Drive",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Move Along",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M156",
+      "name": "MGK — TRACK BREAKDOWN — Bloody Valentine — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Bloody Valentine"
+      ],
+      "tonalTarget": "Track-focused tonal study for Bloody Valentine: modern saturated pop-punk; aggressive bright rhythm. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "mgk",
+      "soundCharacter": "Clean",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bloody Valentine",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M157",
+      "name": "MGK — TRACK BREAKDOWN — Papercuts — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Papercuts"
+      ],
+      "tonalTarget": "Track-focused tonal study for Papercuts: modern saturated pop-punk; aggressive bright rhythm. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "mgk",
+      "soundCharacter": "Clean",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Papercuts",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M158",
+      "name": "MGK — TRACK BREAKDOWN — Tickets to My Downfall — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Tickets to My Downfall"
+      ],
+      "tonalTarget": "Track-focused tonal study for Tickets to My Downfall: modern saturated pop-punk; aggressive bright rhythm. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "mgk",
+      "soundCharacter": "Clean",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Tickets to My Downfall",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "M159",
+      "name": "Avril Lavigne — TRACK BREAKDOWN — Bite Me — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Avril Lavigne",
+      "referenceTracks": [
+        "Bite Me"
+      ],
+      "tonalTarget": "Track-focused tonal study for Bite Me: bright melodic pop-punk; crunchy rhythm. Section-level sound profile only; not a note-for-note transcription.",
+      "sampleProfile": "acoustic",
+      "parameters": {
+        "drive": 0.12,
+        "tone": 6.3,
+        "reverb": 0.18,
+        "outputDb": -3,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-breakdown-definition-awaiting-plugin-integration-and-sample-validation",
+      "styleProfileId": "avril-lavigne",
+      "soundCharacter": "Crunch",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bite Me",
+        "scope": "section-level tonal and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
     }
   ],
   "patternPresets": [
@@ -3787,10 +3988,7 @@
       "name": "Sum 41 — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "groove": "fast downstroke punk",
       "articulation": "driven-picked",
@@ -3848,10 +4046,7 @@
       "name": "Simple Plan — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "groove": "wide open chorus strums",
       "articulation": "driven-picked",
@@ -3909,10 +4104,7 @@
       "name": "New Found Glory — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "groove": "open chorus power chords",
       "articulation": "palm-muted",
@@ -3970,10 +4162,7 @@
       "name": "Good Charlotte — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "groove": "mid-tempo down-up eighths",
       "articulation": "open-chord-strum",
@@ -4031,10 +4220,7 @@
       "name": "Mest — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "groove": "palm-muted verse to ringing chorus",
       "articulation": "palm-muted",
@@ -4092,10 +4278,7 @@
       "name": "Angels & Airwaves — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "groove": "ambient arpeggio",
       "articulation": "lead-picked",
@@ -4153,10 +4336,7 @@
       "name": "The All-American Rejects — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "groove": "muted verse groove",
       "articulation": "driven-picked",
@@ -4214,10 +4394,7 @@
       "name": "MGK — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "bright saturated eighth-note drive",
       "articulation": "clean-picked",
@@ -4275,10 +4452,7 @@
       "name": "Avril Lavigne — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "muted verse to wide chorus",
       "articulation": "driven-picked",
@@ -6656,9 +6830,7 @@
       "name": "MGK — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "octave-hook rhythm",
       "articulation": "driven-picked",
@@ -6716,9 +6888,7 @@
       "name": "Avril Lavigne — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "melodic octave accents",
       "articulation": "palm-muted",
@@ -6776,9 +6946,7 @@
       "name": "The Offspring — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "fast continuous downstrokes",
       "articulation": "open-chord-strum",
@@ -6836,9 +7004,7 @@
       "name": "Green Day — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "tight palm-muted verse",
       "articulation": "palm-muted",
@@ -6896,9 +7062,7 @@
       "name": "Bowling for Soup — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "light palm-muted verse",
       "articulation": "palm-muted",
@@ -6956,9 +7120,7 @@
       "name": "Sugarcult — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "melodic octave pulse",
       "articulation": "driven-picked",
@@ -7016,9 +7178,7 @@
       "name": "All Time Low — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "polished down-up eighths",
       "articulation": "clean-picked",
@@ -7076,9 +7236,7 @@
       "name": "Fall Out Boy — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "stop-start eighth-note groove",
       "articulation": "driven-picked",
@@ -7136,9 +7294,7 @@
       "name": "Yellowcard — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "groove": "open electric chorus",
       "articulation": "driven-picked",
@@ -7196,9 +7352,7 @@
       "name": "My Chemical Romance — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "groove": "palm-muted build to open chorus",
       "articulation": "palm-muted",
@@ -7897,10 +8051,7 @@
       "name": "MGK — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "wide open power-chord chorus",
       "articulation": "driven-picked",
@@ -7958,10 +8109,7 @@
       "name": "Avril Lavigne — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "bright pop-punk eighths",
       "articulation": "clean-picked",
@@ -8019,10 +8167,7 @@
       "name": "The Offspring — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "palm-muted punk gallop",
       "articulation": "palm-muted",
@@ -8080,10 +8225,7 @@
       "name": "Green Day — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "open power-chord chorus",
       "articulation": "driven-picked",
@@ -8141,10 +8283,7 @@
       "name": "Bowling for Soup — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "bouncy power-chord groove",
       "articulation": "palm-muted",
@@ -8202,10 +8341,7 @@
       "name": "Sugarcult — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "glossy alternate eighths",
       "articulation": "open-chord-strum",
@@ -8263,10 +8399,7 @@
       "name": "All Time Low — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "palm-muted verse build",
       "articulation": "palm-muted",
@@ -8324,10 +8457,7 @@
       "name": "Fall Out Boy — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "palm-muted syncopation",
       "articulation": "palm-muted",
@@ -8385,10 +8515,7 @@
       "name": "Yellowcard — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "groove": "hybrid acoustic/electric pulse",
       "articulation": "driven-picked",
@@ -8446,11 +8573,7 @@
       "name": "My Chemical Romance — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "groove": "dramatic stop-start riff",
       "articulation": "clean-picked",
@@ -8508,11 +8631,7 @@
       "name": "Less Than Jake — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Less Than Jake",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "upbeat ska-punk guitar; crisp offbeat upstrokes; short chord chops; bright clean-to-crunch tone",
       "groove": "short clean chord chops",
       "articulation": "driven-picked",
@@ -8570,11 +8689,7 @@
       "name": "Fenix TX — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Fenix TX",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright fast melodic skate-punk; tight eighth-note downstrokes; punchy palm-muted verses and open choruses",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -8632,11 +8747,7 @@
       "name": "Midtown — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "Midtown",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "urgent melodic emo-pop-punk; ringing octave leads; tight rhythm attacks; energetic dynamic changes",
       "groove": "dynamic stop-start accents",
       "articulation": "palm-muted",
@@ -8694,11 +8805,7 @@
       "name": "Blink-182 — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Blink-182",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright modern pop-punk crunch; tight muted verses; wide open choruses",
       "groove": "tight eighth-note down-up",
       "articulation": "open-chord-strum",
@@ -8756,11 +8863,7 @@
       "name": "Sum 41 — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "groove": "fast downstroke punk",
       "articulation": "acoustic-strum",
@@ -8818,11 +8921,7 @@
       "name": "Simple Plan — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "groove": "wide open chorus strums",
       "articulation": "lead-picked",
@@ -8880,11 +8979,7 @@
       "name": "New Found Glory — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -8942,11 +9037,7 @@
       "name": "Good Charlotte — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "groove": "mid-tempo down-up eighths",
       "articulation": "clean-picked",
@@ -9004,11 +9095,7 @@
       "name": "Mest — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "groove": "palm-muted verse to ringing chorus",
       "articulation": "palm-muted",
@@ -9066,9 +9153,7 @@
       "name": "Angels & Airwaves — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "groove": "ambient arpeggio",
       "articulation": "driven-picked",
@@ -9126,9 +9211,7 @@
       "name": "The All-American Rejects — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "groove": "muted verse groove",
       "articulation": "palm-muted",
@@ -9186,9 +9269,7 @@
       "name": "MGK — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "bright saturated eighth-note drive",
       "articulation": "open-chord-strum",
@@ -9306,9 +9387,7 @@
       "name": "The Offspring — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "tight power-chord eighths",
       "articulation": "lead-picked",
@@ -9366,9 +9445,7 @@
       "name": "Green Day — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "driving eighth-note punk",
       "articulation": "driven-picked",
@@ -9426,9 +9503,7 @@
       "name": "Bowling for Soup — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "upbeat down-up eighths",
       "articulation": "clean-picked",
@@ -9486,9 +9561,7 @@
       "name": "Sugarcult — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "wide layered open chorus",
       "articulation": "driven-picked",
@@ -9546,9 +9619,7 @@
       "name": "All Time Low — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -9606,9 +9677,7 @@
       "name": "Fall Out Boy — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "wide open chorus accents",
       "articulation": "palm-muted",
@@ -12560,6 +12629,654 @@
         "Muted Chugs"
       ],
       "styleProfileId": "simple-plan"
+    },
+    {
+      "id": "P151",
+      "name": "Blink-182 — TRACK BREAKDOWN — Bad News — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Blink-182",
+      "referenceTracks": [
+        "Bad News"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Bad News: bright modern pop-punk crunch; tight muted verses; wide open choruses. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "tight eighth-note down-up",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.68,
+        "tone": 7.8,
+        "reverb": 0.08,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "tight eighth-note down-up",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "blink-182",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bad News",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P152",
+      "name": "Blink-182 — TRACK BREAKDOWN — Anthem Part Three — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Blink-182",
+      "referenceTracks": [
+        "Anthem Part Three"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Anthem Part Three: bright modern pop-punk crunch; tight muted verses; wide open choruses. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "tight eighth-note down-up",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.68,
+        "tone": 7.8,
+        "reverb": 0.08,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "tight eighth-note down-up",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "blink-182",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Anthem Part Three",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P153",
+      "name": "Mest — TRACK BREAKDOWN — Photographs (0:13–0:37) — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Mest",
+      "referenceTracks": [
+        "Photographs (0:13–0:37)"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Photographs (0:13–0:37): melodic pop-punk lead and energetic rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "palm-muted verse to ringing chorus",
+      "articulation": "palm-muted",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.84,
+        "tone": 6.4,
+        "reverb": 0.06,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "palm-muted verse to ringing chorus",
+      "soundCharacter": "Acoustic",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mest",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Photographs (0:13–0:37)",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P154",
+      "name": "The All-American Rejects — TRACK BREAKDOWN — Dirty Little Secret — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "The All-American Rejects",
+      "referenceTracks": [
+        "Dirty Little Secret"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Dirty Little Secret: radio-ready pop-rock/pop-punk; defined crunch. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "muted verse groove",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.22,
+        "tone": 8.8,
+        "reverb": 0.34,
+        "outputDb": -3
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "muted verse groove",
+      "soundCharacter": "Muted Chugs",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-all-american-rejects",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Dirty Little Secret",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P155",
+      "name": "The All-American Rejects — TRACK BREAKDOWN — Move Along — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "The All-American Rejects",
+      "referenceTracks": [
+        "Move Along"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Move Along: radio-ready pop-rock/pop-punk; defined crunch. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "muted verse groove",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.22,
+        "tone": 8.8,
+        "reverb": 0.34,
+        "outputDb": -3
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "muted verse groove",
+      "soundCharacter": "Muted Chugs",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-all-american-rejects",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Move Along",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P156",
+      "name": "MGK — TRACK BREAKDOWN — Bloody Valentine — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Bloody Valentine"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Bloody Valentine: modern saturated pop-punk; aggressive bright rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "bright saturated eighth-note drive",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "bright saturated eighth-note drive",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mgk",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bloody Valentine",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P157",
+      "name": "MGK — TRACK BREAKDOWN — Papercuts — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Papercuts"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Papercuts: modern saturated pop-punk; aggressive bright rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "bright saturated eighth-note drive",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "bright saturated eighth-note drive",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mgk",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Papercuts",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P158",
+      "name": "MGK — TRACK BREAKDOWN — Tickets to My Downfall — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "MGK",
+      "referenceTracks": [
+        "Tickets to My Downfall"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Tickets to My Downfall: modern saturated pop-punk; aggressive bright rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "bright saturated eighth-note drive",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.88,
+        "tone": 6.8,
+        "reverb": 0.1,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "bright saturated eighth-note drive",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mgk",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Tickets to My Downfall",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
+    },
+    {
+      "id": "P159",
+      "name": "Avril Lavigne — TRACK BREAKDOWN — Bite Me — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Avril Lavigne",
+      "referenceTracks": [
+        "Bite Me"
+      ],
+      "tonalTarget": "Track-focused rhythm and arrangement study for Bite Me: bright melodic pop-punk; crunchy rhythm. Section-level groove and articulation profile only; no copied riff or recording.",
+      "groove": "muted verse to wide chorus",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.65,
+          0.8,
+          0.65,
+          0.95,
+          0.65,
+          0.8,
+          0.65
+        ]
+      },
+      "parameters": {
+        "drive": 0.12,
+        "tone": 6.3,
+        "reverb": 0.18,
+        "outputDb": -3
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-breakdown-definition-awaiting-pattern-engine-and-performance-library",
+      "playingStyle": "muted verse to wide chorus",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "avril-lavigne",
+      "tags": [
+        "track-breakdown",
+        "track-specific",
+        "style-reference-only",
+        "section-level-study"
+      ],
+      "trackBreakdown": {
+        "trackTitle": "Bite Me",
+        "scope": "section-level groove, dynamics and articulation study",
+        "transcription": "not included",
+        "recording": "not included"
+      }
     }
   ],
   "patternSoundOptions": [
