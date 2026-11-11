@@ -6,7 +6,7 @@
     "pattern": 150,
     "total": 300
   },
-  "note": "330 catalog definitions: 165 Melody + 165 Pattern. Bloodhound Gang song-inspired presets are original tonal/performance interpretations only; no recordings, stems, note-for-note transcriptions or proprietary samples are included. Presets remain pending licensed sample-bank and runtime performance validation.",
+  "note": "330 factory preset definitions: 165 Melody + 165 Pattern. Every preset is grouped in the unified browser by artist and sound character; Bloodhound Gang additionally uses curated album-era groups. Track references are retained only where curated/verified. All tonal and performance profiles are original genre-inspired definitions, not copied recordings. Runtime sample/performance integration and validation remain separate tasks.",
   "artists": [
     {
       "name": "Blink-182",
@@ -38,9 +38,7 @@
     },
     {
       "name": "Mest",
-      "tracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "tracks": [],
       "vibe": "melodic pop-punk lead and energetic rhythm"
     },
     {
@@ -50,26 +48,17 @@
     },
     {
       "name": "The All-American Rejects",
-      "tracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "tracks": [],
       "vibe": "radio-ready pop-rock/pop-punk; defined crunch"
     },
     {
       "name": "MGK",
-      "tracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "tracks": [],
       "vibe": "modern saturated pop-punk; aggressive bright rhythm"
     },
     {
       "name": "Avril Lavigne",
-      "tracks": [
-        "Bite Me"
-      ],
+      "tracks": [],
       "vibe": "bright melodic pop-punk; crunchy rhythm"
     },
     {
@@ -174,17 +163,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Blink-182 / CLEAN",
+      "browserArtist": "Blink-182",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M002",
       "name": "Sum 41 — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -200,17 +190,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Sum 41 / CRUNCH",
+      "browserArtist": "Sum 41",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M003",
       "name": "Simple Plan — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "sampleProfile": "electric",
       "parameters": {
@@ -226,17 +217,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Simple Plan / DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M004",
       "name": "New Found Glory — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "sampleProfile": "electric",
       "parameters": {
@@ -252,17 +244,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "New Found Glory / LEAD DRIVE",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M005",
       "name": "Good Charlotte — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -278,17 +271,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Good Charlotte / CLEAN",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M006",
       "name": "Mest — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -304,17 +298,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Mest / CRUNCH",
+      "browserArtist": "Mest",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M007",
       "name": "Angels & Airwaves — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "sampleProfile": "electric",
       "parameters": {
@@ -330,17 +325,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Angels & Airwaves / DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M008",
       "name": "The All-American Rejects — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -356,17 +352,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "The All-American Rejects / LEAD DRIVE",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M009",
       "name": "MGK — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -382,17 +379,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "MGK / CLEAN",
+      "browserArtist": "MGK",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M010",
       "name": "Avril Lavigne — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -408,7 +406,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Avril Lavigne / CRUNCH",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M011",
@@ -431,7 +433,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "The Offspring / DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M012",
@@ -454,7 +460,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Green Day / LEAD DRIVE",
+      "browserArtist": "Green Day",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M013",
@@ -477,7 +487,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Bowling for Soup / CLEAN",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M014",
@@ -500,7 +514,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Sugarcult / CRUNCH",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M015",
@@ -523,7 +541,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "All Time Low / DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M016",
@@ -546,7 +568,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Fall Out Boy / LEAD DRIVE",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M017",
@@ -569,7 +595,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Yellowcard / CLEAN",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M018",
@@ -592,7 +622,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "My Chemical Romance / CRUNCH",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M019",
@@ -615,7 +649,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Less Than Jake / DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M020",
@@ -638,7 +676,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Fenix TX / LEAD DRIVE",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M021",
@@ -661,7 +703,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Midtown / CLEAN",
+      "browserArtist": "Midtown",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M022",
@@ -684,7 +730,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Blink-182 / CRUNCH",
+      "browserArtist": "Blink-182",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M023",
@@ -707,7 +757,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Sum 41 / DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M024",
@@ -730,7 +784,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Simple Plan / LEAD DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M025",
@@ -753,7 +811,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "New Found Glory / CLEAN",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M026",
@@ -776,7 +838,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Good Charlotte / CRUNCH",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M027",
@@ -799,7 +865,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Mest / DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M028",
@@ -822,7 +892,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Angels & Airwaves / LEAD DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M029",
@@ -845,7 +919,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "The All-American Rejects / CLEAN",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M030",
@@ -868,7 +946,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "MGK / CRUNCH",
+      "browserArtist": "MGK",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M031",
@@ -891,7 +973,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Avril Lavigne / DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M032",
@@ -914,7 +1000,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "The Offspring / LEAD DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M033",
@@ -937,7 +1027,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Green Day / CLEAN",
+      "browserArtist": "Green Day",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M034",
@@ -960,7 +1054,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Bowling for Soup / CRUNCH",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M035",
@@ -983,7 +1081,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Sugarcult / DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M036",
@@ -1006,7 +1108,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "All Time Low / LEAD DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M037",
@@ -1029,7 +1135,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Fall Out Boy / CLEAN",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M038",
@@ -1052,7 +1162,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Yellowcard / CRUNCH",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M039",
@@ -1075,7 +1189,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "My Chemical Romance / DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M040",
@@ -1098,7 +1216,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Less Than Jake / LEAD DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M041",
@@ -1121,7 +1243,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Fenix TX / CLEAN",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M042",
@@ -1144,7 +1270,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Midtown / CRUNCH",
+      "browserArtist": "Midtown",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M043",
@@ -1167,7 +1297,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Blink-182 / DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M044",
@@ -1190,7 +1324,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Sum 41 / LEAD DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M045",
@@ -1213,7 +1351,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Simple Plan / CLEAN",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M046",
@@ -1236,7 +1378,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "New Found Glory / CRUNCH",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M047",
@@ -1259,7 +1405,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Good Charlotte / DRIVE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M048",
@@ -1282,7 +1432,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Mest / LEAD DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M049",
@@ -1305,7 +1459,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Angels & Airwaves / CLEAN",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M050",
@@ -1328,16 +1486,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "The All-American Rejects / CRUNCH",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M051",
       "name": "MGK — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1353,16 +1513,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "MGK / DRIVE",
+      "browserArtist": "MGK",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M052",
       "name": "Avril Lavigne — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1378,16 +1540,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Avril Lavigne / LEAD DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M053",
       "name": "The Offspring — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1403,16 +1567,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "The Offspring / CLEAN",
+      "browserArtist": "The Offspring",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M054",
       "name": "Green Day — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -1428,16 +1594,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Green Day / CRUNCH",
+      "browserArtist": "Green Day",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M055",
       "name": "Bowling for Soup — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1453,16 +1621,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Bowling for Soup / DRIVE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M056",
       "name": "Sugarcult — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -1478,16 +1648,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Sugarcult / LEAD DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M057",
       "name": "All Time Low — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -1503,16 +1675,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "All Time Low / CLEAN",
+      "browserArtist": "All Time Low",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M058",
       "name": "Fall Out Boy — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -1528,16 +1702,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Fall Out Boy / CRUNCH",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M059",
       "name": "Yellowcard — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "sampleProfile": "electric",
       "parameters": {
@@ -1553,16 +1729,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Yellowcard / DRIVE",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M060",
       "name": "My Chemical Romance — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -1578,7 +1756,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "My Chemical Romance / LEAD DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M061",
@@ -1601,7 +1783,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Less Than Jake / CLEAN",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M062",
@@ -1624,7 +1810,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Fenix TX / CRUNCH",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M063",
@@ -1647,7 +1837,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Midtown / DRIVE",
+      "browserArtist": "Midtown",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M064",
@@ -1670,7 +1864,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Blink-182 / LEAD DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M065",
@@ -1693,7 +1891,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Sum 41 / CLEAN",
+      "browserArtist": "Sum 41",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M066",
@@ -1716,7 +1918,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Simple Plan / CRUNCH",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M067",
@@ -1739,7 +1945,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "New Found Glory / DRIVE",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M068",
@@ -1762,7 +1972,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Good Charlotte / LEAD DRIVE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M069",
@@ -1785,7 +1999,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Mest / CLEAN",
+      "browserArtist": "Mest",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M070",
@@ -1808,17 +2026,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Angels & Airwaves / CRUNCH",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M071",
       "name": "The All-American Rejects — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -1834,17 +2053,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "The All-American Rejects / DRIVE",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M072",
       "name": "MGK — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1860,17 +2080,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "MGK / LEAD DRIVE",
+      "browserArtist": "MGK",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M073",
       "name": "Avril Lavigne — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1886,17 +2107,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Avril Lavigne / CLEAN",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M074",
       "name": "The Offspring — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1912,17 +2134,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "The Offspring / CRUNCH",
+      "browserArtist": "The Offspring",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M075",
       "name": "Green Day — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -1938,17 +2161,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Green Day / DRIVE",
+      "browserArtist": "Green Day",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M076",
       "name": "Bowling for Soup — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -1964,17 +2188,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Bowling for Soup / LEAD DRIVE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M077",
       "name": "Sugarcult — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -1990,17 +2215,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Sugarcult / CLEAN",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M078",
       "name": "All Time Low — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2016,17 +2242,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "All Time Low / CRUNCH",
+      "browserArtist": "All Time Low",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M079",
       "name": "Fall Out Boy — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2042,17 +2269,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Fall Out Boy / DRIVE",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M080",
       "name": "Yellowcard — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -2068,18 +2296,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Yellowcard / LEAD DRIVE",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M081",
       "name": "My Chemical Romance — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "sampleProfile": "electric",
       "parameters": {
@@ -2095,18 +2323,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "My Chemical Romance / CLEAN",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M082",
       "name": "Less Than Jake — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "Less Than Jake",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "upbeat ska-punk guitar; crisp offbeat upstrokes; short chord chops; bright clean-to-crunch tone",
       "sampleProfile": "electric",
       "parameters": {
@@ -2122,18 +2350,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Less Than Jake / CRUNCH",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M083",
       "name": "Fenix TX — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "Fenix TX",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright fast melodic skate-punk; tight eighth-note downstrokes; punchy palm-muted verses and open choruses",
       "sampleProfile": "electric",
       "parameters": {
@@ -2149,18 +2377,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Fenix TX / DRIVE",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M084",
       "name": "Midtown — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "Midtown",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "urgent melodic emo-pop-punk; ringing octave leads; tight rhythm attacks; energetic dynamic changes",
       "sampleProfile": "electric",
       "parameters": {
@@ -2176,7 +2404,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Midtown / LEAD DRIVE",
+      "browserArtist": "Midtown",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M085",
@@ -2203,18 +2435,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Blink-182 / CLEAN",
+      "browserArtist": "Blink-182",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M086",
       "name": "Sum 41 — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -2230,18 +2462,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Sum 41 / CRUNCH",
+      "browserArtist": "Sum 41",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M087",
       "name": "Simple Plan — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "sampleProfile": "electric",
       "parameters": {
@@ -2257,18 +2489,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Simple Plan / DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M088",
       "name": "New Found Glory — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "sampleProfile": "electric",
       "parameters": {
@@ -2284,18 +2516,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "New Found Glory / LEAD DRIVE",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M089",
       "name": "Good Charlotte — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "sampleProfile": "electric",
       "parameters": {
@@ -2311,18 +2543,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Good Charlotte / CLEAN",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M090",
       "name": "Mest — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -2338,16 +2570,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Mest / CRUNCH",
+      "browserArtist": "Mest",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M091",
       "name": "Angels & Airwaves — Bright Single Notes",
       "mode": "MELODY",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "sampleProfile": "electric",
       "parameters": {
@@ -2363,16 +2597,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Angels & Airwaves / DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M092",
       "name": "The All-American Rejects — Tight Lead",
       "mode": "MELODY",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2388,16 +2624,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "The All-American Rejects / LEAD DRIVE",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M093",
       "name": "MGK — Clean Arpeggio",
       "mode": "MELODY",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2413,16 +2651,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "MGK / CLEAN",
+      "browserArtist": "MGK",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M094",
       "name": "Avril Lavigne — Crunch Melody",
       "mode": "MELODY",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2438,16 +2678,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Avril Lavigne / CRUNCH",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M095",
       "name": "The Offspring — Octave Hook",
       "mode": "MELODY",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2463,16 +2705,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "The Offspring / DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M096",
       "name": "Green Day — Palm-Mute Lead",
       "mode": "MELODY",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "sampleProfile": "electric",
       "parameters": {
@@ -2488,16 +2732,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Green Day / LEAD DRIVE",
+      "browserArtist": "Green Day",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M097",
       "name": "Bowling for Soup — Wide Chorus Lead",
       "mode": "MELODY",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "sampleProfile": "electric",
       "parameters": {
@@ -2513,16 +2759,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Bowling for Soup / CLEAN",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M098",
       "name": "Sugarcult — Acoustic Melody",
       "mode": "MELODY",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "sampleProfile": "electric",
       "parameters": {
@@ -2538,16 +2786,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Sugarcult / CRUNCH",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M099",
       "name": "All Time Low — Sustain Lead",
       "mode": "MELODY",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "sampleProfile": "electric",
       "parameters": {
@@ -2563,16 +2813,18 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "All Time Low / DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M100",
       "name": "Fall Out Boy — Fast Picking",
       "mode": "MELODY",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "sampleProfile": "acoustic",
       "parameters": {
@@ -2588,7 +2840,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Fall Out Boy / LEAD DRIVE",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M101",
@@ -2611,7 +2867,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Yellowcard / CLEAN",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M102",
@@ -2634,7 +2894,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "My Chemical Romance / CRUNCH",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M103",
@@ -2657,7 +2921,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Less Than Jake / DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M104",
@@ -2680,7 +2948,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Fenix TX / LEAD DRIVE",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M105",
@@ -2703,7 +2975,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Midtown / CLEAN",
+      "browserArtist": "Midtown",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M106",
@@ -2726,7 +3002,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Blink-182 / CRUNCH",
+      "browserArtist": "Blink-182",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M107",
@@ -2749,7 +3029,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Sum 41 / DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M108",
@@ -2772,7 +3056,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Simple Plan / LEAD DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M109",
@@ -2795,7 +3083,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "New Found Glory / CLEAN",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M110",
@@ -2818,7 +3110,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Good Charlotte / CRUNCH",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M111",
@@ -2841,7 +3137,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Mest / DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M112",
@@ -2864,7 +3164,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Angels & Airwaves / LEAD DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M113",
@@ -2887,7 +3191,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "The All-American Rejects / CLEAN",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M114",
@@ -2910,7 +3218,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "MGK / CRUNCH",
+      "browserArtist": "MGK",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M115",
@@ -2933,7 +3245,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Avril Lavigne / DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M116",
@@ -2956,7 +3272,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "The Offspring / LEAD DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M117",
@@ -2979,7 +3299,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Green Day / CLEAN",
+      "browserArtist": "Green Day",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M118",
@@ -3002,7 +3326,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Bowling for Soup / CRUNCH",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M119",
@@ -3025,7 +3353,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Sugarcult / DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M120",
@@ -3048,7 +3380,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "All Time Low / LEAD DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M121",
@@ -3071,7 +3407,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Fall Out Boy / CLEAN",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M122",
@@ -3094,7 +3434,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Yellowcard / CRUNCH",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M123",
@@ -3117,7 +3461,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "My Chemical Romance / DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M124",
@@ -3140,7 +3488,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Less Than Jake / LEAD DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M125",
@@ -3163,7 +3515,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Fenix TX / CLEAN",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M126",
@@ -3186,7 +3542,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Midtown / CRUNCH",
+      "browserArtist": "Midtown",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M127",
@@ -3209,7 +3569,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Blink-182 / DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M128",
@@ -3232,7 +3596,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Sum 41 / LEAD DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M129",
@@ -3255,7 +3623,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Simple Plan / CLEAN",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M130",
@@ -3278,7 +3650,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "New Found Glory / CRUNCH",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M131",
@@ -3301,7 +3677,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Good Charlotte / DRIVE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M132",
@@ -3324,7 +3704,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Mest / LEAD DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M133",
@@ -3347,7 +3731,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Angels & Airwaves / CLEAN",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M134",
@@ -3370,7 +3758,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "The All-American Rejects / CRUNCH",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M135",
@@ -3393,7 +3785,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "MGK / DRIVE",
+      "browserArtist": "MGK",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M136",
@@ -3416,7 +3812,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Avril Lavigne / LEAD DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M137",
@@ -3439,7 +3839,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "The Offspring / CLEAN",
+      "browserArtist": "The Offspring",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M138",
@@ -3462,7 +3866,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Green Day / CRUNCH",
+      "browserArtist": "Green Day",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M139",
@@ -3485,7 +3893,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Bowling for Soup / DRIVE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M140",
@@ -3508,7 +3920,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Sugarcult / LEAD DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M141",
@@ -3531,7 +3947,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "All Time Low / CLEAN",
+      "browserArtist": "All Time Low",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M142",
@@ -3554,7 +3974,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Fall Out Boy / CRUNCH",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M143",
@@ -3577,7 +4001,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Yellowcard / DRIVE",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M144",
@@ -3600,7 +4028,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "My Chemical Romance / LEAD DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M145",
@@ -3623,7 +4055,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Less Than Jake / CLEAN",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M146",
@@ -3646,7 +4082,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Fenix TX / CRUNCH",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "M147",
@@ -3669,7 +4109,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "browserGroup": "Midtown / DRIVE",
+      "browserArtist": "Midtown",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M148",
@@ -3692,7 +4136,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "browserGroup": "Blink-182 / LEAD DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Lead Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "M149",
@@ -3715,7 +4163,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "browserGroup": "Sum 41 / CLEAN",
+      "browserArtist": "Sum 41",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "M150",
@@ -3738,7 +4190,11 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "browserGroup": "Simple Plan / CRUNCH",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-001",
@@ -3767,7 +4223,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "picked-crunch"
+      "playingStyle": "picked-crunch",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-002",
@@ -3796,7 +4255,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2005",
-      "playingStyle": "staccato-picked"
+      "playingStyle": "staccato-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-003",
@@ -3825,7 +4287,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Drive",
       "styleProfileId": "bhg-legacy",
-      "playingStyle": "driven-picked"
+      "playingStyle": "driven-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-004",
@@ -3854,7 +4319,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "open-picked"
+      "playingStyle": "open-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-005",
@@ -3883,7 +4351,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Clean",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "clean-picked"
+      "playingStyle": "clean-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Clean",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-006",
@@ -3912,7 +4383,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Drive",
       "styleProfileId": "bhg-2005",
-      "playingStyle": "muted-picked"
+      "playingStyle": "muted-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-007",
@@ -3941,7 +4415,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Distortion",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "palm-muted"
+      "playingStyle": "palm-muted",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-008",
@@ -3970,7 +4447,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "crunch-picked"
+      "playingStyle": "crunch-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-009",
@@ -3999,7 +4479,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2015",
-      "playingStyle": "driven-picked"
+      "playingStyle": "driven-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-010",
@@ -4028,7 +4511,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Drive",
       "styleProfileId": "bhg-legacy",
-      "playingStyle": "crunch-picked"
+      "playingStyle": "crunch-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-011",
@@ -4057,7 +4543,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Distortion",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "palm-muted"
+      "playingStyle": "palm-muted",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-012",
@@ -4086,7 +4575,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "open-picked"
+      "playingStyle": "open-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-013",
@@ -4115,7 +4607,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Drive",
       "styleProfileId": "bhg-legacy",
-      "playingStyle": "driven-picked"
+      "playingStyle": "driven-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-014",
@@ -4144,7 +4639,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Distortion",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "palm-muted"
+      "playingStyle": "palm-muted",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "MELODY"
     },
     {
       "id": "BHG-M-015",
@@ -4173,7 +4671,10 @@
       "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
       "soundCharacter": "Crunch",
       "styleProfileId": "bhg-2000",
-      "playingStyle": "crunch-picked"
+      "playingStyle": "crunch-picked",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "MELODY"
     }
   ],
   "patternPresets": [
@@ -4236,17 +4737,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / CLEAN",
+      "browserArtist": "Blink-182",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P002",
       "name": "Sum 41 — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "groove": "fast downstroke punk",
       "articulation": "driven-picked",
@@ -4297,17 +4799,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / CRUNCH",
+      "browserArtist": "Sum 41",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P003",
       "name": "Simple Plan — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "groove": "wide open chorus strums",
       "articulation": "driven-picked",
@@ -4358,17 +4861,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P004",
       "name": "New Found Glory — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "groove": "open chorus power chords",
       "articulation": "palm-muted",
@@ -4419,17 +4923,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / PALM MUTE",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P005",
       "name": "Good Charlotte — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "groove": "mid-tempo down-up eighths",
       "articulation": "open-chord-strum",
@@ -4480,17 +4985,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / OPEN CHORDS",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P006",
       "name": "Mest — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "groove": "palm-muted verse to ringing chorus",
       "articulation": "palm-muted",
@@ -4541,17 +5047,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / ACOUSTIC",
+      "browserArtist": "Mest",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P007",
       "name": "Angels & Airwaves — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "groove": "ambient arpeggio",
       "articulation": "lead-picked",
@@ -4602,17 +5109,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / LEAD DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P008",
       "name": "The All-American Rejects — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "groove": "muted verse groove",
       "articulation": "driven-picked",
@@ -4663,17 +5171,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / MUTED CHUGS",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P009",
       "name": "MGK — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "bright saturated eighth-note drive",
       "articulation": "clean-picked",
@@ -4724,17 +5233,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / CLEAN",
+      "browserArtist": "MGK",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P010",
       "name": "Avril Lavigne — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bad News",
-        "Anthem Part Three"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "muted verse to wide chorus",
       "articulation": "driven-picked",
@@ -4785,7 +5295,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / CRUNCH",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P011",
@@ -4843,7 +5357,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P012",
@@ -4901,7 +5419,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / PALM MUTE",
+      "browserArtist": "Green Day",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P013",
@@ -4959,7 +5481,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / OPEN CHORDS",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P014",
@@ -5017,7 +5543,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / ACOUSTIC",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P015",
@@ -5075,7 +5605,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / LEAD DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P016",
@@ -5133,7 +5667,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / MUTED CHUGS",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P017",
@@ -5191,7 +5729,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / CLEAN",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P018",
@@ -5249,7 +5791,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / CRUNCH",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P019",
@@ -5307,7 +5853,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P020",
@@ -5365,7 +5915,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / PALM MUTE",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P021",
@@ -5423,7 +5977,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / OPEN CHORDS",
+      "browserArtist": "Midtown",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P022",
@@ -5481,7 +6039,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / ACOUSTIC",
+      "browserArtist": "Blink-182",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P023",
@@ -5539,7 +6101,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / LEAD DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P024",
@@ -5597,7 +6163,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / MUTED CHUGS",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P025",
@@ -5655,7 +6225,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / CLEAN",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P026",
@@ -5713,7 +6287,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / CRUNCH",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P027",
@@ -5771,7 +6349,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P028",
@@ -5829,7 +6411,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / PALM MUTE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P029",
@@ -5887,7 +6473,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / OPEN CHORDS",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P030",
@@ -5945,7 +6535,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / ACOUSTIC",
+      "browserArtist": "MGK",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P031",
@@ -6003,7 +6597,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / LEAD DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P032",
@@ -6061,7 +6659,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / MUTED CHUGS",
+      "browserArtist": "The Offspring",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P033",
@@ -6119,7 +6721,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / CLEAN",
+      "browserArtist": "Green Day",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P034",
@@ -6177,7 +6783,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / CRUNCH",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P035",
@@ -6235,7 +6845,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P036",
@@ -6293,7 +6907,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / PALM MUTE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P037",
@@ -6351,7 +6969,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / OPEN CHORDS",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P038",
@@ -6409,7 +7031,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / ACOUSTIC",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P039",
@@ -6467,7 +7093,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / LEAD DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P040",
@@ -6525,7 +7155,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / MUTED CHUGS",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P041",
@@ -6583,7 +7217,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / CLEAN",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P042",
@@ -6641,7 +7279,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / CRUNCH",
+      "browserArtist": "Midtown",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P043",
@@ -6699,7 +7341,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P044",
@@ -6757,7 +7403,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / PALM MUTE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P045",
@@ -6815,7 +7465,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / OPEN CHORDS",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P046",
@@ -6873,7 +7527,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / ACOUSTIC",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P047",
@@ -6931,7 +7589,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / LEAD DRIVE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P048",
@@ -6989,7 +7651,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / MUTED CHUGS",
+      "browserArtist": "Mest",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P049",
@@ -7047,7 +7713,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / CLEAN",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P050",
@@ -7105,16 +7775,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / CRUNCH",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P051",
       "name": "MGK — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "octave-hook rhythm",
       "articulation": "driven-picked",
@@ -7165,16 +7837,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / DRIVE",
+      "browserArtist": "MGK",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P052",
       "name": "Avril Lavigne — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "melodic octave accents",
       "articulation": "palm-muted",
@@ -7225,16 +7899,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / PALM MUTE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P053",
       "name": "The Offspring — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "fast continuous downstrokes",
       "articulation": "open-chord-strum",
@@ -7285,16 +7961,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / OPEN CHORDS",
+      "browserArtist": "The Offspring",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P054",
       "name": "Green Day — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "tight palm-muted verse",
       "articulation": "palm-muted",
@@ -7345,16 +8023,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / ACOUSTIC",
+      "browserArtist": "Green Day",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P055",
       "name": "Bowling for Soup — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "light palm-muted verse",
       "articulation": "palm-muted",
@@ -7405,16 +8085,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / LEAD DRIVE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P056",
       "name": "Sugarcult — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "melodic octave pulse",
       "articulation": "driven-picked",
@@ -7465,16 +8147,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / MUTED CHUGS",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P057",
       "name": "All Time Low — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "polished down-up eighths",
       "articulation": "clean-picked",
@@ -7525,16 +8209,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / CLEAN",
+      "browserArtist": "All Time Low",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P058",
       "name": "Fall Out Boy — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "stop-start eighth-note groove",
       "articulation": "driven-picked",
@@ -7585,16 +8271,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / CRUNCH",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P059",
       "name": "Yellowcard — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "groove": "open electric chorus",
       "articulation": "driven-picked",
@@ -7645,16 +8333,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / DRIVE",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P060",
       "name": "My Chemical Romance — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Photographs (0:13–0:37)"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "groove": "palm-muted build to open chorus",
       "articulation": "palm-muted",
@@ -7705,7 +8395,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / PALM MUTE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P061",
@@ -7763,7 +8457,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / OPEN CHORDS",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P062",
@@ -7821,7 +8519,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / ACOUSTIC",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P063",
@@ -7879,7 +8581,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / LEAD DRIVE",
+      "browserArtist": "Midtown",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P064",
@@ -7937,7 +8643,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / MUTED CHUGS",
+      "browserArtist": "Blink-182",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P065",
@@ -7995,7 +8705,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / CLEAN",
+      "browserArtist": "Sum 41",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P066",
@@ -8053,7 +8767,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / CRUNCH",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P067",
@@ -8111,7 +8829,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / DRIVE",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P068",
@@ -8169,7 +8891,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / PALM MUTE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P069",
@@ -8227,7 +8953,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / OPEN CHORDS",
+      "browserArtist": "Mest",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P070",
@@ -8285,17 +9015,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / ACOUSTIC",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P071",
       "name": "The All-American Rejects — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "groove": "open chord accents",
       "articulation": "lead-picked",
@@ -8346,17 +9077,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / LEAD DRIVE",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P072",
       "name": "MGK — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "wide open power-chord chorus",
       "articulation": "driven-picked",
@@ -8407,17 +9139,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / MUTED CHUGS",
+      "browserArtist": "MGK",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P073",
       "name": "Avril Lavigne — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "bright pop-punk eighths",
       "articulation": "clean-picked",
@@ -8468,17 +9201,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / CLEAN",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P074",
       "name": "The Offspring — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "palm-muted punk gallop",
       "articulation": "palm-muted",
@@ -8529,17 +9263,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / CRUNCH",
+      "browserArtist": "The Offspring",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P075",
       "name": "Green Day — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "open power-chord chorus",
       "articulation": "driven-picked",
@@ -8590,17 +9325,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / DRIVE",
+      "browserArtist": "Green Day",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P076",
       "name": "Bowling for Soup — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "bouncy power-chord groove",
       "articulation": "palm-muted",
@@ -8651,17 +9387,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / PALM MUTE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P077",
       "name": "Sugarcult — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "glossy alternate eighths",
       "articulation": "open-chord-strum",
@@ -8712,17 +9449,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / OPEN CHORDS",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P078",
       "name": "All Time Low — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "palm-muted verse build",
       "articulation": "palm-muted",
@@ -8773,17 +9511,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / ACOUSTIC",
+      "browserArtist": "All Time Low",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P079",
       "name": "Fall Out Boy — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "palm-muted syncopation",
       "articulation": "palm-muted",
@@ -8834,17 +9573,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / LEAD DRIVE",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P080",
       "name": "Yellowcard — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Yellowcard",
-      "referenceTracks": [
-        "Dirty Little Secret",
-        "Move Along"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk with acoustic/electric layering; bright open chords; picked arpeggios and ringing upper strings",
       "groove": "hybrid acoustic/electric pulse",
       "articulation": "driven-picked",
@@ -8895,18 +9635,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / MUTED CHUGS",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P081",
       "name": "My Chemical Romance — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "My Chemical Romance",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "dramatic emo-punk; forceful downstrokes; octave lines; dynamic quiet-to-explosive sections",
       "groove": "dramatic stop-start riff",
       "articulation": "clean-picked",
@@ -8957,18 +9697,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / CLEAN",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P082",
       "name": "Less Than Jake — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "Less Than Jake",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "upbeat ska-punk guitar; crisp offbeat upstrokes; short chord chops; bright clean-to-crunch tone",
       "groove": "short clean chord chops",
       "articulation": "driven-picked",
@@ -9019,18 +9759,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / CRUNCH",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P083",
       "name": "Fenix TX — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "Fenix TX",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright fast melodic skate-punk; tight eighth-note downstrokes; punchy palm-muted verses and open choruses",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -9081,18 +9821,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / DRIVE",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P084",
       "name": "Midtown — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "Midtown",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "urgent melodic emo-pop-punk; ringing octave leads; tight rhythm attacks; energetic dynamic changes",
       "groove": "dynamic stop-start accents",
       "articulation": "palm-muted",
@@ -9143,7 +9883,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / PALM MUTE",
+      "browserArtist": "Midtown",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P085",
@@ -9205,18 +9949,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / OPEN CHORDS",
+      "browserArtist": "Blink-182",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P086",
       "name": "Sum 41 — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Sum 41",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "aggressive skate-punk attack; dense rhythm drive; articulate leads",
       "groove": "fast downstroke punk",
       "articulation": "acoustic-strum",
@@ -9267,18 +10011,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / ACOUSTIC",
+      "browserArtist": "Sum 41",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P087",
       "name": "Simple Plan — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Simple Plan",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "polished melodic pop-punk; bright attack; controlled low end",
       "groove": "wide open chorus strums",
       "articulation": "lead-picked",
@@ -9329,18 +10073,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / LEAD DRIVE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P088",
       "name": "New Found Glory — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "New Found Glory",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast melodic punk; sharp downstrokes; tight palm-muted verses",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -9391,18 +10135,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / MUTED CHUGS",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P089",
       "name": "Good Charlotte — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "Good Charlotte",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "mid-forward punchy pop-punk; compact rhythm and octave leads",
       "groove": "mid-tempo down-up eighths",
       "articulation": "clean-picked",
@@ -9453,18 +10197,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / CLEAN",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P090",
       "name": "Mest — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Mest",
-      "referenceTracks": [
-        "Bloody Valentine",
-        "Papercuts",
-        "Tickets to My Downfall"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "melodic pop-punk lead and energetic rhythm",
       "groove": "palm-muted verse to ringing chorus",
       "articulation": "palm-muted",
@@ -9515,16 +10259,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / CRUNCH",
+      "browserArtist": "Mest",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P091",
       "name": "Angels & Airwaves — Straight Eighths",
       "mode": "PATTERN",
       "referenceArtist": "Angels & Airwaves",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "spacious layered guitars; modulation and ambient sustain",
       "groove": "ambient arpeggio",
       "articulation": "driven-picked",
@@ -9575,16 +10321,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / DRIVE",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P092",
       "name": "The All-American Rejects — Fast Downstrokes",
       "mode": "PATTERN",
       "referenceArtist": "The All-American Rejects",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "radio-ready pop-rock/pop-punk; defined crunch",
       "groove": "muted verse groove",
       "articulation": "palm-muted",
@@ -9635,16 +10383,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / PALM MUTE",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P093",
       "name": "MGK — Palm-Mute Verse",
       "mode": "PATTERN",
       "referenceArtist": "MGK",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern saturated pop-punk; aggressive bright rhythm",
       "groove": "bright saturated eighth-note drive",
       "articulation": "open-chord-strum",
@@ -9695,16 +10445,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / OPEN CHORDS",
+      "browserArtist": "MGK",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P094",
       "name": "Avril Lavigne — Open-Chord Chorus",
       "mode": "PATTERN",
       "referenceArtist": "Avril Lavigne",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright melodic pop-punk; crunchy rhythm",
       "groove": "muted verse to wide chorus",
       "articulation": "acoustic-strum",
@@ -9755,16 +10507,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / ACOUSTIC",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P095",
       "name": "The Offspring — Alternate Picking",
       "mode": "PATTERN",
       "referenceArtist": "The Offspring",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "fast aggressive punk; tight distorted rhythm",
       "groove": "tight power-chord eighths",
       "articulation": "lead-picked",
@@ -9815,16 +10569,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / LEAD DRIVE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P096",
       "name": "Green Day — Syncopated Stops",
       "mode": "PATTERN",
       "referenceArtist": "Green Day",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "midrange-driven punk crunch; focused power chords",
       "groove": "driving eighth-note punk",
       "articulation": "driven-picked",
@@ -9875,16 +10631,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / MUTED CHUGS",
+      "browserArtist": "Green Day",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P097",
       "name": "Bowling for Soup — Octave Hook Groove",
       "mode": "PATTERN",
       "referenceArtist": "Bowling for Soup",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "bright upbeat pop-punk; lighter crunchy rhythm",
       "groove": "upbeat down-up eighths",
       "articulation": "clean-picked",
@@ -9935,16 +10693,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / CLEAN",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P098",
       "name": "Sugarcult — Acoustic Strum",
       "mode": "PATTERN",
       "referenceArtist": "Sugarcult",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "glossy alternative pop-punk; wide rhythm layers",
       "groove": "wide layered open chorus",
       "articulation": "driven-picked",
@@ -9995,16 +10755,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / CRUNCH",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P099",
       "name": "All Time Low — Arpeggio Pulse",
       "mode": "PATTERN",
       "referenceArtist": "All Time Low",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "modern melodic pop-punk; polished clean-to-crunch",
       "groove": "open chorus power chords",
       "articulation": "driven-picked",
@@ -10055,16 +10817,18 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / DRIVE",
+      "browserArtist": "All Time Low",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P100",
       "name": "Fall Out Boy — Dynamic Build",
       "mode": "PATTERN",
       "referenceArtist": "Fall Out Boy",
-      "referenceTracks": [
-        "Bite Me"
-      ],
+      "referenceTracks": [],
       "tonalTarget": "syncopated emo-pop-punk; octave hooks; tight stop-start accents; polished high-mid crunch",
       "groove": "wide open chorus accents",
       "articulation": "palm-muted",
@@ -10115,7 +10879,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / PALM MUTE",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P101",
@@ -10173,7 +10941,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / OPEN CHORDS",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P102",
@@ -10231,7 +11003,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / ACOUSTIC",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P103",
@@ -10289,7 +11065,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / LEAD DRIVE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P104",
@@ -10347,7 +11127,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / MUTED CHUGS",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P105",
@@ -10405,7 +11189,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / CLEAN",
+      "browserArtist": "Midtown",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P106",
@@ -10463,7 +11251,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / CRUNCH",
+      "browserArtist": "Blink-182",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P107",
@@ -10521,7 +11313,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / DRIVE",
+      "browserArtist": "Sum 41",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P108",
@@ -10579,7 +11375,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / PALM MUTE",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P109",
@@ -10637,7 +11437,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / OPEN CHORDS",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P110",
@@ -10695,7 +11499,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / ACOUSTIC",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P111",
@@ -10753,7 +11561,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / LEAD DRIVE",
+      "browserArtist": "Mest",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P112",
@@ -10811,7 +11623,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / MUTED CHUGS",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P113",
@@ -10869,7 +11685,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / CLEAN",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P114",
@@ -10927,7 +11747,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / CRUNCH",
+      "browserArtist": "MGK",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P115",
@@ -10985,7 +11809,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / DRIVE",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P116",
@@ -11043,7 +11871,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / PALM MUTE",
+      "browserArtist": "The Offspring",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P117",
@@ -11101,7 +11933,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / OPEN CHORDS",
+      "browserArtist": "Green Day",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P118",
@@ -11159,7 +11995,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / ACOUSTIC",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P119",
@@ -11217,7 +12057,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / LEAD DRIVE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P120",
@@ -11275,7 +12119,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / MUTED CHUGS",
+      "browserArtist": "All Time Low",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P121",
@@ -11333,7 +12181,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / CLEAN",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P122",
@@ -11391,7 +12243,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / CRUNCH",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P123",
@@ -11449,7 +12305,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / DRIVE",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P124",
@@ -11507,7 +12367,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / PALM MUTE",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P125",
@@ -11565,7 +12429,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / OPEN CHORDS",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P126",
@@ -11623,7 +12491,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / ACOUSTIC",
+      "browserArtist": "Midtown",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P127",
@@ -11681,7 +12553,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / LEAD DRIVE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P128",
@@ -11739,7 +12615,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / MUTED CHUGS",
+      "browserArtist": "Sum 41",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P129",
@@ -11797,7 +12677,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / CLEAN",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P130",
@@ -11855,7 +12739,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "browserGroup": "New Found Glory / CRUNCH",
+      "browserArtist": "New Found Glory",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P131",
@@ -11913,7 +12801,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "browserGroup": "Good Charlotte / DRIVE",
+      "browserArtist": "Good Charlotte",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P132",
@@ -11971,7 +12863,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "browserGroup": "Mest / PALM MUTE",
+      "browserArtist": "Mest",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P133",
@@ -12029,7 +12925,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "browserGroup": "Angels & Airwaves / OPEN CHORDS",
+      "browserArtist": "Angels & Airwaves",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P134",
@@ -12087,7 +12987,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "browserGroup": "The All-American Rejects / ACOUSTIC",
+      "browserArtist": "The All-American Rejects",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P135",
@@ -12145,7 +13049,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "browserGroup": "MGK / LEAD DRIVE",
+      "browserArtist": "MGK",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P136",
@@ -12203,7 +13111,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "browserGroup": "Avril Lavigne / MUTED CHUGS",
+      "browserArtist": "Avril Lavigne",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P137",
@@ -12261,7 +13173,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "browserGroup": "The Offspring / CLEAN",
+      "browserArtist": "The Offspring",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P138",
@@ -12319,7 +13235,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "browserGroup": "Green Day / CRUNCH",
+      "browserArtist": "Green Day",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P139",
@@ -12377,7 +13297,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "browserGroup": "Bowling for Soup / DRIVE",
+      "browserArtist": "Bowling for Soup",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P140",
@@ -12435,7 +13359,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "browserGroup": "Sugarcult / PALM MUTE",
+      "browserArtist": "Sugarcult",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P141",
@@ -12493,7 +13421,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "browserGroup": "All Time Low / OPEN CHORDS",
+      "browserArtist": "All Time Low",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P142",
@@ -12551,7 +13483,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "browserGroup": "Fall Out Boy / ACOUSTIC",
+      "browserArtist": "Fall Out Boy",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P143",
@@ -12609,7 +13545,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "browserGroup": "Yellowcard / LEAD DRIVE",
+      "browserArtist": "Yellowcard",
+      "browserSound": "Lead Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P144",
@@ -12667,7 +13607,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "browserGroup": "My Chemical Romance / MUTED CHUGS",
+      "browserArtist": "My Chemical Romance",
+      "browserSound": "Muted Chugs",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P145",
@@ -12725,7 +13669,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "browserGroup": "Less Than Jake / CLEAN",
+      "browserArtist": "Less Than Jake",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P146",
@@ -12783,7 +13731,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "browserGroup": "Fenix TX / CRUNCH",
+      "browserArtist": "Fenix TX",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P147",
@@ -12841,7 +13793,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "browserGroup": "Midtown / DRIVE",
+      "browserArtist": "Midtown",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P148",
@@ -12899,7 +13855,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "browserGroup": "Blink-182 / PALM MUTE",
+      "browserArtist": "Blink-182",
+      "browserSound": "Palm Mute",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P149",
@@ -12957,7 +13917,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "browserGroup": "Sum 41 / OPEN CHORDS",
+      "browserArtist": "Sum 41",
+      "browserSound": "Open Chords",
+      "browserMode": "PATTERN"
     },
     {
       "id": "P150",
@@ -13015,7 +13979,11 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "browserGroup": "Simple Plan / ACOUSTIC",
+      "browserArtist": "Simple Plan",
+      "browserSound": "Acoustic",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-001",
@@ -13081,7 +14049,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-002",
@@ -13147,7 +14118,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2005"
+      "styleProfileId": "bhg-2005",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-003",
@@ -13213,7 +14187,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-legacy"
+      "styleProfileId": "bhg-legacy",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-004",
@@ -13279,7 +14256,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-005",
@@ -13345,7 +14325,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Clean",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-006",
@@ -13411,7 +14394,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2005"
+      "styleProfileId": "bhg-2005",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-007",
@@ -13477,7 +14463,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-008",
@@ -13543,7 +14532,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-009",
@@ -13609,7 +14601,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2015"
+      "styleProfileId": "bhg-2015",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-010",
@@ -13675,7 +14670,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-legacy"
+      "styleProfileId": "bhg-legacy",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-011",
@@ -13741,7 +14739,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-012",
@@ -13807,7 +14808,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-013",
@@ -13873,7 +14877,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-legacy"
+      "styleProfileId": "bhg-legacy",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Drive",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-014",
@@ -13939,7 +14946,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Distortion",
+      "browserMode": "PATTERN"
     },
     {
       "id": "BHG-P-015",
@@ -14005,7 +15015,10 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bhg-2000"
+      "styleProfileId": "bhg-2000",
+      "browserArtist": "Bloodhound Gang",
+      "browserSound": "Crunch",
+      "browserMode": "PATTERN"
     }
   ],
   "patternSoundOptions": [
@@ -14018,5 +15031,12 @@
     "Lead Drive",
     "Muted Chugs"
   ],
-  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings."
+  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings.",
+  "browserOrganization": {
+    "primary": "Artist",
+    "secondary": "Sound Character",
+    "mode": "MELODY or PATTERN filter",
+    "verifiedAlbumEraGroups": "Only shown where album/year metadata has been explicitly curated; currently Bloodhound Gang.",
+    "rule": "Do not invent album names, years, song references or audio provenance. Every artist preset remains selectable in either mode when present in that bank."
+  }
 }
