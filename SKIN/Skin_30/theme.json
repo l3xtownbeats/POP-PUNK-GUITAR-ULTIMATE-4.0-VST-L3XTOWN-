@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-30",
+  "index": 30,
+  "name": "Pure Control",
+  "description": "Minimal high-clarity control room with white space and decisive accents",
+  "cluster": "A",
+  "identity": {
+    "material": "matte ceramic and anodized aluminium",
+    "lighting": "balanced neutral studio light",
+    "mood": "minimal, efficient, confident"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#F5F5F2",
+      "inset": "#FFFFFF"
+    },
+    "surfaces": {
+      "primary": "#FFFFFF",
+      "secondary": "#E8E9E5",
+      "raised": "#D5D8D2",
+      "overlay": "#F5F5F2"
+    },
+    "borders": {
+      "subtle": "#AEB4B2",
+      "strong": "#D64B82",
+      "focus": "#252A31"
+    },
+    "typography": {
+      "primary": "#20252A",
+      "secondary": "#596168",
+      "disabled": "#85858B",
+      "onAccent": "#F5F5F2"
+    },
+    "rotary": {
+      "body": "#D5D8D2",
+      "ring": "#D64B82",
+      "track": "#AEB4B2",
+      "value": "#252A31",
+      "pointer": "#3B9EAB",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#AEB4B2",
+      "fill": "#252A31",
+      "thumb": "#3B9EAB",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#252A31",
+        "foreground": "#F5F5F2",
+        "hover": "#3B9EAB",
+        "pressed": "#D64B82",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#E8E9E5",
+        "foreground": "#20252A",
+        "hover": "#D5D8D2",
+        "pressed": "#D64B82",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#252A31",
+      "activeText": "#F5F5F2",
+      "inactiveBackground": "#E8E9E5",
+      "inactiveText": "#596168",
+      "indicator": "#D64B82"
+    },
+    "comboBoxes": {
+      "background": "#E8E9E5",
+      "foreground": "#20252A",
+      "border": "#AEB4B2",
+      "hover": "#D5D8D2",
+      "menuBackground": "#FFFFFF",
+      "selection": "#252A31"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#252A31",
+      "blackPressed": "#D64B82",
+      "keyBorder": "#AEB4B2",
+      "octaveLabel": "#596168"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#252A31",
+      "high": "#F06A58",
+      "background": "#F5F5F2"
+    },
+    "icons": {
+      "primary": "#20252A",
+      "secondary": "#596168",
+      "accent": "#252A31",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#E8E9E5",
+      "border": "#AEB4B2",
+      "selected": "#252A31",
+      "caption": "#20252A"
+    },
+    "windowChrome": {
+      "background": "#F5F5F2",
+      "title": "#20252A",
+      "border": "#AEB4B2",
+      "close": "#3B9EAB"
+    },
+    "hero": {
+      "background": "#F5F5F2",
+      "accent": "#252A31",
+      "secondaryAccent": "#D64B82",
+      "highlight": "#3B9EAB"
+    },
+    "accents": {
+      "primary": "#252A31",
+      "secondary": "#D64B82",
+      "tertiary": "#3B9EAB"
+    },
+    "texture": {
+      "material": "matte ceramic and anodized aluminium",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "balanced neutral studio light",
+      "glow": "#252A31",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#D64B82"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Pure Control thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original matte ceramic and anodized aluminium abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast matte ceramic and anodized aluminium material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
