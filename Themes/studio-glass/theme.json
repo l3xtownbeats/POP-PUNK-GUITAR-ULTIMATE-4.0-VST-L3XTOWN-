@@ -1,0 +1,60 @@
+{
+  "name": "Studio Glass",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#e5e8eb",
+    "background.bottom": "#cfd5da",
+    "accent.primary": "#426b86",
+    "accent.secondary": "#6b9ab6",
+    "text.main": "#17232c",
+    "text.dim": "#687985",
+    "knob.face": "#f4f6f8",
+    "knob.ring": "#527f9a",
+    "button.normal": "#cfd5da",
+    "button.active": "#426b86",
+    "button.hover": "#e5e8eb",
+    "slider.track": "#687985",
+    "slider.fill": "#426b86",
+    "led.on": "#426b86",
+    "led.off": "#687985",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#426b86",
+    "meter.fill": "#426b86",
+    "meter.peak": "#ff4444",
+    "panel.border": "#687985",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#cfd5da",
+    "list.row.selected": "#426b86",
+    "tooltip.background": "#cfd5da",
+    "tooltip.text": "#17232c"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Inter-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "soft_glass"
+  }
+}
