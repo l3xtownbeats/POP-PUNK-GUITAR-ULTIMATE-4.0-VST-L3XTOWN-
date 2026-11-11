@@ -275,6 +275,96 @@
       "path": "Skin_31/theme.json",
       "preview": "Skin_31/assets/preview.png",
       "hero": "Skin_31/assets/hero.webp"
+    },
+    {
+      "id": "skin-32",
+      "index": 32,
+      "name": "Gig Poster Luxe",
+      "cluster": "B",
+      "path": "Skin_32/theme.json",
+      "preview": "Skin_32/assets/preview.png",
+      "hero": "Skin_32/assets/hero.webp"
+    },
+    {
+      "id": "skin-33",
+      "index": 33,
+      "name": "Checker Riot",
+      "cluster": "B",
+      "path": "Skin_33/theme.json",
+      "preview": "Skin_33/assets/preview.png",
+      "hero": "Skin_33/assets/hero.webp"
+    },
+    {
+      "id": "skin-34",
+      "index": 34,
+      "name": "Midnight City",
+      "cluster": "B",
+      "path": "Skin_34/theme.json",
+      "preview": "Skin_34/assets/preview.png",
+      "hero": "Skin_34/assets/hero.webp"
+    },
+    {
+      "id": "skin-35",
+      "index": 35,
+      "name": "Arena Pulse",
+      "cluster": "B",
+      "path": "Skin_35/theme.json",
+      "preview": "Skin_35/assets/preview.png",
+      "hero": "Skin_35/assets/hero.webp"
+    },
+    {
+      "id": "skin-36",
+      "index": 36,
+      "name": "Sticker Luxe",
+      "cluster": "B",
+      "path": "Skin_36/theme.json",
+      "preview": "Skin_36/assets/preview.png",
+      "hero": "Skin_36/assets/hero.webp"
+    },
+    {
+      "id": "skin-37",
+      "index": 37,
+      "name": "Carbon Sprint",
+      "cluster": "B",
+      "path": "Skin_37/theme.json",
+      "preview": "Skin_37/assets/preview.png",
+      "hero": "Skin_37/assets/hero.webp"
+    },
+    {
+      "id": "skin-38",
+      "index": 38,
+      "name": "Electric Boulevard",
+      "cluster": "B",
+      "path": "Skin_38/theme.json",
+      "preview": "Skin_38/assets/preview.png",
+      "hero": "Skin_38/assets/hero.webp"
+    },
+    {
+      "id": "skin-39",
+      "index": 39,
+      "name": "Aftershow Gold",
+      "cluster": "B",
+      "path": "Skin_39/theme.json",
+      "preview": "Skin_39/assets/preview.png",
+      "hero": "Skin_39/assets/hero.webp"
+    },
+    {
+      "id": "skin-40",
+      "index": 40,
+      "name": "Signal Redline",
+      "cluster": "B",
+      "path": "Skin_40/theme.json",
+      "preview": "Skin_40/assets/preview.png",
+      "hero": "Skin_40/assets/hero.webp"
+    },
+    {
+      "id": "skin-41",
+      "index": 41,
+      "name": "Arctic Glasshouse",
+      "cluster": "C",
+      "path": "Skin_41/theme.json",
+      "preview": "Skin_41/assets/preview.png",
+      "hero": "Skin_41/assets/hero.webp"
     }
   ]
 }
