@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "totalSkins": 50,
+  "defaultSkin": "skin-01",
+  "selector": "SKIN",
+  "status": "specification",
+  "themes": [
+    {
+      "id": "skin-02",
+      "index": 2,
+      "name": "Dark Metal",
+      "cluster": "C",
+      "path": "Skin_02/theme.json",
+      "preview": "Skin_02/assets/preview.png",
+      "hero": "Skin_02/assets/hero.webp"
+    },
+    {
+      "id": "skin-03",
+      "index": 3,
+      "name": "Modern Studio",
+      "cluster": "A",
+      "path": "Skin_03/theme.json",
+      "preview": "Skin_03/assets/preview.png",
+      "hero": "Skin_03/assets/hero.webp"
+    },
+    {
+      "id": "skin-04",
+      "index": 4,
+      "name": "Punk Rock",
+      "cluster": "B",
+      "path": "Skin_04/theme.json",
+      "preview": "Skin_04/assets/preview.png",
+      "hero": "Skin_04/assets/hero.webp"
+    },
+    {
+      "id": "skin-05",
+      "index": 5,
+      "name": "Electric Guitar",
+      "cluster": "C",
+      "path": "Skin_05/theme.json",
+      "preview": "Skin_05/assets/preview.png",
+      "hero": "Skin_05/assets/hero.webp"
+    },
+    {
+      "id": "skin-06",
+      "index": 6,
+      "name": "Dark Carbon",
+      "cluster": "C",
+      "path": "Skin_06/theme.json",
+      "preview": "Skin_06/assets/preview.png",
+      "hero": "Skin_06/assets/hero.webp"
+    },
+    {
+      "id": "skin-07",
+      "index": 7,
+      "name": "Neon Cyber",
+      "cluster": "B",
+      "path": "Skin_07/theme.json",
+      "preview": "Skin_07/assets/preview.png",
+      "hero": "Skin_07/assets/hero.webp"
+    },
+    {
+      "id": "skin-08",
+      "index": 8,
+      "name": "Vintage Amplifier",
+      "cluster": "C",
+      "path": "Skin_08/theme.json",
+      "preview": "Skin_08/assets/preview.png",
+      "hero": "Skin_08/assets/hero.webp"
+    },
+    {
+      "id": "skin-09",
+      "index": 9,
+      "name": "Minimal Black",
+      "cluster": "A",
+      "path": "Skin_09/theme.json",
+      "preview": "Skin_09/assets/preview.png",
+      "hero": "Skin_09/assets/hero.webp"
+    },
+    {
+      "id": "skin-10",
+      "index": 10,
+      "name": "Glass UI",
+      "cluster": "C",
+      "path": "Skin_10/theme.json",
+      "preview": "Skin_10/assets/preview.png",
+      "hero": "Skin_10/assets/hero.webp"
+    },
+    {
+      "id": "skin-11",
+      "index": 11,
+      "name": "Sunset Drive",
+      "cluster": "B",
+      "path": "Skin_11/theme.json",
+      "preview": "Skin_11/assets/preview.png",
+      "hero": "Skin_11/assets/hero.webp"
+    }
+  ]
+}
