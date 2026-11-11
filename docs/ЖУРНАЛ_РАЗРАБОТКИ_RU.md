@@ -1196,3 +1196,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Добавлен сценарий с реальным PatternScheduler: ранее поставленный NoteOff старого аккорда должен пережить переход к новому аккорду и быть выдан на исходной PPQ-границе.
 - Новый CTest target ppgu_chord_transition_tests зарегистрирован в CMakeLists.txt.
 - Статус: тестовый код добавлен в main, но не запускался. Нет подтверждённой сборки, CTest или DAW проверки. M3-014 остаётся OPEN; не объявлять результат рабочим до получения Windows CI/CTest и processor-level/host evidence.
+
+
+## 11 ноября 2026 — THEME-FORGE MAX+ / SKIN REV 5.0 / Skin_12–Skin_21
+
+- Добавлены десять самостоятельных data-only манифестов: Arctic Blue, Toxic Green, Purple Voltage, Blood Red, Ocean Stage, Golden Era, Mono Chrome, Festival Lights, Studio Olive, Neon Flagship.
+- Каждая тема содержит собственные HEX-палитры и полный набор токен-групп schema 1.0.0, включая thumbnails.
+- Обновлён SKIN/theme_manifest.json; реестр содержит 20 тем Skin_02–Skin_21. Skin_01/Neon Riot остаётся дефолтом.
+- AssetSpec описывает preview 480x300 PNG, hero 1200x420 WebP и optional seamless texture. Файлы изображений не созданы.
+- В этом цикле production C++ не менялся. Runtime, schema validation, contrast automation, inventory matrix, Windows build/CTest и FL Studio 20 не проверялись.
+- Статус: SPEC READY (manifest authored) — pending independent schema/contrast validation, assets, runtime and user acceptance. CI: AWAITING CI.
