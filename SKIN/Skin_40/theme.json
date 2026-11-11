@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-40",
+  "index": 40,
+  "name": "Signal Redline",
+  "description": "Precise redline accents across a deep graphite performance surface",
+  "cluster": "B",
+  "identity": {
+    "material": "blackened aluminium and tactile rubber",
+    "lighting": "thin red edge light, no diffuse haze",
+    "mood": "urgent, precise, high-energy"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#1D1518",
+      "inset": "#291B20"
+    },
+    "surfaces": {
+      "primary": "#291B20",
+      "secondary": "#38242B",
+      "raised": "#4A303A",
+      "overlay": "#1D1518"
+    },
+    "borders": {
+      "subtle": "#78545E",
+      "strong": "#FF9E6A",
+      "focus": "#FF3E52"
+    },
+    "typography": {
+      "primary": "#FFF4F4",
+      "secondary": "#D0BFC3",
+      "disabled": "#85858B",
+      "onAccent": "#1D1518"
+    },
+    "rotary": {
+      "body": "#4A303A",
+      "ring": "#FF9E6A",
+      "track": "#78545E",
+      "value": "#FF3E52",
+      "pointer": "#D9DCE2",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#78545E",
+      "fill": "#FF3E52",
+      "thumb": "#D9DCE2",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF3E52",
+        "foreground": "#1D1518",
+        "hover": "#D9DCE2",
+        "pressed": "#FF9E6A",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#38242B",
+        "foreground": "#FFF4F4",
+        "hover": "#4A303A",
+        "pressed": "#FF9E6A",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF3E52",
+      "activeText": "#1D1518",
+      "inactiveBackground": "#38242B",
+      "inactiveText": "#D0BFC3",
+      "indicator": "#FF9E6A"
+    },
+    "comboBoxes": {
+      "background": "#38242B",
+      "foreground": "#FFF4F4",
+      "border": "#78545E",
+      "hover": "#4A303A",
+      "menuBackground": "#291B20",
+      "selection": "#FF3E52"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF3E52",
+      "blackPressed": "#FF9E6A",
+      "keyBorder": "#78545E",
+      "octaveLabel": "#D0BFC3"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF3E52",
+      "high": "#F06A58",
+      "background": "#1D1518"
+    },
+    "icons": {
+      "primary": "#FFF4F4",
+      "secondary": "#D0BFC3",
+      "accent": "#FF3E52",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#38242B",
+      "border": "#78545E",
+      "selected": "#FF3E52",
+      "caption": "#FFF4F4"
+    },
+    "windowChrome": {
+      "background": "#1D1518",
+      "title": "#FFF4F4",
+      "border": "#78545E",
+      "close": "#D9DCE2"
+    },
+    "hero": {
+      "background": "#1D1518",
+      "accent": "#FF3E52",
+      "secondaryAccent": "#FF9E6A",
+      "highlight": "#D9DCE2"
+    },
+    "accents": {
+      "primary": "#FF3E52",
+      "secondary": "#FF9E6A",
+      "tertiary": "#D9DCE2"
+    },
+    "texture": {
+      "material": "blackened aluminium and tactile rubber",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "thin red edge light, no diffuse haze",
+      "glow": "#FF3E52",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#FF9E6A"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Signal Redline preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original blackened aluminium and tactile rubber hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle blackened aluminium and tactile rubber texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
