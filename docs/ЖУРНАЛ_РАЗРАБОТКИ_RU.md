@@ -1187,3 +1187,12 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Код не менялся: музыкальный контракт не установлен достоверно из доступного в main `Promt.txt v33 FINAL` (файл с таким точным путём не найден). До исправления нужно найти действующий файл ТЗ и выбрать ожидаемую семантику: immediate switch, deferred switch with old pattern continuation, или latest-chord coalescing.
 - Следующий инженерный шаг: найти реальный путь к v33 FINAL в репозитории; зафиксировать contract test на нескольких chord transitions внутри quantize window и pending NoteOff; затем внести минимальный source fix и настоящий processor-level integration harness. Не считать helper test end-to-end acceptance.
 - Результат этого цикла: source audit + уточнение M3-014 в баг-реестре; production code/build/test не менялись и не запускались. M3-014 OPEN, M3-015 FIXED IN SOURCE / AWAITING CI, M1/M2/M3 не приняты.
+
+
+## 11 ноября 2026 — M3-014: добавлен regression target
+
+- Добавлен автономный тест tests/ChordTransitionPolicyTests.cpp.
+- Проверяются решения policy для первого аккорда, ожидания следующего такта, переходов non-empty → non-empty, повторных переходов в одном окне, перехода к пустому аккорду и невалидного PPQ.
+- Добавлен сценарий с реальным PatternScheduler: ранее поставленный NoteOff старого аккорда должен пережить переход к новому аккорду и быть выдан на исходной PPQ-границе.
+- Новый CTest target ppgu_chord_transition_tests зарегистрирован в CMakeLists.txt.
+- Статус: тестовый код добавлен в main, но не запускался. Нет подтверждённой сборки, CTest или DAW проверки. M3-014 остаётся OPEN; не объявлять результат рабочим до получения Windows CI/CTest и processor-level/host evidence.
