@@ -143,3 +143,12 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Defined a clean playable default screen with deeper functions organized into focused panels; every theme must retain the same full feature set.
 - This records the product direction only; it is not a claim that the interface has already been redesigned or that every feature is implemented.
 - Requirements document commit: `099256b768775fee868af925e321ca9a78a26496`.
+
+## 2026-11-11 — factory catalog / Windows CI count correction
+
+- Verified the current factory JSON contains exactly 240 MELODY + 240 PATTERN = 480 definitions and declares the same minimums.
+- Found a concrete CI inconsistency: the workflow expected 482 generated files, while the checked-in catalog contains 480; package notes also described the older 432-entry catalog.
+- Corrected generation validation and package metadata to expect/report 480 files.
+- Updated `validate_factory_bank.py` to read the minimum counts from the catalog's `minimumPresetCounts` object instead of hard-coding the obsolete 216 + 216 / 432 thresholds.
+- Commits: workflow `ac70f4e60f477c7da53a6a406b98b86756e0c676`; validator `786e4ae8f04c1ed63ca55dc30dc854fed3bf102f`.
+- Validation is pending the Windows workflow for the resulting branch revision. The 480 entries remain catalog definitions, not a claim that all 480 are mapped to playable validated sample sets.
