@@ -9,12 +9,15 @@
 #include "PluginProcessor.h"
 
 #include <juce_audio_formats/juce_audio_formats.h>
+#include <array>
 #include <cmath>
+#include <cstdint>
 #include <filesystem>
 #include <iostream>
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <utility>
 
 namespace
 {
