@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-38",
+  "index": 38,
+  "name": "Electric Boulevard",
+  "description": "Neon boulevard with saturated violet and blue architectural highlights",
+  "cluster": "B",
+  "identity": {
+    "material": "smoked acrylic and anodized violet metal",
+    "lighting": "violet-blue city neon, controlled bloom",
+    "mood": "electric, urban, expressive"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#19152A",
+      "inset": "#231D3A"
+    },
+    "surfaces": {
+      "primary": "#231D3A",
+      "secondary": "#30274A",
+      "raised": "#44365F",
+      "overlay": "#19152A"
+    },
+    "borders": {
+      "subtle": "#6B5A91",
+      "strong": "#6A9EFF",
+      "focus": "#E35BFF"
+    },
+    "typography": {
+      "primary": "#F8F3FF",
+      "secondary": "#C9BFDF",
+      "disabled": "#85858B",
+      "onAccent": "#19152A"
+    },
+    "rotary": {
+      "body": "#44365F",
+      "ring": "#6A9EFF",
+      "track": "#6B5A91",
+      "value": "#E35BFF",
+      "pointer": "#FFD66B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#6B5A91",
+      "fill": "#E35BFF",
+      "thumb": "#FFD66B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#E35BFF",
+        "foreground": "#19152A",
+        "hover": "#FFD66B",
+        "pressed": "#6A9EFF",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#30274A",
+        "foreground": "#F8F3FF",
+        "hover": "#44365F",
+        "pressed": "#6A9EFF",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#E35BFF",
+      "activeText": "#19152A",
+      "inactiveBackground": "#30274A",
+      "inactiveText": "#C9BFDF",
+      "indicator": "#6A9EFF"
+    },
+    "comboBoxes": {
+      "background": "#30274A",
+      "foreground": "#F8F3FF",
+      "border": "#6B5A91",
+      "hover": "#44365F",
+      "menuBackground": "#231D3A",
+      "selection": "#E35BFF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#E35BFF",
+      "blackPressed": "#6A9EFF",
+      "keyBorder": "#6B5A91",
+      "octaveLabel": "#C9BFDF"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E35BFF",
+      "high": "#F06A58",
+      "background": "#19152A"
+    },
+    "icons": {
+      "primary": "#F8F3FF",
+      "secondary": "#C9BFDF",
+      "accent": "#E35BFF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#30274A",
+      "border": "#6B5A91",
+      "selected": "#E35BFF",
+      "caption": "#F8F3FF"
+    },
+    "windowChrome": {
+      "background": "#19152A",
+      "title": "#F8F3FF",
+      "border": "#6B5A91",
+      "close": "#FFD66B"
+    },
+    "hero": {
+      "background": "#19152A",
+      "accent": "#E35BFF",
+      "secondaryAccent": "#6A9EFF",
+      "highlight": "#FFD66B"
+    },
+    "accents": {
+      "primary": "#E35BFF",
+      "secondary": "#6A9EFF",
+      "tertiary": "#FFD66B"
+    },
+    "texture": {
+      "material": "smoked acrylic and anodized violet metal",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "violet-blue city neon, controlled bloom",
+      "glow": "#E35BFF",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#6A9EFF"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Electric Boulevard preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original smoked acrylic and anodized violet metal hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle smoked acrylic and anodized violet metal texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
