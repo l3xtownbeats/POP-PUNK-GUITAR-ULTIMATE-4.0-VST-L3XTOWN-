@@ -164,8 +164,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
     setResizeLimits(800, 790, 1600, 1100);
-    titleLabel.setText("PPGU", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(22.0f, juce::Font::bold));
+    titleLabel.setText("BROWSER PRESETS:", juce::dontSendNotification);
+    titleLabel.setFont(juce::Font(13.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
     addAndMakeVisible(titleLabel);
     subtitleLabel.setText("POP PUNK GUITAR ULTIMATE   /   PLAY. CREATE. ROCK.", juce::dontSendNotification);
@@ -178,7 +178,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
     categoryBox.addItem("OFF", 1);
-    categoryBox.addItem("PUNK GROUPS", 2);
+    categoryBox.addItem("PUNK GROUP", 2);
     categoryBox.setSelectedId(2, juce::dontSendNotification);
     categoryBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     categoryBox.setColour(juce::ComboBox::textColourId, pale);
@@ -190,9 +190,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     addAndMakeVisible(presetSearch);
     loadFactoryPresetCatalog();
     melodyFilterBox.addItem("OFF", 1);
-    melodyFilterBox.addItem("ALL SOUNDS", 2);
+    melodyFilterBox.addItem("MELODY", 2);
     styleFilterBox.addItem("OFF", 1);
-    styleFilterBox.addItem("ALL STYLES", 2);
+    styleFilterBox.addItem("STYLE", 2);
     juce::StringArray melodyValues;
     for (const auto& item : factoryPresets)
         if (item.soundCharacter.isNotEmpty() && !melodyValues.contains(item.soundCharacter))
@@ -255,10 +255,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         const auto groupFilter = categoryBox.getText();
         for (size_t i = 0; i < factoryPresets.size(); ++i) {
             const auto& item = factoryPresets[i];
-            if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "PUNK GROUPS"
+            if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "PUNK GROUP"
                 && !item.category.equalsIgnoreCase(groupFilter)) continue;
             const auto melodyFilter = melodyFilterBox.getText();
-            if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "ALL SOUNDS"
+            if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "MELODY"
                 && !item.soundCharacter.containsIgnoreCase(melodyFilter)) continue;
             const auto styleFilter = styleFilterBox.getText();
             const auto styleText = (item.name + " " + item.groove + " " + item.articulation + " "
@@ -282,7 +282,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
                             || styleText.contains("picked arpeggios");
             else if (styleFilter == "Ska Upstrokes")
                 matchesStyle = styleText.contains("ska") || styleText.contains("upstroke");
-            else if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "ALL STYLES")
+            else if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "STYLE")
                 matchesStyle = styleText.containsIgnoreCase(styleFilter);
             if (!matchesStyle) continue;
 
@@ -626,12 +626,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 
     // Unified browser: preset, search, mode, sound character and playing style.
     auto browser = area.removeFromTop(46);
-    titleLabel.setBounds(browser.removeFromLeft(60));
-    presetBox.setBounds(browser.removeFromLeft(170).reduced(3, 5));
-    presetSearch.setBounds(browser.removeFromLeft(110).reduced(3, 7));
-    categoryBox.setBounds(browser.removeFromLeft(115).reduced(3, 7));
-    melodyFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
-    styleFilterBox.setBounds(browser.removeFromLeft(125).reduced(3, 7));
+    titleLabel.setBounds(browser.removeFromLeft(126).reduced(1, 5));
+    presetBox.setBounds(browser.removeFromLeft(154).reduced(3, 5));
+    presetSearch.setBounds(browser.removeFromLeft(104).reduced(3, 7));
+    categoryBox.setBounds(browser.removeFromLeft(122).reduced(3, 7));
+    melodyFilterBox.setBounds(browser.removeFromLeft(120).reduced(3, 7));
+    styleFilterBox.setBounds(browser.removeFromLeft(120).reduced(3, 7));
     subtitleLabel.setVisible(browser.getWidth() > 180);
     subtitleLabel.setBounds(browser.reduced(4, 0));
 
