@@ -9,7 +9,9 @@ path = Path(sys.argv[1] if len(sys.argv) > 1 else "presets/factory_bank_300.json
 data = json.loads(path.read_text(encoding="utf-8"))
 errors = []
 
-artists = {item["name"] for item in data.get("artists", [])}
+artist_items = data.get("artists", [])
+artists = {item["name"] for item in artist_items}
+artist_tracks = {item["name"]: set(item.get("tracks", [])) for item in artist_items}
 melody = data.get("melodyPresets", [])
 pattern = data.get("patternPresets", [])
 if len(melody) < 150:
@@ -33,6 +35,18 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
         artist = preset.get("referenceArtist")
         if artist not in artists:
             errors.append(f'{preset.get("id")}: unknown reference artist {artist!r}')
+        else:
+            allowed_tracks = artist_tracks.get(artist, set())
+            for track in preset.get("referenceTracks", []):
+                if track not in allowed_tracks:
+                    errors.append(f'{preset.get("id")}: track {track!r} is not listed for {artist!r}')
+            breakdown = preset.get("trackBreakdown")
+            if breakdown:
+                track_title = breakdown.get("trackTitle")
+                if track_title not in allowed_tracks:
+                    errors.append(f'{preset.get("id")}: track breakdown title {track_title!r} is not listed for {artist!r}')
+                if track_title not in preset.get("referenceTracks", []):
+                    errors.append(f'{preset.get("id")}: track breakdown title is missing from referenceTracks')
         params = preset.get("parameters", {})
         for key in ("drive", "tone", "reverb"):
             value = params.get(key)
@@ -62,6 +76,13 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
             errors.append(f'{preset.get("id")}: missing noteBehavior')
         if expected_mode == "PATTERN" and not preset.get("groove"):
             errors.append(f'{preset.get("id")}: missing groove')
+
+for artist in artist_items:
+    if len(artist.get("tracks", [])) < 2:
+        errors.append(f'{artist.get("name")}: expected at least two track references')
+    for mode_name, presets in (("MELODY", melody), ("PATTERN", pattern)):
+        if not any(p.get("referenceArtist") == artist.get("name") and p.get("trackBreakdown") for p in presets):
+            errors.append(f'{artist.get("name")}: missing track-study preset in {mode_name}')
 
 if errors:
     print("Factory preset catalog validation FAILED:")
