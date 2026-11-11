@@ -83,6 +83,10 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
         license_spdx = ((metadata.get("license") or {}).get("spdx_id") or "").upper()
         if license_spdx != item["license"]:
             raise RuntimeError(f"{repo}: expected {item['license']}, GitHub reports {license_spdx or 'unknown'}; refusing download")
+        license_payload = request_json(f"https://api.github.com/repos/{repo}/license", headers)
+        license_bytes = base64.b64decode(license_payload.get("content", ""))
+        if b"CC0 1.0 Universal" not in license_bytes and b"Creative Commons Zero" not in license_bytes:
+            raise RuntimeError(f"{repo}: official GitHub license file does not contain CC0 1.0; refusing download")
         release = request_json(f"https://api.github.com/repos/{repo}/releases/tags/{item['tag']}", headers)
         asset = next((a for a in release.get("assets", []) if a.get("name") == item["asset"]), None)
         if not asset:
