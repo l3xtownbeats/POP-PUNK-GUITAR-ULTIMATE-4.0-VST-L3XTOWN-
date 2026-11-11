@@ -312,3 +312,68 @@ The engine must avoid the obvious sampler effect: repeated identical attacks, ab
 - [ ] Mark each articulation and instrument family as implemented only when its source assets, mapping, DSP path and tests are present. Unsupported techniques must be clearly identified rather than simulated deceptively.
 
 **Acceptance principle:** sound quality is demonstrated per instrument, articulation and performance scenario. A single good preset or a large sample count does not prove that the whole instrument is realistic.
+
+
+# MELODY VELOCITY ARTICULATION — DRIVE / DISTORTION PALM-MUTE TO SUSTAIN
+
+## Goal and scope
+
+Implement a Piano Roll velocity articulation switch inspired by the documented Ample Metal Eclipse workflow: low-velocity notes trigger progressively tighter palm mutes; higher-velocity notes trigger open sustained notes suitable for lead lines. This feature is intentionally restricted to **MELODY playback + presets explicitly classified as DRIVE or DISTORTION**. It must not alter CLEAN, ACOUSTIC, NYLON, CRUNCH-unless-explicitly-tagged, PATTERN, or other preset families. The selected preset's explicit articulation profile is authoritative; the global distortion FX switch alone is not sufficient to activate the behavior.
+
+This is an original implementation of the musical idea, not a copy of Ample's code, samples, thresholds, or proprietary assets.
+
+## 1. MIDI velocity mapping
+
+- Read the original MIDI note velocity before any global velocity scaling/dynamics curve. Keep two independent values: (a) audible note intensity, shaped by the existing velocity/dynamics controls; (b) articulation selector, derived from the raw MIDI velocity so the Piano Roll remains predictable.
+- Default mapping for the first implementation should be configurable and based on the following five zones:
+  - 1–15: FULL MUTE / very tight palm mute.
+  - 16–31: DEEP MUTE / tight palm mute.
+  - 32–63: HALF MUTE / shorter palm-muted note.
+  - 64–126: OPEN SUSTAIN / sustained lead note.
+  - 127: STRONG SUSTAIN / accent layer only if a matching real sample layer exists; otherwise use the strongest valid sustain layer. Never trigger a harmonic/pop merely because velocity is 127 unless a separate explicit articulation/preset mapping requests it.
+- Expose user-adjustable zone boundaries and/or a compact VELOCITY ARTICULATION curve in the instrument UI in a later UI pass. Store values in APVTS so automation and project recall work. Initial default behavior must work without extra setup.
+- A low velocity must not simply become a quieter open note. It must select the corresponding palm-muted sample/articulation when that zone exists.
+- High velocity must not force palm mute. It selects the open/sustain sample and preserves the MIDI note's natural duration until Note Off/release.
+- Preserve musical dynamics: velocity continues to influence amplitude/attack, but articulation selection is a separate mapping. Avoid sudden loudness jumps at zone boundaries; level-match source layers and test transitions.
+
+## 2. Preset and mode gating
+
+- Add an explicit preset metadata field such as `velocityArticulationProfile` with values `off` and `drivePalmMuteSustain`. The latter is valid only for DRIVE/DISTORTION electric-guitar presets.
+- Factory preset metadata must classify eligible presets deliberately; do not infer eligibility from preset display-name substring alone at runtime.
+- USER/imported presets default to `off` until the user explicitly selects the compatible profile and the bank's sample map proves that the required articulations exist.
+- Runtime gate is strict: `playMode == MELODY && activePreset.velocityArticulationProfile == drivePalmMuteSustain && activeInstrumentFamily == electric`.
+- PATTERN always keeps its own preset/pattern articulation rules and must not inherit this MELODY velocity map.
+- CLEAN, BRIGHT CLEAN, CHORUS CLEAN, TREMOLO CLEAN, ACOUSTIC, NYLON and other non-eligible presets retain their existing velocity behavior.
+- Explicit manual articulation selection (for example a deliberate Palm Mute articulation) has priority over automatic velocity mapping. Switching preset/mode must not leave a stale articulation override.
+
+## 3. Sample-bank requirements and fallback
+
+- Each enabled preset must provide correctly mapped note/range coverage for at least the open sustain layer and the available palm-mute depth layers, including velocity zones and round-robin variation where available.
+- Use genuinely recorded palm-muted performances at different mute depths. Do not manufacture three acoustic/PM layers by gain changes, pitch shifts, EQ-only changes or arbitrary sample truncation.
+- If a bank contains only one PM layer, map the PM zones to that real layer and mark the reduced depth resolution in the bank audit; do not claim three distinct PM articulations.
+- If no compatible PM layer exists for a note/range, use the closest valid mapped articulation with a safe fallback and expose a diagnostic; never silently select an unrelated sample.
+- Preserve sample provenance, redistribution licenses, checksums and mapping metadata. Commercial reference-library samples must never be extracted or bundled.
+
+## 4. Real-time and MIDI correctness
+
+- Implement the velocity-to-articulation decision in the audio thread with bounded, allocation-free operations. Do not allocate strings/vectors, lock, scan the preset catalog, or parse SFZ in `processBlock`.
+- Resolve the active preset profile and sample-zone mapping before playback or publish a compact immutable/precomputed mapping to the audio thread.
+- Apply the articulation choice per incoming note, not globally to all currently held notes. Chords in MELODY may therefore contain notes with different velocity/articulation layers.
+- MIDI Note Off must release the exact voice started by that Note On. Respect note duration, overlapping same-pitch notes, sustain pedal if supported, all-notes-off, panic, transport stop and preset changes.
+- Velocity-zero Note On is Note Off and must not start a palm-muted voice.
+- PATTERN and AutoChords behavior are unchanged.
+
+## 5. Required regression tests / acceptance
+
+- [ ] In MELODY + eligible DRIVE preset: velocity 1, 15, 16, 31, 32, 63 select the intended PM zones; 64, 126, 127 select sustain/accent fallback as specified.
+- [ ] Test every zone boundary at adjacent values to catch off-by-one errors.
+- [ ] In MELODY + CLEAN / ACOUSTIC / NYLON / untagged presets: automatic PM switching is disabled at all velocities.
+- [ ] In PATTERN + DRIVE preset: this MELODY-only mapping is disabled; pattern articulation logic remains unchanged.
+- [ ] Chord test: simultaneous notes with different velocities select independent articulations.
+- [ ] Confirm MIDI velocity still affects amplitude/attack and that layer loudness is level-matched.
+- [ ] Confirm high-velocity sustained notes follow Piano Roll note length and Note Off; low-velocity palm-muted notes have natural recorded short decay without stuck tails.
+- [ ] Confirm project save/reopen and automation restore profile and threshold settings.
+- [ ] Run sample-map coverage audit and render a velocity sweep for low E/A/D strings and representative upper-register notes; inspect waveforms, loudness, transient and decay.
+- [ ] Compare the same MIDI passage against reference instruments at matched loudness; do not claim equivalent or superior realism without listening evidence.
+
+**Important current-code finding:** the existing MELODY path currently compares the shaped/scaled velocity to one `palmMuteThreshold` and collapses every below-threshold note to a single sample velocity (`palmMuteThreshold - 1`). It also applies this automatic selection to all MELODY presets, not only DRIVE/DISTORTION. This does not provide multi-depth palm mute, and it violates the requested preset-family restriction. Replace this behavior with the explicit preset-gated multi-zone mapping above; do not stack a second velocity switch on top of the old one.
