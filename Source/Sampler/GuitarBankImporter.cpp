@@ -12,6 +12,28 @@ bool isAudioOrInstrument(const juce::File& file)
     return ext == ".wav" || ext == ".sfz" || ext == ".aiff" || ext == ".aif"
         || ext == ".flac" || ext == ".ogg" || ext == ".mp3";
 }
+
+juce::String classifyCategory(const juce::File& file)
+{
+    const auto hint = (file.getParentDirectory().getFileName() + " "
+        + file.getFileNameWithoutExtension()).toLowerCase();
+    if (hint.contains("acoustic") || hint.contains("nylon") || hint.contains("steel-guitar")) return "Acoustic";
+    if (hint.contains("palm") || hint.contains("mute") || hint.contains("muted")) return "Palm Mute";
+    if (hint.contains("distortion") || hint.contains("dist") || hint.contains("high-gain")
+        || hint.contains("metal") || hint.contains("heavy")) return "Distortion";
+    if (hint.contains("crunch") || hint.contains("overdrive")) return "Crunch";
+    if (hint.contains("drive") || hint.contains("lead") || hint.contains("amp")) return "Drive";
+    if (hint.contains("clean") || hint.contains("direct")) return "Clean";
+    if (hint.contains("bass")) return "Bass";
+    return "Unsorted";
+}
+juce::String formatLabel(const juce::File& file)
+{
+    auto ext = file.getFileExtension().toLowerCase().trimCharacters(".");
+    if (ext == "aif") ext = "aiff";
+    return ext.toUpperCase();
+}
+
 juce::String safeName(juce::String value)
 {
     value = value.trim().retainCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ");
@@ -54,6 +76,8 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
     }
 
     juce::Array<juce::var> assets;
+    juce::DynamicObject::Ptr categoryCounts = new juce::DynamicObject();
+    juce::DynamicObject::Ptr formatCounts = new juce::DynamicObject();
     juce::File selectedSfz;
     std::uint64_t totalBytes = 0;
     bool failed = false;
@@ -81,6 +105,15 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
         asset->setProperty("bytes", static_cast<juce::int64>(bytes));
         asset->setProperty("sha256", juce::SHA256(target).toHexString());
         asset->setProperty("sourceName", source.getFileName());
+        const auto category = classifyCategory(source);
+        const auto format = formatLabel(source);
+        asset->setProperty("category", category);
+        asset->setProperty("format", format);
+        const bool currentPlaybackFormat = source.hasFileExtension("wav") || source.hasFileExtension("sfz");
+        asset->setProperty("playbackStatus", currentPlaybackFormat
+            ? "supported-by-current-loader" : "indexed-decoder-capability-pending");
+        categoryCounts->setProperty(category, static_cast<int>(categoryCounts->getProperty(category)) + 1);
+        formatCounts->setProperty(format, static_cast<int>(formatCounts->getProperty(format)) + 1);
         assets.add(juce::var(asset.get()));
         if (source.getFileExtension().equalsIgnoreCase(".sfz") && selectedSfz == juce::File{})
             selectedSfz = target;
@@ -110,6 +143,10 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
             manifest->setProperty("wavCount", report.indexedWavFiles);
             manifest->setProperty("totalBytes", static_cast<juce::int64>(totalBytes));
             manifest->setProperty("assets", juce::var(assets));
+            manifest->setProperty("categoryCounts", juce::var(categoryCounts.get()));
+            manifest->setProperty("formatCounts", juce::var(formatCounts.get()));
+            manifest->setProperty("organization", "logical-categories-and-formats; original-relative-paths-preserved");
+            manifest->setProperty("categoryRuleVersion", 1);
             const auto manifestFile = staging.getChildFile("bank.json");
             if (!manifestFile.replaceWithText(juce::JSON::toString(juce::var(manifest.get()), true)))
             {
