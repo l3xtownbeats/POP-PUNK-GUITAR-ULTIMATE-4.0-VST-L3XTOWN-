@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-12",
+  "index": 12,
+  "name": "Arctic Blue",
+  "description": "Cold glacial metal, crisp blue studio light",
+  "cluster": "C",
+  "identity": {
+    "material": "ice-coated aluminium",
+    "lighting": "arctic blue edge light",
+    "mood": "precise, cold, open"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#111C29",
+      "inset": "#182A3B"
+    },
+    "surfaces": {
+      "primary": "#182A3B",
+      "secondary": "#21384C",
+      "raised": "#2C4A60",
+      "overlay": "#111C29"
+    },
+    "borders": {
+      "subtle": "#54758E",
+      "strong": "#4B8EC9",
+      "focus": "#8EDBFF"
+    },
+    "typography": {
+      "primary": "#F2F7FB",
+      "secondary": "#B8CAD8",
+      "disabled": "#85858B",
+      "onAccent": "#111C29"
+    },
+    "rotary": {
+      "body": "#2C4A60",
+      "ring": "#4B8EC9",
+      "track": "#54758E",
+      "value": "#8EDBFF",
+      "pointer": "#DCEBFA",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#54758E",
+      "fill": "#8EDBFF",
+      "thumb": "#DCEBFA",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#8EDBFF",
+        "foreground": "#111C29",
+        "hover": "#DCEBFA",
+        "pressed": "#4B8EC9",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#21384C",
+        "foreground": "#F2F7FB",
+        "hover": "#2C4A60",
+        "pressed": "#4B8EC9",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#8EDBFF",
+      "activeText": "#111C29",
+      "inactiveBackground": "#21384C",
+      "inactiveText": "#B8CAD8",
+      "indicator": "#4B8EC9"
+    },
+    "comboBoxes": {
+      "background": "#21384C",
+      "foreground": "#F2F7FB",
+      "border": "#54758E",
+      "hover": "#2C4A60",
+      "menuBackground": "#182A3B",
+      "selection": "#8EDBFF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#8EDBFF",
+      "blackPressed": "#4B8EC9",
+      "keyBorder": "#54758E",
+      "octaveLabel": "#B8CAD8"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#8EDBFF",
+      "high": "#F06A58",
+      "background": "#111C29"
+    },
+    "icons": {
+      "primary": "#F2F7FB",
+      "secondary": "#B8CAD8",
+      "accent": "#8EDBFF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#21384C",
+      "border": "#54758E",
+      "selected": "#8EDBFF",
+      "caption": "#F2F7FB"
+    },
+    "windowChrome": {
+      "background": "#111C29",
+      "title": "#F2F7FB",
+      "border": "#54758E",
+      "close": "#DCEBFA"
+    },
+    "hero": {
+      "background": "#111C29",
+      "accent": "#8EDBFF",
+      "secondaryAccent": "#4B8EC9",
+      "highlight": "#DCEBFA"
+    },
+    "accents": {
+      "primary": "#8EDBFF",
+      "secondary": "#4B8EC9",
+      "tertiary": "#DCEBFA"
+    },
+    "texture": {
+      "material": "ice-coated aluminium",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "arctic blue edge light",
+      "glow": "#8EDBFF",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#4B8EC9"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Arctic Blue interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract ice-coated aluminium hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original ice-coated aluminium texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
