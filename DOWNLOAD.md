@@ -1,9 +1,9 @@
 <div align="center">
 
-<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN" width="100%">
+<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN AUDIO LAB" width="100%">
 
-# POP PUNK GUITAR ULTIMATE
-### WINDOWS x64 · VST3 INSTRUMENT · DOWNLOAD CENTER
+# DOWNLOAD CENTER
+### WINDOWS x64 · VST3 INSTRUMENT
 
 **PLAY. CREATE. ROCK.**
 
@@ -11,96 +11,73 @@
 
 ---
 
-## Current download status
+## Current release candidate — run #827
 
-### Previous successful package
+**Last checked status: Windows Release build in progress.**
 
-[**⬇ DOWNLOAD VST3 + GUITAR SAMPLE LIBRARY + PRESET FILES (ZIP)**](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+The source fix for the missing generated JUCE BinaryData.h has been committed. Sample-cache restore, license validation, x64 CMake configuration and pre-build validation passed. The Windows Release build step is active; CTest, VST3 discovery, pluginval strictness 5 and packaging remain pending.
 
-- Approximate archive size: **1.55 GiB**
-- Platform: Windows x64
-- Format: VST3 instrument
-- Package: plugin + redistributable sample content + preset files
-- Build result: [successful workflow run #216](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
-- Artifact expiration: **8 February 2027**
+[**OPEN CURRENT WINDOWS BUILD #827**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43113647167)
 
-This is a verified earlier package from a previous development commit. It does not contain the newly requested folder layout.
+- Source SHA: 0ef0ebe934350d57779328a5e0979f1134ae85f2
+- Current complete ZIP: **not yet published**
+- Do not install an older artifact as though it were the current release.
 
-### New complete package — being prepared
+## Previous build — historical artifact
 
-[**View current build and packaging run #826**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448)
+[Download previous VST3 + sample content package](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
 
-The latest attempt (run #826) failed during compilation: the pattern integration test target could not find generated JUCE header BinaryData.h. CTest, pluginval strictness 5 and packaging were skipped. No new complete ZIP was published. A new successful run is required before the new package can be downloaded.
+[Open its successful workflow run](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
 
-Planned ZIP layout:
+This artifact comes from an earlier source revision and package layout. It is for historical testing only and is not the canonical REV 13.0 release package.
+
+## Required final package
+
+The release archive name is fixed:
+
+**POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip**
+
+Expected top-level layout:
 
 ```text
 POP_PUNK_GUITAR_ULTIMATE/
 ├── VST3/
 ├── SOUNDBANK/
 ├── PRESETS/
-├── SKINS/
+├── Skins/             # only if real runtime assets are shipped
 ├── Resources/
 ├── Assets/
+├── MANIFEST.json
 └── INSTALL_AND_CONTENTS.txt
 ```
 
-The new ZIP is **not available**: the latest workflow attempt failed before tests and packaging.
+The live editor currently uses one fixed dark charcoal / magenta design. There is no accepted runtime skin selector or theme hot-swap. The package must not imply that a skin gallery exists. Do not manufacture placeholder skin packs merely to fill this directory.
 
-## Presets
+## Release contents
 
-- [Factory preset catalogue — 300 definitions](presets/factory_bank_300.json)
-- [Additional factory bank data](presets/factory_preset_bank_v1.json)
-- [Melody example (.ppgm)](presets/examples/Example-Melody.ppgm)
-- [Pattern example (.ppgp)](presets/examples/Example-Pattern.ppgp)
-- [Preset integration status and acceptance criteria](docs/PRESET_BANK_4_0_READINESS_RU.md)
+- Windows x64 VST3 instrument.
+- Redistributable guitar SoundBank with source licenses and checksums.
+- Factory preset data and supported user-bank examples.
+- Runtime resources and assets required by the actual editor.
+- Installation instructions, manifest and package contents list.
 
-The 300 records are authored preset definitions (150 Melody + 150 Pattern). They are not all accepted as fully playable runtime presets yet.
+The 300 factory catalogue records are definitions, not 300 verified playable presets. The release report must publish the tested playable count as N/300.
 
-## SoundBank and licensing
+## Installation (after a verified package is published)
 
-The previous package includes the sample collection in the archive. A separate standalone SoundBank download has not been published.
+1. Extract the archive.
+2. Copy the .vst3 bundle into C:\Program Files\Common Files\VST3\.
+3. Keep the SoundBank in the package-prescribed location and do not rename its folders.
+4. Rescan VST3 plugins in FL Studio 20.
+5. Load the instrument, select a verified preset or licensed SFZ library, and audition it with MIDI.
 
-- [Sample-source and redistribution policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
-- [Meta Open Sound clearance notes](licenses/META_OPEN_SOUND_CLEARANCE.md)
-- [Sampler streaming architecture](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
+Use INSTALL_AND_CONTENTS.txt shipped with the exact package. Do not apply instructions from a different artifact revision.
 
-Only audio with verified redistribution rights may be included in the plugin package.
+## References
 
-## Skins, resources and artwork
-
-- [Skin/theme directory](SKIN/)
-- [Theme schema](SKIN/theme.schema.json)
-- [Theme manifest](SKIN/theme_manifest.json)
-- [Skin documentation](SKIN/README.md)
-- [Product cover and interface banner](assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg)
-- [Interface artwork](Cover%20Interface.jpg)
-
-The repository contains theme manifests and skin specifications. Runtime skin switching is not yet accepted as complete.
-
-## Installation
-
-1. Download and extract the ZIP.
-2. Copy the VST3 bundle into C:\Program Files\Common Files\VST3\.
-3. Keep the extracted sample folder available to the plugin.
-4. Rescan VST3 plugins in FL Studio 20 or another compatible Windows host.
-5. Load the instrument and send MIDI notes.
-
-Use the package's INSTALL_AND_CONTENTS.txt for exact folder and sample-library instructions.
-
-## Technical target
-
-| Item | Specification |
-|---|---|
-| Platform | Windows 10/11 x64 |
-| Format | VST3 instrument |
-| Intended DAW | FL Studio 20 |
-| Framework | JUCE 7.0.12 |
-| Language | C++20 |
-| Audio | Stereo |
-| MIDI | Note / velocity / channel |
-| Sampler | SFZ-mapped WAV |
-| Voice slots | Up to 64 |
-| UI direction | Dark charcoal / magenta |
-
-See the [main README](README.md) for full product description, engine status, limitations and project documentation.
+- [Main product README](README.md)
+- [Single engineering journal](Info.txt)
+- [Preset catalogue](presets/)
+- [Sample sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
+- [SoundBank audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
+- [Skin/UI implementation audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
