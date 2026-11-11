@@ -47,7 +47,7 @@ The target workflow is immediate MIDI playability in **FL Studio 20** and other 
 
 This is the previous successful package from an earlier development commit. It contains the VST3 instrument, the redistributable sample collection and preset files. It uses the earlier package layout; it is **not** the new VST3 / SOUNDBANK / PRESETS / SKINS / Resources / Assets layout currently being prepared.
 
-**Current packaging run:** [Run #826 — inspect live CI status](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448). The new complete ZIP is not published until this run passes build, CTest, pluginval and packaging checks. Do not treat the previous artifact as the new package.
+**Latest packaging attempt:** [Run #826 — failed](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448). The Windows Release compile stopped because the pattern integration test target could not find generated JUCE header BinaryData.h. CTest, pluginval and ZIP packaging were skipped, so no new complete ZIP was produced. The previous artifact remains the only downloadable package; do not treat it as the new folder-layout build.
 
 ### Presets and examples
 
@@ -165,7 +165,7 @@ The current previous-build ZIP includes INSTALL_AND_CONTENTS.txt with package-sp
 | FL Studio 20 current-HEAD acceptance | Not confirmed |
 | CPU/RAM profiling | Not completed for release claims |
 
-**Latest packaging workflow:** [Run #826](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448)  
+**Latest packaging attempt (failed compile):** [Run #826](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448)  
 **Previous successful Windows build:** [Run #216](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
 
 ## Project links
