@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-15",
+  "index": 15,
+  "name": "Blood Red",
+  "description": "Dark stage hardware with precise red and warm highlights",
+  "cluster": "B",
+  "identity": {
+    "material": "blackened steel and textured rubber",
+    "lighting": "controlled red stage wash",
+    "mood": "intense, bold, performance-driven"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#1D1115",
+      "inset": "#28171C"
+    },
+    "surfaces": {
+      "primary": "#28171C",
+      "secondary": "#321D23",
+      "raised": "#48252D",
+      "overlay": "#1D1115"
+    },
+    "borders": {
+      "subtle": "#78414B",
+      "strong": "#FF9B83",
+      "focus": "#F04450"
+    },
+    "typography": {
+      "primary": "#FFF2F1",
+      "secondary": "#D0B7BA",
+      "disabled": "#85858B",
+      "onAccent": "#1D1115"
+    },
+    "rotary": {
+      "body": "#48252D",
+      "ring": "#FF9B83",
+      "track": "#78414B",
+      "value": "#F04450",
+      "pointer": "#D8C0C1",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#78414B",
+      "fill": "#F04450",
+      "thumb": "#D8C0C1",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F04450",
+        "foreground": "#1D1115",
+        "hover": "#D8C0C1",
+        "pressed": "#FF9B83",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#321D23",
+        "foreground": "#FFF2F1",
+        "hover": "#48252D",
+        "pressed": "#FF9B83",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F04450",
+      "activeText": "#1D1115",
+      "inactiveBackground": "#321D23",
+      "inactiveText": "#D0B7BA",
+      "indicator": "#FF9B83"
+    },
+    "comboBoxes": {
+      "background": "#321D23",
+      "foreground": "#FFF2F1",
+      "border": "#78414B",
+      "hover": "#48252D",
+      "menuBackground": "#28171C",
+      "selection": "#F04450"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#F04450",
+      "blackPressed": "#FF9B83",
+      "keyBorder": "#78414B",
+      "octaveLabel": "#D0B7BA"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F04450",
+      "high": "#F06A58",
+      "background": "#1D1115"
+    },
+    "icons": {
+      "primary": "#FFF2F1",
+      "secondary": "#D0B7BA",
+      "accent": "#F04450",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#321D23",
+      "border": "#78414B",
+      "selected": "#F04450",
+      "caption": "#FFF2F1"
+    },
+    "windowChrome": {
+      "background": "#1D1115",
+      "title": "#FFF2F1",
+      "border": "#78414B",
+      "close": "#D8C0C1"
+    },
+    "hero": {
+      "background": "#1D1115",
+      "accent": "#F04450",
+      "secondaryAccent": "#FF9B83",
+      "highlight": "#D8C0C1"
+    },
+    "accents": {
+      "primary": "#F04450",
+      "secondary": "#FF9B83",
+      "tertiary": "#D8C0C1"
+    },
+    "texture": {
+      "material": "blackened steel and textured rubber",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "controlled red stage wash",
+      "glow": "#F04450",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#FF9B83"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Blood Red interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract blackened steel and textured rubber hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original blackened steel and textured rubber texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
