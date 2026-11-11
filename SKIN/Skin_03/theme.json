@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-03",
+  "index": 3,
+  "name": "Modern Studio",
+  "description": "Clean contemporary studio surfaces",
+  "cluster": "A",
+  "identity": {
+    "material": "satin-aluminium",
+    "lighting": "neutral",
+    "mood": "Clean contemporary studio surfaces"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#20252C",
+      "inset": "#20252C"
+    },
+    "surfaces": {
+      "primary": "#20252C",
+      "secondary": "#20252C",
+      "raised": "#69A9C9",
+      "overlay": "#20252C"
+    },
+    "borders": {
+      "subtle": "#E4EAF0",
+      "strong": "#69A9C9",
+      "focus": "#C18A56"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#20252C",
+      "ring": "#E4EAF0",
+      "track": "#49434F",
+      "value": "#69A9C9",
+      "pointer": "#C18A56",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#69A9C9",
+      "thumb": "#C18A56",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#69A9C9",
+        "foreground": "#101116",
+        "hover": "#C18A56",
+        "pressed": "#E4EAF0",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#20252C",
+        "foreground": "#F4F0F4",
+        "hover": "#E4EAF0",
+        "pressed": "#69A9C9",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#69A9C9",
+      "activeText": "#101116",
+      "inactiveBackground": "#20252C",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#C18A56"
+    },
+    "comboBoxes": {
+      "background": "#20252C",
+      "foreground": "#F4F0F4",
+      "border": "#E4EAF0",
+      "hover": "#69A9C9",
+      "menuBackground": "#20252C",
+      "selection": "#69A9C9"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#69A9C9",
+      "blackPressed": "#C18A56",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#C18A56",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#69A9C9",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#20252C",
+      "title": "#F4F0F4",
+      "border": "#E4EAF0",
+      "close": "#69A9C9"
+    },
+    "hero": {
+      "background": "#20252C",
+      "accent": "#69A9C9",
+      "secondaryAccent": "#E4EAF0",
+      "highlight": "#C18A56"
+    },
+    "accents": {
+      "primary": "#69A9C9",
+      "secondary": "#E4EAF0",
+      "tertiary": "#C18A56"
+    },
+    "texture": {
+      "material": "satin-aluminium",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "neutral",
+      "glow": "#69A9C9",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#E4EAF0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
