@@ -415,14 +415,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] {
         juce::PopupMenu menu;
-        menu.addItem(1, "Load Guitar SFZ Instrument...");
-        menu.addItem(2, "Connect Factory Guitar Bank...");
+        menu.addItem(1, "Import Guitar Folder into Sounds Bank...");
+        menu.addItem(2, "Load Guitar SFZ Instrument...");
+        menu.addItem(3, "Connect Factory Guitar Bank...");
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
         menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&loadButton),
             [safeThis](int result) {
                 if (safeThis == nullptr) return;
-                if (result == 1) safeThis->chooseSfzFile();
-                else if (result == 2) safeThis->chooseSampleLibraryFolder();
+                if (result == 1) safeThis->chooseGuitarImportFolder();
+                else if (result == 2) safeThis->chooseSfzFile();
+                else if (result == 3) safeThis->chooseSampleLibraryFolder();
             });
     };
     addAndMakeVisible(loadButton);
@@ -1010,4 +1012,40 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
             else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
         });
     });
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseGuitarImportFolder()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Select a guitar sample library folder",
+        juce::File::getSpecialLocation(juce::File::userHomeDirectory));
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode
+                                 | juce::FileBrowserComponent::canSelectDirectories,
+        [safeThis](const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr) return;
+            const auto selected = chooser.getResult();
+            if (!selected.isDirectory()) return;
+            safeThis->loadButton.setEnabled(false);
+            safeThis->statusLabel.setText("IMPORT GUITAR: COPYING, SCANNING AND INDEXING...", juce::dontSendNotification);
+            safeThis->processor.importGuitarFolderAsync(selected,
+                [safeThis](ppgu::sampler::GuitarBankImportReport report)
+                {
+                    if (safeThis == nullptr) return;
+                    safeThis->loadButton.setEnabled(true);
+                    if (!report.success)
+                    {
+                        safeThis->statusLabel.setText("IMPORT FAILED / "
+                            + (report.errors.isEmpty() ? juce::String("UNKNOWN ERROR") : report.errors[0]),
+                            juce::dontSendNotification);
+                        return;
+                    }
+                    safeThis->statusLabel.setText("BANK ADDED / "
+                        + juce::String(report.indexedWavFiles) + " WAV / "
+                        + juce::String::formatted("%.1f MB", report.totalBytes / (1024.0 * 1024.0))
+                        + (report.selectedSfz.existsAsFile() ? " / SFZ READY" : " / WAV ASSETS INDEXED; INSTRUMENT MAPPING REQUIRED"),
+                        juce::dontSendNotification);
+                });
+        });
 }
