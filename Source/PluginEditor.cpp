@@ -902,44 +902,46 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else if (preset.articulation.containsIgnoreCase("tremolo")) articulationIndex = 3;
     setParameter("articulation", static_cast<float>(articulationIndex));
 
+    const auto presetMessage = "PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter;
+    if (processor.getSampleLibraryRootDirectory().isDirectory())
+    {
+        const auto bankProfile = acousticProfile
+            ? (preset.sampleProfile.containsIgnoreCase("nylon") ? "acoustic-nylon" : "acoustic-steel")
+            : "electric";
+        statusLabel.setText(presetMessage + "  /  SWITCHING FACTORY SAMPLE BANK...", juce::dontSendNotification);
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+        const auto presetName = preset.name;
+        const float presetDrive = preset.drive;
+        processor.loadFactorySampleProfileAsync(bankProfile, presetDrive,
+            [safeThis, presetName](ppgu::sampler::LoadReport report)
+            {
+                if (safeThis == nullptr) return;
+                if (report.success)
+                    safeThis->statusLabel.setText("READY  /  " + presetName + "  /  "
+                        + juce::String(static_cast<int>(report.loadedRegions)) + " REGIONS",
+                        juce::dontSendNotification);
+                else
+                    safeThis->statusLabel.setText("PRESET LOADED, SAMPLE BANK NOT READY  /  "
+                        + (report.errors.empty() ? juce::String("UNKNOWN SFZ ERROR")
+                                                 : juce::String(report.errors.front())),
+                        juce::dontSendNotification);
+            });
+    }
+
     if (preset.mode == "PATTERN")
     {
-        const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
-        statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation + "  /  SELECT MELODY OR PATTERN", juce::dontSendNotification);
+        auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
+        if (!processor.getSampleLibraryRootDirectory().isDirectory())
+            detail += "  /  SET SAMPLES FOLDER IN IMPORT SOUNDS FOR FACTORY BANK";
+        statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation, juce::dontSendNotification);
     }
     else
     {
-        auto message = "PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter;
-        if (processor.getSampleLibraryRootDirectory().isDirectory())
-        {
-            const auto bankProfile = acousticProfile
-                ? (preset.sampleProfile.containsIgnoreCase("nylon") ? "acoustic-nylon" : "acoustic-steel")
-                : "electric";
-            statusLabel.setText(message + "  /  SWITCHING FACTORY SAMPLE BANK...", juce::dontSendNotification);
-            juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
-            const auto presetName = preset.name;
-            const float presetDrive = preset.drive;
-            processor.loadFactorySampleProfileAsync(bankProfile, presetDrive,
-                [safeThis, presetName](ppgu::sampler::LoadReport report)
-                {
-                    if (safeThis == nullptr) return;
-                    if (report.success)
-                        safeThis->statusLabel.setText("READY  /  " + presetName + "  /  "
-                            + juce::String(static_cast<int>(report.loadedRegions)) + " REGIONS",
-                            juce::dontSendNotification);
-                    else
-                        safeThis->statusLabel.setText("PRESET LOADED, SAMPLE BANK NOT READY  /  "
-                            + (report.errors.empty() ? juce::String("UNKNOWN SFZ ERROR")
-                                                     : juce::String(report.errors.front())),
-                            juce::dontSendNotification);
-                });
-        }
-        else
-        {
-            if (acousticProfile)
-                message += "  /  SET SAMPLES FOLDER TO AUTO-LOAD STEEL/NYLON BANK";
+        auto message = presetMessage;
+        if (!processor.getSampleLibraryRootDirectory().isDirectory() && acousticProfile)
+            message += "  /  SET SAMPLES FOLDER TO AUTO-LOAD STEEL/NYLON BANK";
+        if (!processor.getSampleLibraryRootDirectory().isDirectory())
             statusLabel.setText(message, juce::dontSendNotification);
-        }
     }
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
