@@ -198,3 +198,12 @@
 
 - SKIN-REV5-005: Skin_02–Skin_11 первоначально не содержали обязательную по REV 5.0 группу tokens.thumbnails. Исправлено добавлением background/border/selected/caption; контракт schema обновлён.
 - Регрессионная проверка чтением main: JSON parse и наличие 18 групп проверены для Skin_02–Skin_21 (20/20). Полная JSON Schema validation и runtime acceptance ещё не выполнены.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / Skin_22–Skin_31
+
+- Новых производственных дефектов в JSON-структуре на этапе авторинга не заявляется; независимая schema validation ещё не запускалась.
+- SKIN-REV5-001 (OPEN): графические preview/hero/texture файлы пока отсутствуют.
+- SKIN-REV5-002 (OPEN): runtime ThemeManager/gallery не подтверждены в main; PR #24 остаётся open и требует отдельного code review.
+- SKIN-REV5-003 (OPEN): нужен реальный JSON Schema validator и regression test.
+- SKIN-REV5-004 (OPEN): нужна полная инвентарная матрица GUI/APVTS по утверждённому Blueprint.
