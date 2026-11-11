@@ -375,6 +375,18 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
 
 ParseResult parseFile(const std::filesystem::path& sfzPath)
 {
+    constexpr std::uintmax_t maximumSfzBytes = 16U * 1024U * 1024U;
+    std::error_code sizeError;
+    const auto fileBytes = std::filesystem::file_size(sfzPath, sizeError);
+    if (sizeError || fileBytes > maximumSfzBytes)
+    {
+        ParseResult result;
+        result.errors.push_back({ 0, sizeError
+            ? "Could not determine SFZ file size."
+            : "SFZ file exceeds the 16 MiB parser safety limit." });
+        return result;
+    }
+
     std::ifstream stream(sfzPath, std::ios::binary);
     if (!stream)
     {
@@ -384,6 +396,12 @@ ParseResult parseFile(const std::filesystem::path& sfzPath)
     }
     std::ostringstream contents;
     contents << stream.rdbuf();
+    if (!stream.good() && !stream.eof())
+    {
+        ParseResult result;
+        result.errors.push_back({ 0, "Could not read the complete SFZ file." });
+        return result;
+    }
     return parseText(contents.str(), sfzPath.parent_path());
 }
 
