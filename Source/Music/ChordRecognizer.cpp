@@ -87,7 +87,7 @@ ChordAnalysis ChordRecognizer::analyze(const std::vector<int>& input)
  }
  out.rootPitchClass=best.root; out.quality=best.t->quality;
  out.symbol=std::string(noteName(best.root))+best.t->suffix;
- if(out.bassPitchClass!=best.root) out.symbol+="/"+noteName(out.bassPitchClass);
+ if(out.bassPitchClass!=best.root) out.symbol+=std::string("/")+noteName(out.bassPitchClass);
  out.qualityLabel=qualityName(best.t->quality);
  return out;
 }
