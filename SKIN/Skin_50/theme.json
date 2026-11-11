@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-50",
+  "index": 50,
+  "name": "Platinum Room",
+  "description": "Bright platinum studio hardware with cool graphite structure",
+  "cluster": "C",
+  "identity": {
+    "material": "platinum anodized aluminium and ceramic",
+    "lighting": "cool diffused showroom light",
+    "mood": "precise, elegant, open"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#D9DDE0",
+      "inset": "#E7EAEC"
+    },
+    "surfaces": {
+      "primary": "#E7EAEC",
+      "secondary": "#CDD3D7",
+      "raised": "#B8C1C7",
+      "overlay": "#D9DDE0"
+    },
+    "borders": {
+      "subtle": "#8D9AA2",
+      "strong": "#8E9BA6",
+      "focus": "#303942"
+    },
+    "typography": {
+      "primary": "#18232B",
+      "secondary": "#4E5A62",
+      "disabled": "#85858B",
+      "onAccent": "#D9DDE0"
+    },
+    "rotary": {
+      "body": "#B8C1C7",
+      "ring": "#8E9BA6",
+      "track": "#8D9AA2",
+      "value": "#303942",
+      "pointer": "#B77B92",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#8D9AA2",
+      "fill": "#303942",
+      "thumb": "#B77B92",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#303942",
+        "foreground": "#D9DDE0",
+        "hover": "#B77B92",
+        "pressed": "#8E9BA6",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#CDD3D7",
+        "foreground": "#18232B",
+        "hover": "#B8C1C7",
+        "pressed": "#8E9BA6",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#303942",
+      "activeText": "#D9DDE0",
+      "inactiveBackground": "#CDD3D7",
+      "inactiveText": "#4E5A62",
+      "indicator": "#8E9BA6"
+    },
+    "comboBoxes": {
+      "background": "#CDD3D7",
+      "foreground": "#18232B",
+      "border": "#8D9AA2",
+      "hover": "#B8C1C7",
+      "menuBackground": "#E7EAEC",
+      "selection": "#303942"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#303942",
+      "blackPressed": "#8E9BA6",
+      "keyBorder": "#8D9AA2",
+      "octaveLabel": "#4E5A62"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#303942",
+      "high": "#F06A58",
+      "background": "#D9DDE0"
+    },
+    "icons": {
+      "primary": "#18232B",
+      "secondary": "#4E5A62",
+      "accent": "#303942",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#CDD3D7",
+      "border": "#8D9AA2",
+      "selected": "#303942",
+      "caption": "#18232B"
+    },
+    "windowChrome": {
+      "background": "#D9DDE0",
+      "title": "#18232B",
+      "border": "#8D9AA2",
+      "close": "#B77B92"
+    },
+    "hero": {
+      "background": "#D9DDE0",
+      "accent": "#303942",
+      "secondaryAccent": "#8E9BA6",
+      "highlight": "#B77B92"
+    },
+    "accents": {
+      "primary": "#303942",
+      "secondary": "#8E9BA6",
+      "tertiary": "#B77B92"
+    },
+    "texture": {
+      "material": "platinum anodized aluminium and ceramic",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "cool diffused showroom light",
+      "glow": "#303942",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#8E9BA6"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Platinum Room preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original platinum anodized aluminium and ceramic hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle platinum anodized aluminium and ceramic material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
