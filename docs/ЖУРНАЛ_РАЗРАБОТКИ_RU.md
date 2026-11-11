@@ -1236,3 +1236,10 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Обнаружено текущее несоответствие: существующий MELODY-код применяет единый palmMuteThreshold ко всем пресетам и сводит все низкие velocity к одному sample velocity. Это не multi-depth и нарушает новое ограничение. Его нужно заменить, а не дублировать новой логикой.
 - Спецификация и обязательные boundary/regression tests добавлены в docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md, commit ddc1d98218ded948c05bdf34be9d1e5dab4d00db.
 - Статус: SPECIFIED; runtime gating, multi-zone sample maps, UI/APVTS controls, bank coverage and tests pending. Не объявлять реализованным до прохождения проверок.
+
+
+## 2026-11-11 — структура папок тембров и performance styles
+- Добавлена отдельная ветвь MELODY Tone Presets: Clean Bright, Clean Warm, Crunch, Lead Crunch, Heavy, Fuzz / Distortion, Lo-Fi / Vintage.
+- Добавлена отдельная ветвь PATTERN / SONG: Pop / Pop-Rock, Pop-Punk / Punk, Electronic, Riffs, Arpeggios, Strumming.
+- Зафиксировано разделение тембра и способа исполнения, правило NOT SOUND first и лицензионное ограничение: только оригинальные профили и собственные/лицензированные sample/performance assets.
+- Статус: структура taxonomy и документация обновлены; визуальная интеграция в браузер и проверка реальных sample/DSP/performance mappings ещё не подтверждены.
