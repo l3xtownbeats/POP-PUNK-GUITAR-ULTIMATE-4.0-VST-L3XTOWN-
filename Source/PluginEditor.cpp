@@ -184,64 +184,105 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
 
 void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juce::Rectangle<int> r)
 {
-    g.setColour(panel);
-    g.fillRoundedRectangle(r.toFloat(), 12.0f);
-    g.setColour(pink.withAlpha(0.45f));
-    g.drawRoundedRectangle(r.toFloat().reduced(0.5f), 12.0f, 1.0f);
+    auto bounds = r.toFloat();
+    juce::ColourGradient fill(juce::Colour(0xff25252d), bounds.getX(), bounds.getY(),
+                              juce::Colour(0xff19191f), bounds.getRight(), bounds.getBottom(), false);
+    g.setGradientFill(fill);
+    g.fillRoundedRectangle(bounds, 10.0f);
+    g.setColour(juce::Colour(0xff45434d).withAlpha(0.72f));
+    g.drawRoundedRectangle(bounds.reduced(0.5f), 10.0f, 1.0f);
+    g.setColour(pink.withAlpha(0.82f));
+    g.fillRoundedRectangle(bounds.getX() + 12.0f, bounds.getY() + 12.0f, 3.0f, 18.0f, 1.5f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(bg);
-    g.setColour(juce::Colour(0xff08080b));
-    g.fillRect(0, 0, getWidth(), 62);
+
+    // Restrained premium hardware-style background and top identity strip.
+    juce::ColourGradient background(juce::Colour(0xff191820), 0.0f, 0.0f,
+                                    juce::Colour(0xff0d0d11), 0.0f, static_cast<float>(getHeight()), false);
+    g.setGradientFill(background);
+    g.fillRect(getLocalBounds());
+
+    g.setColour(juce::Colour(0xff09090d));
+    g.fillRect(0, 0, getWidth(), 66);
     g.setColour(pink);
-    g.fillRect(0, 0, getWidth(), 3);
+    g.fillRect(0, 0, getWidth(), 2);
+    g.setColour(juce::Colour(0xff393640));
+    g.fillRect(0, 65, getWidth(), 1);
+
+    // Main instrument identity panel: compact wordmark, clear hierarchy, no poster-like oversized lettering.
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
-    g.setGradientFill(grad);
-    g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
-    g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
-    auto textArea = hero.reduced(28, 18);
-    g.setColour(pale);
-    g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
-    g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
-    g.setColour(pink);
-    g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
-    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
-    g.setColour(pale.withAlpha(0.8f));
-    g.setFont(juce::Font(16.0f, juce::Font::italic));
-    g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
-    // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
-    auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
-    juce::Path body;
-    body.startNewSubPath(guitar.getX() + guitar.getWidth()*0.48f, guitar.getY()+guitar.getHeight()*0.52f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.23f,guitar.getX()+guitar.getWidth()*0.12f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.68f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
-    body.closeSubPath();
-    g.setColour(juce::Colour(0xffd9d9df));
-    g.fillPath(body);
-    g.setColour(juce::Colour(0xff292932));
-    g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(juce::Colour(0xffd8b77c));
-    juce::Path neck;
-    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
-    g.fillPath(neck);
-    g.setColour(pink.withAlpha(0.75f));
-    g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
-    auto panelArea = getLocalBounds().reduced(16);
-    panelArea.removeFromTop(355);
-    panelArea.removeFromBottom(80);
-    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
-    auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
-    auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
-    drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,panelArea);
-}
+    auto heroF = hero.toFloat();
+    juce::ColourGradient heroGradient(juce::Colour(0xff30232f), heroF.getX(), heroF.getY(),
+                                      juce::Colour(0xff14141b), heroF.getRight(), heroF.getBottom(), false);
+    g.setGradientFill(heroGradient);
+    g.fillRoundedRectangle(heroF, 11.0f);
+    g.setColour(juce::Colour(0xff6d5368).withAlpha(0.65f));
+    g.drawRoundedRectangle(heroF.reduced(0.5f), 11.0f, 1.0f);
 
+    auto copy = hero.reduced(26, 18);
+    g.setColour(pink);
+    g.setFont(juce::Font(11.0f, juce::Font::bold));
+    g.drawText("L3XTOWN  /  SIGNATURE INSTRUMENT", copy.removeFromTop(20), juce::Justification::left);
+    g.setColour(pale);
+    g.setFont(juce::Font(juce::jmin(31.0f, getWidth() * 0.034f), juce::Font::bold));
+    g.drawText("POP PUNK GUITAR", copy.removeFromTop(39), juce::Justification::left);
+    g.setColour(pink);
+    g.setFont(juce::Font(juce::jmin(27.0f, getWidth() * 0.030f), juce::Font::bold));
+    g.drawText("ULTIMATE 4.0", copy.removeFromTop(34), juce::Justification::left);
+    g.setColour(pale.withAlpha(0.72f));
+    g.setFont(juce::Font(12.0f));
+    g.drawText("MELODY  /  PATTERN  /  RIFFS  /  HOOKS", copy.removeFromTop(22), juce::Justification::left);
+
+    // Original vector guitar silhouette, refined as a subtle product motif.
+    auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.38f)).reduced(26, 17).toFloat();
+    const float cx = guitar.getX() + guitar.getWidth() * 0.48f;
+    const float cy = guitar.getY() + guitar.getHeight() * 0.56f;
+    juce::Path body;
+    body.startNewSubPath(cx, cy - guitar.getHeight() * 0.20f);
+    body.cubicTo(cx - guitar.getWidth()*0.27f, cy - guitar.getHeight()*0.52f,
+                 cx - guitar.getWidth()*0.53f, cy - guitar.getHeight()*0.13f,
+                 cx - guitar.getWidth()*0.34f, cy + guitar.getHeight()*0.15f);
+    body.cubicTo(cx - guitar.getWidth()*0.20f, cy + guitar.getHeight()*0.40f,
+                 cx + guitar.getWidth()*0.08f, cy + guitar.getHeight()*0.34f,
+                 cx + guitar.getWidth()*0.20f, cy + guitar.getHeight()*0.12f);
+    body.cubicTo(cx + guitar.getWidth()*0.48f, cy + guitar.getHeight()*0.17f,
+                 cx + guitar.getWidth()*0.50f, cy - guitar.getHeight()*0.19f,
+                 cx + guitar.getWidth()*0.24f, cy - guitar.getHeight()*0.19f);
+    body.closeSubPath();
+    g.setColour(juce::Colour(0xffd8d5dc).withAlpha(0.94f));
+    g.fillPath(body);
+
+    // Neck and headstock.
+    juce::Path neck;
+    neck.addQuadrilateral(cx + guitar.getWidth()*0.10f, cy - guitar.getHeight()*0.13f,
+                          guitar.getRight() - 10.0f, guitar.getY() + 7.0f,
+                          guitar.getRight(), guitar.getY() + 16.0f,
+                          cx + guitar.getWidth()*0.22f, cy - guitar.getHeight()*0.02f);
+    g.setColour(juce::Colour(0xffb9a58c));
+    g.fillPath(neck);
+    g.setColour(juce::Colour(0xff37343d));
+    g.fillEllipse(cx - guitar.getWidth()*0.10f, cy - guitar.getHeight()*0.12f,
+                  guitar.getWidth()*0.18f, guitar.getHeight()*0.20f);
+    g.setColour(pink.withAlpha(0.9f));
+    for (int string = 0; string < 6; ++string)
+    {
+        const float offset = (static_cast<float>(string) - 2.5f) * 1.15f;
+        g.drawLine(cx + offset, cy - guitar.getHeight()*0.12f,
+                   guitar.getRight() - 8.0f + offset * 0.25f, guitar.getY() + 12.0f, 0.65f);
+    }
+    g.setColour(juce::Colour(0xfff4d9ed).withAlpha(0.12f));
+    g.drawLine(heroF.getX() + 18.0f, heroF.getBottom() - 1.0f,
+               heroF.getRight() - 18.0f, heroF.getBottom() - 1.0f, 1.0f);
+
+    // Fine section separators give the control surface a coherent instrument-panel feel.
+    g.setColour(juce::Colour(0xff0a0a0e).withAlpha(0.7f));
+    g.drawLine(16.0f, 348.0f, static_cast<float>(getWidth() - 16), 348.0f, 1.0f);
+}
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
     auto area=getLocalBounds().reduced(16);
