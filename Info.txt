@@ -203,3 +203,16 @@ README commit: `5271d65f597c3b35ab18993c92850fd93f9703ad`; DOWNLOAD commit: `72f
 README и SKIN/README.md обновлены, чтобы не выдавать манифесты за готовые skins и связать главную страницу с аудитом. Аудитный commit: `be8b1623625f922334fbf796656afff65eb97d0a`; SKIN README commit: `630b6f3490e8d68e6712920984ccf68d47027d44`; README commit: `25fb745b81ab95d9e708e99c74b6bd883191e6a2`.
 
 Build status remains unchanged: Windows run #826 / `43017263448` failed because `ppgu_processor_pattern_tests` cannot find generated JUCE `BinaryData.h`; CTest, pluginval and packaging were skipped. No source/runtime code was changed and no new ZIP was produced by this audit.
+
+## 2026-11-12 — C1083 / generated BinaryData.h regression fix
+
+**Статус:** SOURCE FIX COMMITTED; WINDOWS BUILD PENDING.  
+Source commit: `0ef0ebe934350d57779328a5e0979f1134ae85f2` (parent: `e21980eee5289b00db371b3c2a907a5d0016b19a`).
+
+В `CMakeLists.txt` добавлена отдельная JUCE binary-data цель `PPGUTestData` до создания зависимого integration-test target. Цель использует маленький нейтральный fixture `tests/assets/ppgu_test_data.txt`, namespace `PPGUTestData` и линкуется непосредственно к `ppgu_processor_pattern_tests`. Это обеспечивает generated include directory и `JUCE_TARGET_HAS_BINARY_DATA` для test target в чистом build tree.
+
+**Важное уточнение JUCE API:** в закреплённой проектом JUCE 7.0.12 сигнатуре используется аргумент `NAMESPACE`, а не `HEADER_NAMESPACE`; сгенерированный заголовок по умолчанию называется `BinaryData.h` и попадает в include directory target. Поэтому путь `PPGUTestData/BinaryData.h` из чернового примера REV 13 не используется: JUCE добавляет generated header через `JuceHeader.h` при наличии `JUCE_TARGET_HAS_BINARY_DATA`. Основание: JUCE CMake API и реализация `juce_add_binary_data`.
+
+GitHub Actions run #827 / ID `43113647167` создан на source commit `0ef0ebe934350d57779328a5e0979f1134ae85f2`; на момент записи состояние `queued`. Локальная Windows/MSVC Release-сборка в этой среде не выполнялась. Следовательно, исправление пока **не объявляется BUILT или TESTED**. Следующие гейты: полный build всех targets, CTest, locate VST3, pluginval strictness 5 и packaging.
+
+Отдельное расхождение REV 13 для последующего согласования: текущий root CMake всё ещё закрепляет JUCE 7.0.12 и minimum CMake 3.22; REV 13 §13.2 требует JUCE 8 и CMake >=3.24. Версии не менялись в рамках изолированного C1083 fix, чтобы не смешивать причины сборочных регрессий.
