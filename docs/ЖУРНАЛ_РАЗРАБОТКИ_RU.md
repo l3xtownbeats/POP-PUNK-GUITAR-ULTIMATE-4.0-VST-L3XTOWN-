@@ -1,8 +1,8 @@
-# POP PUNK GUITAR ULTIMATE — журнал разработки
+# POP PUNK GUITAR ULTIMATE REV 6.0 VST3 — журнал разработки
 
-Обновлено: 10 ноября 2026 г.
+Обновлено: 11 ноября 2026 г.
 Репозиторий: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
-Рабочая ветка: migration/full-copy-m3-transport-scheduler-v2
+Рабочая ветка: main (подтверждена пользователем)
 
 ## Цель
 
@@ -1163,3 +1163,17 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Проведён предварительный GitHub audit: существует ветка feat/theme-folder-system, но её README не подтверждает готовность 10 тем, единой кнопки выбора, независимых обложек или сохранения темы. Поэтому функциональность не отмечается как реализованная.
 - Приоритеты оптимизации зафиксированы: не ослаблять тесты; сначала проверить текущий HEAD/CI и критические M2 streaming + M3 Pattern runtime, затем интегрировать/проверить UI skins и структуру пакета; провести Windows x64 Release, CTest, pluginval и ручную проверку в FL Studio 20.
 - Статус: SPECIFIED / IMPLEMENTATION AND QA PENDING. В этой сессии исходный код плагина не изменялся; внесена только запись требований и результатов аудита в журналы.
+
+
+## 11 ноября 2026 — REV 6.0 VST3: актуальный main и следующий критический gate
+
+- Официальное название релиза: **POP PUNK GUITAR ULTIMATE REV 6.0 VST3**.
+- Рабочая ветка подтверждена пользователем: `main`. Устаревшую строку о migration branch в предыдущих исторических записях считать superseded; никакие резервные ветки не менять.
+- HEAD проверен: `27abf1313d707f9df4c0da0b77c044c18e8977ab`. Для этого SHA GitHub combined status не содержит проверок, а список workflow runs пуст. Актуальные Windows Release build и CTest не подтверждены.
+- M3-014 source path присутствует в `PluginProcessor.cpp`: MIDI timeline разделяет блок по sample offsets, рендерит каждый интервал до применения следующего MIDI event, обновляет held chord и передаёт scheduler events в sampler. Unit regression на sample offsets 16/80/120 проверяет chord snapshots, но не запускает настоящий PluginProcessor→PatternScheduler→SamplerEngine путь.
+- Риск для отдельной проверки: несколько chord transitions внутри одной quantize window могут повторно назначать одинаковый `patternCycleStartPpq`; требуется regression, которая фиксирует требуемую музыкальную семантику, а не только состояние held notes. Также проверить очистку pending NoteOff при нескольких сменах аккорда.
+- M3-015 source path присутствует: лимит 512 событий, overflow indication и processor fail-safe. Текущий CTest не подтверждён для HEAD.
+- CMake регистрирует helper/scheduler tests; полноценного processor-level integration target не обнаружено.
+- GUI blueprint и документ PPGU 5.0 UI/UX acceptance не найдены в main. UI/UX implementation остаётся заблокированной до приёмки M1–M3.
+- Код плагина в этом цикле не менялся. Документация синхронизирована; не заявлять build/test/runtime completion.
+- Следующий шаг по протоколу: M3-014 integration regression + quantize-window/pending-NoteOff tests; затем M3-015 CI gate. После успешного CI пользователь подтверждает запуск workflow; M1/M2 acceptance выполняются до UI/UX 5.0 и M4+.
