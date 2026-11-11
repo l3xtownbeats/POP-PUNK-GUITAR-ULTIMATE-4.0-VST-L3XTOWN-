@@ -197,3 +197,62 @@
 
 ---
 Документ является надстройкой над существующим 5.0 product/UI contract, а не заменой утверждённых пользовательских требований.
+
+
+## 9. SUPERTEAM prompt — технический конфликт-чек присланных header-прототипов
+
+Новые фрагменты из SUPERTEAM prompt считаются **эскизами требований**, а не готовым кодом для копирования в JUCE-проект. Проверка выявила следующие блокирующие проблемы.
+
+### 9.1 Resource.h — lifecycle не завершён и не защищён от гонки
+
+- `acquire()` проверяет только `refs_ > 0`, но не атомарно запрещает acquire после перехода в `DYING`. Нужен единый атомарный control word (state + refcount) либо эквивалентный протокол, в котором переход ACTIVE→DYING и acquire линеаризованы.
+- `release()` допускает underflow при повторном release; нет проверки состояния и корректного перехода в FREED.
+- `destroyNow()` вызывается на потоке последнего release. Если последний владелец — audio thread, деструктор и освобождение памяти произойдут в audio callback. Это запрещено. Финальное освобождение должно передаваться заранее определённому reclamation/retire queue на control/worker thread.
+- Виртуальный self-destruction требует чёткой политики владения; нельзя одновременно применять этот механизм и обычный `unique_ptr` без доказанного единственного owner.
+
+**Решение:** не внедрять этот класс как есть. Сначала определить owner, acquisition gate, retirement queue и гарантированный shutdown drain.
+
+### 9.2 ParameterBus.h — не компилируется и имеет data race
+
+- `ParamSnapshot` содержит `std::atomic<uint32>`; такой тип не копируем/не присваиваем обычным способом, поэтому `slots_[idx] = next` некорректно.
+- `uint32` не является стандартным именем типа без собственного typedef; использовать `std::uint32_t`.
+- Два слота не обеспечивают безопасность: GUI может перезаписать слот, пока audio thread читает возвращённую ссылку. Это C++ data race, даже если индекс атомарный.
+- `latest()` возвращает ссылку на изменяемый слот без lease/sequence protocol. Нельзя считать это безопасным snapshot.
+- Заявление «64 байта — одна cache line» не гарантируется layout-ом структуры.
+
+**Решение:** параметры JUCE должны читаться через заранее полученные atomic parameter pointers либо через корректный SPSC/triple-buffer handoff с подтверждением владения слотом. Не копировать атомики; snapshot должен быть trivially copyable POD. Размер/align проверять static_assert только если это действительно требуется.
+
+### 9.3 SampleBank.h — прямое нарушение RT-контракта
+
+- `tryGet()` захватывает `std::mutex` на audio thread. Короткая блокировка всё равно может ждать worker и нарушает правило проекта.
+- `unordered_map::find` сам по себе не RT-safe контракт, если структура параллельно меняется.
+- `loadOrWait()` по названию допускает ожидание; такой API нельзя вызывать из audio path.
+- LRU eviction требует pin/lease протокола. Нельзя возвращать голый `SamplePage*` и затем позволять worker удалить/перезаписать страницу.
+- `ManagedResource base` в SamplePage не решает ownership, пока не определён безопасный retirement.
+
+**Решение:** использовать существующий фиксированный `PageCacheSlots` из базовой ветки как отправную точку: атомарный lookup + ReadLease, worker-only decode/eviction. Не вводить mutex/map cache параллельно существующему коду.
+
+### 9.4 Очереди и число потоков
+
+В реальном исходнике `SampleStreamingService` использует `BoundedSpscQueue`: это корректно только при одном producer и одном consumer. Схема SUPERTEAM помечает page requests как MPSC — эти контракты противоречат друг другу. До изменения очереди нужно подтвердить, сколько именно audio/control producers существует. На целевом i3 2C/2T сохраняем один ограниченный worker; не добавлять отдельный поток на каждый модуль.
+
+### 9.5 Остальные прототипы
+
+- `PresetEngine::apply()` не может гарантировать <10 ms, если API не различает prepared и not-prepared dependencies. Нужны async prepare + commit-ready command; аудиопоток не должен ждать.
+- `previewStart/Stop` должны иметь собственный logical routing/state, но использовать общий sampler/cache; смена preview должна инвалидировать предыдущий generation token.
+- `SkinManager` работает на message thread; тема не должна владеть ресурсами audio engine. GUI hot-swap — отдельная транзакция.
+- `WindowManager` обязан соблюдать JUCE message-thread affinity. Закрытие окна не должно вызывать destruction на audio thread; shutdown должен закрывать дочерние окна до уничтожения processor/editor.
+- `VoiceManager::noteOn/noteOff` должны быть вызваны только из audio callback или через bounded command queue. В voice обязателен page lease на время чтения; note stealing должно освобождать lease ровно один раз.
+- `CPU idle = 0%` и «нулевой DSP-цикл» не являются буквальной гарантией: host может продолжать вызывать `processBlock`. Реальная цель — быстрый bounded early-exit без активных голосов/хвостов, при сохранении корректного MIDI/state/FX tail поведения.
+
+### 9.6 Конкретные блокирующие тесты до реализации
+
+1. Compile test: POD snapshot copy, type aliases, headers standalone.
+2. ThreadSanitizer stress (где доступно): GUI publish ↔ audio read, cache acquire ↔ worker eviction.
+3. Reclamation test: release последнего lease не выполняет delete на audio thread.
+4. SPSC contract test: один producer/consumer; отдельный тест запрещает второй producer.
+5. Cache test: concurrent readers, eviction, miss, queue overflow, shutdown after producer quiescence.
+6. Preset test: prepared commit и not-ready request — без ожидания в callback.
+7. Window lifecycle test выполняется на message thread; 1000 циклов open/close + host shutdown.
+
+**Статус:** это ревью присланных эскизов и уточнение архитектурного контракта. Оно не означает, что перечисленные новые классы уже добавлены в C++ runtime. Следующая реализация должна расширять существующие `PageCacheSlots` / `SampleStreamingService` / `SamplerEngine`, а не создавать конкурирующую подсистему.
