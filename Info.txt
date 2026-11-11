@@ -395,3 +395,13 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 7. Полный Windows Release → CTest → pluginval strictness 5 → packaging; FL Studio 20 host acceptance отдельно.
 
 Никаких изменений аудио-кода, APVTS IDs, preset data, MIDI или SoundBank в этом skin этапe не выполнялось. `BUILD VERIFIED`, `VALIDATION PASS`, `MERGED` и `INTEGRATED` не присваивались.
+
+
+### REV 14 reference pack — validator result
+Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a32da9006062e2ed1efe060139b`:
+- Validate 300-preset catalog — PASS.
+- Validate portable preset examples — PASS.
+- Validate APVTS registry — PASS.
+- **Validate PPGU REV 14 skin pack (G1–G4) — PASS.**
+- Confirmed by workflow job step summary; run #859 overall Windows build is still in progress at the time of this entry.
+- Therefore Skin_052 status is now **PACK GENERATED / VALIDATION PASS / NOT MERGED / NOT INTEGRATED**. This validation result applies to source SHA `d0eecea...`; subsequent commits require a new run for refreshed CI evidence.
