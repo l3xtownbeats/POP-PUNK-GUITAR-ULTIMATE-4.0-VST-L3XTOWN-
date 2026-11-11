@@ -70,12 +70,28 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
         if isinstance(tone, (int, float)) and not isinstance(tone, bool) and math.isfinite(tone) and not 0 <= tone <= 10:
             errors.append(f'{preset.get("id")}: tone outside 0..10')
         sample_profile = preset.get("sampleProfile")
-        if expected_mode == "MELODY" and (not isinstance(sample_profile, str) or not sample_profile.strip()):
-            errors.append(f'{preset.get("id")}: missing sampleProfile')
+        if not isinstance(sample_profile, str) or sample_profile not in {"electric", "acoustic"}:
+            errors.append(f'{preset.get("id")}: sampleProfile must be electric or acoustic')
         if expected_mode == "MELODY" and not preset.get("noteBehavior"):
             errors.append(f'{preset.get("id")}: missing noteBehavior')
         if expected_mode == "PATTERN" and not preset.get("groove"):
             errors.append(f'{preset.get("id")}: missing groove')
+
+# Melody and Pattern presets share a stable numeric slot. Keep their sample
+# profiles paired so changing performance mode never leaves the wrong bank loaded.
+melody_by_slot = {
+    str(p.get("id", ""))[1:]: p
+    for p in melody
+    if str(p.get("id", "")).startswith("M")
+}
+for preset in pattern:
+    preset_id = str(preset.get("id", ""))
+    slot = preset_id[1:] if preset_id.startswith("P") else ""
+    melody_preset = melody_by_slot.get(slot)
+    if melody_preset is None:
+        errors.append(f'{preset_id}: no matching Melody preset for sample-profile pairing')
+    elif preset.get("sampleProfile") != melody_preset.get("sampleProfile"):
+        errors.append(f'{preset_id}: sampleProfile differs from paired {melody_preset.get("id")}')
 
 for artist in artist_items:
     if len(artist.get("tracks", [])) < 2:
