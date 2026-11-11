@@ -819,10 +819,50 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         if (auto* parameter = processor.parameters.getParameter(id))
             parameter->setValueNotifyingHost(parameter->convertTo0to1(value));
     };
-    setParameter("distortionDrive", juce::jlimit(0.0f, 1.0f, preset.drive));
+
+    const auto profileText = (preset.soundCharacter + " " + preset.tonalTarget + " " + preset.tags).toLowerCase();
+    const bool acousticProfile = preset.sampleProfile.containsIgnoreCase("acoustic")
+        || preset.soundCharacter.containsIgnoreCase("acoustic");
+    const bool ambientProfile = profileText.contains("ambient") || profileText.contains("dotted-eighth")
+        || profileText.contains("delay") || profileText.contains("spacious");
+    const bool wideProfile = profileText.contains("wide") || profileText.contains("layered")
+        || profileText.contains("double-track") || profileText.contains("double track");
+    const bool chorusProfile = profileText.contains("chorus") || profileText.contains("chorused");
+    const bool flangerProfile = profileText.contains("flanger");
+    const bool brightProfile = profileText.contains("bright");
+    const bool darkProfile = profileText.contains("dark") || profileText.contains("warm");
+    const bool tightProfile = profileText.contains("tight") || profileText.contains("muted");
+
+    // The factory preset is a real parameter snapshot for the currently implemented
+    // amp/EQ/FX engine. Acoustic sample selection remains a separate SFZ-bank action.
+    const float drive = acousticProfile ? 0.0f : juce::jlimit(0.0f, 1.0f, preset.drive);
+    setParameter("distortionDrive", drive);
+    setParameter("distortionMix", acousticProfile ? 0.0f : 0.82f);
+    setParameter("distortionOn", drive > 0.25f ? 1.0f : 0.0f);
+    setParameter("ampGain", acousticProfile ? 4.8f : 5.0f + drive * 0.8f);
     setParameter("tone", juce::jlimit(0.0f, 10.0f, preset.tone));
+    setParameter("eqLow", tightProfile ? -1.0f : (acousticProfile ? 1.0f : 0.0f));
+    setParameter("eqMid", darkProfile ? 0.8f : 0.0f);
+    setParameter("eqHigh", brightProfile ? 1.4f : (darkProfile ? -1.2f : (acousticProfile ? 0.8f : 0.0f)));
+    setParameter("eqOn", 1.0f);
     setParameter("reverbMix", juce::jlimit(0.0f, 1.0f, preset.reverb));
+    setParameter("reverbOn", preset.reverb > 0.01f ? 1.0f : 0.0f);
+    setParameter("cabinetOn", acousticProfile ? 0.0f : 1.0f);
+    setParameter("cabinetMix", acousticProfile ? 0.0f : 0.28f);
+    setParameter("chorusOn", (chorusProfile || wideProfile) ? 1.0f : 0.0f);
+    setParameter("chorusMix", chorusProfile ? 0.18f : (wideProfile ? 0.12f : 0.0f));
+    setParameter("chorusDepth", wideProfile ? 0.55f : 0.35f);
+    setParameter("chorusRate", 0.32f);
+    setParameter("flangerOn", flangerProfile ? 1.0f : 0.0f);
+    setParameter("flangerMix", flangerProfile ? 0.18f : 0.0f);
+    setParameter("delayOn", ambientProfile ? 1.0f : 0.0f);
+    setParameter("delayTime", 375.0f);
+    setParameter("delayMix", ambientProfile ? 0.18f : 0.0f);
+    setParameter("delayFeedback", ambientProfile ? 0.28f : 0.18f);
+    setParameter("doubleTrackOn", wideProfile ? 1.0f : 0.0f);
+    setParameter("doubleTrackMix", wideProfile ? 0.28f : 0.0f);
     setParameter("output", juce::jlimit(-24.0f, 12.0f, preset.outputDb));
+
     // Preset identity is independent of the performance mode. The user chooses MELODY or PATTERN.
     const auto styleText = (preset.groove + " " + preset.articulation).toLowerCase();
     int patternStyle = 2;
@@ -830,8 +870,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else if (styleText.contains("stop-start") || styleText.contains("syncopated")) patternStyle = 6;
     else if (styleText.contains("ska") || styleText.contains("upstroke")) patternStyle = 4;
     else if (styleText.contains("downstroke") || styleText.contains("eighth")) patternStyle = 0;
-    else if (styleText.contains("palm") || styleText.contains("muted")) patternStyle = 1;
-    else if (styleText.contains("open") || styleText.contains("chorus")) patternStyle = 3;
+    else if (styleText.contains("palm") || styleText.contains("muted") || styleText.contains("gallop")) patternStyle = 1;
+    else if (styleText.contains("open") || styleText.contains("chorus") || styleText.contains("strum")) patternStyle = 3;
     else if (styleText.contains("alternate")) patternStyle = 5;
     if (preset.groove.isEmpty()) {
         const auto profile = preset.styleProfileId.toLowerCase();
@@ -844,17 +884,25 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         else patternStyle = 2;
     }
     setParameter("patternSlot", static_cast<float>(patternStyle));
-    const int articulationIndex = preset.articulation.containsIgnoreCase("palm") ? 1 : 0;
+
+    int articulationIndex = 0;
+    if (preset.articulation.containsIgnoreCase("palm") || preset.articulation.containsIgnoreCase("muted")) articulationIndex = 1;
+    else if (preset.articulation.containsIgnoreCase("flageolet") || preset.articulation.containsIgnoreCase("harmonic")) articulationIndex = 2;
+    else if (preset.articulation.containsIgnoreCase("tremolo")) articulationIndex = 3;
     setParameter("articulation", static_cast<float>(articulationIndex));
-    setParameter("distortionOn", preset.drive > 0.25f ? 1.0f : 0.0f);
-    setParameter("reverbOn", preset.reverb > 0.01f ? 1.0f : 0.0f);
+
     if (preset.mode == "PATTERN")
     {
         const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
         statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation + "  /  SELECT MELODY OR PATTERN", juce::dontSendNotification);
     }
     else
-        statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter + "  /  MELODY = SINGLE NOTES, PATTERN = STYLE PLAYBACK", juce::dontSendNotification);
+    {
+        auto message = "PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter;
+        if (acousticProfile)
+            message += "  /  LOAD AN ACOUSTIC SFZ BANK FOR ACOUSTIC SAMPLES";
+        statusLabel.setText(message, juce::dontSendNotification);
+    }
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
 {
@@ -862,8 +910,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
     // factory preset. Keep play mode, AutoChords, key/scale, transport and
     // user-loaded sample library untouched.
     static const juce::StringArray presetOwnedParameters {
-        "distortionDrive", "tone", "reverbMix", "output",
-        "patternSlot", "articulation", "distortionOn", "reverbOn"
+        "distortionDrive", "distortionMix", "ampGain", "tone", "eqLow", "eqMid", "eqHigh", "eqOn",
+        "reverbMix", "output", "patternSlot", "articulation", "distortionOn", "reverbOn",
+        "cabinetOn", "cabinetMix", "chorusOn", "chorusMix", "chorusDepth", "chorusRate",
+        "flangerOn", "flangerMix", "delayOn", "delayTime", "delayMix", "delayFeedback",
+        "doubleTrackOn", "doubleTrackMix"
     };
 
     for (const auto& parameterId : presetOwnedParameters)

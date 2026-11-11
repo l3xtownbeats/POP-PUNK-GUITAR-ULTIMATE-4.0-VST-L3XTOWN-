@@ -384,8 +384,17 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                const int articulationChoice = juce::jlimit(0, 3, static_cast<int>(
+                    parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)));
+                const int palmMuteThreshold = juce::jlimit(2, 127, static_cast<int>(
+                    parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
+                // Low playing velocity selects the mapped palm-muted SFZ velocity layer.
+                // Keep the real MIDI velocity for amplitude; use the layer selector only
+                // to choose the articulation sample. Explicit Palm Mute also forces that layer.
+                const bool usePalmMuteLayer = articulationChoice == 1 || scaledVelocity < palmMuteThreshold;
+                const int sampleVelocity = usePalmMuteLayer ? palmMuteThreshold - 1 : scaledVelocity;
                 const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
-                                                      message.getChannel(), globalTuningSemitones, scaledVelocity);
+                                                      message.getChannel(), globalTuningSemitones, sampleVelocity);
                 juce::ignoreUnused(triggered);
             }
             else if (message.isNoteOff())
@@ -558,8 +567,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)));
                     const int palmMuteThreshold = juce::jlimit(1, 127, static_cast<int>(
                         parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
-                    const int sampleVelocity = articulationChoice == 1
-                        ? juce::jmin(scaledVelocity, palmMuteThreshold - 1) : scaledVelocity;
+                    const bool usePalmMuteLayer = articulationChoice == 1 || scaledVelocity < palmMuteThreshold;
+                    const int sampleVelocity = usePalmMuteLayer ? palmMuteThreshold - 1 : scaledVelocity;
                     const bool triggered = sampler.noteOn(event.note, scaledVelocity, maximumVoices,
                         event.channel, globalTuningSemitones, sampleVelocity);
                     juce::ignoreUnused(triggered);
