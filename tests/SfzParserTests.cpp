@@ -122,6 +122,18 @@ int main()
     CHECK(!defaultPathTraversal.succeeded());
     CHECK(!defaultPathTraversal.errors.empty());
 
+    const auto powerCurve = parseText(
+        "<region> sample=x.wav key=60 xfin_lovel=20 xfin_hivel=80 xf_velcurve=power\n", base);
+    CHECK(powerCurve.succeeded());
+    CHECK(powerCurve.regions[0].velocityCrossfadePower);
+    const auto gainCurve = parseText(
+        "<region> sample=x.wav key=60 xfin_lovel=20 xfin_hivel=80 xf_velcurve=gain\n", base);
+    CHECK(gainCurve.succeeded());
+    CHECK(!gainCurve.regions[0].velocityCrossfadePower);
+    const auto invalidCurve = parseText(
+        "<region> sample=x.wav key=60 xf_velcurve=exponential\n", base);
+    CHECK(!invalidCurve.succeeded());
+
     std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\n";
     return 0;
 }

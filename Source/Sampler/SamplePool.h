@@ -68,6 +68,7 @@ public:
         int xfinHighVelocity = -1;
         int xfoutLowVelocity = -1;
         int xfoutHighVelocity = -1;
+        bool velocityCrossfadePower = true;
         std::uint64_t startFrame = 0;
         std::uint64_t endFrame = 0;
         std::uint64_t loopStartFrame = 0;
@@ -79,6 +80,14 @@ public:
         float releaseSeconds = 0.15f;
     };
 
+    struct RegionSelection
+    {
+        const RegionView* region = nullptr;
+        float velocityGain = 1.0f;
+    };
+
+    static constexpr std::size_t maximumVelocityLayers = 8;
+
     struct Snapshot
     {
         std::vector<RegionView> regions;
@@ -87,6 +96,8 @@ public:
     };
 
     [[nodiscard]] const RegionView* findRegion(int midiNote, int velocity, int midiChannel = 1) noexcept;
+    [[nodiscard]] std::size_t findRegions(int midiNote, int velocity, int midiChannel,
+        std::array<RegionSelection, maximumVelocityLayers>& output) noexcept;
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
 

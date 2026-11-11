@@ -307,6 +307,7 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
         view.xfinHighVelocity = region.xfinHighVelocity;
         view.xfoutLowVelocity = region.xfoutLowVelocity;
         view.xfoutHighVelocity = region.xfoutHighVelocity;
+        view.velocityCrossfadePower = region.velocityCrossfadePower;
         if (region.seqLength > 1)
         {
             const RoundRobinKey rrKey { region.group, region.seqLength, region.lowKey, region.highKey,
@@ -425,6 +426,126 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     return firstSequenceMatch != nullptr ? firstSequenceMatch : firstMatch;
 }
 
+std::size_t SamplePool::findRegions(
+    int midiNote, int velocity, int midiChannel,
+    std::array<RegionSelection, maximumVelocityLayers>& output) noexcept
+{
+    output.fill(RegionSelection {});
+    const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
+    if (snapshot == nullptr || velocity <= 0)
+        return 0;
+
+    struct RoundRobinChoice
+    {
+        int setIndex = -1;
+        int wantedPosition = -1;
+        const RegionView* fallback = nullptr;
+        const RegionView* selected = nullptr;
+    };
+    std::array<RoundRobinChoice, maximumVelocityLayers> rrChoices {};
+    std::size_t rrChoiceCount = 0;
+    std::size_t outputCount = 0;
+
+    const auto append = [&](const RegionView* region)
+    {
+        if (region == nullptr || outputCount >= output.size())
+            return;
+
+        float gain = 1.0f;
+        constexpr float halfPi = 1.57079632679489661923f;
+        if (region->xfinLowVelocity >= 0 && region->xfinHighVelocity >= 0)
+        {
+            const int low = region->xfinLowVelocity;
+            const int high = region->xfinHighVelocity;
+            float phase = high > low
+                ? static_cast<float>(velocity - low) / static_cast<float>(high - low)
+                : (velocity > low ? 1.0f : 0.0f);
+            phase = juce::jlimit(0.0f, 1.0f, phase);
+            if (region->velocityCrossfadePower)
+                phase = std::sin(phase * halfPi);
+            gain *= phase;
+        }
+
+        if (region->xfoutLowVelocity >= 0 && region->xfoutHighVelocity >= 0)
+        {
+            const int low = region->xfoutLowVelocity;
+            const int high = region->xfoutHighVelocity;
+            float phase = high > low
+                ? static_cast<float>(velocity - low) / static_cast<float>(high - low)
+                : (velocity > low ? 1.0f : 0.0f);
+            phase = juce::jlimit(0.0f, 1.0f, phase);
+            if (region->velocityCrossfadePower)
+                phase = std::cos(phase * halfPi);
+            else
+                phase = 1.0f - phase;
+            gain *= phase;
+        }
+
+        if (gain <= 0.000001f)
+            return;
+        output[outputCount++] = { region, gain };
+    };
+
+    // One bounded pass over the immutable region snapshot. RR choices are
+    // accumulated in a fixed array, avoiding a second full scan per RR set.
+    for (const auto& region : snapshot->regions)
+    {
+        if (midiNote < region.lowKey || midiNote > region.highKey
+            || velocity < region.lowVelocity || velocity > region.highVelocity
+            || midiChannel < region.lowChannel || midiChannel > region.highChannel)
+            continue;
+
+        if (region.roundRobinSetIndex < 0)
+        {
+            append(&region);
+            continue;
+        }
+
+        std::size_t choiceIndex = rrChoiceCount;
+        for (std::size_t i = 0; i < rrChoiceCount; ++i)
+            if (rrChoices[i].setIndex == region.roundRobinSetIndex)
+            {
+                choiceIndex = i;
+                break;
+            }
+
+        if (choiceIndex == rrChoiceCount)
+        {
+            if (rrChoiceCount >= rrChoices.size())
+                continue;
+
+            auto& choice = rrChoices[rrChoiceCount++];
+            choice.setIndex = region.roundRobinSetIndex;
+            const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
+            const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
+            constexpr std::size_t cursorsPerSet = 16U * 128U;
+            const auto cursorIndex = static_cast<std::size_t>(region.roundRobinSetIndex) * cursorsPerSet
+                + channelIndex * 128U + noteIndex;
+            if (cursorIndex < snapshot->roundRobinCounters.size())
+            {
+                auto& cursor = snapshot->roundRobinCounters[cursorIndex];
+                choice.wantedPosition = static_cast<int>(
+                    cursor % static_cast<std::uint32_t>(region.seqLength)) + 1;
+                ++cursor;
+            }
+        }
+
+        auto& choice = rrChoices[choiceIndex];
+        if (choice.fallback == nullptr)
+            choice.fallback = &region;
+        if (choice.wantedPosition > 0 && region.seqPosition == choice.wantedPosition)
+            choice.selected = &region;
+    }
+
+    for (std::size_t i = 0; i < rrChoiceCount; ++i)
+    {
+        const auto& choice = rrChoices[i];
+        append(choice.selected != nullptr ? choice.selected : choice.fallback);
+    }
+
+    return outputCount;
+}
+
 std::size_t SamplePool::getRegionCount() const noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
@@ -468,47 +589,87 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
     return pool.loadSfz(sfzFile, requestGeneration, expectedGeneration);
 }
 
-bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
+bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices,
+                           int midiChannel, double globalTuningSemitones) noexcept
 {
-    const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
-    if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
+    if (velocity <= 0)
         return false;
 
-    // SFZ off_by groups implement guitar-string choking: a new note on the
-    // same string gently releases the previously ringing voice.
-    if (region->offBy > 0)
-        for (auto& activeVoice : voices)
-            if (activeVoice.region != nullptr
-                && activeVoice.region->group == region->offBy
-                && activeVoice.midiChannel == midiChannel)
-                releaseVoice(activeVoice);
+    std::array<SamplePool::RegionSelection, SamplePool::maximumVelocityLayers> selections {};
+    const auto selectionCount = pool.findRegions(midiNote, velocity, midiChannel, selections);
+    if (selectionCount == 0)
+        return false;
 
-    const int voiceIndex = chooseVoice(juce::jlimit(1, maximumVoices, maximumActiveVoices));
-    auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
-    auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
-    streamReader.release();
-    voice = {};
-    voice.region = region;
-    voice.note = midiNote;
-    voice.midiChannel = juce::jlimit(1, 16, midiChannel);
-    voice.direction = 1;
-    voice.position = static_cast<double>(region->startFrame);
+    const int voiceLimit = juce::jlimit(1, maximumVoices, maximumActiveVoices);
+    int activeVoices = 0;
+    for (const auto& active : voices)
+        if (active.region != nullptr)
+            ++activeVoices;
+
+    // If the polyphony budget is tight, retain the strongest crossfade layers
+    // rather than letting later layers steal voices started for this same note.
+    const std::size_t available = activeVoices < voiceLimit
+        ? static_cast<std::size_t>(voiceLimit - activeVoices) : 1U;
+    for (std::size_t i = 1; i < selectionCount; ++i)
+    {
+        const auto candidate = selections[i];
+        std::size_t j = i;
+        while (j > 0 && selections[j - 1].velocityGain < candidate.velocityGain)
+        {
+            selections[j] = selections[j - 1];
+            --j;
+        }
+        selections[j] = candidate;
+    }
+    const auto layersToStart = std::min(selectionCount, available);
+
     const double safeGlobalTuning = std::isfinite(globalTuningSemitones)
         ? juce::jlimit(-48.0, 48.0, globalTuningSemitones) : 0.0;
-    const double semitones = static_cast<double>(midiNote - region->rootKey)
-        + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
-    voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
-    voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
-    voice.age = nextAge++;
-    if (region->streaming != nullptr)
+    bool started = false;
+
+    for (std::size_t layer = 0; layer < layersToStart; ++layer)
     {
-        streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
-        streamReader.prefetch(region->startFrame);
-        if (region->loopMode == 1 || region->loopMode == 2 || region->loopMode == 3)
-            streamReader.requestPrefetch(region->loopStartFrame);
-        voice.prefetchedPage = region->startFrame / region->streaming->pageFrames();
+        const auto* region = selections[layer].region;
+        if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr))
+            continue;
+
+        // SFZ off_by groups implement guitar-string choking.
+        if (region->offBy > 0)
+            for (auto& activeVoice : voices)
+                if (activeVoice.region != nullptr
+                    && activeVoice.region->group == region->offBy
+                    && activeVoice.midiChannel == midiChannel)
+                    releaseVoice(activeVoice);
+
+        const int voiceIndex = chooseVoice(voiceLimit);
+        auto& voice = voices[static_cast<std::size_t>(voiceIndex)];
+        auto& streamReader = streamingReaders[static_cast<std::size_t>(voiceIndex)];
+        streamReader.release();
+        voice = {};
+        voice.region = region;
+        voice.note = midiNote;
+        voice.midiChannel = juce::jlimit(1, 16, midiChannel);
+        voice.direction = 1;
+        voice.position = static_cast<double>(region->startFrame);
+        const double semitones = static_cast<double>(midiNote - region->rootKey)
+            + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
+        voice.increment = (region->sourceSampleRate / outputSampleRate)
+            * std::pow(2.0, semitones / 12.0);
+        voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain
+            * selections[layer].velocityGain;
+        voice.age = nextAge++;
+        if (region->streaming != nullptr)
+        {
+            streamReader.attach(region->streaming, region->sampleId, region->totalFrames);
+            streamReader.prefetch(region->startFrame);
+            if (region->loopMode == 1 || region->loopMode == 2 || region->loopMode == 3)
+                streamReader.requestPrefetch(region->loopStartFrame);
+            voice.prefetchedPage = region->startFrame / region->streaming->pageFrames();
+        }
+        started = true;
     }
-    return true;
+
+    return started;
 }
 
 void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept
