@@ -87,8 +87,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
-    themeButton.setTooltip("Open the 20 visual skins. Switching themes never interrupts playback.");
-    themeButton.setColour(juce::TextButton::buttonColourId, theme.panelRaised);
+    themeButton.setTooltip("SKIN: choose one of 20 complete visual themes. Changes never interrupt playback.");
+    themeButton.setColour(juce::TextButton::buttonColourId, theme.accent);
     themeButton.setColour(juce::TextButton::textColourOffId, theme.text);
     themeButton.onClick = [this]
     {
@@ -219,17 +219,17 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(theme.background);
-    g.setColour(juce::Colour(0xff08080b));
+    g.setColour(theme.panel);
     g.fillRect(0, 0, getWidth(), 62);
     g.setColour(theme.accent);
     g.fillRect(0, 0, getWidth(), 3);
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
+    juce::ColourGradient grad(theme.panelRaised, static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), theme.background, static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
     g.setGradientFill(grad);
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
+    g.setColour(theme.accent.withAlpha(0.35f));
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
     g.setColour(theme.text);
@@ -249,11 +249,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
     body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
     body.closeSubPath();
-    g.setColour(juce::Colour(0xffd9d9df));
+    g.setColour(theme.text.withAlpha(0.88f));
     g.fillPath(body);
-    g.setColour(juce::Colour(0xff292932));
+    g.setColour(theme.panelRaised);
     g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(juce::Colour(0xffd8b77c));
+    g.setColour(theme.accentAlt);
     juce::Path neck;
     neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
     g.fillPath(neck);
@@ -368,6 +368,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadThemes()
     const auto parseColour = [](const juce::var& value, juce::Colour fallback)
     {
         auto hex = value.toString().trimCharactersAtStart("#");
+        if (hex.length() == 8) return juce::Colour::fromRGBA(static_cast<juce::uint8>(hex.substring(0, 2).getHexValue32()), static_cast<juce::uint8>(hex.substring(2, 4).getHexValue32()), static_cast<juce::uint8>(hex.substring(4, 6).getHexValue32()), static_cast<juce::uint8>(hex.substring(6, 8).getHexValue32()));
         if (hex.length() != 6) return fallback;
         return juce::Colour::fromRGB(
             static_cast<juce::uint8>(hex.substring(0, 2).getHexValue32()),
@@ -465,7 +466,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyTheme(int index)
         keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, theme.accent.withAlpha(0.85f));
     }
     processor.parameters.state.setProperty("uiTheme", theme.name, nullptr);
-    themeButton.setButtonText("THEME  /  " + theme.name.toUpperCase() + "  v");
+    themeButton.setButtonText("SKIN  /  " + theme.name.toUpperCase() + "  v");
     repaint();
 }
 
