@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-46",
+  "index": 46,
+  "name": "Solar Bronze",
+  "description": "Sunlit bronze hardware with warm metallic surfaces and clear labels",
+  "cluster": "C",
+  "identity": {
+    "material": "satin bronze and dark walnut",
+    "lighting": "warm solar studio light",
+    "mood": "radiant, mature, warm"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#272017",
+      "inset": "#35291B"
+    },
+    "surfaces": {
+      "primary": "#35291B",
+      "secondary": "#443522",
+      "raised": "#59452C",
+      "overlay": "#272017"
+    },
+    "borders": {
+      "subtle": "#806744",
+      "strong": "#A87549",
+      "focus": "#E9B45D"
+    },
+    "typography": {
+      "primary": "#FFF8EA",
+      "secondary": "#D7C6A5",
+      "disabled": "#85858B",
+      "onAccent": "#272017"
+    },
+    "rotary": {
+      "body": "#59452C",
+      "ring": "#A87549",
+      "track": "#806744",
+      "value": "#E9B45D",
+      "pointer": "#E8D09B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#806744",
+      "fill": "#E9B45D",
+      "thumb": "#E8D09B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#E9B45D",
+        "foreground": "#272017",
+        "hover": "#E8D09B",
+        "pressed": "#A87549",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#443522",
+        "foreground": "#FFF8EA",
+        "hover": "#59452C",
+        "pressed": "#A87549",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#E9B45D",
+      "activeText": "#272017",
+      "inactiveBackground": "#443522",
+      "inactiveText": "#D7C6A5",
+      "indicator": "#A87549"
+    },
+    "comboBoxes": {
+      "background": "#443522",
+      "foreground": "#FFF8EA",
+      "border": "#806744",
+      "hover": "#59452C",
+      "menuBackground": "#35291B",
+      "selection": "#E9B45D"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#E9B45D",
+      "blackPressed": "#A87549",
+      "keyBorder": "#806744",
+      "octaveLabel": "#D7C6A5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E9B45D",
+      "high": "#F06A58",
+      "background": "#272017"
+    },
+    "icons": {
+      "primary": "#FFF8EA",
+      "secondary": "#D7C6A5",
+      "accent": "#E9B45D",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#443522",
+      "border": "#806744",
+      "selected": "#E9B45D",
+      "caption": "#FFF8EA"
+    },
+    "windowChrome": {
+      "background": "#272017",
+      "title": "#FFF8EA",
+      "border": "#806744",
+      "close": "#E8D09B"
+    },
+    "hero": {
+      "background": "#272017",
+      "accent": "#E9B45D",
+      "secondaryAccent": "#A87549",
+      "highlight": "#E8D09B"
+    },
+    "accents": {
+      "primary": "#E9B45D",
+      "secondary": "#A87549",
+      "tertiary": "#E8D09B"
+    },
+    "texture": {
+      "material": "satin bronze and dark walnut",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "warm solar studio light",
+      "glow": "#E9B45D",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#A87549"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Solar Bronze preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original satin bronze and dark walnut hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle satin bronze and dark walnut material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
