@@ -35,3 +35,24 @@ Files changed:
 4. Integrate page-cache streaming into actual voice rendering before relaxing decoded-memory caps.
 5. Replace palette-only skin switching with complete, resource-backed skin packs while preserving the approved dark/charcoal and magenta visual direction.
 6. Re-enable MIDI and MULTICORE controls only after their respective functions are implemented and tested.
+
+## Follow-up browser revision
+
+The unified browser's STYLE filter now presents playing techniques instead of a long list of individual groove labels:
+- Lead Guitar
+- Solo Guitar
+- Palm Mute
+- Open Chords
+- Rhythm Guitar
+- Arpeggio
+- Ska Upstrokes
+
+The filter evaluates the preset's name, groove, articulation, tonal target and style profile. MELODY remains the separate sound-character selector, and PUNK GROUP remains independent of the selected performance mode.
+
+The sample-profile search field also falls back to the catalog's actual `sampleRequirement` property when `sampleProfile` is absent.
+
+Latest source commits:
+- `e02298c` — sample requirement metadata fallback.
+- `56a7eb6` — playing-style taxonomy filters.
+
+The earlier CI run for `e02298c` was cancelled before compilation. The current branch revision requires a fresh Windows x64 build and tests; no build pass is claimed yet.
