@@ -46,6 +46,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginProcessor.h
     Source/PluginEditor.cpp
     Source/PluginEditor.h
+    Source/ThemeManager.cpp
+    Source/ThemeManager.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
