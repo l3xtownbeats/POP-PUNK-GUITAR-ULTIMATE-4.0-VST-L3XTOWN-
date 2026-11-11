@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-02",
+  "index": 2,
+  "name": "Dark Metal",
+  "description": "Matte brushed steel, cold industrial edge",
+  "cluster": "C",
+  "identity": {
+    "material": "steel",
+    "lighting": "cool",
+    "mood": "Matte brushed steel, cold industrial edge"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#15191E",
+      "inset": "#15191E"
+    },
+    "surfaces": {
+      "primary": "#15191E",
+      "secondary": "#15191E",
+      "raised": "#AEB8C2",
+      "overlay": "#15191E"
+    },
+    "borders": {
+      "subtle": "#647887",
+      "strong": "#AEB8C2",
+      "focus": "#D75A72"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#15191E",
+      "ring": "#647887",
+      "track": "#49434F",
+      "value": "#AEB8C2",
+      "pointer": "#D75A72",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#AEB8C2",
+      "thumb": "#D75A72",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#AEB8C2",
+        "foreground": "#101116",
+        "hover": "#D75A72",
+        "pressed": "#647887",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#15191E",
+        "foreground": "#F4F0F4",
+        "hover": "#647887",
+        "pressed": "#AEB8C2",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#AEB8C2",
+      "activeText": "#101116",
+      "inactiveBackground": "#15191E",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#D75A72"
+    },
+    "comboBoxes": {
+      "background": "#15191E",
+      "foreground": "#F4F0F4",
+      "border": "#647887",
+      "hover": "#AEB8C2",
+      "menuBackground": "#15191E",
+      "selection": "#AEB8C2"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#AEB8C2",
+      "blackPressed": "#D75A72",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D75A72",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#AEB8C2",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#15191E",
+      "title": "#F4F0F4",
+      "border": "#647887",
+      "close": "#AEB8C2"
+    },
+    "hero": {
+      "background": "#15191E",
+      "accent": "#AEB8C2",
+      "secondaryAccent": "#647887",
+      "highlight": "#D75A72"
+    },
+    "accents": {
+      "primary": "#AEB8C2",
+      "secondary": "#647887",
+      "tertiary": "#D75A72"
+    },
+    "texture": {
+      "material": "steel",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "cool",
+      "glow": "#AEB8C2",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#647887"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
