@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "contract": "PPGU SKIN STUDIO REV 14.0",
+  "principle": "A theme maps every required control ID. Theme metadata never creates missing processor functionality; controls whose runtime implementation is absent must be represented as unavailable in the implementation inventory and may not be advertised as working.",
+  "layoutVariants": [
+    "STUDIO_CONSOLE",
+    "WORKSTATION_TOPBAR",
+    "RACK_SIDE",
+    "COMPACT_MINI"
+  ],
+  "grid": {
+    "columns": 12,
+    "rows": 12,
+    "coordinateSystem": "zero-based; x/y are top-left cell; w/h are cell spans",
+    "minimumReadableCellPx": {
+      "width": 48,
+      "height": 36
+    }
+  },
+  "requiredControlIds": [
+    "preset_browser",
+    "mode_selector",
+    "knob01",
+    "knob02",
+    "knob03",
+    "knob04",
+    "knob05",
+    "knob06",
+    "knob07",
+    "knob08",
+    "knob09",
+    "fx_switch01",
+    "fx_switch02",
+    "fx_switch03",
+    "fx_switch04",
+    "fx_switch05",
+    "fx_switch06",
+    "fx_switch07",
+    "midi_keyboard",
+    "LCD_display",
+    "LED_indicator",
+    "SKIN_button",
+    "Import_Guitar",
+    "Auto_Discover",
+    "Curator",
+    "Settings",
+    "About"
+  ],
+  "paletteTokens": [
+    "window_bg",
+    "panel",
+    "panel_elevated",
+    "control_bg",
+    "control_face",
+    "control_border",
+    "text_primary",
+    "text_secondary",
+    "text_disabled",
+    "accent",
+    "accent_glow",
+    "danger",
+    "warning",
+    "success",
+    "lcd_bg",
+    "lcd_text",
+    "led_on",
+    "led_off",
+    "shadow",
+    "highlight",
+    "lowlight"
+  ],
+  "controls": {
+    "preset_browser": {
+      "kind": "composite",
+      "runtimeStatus": "implemented",
+      "components": [
+        "presetBox",
+        "categoryBox",
+        "presetSearch"
+      ],
+      "function": "Selects a factory preset; category and text filter only change the visible catalog. Filtering must never load a different preset."
+    },
+    "mode_selector": {
+      "kind": "composite",
+      "runtimeStatus": "partial",
+      "components": [
+        "modeBox",
+        "melodyTab",
+        "patternTab"
+      ],
+      "parameterIds": [
+        "playMode"
+      ],
+      "function": "Switches Melody or Pattern playback mode. PUNK GROUP is reserved in the design contract and is not exposed as an active mode in the current editor."
+    },
+    "knob01": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[0]",
+      "parameterIds": [
+        "ampGain"
+      ],
+      "label": "GAIN",
+      "function": "Controls amplifier gain."
+    },
+    "knob02": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[1]",
+      "parameterIds": [
+        "eqHigh"
+      ],
+      "label": "TREBLE",
+      "function": "Controls high-frequency EQ gain."
+    },
+    "knob03": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[2]",
+      "parameterIds": [
+        "eqMid"
+      ],
+      "label": "MID",
+      "function": "Controls mid-frequency EQ gain."
+    },
+    "knob04": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[3]",
+      "parameterIds": [
+        "eqLow"
+      ],
+      "label": "BASS",
+      "function": "Controls low-frequency EQ gain."
+    },
+    "knob05": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[4]",
+      "parameterIds": [
+        "velocity"
+      ],
+      "label": "VELOCITY",
+      "function": "Controls MIDI velocity response."
+    },
+    "knob06": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[5]",
+      "parameterIds": [
+        "dynamics"
+      ],
+      "label": "DYNAMICS",
+      "function": "Controls velocity-to-dynamics response."
+    },
+    "knob07": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[6]",
+      "parameterIds": [
+        "swing"
+      ],
+      "label": "SWING",
+      "function": "Controls Pattern swing amount."
+    },
+    "knob08": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[7]",
+      "parameterIds": [
+        "humanize"
+      ],
+      "label": "HUMANIZE",
+      "function": "Controls Pattern timing/feel humanization."
+    },
+    "knob09": {
+      "kind": "rotary",
+      "runtimeStatus": "implemented",
+      "component": "knobs[8]",
+      "parameterIds": [
+        "accent"
+      ],
+      "label": "ACCENT",
+      "function": "Controls Pattern accent amount."
+    },
+    "fx_switch01": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[0]",
+      "parameterIds": [
+        "compressorOn"
+      ],
+      "label": "COMPRESSOR",
+      "function": "Bypasses or enables the compressor."
+    },
+    "fx_switch02": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[1]",
+      "parameterIds": [
+        "eqOn"
+      ],
+      "label": "EQ",
+      "function": "Bypasses or enables the equalizer."
+    },
+    "fx_switch03": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[2]",
+      "parameterIds": [
+        "distortionOn"
+      ],
+      "label": "DISTORTION",
+      "function": "Bypasses or enables distortion."
+    },
+    "fx_switch04": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[3]",
+      "parameterIds": [
+        "chorusOn"
+      ],
+      "label": "CHORUS",
+      "function": "Bypasses or enables chorus."
+    },
+    "fx_switch05": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[4]",
+      "parameterIds": [
+        "delayOn"
+      ],
+      "label": "DELAY",
+      "function": "Bypasses or enables delay."
+    },
+    "fx_switch06": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[5]",
+      "parameterIds": [
+        "reverbOn"
+      ],
+      "label": "REVERB",
+      "function": "Bypasses or enables reverb."
+    },
+    "fx_switch07": {
+      "kind": "toggle",
+      "runtimeStatus": "implemented",
+      "component": "fxButtons[6]",
+      "parameterIds": [
+        "cabinetOn"
+      ],
+      "label": "CABINET IR",
+      "function": "Bypasses or enables cabinet processing."
+    },
+    "midi_keyboard": {
+      "kind": "keyboard",
+      "runtimeStatus": "implemented",
+      "component": "keyboard",
+      "parameterIds": [
+        "keyboardState"
+      ],
+      "function": "On-screen MIDI keyboard; sends note events to the instrument."
+    },
+    "LCD_display": {
+      "kind": "display",
+      "runtimeStatus": "partial",
+      "component": "statusLabel",
+      "function": "Current editor status and preset/library feedback; full dedicated LCD treatment is a visual rendering goal."
+    },
+    "LED_indicator": {
+      "kind": "indicator",
+      "runtimeStatus": "not_implemented",
+      "function": "Reserved visual activity/status indicator. No live MIDI/audio meter is currently wired; never fabricate activity."
+    },
+    "SKIN_button": {
+      "kind": "action",
+      "runtimeStatus": "implemented",
+      "component": "skinButton",
+      "function": "Opens visual theme selection; Ctrl+K is the keyboard shortcut."
+    },
+    "Import_Guitar": {
+      "kind": "action",
+      "runtimeStatus": "implemented",
+      "component": "loadButton",
+      "function": "Opens SFZ file selection and requests asynchronous licensed guitar library loading."
+    },
+    "Auto_Discover": {
+      "kind": "action",
+      "runtimeStatus": "not_implemented",
+      "function": "Reserved for the existing Sound Hunter/S6 discovery workflow. Must remain visibly unavailable until production discovery integration exists."
+    },
+    "Curator": {
+      "kind": "panel_action",
+      "runtimeStatus": "not_implemented",
+      "function": "Reserved for Sound Hunter curator and library review. Must remain visibly unavailable until production curator integration exists."
+    },
+    "Settings": {
+      "kind": "panel_action",
+      "runtimeStatus": "not_implemented",
+      "function": "Reserved settings panel. Do not expose a non-functional active action."
+    },
+    "About": {
+      "kind": "panel_action",
+      "runtimeStatus": "not_implemented",
+      "function": "Reserved About panel; may be enabled only when it displays real product/build metadata."
+    }
+  },
+  "additionalCurrentControls": {
+    "sync_selector": {
+      "runtimeStatus": "implemented",
+      "component": "startModeBox",
+      "parameterIds": [
+        "syncMode"
+      ],
+      "function": "Host / Host Start / Internal transport synchronization."
+    },
+    "preset_category": {
+      "runtimeStatus": "implemented",
+      "component": "categoryBox",
+      "function": "Filters factory preset list by All / Melody / Pattern."
+    },
+    "preset_search": {
+      "runtimeStatus": "implemented",
+      "component": "presetSearch",
+      "function": "Filters catalog names and metadata without changing loaded sound."
+    },
+    "library_load_status": {
+      "runtimeStatus": "implemented",
+      "component": "statusLabel",
+      "function": "Reports SFZ load progress/results and missing-library state."
+    },
+    "product_brand": {
+      "runtimeStatus": "implemented",
+      "component": "titleLabel,subtitleLabel",
+      "function": "Product identification."
+    }
+  },
+  "implementationRules": {
+    "themeMayChange": [
+      "visual tokens",
+      "materials",
+      "typography",
+      "decorative artwork",
+      "asset references",
+      "layout presentation within declared grid"
+    ],
+    "themeMustNotChange": [
+      "APVTS IDs",
+      "parameter ranges/defaults",
+      "attachments",
+      "control semantics",
+      "MIDI behavior",
+      "preset data",
+      "audio engine",
+      "processor state",
+      "control visibility for implemented controls"
+    ],
+    "missingRuntimeControls": "Keep their IDs in the parity contract, mark runtimeStatus not_implemented, and do not present them as active functionality.",
+    "layoutOwnership": "The editor owns actual component bounds and hit targets. Theme control maps are validated metadata until a layout engine consumes them; a skin cannot move or resize functional controls by itself.",
+    "audioInvariant": "Theme change must not mutate processor/APVTS/MIDI/audio state; output-buffer equivalence must be verified by dedicated tests."
+  }
+}
