@@ -10,6 +10,7 @@ on:
       - 'CMakeLists.txt'
       - 'Source/**'
       - 'tests/**'
+      - 'SKIN/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
       - 'presets/factory_bank_300.json'
@@ -225,7 +226,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'SKINS', 'Resources', 'Assets')
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -233,7 +234,13 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'SKIN/*') -Destination (Join-Path $release 'SKINS') -Recurse
+          # Runtime skin payload is a sibling of VST3/, so both can be copied
+          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
+          $runtimeSkins = Join-Path $release 'Skins'
+          Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
+            Copy-Item -Destination $runtimeSkins -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
@@ -242,8 +249,27 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
 
-          $skinManifests = Get-ChildItem (Join-Path $release 'SKINS') -Recurse -File -Filter 'theme.json'
-          if ($skinManifests.Count -ne 50) { throw "Expected 50 skin manifests in SKINS; found $($skinManifests.Count)." }
+          $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
+          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
+          $expectedSkinCount = [int]$skinRegistry.totalSkins
+          if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Skin registry totalSkins does not match its themes array.' }
+          $skinManifests = Get-ChildItem $runtimeSkins -Recurse -File -Filter 'theme.json'
+          if ($skinManifests.Count -ne $expectedSkinCount) { throw "Runtime Skins manifest count mismatch: registry=$expectedSkinCount, files=$($skinManifests.Count)." }
+          foreach ($theme in $skinRegistry.themes) {
+            $manifestPath = Join-Path $runtimeSkins $theme.path
+            if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Registered runtime skin manifest missing: $($theme.path)" }
+            $themeData = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+            $themeRoot = Split-Path -Parent $manifestPath
+            foreach ($assetKey in @('preview', 'hero')) {
+              $assetPath = [string]$themeData.assets.$assetKey
+              if ([string]::IsNullOrWhiteSpace($assetPath) -or -not (Test-Path -LiteralPath (Join-Path $themeRoot $assetPath))) {
+                throw "Runtime skin '$($theme.id)' is incomplete: required $assetKey asset '$assetPath' is missing. Runtime Skins package is blocked until artwork is present."
+              }
+            }
+            if (-not [string]::IsNullOrWhiteSpace([string]$themeData.assets.texture) -and -not (Test-Path -LiteralPath (Join-Path $themeRoot ([string]$themeData.assets.texture)))) {
+              throw "Runtime skin '$($theme.id)' declares a texture asset that is missing."
+            }
+          }
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
@@ -257,19 +283,20 @@ jobs:
           VST3/       The compiled VST3 plugin bundle.
           SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
           PRESETS/    Factory catalog (300 entries) and portable preset examples.
-          SKINS/      50 theme manifests, theme schema and skin manifest.
+          Skins/      Runtime theme manifests and artwork; copy beside the VST3 bundle.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
           INSTALL:
-          1. Copy the .vst3 bundle from VST3/ into:
+          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
              C:\Program Files\Common Files\VST3\
+             Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
           2. In the plugin, use its SFZ load control and select an instrument SFZ
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
-          4. SKINS contains 50 theme manifests. Runtime skin switching is not claimed
-             as host-verified in this build.
+          4. Skins/ is the runtime theme directory and must remain beside the .vst3 bundle.
+             Runtime skin switching still requires separate host acceptance.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 
           Automated CMake build, CTest and pluginval results are reported by this workflow.
