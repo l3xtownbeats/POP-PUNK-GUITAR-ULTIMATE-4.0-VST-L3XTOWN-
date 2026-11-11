@@ -10,7 +10,7 @@ POP PUNK GUITAR ULTIMATE REV 6.0 VST3 — INFO / ЕДИНЫЙ ЖУРНАЛ РА�
 
 ПРОЕКТ И БАЗОВЫЕ ТРЕБОВАНИЯ
 - Продукт/релиз: POP PUNK GUITAR ULTIMATE REV 6.0 VST3 by L3XTOWN — самостоятельный Windows x64 VST3 guitar sampler/rompler/performance instrument для FL Studio 20 и Windows 10 1809+.
-- Основной документ: Promt.txt v33 FINAL. Приоритет — обязательные правила Части 0, вехи M1–M13, критерии приёмки и запрет перехода к следующей вехе до фактического прохождения текущей.
+- Основной документ: Promt.txt v34 PERFORMANCE REVISION (на базе v33 FINAL). Приоритет — обязательные правила Части 0, вехи M1–M13, критерии приёмки и запрет перехода к следующей вехе до фактического прохождения текущей.
 - Стек: JUCE 7.0.12, C++20, CMake >=3.22, Visual Studio 2022/MSVC v143, VST3.
 - Звуковая модель: ROMpler/sample-based; реальные WAV/SFZ сэмплы, не синусоидальная подмена. Melody: клавиша = хроматическая нота. Pattern: MIDI chord = гитарное исполнение/ритм.
 - Цели: быстрый старт, низкие CPU/RAM, отсутствие disk I/O/allocations/locks в audio callback, sample-accurate MIDI, 64 voices maximum, presets/style DNA, effects, browser/preview, independent libraries, safe state restore.
