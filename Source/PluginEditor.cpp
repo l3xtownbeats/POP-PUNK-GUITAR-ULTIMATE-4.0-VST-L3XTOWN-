@@ -14,7 +14,7 @@ namespace
     juce::Colour pale { 0xfff4f0f4 };
     juce::Colour muted { 0xffaaa8b2 };
     struct SkinPalette { const char* name; juce::uint32 background, panel, panel2, accent, text, muted; };
-    const std::array<SkinPalette, 10> skinPalettes {{
+    const std::array<SkinPalette, 20> skinPalettes {{
         { "NEON PINK", 0xff111116, 0xff202027, 0xff17171d, 0xffed238b, 0xfff4f0f4, 0xffaaa8b2 },
         { "MIDNIGHT BLUE", 0xff0b111b, 0xff172638, 0xff101d2c, 0xff38a9ff, 0xffeef6ff, 0xff91a9c0 },
         { "BLOOD RED", 0xff160d10, 0xff2b171d, 0xff211116, 0xffff4058, 0xfffff0f0, 0xffc39da4 },
@@ -24,7 +24,17 @@ namespace
         { "ARCTIC", 0xff10171b, 0xff1d2a31, 0xff152127, 0xff62d7d9, 0xfff0ffff, 0xffa4bec1 },
         { "GRAPHITE", 0xff111214, 0xff24262a, 0xff191b1f, 0xffd2d5dc, 0xfff5f6f8, 0xffa4a7ae },
         { "SUNSET", 0xff1a1011, 0xff35201f, 0xff241716, 0xffff765e, 0xfffff1e9, 0xffc8a59a },
-        { "GOLD EDITION", 0xff15130e, 0xff2b2619, 0xff201c13, 0xffe5c46a, 0xfffff8e8, 0xffbdb08c }
+        { "GOLD EDITION", 0xff15130e, 0xff2b2619, 0xff201c13, 0xffe5c46a, 0xfffff8e8, 0xffbdb08c },
+        { "SKATE YARD", 0xff111612, 0xff202d23, 0xff17221a, 0xffb7e34b, 0xfff3f7e9, 0xffaab89b },
+        { "BASEMENT SHOW", 0xff140d10, 0xff2a171d, 0xff1d1116, 0xffe23b4f, 0xffffeef0, 0xffbd9da4 },
+        { "COLLEGE ROCK", 0xffe8e0cf, 0xffd4c9b4, 0xfff0e9da, 0xff9b4d37, 0xff25221d, 0xff6c6255 },
+        { "HARDCORE STAGE", 0xff090909, 0xff1c1c1e, 0xff111113, 0xffff3030, 0xffffffff, 0xffb8b8b8 },
+        { "ACOUSTIC WOOD", 0xff1b130d, 0xff382719, 0xff281b12, 0xffd49a52, 0xfffff1dc, 0xffc3a98b },
+        { "STUDIO GLASS", 0xffcfd5dc, 0xffe8edf2, 0xffdce3ea, 0xff287ea8, 0xff17232c, 0xff526575 },
+        { "EMO WINTER", 0xff101722, 0xff202d3d, 0xff172231, 0xff8ca9d8, 0xffedf3ff, 0xffa5b3c7 },
+        { "DAYLIGHT PRO", 0xfff0f2f4, 0xffdce1e6, 0xffe8ecef, 0xff176f9b, 0xff17212a, 0xff56636d },
+        { "ARCADE CABINET", 0xff100d1c, 0xff241a3d, 0xff19132c, 0xffff4fd8, 0xfff8f2ff, 0xffb6a7d2 },
+        { "BLUEPRINT", 0xff081b2c, 0xff12314b, 0xff0c263d, 0xff39c5ff, 0xffe8f7ff, 0xff9dbdd0 }
     }};
 }
 
@@ -306,7 +316,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
 
-    skinsButton.setTooltip("Choose one of 10 interface skins. The selected theme is saved with this plugin instance.");
+    skinsButton.setTooltip("Choose one of 20 interface skins. The selected theme is saved with this plugin instance.");
     skinsButton.setEnabled(true);
     skinsButton.setColour(juce::TextButton::buttonColourId, panel2);
     skinsButton.setColour(juce::TextButton::textColourOffId, pink);
