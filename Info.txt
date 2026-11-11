@@ -85,7 +85,7 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 5. Подтвердить Windows x64 Release, полный CTest, pluginval и отдельно FL Studio 20 host acceptance.
 6. После каждого этапа обновлять этот INFO краткой записью с commit SHA и точными результатами.
 
-## 8. Правила журнала
+## 8. Правила единого журнала
 
 - INFO фиксирует этапы разработки, решения и ближайшие задачи.
 - Баги, фиксы, правки, CI/build/release результаты фиксируются в `BUILD_RELEASE.md`.
