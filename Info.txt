@@ -180,3 +180,26 @@ Run `43017263448` / workflow run #826 завершился с `failure` на ш�
 README и DOWNLOAD.md обновлены: текущая попытка помечена как failed, предыдущий artifact `13766348419` указан как единственная доступная старая успешная сборка с прежней структурой. Исправление исходного build error и повторный запуск требуют отдельного изменения workflow/source; в рамках оформления документации код сборки не менялся.
 
 README commit: `5271d65f597c3b35ab18993c92850fd93f9703ad`; DOWNLOAD commit: `72fc9d88b6f8a3acacc2ca58d7c4083fe50b700e`.
+
+
+## 2026-11-11 — Skin Engine implementation gap audit
+
+**Статус:** AUDIT COMPLETE / RUNTIME SKIN ENGINE NOT IMPLEMENTED.  
+Проверен актуальный main HEAD перед аудитом: `892cba3ea523af204d9c7e9c9ab0cd30809e08f1`.
+
+Создан подробный аудит `SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md`. Проверены PluginEditor, ThemeManager, CMake, 50-slot schema/registry/validator, тесты, asset briefs, package workflow, README и прежний review PR #24.
+
+Подтверждённые недостатки:
+- текущий PluginEditor не создаёт/не использует PPGUThemeManager; цвета жёстко заданы в UI;
+- отсутствуют кнопка SKIN, browser/gallery, previews, search/favourites, Ctrl+K, hot-swap, сохранение выбранной темы и runtime scan;
+- ThemeManager валидирует только часть manifest/palette и не загружает полный token model/assets; нет полного control parity, version check, asset/path validation, lazy loading/LRU/ECO;
+- найдено 51 папка/manifest Skin_01…Skin_51, хотя schema/registry/Python validator допускают 50; Skin_51 не зарегистрирован и вне schema range;
+- per-skin preview.png, hero.webp, texture.png и полный комплект SVG/PNG control artwork отсутствуют; спецификация называет их заданиями, а не готовыми файлами;
+- package workflow складывает исходники в SKINS/ внутри ZIP, но не создаёт требуемую runtime папку Skins/ рядом с установленным .vst3 bundle;
+- нет подтверждённых UI, DPI, accessibility, memory/LRU, persistence, audio-invariance и hot-swap тестов.
+
+Зафиксировано пользовательское обязательное правило: runtime каталог называется ровно `Skins` и располагается рядом с установленным .vst3 bundle; AppData и системные каталоги не являются основным источником тем.
+
+README и SKIN/README.md обновлены, чтобы не выдавать манифесты за готовые skins и связать главную страницу с аудитом. Аудитный commit: `be8b1623625f922334fbf796656afff65eb97d0a`; SKIN README commit: `630b6f3490e8d68e6712920984ccf68d47027d44`; README commit: `25fb745b81ab95d9e708e99c74b6bd883191e6a2`.
+
+Build status remains unchanged: Windows run #826 / `43017263448` failed because `ppgu_processor_pattern_tests` cannot find generated JUCE `BinaryData.h`; CTest, pluginval and packaging were skipped. No source/runtime code was changed and no new ZIP was produced by this audit.
