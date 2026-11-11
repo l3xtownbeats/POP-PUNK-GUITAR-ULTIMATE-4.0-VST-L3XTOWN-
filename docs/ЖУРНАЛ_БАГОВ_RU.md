@@ -205,3 +205,12 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Тестировать 12 корней major/minor, обращения, дубли октав, неполные voicings и независимость от preset/mode.
 - Спецификация: `bbe6759a267a6520`.
 - Статус: OPEN; распознавание в исходном коде и тестирование ещё не выполнены.
+
+
+## 11 ноября 2026 — SOUND REALISM: открытые критерии качества электрогитары и акустики
+
+- Требуется проверить реальную полноту multisample coverage, velocity layers, round robin, articulation maps, transitions, release, acoustic source recordings, amp/cab routing, pattern humanization и legal provenance.
+- Наличие sample importer или большого количества файлов само по себе не подтверждает реалистичное звучание. Нельзя выдавать неподдерживаемые артикуляции за реализованные.
+- Нужны повторяемые MIDI render tests, измерения CPU/RAM/latency/peaks и level-matched blind listening comparisons с коммерческими референсами.
+- Цель качества внесена в `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `95d53067d5fac72b14e37a9a133381c535ce4ef5`.
+- Статус: OPEN / полный source-to-engine audit и акустические/электрические QA tests pending.
