@@ -346,8 +346,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         processor.parameters, "autoChordsOn", autoChordsButton);
     autoChordsButton.setButtonText(autoChordsButton.getToggleState() ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
     autoChordsButton.onClick = [this] {
-        autoChordsButton.setButtonText(autoChordsButton.getToggleState() ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
-        statusLabel.setText(autoChordsButton.getToggleState()
+        const bool enabled = autoChordsButton.getToggleState();
+        autoChordsButton.setButtonText(enabled ? "AUTOCHORDS  ON" : "AUTOCHORDS  OFF");
+        const bool patternMode = modeBox.getSelectedId() == 2;
+        autoChordKeyBox.setEnabled(patternMode && enabled);
+        autoChordScaleBox.setEnabled(patternMode && enabled);
+        statusLabel.setText(enabled
             ? "AUTOCHORDS ON  /  PATTERN MODE ONLY  /  SINGLE MIDI NOTE BUILDS A DIATONIC CHORD"
             : "AUTOCHORDS OFF  /  PLAY CHORDS FROM MIDI INPUT", juce::dontSendNotification);
     };
@@ -417,6 +421,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         const bool isPattern = modeBox.getSelectedId() == 2;
         melodyTab.setToggleState(!isPattern, juce::dontSendNotification);
         patternTab.setToggleState(isPattern, juce::dontSendNotification);
+
+        // AutoChords is a Pattern-only performance feature. Keep its saved
+        // toggle state, but make the button and key/scale controls unavailable
+        // while Melody is active so the UI cannot imply chromatic notes are
+        // being transformed.
+        autoChordsButton.setEnabled(isPattern);
+        const bool autoChordsEnabled = autoChordsButton.getToggleState();
+        autoChordKeyBox.setEnabled(isPattern && autoChordsEnabled);
+        autoChordScaleBox.setEnabled(isPattern && autoChordsEnabled);
     };
     modeBox.onChange();
     for (size_t i = 0; i < knobs.size(); ++i) {
