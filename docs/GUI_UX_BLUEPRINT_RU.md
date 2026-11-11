@@ -3,6 +3,19 @@
 **Design direction:** premium contemporary music-software graphics with a confident pop-punk identity. Combine the energy, attitude and color language associated with Blink-182 and Sum 41 with the finish of a high-end 2026 instrument: deep graphite/black materials, precision-machined metal details, rich layered surfaces, controlled neon lighting, cinematic contrast, premium typography, crisp vector iconography and original photorealistic guitar/studio artwork. Pop-punk references should appear as tasteful design cues (checkerboard micro-details, gig-poster composition, sticker-like labels), never as a cheap distressed collage or a retro imitation. Do not copy band logos, album covers, photographs, trademarks or protected artwork.  
 **Status:** implementation specification and theme-token foundation; this document does not claim that every described panel is already implemented.
 
+## 0. Reference-product principles
+
+Use the usability and visual hierarchy of **reFX Nexus / FLEX** and the depth, premium finish and immersive instrument presentation of **Spectrasonics Omnisphere** as product-quality references—not as templates to copy. The plugin must retain its own pop-punk guitar identity.
+
+- **Nexus / FLEX principle:** fast access to sounds, clear preset browsing, immediate feedback, compact controls, low-friction workflow and no unnecessary navigation.
+- **Omnisphere principle:** premium visual depth, strong hero artwork, coherent material design, carefully layered panels and a sense of a complete flagship instrument.
+- **PPGU principle:** every visual layer must support the guitar workflow. The hero/background art is atmospheric and secondary; controls, preset names, articulation state, pattern information and performance feedback always remain readable and visually dominant.
+- Keep the main performance controls in a stable, predictable grid. Decorative artwork must never sit behind dense labels or rotary value readouts. Use opaque or sufficiently solid control cards over detailed artwork.
+- Provide a restrained **Performance / Focus view** where the hero artwork recedes and the active sound controls become more prominent. The normal view balances brand identity and function.
+- Preset selection should be one or two actions at most; Melody and Pattern remain immediately accessible. Do not hide essential parameters inside decorative tabs or deep menus.
+- Use consistent spacing, alignment, contrast and component sizing. The UI should feel designed as one instrument, not a collage of unrelated panels.
+- Do not copy Nexus, FLEX or Omnisphere layouts, assets, logos, icons or proprietary graphics. Borrow only broad interaction and presentation principles.
+
 ## 1. Visual language
 
 The default skin is **Neon Riot**: near-black graphite canvas, layered charcoal/black panels, subtle brushed-metal and anodized-aluminium cues, electric magenta primary accent, cyan secondary accent and carefully rationed acid-yellow highlights. Use premium gradients, precise 1 px borders, soft ambient shadows, controlled edge lighting, subtle material texture and original high-resolution guitar/studio artwork. The result should feel like a flagship virtual instrument from a leading audio company: modern, expensive, tactile and performance-focused. Keep pop-punk character in the attitude, contrast, checkerboard micro-details and energetic typography—not in visual clutter. Keep controls highly legible; decoration stays behind controls and never competes with parameter labels. Use consistent 8 px spacing, 10–14 px card radii, clear section headings, compact labels, readable numeric values and large hit targets. Use a contemporary condensed display face for headings, clean UI typography for controls, restrained highlight effects and carefully art-directed negative space. Avoid excessive glow, tiny text and distressed textures that make the interface look dated.
