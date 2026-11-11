@@ -409,14 +409,14 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         fxWindow->toFront(true);
     };
     addAndMakeVisible(fxOpenButton);
-    loadButton.setButtonText("IMPORT SOUNDS");
-    loadButton.setTooltip("Load a custom SFZ or select the bundled Samples folder for automatic factory-bank switching.");
+    loadButton.setButtonText("IMPORT GUITAR");
+    loadButton.setTooltip("Import a guitar SFZ instrument or connect the factory guitar Sounds Bank.");
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] {
         juce::PopupMenu menu;
-        menu.addItem(1, "Load Custom SFZ...");
-        menu.addItem(2, "Choose Bundled Samples Folder...");
+        menu.addItem(1, "Load Guitar SFZ Instrument...");
+        menu.addItem(2, "Connect Factory Guitar Bank...");
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
         menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&loadButton),
             [safeThis](int result) {
@@ -932,14 +932,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     {
         auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
         if (!processor.getSampleLibraryRootDirectory().isDirectory())
-            detail += "  /  SET SAMPLES FOLDER IN IMPORT SOUNDS FOR FACTORY BANK";
+            detail += "  /  CONNECT SOUNDS BANK IN IMPORT GUITAR";
         statusLabel.setText("STYLE LOADED: " + detail + "  /  " + preset.articulation, juce::dontSendNotification);
     }
     else
     {
         auto message = presetMessage;
         if (!processor.getSampleLibraryRootDirectory().isDirectory() && acousticProfile)
-            message += "  /  SET SAMPLES FOLDER TO AUTO-LOAD STEEL/NYLON BANK";
+            message += "  /  CONNECT SOUNDS BANK IN IMPORT GUITAR";
         if (!processor.getSampleLibraryRootDirectory().isDirectory())
             statusLabel.setText(message, juce::dontSendNotification);
     }
