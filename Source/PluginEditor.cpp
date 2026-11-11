@@ -219,10 +219,49 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(theme.background);
+
+    // DIY pop-punk poster language: photocopy grain, checkerboard, tape,
+    // marker strokes and stage-light accents. Everything is vector-drawn,
+    // cached by JUCE's normal paint path and requires no external artwork.
+    const auto w = getWidth();
+    const auto h = getHeight();
+    g.setColour(theme.text.withAlpha(0.025f));
+    for (int y = 76; y < h; y += 22)
+        for (int x = 8 + ((y / 22) % 2) * 11; x < w; x += 22)
+            g.fillEllipse(static_cast<float>(x), static_cast<float>(y), 1.4f, 1.4f);
+
+    // Top stage fascia and high-contrast checker strip.
     g.setColour(theme.panel);
-    g.fillRect(0, 0, getWidth(), 62);
+    g.fillRect(0, 0, w, 62);
     g.setColour(theme.accent);
-    g.fillRect(0, 0, getWidth(), 3);
+    g.fillRect(0, 0, w, 4);
+    const int checkerSize = 12;
+    for (int x = w - 156; x < w; x += checkerSize)
+        for (int y = 8; y < 44; y += checkerSize)
+            if (((x / checkerSize) + (y / checkerSize)) % 2 == 0)
+            {
+                g.setColour(theme.text.withAlpha(0.20f));
+                g.fillRect(x, y, checkerSize, checkerSize);
+            }
+
+    // Slanted hand-cut poster tape at the top-left and small starburst mark.
+    juce::Path tape;
+    tape.addQuadrilateral(18.0f, 68.0f, 116.0f, 68.0f, 108.0f, 79.0f, 10.0f, 79.0f);
+    g.setColour(theme.warning.withAlpha(0.70f));
+    g.fillPath(tape);
+    g.setColour(theme.accent);
+    juce::Path spark;
+    spark.startNewSubPath(0.0f, 0.0f);
+    const float sx = static_cast<float>(w - 44), sy = 88.0f;
+    for (int i = 0; i < 16; ++i)
+    {
+        const float angle = juce::MathConstants<float>::twoPi * static_cast<float>(i) / 16.0f;
+        const float radius = (i % 2 == 0) ? 17.0f : 7.0f;
+        const auto point = juce::Point<float>(sx + std::cos(angle) * radius, sy + std::sin(angle) * radius);
+        if (i == 0) spark.startNewSubPath(point); else spark.lineTo(point);
+    }
+    spark.closeSubPath();
+    g.fillPath(spark);
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
@@ -233,14 +272,26 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
     auto textArea = hero.reduced(28, 18);
     g.setColour(theme.text);
-    g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
-    g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
+    g.setFont(juce::Font(juce::jmin(43.0f, getWidth() * 0.048f), juce::Font::bold));
+    g.drawText("POP PUNK", textArea.removeFromTop(49), juce::Justification::left);
     g.setColour(theme.accent);
-    g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
-    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
-    g.setColour(theme.text.withAlpha(0.8f));
-    g.setFont(juce::Font(16.0f, juce::Font::italic));
-    g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
+    g.setFont(juce::Font(juce::jmin(36.0f, getWidth() * 0.040f), juce::Font::italic | juce::Font::bold));
+    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(40), juce::Justification::left);
+    g.setColour(theme.text.withAlpha(0.86f));
+    g.setFont(juce::Font(15.0f, juce::Font::bold));
+    g.drawText("FAST RIFFS  /  BIG CHORUSES  /  LOUD GUITARS", textArea.removeFromTop(24), juce::Justification::left);
+
+    // Marker underline and cut-out genre stickers.
+    const float underlineY = static_cast<float>(hero.getY() + 118);
+    g.setColour(theme.warning);
+    g.drawLine(static_cast<float>(hero.getX() + 27), underlineY,
+               static_cast<float>(hero.getX() + 245), underlineY - 3.0f, 3.0f);
+    auto sticker = hero.removeFromBottom(30).removeFromLeft(300);
+    g.setColour(theme.accent.withAlpha(0.95f));
+    g.fillRoundedRectangle(sticker.toFloat(), 4.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(juce::Font(11.0f, juce::Font::bold));
+    g.drawText("SKATE PUNK  •  2000s ALT ROCK  •  DIY", sticker.reduced(8, 2), juce::Justification::centredLeft);
     // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
     auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
     juce::Path body;
@@ -259,6 +310,13 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillPath(neck);
     g.setColour(theme.accent.withAlpha(0.75f));
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
+
+    // Tiny set-list labels evoke gig posters without copying band logos,
+    // album covers or protected artwork.
+    g.setColour(theme.warning);
+    g.setFont(juce::Font(10.0f, juce::Font::bold));
+    g.drawText("RIFF / HOOK / REPEAT", guitar.getX() + 2, guitar.getBottom() - 18,
+               guitar.getWidth() - 4, 14, juce::Justification::centredRight);
     auto panelArea = getLocalBounds().reduced(16);
     panelArea.removeFromTop(355);
     panelArea.removeFromBottom(80);
