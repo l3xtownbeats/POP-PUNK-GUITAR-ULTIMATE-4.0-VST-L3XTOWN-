@@ -4,11 +4,24 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <string>
 #if JUCE_WINDOWS
  #ifndef NOMINMAX
   #define NOMINMAX
  #endif
  #include <windows.h>
+juce::String fromWidePath(const wchar_t* value, int length)
+{
+    if (value == nullptr || length <= 0)
+        return {};
+    const int required = WideCharToMultiByte(CP_UTF8, 0, value, length, nullptr, 0, nullptr, nullptr);
+    if (required <= 0)
+        return {};
+    std::string utf8(static_cast<size_t>(required), '\0');
+    const int written = WideCharToMultiByte(CP_UTF8, 0, value, length,
+                                             utf8.data(), required, nullptr, nullptr);
+    return written == required ? juce::String::fromUTF8(utf8.data(), written) : juce::String();
+}
 #endif
 
 // Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
@@ -291,7 +304,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
  HMODULE module=nullptr;auto address=reinterpret_cast<LPCWSTR>(reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
  DWORD flags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
  if(GetModuleHandleExW(flags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
-  if(n>0&&n<path.size()){juce::File f(juce::String::fromWideCharPointer(path.data()));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
+  if(n>0&&n<path.size()){juce::File f(fromWidePath(path.data(), static_cast<int>(n)));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
 #endif
  auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
  auto dev=juce::File::getCurrentWorkingDirectory().getChildFile("SKIN");return dev.isDirectory()?dev:beside;
@@ -345,7 +358,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             auto reference = value.getProperty("referenceArtist", "").toString();
             auto displayName = value.getProperty("name", "Unnamed").toString();
             if (reference.isNotEmpty() && displayName.startsWithIgnoreCase(reference))
-                displayName = displayName.substring(reference.length()).trimStartCharacters(" —-:");
+                displayName = displayName.substring(reference.length()).trim();
             preset.name = displayName;
             preset.category = "Original";
             preset.mode = mode;
