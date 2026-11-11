@@ -95,6 +95,17 @@ Only mark a feature **Implemented** when code or content has actually been added
 - Validation: Documentation update committed. Fast loading remains an acceptance target to verify on Windows 10 Enterprise 1809 x64 / FL Studio 20 with cold-cache and warm-cache tests.
 - Follow-up: Implement lightweight preset indexing, asynchronous asset preparation, shared bounded sample cache, preload-ahead and safe voice/resource handoff; benchmark first playable note and preset-switch latency.
 
+## 2026-11-11 — Source-tree audit and release integration blockers
+
+- Date: 2026-11-11
+- Version / area: Repository audit; VST3 build; presets; Pattern Engine; skins; sample-bank runtime
+- Change: Audited the recursive source tree, CMake target, Windows CI workflow, processor/editor, sampler and current release checklists. Confirmed native JUCE 7.0.12 / C++20 VST3 source, SFZ/WAV streaming components, bounded page cache, PatternScheduler dispatch, a 300-definition catalog, and a Windows workflow that downloads license-cleared sample libraries, builds/tests the VST3 and packages Samples + Presets. Recorded the actual gaps: factory preset selection currently applies only four tone values and mode (not sampleProfile/full parameter state); Pattern mode currently uses eight hard-coded rhythm masks rather than the full authored pattern bank; no runtime skin/theme manager or complete switchable-skin folder is present in the audited tree; SamplePool retains snapshots and has explicit 128-snapshot/eight-library-root limits; target-machine CPU/RAM and FL Studio 20 acceptance remain unmeasured.
+- Reason: Avoid treating catalog entries, source files or an old CI artifact as a complete playable release. Establish an evidence-based implementation order before making risky changes to real-time audio and sample lifetimes.
+- Files: `docs/IMPLEMENTATION_AUDIT_2026-11-11_RU.md`; `docs/CHANGELOG.md`
+- Status: Audited / Specified (source inspection only; no new engine/UI code, Windows build, or audio benchmark in this step).
+- Validation: Recursive Git tree and relevant source/build/configuration files inspected. Current PatternScheduler call path confirmed in `PluginProcessor.cpp`. Existing workflow is configured for Windows Release, CTest, pluginval strictness 5 and packaging; no workflow run was triggered by this audit-only commit.
+- Follow-up: Implement full preset-to-bank integration, replace placeholder pattern masks with versioned original pattern data, implement the skin manager, then run Windows CI and manual FL Studio 20 acceptance. Preserve current streaming safety limits until stress tests justify changing them.
+
 ---
 
 ## Rules for future entries
