@@ -193,16 +193,26 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     melodyFilterBox.addItem("MELODY", 2);
     styleFilterBox.addItem("OFF", 1);
     styleFilterBox.addItem("STYLE", 2);
-    juce::StringArray melodyValues;
-    for (const auto& item : factoryPresets)
-        if (item.soundCharacter.isNotEmpty() && !melodyValues.contains(item.soundCharacter))
-            melodyValues.add(item.soundCharacter);
+    // MELODY describes tone colour / guitar articulation, not playing pattern.
+    // The expanded taxonomy is inspired by the full punk-group reference catalogue.
+    const juce::StringArray melodyValues {
+        "Clean", "Bright Clean", "Chorus Clean", "Tremolo Clean", "Warm Clean",
+        "Acoustic Steel", "Nylon Acoustic", "Hybrid Acoustic / Electric",
+        "Muted", "Palm Muted", "Flageolet / Harmonics",
+        "Crunch", "Classic Drive", "Lead Drive", "High-Gain Distortion",
+        "Saturated Punk", "Wide Open", "Ambient / Delay", "Bright Pop-Punk", "Dark / Warm"
+    };
     for (int i = 0; i < melodyValues.size(); ++i)
         melodyFilterBox.addItem(melodyValues[i], i + 3);
 
-    // STYLE is a playing-technique taxonomy, not a dump of 300 individual groove names.
+    // STYLE describes the physical playing technique and rhythmic feel.
     const juce::StringArray styleValues {
-        "Lead Guitar", "Solo Guitar", "Palm Mute", "Open Chords", "Rhythm Guitar", "Arpeggio", "Ska Upstrokes"
+        "Lead Guitar", "Solo Guitar", "Octave Hooks", "Melodic Runs", "Alternate Picking",
+        "Tight Downstrokes", "Down-Up Strumming", "Palm-Muted Eighths", "Palm-Mute Gallop",
+        "Open Power Chords", "Open Chord Strums", "Muted Verse / Open Chorus",
+        "Stop-Start Accents", "Syncopated Riffs", "Straight Eighths", "Half-Time Groove",
+        "Arpeggio", "Ambient Arpeggio", "Ska Upstrokes", "Acoustic Strumming",
+        "Clean Chord Chops", "Sustained Lead Notes"
     };
     for (int i = 0; i < styleValues.size(); ++i)
         styleFilterBox.addItem(styleValues[i], i + 3);
@@ -258,30 +268,104 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             if (groupFilter.isNotEmpty() && groupFilter != "OFF" && groupFilter != "PUNK GROUP"
                 && !item.category.equalsIgnoreCase(groupFilter)) continue;
             const auto melodyFilter = melodyFilterBox.getText();
-            if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "MELODY"
-                && !item.soundCharacter.containsIgnoreCase(melodyFilter)) continue;
+            const auto melodyText = (item.soundCharacter + " " + item.tonalTarget + " "
+                                     + item.sampleProfile + " " + item.artistReference + " "
+                                     + item.styleProfileId + " " + item.tags).toLowerCase();
+            const auto containsAny = [](const juce::String& text, std::initializer_list<const char*> terms) {
+                for (const auto* term : terms)
+                    if (text.containsIgnoreCase(term)) return true;
+                return false;
+            };
+            bool matchesMelody = true;
+            if (melodyFilter == "Clean")
+                matchesMelody = containsAny(melodyText, {"clean"});
+            else if (melodyFilter == "Bright Clean")
+                matchesMelody = containsAny(melodyText, {"bright"}) && containsAny(melodyText, {"clean", "polished", "glassy"});
+            else if (melodyFilter == "Chorus Clean")
+                matchesMelody = containsAny(melodyText, {"chorus", "wide", "layered"}) && containsAny(melodyText, {"clean", "open", "polished"});
+            else if (melodyFilter == "Tremolo Clean")
+                matchesMelody = containsAny(melodyText, {"tremolo", "pulsing", "shimmer"});
+            else if (melodyFilter == "Warm Clean")
+                matchesMelody = containsAny(melodyText, {"warm", "round", "soft"}) && containsAny(melodyText, {"clean", "acoustic", "polished"});
+            else if (melodyFilter == "Acoustic Steel")
+                matchesMelody = containsAny(melodyText, {"acoustic", "steel"});
+            else if (melodyFilter == "Nylon Acoustic")
+                matchesMelody = containsAny(melodyText, {"nylon"});
+            else if (melodyFilter == "Hybrid Acoustic / Electric")
+                matchesMelody = containsAny(melodyText, {"hybrid", "acoustic/electric", "acoustic-electric"});
+            else if (melodyFilter == "Muted")
+                matchesMelody = containsAny(melodyText, {"muted", "palm mute", "chug"});
+            else if (melodyFilter == "Palm Muted")
+                matchesMelody = containsAny(melodyText, {"palm", "muted", "chug"});
+            else if (melodyFilter == "Flageolet / Harmonics")
+                matchesMelody = containsAny(melodyText, {"flageolet", "harmonic", "natural overtone"});
+            else if (melodyFilter == "Crunch")
+                matchesMelody = containsAny(melodyText, {"crunch", "gritty", "skate-punk"});
+            else if (melodyFilter == "Classic Drive")
+                matchesMelody = containsAny(melodyText, {"drive", "driven", "saturated", "distortion"});
+            else if (melodyFilter == "Lead Drive")
+                matchesMelody = containsAny(melodyText, {"lead", "solo", "octave", "melodic run"});
+            else if (melodyFilter == "High-Gain Distortion")
+                matchesMelody = containsAny(melodyText, {"high-gain", "aggressive", "heavy", "distortion", "hard-hitting"});
+            else if (melodyFilter == "Saturated Punk")
+                matchesMelody = containsAny(melodyText, {"saturated", "dense", "aggressive", "punk"});
+            else if (melodyFilter == "Wide Open")
+                matchesMelody = containsAny(melodyText, {"wide", "open", "ringing", "sustained"});
+            else if (melodyFilter == "Ambient / Delay")
+                matchesMelody = containsAny(melodyText, {"ambient", "dotted-eighth", "spacious", "delay", "atmospheric"});
+            else if (melodyFilter == "Bright Pop-Punk")
+                matchesMelody = containsAny(melodyText, {"bright", "pop-punk", "polished"});
+            else if (melodyFilter == "Dark / Warm")
+                matchesMelody = containsAny(melodyText, {"dark", "warm", "thick", "low-mid"});
+            else if (melodyFilter.isNotEmpty() && melodyFilter != "OFF" && melodyFilter != "MELODY")
+                matchesMelody = melodyText.containsIgnoreCase(melodyFilter);
+            if (!matchesMelody) continue;
+
             const auto styleFilter = styleFilterBox.getText();
             const auto styleText = (item.name + " " + item.groove + " " + item.articulation + " "
-                                    + item.tonalTarget + " " + item.styleProfileId).toLowerCase();
+                                    + item.tonalTarget + " " + item.styleProfileId + " "
+                                    + item.referenceArtist + " " + item.referenceTracks + " " + item.tags).toLowerCase();
             bool matchesStyle = true;
-            if (styleFilter == "Lead Guitar")
-                matchesStyle = styleText.contains("lead") || styleText.contains("octave") || styleText.contains("hook");
-            else if (styleFilter == "Solo Guitar")
-                matchesStyle = styleText.contains("solo") || styleText.contains("melodic run")
-                            || styleText.contains("alternate-picked") || styleText.contains("flageolet");
-            else if (styleFilter == "Palm Mute")
-                matchesStyle = styleText.contains("palm") || styleText.contains("muted") || styleText.contains("chug");
-            else if (styleFilter == "Open Chords")
-                matchesStyle = styleText.contains("open chord") || styleText.contains("open chorus")
-                            || styleText.contains("acoustic-strum");
-            else if (styleFilter == "Rhythm Guitar")
-                matchesStyle = styleText.contains("rhythm") || styleText.contains("downstroke")
-                            || styleText.contains("eighth") || styleText.contains("strum");
-            else if (styleFilter == "Arpeggio")
-                matchesStyle = styleText.contains("arpeggio") || styleText.contains("picked melodic")
-                            || styleText.contains("picked arpeggios");
+            if (styleFilter == "Lead Guitar" || styleFilter == "Solo Guitar")
+                matchesStyle = containsAny(styleText, {"lead", "solo", "octave", "hook", "melodic run", "alternate-picked"});
+            else if (styleFilter == "Octave Hooks")
+                matchesStyle = containsAny(styleText, {"octave", "hook"});
+            else if (styleFilter == "Melodic Runs")
+                matchesStyle = containsAny(styleText, {"melodic run", "lead-picked", "alternate picking", "flageolet"});
+            else if (styleFilter == "Alternate Picking")
+                matchesStyle = containsAny(styleText, {"alternate", "picked melodic", "fast picking"});
+            else if (styleFilter == "Tight Downstrokes")
+                matchesStyle = containsAny(styleText, {"downstroke", "continuous downstrokes", "straight eighth", "tight power"});
+            else if (styleFilter == "Down-Up Strumming")
+                matchesStyle = containsAny(styleText, {"down-up", "down up", "strum", "upstroke/downstroke"});
+            else if (styleFilter == "Palm-Muted Eighths")
+                matchesStyle = containsAny(styleText, {"palm-muted", "palm muted", "palm-mute", "tight palm", "muted eighth"});
+            else if (styleFilter == "Palm-Mute Gallop")
+                matchesStyle = containsAny(styleText, {"gallop", "palm-muted 16ths", "palm-muted gallop"});
+            else if (styleFilter == "Open Power Chords")
+                matchesStyle = containsAny(styleText, {"open power", "power-chord chorus", "open electric chorus", "wide open"});
+            else if (styleFilter == "Open Chord Strums")
+                matchesStyle = containsAny(styleText, {"open chord", "open-chord", "acoustic-strum", "open chord strum"});
+            else if (styleFilter == "Muted Verse / Open Chorus")
+                matchesStyle = containsAny(styleText, {"muted verse", "palm-muted verse", "open chorus", "wide chorus"});
+            else if (styleFilter == "Stop-Start Accents")
+                matchesStyle = containsAny(styleText, {"stop-start", "stop start", "short chord chops", "punctuated"});
+            else if (styleFilter == "Syncopated Riffs")
+                matchesStyle = containsAny(styleText, {"syncopated", "offbeat", "accent pattern"});
+            else if (styleFilter == "Straight Eighths")
+                matchesStyle = containsAny(styleText, {"eighth", "straight", "continuous"});
+            else if (styleFilter == "Half-Time Groove")
+                matchesStyle = containsAny(styleText, {"half-time", "half time", "mid-tempo"});
+            else if (styleFilter == "Arpeggio" || styleFilter == "Ambient Arpeggio")
+                matchesStyle = containsAny(styleText, {"arpeggio", "picked melodic", "picked arpeggios", "ambient"});
             else if (styleFilter == "Ska Upstrokes")
-                matchesStyle = styleText.contains("ska") || styleText.contains("upstroke");
+                matchesStyle = containsAny(styleText, {"ska", "upstroke", "offbeat"});
+            else if (styleFilter == "Acoustic Strumming")
+                matchesStyle = containsAny(styleText, {"acoustic", "strum", "down-up"});
+            else if (styleFilter == "Clean Chord Chops")
+                matchesStyle = containsAny(styleText, {"clean chord", "short clean", "chord chops", "chops"});
+            else if (styleFilter == "Sustained Lead Notes")
+                matchesStyle = containsAny(styleText, {"sustain", "sustained", "lead", "ambient", "ringing"});
             else if (styleFilter.isNotEmpty() && styleFilter != "OFF" && styleFilter != "STYLE")
                 matchesStyle = styleText.containsIgnoreCase(styleFilter);
             if (!matchesStyle) continue;
