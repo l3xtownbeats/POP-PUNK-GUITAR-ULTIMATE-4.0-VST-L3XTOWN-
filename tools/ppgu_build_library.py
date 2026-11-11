@@ -10,6 +10,7 @@ key. No Looperman or Splice material is redistributed by this tool.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import os
