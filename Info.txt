@@ -245,3 +245,29 @@ Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sam
 **Scope boundary:** these commits are on `main`. The repository inventory contains 41 branches; the other 40 branch heads have not yet received this docs-only refresh. No code from those branches was merged, rebased or overwritten. Repository-level Description/Topics metadata also remains unchanged because the connected GitHub actions do not expose repository-metadata writes. Suggested public description: “POP PUNK GUITAR ULTIMATE — Windows x64 VST3 pop-punk guitar instrument built with JUCE/C++20. SFZ/WAV sample engine, MIDI Melody & Pattern workflows, 300 preset definitions. Active development; current build and release gates tracked in Info.txt.”
 
 README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b22330c7` to state explicitly that run #827 validates main only, not the other 40 branches.
+
+## 2026-11-12 — REV 13.0 authority and Windows CI run #827 result
+
+**Статус:** REV 13.0 ACCEPTED AS CURRENT SPECIFICATION; CI PACKAGE GATE FAILED; NO COMPLETE ZIP.
+
+Пользователь утвердил **MASTER PROMPT — PPGU REV 13.0 FINAL**, заменяющий все прежние ревизии вплоть до REV 12.1. REV 13.0 является единственной актуальной спецификацией; INFO остаётся единственным источником фактических статусов. Приоритеты и запрет завышать статус сохранены.
+
+Проверен фактический результат GitHub Actions run #827 / ID `43113647167`, source commit `0ef0ebe934350d57779328a5e0979f1134ae85f2`:
+- Windows x64 Release configure: PASS.
+- Build VST3 + test executables: PASS.
+- CTest: PASS, 12/12.
+- pluginval strictness 5: PASS.
+- Packaging: FAIL. Workflow жёстко ожидал 50 manifests, но обнаружил 51 (`Skin_01`…`Skin_51`). Ошибка воспроизводима в шаге упаковки: `Expected 50 skin manifests in SKINS; found 51.`
+- Artifact upload был пропущен; канонический COMPLETE ZIP не создан.
+- FL Studio 20 host acceptance, runtime skin switching, CPU/RAM profiling и playable listening count 300 presets остаются НЕ ПОДТВЕРЖДЕНЫ.
+
+Текущий main HEAD на момент аудита: `760ab651732d530a7d6a50cf9bbdd205fdf2db89`. Run #827 относится к source commit `0ef0ebe...`, а не к текущему docs-only HEAD; CI результат не переносится автоматически на последующие commits.
+
+Подтверждённые факты для REV 13.0:
+- `SKIN/theme_manifest.json` сообщает `totalSkins: 50` и содержит 50 записей.
+- В дереве есть `SKIN/Skin_51/theme.json` с `id: skin-51`, `index: 51`, но он не зарегистрирован; JSON schema ограничивает index значением 50.
+- `.github/workflows/vst3-build.yml` содержит второй независимый hard-code: PowerShell packaging gate требует ровно 50 manifests и копирует исходный каталог в `SKINS/`, а не готовый runtime-каталог `Skins/` рядом с VST3 bundle. Это противоречит REV 13.0 R2/R6/R13/R14.
+- Skin_51 manifest сообщает assets как pending; наличие runtime artwork и полной runtime-интеграции PluginEditor/ThemeManager не подтверждено. Поэтому простое переименование `SKINS` в `Skins` не считается реализацией runtime skin engine.
+- Последний успешный build/CTest/pluginval run не закрывает release gate, поскольку packaging не завершился и artifact не опубликован.
+
+**Следующий порядок работ:** (1) согласовать и реализовать schema registry для всех реально имеющихся skin manifests, убрать magic count из Python/PowerShell gates; (2) проверить и реализовать R14 runtime layout `Skins/` рядом с VST3 bundle без выдачи исходных manifests за готовые темы; (3) завершить runtime ThemeManager/PluginEditor integration и тесты; (4) проверить soundbank lifecycle/stress и прочие открытые INFO risks; (5) только затем повторить полный Windows Release, CTest, pluginval и packaging. JUCE 7.0.12/CMake 3.22 остаются фактическими pins в исходниках; REV 13.0 требует JUCE 8/CMake >=3.24 — обновление выполнять отдельным контролируемым этапом с полной регрессией.
