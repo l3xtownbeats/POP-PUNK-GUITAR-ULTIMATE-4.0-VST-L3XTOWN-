@@ -1703,3 +1703,15 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - ThemeManager пока не подключён к PluginEditor; SKIN button/gallery, live preview/apply/cancel, theme persistence, packaged resource discovery, graphics assets и FL Studio 20 runtime acceptance остаются открытыми.
 - Состояния: ThemeManager source authored; runtime contract test authored / awaiting execution; RUNTIME APPLIED 0/50; USER-CONFIRMED 0/50; ACCEPTED 0/50; CI AWAITING CI.
 - Следующий шаг: получить компиляцию и CTest на Windows. После зелёного gate — интегрировать palette в Editor, затем реализовать полноценную SKIN Gallery и безопасное сохранение skin ID.
+
+
+================ 11 НОЯБРЯ 2026 — MASTER PROMPT REV 34 / ADAPTIVE CPU-RAM BUDGETS ================
+
+- Обновлён `Promt.txt`: раздел 3 заменён адаптивной моделью производительности для Intel Core i3, 2 физических ядра / 2 потока, 48 kHz / 64 samples.
+- Зафиксированы четыре измеряемых состояния: IDLE (цель <=1% средней общей CPU-мощности после 30 секунд стабилизации), LIGHT PROCESSING (<=6–7%), NORMAL PLAYBACK (ориентир около 10%), HIGH LOAD/STRESS (нагрузка зависит от числа голосов, слоёв, FX, sample rate, буфера, Preview и скорости диска; абсолютный лимит без указания нагрузки не обещается).
+- RAM-пределы самого плагина: IDLE <100 MB; ACTIVE <500 MB. Память FL Studio/хоста не приписывается плагину; отдельно измерять Private Bytes, Working Set и plugin-owned sample/page-cache buffers.
+- Уточнены контрольные сценарии, average/peak/P95, baseline delta относительно пустого проекта, 32/64-voice stress, bounded page cache, общий ресурсный пул для Preview и SAMPLEBANK.
+- ECO/QUALITY профили уточнены. Для i3 2C/2T разрешён максимум один активный background worker; нет busy-wait, потоков на каждый voice/effect и блокировки audio thread.
+- Пересмотрен раздел 4.3: audio/message/background — роли потоков, а не требование постоянно держать несколько загруженных worker threads.
+- Коммит `Promt.txt`: e6e0f911cf3201a519cd79780d698088c65d3fff`.
+- Это обновление спецификации. Цели CPU/RAM не считаются достигнутыми без измерений на целевом i3 и фиксированного сценария нагрузки.
