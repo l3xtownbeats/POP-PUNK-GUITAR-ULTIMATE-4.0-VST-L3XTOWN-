@@ -1,237 +1,198 @@
 <div align="center">
 
-<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN" width="100%">
+<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN product cover and interface concept" width="100%">
 
 # POP PUNK GUITAR ULTIMATE
-### BY L3XTOWN
-**THE POP-PUNK GUITAR INSTRUMENT FOR RIFFS THAT HIT HARD.**
+### BY L3XTOWN · WINDOWS x64 · VST3 INSTRUMENT
+
+**THE POP-PUNK GUITAR WORKSTATION FOR RIFFS THAT HIT HARD.**
+
+[⬇ DOWNLOAD PREVIOUS VERIFIED BUILD](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip) · [LATEST BUILD STATUS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448) · [PRESETS](presets/) · [DOCUMENTATION](docs/)
+
+![Windows](https://img.shields.io/badge/Windows-x64-24292f?style=for-the-badge&logo=windows)
+![VST3](https://img.shields.io/badge/Plugin-VST3-8e2462?style=for-the-badge)
+![JUCE](https://img.shields.io/badge/Framework-JUCE-6b315a?style=for-the-badge)
+![C++20](https://img.shields.io/badge/Language-C%2B%2B20-24292f?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Development%20Preview-orange?style=for-the-badge)
 
 *PLAY. CREATE. ROCK.*
 
-
-
 </div>
 
 ---
 
-## THE SOUND OF POP-PUNK. BUILT FOR YOUR NEXT TRACK.
+## About the instrument
 
-**POP PUNK GUITAR ULTIMATE** is an evolving Windows VST3 guitar instrument shaped around the sound and energy of pop-punk, skate-punk and melodic alternative rock.
+**POP PUNK GUITAR ULTIMATE** is an actively developed sample-based electric-guitar VST3 instrument focused on pop-punk, skate-punk and melodic alternative rock. It is being built for fast songwriting workflows: punchy power chords, tight palm-muted verses, energetic eighth-note rhythms, octave hooks, melodic leads and open choruses.
 
-From tight palm-muted verses to explosive open choruses, from punchy power chords to bright melodic hooks — the project brings the essential guitar vocabulary of the genre into one focused instrument.
+The target workflow is immediate MIDI playability in **FL Studio 20** and other Windows VST3 hosts. The project combines a JUCE/C++20 instrument, an SFZ/WAV sampler, a growing factory-preset catalogue and a dark charcoal interface with magenta accents.
 
-Designed with **FL Studio 20** and other VST3 hosts in mind, the instrument combines a sample-based engine, MIDI performance controls and a growing preset system in a streamlined dark interface.
+> **Development preview — not a finished commercial release.** The repository contains working engine components and buildable project source, but some catalogue entries and performance systems are not yet fully integrated. This page separates implemented components from planned or not-yet-accepted features.
 
-<div align="center">
+## Downloads
 
-| MELODY | PATTERN | TONE |
-|:---:|:---:|:---:|
-| Chromatic guitar-note workflow | Chord-driven rhythm workflow | Clean, crunch and driven directions |
-| Riffs, hooks and lead lines | Strums, grooves and rhythmic parts | Electric and acoustic sound targets |
-
-</div>
-
-> **Development preview:** this is an actively developed engineering build, not a finished commercial release. The download is real, but some performance systems and preset definitions are still being integrated and acceptance-tested. This page distinguishes implemented code from planned or catalogued features.
-
-
+### Previous verified Windows x64 VST3 package
 
 <div align="center">
 
+### [⬇ DOWNLOAD VST3 + GUITAR SAMPLES + PRESET FILES](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+
+**ZIP · approximately 1.55 GiB · GitHub Actions artifact**
+
+[Open the successful build and test run](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
 
 </div>
 
-### DOWNLOAD — WINDOWS x64 VST3
+This is the previous successful package from an earlier development commit. It contains the VST3 instrument, the redistributable sample collection and preset files. It uses the earlier package layout; it is **not** the new VST3 / SOUNDBANK / PRESETS / SKINS / Resources / Assets layout currently being prepared.
 
-<div align="center">
+**Current packaging run:** [Run #826 — inspect live CI status](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448). The new complete ZIP is not published until this run passes build, CTest, pluginval and packaging checks. Do not treat the previous artifact as the new package.
 
-## [⬇ DOWNLOAD VST3 + FULL GUITAR SAMPLE LIBRARY + FACTORY PRESETS](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+### Presets and examples
 
-**Complete package · approximately 1.55 GiB · Windows x64**
+- [Factory catalogue — 300 preset definitions (JSON)](presets/factory_bank_300.json)
+- [Additional factory bank data (JSON)](presets/factory_preset_bank_v1.json)
+- [Melody portable preset example (.ppgm)](presets/examples/Example-Melody.ppgm)
+- [Pattern portable preset example (.ppgp)](presets/examples/Example-Pattern.ppgp)
+- [Preset readiness and integration status](docs/PRESET_BANK_4_0_READINESS_RU.md)
 
-</div>
+**Important:** the 300 entries are authored sound/performance definitions (150 Melody + 150 Pattern). They are not a claim that 300 fully playable presets are already integrated into the current plugin UI. Pattern playback still requires full sampler/runtime and performance-asset acceptance.
 
-The latest verified package is a single ZIP containing the VST3 plugin, the redistributable guitar WAV sample bank and the preset files. Keep the extracted `Samples` folder beside the plugin package as described in `INSTALL_AND_CONTENTS.txt`.
+### SoundBank and sample sources
 
-**Separate preset downloads:**
-- [Factory preset catalogue — 300 definitions (JSON)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/factory_bank_300.json?download=1)
-- [Additional factory preset bank data (JSON)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/factory_preset_bank_v1.json?download=1)
-- [Melody portable preset example (.ppgm)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/examples/Example-Melody.ppgm?download=1)
-- [Pattern portable preset example (.ppgp)](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/raw/refs/heads/main/presets/examples/Example-Pattern.ppgp?download=1)
+The previous complete ZIP contains the sample collection. A separate standalone SoundBank archive is not currently published.
 
-**Sample library:** currently included in the complete ZIP above; a separate standalone sample-library archive has not yet been published. The 300-entry catalogue is a set of preset definitions, not a claim that all 300 are fully playable in the current plugin build.
+- [Sample sourcing and redistribution policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
+- [Meta Open Sound CC0 clearance notes](licenses/META_OPEN_SOUND_CLEARANCE.md)
+- [SFZ/WAV streaming design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
+- [SoundBank engine audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
 
-**Download availability:** the ZIP is a GitHub Actions artifact, not a permanent Release asset. GitHub may require sign-in/repository access. This artifact is scheduled to expire on **8 February 2027**. A permanent release package will be published after the release build is frozen and validated.
+Only sample material whose exact license permits redistribution inside a third-party instrument may be bundled. Commercial Session Guitarist/Kontakt samples, stems and proprietary recordings are not included.
 
-### Installation
+### Skins, resources and visual assets
 
-1. Download and extract the complete ZIP.
-2. Copy the `.vst3` bundle into `C:\\Program Files\\Common Files\\VST3\\`.
-3. Keep the extracted `Samples` folder available to the plugin.
-4. Open or rescan the plugin in your VST3 host.
+- [Skin specifications and asset requirements](SKIN/README.md)
+- [Skin asset specifications](SKIN/ASSET_SPECIFICATIONS_RU.md)
+- [Skin control inventory](SKIN/CONTROL_INVENTORY_MATRIX_RU.md)
+- [Theme schema](SKIN/theme.schema.json)
+- [Theme manifest](SKIN/theme_manifest.json)
+- [Product cover artwork (SVG)](assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg)
+- [Interface artwork / source image](Cover%20Interface.jpg)
 
-[Open the verified build workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125).
+The repository contains skin/theme specifications and 50 theme folders/manifests. Their presence is not proof that runtime skin switching is finished. The new complete build workflow is intended to package these into SKINS/, with supporting files in Resources/ and Assets/.
 
-## INSTRUMENT ARCHITECTURE
+## Instrument architecture
 
-### Two ways to play
+### MELODY — chromatic guitar instrument
 
-**01 — MELODY**
+- MIDI keyboard / piano-roll note workflow.
+- Each MIDI note is intended to trigger its mapped guitar pitch.
+- Designed for riffs, octave lines, hooks, picked parts and lead melodies.
+- SFZ region selection supports key, velocity and MIDI-channel mapping.
 
-A direct chromatic instrument workflow: each MIDI key triggers its corresponding guitar note. Built for riffs, octave lines, hooks, picked parts and expressive leads.
+### PATTERN — chord-driven rhythm workflow
 
-**02 — PATTERN**
+- Designed for synchronized strumming and pop-punk rhythm parts.
+- Target vocabulary includes downstrokes, alternate picking, palm-muted eighths, open chorus strums, ska offbeats, stop-start riffs, arpeggios and acoustic strumming.
+- Scheduler components and tests exist; full real-sampler pattern playback and host acceptance remain in progress.
 
-A chord-oriented rhythm workflow intended for synchronized strumming and pop-punk performance patterns. The scheduler is connected to the processing path, but full real-sampler pattern playback and complete runtime acceptance are still in progress.
+## Sound engine and controls
 
-### Sound design and controls
-
-The current parameter model includes:
-
-- Master output and polyphony / voice count
-- Velocity response, dynamics and palm-mute threshold
-- Guitar tuning, pan and output level
-- Pick / finger style selection
-- Articulation-related controls: vibrato, slide, legato, hammer-on / pull-off
-- Scale root and scale mode
-- Pattern slot, pattern length, sync mode and swing base
-
-The presence of a parameter does not mean every associated articulation or performance feature is complete.
-
-## SOUND ENGINE
-
-| System | Current state |
+| Component | Current implementation / status |
 |---|---|
-| SFZ engine | Parser with global / master / group / region inheritance |
-| WAV playback | Key, velocity and MIDI-channel zone selection |
-| Sample mapping | Root key, tuning, volume, pan, release and loop metadata |
-| Voice engine | Bounded polyphony, up to 64 voices |
-| Loop modes | Continuous, sustain, ping-pong and one-shot |
-| Loading | SFZ loading on a worker thread; sample loading kept off the audio callback |
-| DSP | Basic distortion, chorus, stereo delay and JUCE reverb stages |
-| UI | Resizable dark charcoal interface with magenta accents |
+| Plugin format | VST3 instrument |
+| Audio engine | JUCE / C++20 |
+| Sampler | SFZ parser and WAV playback path |
+| Mapping | Key, velocity, channel, root key, tuning, volume, pan and loop metadata |
+| Voice management | Bounded voice engine, up to 64 voice slots |
+| Streaming | Background WAV page streaming and bounded page-cache components |
+| Loop modes | Continuous, sustain, ping-pong and one-shot metadata/path |
+| DSP stages | Basic distortion, chorus, stereo delay and JUCE reverb components |
+| UI direction | Resizable dark charcoal interface with magenta accents |
+| Pattern engine | Scheduler components present; complete runtime integration not accepted |
 
-The project is designed for efficient startup and controlled resource use. Final CPU/RAM performance claims are withheld until repeatable profiling on the target hardware has been completed.
+The parameter model includes master output, voices/polyphony, velocity response, palm-mute threshold, tuning, pan, pick/finger selection, articulation-related controls, scale root/mode and pattern timing controls. A parameter or catalogue entry is not automatically proof that every related performance behavior is complete.
 
-**Large-library memory target:** the sound library may occupy up to 7 GB on disk; this is not a target for resident RAM usage. SFZ/WAV loading now indexes file metadata instead of decoding the whole bank, and production SamplerEngine voices read audio through the background WAV page streamer. The default cache is 256 pages × 4096 frames × stereo float samples (about 8 MiB per library root), with up to eight roots per sampler instance (about 64 MiB of configured page-cache storage). The underlying page-cache allocator independently rejects any single cache above its hard 256 MiB limit. These figures describe page-cache allocation only, not total plugin memory. Streaming integration and multi-page playback regression tests are in CI; 7 GB library acceptance and final RAM/CPU claims remain gated on successful stress profiling.
+### Tone and performance targets
 
-## FACTORY SOUND DIRECTION
+**Tone palette:** Clean · Crunch · Drive · Palm Mute · Open Chords · Acoustic · Lead Drive · Muted Chugs.
 
-### 300 authored preset definitions
+**Effects in the current DSP codebase:** Distortion · Chorus · Stereo Delay · Reverb. Flanger and expanded amp/cab processing remain targets unless separately confirmed in the current build.
 
-The repository includes a structured catalogue of **300 preset definitions**:
+**Style references:** Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, The All-American Rejects, MGK, Avril Lavigne, Green Day, Fall Out Boy, Yellowcard, My Chemical Romance, The Offspring, Sugarcult and All Time Low.
 
-- **150 Melody**
-- **150 Pattern**
-- **21 artist-inspired style profiles**
+Artist and product names are used as stylistic references only. This is an independent project and is not affiliated with or endorsed by any artist, label or third-party instrument maker.
 
-The catalogue explores the sound vocabulary associated with Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, The All-American Rejects, MGK, Avril Lavigne, Green Day, Fall Out Boy, Yellowcard, My Chemical Romance, Less Than Jake, Fenix TX, Midtown, Bowling for Soup, The Offspring, Sugarcult and All Time Low.
-
-### Tone palette
-
-Clean · Crunch · Drive · Palm Mute · Open Chords · Acoustic · Lead Drive · Muted Chugs.
-
-### Performance vocabulary
-
-Straight eighth-note downstrokes · alternate picking · fast skate-punk drive · palm-muted verses · open chorus strums · ska upstrokes · syncopated stop-start riffs · octave hooks · arpeggios · acoustic strumming · dynamic builds.
-
-These are authored sound and performance targets. The Pattern catalogue still requires completed runtime integration and licensed performance recordings before it can be described as a fully playable factory bank.
-
-Artist and track names are used only as stylistic reference points. This independent project is not affiliated with or endorsed by any artist, label or third-party instrument maker.
-
-## SAMPLE BANK & LICENSING
-
-The sampler is designed for compatible SFZ/WAV libraries. The build pipeline references redistributable sources including:
-
-- Meta Open Sound Steel Guitar and Nylon Guitar — CC0 source release.
-- FreePats FSBS electric guitar clean and distorted sets — CC0 source repositories.
-
-Sample redistribution is subject to source and license verification. Commercial Session Guitarist libraries, protected recordings, stems and proprietary content are not included. See the [sample licensing policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md) and [Meta clearance notes](licenses/META_OPEN_SOUND_CLEARANCE.md).
-
-## DEVELOPMENT STATUS
-
-| Milestone | Current status |
-|---|---|
-| **M1 — VST3 foundation** | Windows Release build and parameter audit pass. User previously confirmed the plugin opens in FL Studio 20; full state, automation and panic acceptance remains. |
-| **M2 — SFZ/WAV sampler** | SFZ/WAV regions now route through bounded background page streaming in SamplerEngine. Multi-page playback regression coverage is added; CI, long playback, 100-hit no-click, cache stress and full-library acceptance remain. |
-| **M3 — Pattern transport/runtime** | Scheduler unit tests pass. Full connection to real sampler playback and complete pattern runtime acceptance remain in progress. **NOT ACCEPTED.** |
-| **M4 — AutoChords / FingeringGenerator** | Not started for release; gated on M1–M3 acceptance. |
-
-### Latest verified CI build
-
-The package was produced by a successful Windows x64 VST3 build and CTest workflow: [VIEW VERIFIED BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767).
-
-This confirms compilation and automated workflow tests for that build. It does not replace manual host validation or milestone acceptance.
-
-## TECHNICAL SPECIFICATION
+## Technical specifications
 
 | Specification | Detail |
 |---|---|
-| Platform | Windows x64 |
+| Platform | Windows 10/11 x64 |
 | Plugin format | VST3 instrument |
+| Intended DAW | FL Studio 20 |
 | Framework | JUCE 7.0.12 |
 | Language | C++20 |
 | Toolchain | Visual Studio 2022 / MSVC v143 |
-| Intended DAW | FL Studio 20 |
 | Audio | Stereo output |
-| MIDI | Note, velocity and channel input |
-| Sampler voice cap | 64 |
-| Sample format | WAV via SFZ mapping |
-| Interface | Resizable dark charcoal / magenta |
+| Input | MIDI notes, velocity and channel |
+| Sampler format | WAV audio mapped by SFZ |
+| Maximum sampler voices | 64 |
+| UI | Resizable dark charcoal / magenta |
+| Build type | Windows x64 Release |
 
-## ROADMAP
+CPU/RAM performance targets, full 7 GB library stress acceptance and final low-latency claims are withheld until repeatable profiling is complete. The configured streaming page-cache figures are engineering limits, not a guarantee of total plugin memory usage.
 
-1. Finish M1 host-side state recall, MIDI, automation and panic acceptance.
-2. Complete M2 sampler stress, velocity / round-robin mapping, click-free voice stealing and bounded streaming cache.
-3. Complete M3 scheduler-to-sampler runtime, transport boundaries, stop/reset and pattern-slot validation.
-4. Complete the licensed guitar recording and sample-map plan.
-5. Develop the tone and articulation pipeline, then proceed to AutoChords / FingeringGenerator in milestone order.
-6. Integrate and validate the factory preset bank, sample browser and preview workflow.
-7. Run loudness-matched listening comparisons and CPU/RAM profiling on target hardware.
+## Installation
 
-## BUILD FROM SOURCE
+1. Download and extract the complete ZIP.
+2. Copy the .vst3 bundle into C:\Program Files\Common Files\VST3\.
+3. Keep the extracted sample folder available to the plugin; do not move or delete it after installation.
+4. Open FL Studio 20 or another VST3 host and run a plugin rescan.
+5. Load the instrument and use MIDI input / Piano Roll to audition notes.
 
-```powershell
-cmake -S . -B build -G "Visual Studio 17 2022" -A x64
-cmake --build build --config Release --parallel 2
-ctest --test-dir build -C Release --output-on-failure
-```
+The current previous-build ZIP includes INSTALL_AND_CONTENTS.txt with package-specific notes. The new folder layout will be documented in the new artifact when the current packaging workflow passes.
 
-## PROJECT & DOCUMENTATION
+## Development and verification
+
+| Milestone | Status |
+|---|---|
+| VST3 foundation / Windows build | Earlier Windows x64 CI build passed; current HEAD is rebuilding |
+| SFZ/WAV sampler | Core playback and streaming components implemented; stress and full-library acceptance remain |
+| Pattern transport/runtime | Scheduler components exist; full runtime playback is not accepted |
+| Factory presets | 300 definitions catalogued; runtime playability not accepted for all entries |
+| Skin/theme system | Specifications and theme manifests exist; runtime switching not accepted |
+| FL Studio 20 current-HEAD acceptance | Not confirmed |
+| CPU/RAM profiling | Not completed for release claims |
+
+**Latest packaging workflow:** [Run #826](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448)  
+**Previous successful Windows build:** [Run #216](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
+
+## Project links
 
 - [Source repository](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-)
-- [Active development branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/migration/full-copy-m3-transport-scheduler-v2)
-- [Windows build verification](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42763253767)
+- [Latest build workflow](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/workflows/vst3-build.yml)
+- [Previous verified package download](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+- [Preset library](presets/)
+- [Skin/theme library](SKIN/)
+- [Product and engineering documentation](docs/)
+- [Single development log — Info.txt](Info.txt)
 - [Full project prompt](Promt.txt)
-- [Master product specification](docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
-- [Bank and library system](docs/BANK_LIBRARY_SYSTEM_RU.md)
-- [Preset bank readiness](docs/PRESET_BANK_4_0_READINESS_RU.md)
-- [Sampler / streaming design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
-- [Sample source and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
-- [Единый журнал разработки и сборок — Info.txt](Info.txt)
 
-## CONTACT & OFFICIAL LINKS
+## Русское описание
 
-<div align="center">
+**POP PUNK GUITAR ULTIMATE** — разрабатываемый VST3-инструмент для гитарных партий в стиле Pop-Punk / Skate-Punk / Alternative Rock. Цель — быстрое создание риффов, power chords, palm-muted куплетов, открытых припевов, мелодических хуков и лид-партий в FL Studio 20.
 
-**L3XTOWN — MUSIC · SOUND · DEVELOPMENT**
+В проекте есть SFZ/WAV sampler, до 64 voice slots, компоненты фонового стриминга сэмплов, DSP-компоненты Distortion/Chorus/Delay/Reverb, каталог из 300 описаний пресетов и спецификации тем оформления. При этом 300 пресетов пока не следует считать полностью playable, а переключение скинов и Pattern runtime ещё не прошли финальную приёмку.
 
-[![Email](https://img.shields.io/badge/EMAIL-l3xtown%40yandex.ru-cb2b83?style=for-the-badge&logo=yandex)](mailto:l3xtown@yandex.ru)
-
-[![Website](https://img.shields.io/badge/WEBSITE-BEATMAKER.TV-171717?style=for-the-badge&logo=googlechrome)](https://beatmaker.tv/user/182573)
-
-[![Telegram](https://img.shields.io/badge/TELEGRAM-%40l3xtown-229ED9?style=for-the-badge&logo=telegram)](https://t.me/l3xtown)
-
-**Business & project enquiries:** [l3xtown@yandex.ru](mailto:l3xtown@yandex.ru)
-
-</div>
+**Скачать предыдущую успешную сборку:** [VST3 + SoundBank + preset files (ZIP)](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip).  
+**Текущая новая сборка и упаковка:** [GitHub Actions run #826](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43017263448) — новый ZIP появится после успешного завершения CI.
 
 ---
 
 <div align="center">
 
-### POP PUNK GUITAR ULTIMATE BY L3XTOWN
+**L3XTOWN AUDIO LAB**
 
-*Built for riffs, hooks, power chords and loud choruses.*
+*RIFFS · HOOKS · POWER CHORDS*
 
 **PLAY. CREATE. ROCK.**
 
