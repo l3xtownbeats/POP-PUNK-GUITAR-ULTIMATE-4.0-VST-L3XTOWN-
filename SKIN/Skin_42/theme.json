@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-42",
+  "index": 42,
+  "name": "Moss Circuit",
+  "description": "Grounded olive-green instrument surfaces with quiet organic contrast",
+  "cluster": "C",
+  "identity": {
+    "material": "moss-green powder-coated metal and canvas",
+    "lighting": "soft filtered woodland studio light",
+    "mood": "organic, steady, understated"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#1D281F",
+      "inset": "#26352A"
+    },
+    "surfaces": {
+      "primary": "#26352A",
+      "secondary": "#324434",
+      "raised": "#455B47",
+      "overlay": "#1D281F"
+    },
+    "borders": {
+      "subtle": "#667B61",
+      "strong": "#69A89A",
+      "focus": "#A5C77C"
+    },
+    "typography": {
+      "primary": "#F3F8EC",
+      "secondary": "#C1CFB6",
+      "disabled": "#85858B",
+      "onAccent": "#1D281F"
+    },
+    "rotary": {
+      "body": "#455B47",
+      "ring": "#69A89A",
+      "track": "#667B61",
+      "value": "#A5C77C",
+      "pointer": "#D3C79B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#667B61",
+      "fill": "#A5C77C",
+      "thumb": "#D3C79B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#A5C77C",
+        "foreground": "#1D281F",
+        "hover": "#D3C79B",
+        "pressed": "#69A89A",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#324434",
+        "foreground": "#F3F8EC",
+        "hover": "#455B47",
+        "pressed": "#69A89A",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#A5C77C",
+      "activeText": "#1D281F",
+      "inactiveBackground": "#324434",
+      "inactiveText": "#C1CFB6",
+      "indicator": "#69A89A"
+    },
+    "comboBoxes": {
+      "background": "#324434",
+      "foreground": "#F3F8EC",
+      "border": "#667B61",
+      "hover": "#455B47",
+      "menuBackground": "#26352A",
+      "selection": "#A5C77C"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#A5C77C",
+      "blackPressed": "#69A89A",
+      "keyBorder": "#667B61",
+      "octaveLabel": "#C1CFB6"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#A5C77C",
+      "high": "#F06A58",
+      "background": "#1D281F"
+    },
+    "icons": {
+      "primary": "#F3F8EC",
+      "secondary": "#C1CFB6",
+      "accent": "#A5C77C",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#324434",
+      "border": "#667B61",
+      "selected": "#A5C77C",
+      "caption": "#F3F8EC"
+    },
+    "windowChrome": {
+      "background": "#1D281F",
+      "title": "#F3F8EC",
+      "border": "#667B61",
+      "close": "#D3C79B"
+    },
+    "hero": {
+      "background": "#1D281F",
+      "accent": "#A5C77C",
+      "secondaryAccent": "#69A89A",
+      "highlight": "#D3C79B"
+    },
+    "accents": {
+      "primary": "#A5C77C",
+      "secondary": "#69A89A",
+      "tertiary": "#D3C79B"
+    },
+    "texture": {
+      "material": "moss-green powder-coated metal and canvas",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft filtered woodland studio light",
+      "glow": "#A5C77C",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#69A89A"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Moss Circuit preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original moss-green powder-coated metal and canvas hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle moss-green powder-coated metal and canvas material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
