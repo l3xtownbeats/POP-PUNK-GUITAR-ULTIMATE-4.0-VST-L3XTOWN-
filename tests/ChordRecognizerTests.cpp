@@ -4,7 +4,10 @@
 using ppgu::music::ChordRecognizer;
 int main(){
  auto check=[](std::vector<int> n,const char* s,const char* q){auto a=ChordRecognizer::analyze(n);assert(a.valid&&!a.ambiguous);assert(a.symbol==s);assert(a.qualityLabel==q);};
- check({60},"C","NOTE");\n auto single=ChordRecognizer::analyze({60}); assert(single.displayText=="C4");\n auto sharp=ChordRecognizer::analyze({61}); assert(sharp.displayText=="C#4");\n auto octaveNote=ChordRecognizer::analyze({72}); assert(octaveNote.displayText=="C5");
+ check({60},"C","NOTE");
+ auto single=ChordRecognizer::analyze({60}); assert(single.displayText=="C4");
+ auto sharp=ChordRecognizer::analyze({61}); assert(sharp.displayText=="C#4");
+ auto octaveNote=ChordRecognizer::analyze({72}); assert(octaveNote.displayText=="C5");
  check({60,64,67},"C","MAJOR");
  check({60,63,67},"Cm","MINOR");
  check({57,60,64},"Am","MINOR");
