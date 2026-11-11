@@ -53,7 +53,12 @@ void SampleStreamingService::stop() noexcept
 {
     running.store(false, std::memory_order_release);
     if (worker.joinable())
+    {
+        // Wake an idle worker. The extra semaphore permit is reserved for this
+        // signal; queued requests are still drained before the thread exits.
+        workAvailable.release();
         worker.join();
+    }
 }
 
 bool SampleStreamingService::requestPage(PageKey key) noexcept
@@ -80,6 +85,7 @@ bool SampleStreamingService::requestPage(PageKey key) noexcept
         return false;
     }
     requestsSubmitted.fetch_add(1, std::memory_order_relaxed);
+    workAvailable.release();
     return true;
 }
 
@@ -138,14 +144,17 @@ void SampleStreamingService::workerLoop() noexcept
     WavPageReader reader;
     std::uint32_t openSampleId = std::numeric_limits<std::uint32_t>::max();
 
-    while (running.load(std::memory_order_acquire) || !requests.empty())
+    for (;;)
     {
+        // No periodic polling: an idle sampler worker blocks here and wakes
+        // only for queued audio pages or shutdown.
+        workAvailable.acquire();
+        if (!running.load(std::memory_order_acquire) && requests.empty())
+            break;
+
         Request request;
         if (!requests.tryPop(request))
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
-        }
 
         requestsProcessed.fetch_add(1, std::memory_order_relaxed);
         const auto key = request.key;
