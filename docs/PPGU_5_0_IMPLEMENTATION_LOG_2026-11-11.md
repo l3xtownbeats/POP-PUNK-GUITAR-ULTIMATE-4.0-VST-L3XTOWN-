@@ -96,3 +96,12 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Audio-to-UI transfer must use a preallocated/lock-free snapshot; chord naming and string formatting stay off the audio thread.
 - Specification commit: `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
 - Status: SPECIFICATION ONLY; source implementation, tests, CI and FL Studio 20 validation pending.
+
+
+## 2026-11-11 — Chord quality / major-minor recognition clarified
+
+- Clarified the live display requirement: accurately identify a single note or the chord symbol plus chord quality, explicitly distinguishing MAJOR and MINOR and supporting common sus, diminished, augmented, power and seventh chords.
+- Recognition must consider pitch classes, candidate roots, inversions/bass note and octave duplicates. Ambiguous or incomplete voicings must not receive guessed labels.
+- The selected preset must not affect recognition. PATTERN + AUTOCHORDS ON displays the effective generated chord.
+- Specification commit: `bbe6759a267a6520d178f612b4ab681fe4eee0e4`.
+- Status: SPECIFICATION ONLY; recognizer, UI and automated tests remain pending.
