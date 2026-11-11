@@ -1237,3 +1237,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Добавлены последние девять манифестов: Moss Circuit, Copper Workshop, Mono Blueprint, Rose Quartz, Solar Bronze, Teal Machine, Concrete Stage, Ultraviolet Club, Platinum Room.
 - Реестр содержит Skin_02–Skin_50 (49 новых идентичностей); Skin_01 Neon Riot остаётся дефолтом. Всего 50 слотов.
 - Все манифесты data-only, имеют 18 token groups и assetSpec. Artwork отсутствует; runtime, matrix, automated validation, Windows CI и FL Studio 20 acceptance не проверялись. CI: AWAITING CI.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / полный каталог и аудит интеграции
+
+- Создан Skin_01/theme.json для Neon Riot; registry содержит 50 уникальных записей Skin_01–Skin_50.
+- Создана CONTROL_INVENTORY_MATRIX_RU.md по полному GUI blueprint: отдельно отмечены APVTS IDs и наличие фактического GUI в main. Матрица специфицирована, но runtime полнота не подтверждена.
+- Прочитан GUI_UX_BLUEPRINT_RU.md из PR #24 branch. PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md не найден в проверенных деревьях main/PR24.
+- PR #24 reviewed: не безопасен для merge as-is. Он добавляет PopupMenu THEMES вместо полноценной SKIN gallery, использует несовместимый embedded Themes manifest, меняет FX labels/min window size и вносит несвязанные изменения PluginProcessor audio path. Аудит сохранён в SKIN/PR24_INTEGRATION_REVIEW_RU.md; merge не выполнялся.
+- Подготовлены индивидуальные asset briefs для всех 50 слотов в ASSET_SPECIFICATIONS_RU.md. Графические файлы отсутствуют.
+- Статусы: SPECIFICATION AUTHORED 50/50; MANIFEST VALIDATED 0/50; RUNTIME APPLIED 0/50; USER-CONFIRMED 0/50; ACCEPTED 0/50. CI: AWAITING CI.
