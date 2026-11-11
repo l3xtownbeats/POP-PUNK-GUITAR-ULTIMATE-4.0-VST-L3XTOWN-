@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-10",
+  "index": 10,
+  "name": "Glass UI",
+  "description": "Layered translucent glass and soft depth",
+  "cluster": "C",
+  "identity": {
+    "material": "smoked-glass",
+    "lighting": "cool",
+    "mood": "Layered translucent glass and soft depth"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#111923",
+      "inset": "#111923"
+    },
+    "surfaces": {
+      "primary": "#111923",
+      "secondary": "#111923",
+      "raised": "#80D9EA",
+      "overlay": "#111923"
+    },
+    "borders": {
+      "subtle": "#D5E7F0",
+      "strong": "#80D9EA",
+      "focus": "#A98BFF"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#111923",
+      "ring": "#D5E7F0",
+      "track": "#49434F",
+      "value": "#80D9EA",
+      "pointer": "#A98BFF",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#80D9EA",
+      "thumb": "#A98BFF",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#80D9EA",
+        "foreground": "#101116",
+        "hover": "#A98BFF",
+        "pressed": "#D5E7F0",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#111923",
+        "foreground": "#F4F0F4",
+        "hover": "#D5E7F0",
+        "pressed": "#80D9EA",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#80D9EA",
+      "activeText": "#101116",
+      "inactiveBackground": "#111923",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#A98BFF"
+    },
+    "comboBoxes": {
+      "background": "#111923",
+      "foreground": "#F4F0F4",
+      "border": "#D5E7F0",
+      "hover": "#80D9EA",
+      "menuBackground": "#111923",
+      "selection": "#80D9EA"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#80D9EA",
+      "blackPressed": "#A98BFF",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#A98BFF",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#80D9EA",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#111923",
+      "title": "#F4F0F4",
+      "border": "#D5E7F0",
+      "close": "#80D9EA"
+    },
+    "hero": {
+      "background": "#111923",
+      "accent": "#80D9EA",
+      "secondaryAccent": "#D5E7F0",
+      "highlight": "#A98BFF"
+    },
+    "accents": {
+      "primary": "#80D9EA",
+      "secondary": "#D5E7F0",
+      "tertiary": "#A98BFF"
+    },
+    "texture": {
+      "material": "smoked-glass",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "cool",
+      "glow": "#80D9EA",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#D5E7F0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
