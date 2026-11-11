@@ -108,8 +108,12 @@ namespace
             return false;
         }
 
-        if (static_cast<int>(spec.getProperty("width", 0)) != width
-            || static_cast<int>(spec.getProperty("height", 0)) != height
+        const auto widthValue = spec.getProperty("width", juce::var());
+        const auto heightValue = spec.getProperty("height", juce::var());
+        if ((!widthValue.isInt() && !widthValue.isInt64())
+            || (!heightValue.isInt() && !heightValue.isInt64())
+            || static_cast<int>(widthValue) != width
+            || static_cast<int>(heightValue) != height
             || spec.getProperty("format", "").toString() != format)
         {
             error = "Invalid asset dimensions or format: " + name.toString();
@@ -152,7 +156,13 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
     }
 
     const auto id = root.getProperty("id", "").toString();
-    const int index = static_cast<int>(root.getProperty("index", 0));
+    const auto indexValue = root.getProperty("index", juce::var());
+    const int index = static_cast<int>(indexValue);
+    if (!indexValue.isInt() && !indexValue.isInt64())
+    {
+        error = "Theme index must be an integer";
+        return false;
+    }
     if (id.length() != 7 || !id.startsWith("skin-")
         || !juce::CharacterFunctions::isDigit(id[5])
         || !juce::CharacterFunctions::isDigit(id[6])
@@ -234,6 +244,12 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
         return false;
     }
 
+    const auto* textureObject = texture.getDynamicObject();
+    if (textureObject == nullptr || !textureObject->hasProperty("asset"))
+    {
+        error = "Texture asset property is missing";
+        return false;
+    }
     const auto textureAsset = texture.getProperty("asset", juce::var());
     if (!textureAsset.isString() && !textureAsset.isVoid())
     {
