@@ -105,6 +105,12 @@ if(BUILD_TESTING)
     )
     target_include_directories(ppgu_pattern_scheduler_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_pattern_scheduler_tests COMMAND ppgu_pattern_scheduler_tests)
+
+    add_executable(ppgu_chord_transition_tests
+        tests/ChordTransitionPolicyTests.cpp
+    )
+    target_include_directories(ppgu_chord_transition_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_chord_transition_tests COMMAND ppgu_chord_transition_tests)
 endif()
 
 
