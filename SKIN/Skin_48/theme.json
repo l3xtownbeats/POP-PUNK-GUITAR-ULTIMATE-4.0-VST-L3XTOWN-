@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-48",
+  "index": 48,
+  "name": "Concrete Stage",
+  "description": "Architectural concrete shell with coral stage highlights",
+  "cluster": "C",
+  "identity": {
+    "material": "fine concrete composite and satin steel",
+    "lighting": "soft stage spot against concrete",
+    "mood": "architectural, grounded, bold"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#27282B",
+      "inset": "#333538"
+    },
+    "surfaces": {
+      "primary": "#333538",
+      "secondary": "#414447",
+      "raised": "#55595D",
+      "overlay": "#27282B"
+    },
+    "borders": {
+      "subtle": "#777A7C",
+      "strong": "#D9B46B",
+      "focus": "#F16F72"
+    },
+    "typography": {
+      "primary": "#F6F6F4",
+      "secondary": "#C9C9C7",
+      "disabled": "#85858B",
+      "onAccent": "#27282B"
+    },
+    "rotary": {
+      "body": "#55595D",
+      "ring": "#D9B46B",
+      "track": "#777A7C",
+      "value": "#F16F72",
+      "pointer": "#C4C5C8",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#777A7C",
+      "fill": "#F16F72",
+      "thumb": "#C4C5C8",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F16F72",
+        "foreground": "#27282B",
+        "hover": "#C4C5C8",
+        "pressed": "#D9B46B",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#414447",
+        "foreground": "#F6F6F4",
+        "hover": "#55595D",
+        "pressed": "#D9B46B",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F16F72",
+      "activeText": "#27282B",
+      "inactiveBackground": "#414447",
+      "inactiveText": "#C9C9C7",
+      "indicator": "#D9B46B"
+    },
+    "comboBoxes": {
+      "background": "#414447",
+      "foreground": "#F6F6F4",
+      "border": "#777A7C",
+      "hover": "#55595D",
+      "menuBackground": "#333538",
+      "selection": "#F16F72"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#F16F72",
+      "blackPressed": "#D9B46B",
+      "keyBorder": "#777A7C",
+      "octaveLabel": "#C9C9C7"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F16F72",
+      "high": "#F06A58",
+      "background": "#27282B"
+    },
+    "icons": {
+      "primary": "#F6F6F4",
+      "secondary": "#C9C9C7",
+      "accent": "#F16F72",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#414447",
+      "border": "#777A7C",
+      "selected": "#F16F72",
+      "caption": "#F6F6F4"
+    },
+    "windowChrome": {
+      "background": "#27282B",
+      "title": "#F6F6F4",
+      "border": "#777A7C",
+      "close": "#C4C5C8"
+    },
+    "hero": {
+      "background": "#27282B",
+      "accent": "#F16F72",
+      "secondaryAccent": "#D9B46B",
+      "highlight": "#C4C5C8"
+    },
+    "accents": {
+      "primary": "#F16F72",
+      "secondary": "#D9B46B",
+      "tertiary": "#C4C5C8"
+    },
+    "texture": {
+      "material": "fine concrete composite and satin steel",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft stage spot against concrete",
+      "glow": "#F16F72",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#D9B46B"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Concrete Stage preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original fine concrete composite and satin steel hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle fine concrete composite and satin steel material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
