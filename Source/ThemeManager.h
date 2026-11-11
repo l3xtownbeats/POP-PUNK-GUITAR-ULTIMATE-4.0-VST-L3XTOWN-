@@ -28,6 +28,9 @@ class ThemeManager final : private juce::AsyncUpdater
 public:
     ThemeManager() = default;
     bool loadCatalogText (const juce::String& jsonText, const juce::File& assetRoot = {});
+    // Loads one theme.json from each immediate child directory. This matches
+    // the shipped Themes/<theme-id>/theme.json folder layout.
+    bool loadFromDirectory (const juce::File& themesDirectory);
     const std::vector<std::unique_ptr<Theme>>& availableThemes() const noexcept { return themes; }
     Theme* current() const noexcept { return currentTheme; }
     int currentIndex() const noexcept;
