@@ -86,3 +86,13 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Applies equally to PATTERN with AUTOCHORDS ON and OFF. Hidden latch-tail is not allowed by default.
 - Specification commit: `360b852079ac0d84ba23a804c0ce176910d13000`.
 - Status: SPECIFICATION ONLY. Scheduler/DSP implementation, regression tests, Windows build and FL Studio 20 validation remain pending.
+
+
+## 2026-11-11 — Live note and chord information display
+
+- Specified a persistent main-screen LIVE NOTE / CHORD display for both MELODY and PATTERN.
+- It shows the active single note (including chromatic pitch classes) or a confidently recognized chord symbol; ambiguous note sets remain displayed as note names rather than guessed chord labels.
+- PATTERN reflects the effective harmony after AUTOCHORDS processing: generated chord when ON, actual incoming notes/chord when OFF. MELODY reflects actual held notes without auto-harmonization.
+- Audio-to-UI transfer must use a preallocated/lock-free snapshot; chord naming and string formatting stay off the audio thread.
+- Specification commit: `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
+- Status: SPECIFICATION ONLY; source implementation, tests, CI and FL Studio 20 validation pending.
