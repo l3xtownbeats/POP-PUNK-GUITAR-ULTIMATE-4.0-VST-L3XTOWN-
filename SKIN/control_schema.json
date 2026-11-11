@@ -1488,6 +1488,22 @@
         }
       },
       "additionalProperties": false
+    },
+    "designStatus": {
+      "type": "string",
+      "enum": [
+        "DESIGNED_NOT_RUNTIME_INTEGRATED",
+        "PACK_GENERATED",
+        "VALIDATION_PASS",
+        "MERGED",
+        "INTEGRATED"
+      ]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false,
