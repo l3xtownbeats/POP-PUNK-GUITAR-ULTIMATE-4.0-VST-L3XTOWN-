@@ -55,13 +55,16 @@
       ],
       "properties": {
         "material": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "lighting": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "mood": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -80,22 +83,136 @@
         "keyboard",
         "meters",
         "icons",
+        "thumbnails",
         "windowChrome",
         "hero",
         "accents",
         "texture",
         "lighting"
-      ]
+      ],
+      "properties": {
+        "canvas": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "surfaces": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "borders": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "typography": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "rotary": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "sliders": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "buttons": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "tabs": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "comboBoxes": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "keyboard": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "meters": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "icons": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "thumbnails": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "windowChrome": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "hero": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "accents": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "texture": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "lighting": {
+          "type": "object",
+          "minProperties": 1
+        }
+      },
+      "additionalProperties": false
     },
     "assets": {
       "type": "object",
       "required": [
         "preview",
         "hero"
-      ]
+      ],
+      "properties": {
+        "preview": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hero": {
+          "type": "string",
+          "minLength": 1
+        },
+        "texture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
     },
     "assetSpec": {
-      "type": "object"
+      "type": "object",
+      "required": [
+        "preview",
+        "hero"
+      ],
+      "properties": {
+        "preview": {
+          "type": "object",
+          "required": [
+            "width",
+            "height",
+            "format"
+          ]
+        },
+        "hero": {
+          "type": "object",
+          "required": [
+            "width",
+            "height",
+            "format"
+          ]
+        }
+      }
     },
     "compatibility": {
       "type": "object",
@@ -104,7 +221,21 @@
         "apvtsChanges",
         "layoutChanges",
         "audioChanges"
-      ]
+      ],
+      "properties": {
+        "minimumPluginVersion": {
+          "type": "string"
+        },
+        "apvtsChanges": {
+          "const": false
+        },
+        "layoutChanges": {
+          "const": false
+        },
+        "audioChanges": {
+          "const": false
+        }
+      }
     },
     "validation": {
       "type": "object",
@@ -113,7 +244,21 @@
         "assets",
         "runtime",
         "flStudio20"
-      ]
+      ],
+      "properties": {
+        "json": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "flStudio20": {
+          "type": "string"
+        }
+      }
     }
   }
 }
