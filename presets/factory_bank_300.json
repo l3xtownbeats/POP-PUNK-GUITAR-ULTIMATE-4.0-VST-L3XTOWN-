@@ -167,7 +167,10 @@
       "browserGroup": "Blink-182 / CLEAN",
       "browserArtist": "Blink-182",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M002",
@@ -194,7 +197,10 @@
       "browserGroup": "Sum 41 / CRUNCH",
       "browserArtist": "Sum 41",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M003",
@@ -221,7 +227,10 @@
       "browserGroup": "Simple Plan / DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M004",
@@ -248,7 +257,10 @@
       "browserGroup": "New Found Glory / LEAD DRIVE",
       "browserArtist": "New Found Glory",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M005",
@@ -275,7 +287,10 @@
       "browserGroup": "Good Charlotte / CLEAN",
       "browserArtist": "Good Charlotte",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M006",
@@ -302,7 +317,10 @@
       "browserGroup": "Mest / CRUNCH",
       "browserArtist": "Mest",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M007",
@@ -329,7 +347,10 @@
       "browserGroup": "Angels & Airwaves / DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M008",
@@ -356,7 +377,10 @@
       "browserGroup": "The All-American Rejects / LEAD DRIVE",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M009",
@@ -383,7 +407,10 @@
       "browserGroup": "MGK / CLEAN",
       "browserArtist": "MGK",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M010",
@@ -410,7 +437,10 @@
       "browserGroup": "Avril Lavigne / CRUNCH",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M011",
@@ -437,7 +467,10 @@
       "browserGroup": "The Offspring / DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M012",
@@ -464,7 +497,10 @@
       "browserGroup": "Green Day / LEAD DRIVE",
       "browserArtist": "Green Day",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M013",
@@ -491,7 +527,10 @@
       "browserGroup": "Bowling for Soup / CLEAN",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M014",
@@ -518,7 +557,10 @@
       "browserGroup": "Sugarcult / CRUNCH",
       "browserArtist": "Sugarcult",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M015",
@@ -545,7 +587,10 @@
       "browserGroup": "All Time Low / DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M016",
@@ -572,7 +617,10 @@
       "browserGroup": "Fall Out Boy / LEAD DRIVE",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M017",
@@ -599,7 +647,10 @@
       "browserGroup": "Yellowcard / CLEAN",
       "browserArtist": "Yellowcard",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M018",
@@ -626,7 +677,10 @@
       "browserGroup": "My Chemical Romance / CRUNCH",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M019",
@@ -653,7 +707,10 @@
       "browserGroup": "Less Than Jake / DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M020",
@@ -680,7 +737,10 @@
       "browserGroup": "Fenix TX / LEAD DRIVE",
       "browserArtist": "Fenix TX",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M021",
@@ -707,7 +767,10 @@
       "browserGroup": "Midtown / CLEAN",
       "browserArtist": "Midtown",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M022",
@@ -734,7 +797,10 @@
       "browserGroup": "Blink-182 / CRUNCH",
       "browserArtist": "Blink-182",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M023",
@@ -761,7 +827,10 @@
       "browserGroup": "Sum 41 / DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M024",
@@ -788,7 +857,10 @@
       "browserGroup": "Simple Plan / LEAD DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M025",
@@ -815,7 +887,10 @@
       "browserGroup": "New Found Glory / CLEAN",
       "browserArtist": "New Found Glory",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M026",
@@ -842,7 +917,10 @@
       "browserGroup": "Good Charlotte / CRUNCH",
       "browserArtist": "Good Charlotte",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M027",
@@ -869,7 +947,10 @@
       "browserGroup": "Mest / DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M028",
@@ -896,7 +977,10 @@
       "browserGroup": "Angels & Airwaves / LEAD DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M029",
@@ -923,7 +1007,10 @@
       "browserGroup": "The All-American Rejects / CLEAN",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M030",
@@ -950,7 +1037,10 @@
       "browserGroup": "MGK / CRUNCH",
       "browserArtist": "MGK",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M031",
@@ -977,7 +1067,10 @@
       "browserGroup": "Avril Lavigne / DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M032",
@@ -1004,7 +1097,10 @@
       "browserGroup": "The Offspring / LEAD DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M033",
@@ -1031,7 +1127,10 @@
       "browserGroup": "Green Day / CLEAN",
       "browserArtist": "Green Day",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M034",
@@ -1058,7 +1157,10 @@
       "browserGroup": "Bowling for Soup / CRUNCH",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M035",
@@ -1085,7 +1187,10 @@
       "browserGroup": "Sugarcult / DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M036",
@@ -1112,7 +1217,10 @@
       "browserGroup": "All Time Low / LEAD DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M037",
@@ -1139,7 +1247,10 @@
       "browserGroup": "Fall Out Boy / CLEAN",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M038",
@@ -1166,7 +1277,10 @@
       "browserGroup": "Yellowcard / CRUNCH",
       "browserArtist": "Yellowcard",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M039",
@@ -1193,7 +1307,10 @@
       "browserGroup": "My Chemical Romance / DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M040",
@@ -1220,7 +1337,10 @@
       "browserGroup": "Less Than Jake / LEAD DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M041",
@@ -1247,7 +1367,10 @@
       "browserGroup": "Fenix TX / CLEAN",
       "browserArtist": "Fenix TX",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M042",
@@ -1274,7 +1397,10 @@
       "browserGroup": "Midtown / CRUNCH",
       "browserArtist": "Midtown",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M043",
@@ -1301,7 +1427,10 @@
       "browserGroup": "Blink-182 / DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M044",
@@ -1328,7 +1457,10 @@
       "browserGroup": "Sum 41 / LEAD DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M045",
@@ -1355,7 +1487,10 @@
       "browserGroup": "Simple Plan / CLEAN",
       "browserArtist": "Simple Plan",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M046",
@@ -1382,7 +1517,10 @@
       "browserGroup": "New Found Glory / CRUNCH",
       "browserArtist": "New Found Glory",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M047",
@@ -1409,7 +1547,10 @@
       "browserGroup": "Good Charlotte / DRIVE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M048",
@@ -1436,7 +1577,10 @@
       "browserGroup": "Mest / LEAD DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M049",
@@ -1463,7 +1607,10 @@
       "browserGroup": "Angels & Airwaves / CLEAN",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M050",
@@ -1490,7 +1637,10 @@
       "browserGroup": "The All-American Rejects / CRUNCH",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M051",
@@ -1517,7 +1667,10 @@
       "browserGroup": "MGK / DRIVE",
       "browserArtist": "MGK",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M052",
@@ -1544,7 +1697,10 @@
       "browserGroup": "Avril Lavigne / LEAD DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M053",
@@ -1571,7 +1727,10 @@
       "browserGroup": "The Offspring / CLEAN",
       "browserArtist": "The Offspring",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M054",
@@ -1598,7 +1757,10 @@
       "browserGroup": "Green Day / CRUNCH",
       "browserArtist": "Green Day",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M055",
@@ -1625,7 +1787,10 @@
       "browserGroup": "Bowling for Soup / DRIVE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M056",
@@ -1652,7 +1817,10 @@
       "browserGroup": "Sugarcult / LEAD DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M057",
@@ -1679,7 +1847,10 @@
       "browserGroup": "All Time Low / CLEAN",
       "browserArtist": "All Time Low",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M058",
@@ -1706,7 +1877,10 @@
       "browserGroup": "Fall Out Boy / CRUNCH",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M059",
@@ -1733,7 +1907,10 @@
       "browserGroup": "Yellowcard / DRIVE",
       "browserArtist": "Yellowcard",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M060",
@@ -1760,7 +1937,10 @@
       "browserGroup": "My Chemical Romance / LEAD DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M061",
@@ -1787,7 +1967,10 @@
       "browserGroup": "Less Than Jake / CLEAN",
       "browserArtist": "Less Than Jake",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M062",
@@ -1814,7 +1997,10 @@
       "browserGroup": "Fenix TX / CRUNCH",
       "browserArtist": "Fenix TX",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M063",
@@ -1841,7 +2027,10 @@
       "browserGroup": "Midtown / DRIVE",
       "browserArtist": "Midtown",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M064",
@@ -1868,7 +2057,10 @@
       "browserGroup": "Blink-182 / LEAD DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M065",
@@ -1895,7 +2087,10 @@
       "browserGroup": "Sum 41 / CLEAN",
       "browserArtist": "Sum 41",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M066",
@@ -1922,7 +2117,10 @@
       "browserGroup": "Simple Plan / CRUNCH",
       "browserArtist": "Simple Plan",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M067",
@@ -1949,7 +2147,10 @@
       "browserGroup": "New Found Glory / DRIVE",
       "browserArtist": "New Found Glory",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M068",
@@ -1976,7 +2177,10 @@
       "browserGroup": "Good Charlotte / LEAD DRIVE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M069",
@@ -2003,7 +2207,10 @@
       "browserGroup": "Mest / CLEAN",
       "browserArtist": "Mest",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M070",
@@ -2030,7 +2237,10 @@
       "browserGroup": "Angels & Airwaves / CRUNCH",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M071",
@@ -2057,7 +2267,10 @@
       "browserGroup": "The All-American Rejects / DRIVE",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M072",
@@ -2084,7 +2297,10 @@
       "browserGroup": "MGK / LEAD DRIVE",
       "browserArtist": "MGK",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M073",
@@ -2111,7 +2327,10 @@
       "browserGroup": "Avril Lavigne / CLEAN",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M074",
@@ -2138,7 +2357,10 @@
       "browserGroup": "The Offspring / CRUNCH",
       "browserArtist": "The Offspring",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M075",
@@ -2165,7 +2387,10 @@
       "browserGroup": "Green Day / DRIVE",
       "browserArtist": "Green Day",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M076",
@@ -2192,7 +2417,10 @@
       "browserGroup": "Bowling for Soup / LEAD DRIVE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M077",
@@ -2219,7 +2447,10 @@
       "browserGroup": "Sugarcult / CLEAN",
       "browserArtist": "Sugarcult",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M078",
@@ -2246,7 +2477,10 @@
       "browserGroup": "All Time Low / CRUNCH",
       "browserArtist": "All Time Low",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M079",
@@ -2273,7 +2507,10 @@
       "browserGroup": "Fall Out Boy / DRIVE",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M080",
@@ -2300,7 +2537,10 @@
       "browserGroup": "Yellowcard / LEAD DRIVE",
       "browserArtist": "Yellowcard",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M081",
@@ -2327,7 +2567,10 @@
       "browserGroup": "My Chemical Romance / CLEAN",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M082",
@@ -2354,7 +2597,10 @@
       "browserGroup": "Less Than Jake / CRUNCH",
       "browserArtist": "Less Than Jake",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M083",
@@ -2381,7 +2627,10 @@
       "browserGroup": "Fenix TX / DRIVE",
       "browserArtist": "Fenix TX",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M084",
@@ -2408,7 +2657,10 @@
       "browserGroup": "Midtown / LEAD DRIVE",
       "browserArtist": "Midtown",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M085",
@@ -2439,7 +2691,10 @@
       "browserGroup": "Blink-182 / CLEAN",
       "browserArtist": "Blink-182",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M086",
@@ -2466,7 +2721,10 @@
       "browserGroup": "Sum 41 / CRUNCH",
       "browserArtist": "Sum 41",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M087",
@@ -2493,7 +2751,10 @@
       "browserGroup": "Simple Plan / DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M088",
@@ -2520,7 +2781,10 @@
       "browserGroup": "New Found Glory / LEAD DRIVE",
       "browserArtist": "New Found Glory",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M089",
@@ -2547,7 +2811,10 @@
       "browserGroup": "Good Charlotte / CLEAN",
       "browserArtist": "Good Charlotte",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M090",
@@ -2574,7 +2841,10 @@
       "browserGroup": "Mest / CRUNCH",
       "browserArtist": "Mest",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M091",
@@ -2601,7 +2871,10 @@
       "browserGroup": "Angels & Airwaves / DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M092",
@@ -2628,7 +2901,10 @@
       "browserGroup": "The All-American Rejects / LEAD DRIVE",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M093",
@@ -2655,7 +2931,10 @@
       "browserGroup": "MGK / CLEAN",
       "browserArtist": "MGK",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M094",
@@ -2682,7 +2961,10 @@
       "browserGroup": "Avril Lavigne / CRUNCH",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M095",
@@ -2709,7 +2991,10 @@
       "browserGroup": "The Offspring / DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M096",
@@ -2736,7 +3021,10 @@
       "browserGroup": "Green Day / LEAD DRIVE",
       "browserArtist": "Green Day",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M097",
@@ -2763,7 +3051,10 @@
       "browserGroup": "Bowling for Soup / CLEAN",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M098",
@@ -2790,7 +3081,10 @@
       "browserGroup": "Sugarcult / CRUNCH",
       "browserArtist": "Sugarcult",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M099",
@@ -2817,7 +3111,10 @@
       "browserGroup": "All Time Low / DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M100",
@@ -2844,7 +3141,10 @@
       "browserGroup": "Fall Out Boy / LEAD DRIVE",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M101",
@@ -2871,7 +3171,10 @@
       "browserGroup": "Yellowcard / CLEAN",
       "browserArtist": "Yellowcard",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M102",
@@ -2898,7 +3201,10 @@
       "browserGroup": "My Chemical Romance / CRUNCH",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M103",
@@ -2925,7 +3231,10 @@
       "browserGroup": "Less Than Jake / DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M104",
@@ -2952,7 +3261,10 @@
       "browserGroup": "Fenix TX / LEAD DRIVE",
       "browserArtist": "Fenix TX",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M105",
@@ -2979,7 +3291,10 @@
       "browserGroup": "Midtown / CLEAN",
       "browserArtist": "Midtown",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M106",
@@ -3006,7 +3321,10 @@
       "browserGroup": "Blink-182 / CRUNCH",
       "browserArtist": "Blink-182",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M107",
@@ -3033,7 +3351,10 @@
       "browserGroup": "Sum 41 / DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M108",
@@ -3060,7 +3381,10 @@
       "browserGroup": "Simple Plan / LEAD DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M109",
@@ -3087,7 +3411,10 @@
       "browserGroup": "New Found Glory / CLEAN",
       "browserArtist": "New Found Glory",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M110",
@@ -3114,7 +3441,10 @@
       "browserGroup": "Good Charlotte / CRUNCH",
       "browserArtist": "Good Charlotte",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M111",
@@ -3141,7 +3471,10 @@
       "browserGroup": "Mest / DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M112",
@@ -3168,7 +3501,10 @@
       "browserGroup": "Angels & Airwaves / LEAD DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M113",
@@ -3195,7 +3531,10 @@
       "browserGroup": "The All-American Rejects / CLEAN",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M114",
@@ -3222,7 +3561,10 @@
       "browserGroup": "MGK / CRUNCH",
       "browserArtist": "MGK",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M115",
@@ -3249,7 +3591,10 @@
       "browserGroup": "Avril Lavigne / DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M116",
@@ -3276,7 +3621,10 @@
       "browserGroup": "The Offspring / LEAD DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M117",
@@ -3303,7 +3651,10 @@
       "browserGroup": "Green Day / CLEAN",
       "browserArtist": "Green Day",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M118",
@@ -3330,7 +3681,10 @@
       "browserGroup": "Bowling for Soup / CRUNCH",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M119",
@@ -3357,7 +3711,10 @@
       "browserGroup": "Sugarcult / DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M120",
@@ -3384,7 +3741,10 @@
       "browserGroup": "All Time Low / LEAD DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M121",
@@ -3411,7 +3771,10 @@
       "browserGroup": "Fall Out Boy / CLEAN",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M122",
@@ -3438,7 +3801,10 @@
       "browserGroup": "Yellowcard / CRUNCH",
       "browserArtist": "Yellowcard",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M123",
@@ -3465,7 +3831,10 @@
       "browserGroup": "My Chemical Romance / DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M124",
@@ -3492,7 +3861,10 @@
       "browserGroup": "Less Than Jake / LEAD DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M125",
@@ -3519,7 +3891,10 @@
       "browserGroup": "Fenix TX / CLEAN",
       "browserArtist": "Fenix TX",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M126",
@@ -3546,7 +3921,10 @@
       "browserGroup": "Midtown / CRUNCH",
       "browserArtist": "Midtown",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M127",
@@ -3573,7 +3951,10 @@
       "browserGroup": "Blink-182 / DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M128",
@@ -3600,7 +3981,10 @@
       "browserGroup": "Sum 41 / LEAD DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M129",
@@ -3627,7 +4011,10 @@
       "browserGroup": "Simple Plan / CLEAN",
       "browserArtist": "Simple Plan",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M130",
@@ -3654,7 +4041,10 @@
       "browserGroup": "New Found Glory / CRUNCH",
       "browserArtist": "New Found Glory",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M131",
@@ -3681,7 +4071,10 @@
       "browserGroup": "Good Charlotte / DRIVE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M132",
@@ -3708,7 +4101,10 @@
       "browserGroup": "Mest / LEAD DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M133",
@@ -3735,7 +4131,10 @@
       "browserGroup": "Angels & Airwaves / CLEAN",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M134",
@@ -3762,7 +4161,10 @@
       "browserGroup": "The All-American Rejects / CRUNCH",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M135",
@@ -3789,7 +4191,10 @@
       "browserGroup": "MGK / DRIVE",
       "browserArtist": "MGK",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M136",
@@ -3816,7 +4221,10 @@
       "browserGroup": "Avril Lavigne / LEAD DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M137",
@@ -3843,7 +4251,10 @@
       "browserGroup": "The Offspring / CLEAN",
       "browserArtist": "The Offspring",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M138",
@@ -3870,7 +4281,10 @@
       "browserGroup": "Green Day / CRUNCH",
       "browserArtist": "Green Day",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M139",
@@ -3897,7 +4311,10 @@
       "browserGroup": "Bowling for Soup / DRIVE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M140",
@@ -3924,7 +4341,10 @@
       "browserGroup": "Sugarcult / LEAD DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M141",
@@ -3951,7 +4371,10 @@
       "browserGroup": "All Time Low / CLEAN",
       "browserArtist": "All Time Low",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M142",
@@ -3978,7 +4401,10 @@
       "browserGroup": "Fall Out Boy / CRUNCH",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M143",
@@ -4005,7 +4431,10 @@
       "browserGroup": "Yellowcard / DRIVE",
       "browserArtist": "Yellowcard",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M144",
@@ -4032,7 +4461,10 @@
       "browserGroup": "My Chemical Romance / LEAD DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M145",
@@ -4059,7 +4491,10 @@
       "browserGroup": "Less Than Jake / CLEAN",
       "browserArtist": "Less Than Jake",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M146",
@@ -4086,7 +4521,10 @@
       "browserGroup": "Fenix TX / CRUNCH",
       "browserArtist": "Fenix TX",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M147",
@@ -4113,7 +4551,10 @@
       "browserGroup": "Midtown / DRIVE",
       "browserArtist": "Midtown",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M148",
@@ -4140,7 +4581,10 @@
       "browserGroup": "Blink-182 / LEAD DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Lead Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M149",
@@ -4167,7 +4611,10 @@
       "browserGroup": "Sum 41 / CLEAN",
       "browserArtist": "Sum 41",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "M150",
@@ -4194,7 +4641,10 @@
       "browserGroup": "Simple Plan / CRUNCH",
       "browserArtist": "Simple Plan",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-001",
@@ -4226,7 +4676,10 @@
       "playingStyle": "picked-crunch",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-002",
@@ -4258,7 +4711,10 @@
       "playingStyle": "staccato-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-003",
@@ -4290,7 +4746,10 @@
       "playingStyle": "driven-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-004",
@@ -4322,7 +4781,10 @@
       "playingStyle": "open-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-005",
@@ -4354,7 +4816,10 @@
       "playingStyle": "clean-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Clean",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-006",
@@ -4386,7 +4851,10 @@
       "playingStyle": "muted-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-007",
@@ -4418,7 +4886,10 @@
       "playingStyle": "palm-muted",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-008",
@@ -4450,7 +4921,10 @@
       "playingStyle": "crunch-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-009",
@@ -4482,7 +4956,10 @@
       "playingStyle": "driven-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-010",
@@ -4514,7 +4991,10 @@
       "playingStyle": "crunch-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-011",
@@ -4546,7 +5026,10 @@
       "playingStyle": "palm-muted",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-012",
@@ -4578,7 +5061,10 @@
       "playingStyle": "open-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-013",
@@ -4610,7 +5096,10 @@
       "playingStyle": "driven-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-014",
@@ -4642,7 +5131,10 @@
       "playingStyle": "palm-muted",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     },
     {
       "id": "BHG-M-015",
@@ -4674,7 +5166,10 @@
       "playingStyle": "crunch-picked",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "MELODY"
+      "browserMode": "MELODY",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-runtime-sfz-autoload-and-audio-validation"
     }
   ],
   "patternPresets": [
@@ -4741,7 +5236,12 @@
       "browserGroup": "Blink-182 / CLEAN",
       "browserArtist": "Blink-182",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P002",
@@ -4803,7 +5303,12 @@
       "browserGroup": "Sum 41 / CRUNCH",
       "browserArtist": "Sum 41",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P003",
@@ -4865,7 +5370,12 @@
       "browserGroup": "Simple Plan / DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P004",
@@ -4927,7 +5437,12 @@
       "browserGroup": "New Found Glory / PALM MUTE",
       "browserArtist": "New Found Glory",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P005",
@@ -4989,7 +5504,12 @@
       "browserGroup": "Good Charlotte / OPEN CHORDS",
       "browserArtist": "Good Charlotte",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P006",
@@ -5051,7 +5571,12 @@
       "browserGroup": "Mest / ACOUSTIC",
       "browserArtist": "Mest",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P007",
@@ -5113,7 +5638,12 @@
       "browserGroup": "Angels & Airwaves / LEAD DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P008",
@@ -5175,7 +5705,12 @@
       "browserGroup": "The All-American Rejects / MUTED CHUGS",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P009",
@@ -5237,7 +5772,12 @@
       "browserGroup": "MGK / CLEAN",
       "browserArtist": "MGK",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P010",
@@ -5299,7 +5839,12 @@
       "browserGroup": "Avril Lavigne / CRUNCH",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P011",
@@ -5361,7 +5906,12 @@
       "browserGroup": "The Offspring / DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P012",
@@ -5423,7 +5973,12 @@
       "browserGroup": "Green Day / PALM MUTE",
       "browserArtist": "Green Day",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P013",
@@ -5485,7 +6040,12 @@
       "browserGroup": "Bowling for Soup / OPEN CHORDS",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P014",
@@ -5547,7 +6107,12 @@
       "browserGroup": "Sugarcult / ACOUSTIC",
       "browserArtist": "Sugarcult",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P015",
@@ -5609,7 +6174,12 @@
       "browserGroup": "All Time Low / LEAD DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P016",
@@ -5671,7 +6241,12 @@
       "browserGroup": "Fall Out Boy / MUTED CHUGS",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P017",
@@ -5733,7 +6308,12 @@
       "browserGroup": "Yellowcard / CLEAN",
       "browserArtist": "Yellowcard",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P018",
@@ -5795,7 +6375,12 @@
       "browserGroup": "My Chemical Romance / CRUNCH",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P019",
@@ -5857,7 +6442,12 @@
       "browserGroup": "Less Than Jake / DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P020",
@@ -5919,7 +6509,12 @@
       "browserGroup": "Fenix TX / PALM MUTE",
       "browserArtist": "Fenix TX",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P021",
@@ -5981,7 +6576,12 @@
       "browserGroup": "Midtown / OPEN CHORDS",
       "browserArtist": "Midtown",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P022",
@@ -6043,7 +6643,12 @@
       "browserGroup": "Blink-182 / ACOUSTIC",
       "browserArtist": "Blink-182",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P023",
@@ -6105,7 +6710,12 @@
       "browserGroup": "Sum 41 / LEAD DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P024",
@@ -6167,7 +6777,12 @@
       "browserGroup": "Simple Plan / MUTED CHUGS",
       "browserArtist": "Simple Plan",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P025",
@@ -6229,7 +6844,12 @@
       "browserGroup": "New Found Glory / CLEAN",
       "browserArtist": "New Found Glory",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P026",
@@ -6291,7 +6911,12 @@
       "browserGroup": "Good Charlotte / CRUNCH",
       "browserArtist": "Good Charlotte",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P027",
@@ -6353,7 +6978,12 @@
       "browserGroup": "Mest / DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P028",
@@ -6415,7 +7045,12 @@
       "browserGroup": "Angels & Airwaves / PALM MUTE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P029",
@@ -6477,7 +7112,12 @@
       "browserGroup": "The All-American Rejects / OPEN CHORDS",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P030",
@@ -6539,7 +7179,12 @@
       "browserGroup": "MGK / ACOUSTIC",
       "browserArtist": "MGK",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P031",
@@ -6601,7 +7246,12 @@
       "browserGroup": "Avril Lavigne / LEAD DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P032",
@@ -6663,7 +7313,12 @@
       "browserGroup": "The Offspring / MUTED CHUGS",
       "browserArtist": "The Offspring",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P033",
@@ -6725,7 +7380,12 @@
       "browserGroup": "Green Day / CLEAN",
       "browserArtist": "Green Day",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P034",
@@ -6787,7 +7447,12 @@
       "browserGroup": "Bowling for Soup / CRUNCH",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P035",
@@ -6849,7 +7514,12 @@
       "browserGroup": "Sugarcult / DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P036",
@@ -6911,7 +7581,12 @@
       "browserGroup": "All Time Low / PALM MUTE",
       "browserArtist": "All Time Low",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P037",
@@ -6973,7 +7648,12 @@
       "browserGroup": "Fall Out Boy / OPEN CHORDS",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P038",
@@ -7035,7 +7715,12 @@
       "browserGroup": "Yellowcard / ACOUSTIC",
       "browserArtist": "Yellowcard",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P039",
@@ -7097,7 +7782,12 @@
       "browserGroup": "My Chemical Romance / LEAD DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P040",
@@ -7159,7 +7849,12 @@
       "browserGroup": "Less Than Jake / MUTED CHUGS",
       "browserArtist": "Less Than Jake",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P041",
@@ -7221,7 +7916,12 @@
       "browserGroup": "Fenix TX / CLEAN",
       "browserArtist": "Fenix TX",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P042",
@@ -7283,7 +7983,12 @@
       "browserGroup": "Midtown / CRUNCH",
       "browserArtist": "Midtown",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P043",
@@ -7345,7 +8050,12 @@
       "browserGroup": "Blink-182 / DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P044",
@@ -7407,7 +8117,12 @@
       "browserGroup": "Sum 41 / PALM MUTE",
       "browserArtist": "Sum 41",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P045",
@@ -7469,7 +8184,12 @@
       "browserGroup": "Simple Plan / OPEN CHORDS",
       "browserArtist": "Simple Plan",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P046",
@@ -7531,7 +8251,12 @@
       "browserGroup": "New Found Glory / ACOUSTIC",
       "browserArtist": "New Found Glory",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P047",
@@ -7593,7 +8318,12 @@
       "browserGroup": "Good Charlotte / LEAD DRIVE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P048",
@@ -7655,7 +8385,12 @@
       "browserGroup": "Mest / MUTED CHUGS",
       "browserArtist": "Mest",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P049",
@@ -7717,7 +8452,12 @@
       "browserGroup": "Angels & Airwaves / CLEAN",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P050",
@@ -7779,7 +8519,12 @@
       "browserGroup": "The All-American Rejects / CRUNCH",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P051",
@@ -7841,7 +8586,12 @@
       "browserGroup": "MGK / DRIVE",
       "browserArtist": "MGK",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P052",
@@ -7903,7 +8653,12 @@
       "browserGroup": "Avril Lavigne / PALM MUTE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P053",
@@ -7965,7 +8720,12 @@
       "browserGroup": "The Offspring / OPEN CHORDS",
       "browserArtist": "The Offspring",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P054",
@@ -8027,7 +8787,12 @@
       "browserGroup": "Green Day / ACOUSTIC",
       "browserArtist": "Green Day",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P055",
@@ -8089,7 +8854,12 @@
       "browserGroup": "Bowling for Soup / LEAD DRIVE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P056",
@@ -8151,7 +8921,12 @@
       "browserGroup": "Sugarcult / MUTED CHUGS",
       "browserArtist": "Sugarcult",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P057",
@@ -8213,7 +8988,12 @@
       "browserGroup": "All Time Low / CLEAN",
       "browserArtist": "All Time Low",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P058",
@@ -8275,7 +9055,12 @@
       "browserGroup": "Fall Out Boy / CRUNCH",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P059",
@@ -8337,7 +9122,12 @@
       "browserGroup": "Yellowcard / DRIVE",
       "browserArtist": "Yellowcard",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P060",
@@ -8399,7 +9189,12 @@
       "browserGroup": "My Chemical Romance / PALM MUTE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P061",
@@ -8461,7 +9256,12 @@
       "browserGroup": "Less Than Jake / OPEN CHORDS",
       "browserArtist": "Less Than Jake",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P062",
@@ -8523,7 +9323,12 @@
       "browserGroup": "Fenix TX / ACOUSTIC",
       "browserArtist": "Fenix TX",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P063",
@@ -8585,7 +9390,12 @@
       "browserGroup": "Midtown / LEAD DRIVE",
       "browserArtist": "Midtown",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P064",
@@ -8647,7 +9457,12 @@
       "browserGroup": "Blink-182 / MUTED CHUGS",
       "browserArtist": "Blink-182",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P065",
@@ -8709,7 +9524,12 @@
       "browserGroup": "Sum 41 / CLEAN",
       "browserArtist": "Sum 41",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P066",
@@ -8771,7 +9591,12 @@
       "browserGroup": "Simple Plan / CRUNCH",
       "browserArtist": "Simple Plan",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P067",
@@ -8833,7 +9658,12 @@
       "browserGroup": "New Found Glory / DRIVE",
       "browserArtist": "New Found Glory",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P068",
@@ -8895,7 +9725,12 @@
       "browserGroup": "Good Charlotte / PALM MUTE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P069",
@@ -8957,7 +9792,12 @@
       "browserGroup": "Mest / OPEN CHORDS",
       "browserArtist": "Mest",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P070",
@@ -9019,7 +9859,12 @@
       "browserGroup": "Angels & Airwaves / ACOUSTIC",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P071",
@@ -9081,7 +9926,12 @@
       "browserGroup": "The All-American Rejects / LEAD DRIVE",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P072",
@@ -9143,7 +9993,12 @@
       "browserGroup": "MGK / MUTED CHUGS",
       "browserArtist": "MGK",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P073",
@@ -9205,7 +10060,12 @@
       "browserGroup": "Avril Lavigne / CLEAN",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P074",
@@ -9267,7 +10127,12 @@
       "browserGroup": "The Offspring / CRUNCH",
       "browserArtist": "The Offspring",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P075",
@@ -9329,7 +10194,12 @@
       "browserGroup": "Green Day / DRIVE",
       "browserArtist": "Green Day",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P076",
@@ -9391,7 +10261,12 @@
       "browserGroup": "Bowling for Soup / PALM MUTE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P077",
@@ -9453,7 +10328,12 @@
       "browserGroup": "Sugarcult / OPEN CHORDS",
       "browserArtist": "Sugarcult",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P078",
@@ -9515,7 +10395,12 @@
       "browserGroup": "All Time Low / ACOUSTIC",
       "browserArtist": "All Time Low",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P079",
@@ -9577,7 +10462,12 @@
       "browserGroup": "Fall Out Boy / LEAD DRIVE",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P080",
@@ -9639,7 +10529,12 @@
       "browserGroup": "Yellowcard / MUTED CHUGS",
       "browserArtist": "Yellowcard",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P081",
@@ -9701,7 +10596,12 @@
       "browserGroup": "My Chemical Romance / CLEAN",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P082",
@@ -9763,7 +10663,12 @@
       "browserGroup": "Less Than Jake / CRUNCH",
       "browserArtist": "Less Than Jake",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P083",
@@ -9825,7 +10730,12 @@
       "browserGroup": "Fenix TX / DRIVE",
       "browserArtist": "Fenix TX",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P084",
@@ -9887,7 +10797,12 @@
       "browserGroup": "Midtown / PALM MUTE",
       "browserArtist": "Midtown",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P085",
@@ -9953,7 +10868,12 @@
       "browserGroup": "Blink-182 / OPEN CHORDS",
       "browserArtist": "Blink-182",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P086",
@@ -10015,7 +10935,12 @@
       "browserGroup": "Sum 41 / ACOUSTIC",
       "browserArtist": "Sum 41",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P087",
@@ -10077,7 +11002,12 @@
       "browserGroup": "Simple Plan / LEAD DRIVE",
       "browserArtist": "Simple Plan",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P088",
@@ -10139,7 +11069,12 @@
       "browserGroup": "New Found Glory / MUTED CHUGS",
       "browserArtist": "New Found Glory",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P089",
@@ -10201,7 +11136,12 @@
       "browserGroup": "Good Charlotte / CLEAN",
       "browserArtist": "Good Charlotte",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P090",
@@ -10263,7 +11203,12 @@
       "browserGroup": "Mest / CRUNCH",
       "browserArtist": "Mest",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P091",
@@ -10325,7 +11270,12 @@
       "browserGroup": "Angels & Airwaves / DRIVE",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P092",
@@ -10387,7 +11337,12 @@
       "browserGroup": "The All-American Rejects / PALM MUTE",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P093",
@@ -10449,7 +11404,12 @@
       "browserGroup": "MGK / OPEN CHORDS",
       "browserArtist": "MGK",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P094",
@@ -10511,7 +11471,12 @@
       "browserGroup": "Avril Lavigne / ACOUSTIC",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P095",
@@ -10573,7 +11538,12 @@
       "browserGroup": "The Offspring / LEAD DRIVE",
       "browserArtist": "The Offspring",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P096",
@@ -10635,7 +11605,12 @@
       "browserGroup": "Green Day / MUTED CHUGS",
       "browserArtist": "Green Day",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P097",
@@ -10697,7 +11672,12 @@
       "browserGroup": "Bowling for Soup / CLEAN",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P098",
@@ -10759,7 +11739,12 @@
       "browserGroup": "Sugarcult / CRUNCH",
       "browserArtist": "Sugarcult",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P099",
@@ -10821,7 +11806,12 @@
       "browserGroup": "All Time Low / DRIVE",
       "browserArtist": "All Time Low",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P100",
@@ -10883,7 +11873,12 @@
       "browserGroup": "Fall Out Boy / PALM MUTE",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P101",
@@ -10945,7 +11940,12 @@
       "browserGroup": "Yellowcard / OPEN CHORDS",
       "browserArtist": "Yellowcard",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P102",
@@ -11007,7 +12007,12 @@
       "browserGroup": "My Chemical Romance / ACOUSTIC",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P103",
@@ -11069,7 +12074,12 @@
       "browserGroup": "Less Than Jake / LEAD DRIVE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P104",
@@ -11131,7 +12141,12 @@
       "browserGroup": "Fenix TX / MUTED CHUGS",
       "browserArtist": "Fenix TX",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P105",
@@ -11193,7 +12208,12 @@
       "browserGroup": "Midtown / CLEAN",
       "browserArtist": "Midtown",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P106",
@@ -11255,7 +12275,12 @@
       "browserGroup": "Blink-182 / CRUNCH",
       "browserArtist": "Blink-182",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P107",
@@ -11317,7 +12342,12 @@
       "browserGroup": "Sum 41 / DRIVE",
       "browserArtist": "Sum 41",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P108",
@@ -11379,7 +12409,12 @@
       "browserGroup": "Simple Plan / PALM MUTE",
       "browserArtist": "Simple Plan",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P109",
@@ -11441,7 +12476,12 @@
       "browserGroup": "New Found Glory / OPEN CHORDS",
       "browserArtist": "New Found Glory",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P110",
@@ -11503,7 +12543,12 @@
       "browserGroup": "Good Charlotte / ACOUSTIC",
       "browserArtist": "Good Charlotte",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P111",
@@ -11565,7 +12610,12 @@
       "browserGroup": "Mest / LEAD DRIVE",
       "browserArtist": "Mest",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P112",
@@ -11627,7 +12677,12 @@
       "browserGroup": "Angels & Airwaves / MUTED CHUGS",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P113",
@@ -11689,7 +12744,12 @@
       "browserGroup": "The All-American Rejects / CLEAN",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P114",
@@ -11751,7 +12811,12 @@
       "browserGroup": "MGK / CRUNCH",
       "browserArtist": "MGK",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P115",
@@ -11813,7 +12878,12 @@
       "browserGroup": "Avril Lavigne / DRIVE",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P116",
@@ -11875,7 +12945,12 @@
       "browserGroup": "The Offspring / PALM MUTE",
       "browserArtist": "The Offspring",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P117",
@@ -11937,7 +13012,12 @@
       "browserGroup": "Green Day / OPEN CHORDS",
       "browserArtist": "Green Day",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P118",
@@ -11999,7 +13079,12 @@
       "browserGroup": "Bowling for Soup / ACOUSTIC",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P119",
@@ -12061,7 +13146,12 @@
       "browserGroup": "Sugarcult / LEAD DRIVE",
       "browserArtist": "Sugarcult",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P120",
@@ -12123,7 +13213,12 @@
       "browserGroup": "All Time Low / MUTED CHUGS",
       "browserArtist": "All Time Low",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P121",
@@ -12185,7 +13280,12 @@
       "browserGroup": "Fall Out Boy / CLEAN",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P122",
@@ -12247,7 +13347,12 @@
       "browserGroup": "Yellowcard / CRUNCH",
       "browserArtist": "Yellowcard",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P123",
@@ -12309,7 +13414,12 @@
       "browserGroup": "My Chemical Romance / DRIVE",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P124",
@@ -12371,7 +13481,12 @@
       "browserGroup": "Less Than Jake / PALM MUTE",
       "browserArtist": "Less Than Jake",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P125",
@@ -12433,7 +13548,12 @@
       "browserGroup": "Fenix TX / OPEN CHORDS",
       "browserArtist": "Fenix TX",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P126",
@@ -12495,7 +13615,12 @@
       "browserGroup": "Midtown / ACOUSTIC",
       "browserArtist": "Midtown",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P127",
@@ -12557,7 +13682,12 @@
       "browserGroup": "Blink-182 / LEAD DRIVE",
       "browserArtist": "Blink-182",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P128",
@@ -12619,7 +13749,12 @@
       "browserGroup": "Sum 41 / MUTED CHUGS",
       "browserArtist": "Sum 41",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P129",
@@ -12681,7 +13816,12 @@
       "browserGroup": "Simple Plan / CLEAN",
       "browserArtist": "Simple Plan",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P130",
@@ -12743,7 +13883,12 @@
       "browserGroup": "New Found Glory / CRUNCH",
       "browserArtist": "New Found Glory",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P131",
@@ -12805,7 +13950,12 @@
       "browserGroup": "Good Charlotte / DRIVE",
       "browserArtist": "Good Charlotte",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P132",
@@ -12867,7 +14017,12 @@
       "browserGroup": "Mest / PALM MUTE",
       "browserArtist": "Mest",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P133",
@@ -12929,7 +14084,12 @@
       "browserGroup": "Angels & Airwaves / OPEN CHORDS",
       "browserArtist": "Angels & Airwaves",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P134",
@@ -12991,7 +14151,12 @@
       "browserGroup": "The All-American Rejects / ACOUSTIC",
       "browserArtist": "The All-American Rejects",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P135",
@@ -13053,7 +14218,12 @@
       "browserGroup": "MGK / LEAD DRIVE",
       "browserArtist": "MGK",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P136",
@@ -13115,7 +14285,12 @@
       "browserGroup": "Avril Lavigne / MUTED CHUGS",
       "browserArtist": "Avril Lavigne",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P137",
@@ -13177,7 +14352,12 @@
       "browserGroup": "The Offspring / CLEAN",
       "browserArtist": "The Offspring",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P138",
@@ -13239,7 +14419,12 @@
       "browserGroup": "Green Day / CRUNCH",
       "browserArtist": "Green Day",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P139",
@@ -13301,7 +14486,12 @@
       "browserGroup": "Bowling for Soup / DRIVE",
       "browserArtist": "Bowling for Soup",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P140",
@@ -13363,7 +14553,12 @@
       "browserGroup": "Sugarcult / PALM MUTE",
       "browserArtist": "Sugarcult",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P141",
@@ -13425,7 +14620,12 @@
       "browserGroup": "All Time Low / OPEN CHORDS",
       "browserArtist": "All Time Low",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P142",
@@ -13487,7 +14687,12 @@
       "browserGroup": "Fall Out Boy / ACOUSTIC",
       "browserArtist": "Fall Out Boy",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "open-acoustic",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "P143",
@@ -13549,7 +14754,12 @@
       "browserGroup": "Yellowcard / LEAD DRIVE",
       "browserArtist": "Yellowcard",
       "browserSound": "Lead Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P144",
@@ -13611,7 +14821,12 @@
       "browserGroup": "My Chemical Romance / MUTED CHUGS",
       "browserArtist": "My Chemical Romance",
       "browserSound": "Muted Chugs",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P145",
@@ -13673,7 +14888,12 @@
       "browserGroup": "Less Than Jake / CLEAN",
       "browserArtist": "Less Than Jake",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P146",
@@ -13735,7 +14955,12 @@
       "browserGroup": "Fenix TX / CRUNCH",
       "browserArtist": "Fenix TX",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P147",
@@ -13797,7 +15022,12 @@
       "browserGroup": "Midtown / DRIVE",
       "browserArtist": "Midtown",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P148",
@@ -13859,7 +15089,12 @@
       "browserGroup": "Blink-182 / PALM MUTE",
       "browserArtist": "Blink-182",
       "browserSound": "Palm Mute",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P149",
@@ -13921,7 +15156,12 @@
       "browserGroup": "Sum 41 / OPEN CHORDS",
       "browserArtist": "Sum 41",
       "browserSound": "Open Chords",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "P150",
@@ -13983,7 +15223,12 @@
       "browserGroup": "Simple Plan / ACOUSTIC",
       "browserArtist": "Simple Plan",
       "browserSound": "Acoustic",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "acoustic",
+      "sampleSetId": "meta-nylon-guitar",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "chord-strum-performance-or-verified-acoustic-multisample-voicing"
     },
     {
       "id": "BHG-P-001",
@@ -14052,7 +15297,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-002",
@@ -14121,7 +15371,12 @@
       "styleProfileId": "bhg-2005",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-003",
@@ -14190,7 +15445,12 @@
       "styleProfileId": "bhg-legacy",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-004",
@@ -14259,7 +15519,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-005",
@@ -14328,7 +15593,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Clean",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-clean",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-006",
@@ -14397,7 +15667,12 @@
       "styleProfileId": "bhg-2005",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-007",
@@ -14466,7 +15741,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-008",
@@ -14535,7 +15815,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-009",
@@ -14604,7 +15889,12 @@
       "styleProfileId": "bhg-2015",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-010",
@@ -14673,7 +15963,12 @@
       "styleProfileId": "bhg-legacy",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-011",
@@ -14742,7 +16037,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-012",
@@ -14811,7 +16111,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "open",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-013",
@@ -14880,7 +16185,12 @@
       "styleProfileId": "bhg-legacy",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Drive",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-014",
@@ -14949,7 +16259,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Distortion",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist2",
+      "articulationProfile": "palm-mute",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     },
     {
       "id": "BHG-P-015",
@@ -15018,7 +16333,12 @@
       "styleProfileId": "bhg-2000",
       "browserArtist": "Bloodhound Gang",
       "browserSound": "Crunch",
-      "browserMode": "PATTERN"
+      "browserMode": "PATTERN",
+      "sampleProfile": "electric",
+      "sampleSetId": "freepats-electric-dist1",
+      "articulationProfile": "picked",
+      "runtimeBindingStatus": "metadata-mapped-awaiting-pattern-runtime-sample-binding-and-audio-validation",
+      "performanceAssetRequirement": "electric-power-chord-and-strum-performance-or-verified-multisample-voicing"
     }
   ],
   "patternSoundOptions": [
@@ -15038,5 +16358,38 @@
     "mode": "MELODY or PATTERN filter",
     "verifiedAlbumEraGroups": "Only shown where album/year metadata has been explicitly curated; currently Bloodhound Gang.",
     "rule": "Do not invent album names, years, song references or audio provenance. Every artist preset remains selectable in either mode when present in that bank."
-  }
+  },
+  "sampleSetRegistry": {
+    "meta-nylon-guitar": {
+      "folder": "Samples/Meta-meta-nylon-guitar",
+      "sfz": "meta-nylon-guitar.sfz",
+      "license": "CC0-1.0",
+      "use": "acoustic baseline; verify parser support for keyswitch/crossfade before full claim"
+    },
+    "meta-steel-guitar": {
+      "folder": "Samples/Meta-meta-steel-guitar",
+      "sfz": "meta-steel-guitar.sfz",
+      "license": "CC0-1.0",
+      "use": "steel acoustic baseline"
+    },
+    "freepats-electric-clean": {
+      "folder": "Samples/FreePats-Clean",
+      "sfz": "discover licensed SFZ map in bank folder",
+      "license": "CC0-1.0",
+      "use": "clean electric"
+    },
+    "freepats-electric-dist1": {
+      "folder": "Samples/FreePats-Distortion-1",
+      "sfz": "discover licensed SFZ map in bank folder",
+      "license": "CC0-1.0",
+      "use": "medium-gain electric"
+    },
+    "freepats-electric-dist2": {
+      "folder": "Samples/FreePats-Distortion-2",
+      "sfz": "discover licensed SFZ map in bank folder",
+      "license": "CC0-1.0",
+      "use": "high-gain electric"
+    }
+  },
+  "sampleBindingNote": "sampleSetId is a deterministic catalog mapping target. It does not imply automatic SFZ loading is implemented. The editor currently requires explicit SFZ import; do not mark a preset audio-ready until the mapped SFZ is loaded and tested."
 }
