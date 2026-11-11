@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+<title id="title">PPGU Blackout Voltage — plugin skin preview</title>
+<desc id="desc">A dark matte-black pop-punk guitar instrument interface with acid-lime and electric-teal accents, nine rotary controls, effects, playback controls and a MIDI keyboard.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#070A0D"/><stop offset=".55" stop-color="#101820"/><stop offset="1" stop-color="#080D11"/></linearGradient>
+ <linearGradient id="hero" x2="1" y2="1"><stop stop-color="#17232B"/><stop offset=".55" stop-color="#101820"/><stop offset="1" stop-color="#0A1015"/></linearGradient>
+ <linearGradient id="lime" x2="1"><stop stop-color="#83B92D"/><stop offset="1" stop-color="#D1FF79"/></linearGradient>
+ <linearGradient id="teal" x2="1"><stop stop-color="#168D87"/><stop offset="1" stop-color="#35D7C5"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <pattern id="grain" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 2H12M0 8H12" stroke="#8AA0A8" stroke-opacity=".035"/></pattern>
+ </defs>
+ <rect width="1600" height="980" rx="34" fill="url(#bg)"/><rect width="1600" height="980" rx="34" fill="url(#grain)"/>
+ <path d="M0 8H1600" stroke="url(#lime)" stroke-width="8"/>
+ <text x="64" y="82" fill="#F4FAFC" font-family="Arial,sans-serif" font-size="34" font-weight="800" letter-spacing="4">PPGU</text>
+ <text x="64" y="112" fill="#B7F34A" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="3">POP PUNK GUITAR ULTIMATE</text>
+ <rect x="1110" y="48" width="184" height="48" rx="12" fill="#17232B" stroke="#3D5360"/>
+ <text x="1134" y="78" fill="#B5C4CB" font-family="Arial,sans-serif" font-size="15" font-weight="700">FACTORY PRESETS</text>
+ <rect x="1310" y="48" width="224" height="48" rx="12" fill="#B7F34A"/>
+ <text x="1350" y="78" fill="#090C10" font-family="Arial,sans-serif" font-size="16" font-weight="800">SKIN ▾  BLACKOUT</text>
+ <rect x="48" y="142" width="1504" height="230" rx="22" fill="url(#hero)" stroke="#526875" stroke-width="2"/>
+ <path d="M48 350L490 142H760L318 372" fill="#35D7C5" opacity=".06"/>
+ <path d="M880 355L1145 142H1320L1050 372" fill="#B7F34A" opacity=".08"/>
+ <text x="94" y="226" fill="#F4FAFC" font-family="Arial,sans-serif" font-size="62" font-weight="900" letter-spacing="2">BLACKOUT</text>
+ <text x="94" y="292" fill="#B7F34A" font-family="Arial,sans-serif" font-size="56" font-weight="900" letter-spacing="1">VOLTAGE</text>
+ <text x="98" y="330" fill="#B5C4CB" font-family="Arial,sans-serif" font-size="19" letter-spacing="3">PLAY. CREATE. ROCK.</text>
+ <g transform="translate(1160 245)" fill="none" stroke-linecap="round">
+  <path d="M-130 15C-166 -22 -151 -78 -104 -80C-76 -81 -60 -62 -42 -41C-17 -13 14 -9 38 -28L116 -98L137 -76L59 1C38 22 42 52 21 75C-12 111 -70 99 -88 66C-99 45 -108 29 -130 15Z" fill="#DDE8E9" fill-opacity=".10" stroke="#B7F34A" stroke-width="4"/>
+  <path d="M-45 -28L116 -98M-36 -17L126 -88M-28 -6L136 -77" stroke="#35D7C5" stroke-width="2"/>
+  <circle cx="-62" cy="22" r="24" stroke="#B7F34A" stroke-width="3"/><circle cx="-62" cy="22" r="7" fill="#35D7C5" stroke="none"/>
+ </g>
+ <rect x="48" y="398" width="480" height="300" rx="18" fill="#17232B" stroke="#3D5360" stroke-width="2"/>
+ <rect x="548" y="398" width="480" height="300" rx="18" fill="#17232B" stroke="#3D5360" stroke-width="2"/>
+ <rect x="1048" y="398" width="504" height="300" rx="18" fill="#17232B" stroke="#3D5360" stroke-width="2"/>
+ <text x="82" y="446" fill="#B7F34A" font-family="Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="2">AMP &amp; TONE</text>
+ <text x="582" y="446" fill="#35D7C5" font-family="Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="2">FX CHAIN</text>
+ <text x="1082" y="446" fill="#B7F34A" font-family="Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="2">PLAYBACK</text>
+ <g font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#B5C4CB" text-anchor="middle">
+  <g transform="translate(144 548)"><circle r="48" fill="#101820" stroke="#3D5360" stroke-width="8"/><path d="M-32 26A42 42 0 1 1 32 26" fill="none" stroke="#B7F34A" stroke-width="6" stroke-linecap="round"/><path d="M0 0L22 -27" stroke="#F4FAFC" stroke-width="4"/><circle r="6" fill="#35D7C5"/><text y="78">GAIN</text></g>
+  <g transform="translate(264 548)"><circle r="48" fill="#101820" stroke="#3D5360" stroke-width="8"/><path d="M-32 26A42 42 0 1 1 32 26" fill="none" stroke="#B7F34A" stroke-width="6" stroke-linecap="round"/><path d="M0 0L18 -30" stroke="#F4FAFC" stroke-width="4"/><circle r="6" fill="#35D7C5"/><text y="78">TREBLE</text></g>
+  <g transform="translate(384 548)"><circle r="48" fill="#101820" stroke="#3D5360" stroke-width="8"/><path d="M-32 26A42 42 0 1 1 32 26" fill="none" stroke="#B7F34A" stroke-width="6" stroke-linecap="round"/><path d="M0 0L-8 -34" stroke="#F4FAFC" stroke-width="4"/><circle r="6" fill="#35D7C5"/><text y="78">MID</text></g>
+  <g transform="translate(474 548)"><circle r="40" fill="#101820" stroke="#3D5360" stroke-width="8"/><path d="M-27 22A34 34 0 1 1 27 22" fill="none" stroke="#35D7C5" stroke-width="6"/><path d="M0 0L-20 -20" stroke="#F4FAFC" stroke-width="4"/><text y="70">BASS</text></g>
+ </g>
+ <g font-family="Arial,sans-serif" font-size="16" font-weight="700">
+  <g><rect x="584" y="475" width="408" height="42" rx="10" fill="#101820" stroke="#3D5360"/><rect x="584" y="475" width="118" height="42" rx="10" fill="#B7F34A"/><text x="615" y="502" fill="#090C10">COMP</text><text x="750" y="502" fill="#B5C4CB">EQ</text><text x="856" y="502" fill="#B5C4CB">DRIVE</text></g>
+  <g><rect x="584" y="531" width="408" height="42" rx="10" fill="#101820" stroke="#3D5360"/><text x="612" y="558" fill="#B5C4CB">CHORUS</text><text x="754" y="558" fill="#B5C4CB">DELAY</text><text x="875" y="558" fill="#35D7C5">REVERB</text></g>
+  <g><rect x="584" y="587" width="408" height="42" rx="10" fill="#101820" stroke="#3D5360"/><text x="612" y="614" fill="#B5C4CB">CABINET IR</text><path d="M856 608H955" stroke="#35D7C5" stroke-width="5" stroke-linecap="round"/></g>
+ </g>
+ <g fill="#B5C4CB" font-family="Arial,sans-serif" font-size="14" font-weight="700">
+  <text x="1084" y="494">VELOCITY</text><text x="1084" y="545">DYNAMICS</text><text x="1084" y="596">SWING</text><text x="1084" y="647">HUMANIZE</text>
+ </g>
+ <g fill="#101820" stroke="#3D5360"><rect x="1220" y="475" width="270" height="18" rx="9"/><rect x="1220" y="526" width="270" height="18" rx="9"/><rect x="1220" y="577" width="270" height="18" rx="9"/><rect x="1220" y="628" width="270" height="18" rx="9"/></g>
+ <g fill="url(#lime)"><rect x="1220" y="475" width="205" height="18" rx="9"/><rect x="1220" y="526" width="166" height="18" rx="9"/><rect x="1220" y="577" width="118" height="18" rx="9"/><rect x="1220" y="628" width="184" height="18" rx="9"/></g>
+ <rect x="48" y="726" width="1504" height="190" rx="18" fill="#101820" stroke="#3D5360" stroke-width="2"/>
+ <text x="82" y="770" fill="#B7F34A" font-family="Arial,sans-serif" font-size="19" font-weight="800" letter-spacing="2">MIDI KEYBOARD</text>
+ <g transform="translate(82 790)">
+  <rect width="1436" height="96" rx="8" fill="#EAF0F2"/>
+  <g fill="#101820">
+   <rect x="82" width="34" height="58" rx="0"/><rect x="184" width="34" height="58"/><rect x="286" width="34" height="58"/><rect x="388" width="34" height="58"/><rect x="490" width="34" height="58"/><rect x="592" width="34" height="58"/><rect x="694" width="34" height="58"/><rect x="796" width="34" height="58"/><rect x="898" width="34" height="58"/><rect x="1000" width="34" height="58"/><rect x="1102" width="34" height="58"/><rect x="1204" width="34" height="58"/><rect x="1306" width="34" height="58"/>
+  </g>
+  <path d="M0 0V96M102 0V96M204 0V96M306 0V96M408 0V96M510 0V96M612 0V96M714 0V96M816 0V96M918 0V96M1020 0V96M1122 0V96M1224 0V96M1326 0V96M1428 0V96" stroke="#AAB7BC" stroke-width="2"/>
+  <rect x="612" y="0" width="102" height="96" fill="#B7F34A" opacity=".45"/>
+ </g>
+ <text x="1510" y="952" fill="#7D8A91" font-family="Arial,sans-serif" font-size="13" text-anchor="end" letter-spacing="2">SKIN CONCEPT · BLACKOUT VOLTAGE · REV 1</text>
+</svg>
