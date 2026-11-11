@@ -24,11 +24,13 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     subtitleLabel.setFont(juce::Font(13.0f, juce::Font::bold));
     subtitleLabel.setColour(juce::Label::textColourId, theme.accent);
     addAndMakeVisible(subtitleLabel);
-    presetBox.setTextWhenNothingSelected("FACTORY PRESETS  /  300");
+    presetBox.setTextWhenNothingSelected("CHOOSE A GUITAR PRESET");
+    presetBox.setTooltip("Choose a sound or playing style. Selecting a preset loads its settings.");
     presetBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     presetBox.setColour(juce::ComboBox::textColourId, theme.text);
     presetBox.setColour(juce::ComboBox::outlineColourId, theme.accent.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
+    categoryBox.setTooltip("Filter the unified preset list. Filtering never changes the current sound.");
     categoryBox.addItem("ALL PRESETS", 1);
     categoryBox.addItem("MELODY", 2);
     categoryBox.addItem("PATTERN", 3);
@@ -36,7 +38,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     categoryBox.setColour(juce::ComboBox::textColourId, theme.text);
     addAndMakeVisible(categoryBox);
-    presetSearch.setTextToShowWhenEmpty("SEARCH PRESETS...", theme.muted);
+    presetSearch.setTextToShowWhenEmpty("Search sounds, styles, articulations...", theme.muted);
+    presetSearch.setTooltip("Search preset names, artist-inspired styles, sound character, groove and articulation.");
     presetSearch.setColour(juce::TextEditor::backgroundColourId, theme.panelRaised);
     presetSearch.setColour(juce::TextEditor::textColourId, theme.text);
     presetSearch.setColour(juce::TextEditor::outlineColourId, theme.accent.withAlpha(0.4f));
@@ -84,11 +87,13 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
+    loadButton.setButtonText("LOAD SFZ");
+    loadButton.setTooltip("Load a licensed SFZ instrument bank from disk. Loading happens in the background.");
     loadButton.setColour(juce::TextButton::buttonColourId, theme.accent);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
-    themeButton.setTooltip("SKIN: choose one of 20 complete visual themes. Changes never interrupt playback.");
+    themeButton.setTooltip("SKIN: change the plugin's visual appearance. Your sound and playback stay unchanged.");
     themeButton.setColour(juce::TextButton::buttonColourId, theme.accent);
     themeButton.setColour(juce::TextButton::textColourOffId, theme.text);
     themeButton.onClick = [this]
@@ -138,6 +143,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         b->setColour(juce::TextButton::textColourOffId, theme.text);
         addAndMakeVisible(*b);
     }
+    modeBox.setTooltip("MELODY plays individual notes and chords. PATTERN plays chord-triggered guitar parts.");
     modeBox.addItem("MELODY", 1);
     modeBox.addItem("PATTERN", 2);
     modeBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
@@ -145,6 +151,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     modeBox.setColour(juce::ComboBox::outlineColourId, theme.accent.withAlpha(0.5f));
     addAndMakeVisible(modeBox);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "playMode", modeBox);
+    startModeBox.setTooltip("Choose whether timing follows the DAW host or the plugin's internal clock.");
     startModeBox.addItem("HOST", 1);
     startModeBox.addItem("HOST START", 2);
     startModeBox.addItem("INTERNAL", 3);
@@ -166,10 +173,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
+        knobs[i].setTooltip(knobNames[i] + " control. Hover for the parameter name; drag vertically to adjust.");
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
     }
     for (size_t i = 0; i < fxButtons.size(); ++i) {
         auto& b = fxButtons[i];
+        b.setTooltip(fxButtons[i].getButtonText() + " effect: click to enable or bypass. The lit state means active.");
         b.setClickingTogglesState(true);
         b.setColour(juce::TextButton::buttonColourId, theme.panelRaised);
         b.setColour(juce::TextButton::buttonOnColourId, theme.accent);
@@ -179,7 +188,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         addAndMakeVisible(b);
     }
     ampTitle.setText("AMP & TONE", juce::dontSendNotification);
+    ampTitle.setTooltip("Shape the guitar's amplifier tone and playing response.");
     fxTitle.setText("FX CHAIN", juce::dontSendNotification);
+    fxTitle.setTooltip("Switch individual effects on or off.");
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
     for (auto* l : { &ampTitle, &fxTitle, &playbackTitle }) {
         l->setFont(juce::Font(15.0f, juce::Font::bold));
