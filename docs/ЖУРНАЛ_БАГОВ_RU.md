@@ -167,3 +167,12 @@
 - M3-015 уточнён: overflow handling и unit regression присутствуют в исходниках; статус изменён на FIXED IN SOURCE — AWAITING CI, не на закрытый баг.
 - M1-001…003 и M2-001…004 остаются OPEN. M3-011/012 DAW и block-size stress остаются OPEN. M4+ и UI/UX 5.0 заблокированы до приёмки M1–M3.
 - Это изменение статусов основано на просмотре исходников и тестов, а не на выполнении сборки. Никакие CI/DAW результаты не выдумывались.
+
+
+## 11 ноября 2026 — M3-014: уточнение фактического runtime-пути и quantize-риск
+
+- Повторно прочитан актуальный `Source/PluginProcessor.cpp` на `main` (blob `b9e86e1d05a92507d2333c5628150fd62f75e286`), `ChordTransitionTimeline.h` (`38bc015a83b8c7dd8a2a6ec55579901ba36fcaec`) и `PatternScheduler.h` (`32d3f7630cb7280830112b61c84a375dabe7a132`).
+- Подтверждён реальный production call path: timeline вызывает render interval; `renderPatternInterval` вызывает `patternScheduler.schedule`; результат перебирается и передаётся в `sampler.noteOn/noteOff`. Это сильнее, чем helper-only тест, но тест всё ещё не создаёт PluginProcessor и не доказывает end-to-end поведение.
+- Выявлен конкретный quantize-window риск в `restartForChord`: на каждом chord change немедленно вызывается `sampler.allNotesOff()` и `clearPendingNoteOffs()`, а новый `patternCycleStartPpq` назначается на следующую quantize boundary. Следовательно, при quantized change текущая фраза может быть немедленно оборвана до будущей границы; несколько переходов в одной quantize window также теряют предыдущие ожидающие состояния. Требуется согласовать ожидаемую музыкальную семантику с v33 FINAL и покрыть её тестом до изменения кода.
+- Не вносить speculative fix: возможные контракты различаются (немедленный retrigger, переход на следующей сетке с продолжением старого паттерна, либо coalescing к последнему удерживаемому аккорду). Нужен явный контракт, после чего regression должен проверять фактические sampler dispatch offsets и pending NoteOff.
+- M3-014 остаётся OPEN. M3-015 остаётся FIXED IN SOURCE / AWAITING CI. Для HEAD `c0cd94eb897bd22fdcc13f0b78050d0d13a7c5a3` combined status пуст, workflow runs не возвращены; CI не подтверждён.
