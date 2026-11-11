@@ -1,8 +1,8 @@
-# Журнал багов — POP-PUNK-GUITAR-ULTIMATE
+# Журнал багов — POP PUNK GUITAR ULTIMATE REV 6.0 VST3
 
-Дата обновления: 10 ноября 2026
-Ветка: `migration/full-copy-m3-transport-scheduler-v2`
-HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
+Дата обновления: 11 ноября 2026
+Ветка: `main` (подтверждена пользователем)
+Последний проверенный HEAD: `27abf1313d707f9df4c0da0b77c044c18e8977ab`; CI для этого HEAD не найден
 
 Статусы: **FIXED — AWAITING CI** означает, что правка внесена, но успешный актуальный build/test не подтверждён; **OPEN** — исправление или приёмка не завершены.
 
@@ -21,8 +21,8 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 | M3-011 | High | DAW integration | Не подтверждены playback/stop/seek/pattern transitions в FL Studio 20. | Ручной acceptance test на Windows 10 / FL Studio 20. | OPEN |
 | M3-012 | Medium | Block-size stress | Полный runtime стресс при 64–1024 samples и BPM automation не подтверждён. | Проверить CTest/DAW при разных block sizes и изменениях темпа. | OPEN |
 | M3-013 | High | Sample-accurate mapping | Fractional PPQ offset 63.6 samples после ceil прижимался к последнему sample текущего блока (63), хотя первый допустимый sample 64 уже в следующем блоке. | Не clamp к blockSamples-1; bounded pending queue переносит NoteOn/NoteOff в следующий блок. Regression: defer + NoteOn@0 + NoteOff@2 и exact 60→60. Windows CI run 42772172657 / commit bdd540e: Release build, CTest, VST3 package и artifact upload SUCCESS. | FIXED — CI SUCCESS |
-| M3-014 | High | MIDI chord transitions | Несколько chord changes внутри одного блока сводятся к одному финальному chord snapshot; промежуточные аккорды теряются. | Общий allocation-free sample-accurate timeline walker рендерит каждый интервал до MIDI события и применяет событие в его sample; regression проверяет chord snapshots и точные границы интервалов. | FIXED IN SOURCE — AWAITING CI |
-| M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может молча отсечь события плотного pattern; нет отдельного overflow flag для output array. | Явный overflow status + all-notes-off fail-safe и regression test. | OPEN |
+| M3-014 | High | MIDI chord transitions | Нужно доказать, что все chord snapshots проходят полный processor→scheduler→sampler путь без потерь, включая несколько transitions в одном блоке и события в одной quantize window. | Timeline helper и processor path присутствуют; текущий тест проверяет helper-level snapshots на 16/80/120, но не является processor-level integration test. Добавить integration regression и проверить quantize-window/pending NoteOff. | OPEN — INTEGRATION TEST + CI REQUIRED |
+| M3-015 | High | Scheduler capacity | Фиксированный output capacity 512 может отсечь события плотного pattern; требуется подтвердить fail-safe на актуальном Windows CI. | Scheduler имеет output overflow flag, consumePendingOverflow() и processor allNotesOff fail-safe; unit test проверяет capacity 512 и однократное потребление overflow. | FIXED IN SOURCE — AWAITING CI |
 | M1-001 | High | State persistence | Активная sample library path/ID не входит в APVTS state; DAW restore не гарантирует возврат выбранной библиотеки. | Добавить versioned library reference и безопасное восстановление на worker thread. | OPEN |
 | M1-002 | High | State/automation acceptance | Нет автоматизированного round-trip теста параметров/state и DAW automation acceptance для текущего HEAD. | Добавить state serialization tests и проверить FL Studio automation/save/reopen. | OPEN |
 | M1-003 | High | Host validation | Pluginval и ручная FL Studio 20 acceptance не подтверждены. | Запустить pluginval strict и ручной host checklist; записать версии/настройки. | OPEN |
@@ -157,3 +157,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Необходимо проверить: фактический theme manager/selector, безопасную загрузку ресурсов из SKIN, fallback при отсутствующем/повреждённом skin manifest, сохранение/восстановление skin ID, масштабирование графики, независимость режима и темы, а также включение SKIN/RESOURCE в итоговый ZIP.
 - Критерии закрытия: 10 тем обнаруживаются и переключаются одной кнопкой; текущая тема переживает перезапуск и восстановление проекта; MELODY/PATTERN отображают собственные обложки независимо от темы; отсутствующие ресурсы не приводят к падению; package contents и Windows x64 Release CI подтверждают корректную структуру.
 - Статус: OPEN / SOURCE AUDIT + IMPLEMENTATION + CI + FL STUDIO 20 CHECK REQUIRED.
+
+
+## 11 ноября 2026 — REV 6.0 VST3: пересмотр статусов по свежему main
+
+- Официальное имя релиза: **POP PUNK GUITAR ULTIMATE REV 6.0 VST3**. Основная ветка: `main`.
+- HEAD `27abf1313d707f9df4c0da0b77c044c18e8977ab`: GitHub combined status пуст, workflow runs для SHA не возвращены. Нельзя считать M3-014/015 прошедшими Windows build/CTest.
+- M3-014 уточнён: наличие sample-accurate timeline и helper-level snapshots не доказывает processor→scheduler→sampler acceptance. Открыт integration-test gate и проверка нескольких transitions в одной quantize window / корректного pending NoteOff.
+- M3-015 уточнён: overflow handling и unit regression присутствуют в исходниках; статус изменён на FIXED IN SOURCE — AWAITING CI, не на закрытый баг.
+- M1-001…003 и M2-001…004 остаются OPEN. M3-011/012 DAW и block-size stress остаются OPEN. M4+ и UI/UX 5.0 заблокированы до приёмки M1–M3.
+- Это изменение статусов основано на просмотре исходников и тестов, а не на выполнении сборки. Никакие CI/DAW результаты не выдумывались.
