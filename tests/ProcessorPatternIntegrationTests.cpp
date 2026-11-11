@@ -1,3 +1,7 @@
+#ifndef JucePlugin_Name
+#define JucePlugin_Name "POP PUNK GUITAR ULTIMATE"
+#endif
+
 // Conflict-check: this integration test drives the real AudioProcessor path
 // (MIDI -> held chord -> PatternScheduler -> SamplerEngine -> streamed WAV).
 // It uses only temporary synthetic fixtures; no production sample assets or
