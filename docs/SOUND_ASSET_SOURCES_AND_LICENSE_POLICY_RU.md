@@ -82,3 +82,10 @@ For every candidate asset/library:
 ## Status and acceptance
 
 This file is a research and engineering policy, not proof that any source has been downloaded, legally cleared, integrated, or tested. Every bundled library requires a separate completed asset manifest and legal review. No audio files are added by this commit.
+
+
+## 2026-11-11 — Native Instruments Session Guitarist compatibility boundary
+
+The product may use Session Guitarist – Electric Sunburst Deluxe and Electric Vintage/Vintage Deluxe as sound/performance references, but PPGU must not extract, decrypt, copy, repackage or redistribute their protected Kontakt samples, NKI/NKX/NKC containers, patterns or presets. Native Instruments' EULA allows the supplied content to be used in musical/audio productions but restricts using it to create or function as another sound library or sample-based instrument and restricts separate sample redistribution. Official references: https://www.native-instruments.com/de/pages/end-user-license-agreement and https://www.native-instruments.com/products/session-guitarist-electric-sunburst-deluxe .
+
+Supported user workflow: run the NI instrument in a separate Kontakt instance/channel inside FL Studio and mix it alongside PPGU. PPGU's own user-bank importer is for original recordings and WAV/SFZ sources whose license explicitly permits local use in another sample instrument. Similar sound categories should be created from original or permissively licensed multisamples and PPGU's own DSP; do not promise direct NI library import or extraction.
