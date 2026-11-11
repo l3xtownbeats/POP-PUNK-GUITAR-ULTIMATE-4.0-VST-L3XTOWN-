@@ -1103,3 +1103,49 @@ void PopPunkGuitarUltimateAudioProcessor::loadSfzFileAsync(
             });
     });
 }
+
+void PopPunkGuitarUltimateAudioProcessor::importGuitarFolderAsync(
+    const juce::File& sourceDirectory,
+    std::function<void(ppgu::sampler::GuitarBankImportReport)> completion)
+{
+    const auto generationState = sampleLoadGeneration;
+    const auto generation = generationState->fetch_add(1, std::memory_order_acq_rel) + 1;
+    const auto libraryRoot = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
+        .getChildFile("L3XTOWN").getChildFile("POP PUNK GUITAR ULTIMATE").getChildFile("Library")
+        .getChildFile("User");
+    sampleLoadPool.addJob([this, sourceDirectory, libraryRoot, completion = std::move(completion),
+                           generationState, generation]() mutable
+    {
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+        ppgu::sampler::GuitarBankImporter importer;
+        auto report = importer.importFolder(sourceDirectory, libraryRoot, sourceDirectory.getFileName());
+        if (generationState->load(std::memory_order_acquire) != generation)
+            return;
+        if (report.success)
+        {
+            {
+                const juce::ScopedLock lock(sampleStateLock);
+                sampleLibraryRootPath = report.bankDirectory.getFullPathName();
+            }
+            if (report.selectedSfz.existsAsFile())
+            {
+                const auto loadReport = sampler.loadSfz(report.selectedSfz, generationState.get(), generation);
+                if (!loadReport.success)
+                    for (const auto& error : loadReport.errors) report.errors.add(error);
+                else
+                {
+                    const juce::ScopedLock lock(sampleStateLock);
+                    currentSfzFilePath = report.selectedSfz.getFullPathName();
+                }
+            }
+        }
+        juce::MessageManager::callAsync(
+            [completion = std::move(completion), report = std::move(report),
+             generationState, generation]() mutable
+            {
+                if (generationState->load(std::memory_order_acquire) == generation && completion)
+                    completion(std::move(report));
+            });
+    });
+}
