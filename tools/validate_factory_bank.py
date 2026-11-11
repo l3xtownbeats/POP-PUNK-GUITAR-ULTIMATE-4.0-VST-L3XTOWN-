@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the authored 300-preset catalog before packaging the VST3 build."""
+"""Validate the full 432-entry authored factory catalog before packaging the VST3 build."""
 import json
 import math
 import sys
@@ -9,15 +9,21 @@ path = Path(sys.argv[1] if len(sys.argv) > 1 else "presets/factory_bank_300.json
 data = json.loads(path.read_text(encoding="utf-8"))
 errors = []
 
-artists = {item["name"] for item in data.get("artists", [])}
+artist_items = data.get("artists", [])
+artists = {item["name"] for item in artist_items}
+artist_tracks = {item["name"]: set(item.get("tracks", [])) for item in artist_items}
 melody = data.get("melodyPresets", [])
 pattern = data.get("patternPresets", [])
-if len(melody) < 150:
-    errors.append(f"Melody bank has {len(melody)} presets; expected at least 150")
-if len(pattern) < 150:
-    errors.append(f"Pattern bank has {len(pattern)} presets; expected at least 150")
-if len(melody) + len(pattern) < 300:
-    errors.append("Combined bank contains fewer than 300 presets")
+minimums = data.get("minimumPresetCounts", {})
+minimum_melody = int(minimums.get("melody", 216))
+minimum_pattern = int(minimums.get("pattern", 216))
+minimum_total = int(minimums.get("total", minimum_melody + minimum_pattern))
+if len(melody) < minimum_melody:
+    errors.append(f"Melody bank has {len(melody)} presets; expected at least {minimum_melody}")
+if len(pattern) < minimum_pattern:
+    errors.append(f"Pattern bank has {len(pattern)} presets; expected at least {minimum_pattern}")
+if len(melody) + len(pattern) < minimum_total:
+    errors.append(f"Combined bank has {len(melody) + len(pattern)} presets; expected at least {minimum_total}")
 
 all_presets = melody + pattern
 ids = [p.get("id") for p in all_presets]
@@ -33,6 +39,18 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
         artist = preset.get("referenceArtist")
         if artist not in artists:
             errors.append(f'{preset.get("id")}: unknown reference artist {artist!r}')
+        else:
+            allowed_tracks = artist_tracks.get(artist, set())
+            for track in preset.get("referenceTracks", []):
+                if track not in allowed_tracks:
+                    errors.append(f'{preset.get("id")}: track {track!r} is not listed for {artist!r}')
+            breakdown = preset.get("trackBreakdown")
+            if breakdown:
+                track_title = breakdown.get("trackTitle")
+                if track_title not in allowed_tracks:
+                    errors.append(f'{preset.get("id")}: track breakdown title {track_title!r} is not listed for {artist!r}')
+                if track_title not in preset.get("referenceTracks", []):
+                    errors.append(f'{preset.get("id")}: track breakdown title is missing from referenceTracks')
         params = preset.get("parameters", {})
         for key in ("drive", "tone", "reverb"):
             value = params.get(key)
@@ -63,11 +81,18 @@ for expected_mode, presets in (("MELODY", melody), ("PATTERN", pattern)):
         if expected_mode == "PATTERN" and not preset.get("groove"):
             errors.append(f'{preset.get("id")}: missing groove')
 
+for artist in artist_items:
+    if len(artist.get("tracks", [])) < 2:
+        errors.append(f'{artist.get("name")}: expected at least two track references')
+    for mode_name, presets in (("MELODY", melody), ("PATTERN", pattern)):
+        if not any(p.get("referenceArtist") == artist.get("name") and p.get("trackBreakdown") for p in presets):
+            errors.append(f'{artist.get("name")}: missing track-study preset in {mode_name}')
+
 if errors:
     print("Factory preset catalog validation FAILED:")
     for error in errors:
         print(f" - {error}")
     raise SystemExit(1)
 
-print(f"Factory catalog OK: {len(melody)} Melody + {len(pattern)} Pattern = {len(all_presets)} presets")
+print(f"Factory catalog OK: {len(melody)} Melody + {len(pattern)} Pattern = {len(all_presets)} presets (minimum {minimum_total})")
 print(f"Artist coverage: {len(artists)} reference artists")
