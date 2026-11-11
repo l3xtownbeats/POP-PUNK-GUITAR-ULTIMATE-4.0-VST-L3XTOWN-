@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-16",
+  "index": 16,
+  "name": "Ocean Stage",
+  "description": "Deep marine panels with sea-glass teal and blue highlights",
+  "cluster": "C",
+  "identity": {
+    "material": "brushed teal alloy and translucent resin",
+    "lighting": "subtle underwater cyan light",
+    "mood": "calm, spacious, cinematic"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#102329",
+      "inset": "#173138"
+    },
+    "surfaces": {
+      "primary": "#173138",
+      "secondary": "#1D3D45",
+      "raised": "#28515A",
+      "overlay": "#102329"
+    },
+    "borders": {
+      "subtle": "#47777A",
+      "strong": "#62A9D9",
+      "focus": "#35C6B0"
+    },
+    "typography": {
+      "primary": "#EFF9F7",
+      "secondary": "#B5D1CE",
+      "disabled": "#85858B",
+      "onAccent": "#102329"
+    },
+    "rotary": {
+      "body": "#28515A",
+      "ring": "#62A9D9",
+      "track": "#47777A",
+      "value": "#35C6B0",
+      "pointer": "#D4E9E5",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#47777A",
+      "fill": "#35C6B0",
+      "thumb": "#D4E9E5",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#35C6B0",
+        "foreground": "#102329",
+        "hover": "#D4E9E5",
+        "pressed": "#62A9D9",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#1D3D45",
+        "foreground": "#EFF9F7",
+        "hover": "#28515A",
+        "pressed": "#62A9D9",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#35C6B0",
+      "activeText": "#102329",
+      "inactiveBackground": "#1D3D45",
+      "inactiveText": "#B5D1CE",
+      "indicator": "#62A9D9"
+    },
+    "comboBoxes": {
+      "background": "#1D3D45",
+      "foreground": "#EFF9F7",
+      "border": "#47777A",
+      "hover": "#28515A",
+      "menuBackground": "#173138",
+      "selection": "#35C6B0"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#35C6B0",
+      "blackPressed": "#62A9D9",
+      "keyBorder": "#47777A",
+      "octaveLabel": "#B5D1CE"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#35C6B0",
+      "high": "#F06A58",
+      "background": "#102329"
+    },
+    "icons": {
+      "primary": "#EFF9F7",
+      "secondary": "#B5D1CE",
+      "accent": "#35C6B0",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#1D3D45",
+      "border": "#47777A",
+      "selected": "#35C6B0",
+      "caption": "#EFF9F7"
+    },
+    "windowChrome": {
+      "background": "#102329",
+      "title": "#EFF9F7",
+      "border": "#47777A",
+      "close": "#D4E9E5"
+    },
+    "hero": {
+      "background": "#102329",
+      "accent": "#35C6B0",
+      "secondaryAccent": "#62A9D9",
+      "highlight": "#D4E9E5"
+    },
+    "accents": {
+      "primary": "#35C6B0",
+      "secondary": "#62A9D9",
+      "tertiary": "#D4E9E5"
+    },
+    "texture": {
+      "material": "brushed teal alloy and translucent resin",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "subtle underwater cyan light",
+      "glow": "#35C6B0",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#62A9D9"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Ocean Stage interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract brushed teal alloy and translucent resin hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original brushed teal alloy and translucent resin texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
