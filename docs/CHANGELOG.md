@@ -131,3 +131,13 @@ Only mark a feature **Implemented** when code or content has actually been added
 
 ## 2026-11-11 — CI run #618 correction
 - The current run `42958088120` has completed compile, CTest regression suite and pluginval strictness 5 successfully. At the time of this entry, package creation and artifact upload were still in progress. This supersedes any earlier status that said the run was still configuring/building. Manual FL Studio 20 acceptance and target-system performance measurements remain outstanding.
+
+## 11 ноября 2026 — runtime-применение заводских пресетов (частичная интеграция)
+
+- Runtime-модель пресета теперь сохраняет `sampleProfile` из JSON-каталога.
+- При выборе пресета реально применяются Amp Gain, Distortion Drive/On, Tone, Reverb Mix/On и Output через APVTS с уведомлением хоста.
+- Для Melody применяются артикуляция и Pick Style; для Pattern groove сопоставляется с ближайшим из восьми существующих scheduler slots.
+- Acoustic target отключает distortion; palm mute / flageolet / tremolo распознаются из поля articulation, когда оно задано в каталоге.
+- Статусная строка показывает целевой тип банка и прямо предупреждает, что для Pattern ещё требуются performance samples.
+- Ограничение: это не завершает все 300 пресетов. JSON-каталог остаётся описанием sound targets; отсутствующие sampleProfile у Pattern получают значение electric по умолчанию. Runtime пока не загружает банк автоматически по профилю, не реализует authored palmMuteMap/accentMap и не превращает восемь масок scheduler в 237 записанных перформансов.
+- Проверка: Windows Release CI запущен для изменений; результат фиксируется отдельным workflow run. Ручной тест в FL Studio 20 ещё не выполнен.
