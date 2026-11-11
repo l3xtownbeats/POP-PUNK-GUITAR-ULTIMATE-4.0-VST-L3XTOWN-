@@ -112,3 +112,64 @@ Known incomplete or unverified from the checked-in editor/source:
 - Fast startup, first-note latency, cache hit rate and preset-switch time have not been benchmarked.
 - Full import format coverage, automatic mapping quality, user-facing license workflow and seamless post-import browser refresh require end-to-end verification.
 - Factory catalogue definitions and generated preset files are not automatically proof of fully playable presets; each must resolve to valid mapped audio and pass host audition.
+
+
+## 6. Continuously expandable instrument — updates, MIDI tools and internal sequencer
+
+The product is designed as an evolving instrument, not a frozen one-time sample pack. New factory libraries, presets, styles, articulations, themes and workflow features can be added after release without overwriting user content or forcing a full reinstall.
+
+### In-plugin update and expansion system
+
+- Add an **UPDATE / CONTENT CENTER** panel with separate sections for Plugin Updates, SoundBank Expansions, Preset Packs, Themes and MIDI/Groove Packs.
+- Read a versioned remote catalog/manifest containing package ID, version, compatibility range, file size, SHA-256, signature, license/provenance, release notes and dependencies.
+- Check for updates on user request or on an optional user-configured schedule. Do not silently download large sound libraries or change the active preset.
+- Let the user select individual packs, see required disk space and download progress, pause/resume, retry and cancel.
+- Download to a staging directory, verify signature/hash and manifest, validate sample maps, then atomically activate the new version.
+- Keep the previous working version for rollback. A failed or interrupted update must not corrupt the active SoundBank or plugin.
+- Plugin binary updates must respect host/DAW file locks; stage them and request restart/reinstall when required rather than replacing a loaded VST3.
+- Keep factory content, user-imported banks and user presets in separate managed locations. Updates must never delete or silently replace user data.
+- Offer offline installation from a local ZIP/package for studio PCs without internet.
+- Display clear release notes and distinguish security/bug-fix updates from optional content expansions.
+- Verify package authenticity and licensing metadata. Unknown or incompatible packages are blocked or clearly marked for review.
+
+### MIDI performance tools
+
+Provide a dedicated **MIDI TOOLS** area that works non-destructively where possible:
+- Quantize to host grid with selectable strength, swing and triplet grids.
+- Humanize timing and velocity with bounded controls and repeatable seed.
+- Velocity shaping, accent templates, crescendo and palm-mute articulation threshold mapping.
+- Note-length/gate adjustment, legato, overlap cleanup, chord strum spread and down/up stroke assignment.
+- Chord recognition and chord-to-guitar voicing suggestions, including power-chord and octave options.
+- Transpose, octave shift, scale/key helper, note range limiting and duplicate-note cleanup.
+- Convert a selected Pattern performance into MIDI notes/events, preserving tempo and articulation markers where the host format permits.
+- Undo/redo and A/B preview before committing any MIDI transformation.
+- Never alter the host's original MIDI clip unless the user explicitly drags/exports or confirms an operation.
+
+### Internal guitar sequencer / pattern editor
+
+- Include a built-in **PATTERN SEQUENCER** with step grid and bar/beat ruler, supporting 1/2/4/8-bar patterns and adjustable resolution.
+- Lanes for note/chord trigger, downstroke/upstroke, palm mute/open, accent/velocity, gate/length, rests and optional articulation changes.
+- Pattern playback follows host tempo, transport, loop range and song position; provide standalone internal clock only when the host is not supplying transport.
+- Support tap tempo, count-in, swing, half-time/double-time, humanize and groove templates.
+- Allow chord progression input from MIDI, chord lane editing and optional AUTOCHORDS. Preserve explicit user voicings when AUTOCHORDS is off.
+- Pattern audition, loop, duplicate, variation generation from controlled parameters, and save as user pattern.
+- Drag patterns and MIDI clips from the plugin directly into compatible DAWs using standard MIDI drag-and-drop; if a host does not support plugin MIDI drag-out, provide Export MIDI file as a fallback.
+- Drag MIDI files into the plugin to audition/import them, with clear tempo/key detection confidence and a confirmation step before changing project state.
+- Pattern packs are data-only, small and versioned; they must not embed unlicensed commercial recordings or note-for-note transcriptions.
+
+### Drag-and-drop workflow
+
+- Drag a preset to a host only where the host API supports preset/state drag; otherwise provide Save/Export Preset.
+- Drag MIDI from the sequencer to FL Studio Piano Roll / playlist where supported; also provide explicit Export MIDI.
+- Drag supported WAV/SFZ/ZIP content onto Import Guitar to begin the same secure validation workflow as the Import button.
+- Drag a sample onto a mapping lane to assign it only after the user confirms root key, velocity range and articulation.
+- Provide visible drop targets and reject unsupported files without changing current state.
+
+### Technical and quality requirements
+
+- UI, downloads, decompression, MIDI analysis and sample indexing run outside the audio callback.
+- Sequencer event scheduling uses preallocated event buffers and sample-accurate host timing where available; no heap allocation, file I/O or blocking locks in the audio thread.
+- Host tempo/transport discontinuities (stop, seek, loop wrap, tempo change) must clear or reschedule pending events safely.
+- MIDI drag-out must use host-supported VST3 mechanisms; do not promise identical behavior across every DAW until tested.
+- Automated tests cover quantization, swing, event ordering, note-off, loop wrap, transport stop, MIDI export round-trip, update rollback, corrupt package rejection and user-data preservation.
+
