@@ -9,7 +9,7 @@ REV 10.0 UNIFIED является текущим мастер-контракто
 ## Фактическое состояние
 - Production WAV/SFZ streaming path существует: metadata index, WAV page reader, fixed page cache, bounded SPSC request queue, background streaming service, streaming voice reader, SamplePool.
 - Текущий playback path ограничен WAV mono/stereo; это не означает поддержку FLAC/OGG/AIFF/SF2/SFZ импорта как единого PGP формата.
-- BankManifest/BankScanner: спецификация подготовлена, реализация не завершена.
+- BankManifest: первая реализация schema/JSON serialization/validation закоммичена вместе с регрессионными тестами; Windows CI ещё не подтвердил компиляцию/тесты. BankScanner (filesystem traversal, SHA-256 file hashing, cancellation, incremental scan, atomic manifest replacement) ещё не реализован.
 - Layered Sound Engine, phase correlation, PGP packer, Import Guitar, Auto Discover, attribution report: не подтверждены как реализованные.
 - Ранее созданные UI skin assets/validators в репозитории не равны 61 завершённой коммерческой теме; текущие CMake comments/validators указывают на 50 skin manifests. Требуется аудит и согласование с REV 10.
 - Текущий VST3/host acceptance не подтверждён.
@@ -36,3 +36,11 @@ SB1 должен быть control-thread-only и не менять SamplePool/Sa
 ## Изменения этой ревизии
 - Исправлена зависимость BinaryData для processor integration test target в CMake.
 - Этот документ фиксирует фактологический baseline и список конфликтов.
+
+
+## SB1 implementation increment (CODED / UNVERIFIED)
+- Added `Source/Sampler/BankManifest.h/.cpp`: versioned manifest data model, JSON serialization/deserialization, schema validation, mono/stereo metadata bounds, SHA-256 string shape validation, relative-path traversal rejection.
+- Added `tests/BankManifestTests.cpp`: round-trip, default-deny redistribution, traversal, malformed hash, unsupported schema preserving destination.
+- Added the module to the plugin source list and a dedicated CTest target.
+- Important: this is the manifest data-contract layer only. It does not yet calculate hashes, scan directories, write atomically, cancel jobs, or publish index snapshots.
+- The first CI run for this increment was superseded/cancelled by subsequent pushes; the latest run must complete before status can be upgraded.
