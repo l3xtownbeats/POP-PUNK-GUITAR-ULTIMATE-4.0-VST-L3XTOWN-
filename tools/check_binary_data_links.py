@@ -38,7 +38,7 @@ for match in binary_blocks:
     header_owners[name] = target
     binary_targets[target] = (name, match.start())
 
-if "HEADER_NAMESPACE" in CMAKE:
+if any(re.search(r"\\bHEADER_NAMESPACE\\b", match.group(2)) for match in binary_blocks):
     fail("JUCE 7.0.12 does not support HEADER_NAMESPACE; use NAMESPACE")
 if "PPGUTestData/BinaryData.h" in CMAKE:
     fail("Invalid generated-header path: use <PPGUTestData.h>")
