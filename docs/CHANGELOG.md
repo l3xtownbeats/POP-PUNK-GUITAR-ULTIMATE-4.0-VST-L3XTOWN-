@@ -84,6 +84,17 @@ Only mark a feature **Implemented** when code or content has actually been added
 - Validation: Specification updated on the feature branch. Standalone VST3 behavior, FL Studio 20 compatibility, visual regression, audio quality, CPU/RAM and load-time performance still require implementation and testing.
 - Follow-up: Audit the actual source/build tree; preserve the approved UI and skin assets; implement/test native VST3 loading, sample/voice engine and performance safeguards; benchmark on Windows 10 Enterprise 1809 x64 with FL Studio 20.
 
+## 2026-11-11 — Fast preset switching and sound preloading promoted to high priority
+
+- Date: 2026-11-11
+- Version / area: Preset browser; Sounds Bank; sample cache; loading performance
+- Change: Added a dedicated high-priority requirement for fast preset switching and sound availability. Preset state application is separated from sample asset loading; the browser uses a lightweight preset/sample index; shared samples are reused across presets; only essential attack regions and mappings are prepared ahead where practical; long sustains and uncommon articulations are streamed/loaded on demand. Added asynchronous background preparation, bounded preload-ahead/cache eviction, safe handling of active voices during switching, and cold/warm cache acceptance tests. Added separate timing metrics for browser open, state apply, first playable note, required-asset readiness and warm-cache switching.
+- Reason: Large Kontakt-hosted instruments can take noticeable time to load presets and their sounds. Our standalone VST3 should minimize time-to-first-sound and make cached preset changes feel immediate without loading the entire library into RAM.
+- Files: `docs/CURATED_FEATURE_SPEC.md`; `docs/CHANGELOG.md`
+- Status: Specified (architecture requirements documented; no loading code or timing benchmark was implemented in this step).
+- Validation: Documentation update committed. Fast loading remains an acceptance target to verify on Windows 10 Enterprise 1809 x64 / FL Studio 20 with cold-cache and warm-cache tests.
+- Follow-up: Implement lightweight preset indexing, asynchronous asset preparation, shared bounded sample cache, preload-ahead and safe voice/resource handoff; benchmark first playable note and preset-switch latency.
+
 ---
 
 ## Rules for future entries
