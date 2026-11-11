@@ -185,3 +185,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Одинаковое поведение требуется при PATTERN + AUTOCHORDS OFF и PATTERN + AUTOCHORDS ON.
 - Спецификация: `360b852079ac0d84ba23a804c0ce176910d13000`.
 - Статус: OPEN / SOURCE AUDIT + IMPLEMENTATION + REGRESSION TESTS + WINDOWS CI + FL STUDIO 20 HOST TEST REQUIRED. Не закрывать без подтверждения отсутствия атак после note-off.
+
+
+## 11 ноября 2026 — OPEN: отсутствует LIVE NOTE / CHORD display
+
+- Требуется добавить на главный экран табло, отображающее актуальную ноту или распознанный аккорд в MELODY и PATTERN.
+- Проверить правильное отображение хроматических нот, одновременных нот, аккордов и обращений; при неоднозначности показывать список нот.
+- Табло должно соответствовать фактическому MIDI-состоянию после AUTOCHORDS обработки в PATTERN ON/OFF и очищаться по последнему note-off, stop, seek и panic.
+- Нужна потокобезопасная публикация snapshot без блокировок/аллокаций в audio thread и regression tests на перекрывающиеся ноты и MIDI velocity 0 note-off.
+- Спецификация: commit `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
+- Статус: OPEN / IMPLEMENTATION + UI LAYOUT + MIDI TESTS + WINDOWS CI + FL STUDIO 20 CHECK REQUIRED.
