@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-14",
+  "index": 14,
+  "name": "Purple Voltage",
+  "description": "Deep violet surfaces with electric lavender and cyan accents",
+  "cluster": "B",
+  "identity": {
+    "material": "satin polymer and smoked glass",
+    "lighting": "violet club lighting",
+    "mood": "dramatic, expressive, nocturnal"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#191326",
+      "inset": "#241A35"
+    },
+    "surfaces": {
+      "primary": "#241A35",
+      "secondary": "#2C2041",
+      "raised": "#3A2B53",
+      "overlay": "#191326"
+    },
+    "borders": {
+      "subtle": "#66527C",
+      "strong": "#E36DDB",
+      "focus": "#B68AFF"
+    },
+    "typography": {
+      "primary": "#F7F1FC",
+      "secondary": "#C9BBD7",
+      "disabled": "#85858B",
+      "onAccent": "#191326"
+    },
+    "rotary": {
+      "body": "#3A2B53",
+      "ring": "#E36DDB",
+      "track": "#66527C",
+      "value": "#B68AFF",
+      "pointer": "#62C9EF",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#66527C",
+      "fill": "#B68AFF",
+      "thumb": "#62C9EF",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#B68AFF",
+        "foreground": "#191326",
+        "hover": "#62C9EF",
+        "pressed": "#E36DDB",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#2C2041",
+        "foreground": "#F7F1FC",
+        "hover": "#3A2B53",
+        "pressed": "#E36DDB",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#B68AFF",
+      "activeText": "#191326",
+      "inactiveBackground": "#2C2041",
+      "inactiveText": "#C9BBD7",
+      "indicator": "#E36DDB"
+    },
+    "comboBoxes": {
+      "background": "#2C2041",
+      "foreground": "#F7F1FC",
+      "border": "#66527C",
+      "hover": "#3A2B53",
+      "menuBackground": "#241A35",
+      "selection": "#B68AFF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#B68AFF",
+      "blackPressed": "#E36DDB",
+      "keyBorder": "#66527C",
+      "octaveLabel": "#C9BBD7"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#B68AFF",
+      "high": "#F06A58",
+      "background": "#191326"
+    },
+    "icons": {
+      "primary": "#F7F1FC",
+      "secondary": "#C9BBD7",
+      "accent": "#B68AFF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2C2041",
+      "border": "#66527C",
+      "selected": "#B68AFF",
+      "caption": "#F7F1FC"
+    },
+    "windowChrome": {
+      "background": "#191326",
+      "title": "#F7F1FC",
+      "border": "#66527C",
+      "close": "#62C9EF"
+    },
+    "hero": {
+      "background": "#191326",
+      "accent": "#B68AFF",
+      "secondaryAccent": "#E36DDB",
+      "highlight": "#62C9EF"
+    },
+    "accents": {
+      "primary": "#B68AFF",
+      "secondary": "#E36DDB",
+      "tertiary": "#62C9EF"
+    },
+    "texture": {
+      "material": "satin polymer and smoked glass",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "violet club lighting",
+      "glow": "#B68AFF",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#E36DDB"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Purple Voltage interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract satin polymer and smoked glass hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original satin polymer and smoked glass texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
