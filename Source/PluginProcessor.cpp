@@ -551,7 +551,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
                 }
             },
-            [&](int eventSample)
+            [&](int)
             {
                 // Publish exactly one chord snapshot after every event at this
                 // sample has been applied. In particular, a same-sample
