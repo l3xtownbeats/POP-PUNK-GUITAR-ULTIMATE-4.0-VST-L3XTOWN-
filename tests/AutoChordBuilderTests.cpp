@@ -26,6 +26,7 @@ int main()
     if (!expect("chromatic major triad", buildAutoChord(61, 0, 0), { 61, 65, 68 }, false)) return 1;
     if (!expect("out-of-scale root snap", buildAutoChord(61, 0, 1), { 60, 64, 67 }, true)) return 1;
     if (!expect("high-note range safety", buildAutoChord(126, 0, 1), { 113, 117, 120 }, true)) return 1;
+    if (!expect("low-note range safety", buildAutoChord(0, 11, 1), { 11, 15, 18 }, true)) return 1;
 
     if (buildAutoChord(-1, 0, 1).count != 0
         || buildAutoChord(60, 12, 1).count != 0
