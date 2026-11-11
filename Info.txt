@@ -1582,3 +1582,8 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - IMPORTANT: these 432 entries are authored metadata/profile definitions, not 432 verified playable presets. Pattern runtime/sample mapping remains a separate blocker.
 - Main baseline CI at ae67940720dd406a0f1043c2d938d2766358053c passed Windows Release build, CTest, VST3 bundle validation and pluginval strictness 5. Integration branch requires its own CI.
 - Detailed decision and acceptance gates: docs/REV6_5_0_SELECTIVE_PORT_RU.md
+
+[2026-11-11] REV 6.0 PRESET BROWSER LABEL CLEANUP
+- Corrected the empty preset selector label from the obsolete 300 count to FACTORY PROFILES / 432.
+- Terminology is deliberate: the 432 catalog entries are metadata/performance profiles, not 432 verified playable instruments. Melody still requires a compatible licensed SFZ bank; Pattern playback remains dependent on the performance runtime.
+- Windows CI on the preceding catalog integration commit 5801ab1 passed Release build, CTest, VST3 bundle validation and pluginval strictness 5. The label-only follow-up commit requires its own CI run.
