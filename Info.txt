@@ -345,3 +345,53 @@ Corrected the checker to inspect only the argument bodies of actual juce_add_bin
 - regex word-boundary correction: a0b9efc12dadecffe904e485045a992cafd0705f
 
 Run #840 / ID 43119690640 was superseded by the immediately following correction commit. Run #841 / ID 43119709236 is queued against corrected checker SHA a0b9efc12dadecffe904e485045a992cafd0705f. The contract gate has NOT yet been observed passing. Do not label this stage PASS until the run log confirms it.
+
+
+## 2026-11-12 — PPGU SKIN STUDIO REV 14.0 / reference pack Skin_052
+
+**Статус:** PACK GENERATED; G1–G4 VALIDATION PENDING IN WINDOWS CI; NOT MERGED; NOT RUNTIME-INTEGRATED.
+
+Пользователь предоставил полный карт-бланш на продолжение PPGU Skin Studio с обязательным использованием ранее принятых REV 13/14 решений, INFO, технического задания и реального функционального состава редактора. REV 14.0 остаётся skin-only: аудио, APVTS, MIDI, presets, SoundBank и processor logic не меняются.
+
+### Актуализация аудита и control inventory
+- Проверены текущие `Source/PluginEditor.h/.cpp`, `Source/PluginProcessor.cpp`, `Source/UI/ThemeManager.h/.cpp`, `SKIN/theme_manifest.json`, legacy `SKIN/theme.schema.json`, старый gap audit и инвентарная матрица.
+- Подтверждено: текущий редактор уже имеет начальную palette switching foundation — SKIN button, popup, Ctrl+K, сохранение skin ID, sibling runtime root resolver и применение палитры. Это не полноценная Gallery.
+- Подтверждены 9 rotary и 7 FX toggles с точными APVTS mappings; preset selector/category/search, MELODY/PATTERN, sync selector, LOAD SFZ, status label и MIDI keyboard.
+- PUNK GROUP, LED activity, Auto Discover, Curator, Settings и About не имеют полной runtime-функции/компонентов. В REV 14 parity schema они включены как обязательные ID, но запрещено выдавать их за работающие функции или имитировать активность.
+- Обновлены `SKIN/CONTROL_INVENTORY_MATRIX_RU.md` и `SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md` с текущими фактами и открытыми gap-ами.
+
+### Skin_052 — Carbon Relay
+- Создана эталонная тема `Skin_052`, ID `skin-052`, family `carbon_studio`, layout `STUDIO_CONSOLE`.
+- Добавлен полный набор 21 palette tokens; рассчитанные контрасты: text primary/window 17.81:1; secondary/window 10.79:1; disabled/window 5.23:1; LCD text/LCD bg 17.17:1; accent/panel 15.09:1.
+- Добавлены все 27 обязательных control IDs и существующий sync selector в 12×16 layout map.
+- Созданы реальные assets: preview PNG 360×240, hero PNG 800×450, SVG texture/bezel/crest.
+- `reduceInEco=true`, `hotSwapFadeMs=150`, compatibility flags APVTS/layout/audio = false.
+- Тема помечена DESIGN / NOT RUNTIME-INTEGRATED: координаты layout пока metadata, потому что текущий JUCE editor ещё не использует theme layout engine.
+
+### REV 14 tooling and CI
+- Создан `SKIN/control_schema.json`: formal JSON Schema + 27 required control IDs + runtime inventory + 21 tokens + layout variants/grid.
+- Создан `SKIN/theme_pack_manifest.json` для одного reference pack, range 52–52. Registry `theme_manifest.json` намеренно не изменялся.
+- Создан `tools/validate_skin_pack.py` для G1 contrast, G2 control parity, G3 PNG/SVG assets, G4 identity/continuous numbering.
+- Создан `tools/merge_skin_pack.py` с backup-before-merge. Merge пока не запускался.
+- В Windows VST3 workflow добавлен pre-build G1–G4 validator step.
+
+Ключевые commits:
+- control schema: `046c2351f0b9a82426dec6108a86fe6900e9760a`, последующие schema updates: `5c30de2dfba180769e6cbaceff1ebc6977795d8e`, `f9da4611cf6c8479f4a3d834c464d0af2f065091`, `566c10161948919b24f88dff4808abf471d9dde3`, `41a3a71d0ce8636cd6e2c21e3071d3789e0bc863`.
+- Skin_052 theme/assets: `f8b8751d9287d25c043e757b20a01dced5f1c6bc`, SVG `fdfc912960f0b2d591a8d27f9c335dd1b870d7d0`, `a1c8b539331fc82c83b66648cc26caf94cefc0db`, `24c38e2123cd9e8b82f3748bc2061c7e7ac93950`, PNG assets commit `cc00b62c3db9c41694e5dd0795042c4df6e6eb28`, theme mapping update `6a6dced61f363505d9e86f549975a49b769bb8ef`.
+- validator: `2c7b72e66ae3d30c0ca7297c3b75959e4d478a3c`, regex/PNG signature fix `ac99f328bfb95d5563cf7bb4b609965e3171fce9`.
+- merge tool: `17172022d753a322f46d59dfbcd05396d8262685`; pack manifest: `adba1c7c70b3aa676b10b816b8a64db0af8fc9ad`.
+- CI gate: `9e190e964b0cc511e5a89e1ee69926f8235afc59`.
+- updated matrix: `26d4138a0afd684a382ec5dfb94ec1509271d494`; updated gap audit: `d0eeceaac4673a32da9006062e2ed1efe060139b`.
+
+Текущая проверка G1–G4 ожидает Windows workflow run #858 / SHA `26d4138a0afd684a382ec5dfb94ec1509271d494` (run #857 относится к более раннему SHA и может быть superseded). До получения итогового CI нельзя писать VALIDATION PASS. Старый run #841 PASS относится только к SHA `a0b9efc12dadecffe904e485045a992cafd0705f` и не подтверждает новый pack.
+
+### Открытые следующие этапы
+1. Получить и зафиксировать run #858, исправить ошибки validator если появятся.
+2. Показать Carbon Relay пользователю на согласование; массовую генерацию не начинать до согласования эталона.
+3. После утверждения — партия 8–12 тем с минимум 3 layout variants.
+4. Мигрировать ThemeManager на 21-token model с `token()`, сохранив legacy compatibility; убрать hardcoded visual hex из PluginEditor.
+5. Реализовать dynamic sibling `Skins/` discovery, Gallery, previews/search/favourites, Ctrl+K navigation, background rescan, persistence и 150 ms UI fade.
+6. Реализовать ECO policy и runtime parity/audio-invariance/DPI tests; только затем merge через `tools/merge_skin_pack.py`.
+7. Полный Windows Release → CTest → pluginval strictness 5 → packaging; FL Studio 20 host acceptance отдельно.
+
+Никаких изменений аудио-кода, APVTS IDs, preset data, MIDI или SoundBank в этом skin этапe не выполнялось. `BUILD VERIFIED`, `VALIDATION PASS`, `MERGED` и `INTEGRATED` не присваивались.
