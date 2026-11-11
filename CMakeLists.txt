@@ -53,6 +53,7 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/Sampler/SamplePool.cpp
     Source/Sampler/SamplePool.h
     Source/Sampler/SampleMetadataIndex.cpp
+    Source/Sampler/BankManifest.cpp
     Source/Sampler/SampleMetadataIndex.h
     Source/Sampler/WavPageReader.cpp
     Source/Sampler/WavPageReader.h
@@ -186,6 +187,14 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_sample_streaming_service_tests COMMAND ppgu_sample_streaming_service_tests)
+endif()
+
+# REV10 SB1 metadata schema tests; no audio-thread or playback integration.
+if(BUILD_TESTING)
+    add_executable(ppgu_bank_manifest_tests Source/Sampler/BankManifest.cpp tests/BankManifestTests.cpp)
+    target_include_directories(ppgu_bank_manifest_tests PRIVATE Source/Sampler)
+    target_link_libraries(ppgu_bank_manifest_tests PRIVATE juce::juce_core juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
+    add_test(NAME ppgu_bank_manifest_tests COMMAND ppgu_bank_manifest_tests)
 endif()
 
 if(BUILD_TESTING)
