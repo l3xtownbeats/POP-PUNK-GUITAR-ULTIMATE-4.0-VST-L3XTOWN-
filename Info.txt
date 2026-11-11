@@ -310,3 +310,28 @@ GitHub Actions run #830 / ID `43115673961` автоматически запущ
 **CI:** run #827 подтвердил Windows build, CTest 12/12 и pluginval strictness 5, но package step failed на старом hard-coded count 50. Runs #830/#831 были отменены новыми commits. Run #832 / ID `43116474444` проверяет source SHA `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`; результат пока pending. Документация не переносит PASS с прежних SHA.
 
 **Runtime art:** все темы — палитровые skin variants с единым layout. Hero illustration рисуется в JUCE Graphics; отдельные preview/hero/texture files не требуются для palette runtime и не заявляются как готовые assets. FL Studio 20 screenshot, hot-swap/persistence, contrast, audio invariance, CPU/RAM profiling и playable preset count требуют дальнейшей проверки. COMPLETE ZIP не публиковать до всех release gates.
+
+## 2026-11-12 — REV 13.1 §16.1 / JUCE 7.0.12 BinaryData v2
+
+**Статус:** SOURCE PATCHES COMMITTED; PRE-CONFIGURE CONTRACT GATE ADDED; CLEAN WINDOWS RUN #839 IN PROGRESS. **BUILD VERIFIED НЕ ПРИСВОЕН.**
+
+Выполнен первый этап обязательной последовательности §16.1:
+- В PPGUPresetData задан уникальный HEADER_NAME "PPGUData.h"; PluginEditor включает именно этот заголовок. Сохранено текущее пространство имён BinaryData, поэтому обращения к встроенному каталогу пресетов не менялись.
+- PPGUTestData объявлен отдельной целью до ppgu_processor_pattern_tests, с HEADER_NAME "PPGUTestData.h" и NAMESPACE PPGUTestData; test target линкует PPGUTestData.
+- Integration test включает <PPGUTestData.h> и проверяет размер встроенного тестового ресурса PPGUTestData::ppgu_test_data_txtSize. Это проверяет не только генерацию заголовка, но и фактическое подключение ресурса в тестовом executable.
+- Не используется HEADER_NAMESPACE и не используется несуществующий путь PPGUTestData/BinaryData.h. Применены JUCE 7.0.12 параметры HEADER_NAME и NAMESPACE.
+- В ходе разбора run #832 обнаружены дополнительные реальные ошибки компиляции JUCE 7.0.12 в PluginEditor.cpp: juce::String::fromWideCharPointer и trimStartCharacters недоступны. Исправлена конвертация Windows UTF-16 пути через WideCharToMultiByte + juce::String::fromUTF8; удаление префикса теперь использует поддерживаемый trim(). Это не C1083, но без этой коррекции build всё равно останавливался.
+- Добавлен tools/check_binary_data_links.py: проверяет уникальность HEADER_NAME, include -> target link, наличие обеих production/test BinaryData целей и порядок объявления бинарной цели раньше зависимого target. Проверка запускается в workflow до CMake configure; отсутствие линковки должно остановить pipeline до сборки.
+
+Commits:
+- CMake unique generated headers: d780b0aa0464f7346671b11a67ea7a1219d22ad9
+- Plugin generated header include: 0ccf93ffaf182b0dbcd224063c8afbbccb946d88
+- Test generated header/resource assertion: cc4f63760edd64ac74ae7d51ad9c1210f2b32b5d
+- JUCE 7 String API compatibility: e9cd121dac393d4d12a515657a88b53ced0974df
+- BinaryData pre-configure checker: abc091889df967ae1f1c17b00679db68b31e5a99
+- Checker regex correction: 715b4a40d38dcd8982ba5335f5f936d73f451f98
+- CI gate before configure: f0dcb6d6323cc09bb8eb196d93592bec33839a8c
+
+**Validation:** GitHub Actions run #839 / ID 43119575780 targets source SHA f0dcb6d6323cc09bb8eb196d93592bec33839a8c. At journal time the job is in progress; the BinaryData pre-configure gate, clean configure, full build, CTest, VST3 locate, pluginval and package stages have not yet been reported as PASS. Run #832 / ID 43116474444 failed at build due to the JUCE 7 String API errors listed above; this failure is retained as the regression trigger.
+
+Следующий обязательный критерий — run #839 пройти весь §16.1.4 без пропусков. Только после подтверждённого PASS каждого этапа можно внести отдельную запись BUILD VERIFIED с точным tested commit SHA. FL Studio 20 host acceptance и runtime audio/skin acceptance остаются самостоятельными проверками.
