@@ -27,6 +27,45 @@ Design requirements:
 
 Acceptance targets are to be established by measurement on the specified Windows/FL Studio setup; do not invent numeric performance claims before benchmarking. Any optimization must preserve audio correctness and avoid clicks, stuck notes, timing drift, or missing samples.
 
+
+## 0.1 Engine architecture lessons from the Electric Sunburst analysis
+
+The supplied Electric Sunburst analysis describes a hybrid instrument: a multisample sound library, chord recognition, pattern skeletons adapted to harmony, articulation/transition handling, and a separate direct-play melody instrument. We should adopt the useful design principles, not reproduce Kontakt's full resource footprint or proprietary content.
+
+### Adopt for our engine
+- **Pattern skeleton + harmony adapter:** store original patterns as compact event data (timing, degree/interval, duration, articulation, accent). At playback, adapt events to the detected chord and selected voicing. This is substantially lighter than storing a separate full audio recording for every chord and every pattern.
+- **String/position mapper in stages:** begin with a deterministic chord-tone/string mapper for supported guitar voicings. Add advanced fretboard-position selection only when the sample set contains the required notes and the CPU/memory cost is measured.
+- **Separate Pattern and Melody execution paths, shared sample engine:** Pattern generates/adapts note events; Melody responds directly to MIDI. Both use the same sample cache, voice allocator, articulation map, and output/FX path to avoid duplicate engines and duplicate sample memory.
+- **Chord recognition as a small state machine:** track held MIDI notes and note-off correctly; support common power chords, major/minor triads, sus and add-tone chords first. Handle chord changes with a configurable transition policy. Do not copy the overlap limitation described for Electric Sunburst; our implementation should avoid stale/overlapping chord state and stuck notes.
+- **Pattern dynamics:** support both MIDI velocity response and a user Accent control. A compatibility option may let a pattern ignore input velocity and use Accent, but this must be explicit per preset/pattern rather than universal.
+- **Humanization only when requested:** deterministic, bounded timing/velocity/strum variation with a low-cost default-off or subtle setting. Avoid random processing that changes timing unpredictably.
+- **MIDI export as a later utility:** pattern-to-MIDI drag/export is useful, but lower priority than reliable playback and performance.
+
+### Do not copy blindly
+- Electric Sunburst's reported 13.6 GB uncompressed / 6.3 GB compressed sample-library size is disk-library size, not a direct measurement of RAM use. Do not infer its runtime memory footprint from those figures. Our RAM use must be measured independently.
+- Multiple pickup/microphone layers, many velocity layers, round robins, fret noises and transition samples can increase disk size, preload memory, voice count and disk traffic. Include only layers that audibly improve the result; use selective preload/streaming and configurable quality tiers.
+- Avoid one giant always-loaded instrument. Use on-demand bank/preset loading, shared sample IDs, bounded cache, and release unused sample pages safely outside the audio callback.
+- Avoid per-pattern audio recordings for every chord. Prefer compact event skeletons mapped to shared multisamples; reserve recorded phrase audio for special one-shot fills only if it is licensed and memory-safe.
+- Do not add a full automatic fretboard solver, elaborate chord vocabulary, song-link system, or many simultaneous mic/pickup paths in the first engine version. Start with common pop-punk harmony and predictable guitar voicings.
+
+### Lightweight sample/voice plan
+- Prefer a small, well-recorded core set of notes/strings and a few meaningful velocity/articulation layers over exhaustive redundant multisampling.
+- Use streaming for long sustain/tail material and a small configurable preloaded attack region; verify disk-streaming behavior under low audio buffers and slower storage.
+- Use a bounded shared sample cache with explicit memory budget and cache metrics; never let preset browsing silently grow memory without limit.
+- Share decoded sample data across presets. Voice instances hold lightweight references and playback cursors, not copies of sample buffers.
+- Implement voice stealing by priority (release voices first, then quiet/oldest voices) and cap simultaneous voices. Avoid needless release tails and duplicate notes.
+- Keep FX modular and bypassed when inactive. Prefer a single efficient shared chain per plugin instance over per-voice heavy FX; use per-voice processing only where musically essential.
+
+### First-release scope recommendation
+1. A lean sample playback core with shared bank, bounded cache, preload/streaming, and voice limit.
+2. Melody playback with reliable note-on/note-off, velocity and a small articulation set.
+3. Pattern skeleton playback with host sync, common chord recognition, transposition/voicing and Accent.
+4. A compact, efficient core FX chain.
+5. Advanced fretboard mapping, extensive articulation transitions, extra pickup/mic layers, MIDI drag/export and Song Builder only after profiling shows sufficient headroom.
+
+### Comparative performance rule
+The product goal is to be lighter than Session Guitarist and Nexus 5 in both load time and runtime resource use, but this is a target to verify, not a claim already established. Benchmark all products on the same Windows 10 Enterprise 1809 x64 machine, FL Studio 20 version, sample rate, buffer size, project, preset, voice count and playback duration. Record cold/warm load time, idle/active CPU, peak/private working-set memory, disk reads, preset-switch latency and audio glitches. Compare equivalent musical output and quality settings; publish results only after repeatable measurements.
+
 ## 1. One unified preset browser
 Keep one browser for the entire instrument. Each preset is tagged with:
 - Sound character: Clean, Crunch, Lead, Distortion, Acoustic, Muted, Ambient.
