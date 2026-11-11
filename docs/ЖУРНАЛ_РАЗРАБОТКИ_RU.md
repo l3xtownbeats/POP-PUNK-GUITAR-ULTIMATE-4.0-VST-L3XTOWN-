@@ -1186,3 +1186,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - PATTERN + ON: одна входящая клавиша может быть преобразована в диатонический аккорд согласно выбранным KEY и MAJOR/MINOR, после чего тот же Pattern engine исполняет ритмический рисунок.
 - Спецификация обновлена в `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `94cf692c5879d8555e89e467f54ac72d669c2e8f`.
 - Статус: SPECIFIED / CODE IMPLEMENTATION AND QA PENDING. Не считать независимость Pattern от AUTOCHORDS подтверждённой в работающем VST3 до проверки Processor, regression tests, Windows CI и FL Studio 20.
+
+
+## 11 ноября 2026 — PATTERN: точная остановка по MIDI note-off из Piano Roll
+
+- Зафиксировано новое обязательное требование: ритмический рисунок/аккомпанемент должен прекращать планирование новых ударов и атак по окончании длины MIDI-ноты, нарисованной в Piano Roll.
+- Последний note-off при отсутствии других удерживаемых управляющих нот отменяет все будущие события PatternScheduler; активные голоса завершаются по строгой release policy. Не допускается скрытый latch-tail, продолжающий аккомпанемент за границей ноты.
+- Legato-переход разрешён только при перекрывающихся/удерживаемых управляющих MIDI-нот; stop, seek, loop/cycle jump и смена режима должны очищать устаревшие события.
+- PATTERN/OFF и PATTERN/ON обязаны одинаково соблюдать note-off.
+- Спецификация обновлена: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `360b852079ac0d84ba23a804c0ce176910d13000`.
+- Статус: SPECIFIED / SOURCE IMPLEMENTATION AND REGRESSION TESTS PENDING. Это не подтверждение исправления DSP/Scheduler и не подтверждение ручного теста в FL Studio 20.
