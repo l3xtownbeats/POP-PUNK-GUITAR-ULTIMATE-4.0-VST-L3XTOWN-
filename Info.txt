@@ -335,3 +335,13 @@ Commits:
 **Validation:** GitHub Actions run #839 / ID 43119575780 targets source SHA f0dcb6d6323cc09bb8eb196d93592bec33839a8c. At journal time the job is in progress; the BinaryData pre-configure gate, clean configure, full build, CTest, VST3 locate, pluginval and package stages have not yet been reported as PASS. Run #832 / ID 43116474444 failed at build due to the JUCE 7 String API errors listed above; this failure is retained as the regression trigger.
 
 Следующий обязательный критерий — run #839 пройти весь §16.1.4 без пропусков. Только после подтверждённого PASS каждого этапа можно внести отдельную запись BUILD VERIFIED с точным tested commit SHA. FL Studio 20 host acceptance и runtime audio/skin acceptance остаются самостоятельными проверками.
+
+### §16.1.2 gate regression correction — run #839
+
+Run #839 / ID 43119575780 stopped before CMake configure, as intended, because the new pre-configure checker returned non-zero. The reported issue was a false positive: the checker searched the entire CMakeLists text for the token HEADER_NAMESPACE and matched the explanatory conflict-check comment, not a JUCE function argument. No compiler/build stage ran in #839.
+
+Corrected the checker to inspect only the argument bodies of actual juce_add_binary_data calls and use a word-boundary token match. Follow-up checker commits:
+- false-positive scope correction: edda3ae1f06ae57060b51d1ec4244af1d33a147c
+- regex word-boundary correction: a0b9efc12dadecffe904e485045a992cafd0705f
+
+Run #840 / ID 43119690640 was superseded by the immediately following correction commit. Run #841 / ID 43119709236 is queued against corrected checker SHA a0b9efc12dadecffe904e485045a992cafd0705f. The contract gate has NOT yet been observed passing. Do not label this stage PASS until the run log confirms it.
