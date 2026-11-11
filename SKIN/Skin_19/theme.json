@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-19",
+  "index": 19,
+  "name": "Festival Lights",
+  "description": "Dark festival-stage canvas with three distinct spotlight accents",
+  "cluster": "B",
+  "identity": {
+    "material": "stage-black composite and satin aluminium",
+    "lighting": "multi-source festival lighting",
+    "mood": "energetic, celebratory, vivid"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#171624",
+      "inset": "#211F34"
+    },
+    "surfaces": {
+      "primary": "#211F34",
+      "secondary": "#2B2842",
+      "raised": "#3A3556",
+      "overlay": "#171624"
+    },
+    "borders": {
+      "subtle": "#625A7D",
+      "strong": "#6CE6D2",
+      "focus": "#FF5F9E"
+    },
+    "typography": {
+      "primary": "#FAF7FF",
+      "secondary": "#C9C2D9",
+      "disabled": "#85858B",
+      "onAccent": "#171624"
+    },
+    "rotary": {
+      "body": "#3A3556",
+      "ring": "#6CE6D2",
+      "track": "#625A7D",
+      "value": "#FF5F9E",
+      "pointer": "#FFD36E",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#625A7D",
+      "fill": "#FF5F9E",
+      "thumb": "#FFD36E",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF5F9E",
+        "foreground": "#171624",
+        "hover": "#FFD36E",
+        "pressed": "#6CE6D2",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#2B2842",
+        "foreground": "#FAF7FF",
+        "hover": "#3A3556",
+        "pressed": "#6CE6D2",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF5F9E",
+      "activeText": "#171624",
+      "inactiveBackground": "#2B2842",
+      "inactiveText": "#C9C2D9",
+      "indicator": "#6CE6D2"
+    },
+    "comboBoxes": {
+      "background": "#2B2842",
+      "foreground": "#FAF7FF",
+      "border": "#625A7D",
+      "hover": "#3A3556",
+      "menuBackground": "#211F34",
+      "selection": "#FF5F9E"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF5F9E",
+      "blackPressed": "#6CE6D2",
+      "keyBorder": "#625A7D",
+      "octaveLabel": "#C9C2D9"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF5F9E",
+      "high": "#F06A58",
+      "background": "#171624"
+    },
+    "icons": {
+      "primary": "#FAF7FF",
+      "secondary": "#C9C2D9",
+      "accent": "#FF5F9E",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2B2842",
+      "border": "#625A7D",
+      "selected": "#FF5F9E",
+      "caption": "#FAF7FF"
+    },
+    "windowChrome": {
+      "background": "#171624",
+      "title": "#FAF7FF",
+      "border": "#625A7D",
+      "close": "#FFD36E"
+    },
+    "hero": {
+      "background": "#171624",
+      "accent": "#FF5F9E",
+      "secondaryAccent": "#6CE6D2",
+      "highlight": "#FFD36E"
+    },
+    "accents": {
+      "primary": "#FF5F9E",
+      "secondary": "#6CE6D2",
+      "tertiary": "#FFD36E"
+    },
+    "texture": {
+      "material": "stage-black composite and satin aluminium",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "multi-source festival lighting",
+      "glow": "#FF5F9E",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#6CE6D2"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Festival Lights interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract stage-black composite and satin aluminium hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original stage-black composite and satin aluminium texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
