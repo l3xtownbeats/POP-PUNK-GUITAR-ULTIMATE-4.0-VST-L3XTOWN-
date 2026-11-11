@@ -22,7 +22,7 @@ private:
     juce::TextButton loadButton { "LOAD SFZ" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
-    struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
+    struct FactoryPreset { juce::String id, name, category, mode, soundCharacter, groove, articulation, artistReference, referenceTracks, tonalTarget, sampleProfile, sampleRequirement, noteBehavior, catalogStatus, styleProfileId, playingStyle, availableSoundCharacters, searchMetadata; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
     std::vector<FactoryPreset> factoryPresets;
     std::vector<int> visiblePresetIndices;
     juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle;
