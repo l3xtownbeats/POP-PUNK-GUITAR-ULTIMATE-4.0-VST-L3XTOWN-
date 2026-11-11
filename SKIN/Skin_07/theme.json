@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-07",
+  "index": 7,
+  "name": "Neon Cyber",
+  "description": "Cold glass, electric neon and sharp geometry",
+  "cluster": "B",
+  "identity": {
+    "material": "smoked-glass",
+    "lighting": "cool",
+    "mood": "Cold glass, electric neon and sharp geometry"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#090F1D",
+      "inset": "#090F1D"
+    },
+    "surfaces": {
+      "primary": "#090F1D",
+      "secondary": "#090F1D",
+      "raised": "#00E5FF",
+      "overlay": "#090F1D"
+    },
+    "borders": {
+      "subtle": "#B14DFF",
+      "strong": "#00E5FF",
+      "focus": "#C6FF4A"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#090F1D",
+      "ring": "#B14DFF",
+      "track": "#49434F",
+      "value": "#00E5FF",
+      "pointer": "#C6FF4A",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#00E5FF",
+      "thumb": "#C6FF4A",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#00E5FF",
+        "foreground": "#101116",
+        "hover": "#C6FF4A",
+        "pressed": "#B14DFF",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#090F1D",
+        "foreground": "#F4F0F4",
+        "hover": "#B14DFF",
+        "pressed": "#00E5FF",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#00E5FF",
+      "activeText": "#101116",
+      "inactiveBackground": "#090F1D",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#C6FF4A"
+    },
+    "comboBoxes": {
+      "background": "#090F1D",
+      "foreground": "#F4F0F4",
+      "border": "#B14DFF",
+      "hover": "#00E5FF",
+      "menuBackground": "#090F1D",
+      "selection": "#00E5FF"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#00E5FF",
+      "blackPressed": "#C6FF4A",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#C6FF4A",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#00E5FF",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#090F1D",
+      "title": "#F4F0F4",
+      "border": "#B14DFF",
+      "close": "#00E5FF"
+    },
+    "hero": {
+      "background": "#090F1D",
+      "accent": "#00E5FF",
+      "secondaryAccent": "#B14DFF",
+      "highlight": "#C6FF4A"
+    },
+    "accents": {
+      "primary": "#00E5FF",
+      "secondary": "#B14DFF",
+      "tertiary": "#C6FF4A"
+    },
+    "texture": {
+      "material": "smoked-glass",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "cool",
+      "glow": "#00E5FF",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#B14DFF"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
