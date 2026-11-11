@@ -75,5 +75,9 @@ P5 — variations, restrained humanization, favorites/search polish, and optiona
 - CPU and memory are measured at representative polyphony and sample rates.
 - Bundled samples have documented redistribution rights; unverified material is not packaged.
 
+## Project journal
+
+All future approved changes, fixes, implementation notes, and test results must be appended to [docs/CHANGELOG.md](CHANGELOG.md). The journal distinguishes planned/specification work from implemented and tested work.
+
 ## Explicitly deferred
 Do not claim a pattern count until the patterns exist and pass validation. Do not claim true pickup blending, microphone mixing, legato transitions, or finished amp/cab models until real content/implementation and tests exist. Do not add a Song Builder before both performance engines are dependable.
