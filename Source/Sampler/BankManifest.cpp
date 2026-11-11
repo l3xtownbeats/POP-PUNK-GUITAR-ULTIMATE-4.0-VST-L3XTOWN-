@@ -1,6 +1,7 @@
 #include "BankManifest.h"
 #include <algorithm>
 #include <cmath>
+#include <cctype>
 #include <memory>
 #include <filesystem>
 namespace ppgu::sampler {
