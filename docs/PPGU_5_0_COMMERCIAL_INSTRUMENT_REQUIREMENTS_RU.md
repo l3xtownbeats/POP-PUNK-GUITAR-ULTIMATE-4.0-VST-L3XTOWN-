@@ -173,3 +173,53 @@ Provide a dedicated **MIDI TOOLS** area that works non-destructively where possi
 - MIDI drag-out must use host-supported VST3 mechanisms; do not promise identical behavior across every DAW until tested.
 - Automated tests cover quantization, swing, event ordering, note-off, loop wrap, transport stop, MIDI export round-trip, update rollback, corrupt package rejection and user-data preservation.
 
+## Architecture decision — extensible engine, Session Guitarist-inspired workflow
+
+This section defines implementation architecture, not a claim that all modules are already complete. The product and interaction benchmark is Session Guitarist Electric Sunburst Deluxe; implementation, assets, samples, patterns and code remain original.
+
+### Module boundaries
+
+Keep the following responsibilities separate behind stable, versioned interfaces:
+
+- **Instrument Core / Voice Engine:** sample-zone lookup, voice allocation/stealing, note-on/off, envelopes, velocity layers, round robin, tuning and release tails. It owns real-time voice rendering only.
+- **Articulation Resolver:** maps performance intent and controller state to available recorded articulations. It must expose availability/fallback status; DSP approximation must never be labelled as a recorded articulation.
+- **Performance Router:** routes MIDI and mode state to MELODY or PATTERN. Mode changes, panic and transport discontinuities must flush incompatible queued events.
+- **Pattern Engine:** pattern data, grid, strokes, accents, rests, note lengths, chord-change handling and host-position scheduling. Pattern definitions are data, not hard-coded UI behavior.
+- **Harmony Engine:** chord analysis, scale/key mapping, AUTOCHORDS and voicing policy. AUTOCHORDS is PATTERN-only; MELODY passes chromatic notes unchanged.
+- **SoundBank Service:** manifests, source/license provenance, sample maps, import validation, indexing, preview and cache lifecycle. Banks are immutable once published; import builds a new candidate and atomically swaps it only after validation.
+- **Preset Service:** preset schema, migration, browser metadata and references to bank/map/articulation/FX/performance settings. Presets never duplicate WAV assets.
+- **FX Graph:** ordered effect modules with stable parameter IDs, bypass, state serialization and deterministic reset. Double Track remains clearly identified as an effect unless a genuine independent second performance is implemented.
+- **MIDI Tools / Sequencer:** non-real-time editing, groove manipulation, pattern authoring, undo/redo and MIDI import/export. The real-time scheduler receives only prevalidated, bounded event data.
+- **Presentation Layer:** editor, live note/chord display, browser and resource-backed skins. UI observes engine state through snapshots and commands; it does not own audio state.
+- **Content / Update Service:** signed versioned manifests, hashes, compatibility checks, staging, rollback and user-controlled activation. User banks/presets are never overwritten by factory updates.
+
+### Real-time and threading contract
+
+- The audio callback performs no filesystem/network access, sample decoding, decompression, library scans, UI calls, blocking mutex waits or unbounded allocations.
+- Worker threads perform import, decode, indexing, preset/resource preparation and update staging. Completed immutable objects are published to the audio side using bounded lock-free handoff or a proven non-blocking swap.
+- The message thread owns component creation/layout and text formatting. Audio-to-UI communication uses a compact atomic/lock-free snapshot; chord naming and string construction happen off the audio thread.
+- Event queues and voice pools are preallocated and bounded. Overflow behavior is explicit, observable and safe.
+- Host tempo, PPQ, play/stop, seek and loop discontinuities are inputs to the Pattern Engine, not inferred from wall-clock timers.
+
+### Data and compatibility contract
+
+- Every persisted format has an explicit schema version: plugin state, preset, pattern, SoundBank manifest, skin manifest and content/update manifest.
+- Parameter IDs are stable. Renaming a control does not silently rename its parameter ID.
+- Migrations are deterministic, tested and non-destructive. Unknown fields are preserved where practical; unknown schema versions fail safely with a clear message.
+- Factory content, imported banks and user presets are separate namespaces. Updates may add or replace factory-owned content only; user content is preserved.
+- Resource references use stable IDs and relative paths, never machine-specific absolute paths.
+- Sample provenance, license, source URL/name, checksum and redistribution permission travel with every imported/factory sample entry.
+
+### Feature completion gate
+
+A feature is not complete because a button, parameter, tooltip or specification exists. Completion requires:
+1. UI/control is connected to the real runtime path.
+2. State saves/restores and automation works where applicable.
+3. Unit or integration tests cover normal, boundary and failure behavior.
+4. Audio-thread safety and host transport behavior are checked for real-time features.
+5. Windows x64 build, CTest and pluginval pass on the exact commit.
+6. FL Studio 20 host validation is recorded separately; it must not be claimed unless actually performed.
+
+### Development policy
+
+Before every implementation pass, inspect the current branch and identify existing runtime code. Mark each requirement IMPLEMENTED+TESTED, IMPLEMENTED+UNVERIFIED, PARTIAL, UI-ONLY, SPECIFIED-ONLY or MISSING. Preserve verified code; fix only demonstrated defects or missing connections. Never delete user content or run cleanup scripts that recursively remove project/library directories.
