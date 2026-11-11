@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-27",
+  "index": 27,
+  "name": "Chrome Velocity",
+  "description": "Precision showroom hardware with polished metal and cyan accents",
+  "cluster": "A",
+  "identity": {
+    "material": "polished aluminium and dark glass",
+    "lighting": "cool showroom rim light",
+    "mood": "precise, fast, premium"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#171C22",
+      "inset": "#222B34"
+    },
+    "surfaces": {
+      "primary": "#222B34",
+      "secondary": "#2D3944",
+      "raised": "#40515F",
+      "overlay": "#171C22"
+    },
+    "borders": {
+      "subtle": "#657B8A",
+      "strong": "#5AC4D8",
+      "focus": "#C8D7E5"
+    },
+    "typography": {
+      "primary": "#F4F8FB",
+      "secondary": "#C0CDD5",
+      "disabled": "#85858B",
+      "onAccent": "#171C22"
+    },
+    "rotary": {
+      "body": "#40515F",
+      "ring": "#5AC4D8",
+      "track": "#657B8A",
+      "value": "#C8D7E5",
+      "pointer": "#F18B5B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#657B8A",
+      "fill": "#C8D7E5",
+      "thumb": "#F18B5B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#C8D7E5",
+        "foreground": "#171C22",
+        "hover": "#F18B5B",
+        "pressed": "#5AC4D8",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#2D3944",
+        "foreground": "#F4F8FB",
+        "hover": "#40515F",
+        "pressed": "#5AC4D8",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#C8D7E5",
+      "activeText": "#171C22",
+      "inactiveBackground": "#2D3944",
+      "inactiveText": "#C0CDD5",
+      "indicator": "#5AC4D8"
+    },
+    "comboBoxes": {
+      "background": "#2D3944",
+      "foreground": "#F4F8FB",
+      "border": "#657B8A",
+      "hover": "#40515F",
+      "menuBackground": "#222B34",
+      "selection": "#C8D7E5"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#C8D7E5",
+      "blackPressed": "#5AC4D8",
+      "keyBorder": "#657B8A",
+      "octaveLabel": "#C0CDD5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#C8D7E5",
+      "high": "#F06A58",
+      "background": "#171C22"
+    },
+    "icons": {
+      "primary": "#F4F8FB",
+      "secondary": "#C0CDD5",
+      "accent": "#C8D7E5",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2D3944",
+      "border": "#657B8A",
+      "selected": "#C8D7E5",
+      "caption": "#F4F8FB"
+    },
+    "windowChrome": {
+      "background": "#171C22",
+      "title": "#F4F8FB",
+      "border": "#657B8A",
+      "close": "#F18B5B"
+    },
+    "hero": {
+      "background": "#171C22",
+      "accent": "#C8D7E5",
+      "secondaryAccent": "#5AC4D8",
+      "highlight": "#F18B5B"
+    },
+    "accents": {
+      "primary": "#C8D7E5",
+      "secondary": "#5AC4D8",
+      "tertiary": "#F18B5B"
+    },
+    "texture": {
+      "material": "polished aluminium and dark glass",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "cool showroom rim light",
+      "glow": "#C8D7E5",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#5AC4D8"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Chrome Velocity thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original polished aluminium and dark glass abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast polished aluminium and dark glass material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
