@@ -143,11 +143,11 @@ Sample redistribution is subject to source and license verification. Commercial 
 
 ### Latest verified CI build
 
-Latest verified Windows x64 VST3 package: [workflow run 42864523781](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42864523781), source commit `fcf8c56e9bea635134d00f0c7a4d4e01a4def370` (the current branch HEAD `85a8129` adds documentation-only commits after that source commit).
+Latest Windows x64 Release VST3 verification is on branch HEAD `2e9356b729e3daba6a5c62c31fed7257072c6f12`:
+- [Main Windows VST3 workflow 42871881934](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881934) — SUCCESS: Release build, 12/12 CTest tests, VST3 bundle, pluginval strictness 5, package and artifact upload.
+- [M1/M2 Windows VST3 workflow 42871881954](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881954) — SUCCESS: APVTS audit (91 unique IDs), Release build, sampler tests, VST3 bundle and artifact upload.
 
-**Passed in this run:** Windows x64 Release configure/build, complete CTest regression suite, VST3 bundle discovery, pluginval strictness level 5, package creation and artifact upload. The package artifact is `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` (1,664,274,603 bytes; SHA-256 `60beff58172b24e118c469e16fe38cf34e1aadfbd4119c262cb1966c9ae267bf`; expires 8 February 2027).
-
-This is a successful automated build/package gate, **not** full milestone acceptance. The workflow explicitly records the remaining host-validation limitation: manual FL Studio 20 save/reopen, automation, MIDI/transport and audio acceptance have not been performed.
+The importer regression verifies 3 imported / 2 mapped / 1 needs mapping, Float32 WAV output, SHA-256 known vector and manifest checks. This green CI result does **not** mean M1–M5 are accepted: FL Studio 20 host checks and remaining runtime/stress gates are still open. See the current dated status at the end of this README and the M1–M5 work log.
 
 ## DEVELOPMENT EXECUTION — THREE STAGES (10 NOV 2026)
 
@@ -258,8 +258,22 @@ ctest --test-dir build -C Release --output-on-failure
 В importer добавлены source/converted SHA-256, source format, sample rate, channels, frames и duration в manifest. Regression test проверяет контрольные суммы и NCW warning. Реализация ожидает Windows CI; это не означает, что весь импортёр или все форматы приняты. Следующий приоритет основной линии — M1–M3, затем M4/M5 integration.
 
 
-## Производственный статус — 10.11.2026
+## Последняя подтверждённая Windows CI-проверка — 11.11.2026
 
-**Приоритет:** M1–M5 — основная линия; M6–M10 — только лёгкая подготовка параллельно; M11–M13 — после подтверждённой приёмки M1–M5. Связанные правки и regression tests объединяются в компактные пакеты. Проверки не отключаются ради скорости.
+Текущая ветка: `fix/m1-m2-m3-release-gates`  
+Проверенный HEAD: `2e9356b729e3daba6a5c62c31fed7257072c6f12` — `test(import): verify SHA-256 against known vector`.
 
-**Последний HEAD:** `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`. Windows CI runs [42868571549](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571549) и [42868571630](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42868571630) завершились FAILURE на компиляции `SampleLibraryImporter.cpp`: недоступен символ `juce::SHA256`. CTest/pluginval/package в этих запусках не выполнялись. IMP-003 открыт; IMP-001 остаётся OPEN и не перепроверен, так как CTest не стартовал. Подробности и план исправления внесены в журналы ниже.
+- Основной Windows VST3 workflow: [run 42871881934 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881934).
+- Дополнительный Windows VST3 M1/M2 workflow: [run 42871881954 — SUCCESS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42871881954).
+- Основной workflow: Windows 2022 / MSVC x64 Release configure и VST3 build — SUCCESS; все 12 CTest regression tests — PASS (0 failed); VST3 bundle найден; pluginval strictness 5 — SUCCESS; package и artifact upload — SUCCESS.
+- Дополнительный M1/M2 workflow: APVTS audit — PASS (91 уникальный ID, обязательные M1 controls, 7 FX slots); Release VST3 build, sampler unit/integration tests, bundle verification и artifact upload — SUCCESS.
+- CTest включает SFZ parser, Pattern scheduler, Pattern/Sampler integration, SamplePool, page-cache slots, bounded SPSC queue, streaming service, sample metadata index, AutoChords, StyleEngine, SampleLibraryImporter и Mapping Editor model.
+- Importer regression на этом HEAD проверяет ровно 3 imported / 2 mapped / 1 needs mapping; SFZ содержит только две автоматически сопоставленные regions (C3 и D4), а файл без root note остаётся без автоматически придуманного ключа. Также проверяются Float32 WAV conversion, SHA-256 известный вектор, source/converted hashes в manifest, аудиометаданные и NCW warning.
+- Несколько более ранних runs со статусом `cancelled` были остановлены concurrency при новых push; это не считать failure. Исторические compile failures на HEAD `2a0f15b` исправлены и перекрыты успешными runs выше.
+
+**Границы доказанного результата:** это подтверждает зелёную автоматизированную Windows build/test/package цепочку на HEAD `2e9356b`, но не закрывает M1–M5 как milestones. Остаются отдельные runtime/stress и host acceptance gates: полное сохранение/восстановление состояния и библиотеки, FL Studio 20 automation/save-reopen и transport acceptance, M2 velocity crossfade DSP/palm-mute/audio stress, а также полная M4/M5 runtime/preset binding. M3 остаётся NOT ACCEPTED. Stage 3 (M11–M13) не запускать до формальной приёмки M1–M5.
+
+### Баги импортера после успешной проверки
+- **IMP-001 — FIXED / REGRESSION PASS:** fixture подтверждает 3/2/1, два валидных SFZ regions и отсутствие выдуманного root key для unmapped take; CTest importer test прошёл в run 42871881934.
+- **IMP-003 — FIXED / WINDOWS CI PASS:** недоступный `juce::SHA256` заменён переносимой реализацией SHA-256; известный вектор `abc` проверяется регрессионным тестом; Windows build прошёл.
+- **IMP-002 — IMPLEMENTED / WINDOWS CI PASS:** manifest source/converted SHA-256 и аудиометаданные проверяются importer regression test. Это не означает, что все возможные внешние decoder files и license provenance уже прошли полноценную проверку.
