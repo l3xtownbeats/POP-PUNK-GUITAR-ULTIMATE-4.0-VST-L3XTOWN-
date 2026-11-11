@@ -73,6 +73,17 @@ Only mark a feature **Implemented** when code or content has actually been added
 - Validation: Source document reviewed. RAM usage was not inferred from the source's disk-library size figures. Comparative performance remains unverified until measured on the target setup.
 - Follow-up: Audit the actual source/build tree; implement the shared sample cache, voice allocator and pattern-to-harmony mapping; then profile load time, CPU, RAM, disk streaming and audio stability.
 
+## 2026-11-11 — Product direction confirmed: visual identity, standalone VST3, quality and efficiency
+
+- Date: 2026-11-11
+- Version / area: Product direction; UI/UX; standalone architecture; performance and sound quality
+- Change: Recorded the user's priority that the approved POP PUNK GUITAR ULTIMATE visual style and full functional interface remain central. Confirmed that the instrument is a native standalone VST3 and must not depend on Kontakt 6 / Kontakt Player. Added a useful-upgrades-only rule: changes must improve sound, playability, workflow, reliability or efficiency. Reaffirmed that fast loading, low RAM/CPU, selective sample loading, shared assets, bounded cache/polyphony, optional efficient FX, and UI/skin isolation must be achieved without unnecessarily sacrificing sound quality.
+- Reason: The product's differentiator is its own visual identity, its own functionality, and independence from the Kontakt shell; it should be easy to launch and load while still delivering high-quality guitar sound.
+- Files: `docs/CURATED_FEATURE_SPEC.md`; `docs/CHANGELOG.md`
+- Status: Specified (product direction and acceptance priorities documented; no new engine/UI code or benchmark was performed in this step).
+- Validation: Specification updated on the feature branch. Standalone VST3 behavior, FL Studio 20 compatibility, visual regression, audio quality, CPU/RAM and load-time performance still require implementation and testing.
+- Follow-up: Audit the actual source/build tree; preserve the approved UI and skin assets; implement/test native VST3 loading, sample/voice engine and performance safeguards; benchmark on Windows 10 Enterprise 1809 x64 with FL Studio 20.
+
 ---
 
 ## Rules for future entries
