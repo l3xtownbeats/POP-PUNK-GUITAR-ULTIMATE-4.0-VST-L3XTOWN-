@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-06",
+  "index": 6,
+  "name": "Dark Carbon",
+  "description": "Technical carbon-fibre instrument panel",
+  "cluster": "C",
+  "identity": {
+    "material": "carbon-fibre",
+    "lighting": "cool",
+    "mood": "Technical carbon-fibre instrument panel"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#101519",
+      "inset": "#101519"
+    },
+    "surfaces": {
+      "primary": "#101519",
+      "secondary": "#101519",
+      "raised": "#4ED0C1",
+      "overlay": "#101519"
+    },
+    "borders": {
+      "subtle": "#A4AFB7",
+      "strong": "#4ED0C1",
+      "focus": "#E8A94A"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#101519",
+      "ring": "#A4AFB7",
+      "track": "#49434F",
+      "value": "#4ED0C1",
+      "pointer": "#E8A94A",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#4ED0C1",
+      "thumb": "#E8A94A",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#4ED0C1",
+        "foreground": "#101116",
+        "hover": "#E8A94A",
+        "pressed": "#A4AFB7",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#101519",
+        "foreground": "#F4F0F4",
+        "hover": "#A4AFB7",
+        "pressed": "#4ED0C1",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#4ED0C1",
+      "activeText": "#101116",
+      "inactiveBackground": "#101519",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#E8A94A"
+    },
+    "comboBoxes": {
+      "background": "#101519",
+      "foreground": "#F4F0F4",
+      "border": "#A4AFB7",
+      "hover": "#4ED0C1",
+      "menuBackground": "#101519",
+      "selection": "#4ED0C1"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#4ED0C1",
+      "blackPressed": "#E8A94A",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E8A94A",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#4ED0C1",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#101519",
+      "title": "#F4F0F4",
+      "border": "#A4AFB7",
+      "close": "#4ED0C1"
+    },
+    "hero": {
+      "background": "#101519",
+      "accent": "#4ED0C1",
+      "secondaryAccent": "#A4AFB7",
+      "highlight": "#E8A94A"
+    },
+    "accents": {
+      "primary": "#4ED0C1",
+      "secondary": "#A4AFB7",
+      "tertiary": "#E8A94A"
+    },
+    "texture": {
+      "material": "carbon-fibre",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "cool",
+      "glow": "#4ED0C1",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#A4AFB7"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
