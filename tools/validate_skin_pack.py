@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate PPGU REV 14 skin packs (G1-G4). Uses only Python standard library."""
 from __future__ import annotations
-import argparse, json, math, re, struct, sys, xml.etree.ElementTree as ET
+import argparse, json, re, struct, sys, xml.etree.ElementTree as ET
 from pathlib import Path
 
 def fail(message: str) -> None:
@@ -30,13 +30,13 @@ def contrast(a: str, b: str) -> float:
 
 def png_dimensions(path: Path):
     data = path.read_bytes()
-    if len(data) < 24 or data[:8] != b"\\x89PNG\\r\\n\\x1a\\n" or data[12:16] != b"IHDR":
+    if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n" or data[12:16] != b"IHDR":
         fail(f"{path}: not a valid PNG")
     return struct.unpack(">II", data[16:24])
 
 def safe_svg(path: Path):
     raw = path.read_text(encoding="utf-8")
-    if re.search(r"<\\s*script|\\bon[a-z]+\\s*=|(?:href|src)\\s*=\\s*['\"]https?://", raw, re.I):
+    if re.search(r"<\s*script|\bon[a-z]+\s*=|(?:href|src)\s*=\s*['\"]https?://", raw, re.I):
         fail(f"{path}: active script/event/external URL is forbidden")
     try:
         root = ET.fromstring(raw)
@@ -46,7 +46,6 @@ def safe_svg(path: Path):
         fail(f"{path}: root element is not svg")
 
 def validate(root: Path, pack_manifest_path: Path) -> list[str]:
-    errors=[]
     schema=load_json(root/"control_schema.json")
     registry=load_json(root/"theme_manifest.json")
     pack=load_json(pack_manifest_path)
@@ -54,7 +53,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
     tokens=schema.get("x-ppgu-contract",{}).get("paletteTokens",[])
     if not required or len(required)!=len(set(required)):
         fail("control_schema.json has no unique requiredControlIds")
-    if len(tokens)!=21 or len(set(tokens))!=21:
+    if len(tokens)!=21 or len(tokens)!=len(set(tokens)):
         fail("control_schema.json must define exactly 21 unique palette tokens")
     existing_total=registry.get("totalSkins")
     if not isinstance(existing_total,int):
@@ -62,7 +61,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
     entries=pack.get("themes")
     if not isinstance(entries,list) or not entries:
         fail("theme_pack_manifest.json must contain a non-empty themes array")
-    start=pack.get("startIndex"); end=pack.get("endIndex")
+    start,end=pack.get("startIndex"),pack.get("endIndex")
     if pack.get("totalSkins")!=len(entries) or start!=existing_total+1 or end!=existing_total+len(entries):
         fail("pack range/count is not continuous with current registry")
     indices=[]
@@ -81,12 +80,10 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
         palette=theme.get("palette",{})
         if set(palette)!=set(tokens): fail(f"{theme_path}: palette must contain exactly the 21 contract tokens")
         for token in tokens: luminance(palette[token])
-        checks=[
+        for fg,bg,minimum in [
             ("text_primary","window_bg",4.0),("text_secondary","window_bg",4.0),
-            ("text_disabled","window_bg",4.0),("lcd_text","lcd_bg",4.0),
-            ("accent","panel",2.2)
-        ]
-        for fg,bg,minimum in checks:
+            ("text_disabled","window_bg",4.0),("lcd_text","lcd_bg",4.0),("accent","panel",2.2)
+        ]:
             ratio=contrast(palette[fg],palette[bg])
             if ratio < minimum: fail(f"{theme_path}: {fg}/{bg} contrast {ratio:.2f} < {minimum:.1f}")
         controls=theme.get("controls",{})
@@ -116,7 +113,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
             safe_svg(asset)
     if sorted(indices)!=list(range(start,end+1)) or len(indices)!=len(set(indices)):
         fail("pack theme IDs are not unique and continuous")
-    return [f"PASS {len(entries)} theme(s)", "PASS G1 contrast", "PASS G2 control parity", "PASS G3 PNG/SVG assets", "PASS G4 identity and continuous numbering"]
+    return [f"PASS {len(entries)} theme(s)","PASS G1 contrast","PASS G2 control parity","PASS G3 PNG/SVG assets","PASS G4 identity and continuous numbering"]
 
 def main():
     parser=argparse.ArgumentParser()
