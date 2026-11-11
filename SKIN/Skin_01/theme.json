@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-01",
+  "index": 1,
+  "name": "Neon Riot",
+  "description": "Default graphite hardware shell with electric magenta, cyan and restrained acid-yellow accents.",
+  "cluster": "B",
+  "identity": {
+    "material": "brushed charcoal metal and anodized aluminium",
+    "lighting": "controlled magenta/cyan edge lighting with soft ambient shadows",
+    "mood": "premium, energetic, precise pop-punk flagship"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#111116",
+      "inset": "#17171D"
+    },
+    "surfaces": {
+      "primary": "#202027",
+      "secondary": "#17171D",
+      "raised": "#292932",
+      "overlay": "#111116"
+    },
+    "borders": {
+      "subtle": "#49434F",
+      "strong": "#6A5B6C",
+      "focus": "#ED238B"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#111116"
+    },
+    "rotary": {
+      "body": "#292932",
+      "ring": "#49434F",
+      "track": "#49434F",
+      "value": "#ED238B",
+      "pointer": "#F4F0F4",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#ED238B",
+      "thumb": "#F4F0F4",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#ED238B",
+        "foreground": "#111116",
+        "hover": "#FF58AB",
+        "pressed": "#B81868",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#202027",
+        "foreground": "#F4F0F4",
+        "hover": "#292932",
+        "pressed": "#49434F",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#ED238B",
+      "activeText": "#111116",
+      "inactiveBackground": "#17171D",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#39D8E8"
+    },
+    "comboBoxes": {
+      "background": "#17171D",
+      "foreground": "#F4F0F4",
+      "border": "#49434F",
+      "hover": "#292932",
+      "menuBackground": "#202027",
+      "selection": "#ED238B"
+    },
+    "keyboard": {
+      "whiteKey": "#E8E7EB",
+      "blackKey": "#17171D",
+      "whitePressed": "#ED238B",
+      "blackPressed": "#39D8E8",
+      "keyBorder": "#34343D",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#E8E34A",
+      "high": "#F06A58",
+      "background": "#17171D"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#ED238B",
+      "disabled": "#77747D"
+    },
+    "thumbnails": {
+      "background": "#17171D",
+      "border": "#49434F",
+      "selected": "#ED238B",
+      "caption": "#F4F0F4"
+    },
+    "windowChrome": {
+      "background": "#111116",
+      "title": "#F4F0F4",
+      "border": "#49434F",
+      "close": "#ED238B"
+    },
+    "hero": {
+      "background": "#111116",
+      "accent": "#ED238B",
+      "secondaryAccent": "#39D8E8",
+      "highlight": "#E8E34A"
+    },
+    "accents": {
+      "primary": "#ED238B",
+      "secondary": "#39D8E8",
+      "tertiary": "#E8E34A"
+    },
+    "texture": {
+      "material": "brushed charcoal metal",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "controlled magenta/cyan edge lighting",
+      "glow": "#ED238B",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#39D8E8"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Default Neon Riot full-shell preview, including all functional areas and readable controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract guitar-hardware hero composition, graphite and brushed metal with restrained magenta/cyan light; no trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle brushed charcoal metal texture, optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
