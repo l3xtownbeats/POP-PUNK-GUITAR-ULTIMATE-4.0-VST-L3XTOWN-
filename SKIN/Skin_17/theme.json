@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-17",
+  "index": 17,
+  "name": "Golden Era",
+  "description": "Warm bronze hardware with restrained champagne highlights",
+  "cluster": "C",
+  "identity": {
+    "material": "aged brass, walnut and satin metal",
+    "lighting": "warm amber tube glow",
+    "mood": "heritage, tactile, refined"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#211C15",
+      "inset": "#2C241A"
+    },
+    "surfaces": {
+      "primary": "#2C241A",
+      "secondary": "#382D20",
+      "raised": "#4A3A27",
+      "overlay": "#211C15"
+    },
+    "borders": {
+      "subtle": "#766044",
+      "strong": "#A87C43",
+      "focus": "#D9B56D"
+    },
+    "typography": {
+      "primary": "#FBF5E9",
+      "secondary": "#D0C2A8",
+      "disabled": "#85858B",
+      "onAccent": "#211C15"
+    },
+    "rotary": {
+      "body": "#4A3A27",
+      "ring": "#A87C43",
+      "track": "#766044",
+      "value": "#D9B56D",
+      "pointer": "#F0DCA8",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#766044",
+      "fill": "#D9B56D",
+      "thumb": "#F0DCA8",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D9B56D",
+        "foreground": "#211C15",
+        "hover": "#F0DCA8",
+        "pressed": "#A87C43",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#382D20",
+        "foreground": "#FBF5E9",
+        "hover": "#4A3A27",
+        "pressed": "#A87C43",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D9B56D",
+      "activeText": "#211C15",
+      "inactiveBackground": "#382D20",
+      "inactiveText": "#D0C2A8",
+      "indicator": "#A87C43"
+    },
+    "comboBoxes": {
+      "background": "#382D20",
+      "foreground": "#FBF5E9",
+      "border": "#766044",
+      "hover": "#4A3A27",
+      "menuBackground": "#2C241A",
+      "selection": "#D9B56D"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#D9B56D",
+      "blackPressed": "#A87C43",
+      "keyBorder": "#766044",
+      "octaveLabel": "#D0C2A8"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D9B56D",
+      "high": "#F06A58",
+      "background": "#211C15"
+    },
+    "icons": {
+      "primary": "#FBF5E9",
+      "secondary": "#D0C2A8",
+      "accent": "#D9B56D",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#382D20",
+      "border": "#766044",
+      "selected": "#D9B56D",
+      "caption": "#FBF5E9"
+    },
+    "windowChrome": {
+      "background": "#211C15",
+      "title": "#FBF5E9",
+      "border": "#766044",
+      "close": "#F0DCA8"
+    },
+    "hero": {
+      "background": "#211C15",
+      "accent": "#D9B56D",
+      "secondaryAccent": "#A87C43",
+      "highlight": "#F0DCA8"
+    },
+    "accents": {
+      "primary": "#D9B56D",
+      "secondary": "#A87C43",
+      "tertiary": "#F0DCA8"
+    },
+    "texture": {
+      "material": "aged brass, walnut and satin metal",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "warm amber tube glow",
+      "glow": "#D9B56D",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#A87C43"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Golden Era interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract aged brass, walnut and satin metal hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original aged brass, walnut and satin metal texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
