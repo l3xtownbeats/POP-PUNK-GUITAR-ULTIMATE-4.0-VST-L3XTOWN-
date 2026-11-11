@@ -1206,3 +1206,12 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - AssetSpec описывает preview 480x300 PNG, hero 1200x420 WebP и optional seamless texture. Файлы изображений не созданы.
 - В этом цикле production C++ не менялся. Runtime, schema validation, contrast automation, inventory matrix, Windows build/CTest и FL Studio 20 не проверялись.
 - Статус: SPEC READY (manifest authored) — pending independent schema/contrast validation, assets, runtime and user acceptance. CI: AWAITING CI.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / выравнивание контракта токенов
+
+- Контракт SKIN/theme.schema.json расширен: thumbnails включены в обязательные группы токенов; заданы базовые ограничения верхнего уровня и структуры пакета.
+- Skin_02–Skin_11 обновлены группой thumbnails: background, border, selected, caption.
+- Повторно прочитаны из GitHub main: Skin_02–Skin_11 и Skin_12–Skin_21 корректно разбираются как JSON; все 18 обязательных групп токенов присутствуют в 20/20 манифестах.
+- Проверка пока не равна полной реализации JSON Schema draft 2020-12 validator, автоматическому contrast test или runtime validation.
+- Artwork assets отсутствуют; ThemeManager/gallery и полная APVTS inventory matrix не подтверждены. CI: AWAITING CI.
