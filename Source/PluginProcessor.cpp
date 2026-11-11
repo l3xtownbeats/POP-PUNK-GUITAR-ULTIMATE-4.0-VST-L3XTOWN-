@@ -271,6 +271,37 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
     const int samples = buffer.getNumSamples();
     keyboardState.processNextMidiBuffer(midi, 0, samples, true);
+
+    // Publish currently held MIDI pitches for the live chord display. This path
+    // is bounded, allocation-free and lock-free; UI reads only the two atomics.
+    for (const auto metadata : midi)
+    {
+        const auto message = metadata.getMessage();
+        if (message.isAllNotesOff() || message.isAllSoundOff())
+        {
+            for (auto& channel : displayHeldNotes) channel.fill(false);
+            liveMidiNoteMask[0].store(0, std::memory_order_relaxed);
+            liveMidiNoteMask[1].store(0, std::memory_order_relaxed);
+            continue;
+        }
+
+        if (!message.isNoteOn() && !message.isNoteOff())
+            continue;
+
+        const int channel = juce::jlimit(0, 15, message.getChannel() - 1);
+        const int note = juce::jlimit(0, 127, message.getNoteNumber());
+        displayHeldNotes[static_cast<size_t>(channel)][static_cast<size_t>(note)] = message.isNoteOn();
+
+        bool heldOnAnyChannel = false;
+        for (const auto& channelNotes : displayHeldNotes)
+            heldOnAnyChannel = heldOnAnyChannel || channelNotes[static_cast<size_t>(note)];
+
+        const size_t word = static_cast<size_t>(note / 64);
+        const std::uint64_t bit = std::uint64_t{ 1 } << static_cast<unsigned int>(note % 64);
+        auto currentMask = liveMidiNoteMask[word].load(std::memory_order_relaxed);
+        currentMask = heldOnAnyChannel ? (currentMask | bit) : (currentMask & ~bit);
+        liveMidiNoteMask[word].store(currentMask, std::memory_order_relaxed);
+    }
     const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
         static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
