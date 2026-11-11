@@ -1201,3 +1201,9 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 ## 11 ноября 2026 — выборочный перенос каталога 5.0 в REV 6.0
 
 Создана отдельная интеграционная ветка integration/rev6-5.0-catalog от main. Полный merge 5.0 отклонён из-за расхождения аудиоархитектуры и UI. Перенесён независимый каталог 432 профилей (216 MELODY + 216 PATTERN; 21 референсная группа) в presets/factory_bank_432.json. Обновлены CMake BinaryData, PluginEditor metadata loader/search, validator и Windows workflow. Поиск использует artist, reference tracks, tonal target, sample profile/requirement, note behavior, status и style profile. Это каталожные профили, а не доказательство наличия 432 звучащих инструментов. CI этой интеграционной ветки ещё должен подтвердить сборку, CTest и pluginval. FL Studio 20 acceptance остаётся отдельной проверкой.
+
+
+## 11 ноября 2026 — корректировка счётчика каталога REV 6.0
+- В `Source/PluginEditor.cpp` заменена устаревшая надпись `FACTORY PRESETS / 300` на `FACTORY PROFILES / 432`.
+- Использовано слово «профили», чтобы не создавать ложного впечатления, будто все 432 записи уже являются готовыми звучащими инструментами.
+- Предыдущий интеграционный commit `5801ab1` прошёл Windows Release build, CTest, VST3 bundle validation и pluginval strictness 5 (Actions run `42985809085`). Новый commit с изменением подписи ожидает отдельного CI.
