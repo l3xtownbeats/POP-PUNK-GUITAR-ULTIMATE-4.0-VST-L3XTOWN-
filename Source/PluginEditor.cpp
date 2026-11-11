@@ -24,7 +24,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     subtitleLabel.setColour(juce::Label::textColourId, theme.accent);
     addAndMakeVisible(subtitleLabel);
     presetBox.setTextWhenNothingSelected("FACTORY PRESETS  /  300");
-    presetBox.setColour(juce::ComboBox::backgroundColourId, theme.theme.panelRaised);
+    presetBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     presetBox.setColour(juce::ComboBox::textColourId, theme.text);
     presetBox.setColour(juce::ComboBox::outlineColourId, theme.accent.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
@@ -32,11 +32,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.addItem("MELODY", 2);
     categoryBox.addItem("PATTERN", 3);
     categoryBox.setSelectedId(1, juce::dontSendNotification);
-    categoryBox.setColour(juce::ComboBox::backgroundColourId, theme.theme.panelRaised);
+    categoryBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     categoryBox.setColour(juce::ComboBox::textColourId, theme.text);
     addAndMakeVisible(categoryBox);
     presetSearch.setTextToShowWhenEmpty("SEARCH PRESETS...", theme.muted);
-    presetSearch.setColour(juce::TextEditor::backgroundColourId, theme.theme.panelRaised);
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, theme.panelRaised);
     presetSearch.setColour(juce::TextEditor::textColourId, theme.text);
     presetSearch.setColour(juce::TextEditor::outlineColourId, theme.accent.withAlpha(0.4f));
     addAndMakeVisible(presetSearch);
@@ -119,13 +119,13 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     melodyTab.setClickingTogglesState(false);
     patternTab.setClickingTogglesState(false);
     for (auto* b : { &melodyTab, &patternTab }) {
-        b->setColour(juce::TextButton::buttonColourId, theme.theme.panelRaised);
+        b->setColour(juce::TextButton::buttonColourId, theme.panelRaised);
         b->setColour(juce::TextButton::textColourOffId, theme.text);
         addAndMakeVisible(*b);
     }
     modeBox.addItem("MELODY", 1);
     modeBox.addItem("PATTERN", 2);
-    modeBox.setColour(juce::ComboBox::backgroundColourId, theme.theme.panelRaised);
+    modeBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     modeBox.setColour(juce::ComboBox::textColourId, theme.text);
     modeBox.setColour(juce::ComboBox::outlineColourId, theme.accent.withAlpha(0.5f));
     addAndMakeVisible(modeBox);
@@ -133,7 +133,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     startModeBox.addItem("HOST", 1);
     startModeBox.addItem("HOST START", 2);
     startModeBox.addItem("INTERNAL", 3);
-    startModeBox.setColour(juce::ComboBox::backgroundColourId, theme.theme.panelRaised);
+    startModeBox.setColour(juce::ComboBox::backgroundColourId, theme.panelRaised);
     startModeBox.setColour(juce::ComboBox::textColourId, theme.text);
     startModeBox.setColour(juce::ComboBox::outlineColourId, theme.accent.withAlpha(0.5f));
     addAndMakeVisible(startModeBox);
@@ -156,7 +156,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     for (size_t i = 0; i < fxButtons.size(); ++i) {
         auto& b = fxButtons[i];
         b.setClickingTogglesState(true);
-        b.setColour(juce::TextButton::buttonColourId, theme.theme.panelRaised);
+        b.setColour(juce::TextButton::buttonColourId, theme.panelRaised);
         b.setColour(juce::TextButton::buttonOnColourId, theme.accent);
         b.setColour(juce::TextButton::textColourOffId, theme.text);
         b.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
@@ -245,13 +245,13 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillPath(neck);
     g.setColour(theme.accent.withAlpha(0.75f));
     g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
-    auto theme.panelArea = getLocalBounds().reduced(16);
-    theme.panelArea.removeFromTop(355);
-    theme.panelArea.removeFromBottom(80);
-    const int gap=12, ampW=static_cast<int>(theme.panelArea.getWidth()*0.39f), fxW=static_cast<int>(theme.panelArea.getWidth()*0.39f);
-    auto amp=theme.panelArea.removeFromLeft(ampW); theme.panelArea.removeFromLeft(gap);
-    auto fx=theme.panelArea.removeFromLeft(fxW); theme.panelArea.removeFromLeft(gap);
-    drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,theme.panelArea);
+    auto panelArea = getLocalBounds().reduced(16);
+    panelArea.removeFromTop(355);
+    panelArea.removeFromBottom(80);
+    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
+    auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
+    auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
+    drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,panelArea);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -273,10 +273,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     area.removeFromTop(8);
     auto status=area.removeFromTop(28); statusLabel.setBounds(status);
     area.removeFromTop(12);
-    auto theme.panels=area.removeFromTop(300);
-    const int gap=12, ampW=static_cast<int>(theme.panels.getWidth()*0.39f), fxW=static_cast<int>(theme.panels.getWidth()*0.39f);
-    auto amp=theme.panels.removeFromLeft(ampW); theme.panels.removeFromLeft(gap);
-    auto fx=theme.panels.removeFromLeft(fxW); theme.panels.removeFromLeft(gap); auto playback=theme.panels;
+    auto panels=area.removeFromTop(300);
+    const int gap=12, ampW=static_cast<int>(panels.getWidth()*0.39f), fxW=static_cast<int>(panels.getWidth()*0.39f);
+    auto amp=panels.removeFromLeft(ampW); panels.removeFromLeft(gap);
+    auto fx=panels.removeFromLeft(fxW); panels.removeFromLeft(gap); auto playback=panels;
     ampTitle.setBounds(amp.removeFromTop(34).reduced(12,2));
     fxTitle.setBounds(fx.removeFromTop(34).reduced(12,2));
     playbackTitle.setBounds(playback.removeFromTop(34).reduced(12,2));
