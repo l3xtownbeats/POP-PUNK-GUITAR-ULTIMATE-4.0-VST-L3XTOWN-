@@ -1,0 +1,1 @@
+PPGU processor-pattern test binary-data fixture.\nThis file exists only to make JUCE generate a test-local BinaryData.h in clean builds.\n

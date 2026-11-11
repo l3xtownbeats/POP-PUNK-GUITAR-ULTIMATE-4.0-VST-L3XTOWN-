@@ -249,6 +249,17 @@ if(BUILD_TESTING)
 endif()
 
 
+# Regression for generated JUCE BinaryData.h in the processor integration test.
+# Conflict-check: JUCE 7.0.12 accepts NAMESPACE (not HEADER_NAMESPACE); linking
+# this target exports its generated include directory and JUCE_TARGET_HAS_BINARY_DATA
+# to this test target. The fixture is intentionally tiny and license-neutral.
+if(BUILD_TESTING)
+    juce_add_binary_data(PPGUTestData
+        NAMESPACE PPGUTestData
+        SOURCES tests/assets/ppgu_test_data.txt
+    )
+endif()
+
 # Real AudioProcessor integration regression for the PATTERN MIDI path.
 # Conflict-check: links the production processor target rather than duplicating
 # a mock scheduler; fixture WAV/SFZ files are generated in the system temp dir.
@@ -262,6 +273,7 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_processor_pattern_tests PRIVATE Source)
     target_link_libraries(ppgu_processor_pattern_tests PRIVATE
         PopPunkGuitarUltimate
+        PPGUTestData
         juce::juce_audio_formats
         juce::juce_audio_utils
         juce::juce_recommended_config_flags
