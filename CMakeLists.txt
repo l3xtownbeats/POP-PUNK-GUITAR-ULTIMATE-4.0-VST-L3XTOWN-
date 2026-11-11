@@ -43,6 +43,7 @@ juce_add_plugin(PopPunkGuitarUltimate
 
 target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginProcessor.cpp
+    Source/Music/ChordRecognizer.cpp
     Source/PluginProcessor.h
     Source/PluginEditor.cpp
     Source/PluginEditor.h
@@ -197,4 +198,14 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
+endif()
+
+# Dependency-free chord-recognition unit tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_chord_recognizer_tests
+        Source/Music/ChordRecognizer.cpp
+        tests/ChordRecognizerTests.cpp
+    )
+    target_include_directories(ppgu_chord_recognizer_tests PRIVATE Source/Music)
+    add_test(NAME ppgu_chord_recognizer_tests COMMAND ppgu_chord_recognizer_tests)
 endif()
