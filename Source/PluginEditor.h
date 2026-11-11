@@ -5,13 +5,14 @@
 #include <array>
 #include <vector>
 
-class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor
+class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
     explicit PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor&);
     ~PopPunkGuitarUltimateAudioProcessorEditor() override = default;
     void paint(juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
 private:
     struct ThemePalette
@@ -40,6 +41,7 @@ private:
     std::vector<FactoryPreset> factoryPresets;
     std::vector<int> visiblePresetIndices;
     juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle, presetLabel, modeLabel;
+    juce::Label chordCaptionLabel, chordValueLabel;
     juce::TextButton melodyTab { "♫  MELODY" }, patternTab { "PATTERN" };
     juce::ComboBox modeBox, startModeBox;
     std::array<juce::Slider, 9> knobs;
