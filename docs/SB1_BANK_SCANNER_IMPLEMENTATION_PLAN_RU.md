@@ -11,9 +11,21 @@
 
 SB1 не меняет текущий SFZ/WAV playback path и не меняет ownership существующих SamplePool snapshots. Scanner работает только в control/worker контексте. Manifest не становится владельцем sample bytes и не открывается audio thread. Это минимизирует риск регрессии sampler core.
 
-## 1. Область SB1
+## 1. Область SB1 — СТРОГО GUITAR-ONLY
 
-Реализовать версионированный sidecar manifest и отдельную задачу сканирования библиотеки. На первом этапе индексируются WAV-файлы, поскольку именно этот формат подтверждён текущими SampleMetadataIndex/WavPageReader. Другие форматы остаются явными будущими расширениями, пока decoder и playback path не реализованы.
+Реализовать версионированный sidecar manifest и отдельную задачу сканирования только гитарных звуков. PPGU — специализированная гитарная библиотека, а не универсальный аудиобраузер. Барабаны, басовые партии, клавишные, вокал, синтезаторы, оркестровые и прочие негитарные источники не должны автоматически попадать в основной SoundBank.
+
+На первом этапе фактически индексируются WAV-файлы, поскольку именно этот формат подтверждён текущими SampleMetadataIndex/WavPageReader. SFZ/SF2 используются как описательные карты: извлекаются только явно указанные в них регионы и только если sample-файлы поддерживаются текущим playback path. Расширение WAV/FLAC/OGG/AIFF само по себе не доказывает, что файл содержит гитару. Неподдерживаемый playback формат не объявляется воспроизводимым.
+
+### Классификация кандидатов
+- `GUITAR_CONFIRMED` — гитарный характер подтверждён структурой специализированной библиотеки, явными SFZ/SF2 metadata, надёжным описанием/тегами или подтверждённым пользователем mapping; разрешён в основной гитарный индекс.
+- `GUITAR_REVIEW` — возможный гитарный звук без достаточных доказательств; показывается отдельно для ручной проверки/прослушивания и не попадает в основной SoundBank до подтверждения.
+- `NON_GUITAR` — явно распознанный барабанный, басовый, клавишный, вокальный, синтезаторный, оркестровый или иной негитарный материал; исключается из гитарного индекса.
+- `UNSUPPORTED_FORMAT` — формат не поддерживается текущим scanner/playback path; не выдаётся за готовый ресурс.
+
+Положительные подсказки: guitar/electric guitar/acoustic/classical/nylon, clean/crunch/overdrive/distortion, palm mute/muted, harmonic/flageolet, slide, bend, tremolo picking, pick noise и другие гитарные артикуляции. Отрицательные подсказки: drums/kick/snare/cymbal, bass, piano/keys, vocal/choir, synth/pad/lead, orchestral/strings. Списки ключевых слов являются эвристикой, а не единственным доказательством.
+
+Нельзя классифицировать аудио как гитару только по расширению, sample rate, имени WAV или факту нахождения в общей папке Sounds. Неоднозначные файлы требуют ручной проверки/прослушивания. Любая будущая аудио-классификация работает только в фоне и не может молча добавлять ресурс в подтверждённый банк.
 
 ### Входит
 - stable Bank ID и Sample ID;
@@ -22,7 +34,7 @@ SB1 не меняет текущий SFZ/WAV playback path и не меняет 
 - размер файла, modification time, sample rate, channels, frames, bit depth, float flag;
 - SHA-256 каждого sample;
 - source, author, license identifier, license URL/evidence, verification timestamp и redistribution status;
-- diagnostics по отдельным файлам;
+- diagnostics и guitar classification по отдельным файлам (GUITAR_CONFIRMED / GUITAR_REVIEW / NON_GUITAR / UNSUPPORTED_FORMAT);
 - cancellation;
 - incremental rescan с проверкой metadata fingerprint и сохранённого checksum;
 - временная запись manifest + валидация + атомарная замена sidecar;
@@ -30,6 +42,8 @@ SB1 не меняет текущий SFZ/WAV playback path и не меняет 
 
 ### Не входит
 - декодирование новых форматов;
+- автоматическое включение неоднозначных или неподтверждённых файлов в основной Guitar SoundBank;
+- объявление всех найденных аудиофайлов гитарными без проверки;
 - изменение SamplePool/SamplerEngine playback;
 - освобождение старых SamplePool snapshots;
 - LayerEngine, phase analysis, loops, Stack, PGP;
@@ -92,6 +106,12 @@ SB1 не меняет текущий SFZ/WAV playback path и не меняет 
 | Тест | Ожидаемый результат |
 |---|---|
 | 1000 WAV файлов | Полный индекс без потери записей |
+| Guitar-only positive metadata | Гитарный кандидат получает GUITAR_CONFIRMED |
+| Drum/piano/vocal/synth metadata | NON_GUITAR, не попадает в основной индекс |
+| Ambiguous WAV без metadata | GUITAR_REVIEW, не включается до подтверждения |
+| WAV в папке с названием Guitar, но без доказательств | Не считается автоматически подтверждённой гитарой |
+| Смешанный SFZ bank | Индексируются только регионы, явно относящиеся к гитаре |
+| Unsupported audio extension | UNSUPPORTED_FORMAT, не обещается playback |
 | Повторный неизменённый scan | Stable IDs; checksum reuse явно отмечен |
 | Изменённый файл | Новый checksum и sampleId |
 | Переименованный файл | Новый relative path и sampleId |
