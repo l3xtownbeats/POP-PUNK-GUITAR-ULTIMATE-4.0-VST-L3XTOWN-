@@ -1,0 +1,60 @@
+{
+  "name": "Skate Yard",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#20251b",
+    "background.bottom": "#11150e",
+    "accent.primary": "#e4d52b",
+    "accent.secondary": "#b8e35c",
+    "text.main": "#fbffe9",
+    "text.dim": "#a9b18c",
+    "knob.face": "#343c29",
+    "knob.ring": "#d4c526",
+    "button.normal": "#11150e",
+    "button.active": "#e4d52b",
+    "button.hover": "#20251b",
+    "slider.track": "#a9b18c",
+    "slider.fill": "#e4d52b",
+    "led.on": "#e4d52b",
+    "led.off": "#a9b18c",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#e4d52b",
+    "meter.fill": "#e4d52b",
+    "meter.peak": "#ff4444",
+    "panel.border": "#a9b18c",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#11150e",
+    "list.row.selected": "#e4d52b",
+    "tooltip.background": "#11150e",
+    "tooltip.text": "#fbffe9"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "BarlowCondensed-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "concrete_stencil"
+  }
+}
