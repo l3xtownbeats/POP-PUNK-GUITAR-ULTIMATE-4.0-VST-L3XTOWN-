@@ -181,7 +181,26 @@
         "scale",
         "letterSpacing"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "properties": {
+        "ui": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 2
+        },
+        "letterSpacing": {
+          "type": "number"
+        }
+      }
     },
     "effects": {
       "type": "object",
@@ -194,7 +213,34 @@
         "edgeHighlight",
         "glow"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "properties": {
+        "material": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "bezel": {
+          "type": "string"
+        },
+        "crest": {
+          "type": "string"
+        },
+        "shadowDepth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "edgeHighlight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "glow": {
+          "type": "string"
+        }
+      }
     },
     "reduceInEco": {
       "type": "boolean",
@@ -1463,7 +1509,24 @@
         "bezel",
         "crest"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "properties": {
+        "preview": {
+          "type": "string"
+        },
+        "hero": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "bezel": {
+          "type": "string"
+        },
+        "crest": {
+          "type": "string"
+        }
+      }
     },
     "compatibility": {
       "type": "object",
