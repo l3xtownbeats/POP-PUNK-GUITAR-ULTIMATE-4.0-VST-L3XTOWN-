@@ -126,3 +126,13 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Added drag-and-drop requirements for MIDI clips, supported audio/SFZ/ZIP imports and sample mapping, with Export MIDI fallback where a host does not support plugin MIDI drag-out.
 - All MIDI processing, content downloads, indexing and decompression must stay outside the audio callback; sequencer scheduling must be preallocated and transport-safe.
 - These are product requirements, not claims of completed implementation. DAW-specific drag/drop and VST3 MIDI output behavior require Windows/FL Studio 20 verification.
+
+## 2026-11-11 — extensible engine architecture decision
+
+- Added explicit module boundaries for Instrument Core/Voice Engine, Articulation Resolver, Performance Router, Pattern Engine, Harmony Engine, SoundBank Service, Preset Service, FX Graph, MIDI Tools/Sequencer, Presentation Layer and Content/Update Service.
+- Added the real-time threading contract: no disk/network/decode/decompression/scan/UI work or unbounded allocation in the audio callback; worker-side preparation and bounded publication to the audio engine.
+- Added versioned data/state migration rules, stable parameter IDs, immutable bank publication, and strict separation of factory content from user banks/presets.
+- Added a release gate distinguishing a visible UI control from a verified runtime feature. Build/CTest/pluginval and FL Studio 20 host validation are separate evidence requirements.
+- Main functional benchmark remains Session Guitarist Electric Sunburst Deluxe. Only general interaction/architecture principles are used; all implementation and assets remain original.
+- This is an architecture/specification change only. It does not claim that missing engine modules have been implemented.
+- Requirements document commit: `a334f27a5683801accd259c0c6da6280a89a3405`.
