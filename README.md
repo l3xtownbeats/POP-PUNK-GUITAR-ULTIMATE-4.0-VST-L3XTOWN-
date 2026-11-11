@@ -207,8 +207,7 @@ ctest --test-dir build -C Release --output-on-failure
 - [Preset bank readiness](docs/PRESET_BANK_4_0_READINESS_RU.md)
 - [Sampler / streaming design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
 - [Sample source and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
-- [INFO — Development Journal](Info.txt)
-- [BUILD & RELEASE — Bugs, Fixes and Build Log](BUILD_RELEASE.md)
+- [Единый журнал разработки и сборок — Info.txt](Info.txt)
 
 ## CONTACT & OFFICIAL LINKS
 
