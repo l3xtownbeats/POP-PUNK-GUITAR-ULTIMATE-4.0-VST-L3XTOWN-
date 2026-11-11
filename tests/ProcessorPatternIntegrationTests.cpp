@@ -7,6 +7,7 @@
 // It uses only temporary synthetic fixtures; no production sample assets or
 // licensed third-party content are copied into the test.
 #include "PluginProcessor.h"
+#include <PPGUTestData.h>
 
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <array>
@@ -94,6 +95,12 @@ void addChordOff(juce::MidiBuffer& midi, int sample, const std::array<int, 3>& n
 
 int main()
 {
+    if (PPGUTestData::ppgu_test_data_txtSize <= 0)
+    {
+        std::cerr << "Generated PPGU test binary-data fixture is empty.\\n";
+        return 1;
+    }
+
     juce::ScopedJuceInitialiser_GUI juceInitialiser;
     const auto root = std::filesystem::temp_directory_path() / "ppgu-processor-pattern-integration";
     std::error_code cleanupError;
