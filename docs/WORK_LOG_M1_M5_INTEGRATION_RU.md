@@ -216,3 +216,40 @@ No secondary branch is merged yet. Unified integration requires current branch h
 - **IMP-001 — FIXED / REGRESSION PASS:** fixture подтверждает 3/2/1, два валидных SFZ regions и отсутствие выдуманного root key для unmapped take; CTest importer test прошёл в run 42871881934.
 - **IMP-003 — FIXED / WINDOWS CI PASS:** недоступный `juce::SHA256` заменён переносимой реализацией SHA-256; известный вектор `abc` проверяется регрессионным тестом; Windows build прошёл.
 - **IMP-002 — IMPLEMENTED / WINDOWS CI PASS:** manifest source/converted SHA-256 и аудиометаданные проверяются importer regression test. Это не означает, что все возможные внешние decoder files и license provenance уже прошли полноценную проверку.
+
+
+## 10 ноября 2026 — M6–M13 lightweight parallel work
+
+- Создана изолированная ветка `work/m6-m13-quickwins` от актуальной M1–M3 integration line; активные DSP/Processor файлы не затрагивались.
+- M7: `tools/validate_factory_bank.py` усилен проверками 150/150/300 declared minimums, core artist palette, уникальных непустых IDs, структуры и mode, конечных числовых параметров/диапазонов, Pattern performance/sample requirement metadata.
+- M11: `tools/validate_preset_files.py` усилен проверками object shape, extension/mode, ID/name, дублей, bool/NaN/Inf и диапазонов параметров, Pattern steps.
+- M8: аудит подтвердил, что bounded page cache уже имеет concurrent reader/worker eviction stress test; новую конкурирующую реализацию не добавляли.
+- M6: APVTS contract уже содержит voices/velocity/palmMuteThreshold/articulation IDs; реальное articulation-to-sample routing и FL Studio validation остаются открытыми.
+- M9: StyleEngine foundation остаётся в PR #3, runtime binding не объявлен готовым.
+- M10: утверждённый skin и FX APVTS controls зафиксированы; parameter→UI→processor QA остаётся открытым.
+- M12: существующий Windows Release/CTest/pluginval/package pipeline используется повторно без запуска лишних сборок.
+- M13: добавлен `docs/M13_CLEAN_INSTALL_SMOKE_CHECKLIST_RU.md` для Windows 10 x64 1809+/FL Studio 20, измерений cold start, RAM, CPU, preset switching и sustained playback.
+- Полная карта статусов: `docs/M6_M13_QUICK_WINS_AUDIT_RU.md`. Изменения ждут CI и не объединяются до прохождения проверок M1–M5 и unified release gates.
+
+
+## 11.11.2026 — CI/PR audit before M6–M13 integration
+
+### Exact branch heads and CI evidence
+- Integration branch `fix/m1-m2-m3-release-gates`: HEAD `98d7c65f86427449cbd83968306f0388054b1aa3`; Windows workflow run [42963660168](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42963660168) — SUCCESS on this exact SHA. Windows x64 Release configure/build, full CTest, VST3 bundle locate, Pluginval strictness 5, redistributable sample-library/license validation, package and artifact upload all completed successfully. Artifact `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS` is present (1,664,278,986 bytes); source-review artifact is also present (699,739 bytes). Library download step was skipped because the redistributable cache was restored.
+- Main branch HEAD `cf851de3b6d63a19080d319cedd404e7e0440789`: run [42996098554](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42996098554) was still packaging at the time of this snapshot. Configure/build, CTest, VST3 locate, Pluginval 5 and license validation had passed; package step was in progress and upload had not completed. Do not record main as final PASS until the run concludes.
+- PR #3 M5: head `0cc36c7455edb3adcc5bde1f5bd690c831acf3cb`; run [42840410645](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42840410645) — SUCCESS on exact head, all listed Windows release gates passed. PR remains draft and `mergeable_state=dirty`; base is `main`, whose current head has advanced. Do not merge until base/head conflict is resolved and CI reruns on the refreshed head.
+- PR #4 M4: head `30e970f657fdeb6ee229004e9022149ed948b50b`; run [42844161921](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42844161921) — SUCCESS on exact head, all listed Windows release gates passed. PR remains draft and `mergeable_state=dirty`; current diff is limited to CMake test registration and AutoChords/FingeringGenerator header/tests. Refresh/resolve base before merge.
+- PR #5 M2 velocity crossfade: head `ef1ee5b04c3dc6653f749d7602b92a683253d059`; run [42843931173](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42843931173) — SUCCESS on exact head, all listed Windows release gates passed. PR remains draft; GitHub currently reports `mergeable_state=clean`. Its diff is limited to SamplePool/SFZ velocity-crossfade implementation and regression tests. No merge performed in this audit.
+- PR #6 M6–M13 quick wins: head `79df94351ccfee7b5e12b02608d6f98194cdb3ae`; run [42879024401](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42879024401) — SUCCESS on exact head, all listed Windows release gates passed. PR remains draft and `mergeable_state=dirty` against current integration head. Current PR diff has exactly six files: `docs/BANK_LIBRARY_SYSTEM_RU.md`, `docs/M13_CLEAN_INSTALL_SMOKE_CHECKLIST_RU.md`, `docs/M6_M13_QUICK_WINS_AUDIT_RU.md`, `docs/WORK_LOG_M1_M5_INTEGRATION_RU.md`, `tools/validate_factory_bank.py`, `tools/validate_preset_files.py`. No DSP/Processor source files are in this PR.
+
+### Conflict and preservation findings
+- Integration HEAD is `98d7c65f86427449cbd83968306f0388054b1aa3`; PR #6 was based on an older integration snapshot. Its bank-library and M1–M5 work-log documents have newer independent additions on the integration branch. These must be preserved during base refresh; do not overwrite them with the older PR versions.
+- The two validator files are unchanged between PR #6's recorded base and current integration HEAD, so their M6 hardening can be transferred without replacing newer integration edits. The new M6 audit and M13 checklist are absent from integration and can be added as new documentation files.
+- PR #6 factory validator does not include the separate M5 “Mest Photographs” assertion from PR #3. Preserve/merge that requirement when M5 is integrated; do not silently treat the M6 validator as a replacement for M5 coverage.
+- PR #3 and PR #4 are currently dirty; PR #5 is clean. No PR was closed or merged in this audit. No branch was deleted and no force-push was used.
+
+### Decision and remaining gates
+- Refresh PR #6 against the exact current integration HEAD, preserving newer documentation and carrying only its six reviewed documentation/validator paths. Re-run the complete Windows workflow on the refreshed PR head before merging.
+- Keep PR #3/#4 isolated until their dirty base conflicts are resolved and fresh-head CI passes. PR #5 remains separately validated but unmerged.
+- Do not describe M6–M13 runtime work as complete. Open runtime/host gates: M6 articulation-to-sample routing and MIDI lifecycle; M8 real-library and streaming-cache stress; M9 StyleEngine runtime binding; M10 UI/FX parameter-to-control QA; M11 real browser/import/export/favorites/MIDI Learn; M13 clean install and performance smoke test on Windows 10 x64 + FL Studio 20.
+- CI success does not replace FL Studio 20 manual validation. No redistributable library was downloaded in this run; only the cached library manifest/license validation completed.
