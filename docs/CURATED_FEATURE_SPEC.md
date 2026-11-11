@@ -4,7 +4,7 @@ Status: design specification; implementation and audio validation are still pend
 Target: Windows x64 VST3, FL Studio 20.
 
 ## Product rule
-Use only features that materially improve playable pop-punk guitar production. Prefer a small, reliable, low-CPU implementation over a large collection of shallow or duplicated features. This is an original design; do not copy proprietary Kontakt instruments, pattern data, samples, artwork, or factory presets.
+Use only features that materially improve playable pop-punk guitar production. Build a large, expandable library without sacrificing quality, consistency, performance, or legal provenance. This is an original design; do not copy proprietary Kontakt instruments, pattern data, samples, artwork, or factory presets.
 
 ## 1. One unified preset browser
 Keep one browser for the entire instrument. Each preset is tagged with:
@@ -19,15 +19,28 @@ Selecting a preset loads its instrument/sound-bank mapping and complete paramete
 ### Melody Engine
 Direct MIDI note performance with velocity layers, note-off/release handling, configurable polyphony, and supported articulations (for example open/muted) only where the selected sample bank actually provides them. Add legato/slide transitions only when suitable transition samples or a credible synthesis method exist.
 
-### Pattern Engine
-Chord-aware phrase playback driven by MIDI input. Start with a curated, well-tested core set rather than promising a fixed large count before content exists:
-- Power-chord rhythms and pop-punk eighth/sixteenth-note strums.
-- Palm-muted grooves and gallops.
-- Arpeggios and picked patterns.
-- Intro, verse, chorus, bridge, and outro phrase roles.
-- A small number of reverse patterns where musically useful.
+### Pattern Engine — large, expandable original library
+Use the 237 patterns in NI Electric Sunburst Deluxe as a reference point for breadth, not as a ceiling or source material. The goal is a substantially larger library that can keep growing through versioned content packs. There is no arbitrary maximum pattern count: add patterns whenever they are musically distinct, useful, properly tagged, tested, and do not merely duplicate existing variations.
 
-Patterns must transpose to incoming chords, follow host tempo, support MIDI sync, and stop/retrigger predictably. Include variation A/B and controlled humanization (timing/velocity/strum) with bounded ranges. Do not randomize so much that tight pop-punk timing is lost.
+Build the library in families:
+- Power chords: straight eighths, driving eighths, sixteenths, syncopated, stop-start, octave movement.
+- Pop-punk strumming: downstrokes, alternate strums, fast 8ths/16ths, accents, muted strums.
+- Palm-muted riffs: tight chugs, gallops, double-time, rests, dynamic builds.
+- Arpeggios and picked patterns: clean electric, acoustic, broken chords, string-crossing figures.
+- Lead phrases: melodic hooks, octave lines, picked riffs, harmonized-style phrases where supported.
+- Song sections: intro, verse, pre-chorus, chorus, bridge, breakdown, transitions, outro, fills and endings.
+- Feel and meter variants: straight, half-time, double-time, swing only where stylistically appropriate, plus supported time signatures.
+- Acoustic patterns: strumming and picking families with their own articulations and dynamics.
+
+Every pattern has metadata: family, feel, meter, subdivision, articulation, compatible sound tags, energy, difficulty, phrase length, variation group, and supported tempo range. Provide meaningful variations (A/B/C/D and more when useful), not artificial count inflation. Patterns must transpose to incoming chords, follow host tempo and transport, support MIDI sync, and stop/retrigger predictably. Include controlled humanization (timing/velocity/strum) with bounded ranges; tight pop-punk timing remains the default.
+
+Library expansion workflow:
+1. Create and curate original pattern ideas.
+2. Deduplicate by musical behavior, not just filename.
+3. Test every pattern across chord types, root notes, tempo extremes, and both engines where compatible.
+4. Check transitions, note-off behavior, timing, and audible artifacts.
+5. Tag and index patterns for fast unified-browser search.
+6. Ship new pattern packs without breaking older presets or user projects.
 
 ## 3. Sound-bank architecture
 Keep audio assets in a shared Sounds Bank and reference them by stable IDs from presets and patterns; never duplicate the same WAV for each preset. Support sample metadata for note range, root key, velocity layers, round robins, articulation, sample rate, and license/source provenance.
@@ -49,16 +62,18 @@ P0 — inspect existing project and preserve working code; document current arch
 P1 — unified preset data model/browser integration and shared sample-bank references.
 P2 — reliable Melody Engine playback and Pattern Engine chord/tempo/MIDI behavior.
 P3 — core FX chain, preset state recall, and parameter automation.
-P4 — variations, restrained humanization, favorites/search polish, and optional Song Builder only after the engines are stable.
+P4 — build the initial high-quality pattern families, then expand the library continuously with validation and content-pack versioning.
+P5 — variations, restrained humanization, favorites/search polish, and optional Song Builder only after the engines are stable.
 
 ## 6. Acceptance tests
 - VST3 loads and unloads in FL Studio 20 x64 without crash.
 - MIDI notes, note-offs, chords, sustain, velocity, and polyphony behave predictably.
 - Pattern playback follows host tempo and transport; chord changes update harmony without stuck notes.
+- Every shipped pattern passes timing, chord-transposition, transition, and artifact checks.
 - Preset changes restore sound, engine, and FX state consistently.
 - No audio-thread memory allocation, blocking file I/O, or unbounded processing.
 - CPU and memory are measured at representative polyphony and sample rates.
 - Bundled samples have documented redistribution rights; unverified material is not packaged.
 
 ## Explicitly deferred
-Do not claim a 237+ pattern library, true pickup blending, microphone mixing, legato transitions, or finished amp/cab models until real content/implementation and tests exist. Do not add a Song Builder before both performance engines are dependable.
+Do not claim a pattern count until the patterns exist and pass validation. Do not claim true pickup blending, microphone mixing, legato transitions, or finished amp/cab models until real content/implementation and tests exist. Do not add a Song Builder before both performance engines are dependable.
