@@ -82,6 +82,10 @@ public:
     struct Snapshot
     {
         std::vector<RegionView> regions;
+        // Prebuilt key index: note-on searches only regions that can match
+        // the incoming MIDI key, rather than scanning the entire SFZ map.
+        // Built before publication and immutable on the audio thread.
+        std::array<std::vector<std::uint32_t>, 128> regionsByKey;
         // Audio-thread-owned cursors: [RR set][MIDI channel][MIDI note].
         mutable std::vector<std::uint32_t> roundRobinCounters;
     };
