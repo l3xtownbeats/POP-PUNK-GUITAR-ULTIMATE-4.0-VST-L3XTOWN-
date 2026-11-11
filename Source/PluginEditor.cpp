@@ -250,19 +250,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     tape.addQuadrilateral(18.0f, 68.0f, 116.0f, 68.0f, 108.0f, 79.0f, 10.0f, 79.0f);
     g.setColour(theme.warning.withAlpha(0.70f));
     g.fillPath(tape);
-    g.setColour(theme.accent);
-    juce::Path spark;
-    spark.startNewSubPath(0.0f, 0.0f);
-    const float sx = static_cast<float>(w - 44), sy = 88.0f;
-    for (int i = 0; i < 16; ++i)
-    {
-        const float angle = juce::MathConstants<float>::twoPi * static_cast<float>(i) / 16.0f;
-        const float radius = (i % 2 == 0) ? 17.0f : 7.0f;
-        const auto point = juce::Point<float>(sx + std::cos(angle) * radius, sy + std::sin(angle) * radius);
-        if (i == 0) spark.startNewSubPath(point); else spark.lineTo(point);
-    }
-    spark.closeSubPath();
-    g.fillPath(spark);
     auto hero = getLocalBounds().reduced(16);
     hero.removeFromTop(72);
     hero.setHeight(194);
@@ -271,6 +258,21 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillRoundedRectangle(hero.toFloat(), 12.0f);
     g.setColour(theme.accent.withAlpha(0.35f));
     g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
+
+    // Small original comic-book burst, now drawn on top of the hero card.
+    juce::Path spark;
+    const float sx = static_cast<float>(hero.getRight() - 48);
+    const float sy = static_cast<float>(hero.getY() + 30);
+    for (int i = 0; i < 16; ++i)
+    {
+        const float angle = juce::MathConstants<float>::twoPi * static_cast<float>(i) / 16.0f;
+        const float radius = (i % 2 == 0) ? 14.0f : 6.0f;
+        const juce::Point<float> point(sx + std::cos(angle) * radius, sy + std::sin(angle) * radius);
+        if (i == 0) spark.startNewSubPath(point); else spark.lineTo(point);
+    }
+    spark.closeSubPath();
+    g.setColour(theme.warning);
+    g.fillPath(spark);
     auto textArea = hero.reduced(28, 18);
     g.setColour(theme.text);
     g.setFont(juce::Font(juce::jmin(43.0f, getWidth() * 0.048f), juce::Font::bold));
