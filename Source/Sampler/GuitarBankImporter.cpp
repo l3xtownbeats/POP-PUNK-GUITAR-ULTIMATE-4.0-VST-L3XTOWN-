@@ -1,6 +1,7 @@
 #include "GuitarBankImporter.h"
 #include <algorithm>
 #include <filesystem>
+#include <limits>
 #include <juce_core/juce_core.h>
 
 namespace ppgu::sampler
@@ -41,6 +42,16 @@ juce::String safeName(juce::String value)
     value = value.replaceCharacter(' ', '-').substring(0, 48);
     return value.isEmpty() ? "Imported-Guitar-Bank" : value;
 }
+
+bool isWithinDirectory(const std::filesystem::path& root, const std::filesystem::path& candidate)
+{
+    const auto relative = candidate.lexically_relative(root);
+    if (relative.empty()) return candidate == root;
+    if (relative.is_absolute()) return false;
+    for (const auto& part : relative)
+        if (part == "..") return false;
+    return true;
+}
 }
 
 GuitarBankImportReport GuitarBankImporter::importFolder(
@@ -54,12 +65,76 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
         return report;
     }
 
-    juce::Array<juce::File> candidates;
-    sourceDirectory.findChildFiles(candidates, juce::File::findFiles, true);
+    // Import only regular files physically contained by the selected root.
+    // Do not recurse through directory symlinks or copy symlink targets.
+    std::error_code scanError;
+    const auto canonicalSourceRoot = std::filesystem::canonical(
+        std::filesystem::path(sourceDirectory.getFullPathName().toStdString()), scanError);
+    if (scanError)
+    {
+        report.errors.add("Could not resolve the selected source folder.");
+        return report;
+    }
+
+    constexpr std::size_t maximumAssets = 50000;
+    constexpr std::uint64_t maximumAssetBytes = 2ULL * 1024ULL * 1024ULL * 1024ULL;
+    constexpr std::uint64_t maximumBankBytes = 20ULL * 1024ULL * 1024ULL * 1024ULL;
     juce::Array<juce::File> supported;
-    for (const auto& file : candidates)
-        if (isAudioOrInstrument(file))
-            supported.add(file);
+    std::uint64_t scannedTotalBytes = 0;
+    const auto options = std::filesystem::directory_options::skip_permission_denied;
+    std::filesystem::recursive_directory_iterator it(canonicalSourceRoot, options, scanError), end;
+    for (; it != end; it.increment(scanError))
+    {
+        if (scanError)
+        {
+            report.warnings.add("A source folder entry could not be inspected and was skipped.");
+            scanError.clear();
+            continue;
+        }
+
+        const auto status = it->symlink_status(scanError);
+        if (scanError)
+        {
+            report.warnings.add("A source asset could not be inspected and was skipped.");
+            scanError.clear();
+            continue;
+        }
+        if (std::filesystem::is_symlink(status))
+        {
+            if (std::filesystem::is_directory(it->status(scanError)))
+                it.disable_recursion_pending();
+            scanError.clear();
+            continue;
+        }
+        if (!std::filesystem::is_regular_file(status))
+            continue;
+
+        const juce::File file(it->path().string());
+        if (!isAudioOrInstrument(file))
+            continue;
+        if (supported.size() >= static_cast<int>(maximumAssets))
+        {
+            report.errors.add("Import stopped: the bank exceeds the 50,000 asset safety limit.");
+            return report;
+        }
+
+        const auto canonicalAsset = std::filesystem::canonical(it->path(), scanError);
+        if (scanError || !isWithinDirectory(canonicalSourceRoot, canonicalAsset))
+        {
+            report.warnings.add("An asset resolving outside the selected folder was skipped.");
+            scanError.clear();
+            continue;
+        }
+        const auto bytes = std::filesystem::file_size(canonicalAsset, scanError);
+        if (scanError || bytes > maximumAssetBytes
+            || bytes > maximumBankBytes - scannedTotalBytes)
+        {
+            report.errors.add("Import stopped: an asset is too large or the bank exceeds the 20 GiB safety limit.");
+            return report;
+        }
+        scannedTotalBytes += bytes;
+        supported.add(juce::File(canonicalAsset.string()));
+    }
     if (supported.isEmpty())
     {
         report.errors.add("No supported guitar audio or SFZ files were found. Nothing was imported.");
@@ -85,7 +160,23 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
     bool failed = false;
     for (const auto& source : supported)
     {
-        const auto relative = source.getRelativePathFrom(sourceDirectory);
+        const auto sourcePath = std::filesystem::canonical(
+            std::filesystem::path(source.getFullPathName().toStdString()), scanError);
+        if (scanError || !isWithinDirectory(canonicalSourceRoot, sourcePath))
+        {
+            report.errors.add("An imported asset changed or escaped the selected source folder during import.");
+            failed = true;
+            scanError.clear();
+            break;
+        }
+        const auto relativePath = sourcePath.lexically_relative(canonicalSourceRoot);
+        if (relativePath.empty() || relativePath.is_absolute())
+        {
+            report.errors.add("Could not safely resolve an asset's relative path.");
+            failed = true;
+            break;
+        }
+        juce::String relative(relativePath.generic_string());
         const auto target = staging.getChildFile(relative);
         if (!target.getParentDirectory().createDirectory() || !source.copyFileTo(target))
         {
@@ -94,7 +185,8 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
             break;
         }
         const auto bytes = target.getSize();
-        if (bytes < 0 || static_cast<std::uint64_t>(bytes) > UINT64_MAX - totalBytes)
+        if (bytes < 0 || static_cast<std::uint64_t>(bytes) > UINT64_MAX - totalBytes
+            || static_cast<std::uint64_t>(bytes) > maximumBankBytes - totalBytes)
         {
             report.errors.add("Imported bank size overflow.");
             failed = true;
