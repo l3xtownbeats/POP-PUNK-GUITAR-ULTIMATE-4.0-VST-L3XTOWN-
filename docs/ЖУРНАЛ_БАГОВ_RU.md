@@ -207,3 +207,12 @@
 - SKIN-REV5-002 (OPEN): runtime ThemeManager/gallery не подтверждены в main; PR #24 остаётся open и требует отдельного code review.
 - SKIN-REV5-003 (OPEN): нужен реальный JSON Schema validator и regression test.
 - SKIN-REV5-004 (OPEN): нужна полная инвентарная матрица GUI/APVTS по утверждённому Blueprint.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / Skin_32–Skin_41
+
+- Новых дефектов структуры манифестов на этапе авторинга не зафиксировано; независимая schema validation ещё не выполнена.
+- SKIN-REV5-001 (OPEN): графические ассеты отсутствуют.
+- SKIN-REV5-002 (OPEN): runtime ThemeManager/gallery не подтверждены; PR #24 открыт и требует code review.
+- SKIN-REV5-003 (OPEN): автоматическая JSON Schema и contrast validation отсутствуют.
+- SKIN-REV5-004 (OPEN): полная APVTS/UI inventory matrix не подтверждена Blueprint.
