@@ -1,0 +1,60 @@
+{
+  "name": "Sunset Drive",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#38202a",
+    "background.bottom": "#1c121c",
+    "accent.primary": "#ff8066",
+    "accent.secondary": "#ffc18b",
+    "text.main": "#fff3e9",
+    "text.dim": "#c9a4a0",
+    "knob.face": "#55313d",
+    "knob.ring": "#f47769",
+    "button.normal": "#1c121c",
+    "button.active": "#ff8066",
+    "button.hover": "#38202a",
+    "slider.track": "#c9a4a0",
+    "slider.fill": "#ff8066",
+    "led.on": "#ff8066",
+    "led.off": "#c9a4a0",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#ff8066",
+    "meter.fill": "#ff8066",
+    "meter.peak": "#ff4444",
+    "panel.border": "#c9a4a0",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#1c121c",
+    "list.row.selected": "#ff8066",
+    "tooltip.background": "#1c121c",
+    "tooltip.text": "#fff3e9"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Nunito-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "sunset_gradient"
+  }
+}
