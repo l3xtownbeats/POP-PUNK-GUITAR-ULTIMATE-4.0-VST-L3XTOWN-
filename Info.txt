@@ -97,6 +97,13 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 
 Статус: POLICY CONTRACT IMPLEMENTED IN TOOLING; НЕ интегрирован в production S6/DiscoveryEngine, не выполняет поиск/скачивание и не добавляет звуки. Registry пуст, approved assets = 0. CTest/Windows Release/pluginval для этого HEAD ещё не подтверждены; ожидается GitHub Actions run после текущих изменений.
 
+## 6.2. Sampler regression coverage audit (target HEAD e534d31, 2026-11-11)
+
+Проверены SamplePoolTests, SampleStreamingServiceTests, PageCacheSlotsTests и BoundedSpscQueueTests.
+Уже покрыто: transactional failed reload; superseded load до публикации; 128-snapshot cap; 121-second WAV; multi-page playback; loop/one-shot/ping-pong release; RR selection; MIDI channel mapping/choke; 100 rapid hits; cache pin ownership и конкурентное чтение/eviction; SPSC full/FIFO/wrap-around/500k transfer; page decode и Hermite boundary reads.
+Не найдено прямого regression coverage: лимит 8 уникальных streaming roots; отмена во время длительного metadata scan; проверка полного drain очереди при stop; service-level queue-overflow/cache-full counters; worker exception/recovery; destruction processor во время загрузки; 64 voices под одновременным cache pressure.
+Статус: TEST COVERAGE AUDITED; production code не менялся в рамках аудита. Следующий безопасный тестовый шаг — проверить 8-root cap и stop/drain contract, затем разработать инъекционный seam для worker failure без добавления тестовых hooks в audio callback.
+
 ## 7. Следующие приоритеты
 
 1. Проверить актуальный S6.5/DiscoveryEngine в исходниках и CMake.
