@@ -68,3 +68,12 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Полная спецификация находится в `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`.
 - Документационные commits: `e78cd252330abd32206315ffb1cf5dab6ef0d003`, `b21205a93149205c2fa85e8f1cf9ae3a641201d8`.
 - Эти коммиты изменяют Markdown-документы; исходный код плагина ими не менялся. Build/CTest/pluginval/FL Studio 20 validation для новых требований не подтверждены.
+
+
+## 2026-11-11 — PATTERN runtime independent from AutoChords
+
+- Clarified that PATTERN is an independent performance engine and must remain active with AUTOCHORDS OFF.
+- AUTOCHORDS OFF disables only automatic chord construction; the Pattern engine continues to rhythmically play the incoming MIDI note or user-played chord without adding notes.
+- AUTOCHORDS ON may harmonize a single incoming key using the selected diatonic key and MAJOR/MINOR map before sending the chord through the same Pattern engine.
+- Specification commit: `94cf692c5879d8555e89e467f54ac72d669c2e8f`.
+- Status: SPECIFIED / IMPLEMENTATION AND TESTS PENDING. Do not mark runtime behavior complete before Processor tests, Windows CI and FL Studio 20 host validation.
