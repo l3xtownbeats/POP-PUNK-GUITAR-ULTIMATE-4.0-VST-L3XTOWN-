@@ -231,3 +231,15 @@ Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sam
 Техническое описание следует REV 13.0 FINAL. Сохранено различие между 300 preset definitions и фактически проверенным playable count N/300. Зафиксировано расхождение: текущий source pin JUCE 7.0.12 / CMake 3.22 против целевого требования REV 13.0 JUCE 8 / CMake >=3.24.
 
 Поле GitHub Repository Description/Topics не изменено: доступный GitHub connector предоставляет чтение репозитория и файловые записи, но не edit-repository metadata action. Обновление всех 41 branch head требует отдельной docs-only синхронизации с сохранением уникального кода каждой ветки; этот этап пока не выполнен.
+
+
+### Documentation refresh — commit references
+
+- README.md: `a496394d8f3ad4c8bc0be97bd8cd8ec67a8e618d`
+- DOWNLOAD.md: `846f15c3fab24cba66269a6b77f98e83d1e4d600`
+- Promt.txt legacy-version notice: `56c1f227c8a03bd4996cd22b8587113b14412598`
+- SKIN/README.md fixed-interface policy: `e9e3ef57a0c8a5b28cbc5774265f759b31208cc1`
+- docs/MASTER_PRODUCT_SPEC_4_0_RU.md authority notice: `b52b039ca20b7fe56336daba23d0eac0161ae8ed`
+- Info.txt refresh record: `6293460630a9a2da58e94ef68dbba9ac068c25ae`
+
+**Scope boundary:** these commits are on `main`. The repository inventory contains 41 branches; the other 40 branch heads have not yet received this docs-only refresh. No code from those branches was merged, rebased or overwritten. Repository-level Description/Topics metadata also remains unchanged because the connected GitHub actions do not expose repository-metadata writes. Suggested public description: “POP PUNK GUITAR ULTIMATE — Windows x64 VST3 pop-punk guitar instrument built with JUCE/C++20. SFZ/WAV sample engine, MIDI Melody & Pattern workflows, 300 preset definitions. Active development; current build and release gates tracked in Info.txt.”
