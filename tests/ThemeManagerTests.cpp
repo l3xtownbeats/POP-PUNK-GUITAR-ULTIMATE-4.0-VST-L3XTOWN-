@@ -28,7 +28,7 @@ int main()
     for (int index = 1; index <= 50; ++index)
     {
         const auto id = juce::String::formatted("skin-%02d", index);
-        const auto manifest = skinRoot.getChildFile("Skin_" + juce::String(index))
+        const auto manifest = skinRoot.getChildFile(juce::String::formatted("Skin_%02d", index))
                                        .getChildFile("theme.json");
         const bool loaded = manager.loadFromFile(manifest);
         expect(loaded, id + " manifest accepted" + (loaded ? juce::String{} : ": " + manager.getLastError()));
