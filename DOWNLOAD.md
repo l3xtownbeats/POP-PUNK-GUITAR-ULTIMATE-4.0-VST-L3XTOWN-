@@ -11,16 +11,15 @@
 
 ---
 
-## Current release candidate — run #827
+## Current release candidate — run #832
 
-**Last checked status: Windows Release build in progress.**
+**Status:** current Windows workflow is validating the Blackout Voltage premium editor, 51 palette manifests and sibling runtime `Skins/` layout. The run is not yet complete; no current ZIP is published.
 
-The source fix for the missing generated JUCE BinaryData.h has been committed. Sample-cache restore, license validation, x64 CMake configuration and pre-build validation passed. The Windows Release build step is active; CTest, VST3 discovery, pluginval strictness 5 and packaging remain pending.
+[**OPEN CURRENT WINDOWS BUILD #832**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444)
 
-[**OPEN CURRENT WINDOWS BUILD #827**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43113647167)
-
-- Source SHA: 0ef0ebe934350d57779328a5e0979f1134ae85f2
+- Source SHA: `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`
 - Current complete ZIP: **not yet published**
+- Run #827 had build/CTest/pluginval pass but package validation fail on the old 50-versus-51 skin count.
 - Do not install an older artifact as though it were the current release.
 
 ## Previous build — historical artifact
@@ -44,14 +43,14 @@ POP_PUNK_GUITAR_ULTIMATE/
 ├── VST3/
 ├── SOUNDBANK/
 ├── PRESETS/
-├── Skins/             # only if real runtime assets are shipped
+├── Skins/             # 51 palette manifests; sibling of VST3 bundle
 ├── Resources/
 ├── Assets/
 ├── MANIFEST.json
 └── INSTALL_AND_CONTENTS.txt
 ```
 
-The live editor currently uses one fixed dark charcoal / magenta design. There is no accepted runtime skin selector or theme hot-swap. The package must not imply that a skin gallery exists. Do not manufacture placeholder skin packs merely to fill this directory.
+The live JUCE editor uses the Blackout Voltage premium shell and a real SKIN menu. The runtime directory contains 51 validated palette manifests; all themes share one control layout. The editor draws its hero guitar artwork in JUCE Graphics. Per-theme preview/hero/texture images are not required by this palette-only runtime and are not claimed as shipped assets.
 
 ## Release contents
 
@@ -69,7 +68,7 @@ The 300 factory catalogue records are definitions, not 300 verified playable pre
 2. Copy the .vst3 bundle into C:\Program Files\Common Files\VST3\.
 3. Keep the SoundBank in the package-prescribed location and do not rename its folders.
 4. Rescan VST3 plugins in FL Studio 20.
-5. Load the instrument, select a verified preset or licensed SFZ library, and audition it with MIDI.
+5. Load the instrument, use SKIN or Ctrl+K to choose a visual palette, then select a verified preset or licensed SFZ library and audition it with MIDI.
 
 Use INSTALL_AND_CONTENTS.txt shipped with the exact package. Do not apply instructions from a different artifact revision.
 

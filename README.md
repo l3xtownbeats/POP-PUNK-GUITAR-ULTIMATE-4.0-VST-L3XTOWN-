@@ -7,7 +7,7 @@
 
 **A dedicated pop-punk guitar instrument for riffs, hooks, power chords and high-energy rhythm parts.**
 
-[CURRENT BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43113647167) · [DOWNLOAD CENTER](DOWNLOAD.md) · [ENGINEERING LOG](Info.txt) · [DOCUMENTATION](docs/)
+[CURRENT BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444) · [DOWNLOAD CENTER](DOWNLOAD.md) · [ENGINEERING LOG](Info.txt) · [DOCUMENTATION](docs/)
 
 ![Windows x64](https://img.shields.io/badge/PLATFORM-Windows%20x64-20242b?style=for-the-badge)
 ![VST3](https://img.shields.io/badge/FORMAT-VST3-8c245e?style=for-the-badge)
@@ -31,17 +31,17 @@ The product direction is immediate playability, a focused control surface and an
 
 > **Development status:** this is an active engineering project, not a declared final commercial release. The status table distinguishes implemented code from features that have passed release acceptance.
 
-## Current build — run #827
+## Current build — run #832
 
-**Last checked status: Windows Release build in progress.** The source fix for the previous generated JUCE BinaryData.h compile failure is committed. Sample-cache restore, license validation, x64 CMake configuration and pre-build catalogue checks passed. The Windows Release build step is running; CTest, VST3 discovery, pluginval strictness 5 and packaging have not yet reported results.
+**Status at last check:** run #832 is testing the premium editor and runtime palette integration from source commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`. Build, CTest, pluginval and packaging results are not yet confirmed for this revision.
 
-- [Open run #827](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43113647167)
-- Source commit: 0ef0ebe934350d57779328a5e0979f1134ae85f2
+- [Open run #832](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444)
+- Source commit: `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`
 - [Single engineering journal — Info.txt](Info.txt)
 
-**Scope:** run #827 validates the `main` source commit shown above only. It does not validate the 40 other feature, fix, release and integration branches in this repository.
+**Previous CI evidence:** run #827 passed Windows Release build, CTest (12/12) and pluginval strictness 5, but packaging failed because the old workflow expected 50 skin manifests while the repository contains 51. Runs #830 and #831 were superseded/cancelled during source updates. Only run #832 can validate this editor revision.
 
-No new COMPLETE ZIP is declared available until every release gate passes. The earlier artifact is a historical previous build, not the current release candidate.
+No COMPLETE ZIP is declared available until the current source build, regression tests, pluginval and package validation all pass.
 
 ### Previous package
 
@@ -49,25 +49,26 @@ No new COMPLETE ZIP is declared available until every release gate passes. The e
 
 This package comes from an earlier source revision and layout. Do not confuse it with current HEAD.
 
-## Real plugin interface
+## Premium plugin interface
 
-The current JUCE editor is a **single fixed product interface**, not a selectable theme marketplace. The source editor defines the dark charcoal / magenta visual language and these actual controls:
+The actual JUCE editor now has a premium **Blackout Voltage** direction: matte-black graphite surfaces, machined-metal rotary controls, acid-lime primary accents and electric-teal signal highlights. The layout is built around the guitar workflow rather than a decorative concept mockup.
 
-- Factory preset selector, category filter and preset search.
+The editor retains the existing working control surface and APVTS attachments:
+- Factory preset catalog selector, category filter and search.
 - MELODY / PATTERN mode controls.
-- SFZ instrument loading and library status.
-- Nine rotary parameter controls with APVTS attachments.
-- Seven effect switches: Compressor, EQ, Distortion, Chorus, Delay, Reverb and Cabinet IR.
-- MIDI keyboard component.
-- Resizable editor with minimum dimensions intended to keep the control layout visible.
+- Licensed SFZ loader and library status.
+- Nine rotary controls and seven effect switches.
+- MIDI keyboard and playback sync selection.
 
-There is **no active in-plugin skin switcher, theme gallery or runtime skin hot-swap** in the accepted editor implementation. The separate Blackout Voltage SVG is a visual concept asset, not a screenshot of the running plugin, and is not presented as the live UI. Cover artwork is branding artwork, not proof of a tested runtime screen. A host-captured screenshot will be labelled as real only after capture from the built VST3.
+A real **SKIN** menu is connected to ThemeManager. It loads validated palettes from the `Skins` folder beside the installed `.vst3` bundle, saves the selected skin, and opens with **Ctrl+K**. The default palette is Blackout Voltage; the registry contains 51 palette manifests. Theme changes are visual-only and do not alter APVTS IDs, DSP, sampler, MIDI behaviour or audio.
+
+The hero guitar hardware illustration is drawn by JUCE Graphics. Manifest preview/hero/texture files are not required by the palette-only runtime and are not claimed as shipped assets. Runtime switching, persistence, fallback, contrast and audio invariance require a successful current Windows CI run and manual FL Studio 20 acceptance. No concept artwork is presented as a host screenshot.
 
 ## Implementation status
 
 | Area | Repository evidence | Release status |
 |---|---|---|
-| VST3 / JUCE project | CMake project and JUCE processor/editor source | Current HEAD build pending CI |
+| VST3 / JUCE project | CMake project and JUCE processor/editor source | Current source build / test / package validation pending run #832 |
 | SFZ/WAV sampler | Parser/playback path, metadata and streaming components | Full-library and stress acceptance pending |
 | Voice management | 64 preallocated sampler voice slots | 64-voice stress acceptance pending |
 | Streaming | Background page streaming and fixed page-cache components | Lifecycle / recovery stress pending |
@@ -76,7 +77,7 @@ There is **no active in-plugin skin switcher, theme gallery or runtime skin hot-
 | Pattern runtime | Scheduler/transport components | End-to-end sampler playback acceptance pending |
 | DSP | Compressor/EQ/Distortion/Chorus/Delay/Reverb/Cabinet controls and DSP components | Signal-quality and host acceptance pending |
 | SoundBank | Redistributable sample sources and license metadata in build pipeline | Current package must be verified from CI artifact |
-| UI | One fixed dark charcoal / magenta editor | No runtime theme switching |
+| UI | Blackout Voltage premium shell, SKIN selector and 51 palette manifests | Current CI / host acceptance pending |
 | Sound Hunter | Policy and registry contract tooling | Production discovery/curation pending |
 | FL Studio 20 | Target host | Manual acceptance on current HEAD not confirmed |
 | CPU / RAM | Defined engineering targets | No release-grade measurements claimed |
@@ -122,8 +123,8 @@ The canonical user-bank conversion format is .pgp; .ppg is not accepted. User im
 | MIDI | Note, velocity and channel mapping |
 | Sample format | WAV mapped through SFZ |
 | Sampler capacity | 64 physical voice slots; default musical polyphony target 32 |
-| UI | One fixed dark charcoal / magenta editor |
-| Package target | VST3 + SOUNDBANK + PRESETS + runtime resources and assets |
+| UI | Blackout Voltage premium shell with visual-only palette switching |
+| Package target | VST3 + SOUNDBANK + PRESETS + sibling Skins + runtime resources and assets |
 
 CPU targets, RAM ceilings, cold-start time and latency stability are engineering acceptance targets—not measured product claims—until the current release build is profiled on the reference machine.
 
@@ -152,7 +153,7 @@ Commercial Kontakt libraries, proprietary stems and recordings are not included 
 
 **POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip**
 
-The exact package layout is documented in [DOWNLOAD.md](DOWNLOAD.md). An artifact from an older commit or earlier successful run does not satisfy current-HEAD release gates.
+The exact package layout is documented in [DOWNLOAD.md](DOWNLOAD.md); the runtime `Skins/` directory must sit beside the VST3 bundle. An artifact from an older commit or earlier successful run does not satisfy current-HEAD release gates.
 
 ## Documentation
 

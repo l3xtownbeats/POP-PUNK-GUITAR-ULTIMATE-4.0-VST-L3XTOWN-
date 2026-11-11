@@ -291,3 +291,22 @@ Commits:
 Проверка дерева выявила, что `Skin_01/assets/` и `Skin_51/assets/` отсутствуют; manifests помечают artwork как pending. Поэтому новый packaging gate намеренно НЕ пропустит неполный runtime skin payload и не создаст вводящий в заблуждение COMPLETE ZIP. ThemeManager/PluginEditor runtime integration, gallery, hot-swap, persistence и UI/audio-invariance acceptance по-прежнему PENDING.
 
 GitHub Actions run #830 / ID `43115673961` автоматически запущен на HEAD `8e3ca17e55023233e1c0e095b8fa9cf5dc741bed`. Результат configure/build/CTest/pluginval/packaging ещё не получен; статус не объявляется PASS. Следующая задача — artwork/runtime integration и их тесты; затем повторить полный release gate.
+
+
+## 2026-11-12 — Blackout Voltage premium editor implementation
+
+**Статус:** SOURCE CHANGES COMMITTED; RUN #832 PENDING; NO COMPLETE ZIP.
+
+В main committed:
+- настоящий JUCE editor обновлён до Blackout Voltage: graphite/black surfaces, metallic rotary controls, acid-lime and teal accents, hero guitar vector and premium panel surfaces;
+- добавлена кнопка SKIN, меню 51 валидированной palette manifests, Ctrl+K и сохранение выбора в пользовательских настройках;
+- runtime path resolution ищет `Skins` рядом с загруженным .vst3 bundle; switching visual-only;
+- APVTS attachments и существующие 9 knobs / 7 FX / MIDI keyboard / MELODY-PATTERN / SFZ flow сохранены;
+- отображаемые preset labels очищаются от artist prefix; reference metadata остаётся только внутренней;
+- default/fallback palette — Blackout Voltage (skin-51); ThemeManager и contract tests расширены до 51.
+
+Дополнительный UI refinement: панели используют текущую тему, подпись header укорочена, ширина value text boxes приведена к колонкам, кнопка SKIN стоит в правом краю. Исправлен fallback expectation в ThemeManager test.
+
+**CI:** run #827 подтвердил Windows build, CTest 12/12 и pluginval strictness 5, но package step failed на старом hard-coded count 50. Runs #830/#831 были отменены новыми commits. Run #832 / ID `43116474444` проверяет source SHA `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`; результат пока pending. Документация не переносит PASS с прежних SHA.
+
+**Runtime art:** все темы — палитровые skin variants с единым layout. Hero illustration рисуется в JUCE Graphics; отдельные preview/hero/texture files не требуются для palette runtime и не заявляются как готовые assets. FL Studio 20 screenshot, hot-swap/persistence, contrast, audio invariance, CPU/RAM profiling и playable preset count требуют дальнейшей проверки. COMPLETE ZIP не публиковать до всех release gates.
