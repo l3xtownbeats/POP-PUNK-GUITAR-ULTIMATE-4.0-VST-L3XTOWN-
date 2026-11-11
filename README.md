@@ -39,6 +39,8 @@ The product direction is immediate playability, a focused control surface and an
 - Source commit: 0ef0ebe934350d57779328a5e0979f1134ae85f2
 - [Single engineering journal — Info.txt](Info.txt)
 
+**Scope:** run #827 validates the `main` source commit shown above only. It does not validate the 40 other feature, fix, release and integration branches in this repository.
+
 No new COMPLETE ZIP is declared available until every release gate passes. The earlier artifact is a historical previous build, not the current release candidate.
 
 ### Previous package
