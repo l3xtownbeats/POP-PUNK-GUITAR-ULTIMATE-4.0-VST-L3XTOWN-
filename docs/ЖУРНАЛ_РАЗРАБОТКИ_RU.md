@@ -1225,3 +1225,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Session Guitarist Electric Sunburst Deluxe и Ample Sound Guitar указаны как референсы для сравнения, а не как доказательство превосходства. Заявлять, что наш продукт звучит лучше, можно только после воспроизводимых сравнительных тестов.
 - Спецификация: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `95d53067d5fac72b14e37a9a133381c535ce4ef5`.
 - Статус: QUALITY TARGET SPECIFIED; source recording coverage, engine, articulation DSP, QA and blind comparisons remain pending / must be audited.
+
+
+## 11 ноября 2026 — MELODY: velocity-controlled Palm Mute → Sustain для DRIVE / DISTORTION
+
+- По официальному руководству Ample Metal Eclipse изучена схема velocity articulation: 1–15 Full Mute, 16–31 3/4 Mute, 32–63 Half Mute, 64–126 Sustain, 127 Pop/Pinch Harmonic; также описано, что меньшая velocity в Palm Mute articulation даёт более глубокое приглушение.
+- Для POP PUNK GUITAR ULTIMATE зафиксирована собственная схема: 1–15 FULL MUTE, 16–31 DEEP MUTE, 32–63 HALF MUTE, 64–126 OPEN SUSTAIN, 127 STRONG SUSTAIN/accent только при наличии реального слоя; без автоматического harmonic/pop на velocity 127.
+- Строгая область действия: только MELODY + электрический preset с явным metadata profile DRIVE/DISTORTION. Не включать по одному только глобальному distortion FX. CLEAN / ACOUSTIC / NYLON / PATTERN и остальные пресеты не затрагивать.
+- Зафиксировано разделение raw MIDI velocity для выбора артикуляции и shaped velocity для громкости/атаки; разные ноты аккорда должны независимо выбирать артикуляцию.
+- Обнаружено текущее несоответствие: существующий MELODY-код применяет единый palmMuteThreshold ко всем пресетам и сводит все низкие velocity к одному sample velocity. Это не multi-depth и нарушает новое ограничение. Его нужно заменить, а не дублировать новой логикой.
+- Спецификация и обязательные boundary/regression tests добавлены в docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md, commit ddc1d98218ded948c05bdf34be9d1e5dab4d00db.
+- Статус: SPECIFIED; runtime gating, multi-zone sample maps, UI/APVTS controls, bank coverage and tests pending. Не объявлять реализованным до прохождения проверок.
