@@ -723,7 +723,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             FactoryPreset preset;
             preset.id = value.getProperty("id", "").toString();
             preset.name = value.getProperty("name", "Unnamed").toString();
-            preset.category = value.getProperty("referenceArtist", "Original").toString();
+            preset.category = value.getProperty("browserGroup", value.getProperty("referenceArtist", "Original")).toString();
             preset.mode = mode;
             preset.styleProfileId = value.getProperty("styleProfileId", "").toString();
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
