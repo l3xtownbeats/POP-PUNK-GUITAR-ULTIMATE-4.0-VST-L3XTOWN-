@@ -56,3 +56,40 @@
 
 ## Правило следующих записей
 Каждый следующий этап добавлять новой датированной секцией, не переписывая историю. При изменении исходников указывать файлы и commit SHA; при сборке — workflow/run ID, commit SHA, итог каждого job и артефакты; при ошибке — точный failing step и краткую причину.
+
+## 2026-11-11 — Углублённая проверка SamplePool / SamplerEngine lifecycle
+
+**Основа:** тот же HEAD до обновления журнала: `855f21c00f967483903cd57a3896a3ba72cd260d`.  
+**Проверены:** `SamplePool.h/.cpp`, `SampleStreamingService.cpp`, `StreamingVoiceReader.cpp`.  
+**Статус:** CODE AUDIT; production-код не менялся.
+
+### Подтверждённое поведение
+- `SamplePool::loadSfz` сериализует загрузки через `loaderMutex`, проверяет generation token, строит candidate snapshot и публикует его через release-store в `activeSnapshot`.
+- Старые snapshots и streaming services удерживаются до destruction SamplePool; это защищает указатели RegionView/service, которыми пользуются активные голоса.
+- Повторная загрузка из уже известного canonical library root повторно использует streaming service; новый root создаёт отдельный service.
+- Есть жёсткие лимиты: максимум 128 snapshots и 8 streaming library roots на экземпляр плагина. При достижении лимита загрузка возвращает ошибку с требованием перезапустить плагин.
+- `SamplerEngine` имеет 64 заранее выделенных voice slots и соответствующие StreamingVoiceReader; noteOn переназначает выбранный voice и освобождает его старые page leases.
+- При старте streaming voice выполняется prefetch attack page; для loop region отдельно запрашивается prefetch loop-start.
+- На cache miss render не ждёт диск и не продвигает sample cursor; запрос страницы остаётся неблокирующим. Для не-releasing voice предусмотрен двухсекундный timeout отсутствия страницы.
+- Streaming worker при stop прекращает приём новых запросов, дренирует уже поставленные в очередь запросы и затем join-ится.
+- Исключение внутри worker loop перехватывается, увеличивает decode failure counter и останавливает worker; автоматического restart worker после такого исключения в текущем коде нет.
+
+### Риски / задачи, которые нельзя считать решёнными
+1. **Ограничение 128 snapshots — функциональный потолок**, а не только защита памяти. Даже если пользователь загружает разные пресеты/банки в рамках долгой сессии, старые snapshots остаются удержанными. Нужна безопасная reclamation схема после подтверждённого quiescence всех audio readers.
+2. **8 roots = до 8 отдельных streaming workers и cache pools.** Нужно проверить общий RAM/потоки и определить лимит ресурсов на продуктовый instance; не менять на несколько producers без изменения SPSC topology.
+3. **Worker failure необратим до пересоздания сервиса:** после исключения running=false, но std::thread остаётся joinable; start() откажет. Нужны тесты и понятная диагностика/recovery policy, не перезапуская поток небезопасно.
+4. **Cache starvation / queue overflow:** текущий API учитывает overflow/cacheFull, а voice reader повторяет запрос с ограниченным cadence. Нужны стресс-тесты при 64 voices, тесном cache и loop prefetch, чтобы подтвердить отсутствие stuck notes и чрезмерного underrun.
+5. **Generation cancellation и lifetime:** проверить гонки уничтожения processor/threadpool и callbacks, включая cancellation во время directory scan и streaming service creation.
+6. **Snapshot reclamation нельзя реализовывать простым удалением старого unique_ptr**: RegionView pointers и SampleStreamingService pointers могут всё ещё читаться audio thread.
+
+### Тесты, требуемые перед изменением lifecycle
+- [ ] 129 последовательных успешных/неуспешных bank load попыток с проверкой точного лимита и сохранения активного snapshot.
+- [ ] 9 разных library roots и повторное использование одного root.
+- [ ] 64 voices × cache pressure × loop prefetch × rapid note on/off.
+- [ ] Worker decode exception, queue overflow, cache full, stop while queue non-empty.
+- [ ] Cancellation при каждом этапе scan/build/publish; superseded request не должен публиковать snapshot.
+- [ ] Destroy processor во время queued и active load; отсутствие use-after-free и зависания.
+- [ ] Windows x64 Release + полный CTest + pluginval после каждого изменения.
+
+### Следующее действие
+Сначала проверить существующие тесты `SamplePoolTests` и `SampleStreamingServiceTests` на покрытие перечисленных граничных случаев; добавлять тесты до изменения snapshot/service ownership. Никакой production refactor в этой записи не выполнялся.
