@@ -6,7 +6,7 @@
     "pattern": 150,
     "total": 300
   },
-  "note": "Preset definitions are authored tonal/performance targets. They are not represented as fully playable in-plugin presets until connected to the plugin loader and verified against mapped sample/performance libraries. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are style references only. No commercial recordings, stems, riffs, or protected samples are included.",
+  "note": "330 catalog definitions: 165 Melody + 165 Pattern. Bloodhound Gang song-inspired presets are original tonal/performance interpretations only; no recordings, stems, note-for-note transcriptions or proprietary samples are included. Presets remain pending licensed sample-bank and runtime performance validation.",
   "artists": [
     {
       "name": "Blink-182",
@@ -126,6 +126,27 @@
       "name": "Midtown",
       "vibe": "urgent melodic emo-pop-punk; ringing octave leads; tight rhythm attacks; energetic dynamic changes",
       "tracks": []
+    },
+    {
+      "name": "Bloodhound Gang",
+      "tracks": [
+        "The Bad Touch",
+        "Foxtrot Uniform Charlie Kilo",
+        "Fire Water Burn",
+        "The Ballad of Chasey Lain",
+        "Along Comes Mary",
+        "Uhn Tiss Uhn Tiss Uhn Tiss",
+        "I Hope You Die",
+        "Mope",
+        "My Dad Says That's for Pussies",
+        "Why's Everybody Always Pickin' on Me?",
+        "Three Point One Four",
+        "A Lap Dance Is So Much Better When the Stripper Is Crying",
+        "Kiss Me Where It Smells Funny",
+        "The Inevitable Return of the Great White Dope",
+        "Magna Cum Nada"
+      ],
+      "vibe": "comedy/alternative rock crossover with punk power-chord drive, groove-led syncopation, stop-start riffs and dance-rock accents; original tonal interpretation only"
     }
   ],
   "melodyPresets": [
@@ -3718,6 +3739,441 @@
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
       "soundCharacter": "Crunch"
+    },
+    {
+      "id": "BHG-M-001",
+      "name": "Bloodhound Gang — The Bad Touch — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Bad Touch"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era dance-rock groove guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.72,
+        "tone": 6.8,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "picked-crunch"
+    },
+    {
+      "id": "BHG-M-002",
+      "name": "Bloodhound Gang — Foxtrot Uniform Charlie Kilo — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Foxtrot Uniform Charlie Kilo"
+      ],
+      "referenceAlbum": "Hefty Fine",
+      "referenceYear": 2005,
+      "browserGroup": "BLOODHOUND GANG / 2005 — HEFTY FINE",
+      "tonalTarget": "Original 2005 Hefty Fine-era stop-start guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.2,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2005",
+      "playingStyle": "staccato-picked"
+    },
+    {
+      "id": "BHG-M-003",
+      "name": "Bloodhound Gang — Fire Water Burn — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Fire Water Burn"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era half-time riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.82,
+        "tone": 5.9,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Drive",
+      "styleProfileId": "bhg-legacy",
+      "playingStyle": "driven-picked"
+    },
+    {
+      "id": "BHG-M-004",
+      "name": "Bloodhound Gang — The Ballad of Chasey Lain — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Ballad of Chasey Lain"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era melodic power chords guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.62,
+        "tone": 6.6,
+        "reverb": 0.1,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "open-picked"
+    },
+    {
+      "id": "BHG-M-005",
+      "name": "Bloodhound Gang — Along Comes Mary — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Along Comes Mary"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era clean-to-crunch guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.28,
+        "tone": 7.8,
+        "reverb": 0.16,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Clean",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "clean-picked"
+    },
+    {
+      "id": "BHG-M-006",
+      "name": "Bloodhound Gang — Uhn Tiss Uhn Tiss Uhn Tiss — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Uhn Tiss Uhn Tiss Uhn Tiss"
+      ],
+      "referenceAlbum": "Hefty Fine",
+      "referenceYear": 2005,
+      "browserGroup": "BLOODHOUND GANG / 2005 — HEFTY FINE",
+      "tonalTarget": "Original 2005 Hefty Fine-era dance-rock pulse guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7.5,
+        "reverb": 0.05,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Drive",
+      "styleProfileId": "bhg-2005",
+      "playingStyle": "muted-picked"
+    },
+    {
+      "id": "BHG-M-007",
+      "name": "Bloodhound Gang — I Hope You Die — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "I Hope You Die"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era dark heavy riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.88,
+        "tone": 5.8,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Distortion",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "palm-muted"
+    },
+    {
+      "id": "BHG-M-008",
+      "name": "Bloodhound Gang — Mope — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Mope"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era groove riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.7,
+        "tone": 6.2,
+        "reverb": 0.06,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "crunch-picked"
+    },
+    {
+      "id": "BHG-M-009",
+      "name": "Bloodhound Gang — My Dad Says That's for Pussies — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "My Dad Says That's for Pussies"
+      ],
+      "referenceAlbum": "Hard-Off",
+      "referenceYear": 2015,
+      "browserGroup": "BLOODHOUND GANG / 2015 — HARD-OFF",
+      "tonalTarget": "Original 2015 Hard-Off-era modern alt-rock guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.76,
+        "tone": 6.4,
+        "reverb": 0.05,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2015",
+      "playingStyle": "driven-picked"
+    },
+    {
+      "id": "BHG-M-010",
+      "name": "Bloodhound Gang — Why's Everybody Always Pickin' on Me? — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Why's Everybody Always Pickin' on Me?"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era bouncy punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.79,
+        "tone": 6,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Drive",
+      "styleProfileId": "bhg-legacy",
+      "playingStyle": "crunch-picked"
+    },
+    {
+      "id": "BHG-M-011",
+      "name": "Bloodhound Gang — Three Point One Four — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Three Point One Four"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era fast punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.84,
+        "tone": 6.3,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Distortion",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "palm-muted"
+    },
+    {
+      "id": "BHG-M-012",
+      "name": "Bloodhound Gang — A Lap Dance Is So Much Better When the Stripper Is Crying — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "A Lap Dance Is So Much Better When the Stripper Is Crying"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era mid-tempo strum guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.54,
+        "tone": 6.9,
+        "reverb": 0.12,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "open-picked"
+    },
+    {
+      "id": "BHG-M-013",
+      "name": "Bloodhound Gang — Kiss Me Where It Smells Funny — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Kiss Me Where It Smells Funny"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era garage punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.75,
+        "tone": 6.1,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Drive",
+      "styleProfileId": "bhg-legacy",
+      "playingStyle": "driven-picked"
+    },
+    {
+      "id": "BHG-M-014",
+      "name": "Bloodhound Gang — The Inevitable Return of the Great White Dope — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Inevitable Return of the Great White Dope"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era heavy chug guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.86,
+        "tone": 5.7,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Distortion",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "palm-muted"
+    },
+    {
+      "id": "BHG-M-015",
+      "name": "Bloodhound Gang — Magna Cum Nada — Melody",
+      "mode": "MELODY",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Magna Cum Nada"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era syncopated riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.69,
+        "tone": 6.5,
+        "reverb": 0.06,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one MIDI key triggers one chromatic guitar note; no automatic riff or chord playback",
+      "sampleRequirement": "licensed multisampled electric-guitar WAV/SFZ zones with root-key and velocity mapping",
+      "status": "tone-preset-definition-awaiting-licensed-sample-bank-and-runtime-integration",
+      "soundCharacter": "Crunch",
+      "styleProfileId": "bhg-2000",
+      "playingStyle": "crunch-picked"
     }
   ],
   "patternPresets": [
@@ -12560,6 +13016,996 @@
         "Muted Chugs"
       ],
       "styleProfileId": "simple-plan"
+    },
+    {
+      "id": "BHG-P-001",
+      "name": "Bloodhound Gang — The Bad Touch — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Bad Touch"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era dance-rock groove guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "bouncy syncopated eighth-note alt-rock; clipped verse accents; open chorus hits",
+      "articulation": "picked-crunch",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.72,
+        "tone": 6.8,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "dance-rock groove",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-002",
+      "name": "Bloodhound Gang — Foxtrot Uniform Charlie Kilo — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Foxtrot Uniform Charlie Kilo"
+      ],
+      "referenceAlbum": "Hefty Fine",
+      "referenceYear": 2005,
+      "browserGroup": "BLOODHOUND GANG / 2005 — HEFTY FINE",
+      "tonalTarget": "Original 2005 Hefty Fine-era stop-start guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "staccato stop-start power-chord riff; syncopated gaps; tight downstrokes",
+      "articulation": "staccato-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.2,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "stop-start",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2005"
+    },
+    {
+      "id": "BHG-P-003",
+      "name": "Bloodhound Gang — Fire Water Burn — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Fire Water Burn"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era half-time riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "heavy half-time riff pulse; chunky low-string accents; sparse stops",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.82,
+        "tone": 5.9,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "half-time riff",
+      "soundCharacter": "Drive",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-legacy"
+    },
+    {
+      "id": "BHG-P-004",
+      "name": "Bloodhound Gang — The Ballad of Chasey Lain — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Ballad of Chasey Lain"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era melodic power chords guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "melodic mid-tempo power-chord pulse; open ringing chorus",
+      "articulation": "open-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.62,
+        "tone": 6.6,
+        "reverb": 0.1,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "melodic power chords",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-005",
+      "name": "Bloodhound Gang — Along Comes Mary — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Along Comes Mary"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era clean-to-crunch guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "bright clean syncopated chord chops; light crunch lift in chorus",
+      "articulation": "clean-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.28,
+        "tone": 7.8,
+        "reverb": 0.16,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "clean-to-crunch",
+      "soundCharacter": "Clean",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-006",
+      "name": "Bloodhound Gang — Uhn Tiss Uhn Tiss Uhn Tiss — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Uhn Tiss Uhn Tiss Uhn Tiss"
+      ],
+      "referenceAlbum": "Hefty Fine",
+      "referenceYear": 2005,
+      "browserGroup": "BLOODHOUND GANG / 2005 — HEFTY FINE",
+      "tonalTarget": "Original 2005 Hefty Fine-era dance-rock pulse guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "dance-rock four-on-the-floor pulse; clipped muted offbeat chops",
+      "articulation": "muted-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7.5,
+        "reverb": 0.05,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "dance-rock pulse",
+      "soundCharacter": "Drive",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2005"
+    },
+    {
+      "id": "BHG-P-007",
+      "name": "Bloodhound Gang — I Hope You Die — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "I Hope You Die"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era dark heavy riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "dark aggressive low-register riff; tight palm-muted pulses and hard accents",
+      "articulation": "palm-muted",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.88,
+        "tone": 5.8,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "dark heavy riff",
+      "soundCharacter": "Distortion",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-008",
+      "name": "Bloodhound Gang — Mope — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Mope"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era groove riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "groove-led alt-rock riff; syncopated accents; dynamic stop-start breaks",
+      "articulation": "crunch-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.7,
+        "tone": 6.2,
+        "reverb": 0.06,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "groove riff",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-009",
+      "name": "Bloodhound Gang — My Dad Says That's for Pussies — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "My Dad Says That's for Pussies"
+      ],
+      "referenceAlbum": "Hard-Off",
+      "referenceYear": 2015,
+      "browserGroup": "BLOODHOUND GANG / 2015 — HARD-OFF",
+      "tonalTarget": "Original 2015 Hard-Off-era modern alt-rock guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "modern compact alt-rock power-chord drive; punchy muted verse and open hits",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.76,
+        "tone": 6.4,
+        "reverb": 0.05,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "modern alt-rock",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2015"
+    },
+    {
+      "id": "BHG-P-010",
+      "name": "Bloodhound Gang — Why's Everybody Always Pickin' on Me? — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Why's Everybody Always Pickin' on Me?"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era bouncy punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "playful bouncy punk-rock riff; clipped chord stabs and brisk eighths",
+      "articulation": "crunch-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.79,
+        "tone": 6,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "bouncy punk",
+      "soundCharacter": "Drive",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-legacy"
+    },
+    {
+      "id": "BHG-P-011",
+      "name": "Bloodhound Gang — Three Point One Four — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Three Point One Four"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era fast punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "fast aggressive punk riff; tight downstroke eighths; short muted turnarounds",
+      "articulation": "palm-muted",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.84,
+        "tone": 6.3,
+        "reverb": 0.03,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "fast punk",
+      "soundCharacter": "Distortion",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-012",
+      "name": "Bloodhound Gang — A Lap Dance Is So Much Better When the Stripper Is Crying — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "A Lap Dance Is So Much Better When the Stripper Is Crying"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era mid-tempo strum guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "mid-tempo melodic rock strum; ringing chord tails and dynamic accents",
+      "articulation": "open-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.54,
+        "tone": 6.9,
+        "reverb": 0.12,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "mid-tempo strum",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-013",
+      "name": "Bloodhound Gang — Kiss Me Where It Smells Funny — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Kiss Me Where It Smells Funny"
+      ],
+      "referenceAlbum": "One Fierce Beer Coaster",
+      "referenceYear": 1996,
+      "browserGroup": "BLOODHOUND GANG / LEGACY — 1996",
+      "tonalTarget": "Original 1996 One Fierce Beer Coaster-era garage punk guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "raw garage-punk power-chord groove; straight eighths and blunt stops",
+      "articulation": "driven-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.75,
+        "tone": 6.1,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "garage punk",
+      "soundCharacter": "Drive",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-legacy"
+    },
+    {
+      "id": "BHG-P-014",
+      "name": "Bloodhound Gang — The Inevitable Return of the Great White Dope — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "The Inevitable Return of the Great White Dope"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era heavy chug guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "heavy alt-rock riff; low-string chugs alternating with open power chords",
+      "articulation": "palm-muted",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.86,
+        "tone": 5.7,
+        "reverb": 0.04,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "heavy chug",
+      "soundCharacter": "Distortion",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
+    },
+    {
+      "id": "BHG-P-015",
+      "name": "Bloodhound Gang — Magna Cum Nada — Pattern",
+      "mode": "PATTERN",
+      "referenceArtist": "Bloodhound Gang",
+      "referenceTracks": [
+        "Magna Cum Nada"
+      ],
+      "referenceAlbum": "Hooray for Boobies",
+      "referenceYear": 2000,
+      "browserGroup": "BLOODHOUND GANG / 2000 — HOORAY FOR BOOBIES",
+      "tonalTarget": "Original 2000 Hooray for Boobies-era syncopated riff guitar tone/performance direction; genre-inspired, not a transcription or recording copy.",
+      "groove": "quirky syncopated riff-rock pattern; clipped accents and open chord punches",
+      "articulation": "crunch-picked",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.68,
+          0.82,
+          0.66,
+          0.96,
+          0.68,
+          0.82,
+          0.66
+        ]
+      },
+      "parameters": {
+        "drive": 0.69,
+        "tone": 6.5,
+        "reverb": 0.06,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "requires-mapped-articulation",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "sampleRequirement": "licensed recorded multisampled chord/strum performance samples; WAV/SFZ with chord and articulation maps",
+      "status": "performance-preset-definition-awaiting-licensed-performance-samples-and-pattern-engine",
+      "playingStyle": "syncopated riff",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "bhg-2000"
     }
   ],
   "patternSoundOptions": [
