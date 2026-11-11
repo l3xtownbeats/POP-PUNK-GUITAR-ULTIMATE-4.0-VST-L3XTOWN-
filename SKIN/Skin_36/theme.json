@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-36",
+  "index": 36,
+  "name": "Sticker Luxe",
+  "description": "Original sticker-label accents with a high-end dark instrument foundation",
+  "cluster": "B",
+  "identity": {
+    "material": "soft-touch polymer and layered label stock",
+    "lighting": "soft pastel edge accents",
+    "mood": "playful, collectible, polished"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#18171E",
+      "inset": "#24212D"
+    },
+    "surfaces": {
+      "primary": "#24212D",
+      "secondary": "#302B3B",
+      "raised": "#43394F",
+      "overlay": "#18171E"
+    },
+    "borders": {
+      "subtle": "#695A72",
+      "strong": "#75CFE2",
+      "focus": "#FF759D"
+    },
+    "typography": {
+      "primary": "#FAF7FB",
+      "secondary": "#C9C0D0",
+      "disabled": "#85858B",
+      "onAccent": "#18171E"
+    },
+    "rotary": {
+      "body": "#43394F",
+      "ring": "#75CFE2",
+      "track": "#695A72",
+      "value": "#FF759D",
+      "pointer": "#B9E36A",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#695A72",
+      "fill": "#FF759D",
+      "thumb": "#B9E36A",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF759D",
+        "foreground": "#18171E",
+        "hover": "#B9E36A",
+        "pressed": "#75CFE2",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#302B3B",
+        "foreground": "#FAF7FB",
+        "hover": "#43394F",
+        "pressed": "#75CFE2",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF759D",
+      "activeText": "#18171E",
+      "inactiveBackground": "#302B3B",
+      "inactiveText": "#C9C0D0",
+      "indicator": "#75CFE2"
+    },
+    "comboBoxes": {
+      "background": "#302B3B",
+      "foreground": "#FAF7FB",
+      "border": "#695A72",
+      "hover": "#43394F",
+      "menuBackground": "#24212D",
+      "selection": "#FF759D"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF759D",
+      "blackPressed": "#75CFE2",
+      "keyBorder": "#695A72",
+      "octaveLabel": "#C9C0D0"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF759D",
+      "high": "#F06A58",
+      "background": "#18171E"
+    },
+    "icons": {
+      "primary": "#FAF7FB",
+      "secondary": "#C9C0D0",
+      "accent": "#FF759D",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#302B3B",
+      "border": "#695A72",
+      "selected": "#FF759D",
+      "caption": "#FAF7FB"
+    },
+    "windowChrome": {
+      "background": "#18171E",
+      "title": "#FAF7FB",
+      "border": "#695A72",
+      "close": "#B9E36A"
+    },
+    "hero": {
+      "background": "#18171E",
+      "accent": "#FF759D",
+      "secondaryAccent": "#75CFE2",
+      "highlight": "#B9E36A"
+    },
+    "accents": {
+      "primary": "#FF759D",
+      "secondary": "#75CFE2",
+      "tertiary": "#B9E36A"
+    },
+    "texture": {
+      "material": "soft-touch polymer and layered label stock",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft pastel edge accents",
+      "glow": "#FF759D",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#75CFE2"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Sticker Luxe preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original soft-touch polymer and layered label stock hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle soft-touch polymer and layered label stock texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
