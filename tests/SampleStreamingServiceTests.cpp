@@ -48,6 +48,22 @@ int main()
         return 1;
     }
 
+    // An idle worker must be woken by stop() without a polling loop or hang.
+    {
+        ppgu::sampler::SampleStreamingService idleService(scan.samples, 2, 256);
+        if (!idleService.isValid() || !idleService.start())
+        {
+            std::cerr << "Idle streaming worker failed to start.\\n";
+            return 1;
+        }
+        idleService.stop();
+        if (idleService.requestPage({ 0, 0 }))
+        {
+            std::cerr << "Idle streaming worker accepted a request after shutdown.\\n";
+            return 1;
+        }
+    }
+
     // Oversized page geometry must fail closed before attempting a
     // multi-gigabyte cache allocation or starting a worker thread.
     {
