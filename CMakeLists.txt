@@ -22,7 +22,10 @@ if(WIN32)
         "Destination for the post-build VST3 bundle")
 endif()
 
-juce_add_binary_data(PPGUPresetData SOURCES presets/factory_bank_300.json)
+juce_add_binary_data(PPGUPresetData
+    HEADER_NAME "PPGUData.h"
+    SOURCES presets/factory_bank_300.json
+)
 
 juce_add_plugin(PopPunkGuitarUltimate
     COMPANY_NAME "L3XTOWN"
@@ -255,6 +258,7 @@ endif()
 # to this test target. The fixture is intentionally tiny and license-neutral.
 if(BUILD_TESTING)
     juce_add_binary_data(PPGUTestData
+        HEADER_NAME "PPGUTestData.h"
         NAMESPACE PPGUTestData
         SOURCES tests/assets/ppgu_test_data.txt
     )
