@@ -1643,7 +1643,14 @@
           "categoryBox",
           "presetSearch"
         ],
-        "function": "Preset selection plus category/text filtering. Filtering is non-destructive and must not load another preset."
+        "function": "Preset selection plus category/text filtering. Filtering is non-destructive and must not load another preset.",
+        "controlType": "browser",
+        "directParameterBinding": false,
+        "componentsExact": [
+          "presetBox",
+          "categoryBox",
+          "presetSearch"
+        ]
       },
       "mode_selector": {
         "kind": "composite",
@@ -1656,7 +1663,27 @@
         "parameterIds": [
           "playMode"
         ],
-        "function": "MELODY/PATTERN selection; PUNK GROUP is reserved and not yet exposed as a working mode."
+        "function": "MELODY/PATTERN selection; PUNK GROUP is reserved and not yet exposed as a working mode.",
+        "controlType": "selector",
+        "parameterDefinitions": [
+          {
+            "id": "playMode",
+            "type": "choice",
+            "choices": [
+              "Melody",
+              "Pattern"
+            ],
+            "defaultIndex": 0,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "supportedRuntimeChoices": [
+          "MELODY",
+          "PATTERN"
+        ],
+        "reservedUnavailableChoices": [
+          "PUNK GROUP"
+        ]
       },
       "knob01": {
         "kind": "rotary",
@@ -1666,7 +1693,23 @@
           "ampGain"
         ],
         "label": "GAIN",
-        "function": "Amplifier gain."
+        "function": "Amplifier gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "ampGain",
+            "type": "float",
+            "min": 0,
+            "max": 10,
+            "default": 5,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob02": {
         "kind": "rotary",
@@ -1676,7 +1719,23 @@
           "eqHigh"
         ],
         "label": "TREBLE",
-        "function": "High-frequency EQ gain."
+        "function": "High-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqHigh",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob03": {
         "kind": "rotary",
@@ -1686,7 +1745,23 @@
           "eqMid"
         ],
         "label": "MID",
-        "function": "Mid-frequency EQ gain."
+        "function": "Mid-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqMid",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob04": {
         "kind": "rotary",
@@ -1696,7 +1771,23 @@
           "eqLow"
         ],
         "label": "BASS",
-        "function": "Low-frequency EQ gain."
+        "function": "Low-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqLow",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob05": {
         "kind": "rotary",
@@ -1706,7 +1797,23 @@
           "velocity"
         ],
         "label": "VELOCITY",
-        "function": "MIDI velocity response."
+        "function": "MIDI velocity response.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "velocity",
+            "type": "float",
+            "min": 0,
+            "max": 2,
+            "default": 1,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob06": {
         "kind": "rotary",
@@ -1716,7 +1823,23 @@
           "dynamics"
         ],
         "label": "DYNAMICS",
-        "function": "Velocity-to-dynamics response."
+        "function": "Velocity-to-dynamics response.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "dynamics",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0.5,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob07": {
         "kind": "rotary",
@@ -1726,7 +1849,23 @@
           "swing"
         ],
         "label": "SWING",
-        "function": "Pattern swing amount."
+        "function": "Pattern swing amount.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "swing",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob08": {
         "kind": "rotary",
@@ -1736,7 +1875,23 @@
           "humanize"
         ],
         "label": "HUMANIZE",
-        "function": "Pattern timing/feel humanization."
+        "function": "Pattern timing/feel humanization.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "humanize",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "knob09": {
         "kind": "rotary",
@@ -1746,7 +1901,23 @@
           "accent"
         ],
         "label": "ACCENT",
-        "function": "Pattern accent amount."
+        "function": "Pattern accent amount.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "accent",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0.75,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
       },
       "fx_switch01": {
         "kind": "toggle",
@@ -1756,7 +1927,24 @@
           "compressorOn"
         ],
         "label": "COMPRESSOR",
-        "function": "Compressor bypass/enable."
+        "function": "Compressor bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "compressorOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch02": {
         "kind": "toggle",
@@ -1766,7 +1954,24 @@
           "eqOn"
         ],
         "label": "EQ",
-        "function": "Equalizer bypass/enable."
+        "function": "Equalizer bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "eqOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch03": {
         "kind": "toggle",
@@ -1776,7 +1981,24 @@
           "distortionOn"
         ],
         "label": "DISTORTION",
-        "function": "Distortion bypass/enable."
+        "function": "Distortion bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "distortionOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch04": {
         "kind": "toggle",
@@ -1786,7 +2008,24 @@
           "chorusOn"
         ],
         "label": "CHORUS",
-        "function": "Chorus bypass/enable."
+        "function": "Chorus bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "chorusOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": false,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch05": {
         "kind": "toggle",
@@ -1796,7 +2035,24 @@
           "delayOn"
         ],
         "label": "DELAY",
-        "function": "Delay bypass/enable."
+        "function": "Delay bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "delayOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": false,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch06": {
         "kind": "toggle",
@@ -1806,7 +2062,24 @@
           "reverbOn"
         ],
         "label": "REVERB",
-        "function": "Reverb bypass/enable."
+        "function": "Reverb bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "reverbOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "fx_switch07": {
         "kind": "toggle",
@@ -1816,56 +2089,106 @@
           "cabinetOn"
         ],
         "label": "CABINET IR",
-        "function": "Cabinet processing bypass/enable."
+        "function": "Cabinet processing bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "cabinetOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
       },
       "midi_keyboard": {
         "kind": "keyboard",
         "runtimeStatus": "implemented",
         "component": "keyboard",
-        "function": "On-screen MIDI keyboard; note events are sent to the instrument."
+        "function": "On-screen MIDI keyboard; note events are sent to the instrument.",
+        "controlType": "keyboard",
+        "midiBinding": "juce::MidiKeyboardState",
+        "noteRange": {
+          "minimum": 36,
+          "maximum": 84
+        },
+        "source": "PluginEditor.cpp:keyboard->setAvailableRange"
       },
       "LCD_display": {
         "kind": "display",
         "runtimeStatus": "partial",
         "component": "statusLabel",
-        "function": "Current status, preset and library feedback. A dedicated hardware-style LCD treatment is a visual goal."
+        "function": "Current status, preset and library feedback. A dedicated hardware-style LCD treatment is a visual goal.",
+        "controlType": "LCD",
+        "parameterBinding": null,
+        "componentType": "juce::Label",
+        "visualStatus": "statusLabel only; no dedicated LCD widget"
       },
       "LED_indicator": {
         "kind": "indicator",
         "runtimeStatus": "not_implemented",
-        "function": "Reserved activity/status indicator. No live MIDI/audio meter is currently wired; never fabricate activity."
+        "function": "Reserved activity/status indicator. No live MIDI/audio meter is currently wired; never fabricate activity.",
+        "controlType": "LED",
+        "parameterBinding": null,
+        "componentType": null,
+        "visualStatus": "not implemented; must not simulate activity"
       },
       "SKIN_button": {
         "kind": "action",
         "runtimeStatus": "implemented",
         "component": "skinButton",
-        "function": "Opens visual theme selection; Ctrl+K shortcut."
+        "function": "Opens visual theme selection; Ctrl+K shortcut.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "actionBinding": "skinButton -> showSkinMenu; Ctrl+K"
       },
       "Import_Guitar": {
         "kind": "action",
         "runtimeStatus": "implemented",
         "component": "loadButton",
-        "function": "Opens SFZ selection and requests asynchronous guitar library loading."
+        "function": "Opens SFZ selection and requests asynchronous guitar library loading.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "actionBinding": "loadButton -> chooseSfzFile -> asynchronous processor SFZ load"
       },
       "Auto_Discover": {
         "kind": "action",
         "runtimeStatus": "not_implemented",
-        "function": "Reserved for production Sound Hunter/S6 discovery. Must remain unavailable until integrated."
+        "function": "Reserved for production Sound Hunter/S6 discovery. Must remain unavailable until integrated.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
       },
       "Curator": {
         "kind": "panel_action",
         "runtimeStatus": "not_implemented",
-        "function": "Reserved for Sound Hunter curator/library review. Must remain unavailable until integrated."
+        "function": "Reserved for Sound Hunter curator/library review. Must remain unavailable until integrated.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
       },
       "Settings": {
         "kind": "panel_action",
         "runtimeStatus": "not_implemented",
-        "function": "Reserved settings panel; do not expose an active non-functional action."
+        "function": "Reserved settings panel; do not expose an active non-functional action.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
       },
       "About": {
         "kind": "panel_action",
         "runtimeStatus": "not_implemented",
-        "function": "Reserved About panel; enable only when it reports actual product/build metadata."
+        "function": "Reserved About panel; enable only when it reports actual product/build metadata.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
       }
     },
     "additionalCurrentControls": {
@@ -1920,6 +2243,12 @@
       ],
       "missingRuntimeControls": "Keep IDs in parity contract; never claim unavailable functionality. A disabled placeholder is acceptable only with an honest reason and cannot simulate activity.",
       "layoutOwnership": "Coordinates are design metadata until a layout engine consumes them. Existing JUCE bounds and hit targets remain authoritative."
+    },
+    "inventorySource": {
+      "editor": "Source/PluginEditor.h and Source/PluginEditor.cpp",
+      "processorParameters": "Source/PluginProcessor.cpp:createParameterLayout",
+      "auditDate": "2026-11-12",
+      "note": "UI control ranges are copied from APVTS parameter declarations; reserved controls are explicitly marked unavailable and are not represented as implemented."
     }
   }
 }
