@@ -8,6 +8,7 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <semaphore>
 #include <thread>
 #include <vector>
 
@@ -71,6 +72,10 @@ private:
     PageCacheSlots pages;
     BoundedSpscQueue<Request, requestQueueCapacity> requests;
     std::atomic<bool> running { false };
+    // The audio thread signals successful enqueues without waiting. A permit
+    // per request lets the worker sleep completely while the bank is idle.
+    // One extra permit is reserved for shutdown wake-up.
+    std::counting_semaphore<static_cast<std::ptrdiff_t>(requestQueueCapacity + 1)> workAvailable { 0 };
     std::thread worker;
 
     std::atomic<std::uint64_t> requestsSubmitted { 0 };
