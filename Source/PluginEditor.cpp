@@ -14,7 +14,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(960, 760, 1920, 1400);
+    setResizeLimits(1040, 820, 1920, 1400);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, theme.text);
@@ -90,17 +90,31 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     themeButton.setTooltip("Open the 20 visual skins. Switching themes never interrupts playback.");
     themeButton.setColour(juce::TextButton::buttonColourId, theme.panelRaised);
     themeButton.setColour(juce::TextButton::textColourOffId, theme.text);
-    themeButton.onClick = [this] { themeBox.showPopup(); };
+    themeButton.onClick = [this]
+    {
+        juce::PopupMenu menu;
+        int selectedItem = 0;
+        for (size_t i = 0; i < themes.size(); ++i)
+        {
+            const int itemId = static_cast<int>(i + 1);
+            const bool active = themes[i].name == theme.name;
+            menu.addItem(itemId, themes[i].name, true, active);
+            if (active) selectedItem = itemId;
+        }
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+        menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&themeButton),
+            [safeThis](int result)
+            {
+                if (safeThis != nullptr && result > 0)
+                    safeThis->applyTheme(result - 1);
+            });
+        juce::ignoreUnused(selectedItem);
+    };
     addAndMakeVisible(themeButton);
-    themeBox.setVisible(false);
-    for (size_t i = 0; i < themes.size(); ++i)
-        themeBox.addItem(themes[i].name, static_cast<int>(i + 1));
-    themeBox.onChange = [this] { applyTheme(themeBox.getSelectedId() - 1); };
     const auto savedTheme = processor.parameters.state.getProperty("uiTheme", "Neon Riot").toString();
     int savedThemeIndex = 0;
     for (size_t i = 0; i < themes.size(); ++i)
         if (themes[i].name == savedTheme) { savedThemeIndex = static_cast<int>(i); break; }
-    themeBox.setSelectedId(savedThemeIndex + 1, juce::dontSendNotification);
     applyTheme(savedThemeIndex);
 
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
@@ -262,7 +276,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     presetBox.setBounds(top.removeFromLeft(205).reduced(3, 7));
     presetSearch.setBounds(top.removeFromLeft(150).reduced(3, 8));
     categoryBox.setBounds(top.removeFromLeft(118).reduced(3, 8));
-    themeButton.setBounds(top.removeFromRight(112).reduced(2, 7));
+    themeButton.setBounds(top.removeFromRight(150).reduced(2, 7));
     loadButton.setBounds(top.removeFromRight(112).reduced(2, 7));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(214);
