@@ -728,7 +728,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.styleProfileId = value.getProperty("styleProfileId", "").toString();
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
-            preset.articulation = value.getProperty("articulation", "").toString();
+            preset.articulation = value.getProperty("articulation", value.getProperty("playingStyle", "")).toString();
             const auto params = value.getProperty("parameters", juce::var());
             preset.drive = static_cast<float>(params.getProperty("drive", 0.0));
             preset.tone = static_cast<float>(params.getProperty("tone", 5.0));
@@ -764,6 +764,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else if (styleText.contains("palm") || styleText.contains("muted")) patternStyle = 1;
     else if (styleText.contains("open") || styleText.contains("chorus")) patternStyle = 3;
     else if (styleText.contains("alternate")) patternStyle = 5;
+    else if (styleText.contains("staccato") || styleText.contains("stop-start") || styleText.contains("syncopated")) patternStyle = 6;
+    else if (styleText.contains("chug") || styleText.contains("palm") || styleText.contains("muted")) patternStyle = 1;
+    else if (styleText.contains("open") || styleText.contains("ringing") || styleText.contains("clean")) patternStyle = 3;
+    else if (styleText.contains("driven") || styleText.contains("crunch") || styleText.contains("punk")) patternStyle = 0;
     if (preset.groove.isEmpty()) {
         const auto profile = preset.styleProfileId.toLowerCase();
         if (profile.contains("blink-182") || profile.contains("the-offspring") || profile.contains("green-day")) patternStyle = 0;
