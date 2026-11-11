@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-11",
+  "index": 11,
+  "name": "Sunset Drive",
+  "description": "Warm sunset gradient and late-night stage light",
+  "cluster": "B",
+  "identity": {
+    "material": "anodized-metal",
+    "lighting": "warm",
+    "mood": "Warm sunset gradient and late-night stage light"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#21151B",
+      "inset": "#21151B"
+    },
+    "surfaces": {
+      "primary": "#21151B",
+      "secondary": "#21151B",
+      "raised": "#FF785A",
+      "overlay": "#21151B"
+    },
+    "borders": {
+      "subtle": "#FFBC70",
+      "strong": "#FF785A",
+      "focus": "#D85E91"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#21151B",
+      "ring": "#FFBC70",
+      "track": "#49434F",
+      "value": "#FF785A",
+      "pointer": "#D85E91",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#FF785A",
+      "thumb": "#D85E91",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF785A",
+        "foreground": "#101116",
+        "hover": "#D85E91",
+        "pressed": "#FFBC70",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#21151B",
+        "foreground": "#F4F0F4",
+        "hover": "#FFBC70",
+        "pressed": "#FF785A",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF785A",
+      "activeText": "#101116",
+      "inactiveBackground": "#21151B",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#D85E91"
+    },
+    "comboBoxes": {
+      "background": "#21151B",
+      "foreground": "#F4F0F4",
+      "border": "#FFBC70",
+      "hover": "#FF785A",
+      "menuBackground": "#21151B",
+      "selection": "#FF785A"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#FF785A",
+      "blackPressed": "#D85E91",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D85E91",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#FF785A",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#21151B",
+      "title": "#F4F0F4",
+      "border": "#FFBC70",
+      "close": "#FF785A"
+    },
+    "hero": {
+      "background": "#21151B",
+      "accent": "#FF785A",
+      "secondaryAccent": "#FFBC70",
+      "highlight": "#D85E91"
+    },
+    "accents": {
+      "primary": "#FF785A",
+      "secondary": "#FFBC70",
+      "tertiary": "#D85E91"
+    },
+    "texture": {
+      "material": "anodized-metal",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "warm",
+      "glow": "#FF785A",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#FFBC70"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
