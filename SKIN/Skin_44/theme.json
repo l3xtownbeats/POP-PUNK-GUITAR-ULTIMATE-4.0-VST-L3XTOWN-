@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-44",
+  "index": 44,
+  "name": "Mono Blueprint",
+  "description": "Technical blueprint language with cool blue-gray panels and measured grid accents",
+  "cluster": "C",
+  "identity": {
+    "material": "blueprint-coated aluminium and matte polymer",
+    "lighting": "cool drafting-room light",
+    "mood": "analytical, clean, technical"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#17212B",
+      "inset": "#202D39"
+    },
+    "surfaces": {
+      "primary": "#202D39",
+      "secondary": "#2B3B49",
+      "raised": "#3B5263",
+      "overlay": "#17212B"
+    },
+    "borders": {
+      "subtle": "#637C8C",
+      "strong": "#70A7CE",
+      "focus": "#D5E4EF"
+    },
+    "typography": {
+      "primary": "#F1F6FA",
+      "secondary": "#BCCBD5",
+      "disabled": "#85858B",
+      "onAccent": "#17212B"
+    },
+    "rotary": {
+      "body": "#3B5263",
+      "ring": "#70A7CE",
+      "track": "#637C8C",
+      "value": "#D5E4EF",
+      "pointer": "#A8B8C5",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#637C8C",
+      "fill": "#D5E4EF",
+      "thumb": "#A8B8C5",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D5E4EF",
+        "foreground": "#17212B",
+        "hover": "#A8B8C5",
+        "pressed": "#70A7CE",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#2B3B49",
+        "foreground": "#F1F6FA",
+        "hover": "#3B5263",
+        "pressed": "#70A7CE",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D5E4EF",
+      "activeText": "#17212B",
+      "inactiveBackground": "#2B3B49",
+      "inactiveText": "#BCCBD5",
+      "indicator": "#70A7CE"
+    },
+    "comboBoxes": {
+      "background": "#2B3B49",
+      "foreground": "#F1F6FA",
+      "border": "#637C8C",
+      "hover": "#3B5263",
+      "menuBackground": "#202D39",
+      "selection": "#D5E4EF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#D5E4EF",
+      "blackPressed": "#70A7CE",
+      "keyBorder": "#637C8C",
+      "octaveLabel": "#BCCBD5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D5E4EF",
+      "high": "#F06A58",
+      "background": "#17212B"
+    },
+    "icons": {
+      "primary": "#F1F6FA",
+      "secondary": "#BCCBD5",
+      "accent": "#D5E4EF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2B3B49",
+      "border": "#637C8C",
+      "selected": "#D5E4EF",
+      "caption": "#F1F6FA"
+    },
+    "windowChrome": {
+      "background": "#17212B",
+      "title": "#F1F6FA",
+      "border": "#637C8C",
+      "close": "#A8B8C5"
+    },
+    "hero": {
+      "background": "#17212B",
+      "accent": "#D5E4EF",
+      "secondaryAccent": "#70A7CE",
+      "highlight": "#A8B8C5"
+    },
+    "accents": {
+      "primary": "#D5E4EF",
+      "secondary": "#70A7CE",
+      "tertiary": "#A8B8C5"
+    },
+    "texture": {
+      "material": "blueprint-coated aluminium and matte polymer",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "cool drafting-room light",
+      "glow": "#D5E4EF",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#70A7CE"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Mono Blueprint preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original blueprint-coated aluminium and matte polymer hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle blueprint-coated aluminium and matte polymer material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
