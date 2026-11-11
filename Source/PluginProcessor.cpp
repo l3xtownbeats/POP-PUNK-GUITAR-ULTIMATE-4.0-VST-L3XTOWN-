@@ -1036,7 +1036,19 @@ void PopPunkGuitarUltimateAudioProcessor::loadFactorySampleProfileAsync(
     {
         return a.getFullPathName().compareIgnoreCase(b.getFullPathName()) < 0;
     });
-    loadSfzFileAsync(sfzFiles.getFirst(), std::move(completion));
+    const auto selectedSfz = sfzFiles.getFirst();
+    // Do not create another immutable sampler snapshot when the requested bank
+    // is already active. This keeps repeated preset browsing below the 128-snapshot cap.
+    if (getCurrentSfzFilePath().equalsIgnoreCase(selectedSfz.getFullPathName()))
+    {
+        ppgu::sampler::LoadReport report;
+        report.success = true;
+        report.loadedRegions = sampler.getRegionCount();
+        report.loadedSamples = sampler.getSampleCount();
+        if (completion) completion(std::move(report));
+        return;
+    }
+    loadSfzFileAsync(selectedSfz, std::move(completion));
 }
 
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
