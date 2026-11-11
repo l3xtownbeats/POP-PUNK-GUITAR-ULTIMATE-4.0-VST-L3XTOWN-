@@ -133,7 +133,6 @@ if(BUILD_TESTING)
         juce::juce_audio_formats
         juce::juce_audio_basics
         juce::juce_core
-        juce::juce_graphics
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags
     )
@@ -215,6 +214,7 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_theme_manager_tests PRIVATE Source/UI)
     target_link_libraries(ppgu_theme_manager_tests PRIVATE
         juce::juce_core
+        juce::juce_graphics
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags
     )
