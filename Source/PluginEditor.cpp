@@ -340,6 +340,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
+            preset.sampleProfile = value.getProperty("sampleProfile", "electric").toString();
             const auto params = value.getProperty("parameters", juce::var());
             preset.drive = static_cast<float>(params.getProperty("drive", 0.0));
             preset.tone = static_cast<float>(params.getProperty("tone", 5.0));
@@ -361,18 +362,67 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
         if (auto* parameter = processor.parameters.getParameter(id))
             parameter->setValueNotifyingHost(parameter->convertTo0to1(value));
     };
-    setParameter("distortionDrive", juce::jlimit(0.0f, 1.0f, preset.drive));
+    const auto setChoice = [&setParameter](const juce::String& id, int choice) {
+        setParameter(id, static_cast<float>(choice));
+    };
+
+    const float drive = juce::jlimit(0.0f, 1.0f, preset.drive);
+    const float reverb = juce::jlimit(0.0f, 1.0f, preset.reverb);
+    const bool acoustic = preset.sampleProfile.equalsIgnoreCase("acoustic")
+                       || preset.soundCharacter.containsIgnoreCase("acoustic");
+    const bool muted = preset.articulation.containsIgnoreCase("palm")
+                    || preset.soundCharacter.containsIgnoreCase("palm mute")
+                    || preset.soundCharacter.containsIgnoreCase("muted chugs");
+    const bool harmonic = preset.articulation.containsIgnoreCase("flageolet")
+                       || preset.articulation.containsIgnoreCase("harmonic");
+    const bool tremolo = preset.articulation.containsIgnoreCase("tremolo");
+
+    // Apply the audible tone controls, not just the preset's display name.
+    setParameter("ampGain", juce::jlimit(0.0f, 10.0f, drive * 10.0f));
+    setParameter("distortionDrive", drive);
+    setParameter("distortionOn", (!acoustic && drive > 0.08f) ? 1.0f : 0.0f);
     setParameter("tone", juce::jlimit(0.0f, 10.0f, preset.tone));
-    setParameter("reverbMix", juce::jlimit(0.0f, 1.0f, preset.reverb));
+    setParameter("reverbMix", reverb);
+    setParameter("reverbOn", reverb > 0.005f ? 1.0f : 0.0f);
     setParameter("output", juce::jlimit(-24.0f, 12.0f, preset.outputDb));
+
+    setChoice("articulation", muted ? 1 : (harmonic ? 2 : (tremolo ? 3 : 0)));
+    setChoice("pickStyle", (acoustic || preset.groove.containsIgnoreCase("finger")
+                           || preset.groove.containsIgnoreCase("arpeggio")) ? 1 : 0);
+
+    // The current scheduler has eight fixed rhythm masks. Map descriptive
+    // catalog grooves to the closest implemented slot without claiming that
+    // the authored performance map is already rendered by the engine.
+    if (preset.mode == "PATTERN")
+    {
+        int slot = 0; // straight eighth-note foundation
+        if (preset.groove.containsIgnoreCase("arpeggio")
+            || preset.groove.containsIgnoreCase("picked"))
+            slot = 7;
+        else if (preset.groove.containsIgnoreCase("sixteenth")
+                 || preset.groove.containsIgnoreCase("chug"))
+            slot = 3;
+        else if (preset.groove.containsIgnoreCase("offbeat")
+                 || preset.groove.containsIgnoreCase("ska"))
+            slot = 4;
+        else if (preset.groove.containsIgnoreCase("half-time")
+                 || preset.groove.containsIgnoreCase("sparse"))
+            slot = 1;
+        setChoice("patternSlot", slot);
+    }
+
     modeBox.setSelectedId(preset.mode == "PATTERN" ? 2 : 1, juce::sendNotification);
+    const auto sampleNote = "TARGET BANK: " + preset.sampleProfile.toUpperCase()
+                          + (acoustic ? "  /  ACOUSTIC TONE" : "  /  ELECTRIC TONE");
     if (preset.mode == "PATTERN")
     {
         const auto detail = preset.soundCharacter + (preset.groove.isNotEmpty() ? "  /  " + preset.groove : juce::String{});
-        statusLabel.setText("PATTERN STYLE: " + detail + "  /  " + preset.articulation + "  /  PERFORMANCE ENGINE REQUIRED", juce::dontSendNotification);
+        statusLabel.setText("PRESET APPLIED  /  " + detail + "  /  " + sampleNote
+                            + "  /  PERFORMANCE SAMPLES STILL REQUIRED", juce::dontSendNotification);
     }
     else
-        statusLabel.setText("MELODY TONE: " + preset.soundCharacter + "  /  ONE KEY = ONE NOTE  /  LOAD A LICENSED SFZ BANK", juce::dontSendNotification);
+        statusLabel.setText("PRESET APPLIED  /  MELODY: " + preset.soundCharacter + "  /  "
+                            + sampleNote + "  /  ONE KEY = ONE NOTE  /  LOAD LICENSED SFZ BANK", juce::dontSendNotification);
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {
