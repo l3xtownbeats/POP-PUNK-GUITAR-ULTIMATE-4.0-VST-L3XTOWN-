@@ -1,10 +1,10 @@
 # POP PUNK GUITAR ULTIMATE — INFO / ЖУРНАЛ РАЗРАБОТКИ
 
-**INFO — журнал разработки.** Здесь только этапы проекта, решения, прогресс и следующие задачи. Ошибки, исправления и результаты сборок ведутся отдельно в `BUILD_RELEASE.md`. README предназначен только для описания самого плагина.
+**Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 11 ноября 2026  
 Ветка: `main`  
-Последний подтверждённый HEAD до этой консолидации: `69161d90a78653e7304f809a8dc0c22afdc4f113`
+Последний commit перед текущей записью: `00869e6d16019f9138b3b2988c4f26c39c059631`
 
 ## 1. Назначение и продукт
 
@@ -75,6 +75,27 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 - `69161d9` — REV 10.1 внесена в журнал.
 
 Исторические CI-успехи из прежних записей относятся к тем commit SHA и не доказывают сборку текущего HEAD. Старые run IDs и артефакты нельзя выдавать за актуальную проверку.
+
+## 6.1. SOUND HUNTER — licensing/provenance contract foundation (2026-11-11)
+
+Аудит текущего main не обнаружил production DiscoveryEngine, BankScanner, S6.5 registry или отдельного Discovery source tree. Поэтому второй search/import pipeline не создавался; сделан только изолированный policy-contract foundation перед интеграцией в существующий S6.
+
+Добавлено:
+- tools/validate_sound_asset_registry.py — проверка asset-level GREEN/YELLOW/RED записей и вычисляемого AUTO ADD gate;
+- assets/sound_hunter/registry.json — versioned registry, пока пустой;
+- tests/TestSoundAssetRegistry.py — 12 unit cases для GREEN, YELLOW, RED, direct-download, hash, license evidence, copyright suspect, guitar gate, quality, GOLD listening, duplicate IDs и empty registry;
+- CTest target ppgu_sound_asset_registry_contract зарегистрирован в CMake.
+
+GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, сохранённое license evidence, APPROVED legal review, разрешение commercial use/redistribution/modification, прямую загрузку, совпадающий SHA-256, SNR >=40 dB, отсутствие clipping, DC offset <=0.0001, integrity PASS, GUITAR_CONFIRMED, profile и отсутствие copyright/manual-review flags. YELLOW остаётся manual-only; RED не может быть curator-overridden; GOLD требует human listening approval.
+
+Коммиты этапа:
+- a739303 — policy validator;
+- 413842c — policy unit tests;
+- 18396a4 — пустой versioned registry;
+- 222e9aa — защита валидатора от malformed values;
+- 00869e6 — CTest registration.
+
+Статус: POLICY CONTRACT IMPLEMENTED IN TOOLING; НЕ интегрирован в production S6/DiscoveryEngine, не выполняет поиск/скачивание и не добавляет звуки. Registry пуст, approved assets = 0. CTest/Windows Release/pluginval для этого HEAD ещё не подтверждены; ожидается GitHub Actions run после текущих изменений.
 
 ## 7. Следующие приоритеты
 
