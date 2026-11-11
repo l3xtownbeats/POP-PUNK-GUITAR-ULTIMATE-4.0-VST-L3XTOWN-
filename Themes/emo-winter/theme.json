@@ -1,0 +1,60 @@
+{
+  "name": "Emo Winter",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#1a202c",
+    "background.bottom": "#0d111a",
+    "accent.primary": "#7d9fce",
+    "accent.secondary": "#b7c9e7",
+    "text.main": "#f2f6ff",
+    "text.dim": "#9aa9c1",
+    "knob.face": "#283347",
+    "knob.ring": "#799ac8",
+    "button.normal": "#0d111a",
+    "button.active": "#7d9fce",
+    "button.hover": "#1a202c",
+    "slider.track": "#9aa9c1",
+    "slider.fill": "#7d9fce",
+    "led.on": "#7d9fce",
+    "led.off": "#9aa9c1",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#7d9fce",
+    "meter.fill": "#7d9fce",
+    "meter.peak": "#ff4444",
+    "panel.border": "#9aa9c1",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#0d111a",
+    "list.row.selected": "#7d9fce",
+    "tooltip.background": "#0d111a",
+    "tooltip.text": "#f2f6ff"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Montserrat-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "frosted_winter"
+  }
+}
