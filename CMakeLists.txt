@@ -237,3 +237,23 @@ if(BUILD_TESTING)
         )
     endif()
 endif()
+
+
+# Real AudioProcessor integration regression for the PATTERN MIDI path.
+# Conflict-check: links the production processor target rather than duplicating
+# a mock scheduler; fixture WAV/SFZ files are generated in the system temp dir.
+if(BUILD_TESTING)
+    add_executable(ppgu_processor_pattern_tests
+        tests/ProcessorPatternIntegrationTests.cpp
+    )
+    target_include_directories(ppgu_processor_pattern_tests PRIVATE Source)
+    target_link_libraries(ppgu_processor_pattern_tests PRIVATE
+        PopPunkGuitarUltimate
+        juce::juce_audio_formats
+        juce::juce_audio_utils
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    juce_generate_juce_header(ppgu_processor_pattern_tests)
+    add_test(NAME ppgu_processor_pattern_integration COMMAND ppgu_processor_pattern_tests)
+endif()
