@@ -207,7 +207,10 @@ endif()
 
 # JUCE-backed runtime contract tests for all 50 skin manifests and safe fallback.
 if(BUILD_TESTING)
-    add_executable(ppgu_theme_manager_tests
+    juce_add_console_app(ppgu_theme_manager_tests
+        PRODUCT_NAME "PPGU Theme Manager Tests"
+    )
+    target_sources(ppgu_theme_manager_tests PRIVATE
         Source/UI/ThemeManager.cpp
         tests/ThemeManagerTests.cpp
     )
@@ -243,7 +246,10 @@ endif()
 # Conflict-check: links the production processor target rather than duplicating
 # a mock scheduler; fixture WAV/SFZ files are generated in the system temp dir.
 if(BUILD_TESTING)
-    add_executable(ppgu_processor_pattern_tests
+    juce_add_console_app(ppgu_processor_pattern_tests
+        PRODUCT_NAME "PPGU Processor Pattern Tests"
+    )
+    target_sources(ppgu_processor_pattern_tests PRIVATE
         tests/ProcessorPatternIntegrationTests.cpp
     )
     target_include_directories(ppgu_processor_pattern_tests PRIVATE Source)
