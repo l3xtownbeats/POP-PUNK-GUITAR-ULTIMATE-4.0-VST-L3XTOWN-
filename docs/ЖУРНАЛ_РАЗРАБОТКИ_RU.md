@@ -1176,3 +1176,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - Статус: SPECIFICATION UPDATED / CODE IMPLEMENTATION AND QA PENDING. В рамках этих двух коммитов изменялась документация, а не исходный код DSP/UI. Не считать автоматический bypass AUTOCHORDS, полный доступ ко всем пресетам в MELODY или новую надпись BACK уже реализованными в VST3.
 - Проверки: сборка, CTest, pluginval и ручная проверка в FL Studio 20 для этих уточнений не выполнялись/не подтверждены.
 - Следующий шаг: реализовать режимный bypass AUTOCHORDS в Processor, корректное состояние UI и доступность всех четырёх разделов браузера в MELODY; затем реализовать навигацию FX EDIT и прогнать Windows x64 CI + host acceptance.
+
+
+## 11 ноября 2026 — PATTERN работает независимо от AUTOCHORDS
+
+- Уточнено обязательное поведение: режим PATTERN должен полноценно исполнять выбранный ритмический рисунок и при AUTOCHORDS OFF.
+- AUTOCHORDS отвечает только за автоматическое построение/достраивание гармонии. Его выключение не отключает Pattern engine.
+- PATTERN + OFF: входящая MIDI-нота или реально сыгранный MIDI-аккорд задаёт гармоническую высоту для ритмического рисунка; дополнительные ноты автоматически не добавляются.
+- PATTERN + ON: одна входящая клавиша может быть преобразована в диатонический аккорд согласно выбранным KEY и MAJOR/MINOR, после чего тот же Pattern engine исполняет ритмический рисунок.
+- Спецификация обновлена в `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `94cf692c5879d8555e89e467f54ac72d669c2e8f`.
+- Статус: SPECIFIED / CODE IMPLEMENTATION AND QA PENDING. Не считать независимость Pattern от AUTOCHORDS подтверждённой в работающем VST3 до проверки Processor, regression tests, Windows CI и FL Studio 20.
