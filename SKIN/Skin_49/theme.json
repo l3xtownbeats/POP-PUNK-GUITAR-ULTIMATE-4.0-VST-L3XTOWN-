@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-49",
+  "index": 49,
+  "name": "Ultraviolet Club",
+  "description": "Deep ultraviolet club palette with crisp cyan and pink energy",
+  "cluster": "B",
+  "identity": {
+    "material": "smoked acrylic and satin black alloy",
+    "lighting": "controlled ultraviolet club lighting",
+    "mood": "vivid, nocturnal, expressive"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#151122",
+      "inset": "#201A32"
+    },
+    "surfaces": {
+      "primary": "#201A32",
+      "secondary": "#2C2442",
+      "raised": "#40345B",
+      "overlay": "#151122"
+    },
+    "borders": {
+      "subtle": "#685C8B",
+      "strong": "#F15FC6",
+      "focus": "#A66CFF"
+    },
+    "typography": {
+      "primary": "#F8F3FF",
+      "secondary": "#C9BFDD",
+      "disabled": "#85858B",
+      "onAccent": "#151122"
+    },
+    "rotary": {
+      "body": "#40345B",
+      "ring": "#F15FC6",
+      "track": "#685C8B",
+      "value": "#A66CFF",
+      "pointer": "#6BDCE8",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#685C8B",
+      "fill": "#A66CFF",
+      "thumb": "#6BDCE8",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#A66CFF",
+        "foreground": "#151122",
+        "hover": "#6BDCE8",
+        "pressed": "#F15FC6",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#2C2442",
+        "foreground": "#F8F3FF",
+        "hover": "#40345B",
+        "pressed": "#F15FC6",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#A66CFF",
+      "activeText": "#151122",
+      "inactiveBackground": "#2C2442",
+      "inactiveText": "#C9BFDD",
+      "indicator": "#F15FC6"
+    },
+    "comboBoxes": {
+      "background": "#2C2442",
+      "foreground": "#F8F3FF",
+      "border": "#685C8B",
+      "hover": "#40345B",
+      "menuBackground": "#201A32",
+      "selection": "#A66CFF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#A66CFF",
+      "blackPressed": "#F15FC6",
+      "keyBorder": "#685C8B",
+      "octaveLabel": "#C9BFDD"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#A66CFF",
+      "high": "#F06A58",
+      "background": "#151122"
+    },
+    "icons": {
+      "primary": "#F8F3FF",
+      "secondary": "#C9BFDD",
+      "accent": "#A66CFF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2C2442",
+      "border": "#685C8B",
+      "selected": "#A66CFF",
+      "caption": "#F8F3FF"
+    },
+    "windowChrome": {
+      "background": "#151122",
+      "title": "#F8F3FF",
+      "border": "#685C8B",
+      "close": "#6BDCE8"
+    },
+    "hero": {
+      "background": "#151122",
+      "accent": "#A66CFF",
+      "secondaryAccent": "#F15FC6",
+      "highlight": "#6BDCE8"
+    },
+    "accents": {
+      "primary": "#A66CFF",
+      "secondary": "#F15FC6",
+      "tertiary": "#6BDCE8"
+    },
+    "texture": {
+      "material": "smoked acrylic and satin black alloy",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "controlled ultraviolet club lighting",
+      "glow": "#A66CFF",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#F15FC6"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Ultraviolet Club preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original smoked acrylic and satin black alloy hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle smoked acrylic and satin black alloy material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
