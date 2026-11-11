@@ -677,7 +677,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
             preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
-            preset.sampleProfile = value.getProperty("sampleProfile", "").toString();
+            preset.sampleProfile = value.getProperty("sampleProfile", value.getProperty("sampleRequirement", "")).toString();
             preset.catalogStatus = value.getProperty("status", "").toString();
             const auto tracks = value.getProperty("referenceTracks", juce::var());
             if (auto* trackArray = tracks.getArray())
