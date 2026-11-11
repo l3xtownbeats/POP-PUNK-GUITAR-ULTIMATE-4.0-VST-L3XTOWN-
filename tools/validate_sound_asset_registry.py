@@ -112,7 +112,7 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
             if not evidence.is_file():
                 reasons.append("archived license evidence file is missing")
 
-    if license_info.get("spdxId") not in ALLOWED_GREEN_LICENSES:
+    if not isinstance(license_info.get("spdxId"), str) or license_info.get("spdxId") not in ALLOWED_GREEN_LICENSES:
         reasons.append("license is not an explicitly approved CC0/Public-Domain identifier")
     for key in ("commercialUse", "redistribution", "modificationAllowed"):
         if license_info.get(key) is not True:
@@ -181,7 +181,7 @@ def validate_registry(data: object, root: Path) -> tuple[list[str], int]:
             seen_ids.add(asset_id)
 
         decision = asset.get("decision")
-        _check(decision in DECISIONS, errors, where, "decision must be GREEN, YELLOW or RED")
+        _check(isinstance(decision, str) and decision in DECISIONS, errors, where, "decision must be GREEN, YELLOW or RED")
         for section in ("source", "file", "license", "screening", "classification", "curator"):
             _check(isinstance(asset.get(section), dict), errors, where, f"{section} must be an object")
         if any(not isinstance(asset.get(section), dict) for section in ("source", "file", "license", "screening", "classification", "curator")):
@@ -198,7 +198,7 @@ def validate_registry(data: object, root: Path) -> tuple[list[str], int]:
         _check(_valid_date(source.get("retrievedAt")), errors, where, "source.retrievedAt must be ISO date")
         _check(isinstance(file_info.get("directDownload"), bool), errors, where, "file.directDownload must be boolean")
         _check(_nonempty(file_info.get("relativePath")), errors, where, "file.relativePath is required")
-        _check(re.fullmatch(r"[0-9a-fA-F]{64}", file_info.get("sha256", "") or "") is not None,
+        _check(isinstance(file_info.get("sha256"), str) and re.fullmatch(r"[0-9a-fA-F]{64}", file_info.get("sha256", "")) is not None,
                errors, where, "file.sha256 must be 64 hexadecimal characters")
 
         _check(_nonempty(license_info.get("spdxId")), errors, where, "license.spdxId is required")
@@ -207,18 +207,18 @@ def validate_registry(data: object, root: Path) -> tuple[list[str], int]:
         _check(_valid_date(license_info.get("verifiedAt")), errors, where, "license.verifiedAt must be ISO date")
         for key in ("commercialUse", "redistribution", "modificationAllowed", "attributionRequired", "shareAlike"):
             _check(isinstance(license_info.get(key), bool), errors, where, f"license.{key} must be boolean")
-        _check(license_info.get("legalReview") in {"PENDING", "APPROVED", "REJECTED"},
+        _check(isinstance(license_info.get("legalReview"), str) and license_info.get("legalReview") in {"PENDING", "APPROVED", "REJECTED"},
                errors, where, "license.legalReview must be PENDING, APPROVED or REJECTED")
         _check(isinstance(license_info.get("additionalRestrictions", []), list),
                errors, where, "license.additionalRestrictions must be an array")
 
-        _check(screening.get("status") in {"PENDING", "PASS", "FAIL"}, errors, where, "screening.status is invalid")
-        _check(classification.get("guitarStatus") in GUITAR_STATES, errors, where, "classification.guitarStatus is invalid")
+        _check(isinstance(screening.get("status"), str) and screening.get("status") in {"PENDING", "PASS", "FAIL"}, errors, where, "screening.status is invalid")
+        _check(isinstance(classification.get("guitarStatus"), str) and classification.get("guitarStatus") in GUITAR_STATES, errors, where, "classification.guitarStatus is invalid")
         profiles = classification.get("profiles", [])
-        _check(isinstance(profiles, list) and all(p in PROFILES for p in profiles),
+        _check(isinstance(profiles, list) and all(isinstance(p, str) and p in PROFILES for p in profiles),
                errors, where, "classification.profiles contains an invalid profile")
         _check(isinstance(classification.get("reviewRequired"), bool), errors, where, "classification.reviewRequired must be boolean")
-        _check(curator.get("status") in CURATOR_STATES, errors, where, "curator.status is invalid")
+        _check(isinstance(curator.get("status"), str) and curator.get("status") in CURATOR_STATES, errors, where, "curator.status is invalid")
         _check(isinstance(curator.get("copyrightSuspect"), bool), errors, where, "curator.copyrightSuspect must be boolean")
         _check(isinstance(curator.get("manualReviewRequired"), bool), errors, where, "curator.manualReviewRequired must be boolean")
         if curator.get("status") == "GOLD":
