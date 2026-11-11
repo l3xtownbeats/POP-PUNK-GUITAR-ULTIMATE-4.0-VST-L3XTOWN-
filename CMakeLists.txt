@@ -255,6 +255,7 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_processor_pattern_tests PRIVATE Source)
     target_link_libraries(ppgu_processor_pattern_tests PRIVATE
         PopPunkGuitarUltimate
+        PPGUPresetData
         juce::juce_audio_formats
         juce::juce_audio_utils
         juce::juce_recommended_config_flags
