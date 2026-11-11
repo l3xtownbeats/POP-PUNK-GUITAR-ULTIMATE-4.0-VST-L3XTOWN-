@@ -1,0 +1,60 @@
+{
+  "name": "College Rock",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#eee5d3",
+    "background.bottom": "#d8cbb3",
+    "accent.primary": "#a84f2e",
+    "accent.secondary": "#d47b42",
+    "text.main": "#211b16",
+    "text.dim": "#716657",
+    "knob.face": "#f7efdf",
+    "knob.ring": "#ad5631",
+    "button.normal": "#d8cbb3",
+    "button.active": "#a84f2e",
+    "button.hover": "#eee5d3",
+    "slider.track": "#716657",
+    "slider.fill": "#a84f2e",
+    "led.on": "#a84f2e",
+    "led.off": "#716657",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#a84f2e",
+    "meter.fill": "#a84f2e",
+    "meter.peak": "#ff4444",
+    "panel.border": "#716657",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#d8cbb3",
+    "list.row.selected": "#a84f2e",
+    "tooltip.background": "#d8cbb3",
+    "tooltip.text": "#211b16"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "RobotoSlab-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "cream_paper"
+  }
+}
