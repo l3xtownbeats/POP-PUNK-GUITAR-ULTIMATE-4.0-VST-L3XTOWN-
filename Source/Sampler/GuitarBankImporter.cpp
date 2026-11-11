@@ -105,7 +105,7 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
         asset->setProperty("path", relative.replaceCharacter('\\', '/'));
         asset->setProperty("extension", source.getFileExtension().toLowerCase());
         asset->setProperty("bytes", static_cast<juce::int64>(bytes));
-        asset->setProperty("sha256", juce::SHA256(target).toHexString());
+        asset->setProperty("md5", juce::MD5(target).toHexString());
         asset->setProperty("sourceName", source.getFileName());
         if (source.hasFileExtension("wav")) ++wavSourceCount;
         const auto category = classifyCategory(source);
