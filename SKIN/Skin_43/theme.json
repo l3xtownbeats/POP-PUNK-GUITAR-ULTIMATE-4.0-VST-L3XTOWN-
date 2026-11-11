@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-43",
+  "index": 43,
+  "name": "Copper Workshop",
+  "description": "Warm copper workshop hardware with precise neutral readouts",
+  "cluster": "C",
+  "identity": {
+    "material": "brushed copper and dark workshop steel",
+    "lighting": "warm directional task lighting",
+    "mood": "crafted, tactile, confident"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#211A17",
+      "inset": "#2D211C"
+    },
+    "surfaces": {
+      "primary": "#2D211C",
+      "secondary": "#3A2A23",
+      "raised": "#50392E",
+      "overlay": "#211A17"
+    },
+    "borders": {
+      "subtle": "#795D4D",
+      "strong": "#8CA2A0",
+      "focus": "#C67D50"
+    },
+    "typography": {
+      "primary": "#FFF4EC",
+      "secondary": "#D2BFB2",
+      "disabled": "#85858B",
+      "onAccent": "#211A17"
+    },
+    "rotary": {
+      "body": "#50392E",
+      "ring": "#8CA2A0",
+      "track": "#795D4D",
+      "value": "#C67D50",
+      "pointer": "#E5B88B",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#795D4D",
+      "fill": "#C67D50",
+      "thumb": "#E5B88B",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#C67D50",
+        "foreground": "#211A17",
+        "hover": "#E5B88B",
+        "pressed": "#8CA2A0",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#3A2A23",
+        "foreground": "#FFF4EC",
+        "hover": "#50392E",
+        "pressed": "#8CA2A0",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#C67D50",
+      "activeText": "#211A17",
+      "inactiveBackground": "#3A2A23",
+      "inactiveText": "#D2BFB2",
+      "indicator": "#8CA2A0"
+    },
+    "comboBoxes": {
+      "background": "#3A2A23",
+      "foreground": "#FFF4EC",
+      "border": "#795D4D",
+      "hover": "#50392E",
+      "menuBackground": "#2D211C",
+      "selection": "#C67D50"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#C67D50",
+      "blackPressed": "#8CA2A0",
+      "keyBorder": "#795D4D",
+      "octaveLabel": "#D2BFB2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#C67D50",
+      "high": "#F06A58",
+      "background": "#211A17"
+    },
+    "icons": {
+      "primary": "#FFF4EC",
+      "secondary": "#D2BFB2",
+      "accent": "#C67D50",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#3A2A23",
+      "border": "#795D4D",
+      "selected": "#C67D50",
+      "caption": "#FFF4EC"
+    },
+    "windowChrome": {
+      "background": "#211A17",
+      "title": "#FFF4EC",
+      "border": "#795D4D",
+      "close": "#E5B88B"
+    },
+    "hero": {
+      "background": "#211A17",
+      "accent": "#C67D50",
+      "secondaryAccent": "#8CA2A0",
+      "highlight": "#E5B88B"
+    },
+    "accents": {
+      "primary": "#C67D50",
+      "secondary": "#8CA2A0",
+      "tertiary": "#E5B88B"
+    },
+    "texture": {
+      "material": "brushed copper and dark workshop steel",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "warm directional task lighting",
+      "glow": "#C67D50",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#8CA2A0"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Copper Workshop preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original brushed copper and dark workshop steel hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle brushed copper and dark workshop steel material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
