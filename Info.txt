@@ -1550,3 +1550,11 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Проверка после записи: исходники повторно прочитаны с ветки 5.0; вызов clearFactoryPreset() и объявление найдены. На момент записи combined commit status пустой, workflow runs для commit не вернулись; CI build/CTest/pluginval ещё НЕ подтверждены.
 - Остальные функции документа остаются TODO / NOT VERIFIED до source-level реализации, regression tests и Windows CI/FL Studio 20 host acceptance. Не считать 20 Skin-пакетов, полноценный runtime Pattern playback, все пресеты, AutoChords и полный UI завершёнными по факту записи спецификации.
 
+## 11 ноября 2026 — AutoChords UI: ограничение управления режимом PATTERN
+
+- В Source/PluginEditor.cpp добавлено явное состояние доступности AutoChords UI: кнопка AutoChords активна только в PATTERN; селекторы Key и Scale доступны только когда PATTERN активен и AutoChords включён.
+- При переходе в MELODY сохранённое значение AutoChords не стирается, но элементы управления блокируются; аудиологика остаётся Pattern-only. Это предотвращает впечатление, что AutoChords меняет хроматическую игру MELODY.
+- При включении/выключении AutoChords в PATTERN селекторы Key/Scale включаются/выключаются вместе с ним.
+- Commit: a9ae1c4233b78eaf50a6dac24462ded2a52ae5b3.
+- Это source change, ещё не подтверждённый Windows CI, CTest, pluginval или ручной проверкой FL Studio 20. Статус: FIXED — AWAITING CI.
+
