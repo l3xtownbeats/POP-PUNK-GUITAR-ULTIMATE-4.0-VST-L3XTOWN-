@@ -231,7 +231,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetBox.onChange = [this] {
         const int selectedId = presetBox.getSelectedId();
         if (selectedId <= 1) {
-            statusLabel.setText("PRESET OFF  /  NO FACTORY PRESET SELECTED", juce::dontSendNotification);
+            clearFactoryPreset();
+            statusLabel.setText("PRESET OFF  /  DEFAULT SOUND SETTINGS RESTORED", juce::dontSendNotification);
             return;
         }
         const int index = selectedId - 2;
@@ -713,6 +714,21 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else
         statusLabel.setText("PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter + "  /  MELODY = SINGLE NOTES, PATTERN = STYLE PLAYBACK", juce::dontSendNotification);
 }
+void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
+{
+    // OFF is an actual deselection: restore only the parameters owned by a
+    // factory preset. Keep play mode, AutoChords, key/scale, transport and
+    // user-loaded sample library untouched.
+    static const juce::StringArray presetOwnedParameters {
+        "distortionDrive", "tone", "reverbMix", "output",
+        "patternSlot", "articulation", "distortionOn", "reverbOn"
+    };
+
+    for (const auto& parameterId : presetOwnedParameters)
+        if (auto* parameter = processor.parameters.getParameter(parameterId))
+            parameter->setValueNotifyingHost(parameter->getDefaultValue());
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {
     fileChooser=std::make_unique<juce::FileChooser>("Choose an SFZ guitar instrument",juce::File::getSpecialLocation(juce::File::userHomeDirectory),"*.sfz");
