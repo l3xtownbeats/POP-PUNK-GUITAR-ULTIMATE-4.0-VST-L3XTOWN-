@@ -166,16 +166,23 @@ int main()
             const std::array<int, 3> chordB { 62, 66, 69 };
             const std::array<int, 3> chordC { 55, 59, 62 };
 
+            // Warm the first chord's streaming page before measuring audio.
+            // The first note is deliberately sent through the real processor.
+            juce::AudioBuffer<float> warmBlock(2, 128);
+            juce::MidiBuffer warmMidi;
+            addChordOn(warmMidi, 16, chordA);
+            processor.processBlock(warmBlock, warmMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
             // One real processor block contains two distinct chord replacements.
             // The second replacement must not expose a transient empty chord or
             // restart the pattern cycle. The third chord should drive step 2.
             juce::AudioBuffer<float> blockA(2, 13000);
             juce::MidiBuffer midiA;
-            addChordOn(midiA, 16, chordA);
-            addChordOff(midiA, 6000, chordA);
-            addChordOn(midiA, 6000, chordB);
-            addChordOff(midiA, 9000, chordB);
-            addChordOn(midiA, 9000, chordC);
+            addChordOff(midiA, 5872, chordA); // absolute sample 6000
+            addChordOn(midiA, 5872, chordB);
+            addChordOff(midiA, 8872, chordB); // absolute sample 9000
+            addChordOn(midiA, 8872, chordC);
             processor.processBlock(blockA, midiA);
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
 
