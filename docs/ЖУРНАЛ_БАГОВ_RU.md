@@ -195,3 +195,13 @@ HEAD до записи CI: `bdd540eb30aeef8d2f51768ef5bb7e63129a9920`
 - Нужна потокобезопасная публикация snapshot без блокировок/аллокаций в audio thread и regression tests на перекрывающиеся ноты и MIDI velocity 0 note-off.
 - Спецификация: commit `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
 - Статус: OPEN / IMPLEMENTATION + UI LAYOUT + MIDI TESTS + WINDOWS CI + FL STUDIO 20 CHECK REQUIRED.
+
+
+## 11 ноября 2026 — уточнение OPEN: chord display обязан показывать точное качество и major/minor
+
+- LIVE NOTE / CHORD должен определять точное имя одиночной ноты либо корректный символ аккорда и его качество/характер, как минимум major/minor, а также основные sus/dim/aug/power/seventh типы.
+- Нельзя определять аккорд только по самой низкой или первой ноте. Нужны анализ pitch classes, возможных корней, обращений, bass note и октавных дублей.
+- При неоднозначном составе показывать ноты и AMBIGUOUS вместо неверного chord label.
+- Тестировать 12 корней major/minor, обращения, дубли октав, неполные voicings и независимость от preset/mode.
+- Спецификация: `bbe6759a267a6520`.
+- Статус: OPEN; распознавание в исходном коде и тестирование ещё не выполнены.
