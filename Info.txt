@@ -271,3 +271,23 @@ README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b2233
 - Последний успешный build/CTest/pluginval run не закрывает release gate, поскольку packaging не завершился и artifact не опубликован.
 
 **Следующий порядок работ:** (1) согласовать и реализовать schema registry для всех реально имеющихся skin manifests, убрать magic count из Python/PowerShell gates; (2) проверить и реализовать R14 runtime layout `Skins/` рядом с VST3 bundle без выдачи исходных manifests за готовые темы; (3) завершить runtime ThemeManager/PluginEditor integration и тесты; (4) проверить soundbank lifecycle/stress и прочие открытые INFO risks; (5) только затем повторить полный Windows Release, CTest, pluginval и packaging. JUCE 7.0.12/CMake 3.22 остаются фактическими pins в исходниках; REV 13.0 требует JUCE 8/CMake >=3.24 — обновление выполнять отдельным контролируемым этапом с полной регрессией.
+
+## 2026-11-12 — REV 13.0 R13 registry reconciliation and R14 package-layout gate
+
+**Статус:** SOURCE / CI CONTRACT UPDATED; WINDOWS RUN #830 IN PROGRESS; RUNTIME SKIN ENGINE STILL PENDING.
+
+Закрыт источник предыдущего packaging mismatch (run #827):
+- Canonical `SKIN/theme_manifest.json` теперь регистрирует существующий `Skin_51`; `totalSkins=51`, registry содержит 51 запись.
+- `SKIN/theme.schema.json` разрешает index до 51.
+- `tests/ValidateSkinManifests.py` больше не использует магическое число 50: количество выводится из registry; проверяется уникальность ID/index, непрерывный диапазон и точное соответствие папок Skin_* реестру.
+- Workflow больше не проверяет фиксированное число 50. Он формирует sibling runtime payload `Skins/` рядом с `VST3/`, копирует registry/schema и зарегистрированные папки, затем проверяет обязательные preview/hero assets и optional texture для каждой темы. Установка требует положить и VST3 bundle, и `Skins/` в один каталог Common Files/VST3; AppData не используется как основной источник.
+
+Commits:
+- registry: `ec72b43029783c7035209d3c491d038eeebbccda`
+- schema: `a098fbb51355780831fbcaa094dd0361258f78f8`
+- validator: `7d186e7e51688104d325863652ffb7656620d8fa`
+- workflow: `8e3ca17e55023233e1c0e095b8fa9cf5dc741bed`
+
+Проверка дерева выявила, что `Skin_01/assets/` и `Skin_51/assets/` отсутствуют; manifests помечают artwork как pending. Поэтому новый packaging gate намеренно НЕ пропустит неполный runtime skin payload и не создаст вводящий в заблуждение COMPLETE ZIP. ThemeManager/PluginEditor runtime integration, gallery, hot-swap, persistence и UI/audio-invariance acceptance по-прежнему PENDING.
+
+GitHub Actions run #830 / ID `43115673961` автоматически запущен на HEAD `8e3ca17e55023233e1c0e095b8fa9cf5dc741bed`. Результат configure/build/CTest/pluginval/packaging ещё не получен; статус не объявляется PASS. Следующая задача — artwork/runtime integration и их тесты; затем повторить полный release gate.
