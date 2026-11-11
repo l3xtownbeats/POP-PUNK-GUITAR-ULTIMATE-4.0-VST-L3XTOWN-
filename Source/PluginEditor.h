@@ -15,6 +15,7 @@ public:
 private:
     void chooseSfzFile();
     void chooseSampleLibraryFolder();
+    void chooseGuitarImportFolder();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
