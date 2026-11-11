@@ -1655,3 +1655,15 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Реестр содержит 49 новых тем Skin_02–Skin_50; вместе с Skin_01 Neon Riot каталог специфицирован на 50 слотов.
 - Графические ассеты, runtime ThemeManager/gallery, полная JSON Schema validation, contrast tests, APVTS inventory matrix, Windows CI и FL Studio 20 acceptance не выполнены.
 - Аудио/DSP/sampler/scheduler не изменялись. CI: AWAITING CI.
+
+
+================ 11 НОЯБРЯ 2026 — SKIN REV 5.0 / КАТАЛОГ И PR24 AUDIT ================
+
+- Создан Skin_01/theme.json (Neon Riot default); registry теперь содержит 50 уникальных слотов Skin_01–Skin_50.
+- Созданы SKIN/CONTROL_INVENTORY_MATRIX_RU.md (полный blueprint-инвентарь с разделением APVTS ID и фактического GUI) и SKIN/PR24_INTEGRATION_REVIEW_RU.md.
+- Прочитан полный GUI_UX_BLUEPRINT_RU.md из открытой PR #24 ветки ui/modern-neon-stage-shell; PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md в дереве main и PR #24 не найден.
+- PR #24 открыт, не слит. Решение: не сливать целиком — кнопка THEMES вместо SKIN, PopupMenu вместо галереи, другой формат manifest, изменение названий FX-контролов, min window 1040x820 и несвязанные изменения PluginProcessor audio path.
+- Никакого merge/cherry-pick не выполнялось; аудио/DSP/sampler/scheduler в main в этом цикле не менялись.
+- Все 50 theme.json authored; assetSpec и индивидуальные спецификации подготовлены. Изображения preview/hero/texture пока отсутствуют.
+- ThemeManager/gallery runtime не реализованы/не подтверждены. Полная JSON Schema validation, contrast tests, runtime matrix, Windows CI и FL Studio 20 acceptance остаются pending.
+- Статусы: 50 SPECIFICATION AUTHORED; 0 MANIFEST VALIDATED; 0 RUNTIME APPLIED; 0 USER-CONFIRMED; 0 ACCEPTED. CI: AWAITING CI.
