@@ -90,6 +90,24 @@ Priority order:
 
 Acceptance rule: the plug-in must be evaluated as a complete standalone product: visual/interface regression, sound/playability tests, VST3 host compatibility, and measured CPU/RAM/load-time benchmarks. Do not claim superiority to Kontakt-based products or Nexus 5 until comparable tests have been run on the same system and settings.
 
+
+## 0.3 Instant-feel preset switching and sound loading — high priority
+
+Preset selection and sound availability must feel immediate. Avoid the slow full-instrument/sample loading workflow associated with large Kontakt-hosted libraries. Fast preset switching is a core product requirement, not a later UI polish item.
+
+- Separate **preset state loading** from **sample asset loading**. A preset should first apply its small parameter/state data (engine mode, sound IDs, articulations, FX, pattern references and UI state) without rebuilding or reloading the entire instrument.
+- Keep a lightweight in-memory index of preset metadata and stable sample IDs. The browser must not scan, decode, or preload the complete Sounds Bank whenever it opens or a preset is selected.
+- Reuse already loaded/decoded samples across presets. If two presets reference the same sample asset, switching between them must not load a second copy.
+- Preload only the next preset's required attack/transient regions and essential mapping data where practical. Stream long sustain/tail regions and load uncommon articulations/round robins on demand, with safe fallback behavior if an asset is not yet ready.
+- Use asynchronous background loading with progress/readiness states. Never perform file I/O, sample decoding, blocking waits, or memory allocation on the real-time audio thread. Audio playback must continue safely while the next preset is prepared.
+- Use a small configurable **preload-ahead** strategy for likely next presets or recently used presets, bounded by a strict memory budget. Make cache eviction deterministic (least-recently-used or equivalent) and do not evict assets currently referenced by active voices.
+- On preset switch, crossfade or otherwise transition safely when required to avoid clicks; do not interrupt active notes unexpectedly. Define whether existing voices retain their old preset resources until release or are explicitly transitioned.
+- Provide a clear loading state only when genuinely needed. Prefer instant switching for presets whose samples are already cached; avoid unnecessary spinners or artificial delays.
+- Record separate timings for browser open, preset-state apply, first playable note, full required-asset readiness, and warm-cache preset switch. Optimize for perceived time-to-first-sound as well as total load time.
+- Acceptance tests must include cold-cache and warm-cache switching, rapid repeated preset changes, switching while notes are held, large bank browsing, missing/slow disk assets, low audio buffer sizes, and memory-budget enforcement.
+
+**Priority:** P0/P1 alongside core audio reliability and shared sample-bank infrastructure. Do not claim instant loading until measured on the target Windows 10 Enterprise 1809 x64 / FL Studio 20 setup.
+
 ## 1. One unified preset browser
 Keep one browser for the entire instrument. Each preset is tagged with:
 - Sound character: Clean, Crunch, Lead, Distortion, Acoustic, Muted, Ambient.
