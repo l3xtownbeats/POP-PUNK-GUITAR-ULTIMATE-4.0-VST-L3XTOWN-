@@ -48,7 +48,7 @@ int main()
            "malformed JSON restores Blackout Voltage fallback");
 
     expect(!manager.loadFromJson("{}"), "empty object rejected");
-    expect(manager.getPalette().id == "skin-01" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
            "incomplete manifest restores fallback");
 
     const auto badColour = validJson.replace("#090C10", "#GG0C10");

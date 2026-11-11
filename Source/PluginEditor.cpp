@@ -11,7 +11,7 @@
  #include <windows.h>
 #endif
 
-// Approved PPGU 4.0 dark/pink skin: all visible rotary and FX controls use APVTS attachments.
+// Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
 
 namespace
 {
@@ -62,11 +62,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
     addAndMakeVisible(titleLabel);
-    subtitleLabel.setText("POP PUNK GUITAR ULTIMATE   /   PLAY. CREATE. ROCK.", juce::dontSendNotification);
-    subtitleLabel.setFont(juce::Font(13.0f, juce::Font::bold));
+    subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
+    subtitleLabel.setFont(juce::Font(9.5f, juce::Font::bold));
     subtitleLabel.setColour(juce::Label::textColourId, pink);
     addAndMakeVisible(subtitleLabel);
-    presetBox.setTextWhenNothingSelected("FACTORY PRESETS  /  300");
+    presetBox.setTextWhenNothingSelected("FACTORY PRESET CATALOG");
     presetBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     presetBox.setColour(juce::ComboBox::textColourId, pale);
     presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
@@ -218,7 +218,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorE
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
 {
     s.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    s.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
+    s.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 46, 16);
     s.setColour(juce::Slider::rotarySliderFillColourId, pink);
     s.setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
     s.setColour(juce::Slider::thumbColourId, pale);
@@ -226,18 +226,23 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
     s.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     addAndMakeVisible(s);
     l.setText(name, juce::dontSendNotification);
-    l.setFont(juce::Font(11.0f, juce::Font::bold));
+    l.setFont(juce::Font(9.5f, juce::Font::bold));
     l.setColour(juce::Label::textColourId, muted);
     l.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(l);
 }
 
-void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juce::Rectangle<int> r)
+void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juce::Rectangle<int> area)
 {
-    g.setColour(panel);
-    g.fillRoundedRectangle(r.toFloat(), 12.0f);
-    g.setColour(pink.withAlpha(0.45f));
-    g.drawRoundedRectangle(r.toFloat().reduced(0.5f), 12.0f, 1.0f);
+    const auto& p = themeManager.getPalette();
+    auto bounds = area.toFloat();
+    g.setGradientFill(juce::ColourGradient(p.surfaceRaised, bounds.getX(), bounds.getY(),
+                                           p.surface, bounds.getX(), bounds.getBottom(), false));
+    g.fillRoundedRectangle(bounds, 12.0f);
+    g.setColour(p.border.withAlpha(0.78f));
+    g.drawRoundedRectangle(bounds.reduced(0.5f), 12.0f, 1.0f);
+    g.setColour(p.accent);
+    g.fillRoundedRectangle(bounds.getX() + 16.0f, bounds.getY() + 1.0f, 42.0f, 2.0f, 1.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
@@ -269,7 +274,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
- loadButton.setBounds(head.removeFromRight(106).reduced(2,8));skinButton.setBounds(head.removeFromRight(94).reduced(2,8));
+ skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
  a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
