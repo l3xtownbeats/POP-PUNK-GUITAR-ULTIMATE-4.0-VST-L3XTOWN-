@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-13",
+  "index": 13,
+  "name": "Toxic Green",
+  "description": "Dark technical shell with controlled acid-green energy",
+  "cluster": "B",
+  "identity": {
+    "material": "rubberized graphite and anodized alloy",
+    "lighting": "acid-green edge lighting",
+    "mood": "aggressive, fast, modern"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#111A13",
+      "inset": "#18251B"
+    },
+    "surfaces": {
+      "primary": "#18251B",
+      "secondary": "#202F24",
+      "raised": "#304733",
+      "overlay": "#111A13"
+    },
+    "borders": {
+      "subtle": "#526A4E",
+      "strong": "#4BCB87",
+      "focus": "#B5F542"
+    },
+    "typography": {
+      "primary": "#F3F8EE",
+      "secondary": "#B9C9B2",
+      "disabled": "#85858B",
+      "onAccent": "#111A13"
+    },
+    "rotary": {
+      "body": "#304733",
+      "ring": "#4BCB87",
+      "track": "#526A4E",
+      "value": "#B5F542",
+      "pointer": "#E4EBCB",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#526A4E",
+      "fill": "#B5F542",
+      "thumb": "#E4EBCB",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#B5F542",
+        "foreground": "#111A13",
+        "hover": "#E4EBCB",
+        "pressed": "#4BCB87",
+        "disabled": "#4B4B50"
+      },
+      "secondary": {
+        "background": "#202F24",
+        "foreground": "#F3F8EE",
+        "hover": "#304733",
+        "pressed": "#4BCB87",
+        "disabled": "#4B4B50"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#B5F542",
+      "activeText": "#111A13",
+      "inactiveBackground": "#202F24",
+      "inactiveText": "#B9C9B2",
+      "indicator": "#4BCB87"
+    },
+    "comboBoxes": {
+      "background": "#202F24",
+      "foreground": "#F3F8EE",
+      "border": "#526A4E",
+      "hover": "#304733",
+      "menuBackground": "#18251B",
+      "selection": "#B5F542"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#B5F542",
+      "blackPressed": "#4BCB87",
+      "keyBorder": "#526A4E",
+      "octaveLabel": "#B9C9B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#B5F542",
+      "high": "#F06A58",
+      "background": "#111A13"
+    },
+    "icons": {
+      "primary": "#F3F8EE",
+      "secondary": "#B9C9B2",
+      "accent": "#B5F542",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#202F24",
+      "border": "#526A4E",
+      "selected": "#B5F542",
+      "caption": "#F3F8EE"
+    },
+    "windowChrome": {
+      "background": "#111A13",
+      "title": "#F3F8EE",
+      "border": "#526A4E",
+      "close": "#E4EBCB"
+    },
+    "hero": {
+      "background": "#111A13",
+      "accent": "#B5F542",
+      "secondaryAccent": "#4BCB87",
+      "highlight": "#E4EBCB"
+    },
+    "accents": {
+      "primary": "#B5F542",
+      "secondary": "#4BCB87",
+      "tertiary": "#E4EBCB"
+    },
+    "texture": {
+      "material": "rubberized graphite and anodized alloy",
+      "enabled": true,
+      "intensity": 0.1,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "acid-green edge lighting",
+      "glow": "#B5F542",
+      "glowIntensity": 0.14,
+      "edgeHighlight": "#4BCB87"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Toxic Green interface thumbnail; full plugin shell visible; no text over controls."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original abstract rubberized graphite and anodized alloy hero artwork; keep all labels and control readouts unobstructed."
+    },
+    "texture": {
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle original rubberized graphite and anodized alloy texture; low contrast; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
