@@ -327,7 +327,10 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
         view.gain = juce::Decibels::decibelsToGain(region.volumeDb);
         view.pan = region.pan;
         view.releaseSeconds = region.releaseSeconds;
+        const auto regionIndex = static_cast<std::uint32_t>(candidateSnapshot->regions.size());
         candidateSnapshot->regions.push_back(view);
+        for (int keyNumber = region.lowKey; keyNumber <= region.highKey; ++keyNumber)
+            candidateSnapshot->regionsByKey[static_cast<std::size_t>(keyNumber)].push_back(regionIndex);
         samplesUsed.insert(key);
     }
 
@@ -368,17 +371,24 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
 
 const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) noexcept
 {
+    if (midiNote < 0 || midiNote > 127 || velocity < 0 || velocity > 127
+        || midiChannel < 1 || midiChannel > 16)
+        return nullptr;
+
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
     if (snapshot == nullptr) return nullptr;
 
+    const auto& candidates = snapshot->regionsByKey[static_cast<std::size_t>(midiNote)];
     const RegionView* firstMatch = nullptr;
     const RegionView* firstSequenceMatch = nullptr;
     int sequenceLength = 1;
     int sequenceSetIndex = -1;
-    for (const auto& region : snapshot->regions)
+    for (const auto regionIndex : candidates)
     {
-        if (midiNote < region.lowKey || midiNote > region.highKey
-            || velocity < region.lowVelocity || velocity > region.highVelocity
+        if (regionIndex >= snapshot->regions.size())
+            continue;
+        const auto& region = snapshot->regions[regionIndex];
+        if (velocity < region.lowVelocity || velocity > region.highVelocity
             || midiChannel < region.lowChannel || midiChannel > region.highChannel)
             continue;
 
@@ -399,8 +409,8 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     if (firstMatch == nullptr || sequenceSetIndex < 0 || sequenceLength <= 1)
         return firstMatch;
 
-    const auto channelIndex = static_cast<std::size_t>(juce::jlimit(1, 16, midiChannel) - 1);
-    const auto noteIndex = static_cast<std::size_t>(juce::jlimit(0, 127, midiNote));
+    const auto channelIndex = static_cast<std::size_t>(midiChannel - 1);
+    const auto noteIndex = static_cast<std::size_t>(midiNote);
     constexpr std::size_t cursorsPerSet = 16U * 128U;
     const auto cursorIndex = static_cast<std::size_t>(sequenceSetIndex) * cursorsPerSet
         + channelIndex * 128U + noteIndex;
@@ -411,13 +421,17 @@ const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity,
     const int wantedPosition = static_cast<int>(cursor % static_cast<std::uint32_t>(sequenceLength)) + 1;
     ++cursor;
 
-    for (const auto& region : snapshot->regions)
+    for (const auto regionIndex : candidates)
+    {
+        if (regionIndex >= snapshot->regions.size())
+            continue;
+        const auto& region = snapshot->regions[regionIndex];
         if (region.roundRobinSetIndex == sequenceSetIndex
             && wantedPosition == region.seqPosition
-            && midiNote >= region.lowKey && midiNote <= region.highKey
             && velocity >= region.lowVelocity && velocity <= region.highVelocity
             && midiChannel >= region.lowChannel && midiChannel <= region.highChannel)
             return &region;
+    }
 
     // Malformed/incomplete RR sets cannot silence a note: fall back within
     // the selected RR set, never to an unrelated non-RR region encountered
