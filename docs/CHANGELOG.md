@@ -55,6 +55,24 @@ Only mark a feature **Implemented** when code or content has actually been added
 - Validation: Documentation updated and read back through GitHub. No Windows 10 / FL Studio build, profiling, or audio stress test was run in this step.
 - Follow-up: Audit the actual source/build tree, implement the audio-thread and sample-loading safeguards, then benchmark cold/warm load, CPU, RAM, preset switching, and low-buffer stability on the target setup.
 
+## 2026-11-11 — Analysis of Electric Sunburst Deluxe applied to our engine
+
+- Date: 2026-11-11
+- Version / area: Pattern Engine, chord engine, sample architecture, performance strategy
+- Change:
+  1. Reviewed the user-provided `Анализ_движка_Electric_Sunburst_Deluxe.md` and extracted design principles relevant to POP PUNK GUITAR ULTIMATE.
+  2. Specified compact pattern skeletons (timing, interval/scale degree, duration, articulation and accent) adapted to incoming harmony, instead of storing separate audio for every chord/pattern combination.
+  3. Specified a staged guitar-string/voicing mapper, shared sample/voice infrastructure for Melody and Pattern engines, and explicit chord-state/note-off handling.
+  4. Added optional Accent-based pattern dynamics, bounded humanization, and deferred MIDI pattern export until core playback is stable.
+  5. Added resource cautions: the document's 13.6 GB uncompressed / 6.3 GB compressed figures describe the sample library size, not measured RAM use; pickup/mic layers, velocity layers, round robins and articulations can increase disk, memory and processing costs.
+  6. Prioritized shared sample references, bounded cache, selective preload/streaming, capped polyphony, voice stealing, and a shared FX path. Advanced fretboard mapping, extensive transitions, extra pickup/mic layers and Song Builder remain later-stage features subject to profiling.
+  7. Set a fair comparison target against Session Guitarist and Nexus 5 using the same machine, Windows 10 Enterprise 1809 x64, FL Studio 20, sample rate, buffer, preset, voice count and playback duration.
+- Reason: Reuse useful hybrid pattern/harmony concepts while making low memory use, low CPU load and fast loading the overriding design constraints.
+- Files: `docs/CURATED_FEATURE_SPEC.md`; `docs/CHANGELOG.md`; source reference: `Анализ_движка_Electric_Sunburst_Deluxe.md` (provided in conversation)
+- Status: Specified (design/documentation only; no engine code was implemented and no benchmark was run).
+- Validation: Source document reviewed. RAM usage was not inferred from the source's disk-library size figures. Comparative performance remains unverified until measured on the target setup.
+- Follow-up: Audit the actual source/build tree; implement the shared sample cache, voice allocator and pattern-to-harmony mapping; then profile load time, CPU, RAM, disk streaming and audio stability.
+
 ---
 
 ## Rules for future entries
