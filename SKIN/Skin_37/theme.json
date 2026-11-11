@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-37",
+  "index": 37,
+  "name": "Carbon Sprint",
+  "description": "Motorsport-inspired carbon precision without logos or racing marks",
+  "cluster": "B",
+  "identity": {
+    "material": "carbon composite and bead-blasted aluminium",
+    "lighting": "sharp orange directional light",
+    "mood": "fast, technical, athletic"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#11161B",
+      "inset": "#192129"
+    },
+    "surfaces": {
+      "primary": "#192129",
+      "secondary": "#232E39",
+      "raised": "#344452",
+      "overlay": "#11161B"
+    },
+    "borders": {
+      "subtle": "#566B79",
+      "strong": "#A5D94B",
+      "focus": "#FF6A3D"
+    },
+    "typography": {
+      "primary": "#F4F7F9",
+      "secondary": "#B9C7D0",
+      "disabled": "#85858B",
+      "onAccent": "#11161B"
+    },
+    "rotary": {
+      "body": "#344452",
+      "ring": "#A5D94B",
+      "track": "#566B79",
+      "value": "#FF6A3D",
+      "pointer": "#C1D0D8",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#566B79",
+      "fill": "#FF6A3D",
+      "thumb": "#C1D0D8",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#FF6A3D",
+        "foreground": "#11161B",
+        "hover": "#C1D0D8",
+        "pressed": "#A5D94B",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#232E39",
+        "foreground": "#F4F7F9",
+        "hover": "#344452",
+        "pressed": "#A5D94B",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#FF6A3D",
+      "activeText": "#11161B",
+      "inactiveBackground": "#232E39",
+      "inactiveText": "#B9C7D0",
+      "indicator": "#A5D94B"
+    },
+    "comboBoxes": {
+      "background": "#232E39",
+      "foreground": "#F4F7F9",
+      "border": "#566B79",
+      "hover": "#344452",
+      "menuBackground": "#192129",
+      "selection": "#FF6A3D"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#FF6A3D",
+      "blackPressed": "#A5D94B",
+      "keyBorder": "#566B79",
+      "octaveLabel": "#B9C7D0"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#FF6A3D",
+      "high": "#F06A58",
+      "background": "#11161B"
+    },
+    "icons": {
+      "primary": "#F4F7F9",
+      "secondary": "#B9C7D0",
+      "accent": "#FF6A3D",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#232E39",
+      "border": "#566B79",
+      "selected": "#FF6A3D",
+      "caption": "#F4F7F9"
+    },
+    "windowChrome": {
+      "background": "#11161B",
+      "title": "#F4F7F9",
+      "border": "#566B79",
+      "close": "#C1D0D8"
+    },
+    "hero": {
+      "background": "#11161B",
+      "accent": "#FF6A3D",
+      "secondaryAccent": "#A5D94B",
+      "highlight": "#C1D0D8"
+    },
+    "accents": {
+      "primary": "#FF6A3D",
+      "secondary": "#A5D94B",
+      "tertiary": "#C1D0D8"
+    },
+    "texture": {
+      "material": "carbon composite and bead-blasted aluminium",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "sharp orange directional light",
+      "glow": "#FF6A3D",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#A5D94B"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Carbon Sprint preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original carbon composite and bead-blasted aluminium hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle carbon composite and bead-blasted aluminium texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
