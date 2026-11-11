@@ -167,3 +167,6 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 Векторная обложка `assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` уже существовала в репозитории и используется как cover/header; отдельный новый растровый cover не добавлялся. Поле GitHub repository Description / Topics не менялось: доступные GitHub actions в этой сессии не предоставляют запись метаданных репозитория.
 
 Документационные commits: README `353eda0e727820f353c731b4800512f8eb57bfcb`; DOWNLOAD `9c91efc53ea73242fd660cdc96c3b27bd761b554`.
+
+
+Дополнение к оформлению: в верхнюю часть README добавлен показ существующего изображения `Cover Interface.jpg` рядом с фирменной SVG-обложкой. Commit: `68b26e4c66d84c3b0382f7f0ec02c7db0f4a90f6`.
