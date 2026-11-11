@@ -6453,7 +6453,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P002",
@@ -6511,7 +6512,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P003",
@@ -6569,7 +6571,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P004",
@@ -6627,7 +6630,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P005",
@@ -6685,7 +6689,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P006",
@@ -6743,7 +6748,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P007",
@@ -6801,7 +6807,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P008",
@@ -6859,7 +6866,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P009",
@@ -6917,7 +6925,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P010",
@@ -6975,7 +6984,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P011",
@@ -7033,7 +7043,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P012",
@@ -7091,7 +7102,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P013",
@@ -7149,7 +7161,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P014",
@@ -7207,7 +7220,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P015",
@@ -7265,7 +7279,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P016",
@@ -7323,7 +7338,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P017",
@@ -7381,7 +7397,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P018",
@@ -7439,7 +7456,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P019",
@@ -7497,7 +7515,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P020",
@@ -7555,7 +7574,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P021",
@@ -7613,7 +7633,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P022",
@@ -7671,7 +7692,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P023",
@@ -7729,7 +7751,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P024",
@@ -7787,7 +7810,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P025",
@@ -7845,7 +7869,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P026",
@@ -7903,7 +7928,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P027",
@@ -7961,7 +7987,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P028",
@@ -8019,7 +8046,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P029",
@@ -8077,7 +8105,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P030",
@@ -8135,7 +8164,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P031",
@@ -8193,7 +8223,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P032",
@@ -8251,7 +8282,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P033",
@@ -8309,7 +8341,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P034",
@@ -8367,7 +8400,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P035",
@@ -8425,7 +8459,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P036",
@@ -8483,7 +8518,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P037",
@@ -8541,7 +8577,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P038",
@@ -8599,7 +8636,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P039",
@@ -8657,7 +8695,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P040",
@@ -8715,7 +8754,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P041",
@@ -8773,7 +8813,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P042",
@@ -8831,7 +8872,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P043",
@@ -8889,7 +8931,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P044",
@@ -8947,7 +8990,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P045",
@@ -9005,7 +9049,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P046",
@@ -9063,7 +9108,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P047",
@@ -9121,7 +9167,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P048",
@@ -9179,7 +9226,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P049",
@@ -9237,7 +9285,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P050",
@@ -9295,7 +9344,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P051",
@@ -9353,7 +9403,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P052",
@@ -9411,7 +9462,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P053",
@@ -9469,7 +9521,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P054",
@@ -9527,7 +9580,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P055",
@@ -9585,7 +9639,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P056",
@@ -9643,7 +9698,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P057",
@@ -9701,7 +9757,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P058",
@@ -9759,7 +9816,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P059",
@@ -9817,7 +9875,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P060",
@@ -9875,7 +9934,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P061",
@@ -9933,7 +9993,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P062",
@@ -9991,7 +10052,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P063",
@@ -10049,7 +10111,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P064",
@@ -10107,7 +10170,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P065",
@@ -10165,7 +10229,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P066",
@@ -10223,7 +10288,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P067",
@@ -10281,7 +10347,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P068",
@@ -10339,7 +10406,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P069",
@@ -10397,7 +10465,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P070",
@@ -10455,7 +10524,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P071",
@@ -10516,7 +10586,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P072",
@@ -10574,7 +10645,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P073",
@@ -10632,7 +10704,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P074",
@@ -10690,7 +10763,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P075",
@@ -10748,7 +10822,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P076",
@@ -10806,7 +10881,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P077",
@@ -10864,7 +10940,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P078",
@@ -10922,7 +10999,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P079",
@@ -10980,7 +11058,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P080",
@@ -11038,7 +11117,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P081",
@@ -11096,7 +11176,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P082",
@@ -11154,7 +11235,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P083",
@@ -11212,7 +11294,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P084",
@@ -11270,7 +11353,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P085",
@@ -11328,7 +11412,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P086",
@@ -11386,7 +11471,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P087",
@@ -11444,7 +11530,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P088",
@@ -11502,7 +11589,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P089",
@@ -11560,7 +11648,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P090",
@@ -11618,7 +11707,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P091",
@@ -11676,7 +11766,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P092",
@@ -11734,7 +11825,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P093",
@@ -11792,7 +11884,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P094",
@@ -11852,7 +11945,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P095",
@@ -11910,7 +12004,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P096",
@@ -11968,7 +12063,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P097",
@@ -12026,7 +12122,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P098",
@@ -12084,7 +12181,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P099",
@@ -12142,7 +12240,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P100",
@@ -12200,7 +12299,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P101",
@@ -12258,7 +12358,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P102",
@@ -12316,7 +12417,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P103",
@@ -12374,7 +12476,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P104",
@@ -12432,7 +12535,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P105",
@@ -12490,7 +12594,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P106",
@@ -12548,7 +12653,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P107",
@@ -12606,7 +12712,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P108",
@@ -12664,7 +12771,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P109",
@@ -12722,7 +12830,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "electric"
     },
     {
       "id": "P110",
@@ -12780,7 +12889,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P111",
@@ -12838,7 +12948,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P112",
@@ -12896,7 +13007,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P113",
@@ -12954,7 +13066,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P114",
@@ -13012,7 +13125,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P115",
@@ -13070,7 +13184,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P116",
@@ -13128,7 +13243,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P117",
@@ -13186,7 +13302,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P118",
@@ -13244,7 +13361,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P119",
@@ -13302,7 +13420,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "electric"
     },
     {
       "id": "P120",
@@ -13360,7 +13479,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P121",
@@ -13418,7 +13538,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P122",
@@ -13476,7 +13597,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P123",
@@ -13534,7 +13656,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P124",
@@ -13592,7 +13715,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P125",
@@ -13650,7 +13774,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P126",
@@ -13708,7 +13833,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P127",
@@ -13766,7 +13892,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P128",
@@ -13824,7 +13951,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P129",
@@ -13882,7 +14010,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "electric"
     },
     {
       "id": "P130",
@@ -13940,7 +14069,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P131",
@@ -13998,7 +14128,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "sampleProfile": "electric"
     },
     {
       "id": "P132",
@@ -14056,7 +14187,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "sampleProfile": "electric"
     },
     {
       "id": "P133",
@@ -14114,7 +14246,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "sampleProfile": "electric"
     },
     {
       "id": "P134",
@@ -14172,7 +14305,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "sampleProfile": "electric"
     },
     {
       "id": "P135",
@@ -14230,7 +14364,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "sampleProfile": "electric"
     },
     {
       "id": "P136",
@@ -14288,7 +14423,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "sampleProfile": "electric"
     },
     {
       "id": "P137",
@@ -14346,7 +14482,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "sampleProfile": "electric"
     },
     {
       "id": "P138",
@@ -14404,7 +14541,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "sampleProfile": "electric"
     },
     {
       "id": "P139",
@@ -14462,7 +14600,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "sampleProfile": "electric"
     },
     {
       "id": "P140",
@@ -14520,7 +14659,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P141",
@@ -14578,7 +14718,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "sampleProfile": "electric"
     },
     {
       "id": "P142",
@@ -14636,7 +14777,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "sampleProfile": "electric"
     },
     {
       "id": "P143",
@@ -14694,7 +14836,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "sampleProfile": "electric"
     },
     {
       "id": "P144",
@@ -14752,7 +14895,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "sampleProfile": "electric"
     },
     {
       "id": "P145",
@@ -14810,7 +14954,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "sampleProfile": "electric"
     },
     {
       "id": "P146",
@@ -14868,7 +15013,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "sampleProfile": "electric"
     },
     {
       "id": "P147",
@@ -14926,7 +15072,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "sampleProfile": "electric"
     },
     {
       "id": "P148",
@@ -14984,7 +15131,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "sampleProfile": "electric"
     },
     {
       "id": "P149",
@@ -15042,7 +15190,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "sampleProfile": "electric"
     },
     {
       "id": "P150",
@@ -15100,7 +15249,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P151",
@@ -15172,7 +15322,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P152",
@@ -15244,7 +15395,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P153",
@@ -15316,7 +15468,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P154",
@@ -15388,7 +15541,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P155",
@@ -15460,7 +15614,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P156",
@@ -15532,7 +15687,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P157",
@@ -15604,7 +15760,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "electric"
     },
     {
       "id": "P159",
@@ -15676,7 +15833,8 @@
         "scope": "section-level groove, dynamics and articulation study",
         "transcription": "not included",
         "recording": "not included"
-      }
+      },
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P160",
@@ -15753,7 +15911,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P161",
@@ -15830,7 +15989,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P162",
@@ -15907,7 +16067,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P163",
@@ -15984,7 +16145,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P164",
@@ -16061,7 +16223,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P165",
@@ -16138,7 +16301,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P166",
@@ -16215,7 +16379,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P167",
@@ -16292,7 +16457,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P168",
@@ -16369,7 +16535,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P169",
@@ -16446,7 +16613,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P170",
@@ -16523,7 +16691,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P171",
@@ -16600,7 +16769,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P172",
@@ -16677,7 +16847,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P173",
@@ -16754,7 +16925,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P174",
@@ -16831,7 +17003,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P175",
@@ -16908,7 +17081,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P176",
@@ -16985,7 +17159,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P177",
@@ -17062,7 +17237,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P178",
@@ -17139,7 +17315,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P179",
@@ -17216,7 +17393,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P180",
@@ -17293,7 +17471,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P181",
@@ -17370,7 +17549,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P182",
@@ -17447,7 +17627,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P183",
@@ -17524,7 +17705,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P184",
@@ -17601,7 +17783,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P185",
@@ -17678,7 +17861,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P186",
@@ -17755,7 +17939,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P187",
@@ -17832,7 +18017,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P188",
@@ -17909,7 +18095,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P189",
@@ -17986,7 +18173,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P190",
@@ -18063,7 +18251,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P191",
@@ -18140,7 +18329,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P192",
@@ -18217,7 +18407,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P193",
@@ -18294,7 +18485,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P194",
@@ -18371,7 +18563,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P195",
@@ -18448,7 +18641,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P196",
@@ -18525,7 +18719,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P197",
@@ -18602,7 +18797,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P198",
@@ -18679,7 +18875,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P199",
@@ -18756,7 +18953,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P200",
@@ -18833,7 +19031,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P201",
@@ -18910,7 +19109,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P202",
@@ -18987,7 +19187,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P203",
@@ -19064,7 +19265,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P204",
@@ -19141,7 +19343,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P205",
@@ -19218,7 +19421,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P206",
@@ -19295,7 +19499,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P207",
@@ -19372,7 +19577,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P208",
@@ -19449,7 +19655,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P209",
@@ -19526,7 +19733,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P210",
@@ -19603,7 +19811,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P211",
@@ -19680,7 +19889,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P212",
@@ -19757,7 +19967,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P213",
@@ -19834,7 +20045,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P214",
@@ -19911,7 +20123,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "acoustic"
     },
     {
       "id": "P215",
@@ -19988,7 +20201,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P216",
@@ -20065,7 +20279,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     },
     {
       "id": "P217",
@@ -20142,7 +20357,8 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
-      ]
+      ],
+      "sampleProfile": "electric"
     }
   ],
   "patternSoundOptions": [
