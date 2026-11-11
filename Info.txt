@@ -1538,3 +1538,15 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - В README проекта подтверждено, что текущий статус — engineering preview. Melody описан как прямой chromatic workflow; Pattern runtime и его связь с реальным sampler playback остаются незавершёнными. Каталог 300 preset definitions не считать 300 полностью готовыми/проверенными звучащими пресетами.
 - Приоритет оптимизации: сначала достоверная сборка/регрессии и M2 streaming playback integration, затем полноценная Pattern-to-sampler интеграция и acceptance, затем UI polish/skin package validation. Не подменять реальные тесты косметическими изменениями и не ослаблять критерии качества ради скорости.
 - Статус: AUDIT NOTES RECORDED; source-level implementation and fresh Windows build/CTest/pluginval/FL Studio 20 checks still required.
+
+## 11 ноября 2026 — PPGU 5.0: фиксация пользовательского UI/UX ТЗ и первый функциональный фикс
+
+- Добавлен документ docs/PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md. Он сводит требования пользователя к общему Preset Browser, двум режимам MELODY/PATTERN, AutoChords, Pattern Sequencer, полной компоновке, 20 самостоятельным Skin-пакетам, mode covers, масштабу 75/100/150, Sound Bank, FX, CPU/Multicore и RU/EN документации.
+- Последнее требование пользователя о 20 полноценных тем имеет приоритет над более ранней промежуточной записью о 10 темах.
+- Реализован первый небольшой функциональный фикс: выбор PRESET OFF теперь вызывает clearFactoryPreset() и возвращает к значениям по умолчанию только параметры, принадлежащие factory preset (drive/tone/reverb/output/pattern slot/articulation и соответствующие FX enable). Режим MELODY/PATTERN, AutoChords, Key/Scale, transport и пользовательская SFZ-библиотека не сбрасываются.
+- Изменены: Source/PluginEditor.cpp, Source/PluginEditor.h.
+- Документ: docs/PPGU_5_0_UI_UX_FUNCTIONAL_ACCEPTANCE_RU.md.
+- Коммиты: 14dd8bcecba15b83110e04947b6ce01e78b27e37 (ТЗ); 097522788a0aa0728bd6a6e381441c5527d7cb03 (OFF behavior); 21eb3a119d01ee9f4068bb19a6ffb7ae411e824a (declaration).
+- Проверка после записи: исходники повторно прочитаны с ветки 5.0; вызов clearFactoryPreset() и объявление найдены. На момент записи combined commit status пустой, workflow runs для commit не вернулись; CI build/CTest/pluginval ещё НЕ подтверждены.
+- Остальные функции документа остаются TODO / NOT VERIFIED до source-level реализации, regression tests и Windows CI/FL Studio 20 host acceptance. Не считать 20 Skin-пакетов, полноценный runtime Pattern playback, все пресеты, AutoChords и полный UI завершёнными по факту записи спецификации.
+
