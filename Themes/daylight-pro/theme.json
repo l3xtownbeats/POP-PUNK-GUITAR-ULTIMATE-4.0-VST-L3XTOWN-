@@ -1,0 +1,60 @@
+{
+  "name": "Daylight Pro",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#f5f6f7",
+    "background.bottom": "#e3e7ea",
+    "accent.primary": "#006b9a",
+    "accent.secondary": "#238fbd",
+    "text.main": "#101c24",
+    "text.dim": "#5c6d78",
+    "knob.face": "#ffffff",
+    "knob.ring": "#0879a8",
+    "button.normal": "#e3e7ea",
+    "button.active": "#006b9a",
+    "button.hover": "#f5f6f7",
+    "slider.track": "#5c6d78",
+    "slider.fill": "#006b9a",
+    "led.on": "#006b9a",
+    "led.off": "#5c6d78",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#006b9a",
+    "meter.fill": "#006b9a",
+    "meter.peak": "#ff4444",
+    "panel.border": "#5c6d78",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#e3e7ea",
+    "list.row.selected": "#006b9a",
+    "tooltip.background": "#e3e7ea",
+    "tooltip.text": "#101c24"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Inter-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": false,
+    "background_effects": "bright_studio"
+  }
+}
