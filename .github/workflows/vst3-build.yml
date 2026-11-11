@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
+          key: ppgu-samples-meta-v1.1.0-freepats-fsbs-direct-cc0-v2
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -121,7 +121,8 @@ jobs:
           $freepats = @(
             @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },
             @{ repo='electric-guitar-FSBS-dist1'; folder='FreePats-Distortion-1' },
-            @{ repo='electric-guitar-FSBS-dist2'; folder='FreePats-Distortion-2' }
+            @{ repo='electric-guitar-FSBS-dist2'; folder='FreePats-Distortion-2' },
+            @{ repo='electric-guitar-FSBS-direct'; folder='FreePats-Direct-DI' }
           )
           foreach ($item in $freepats) {
             $dest = Join-Path $sampleRoot $item.folder
@@ -135,7 +136,7 @@ jobs:
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
             Remove-Item -Recurse -Force
           $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
+          if ($wavFiles.Count -lt 200) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
           $hashLines = foreach ($file in $wavFiles) {
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
@@ -146,10 +147,11 @@ jobs:
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1 and Distortion 2 electric guitars, CC0 1.0.
+          - FreePats FSBS Clean, Distortion 1, Distortion 2 and Direct DI electric guitars, CC0 1.0.
             https://github.com/freepats/electric-guitar-FSBS-clean
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
+            https://github.com/freepats/electric-guitar-FSBS-direct
           Original license files, SFZ maps and source checksum manifests are retained beside the samples.
           SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
           '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
@@ -165,7 +167,8 @@ jobs:
             'Meta-meta-nylon-guitar/LICENSE',
             'FreePats-Clean/LICENSE.txt',
             'FreePats-Distortion-1/LICENSE.txt',
-            'FreePats-Distortion-2/LICENSE.txt'
+            'FreePats-Distortion-2/LICENSE.txt',
+            'FreePats-Direct-DI/LICENSE.txt'
           )) {
             if (-not (Test-Path (Join-Path $sampleRoot $license))) { throw "Required sample license missing: $license" }
           }
