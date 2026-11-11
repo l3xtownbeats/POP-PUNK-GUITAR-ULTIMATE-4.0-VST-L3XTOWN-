@@ -2,6 +2,8 @@
 
 <img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN product cover and interface concept" width="100%">
 
+<img src="Cover%20Interface.jpg" alt="POP PUNK GUITAR ULTIMATE interface artwork" width="92%">
+
 # POP PUNK GUITAR ULTIMATE
 ### BY L3XTOWN · WINDOWS x64 · VST3 INSTRUMENT
 
