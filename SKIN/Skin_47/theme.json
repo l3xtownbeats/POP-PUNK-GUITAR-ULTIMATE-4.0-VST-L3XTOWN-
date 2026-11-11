@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-47",
+  "index": 47,
+  "name": "Teal Machine",
+  "description": "Deep teal technical instrument with bright mint signal accents",
+  "cluster": "C",
+  "identity": {
+    "material": "teal anodized alloy and smoked resin",
+    "lighting": "cool teal edge light",
+    "mood": "precise, modern, fluid"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#102326",
+      "inset": "#173034"
+    },
+    "surfaces": {
+      "primary": "#173034",
+      "secondary": "#1F3D41",
+      "raised": "#2D5356",
+      "overlay": "#102326"
+    },
+    "borders": {
+      "subtle": "#4E7777",
+      "strong": "#D6A96B",
+      "focus": "#4BD2C1"
+    },
+    "typography": {
+      "primary": "#EFFAF8",
+      "secondary": "#B6D4D0",
+      "disabled": "#85858B",
+      "onAccent": "#102326"
+    },
+    "rotary": {
+      "body": "#2D5356",
+      "ring": "#D6A96B",
+      "track": "#4E7777",
+      "value": "#4BD2C1",
+      "pointer": "#B2E5DC",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#4E7777",
+      "fill": "#4BD2C1",
+      "thumb": "#B2E5DC",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#4BD2C1",
+        "foreground": "#102326",
+        "hover": "#B2E5DC",
+        "pressed": "#D6A96B",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#1F3D41",
+        "foreground": "#EFFAF8",
+        "hover": "#2D5356",
+        "pressed": "#D6A96B",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#4BD2C1",
+      "activeText": "#102326",
+      "inactiveBackground": "#1F3D41",
+      "inactiveText": "#B6D4D0",
+      "indicator": "#D6A96B"
+    },
+    "comboBoxes": {
+      "background": "#1F3D41",
+      "foreground": "#EFFAF8",
+      "border": "#4E7777",
+      "hover": "#2D5356",
+      "menuBackground": "#173034",
+      "selection": "#4BD2C1"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#4BD2C1",
+      "blackPressed": "#D6A96B",
+      "keyBorder": "#4E7777",
+      "octaveLabel": "#B6D4D0"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#4BD2C1",
+      "high": "#F06A58",
+      "background": "#102326"
+    },
+    "icons": {
+      "primary": "#EFFAF8",
+      "secondary": "#B6D4D0",
+      "accent": "#4BD2C1",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#1F3D41",
+      "border": "#4E7777",
+      "selected": "#4BD2C1",
+      "caption": "#EFFAF8"
+    },
+    "windowChrome": {
+      "background": "#102326",
+      "title": "#EFFAF8",
+      "border": "#4E7777",
+      "close": "#B2E5DC"
+    },
+    "hero": {
+      "background": "#102326",
+      "accent": "#4BD2C1",
+      "secondaryAccent": "#D6A96B",
+      "highlight": "#B2E5DC"
+    },
+    "accents": {
+      "primary": "#4BD2C1",
+      "secondary": "#D6A96B",
+      "tertiary": "#B2E5DC"
+    },
+    "texture": {
+      "material": "teal anodized alloy and smoked resin",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "cool teal edge light",
+      "glow": "#4BD2C1",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#D6A96B"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Teal Machine preview, show the complete interface hierarchy and readable labels."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original teal anodized alloy and smoked resin hero artwork; avoid text overlap and trademarks."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Optional subtle teal anodized alloy and smoked resin material texture."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
