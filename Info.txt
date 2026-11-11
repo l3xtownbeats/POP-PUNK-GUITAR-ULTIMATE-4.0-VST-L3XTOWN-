@@ -4,7 +4,7 @@
 
 Последнее обновление: 11 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `e534d312dcf4b6768e4c28acd39af1c937b6643d`
+Последний commit перед текущей записью: `1bf2c9474b66808951cd3409f4b1e27bfbda39ea`
 
 ## 1. Назначение и продукт
 
@@ -103,6 +103,24 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 Уже покрыто: transactional failed reload; superseded load до публикации; 128-snapshot cap; 121-second WAV; multi-page playback; loop/one-shot/ping-pong release; RR selection; MIDI channel mapping/choke; 100 rapid hits; cache pin ownership и конкурентное чтение/eviction; SPSC full/FIFO/wrap-around/500k transfer; page decode и Hermite boundary reads.
 Не найдено прямого regression coverage: лимит 8 уникальных streaming roots; отмена во время длительного metadata scan; проверка полного drain очереди при stop; service-level queue-overflow/cache-full counters; worker exception/recovery; destruction processor во время загрузки; 64 voices под одновременным cache pressure.
 Статус: TEST COVERAGE AUDITED; production code не менялся в рамках аудита. Следующий безопасный тестовый шаг — проверить 8-root cap и stop/drain contract, затем разработать инъекционный seam для worker failure без добавления тестовых hooks в audio callback.
+
+## 6.2. COMPLETE Windows x64 package layout (2026-11-11)
+
+Обновлён GitHub Actions packaging step:
+- Commit `cb840c4` — первоначальная схема полного пакета;
+- Commit `1bf2c94` — исправлены PowerShell wildcard copy paths и удалён старый artifact config.
+
+Новая структура ZIP `POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip`:
+- `VST3/` — собранный JUCE .vst3 bundle;
+- `SOUNDBANK/` — WAV multisamples, SFZ maps, исходные лицензии, source manifest и SHA-256;
+- `PRESETS/` — factory_bank_300.json и portable preset examples;
+- `SKINS/` — 50 theme manifests, schema и manifest;
+- `Resources/` — инструкции, лицензии/источники, checksums и skin documentation;
+- `Assets/` — графические ресурсы проекта.
+
+Добавлены packaging assertions: наличие VST3 bundle, каталога из 300 пресетов, ровно 50 theme manifests и не менее 100 WAV. ZIP создаётся только после прохождения build, CTest и pluginval strictness 5.
+
+Статус: packaging workflow обновлён, но **новый ZIP ещё не создан**. GitHub Actions run `43017263448` ожидает запуска на commit `1bf2c94`; предыдущий run на `e534d31` не подтверждает новый layout. FL Studio 20 host acceptance не подтверждён. SKINS включены в комплект как manifests; runtime skin switching не заявляется как завершённая функция.
 
 ## 7. Следующие приоритеты
 
