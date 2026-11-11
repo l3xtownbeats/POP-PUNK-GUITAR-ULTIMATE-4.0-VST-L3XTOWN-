@@ -266,7 +266,13 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 
             const auto matchesQuery = query.isEmpty()
                 || item.name.toLowerCase().contains(query)
-                 || item.category.toLowerCase().contains(query)
+                || item.category.toLowerCase().contains(query)
+                || item.artistReference.toLowerCase().contains(query)
+                || item.referenceTracks.toLowerCase().contains(query)
+                || item.tonalTarget.toLowerCase().contains(query)
+                || item.sampleProfile.toLowerCase().contains(query)
+                || item.catalogStatus.toLowerCase().contains(query)
+                || item.tags.toLowerCase().contains(query)
                 || item.soundCharacter.toLowerCase().contains(query)
                 || item.styleProfileId.toLowerCase().contains(query)
                 || item.groove.toLowerCase().contains(query)
@@ -664,11 +670,23 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadFactoryPresetCatalog()
             preset.id = value.getProperty("id", "").toString();
             preset.name = value.getProperty("name", "Unnamed").toString();
             preset.category = value.getProperty("referenceArtist", "Original").toString();
+            preset.artistReference = preset.category;
             preset.mode = mode;
             preset.styleProfileId = value.getProperty("styleProfileId", "").toString();
             preset.soundCharacter = value.getProperty("soundCharacter", "Electric").toString();
             preset.groove = value.getProperty("groove", "").toString();
             preset.articulation = value.getProperty("articulation", "").toString();
+            preset.tonalTarget = value.getProperty("tonalTarget", "").toString();
+            preset.sampleProfile = value.getProperty("sampleProfile", "").toString();
+            preset.catalogStatus = value.getProperty("status", "").toString();
+            const auto tracks = value.getProperty("referenceTracks", juce::var());
+            if (auto* trackArray = tracks.getArray())
+                for (const auto& track : *trackArray)
+                    preset.referenceTracks += (preset.referenceTracks.isEmpty() ? "" : "  ") + track.toString();
+            const auto tags = value.getProperty("tags", juce::var());
+            if (auto* tagArray = tags.getArray())
+                for (const auto& tag : *tagArray)
+                    preset.tags += (preset.tags.isEmpty() ? "" : "  ") + tag.toString();
             const auto params = value.getProperty("parameters", juce::var());
             preset.drive = static_cast<float>(params.getProperty("drive", 0.0));
             preset.tone = static_cast<float>(params.getProperty("tone", 5.0));
