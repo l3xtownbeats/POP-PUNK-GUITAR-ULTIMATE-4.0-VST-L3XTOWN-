@@ -493,5 +493,209 @@
     "requiredArticulations",
     "availability",
     "licenseProvenance"
-  ]
+  ],
+  "browserFolders": {
+    "melody": {
+      "id": "melody-tone-presets",
+      "label": "MELODY",
+      "description": "Звуковые тембры для одиночных нот и вручную сыгранных аккордов.",
+      "subfolders": [
+        {
+          "id": "clean-bright",
+          "label": "Clean Bright",
+          "toneFamily": "clean",
+          "tags": [
+            "bright",
+            "glassy",
+            "bridge-pickup"
+          ],
+          "description": "Яркий чистый электрогитарный тон; чистая атака, лёгкая ambience.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "clean-warm",
+          "label": "Clean Warm",
+          "toneFamily": "clean",
+          "tags": [
+            "warm",
+            "neck-pickup",
+            "rounded"
+          ],
+          "description": "Тёплый мягкий чистый тон с более округлой серединой.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "crunch",
+          "label": "Crunch",
+          "toneFamily": "edge-crunch",
+          "tags": [
+            "classic-crunch",
+            "light-overdrive",
+            "rhythm"
+          ],
+          "description": "Лёгкий/средний перегруз для ритм-партий.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "lead-crunch",
+          "label": "Lead Crunch",
+          "toneFamily": "edge-crunch",
+          "tags": [
+            "mid-forward",
+            "lead",
+            "cut-through"
+          ],
+          "description": "Более плотный crunch с акцентом на середину для лид-партий.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "heavy",
+          "label": "Heavy",
+          "toneFamily": "distortion",
+          "tags": [
+            "high-gain",
+            "compressed",
+            "aggressive"
+          ],
+          "description": "Плотный high-gain тон для тяжёлых риффов.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "fuzz-distortion",
+          "label": "Fuzz / Distortion",
+          "toneFamily": "distortion",
+          "tags": [
+            "fuzz",
+            "distortion",
+            "saturated"
+          ],
+          "description": "Фузз и варианты дисторшна; отдельные профили FX/амп-моделей.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "profile-definition"
+        },
+        {
+          "id": "lofi-vintage",
+          "label": "Lo-Fi / Vintage",
+          "toneFamily": "special",
+          "tags": [
+            "lo-fi",
+            "vintage",
+            "tape-saturation"
+          ],
+          "description": "Винтажная фильтрация/сатурация; шум добавлять только как явно включаемый эффект.",
+          "modes": [
+            "melody"
+          ],
+          "availability": "dsp-dependent"
+        }
+      ],
+      "ordering": "NOT SOUND first, then the subfolders above"
+    },
+    "pattern": {
+      "id": "pattern-song-presets",
+      "label": "PATTERN / SONG",
+      "description": "Отдельная папка музыкальных исполнений: риффы, арпеджио, аккордовые паттерны и song-style партии.",
+      "subfolders": [
+        {
+          "id": "pop-patterns",
+          "label": "Pop / Pop-Rock",
+          "tags": [
+            "pop",
+            "pop-rock"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "pop-punk-patterns",
+          "label": "Pop-Punk / Punk",
+          "tags": [
+            "pop-punk",
+            "punk",
+            "skate-punk"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "electronic-patterns",
+          "label": "Electronic",
+          "tags": [
+            "electronic",
+            "synth-pop"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "riff-patterns",
+          "label": "Riffs",
+          "tags": [
+            "riff",
+            "rhythm"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "arpeggio-patterns",
+          "label": "Arpeggios",
+          "tags": [
+            "arpeggio",
+            "broken-chord"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        },
+        {
+          "id": "strum-patterns",
+          "label": "Strumming",
+          "tags": [
+            "strum",
+            "downstroke",
+            "upstroke"
+          ],
+          "modes": [
+            "pattern"
+          ],
+          "availability": "performance-library-dependent"
+        }
+      ],
+      "ordering": "NOT SOUND first, then genre/performance folders"
+    }
+  },
+  "browserFolderPolicy": {
+    "inspiredBy": "User-provided descriptive sound categories based on the Electric Sunburst Deluxe discussion; original project profiles only.",
+    "trademarkAndAssetPolicy": "Do not label these as official Native Instruments presets. Do not copy Kontakt presets, pattern MIDI, samples, impulse responses, graphics or proprietary data.",
+    "availabilityRule": "Taxonomy entries are browser organization/profile definitions only. Mark playable only after matching sample bank, DSP/FX mapping, performance data and licensing are verified.",
+    "separationRule": "MELODY tone folders are sound/tone profiles; PATTERN / SONG folders are performance-pattern collections. Never mix them.",
+    "notSound": "NOT SOUND remains the first selectable item in every browser tab/folder."
+  }
 }
