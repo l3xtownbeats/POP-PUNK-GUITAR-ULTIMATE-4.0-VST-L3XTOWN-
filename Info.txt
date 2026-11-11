@@ -1563,3 +1563,12 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Это пока не исправление: действующий v33 FINAL документ не найден по точному пути в main, поэтому ожидаемая музыкальная семантика должна быть подтверждена до изменения кода.
 - В этом цикле обновлён только баг-реестр и журнал разработки; production source, тесты, CMake и CI не менялись/не запускались. M3-014 OPEN; M3-015 FIXED IN SOURCE / AWAITING CI; M1/M2/M3 NOT ACCEPTED.
 - Следующий шаг: обнаружить фактический путь к Promt.txt v33 FINAL; зафиксировать quantize-window contract regression; реализовать минимальный fix и полноценный processor-level integration harness.
+
+
+================ 11 НОЯБРЯ 2026 — M3-014 REGRESSION HARNESS ================
+
+- В main добавлен tests/ChordTransitionPolicyTests.cpp: проверки первого аккорда, старта со следующего такта, переходов между непустыми аккордами, нескольких переходов, отпускания последней ноты и невалидного PPQ.
+- Добавлен сценарий совместной проверки ChordTransitionPolicy + PatternScheduler: NoteOff ранее запущенной ноты должен сохраниться через переход к новому непустому аккорду и выйти на своей PPQ-позиции.
+- Новый target ppgu_chord_transition_tests зарегистрирован в CMake/CTest.
+- ВАЖНО: исходники и CMake изменены, но тестовый target ещё не запускался; Windows build/CTest/FL Studio host test не подтверждены. Это не является закрытием M3-014.
+- M3-014 остаётся OPEN — требуется успешная сборка и запуск всего CTest на Windows, затем processor/host integration verification. M1/M2 и M3 в целом не приняты; UI/UX 5.0 и M4+ остаются заблокированы.
