@@ -77,3 +77,12 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - AUTOCHORDS ON may harmonize a single incoming key using the selected diatonic key and MAJOR/MINOR map before sending the chord through the same Pattern engine.
 - Specification commit: `94cf692c5879d8555e89e467f54ac72d669c2e8f`.
 - Status: SPECIFIED / IMPLEMENTATION AND TESTS PENDING. Do not mark runtime behavior complete before Processor tests, Windows CI and FL Studio 20 host validation.
+
+
+## 2026-11-11 — Strict Pattern stop at Piano Roll MIDI note end
+
+- Added a strict note-duration requirement: the last MIDI note-off must stop further Pattern events; queued future hits are cancelled and active voices are released/killed according to the strict release policy.
+- Legato continuation is permitted only while another controlling MIDI note remains held/overlaps. Transport stop, seek, cycle/loop jumps and mode changes must flush stale scheduled events.
+- Applies equally to PATTERN with AUTOCHORDS ON and OFF. Hidden latch-tail is not allowed by default.
+- Specification commit: `360b852079ac0d84ba23a804c0ce176910d13000`.
+- Status: SPECIFICATION ONLY. Scheduler/DSP implementation, regression tests, Windows build and FL Studio 20 validation remain pending.
