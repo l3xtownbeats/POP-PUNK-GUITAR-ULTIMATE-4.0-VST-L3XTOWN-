@@ -1247,3 +1247,12 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - PR #24 reviewed: не безопасен для merge as-is. Он добавляет PopupMenu THEMES вместо полноценной SKIN gallery, использует несовместимый embedded Themes manifest, меняет FX labels/min window size и вносит несвязанные изменения PluginProcessor audio path. Аудит сохранён в SKIN/PR24_INTEGRATION_REVIEW_RU.md; merge не выполнялся.
 - Подготовлены индивидуальные asset briefs для всех 50 слотов в ASSET_SPECIFICATIONS_RU.md. Графические файлы отсутствуют.
 - Статусы: SPECIFICATION AUTHORED 50/50; MANIFEST VALIDATED 0/50; RUNTIME APPLIED 0/50; USER-CONFIRMED 0/50; ACCEPTED 0/50. CI: AWAITING CI.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / структурная проверка 50 манифестов
+
+- Все 50 theme.json повторно прочитаны из main и успешно разобраны JSON parser: 50/50.
+- Проверены все 18 token groups и обязательные вложенные ключи по пяти партиям: 50/50 без пропусков.
+- JSON Schema усилена: nested required fields, HEX pattern, ограничение intensity, фиксированные размеры preview/hero/texture и запрет APVTS/layout/audio changes.
+- Registry проверен: 50 записей, 50 уникальных индексов 1–50, default Skin_01 Neon Riot, selector SKIN.
+- Это структурная проверка исходных JSON, не запуск полноценного JSON Schema validator, не fallback test и не runtime/host acceptance. Статусы тем остаются SPEC READY / ASSETS PENDING / RUNTIME NOT VERIFIED. CI: AWAITING CI.
