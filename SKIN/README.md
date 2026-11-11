@@ -23,6 +23,10 @@ VST3 install directory/
 
 The source folder SKIN/ is a development/catalogue folder. Packaging and installation must transform/copy its accepted theme packs into the runtime sibling folder Skins/. The plugin must resolve the installed VST3 bundle path, not use the DAW current working directory. Do not silently substitute AppData as the main theme location.
 
+## User and designer guide
+
+See [PPGU User & Designer Skin Guide (Russian)](USER_SKIN_GUIDE_RU.md) for the full authoring instructions, manifest contract, safe asset rules, installation layout and current feature status.
+
 ## Catalogue and current gaps
 
 - The registry and validator define 50 canonical slots (skin-01 through skin-50).
