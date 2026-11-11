@@ -1,0 +1,60 @@
+{
+  "name": "Hardcore Stage",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#171313",
+    "background.bottom": "#090909",
+    "accent.primary": "#f02e35",
+    "accent.secondary": "#ff7777",
+    "text.main": "#fff5f5",
+    "text.dim": "#b89a9a",
+    "knob.face": "#2b2020",
+    "knob.ring": "#e52a32",
+    "button.normal": "#090909",
+    "button.active": "#f02e35",
+    "button.hover": "#171313",
+    "slider.track": "#b89a9a",
+    "slider.fill": "#f02e35",
+    "led.on": "#f02e35",
+    "led.off": "#b89a9a",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#f02e35",
+    "meter.fill": "#f02e35",
+    "meter.peak": "#ff4444",
+    "panel.border": "#b89a9a",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#090909",
+    "list.row.selected": "#f02e35",
+    "tooltip.background": "#090909",
+    "tooltip.text": "#fff5f5"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "Teko-Bold.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "sharp_scratches"
+  }
+}
