@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-08",
+  "index": 8,
+  "name": "Vintage Amplifier",
+  "description": "Vintage amp cloth, walnut and warm tube glow",
+  "cluster": "C",
+  "identity": {
+    "material": "tolex-and-wood",
+    "lighting": "warm",
+    "mood": "Vintage amp cloth, walnut and warm tube glow"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#241C17",
+      "inset": "#241C17"
+    },
+    "surfaces": {
+      "primary": "#241C17",
+      "secondary": "#241C17",
+      "raised": "#D5A66E",
+      "overlay": "#241C17"
+    },
+    "borders": {
+      "subtle": "#E6D2AE",
+      "strong": "#D5A66E",
+      "focus": "#9E5745"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#241C17",
+      "ring": "#E6D2AE",
+      "track": "#49434F",
+      "value": "#D5A66E",
+      "pointer": "#9E5745",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#D5A66E",
+      "thumb": "#9E5745",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D5A66E",
+        "foreground": "#101116",
+        "hover": "#9E5745",
+        "pressed": "#E6D2AE",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#241C17",
+        "foreground": "#F4F0F4",
+        "hover": "#E6D2AE",
+        "pressed": "#D5A66E",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D5A66E",
+      "activeText": "#101116",
+      "inactiveBackground": "#241C17",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#9E5745"
+    },
+    "comboBoxes": {
+      "background": "#241C17",
+      "foreground": "#F4F0F4",
+      "border": "#E6D2AE",
+      "hover": "#D5A66E",
+      "menuBackground": "#241C17",
+      "selection": "#D5A66E"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#D5A66E",
+      "blackPressed": "#9E5745",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#9E5745",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#D5A66E",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#241C17",
+      "title": "#F4F0F4",
+      "border": "#E6D2AE",
+      "close": "#D5A66E"
+    },
+    "hero": {
+      "background": "#241C17",
+      "accent": "#D5A66E",
+      "secondaryAccent": "#E6D2AE",
+      "highlight": "#9E5745"
+    },
+    "accents": {
+      "primary": "#D5A66E",
+      "secondary": "#E6D2AE",
+      "tertiary": "#9E5745"
+    },
+    "texture": {
+      "material": "tolex-and-wood",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "warm",
+      "glow": "#D5A66E",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#E6D2AE"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
