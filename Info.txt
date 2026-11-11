@@ -216,3 +216,18 @@ Source commit: `0ef0ebe934350d57779328a5e0979f1134ae85f2` (parent: `e21980eee528
 GitHub Actions run #827 / ID `43113647167` создан на source commit `0ef0ebe934350d57779328a5e0979f1134ae85f2`; на момент записи состояние `queued`. Локальная Windows/MSVC Release-сборка в этой среде не выполнялась. Следовательно, исправление пока **не объявляется BUILT или TESTED**. Следующие гейты: полный build всех targets, CTest, locate VST3, pluginval strictness 5 и packaging.
 
 Отдельное расхождение REV 13 для последующего согласования: текущий root CMake всё ещё закрепляет JUCE 7.0.12 и minimum CMake 3.22; REV 13 §13.2 требует JUCE 8 и CMake >=3.24. Версии не менялись в рамках изолированного C1083 fix, чтобы не смешивать причины сборочных регрессий.
+
+
+## 2026-11-12 — Premium repository documentation refresh (main)
+
+**Статус:** MAIN DOCUMENTATION REFRESH COMMITTED; ALL-BRANCH ROLLOUT NOT YET VERIFIED.
+
+Проведена инвентаризация: найдено 41 ветка. Обновлены главная страница README и Download Center: устаревшие ссылки на run #826 заменены на актуальный run #827; прежний artifact 13766348419 оставлен только как историческая сборка. Описание отделяет фактическую реализацию от целевых характеристик и release gates.
+
+UI описан по текущему JUCE editor source: один фиксированный тёмный интерфейс charcoal/magenta, preset selector/search/category, MELODY/PATTERN, SFZ load/status, девять rotary controls, семь FX switches и MIDI keyboard. Активного skin/theme selector, gallery или runtime hot-swap нет. PPGU_BLACKOUT_VOLTAGE_SKIN.svg не выдаётся за runtime UI и не используется как скриншот готового плагина. Для публичного скриншота нужен реальный capture собранного VST3 в host.
+
+Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sample cache restore и license validation прошли, CMake x64 Release configure прошёл; шаг Build VST3 and test executables выполняется. CTest, pluginval strictness 5 и packaging ещё не завершены. Новый COMPLETE ZIP не объявляется готовым.
+
+Техническое описание следует REV 13.0 FINAL. Сохранено различие между 300 preset definitions и фактически проверенным playable count N/300. Зафиксировано расхождение: текущий source pin JUCE 7.0.12 / CMake 3.22 против целевого требования REV 13.0 JUCE 8 / CMake >=3.24.
+
+Поле GitHub Repository Description/Topics не изменено: доступный GitHub connector предоставляет чтение репозитория и файловые записи, но не edit-repository metadata action. Обновление всех 41 branch head требует отдельной docs-only синхронизации с сохранением уникального кода каждой ветки; этот этап пока не выполнен.
