@@ -2,11 +2,11 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR L3XTOWN VST3",
   "minimumPresetCounts": {
-    "melody": 216,
-    "pattern": 216,
-    "total": 432
+    "melody": 240,
+    "pattern": 240,
+    "total": 480
   },
-  "note": "Factory presets are authored tonal/performance targets. Track-study entries are original high-level style-reference profiles, not note-for-note transcriptions or included recordings. Their section-level details remain subject to audio validation and performance-library mapping. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are used as style references only.",
+  "note": "Factory presets are authored tonal/performance targets. Track-study entries are original high-level style-reference profiles, not note-for-note transcriptions or included recordings. Their section-level details remain subject to audio validation and performance-library mapping. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are used as style references only. Additional artist and track entries are original high-level style studies; they are not transcriptions or included recordings. Their sample mapping and runtime playback remain validation gates.",
   "artists": [
     {
       "name": "Blink-182",
@@ -199,6 +199,102 @@
         "Become What You Hate",
         "Just Rock and Roll"
       ]
+    },
+    {
+      "name": "The Starting Line",
+      "tracks": [
+        "Best of Me",
+        "The Drama Summer"
+      ],
+      "vibe": "bright melodic East Coast pop-punk; articulate eighth-note drive, tight muted verses and ringing chorus chords"
+    },
+    {
+      "name": "Rufio",
+      "tracks": [
+        "Above Me",
+        "In My Eyes"
+      ],
+      "vibe": "fast technical skate-punk; precise alternate picking, tight low strings and bright high-register hooks"
+    },
+    {
+      "name": "The Ataris",
+      "tracks": [
+        "In This Diary",
+        "The Boys of Summer"
+      ],
+      "vibe": "nostalgic melodic punk; open ringing chords, bright rhythm and clean-to-crunch contrast"
+    },
+    {
+      "name": "Zebrahead",
+      "tracks": [
+        "Playmate of the Year",
+        "Falling Apart"
+      ],
+      "vibe": "energetic rap-rock pop-punk; percussive muted syncopation and explosive open power chords"
+    },
+    {
+      "name": "Lit",
+      "tracks": [
+        "My Own Worst Enemy",
+        "Miserable"
+      ],
+      "vibe": "radio-ready California pop-punk; focused midrange crunch, tight palm-muted verse and broad chorus"
+    },
+    {
+      "name": "SR-71",
+      "tracks": [
+        "Right Now",
+        "Tomorrow"
+      ],
+      "vibe": "polished early-2000s pop-punk; bright crunchy rhythm and catchy octave lead phrasing"
+    },
+    {
+      "name": "The Click Five",
+      "tracks": [
+        "Just the Girl",
+        "Catch Your Wave"
+      ],
+      "vibe": "power-pop pop-punk crossover; crisp clean attack, bright chord voicings and glossy chorus lift"
+    },
+    {
+      "name": "Cartel",
+      "tracks": [
+        "Honestly",
+        "Say Anything (Else)"
+      ],
+      "vibe": "melodic polished pop-punk; tight palm-muted pulse, layered open chorus and expressive lead"
+    },
+    {
+      "name": "Mayday Parade",
+      "tracks": [
+        "Jamie All Over",
+        "Miserable at Best"
+      ],
+      "vibe": "emotional melodic pop-punk; dynamic clean arpeggio to wide distorted chorus"
+    },
+    {
+      "name": "Neck Deep",
+      "tracks": [
+        "In Bloom",
+        "December"
+      ],
+      "vibe": "modern UK pop-punk; aggressive bright rhythm, tight low end and melodic octave hooks"
+    },
+    {
+      "name": "State Champs",
+      "tracks": [
+        "Secrets",
+        "Elevated"
+      ],
+      "vibe": "modern melodic skate-punk; punchy downstrokes, precise palm mute and polished open choruses"
+    },
+    {
+      "name": "The Story So Far",
+      "tracks": [
+        "Quicksand",
+        "Nerve"
+      ],
+      "vibe": "aggressive modern melodic punk; dense pick attack, compact low-register power chords and urgent rhythms"
     }
   ],
   "melodyPresets": [
@@ -6390,6 +6486,1038 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
+      ]
+    },
+    {
+      "id": "M217",
+      "name": "The Starting Line — Best of Me — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Starting Line",
+      "referenceTracks": [
+        "Best of Me"
+      ],
+      "tonalTarget": "bright melodic East Coast pop-punk; articulate eighth-note drive, tight muted verses and ringing chorus chords. Original high-level guitar tone and articulation study for Best of Me; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-starting-line",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Best of Me",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "melodic bright crunch",
+        "rhythm": "straight eighth-note down-up",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M218",
+      "name": "The Starting Line — The Drama Summer — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Starting Line",
+      "referenceTracks": [
+        "The Drama Summer"
+      ],
+      "tonalTarget": "bright melodic East Coast pop-punk; articulate eighth-note drive, tight muted verses and ringing chorus chords. Original high-level guitar tone and articulation study for The Drama Summer; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-starting-line",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "The Drama Summer",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "melodic bright crunch",
+        "rhythm": "straight eighth-note down-up",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M219",
+      "name": "Rufio — Above Me — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Rufio",
+      "referenceTracks": [
+        "Above Me"
+      ],
+      "tonalTarget": "fast technical skate-punk; precise alternate picking, tight low strings and bright high-register hooks. Original high-level guitar tone and articulation study for Above Me; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.67,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "rufio",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Above Me",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "fast articulate skate-punk",
+        "rhythm": "fast alternate-picked eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M220",
+      "name": "Rufio — In My Eyes — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Rufio",
+      "referenceTracks": [
+        "In My Eyes"
+      ],
+      "tonalTarget": "fast technical skate-punk; precise alternate picking, tight low strings and bright high-register hooks. Original high-level guitar tone and articulation study for In My Eyes; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.75,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "rufio",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "In My Eyes",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "fast articulate skate-punk",
+        "rhythm": "fast alternate-picked eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M221",
+      "name": "The Ataris — In This Diary — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Ataris",
+      "referenceTracks": [
+        "In This Diary"
+      ],
+      "tonalTarget": "nostalgic melodic punk; open ringing chords, bright rhythm and clean-to-crunch contrast. Original high-level guitar tone and articulation study for In This Diary; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.76,
+        "tone": 7,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-ataris",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "In This Diary",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "open ringing melodic punk",
+        "rhythm": "open eighth-note chorus strum",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M222",
+      "name": "The Ataris — The Boys of Summer — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Ataris",
+      "referenceTracks": [
+        "The Boys of Summer"
+      ],
+      "tonalTarget": "nostalgic melodic punk; open ringing chords, bright rhythm and clean-to-crunch contrast. Original high-level guitar tone and articulation study for The Boys of Summer; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.84,
+        "tone": 7.5,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-ataris",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "The Boys of Summer",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "open ringing melodic punk",
+        "rhythm": "open eighth-note chorus strum",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M223",
+      "name": "Zebrahead — Playmate of the Year — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Zebrahead",
+      "referenceTracks": [
+        "Playmate of the Year"
+      ],
+      "tonalTarget": "energetic rap-rock pop-punk; percussive muted syncopation and explosive open power chords. Original high-level guitar tone and articulation study for Playmate of the Year; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.85,
+        "tone": 7.9,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "zebrahead",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Playmate of the Year",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "punchy syncopated crunch",
+        "rhythm": "syncopated muted-to-open groove",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M224",
+      "name": "Zebrahead — Falling Apart — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Zebrahead",
+      "referenceTracks": [
+        "Falling Apart"
+      ],
+      "tonalTarget": "energetic rap-rock pop-punk; percussive muted syncopation and explosive open power chords. Original high-level guitar tone and articulation study for Falling Apart; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.61,
+        "tone": 8.4,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "zebrahead",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Falling Apart",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "punchy syncopated crunch",
+        "rhythm": "syncopated muted-to-open groove",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M225",
+      "name": "Lit — My Own Worst Enemy — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Lit",
+      "referenceTracks": [
+        "My Own Worst Enemy"
+      ],
+      "tonalTarget": "radio-ready California pop-punk; focused midrange crunch, tight palm-muted verse and broad chorus. Original high-level guitar tone and articulation study for My Own Worst Enemy; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.63,
+        "tone": 6.5,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "lit",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "My Own Worst Enemy",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "radio-ready California crunch",
+        "rhythm": "muted verse to open chorus",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M226",
+      "name": "Lit — Miserable — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Lit",
+      "referenceTracks": [
+        "Miserable"
+      ],
+      "tonalTarget": "radio-ready California pop-punk; focused midrange crunch, tight palm-muted verse and broad chorus. Original high-level guitar tone and articulation study for Miserable; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.7,
+        "tone": 7,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "lit",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Miserable",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "radio-ready California crunch",
+        "rhythm": "muted verse to open chorus",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M227",
+      "name": "SR-71 — Right Now — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "SR-71",
+      "referenceTracks": [
+        "Right Now"
+      ],
+      "tonalTarget": "polished early-2000s pop-punk; bright crunchy rhythm and catchy octave lead phrasing. Original high-level guitar tone and articulation study for Right Now; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.71,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "sr-71",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Right Now",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "polished bright pop-punk",
+        "rhythm": "driving straight eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M228",
+      "name": "SR-71 — Tomorrow — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "SR-71",
+      "referenceTracks": [
+        "Tomorrow"
+      ],
+      "tonalTarget": "polished early-2000s pop-punk; bright crunchy rhythm and catchy octave lead phrasing. Original high-level guitar tone and articulation study for Tomorrow; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.8,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "sr-71",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Tomorrow",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "polished bright pop-punk",
+        "rhythm": "driving straight eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M229",
+      "name": "The Click Five — Just the Girl — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Click Five",
+      "referenceTracks": [
+        "Just the Girl"
+      ],
+      "tonalTarget": "power-pop pop-punk crossover; crisp clean attack, bright chord voicings and glossy chorus lift. Original high-level guitar tone and articulation study for Just the Girl; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.8,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-click-five",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Just the Girl",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "glossy power-pop crunch",
+        "rhythm": "bright alternate eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M230",
+      "name": "The Click Five — Catch Your Wave — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Click Five",
+      "referenceTracks": [
+        "Catch Your Wave"
+      ],
+      "tonalTarget": "power-pop pop-punk crossover; crisp clean attack, bright chord voicings and glossy chorus lift. Original high-level guitar tone and articulation study for Catch Your Wave; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.89,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-click-five",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Catch Your Wave",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "glossy power-pop crunch",
+        "rhythm": "bright alternate eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M231",
+      "name": "Cartel — Honestly — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Cartel",
+      "referenceTracks": [
+        "Honestly"
+      ],
+      "tonalTarget": "melodic polished pop-punk; tight palm-muted pulse, layered open chorus and expressive lead. Original high-level guitar tone and articulation study for Honestly; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "cartel",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Honestly",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "polished melodic pop-punk",
+        "rhythm": "tight muted eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M232",
+      "name": "Cartel — Say Anything (Else) — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Cartel",
+      "referenceTracks": [
+        "Say Anything (Else)"
+      ],
+      "tonalTarget": "melodic polished pop-punk; tight palm-muted pulse, layered open chorus and expressive lead. Original high-level guitar tone and articulation study for Say Anything (Else); melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.5,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "cartel",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Say Anything (Else)",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "polished melodic pop-punk",
+        "rhythm": "tight muted eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M233",
+      "name": "Mayday Parade — Jamie All Over — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Mayday Parade",
+      "referenceTracks": [
+        "Jamie All Over"
+      ],
+      "tonalTarget": "emotional melodic pop-punk; dynamic clean arpeggio to wide distorted chorus. Original high-level guitar tone and articulation study for Jamie All Over; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.67,
+        "tone": 7.9,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "mayday-parade",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Jamie All Over",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "dynamic clean-to-wide crunch",
+        "rhythm": "arpeggio verse to open chorus",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M234",
+      "name": "Mayday Parade — Miserable at Best — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Mayday Parade",
+      "referenceTracks": [
+        "Miserable at Best"
+      ],
+      "tonalTarget": "emotional melodic pop-punk; dynamic clean arpeggio to wide distorted chorus. Original high-level guitar tone and articulation study for Miserable at Best; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.75,
+        "tone": 8.4,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "mayday-parade",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Miserable at Best",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "dynamic clean-to-wide crunch",
+        "rhythm": "arpeggio verse to open chorus",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M235",
+      "name": "Neck Deep — In Bloom — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Neck Deep",
+      "referenceTracks": [
+        "In Bloom"
+      ],
+      "tonalTarget": "modern UK pop-punk; aggressive bright rhythm, tight low end and melodic octave hooks. Original high-level guitar tone and articulation study for In Bloom; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.76,
+        "tone": 6.5,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "neck-deep",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "In Bloom",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "modern bright pop-punk",
+        "rhythm": "fast downstroke eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M236",
+      "name": "Neck Deep — December — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "Neck Deep",
+      "referenceTracks": [
+        "December"
+      ],
+      "tonalTarget": "modern UK pop-punk; aggressive bright rhythm, tight low end and melodic octave hooks. Original high-level guitar tone and articulation study for December; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.84,
+        "tone": 7,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "neck-deep",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "December",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "modern bright pop-punk",
+        "rhythm": "fast downstroke eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M237",
+      "name": "State Champs — Secrets — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "State Champs",
+      "referenceTracks": [
+        "Secrets"
+      ],
+      "tonalTarget": "modern melodic skate-punk; punchy downstrokes, precise palm mute and polished open choruses. Original high-level guitar tone and articulation study for Secrets; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.85,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "state-champs",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Secrets",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "modern skate-punk crunch",
+        "rhythm": "fast palm-muted downstrokes",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M238",
+      "name": "State Champs — Elevated — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "State Champs",
+      "referenceTracks": [
+        "Elevated"
+      ],
+      "tonalTarget": "modern melodic skate-punk; punchy downstrokes, precise palm mute and polished open choruses. Original high-level guitar tone and articulation study for Elevated; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.61,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "state-champs",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Elevated",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "modern skate-punk crunch",
+        "rhythm": "fast palm-muted downstrokes",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M239",
+      "name": "The Story So Far — Quicksand — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Story So Far",
+      "referenceTracks": [
+        "Quicksand"
+      ],
+      "tonalTarget": "aggressive modern melodic punk; dense pick attack, compact low-register power chords and urgent rhythms. Original high-level guitar tone and articulation study for Quicksand; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.63,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-story-so-far",
+      "soundCharacter": "Crunch",
+      "trackBreakdown": {
+        "trackTitle": "Quicksand",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "aggressive modern melodic punk",
+        "rhythm": "driving downstroke eighths",
+        "articulation": "palm-muted-picked-to-open-chord",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ]
+    },
+    {
+      "id": "M240",
+      "name": "The Story So Far — Nerve — Melody Style Study",
+      "mode": "MELODY",
+      "referenceArtist": "The Story So Far",
+      "referenceTracks": [
+        "Nerve"
+      ],
+      "tonalTarget": "aggressive modern melodic punk; dense pick attack, compact low-register power chords and urgent rhythms. Original high-level guitar tone and articulation study for Nerve; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "sampleProfile": "electric",
+      "parameters": {
+        "drive": 0.7,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2,
+        "velocityResponse": "multi-layer-if-library-available",
+        "palmMute": "optional",
+        "roundRobin": "use-mapped-round-robins"
+      },
+      "noteBehavior": "one-MIDI-key-triggers-one-chromatic-guitar-note; no automatic strum or pattern playback",
+      "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
+      "status": "track-study-profile-awaiting-audio-section-validation-and-sample-mapping",
+      "styleProfileId": "the-story-so-far",
+      "soundCharacter": "Lead Drive",
+      "trackBreakdown": {
+        "trackTitle": "Nerve",
+        "scope": "original high-level guitar tone, groove, articulation and dynamics study",
+        "guitarTone": "aggressive modern melodic punk",
+        "rhythm": "driving downstroke eighths",
+        "articulation": "driven-picked-and-ringing-lead",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
       ]
     }
   ],
@@ -20357,6 +21485,1902 @@
         "track-specific",
         "reference-profile-draft",
         "no-transcription"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P217",
+      "name": "The Starting Line — Best of Me — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Starting Line",
+      "referenceTracks": [
+        "Best of Me"
+      ],
+      "tonalTarget": "bright melodic East Coast pop-punk; articulate eighth-note drive, tight muted verses and ringing chorus chords. Original high-level groove and articulation study for Best of Me; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "straight eighth-note down-up",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "straight eighth-note down-up",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-starting-line",
+      "trackBreakdown": {
+        "trackTitle": "Best of Me",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "melodic bright crunch",
+        "rhythm": "straight eighth-note down-up",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P218",
+      "name": "The Starting Line — The Drama Summer — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Starting Line",
+      "referenceTracks": [
+        "The Drama Summer"
+      ],
+      "tonalTarget": "bright melodic East Coast pop-punk; articulate eighth-note drive, tight muted verses and ringing chorus chords. Original high-level groove and articulation study for The Drama Summer; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "straight eighth-note down-up",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "straight eighth-note down-up",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-starting-line",
+      "trackBreakdown": {
+        "trackTitle": "The Drama Summer",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "melodic bright crunch",
+        "rhythm": "straight eighth-note down-up",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P219",
+      "name": "Rufio — Above Me — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Rufio",
+      "referenceTracks": [
+        "Above Me"
+      ],
+      "tonalTarget": "fast technical skate-punk; precise alternate picking, tight low strings and bright high-register hooks. Original high-level groove and articulation study for Above Me; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "fast alternate-picked eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.67,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast alternate-picked eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "rufio",
+      "trackBreakdown": {
+        "trackTitle": "Above Me",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "fast articulate skate-punk",
+        "rhythm": "fast alternate-picked eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P220",
+      "name": "Rufio — In My Eyes — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Rufio",
+      "referenceTracks": [
+        "In My Eyes"
+      ],
+      "tonalTarget": "fast technical skate-punk; precise alternate picking, tight low strings and bright high-register hooks. Original high-level groove and articulation study for In My Eyes; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "fast alternate-picked eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.75,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast alternate-picked eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "rufio",
+      "trackBreakdown": {
+        "trackTitle": "In My Eyes",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "fast articulate skate-punk",
+        "rhythm": "fast alternate-picked eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P221",
+      "name": "The Ataris — In This Diary — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Ataris",
+      "referenceTracks": [
+        "In This Diary"
+      ],
+      "tonalTarget": "nostalgic melodic punk; open ringing chords, bright rhythm and clean-to-crunch contrast. Original high-level groove and articulation study for In This Diary; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "open eighth-note chorus strum",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.76,
+        "tone": 7,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "open eighth-note chorus strum",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-ataris",
+      "trackBreakdown": {
+        "trackTitle": "In This Diary",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "open ringing melodic punk",
+        "rhythm": "open eighth-note chorus strum",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P222",
+      "name": "The Ataris — The Boys of Summer — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Ataris",
+      "referenceTracks": [
+        "The Boys of Summer"
+      ],
+      "tonalTarget": "nostalgic melodic punk; open ringing chords, bright rhythm and clean-to-crunch contrast. Original high-level groove and articulation study for The Boys of Summer; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "open eighth-note chorus strum",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.84,
+        "tone": 7.5,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "open eighth-note chorus strum",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-ataris",
+      "trackBreakdown": {
+        "trackTitle": "The Boys of Summer",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "open ringing melodic punk",
+        "rhythm": "open eighth-note chorus strum",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P223",
+      "name": "Zebrahead — Playmate of the Year — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Zebrahead",
+      "referenceTracks": [
+        "Playmate of the Year"
+      ],
+      "tonalTarget": "energetic rap-rock pop-punk; percussive muted syncopation and explosive open power chords. Original high-level groove and articulation study for Playmate of the Year; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "syncopated muted-to-open groove",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.85,
+        "tone": 7.9,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "syncopated muted-to-open groove",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "zebrahead",
+      "trackBreakdown": {
+        "trackTitle": "Playmate of the Year",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "punchy syncopated crunch",
+        "rhythm": "syncopated muted-to-open groove",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P224",
+      "name": "Zebrahead — Falling Apart — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Zebrahead",
+      "referenceTracks": [
+        "Falling Apart"
+      ],
+      "tonalTarget": "energetic rap-rock pop-punk; percussive muted syncopation and explosive open power chords. Original high-level groove and articulation study for Falling Apart; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "syncopated muted-to-open groove",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.61,
+        "tone": 8.4,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "syncopated muted-to-open groove",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "zebrahead",
+      "trackBreakdown": {
+        "trackTitle": "Falling Apart",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "punchy syncopated crunch",
+        "rhythm": "syncopated muted-to-open groove",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P225",
+      "name": "Lit — My Own Worst Enemy — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Lit",
+      "referenceTracks": [
+        "My Own Worst Enemy"
+      ],
+      "tonalTarget": "radio-ready California pop-punk; focused midrange crunch, tight palm-muted verse and broad chorus. Original high-level groove and articulation study for My Own Worst Enemy; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "muted verse to open chorus",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.63,
+        "tone": 6.5,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "muted verse to open chorus",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "lit",
+      "trackBreakdown": {
+        "trackTitle": "My Own Worst Enemy",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "radio-ready California crunch",
+        "rhythm": "muted verse to open chorus",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P226",
+      "name": "Lit — Miserable — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Lit",
+      "referenceTracks": [
+        "Miserable"
+      ],
+      "tonalTarget": "radio-ready California pop-punk; focused midrange crunch, tight palm-muted verse and broad chorus. Original high-level groove and articulation study for Miserable; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "muted verse to open chorus",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.7,
+        "tone": 7,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "muted verse to open chorus",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "lit",
+      "trackBreakdown": {
+        "trackTitle": "Miserable",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "radio-ready California crunch",
+        "rhythm": "muted verse to open chorus",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P227",
+      "name": "SR-71 — Right Now — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "SR-71",
+      "referenceTracks": [
+        "Right Now"
+      ],
+      "tonalTarget": "polished early-2000s pop-punk; bright crunchy rhythm and catchy octave lead phrasing. Original high-level groove and articulation study for Right Now; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "driving straight eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.71,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "driving straight eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "sr-71",
+      "trackBreakdown": {
+        "trackTitle": "Right Now",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "polished bright pop-punk",
+        "rhythm": "driving straight eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P228",
+      "name": "SR-71 — Tomorrow — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "SR-71",
+      "referenceTracks": [
+        "Tomorrow"
+      ],
+      "tonalTarget": "polished early-2000s pop-punk; bright crunchy rhythm and catchy octave lead phrasing. Original high-level groove and articulation study for Tomorrow; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "driving straight eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.8,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "driving straight eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "sr-71",
+      "trackBreakdown": {
+        "trackTitle": "Tomorrow",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "polished bright pop-punk",
+        "rhythm": "driving straight eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P229",
+      "name": "The Click Five — Just the Girl — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Click Five",
+      "referenceTracks": [
+        "Just the Girl"
+      ],
+      "tonalTarget": "power-pop pop-punk crossover; crisp clean attack, bright chord voicings and glossy chorus lift. Original high-level groove and articulation study for Just the Girl; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "bright alternate eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.8,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "bright alternate eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-click-five",
+      "trackBreakdown": {
+        "trackTitle": "Just the Girl",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "glossy power-pop crunch",
+        "rhythm": "bright alternate eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P230",
+      "name": "The Click Five — Catch Your Wave — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Click Five",
+      "referenceTracks": [
+        "Catch Your Wave"
+      ],
+      "tonalTarget": "power-pop pop-punk crossover; crisp clean attack, bright chord voicings and glossy chorus lift. Original high-level groove and articulation study for Catch Your Wave; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "bright alternate eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.89,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "bright alternate eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-click-five",
+      "trackBreakdown": {
+        "trackTitle": "Catch Your Wave",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "glossy power-pop crunch",
+        "rhythm": "bright alternate eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P231",
+      "name": "Cartel — Honestly — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Cartel",
+      "referenceTracks": [
+        "Honestly"
+      ],
+      "tonalTarget": "melodic polished pop-punk; tight palm-muted pulse, layered open chorus and expressive lead. Original high-level groove and articulation study for Honestly; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "tight muted eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.58,
+        "tone": 7,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "tight muted eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "cartel",
+      "trackBreakdown": {
+        "trackTitle": "Honestly",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "polished melodic pop-punk",
+        "rhythm": "tight muted eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P232",
+      "name": "Cartel — Say Anything (Else) — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Cartel",
+      "referenceTracks": [
+        "Say Anything (Else)"
+      ],
+      "tonalTarget": "melodic polished pop-punk; tight palm-muted pulse, layered open chorus and expressive lead. Original high-level groove and articulation study for Say Anything (Else); melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "tight muted eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.66,
+        "tone": 7.5,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "tight muted eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "cartel",
+      "trackBreakdown": {
+        "trackTitle": "Say Anything (Else)",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "polished melodic pop-punk",
+        "rhythm": "tight muted eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P233",
+      "name": "Mayday Parade — Jamie All Over — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Mayday Parade",
+      "referenceTracks": [
+        "Jamie All Over"
+      ],
+      "tonalTarget": "emotional melodic pop-punk; dynamic clean arpeggio to wide distorted chorus. Original high-level groove and articulation study for Jamie All Over; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "arpeggio verse to open chorus",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.67,
+        "tone": 7.9,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "arpeggio verse to open chorus",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mayday-parade",
+      "trackBreakdown": {
+        "trackTitle": "Jamie All Over",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "dynamic clean-to-wide crunch",
+        "rhythm": "arpeggio verse to open chorus",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P234",
+      "name": "Mayday Parade — Miserable at Best — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Mayday Parade",
+      "referenceTracks": [
+        "Miserable at Best"
+      ],
+      "tonalTarget": "emotional melodic pop-punk; dynamic clean arpeggio to wide distorted chorus. Original high-level groove and articulation study for Miserable at Best; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "arpeggio verse to open chorus",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.75,
+        "tone": 8.4,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "arpeggio verse to open chorus",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "mayday-parade",
+      "trackBreakdown": {
+        "trackTitle": "Miserable at Best",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "dynamic clean-to-wide crunch",
+        "rhythm": "arpeggio verse to open chorus",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P235",
+      "name": "Neck Deep — In Bloom — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Neck Deep",
+      "referenceTracks": [
+        "In Bloom"
+      ],
+      "tonalTarget": "modern UK pop-punk; aggressive bright rhythm, tight low end and melodic octave hooks. Original high-level groove and articulation study for In Bloom; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "fast downstroke eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.76,
+        "tone": 6.5,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast downstroke eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "neck-deep",
+      "trackBreakdown": {
+        "trackTitle": "In Bloom",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "modern bright pop-punk",
+        "rhythm": "fast downstroke eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P236",
+      "name": "Neck Deep — December — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "Neck Deep",
+      "referenceTracks": [
+        "December"
+      ],
+      "tonalTarget": "modern UK pop-punk; aggressive bright rhythm, tight low end and melodic octave hooks. Original high-level groove and articulation study for December; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "fast downstroke eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.84,
+        "tone": 7,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast downstroke eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "neck-deep",
+      "trackBreakdown": {
+        "trackTitle": "December",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "modern bright pop-punk",
+        "rhythm": "fast downstroke eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P237",
+      "name": "State Champs — Secrets — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "State Champs",
+      "referenceTracks": [
+        "Secrets"
+      ],
+      "tonalTarget": "modern melodic skate-punk; punchy downstrokes, precise palm mute and polished open choruses. Original high-level groove and articulation study for Secrets; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "fast palm-muted downstrokes",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.85,
+        "tone": 7.5,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast palm-muted downstrokes",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "state-champs",
+      "trackBreakdown": {
+        "trackTitle": "Secrets",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "modern skate-punk crunch",
+        "rhythm": "fast palm-muted downstrokes",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P238",
+      "name": "State Champs — Elevated — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "State Champs",
+      "referenceTracks": [
+        "Elevated"
+      ],
+      "tonalTarget": "modern melodic skate-punk; punchy downstrokes, precise palm mute and polished open choruses. Original high-level groove and articulation study for Elevated; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "fast palm-muted downstrokes",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.61,
+        "tone": 7.9,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "fast palm-muted downstrokes",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "state-champs",
+      "trackBreakdown": {
+        "trackTitle": "Elevated",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "modern skate-punk crunch",
+        "rhythm": "fast palm-muted downstrokes",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P239",
+      "name": "The Story So Far — Quicksand — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Story So Far",
+      "referenceTracks": [
+        "Quicksand"
+      ],
+      "tonalTarget": "aggressive modern melodic punk; dense pick attack, compact low-register power chords and urgent rhythms. Original high-level groove and articulation study for Quicksand; tight verse pulse opening into a wide, ringing chorus. Not a note-for-note transcription.",
+      "groove": "driving downstroke eighths",
+      "articulation": "palm-muted-to-open-strum",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.63,
+        "tone": 8.4,
+        "reverb": 0.07,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "driving downstroke eighths",
+      "soundCharacter": "Crunch",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-story-so-far",
+      "trackBreakdown": {
+        "trackTitle": "Quicksand",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "aggressive modern melodic punk",
+        "rhythm": "driving downstroke eighths",
+        "articulation": "palm-muted-to-open-strum",
+        "dynamicArc": "tight verse pulse opening into a wide, ringing chorus",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
+      ],
+      "sampleProfile": "electric"
+    },
+    {
+      "id": "P240",
+      "name": "The Story So Far — Nerve — Pattern Style Study",
+      "mode": "PATTERN",
+      "referenceArtist": "The Story So Far",
+      "referenceTracks": [
+        "Nerve"
+      ],
+      "tonalTarget": "aggressive modern melodic punk; dense pick attack, compact low-register power chords and urgent rhythms. Original high-level groove and articulation study for Nerve; melodic lift with articulate picked accents and controlled chord decay. Not a note-for-note transcription.",
+      "groove": "driving downstroke eighths",
+      "articulation": "open-chord-strum-and-picked-accents",
+      "performance": {
+        "chordSource": "incoming-host-MIDI-chords",
+        "chordChanges": "follow-MIDI-progression",
+        "strokeVariation": true,
+        "palmMuteMap": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "humanize": true,
+        "velocityAccents": true,
+        "accentMap": [
+          1,
+          0.66,
+          0.82,
+          0.68,
+          0.96,
+          0.66,
+          0.8,
+          0.68
+        ]
+      },
+      "parameters": {
+        "drive": 0.7,
+        "tone": 6.5,
+        "reverb": 0.13,
+        "outputDb": -2
+      },
+      "sampleRequirement": "recorded-multisampled-chord-and-strum-performance-samples",
+      "status": "track-study-profile-awaiting-pattern-engine-and-audio-section-validation",
+      "playingStyle": "driving downstroke eighths",
+      "soundCharacter": "Open Chords",
+      "availableSoundCharacters": [
+        "Clean",
+        "Crunch",
+        "Drive",
+        "Palm Mute",
+        "Open Chords",
+        "Acoustic",
+        "Lead Drive",
+        "Muted Chugs"
+      ],
+      "styleProfileId": "the-story-so-far",
+      "trackBreakdown": {
+        "trackTitle": "Nerve",
+        "scope": "original high-level groove, articulation and dynamics study",
+        "guitarTone": "aggressive modern melodic punk",
+        "rhythm": "driving downstroke eighths",
+        "articulation": "open-chord-strum-and-picked-accents",
+        "dynamicArc": "melodic lift with articulate picked accents and controlled chord decay",
+        "transcription": "not included",
+        "recording": "not included",
+        "analysisStatus": "reference-profile-draft-awaiting-audio-section-validation"
+      },
+      "tags": [
+        "track-study",
+        "track-specific",
+        "reference-profile-draft",
+        "no-transcription",
+        "california-pop-punk"
       ],
       "sampleProfile": "electric"
     }
