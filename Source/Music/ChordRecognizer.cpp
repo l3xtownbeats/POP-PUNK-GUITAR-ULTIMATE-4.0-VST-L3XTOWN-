@@ -52,7 +52,8 @@ ChordAnalysis ChordRecognizer::analyze(const std::vector<int>& input)
   out.symbol=noteName(out.rootPitchClass);
   const int midi=*uniqueMidi.begin();
   const int octave=(midi/12)-1;
-  out.displayText=out.symbol+std::to_string(octave);\n  out.qualityLabel="NOTE"; return out;
+  out.displayText=out.symbol+std::to_string(octave);
+  out.qualityLabel="NOTE"; return out;
  }
  struct Candidate { int root; const Template* t; int missing; int extra; };
  std::vector<Candidate> candidates;
