@@ -1196,3 +1196,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - PATTERN/OFF и PATTERN/ON обязаны одинаково соблюдать note-off.
 - Спецификация обновлена: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `360b852079ac0d84ba23a804c0ce176910d13000`.
 - Статус: SPECIFIED / SOURCE IMPLEMENTATION AND REGRESSION TESTS PENDING. Это не подтверждение исправления DSP/Scheduler и не подтверждение ручного теста в FL Studio 20.
+
+
+## 11 ноября 2026 — LIVE NOTE / CHORD: отображение удерживаемых нот и аккордов
+
+- Зафиксировано требование к постоянно видимому табло главного интерфейса, которое отображает реально удерживаемые MIDI-ноты и распознанные аккорды в обоих режимах MELODY и PATTERN.
+- Одна нота отображается буквенным именем и по возможности октавой; хроматические ноты тоже должны отображаться корректно. Для распознаваемых наборов показывать обозначения аккордов (C, Cm, C5, Cmaj7, Am, обращения и т. п.); если определение неоднозначно — показывать список нот, не угадывать.
+- В PATTERN табло должно отражать фактический гармонический материал после обработки AUTOCHORDS: ON — сформированный аккорд; OFF — реальные входящие ноты/аккорд. В MELODY — фактически удерживаемые ноты без автодостраивания.
+- Предусмотрен lock-free/preallocated snapshot от audio thread к UI; распознавание и форматирование выполняются вне processBlock. Обновление по note-on/off, включая velocity-zero note-on, перекрытия, stop/seek/panic.
+- Спецификация: `docs/PRESETS_BROWSER_AND_MODE_UI_5_0_RU.md`, commit `664b3f6b4131e70ddacf618e3d7041816913ec6d`.
+- Статус: SPECIFIED / SOURCE IMPLEMENTATION AND MIDI REGRESSION TESTS PENDING.
