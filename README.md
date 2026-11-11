@@ -348,6 +348,7 @@ The package includes `INSTALL_AND_CONTENTS.txt` with the same basic instructions
 - [Sample sourcing and licence policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
 - [Final integration checklist](docs/FINAL_INTEGRATION_CHECKLIST.md)
 - [M1 / M2 / M3 blocker audit](docs/M1_M2_M3_BLOCKER_AUDIT_RU.md)
+- [5.0 engineering upgrade — real-time safety, streaming, performance and release gates](docs/ENGINEERING_UPGRADE_5_0_RU.md)
 - [Development journal](docs/ЖУРНАЛ_РАЗРАБОТКИ_RU.md)
 - [Bug log](docs/ЖУРНАЛ_БАГОВ_RU.md)
 - [Source repository](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-)
