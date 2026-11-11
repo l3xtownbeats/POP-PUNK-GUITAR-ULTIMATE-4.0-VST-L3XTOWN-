@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "defaultTheme": "Neon Riot",
+  "themeSwitching": {
+    "livePreview": true,
+    "persistSelection": true,
+    "engineReload": false,
+    "preservePreset": true,
+    "preservePlayback": true
+  },
+  "themes": [
+    {
+      "name": "Neon Riot",
+      "colors": {
+        "background": "#0B0D13",
+        "panel": "#151923",
+        "panelRaised": "#202635",
+        "text": "#F2F4FA",
+        "muted": "#9AA6B8",
+        "accent": "#FF2E93",
+        "accentAlt": "#22D3EE",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Dark Metal",
+      "colors": {
+        "background": "#090A0C",
+        "panel": "#15171B",
+        "panelRaised": "#242830",
+        "text": "#F1F2F4",
+        "muted": "#9299A4",
+        "accent": "#E34B45",
+        "accentAlt": "#C0C6D0",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Modern Studio",
+      "colors": {
+        "background": "#10151D",
+        "panel": "#1A2430",
+        "panelRaised": "#263545",
+        "text": "#F3F7FC",
+        "muted": "#9EADBE",
+        "accent": "#4DA3FF",
+        "accentAlt": "#57D6B0",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Punk Rock",
+      "colors": {
+        "background": "#171014",
+        "panel": "#261720",
+        "panelRaised": "#38212E",
+        "text": "#FFF4F6",
+        "muted": "#C8AEB8",
+        "accent": "#FF3D6E",
+        "accentAlt": "#FFD166",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Electric Guitar",
+      "colors": {
+        "background": "#101216",
+        "panel": "#1D222A",
+        "panelRaised": "#2A333D",
+        "text": "#F4F6F8",
+        "muted": "#AAB6C2",
+        "accent": "#F5A623",
+        "accentAlt": "#58D5C9",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Dark Carbon",
+      "colors": {
+        "background": "#0A0D10",
+        "panel": "#151A1F",
+        "panelRaised": "#232B33",
+        "text": "#EAF0F4",
+        "muted": "#8D9AA5",
+        "accent": "#00C2A8",
+        "accentAlt": "#7B8CFF",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Neon Cyber",
+      "colors": {
+        "background": "#080B18",
+        "panel": "#111A31",
+        "panelRaised": "#1B2A49",
+        "text": "#EAF7FF",
+        "muted": "#8EA9C8",
+        "accent": "#00E5FF",
+        "accentAlt": "#B45CFF",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Vintage Amplifier",
+      "colors": {
+        "background": "#191612",
+        "panel": "#28221B",
+        "panelRaised": "#3B3024",
+        "text": "#F5EAD5",
+        "muted": "#B7A58A",
+        "accent": "#D68A42",
+        "accentAlt": "#A7B77A",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Minimal Black",
+      "colors": {
+        "background": "#080808",
+        "panel": "#141414",
+        "panelRaised": "#202020",
+        "text": "#F5F5F5",
+        "muted": "#929292",
+        "accent": "#F04452",
+        "accentAlt": "#B9C4D0",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Glass UI",
+      "colors": {
+        "background": "#101722",
+        "panel": "#1B2938",
+        "panelRaised": "#26394B",
+        "text": "#F1F8FF",
+        "muted": "#A9BDCF",
+        "accent": "#58B8FF",
+        "accentAlt": "#8B7CFF",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Sunset Drive",
+      "colors": {
+        "background": "#17111B",
+        "panel": "#281B2A",
+        "panelRaised": "#3B2638",
+        "text": "#FFF1E8",
+        "muted": "#C5A8A0",
+        "accent": "#FF765E",
+        "accentAlt": "#FFC36B",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Arctic Blue",
+      "colors": {
+        "background": "#08131C",
+        "panel": "#122330",
+        "panelRaised": "#1D3545",
+        "text": "#EAF8FF",
+        "muted": "#9CB9C8",
+        "accent": "#46C8F2",
+        "accentAlt": "#7EE0C3",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Toxic Green",
+      "colors": {
+        "background": "#0C120E",
+        "panel": "#17231A",
+        "panelRaised": "#253629",
+        "text": "#F0F8EF",
+        "muted": "#9DB49F",
+        "accent": "#A4E639",
+        "accentAlt": "#E4B84A",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Purple Voltage",
+      "colors": {
+        "background": "#100C19",
+        "panel": "#1D1630",
+        "panelRaised": "#2B2146",
+        "text": "#F5F0FF",
+        "muted": "#B3A7CA",
+        "accent": "#B47CFF",
+        "accentAlt": "#FF5EBD",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Blood Red",
+      "colors": {
+        "background": "#140B0D",
+        "panel": "#241316",
+        "panelRaised": "#382024",
+        "text": "#FFF1F0",
+        "muted": "#C6A5A5",
+        "accent": "#FF4655",
+        "accentAlt": "#FF9A6B",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Ocean Stage",
+      "colors": {
+        "background": "#081418",
+        "panel": "#10252A",
+        "panelRaised": "#1A373D",
+        "text": "#E9FAF7",
+        "muted": "#9CBDB7",
+        "accent": "#23C7A5",
+        "accentAlt": "#57A8FF",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Golden Era",
+      "colors": {
+        "background": "#17140D",
+        "panel": "#282217",
+        "panelRaised": "#3C3322",
+        "text": "#FFF8E8",
+        "muted": "#C3B48D",
+        "accent": "#E6B84C",
+        "accentAlt": "#D98755",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Mono Chrome",
+      "colors": {
+        "background": "#101010",
+        "panel": "#1C1C1C",
+        "panelRaised": "#2A2A2A",
+        "text": "#F4F4F4",
+        "muted": "#A0A0A0",
+        "accent": "#E6E6E6",
+        "accentAlt": "#888888",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Festival Lights",
+      "colors": {
+        "background": "#11101B",
+        "panel": "#201D32",
+        "panelRaised": "#302A48",
+        "text": "#F7F3FF",
+        "muted": "#B8B0D0",
+        "accent": "#FF4FA3",
+        "accentAlt": "#5DE2FF",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    },
+    {
+      "name": "Studio Olive",
+      "colors": {
+        "background": "#11150F",
+        "panel": "#20291C",
+        "panelRaised": "#303D29",
+        "text": "#F3F6E9",
+        "muted": "#AAB69B",
+        "accent": "#C2D66B",
+        "accentAlt": "#D9A85F",
+        "outline": "#FFFFFF22",
+        "meter": "#42D392",
+        "warning": "#F5B942",
+        "error": "#FF5964"
+      }
+    }
+  ]
+}
