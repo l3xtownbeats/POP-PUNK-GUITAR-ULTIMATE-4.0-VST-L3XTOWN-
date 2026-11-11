@@ -1,0 +1,60 @@
+{
+  "name": "Arcade Cabinet",
+  "author": "L3XTOWN PRODUCTION",
+  "version": "1.0",
+  "colors": {
+    "background.top": "#100d27",
+    "background.bottom": "#080619",
+    "accent.primary": "#ff3d81",
+    "accent.secondary": "#31f5d1",
+    "text.main": "#fff8ff",
+    "text.dim": "#b8afd0",
+    "knob.face": "#251d4c",
+    "knob.ring": "#ff3d81",
+    "button.normal": "#080619",
+    "button.active": "#ff3d81",
+    "button.hover": "#100d27",
+    "slider.track": "#b8afd0",
+    "slider.fill": "#ff3d81",
+    "led.on": "#ff3d81",
+    "led.off": "#b8afd0",
+    "keyboard.white": "#f0f0f0",
+    "keyboard.black": "#161618",
+    "keyboard.active": "#ff3d81",
+    "meter.fill": "#ff3d81",
+    "meter.peak": "#ff4444",
+    "panel.border": "#b8afd0",
+    "panel.shadow": "#00000088",
+    "list.row.normal": "#080619",
+    "list.row.selected": "#ff3d81",
+    "tooltip.background": "#080619",
+    "tooltip.text": "#fff8ff"
+  },
+  "assets": {
+    "background": "background.png",
+    "background_browser": "background_browser.png",
+    "panel": "panel.png",
+    "knob": "knob.png",
+    "knob_frames": 64,
+    "slider_handle": "slider_handle.png",
+    "button_normal": "button_normal.png",
+    "button_active": "button_active.png",
+    "toggle_on": "toggle_on.png",
+    "toggle_off": "toggle_off.png",
+    "led_on": "led_on.png",
+    "led_off": "led_off.png",
+    "keyboard": "keyboard.png",
+    "header_logo": "header_logo.png"
+  },
+  "fonts": {
+    "header": "PressStart2P.ttf",
+    "body": "Roboto-Regular.ttf",
+    "mono": "JetBrainsMono-Regular.ttf"
+  },
+  "style": {
+    "corner_radius": 8,
+    "knob_style": "neon_ring",
+    "button_glow": true,
+    "background_effects": "arcade_scanlines"
+  }
+}
