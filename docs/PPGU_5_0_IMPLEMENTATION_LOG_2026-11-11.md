@@ -115,3 +115,14 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - Live display must show held notes and confidently recognised chord quality/inversion, with ambiguity falling back to note names. It must reflect effective harmony in PATTERN + AUTOCHORDS ON and raw input otherwise.
 - Source audit: async SFZ load and folder import APIs exist; MIDI and MULTICORE controls remain disabled; no dedicated live note/chord display component was found in the current editor; startup/switch latency has not been benchmarked.
 - These requirements are now the release direction. They are not marked implemented until source changes, tests, Windows CI and FL Studio 20 validation pass.
+
+
+## 2026-11-11 — Expandable instrument and MIDI workflow
+
+- Added the evolving-product requirement: in-plugin Update / Content Center for versioned plugin updates, SoundBank expansions, preset/style packs, themes and MIDI/groove packs.
+- Updates require user control, package signatures/hashes, compatibility and license metadata, staging, atomic activation, rollback and preservation of user banks/presets. No silent large downloads.
+- Added MIDI Tools scope: quantize, swing, humanize, velocity/accent shaping, note gate/legato, chord strum spread, articulation mapping, transpose, chord recognition and MIDI export.
+- Added internal Pattern Sequencer requirements: step grid, multiple bars, stroke/mute/accent/gate lanes, host tempo/transport sync, chord progression input, pattern variations and user pattern saving.
+- Added drag-and-drop requirements for MIDI clips, supported audio/SFZ/ZIP imports and sample mapping, with Export MIDI fallback where a host does not support plugin MIDI drag-out.
+- All MIDI processing, content downloads, indexing and decompression must stay outside the audio callback; sequencer scheduling must be preallocated and transport-safe.
+- These are product requirements, not claims of completed implementation. DAW-specific drag/drop and VST3 MIDI output behavior require Windows/FL Studio 20 verification.
