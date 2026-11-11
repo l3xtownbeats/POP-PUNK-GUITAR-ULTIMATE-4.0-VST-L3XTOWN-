@@ -216,35 +216,77 @@ jobs:
         run: |
           Write-Host 'Automated pluginval strictness level 5 completed. FL Studio 20 manual host acceptance remains a separate required check.'
 
-      - name: Package VST3, sample library and factory presets
+      - name: Package VST3, SOUNDBANK, PRESETS, SKINS, Resources and Assets
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          New-Item -ItemType Directory -Force -Path release | Out-Null
-          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination release -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples') -Destination (Join-Path $PWD 'release/Samples') -Recurse
-          # Include the validated 300-preset factory catalog and portable preset files.
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets') -Destination (Join-Path $PWD 'release/presets') -Recurse
-          @'
-          POP PUNK GUITAR ULTIMATE - BUILD CONTENTS
-          ========================================
-          VST3 plugin: included in this archive.
-          Multisample assets / sound bank: Samples/ (Meta steel + nylon acoustic; FreePats electric clean + two distorted sets).
-          Factory presets: presets/factory_bank_300.json (150 Melody + 150 Pattern presets).
-          Portable preset examples: presets/examples/.
-          SFZ maps, original license files and source manifests are retained.
-          WAV SHA256 manifest: Samples/SHA256SUMS-POP-PUNK.txt
-          Preset catalog validation: 300 factory presets + portable preset examples.
+          $release = Join-Path $PWD 'release'
+          New-Item -ItemType Directory -Force -Path $release | Out-Null
 
-          Install the .vst3 bundle to:
-          C:\Program Files\Common Files\VST3\
-          Keep the Samples folder beside the extracted plugin package. If the plugin's
-          sample browser asks for a library folder, select this Samples directory.
-          This package does not claim DAW validation; test in FL Studio 20 after install.
-          '@ | Set-Content -Encoding utf8 release/INSTALL_AND_CONTENTS.txt
-          Compress-Archive -Path release/* -DestinationPath POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip -Force
+          # Final user-facing package layout. Keep the VST3 bundle in its own
+          # folder so it can be copied directly into the system VST3 directory.
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'SKINS', 'Resources', 'Assets')
+          foreach ($folder in $folders) {
+            New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
+          }
+
+          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/*') -Destination (Join-Path $release 'SKINS') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
+
+          # Keep human-readable install notes and provenance in Resources.
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
+
+          $skinManifests = Get-ChildItem (Join-Path $release 'SKINS') -Recurse -File -Filter 'theme.json'
+          if ($skinManifests.Count -ne 50) { throw "Expected 50 skin manifests in SKINS; found $($skinManifests.Count)." }
+          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
+          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
+          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
+          $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
+          if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
+
+          @'
+          POP PUNK GUITAR ULTIMATE — WINDOWS x64 VST3 PACKAGE
+          ===================================================
+          VST3/       The compiled VST3 plugin bundle.
+          SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
+          PRESETS/    Factory catalog (300 entries) and portable preset examples.
+          SKINS/      50 theme manifests, theme schema and skin manifest.
+          Resources/  Install notes, source/license summary, checksums and skin documentation.
+          Assets/     Product artwork and visual assets.
+
+          INSTALL:
+          1. Copy the .vst3 bundle from VST3/ into:
+             C:\Program Files\Common Files\VST3\
+          2. In the plugin, use its SFZ load control and select an instrument SFZ
+             from SOUNDBANK/. Keep SOUNDBANK on disk.
+          3. The factory preset catalog is embedded in the plugin and also shipped
+             as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
+          4. SKINS contains 50 theme manifests. Runtime skin switching is not claimed
+             as host-verified in this build.
+          5. See Resources/ for source attribution, licenses, checksums and documentation.
+
+          Automated CMake build, CTest and pluginval results are reported by this workflow.
+          FL Studio 20 manual host acceptance remains a separate step and is not implied.
+          '@ | Set-Content -Encoding utf8 (Join-Path $release 'INSTALL_AND_CONTENTS.txt')
+
+          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip'
+          if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
+          Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
 
       - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip
+          if-no-files-found: error
+
+
         with:
           name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-WITH-SAMPLES-AND-PRESETS
           path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_WITH_SAMPLES_AND_PRESETS.zip
