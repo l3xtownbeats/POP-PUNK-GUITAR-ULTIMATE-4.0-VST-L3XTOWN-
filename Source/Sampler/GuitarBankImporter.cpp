@@ -1,6 +1,7 @@
 #include "GuitarBankImporter.h"
 #include <algorithm>
 #include <filesystem>
+#include <juce_core/cryptography/juce_SHA256.h>
 
 namespace ppgu::sampler
 {
@@ -29,7 +30,7 @@ juce::String classifyCategory(const juce::File& file)
 }
 juce::String formatLabel(const juce::File& file)
 {
-    auto ext = file.getFileExtension().toLowerCase().trimCharacters(".");
+    auto ext = file.getFileExtension().toLowerCase().removeCharacters(".");
     if (ext == "aif") ext = "aiff";
     return ext.toUpperCase();
 }
