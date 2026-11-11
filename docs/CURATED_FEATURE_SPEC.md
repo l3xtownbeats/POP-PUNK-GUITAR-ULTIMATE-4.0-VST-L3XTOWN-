@@ -6,6 +6,27 @@ Target: Windows x64 VST3, FL Studio 20.
 ## Product rule
 Use only features that materially improve playable pop-punk guitar production. Build a large, expandable library without sacrificing quality, consistency, performance, or legal provenance. This is an original design; do not copy proprietary Kontakt instruments, pattern data, samples, artwork, or factory presets.
 
+
+## 0. Performance-first design — non-negotiable
+
+Primary product goal: the instrument must remain lightweight both at plug-in startup/load time and during real-time playback. Target host environment: Windows 10 Enterprise 1809 x64 and FL Studio 20. Feature count must never take priority over low CPU/RAM use, fast startup, and reliable operation on this environment.
+
+Design requirements:
+- Load only the selected preset's required sample mappings and metadata; avoid scanning/decoding the entire library on the audio thread. Build a lightweight preset/sample index and cache it safely.
+- Stream long samples from disk where appropriate, while keeping short attack/transient material and active voice data ready in memory. Provide bounded preload settings and sensible defaults.
+- Use shared sample assets and references, not per-preset copies. Avoid unnecessary duplicate sample buffers.
+- Provide a user-adjustable Voices/polyphony limit with a conservative default, voice stealing, and predictable CPU/memory ceilings.
+- Keep optional FX bypassed/off by default where practical; allow expensive modules and oversampling to be disabled or quality-scaled. Do not run inactive processors.
+- Avoid background work that competes with audio playback. Any indexing, waveform generation, preset scanning, or sample preparation must happen off the audio thread and report progress without blocking playback.
+- Audio callback must be real-time safe: no heap allocation/deallocation, mutex waits, file I/O, logging, or unbounded loops. Use preallocated buffers, lock-free or bounded communication, parameter smoothing, and denormal protection.
+- Keep UI rendering and skin loading separate from DSP. High-resolution skins must not inflate audio memory or delay plug-in instantiation; load only the active theme and release unused image assets.
+- Make multiprocessor use selective and measurable. Do not create worker threads per voice or add parallelism that costs more than it saves; prioritize deterministic audio-thread DSP and bounded background tasks.
+- Provide performance/quality options (for example Eco/Normal/High) only where they produce measurable trade-offs. Eco mode should reduce preload, oversampling, FX quality, or voice limits without changing project compatibility.
+- Measure cold and warm load time, idle CPU, active CPU at representative voice counts, peak memory, preset-switch latency, and behavior under low buffer sizes.
+- Ensure installer/package size stays reasonable: avoid bundling unused sample formats, duplicate assets, unneeded artwork, and development files.
+
+Acceptance targets are to be established by measurement on the specified Windows/FL Studio setup; do not invent numeric performance claims before benchmarking. Any optimization must preserve audio correctness and avoid clicks, stuck notes, timing drift, or missing samples.
+
 ## 1. One unified preset browser
 Keep one browser for the entire instrument. Each preset is tagged with:
 - Sound character: Clean, Crunch, Lead, Distortion, Acoustic, Muted, Ambient.
