@@ -94,15 +94,29 @@ def fetch_github_bank(root: Path, token: str | None) -> list[dict]:
             raise RuntimeError(f"{repo}@{item['tag']}: expected release asset {item['asset']} not found")
         target = root / item["folder"]
         marker = target / "SOURCE_PROVENANCE.json"
-        if marker.exists():
+        # Never re-download or overwrite an existing bank. Prefer the recorded
+        # provenance marker; if older installs predate the marker, detect a
+        # usable SFZ+audio tree and leave it untouched for manual license audit.
+        if target.exists():
             try:
-                old = json.loads(marker.read_text(encoding="utf-8"))
-                if old.get("asset_url") == asset["browser_download_url"] and old.get("license") == item["license"]:
-                    report.append(old | {"status": "already-installed"})
-                    print(f"  Already installed: {target}")
-                    continue
+                old = json.loads(marker.read_text(encoding="utf-8")) if marker.exists() else {}
             except Exception:
-                pass
+                old = {}
+            existing_sfz = list(target.rglob("*.sfz"))
+            existing_audio = [p for p in target.rglob("*") if p.is_file() and p.suffix.lower() in {".wav", ".flac", ".aif", ".aiff", ".ogg"}]
+            if old.get("asset_url") == asset["browser_download_url"] and old.get("license") == item["license"]:
+                report.append(old | {"status": "already-installed"})
+                print(f"  Already installed; download skipped: {target}")
+                continue
+            if existing_sfz and existing_audio:
+                report.append({
+                    "source": repo, "asset": item["asset"], "license": "UNKNOWN",
+                    "status": "already-present-unverified-no-redownload",
+                    "audio_files": len(existing_audio), "sfz_files": len(existing_sfz),
+                    "path": str(target),
+                })
+                print(f"  Existing SFZ/audio bank found; preserving without re-download (license audit required): {target}")
+                continue
         target.parent.mkdir(parents=True, exist_ok=True)
         temp = target.with_name(target.name + ".download")
         if temp.exists():
