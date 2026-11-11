@@ -933,6 +933,7 @@ void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock&
     {
         const juce::ScopedLock lock(sampleStateLock);
         state.setProperty("sfzFilePath", currentSfzFilePath, nullptr);
+        state.setProperty("sampleLibraryRootPath", sampleLibraryRootPath, nullptr);
     }
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     if (xml != nullptr)
@@ -950,12 +951,14 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         return;
 
     const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    const auto restoredSampleRootPath = restoredState.getProperty("sampleLibraryRootPath").toString();
     // Even a state with no bank path supersedes an older pending load.
     sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     parameters.replaceState(restoredState);
     {
         const juce::ScopedLock lock(sampleStateLock);
         currentSfzFilePath = restoredSfzPath;
+        sampleLibraryRootPath = restoredSampleRootPath;
     }
 
     // Legacy sessions have no path property. Missing libraries are deliberately
@@ -972,6 +975,68 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PopPunkGuitarUltimateAudioProcessor();
+}
+
+void PopPunkGuitarUltimateAudioProcessor::setSampleLibraryRootDirectory(const juce::File& directory)
+{
+    const juce::ScopedLock lock(sampleStateLock);
+    sampleLibraryRootPath = directory.isDirectory() ? directory.getFullPathName() : juce::String{};
+}
+
+juce::File PopPunkGuitarUltimateAudioProcessor::getSampleLibraryRootDirectory() const
+{
+    const juce::ScopedLock lock(sampleStateLock);
+    return juce::File(sampleLibraryRootPath);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::loadFactorySampleProfileAsync(
+    const juce::String& profile, float drive,
+    std::function<void(ppgu::sampler::LoadReport)> completion)
+{
+    const auto root = getSampleLibraryRootDirectory();
+    if (!root.isDirectory())
+    {
+        ppgu::sampler::LoadReport report;
+        report.errors.emplace_back("Samples folder is not configured. Use IMPORT SOUNDS > Choose bundled Samples folder.");
+        if (completion) completion(std::move(report));
+        return;
+    }
+
+    const auto normalizedProfile = profile.toLowerCase();
+    juce::String folderName;
+    if (normalizedProfile.contains("nylon"))
+        folderName = "Meta-meta-nylon-guitar";
+    else if (normalizedProfile.contains("acoustic") || normalizedProfile.contains("steel"))
+        folderName = "Meta-meta-steel-guitar";
+    else if (drive >= 0.75f)
+        folderName = "FreePats-Distortion-2";
+    else if (drive >= 0.40f)
+        folderName = "FreePats-Distortion-1";
+    else
+        folderName = "FreePats-Clean";
+
+    auto bankDirectory = root.getChildFile(folderName);
+    juce::Array<juce::File> sfzFiles;
+    if (bankDirectory.isDirectory())
+        bankDirectory.findChildFiles(sfzFiles, juce::File::findFiles, true, "*.sfz");
+
+    // Also accept a user-selected bank folder itself, not only the top-level Samples folder.
+    if (sfzFiles.isEmpty())
+        root.findChildFiles(sfzFiles, juce::File::findFiles, true, "*.sfz");
+
+    if (sfzFiles.isEmpty())
+    {
+        ppgu::sampler::LoadReport report;
+        report.errors.emplace_back("No SFZ maps were found under the selected Samples folder.");
+        if (completion) completion(std::move(report));
+        return;
+    }
+
+    std::sort(sfzFiles.begin(), sfzFiles.end(), [](const juce::File& a, const juce::File& b)
+    {
+        return a.getFullPathName().compareIgnoreCase(b.getFullPathName()) < 0;
+    });
+    loadSfzFileAsync(sfzFiles.getFirst(), std::move(completion));
 }
 
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
