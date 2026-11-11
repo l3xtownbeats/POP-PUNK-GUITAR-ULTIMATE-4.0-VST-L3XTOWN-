@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-41",
+  "index": 41,
+  "name": "Arctic Glasshouse",
+  "description": "Bright glacial glass with deep blue structure and quiet lavender accents",
+  "cluster": "C",
+  "identity": {
+    "material": "frosted glass and pale anodized aluminium",
+    "lighting": "cool diffused daylight",
+    "mood": "airy, clean, contemporary"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#DCE8EC",
+      "inset": "#EAF1F3"
+    },
+    "surfaces": {
+      "primary": "#EAF1F3",
+      "secondary": "#CBDDE3",
+      "raised": "#B7CDD5",
+      "overlay": "#DCE8EC"
+    },
+    "borders": {
+      "subtle": "#8BAAB5",
+      "strong": "#68AFC2",
+      "focus": "#274C60"
+    },
+    "typography": {
+      "primary": "#172E3A",
+      "secondary": "#486674",
+      "disabled": "#85858B",
+      "onAccent": "#DCE8EC"
+    },
+    "rotary": {
+      "body": "#B7CDD5",
+      "ring": "#68AFC2",
+      "track": "#8BAAB5",
+      "value": "#274C60",
+      "pointer": "#B5A7E8",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#8BAAB5",
+      "fill": "#274C60",
+      "thumb": "#B5A7E8",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#274C60",
+        "foreground": "#DCE8EC",
+        "hover": "#B5A7E8",
+        "pressed": "#68AFC2",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#CBDDE3",
+        "foreground": "#172E3A",
+        "hover": "#B7CDD5",
+        "pressed": "#68AFC2",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#274C60",
+      "activeText": "#DCE8EC",
+      "inactiveBackground": "#CBDDE3",
+      "inactiveText": "#486674",
+      "indicator": "#68AFC2"
+    },
+    "comboBoxes": {
+      "background": "#CBDDE3",
+      "foreground": "#172E3A",
+      "border": "#8BAAB5",
+      "hover": "#B7CDD5",
+      "menuBackground": "#EAF1F3",
+      "selection": "#274C60"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#274C60",
+      "blackPressed": "#68AFC2",
+      "keyBorder": "#8BAAB5",
+      "octaveLabel": "#486674"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#274C60",
+      "high": "#F06A58",
+      "background": "#DCE8EC"
+    },
+    "icons": {
+      "primary": "#172E3A",
+      "secondary": "#486674",
+      "accent": "#274C60",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#CBDDE3",
+      "border": "#8BAAB5",
+      "selected": "#274C60",
+      "caption": "#172E3A"
+    },
+    "windowChrome": {
+      "background": "#DCE8EC",
+      "title": "#172E3A",
+      "border": "#8BAAB5",
+      "close": "#B5A7E8"
+    },
+    "hero": {
+      "background": "#DCE8EC",
+      "accent": "#274C60",
+      "secondaryAccent": "#68AFC2",
+      "highlight": "#B5A7E8"
+    },
+    "accents": {
+      "primary": "#274C60",
+      "secondary": "#68AFC2",
+      "tertiary": "#B5A7E8"
+    },
+    "texture": {
+      "material": "frosted glass and pale anodized aluminium",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "cool diffused daylight",
+      "glow": "#274C60",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#68AFC2"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Arctic Glasshouse preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original frosted glass and pale anodized aluminium hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle frosted glass and pale anodized aluminium texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
