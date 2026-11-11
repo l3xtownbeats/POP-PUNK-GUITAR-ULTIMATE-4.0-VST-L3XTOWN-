@@ -209,3 +209,12 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_chord_recognizer_tests PRIVATE Source/Music)
     add_test(NAME ppgu_chord_recognizer_tests COMMAND ppgu_chord_recognizer_tests)
 endif()
+
+# Allocation-free AutoChords scale mapping regression tests.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chord_builder_tests
+        tests/AutoChordBuilderTests.cpp
+    )
+    target_include_directories(ppgu_auto_chord_builder_tests PRIVATE Source/Music)
+    add_test(NAME ppgu_auto_chord_builder_tests COMMAND ppgu_auto_chord_builder_tests)
+endif()
