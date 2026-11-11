@@ -73,6 +73,7 @@ Only sample material whose exact license permits redistribution inside a third-p
 ### Skins, resources and visual assets
 
 - [Skin specifications and asset requirements](SKIN/README.md)
+- [Skin Engine implementation gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
 - [Skin asset specifications](SKIN/ASSET_SPECIFICATIONS_RU.md)
 - [Skin control inventory](SKIN/CONTROL_INVENTORY_MATRIX_RU.md)
 - [Theme schema](SKIN/theme.schema.json)
@@ -80,7 +81,11 @@ Only sample material whose exact license permits redistribution inside a third-p
 - [Product cover artwork (SVG)](assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg)
 - [Interface artwork / source image](Cover%20Interface.jpg)
 
-The repository contains skin/theme specifications and 50 theme folders/manifests. Their presence is not proof that runtime skin switching is finished. The new complete build workflow is intended to package these into SKINS/, with supporting files in Resources/ and Assets/.
+**Current skin status:** the repository contains 50 canonical theme manifests in the registry plus an extra unregistered Skin_51 manifest. The specified per-theme preview/hero/texture images and complete control artwork are not present. The ThemeManager is only partially implemented and is not connected to the current plugin editor; there is no in-plugin SKIN browser, hot-swap, Ctrl+K shortcut, or saved theme selection. Do not treat the manifests as 50 finished selectable skins.
+
+**Installation requirement:** the runtime theme folder must be named `Skins` and sit beside the installed `.vst3` bundle in the plugin installation directory. The current packaging workflow still copies source data to `SKINS/` inside the ZIP and does not yet create/verify this installed sibling layout.
+
+See the [detailed Skin Engine gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md) for confirmed implementation gaps, test coverage and priorities.
 
 ## Instrument architecture
 
