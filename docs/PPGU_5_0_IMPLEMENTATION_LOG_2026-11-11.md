@@ -105,3 +105,13 @@ The earlier CI run for `e02298c` was cancelled before compilation. The current b
 - The selected preset must not affect recognition. PATTERN + AUTOCHORDS ON displays the effective generated chord.
 - Specification commit: `bbe6759a267a6520d178f612b4ab681fe4eee0e4`.
 - Status: SPECIFICATION ONLY; recognizer, UI and automated tests remain pending.
+
+
+## 2026-11-11 — Commercial instrument product pillars
+
+- Added `docs/PPGU_5_0_COMMERCIAL_INSTRUMENT_REQUIREMENTS_RU.md`.
+- Locked the product priorities: fast startup and preset switching; a high-quality factory SoundBank up to 10 GB without filler; MELODY and PATTERN performance modes; automatic Import Guitar onboarding; and a live MIDI note/chord display.
+- Import Guitar must support safe folder/ZIP intake, SFZ/WAV validation, cautious auto-mapping, SHA-256 duplicate detection, license/provenance review, background indexing and atomic publication.
+- Live display must show held notes and confidently recognised chord quality/inversion, with ambiguity falling back to note names. It must reflect effective harmony in PATTERN + AUTOCHORDS ON and raw input otherwise.
+- Source audit: async SFZ load and folder import APIs exist; MIDI and MULTICORE controls remain disabled; no dedicated live note/chord display component was found in the current editor; startup/switch latency has not been benchmarked.
+- These requirements are now the release direction. They are not marked implemented until source changes, tests, Windows CI and FL Studio 20 validation pass.
