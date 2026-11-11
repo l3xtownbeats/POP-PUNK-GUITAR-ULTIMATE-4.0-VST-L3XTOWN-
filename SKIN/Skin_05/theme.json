@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-05",
+  "index": 5,
+  "name": "Electric Guitar",
+  "description": "Precision guitar workshop with metal details",
+  "cluster": "C",
+  "identity": {
+    "material": "brushed-metal",
+    "lighting": "warm",
+    "mood": "Precision guitar workshop with metal details"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#171B20",
+      "inset": "#171B20"
+    },
+    "surfaces": {
+      "primary": "#171B20",
+      "secondary": "#171B20",
+      "raised": "#D7A35D",
+      "overlay": "#171B20"
+    },
+    "borders": {
+      "subtle": "#6DB7C8",
+      "strong": "#D7A35D",
+      "focus": "#F2E8D9"
+    },
+    "typography": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "disabled": "#77747D",
+      "onAccent": "#101116"
+    },
+    "rotary": {
+      "body": "#171B20",
+      "ring": "#6DB7C8",
+      "track": "#49434F",
+      "value": "#D7A35D",
+      "pointer": "#F2E8D9",
+      "disabled": "#55515A"
+    },
+    "sliders": {
+      "track": "#49434F",
+      "fill": "#D7A35D",
+      "thumb": "#F2E8D9",
+      "disabled": "#55515A"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D7A35D",
+        "foreground": "#101116",
+        "hover": "#F2E8D9",
+        "pressed": "#6DB7C8",
+        "disabled": "#49434F"
+      },
+      "secondary": {
+        "background": "#171B20",
+        "foreground": "#F4F0F4",
+        "hover": "#6DB7C8",
+        "pressed": "#D7A35D",
+        "disabled": "#49434F"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D7A35D",
+      "activeText": "#101116",
+      "inactiveBackground": "#171B20",
+      "inactiveText": "#AAA8B2",
+      "indicator": "#F2E8D9"
+    },
+    "comboBoxes": {
+      "background": "#171B20",
+      "foreground": "#F4F0F4",
+      "border": "#6DB7C8",
+      "hover": "#D7A35D",
+      "menuBackground": "#171B20",
+      "selection": "#D7A35D"
+    },
+    "keyboard": {
+      "whiteKey": "#F1F0EC",
+      "blackKey": "#22232A",
+      "whitePressed": "#D7A35D",
+      "blackPressed": "#F2E8D9",
+      "keyBorder": "#49434F",
+      "octaveLabel": "#AAA8B2"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F2E8D9",
+      "high": "#F06A58",
+      "background": "#303039"
+    },
+    "icons": {
+      "primary": "#F4F0F4",
+      "secondary": "#AAA8B2",
+      "accent": "#D7A35D",
+      "disabled": "#77747D"
+    },
+    "windowChrome": {
+      "background": "#171B20",
+      "title": "#F4F0F4",
+      "border": "#6DB7C8",
+      "close": "#D7A35D"
+    },
+    "hero": {
+      "background": "#171B20",
+      "accent": "#D7A35D",
+      "secondaryAccent": "#6DB7C8",
+      "highlight": "#F2E8D9"
+    },
+    "accents": {
+      "primary": "#D7A35D",
+      "secondary": "#6DB7C8",
+      "tertiary": "#F2E8D9"
+    },
+    "texture": {
+      "material": "brushed-metal",
+      "enabled": true,
+      "intensity": 0.12,
+      "asset": null
+    },
+    "lighting": {
+      "profile": "warm",
+      "glow": "#D7A35D",
+      "glowIntensity": 0.18,
+      "edgeHighlight": "#6DB7C8"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": null
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png"
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp"
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "pending",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending"
+  }
+}
