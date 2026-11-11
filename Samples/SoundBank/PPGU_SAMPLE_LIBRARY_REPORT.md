@@ -22,3 +22,20 @@ The CI pipeline downloads official release assets / repositories, verifies upstr
 
 ## Important status distinction
 This report is a packaging specification and source audit. It does not assert that the current run has completed. Check the linked GitHub Actions run for the actual download/build/test outcome. It also does not assert every source articulation has been wired to a playable factory preset.
+
+
+## Verified download status — 2026-11-11, workflow run 42969939920
+
+The Windows x64 workflow completed all sample acquisition and indexing steps successfully on branch `5.0-import-guitar-library-user-presets` at commit `dc047d6e12bfbe2f4429e61a8f004ed37ccb063d`:
+
+- Meta Open Sound: Steel Guitar and Nylon Guitar (CC0 1.0; official release WAV assets plus SFZ, LICENSE, SHA256SUMS and source metadata).
+- FreePats FSBS: Clean, Distortion 1, Distortion 2 and Direct DI (four repositories; CC0 1.0; SFZ and LICENSE retained).
+- Karoryfer: Black and Green Guitars, Emilyguitar and Shinyguitar (three official CC0-1.0 release assets; SFZ/audio and provenance checks passed).
+
+The workflow's steps **Download redistributable guitar sample libraries**, **Validate restored sample library and licenses**, **Download vetted CC0 guitar SFZ libraries**, and **Build license-aware sound bank index** all reported success. The downloaded content is retained in the GitHub Actions sample cache for subsequent runs; it is not committed as large binary files to the source branch.
+
+The same workflow then failed at **Build VST3 and test executables**. CTest, pluginval and release packaging were consequently skipped. Therefore the sample acquisition/index stage is verified, but a finished downloadable SoundBank archive and a working VST3 release have not yet been produced by this run.
+
+## Session Guitarist / Electric Sunburst reference
+
+Use NI Session Guitarist — Electric Sunburst Deluxe strictly as a playability and workflow reference: mapped multisamples, playable chromatic notes, velocity/articulation zones, round-robin variation, note-off/release behavior, chord-triggered performance patterns, and separate sound/performance preset browsing. Do not copy or redistribute NI samples, MIDI patterns, scripts, UI assets or proprietary content. PPGU factory presets must resolve to the legally sourced PPGU sample maps and original PPGU performance data; catalog labels alone do not make a preset playable.
