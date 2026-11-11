@@ -90,11 +90,11 @@ GuitarBankImportReport GuitarBankImporter::importFolder(
     {
         SampleMetadataIndex index;
         const auto indexed = index.scanDirectory(staging);
-        report.warnings.addArray(juce::StringArray(indexed.warnings.begin(), indexed.warnings.end()));
+        for (const auto& warning : indexed.warnings) report.warnings.add(warning);
         report.indexedWavFiles = static_cast<int>(indexed.samples.size());
         if (!indexed.success)
         {
-            report.errors.addArray(juce::StringArray(indexed.errors.begin(), indexed.errors.end()));
+            for (const auto& error : indexed.errors) report.errors.add(error);
             report.errors.add("The copied bank contains no valid WAV playback assets.");
             failed = true;
         }
