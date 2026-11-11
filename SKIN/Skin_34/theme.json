@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-34",
+  "index": 34,
+  "name": "Midnight City",
+  "description": "Night-city palette with blue architecture and warm distant signals",
+  "cluster": "B",
+  "identity": {
+    "material": "smoked glass and dark anodized metal",
+    "lighting": "urban blue rim light and warm amber points",
+    "mood": "nocturnal, cinematic, focused"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#101522",
+      "inset": "#172033"
+    },
+    "surfaces": {
+      "primary": "#172033",
+      "secondary": "#202C42",
+      "raised": "#30405A",
+      "overlay": "#101522"
+    },
+    "borders": {
+      "subtle": "#526985",
+      "strong": "#D76AB7",
+      "focus": "#4D9EFF"
+    },
+    "typography": {
+      "primary": "#F3F6FF",
+      "secondary": "#B7C5D9",
+      "disabled": "#85858B",
+      "onAccent": "#101522"
+    },
+    "rotary": {
+      "body": "#30405A",
+      "ring": "#D76AB7",
+      "track": "#526985",
+      "value": "#4D9EFF",
+      "pointer": "#E6B96A",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#526985",
+      "fill": "#4D9EFF",
+      "thumb": "#E6B96A",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#4D9EFF",
+        "foreground": "#101522",
+        "hover": "#E6B96A",
+        "pressed": "#D76AB7",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#202C42",
+        "foreground": "#F3F6FF",
+        "hover": "#30405A",
+        "pressed": "#D76AB7",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#4D9EFF",
+      "activeText": "#101522",
+      "inactiveBackground": "#202C42",
+      "inactiveText": "#B7C5D9",
+      "indicator": "#D76AB7"
+    },
+    "comboBoxes": {
+      "background": "#202C42",
+      "foreground": "#F3F6FF",
+      "border": "#526985",
+      "hover": "#30405A",
+      "menuBackground": "#172033",
+      "selection": "#4D9EFF"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#4D9EFF",
+      "blackPressed": "#D76AB7",
+      "keyBorder": "#526985",
+      "octaveLabel": "#B7C5D9"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#4D9EFF",
+      "high": "#F06A58",
+      "background": "#101522"
+    },
+    "icons": {
+      "primary": "#F3F6FF",
+      "secondary": "#B7C5D9",
+      "accent": "#4D9EFF",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#202C42",
+      "border": "#526985",
+      "selected": "#4D9EFF",
+      "caption": "#F3F6FF"
+    },
+    "windowChrome": {
+      "background": "#101522",
+      "title": "#F3F6FF",
+      "border": "#526985",
+      "close": "#E6B96A"
+    },
+    "hero": {
+      "background": "#101522",
+      "accent": "#4D9EFF",
+      "secondaryAccent": "#D76AB7",
+      "highlight": "#E6B96A"
+    },
+    "accents": {
+      "primary": "#4D9EFF",
+      "secondary": "#D76AB7",
+      "tertiary": "#E6B96A"
+    },
+    "texture": {
+      "material": "smoked glass and dark anodized metal",
+      "enabled": true,
+      "intensity": 0.08,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "urban blue rim light and warm amber points",
+      "glow": "#4D9EFF",
+      "glowIntensity": 0.11,
+      "edgeHighlight": "#D76AB7"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Midnight City preview; show functional blocks and keep labels readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original smoked glass and dark anodized metal hero artwork; no brand marks and no text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Subtle smoked glass and dark anodized metal texture; optional and low contrast."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
