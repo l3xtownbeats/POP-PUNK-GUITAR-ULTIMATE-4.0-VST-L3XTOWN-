@@ -192,3 +192,9 @@
 - SKIN-REV5-003 (OPEN): schema file currently checks required top-level groups but does not yet enforce complete nested token keys or HEX formats; strengthen schema and add automated validation tests before MANIFEST VALIDATED.
 - SKIN-REV5-004 (OPEN): complete APVTS-to-GUI inventory matrix is not available from the current UI source alone; Blueprint/acceptance documents must be recovered and reconciled.
 - No audio callback, DSP, sampler, scheduler or APVTS implementation was modified in this cycle.
+
+
+## 11 ноября 2026 — SKIN REV 5.0 / исправление неполной группы thumbnails
+
+- SKIN-REV5-005: Skin_02–Skin_11 первоначально не содержали обязательную по REV 5.0 группу tokens.thumbnails. Исправлено добавлением background/border/selected/caption; контракт schema обновлён.
+- Регрессионная проверка чтением main: JSON parse и наличие 18 групп проверены для Skin_02–Skin_21 (20/20). Полная JSON Schema validation и runtime acceptance ещё не выполнены.
