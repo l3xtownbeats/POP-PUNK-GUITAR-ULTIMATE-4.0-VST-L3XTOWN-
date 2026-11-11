@@ -125,7 +125,8 @@ jobs:
 
           # FreePats electric guitars: clean, jazz-clean, two distorted variants and direct DI; CC0 1.0.
           $freepats = @(
-            @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },\n            @{ repo='electric-guitar-FSBS-jazz'; folder='FreePats-Jazz-Clean' },
+            @{ repo='electric-guitar-FSBS-clean'; folder='FreePats-Clean' },
+            @{ repo='electric-guitar-FSBS-jazz'; folder='FreePats-Jazz-Clean' },
             @{ repo='electric-guitar-FSBS-dist1'; folder='FreePats-Distortion-1' },
             @{ repo='electric-guitar-FSBS-dist2'; folder='FreePats-Distortion-2' },
             @{ repo='electric-guitar-FSBS-direct'; folder='FreePats-Direct-DI' }
@@ -153,8 +154,9 @@ jobs:
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1, Distortion 2 and Direct DI electric guitars, CC0 1.0.
+          - FreePats FSBS Clean, Jazz Clean, Distortion 1, Distortion 2 and Direct DI electric guitars, CC0 1.0.
             https://github.com/freepats/electric-guitar-FSBS-clean
+            https://github.com/freepats/electric-guitar-FSBS-jazz
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
             https://github.com/freepats/electric-guitar-FSBS-direct
