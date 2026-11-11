@@ -1177,3 +1177,13 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - GUI blueprint и документ PPGU 5.0 UI/UX acceptance не найдены в main. UI/UX implementation остаётся заблокированной до приёмки M1–M3.
 - Код плагина в этом цикле не менялся. Документация синхронизирована; не заявлять build/test/runtime completion.
 - Следующий шаг по протоколу: M3-014 integration regression + quantize-window/pending-NoteOff tests; затем M3-015 CI gate. После успешного CI пользователь подтверждает запуск workflow; M1/M2 acceptance выполняются до UI/UX 5.0 и M4+.
+
+
+## 11 ноября 2026 — REV 6.0: ускоренный source audit M3-014
+
+- Повторно подтверждён актуальный `main`: HEAD до этой документационной записи `c0cd94eb897bd22fdcc13f0b78050d0d13a7c5a3`; combined status пуст, workflow runs для commit не возвращены.
+- Свежая проверка `PluginProcessor.cpp` показывает production путь MIDI timeline → renderPatternInterval → PatternScheduler::schedule → sampler.noteOn/noteOff. Однако существующий PatternSchedulerTests тестирует helper/timeline и scheduler отдельно; отдельного тестового target, создающего PluginProcessor и проверяющего его sampler dispatch, в CMake нет.
+- Найден конкретный риск в `restartForChord`: chord change немедленно обрывает все sampler voices и удаляет pending NoteOff, хотя `patternCycleStartPpq` для следующего аккорда может быть отложен до следующей 1/16 или 1/32 границы. Это может создавать преждевременную тишину до quantize boundary. При нескольких сменах внутри одной сетки переходы могут схлопываться к последнему состоянию.
+- Код не менялся: музыкальный контракт не установлен достоверно из доступного в main `Promt.txt v33 FINAL` (файл с таким точным путём не найден). До исправления нужно найти действующий файл ТЗ и выбрать ожидаемую семантику: immediate switch, deferred switch with old pattern continuation, или latest-chord coalescing.
+- Следующий инженерный шаг: найти реальный путь к v33 FINAL в репозитории; зафиксировать contract test на нескольких chord transitions внутри quantize window и pending NoteOff; затем внести минимальный source fix и настоящий processor-level integration harness. Не считать helper test end-to-end acceptance.
+- Результат этого цикла: source audit + уточнение M3-014 в баг-реестре; production code/build/test не менялись и не запускались. M3-014 OPEN, M3-015 FIXED IN SOURCE / AWAITING CI, M1/M2/M3 не приняты.
