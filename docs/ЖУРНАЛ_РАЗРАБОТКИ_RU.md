@@ -1256,3 +1256,14 @@ Commit: b3c5e10f6986c31697ad6b66fa2ce035c499bb96 (первый M3 patch); пос
 - JSON Schema усилена: nested required fields, HEX pattern, ограничение intensity, фиксированные размеры preview/hero/texture и запрет APVTS/layout/audio changes.
 - Registry проверен: 50 записей, 50 уникальных индексов 1–50, default Skin_01 Neon Riot, selector SKIN.
 - Это структурная проверка исходных JSON, не запуск полноценного JSON Schema validator, не fallback test и не runtime/host acceptance. Статусы тем остаются SPEC READY / ASSETS PENDING / RUNTIME NOT VERIFIED. CI: AWAITING CI.
+
+================ 11 НОЯБРЯ 2026 — SKIN REV 5.0 / CONTRACT VALIDATOR MILESTONE ================
+
+- Добавлен tests/ValidateSkinManifests.py: стандартная библиотека Python, проверка registry (50 уникальных ID/index, 1..50, default skin-01, selector SKIN), всех 18 token groups и обязательных nested keys, HEX-полей, assetSpec preview/hero, compatibility flags (APVTS/layout/audio=false), диапазонов intensity и трёх ключевых пар контрастности WCAG 4.5:1.
+- Валидатор явно обозначен как focused project-contract validator, а не полный движок JSON Schema Draft 2020-12.
+- CMakeLists.txt: при BUILD_TESTING и наличии Python3 тест ppgu_skin_manifest_contract регистрируется в CTest. Python остаётся optional для локальных сборок без интерпретатора.
+- Коммиты: validator 388df31b2ec853a062f81d1075e93538ce320d80; CTest registration 53423074e25e46e40eb5cb541e61803e693932cf.
+- Важно: скрипт ещё не исполнен на Windows CI. До успешного теста на актуальном HEAD — MANIFEST VALIDATED 0/50 / AWAITING CI. Не заявлять schema/runtime acceptance.
+- ThemeManager, реальная галерея SKIN, применение цветов к компонентам, persistence, графические preview/hero/texture и FL Studio 20 acceptance по-прежнему не реализованы/не подтверждены.
+- Scope соблюдён: PluginProcessor/audio DSP/sampler/scheduler не изменялись.
+- Следующий шаг: получить Windows CMake/CTest на актуальном main; исправить все обнаруженные расхождения манифестов без ослабления теста; после зелёного gate перейти к ThemeManager и gallery runtime.
