@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-31",
+  "index": 31,
+  "name": "Skate Voltage",
+  "description": "Premium skate-culture energy without logos, with crisp diagonal accents",
+  "cluster": "B",
+  "identity": {
+    "material": "textured grip rubber and anodized metal",
+    "lighting": "hard directional street-light",
+    "mood": "youthful, fast, confident"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#17171D",
+      "inset": "#22222B"
+    },
+    "surfaces": {
+      "primary": "#22222B",
+      "secondary": "#2E2D39",
+      "raised": "#403D4D",
+      "overlay": "#17171D"
+    },
+    "borders": {
+      "subtle": "#625C6A",
+      "strong": "#F05A86",
+      "focus": "#F5D547"
+    },
+    "typography": {
+      "primary": "#F8F7F2",
+      "secondary": "#C9C6C4",
+      "disabled": "#85858B",
+      "onAccent": "#17171D"
+    },
+    "rotary": {
+      "body": "#403D4D",
+      "ring": "#F05A86",
+      "track": "#625C6A",
+      "value": "#F5D547",
+      "pointer": "#72D5D0",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#625C6A",
+      "fill": "#F5D547",
+      "thumb": "#72D5D0",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#F5D547",
+        "foreground": "#17171D",
+        "hover": "#72D5D0",
+        "pressed": "#F05A86",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#2E2D39",
+        "foreground": "#F8F7F2",
+        "hover": "#403D4D",
+        "pressed": "#F05A86",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#F5D547",
+      "activeText": "#17171D",
+      "inactiveBackground": "#2E2D39",
+      "inactiveText": "#C9C6C4",
+      "indicator": "#F05A86"
+    },
+    "comboBoxes": {
+      "background": "#2E2D39",
+      "foreground": "#F8F7F2",
+      "border": "#625C6A",
+      "hover": "#403D4D",
+      "menuBackground": "#22222B",
+      "selection": "#F5D547"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#F5D547",
+      "blackPressed": "#F05A86",
+      "keyBorder": "#625C6A",
+      "octaveLabel": "#C9C6C4"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#F5D547",
+      "high": "#F06A58",
+      "background": "#17171D"
+    },
+    "icons": {
+      "primary": "#F8F7F2",
+      "secondary": "#C9C6C4",
+      "accent": "#F5D547",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#2E2D39",
+      "border": "#625C6A",
+      "selected": "#F5D547",
+      "caption": "#F8F7F2"
+    },
+    "windowChrome": {
+      "background": "#17171D",
+      "title": "#F8F7F2",
+      "border": "#625C6A",
+      "close": "#72D5D0"
+    },
+    "hero": {
+      "background": "#17171D",
+      "accent": "#F5D547",
+      "secondaryAccent": "#F05A86",
+      "highlight": "#72D5D0"
+    },
+    "accents": {
+      "primary": "#F5D547",
+      "secondary": "#F05A86",
+      "tertiary": "#72D5D0"
+    },
+    "texture": {
+      "material": "textured grip rubber and anodized metal",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "hard directional street-light",
+      "glow": "#F5D547",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#F05A86"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Skate Voltage thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original textured grip rubber and anodized metal abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast textured grip rubber and anodized metal material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
