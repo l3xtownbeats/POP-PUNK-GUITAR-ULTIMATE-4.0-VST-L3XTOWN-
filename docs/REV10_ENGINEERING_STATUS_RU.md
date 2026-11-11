@@ -44,3 +44,12 @@ SB1 должен быть control-thread-only и не менять SamplePool/Sa
 - Added the module to the plugin source list and a dedicated CTest target.
 - Important: this is the manifest data-contract layer only. It does not yet calculate hashes, scan directories, write atomically, cancel jobs, or publish index snapshots.
 - The first CI run for this increment was superseded/cancelled by subsequent pushes; the latest run must complete before status can be upgraded.
+
+
+## Manifest hardening increment (IMPLEMENTED / CI PENDING)
+- `BankManifest::fromJson` now rejects non-positive fileBytes/frames/channels and negative bits-per-sample before unsigned conversion, preventing malformed negative JSON integers from wrapping to huge unsigned values.
+- `BankManifest::validate` now rejects duplicate sample IDs, duplicate relative paths and negative modification timestamps.
+- Added regression cases for duplicate records and negative fileBytes.
+- Commits: `4217a644baa1b302f96a0b57c60ecfa8ba2fe8f9` (validation hardening), `7fdaaaec31057bd578d6a48d057cbdc628e3b0bb` (tests).
+- Status remains IMPLEMENTED / CI PENDING; no successful Windows build or CTest result is claimed.
+- Previous workflow run `43011601549` conclusively ended CANCELLED: configure passed, build was cancelled, CTest/pluginval/package steps were skipped. It is not a passing run.
