@@ -131,7 +131,9 @@ User-imported material is local/private by default and is not automatically adde
 
 ## 5.2 User presets and Favorites
 
-Пресеты пользователя отделены от Factory Bank:
+**USER — это раздел внутри браузера PRESETS, а не папка/раздел библиотеки звуков.** В верхнем уровне браузера PRESETS пользователь переключает коллекции Factory, User и Favorites. User хранит только пользовательские пресеты; сами аудиофайлы и банки остаются в Sounds Bank / Import Guitar.
+
+Физическое хранение пользовательских пресетов:
 
 ```text
 %LOCALAPPDATA%/L3XTOWN/POP PUNK GUITAR ULTIMATE/Presets/
@@ -139,11 +141,13 @@ User-imported material is local/private by default and is not automatically adde
   Favorites/favorites.json
 ```
 
-- В браузере должны быть отдельные источники Factory, User и Favorites; фильтр не должен менять активный пресет.
+Это расположение файлов на диске, а не отдельная вкладка звукового банка.
+
+- В браузере PRESETS должны быть отдельные категории/папки Factory, USER и Favorites. USER располагается именно в графе PRESETS, рядом с Factory, а не внутри IMPORT GUITAR / Sounds Bank. Переключение категории и фильтры не должны менять активный пресет.
 - Кнопка-звезда на выбранной карточке переключает Favorite; состояние сохраняется по стабильному preset ID, не по display name.
 - Save и Save As сохраняют полное состояние параметров, режим MELODY/PATTERN, sample asset references, FX snapshot, style/artist metadata и пользовательские теги.
 - Factory-пресет никогда не перезаписывается: Save для Factory означает Save As в User.
-- User preset ссылается на bank-id и asset-id, а не на абсолютный путь к исходнику. При отсутствующем банке браузер показывает Missing Asset и предлагает Relink.
+- User preset при необходимости ссылается на bank-id и asset-id в Sounds Bank, а не на абсолютный путь к исходнику. При отсутствующем банке браузер PRESETS показывает Missing Asset и предлагает Relink; импорт и управление аудиофайлами выполняются отдельно в IMPORT GUITAR.
 - Переименование/удаление User preset не удаляет Sounds Bank и не затрагивает Factory content.
 - Favorites — отдельная коллекция ссылок; удаление избранного не удаляет сам пресет.
 - JSON валидируется по schemaVersion; повреждённый файл помещается в quarantine и не блокирует запуск плагина.
