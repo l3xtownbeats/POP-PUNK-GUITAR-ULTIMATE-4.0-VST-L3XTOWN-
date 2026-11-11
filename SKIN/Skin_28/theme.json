@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-28",
+  "index": 28,
+  "name": "Clear Signal",
+  "description": "Bright clean instrument surface with strong legibility and teal signals",
+  "cluster": "A",
+  "identity": {
+    "material": "satin white composite and clear acrylic",
+    "lighting": "soft daylight with teal signal accents",
+    "mood": "clear, direct, accessible"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#F0F3F5",
+      "inset": "#FFFFFF"
+    },
+    "surfaces": {
+      "primary": "#FFFFFF",
+      "secondary": "#E3E9ED",
+      "raised": "#D1DCE2",
+      "overlay": "#F0F3F5"
+    },
+    "borders": {
+      "subtle": "#A9B9C3",
+      "strong": "#278C9D",
+      "focus": "#253B52"
+    },
+    "typography": {
+      "primary": "#1C2B36",
+      "secondary": "#536674",
+      "disabled": "#85858B",
+      "onAccent": "#F0F3F5"
+    },
+    "rotary": {
+      "body": "#D1DCE2",
+      "ring": "#278C9D",
+      "track": "#A9B9C3",
+      "value": "#253B52",
+      "pointer": "#E2A64D",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#A9B9C3",
+      "fill": "#253B52",
+      "thumb": "#E2A64D",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#253B52",
+        "foreground": "#F0F3F5",
+        "hover": "#E2A64D",
+        "pressed": "#278C9D",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#E3E9ED",
+        "foreground": "#1C2B36",
+        "hover": "#D1DCE2",
+        "pressed": "#278C9D",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#253B52",
+      "activeText": "#F0F3F5",
+      "inactiveBackground": "#E3E9ED",
+      "inactiveText": "#536674",
+      "indicator": "#278C9D"
+    },
+    "comboBoxes": {
+      "background": "#E3E9ED",
+      "foreground": "#1C2B36",
+      "border": "#A9B9C3",
+      "hover": "#D1DCE2",
+      "menuBackground": "#FFFFFF",
+      "selection": "#253B52"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#253B52",
+      "blackPressed": "#278C9D",
+      "keyBorder": "#A9B9C3",
+      "octaveLabel": "#536674"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#253B52",
+      "high": "#F06A58",
+      "background": "#F0F3F5"
+    },
+    "icons": {
+      "primary": "#1C2B36",
+      "secondary": "#536674",
+      "accent": "#253B52",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#E3E9ED",
+      "border": "#A9B9C3",
+      "selected": "#253B52",
+      "caption": "#1C2B36"
+    },
+    "windowChrome": {
+      "background": "#F0F3F5",
+      "title": "#1C2B36",
+      "border": "#A9B9C3",
+      "close": "#E2A64D"
+    },
+    "hero": {
+      "background": "#F0F3F5",
+      "accent": "#253B52",
+      "secondaryAccent": "#278C9D",
+      "highlight": "#E2A64D"
+    },
+    "accents": {
+      "primary": "#253B52",
+      "secondary": "#278C9D",
+      "tertiary": "#E2A64D"
+    },
+    "texture": {
+      "material": "satin white composite and clear acrylic",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft daylight with teal signal accents",
+      "glow": "#253B52",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#278C9D"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Clear Signal thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original satin white composite and clear acrylic abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast satin white composite and clear acrylic material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
