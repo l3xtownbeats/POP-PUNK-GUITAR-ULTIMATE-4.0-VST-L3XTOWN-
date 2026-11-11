@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-25",
+  "index": 25,
+  "name": "Acoustic Atelier",
+  "description": "Natural acoustic workshop with warm wood and quiet studio greens",
+  "cluster": "A",
+  "identity": {
+    "material": "natural walnut, linen and brushed aluminium",
+    "lighting": "soft diffused acoustic-room light",
+    "mood": "natural, calm, crafted"
+  },
+  "tokens": {
+    "canvas": {
+      "base": "#28231C",
+      "inset": "#342D23"
+    },
+    "surfaces": {
+      "primary": "#342D23",
+      "secondary": "#40372A",
+      "raised": "#554835",
+      "overlay": "#28231C"
+    },
+    "borders": {
+      "subtle": "#81745C",
+      "strong": "#91A68A",
+      "focus": "#D4B58B"
+    },
+    "typography": {
+      "primary": "#FBF7EF",
+      "secondary": "#D2C7B5",
+      "disabled": "#85858B",
+      "onAccent": "#28231C"
+    },
+    "rotary": {
+      "body": "#554835",
+      "ring": "#91A68A",
+      "track": "#81745C",
+      "value": "#D4B58B",
+      "pointer": "#F0E5D2",
+      "disabled": "#66666B"
+    },
+    "sliders": {
+      "track": "#81745C",
+      "fill": "#D4B58B",
+      "thumb": "#F0E5D2",
+      "disabled": "#66666B"
+    },
+    "buttons": {
+      "primary": {
+        "background": "#D4B58B",
+        "foreground": "#28231C",
+        "hover": "#F0E5D2",
+        "pressed": "#91A68A",
+        "disabled": "#55555A"
+      },
+      "secondary": {
+        "background": "#40372A",
+        "foreground": "#FBF7EF",
+        "hover": "#554835",
+        "pressed": "#91A68A",
+        "disabled": "#55555A"
+      }
+    },
+    "tabs": {
+      "activeBackground": "#D4B58B",
+      "activeText": "#28231C",
+      "inactiveBackground": "#40372A",
+      "inactiveText": "#D2C7B5",
+      "indicator": "#91A68A"
+    },
+    "comboBoxes": {
+      "background": "#40372A",
+      "foreground": "#FBF7EF",
+      "border": "#81745C",
+      "hover": "#554835",
+      "menuBackground": "#342D23",
+      "selection": "#D4B58B"
+    },
+    "keyboard": {
+      "whiteKey": "#F2F1EC",
+      "blackKey": "#202127",
+      "whitePressed": "#D4B58B",
+      "blackPressed": "#91A68A",
+      "keyBorder": "#81745C",
+      "octaveLabel": "#D2C7B5"
+    },
+    "meters": {
+      "low": "#58C98A",
+      "medium": "#D4B58B",
+      "high": "#F06A58",
+      "background": "#28231C"
+    },
+    "icons": {
+      "primary": "#FBF7EF",
+      "secondary": "#D2C7B5",
+      "accent": "#D4B58B",
+      "disabled": "#85858B"
+    },
+    "thumbnails": {
+      "background": "#40372A",
+      "border": "#81745C",
+      "selected": "#D4B58B",
+      "caption": "#FBF7EF"
+    },
+    "windowChrome": {
+      "background": "#28231C",
+      "title": "#FBF7EF",
+      "border": "#81745C",
+      "close": "#F0E5D2"
+    },
+    "hero": {
+      "background": "#28231C",
+      "accent": "#D4B58B",
+      "secondaryAccent": "#91A68A",
+      "highlight": "#F0E5D2"
+    },
+    "accents": {
+      "primary": "#D4B58B",
+      "secondary": "#91A68A",
+      "tertiary": "#F0E5D2"
+    },
+    "texture": {
+      "material": "natural walnut, linen and brushed aluminium",
+      "enabled": true,
+      "intensity": 0.09,
+      "asset": "assets/texture.png"
+    },
+    "lighting": {
+      "profile": "soft diffused acoustic-room light",
+      "glow": "#D4B58B",
+      "glowIntensity": 0.12,
+      "edgeHighlight": "#91A68A"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.webp",
+    "texture": "assets/texture.png"
+  },
+  "assetSpec": {
+    "preview": {
+      "width": 480,
+      "height": 300,
+      "format": "png",
+      "content": "Full-shell Acoustic Atelier thumbnail; all visible controls remain readable."
+    },
+    "hero": {
+      "width": 1200,
+      "height": 420,
+      "format": "webp",
+      "content": "Original natural walnut, linen and brushed aluminium abstract hero composition; no logos or text over controls."
+    },
+    "texture": {
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "tiling": "seamless",
+      "content": "Low-contrast natural walnut, linen and brushed aluminium material texture; optional."
+    }
+  },
+  "compatibility": {
+    "minimumPluginVersion": "6.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "validation": {
+    "json": "authored",
+    "assets": "pending",
+    "runtime": "pending",
+    "flStudio20": "pending",
+    "matrix": "pending"
+  }
+}
