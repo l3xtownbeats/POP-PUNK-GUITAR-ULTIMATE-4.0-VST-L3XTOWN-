@@ -21,14 +21,14 @@ def block(pattern, text=CMAKE):
     return match.group(1) if match else None
 
 binary_blocks = list(re.finditer(
-    r"juce_add_binary_data\\s*\\(\\s*(\\w+)(.*?)\\)",
+    r"juce_add_binary_data\s*\(\s*(\w+)(.*?)\)",
     CMAKE, re.DOTALL
 ))
 binary_targets = {}
 header_owners = {}
 for match in binary_blocks:
     target, body = match.group(1), match.group(2)
-    header = re.search(r'\\bHEADER_NAME\\s+"([^"]+)"', body)
+    header = re.search(r'\bHEADER_NAME\s+"([^"]+)"', body)
     if not header:
         fail(f"{target}: juce_add_binary_data must declare a unique HEADER_NAME")
         continue
@@ -46,9 +46,9 @@ if "PPGUTestData/BinaryData.h" in CMAKE:
 # Every source that includes one of the generated headers must belong to a
 # CMake target which links the corresponding juce_add_binary_data target.
 source_targets = {}
-for match in re.finditer(r"target_sources\\s*\\(\\s*(\\w+)(.*?)\\)", CMAKE, re.DOTALL):
+for match in re.finditer(r"target_sources\s*\(\s*(\w+)(.*?)\)", CMAKE, re.DOTALL):
     target, body = match.group(1), match.group(2)
-    for token in re.findall(r"(?<![\\w/])((?:Source|tests)/[A-Za-z0-9_./-]+\\.(?:cpp|cc|cxx))", body):
+    for token in re.findall(r"(?<![\w/])((?:Source|tests)/[A-Za-z0-9_./-]+\.(?:cpp|cc|cxx))", body):
         source_targets.setdefault((ROOT / token).resolve(), set()).add(target)
 
 for source, targets in source_targets.items():
@@ -56,14 +56,14 @@ for source, targets in source_targets.items():
         continue
     content = source.read_text(encoding="utf-8")
     for header, binary_target in ((name, target) for target, (name, _) in binary_targets.items()):
-        if re.search(r'#\\s*include\\s*[<"]' + re.escape(header) + r'[>"]', content):
+        if re.search(r'#\s*include\s*[<"]' + re.escape(header) + r'[>"]', content):
             for target in targets:
-                link = block(r"target_link_libraries\\s*\\(\\s*" + re.escape(target) + r"\\b(.*?)\\)", CMAKE)
-                if link is None or not re.search(r"(?<![\\w:])" + re.escape(binary_target) + r"(?![\\w])", link):
+                link = block(r"target_link_libraries\s*\(\s*" + re.escape(target) + r"\b(.*?)\)", CMAKE)
+                if link is None or not re.search(r"(?<![\w:])" + re.escape(binary_target) + r"(?![\w])", link):
                     fail(f"{source.relative_to(ROOT)} includes {header}, but target {target} does not link {binary_target}")
                 declaration = next((m.start() for m in binary_blocks if m.group(1) == binary_target), None)
                 target_decl = re.search(
-                    r"(?:juce_add_plugin|juce_add_console_app|add_executable)\\s*\\(\\s*" + re.escape(target) + r"\\b",
+                    r"(?:juce_add_plugin|juce_add_console_app|add_executable)\s*\(\s*" + re.escape(target) + r"\b",
                     CMAKE
                 )
                 if declaration is None or target_decl is None or declaration > target_decl.start():
@@ -82,10 +82,10 @@ for binary_target, (header, consumer, source_rel) in expected.items():
     if binary_targets[binary_target][0] != header:
         fail(f"{binary_target} must generate {header}")
     source = ROOT / source_rel
-    if not source.is_file() or not re.search(r'#\\s*include\\s*[<"]' + re.escape(header) + r'[>"]', source.read_text(encoding="utf-8")):
+    if not source.is_file() or not re.search(r'#\s*include\s*[<"]' + re.escape(header) + r'[>"]', source.read_text(encoding="utf-8")):
         fail(f"{source_rel} must include {header}")
-    link = block(r"target_link_libraries\\s*\\(\\s*" + re.escape(consumer) + r"\\b(.*?)\\)", CMAKE)
-    if link is None or not re.search(r"(?<![\\w:])" + re.escape(binary_target) + r"(?![\\w])", link):
+    link = block(r"target_link_libraries\s*\(\s*" + re.escape(consumer) + r"\b(.*?)\)", CMAKE)
+    if link is None or not re.search(r"(?<![\w:])" + re.escape(binary_target) + r"(?![\w])", link):
         fail(f"{consumer} must link {binary_target}")
 
 if ERRORS:
