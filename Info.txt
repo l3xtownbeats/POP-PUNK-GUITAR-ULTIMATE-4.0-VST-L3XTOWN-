@@ -1667,3 +1667,13 @@ M1 = NOT ACCEPTED; M2 = NOT ACCEPTED; M3 = NOT ACCEPTED; M4 = BLOCKED. Ни од
 - Все 50 theme.json authored; assetSpec и индивидуальные спецификации подготовлены. Изображения preview/hero/texture пока отсутствуют.
 - ThemeManager/gallery runtime не реализованы/не подтверждены. Полная JSON Schema validation, contrast tests, runtime matrix, Windows CI и FL Studio 20 acceptance остаются pending.
 - Статусы: 50 SPECIFICATION AUTHORED; 0 MANIFEST VALIDATED; 0 RUNTIME APPLIED; 0 USER-CONFIRMED; 0 ACCEPTED. CI: AWAITING CI.
+
+
+================ 11 НОЯБРЯ 2026 — SKIN REV 5.0 / STRUCTURAL MANIFEST CHECK ================
+
+- Повторно прочитаны из main все 50 манифестов Skin_01–Skin_50 по партиям.
+- JSON parsing: 50/50 успешно.
+- Обязательные 18 token groups и все обязательные nested keys: проверены по партиям 01–10, 11–20, 21–30, 31–40, 41–50; 50/50 без пропусков.
+- SKIN/theme.schema.json усилена: required nested keys, HEX pattern для цветовых значений, ограничения intensity/glowIntensity, asset dimensions/formats, compatibility flags.
+- Registry JSON: 50 записей, 50 уникальных индексов, непрерывный диапазон 1–50; defaultSkin=skin-01; selector=SKIN.
+- Это source-level structural check; полноценный JSON Schema draft 2020-12 validator, контрастные формульные тесты, fallback runtime, image decoding, ThemeManager/gallery и DAW checks ещё не запускались. Ни одна тема не переводится в MANIFEST VALIDATED.
