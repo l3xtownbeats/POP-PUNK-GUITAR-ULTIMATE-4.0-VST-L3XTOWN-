@@ -15,11 +15,11 @@ AUDIO_EXTENSIONS = {".wav", ".flac"}
 SOURCES = {
     "Meta-meta-steel-guitar": ("Meta Open Sound Steel Guitar", "LICENSE"),
     "Meta-meta-nylon-guitar": ("Meta Open Sound Nylon Guitar", "LICENSE"),
-    "FreePats-Clean": ("FreePats FSBS Clean Electric Guitar", "LICENSE.txt"),
-    "FreePats-Distortion-1": ("FreePats FSBS Distortion 1", "LICENSE.txt"),
-    "FreePats-Distortion-2": ("FreePats FSBS Distortion 2", "LICENSE.txt"),
-    "FreePats-Jazz-Electric": ("FreePats Jazz Electric Guitar", "LICENSE.txt"),
-    "FreePats-Spanish-Classical": ("FreePats Spanish Classical Guitar", "LICENSE.txt"),
+    "FreePats-Clean": ("FreePats FSBS Clean Electric Guitar", ("LICENSE.txt", "LICENSE")),
+    "FreePats-Distortion-1": ("FreePats FSBS Distortion 1", ("LICENSE.txt", "LICENSE")),
+    "FreePats-Distortion-2": ("FreePats FSBS Distortion 2", ("LICENSE.txt", "LICENSE")),
+    "FreePats-Jazz-Electric": ("FreePats Jazz Electric Guitar", ("LICENSE.txt", "LICENSE")),
+    "FreePats-Spanish-Classical": ("FreePats Spanish Classical Guitar", ("LICENSE.txt", "LICENSE")),
     "Karoryfer-Black-And-Green": ("Karoryfer Black And Green Guitars", "LICENSE"),
     "Karoryfer-Emilyguitar": ("Karoryfer Emilyguitar", "LICENSE"),
     "Karoryfer-Shinyguitar": ("Karoryfer Shinyguitar", "LICENSE"),
@@ -54,7 +54,7 @@ def main() -> int:
     if len(audio_files) < 100:
         errors.append(f"expected at least 100 WAV/FLAC files, found {len(audio_files)}")
 
-    for folder, (label, license_name) in SOURCES.items():
+    for folder, (label, license_names) in SOURCES.items():
         source_root = root / folder
         if not source_root.is_dir():
             errors.append(f"required source folder missing: {folder} ({label})")
