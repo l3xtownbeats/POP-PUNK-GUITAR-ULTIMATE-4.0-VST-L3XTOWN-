@@ -87,13 +87,26 @@ class SoundAssetRegistryTests(unittest.TestCase):
         asset = {**self.asset, "file": {**self.asset["file"], "sha256": "0" * 64}}
         self.assertTrue(any("does not match" in e for e in self.errors(asset)))
 
-    def test_non_cc0_license_blocks_green(self):
+    def test_non_cc0_spdx_cannot_claim_cc0_clearance(self):
         asset = {**self.asset, "license": {**self.asset["license"], "spdxId": "CC-BY-4.0"}}
-        self.assertTrue(any("not an explicitly approved" in e for e in self.errors(asset)))
+        self.assertTrue(any("CC0_PD_VERIFIED requires CC0/Public-Domain SPDX" in e
+                            for e in self.errors(asset)))
 
-    def test_unapproved_or_missing_license_evidence_blocks_green(self):
-        asset = {**self.asset, "license": {**self.asset["license"], "legalReview": "PENDING"}}
-        self.assertTrue(any("not APPROVED" in e for e in self.errors(asset)))
+    def test_unapproved_explicit_permission_blocks_green(self):
+        (self.root / "licenses" / "permission.txt").write_text(
+            "Permission evidence fixture", encoding="utf-8")
+        asset = {**self.asset, "license": {
+            **self.asset["license"],
+            "spdxId": "LicenseRef-Explicit-Permission",
+            "clearanceBasis": "EXPLICIT_PERMISSION",
+            "legalReview": "PENDING",
+            "permissionScope": ["commercial_use", "embedding", "redistribution",
+                                "sample_library_redistribution"],
+            "permissionEvidencePath": "licenses/permission.txt",
+            "attributionRequired": False
+        }}
+        self.assertTrue(any("explicit permission requires APPROVED evidence review" in e
+                            for e in self.errors(asset)))
 
     def test_copyright_suspect_blocks_green(self):
         asset = {**self.asset, "curator": {**self.asset["curator"], "copyrightSuspect": True}}

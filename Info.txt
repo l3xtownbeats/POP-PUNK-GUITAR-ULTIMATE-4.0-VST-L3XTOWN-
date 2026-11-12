@@ -909,3 +909,17 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 Коммит исправления: `11a8b511cef0f08d3e3ae8698c05dfdf515638d9`.
 Статус: DOCUMENT CORRECTION COMMITTED; CI для этого SHA — PENDING.
+
+
+## 2026-11-12 — Sound Asset Registry CTest assertion alignment (REV 17.0)
+
+**Статус:** TEST FIX COMMITTED; Windows Release/CTest rerun PENDING.
+**Основание:** run #970 (ID `43142815200`), SHA `11a8b511cef0f08d3e3ae8698c05dfdf515638d9`: Windows x64 Release configure/build PASS; CTest 13/14 targets PASS, `ppgu_sound_asset_registry_contract` FAILED because two assertions still encoded the superseded REV 16.4 policy.
+**Диагностика:**
+- `test_non_cc0_license_blocks_green` expected all non-CC0 licenses to be blocked, but REV 16.5/17.0 explicitly permits CC-BY with exact attribution. The actual fixture changed only SPDX to CC-BY while falsely retaining `CC0_PD_VERIFIED`; the correct assertion checks that this inconsistent SPDX/basis pair is rejected.
+- `test_unapproved_or_missing_license_evidence_blocks_green` set `legalReview=PENDING` on a CC0 fixture. REV 17.0 does not require a separate curator approval for standard verified CC0/PD; approval is mandatory for EXPLICIT_PERMISSION. The test now uses a complete explicit-permission fixture with archived evidence/scope and verifies that PENDING review blocks GREEN.
+**Изменения:** только два тестовых сценария в `tests/TestSoundAssetRegistry.py`; validator, license policy, runtime/audio, APVTS, MIDI, samples, UI and packaging unchanged.
+**Host acceptance:** пользователь подтвердил повторно, что VST3 проверен в FL Studio 20 на Windows 10. Это USER-REPORTED HOST ACCEPTANCE; конкретный plugin binary SHA/build и тестовая матрица не привязаны к текущему HEAD, поэтому не приписывается CI и не заменяет release gate.
+**R28 non-goals:** не менялись production validator/policy, DSP/audio callback, APVTS, MIDI, ThemeManager, Skin_052, resource resolver, auxiliary windows, CMake or packaging.
+**CI:** run #970 на исходном SHA завершился FAILED на одном CTest target; после исправления ожидается новый run на точном коммите. Никакой BUILD VERIFIED / TESTED / COMPLETE ZIP статус новому SHA пока не присваивается.
+**Следующий этап:** после CTest PASS вернуться к согласованию Skin_052 через merge tool + schema + registry + ThemeManager; не считать manifest-only запись runtime integration.
