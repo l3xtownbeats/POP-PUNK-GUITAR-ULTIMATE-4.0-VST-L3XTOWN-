@@ -26,9 +26,9 @@ int main()
                                                  chords.data(), chords.size());
     if (!result.valid || result.count != 4) return 6;
     if (!isChord(chords[0], 9, ChordQuality::Minor, 1, "i")) return 7;
-    if (!isChord(chords[1], 6, ChordQuality::Major, 6, "VI")) return 8;
-    if (!isChord(chords[2], 1, ChordQuality::Major, 3, "III")) return 9;
-    if (!isChord(chords[3], 4, ChordQuality::Major, 7, "VII")) return 10;
+    if (!isChord(chords[1], 5, ChordQuality::Major, 6, "VI")) return 8;
+    if (!isChord(chords[2], 0, ChordQuality::Major, 3, "III")) return 9;
+    if (!isChord(chords[3], 7, ChordQuality::Major, 7, "VII")) return 10;
 
     if (HarmonyProgressionEngine::relativeMinorRoot(0) != 9
         || HarmonyProgressionEngine::relativeMinorRoot(7) != 4

@@ -82,7 +82,8 @@ public:
         constexpr std::array<int, 7> minorScale {{ 0, 2, 3, 5, 7, 8, 10 }};
         constexpr std::array<int, 7> majorThirds {{ 4, 3, 3, 4, 4, 3, 3 }};
         constexpr std::array<int, 7> minorThirds {{ 3, 3, 4, 3, 3, 4, 4 }};
-        constexpr std::array<int, 7> fifths {{ 7, 7, 7, 7, 7, 7, 6 }};
+        constexpr std::array<int, 7> majorFifths {{ 7, 7, 7, 7, 7, 7, 6 }};
+        constexpr std::array<int, 7> minorFifths {{ 7, 6, 7, 7, 7, 7, 7 }};
         constexpr std::array<std::string_view, 7> majorRoman {{
             "I", "ii", "iii", "IV", "V", "vi", "vii°"
         }};
@@ -95,6 +96,7 @@ public:
             ? majorTemplates[templateIndex] : minorTemplates[templateIndex];
         const auto& scale = mode == HarmonyMode::Major ? majorScale : minorScale;
         const auto& thirds = mode == HarmonyMode::Major ? majorThirds : minorThirds;
+        const auto& fifths = mode == HarmonyMode::Major ? majorFifths : minorFifths;
         const auto& roman = mode == HarmonyMode::Major ? majorRoman : minorRoman;
 
         for (std::size_t i = 0; i < degrees.size(); ++i)
