@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `8bd10b20cc9303452d19a46fcf4edea3e11488f1`
+Последний commit перед текущей записью: `63bca7aed262e002264c6986e95a052118481e70`
 
 ## 1. Назначение и продукт
 
@@ -753,3 +753,38 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 3. R28 non-goals соблюдены.
 4. Статус source fix — IMPLEMENTED; BUILD VERIFIED / TESTED для нового SHA пока не присваиваются.
 5. Осталось: Windows rebuild, полный CTest, pluginval, package, FL Studio 20 acceptance, profiling.
+
+
+## 2026-11-12 — Принятие MASTER PROMPT REV 16.2 UNIFIED (FINAL)
+
+**Статус:** MERGED (спецификация сохранена в main) / PENDING (CI и веточное распространение не подтверждены).  
+**Спецификация:** REV 16.2 UNIFIED (FINAL), заменяет REV 10/13/14/15.x/16.0/16.1.  
+**Коммит документа:** `63bca7aed262e002264c6986e95a052118481e70` — `docs/PPGU_MASTER_PROMPT_RU.md`.
+
+**CI / source state:**
+- Документный commit `63bca7a...`: combined status query вернул пустой список `statuses: []`; это не build/test PASS.
+- Последний известный source fix: `8bd10b20cc9303452d19a46fcf4edea3e11488f1` (JUCE 7.0.12 `juce::var::getProperty` compile fix в `Source/UI/ThemeManager.cpp`). Combined status для этого SHA пуст; доступный workflow lookup ограничен PR-triggered runs и вернул пусто. Это не подтверждает отсутствие обычных push/workflow runs.
+- Последний детально зафиксированный CI run — #963, ID `43134831986`, SHA `34f074057b9e7572b60e64549de7006bc2307f61`: configure PASS; Build VST3/test executables FAILED с MSVC C2660; CTest, VST3 locate, pluginval strictness 5 и packaging SKIPPED. Fix commit `8bd10b2...` ещё не имеет подтверждённого успешного повторного прогона в доступных данных.
+- На актуальном main перед этим документным этапом HEAD был `41a235a21107cdcdb1552cccbffa51ea8cef0306` (INFO-only commit поверх source fix). После обновления спецификации main получил документный commit `63bca7...`.
+
+**Факт изменения спецификации:**
+- Заголовок и область замены обновлены до REV 16.2.
+- Добавлено R33 (веточная гигиена); уточнены R01 и I4.
+- §2 содержит требуемый пользователем снимок blocker runs #859/#860. Важно: более поздние записи INFO имеют приоритет по R08 и supersede отдельные исторические утверждения этого снимка: последующая инвентаризация фиксирует Skin_052 и registry total 52, а run #963/source fix 8bd10b2 — более позднее состояние сборки. При новом preflight обновлять §2 по последним фактам INFO, не считать #859/#860 текущим последним CI.
+- §9.1 перечисляет CTest targets без фиксированного общего счётчика; текст «12/12» присутствует только как явно запрещённый пример.
+- R19 отделяет размер партии 50 тем от диапазона/числа записей реестра; нумерация и стартовый индекс определяются schema/manifest.
+- §16.1 фиксирует историю REV 16.0 / 16.1 / 16.2; §21 включает пункт 6 о веточном распространении.
+
+**R33 / ветки:** branch search вернул 42 refs в репозитории, включая `main`. REV 16.2 и эта запись выполнены только в `main`; распространение по остальным веткам НЕ выполнено и NOT YET VERIFIED. Не производилось массового merge/force-update 41 ветки: они могут содержать независимые/устаревшие истории. Для этого этапа явно зафиксирован режим **main-only**; all-branch rollout не заявляется.
+
+**R28 non-goals:** не менялись C++/DSP/audio callback, APVTS, MIDI, SoundBank, presets, ThemeManager, skin assets/registry/schema, CMake, workflows, packaging и release artifacts. Новые темы не генерировались. COMPLETE ZIP не создавался.
+
+**DoD / self-check §21:**
+1. SHA: спецификация commit `63bca7aed262e002264c6986e95a052118481e70`; CI combined status пуст, поэтому build/test PASS нет.
+2. Contract test для документной редакции не требуется; изменения правил проверяются review целостности документа. Никакой CTest PASS не заявляется.
+3. R28 non-goals соблюдены.
+4. Статус документа: MERGED в main; CI/техническая приёмка PENDING.
+5. Не выполнено: Windows rebuild на `8bd10b2...`, все CTest targets, pluginval strictness 5, COMPLETE ZIP, FL Studio 20 host acceptance, CPU/RAM profiling, all-branch rollout.
+6. Ветки: 42 refs обнаружены; этап явно помечен main-only; синхронизация остальных веток NOT YET VERIFIED.
+
+**Следующий этап по R24:** новый Windows CI на source SHA после compile fix; затем все CTest targets PASS, включая `ppgu_auxiliary_panel_layout_contract`; только после этого переходить к default-ppgu + ThemeManager 21-token contract migration.
