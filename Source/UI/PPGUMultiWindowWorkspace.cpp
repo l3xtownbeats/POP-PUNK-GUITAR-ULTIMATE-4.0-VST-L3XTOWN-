@@ -40,6 +40,18 @@ public:
     ppgu::ui::PanelSize getDesiredSize() const noexcept { return desired; }
     ppgu::ui::PanelSize getMinimumSize() const noexcept { return minimum; }
 
+    void setColours(juce::Colour panel, juce::Colour border,
+                    juce::Colour heading, juce::Colour text)
+    {
+        panelColour = panel;
+        borderColour = border;
+        title.setColour(juce::Label::textColourId, heading);
+        closeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
+        closeButton.setColour(juce::TextButton::textColourOffId, text);
+        closeButton.setColour(juce::TextButton::buttonOnColourId, border);
+        repaint();
+    }
+
     void setPanelBounds(juce::Rectangle<int> bounds)
     {
         setBounds(bounds);
@@ -179,11 +191,7 @@ void PPGUMultiWindowWorkspace::setSurfaceColours(juce::Colour background,
     headingColour = heading;
     textColour = text;
     for (auto& window : windows)
-    {
-        // Existing child content remains owned by its window. Recreate only the
-        // lightweight frame so every open panel receives the new theme colours.
-        (void) window;
-    }
+        window->setColours(panelColour, borderColour, headingColour, textColour);
     repaint();
     layoutPanels();
 }
