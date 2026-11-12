@@ -309,7 +309,7 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
         error = "Theme index must be an integer";
         return false;
     }
-    if (id.length() == 8)
+    if (id.length() >= 8)
         return validateSkinStudioManifest(root, palette, error);
 
     if (id.length() != 7 || !id.startsWith("skin-")
