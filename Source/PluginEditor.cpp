@@ -348,10 +348,11 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
 
-        const auto index = static_cast<int>(indexValue);
-        if (index < 1 || index > total || !id.startsWith("skin-")
-            || id.substring(5).getIntValue() != index
-            || !indices.insert(index).second || !ids.insert(id.toStdString()).second)
+        const auto index64 = indexValue.toString().getLargeIntValue();
+        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
+            || id.substring(5).getLargeIntValue() != index64
+            || !indices.insert(static_cast<int>(index64)).second
+            || !ids.insert(id.toStdString()).second)
             return 0;
     }
 
@@ -379,7 +380,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
             continue;
         const auto indexValue = entry.getProperty("index", juce::var());
         if ((!indexValue.isInt() && !indexValue.isInt64())
-            || static_cast<int>(indexValue) != index)
+            || indexValue.toString().getLargeIntValue() != index)
             continue;
 
         const auto relativePath = entry.getProperty("path", "").toString();
