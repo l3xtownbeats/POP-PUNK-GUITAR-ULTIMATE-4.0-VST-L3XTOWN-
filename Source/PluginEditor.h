@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "UI/ThemeManager.h"
+#include "Performance/AutoChordEngine.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -16,7 +17,7 @@ private:
     PPGUThemeManager::Palette palette;
 };
 
-class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor
+class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
     explicit PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor&);
@@ -24,8 +25,11 @@ public:
     bool keyPressed(const juce::KeyPress&) override;
     void paint(juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
 private:
+    void updateKeyboardReadout();
+    void setKeyboardCollapsed(bool collapsed);
     void chooseSfzFile();
     juce::File getRuntimeSkinRoot() const;
     int getSkinCount() const;
@@ -67,6 +71,9 @@ private:
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
+    juce::TextButton keyboardToggleButton { "⌄  HIDE KEYS" };
+    juce::Label activeNotesLabel, chordLabel;
+    bool keyboardCollapsed = false;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
 };
