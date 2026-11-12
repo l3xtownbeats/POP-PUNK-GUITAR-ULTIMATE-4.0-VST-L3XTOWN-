@@ -259,3 +259,24 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Boundaries:** no APVTS IDs/attachments, FX enable mappings, DSP, processBlock, sampler, MIDI, presets or SoundBank changes.  
 **Verification:** static source/patch review only; compile, CTest, pluginval, performance and FL Studio 20 host checks pending on resulting SHA.  
 **Status:** SOURCE CHANGE PREPARED; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
+
+
+## 2026-11-12 — REV.17 Factory Bank: защита согласованного набора из 300 пресетов
+
+**Files:**
+- `presets/factory_bank_300.json` — основной согласованный каталог; сохраняется без замены восьмипрофильным JSON.
+- `Source/PluginProcessor.cpp` — APVTS `playMode`: Choice `Melody` / `Pattern`; допустимые индексы только 0 и 1.
+- `Info.txt` — полная запись продуктового решения и ограничений.
+
+**Контентный контракт:**
+- ровно 300 заводских пресетов; структура 150 MELODY + 150 PATTERN остаётся базовым требованием;
+- поп-панк-направления, стилистики групп/исполнителей, группировки и звуковые профили сохраняются;
+- 8 присланных профилей — только reference/QA material для сверки и возможного точечного сопоставления с существующими слотами; не отдельное расширение каталога и не замена;
+- значения `playMode` вне диапазона 0..1 запрещены при текущем APVTS;
+- не менять художественную концепцию, названия/направления/структуру без отдельного явного согласования.
+
+**Интеграционные границы:** не менять DSP, sampler, MIDI, APVTS ID/семантику, sample library или skin inventory в рамках этой записи. Не заявлять, что восемь профилей уже внедрены в 300 позиций или что все 300 пресетов полностью воспроизводимы, пока не выполнены schema/APVTS/sample mapping и runtime tests.
+
+**Проверка:** сверены существующий каталог и APVTS playMode declaration. Полная проверка 300 записей, диапазонов каждого параметра, ссылок на sample profiles и фактического воспроизведения не выполнялась в рамках этой journal-only фиксации.
+
+**Status:** REQUIREMENT RECORDED; PRESET DATA UNCHANGED; IMPLEMENTATION/VALIDATION PENDING.
