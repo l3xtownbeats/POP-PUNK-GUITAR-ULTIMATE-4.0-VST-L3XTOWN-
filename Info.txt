@@ -1587,3 +1587,12 @@ F. Только после этого считать документальны�
 **Тесты:** readback исходников проверен. Windows build workflow после последних source/doc commits ожидается; до его завершения не заявлять build/CTest/pluginval PASS. Skin pack generation/merge remains SUCCESS on run `43195205929`.
 
 **Результат:** dynamic theme propagation SOURCE IMPLEMENTED; exact-SHA Windows validation PENDING.
+
+
+## 2026-11-12 — REV.17 canonical work branch
+
+**Canonical working branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.  
+**Created from:** `e5000be105fa059d5f903f6efc17f530ccfee412` (previous skin expansion work branch head).  
+**Reason:** normalize the user-requested REV.17 branch name into a valid Git ref (Git does not permit spaces in branch names). All subsequent implementation/fixes are to be committed only to this REV.17 branch. The prior `work/ppgu-skin-expansion-53-102` branch is retained as the source history, not the active work target.
+
+**Build evidence in progress:** Windows workflow run `43197596467` was started on source commit `557570861655b1b5c028c741835e319326d01c68`, which is included in this branch's history. Final result pending.
