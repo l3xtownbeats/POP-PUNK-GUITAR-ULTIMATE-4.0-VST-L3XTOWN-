@@ -171,6 +171,14 @@ The user's sound hierarchy for the pattern engine is now:
 64. FreePats — Spanish Classical Guitar — https://github.com/freepats/spanish-classical-guitar
     - Real Spanish classical guitar recordings; repository README identifies CC0 1.0 and includes SFZ mappings, FLAC samples and LICENSE. Suitable for GENERAL GUITAR acoustic layers and melodic/chordal pattern material; archive is now added to the automated CI download manifest.
 
+65. Karoryfer — Black And Green Guitars — https://github.com/sfzinstruments/karoryfer.black-and-green-guitars
+    - Two real hollowbody electric guitars (Gretsch Anniversary and Hofner Club), over 1,500 samples / approximately 500 MB, including short/long notes, feedback and instrument-specific articulations. Repository contains CC0-1.0 LICENSE; added to automated CI SoundBank download.
+66. Karoryfer — Emilyguitar — https://github.com/sfzinstruments/karoryfer.emilyguitar
+    - Real Epiphone Emily the Strange electric guitar; 323 WAV samples, four velocity layers, three round robins, release/noise samples and SFZ mappings including power/minor/major barre-chord patterns. CC0-1.0 LICENSE; added to automated CI SoundBank download.
+67. Karoryfer — Shinyguitar — https://github.com/sfzinstruments/karoryfer.shinyguitar
+    - Real archtop guitar recorded from both pickup and microphone; 846 WAV samples, 24-bit/44.1 kHz, multiple articulations and control mappings. CC0-1.0 LICENSE; added to automated CI SoundBank download.
+
+
 ## Follow-up scan: verified high-priority candidates and pattern material
 
 52. Freesound — Pop Punk Guitar Loop, 87 BPM, C major — https://freesound.org/people/deadrobotmusic/sounds/591622/
