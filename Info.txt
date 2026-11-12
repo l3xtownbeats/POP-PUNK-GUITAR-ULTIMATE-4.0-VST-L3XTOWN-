@@ -2019,3 +2019,17 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 **Ограничения:** текущий DOUBLE — первый mono-compatible Haas-inspired widener, а не финальная psychoacoustic stereo suite. Нужны автоматические DSP tests на mono sum, stereo width, bypass, on/off transitions, mono/stereo bus layouts, clipping/peak headroom и host listening. FX панели уже имеют индивидуальные accent identities; отдельные графические формы/компоновки каждого эффекта — следующий UI pass.
 
 **Статус:** IMPLEMENTED / CI VALIDATION IN PROGRESS / AUDIO QA PENDING.
+
+
+## 2026-11-12 — FX visual signatures and individual rack identities
+
+**Тип:** UI production code refinement.
+**Ветка:** `work/ppgu-toolchain-qa-rev17-1`.
+**Commit:** `7c7e8244fbb4ca785cae3d413f814d1e334804e1`.
+**Parent:** `3a79120704482765ba9e74a923be8ac1ff6de19b`.
+**Файл:** `Source/PluginEditor.cpp`, blob SHA `3d88ba26102ad5de7b65048da66ab98805c246c9`.
+
+**Изменения:** каждый rack control получил свой цветовой код; FX Edit graph теперь имеет разные визуальные сигнатуры: компрессорная knee-кривая, трёхполосная EQ response, saturation curve для зелёного Distortion, медленная Chorus modulation, быстрая Flanger modulation, отдельные Delay taps, Reverb decay, Cabinet band-pass и парные стереолинии DOUBLE. Панель/регуляторы сохраняют индивидуальные accent colors.
+
+**Проверка:** source read-back и статическая сверка названий/групп выполнены. Новая сборка CI после этого commit ещё не подтверждена. Это графические guides, не измерители фактической АЧХ/компрессии/реверберации; реальные DSP анализаторы не заявляются.
+**Статус:** IMPLEMENTED / BUILD VALIDATION PENDING / VISUAL QA PENDING.
