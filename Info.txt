@@ -1053,3 +1053,22 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Исправление:** chooseSfzFile() теперь синхронно по UI callback обновляет основной статус и PPGUImportGuitarPanel::setStatus() на этапах LOADING, SUCCESS и FAILURE. Существующий asynchronous SFZ loader, SafePointer lifetime guard, параметры, DSP и sampler lifecycle не менялись.
 **Объём:** только Source/PluginEditor.cpp; no APVTS IDs/semantics, MIDI routing, DSP/audio callback, sampler lifecycle, SFZ validation, SoundBank, preset catalog, skin schema/registry, ThemeManager, CMake pins или packaging rules changes.
 **Повторная проверка:** отмена FileChooser не меняет статус; успешная/неуспешная загрузка передаёт один и тот же фактический результат обоим UI-индикаторам. Exact-SHA CI требуется; до его завершения BUILD VERIFIED / TESTED не заявлять. FL Studio 20 manual host acceptance остаётся NOT VERIFIED.
+
+
+## 2026-11-12 — SOUND HUNTER: guitar-only content expansion
+
+**Статус:** SEARCH SCOPE DOCUMENTED / EXTERNAL ASSET INGESTION NOT YET VERIFIED.
+
+Пользователь уточнил, что библиотека должна содержать только гитарный материал: электрогитара и акустика, clean/crunch/rock drive/high-gain, прогрессии, риффы, проигровки, аккорды, ритмические рисунки, palm-mute, арпеджио, гитарные loops/fills/transitions, one-shots, stems и гитарные аудио-текстуры с эффектами. Drum-only packs, drum fills, bass, vocals и полные song mixes исключены из Guitar SoundBank.
+
+В SOUND HUNTER REV 10.1 добавлен §H11 с приоритетными источниками:
+- Meta Open Sound Steel Guitar (375) и Nylon Guitar (348), CC0 1.0, SFZ и WAV 24-bit/48 kHz;
+- Karoryfer free guitar libraries (CC0 согласно официальной странице; проверять LICENSE каждого архива);
+- FreePats FSBS Electric Guitar Clean и Distorted (CC0 1.0 на страницах банков);
+- Selekt/Pulse Open Loops — только по конкретным asset-level лицензиям;
+- SoundShockAudio и промо/free/demo packs — поиск разрешён, но ambiguous packs остаются YELLOW;
+- SampleRadar и subscription packs не включаются в raw SoundBank без отдельного явного разрешения на redistribution.
+
+Официальные веб-источники проверены 2026-11-12: Meta Open Sound README/AGENTS; Karoryfer Free Samples; FreePats Clean Electric Guitar; FreePats Distorted Electric Guitar. Точные ссылки и требования отражены в §H11.
+
+**Важно:** registry `assets/sound_hunter/registry.json` остаётся пустым. Это изменение расширяет спецификацию и приоритеты поиска, но не является доказательством скачивания, SHA-256 screening, прослушивания или добавления WAV в playable SoundBank. Такие операции должны пройти существующий S6.5 pipeline; никаких неразрешённых файлов в релиз не включать.
