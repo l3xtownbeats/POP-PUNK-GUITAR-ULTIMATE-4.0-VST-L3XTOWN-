@@ -1,0 +1,98 @@
+PPGU — CODE DEVELOPMENT JOURNAL
+================================
+
+Назначение
+---------
+CODE.txt — хронологический индекс всех изменений исходного кода POP PUNK GUITAR ULTIMATE.
+Журнал ведётся append-only: новые записи добавляются в конец; исторические записи не стираются и не переписываются.
+
+Где находится полный код
+------------------------
+Полный исходный код хранится в канонических файлах репозитория, а не дублируется вручную в этом журнале:
+- Source/ — production C++ / JUCE code, processor, UI, DSP и runtime modules;
+- tests/ — автоматические тесты и contract tests;
+- tools/ — validators, generators, merge/build helpers;
+- CMakeLists.txt, .github/workflows/ и остальные build/config files — конфигурация сборки и CI;
+- SKIN/, assets/, presets/, licenses/ и docs/ — соответствующие ресурсы, данные и документация.
+
+CODE.txt обязан указывать точный commit SHA и пути затронутых файлов. Полный код на любой ревизии восстанавливается из Git по указанному SHA. Не хранить второй копией исходники в журнале: такая копия быстро расходится с рабочим кодом и становится опасным источником устаревших правок.
+
+Обязательные поля каждой записи
+-------------------------------
+1. Дата и тип изменения.
+2. Ветка, commit SHA и parent SHA.
+3. Точные пути изменённых файлов.
+4. Затронутые классы, методы, функции, структуры, параметры или тесты.
+5. Что изменено и зачем.
+6. Совместимость и запрещённые области, которые не затрагивались.
+7. Добавленные/изменённые тесты и их результат на этом SHA.
+8. CI run ID, ссылки/артефакты и статусы, если доступны.
+9. Открытые дефекты, ограничения и следующий шаг.
+
+Правила достоверности
+---------------------
+- Перед изменением сверять branch HEAD, исходные файлы и незакоммиченные/параллельные ветки, если они доступны.
+- Не переносить старый код поверх более нового. Cherry-pick/merge только после сравнения изменений и проверки конфликтов.
+- Не объявлять BUILD PASS, TESTED, HOST VERIFIED или RELEASE READY без результата на точном commit SHA.
+- Старый CI результат не является подтверждением нового SHA.
+- Каждое production code изменение должно иметь соответствующую запись здесь и в Info.txt.
+- Если этап только документальный, прямо указывать, что production source code не менялся.
+- Аудиобезопасность PPGU: Skin Engine не должен менять DSP, audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank или поведение существующих контролов.
+
+Хронология
+==========
+
+## 2026-11-12 — ThemeManager canonical 21-token palette API
+
+**Тип:** UI/theme infrastructure code change.
+**Ветка:** work/signal-forge-theme-tokens.
+**Commit:** 57fe40044532eeab4bc66ccec37bce865904d455.
+**Parent:** 71c2d852c1dc1d138e903fb577533a17ca540002.
+**Commit message:** feat(ui): expose canonical 21-token theme palette with legacy mapping.
+
+**Изменённые области кода (по commit diff и соответствующей INFO-записи):**
+- Source/UI/ThemeManager.h — canonical Palette token model / API.
+- Source/UI/ThemeManager.cpp — token lookup, JSON palette loading, legacy mapping and fallback compatibility.
+- Source/PluginEditor.cpp — перенос существующих editor color assignments с отдельных hardcoded palette constants на ThemeManager token API.
+- Tests/ThemeManagerTests.cpp — contract coverage для canonical tokens и legacy mapping (точное имя файла/наличие проверить на выбранной ветке перед дальнейшим изменением).
+
+**Суть изменения:**
+- Введён единый набор из 21 canonical Skin Studio tokens: window_bg, panel, panel_elevated, control_bg, control_face, control_border, text_primary, text_secondary, text_disabled, accent, accent_glow, danger, warning, success, lcd_bg, lcd_text, led_on, led_off, shadow, highlight, lowlight.
+- Legacy skin 1–51 сохраняют совместимость через mapping существующих цветов и детерминированные fallback values для отсутствующих semantic colors.
+- Существующий editor использует ThemeManager token API для ряда видимых компонентов и панелей.
+- Геометрия существующего окна и APVTS attachments в этом изменении не менялись.
+
+**Границы изменения:** Audio Engine, DSP, audio callback, MIDI routing, APVTS IDs/semantics, presets, SoundBank и Skin_052 artwork/assets/registry/schema не менялись. Изменение не является полной реализацией Gallery, dynamic resource discovery, layout engine, secure asset pipeline или runtime gates G5–G7.
+
+**Проверки:** INFO на момент записи сообщал CI run #971 (ID 43146185476) и #972 (ID 43146540434) как IN_PROGRESS на родительских SHA соответственно; эти статусы не доказывают PASS для commit 57fe400. Полный Windows Release/CTest/pluginval/host status для SHA 57fe400 здесь не подтверждён. Не помечать как BUILD VERIFIED.
+
+**Дальнейшая работа:** продолжить Skin Engine как приоритет №1; сначала повторно проверить актуальную ветку и HEAD, затем проверить token API и тесты на точной ревизии, после чего выполнять gallery/runtime/resource loading/control parity/hot-swap/DPI/ECO gates из SKIN specification.
+
+## 2026-11-12 — INFO/CODE journal bootstrap
+
+**Тип:** documentation only; создание постоянного CODE journal.
+**Ветка:** work/signal-forge-theme-tokens.
+**INFO commit:** 2d308afdb8990234a35c55b715567581c459c4f9.
+**Production source code:** НЕ менялся этим документальным этапом.
+**Что зафиксировано:** append-only правила ведения INFO.txt и CODE.txt; обязательная привязка каждой записи к точному commit SHA, путям, символам, тестам и статусам; правило сохранять полный код в канонических source files и не заменять новые изменения старыми.
+**Skin Engine priority:** зафиксирован как первостепенная задача до завершения полной интеграции и проверки.
+**Важное замечание:** на момент фиксации рабочая ветка имела code commit 57fe400; main имел HEAD 6174041. Эта запись не утверждает, что ветка work/signal-forge-theme-tokens является новейшей среди всех веток репозитория. Перед следующим code change требуется branch/HEAD preflight.
+
+## TEMPLATE — новая запись (копировать в конец файла)
+
+## YYYY-MM-DD — Краткое название изменения
+
+**Тип:** production code / test / build / docs / revert.
+**Ветка:**
+**Commit SHA:**
+**Parent SHA:**
+**Файлы:**
+- path/to/file — классы/методы/функции и суть изменения.
+
+**Причина:**
+**Изменения:**
+**Совместимость / non-goals:**
+**Тесты:**
+**CI run / artifacts:**
+**Статус:** IMPLEMENTED / VALIDATION PENDING / PASS / FAIL / REVERTED.
+**Следующий шаг:**
