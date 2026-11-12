@@ -95,12 +95,28 @@ int main()
         CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
     checkInsideAndDisjoint(portrait, portraitArea);
 
-    auto overflow = calculatePanelLayout({ 0, 0, 420, 260 }, makePanels(4), 1.0f);
-    CHECK(overflow.overflow && overflow.panels.size() == 4);
-    int visible = 0;
-    for (const auto& p : overflow.panels) visible += p.visible ? 1 : 0;
-    CHECK(visible == 1);
-    CHECK(overflow.panels.front().visible);
+    const PanelRect narrowArea { 0, 0, 420, 260 };
+    auto overflow = calculatePanelLayout(narrowArea, makePanels(4), 1.0f);
+    CHECK(overflow.overflow && !overflow.invalidInput && overflow.panels.size() == 4);
+    CHECK(overflow.columns == 1 && overflow.rows == 4);
+    for (const auto& p : overflow.panels)
+    {
+        CHECK(p.visible);
+        CHECK(p.bounds.width == 280 && p.bounds.height == 190);
+    }
+    for (std::size_t i = 0; i < overflow.panels.size(); ++i)
+        for (std::size_t j = i + 1; j < overflow.panels.size(); ++j)
+            CHECK(!overlaps(overflow.panels[i].bounds, overflow.panels[j].bounds));
+
+    const PanelRect shortWideArea { 0, 0, 700, 260 };
+    auto twoColumnOverflow = calculatePanelLayout(shortWideArea, makePanels(4), 1.0f);
+    CHECK(twoColumnOverflow.overflow && twoColumnOverflow.columns == 2
+          && twoColumnOverflow.rows == 2);
+    for (const auto& p : twoColumnOverflow.panels)
+        CHECK(p.visible);
+    for (std::size_t i = 0; i < twoColumnOverflow.panels.size(); ++i)
+        for (std::size_t j = i + 1; j < twoColumnOverflow.panels.size(); ++j)
+            CHECK(!overlaps(twoColumnOverflow.panels[i].bounds, twoColumnOverflow.panels[j].bounds));
 
     const PanelRect dpiArea { 0, 0, 1800, 1000 };
     auto dpi = calculatePanelLayout(dpiArea, makePanels(4), 1.5f);
@@ -149,7 +165,7 @@ int main()
 
     auto extremeScale = calculatePanelLayout(desktop, makePanels(2),
                                               std::numeric_limits<float>::max());
-    CHECK(extremeScale.overflow && !extremeScale.invalidInput);
+    CHECK(extremeScale.overflow && extremeScale.invalidInput && extremeScale.panels.empty());
 
     if (failures != 0)
     {
