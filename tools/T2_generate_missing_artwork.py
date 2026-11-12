@@ -58,8 +58,13 @@ def render(size, title, index, accent_hex, secondary_hex, bg_hex, mood):
     glow_draw = ImageDraw.Draw(glow_mask)
     cx, cy = int(w * .76), int(h * .48)
     rx, ry = int(w * .90), int(h * .90)
-    glow_draw.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=28)
-    glow_mask = glow_mask.filter(ImageFilter.GaussianBlur(radius=max(2, w // 18)))
+    for step in range(15, 0, -1):
+        radius = step / 15.0
+        intensity = round(28 * (1.0 - radius * radius))
+        glow_draw.ellipse((cx - int(rx * radius), cy - int(ry * radius),
+                           cx + int(rx * radius), cy + int(ry * radius)),
+                          fill=intensity)
+    glow_mask = glow_mask.filter(ImageFilter.GaussianBlur(radius=max(2, w // 100)))
     accent_layer = Image.new("RGB", (w, h), accent)
     image = Image.composite(accent_layer, image, glow_mask)
 
