@@ -326,9 +326,11 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
     if ((!totalValue.isInt() && !totalValue.isInt64()) || themes == nullptr)
         return 0;
 
-    const auto total = static_cast<int>(totalValue);
-    if (total < 1 || total != static_cast<int>(themes->size()))
+    const auto total64 = totalValue.toString().getLargeIntValue();
+    if (total64 < 1 || total64 > std::numeric_limits<int>::max()
+        || total64 != static_cast<juce::int64>(themes->size()))
         return 0;
+    const auto total = static_cast<int>(total64);
 
     std::set<int> indices;
     std::set<std::string> ids;
@@ -347,8 +349,9 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             return 0;
 
         const auto index = static_cast<int>(indexValue);
-        if (index < 1 || index > total || !indices.insert(index).second
-            || !ids.insert(id.toStdString()).second)
+        if (index < 1 || index > total || !id.startsWith("skin-")
+            || id.substring(5).getIntValue() != index
+            || !indices.insert(index).second || !ids.insert(id.toStdString()).second)
             return 0;
     }
 
@@ -435,7 +438,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
     }
 
     if (menu.getNumItems() == 0)
-        menu.addItem(0, "No valid themes found", false);
+        menu.addSectionHeader("NO VALID THEMES FOUND");
 
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
     menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinButton),
