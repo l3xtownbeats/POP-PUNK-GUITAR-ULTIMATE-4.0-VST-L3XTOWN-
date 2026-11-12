@@ -159,6 +159,19 @@ jobs:
             if (-not ((Get-ChildItem $dest -Recurse -File -Include '*.flac','*.wav' | Measure-Object).Count -gt 0)) { throw "No recorded audio found for $($item.repo)." }
           }
 
+          # Additional Karoryfer real-performed guitar multisamples, CC0 1.0.
+          $karoryfer = @(
+            @{ repo='karoryfer.black-and-green-guitars'; folder='Karoryfer-Black-And-Green' },
+            @{ repo='karoryfer.emilyguitar'; folder='Karoryfer-Emilyguitar' },
+            @{ repo='karoryfer.shinyguitar'; folder='Karoryfer-Shinyguitar' }
+          )
+          foreach ($item in $karoryfer) {
+            $dest = Join-Path $sampleRoot $item.folder
+            git clone --depth 1 "https://github.com/sfzinstruments/$($item.repo).git" $dest
+            if (-not (Test-Path (Join-Path $dest 'LICENSE'))) { throw "License missing for $($item.repo)." }
+            if (-not ((Get-ChildItem $dest -Recurse -File -Include '*.wav','*.flac' | Measure-Object).Count -gt 0)) { throw "No recorded audio found for $($item.repo)." }
+          }
+
           # Keep source licenses and SFZ maps, but strip cloned Git metadata
           # from the redistributable package and its reusable CI cache.
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
@@ -176,6 +189,10 @@ jobs:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
           - FreePats FSBS Clean, Distortion 1, Distortion 2 and Jazz electric guitars, CC0 1.0.
+          - Karoryfer Black And Green Guitars, Emilyguitar and Shinyguitar, CC0 1.0.
+            https://github.com/sfzinstruments/karoryfer.black-and-green-guitars
+            https://github.com/sfzinstruments/karoryfer.emilyguitar
+            https://github.com/sfzinstruments/karoryfer.shinyguitar
             https://github.com/freepats/electric-guitar-FSBS-clean
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
