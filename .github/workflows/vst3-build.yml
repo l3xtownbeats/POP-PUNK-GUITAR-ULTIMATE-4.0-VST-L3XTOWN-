@@ -237,6 +237,10 @@ jobs:
         shell: pwsh
         run: python tools/audit_soundbank.py --root Samples --preferred-gb 25 --hard-limit-gb 30
 
+      - name: Generate per-file Sound Hunter registry
+        shell: pwsh
+        run: python tools/build_sound_hunter_registry.py --root Samples
+
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh
         run: python tools/check_binary_data_links.py

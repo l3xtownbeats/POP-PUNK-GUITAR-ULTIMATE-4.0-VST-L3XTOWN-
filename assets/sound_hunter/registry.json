@@ -1,5 +1,15 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "policy": "PPGU-REV-10.1",
-  "assets": []
+  "inventoryMode": "generated-at-build-from-files-physically-present-under-Samples",
+  "runtimeInventoryPath": "Samples/SOUND_HUNTER_REGISTRY.json",
+  "assetCount": 0,
+  "sourceCount": 0,
+  "sources": [],
+  "assets": [],
+  "notes": [
+    "This checked-in file is a schema/bootstrap marker, not a claim that samples have been imported.",
+    "The build generates Samples/SOUND_HUNTER_REGISTRY.json from actual staged audio files and SHA-256 hashes.",
+    "Files are marked verified_on_disk only; ANGELA playback integration is not implied."
+  ]
 }
