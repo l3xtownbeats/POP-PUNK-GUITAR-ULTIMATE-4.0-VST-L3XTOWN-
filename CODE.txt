@@ -427,3 +427,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Reference boundary:** functional/UX inspiration only. Do not copy proprietary source code, samples, artwork or exact protected performances. Retain PPGU's own identity, content and SamplerEngine + PatternScheduler architecture.
 - **Next QA:** create a PATTERN/MELODY parity matrix and label each behavior VERIFIED / PARTIAL / NOT IMPLEMENTED before implementing gaps.
 - **Status:** reference accepted; source implementation and complete functional parity remain unverified. This journal update changes no runtime code and makes no test-pass claim.
+
+
+## 2026-11-12 — Preset-driven source / FX / layering sound model
+
+- User-defined sound model: the preset's sound may be (a) a direct dry library source, (b) source plus selected FX, (c) multiple library sources summed into one layered instrument sound, or (d) layered sources with per-layer and/or shared FX routing.
+- The exact source selection, layer composition, processing and routing are preset-dependent; a dry source is a valid intentional design, not a missing-FX state.
+- Clean Acoustic presets must be able to reproduce the source library recording naturally, without mandatory tone-changing processing. Some acoustic presets may intentionally use restrained Reverb, Chorus, Flanger or other supported effects.
+- Preset data should explicitly describe source mappings, layer levels/ranges/pan where applicable, FX enable/state/parameters, routing/order and intended sound character.
+- Audit actual support in preset schema, SamplerEngine and FX routing before claiming layering or per-layer FX exists. Extend the current architecture only where needed; do not add metadata-only/nonfunctional layer definitions.
+- QA matrix: dry source, source+FX, layered dry, layered with per-layer/shared FX, bypass/A-B, Clean Acoustic neutrality, headroom/clipping, artifacts and real-time safety. Layer summing must preserve headroom and avoid audio-thread allocation/locks.
+- **Status:** requirement accepted; no source, DSP, preset or sample changes made in this journal-only update. Current layer-engine/per-layer-FX support remains unverified.
