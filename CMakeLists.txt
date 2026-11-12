@@ -51,6 +51,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginEditor.h
     Source/UI/ThemeManager.cpp
     Source/UI/ThemeManager.h
+    Source/UI/AuxiliaryPanelLayout.cpp
+    Source/UI/AuxiliaryPanelLayout.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
@@ -116,6 +118,13 @@ if(BUILD_TESTING)
     )
     target_include_directories(ppgu_chord_transition_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_chord_transition_tests COMMAND ppgu_chord_transition_tests)
+
+    add_executable(ppgu_auxiliary_panel_layout_tests
+        Source/UI/AuxiliaryPanelLayout.cpp
+        tests/AuxiliaryPanelLayoutTests.cpp
+    )
+    target_include_directories(ppgu_auxiliary_panel_layout_tests PRIVATE Source/UI)
+    add_test(NAME ppgu_auxiliary_panel_layout_tests COMMAND ppgu_auxiliary_panel_layout_tests)
 endif()
 
 
