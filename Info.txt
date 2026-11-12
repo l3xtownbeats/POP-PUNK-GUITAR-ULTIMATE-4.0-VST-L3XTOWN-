@@ -1256,3 +1256,10 @@ UX-контракт: выбор гармонического/chord preset и в�
 Пользователь уточнил: в правой части AutoChords должны быть явно представлены также стили/техники игры (например OPEN CHORDS, PALM MUTE), а не только ритмические рисунки. Внесено в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`, раздел 15.10.
 
 Зафиксировано разделение трёх независимых осей: (1) tone preset/тембр и эффекты; (2) playing style/articulation — OPEN CHORDS, PALM MUTE, DOWNSTROKE, UPSTROKE, ALTERNATE DOWN-UP, POWER CHORDS, CHUGS, MUTED BRIDGE, SKANK, OCTAVE HOOKS, DOUBLE-STOPS, TREMOLO PICKING, ARPEGGIO/PICKING, SUSTAIN/AMBIENT, STOP-START; (3) rhythm pattern — STRAIGHT 8THS, FAST SKATE-PUNK, GALLOP, HALF-TIME, STOP-TIME ACCENTS, VERSE→OPEN CHORUS и др. Не смешивать TREMOLO PICKING с TREMOLO EFFECT. Доступность определяется реальными записями и performance maps.
+
+
+## 2026-11-12 — AutoChords visual refresh / UI-only pass
+
+В `Source/UI/AutoChordsPanel.h/.cpp` обновлена визуальная структура AutoChords: тёмная многослойная поверхность с карточками; левая колонка HARMONY PRESETS с выбором progression/key/scale и preview; правая колонка разделена на PLAYING STYLE / ARTICULATION и RHYTHM PATTERN; добавлены наглядные chip-кнопки OPEN CHORDS, PALM MUTE, POWER CHORDS, DOWNSTROKE, ALTERNATE, CHUGS, SKANK, ARPEGGIO и STRAIGHT 8THS, FAST SKATE-PUNK, GALLOP, HALF-TIME, STOP-START, VERSE→CHORUS, OFFBEAT, OCTAVE HOOK. Добавлены визуальная иерархия, тонкие контуры, градиентные карточки, акцентные маркеры, статусный footer и адаптивная раскладка колонок.
+
+**Честный статус:** это UI-only visual refresh. Компоненты выбора и preview оставлены отключёнными, поскольку chord-generation/performance MIDI routing в панели не подключён; недоступные стили не выдаются за работающие. Не менялись APVTS, DSP, MIDI/audio callback и sampler. Экранная клавиатура основного окна не затрагивалась. Коммиты: `decdb496` (header), `20f7edc` (panel implementation). **Компиляция, CTest, pluginval и визуальная проверка в FL Studio после этих изменений ещё не выполнены**; до них считать правку UNVERIFIED.
