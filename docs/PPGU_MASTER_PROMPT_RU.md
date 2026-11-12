@@ -1,10 +1,10 @@
-# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 16.5 UNIFIED (FINAL)
+# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 17.0 UNIFIED (FINAL)
 
-Единый операционный документ: законы, инварианты, реестр правил R01–R33,
+Единый операционный документ: законы, инварианты, реестр правил R01–R34,
 SUPERTEAM, движок, SoundBank, скины, окна, тесты, журнал, приёмка, DoD,
 протоколы (открытие/закрытие сессии, отката, разногласий, публикации),
 каталог отказов, self-check, шаблоны, глоссарий, non-goals.
-Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
+Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4/16.5. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
 версия фиксируется в INFO на каждом этапе.
 Иерархия истины: INFO → control inventory/schema → этот промт → устные
 договорённости. При расхождении фактов INFO первичен, правку вносит
@@ -65,9 +65,11 @@ R33 [Веточная гигиена] Рабочие этапы ведутся �
 I1 APVTS parameter IDs и их семантика.
 I2 Control inventory (набор control-ID).
 I3 Pin-версии R01.
-I4 Имя runtime-каталога тем: ровно `Skins`, рядом с .vst3.
-    Распакованный пакет обязан создавать runtime-структуру (R31);
-    регистронезависимость Windows не основание смешивать SKINS/ и Skins/.
+I4 Имя каталога тем: ровно `Skins` внутри единого корня ресурсов
+    `POP PUNK GUITAR ULTIMATE VST` (R34); легаси-фолбэк `Skins` рядом
+    с .vst3 сохраняется. Распакованный пакет обязан создавать полную
+    runtime-структуру (R31/R34); регистронезависимость Windows не основание
+    смешивать SKINS/ и Skins/.
 I5 INFO как единственный журнал.
 I6 Словарь статусов §13.1.
 I7 Имя дефолт-скина: DEFAULT POP PUNK GUITAR ULTIMATE SKIN (default-ppgu).
@@ -101,7 +103,8 @@ streaming; fixed page cache; SFZ mapping (velocity/key/channel/RR);
 definitions (НЕ все playable); policy contract SOUND HUNTER в tooling
 (validate_sound_asset_registry.py + пустой versioned registry, 12 unit
 cases, CTest target); редактор Blackout Voltage (skin-51): кнопка SKIN,
-палитры, Ctrl+K, persistence; runtime ищет `Skins` рядом с .vst3;
+палитры, Ctrl+K, persistence; legacy runtime fallback ищет `Skins` рядом с .vst3; новый
+    ResourceRootResolver по R34 пока NOT IMPLEMENTED / NOT VERIFIED;
 AuxiliaryPanelLayout (geometry + тесты зарегистрированы, PASS в CI не
 подтверждён); control inventory в репо (commit bf436ae...).
 ОТКРЫТЫЙ RELEASE BLOCKER: run #859 (SHA d0eecea...) — skin pack
@@ -196,10 +199,11 @@ CPU/RAM подтверждаются только измерениями. Ани
         атрибуцию автоматически. Отдельная curator-процедура не требуется,
         если стандартные условия однозначны и нет дополнительных ограничений;
     (c) EXPLICIT_PERMISSION — включая Looperman: RED до получения
-        проверяемого разрешения правообладателя, прямо охватывающего
-        commercial use, embedding in VST3, redistribution и redistribution
-        as part of a sample library. После проверки конкретный asset
-        переводится в GREEN с clearanceBasis=EXPLICIT_PERMISSION;
+        проверяемого письменного разрешения правообладателя, прямо
+        охватывающего commercial use, embedding in VST3, redistribution и
+        redistribution as part of a sample library. После проверки asset
+        получает отдельный класс EXPLICIT-PERMISSION (эквивалент GREEN по
+        допуску в factory SoundBank) с clearanceBasis=EXPLICIT_PERMISSION;
     (d) OWN_RECORDING / OWN_DSP — собственные записи и созданный PPGU DSP
         контент допускаются при provenance происхождения; для DSP фиксируются
         generator, version и параметры/seed;
@@ -211,6 +215,14 @@ CPU/RAM подтверждаются только измерениями. Ани
         GREEN только после подтверждения совместимости всех условий.
         CC-BY-SA не маркируется автоматическим copyleft-предупреждением:
         точные obligations определяются текстом применимой лицензии.
+    EXPLICIT-PERMISSION — отдельный класс для ассета с письменным
+        разрешением автора/правообладателя на редистрибуцию. Разрешение
+        должно быть сохранено как документ/evidence и связано с asset в
+        provenance; его scope обязан покрывать commercial use, embedding
+        in VST3, redistribution и redistribution as part of a sample
+        library. После фиксации и проверки документа класс приравнивается
+        к GREEN для допуска в заводской SoundBank; без документа asset
+        остаётся RED. clearanceBasis фиксируется как EXPLICIT_PERMISSION.
     RED — отсутствие прав на редистрибуцию, Looperman без explicit permission,
         неизвестная лицензия, несовместимые NC/ND/ограничения и неразрешённый
         COPYRIGHT SUSPECT. RED-кандидат можно сохранить в реестре и commit как
@@ -257,13 +269,25 @@ R15 [Формат пакета] Skins/<skin_id>/ = theme.json (21 токен, la
     ассетов РОВНО ТОТ, который объявлен skin schema (валидатор —
     источник; schema может требовать preview.png + hero.webp + texture
     + svg-комплект). Расхождение набора со schema = брак G3.
-R16 [Каталог тем] Ровно `Skins` рядом с .vst3; AppData — НЕ источник;
-    фоновый rescan без перезапуска DAW.
+R16 [Каталог тем] Темы читаются ТОЛЬКО из корня ресурсов по R34;
+    AppData — НЕ источник; фоновый rescan без перезапуска DAW.
+R34 [Портативный корень ресурсов] Все ресурсы (Skins/, Samples/, Presets/,
+    LICENSES.txt) живут в одной папке `POP PUNK GUITAR ULTIMATE VST`.
+    ResourceRootResolver находит её в строгом порядке приоритета:
+    (1) маркер PPGU_ROOT.ini рядом с .vst3; (2) переменная окружения
+    PPGU_ROOT; (3) соседняя папка с маркером; (4) легаси-фолбэк `Skins`
+    рядом с .vst3 (I4). VST3 может находиться в любом каталоге любого
+    диска; абсолютные пути не зашиваются. Если корень не найден —
+    безопасная дефолт-палитра и понятное сообщение; падение запрещено
+    (R20). Resolver не должен зависеть от JUCE и обязан быть
+    unit-тестируемым (§9.5).
 R31 [Runtime-структура в комплекте] COMPLETE ZIP обязан содержать
-    ГОТОВУЮ runtime-структуру: Skins/ рядом с VST3/ (распаковал —
-    работает, без ручного переноса). Дистрибутивные исходники (SKINS/
-    как source tree) допустимы только ДОПОЛНИТЕЛЬНО, не вместо
-    runtime-структуры (урок gap-аудита).
+    ГОТОВУЮ runtime-структуру: VST3/ и единый корень `POP PUNK GUITAR
+    ULTIMATE VST/` с Skins/, Samples/, Presets/, LICENSES.txt и
+    необходимым маркером PPGU_ROOT.ini (R34). Распаковал — работает,
+    без ручного переноса и без привязки к букве диска. Дистрибутивные
+    исходники (SKINS/ как source tree) допустимы только ДОПОЛНИТЕЛЬНО,
+    не вместо runtime-структуры (урок gap-аудита).
 R17 [Реестр без магических чисел] Числа только из
     SKIN/theme_manifest.json / schema; merge — только
     tools/merge_skin_pack.py с бэкапом и согласованием schema maximum.
@@ -344,6 +368,10 @@ R32 [Гигиена журнала] INFO — единственный журна
 9.4 Skin runtime-тесты: 1000 hot-swap'ов; persistence; ECO; DPI
     100/125/150.
 9.5 Чистые модули (как AuxiliaryPanelLayout) — JUCE-free где возможно.
+    ResourceRootResolver обязан быть JUCE-free и unit-тестируемым;
+    тестировать все 4 приоритета поиска, отсутствующий/битый маркер,
+    перемещение VST3 между каталогами/дисками, легаси-фолбэк и безопасный
+    fallback без падения.
 
 §10. ФОРМАТ РАБОТЫ И СКОРОСТЬ
 ═══════════════════════════════════════════════════════════════
@@ -444,6 +472,8 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
 - отклоняться от фото-эталона дефолта без согласования (R18);
 - публиковать COMPLETE ZIP до всех гейтов R22;
 - класть темы в AppData (R16); хардкодить номера/счётчики (R17/R30);
+- зашивать пути ресурсов в код (R34); включать RED-источники без
+  письменного разрешения автора в SoundBank (§5.7);
 - рассинхрон schema/registry/validator (R26);
 - смешивать дистрибутивные исходники и runtime-структуру в ZIP (R31);
 - имена групп/артистов/чужих продуктов в UI и названиях;
@@ -456,7 +486,7 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
 §16. УПРАВЛЕНИЕ ЭТИМ ДОКУМЕНТОМ
 ═══════════════════════════════════════════════════════════════
 16.1 MINOR (+0.1) — уточнения без изменения законов/инвариантов/реестра;
-    MAJOR (+1.0) — изменение §0/§0.1/реестра R01–R33. Каждое изменение —
+    MAJOR (+1.0) — изменение §0/§0.1/реестра R01–R34. Каждое изменение —
     запись в INFO. (REV 16.0 = MAJOR: добавлены R30–R32, уточнены R07,
     R15, R24, I4. REV 16.1 = MAJOR: добавлен R33, уточнены R01/§2/§15.
     REV 16.2 = MINOR: удалён остаточный счётчик из §9.1, восстановлены
@@ -470,6 +500,10 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
     explicit permission для Looperman, собственных записей/DSP и коммерческих
     royalty-free библиотек; copyright-suspect блокирует GREEN, но не commit
     RED/YELLOW кандидата.)
+    REV 17.0 = MAJOR: добавлен R34 (единый портативный корень ресурсов и
+    JUCE-free ResourceRootResolver), изменены I4/R16/R31/§9.5; введён
+    класс EXPLICIT-PERMISSION с письменным разрешением и provenance;
+    уточнены §2, §15 и §17.
 16.2 Ссылки на правила — только по R-ID; на инварианты — по I-ID.
 16.3 Документ — docs/PPGU_MASTER_PROMPT_RU.md; версия в INFO на этапе.
 16.4 Внутреннее противоречие документа — ошибка, фиксируется в INFO.
@@ -489,7 +523,16 @@ Skin gap audit (51 папка против 50-слотовой schema; Skin_51 �
     диапазона) → R26/R30/R31: «папка есть» ≠ «зарегистрирована»;
     packaging-счётчики — из schema, не константы; ZIP содержит
     runtime-структуру.
-Package layout (SKINS/ как исходники, нет runtime Skins/) → R31.
+Package layout (SKINS/ как исходники, нет runtime Skins/) → R31/R34.
+Resource paths (зависимость от каталога установки/жёсткие абсолютные
+    пути) → R34: единый переносимый root и ResourceRootResolver;
+    отсутствие root не должно ронять плагин.
+SoundBank RED asset → §5.7: без проверяемого письменного разрешения
+    автора на коммерческое использование, embedding и sample-library
+    redistribution asset не допускается в заводской payload.
+Каноничность патчей: инвертированные/противоречивые формулировки в
+    присланных патчах не применять; действует только канонический текст
+    этого документа.
 INFO hygiene (шапка отстаёт от записей; два раздела 6.2) → R32.
 SoundBank clearance (REV 16.5) → §5.7: Looperman RED до explicit
     permission; CC-BY допускается с атрибуцией; CC0/PD, собственные
@@ -542,8 +585,9 @@ Schema maximum — верхняя граница диапазона ID в skin s
 Layout engine — редакторный компонент, читающий layout-координаты темы
     в рантайме (сейчас отсутствует — R13).
 Payload пакета — полный набор ассетов, объявленный skin schema.
-Runtime-структура — рабочий каталог Skins/ рядом с VST3/ внутри
-    распакованного комплекта (R31), не source tree.
+Runtime-структура — VST3/ и единый корень `POP PUNK GUITAR ULTIMATE
+    VST/` с Skins/, Samples/, Presets/ и LICENSES.txt; корень разрешается
+    по R34, а не определяется расположением самого .vst3.
 Инвариант — свойство проекта, которое не меняется рабочим этапом (§0.1).
 
 ═══════════════════════════════════════════════════════════════
