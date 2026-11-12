@@ -140,6 +140,45 @@ int main()
         CHECK(repeated.panels[i].bounds.height == repeatedAgain.panels[i].bounds.height);
     }
 
+
+    // Expanded workspace keeps every panel visible and disjoint in a right dock.
+    auto expandedFour = calculateExpandedPanelLayout(
+        { 18, 18, 1084, 804 }, makePanels(4), 2, 1.0f, 8);
+    CHECK(!expandedFour.invalidInput && !expandedFour.overflow);
+    CHECK(expandedFour.panels.size() == 4);
+    checkInsideAndDisjoint(expandedFour, { 18, 18, 1084, 804 });
+    int expandedVisible = 0;
+    int expandedMain = 0;
+    for (const auto& p : expandedFour.panels)
+    {
+        expandedVisible += p.visible ? 1 : 0;
+        if (p.id == 2)
+        {
+            ++expandedMain;
+            CHECK(p.bounds.width > 500);
+        }
+        else
+            CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
+    }
+    CHECK(expandedVisible == 4 && expandedMain == 1);
+
+    auto expandedSingle = calculateExpandedPanelLayout(
+        { 0, 0, 900, 520 }, makePanels(1), 1, 1.0f, 8);
+    CHECK(!expandedSingle.overflow && expandedSingle.panels.size() == 1);
+    CHECK(expandedSingle.panels[0].bounds.width == 900);
+    CHECK(expandedSingle.panels[0].bounds.height == 520);
+
+    auto expandedTooSmall = calculateExpandedPanelLayout(
+        { 0, 0, 500, 300 }, makePanels(4), 1, 1.0f, 8);
+    CHECK(expandedTooSmall.overflow && expandedTooSmall.panels.size() == 4);
+    int expandedSmallVisible = 0;
+    for (const auto& p : expandedTooSmall.panels)
+        expandedSmallVisible += p.visible ? 1 : 0;
+    CHECK(expandedSmallVisible == 1);
+
+    CHECK(calculateExpandedPanelLayout(
+        { 0, 0, 900, 520 }, makePanels(2), 99, 1.0f, 8).invalidInput);
+
     auto duplicateIds = makePanels(2);
     duplicateIds[1].id = duplicateIds[0].id;
     auto duplicateResult = calculatePanelLayout(desktop, duplicateIds, 1.0f);
