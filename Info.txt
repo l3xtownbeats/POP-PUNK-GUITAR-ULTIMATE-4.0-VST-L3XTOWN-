@@ -1045,3 +1045,14 @@ POP PUNK GUITAR ULTIMATE остаётся названием продукта; J
 **Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `764ef3547977fdc73fc7db71c1333dabc29334d5`.
 **Повторный анализ:** решение не меняет APVTS IDs, семь существующих FX slots или DSP callback. Реализация preset mapping, IR library, UI modes и regression tests остаётся отдельной задачей по R09/R10.
 **Не заявляется:** наличие готовой профессиональной IR-библиотеки, автоматический выбор IR из пресета, clean/DI bypass workflow или проверенная звуковая приёмка.
+
+
+## 2026-11-12 — Обязательный кабинетный характер Orange PPC412 / 4x12 V30
+
+**Статус:** CABINET VOICING REQUIREMENT ACCEPTED / IMPLEMENTATION PENDING.
+**Решение:** в Cabinet library обязателен отдельный профиль Orange PPC412 4x12 с четырьмя Celestion Vintage 30: плотный густой low-mid, выраженная агрессивная середина, собранный низ и напористая верхняя середина. Это один из базовых характеров для тяжёлого панка, post-hardcore и stoner-направления; художественный ориентир — жёсткая Orange-школа, включая Gallows.
+**UX:** профиль должен быть доступен как отдельный cabinet model/preset из заводских guitar presets и вручную через Cabinet browser. Должны быть варианты IR/mic placement и Mix; кабинет не имитировать одним EQ-профилем.
+**Лицензии и достоверность:** реальные фирменные IR, изображения и trademark assets использовать только при наличии прав. Не выдавать сторонний/синтетический импульс за официальный Orange/Celestion capture. Если лицензированного IR нет — создать собственный оригинальный PPC412-style / V30-inspired voicing и явно обозначить его как вдохновлённый характер, не официальный capture.
+**Приёмка:** blind A/B audition на DI-гитаре и нескольких миксах; проверка лицензии, качества IR, CPU/latency и безопасного переключения вне audio thread.
+**Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `77f108167e43c8745d9b4f79075c0b681a8eb853`.
+**Не заявляется:** готовая Orange PPC412 IR, лицензированная библиотека, DSP implementation или звуковая приёмка.
