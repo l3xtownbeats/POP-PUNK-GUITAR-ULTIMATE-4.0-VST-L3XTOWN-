@@ -706,6 +706,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         bpmSlider.setTooltip(internalClock
             ? "Internal clock tempo (20–300 BPM)."
             : "Host tempo is controlled by the DAW; fallback BPM is read-only here.");
+        bpmLabel.setText(internalClock ? "INTERNAL BPM" : "FALLBACK BPM (HOST)", juce::dontSendNotification);
     };
     modeBox.onChange = updatePatternControlState;
     startModeBox.onChange = updatePatternControlState;
@@ -724,6 +725,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     addAndMakeVisible(patternLengthBox);
     addAndMakeVisible(bpmSlider);
     addAndMakeVisible(startOnFirstChordButton);
+    updatePatternControlState();
 
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
