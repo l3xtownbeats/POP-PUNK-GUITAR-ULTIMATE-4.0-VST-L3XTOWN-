@@ -1566,3 +1566,24 @@ F. Только после этого считать документальны�
 **CI:** Windows workflow run `43196750439` on SHA `68b0fa29443855f2e126c2e0511d014ffbbdb37f` was PENDING at journal time; earlier runs were cancelled by subsequent commits. Build/CTest/pluginval/host PASS not yet claimed. Skin expansion run `43195205929` remains SUCCESS and pack commit `3a2ceb52062be112429f96d411ae223d87df17a6` remains published.
 
 **РЕЗУЛЬТАТ:** mixed-size 2×3 layout SOURCE IMPLEMENTED; fallback alias parity SOURCE/TEST UPDATED; exact-SHA validation PENDING.
+
+
+## 2026-11-12 — Live theme propagation to every auxiliary panel
+
+**Тип:** UI architecture / theme runtime integration.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Source commits:**
+- `81aecb1620124d80cfdd62304b73471c84f43f5e` (parent `5c25a078d249e97b520a3b1ee438ded5e555596b`) — общий интерфейс `PPGUThemeAwarePanel` и `PPGUMultiWindowWorkspace::setThemePalette`.
+- `fbe79dfdd6c387cf8d4462930e2f4ba4f9bf2c06` (parent `81aecb1620124d80cfdd62304b73471c84f43f5e`) — текущая палитра хранится workspace и передаётся новым и уже открытым окнам.
+- `21137e2cb81198bb0ef773c2936d14417f60097e` (parent `fbe79dfdd6c387cf8d4462930e2f4ba4f9bf2c06`) — FX EDIT, AutoChords, Import Guitar, Settings и Gallery реализуют theme-aware recolouring для своих controls/labels/graphs/cards/status.
+- `ff027621afee2f5cfb551ca5423eb8fb332cae52` (parent `21137e2cb81198bb0ef773c2936d14417f60097e`) — Gallery обновляет ACTIVE marker при смене темы и показывает компактный APPLY badge.
+
+**ПРОВЕРКА:** отдельные дочерние панели сохраняли локальные hardcoded colours после переключения темы, хотя frame workspace и основной editor уже получали новую палитру.
+
+**ИСПРАВЛЕНИЕ:** добавлен интерфейс `PPGUThemeAwarePanel::setThemePalette`. Workspace хранит текущую `PPGUThemeManager::Palette`, обновляет содержимое открытых окон при смене темы и немедленно передаёт ту же палитру новым панелям. FX EDIT использует tokens для labels/sliders/selector/graph; AutoChords — labels/status/combos/background; Import Guitar — heading/description/status/button; Settings — labels/sliders/buttons; Gallery — search/filter/cards/active marker.
+
+**Границы:** UI-only. APVTS attachments, DSP, processor, MIDI, sampler, presets, SoundBank и audio callback не меняются. Полная очистка hardcoded цветов в основном editor остаётся отдельным audit item.
+
+**Тесты:** readback исходников проверен. Windows build workflow после последних source/doc commits ожидается; до его завершения не заявлять build/CTest/pluginval PASS. Skin pack generation/merge remains SUCCESS on run `43195205929`.
+
+**Результат:** dynamic theme propagation SOURCE IMPLEMENTED; exact-SHA Windows validation PENDING.
