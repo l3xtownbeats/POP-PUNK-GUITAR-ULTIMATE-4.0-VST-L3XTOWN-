@@ -219,11 +219,35 @@ namespace
         }
 
         juce::var controls;
+        const juce::StringArray requiredControlIds {
+            "preset_browser", "mode_selector", "knob01", "knob02", "knob03",
+            "knob04", "knob05", "knob06", "knob07", "knob08", "knob09",
+            "fx_switch01", "fx_switch02", "fx_switch03", "fx_switch04",
+            "fx_switch05", "fx_switch06", "fx_switch07", "midi_keyboard",
+            "LCD_display", "LED_indicator", "SKIN_button", "Import_Guitar",
+            "Auto_Discover", "Curator", "Settings", "About"
+        };
         if (!hasObject(root, "controls", controls)
             || controls.getDynamicObject() == nullptr
-            || controls.getDynamicObject()->getProperties().size() < 27)
+            || controls.getDynamicObject()->getProperties().size()
+                   != requiredControlIds.size() + 1)
         {
-            error = "Skin Studio control map is incomplete";
+            error = "Skin Studio control map must contain the exact canonical control set";
+            return false;
+        }
+
+        for (const auto& controlId : requiredControlIds)
+        {
+            if (!controls.getDynamicObject()->hasProperty(controlId))
+            {
+                error = "Skin Studio control map is missing mandatory ID: " + controlId;
+                return false;
+            }
+        }
+
+        if (!controls.getDynamicObject()->hasProperty("sync_selector"))
+        {
+            error = "Skin Studio control map is missing mandatory ID: sync_selector";
             return false;
         }
 
