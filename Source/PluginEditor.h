@@ -74,6 +74,13 @@ private:
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
+    juce::Label patternSlotLabel, patternLengthLabel, syncModeLabel, bpmLabel;
+    juce::ComboBox patternSlotBox, patternLengthBox;
+    juce::Slider bpmSlider;
+    juce::ToggleButton startOnFirstChordButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> patternSlotAttachment, patternLengthAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> bpmAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> startOnFirstChordAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
