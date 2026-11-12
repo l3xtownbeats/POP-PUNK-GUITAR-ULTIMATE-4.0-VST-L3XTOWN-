@@ -17,3 +17,11 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Scope: independent JUCE top-level panel windows, X/expand action, tiled/expanded/overflow geometry, PropertiesFile window-state persistence, editor-owned panel content lifetime, existing APVTS attachments, existing async SFZ callback, read-only MIDI monitor.
 - R28: no DSP/audio callback, sampler lifecycle, MIDI routing/emission, APVTS IDs/semantics, preset catalog, SoundBank, ThemeManager, skin schema/registry/assets or packaging rule changes. CMake source/test registration added because main did not compile the staged panel files.
 - Tests added/updated: ppgu_auxiliary_panel_layout_contract; ppgu_auto_chord_engine_contract. CI #1163 / ID 43226541896 on exact source SHA ae0334b7bcc51a31c46b959bd6ed0d5417b356fb is IN_PROGRESS; no build/test/pluginval/package result claimed yet.
+
+
+### S2 source correction — canonical palette API and window behavior
+- Corrective source commit: c143d811756a8cc935400c5f7cab8dc04b75d0a7
+- Paths: Source/PluginEditor.cpp; Source/UI/AuxiliaryPanelWindowManager.h/.cpp; Source/UI/FXEditPanel.cpp; Source/UI/AutoChordsPanel.cpp; Source/UI/ImportGuitarPanel.cpp; Source/UI/SettingsPanel.cpp; Source/UI/PerformanceDisplay.h/.cpp.
+- Root cause: initial S2 port used a nonexistent Palette::token() API; main's Palette contract is the 21 direct colour fields. Fixed all panel color access and JUCE color setter signatures.
+- Additional behavior: editor-display-aware placement; logical-coordinate sizing; compact 260x190 minimum for 2x3 tiling; persisted normal bounds for expand/restore; PerformanceDisplay timer active only while visible.
+- Verification: run #1163 / ID 43226541896 failed at Build VST3 and test executables on SHA ae0334b7bcc51a31c46b959bd6ed0d5417b356fb; configure passed. Run #1164 / ID 43227468469 is QUEUED on exact corrective SHA c143d811756a8cc935400c5f7cab8dc04b75d0a7.
