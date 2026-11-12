@@ -505,3 +505,25 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Это не заменяет проверку внешнего MIDI-контроллера/host MIDI input, note-off/choke, polyphony/voice stealing, длительной стабильности, preset recall, automation/state restore, pluginval и CPU/RAM profiling.
 - Следующий технический приоритет остаётся UI: безопасная реализация отдельных окон AMP & TONE, FX CHAIN и PLAYBACK с независимым закрытием и maximize/restore. Перед интеграцией сохранять текущие control attachments и не менять parameter IDs/audio callback.
 
+
+
+## 2026-11-12 — AuxiliaryPanelLayout hardening (Release-test correction)
+
+**Статус: SOURCE PATCHES COMMITTED / CI VALIDATION PENDING. BUILD VERIFIED НЕ ПРИСВОЕН.**
+
+По результатам анализа CTest #860 выявлен важный недостаток самого тестового набора: tests/AuxiliaryPanelLayoutTests.cpp использовал стандартный assert, который в конфигурации Release может быть отключён через NDEBUG. Проверки переведены на собственный CHECK-механизм с ненулевым exit code при ошибках, чтобы тест действительно исполнялся в Windows Release.
+
+Исправления geometry module:
+- Проверка положительных desired/minimum размеров и отношения minimum <= desired; повторяющиеся PanelId теперь возвращают пустой результат с invalidInput=true вместо неоднозначного layout.
+- Проверка положительной рабочей области и безопасных правой/нижней границ через int64.
+- Устранены потенциальные переполнения при масштабировании размеров, вычислении gap, количества строк/колонок и координат.
+- Некорректный/non-finite scale нормализуется к 1.0; отрицательный gap безопасно нормализуется к 0.
+- Сохранена overflow paging policy: все PanelId остаются в результате, но видимой отмечается первая панель; навигация остаётся ответственностью будущего window manager.
+- Добавлены Release-active проверки duplicate IDs, invalid/minimum dimensions, overflow coordinates, negative gap, NaN/extreme DPI, determinism, containment и non-overlap.
+
+Commits:
+- API/input contract: `4ffab94fe5dbd38edd21628e6dc50f2658bdd9ad`
+- overflow-safe implementation: `27c63782005401aecf63457fa114fc96eecec6cd`
+- Release-active tests and edge cases: `e7018e574f65f5df8a65d559d1eb4b0291b3100e`
+
+Проверки локально не запускались: в этой среде нет клонированного Windows/JUCE build workspace. До подтверждения GitHub Actions CTest этот этап имеет статус COMMITTED / VALIDATION PENDING, не PASS. Тесты geometry не означают, что JUCE auxiliary windows/window manager уже реализованы.
