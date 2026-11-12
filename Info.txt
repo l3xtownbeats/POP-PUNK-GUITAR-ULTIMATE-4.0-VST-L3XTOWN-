@@ -617,3 +617,16 @@ Commits:
 - Улучшен contrast fallback и вариативность визуальных материалов Skin Studio: commit dd491f6ccbe9db4b94d681cf854eed937dee923c.
 - ThemeManager registry tests переведены на динамический список тем и проверку fallback/error cases: 0410e3bc860f6a60978e0aeda729c4c110af81de; JSON escaping исправлен отдельным commit 47d76574d52006258ded247498e0f9979352e7dd.
 - Skin_052 registry merge и базовые backups: 608205ec5142582d84429425e63a9e52d53c7b5b; merge tool hardening: 8a1176765c8007bbe3db354d3572d35625cf54f4.
+
+
+## 2026-11-12 — CMake test-discovery correction
+
+**Статус: SOURCE FIX COMMITTED / WINDOWS CI VALIDATION PENDING.**
+
+В ходе повторного аудита CMakeLists.txt обнаружен дефект порядка инициализации CTest: первый блок `if(BUILD_TESTING)` для `ppgu_auxiliary_panel_layout_tests` находился выше `include(CTest)`. До вызова `include(CTest)` переменная BUILD_TESTING не была определена стандартным механизмом CTest, поэтому geometry contract test мог быть молча исключён из конфигурации, даже если остальные тесты регистрировались.
+
+Исправление: `include(CTest)` перенесён сразу после настройки стандарта C++, до любых условных test targets. Поздний дублирующий вызов удалён. JUCE 7.0.12, CMake minimum 3.22, plugin target, APVTS и аудио/MIDI код не менялись.
+
+Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
+
+Проверка GitHub combined status для нового HEAD и workflow run ещё не подтверждены на момент записи. Поэтому включение geometry test исправлено в исходнике, но фактическое появление теста в CTest, Windows Release build, полный CTest, pluginval strictness 5 и VST3 package остаются VALIDATION PENDING. Не считать этот source fix доказательством успешной сборки.
