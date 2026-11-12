@@ -24,20 +24,53 @@ int main()
 
     const auto root = juce::File::getCurrentWorkingDirectory();
     const auto skinRoot = root.getChildFile("SKIN");
+    const auto registryFile = skinRoot.getChildFile("theme_manifest.json");
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    const auto totalValue = registry.getProperty("totalSkins", juce::var());
+    expect(registry.isObject(), "skin registry is a JSON object");
+    expect(themes != nullptr, "skin registry contains a themes array");
+    expect(totalValue.isInt() || totalValue.isInt64(), "skin registry totalSkins is an integer");
 
-    for (int index = 1; index <= 51; ++index)
+    if (themes != nullptr && (totalValue.isInt() || totalValue.isInt64()))
     {
-        const auto id = juce::String::formatted("skin-%02d", index);
-        const auto manifest = skinRoot.getChildFile(juce::String::formatted("Skin_%02d", index))
-                                       .getChildFile("theme.json");
-        const bool loaded = manager.loadFromFile(manifest);
-        expect(loaded, id + " manifest accepted" + (loaded ? juce::String{} : ": " + manager.getLastError()));
-        if (loaded)
+        const auto total = totalValue.toString().getLargeIntValue();
+        expect(total == static_cast<juce::int64>(themes->size()),
+               "registry totalSkins matches entry count");
+
+        for (const auto& entry : *themes)
         {
-            expect(manager.getPalette().id == id, id + " ID matches folder index");
-            expect(!manager.getPalette().usedFallback, id + " does not use fallback");
+            expect(entry.isObject(), "registry entry is an object");
+            if (!entry.isObject())
+                continue;
+
+            const auto id = entry.getProperty("id", "").toString();
+            const auto indexValue = entry.getProperty("index", juce::var());
+            const auto relativePath = entry.getProperty("path", "").toString();
+            expect(indexValue.isInt() || indexValue.isInt64(), id + " index is an integer");
+            expect(relativePath.startsWith("Skin_") && relativePath.endsWith("/theme.json"),
+                   id + " has a canonical relative manifest path");
+            if ((!indexValue.isInt() && !indexValue.isInt64()) || relativePath.isEmpty())
+                continue;
+
+            const auto index = indexValue.toString().getLargeIntValue();
+            const auto manifest = skinRoot.getChildFile(relativePath);
+            const bool loaded = manifest.existsAsFile() && manager.loadFromFile(manifest);
+            expect(loaded, id + " manifest accepted"
+                   + (loaded ? juce::String{} : ": " + manager.getLastError()));
+            if (loaded)
+            {
+                expect(manager.getPalette().id == id, id + " ID matches registry");
+                expect(id.substring(5).getLargeIntValue() == index, id + " ID matches registry index");
+                expect(!manager.getPalette().usedFallback, id + " does not use fallback");
+            }
         }
     }
+
+    const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
+    const auto validJson = defaultManifest.loadFileAsString();
+    expect(validJson.isNotEmpty(), "Skin_51 fallback manifest readable");
 
     const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
     const auto skin52Json = skin52Manifest.loadFileAsString();
@@ -50,7 +83,8 @@ int main()
         expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
         expect(manager.getPalette().name == "Carbon Relay", "Skin_052 name is decoded");
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
-        expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12), "Skin_052 window background is mapped");
+        expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
+               "Skin_052 window background is mapped");
     }
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
@@ -58,9 +92,12 @@ int main()
     expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
-    const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
-    const auto validJson = defaultManifest.loadFileAsString();
-    expect(validJson.isNotEmpty(), "Skin_51 manifest readable");
+    const auto badStudioCompatibility = skin52Json.replace(""audioChanges": false",
+                                                            ""audioChanges": true");
+    expect(!manager.loadFromJson(badStudioCompatibility),
+           "audio-changing Skin Studio theme rejected");
+    expect(manager.getPalette().usedFallback,
+           "Skin Studio compatibility failure restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
     expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
@@ -71,17 +108,17 @@ int main()
            "incomplete manifest restores fallback");
 
     const auto badColour = validJson.replace("#090C10", "#GG0C10");
-    expect(!manager.loadFromJson(badColour), "invalid HEX colour rejected");
-    expect(manager.getPalette().usedFallback, "invalid HEX restores fallback");
+    expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
+    expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
 
-    const auto badCompatibility = validJson.replace("\"audioChanges\": false",
-                                                     "\"audioChanges\": true");
-    expect(!manager.loadFromJson(badCompatibility), "audio-changing theme rejected");
-    expect(manager.getPalette().usedFallback, "compatibility failure restores fallback");
+    const auto badCompatibility = validJson.replace(""audioChanges": false",
+                                                     ""audioChanges": true");
+    expect(!manager.loadFromJson(badCompatibility), "legacy audio-changing theme rejected");
+    expect(manager.getPalette().usedFallback, "legacy compatibility failure restores fallback");
 
-    const auto mismatchedIndex = validJson.replace("\"index\": 51", "\"index\": 50");
-    expect(!manager.loadFromJson(mismatchedIndex), "ID/index mismatch rejected");
-    expect(manager.getPalette().usedFallback, "ID/index failure restores fallback");
+    const auto mismatchedIndex = validJson.replace(""index": 51", ""index": 50");
+    expect(!manager.loadFromJson(mismatchedIndex), "legacy ID/index mismatch rejected");
+    expect(manager.getPalette().usedFallback, "legacy ID/index failure restores fallback");
 
     if (failures != 0)
     {
@@ -89,6 +126,7 @@ int main()
         return 1;
     }
 
-    std::cout << "ThemeManager contract tests passed: 51 manifests + fallback/error cases." << std::endl;
+    std::cout << "ThemeManager contract tests passed: registry-driven manifests + fallback/error cases."
+              << std::endl;
     return 0;
 }
