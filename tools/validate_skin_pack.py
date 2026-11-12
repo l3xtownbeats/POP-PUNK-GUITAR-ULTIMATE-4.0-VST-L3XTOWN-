@@ -145,8 +145,11 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
         if start != existing_total + 1:
             fail("unmerged pack must begin immediately after the current registry")
     elif pack_status == "MERGED":
-        if start < 1 or end > existing_total:
-            fail("merged pack range is outside the current registry")
+        merged_total = pack.get("mergedRegistryTotal")
+        if (start < 1 or end > existing_total
+                or not isinstance(merged_total, int) or isinstance(merged_total, bool)
+                or merged_total < end or merged_total > existing_total):
+            fail("merged pack range/mergedRegistryTotal is outside the current registry")
         registry_by_index = {
             item.get("index"): item for item in registry["themes"] if isinstance(item, dict)
         }
