@@ -31,17 +31,19 @@ The product direction is immediate playability, a focused control surface and an
 
 > **Development status:** this is an active engineering project, not a declared final commercial release. The status table distinguishes implemented code from features that have passed release acceptance.
 
-## Current build — run #832
+## Current build status
 
-**Status at last check:** run #832 is testing the premium editor and runtime palette integration from source commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`. Build, CTest, pluginval and packaging results are not yet confirmed for this revision.
+**Current source HEAD:** `e05a12b0830ba323bc9fcd9166eae9e7ca701092` (main).
 
-- [Open run #832](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444)
-- Source commit: `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`
+The latest source audit fixed CMake test discovery: `include(CTest)` now initializes `BUILD_TESTING` before every conditional test target, including the auxiliary-panel geometry contract. This is a source-level correction only.
+
+**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
+
+- [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
+- [Current source commit](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/e05a12b0830ba323bc9fcd9166eae9e7ca701092)
 - [Single engineering journal — Info.txt](Info.txt)
 
-**Previous CI evidence:** run #827 passed Windows Release build, CTest (12/12) and pluginval strictness 5, but packaging failed because the old workflow expected 50 skin manifests while the repository contains 51. Runs #830 and #831 were superseded/cancelled during source updates. Only run #832 can validate this editor revision.
-
-No COMPLETE ZIP is declared available until the current source build, regression tests, pluginval and package validation all pass.
+No COMPLETE ZIP is declared available until the current source build, all registered regression tests, pluginval and package validation pass. FL Studio 20 acceptance remains a separate manual gate.
 
 ### Previous package
 
@@ -60,7 +62,7 @@ The editor retains the existing working control surface and APVTS attachments:
 - Nine rotary controls and seven effect switches.
 - MIDI keyboard and playback sync selection.
 
-A real **SKIN** menu is connected to ThemeManager. It loads validated palettes from the `Skins` folder beside the installed `.vst3` bundle, saves the selected skin, and opens with **Ctrl+K**. The default palette is Blackout Voltage; the registry contains 51 palette manifests. Theme changes are visual-only and do not alter APVTS IDs, DSP, sampler, MIDI behaviour or audio.
+A real **SKIN** menu is connected to ThemeManager. It loads validated palettes from the `Skins` folder beside the installed `.vst3` bundle, saves the selected skin, and opens with **Ctrl+K**. The default palette is Blackout Voltage; the registry contains 52 registered skin entries (including the Skin Studio Carbon Relay entry); runtime acceptance for the latest source revision remains pending. Theme changes are visual-only and do not alter APVTS IDs, DSP, sampler, MIDI behaviour or audio.
 
 The hero guitar hardware illustration is drawn by JUCE Graphics. Manifest preview/hero/texture files are not required by the palette-only runtime and are not claimed as shipped assets. Runtime switching, persistence, fallback, contrast and audio invariance require a successful current Windows CI run and manual FL Studio 20 acceptance. No concept artwork is presented as a host screenshot.
 
@@ -77,7 +79,7 @@ The hero guitar hardware illustration is drawn by JUCE Graphics. Manifest previe
 | Pattern runtime | Scheduler/transport components | End-to-end sampler playback acceptance pending |
 | DSP | Compressor/EQ/Distortion/Chorus/Delay/Reverb/Cabinet controls and DSP components | Signal-quality and host acceptance pending |
 | SoundBank | Redistributable sample sources and license metadata in build pipeline | Current package must be verified from CI artifact |
-| UI | Blackout Voltage premium shell, SKIN selector and 51 palette manifests | Current CI / host acceptance pending |
+| UI | Blackout Voltage premium shell, SKIN selector and 52 registered skin entries | Current CI / host acceptance pending |
 | Sound Hunter | Policy and registry contract tooling | Production discovery/curation pending |
 | FL Studio 20 | Target host | Manual acceptance on current HEAD not confirmed |
 | CPU / RAM | Defined engineering targets | No release-grade measurements claimed |
