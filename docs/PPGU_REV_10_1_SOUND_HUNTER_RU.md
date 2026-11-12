@@ -124,3 +124,47 @@ Curator собирает Stacks и presets только из approved assets. At
 - Разделы MELODY/PATTERN/PUNK GROUP и целевые количества: PRODUCT TARGETS, не подтверждены как достигнутые.
 - Набор лицензированных SOUND HUNTER assets и attribution report: отсутствует как подтверждённый результат этого этапа.
 - Сборка, CTest, pluginval и FL Studio 20 host verification этим документом не запускались.
+
+
+## H11. Расширенный охват: только гитарный контент (2026-11-12)
+
+SOUND HUNTER ищет и каталогизирует исключительно guitar assets:
+- Электрогитара: clean, DI, crunch, overdrive, rock drive, high-gain, palm-mute, chugs, power chords, octaves, harmonics, slides, bends, pick attacks, string noises.
+- Акустика: steel-string, nylon, strummed chords, fingerpicked notes, arpeggios, harmonics и артикуляции.
+- Гитарные музыкальные материалы: chord progressions, riffs, lead phrases, rhythm patterns, double-time patterns, palm-muted patterns, loops, fills, turnarounds, transitions, endings, guitar stems.
+- Гитарные FX-записи: amp/cab captures, feedback, reverse guitar, flanger/delay-modulated guitar phrases, texture/noise swells.
+- Форматы: WAV, AIFF, FLAC, OGG для предпрослушивания; SFZ/SF2 и другие sampler maps — только после проверки поддержки конвертации/воспроизведения текущим S6.
+- Free, promo, demo, starter packs и отдельные one-shots рассматриваются как источники поиска. Drum-only kits, drum loops/fills, bass, vocals и полные song mixes исключены из Guitar SoundBank.
+
+### Приоритетные source candidates
+
+| Источник | Гитарный материал | Лицензионный/технический статус |
+|---|---|---|
+| Meta Open Sound — Steel Guitar | 375 multisamples, SFZ, WAV 24-bit/48 kHz, 3 velocity layers | CC0 1.0; приоритет №1 |
+| Meta Open Sound — Nylon Guitar | 348 multisamples, SFZ, WAV 24-bit/48 kHz, 3 dynamic layers | CC0 1.0; приоритет №1 |
+| Karoryfer free libraries — Emilyguitar, Shinyguitar, Black And Green Guitars | Электрогитары, артикулляции и многосэмпловые банки | Авторская free-samples page указывает CC0; проверять LICENSE каждого фактически скачанного архива |
+| FreePats FSBS Electric Guitar Clean | Clean/jazz-clean, SFZ WAV/FLAC/SF2 | CC0 1.0 указана на страницах конкретных банков |
+| FreePats FSBS Electric Guitar Distorted | Distorted/overdriven, SFZ WAV/FLAC/SF2 | CC0 1.0 указана на страницах конкретных банков |
+| Selekt/Selektaudio | Отдельные гитарные one-shots/loops | Только asset-level clearance и подтверждённая лицензия конкретного файла |
+| Pulse Open Loops | Гитарные лупы и stems | Проверять каждый asset; CC-BY требует корректной атрибуции и отдельного разрешения на bundling |
+| SoundShockAudio и официальные промо/free packs авторов | Гитарные one-shots, riffs, loops, fills | Discovery only; YELLOW до подтверждения прав на redistribution исходных файлов |
+| MusicRadar SampleRadar | Гитарные loops и hits | Не включать raw samples в SoundBank без отдельного явного разрешения |
+| Splice/subscription packs | Коммерческие гитарные loops/stems | Исключены без отдельной лицензии на embedding/redistribution исходных файлов |
+
+### Правила отбора
+
+1. Искать максимально широко, но добавлять в библиотеку только гитарные файлы. Наличие гитар в названии набора недостаточно: каждый файл классифицируется отдельно.
+2. Free/promo/royalty-free означает лишь повод рассмотреть материал, но не автоматически разрешает распространять исходные WAV внутри коммерческого VST3.
+3. CC0/PD с точным доказательством — приоритет для автоматического включения. CC-BY — только при наличии полного attribution record и совместимой модели распространения. Неясные условия — YELLOW/manual review; запретительные условия — RED.
+4. Для каждого файла сохранять источник, asset ID, точную лицензию и её evidence, URL, дату получения, формат, размер и SHA-256.
+5. Лупы и прогрессии индексировать отдельно от multisample-инструментов: tempo, key, meter, bars, loop points, tuning и profile. Не считать луп playable preset без подтверждённого playback path.
+6. FX-плагины как таковые не являются сэмплами; в SoundBank попадают только гитарные аудиозаписи с соответствующими эффектами. Flanger, delay, crunch и rock drive как DSP-пресеты остаются отдельной задачей движка.
+7. Сетевой поиск, скачивание, распаковка, хэширование и анализ всегда вне audio callback.
+
+### Подтверждённые официальные сведения
+
+Meta Open Sound README указывает CC0 для Steel/Nylon, размеры библиотек 375/348 samples, WAV ZIP 24-bit/48 kHz, SFZ maps и SHA256SUMS. Karoryfer official free-samples page заявляет CC0 для бесплатных библиотек, с оговоркой о старых загрузках и исключении Marie Ork. FreePats Clean и Distorted Electric Guitar pages явно указывают CC0 1.0 и публикуют SFZ WAV/FLAC/SF2 варианты.
+
+### Граница текущего этапа
+
+`assets/sound_hunter/registry.json` пока пуст. Ни один новый внешний архив не объявляется скачанным, хэшированным, прослушанным, импортированным или готовым к воспроизведению в этом изменении. Реальный импорт выполняется через единый S6.5 pipeline после всех H2/H5/H6 gates.
