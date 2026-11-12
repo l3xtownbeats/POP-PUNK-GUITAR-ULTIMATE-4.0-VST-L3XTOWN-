@@ -1,5 +1,7 @@
 #include "ThemeManager.h"
 
+#include <limits>
+
 namespace
 {
     bool isAsciiHexDigit(juce_wchar character) noexcept
@@ -144,16 +146,20 @@ namespace
         const auto indexValue = root.getProperty("index", juce::var());
         const auto index = indexValue.toString().getLargeIntValue();
         if ((!indexValue.isInt() && !indexValue.isInt64())
-            || id.length() != 8 || !id.startsWith("skin-")
-            || id.substring(5).length() != 3
-            || !juce::CharacterFunctions::isDigit(id[5])
-            || !juce::CharacterFunctions::isDigit(id[6])
-            || !juce::CharacterFunctions::isDigit(id[7])
-            || id.substring(5).getIntValue() != index
-            || index < 52 || index > 999)
+            || id.length() < 8 || !id.startsWith("skin-")
+            || index < 52 || index > std::numeric_limits<int>::max()
+            || id.substring(5).getLargeIntValue() != index)
         {
             error = "Invalid Skin Studio ID/index pair";
             return false;
+        }
+        for (int position = 5; position < id.length(); ++position)
+        {
+            if (!juce::CharacterFunctions::isDigit(id[position]))
+            {
+                error = "Skin Studio ID suffix must contain only digits";
+                return false;
+            }
         }
 
         const auto name = root.getProperty("name", "").toString().trim();
