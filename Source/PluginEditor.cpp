@@ -386,10 +386,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     auto header = area.reduced(18, 12).removeFromTop(72);
     titleLabel.setBounds(header.removeFromLeft(190).removeFromTop(38));
     subtitleLabel.setBounds(28, 68, 190, 16);
+    // Preset browser controls live only in the left browser column.
+    // Do not assign them here: a second setBounds() later in this method
+    // used to overwrite these header bounds and made the header layout misleading.
     header.removeFromLeft(12);
-    presetBox.setBounds(header.removeFromLeft(250).reduced(3, 15));
-    presetSearch.setBounds(header.removeFromLeft(230).reduced(3, 15));
-    categoryBox.setBounds(header.removeFromLeft(150).reduced(3, 15));
     skinButton.setBounds(header.removeFromRight(116).reduced(2, 9));
     loadButton.setBounds(header.removeFromRight(132).reduced(2, 9));
 

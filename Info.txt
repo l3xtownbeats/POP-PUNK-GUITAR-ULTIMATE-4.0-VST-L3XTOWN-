@@ -946,3 +946,13 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Журналирование:** `Info.txt` — единственный авторитетный хронологический журнал; `CODE.txt` — append-only технический индекс. Каждая реализационная порция обновляет оба файла в том же commit SHA; фиксируются branch/SHA, изменения, тесты и честные статусы PLANNED / IMPLEMENTED / BUILT / TESTED / DAW VERIFIED. CI-результаты не переносятся между SHA.
 **Следующие действия:** закончить инвентаризацию editor/processor/APVTS/FX/preset/SFZ/skin; составить mapping контролов; реализовать панели и lifecycle; исправить layout overlap; добавить regressions; затем Windows Release, полный CTest, pluginval strictness 5 и отдельная FL Studio 20 проверка.
 **Проверки journal-only commit:** production UI code не менялся; build/CTest/pluginval/DAW не запускались и не заявляются.
+
+## 2026-11-12 — UI layout regression correction and all-panels-visible overflow policy
+
+**Статус:** IMPLEMENTED IN SOURCE; BUILD/CTest/PLUGINVAL/DAW VALIDATION PENDING.
+**Branch:** `feature/pop-punk-ultimate-skin-ui`.
+**Изменения:** `PluginEditor.cpp` — удалены повторные назначения presetBox/presetSearch/categoryBox в header; эти элементы остаются только в browser column, где фактически размещаются. Это устраняет перезапись их геометрии при последующем вызове resized().
+`AuxiliaryPanelLayout.cpp` — при нехватке места геометрия теперь распределяет все запрошенные панели по компактной сетке, все placement.visible=true; helper больше не скрывает все панели, кроме первой. Режим помечается compact+overflow, размеры ячеек ограничены минимумом 1 px и остаются внутри work area.
+`AuxiliaryPanelLayoutTests.cpp` — overflow regressions проверяют видимость всех панелей, отсутствие пересечений и выходов за work area; добавлена проверка экстремального масштаба.
+**Ограничение:** это исправление чистой геометрии и browser layout. Сам JUCE panel host/window lifecycle ещё не подключён; маленькие ячейки в overflow могут требовать host-level compact rendering. Не заявлять окна как реализованные.
+**Проверки:** source-level replacement applied; build/CTest/pluginval/FL Studio 20 не запускались в этой среде.

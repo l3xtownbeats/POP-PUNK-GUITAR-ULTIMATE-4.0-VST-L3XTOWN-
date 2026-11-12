@@ -91,12 +91,13 @@ int main()
         CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
     checkInsideAndDisjoint(portrait, portraitArea);
 
-    auto overflow = calculatePanelLayout({ 0, 0, 420, 260 }, makePanels(4), 1.0f);
-    CHECK(overflow.overflow && overflow.panels.size() == 4);
+    const PanelRect overflowArea { 0, 0, 420, 260 };
+    auto overflow = calculatePanelLayout(overflowArea, makePanels(4), 1.0f);
+    CHECK(overflow.overflow && overflow.compact && overflow.panels.size() == 4);
     int visible = 0;
     for (const auto& p : overflow.panels) visible += p.visible ? 1 : 0;
-    CHECK(visible == 1);
-    CHECK(overflow.panels.front().visible);
+    CHECK(visible == 4);
+    checkInsideAndDisjoint(overflow, overflowArea);
 
     const PanelRect dpiArea { 0, 0, 1800, 1000 };
     auto dpi = calculatePanelLayout(dpiArea, makePanels(4), 1.5f);
@@ -145,7 +146,9 @@ int main()
 
     auto extremeScale = calculatePanelLayout(desktop, makePanels(2),
                                               std::numeric_limits<float>::max());
-    CHECK(extremeScale.overflow && !extremeScale.invalidInput);
+    CHECK(extremeScale.overflow && extremeScale.compact && !extremeScale.invalidInput);
+    CHECK(extremeScale.panels.size() == 2);
+    for (const auto& p : extremeScale.panels) CHECK(p.visible);
 
     if (failures != 0)
     {

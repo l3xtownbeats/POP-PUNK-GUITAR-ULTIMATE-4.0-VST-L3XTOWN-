@@ -20,3 +20,10 @@ This file is the technical change index for POP PUNK GUITAR ULTIMATE. Info.txt r
 - Audit findings: auxiliary panel components/window manager are not wired into PluginEditor; AuxiliaryPanelLayout is geometry-only and its overflow branch exposes only the first panel; preset/search/category controls are assigned twice in resized(), so browser bounds override header bounds; guitar hero is still a source-commented placeholder.
 - This entry changes documentation only. No production code, build, tests, pluginval, package, or DAW verification performed.
 - Governance: append Info.txt and CODE.txt together on each implementation commit; record exact SHA and evidence; never promote PLANNED/IMPLEMENTED/BUILT/TESTED/DAW VERIFIED without corresponding proof.
+
+## 2026-11-12 — UI layout regression correction
+
+- Removed duplicate header bounds assignments for presetBox, presetSearch and categoryBox; these controls are owned by the left browser column.
+- AuxiliaryPanelLayout overflow now computes a compact tiled placement for every requested panel and marks all placements visible instead of exposing only the first panel.
+- Updated geometry regressions to assert all overflow panels are visible, inside the work area, and non-overlapping; extreme scale retains all panel placements.
+- Status: source changes implemented; build, CTest, pluginval and FL Studio 20 verification pending. No JUCE panel host has been wired yet.
