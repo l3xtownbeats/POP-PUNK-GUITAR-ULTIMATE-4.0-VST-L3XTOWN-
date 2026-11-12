@@ -363,3 +363,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Preserved:** JUCE 7.0.12, C++20, Visual Studio 2022 x64, VST3 target, CTest, pluginval strictness 5 and packaging sequence.
 - **Boundary:** CI-only change; no production C++/DSP/APVTS/sampler/MIDI/preset/SoundBank changes.
 - **Validation:** exact-SHA Windows build and cache statistics pending; no build-speed improvement is claimed before measurement.
+
+
+## 2026-11-12 — sccache invocation audit and Ninja Multi-Config correction
+
+- Previous validation: run `43188981213`, SHA `8f1eab9cb8da8a468b98adfe43cb103fe9ae4abe`; Windows Release, CTest 14/14 and pluginval 5 passed.
+- Cache audit: sccache statistics showed 0 compile requests and 0 compilations. Cache integration therefore was not active with the Visual Studio generator.
+- Correction commit: `b3ba87cfd575efdaba62438c57a07be742f31111`.
+- Workflow changes: initialize x64 MSVC with `ilammy/msvc-dev-cmd@v1`; switch to `Ninja Multi-Config`; keep `CMAKE_CXX_COMPILER_LAUNCHER=sccache`.
+- Runtime/source boundary: CI-only; no C++ source, processor, APVTS, DSP, MIDI, sampler, preset, SoundBank or plugin format changes.
+- Validation: exact-SHA CI and non-zero sccache compile requests pending; cache hit-rate/performance improvement not yet claimed.
