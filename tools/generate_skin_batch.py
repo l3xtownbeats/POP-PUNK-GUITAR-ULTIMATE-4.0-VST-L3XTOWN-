@@ -77,7 +77,8 @@ def ensure_contrast(foreground: str, background: str, minimum: float) -> str:
             high = middle
         else:
             low = middle
-    return mix(foreground, target, high)
+    candidate = mix(foreground, target, high)
+    return candidate if contrast(candidate, background) >= minimum else target
 
 
 def make_palette(family: str, variant: int) -> dict[str, str]:
@@ -283,6 +284,14 @@ def main() -> int:
                     "Control coordinates remain metadata until the runtime layout engine consumes them."
                 ],
             })
+            effects = theme.get("effects")
+            if isinstance(effects, dict):
+                effects["material"] = family.replace("_", " ") + " finish"
+                effects["glow"] = "restrained accent LED lighting"
+            typography = theme.get("typography")
+            if isinstance(typography, dict):
+                typography["scale"] = 1.0 + (offset % 3) * 0.025
+
             folder = staging / f"Skin_{index:03d}"
             (folder / "assets").mkdir(parents=True)
             (folder / "svg").mkdir(parents=True)
