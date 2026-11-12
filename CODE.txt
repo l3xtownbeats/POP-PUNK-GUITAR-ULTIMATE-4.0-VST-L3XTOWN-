@@ -322,3 +322,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Compatibility boundary:** no APVTS IDs/semantics, scheduler, MIDI, DSP, preset schema, SoundBank, or production UI source changed. No implementation or test pass is claimed.
 
 **Status:** SPECIFICATION UPDATED; UI IMPLEMENTATION AND EXACT-SHA VALIDATION PENDING.
+
+
+## 2026-11-12 — REV.17 Zone F restart checkpoint
+
+- **Branch baseline:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17` @ `c147c9e28d0117dfe035fe801716eaeaf0e3f9ab` (confirmed identical at checkpoint).
+- **Task source:** `Info.txt`, section “REV.17 restart checkpoint: Zone F UI implementation queue”.
+- **Source baseline:** `Source/PluginEditor.h` blob `12a3454218a20f55144987148803b89d861f4705`; `Source/PluginEditor.cpp` blob `ea9f8074deb545255cdbd0cec15cdb8a6ea8ec6a`; `Source/PluginProcessor.cpp` blob `0e3e88fece554f82f0ca8d70fb01ea79be122eef`.
+- **Queue:** T-F1 parameter/runtime audit → T-F2 Zone F controls/attachments → T-F3 mode/sync behavior → T-F4 layout/resize → T-F5 static diff checks → T-F6 Windows Release/CTest/pluginval/exact-SHA CI → T-F7 FL Studio 20 host acceptance → T-F8 append-only closeout.
+- **Boundaries:** logical center strip only; no fourth outer column; no new APVTS IDs; no DSP/MIDI/sampler/scheduler/preset/SoundBank changes; no fake controls; swing/humanize/accent remain in the existing knob matrix.
+- **Status:** restart checkpoint recorded; production UI implementation pending; no build/test/host pass claimed.
