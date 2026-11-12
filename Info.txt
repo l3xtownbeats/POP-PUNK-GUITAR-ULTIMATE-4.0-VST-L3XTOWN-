@@ -17,3 +17,13 @@ undefined
 **Изменения:** добавлен OverlayPanel для AutoChords и FX EDIT внутри главного окна; FX EDIT использует существующие семь APVTS bool-параметров через ButtonAttachment; AutoChords предоставляет UI-выбор Key/Mode/Pattern и детерминированный readout. Preview остаётся disabled. Кнопки FX открывают FX EDIT; добавлена кнопка AUTOCHORDS. Тайлинг выполняется через AuxiliaryPanelLayout.
 **Ограничения:** это O1 shell, не полная реализация AutoChords audio/MIDI. Персистенция bounds/open-state, paging, focus manager и z-order manager остаются O2. FX-параметры/GR/кривая не реализованы и не имитируются. Панели закрываются с уничтожением UI-компонента; аудио/APVTS state не сбрасывается.
 **Проверки:** commit-level source review only; build, CTest, pluginval strictness 5 и FL Studio 20 не запускались; CI PASS не заявлен.
+
+
+## 2026-11-12 — O2 overlay lifecycle and state persistence
+
+**Статус:** SOURCE PRESENT / INTEGRATION COMMITTED; Windows build, CTest, pluginval and DAW verification PENDING.
+**Ветка:** feature/pop-punk-ultimate-skin-ui; parent SHA 0fbe364dc64812fffe75fcdb3fc4e3c8f3a50f9a.
+**Изменения:** сохранение open/compact state и последних bounds AutoChords/FX EDIT в существующем UI settings store; восстановление открытых панелей при создании редактора; сохранение bounds после layout; закрытие панели сохраняет её UI-настройки и не трогает APVTS/audio state; клик по панели поднимает её над соседними панелями; callback компактного режима синхронизирует persistence. Исправлена строка переноса в списке нот AutoChords, которая попала в исходник как буквальная последовательность \\n.
+**Ограничения:** менеджер пока ограничен двумя зарегистрированными панелями; полноценный paging для произвольного числа панелей и DPI-aware layout остаются отдельными задачами. Ручная проверка восстановления bounds в FL Studio 20 не выполнена.
+**Инварианты:** DSP, audio callback, MIDI routing, APVTS IDs, presets и SoundBank не изменялись.
+**Проверки:** source-level review only; CI/build/CTest/pluginval strictness 5/FL Studio 20 не заявляются.

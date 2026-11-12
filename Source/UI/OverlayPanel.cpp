@@ -13,8 +13,9 @@ const std::array<const char*, 7> fxIds {
 };
 }
 OverlayPanel::OverlayPanel(OverlayPanelId panelId, PopPunkGuitarUltimateAudioProcessor& p,
-                           std::function<void()> onClose)
-    : id(panelId), processor(p), closeCallback(std::move(onClose))
+                           std::function<void()> onClose, std::function<void(bool)> onCompactChanged)
+    : id(panelId), processor(p), closeCallback(std::move(onClose)),
+      compactCallback(std::move(onCompactChanged))
 {
     setOpaque(false);
     title.setText(id == OverlayPanelId::AutoChords ? "♫  AUTOCHORDS" : "✦  FX EDIT",
@@ -86,7 +87,18 @@ void OverlayPanel::updateChordReadout()
                                                               : "vi – IV – I – V"),
                          juce::dontSendNotification);
 }
-void OverlayPanel::setCompact(bool value) { compact = value; resized(); repaint(); }
+void OverlayPanel::setCompact(bool value)
+{
+    if (compact == value) return;
+    compact = value;
+    resized();
+    repaint();
+    if (compactCallback) compactCallback(compact);
+}
+void OverlayPanel::mouseDown(const juce::MouseEvent&)
+{
+    toFront(false);
+}
 void OverlayPanel::paint(juce::Graphics& g)
 {
     auto r = getLocalBounds().toFloat();

@@ -229,6 +229,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     uiProperties.setStorageParameters(options);
     loadSavedSkin();
     applyPalette();
+    restoreOverlayState();
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
@@ -702,16 +703,25 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openOverlay(ppgu::ui::OverlayPan
     {
         overlayPanels[index] = std::make_unique<ppgu::ui::OverlayPanel>(
             id, processor, [this, index] {
+                persistOverlayState(index, false);
                 if (overlayPanels[index])
                 {
                     removeChildComponent(overlayPanels[index].get());
                     overlayPanels[index].reset();
                     layoutOverlays();
                 }
+            }, [this, index](bool compact) {
+                if (restoringOverlayState) return;
+                if (auto* settings = uiProperties.getUserSettings())
+                {
+                    settings->setValue("overlay." + juce::String(index) + ".compact", compact);
+                    settings->saveIfNeeded();
+                }
             });
         addAndMakeVisible(*overlayPanels[index]);
     }
     overlayPanels[index]->toFront(false);
+    if (!restoringOverlayState) persistOverlayState(index, true);
     layoutOverlays();
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::layoutOverlays()
@@ -734,6 +744,54 @@ void PopPunkGuitarUltimateAudioProcessorEditor::layoutOverlays()
                                             placement.bounds.width, placement.bounds.height);
             if (result.compact || result.overflow)
                 overlayPanels[index]->setCompact(true);
+            persistOverlayState(index, true);
         }
     }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::persistOverlayState(size_t index, bool open)
+{
+    if (index >= overlayPanels.size() || restoringOverlayState) return;
+    if (auto* settings = uiProperties.getUserSettings())
+    {
+        const auto prefix = "overlay." + juce::String(static_cast<int>(index)) + ".";
+        settings->setValue(prefix + "open", open);
+        if (overlayPanels[index])
+        {
+            const auto bounds = overlayPanels[index]->getBounds();
+            settings->setValue(prefix + "x", bounds.getX());
+            settings->setValue(prefix + "y", bounds.getY());
+            settings->setValue(prefix + "width", bounds.getWidth());
+            settings->setValue(prefix + "height", bounds.getHeight());
+            settings->setValue(prefix + "compact", overlayPanels[index]->isCompact());
+        }
+        settings->saveIfNeeded();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::restoreOverlayState()
+{
+    auto* settings = uiProperties.getUserSettings();
+    if (settings == nullptr) return;
+    restoringOverlayState = true;
+    for (size_t index = 0; index < overlayPanels.size(); ++index)
+    {
+        const auto prefix = "overlay." + juce::String(static_cast<int>(index)) + ".";
+        if (settings->getBoolValue(prefix + "open", false))
+            openOverlay(index == 0 ? ppgu::ui::OverlayPanelId::AutoChords
+                                   : ppgu::ui::OverlayPanelId::FXEdit);
+        if (overlayPanels[index])
+        {
+            overlayPanels[index]->setCompact(settings->getBoolValue(prefix + "compact", false));
+            const auto x = settings->getIntValue(prefix + "x", -1);
+            const auto y = settings->getIntValue(prefix + "y", -1);
+            const auto w = settings->getIntValue(prefix + "width", 0);
+            const auto h = settings->getIntValue(prefix + "height", 0);
+            if (w >= 300 && h >= 180)
+                overlayPanels[index]->setBounds(juce::Rectangle<int>(x, y, w, h)
+                    .constrainedWithin(getLocalBounds().reduced(12)));
+        }
+    }
+    restoringOverlayState = false;
+    layoutOverlays();
 }

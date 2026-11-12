@@ -16,3 +16,14 @@ undefined
 - Added OverlayPanel source/header to CMake target.
 - UI shell only: no DSP/MIDI/APVTS ID changes. Bounds/open-state persistence, paging/focus manager and complete AutoChords engine remain deferred to O2/O3.
 - Validation not run; no build/CTest/pluginval/DAW pass claimed.
+
+
+## 2026-11-12 — O2 overlay lifecycle persistence
+
+- Extended OverlayPanel callbacks for compact-state persistence and added click-to-front focus behavior.
+- PluginEditor persists per-panel open/compact state and last bounds in the existing PPGU UI PropertiesFile; restores open panels when the editor is recreated.
+- Close removes only the UI component after persisting state; APVTS/audio state remains owned by the processor.
+- Kept the two-panel AuxiliaryPanelLayout as the current supported registry; arbitrary panel paging and verified DPI scaling are not claimed.
+- Fixed the literal escaped newline in the AutoChords key-name initializer.
+- No DSP, audio callback, MIDI routing, APVTS IDs, presets or SoundBank changes.
+- Validation pending on the resulting commit SHA.

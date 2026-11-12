@@ -71,6 +71,9 @@ private:
     std::array<std::unique_ptr<ppgu::ui::OverlayPanel>, 2> overlayPanels;
     void openOverlay(ppgu::ui::OverlayPanelId);
     void layoutOverlays();
+    void persistOverlayState(size_t index, bool open);
+    void restoreOverlayState();
+    bool restoringOverlayState = false;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
 };

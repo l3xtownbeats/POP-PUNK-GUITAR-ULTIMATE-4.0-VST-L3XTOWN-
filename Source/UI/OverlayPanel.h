@@ -12,16 +12,19 @@ enum class OverlayPanelId { AutoChords = 1, FXEdit = 2 };
 class OverlayPanel final : public juce::Component
 {
 public:
-    OverlayPanel(OverlayPanelId, PopPunkGuitarUltimateAudioProcessor&, std::function<void()> onClose);
+    OverlayPanel(OverlayPanelId, PopPunkGuitarUltimateAudioProcessor&, std::function<void()> onClose,
+                 std::function<void(bool)> onCompactChanged);
     void paint(juce::Graphics&) override;
     void resized() override;
     void setCompact(bool);
+    void mouseDown(const juce::MouseEvent&) override;
     bool isCompact() const noexcept { return compact; }
 private:
     void updateChordReadout();
     OverlayPanelId id;
     PopPunkGuitarUltimateAudioProcessor& processor;
     std::function<void()> closeCallback;
+    std::function<void(bool)> compactCallback;
     juce::Label title, chordReadout, status;
     juce::TextButton closeButton { "×" }, sizeButton { "□" }, previewButton { "PREVIEW" };
     juce::ComboBox keyBox, modeBox, patternBox;
