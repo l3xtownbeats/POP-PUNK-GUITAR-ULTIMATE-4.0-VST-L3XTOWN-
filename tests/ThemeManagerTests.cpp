@@ -72,6 +72,13 @@ int main()
     const auto validJson = defaultManifest.loadFileAsString();
     expect(validJson.isNotEmpty(), "Skin_51 fallback manifest readable");
 
+    const auto wrappedWidth = validJson.replace("\"width\": 480",
+                                                "\"width\": 4294967776");
+    expect(!manager.loadFromJson(wrappedWidth),
+           "int64 asset width that wraps to 480 after narrowing is rejected");
+    expect(manager.getPalette().usedFallback,
+           "overflowing asset dimensions restore default fallback");
+
     const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
     const auto skin52Json = skin52Manifest.loadFileAsString();
     expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
@@ -102,6 +109,27 @@ int main()
         }
         expect(!manager.getPalette().token("unknown_token").isOpaque(),
                "unknown token does not silently alias a valid colour");
+
+        auto missingControl = juce::JSON::parse(skin52Json);
+        auto* missingControls = missingControl.getProperty("controls", juce::var()).getDynamicObject();
+        expect(missingControls != nullptr, "Skin_052 controls object is mutable for contract tests");
+        if (missingControls != nullptr)
+            missingControls->removeProperty("About");
+        expect(!manager.loadFromJson(juce::JSON::toString(missingControl)),
+               "Skin_052 rejects a missing mandatory control ID");
+        expect(manager.getPalette().usedFallback,
+               "missing mandatory control ID restores default fallback");
+
+        auto unexpectedControl = juce::JSON::parse(skin52Json);
+        auto* unexpectedControls = unexpectedControl.getProperty("controls", juce::var()).getDynamicObject();
+        expect(unexpectedControls != nullptr, "Skin_052 controls object is mutable for extra-key test");
+        if (unexpectedControls != nullptr)
+            unexpectedControls->setProperty("unapproved_control",
+                                             unexpectedControls->getProperty("About", juce::var()));
+        expect(!manager.loadFromJson(juce::JSON::toString(unexpectedControl)),
+               "Skin_052 rejects an unapproved extra control ID");
+        expect(manager.getPalette().usedFallback,
+               "extra control ID restores default fallback");
     }
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");

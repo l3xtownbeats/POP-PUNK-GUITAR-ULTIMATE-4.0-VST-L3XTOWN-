@@ -121,8 +121,10 @@ namespace
         const auto heightValue = spec.getProperty("height", juce::var());
         if ((!widthValue.isInt() && !widthValue.isInt64())
             || (!heightValue.isInt() && !heightValue.isInt64())
-            || static_cast<int>(widthValue) != width
-            || static_cast<int>(heightValue) != height
+            // Compare in the original 64-bit domain. Narrowing before the
+            // bounds check can wrap hostile int64 dimensions into valid values.
+            || widthValue.toString().getLargeIntValue() != static_cast<juce::int64>(width)
+            || heightValue.toString().getLargeIntValue() != static_cast<juce::int64>(height)
             || spec.getProperty("format", "").toString() != format)
         {
             error = "Invalid asset dimensions or format: " + name.toString();
