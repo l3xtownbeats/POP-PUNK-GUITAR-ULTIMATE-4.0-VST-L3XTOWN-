@@ -33,7 +33,7 @@ The product direction is immediate playability, a focused control surface and an
 
 ## Current build status
 
-**Current source HEAD at this documentation update:** `ce5ee12b5eb4b10fb8d2a3b7659e202b5a803f5c` (main).
+**Source HEAD and authoritative engineering status:** see the latest dated entry in [Info.txt](Info.txt); CI status is always evaluated against the exact SHA recorded there.
 
 The latest source audit fixed CMake test discovery: `include(CTest)` now initializes `BUILD_TESTING` before every conditional test target, including the auxiliary-panel geometry contract. This is a source-level correction only.
 
@@ -168,7 +168,7 @@ The exact package layout is documented in [DOWNLOAD.md](DOWNLOAD.md); the runtim
 - [Skin/UI gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
 - [Sample sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
 
-**Specification authority:** the latest accepted project requirements are MASTER PROMPT REV 13.0 FINAL. Older REV 10.x and earlier prompt files are historical references and must not override REV 13.0 or factual status in Info.txt.
+**Specification authority:** MASTER PROMPT REV 16.0 UNIFIED is stored in [docs/PPGU_MASTER_PROMPT_RU.md](docs/PPGU_MASTER_PROMPT_RU.md) and supersedes REV 10/13/14/15.x. Factual project status and conflict resolution remain governed by [Info.txt](Info.txt), then the control inventory/schema, then REV 16.0.
 
 ---
 
