@@ -43,11 +43,15 @@ bool PPGUAuxiliaryPanelWindowManager::openPanel(int id)
     if (window == nullptr)
         return false;
 
-    if (!window->overlay->isVisible())
+    if (!window->open && getOpenPanelCount() >= 6)
+        return false;
+
+    if (!window->open)
     {
-        window->overlay->setVisible(true);
+        window->open = true;
         addAndMakeVisible(*window->overlay);
     }
+    window->overlay->setVisible(true);
     setVisible(true);
     window->overlay->toFront(false);
     updateLayout();
@@ -61,6 +65,7 @@ void PPGUAuxiliaryPanelWindowManager::closePanel(int id)
     if (window == nullptr)
         return;
 
+    window->open = false;
     window->overlay->setVisible(false);
     if (expandedId == id)
         expandedId = 0;
@@ -75,7 +80,10 @@ void PPGUAuxiliaryPanelWindowManager::closeAll()
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
     expandedId = 0;
     for (auto& window : windows)
+    {
+        window.open = false;
         window.overlay->setVisible(false);
+    }
     setVisible(false);
     repaint();
 }
@@ -83,13 +91,13 @@ void PPGUAuxiliaryPanelWindowManager::closeAll()
 bool PPGUAuxiliaryPanelWindowManager::isOpen(int id) const noexcept
 {
     const auto* window = findWindow(id);
-    return window != nullptr && window->overlay->isVisible();
+    return window != nullptr && window->open;
 }
 
 int PPGUAuxiliaryPanelWindowManager::getOpenPanelCount() const noexcept
 {
     return static_cast<int>(std::count_if(windows.begin(), windows.end(),
-        [](const Window& window) { return window.overlay->isVisible(); }));
+        [](const Window& window) { return window.open; }));
 }
 
 void PPGUAuxiliaryPanelWindowManager::setPalette(
@@ -139,11 +147,23 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     {
         for (auto& window : windows)
         {
-            const bool expanded = window.id == expandedId && window.overlay->isVisible();
-            if (window.overlay->isVisible())
-                window.overlay->setVisible(expanded);
-            if (expanded)
+            if (!window.open)
+                continue;
+            window.overlay->setVisible(true);
+            if (window.id == expandedId)
+            {
                 window.overlay->setBounds(area);
+                window.overlay->toFront(false);
+            }
+            else
+            {
+                const auto compactWidth = juce::jmax(220, area.getWidth() / 4);
+                const auto compactHeight = juce::jmax(150, area.getHeight() / 3);
+                window.overlay->setBounds(area.getRight() - compactWidth - 8,
+                                          area.getY() + 8,
+                                          compactWidth, compactHeight);
+                window.overlay->toBack();
+            }
         }
         updatingLayout = false;
         repaint();
@@ -154,7 +174,7 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     requests.reserve(windows.size());
     for (const auto& window : windows)
     {
-        if (!window.overlay->isVisible())
+        if (!window.open)
             continue;
         requests.push_back({ window.id, { 520, 360 }, { 260, 190 } });
     }
@@ -165,7 +185,7 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
 
     for (auto& window : windows)
     {
-        if (!window.overlay->isVisible())
+        if (!window.open)
             continue;
         const auto placement = std::find_if(layout.panels.begin(), layout.panels.end(),
             [&window](const ppgu::ui::PanelPlacement& item) { return item.id == window.id; });
