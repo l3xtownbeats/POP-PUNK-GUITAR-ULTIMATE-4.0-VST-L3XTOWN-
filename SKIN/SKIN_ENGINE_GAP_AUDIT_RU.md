@@ -80,7 +80,7 @@ PUNK GROUP, dedicated LED, Auto Discover, Curator, Settings и About пока н
 
 Этот addendum **заменяет устаревшие snapshot-утверждения выше** о fallback skin-51, registry из 51 темы, отсутствии gallery и непроведённом merge Skin_052/53–102. Исторические наблюдения сохранены как снимок более раннего состояния ветки main.
 
-**Текущая ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Текущая ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.  
 **Gallery/source chain:** `9054f92b4bd5b559a67eb68ed00a72dcd6f23b96`, `065279795c421a9b01e10e288faa1a8bb0eb2a1d`.  
 **Overflow workspace fix:** `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b`.  
 **Skin data commit:** `3a2ceb52062be112429f96d411ae223d87df17a6`.  
