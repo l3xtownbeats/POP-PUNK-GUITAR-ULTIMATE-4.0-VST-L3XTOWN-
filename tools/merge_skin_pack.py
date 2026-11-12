@@ -62,6 +62,8 @@ def main() -> int:
     existing_total = registry.get("totalSkins")
     if not isinstance(existing_total, int) or isinstance(existing_total, bool) or existing_total != len(existing):
         return fail("Registry totalSkins does not match its themes array.")
+    if pack.get("status") != "GENERATED_NOT_MERGED":
+        return fail("Only a GENERATED_NOT_MERGED pack may be merged.")
 
     existing_ids = [item.get("id") for item in existing if isinstance(item, dict)]
     existing_indices = [item.get("index") for item in existing if isinstance(item, dict)]
@@ -126,16 +128,34 @@ def main() -> int:
         (registry_path, backup_dir / f"theme_manifest.{stamp}.json.bak"),
         (legacy_schema_path, backup_dir / f"theme.schema.legacy.{stamp}.json.bak"),
         (studio_schema_path, backup_dir / f"control_schema.{stamp}.json.bak"),
+        (args.manifest, backup_dir / f"theme_pack_manifest.{stamp}.json.bak"),
     ]
     for source, destination in backup_paths:
         shutil.copy2(source, destination)
 
-    temporary = registry_path.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(new_registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    temporary.replace(registry_path)
+    pack["status"] = "MERGED"
+    pack["mergedRegistryTotal"] = new_registry["totalSkins"]
+
+    registry_temp = registry_path.with_suffix(".json.tmp")
+    pack_temp = args.manifest.with_suffix(args.manifest.suffix + ".tmp")
+    try:
+        registry_temp.write_text(
+            json.dumps(new_registry, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8"
+        )
+        pack_temp.write_text(
+            json.dumps(pack, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8"
+        )
+        registry_temp.replace(registry_path)
+        pack_temp.replace(args.manifest)
+    except Exception:
+        registry_temp.unlink(missing_ok=True)
+        pack_temp.unlink(missing_ok=True)
+        shutil.copy2(backup_paths[0][1], registry_path)
+        shutil.copy2(backup_paths[3][1], args.manifest)
+        raise
 
     print(f"MERGED {len(additions)} theme(s); registry total={new_registry['totalSkins']}.")
-    print(f"Backups created in {backup_dir}.")
+    print(f"Pack status set to MERGED; backups created in {backup_dir}.")
     print("Legacy and Skin Studio schemas were preserved independently.")
     return 0
 
