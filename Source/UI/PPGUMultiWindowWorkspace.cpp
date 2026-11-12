@@ -16,6 +16,7 @@ public:
         title.setFont(juce::Font(14.0f, juce::Font::bold));
         title.setColour(juce::Label::textColourId, heading);
         title.setJustificationType(juce::Justification::centredLeft);
+        title.setInterceptsMouseClicks(false, false);
         addAndMakeVisible(title);
 
         closeButton.setButtonText(juce::String::charToString(0x00d7));
@@ -57,6 +58,28 @@ public:
         setBounds(bounds);
     }
 
+    void mouseDown(const juce::MouseEvent& event) override
+    {
+        draggingHeader = event.y < 42 && !closeButton.getBounds().contains(event.getPosition());
+    }
+
+    void mouseDrag(const juce::MouseEvent& event) override
+    {
+        if (!draggingHeader || !event.mouseWasDraggedSinceMouseDown())
+            return;
+        const auto relative = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
+        for (const auto& candidate : owner.windows)
+        {
+            if (candidate->getPanelId() != panelId && candidate->getBounds().contains(relative))
+            {
+                owner.reorderPanels(panelId, candidate->getPanelId());
+                break;
+            }
+        }
+    }
+
+    void mouseUp(const juce::MouseEvent&) override { draggingHeader = false; }
+
     void paint(juce::Graphics& g) override
     {
         auto area = getLocalBounds().toFloat();
@@ -88,6 +111,7 @@ private:
     juce::Label title;
     juce::TextButton closeButton;
     juce::Colour panelColour, borderColour;
+    bool draggingHeader = false;
 };
 
 class PPGUMultiWindowWorkspace::TileSurface final : public juce::Component
@@ -212,6 +236,19 @@ void PPGUMultiWindowWorkspace::paint(juce::Graphics& g)
 void PPGUMultiWindowWorkspace::handleClose(int id)
 {
     closePanel(id);
+}
+
+void PPGUMultiWindowWorkspace::reorderPanels(int draggedId, int targetId)
+{
+    const auto dragged = std::find_if(windows.begin(), windows.end(),
+        [draggedId](const auto& item) { return item->getPanelId() == draggedId; });
+    const auto target = std::find_if(windows.begin(), windows.end(),
+        [targetId](const auto& item) { return item->getPanelId() == targetId; });
+    if (dragged == windows.end() || target == windows.end() || dragged == target)
+        return;
+
+    std::iter_swap(dragged, target);
+    layoutPanels();
 }
 
 void PPGUMultiWindowWorkspace::layoutPanels()
