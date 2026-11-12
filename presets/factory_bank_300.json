@@ -153,7 +153,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M002",
@@ -179,7 +180,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M003",
@@ -205,7 +207,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M004",
@@ -231,7 +234,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M005",
@@ -257,7 +261,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M006",
@@ -283,7 +288,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "mest"
     },
     {
       "id": "M007",
@@ -309,7 +315,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M008",
@@ -335,7 +342,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M009",
@@ -361,7 +369,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M010",
@@ -387,7 +396,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M011",
@@ -410,7 +420,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M012",
@@ -433,7 +444,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M013",
@@ -456,7 +468,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M014",
@@ -479,7 +492,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M015",
@@ -502,7 +516,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M016",
@@ -525,7 +540,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M017",
@@ -548,7 +564,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M018",
@@ -571,7 +588,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M019",
@@ -594,7 +612,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M020",
@@ -617,7 +636,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M021",
@@ -640,7 +660,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M022",
@@ -663,7 +684,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M023",
@@ -686,7 +708,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M024",
@@ -709,7 +732,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M025",
@@ -732,7 +756,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M026",
@@ -755,7 +780,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M027",
@@ -778,7 +804,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "mest"
     },
     {
       "id": "M028",
@@ -801,7 +828,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M029",
@@ -824,7 +852,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M030",
@@ -847,7 +876,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M031",
@@ -870,7 +900,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M032",
@@ -893,7 +924,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M033",
@@ -916,7 +948,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M034",
@@ -939,7 +972,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M035",
@@ -962,7 +996,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M036",
@@ -985,7 +1020,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M037",
@@ -1008,7 +1044,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M038",
@@ -1031,7 +1068,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M039",
@@ -1054,7 +1092,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M040",
@@ -1077,7 +1116,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M041",
@@ -1100,7 +1140,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M042",
@@ -1123,7 +1164,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M043",
@@ -1146,7 +1188,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M044",
@@ -1169,7 +1212,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M045",
@@ -1192,7 +1236,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M046",
@@ -1215,7 +1260,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M047",
@@ -1238,7 +1284,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M048",
@@ -1261,7 +1308,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "mest"
     },
     {
       "id": "M049",
@@ -1284,7 +1332,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M050",
@@ -1307,7 +1356,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M051",
@@ -1332,7 +1382,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M052",
@@ -1357,7 +1408,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M053",
@@ -1382,7 +1434,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M054",
@@ -1407,7 +1460,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M055",
@@ -1432,7 +1486,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M056",
@@ -1457,7 +1512,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M057",
@@ -1482,7 +1538,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M058",
@@ -1507,7 +1564,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M059",
@@ -1532,7 +1590,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M060",
@@ -1557,7 +1616,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M061",
@@ -1580,7 +1640,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M062",
@@ -1603,7 +1664,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M063",
@@ -1626,7 +1688,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M064",
@@ -1649,7 +1712,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M065",
@@ -1672,7 +1736,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M066",
@@ -1695,7 +1760,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M067",
@@ -1718,7 +1784,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M068",
@@ -1741,7 +1808,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M069",
@@ -1764,7 +1832,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "mest"
     },
     {
       "id": "M070",
@@ -1787,7 +1856,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M071",
@@ -1813,7 +1883,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M072",
@@ -1839,7 +1910,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M073",
@@ -1865,7 +1937,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M074",
@@ -1891,7 +1964,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M075",
@@ -1917,7 +1991,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M076",
@@ -1943,7 +2018,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M077",
@@ -1969,7 +2045,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M078",
@@ -1995,7 +2072,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M079",
@@ -2021,7 +2099,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M080",
@@ -2047,7 +2126,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M081",
@@ -2074,7 +2154,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M082",
@@ -2101,7 +2182,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M083",
@@ -2128,7 +2210,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M084",
@@ -2155,7 +2238,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M085",
@@ -2182,7 +2266,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M086",
@@ -2209,7 +2294,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M087",
@@ -2236,7 +2322,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M088",
@@ -2263,7 +2350,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M089",
@@ -2290,7 +2378,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M090",
@@ -2317,7 +2406,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "mest"
     },
     {
       "id": "M091",
@@ -2342,7 +2432,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M092",
@@ -2367,7 +2458,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M093",
@@ -2392,7 +2484,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M094",
@@ -2417,7 +2510,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M095",
@@ -2442,7 +2536,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M096",
@@ -2467,7 +2562,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M097",
@@ -2492,7 +2588,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M098",
@@ -2517,7 +2614,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M099",
@@ -2542,7 +2640,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M100",
@@ -2567,7 +2666,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M101",
@@ -2590,7 +2690,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M102",
@@ -2613,7 +2714,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M103",
@@ -2636,7 +2738,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M104",
@@ -2659,7 +2762,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M105",
@@ -2682,7 +2786,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M106",
@@ -2705,7 +2810,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M107",
@@ -2728,7 +2834,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M108",
@@ -2751,7 +2858,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M109",
@@ -2774,7 +2882,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M110",
@@ -2797,7 +2906,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M111",
@@ -2820,7 +2930,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "mest"
     },
     {
       "id": "M112",
@@ -2843,7 +2954,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M113",
@@ -2866,7 +2978,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M114",
@@ -2889,7 +3002,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M115",
@@ -2912,7 +3026,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M116",
@@ -2935,7 +3050,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M117",
@@ -2958,7 +3074,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M118",
@@ -2981,7 +3098,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M119",
@@ -3004,7 +3122,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M120",
@@ -3027,7 +3146,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M121",
@@ -3050,7 +3170,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M122",
@@ -3073,7 +3194,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M123",
@@ -3096,7 +3218,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M124",
@@ -3119,7 +3242,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M125",
@@ -3142,7 +3266,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M126",
@@ -3165,7 +3290,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M127",
@@ -3188,7 +3314,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M128",
@@ -3211,7 +3338,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M129",
@@ -3234,7 +3362,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "M130",
@@ -3257,7 +3386,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "new-found-glory",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "M131",
@@ -3280,7 +3410,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "good-charlotte",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "M132",
@@ -3303,7 +3434,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mest",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "mest"
     },
     {
       "id": "M133",
@@ -3326,7 +3458,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "angels-airwaves",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "M134",
@@ -3349,7 +3482,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-all-american-rejects",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "M135",
@@ -3372,7 +3506,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "mgk",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "mgk"
     },
     {
       "id": "M136",
@@ -3395,7 +3530,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "avril-lavigne",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "M137",
@@ -3418,7 +3554,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "the-offspring",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "M138",
@@ -3441,7 +3578,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "green-day",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "green-day"
     },
     {
       "id": "M139",
@@ -3464,7 +3602,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "bowling-for-soup",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "M140",
@@ -3487,7 +3626,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sugarcult",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "M141",
@@ -3510,7 +3650,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "all-time-low",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "M142",
@@ -3533,7 +3674,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fall-out-boy",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "M143",
@@ -3556,7 +3698,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "yellowcard",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "M144",
@@ -3579,7 +3722,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "my-chemical-romance",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "M145",
@@ -3602,7 +3746,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "less-than-jake",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "M146",
@@ -3625,7 +3770,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "fenix-tx",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "M147",
@@ -3648,7 +3794,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "midtown",
-      "soundCharacter": "Drive"
+      "soundCharacter": "Drive",
+      "toneProfileId": "midtown"
     },
     {
       "id": "M148",
@@ -3671,7 +3818,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "blink-182",
-      "soundCharacter": "Lead Drive"
+      "soundCharacter": "Lead Drive",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "M149",
@@ -3694,7 +3842,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "sum-41",
-      "soundCharacter": "Clean"
+      "soundCharacter": "Clean",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "M150",
@@ -3717,7 +3866,8 @@
       "sampleRequirement": "multisampled-WAV-zones-with-root-key-and-velocity-mapping",
       "status": "catalog-definition-awaiting-plugin-integration-and-sample-validation",
       "styleProfileId": "simple-plan",
-      "soundCharacter": "Crunch"
+      "soundCharacter": "Crunch",
+      "toneProfileId": "simple-plan"
     }
   ],
   "patternPresets": [
@@ -3780,7 +3930,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P002",
@@ -3841,7 +3992,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P003",
@@ -3902,7 +4054,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P004",
@@ -3963,7 +4116,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P005",
@@ -4024,7 +4178,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P006",
@@ -4085,7 +4240,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P007",
@@ -4146,7 +4302,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P008",
@@ -4207,7 +4364,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P009",
@@ -4268,7 +4426,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P010",
@@ -4329,7 +4488,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P011",
@@ -4387,7 +4547,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P012",
@@ -4445,7 +4606,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P013",
@@ -4503,7 +4665,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P014",
@@ -4561,7 +4724,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P015",
@@ -4619,7 +4783,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P016",
@@ -4677,7 +4842,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P017",
@@ -4735,7 +4901,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P018",
@@ -4793,7 +4960,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P019",
@@ -4851,7 +5019,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P020",
@@ -4909,7 +5078,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P021",
@@ -4967,7 +5137,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P022",
@@ -5025,7 +5196,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P023",
@@ -5083,7 +5255,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P024",
@@ -5141,7 +5314,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P025",
@@ -5199,7 +5373,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P026",
@@ -5257,7 +5432,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P027",
@@ -5315,7 +5491,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P028",
@@ -5373,7 +5550,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P029",
@@ -5431,7 +5609,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P030",
@@ -5489,7 +5668,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P031",
@@ -5547,7 +5727,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P032",
@@ -5605,7 +5786,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P033",
@@ -5663,7 +5845,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P034",
@@ -5721,7 +5904,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P035",
@@ -5779,7 +5963,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P036",
@@ -5837,7 +6022,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P037",
@@ -5895,7 +6081,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P038",
@@ -5953,7 +6140,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P039",
@@ -6011,7 +6199,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P040",
@@ -6069,7 +6258,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P041",
@@ -6127,7 +6317,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P042",
@@ -6185,7 +6376,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P043",
@@ -6243,7 +6435,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P044",
@@ -6301,7 +6494,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P045",
@@ -6359,7 +6553,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P046",
@@ -6417,7 +6612,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P047",
@@ -6475,7 +6671,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P048",
@@ -6533,7 +6730,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P049",
@@ -6591,7 +6789,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P050",
@@ -6649,7 +6848,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P051",
@@ -6709,7 +6909,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P052",
@@ -6769,7 +6970,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P053",
@@ -6829,7 +7031,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P054",
@@ -6889,7 +7092,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P055",
@@ -6949,7 +7153,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P056",
@@ -7009,7 +7214,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P057",
@@ -7069,7 +7275,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P058",
@@ -7129,7 +7336,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P059",
@@ -7189,7 +7397,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P060",
@@ -7249,7 +7458,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P061",
@@ -7307,7 +7517,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P062",
@@ -7365,7 +7576,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P063",
@@ -7423,7 +7635,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P064",
@@ -7481,7 +7694,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P065",
@@ -7539,7 +7753,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P066",
@@ -7597,7 +7812,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P067",
@@ -7655,7 +7871,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P068",
@@ -7713,7 +7930,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P069",
@@ -7771,7 +7989,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P070",
@@ -7829,7 +8048,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P071",
@@ -7890,7 +8110,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P072",
@@ -7951,7 +8172,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P073",
@@ -8012,7 +8234,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P074",
@@ -8073,7 +8296,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P075",
@@ -8134,7 +8358,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P076",
@@ -8195,7 +8420,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P077",
@@ -8256,7 +8482,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P078",
@@ -8317,7 +8544,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P079",
@@ -8378,7 +8606,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P080",
@@ -8439,7 +8668,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P081",
@@ -8501,7 +8731,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P082",
@@ -8563,7 +8794,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P083",
@@ -8625,7 +8857,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P084",
@@ -8687,7 +8920,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P085",
@@ -8749,7 +8983,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P086",
@@ -8811,7 +9046,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P087",
@@ -8873,7 +9109,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P088",
@@ -8935,7 +9172,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P089",
@@ -8997,7 +9235,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P090",
@@ -9059,7 +9298,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P091",
@@ -9119,7 +9359,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P092",
@@ -9179,7 +9420,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P093",
@@ -9239,7 +9481,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P094",
@@ -9299,7 +9542,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P095",
@@ -9359,7 +9603,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P096",
@@ -9419,7 +9664,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P097",
@@ -9479,7 +9725,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P098",
@@ -9539,7 +9786,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P099",
@@ -9599,7 +9847,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P100",
@@ -9659,7 +9908,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P101",
@@ -9717,7 +9967,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P102",
@@ -9775,7 +10026,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P103",
@@ -9833,7 +10085,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P104",
@@ -9891,7 +10144,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P105",
@@ -9949,7 +10203,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P106",
@@ -10007,7 +10262,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P107",
@@ -10065,7 +10321,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P108",
@@ -10123,7 +10380,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P109",
@@ -10181,7 +10439,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P110",
@@ -10239,7 +10498,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P111",
@@ -10297,7 +10557,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P112",
@@ -10355,7 +10616,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P113",
@@ -10413,7 +10675,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P114",
@@ -10471,7 +10734,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P115",
@@ -10529,7 +10793,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P116",
@@ -10587,7 +10852,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P117",
@@ -10645,7 +10911,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P118",
@@ -10703,7 +10970,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P119",
@@ -10761,7 +11029,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P120",
@@ -10819,7 +11088,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P121",
@@ -10877,7 +11147,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P122",
@@ -10935,7 +11206,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P123",
@@ -10993,7 +11265,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P124",
@@ -11051,7 +11324,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P125",
@@ -11109,7 +11383,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P126",
@@ -11167,7 +11442,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P127",
@@ -11225,7 +11501,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P128",
@@ -11283,7 +11560,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P129",
@@ -11341,7 +11619,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     },
     {
       "id": "P130",
@@ -11399,7 +11678,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "new-found-glory"
+      "styleProfileId": "new-found-glory",
+      "toneProfileId": "new-found-glory"
     },
     {
       "id": "P131",
@@ -11457,7 +11737,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "good-charlotte"
+      "styleProfileId": "good-charlotte",
+      "toneProfileId": "good-charlotte"
     },
     {
       "id": "P132",
@@ -11515,7 +11796,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mest"
+      "styleProfileId": "mest",
+      "toneProfileId": "mest"
     },
     {
       "id": "P133",
@@ -11573,7 +11855,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "angels-airwaves"
+      "styleProfileId": "angels-airwaves",
+      "toneProfileId": "angels-airwaves"
     },
     {
       "id": "P134",
@@ -11631,7 +11914,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-all-american-rejects"
+      "styleProfileId": "the-all-american-rejects",
+      "toneProfileId": "the-all-american-rejects"
     },
     {
       "id": "P135",
@@ -11689,7 +11973,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "mgk"
+      "styleProfileId": "mgk",
+      "toneProfileId": "mgk"
     },
     {
       "id": "P136",
@@ -11747,7 +12032,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "avril-lavigne"
+      "styleProfileId": "avril-lavigne",
+      "toneProfileId": "avril-lavigne"
     },
     {
       "id": "P137",
@@ -11805,7 +12091,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "the-offspring"
+      "styleProfileId": "the-offspring",
+      "toneProfileId": "the-offspring"
     },
     {
       "id": "P138",
@@ -11863,7 +12150,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "green-day"
+      "styleProfileId": "green-day",
+      "toneProfileId": "green-day"
     },
     {
       "id": "P139",
@@ -11921,7 +12209,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "bowling-for-soup"
+      "styleProfileId": "bowling-for-soup",
+      "toneProfileId": "bowling-for-soup"
     },
     {
       "id": "P140",
@@ -11979,7 +12268,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sugarcult"
+      "styleProfileId": "sugarcult",
+      "toneProfileId": "sugarcult"
     },
     {
       "id": "P141",
@@ -12037,7 +12327,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "all-time-low"
+      "styleProfileId": "all-time-low",
+      "toneProfileId": "all-time-low"
     },
     {
       "id": "P142",
@@ -12095,7 +12386,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fall-out-boy"
+      "styleProfileId": "fall-out-boy",
+      "toneProfileId": "fall-out-boy"
     },
     {
       "id": "P143",
@@ -12153,7 +12445,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "yellowcard"
+      "styleProfileId": "yellowcard",
+      "toneProfileId": "yellowcard"
     },
     {
       "id": "P144",
@@ -12211,7 +12504,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "my-chemical-romance"
+      "styleProfileId": "my-chemical-romance",
+      "toneProfileId": "my-chemical-romance"
     },
     {
       "id": "P145",
@@ -12269,7 +12563,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "less-than-jake"
+      "styleProfileId": "less-than-jake",
+      "toneProfileId": "less-than-jake"
     },
     {
       "id": "P146",
@@ -12327,7 +12622,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "fenix-tx"
+      "styleProfileId": "fenix-tx",
+      "toneProfileId": "fenix-tx"
     },
     {
       "id": "P147",
@@ -12385,7 +12681,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "midtown"
+      "styleProfileId": "midtown",
+      "toneProfileId": "midtown"
     },
     {
       "id": "P148",
@@ -12443,7 +12740,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "blink-182"
+      "styleProfileId": "blink-182",
+      "toneProfileId": "blink-182"
     },
     {
       "id": "P149",
@@ -12501,7 +12799,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "sum-41"
+      "styleProfileId": "sum-41",
+      "toneProfileId": "sum-41"
     },
     {
       "id": "P150",
@@ -12559,7 +12858,8 @@
         "Lead Drive",
         "Muted Chugs"
       ],
-      "styleProfileId": "simple-plan"
+      "styleProfileId": "simple-plan",
+      "toneProfileId": "simple-plan"
     }
   ],
   "patternSoundOptions": [
@@ -12572,5 +12872,10 @@
     "Lead Drive",
     "Muted Chugs"
   ],
-  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings."
+  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings.",
+  "toneProfileRegistry": {
+    "path": "presets/artist_tone_profiles_v1.json",
+    "version": "1.0.0",
+    "status": "reference-only-not-runtime-applied"
+  }
 }
