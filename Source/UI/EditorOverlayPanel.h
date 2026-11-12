@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <functional>
 
 class PPGUEditorOverlayPanel final : public juce::Component
 {
