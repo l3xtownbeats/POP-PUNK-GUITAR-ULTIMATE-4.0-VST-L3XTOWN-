@@ -467,3 +467,21 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Нереализованные Settings/About/Curator/Auto Discover нельзя выдавать за готовые функции или заполнять фиктивными активными заглушками.
 - Следующий coding task: pure geometry module AuxiliaryPanelLayout + unit tests; после этого — window shell/manager. Это дизайн-этап, не реализация: отдельные окна, auto-tiling и compact mode пока НЕ IMPLEMENTED и НЕ TESTED.
 - Отдельный известный release blocker остаётся: run #860 CTest 11/12 из-за Skin_052, не зарегистрированной в legacy theme registry. Не обходить проверку; skin pack merge/registry consistency требует отдельного корректного исправления до полного Release → CTest → pluginval → package acceptance.
+
+
+## 2026-11-12 — Auxiliary Panel Layout: первый кодовый этап
+
+**Статус: GEOMETRY MODULE IMPLEMENTED / CI AND HOST TESTS PENDING.**
+
+- Добавлен pure C++ geometry module: `Source/UI/AuxiliaryPanelLayout.h/.cpp`. Он не зависит от JUCE Component/window ownership и не затрагивает audio callback, APVTS, MIDI или DSP.
+- Реализован детерминированный расчёт tiled bounds по доступной рабочей области, числу открытых панелей и DPI scale. При уменьшении ниже желаемых размеров выставляется `compact=true`; если все панели не помещаются даже по minimum size, выставляется `overflow=true` и видимой остаётся первая панель-страница, остальные доступны менеджеру через будущую навигацию. Это геометрическая политика, не готовая UI-навигация.
+- Добавлены `tests/AuxiliaryPanelLayoutTests.cpp`: сценарии 0/1/2/3/4/6 панелей, неперекрытие и границы work area, compact mode, portrait layout, overflow paging, DPI scale и детерминизм.
+- Модуль зарегистрирован в основном plugin target и отдельном CTest target `ppgu_auxiliary_panel_layout_contract` в CMake.
+- Commits: header `5440dec658b0417d439b12ec43975379a91c0a22`; implementation `08fe8cd53dbb1a6d3be0883f476675798a0169b2`; tests `f5eda5866aa5c82795df65b6cc69bc2df5b897e8`; CMake `8783b1078ec52b0449e8339019c0337045a56cf8`.
+- **Локальная сборка/CTest не запускались в этой среде; GitHub Actions result для нового HEAD ещё не подтверждён.** Поэтому тесты пока обозначаются как ADDED, а не PASS.
+- Следующий этап после CI: исправить только реальные compiler/test findings; затем построить JUCE window shell/manager с per-panel square maximize/restore и X, SafePointer lifecycle, сохранением bounds и независимым закрытием. До этого независимые окна и compact UI не считаются готовыми.
+ 
+## 2026-11-12 — VST3 instrument target verification (source configuration)
+
+- Повторно проверен текущий `CMakeLists.txt`: JUCE plugin target содержит `FORMATS VST3`, `IS_SYNTH TRUE`, `NEEDS_MIDI_INPUT TRUE`, `NEEDS_MIDI_OUTPUT FALSE`, `IS_MIDI_EFFECT FALSE`. Конфигурация соответствует намерению PPGU быть MIDI-управляемым VST3 instrument, а не audio effect.
+- Это проверка исходной конфигурации, не доказательство успешной сборки нового HEAD и не FL Studio 20 host acceptance. Реальный scan/load/MIDI/audio/state test в FL Studio 20 остаётся отдельным обязательным gate.
