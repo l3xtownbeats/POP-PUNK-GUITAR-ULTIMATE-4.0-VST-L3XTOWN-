@@ -17,6 +17,8 @@ private:
     PPGUThemeManager::Palette palette;
 };
 
+class PPGUPerformanceDisplay;
+
 class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
@@ -44,6 +46,7 @@ private:
     PopPunkGuitarUltimateAudioProcessor& processor;
     PPGUThemeManager themeManager;
     std::unique_ptr<PPGUMultiWindowWorkspace> auxiliaryWorkspace;
+    std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
