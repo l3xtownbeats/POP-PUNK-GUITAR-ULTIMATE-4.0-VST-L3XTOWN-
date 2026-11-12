@@ -7,11 +7,11 @@ PPGUSettingsPanel::PPGUSettingsPanel(juce::AudioProcessorValueTreeState& state,
 {
     title.setText("PERFORMANCE & ENGINE SETTINGS", juce::dontSendNotification);
     title.setFont(juce::Font(17.0f, juce::Font::bold));
-    title.setColour(juce::Label::textColourId, juce::Colour(0xfff4f0f4));
+    title.setColour(juce::Label::textColourId, palette.textPrimary);
     addAndMakeVisible(title);
     description.setText("These controls are attached to the existing processor parameters. They do not change the audio routing or parameter identifiers.", juce::dontSendNotification);
     description.setFont(juce::Font(11.0f));
-    description.setColour(juce::Label::textColourId, juce::Colour(0xffaab2bf));
+    description.setColour(juce::Label::textColourId, palette.textSecondary);
     addAndMakeVisible(description);
     const std::pair<const char*, const char*> definitions[] = {
         { "voices", "POLYPHONY / VOICES" }, { "master", "MASTER LEVEL" },
