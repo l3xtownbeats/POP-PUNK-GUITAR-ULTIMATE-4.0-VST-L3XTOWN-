@@ -1846,3 +1846,13 @@ ARTIST STYLE не должен превращаться в обязательн�
 Измерять cold/warm startup, время до первого готового звука, preset/bank load latency, MIDI round-trip/processing latency, UI action response, peak CPU/RAM, cache hit rate, disk streaming, audio underruns и memory growth. Фиксировать систему, DAW, sample rate, buffer size, bank/preset и нагрузочный сценарий. Оптимизация принимается только при повторяемых измерениях и отсутствии регрессий качества/стабильности.
 
 **Правило:** PPGU должен ощущаться мгновенным и лёгким в повседневной работе, даже при большой библиотеке и сложной сессии; производительность достигается архитектурой и профилированием, а не отключением нужных пользователю возможностей.
+
+
+## 2026-11-12 — SCOPE CONTROL: NO UNREQUESTED SUPERFEATURES
+
+- Do not invent new "super tasks", oversized subsystems, speculative features, or unnecessary complexity.
+- Work only within the user's approved PPGU scope, existing master specifications, and explicitly accepted requirements.
+- Improve reliability, speed, responsiveness, audio quality, editing workflow, and CPU/RAM efficiency of the existing engine and features.
+- Refactor or replace internals only when justified by a concrete defect, measurable performance gain, stability requirement, or compatibility need.
+- Do not add product features, background services, cloud/network dependencies, extra engines, or elaborate abstractions merely because they seem impressive.
+- Keep implementation as simple as possible while fully meeting the approved requirements. No scope creep; no weakening of already accepted functionality.
