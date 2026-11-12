@@ -68,7 +68,215 @@ private:
     juce::TextButton loadButton;
 };
 
-// Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
+// Compact live harmony monitor. It observes the existing MIDI keyboard state and
+// scale parameters only; it never writes to APVTS or changes processor behaviour.
+class PPGUPerformanceDisplay final : public juce::Component, private juce::Timer
+{
+public:
+    PPGUPerformanceDisplay(juce::MidiKeyboardState& state,
+                           juce::AudioProcessorValueTreeState& apvts)
+        : keyboardState(state), parameters(apvts)
+    {
+        setOpaque(false);
+        refreshState();
+        startTimerHz(20);
+    }
+
+    void setPalette(const PPGUThemeManager::Palette& value)
+    {
+        palette = value;
+        repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        auto bounds = getLocalBounds().toFloat();
+        g.setGradientFill(juce::ColourGradient(palette.tokens.panelElevated,
+                                               bounds.getX(), bounds.getY(),
+                                               palette.tokens.panel,
+                                               bounds.getX(), bounds.getBottom(), false));
+        g.fillRoundedRectangle(bounds, 9.0f);
+        g.setColour(palette.tokens.controlBorder.withAlpha(0.9f));
+        g.drawRoundedRectangle(bounds.reduced(0.5f), 9.0f, 1.0f);
+        g.setColour(palette.tokens.accent);
+        g.fillRoundedRectangle(bounds.getX() + 1.0f, bounds.getY() + 8.0f, 3.0f,
+                               juce::jmax(8.0f, bounds.getHeight() - 16.0f), 1.5f);
+
+        auto area = getLocalBounds().reduced(14, 5);
+        auto harmony = area.removeFromLeft(190);
+        g.setColour(palette.tokens.textSecondary);
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("LIVE HARMONY", harmony.removeFromTop(13), juce::Justification::left);
+        g.setColour(palette.tokens.accent);
+        g.setFont(juce::Font(23.0f, juce::Font::bold));
+        g.drawFittedText(chordText, harmony, juce::Justification::centredLeft, 1);
+
+        area.removeFromLeft(10);
+        auto keyArea = area.removeFromRight(148);
+        g.setColour(palette.tokens.textSecondary);
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("SCALE / KEY", keyArea.removeFromTop(13), juce::Justification::left);
+        g.setColour(palette.tokens.textPrimary);
+        g.setFont(juce::Font(12.0f, juce::Font::bold));
+        g.drawFittedText(keyText, keyArea, juce::Justification::centredLeft, 1);
+
+        area.removeFromRight(8);
+        g.setColour(palette.tokens.textSecondary);
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("NOTES HELD", area.removeFromTop(13), juce::Justification::left);
+        g.setColour(palette.tokens.textPrimary);
+        g.setFont(juce::Font(12.0f));
+        g.drawFittedText(notesText, area, juce::Justification::centredLeft, 1);
+    }
+
+private:
+    struct ChordShape
+    {
+        const char* suffix;
+        std::vector<int> intervals;
+        int priority;
+    };
+
+    static juce::String pitchName(int pitchClass)
+    {
+        static const char* names[] = {
+            "C", "C#", "D", "D#", "E", "F",
+            "F#", "G", "G#", "A", "A#", "B"
+        };
+        return names[juce::jlimit(0, 11, pitchClass)];
+    }
+
+    static juce::String noteName(int midiNote)
+    {
+        return pitchName(midiNote % 12) + juce::String(midiNote / 12 - 1);
+    }
+
+    juce::String detectChord(const std::vector<int>& notes) const
+    {
+        if (notes.empty())
+            return "—";
+
+        if (notes.size() == 1)
+            return noteName(notes.front());
+
+        std::array<bool, 12> present {};
+        int pitchClassCount = 0;
+        for (const auto note : notes)
+        {
+            const int pc = note % 12;
+            if (!present[static_cast<size_t>(pc)])
+            {
+                present[static_cast<size_t>(pc)] = true;
+                ++pitchClassCount;
+            }
+        }
+
+        static const std::vector<ChordShape> shapes {
+            { "m",    { 0, 3, 7 },       12 },
+            { "maj",  { 0, 4, 7 },       11 },
+            { "m7",   { 0, 3, 7, 10 },  10 },
+            { "7",    { 0, 4, 7, 10 },   9 },
+            { "maj7", { 0, 4, 7, 11 },   9 },
+            { "sus2", { 0, 2, 7 },       8 },
+            { "sus4", { 0, 5, 7 },       8 },
+            { "dim",  { 0, 3, 6 },       7 },
+            { "aug",  { 0, 4, 8 },       7 },
+            { "m7b5", { 0, 3, 6, 10 },   6 },
+            { "dim7", { 0, 3, 6, 9 },    6 },
+            { "6",    { 0, 4, 7, 9 },    5 },
+            { "m6",   { 0, 3, 7, 9 },    5 },
+            { "mMaj7",{ 0, 3, 7, 11 },  4 },
+            { "5",    { 0, 7 },          2 }
+        };
+
+        const int bassPc = notes.front() % 12;
+        int bestScore = std::numeric_limits<int>::min();
+        juce::String best;
+
+        for (int root = 0; root < 12; ++root)
+        {
+            for (const auto& shape : shapes)
+            {
+                bool complete = true;
+                for (const auto interval : shape.intervals)
+                    if (!present[static_cast<size_t>((root + interval) % 12)])
+                    {
+                        complete = false;
+                        break;
+                    }
+
+                if (!complete)
+                    continue;
+
+                const int extras = pitchClassCount - static_cast<int>(shape.intervals.size());
+                const int score = 100 - extras * 18 + shape.priority + (root == bassPc ? 4 : 0);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    best = pitchName(root) + shape.suffix;
+                }
+            }
+        }
+
+        if (best.isNotEmpty())
+            return best;
+
+        return pitchName(bassPc) + "  /  " + juce::String(pitchClassCount) + " tones";
+    }
+
+    void refreshState()
+    {
+        std::vector<int> held;
+        held.reserve(8);
+        for (int note = 0; note < 128; ++note)
+        {
+            bool isHeld = false;
+            for (int channel = 1; channel <= 16 && !isHeld; ++channel)
+                isHeld = keyboardState.isNoteOn(channel, note);
+            if (isHeld)
+                held.push_back(note);
+        }
+
+        juce::StringArray noteNames;
+        for (size_t i = 0; i < held.size() && i < 6; ++i)
+            noteNames.add(noteName(held[i]));
+        if (held.size() > 6)
+            noteNames.add("+" + juce::String(static_cast<int>(held.size() - 6)));
+
+        const auto newChord = detectChord(held);
+        const auto newNotes = held.empty() ? juce::String("Waiting for MIDI input")
+                                           : noteNames.joinIntoString("   ·   ");
+
+        auto* rootParameter = parameters.getRawParameterValue("scaleRoot");
+        auto* modeParameter = parameters.getRawParameterValue("scaleMode");
+        const int root = rootParameter != nullptr
+            ? juce::jlimit(0, 11, static_cast<int>(rootParameter->load(std::memory_order_relaxed))) : 0;
+        const int mode = modeParameter != nullptr
+            ? juce::jlimit(0, 2, static_cast<int>(modeParameter->load(std::memory_order_relaxed))) : 0;
+        const auto newKey = mode == 1 ? pitchName(root) + " MAJOR"
+                         : mode == 2 ? pitchName(root) + " MINOR"
+                                     : juce::String("CHROMATIC");
+
+        if (newChord != chordText || newNotes != notesText || newKey != keyText)
+        {
+            chordText = newChord;
+            notesText = newNotes;
+            keyText = newKey;
+            repaint();
+        }
+    }
+
+    void timerCallback() override { refreshState(); }
+
+    juce::MidiKeyboardState& keyboardState;
+    juce::AudioProcessorValueTreeState& parameters;
+    PPGUThemeManager::Palette palette;
+    juce::String chordText { "—" };
+    juce::String notesText { "Waiting for MIDI input" };
+    juce::String keyText { "CHROMATIC" };
+};
+
+// Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -229,6 +437,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
+    performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, processor.parameters);
+    addAndMakeVisible(*performanceDisplay);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
     for (size_t i = 0; i < knobs.size(); ++i) {
@@ -318,7 +528,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
  g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
  for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
  g.setColour(p.token("accent"));g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
- auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(92);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
+ auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(152);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
  auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
 }
 
@@ -335,8 +545,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
  for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
- auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+ auto controls=play.removeFromTop(214);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
+ startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(8);auto display=a.removeFromTop(52);if(performanceDisplay)performanceDisplay->setBounds(display);a.removeFromTop(8);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
@@ -438,7 +648,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-01") : juce::String("skin-01");
+    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
     const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
     if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
     {
@@ -491,7 +701,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
          p.token("control_border"), p.token("accent"), p.token("text_primary"));
