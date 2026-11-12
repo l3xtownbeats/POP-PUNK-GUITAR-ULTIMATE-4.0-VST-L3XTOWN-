@@ -252,3 +252,15 @@ Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Fou
 
 
 - **AutoChords display / keyboard non-obstruction (approved clarification, 2026-11-12):** Display AutoChords must never cover, obscure, intercept, or reduce the usable area of the plugin's playable on-screen piano/MIDI keyboard. The keyboard remains fully visible and operable in every AutoChords display state, window size, panel layout, and theme. Prefer a dedicated non-overlapping region above/beside the keyboard or a separate/resizable auxiliary window; if space is constrained, AutoChords content must reflow, scroll, collapse, or resize without overlaying the keys. Pointer hit-testing and MIDI-key interaction must remain unambiguous. Verify minimum editor size, resize extremes, tiled/expanded auxiliary windows, DPI scaling, keyboard boundaries, and open/close transitions. This is a UI layout and interaction requirement; it does not change AutoChords MIDI/chord-generation semantics.
+
+
+### 15.9 AutoChords — утверждённая компоновка раздела (2026-11-12)
+
+Пользователь уточнил расположение основных элементов AutoChords:
+- **Левая колонка — PRESETS:** вертикальный список/браузер пресетов AutoChords. Здесь выбираются сохранённые chord/progression presets и связанные музыкальные заготовки; поиск и категории размещать в верхней части колонки, если они предусмотрены.
+- **Правая колонка — RHYTHM PATTERNS / MODES:** выбор режима исполнения и ритмического рисунка. Показывать варианты наглядными карточками или компактным списком с названием, кратким описанием feel/акцентов и доступностью для выбранного инструмента.
+- Выбор пресета слева и рисунка справа — независимые решения. Смена ритмического рисунка не должна самопроизвольно менять выбранную гармоническую прогрессию; смена пресета не должна сбрасывать рисунок без явного правила/индикации.
+- Над двумя колонками — заголовок AUTOCHORDS и понятный статус выбранного инструмента/тона; внизу — компактная область текущей последовательности/аккордов и транспортных действий, если это предусмотрено текущим макетом.
+- Не перекрывать экранную MIDI-клавиатуру. Раздел AutoChords занимает отдельную область выше/рядом с клавиатурой либо открывается отдельным изменяемым окном. При уменьшении окна колонки адаптивно сжимаются/перестраиваются/прокручиваются, но клавиши остаются полностью видимыми и кликабельными.
+- Состояния выбранного пресета и ритмического рисунка должны быть визуально различимы; предусмотреть audition/preview, если соответствующие данные доступны. Недоступные для выбранной гитары варианты явно помечать, не имитировать отсутствующие исполнения.
+- Это утверждённое требование к визуальной структуре и UX; оно не означает, что соответствующий GUI уже реализован. Проверить реализацию в JUCE, hit-testing, resize, DPI и сохранение выбора.
