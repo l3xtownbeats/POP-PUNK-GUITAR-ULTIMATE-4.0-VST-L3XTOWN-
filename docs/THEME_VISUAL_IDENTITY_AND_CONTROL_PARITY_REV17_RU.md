@@ -95,3 +95,14 @@ Legacy manifests remain loadable through deterministic compatibility defaults. M
 ## 8. Acceptance rule
 
 A theme is not COMPLETE merely because its JSON loads or its colours change. It is COMPLETE only when its material/panel/control/frame identity is visibly distinct, its declared layout is applied, every mandatory control retains parity, and automated plus host-side checks pass.
+
+
+## 9. GUI parity hierarchy — binding rule for all skins
+
+The approved REV.17 development journal, master specification and Control Inventory are authoritative for **which controls and functions exist**. The visual mockup is authoritative for the appearance and placement of those approved controls, not for inventing extra functionality.
+
+A mockup-only element with no approved functional counterpart may be removed or replaced by a journal-required control. A journal-required control missing from the mockup or current editor must be added to the correct zone and given a real component, binding/action, state and feedback. This applies equally to NEON PUNK, BLACK METAL, CYBER BLUE, DARK INDUSTRIAL and CLASSIC STUDIO.
+
+This is GUI-only reconciliation: never delete or alter an underlying working engine/DSP/sampler/MIDI/APVTS feature, ID, parameter semantics, preset data or SoundBank merely because its old visual control is removed. Preserve the feature and expose it through the approved UI when required. Never leave decorative/fake controls that imply unavailable functionality; mark unresolved functions honestly as DISABLED / DEFERRED / NOT IMPLEMENTED. Resolve ambiguous conflicts in INFO/CODE before changing the GUI.
+
+Acceptance requires exact visual treatment of the approved controls plus 100% required control parity and real interaction/binding. Palette or mockup resemblance alone is not a pass.
