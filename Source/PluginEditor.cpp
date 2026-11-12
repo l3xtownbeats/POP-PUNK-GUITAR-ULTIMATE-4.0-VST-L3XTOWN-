@@ -7,6 +7,7 @@
 #include <string>
 #include <set>
 #include <limits>
+#include <vector>
 #if JUCE_WINDOWS
  #ifndef NOMINMAX
   #define NOMINMAX
@@ -73,9 +74,8 @@ private:
 class PPGUPerformanceDisplay final : public juce::Component, private juce::Timer
 {
 public:
-    PPGUPerformanceDisplay(juce::MidiKeyboardState& state,
-                           juce::AudioProcessorValueTreeState& apvts)
-        : keyboardState(state), parameters(apvts)
+    explicit PPGUPerformanceDisplay(PopPunkGuitarUltimateAudioProcessor& processorIn)
+        : processor(processorIn), parameters(processorIn.parameters)
     {
         setOpaque(false);
         refreshState();
@@ -154,7 +154,7 @@ private:
     juce::String detectChord(const std::vector<int>& notes) const
     {
         if (notes.empty())
-            return "—";
+            return "-";
 
         if (notes.size() == 1)
             return noteName(notes.front());
@@ -231,8 +231,7 @@ private:
         for (int note = 0; note < 128; ++note)
         {
             bool isHeld = false;
-            for (int channel = 1; channel <= 16 && !isHeld; ++channel)
-                isHeld = keyboardState.isNoteOn(channel, note);
+            isHeld = processor.isMidiNoteHeld(note);
             if (isHeld)
                 held.push_back(note);
         }
@@ -245,7 +244,7 @@ private:
 
         const auto newChord = detectChord(held);
         const auto newNotes = held.empty() ? juce::String("Waiting for MIDI input")
-                                           : noteNames.joinIntoString("   ·   ");
+                                           : noteNames.joinIntoString("   /   ");
 
         auto* rootParameter = parameters.getRawParameterValue("scaleRoot");
         auto* modeParameter = parameters.getRawParameterValue("scaleMode");
@@ -268,7 +267,7 @@ private:
 
     void timerCallback() override { refreshState(); }
 
-    juce::MidiKeyboardState& keyboardState;
+    PopPunkGuitarUltimateAudioProcessor& processor;
     juce::AudioProcessorValueTreeState& parameters;
     PPGUThemeManager::Palette palette;
     juce::String chordText { "—" };
@@ -437,7 +436,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
-    performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, processor.parameters);
+    performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor);
     addAndMakeVisible(*performanceDisplay);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
