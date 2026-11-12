@@ -11,7 +11,7 @@ public:
            juce::Colour heading, juce::Colour text)
         : owner(ownerIn), panelId(spec.id), desired(spec.desired), minimum(spec.minimum),
           content(std::move(spec.content)),
-          resizeCorner(*this, &boundsConstrainer)
+          resizeCorner(this, &boundsConstrainer)
     {
         title.setText(spec.title, juce::dontSendNotification);
         title.setFont(juce::Font(14.0f, juce::Font::bold));
