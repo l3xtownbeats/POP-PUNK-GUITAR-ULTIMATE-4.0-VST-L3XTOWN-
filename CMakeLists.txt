@@ -62,6 +62,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/UI/PerformanceDisplay.h
     Source/UI/EditorOverlayPanel.cpp
     Source/UI/EditorOverlayPanel.h
+    Source/UI/AuxiliaryPanelWindowManager.cpp
+    Source/UI/AuxiliaryPanelWindowManager.h
     Source/UI/FXEditPanel.cpp
     Source/UI/FXEditPanel.h
     Source/UI/AutoChordsPanel.cpp
