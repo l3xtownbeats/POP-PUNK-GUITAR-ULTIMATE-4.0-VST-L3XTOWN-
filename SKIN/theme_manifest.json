@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 52,
-  "defaultSkin": "skin-01",
+  "defaultSkin": "skin-052",
   "selector": "SKIN",
   "status": "runtime-palette-switching-implemented-pending-validation",
   "themes": [
@@ -468,7 +468,7 @@
     {
       "id": "skin-052",
       "index": 52,
-      "name": "Carbon Relay",
+      "name": "SIGNAL FORGE",
       "family": "carbon_studio",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_052/theme.json",
