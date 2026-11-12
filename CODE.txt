@@ -64,3 +64,5 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - GitHub Actions run #1177 / ID 43235287270: SUCCESS.
 - Windows x64 Release configure, VST3/test executable build, CTest, VST3 locate, pluginval strictness 5, package job and artifact upload all SUCCESS; sample library license validation SUCCESS from restored cache (download skipped).
 - Evidence and limitations recorded append-only in Info.txt. Host/FL Studio 20 acceptance remains NOT VERIFIED; no COMPLETE ZIP release claimed.
+
+- docs/AUXILIARY_PANEL_MANAGER_DESIGN_RU.md: refreshed exact-source CI evidence to run #1177 on e90e7be79a717c74fc94ec634a31f8c7669fb850; explicitly retained FL Studio 20 interactive host acceptance as NOT VERIFIED.
