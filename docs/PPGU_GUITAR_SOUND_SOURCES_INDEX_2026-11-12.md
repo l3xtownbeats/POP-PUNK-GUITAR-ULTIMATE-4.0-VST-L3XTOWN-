@@ -118,3 +118,48 @@ Current repository Sound Hunter registry is not proof of completed ingestion. Th
 - **YELLOW / permission needed:** Ghosthack, Function Loops, Samplephonics/Noiiz, Abletunes, Godlike Loops, Unison, Slooply, Pasin Guitar Loops and any pack described only as royalty-free/free for music use.
 - **RED / exclude from bundled source files under current terms:** FiftySounds music and NDA Samples rock guitar loops; MusicRadar SampleRadar and Splice are also not cleared for raw sample redistribution under their standard music-use licenses.
 - No missing license text is treated as permission. Silence is UNKNOWN, not GREEN.
+
+
+## Priority expansion: pattern-engine material (punk first)
+
+The user's sound hierarchy for the pattern engine is now:
+1. **PUNK (highest priority):** pop-punk, punk rock, emo-punk, skate punk, melodic hardcore and adjacent punk guitar performances. Seek real-player power chords, palm-muted eighths, octave riffs, open-chord choruses, ska upstrokes, leads, fills, transitions, endings, harmonics, slides and pick/noise articulations.
+2. **GENERAL GUITAR LOOPS:** any style of real acoustic/electric guitar, any chord progression, tempo, key, meter, strumming/fingerpicking pattern or loop format.
+3. **ROCK GUITARS:** broader rock recordings and patterns, only after the first two tiers.
+4. **DRUM/PERCUSSION ONE-SHOTS:** may be used as supporting pattern-engine material when they are musically suitable (kick, snare, hats, crashes, toms, tambourine, claps). Keep them in a separate drum/percussion bank, never mislabel them as guitar samples. Do not let generic drum packs displace the punk-guitar priority.
+
+41. Spare Bedroom Studio — Pop Punk Loop Pack — https://shop.sparebedroomstudio.com/products/pop-punk-loop-pack-guitar-loops
+    - Product page states 3,600+ loops played by a real guitarist: full chords, palm-muted riffs, leads, ska rhythms, octave stabs and one-shots; every key, five tempos (145/155/170/185/200 BPM), processed and raw DI WAV; claimed size 17.53 GB.
+    - Excellent stylistic match and a strong benchmark for pattern coverage. Paid pack. “Royalty-free” is for music production; no proof of permission to redistribute the raw WAV files inside PPGU. Do not bundle without written permission.
+42. Looperman — live punk/emo guitar loop examples:
+    - https://www.looperman.com/loops/detail/421913/shooting-star-pop-punk-x-emo-guitars-free-175bpm-punk-electric-guitar-loop (175 BPM, B, 4/4; uploader describes live guitars, pop-punk/rock/alternative/emo).
+    - https://www.looperman.com/loops/detail/419325/high-emo-rock-x-pop-punk-guitars-free-135bpm-rock-electric-guitar-loop (135 BPM, A, 4/4; uploader describes live guitars).
+    - https://www.looperman.com/loops/detail/394898/its-over-pop-punk-x-emo-rock-gtrs-free-160bpm-punk-electric-guitar-loop (160 BPM, D, 4/4; uploader describes live guitars).
+    - https://www.looperman.com/loops/detail/314315/the-edge-mgk-x-blackbear-guitars-free-171bpm-punk-electric-guitar-loop (171 BPM, G; uploader describes live guitars).
+    - Looperman grants use under its loop terms for music projects, but that is not automatic permission to republish the sample itself in a plugin. Treat as YELLOW until the current terms and uploader permission explicitly cover embedded redistribution.
+43. Splice — Punk Guitar category — https://splice.com/sounds/genres/punk/guitar/packs
+    - Search result reports 996 samples, 30 presets, 10 packs and filters for electric guitar, drums, bass and more. Great discovery/benchmark source for punk production; standard royalty-free music-use terms do not grant redistribution of the source samples as a competing library. Do not bundle.
+44. Splice — Rock Guitar samples — https://splice.com/sounds/genres/rock/guitar/samples
+    - Useful broad-rock discovery source; same raw-file redistribution restriction.
+45. Soundza — Rock & Indie packs — https://soundza.com/free-sample-packs/rock-indie
+    - Free 24-bit WAV packs; site license permits commercial music use but expressly prohibits reselling or redistributing unmodified sounds as a pack. Not suitable for bundling source files without a separate agreement.
+46. Selekt — cleared drums and percussion — https://selektaudio.com/sound-lab/drums
+    - Catalogue advertises 20,000+ drum/percussion samples, loops, one-shots and kits with per-file CC0, Public Domain or CC-BY labels and source/certificate details. Select only punk-useful acoustic hits/performances; save each certificate. CC-BY requires attribution handling.
+47. Karoryfer — Big Rusty Drums — https://shop.karoryfer.com/pages/free-big-rusty-drums
+    - Large acoustic drum multisample candidate listed as CC0-1.0 in the SFZ Instruments drum catalogue. Verify the exact current archive's LICENSE and mapping before importing.
+48. Salamander Drumkit — https://sfzinstruments.github.io/drums/salamander/
+    - Acoustic drum SFZ library listed as CC0; verify original author release, archive and license file. Useful for realistic kick/snare/toms/cymbals in pattern engine.
+49. Versilian — Virtuosity Drums — https://versilian-studios.com/virtuosity-drums/
+    - Jazz/acoustic drum SFZ library reported CC0; check exact archive license and whether the sound suits punk patterns before inclusion.
+50. Soundza — Dust Jacket Lo-Fi Acoustic Drum Kit — https://soundza.com/packs/dust-jacket-lo-fi-acoustic-drum-kit
+    - Page labels 93 WAV, 24-bit, CC0. More lo-fi than punk; optional secondary color only after audition and archive-level license verification.
+51. Producer Space — https://producerspace.com/
+    - Site claims CC0 for 2,322 WAV and 139 MIDI across 18 packs, but the visible inventory is mainly drums/808s/vocals/FX rather than a confirmed punk guitar source. Discovery only; do not assume guitar content.
+
+### Pattern-engine ingestion rules
+
+- Prefer multi-velocity, multi-articulation DI/amp multisamples and short playable one-shots for note-triggered guitar voices. Use loops/riffs/progressions as phrase-pattern assets, not as substitutes for a chromatic playable instrument.
+- Tag every guitar asset with tier (PUNK / GENERAL GUITAR / ROCK), live-performance evidence, instrument type, tuning, articulation, BPM, key, meter, loop length, chord/root metadata, processed-vs-DI, dry/wet, license and SHA-256.
+- For drum one-shots, maintain a separate kit taxonomy (kick/snare/hat/ride/crash/tom/percussion), velocity layers and round-robin variants where available.
+- The pattern engine may reference these materials only after the file is actually downloaded, auditioned, checksum-verified, license-cleared and tested in the target playback path. No synthetic guitar generation or synthetic guitar substitutes.
+- Current entries are discovery leads, not a statement that these new packs have been downloaded or imported.
