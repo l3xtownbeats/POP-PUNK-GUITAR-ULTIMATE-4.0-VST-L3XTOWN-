@@ -86,7 +86,7 @@ def png_dimensions(path: Path) -> tuple[int, int]:
 
 def safe_svg(path: Path) -> None:
     raw = path.read_text(encoding="utf-8")
-    if re.search(r"<\s*script|\bon[a-z]+\s*=|(?:href|src)\s*=\s*['"]https?://", raw, re.I):
+    if re.search(r"""<\s*script|\bon[a-z]+\s*=|(?:href|src)\s*=\s*['"]https?://""", raw, re.I):
         raise ValueError(f"{path}: active script/event/external URL is forbidden")
     root = ET.fromstring(raw)
     if not root.tag.endswith("svg"):
