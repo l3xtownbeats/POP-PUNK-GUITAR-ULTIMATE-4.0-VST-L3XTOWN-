@@ -1358,3 +1358,10 @@ RESOURCE CONTRACT APPROVED AS DESIGN. Это архитектурное реше
 Отложено/исключено из первой версии: AI denoise/source separation, neural upscaling, auto-mastering, обязательный GPU, daemon/background polling, отдельная БД/формат, сеть внутри VST, переписывание sampler. Offline jobs: один worker, чанковая обработка, один preview, bounded memory/temp files, low-power mode. Runtime не сканирует/не хэширует/не конвертирует и не выполняет I/O в audio callback.
 
 Этапы: A baseline profiling; B scan+manifest; C verify+SHA-256/dedup; D 2–3 безопасные операции подготовки с A/B; E SFZ/build validation; F atomic package и только затем простая GUI. Подробная спецификация добавлена в MASTER_PRODUCT_SPEC_4_0_RU.md §15.14. Статус: DESIGN/SPECIFICATION ONLY; реализации и benchmark пока не подтверждены.
+## 2026-11-12 — единый SoundBank для Rhythm Mode и Melody Mode
+
+По просьбе пользователя зафиксировано: обработанные SOUND FORGE инструменты должны быть доступны в обоих режимах PPGU — RHYTHM MODE и MELODY MODE. Один Guitar Instrument Package (audio assets, SFZ/sample map, velocity layers, round robin, articulation/capability metadata) используется обоими режимами. Режим меняет способ исполнения/MIDI event generation, а не создаёт копию библиотеки или повторно загружает аудиофайлы.
+
+Rhythm Mode: аккорды, power chords, down/upstroke, palm mute, chugs, octave hooks, skank/offbeat, stop-start и tempo-synced patterns. Melody Mode: одиночные ноты, риффы, лиды, арпеджио, соло, note-off и доступные артикуляции; phrase/lick trigger только при наличии записанных performance assets. UI показывает только реальные возможности карты инструмента. Общий voice budget, общий streaming cache, отдельные параметры исполнения каждого режима.
+
+Подробная спецификация: MASTER_PRODUCT_SPEC_4_0_RU.md §15.15. Статус: SPECIFICATION APPROVED; код, сборка и runtime tests ещё не подтверждены.
