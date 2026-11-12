@@ -26,6 +26,48 @@ juce::String fromWidePath(const wchar_t* value, int length)
 }
 #endif
 
+// Import panel delegates to the existing asynchronous SFZ loader and reports its real result.
+class PPGUImportGuitarPanel final : public juce::Component
+{
+public:
+    explicit PPGUImportGuitarPanel(std::function<void(juce::Label*)> loadActionIn)
+        : loadAction(std::move(loadActionIn))
+    {
+        heading.setText("LICENSED GUITAR LIBRARY", juce::dontSendNotification);
+        heading.setFont(juce::Font(18.0f, juce::Font::bold));
+        heading.setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(heading);
+        description.setText("Load an SFZ guitar instrument and its referenced WAV samples. "
+                            "The existing background loader validates and registers the bank.",
+                            juce::dontSendNotification);
+        description.setJustificationType(juce::Justification::topLeft);
+        description.setColour(juce::Label::textColourId, juce::Colour(0xffb5c4cb));
+        addAndMakeVisible(description);
+        status.setText("No SFZ library loaded in this session.", juce::dontSendNotification);
+        status.setJustificationType(juce::Justification::topLeft);
+        status.setColour(juce::Label::textColourId, juce::Colour(0xffd7ffb2));
+        addAndMakeVisible(status);
+        loadButton.setButtonText("LOAD SFZ");
+        loadButton.onClick = [this] { if (loadAction) loadAction(&status); };
+        addAndMakeVisible(loadButton);
+    }
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(18);
+        heading.setBounds(area.removeFromTop(34));
+        area.removeFromTop(12);
+        description.setBounds(area.removeFromTop(64));
+        area.removeFromTop(18);
+        loadButton.setBounds(area.removeFromTop(42).removeFromLeft(180));
+        area.removeFromTop(16);
+        status.setBounds(area.removeFromTop(90));
+    }
+private:
+    std::function<void(juce::Label*)> loadAction;
+    juce::Label heading, description, status;
+    juce::TextButton loadButton;
+};
+
 // Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
@@ -132,8 +174,14 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     refreshPresetList();
     loadButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("accent"));
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-    loadButton.onClick = [this] { chooseSfzFile(); };
+    loadButton.onClick = [this] { openImportGuitarPanel(); };
     addAndMakeVisible(loadButton);
+    auxiliaryWorkspace = std::make_unique<PPGUMultiWindowWorkspace>();
+    auxiliaryWorkspace->setSurfaceColours(themeManager.getPalette().token("window_bg"),
+        themeManager.getPalette().token("panel"), themeManager.getPalette().token("control_border"),
+        themeManager.getPalette().token("accent"), themeManager.getPalette().token("text_primary"));
+    addAndMakeVisible(*auxiliaryWorkspace);
+    auxiliaryWorkspace->setVisible(false);
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
@@ -276,7 +324,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
- auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
+ if (auxiliaryWorkspace != nullptr)
+        auxiliaryWorkspace->setBounds(getLocalBounds().reduced(18));
+    auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
@@ -442,6 +492,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);
+ if (auxiliaryWorkspace != nullptr)
+     auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
+         p.token("control_border"), p.token("accent"), p.token("text_primary"));
  titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
@@ -511,17 +564,65 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else
         statusLabel.setText("MELODY TONE: " + preset.soundCharacter + "  /  ONE KEY = ONE NOTE  /  LOAD A LICENSED SFZ BANK", juce::dontSendNotification);
 }
-void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
+void PopPunkGuitarUltimateAudioProcessorEditor::openImportGuitarPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+    constexpr int importGuitarPanelId = 1001;
+    if (!auxiliaryWorkspace->isPanelOpen(importGuitarPanelId))
+    {
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = importGuitarPanelId;
+        spec.title = "IMPORT GUITAR";
+        spec.desired = { 560, 360 };
+        spec.minimum = { 300, 220 };
+        spec.content = std::make_unique<PPGUImportGuitarPanel>(
+            [safeThis](juce::Label* targetStatus)
+            {
+                if (safeThis != nullptr)
+                    safeThis->chooseSfzFile(targetStatus);
+            });
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+    resized();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile(juce::Label* panelStatus)
 {
     fileChooser=std::make_unique<juce::FileChooser>("Choose an SFZ guitar instrument",juce::File::getSpecialLocation(juce::File::userHomeDirectory),"*.sfz");
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+    juce::Component::SafePointer<juce::Label> safePanelStatus(panelStatus);
     fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis](const juce::FileChooser& chooser){
         if(safeThis==nullptr) return; const auto selected=chooser.getResult(); if(selected==juce::File{}) return;
-        safeThis->loadButton.setEnabled(false); safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...",juce::dontSendNotification);
-        safeThis->processor.loadSfzFileAsync(selected,[safeThis](ppgu::sampler::LoadReport report){
-            if(safeThis==nullptr) return; safeThis->loadButton.setEnabled(true);
-            if(report.success) safeThis->statusLabel.setText("READY  /  "+juce::String(static_cast<int>(report.loadedRegions))+" REGIONS  /  "+juce::String(static_cast<int>(report.loadedSamples))+" WAV SAMPLES",juce::dontSendNotification);
-            else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
+        safeThis->loadButton.setEnabled(false);
+        safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...", juce::dontSendNotification);
+        if (safePanelStatus != nullptr)
+            safePanelStatus->setText("Loading SFZ in background...", juce::dontSendNotification);
+        safeThis->processor.loadSfzFileAsync(selected, [safeThis, safePanelStatus](ppgu::sampler::LoadReport report)
+        {
+            if (safeThis == nullptr)
+                return;
+            safeThis->loadButton.setEnabled(true);
+            if (report.success)
+            {
+                const auto readyText = "READY  /  " + juce::String(static_cast<int>(report.loadedRegions))
+                    + " REGIONS  /  " + juce::String(static_cast<int>(report.loadedSamples)) + " WAV SAMPLES";
+                safeThis->statusLabel.setText(readyText, juce::dontSendNotification);
+                if (safePanelStatus != nullptr)
+                    safePanelStatus->setText(readyText, juce::dontSendNotification);
+            }
+            else
+            {
+                const auto errorText = report.errors.empty()
+                    ? juce::String("SFZ LOAD FAILED") : juce::String(report.errors.front());
+                safeThis->statusLabel.setText(errorText, juce::dontSendNotification);
+                if (safePanelStatus != nullptr)
+                    safePanelStatus->setText(errorText, juce::dontSendNotification);
+            }
         });
     });
 }
