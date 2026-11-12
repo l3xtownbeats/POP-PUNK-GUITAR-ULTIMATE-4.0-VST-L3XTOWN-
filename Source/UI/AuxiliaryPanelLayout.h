@@ -29,6 +29,17 @@ struct PanelLayout
     int rows = 0;
 };
 
+struct PanelPageRange
+{
+    std::size_t begin = 0;
+    std::size_t end = 0;
+    std::size_t pageCount = 0;
+    std::size_t pageIndex = 0;
+    bool invalidInput = false;
+};
+
+PanelPageRange calculatePanelPageRange(std::size_t totalPanels, int requestedPage, std::size_t pageSize = 6);
+
 // Pure geometry only: coordinates are physical pixels; scale converts logical
 // panel metrics to physical pixels. Invalid geometry or duplicate IDs return
 // an empty layout with invalidInput=true. Overflow preserves all IDs and marks
@@ -38,4 +49,12 @@ PanelLayout calculatePanelLayout(PanelRect workArea,
                                  const std::vector<PanelRequest>& requests,
                                  float scale,
                                  int gap = 12);
+
+// Places one selected panel in the main workspace and every remaining panel
+// in a vertically stacked dock. Returns overflow instead of clipping.
+PanelLayout calculateExpandedPanelLayout(PanelRect workArea,
+                                         const std::vector<PanelRequest>& requests,
+                                         int expandedId,
+                                         float scale = 1.0f,
+                                         int gap = 8);
 } // namespace ppgu::ui

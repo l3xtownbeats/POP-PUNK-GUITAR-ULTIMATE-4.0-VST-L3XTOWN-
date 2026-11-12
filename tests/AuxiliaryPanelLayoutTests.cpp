@@ -59,6 +59,26 @@ void checkInsideAndDisjoint(const PanelLayout& layout, const PanelRect& area)
 
 int main()
 {
+    const auto emptyPages = calculatePanelPageRange(0, 0, 6);
+    CHECK(!emptyPages.invalidInput && emptyPages.pageCount == 0 && emptyPages.begin == 0 && emptyPages.end == 0);
+    const auto onePage = calculatePanelPageRange(6, 0, 6);
+    CHECK(!onePage.invalidInput && onePage.pageCount == 1 && onePage.begin == 0 && onePage.end == 6);
+    const auto twoPagesFirst = calculatePanelPageRange(7, 0, 6);
+    CHECK(!twoPagesFirst.invalidInput && twoPagesFirst.pageCount == 2 && twoPagesFirst.pageIndex == 0 && twoPagesFirst.begin == 0 && twoPagesFirst.end == 6);
+    const auto twoPagesLast = calculatePanelPageRange(7, 1, 6);
+    CHECK(!twoPagesLast.invalidInput && twoPagesLast.pageCount == 2 && twoPagesLast.pageIndex == 1 && twoPagesLast.begin == 6 && twoPagesLast.end == 7);
+    const auto threePages = calculatePanelPageRange(13, 2, 6);
+    CHECK(!threePages.invalidInput && threePages.pageCount == 3 && threePages.pageIndex == 2 && threePages.begin == 12 && threePages.end == 13);
+    const auto clampedPage = calculatePanelPageRange(13, 99, 6);
+    CHECK(!clampedPage.invalidInput && clampedPage.pageIndex == 2 && clampedPage.begin == 12 && clampedPage.end == 13);
+    const auto negativePage = calculatePanelPageRange(7, -4, 6);
+    CHECK(!negativePage.invalidInput && negativePage.pageIndex == 0 && negativePage.begin == 0 && negativePage.end == 6);
+    const auto compactViewportPages = calculatePanelPageRange(5, 1, 2);
+    CHECK(!compactViewportPages.invalidInput && compactViewportPages.pageCount == 3 && compactViewportPages.begin == 2 && compactViewportPages.end == 4);
+    const auto compactViewportLast = calculatePanelPageRange(5, 2, 2);
+    CHECK(!compactViewportLast.invalidInput && compactViewportLast.begin == 4 && compactViewportLast.end == 5);
+    CHECK(calculatePanelPageRange(7, 0, 0).invalidInput);
+
     const PanelRect desktop { 100, 80, 1600, 900 };
     CHECK(calculatePanelLayout(desktop, {}, 1.0f).panels.empty());
 
@@ -79,12 +99,35 @@ int main()
         checkInsideAndDisjoint(layout, desktop);
     }
 
+    auto two = calculatePanelLayout(desktop, makePanels(2), 1.0f);
+    CHECK(two.columns == 2 && two.rows == 1);
+    CHECK(two.panels.size() == 2);
+    checkInsideAndDisjoint(two, desktop);
+
+    auto three = calculatePanelLayout(desktop, makePanels(3), 1.0f);
+    CHECK(three.columns == 2 && three.rows == 2);
+    checkInsideAndDisjoint(three, desktop);
+
+    auto five = calculatePanelLayout({ 0, 0, 1600, 1100 }, makePanels(5), 1.0f);
+    CHECK(five.columns == 2 && five.rows == 3 && !five.overflow);
+    checkInsideAndDisjoint(five, { 0, 0, 1600, 1100 });
+
+    auto six = calculatePanelLayout({ 0, 0, 1600, 1100 }, makePanels(6), 1.0f);
+    CHECK(six.columns == 2 && six.rows == 3 && !six.overflow);
+    checkInsideAndDisjoint(six, { 0, 0, 1600, 1100 });
+
+    auto seven = calculatePanelLayout(desktop, makePanels(7), 1.0f);
+    CHECK(seven.overflow && seven.panels.size() == 7);
+    int sevenVisible = 0;
+    for (const auto& p : seven.panels) sevenVisible += p.visible ? 1 : 0;
+    CHECK(sevenVisible == 1 && seven.panels.front().visible);
+
     const PanelRect compactArea { 0, 0, 900, 520 };
     auto compact = calculatePanelLayout(compactArea, makePanels(4), 1.0f);
     CHECK(compact.compact && !compact.overflow);
     checkInsideAndDisjoint(compact, compactArea);
 
-    const PanelRect portraitArea { 0, 0, 520, 1100 };
+    const PanelRect portraitArea { 0, 0, 620, 1100 };
     auto portrait = calculatePanelLayout(portraitArea, makePanels(3), 1.0f);
     CHECK(!portrait.overflow);
     for (const auto& p : portrait.panels)
@@ -116,6 +159,45 @@ int main()
         CHECK(repeated.panels[i].bounds.width == repeatedAgain.panels[i].bounds.width);
         CHECK(repeated.panels[i].bounds.height == repeatedAgain.panels[i].bounds.height);
     }
+
+
+    // Expanded workspace keeps every panel visible and disjoint in a right dock.
+    auto expandedFour = calculateExpandedPanelLayout(
+        { 18, 18, 1084, 804 }, makePanels(4), 2, 1.0f, 8);
+    CHECK(!expandedFour.invalidInput && !expandedFour.overflow);
+    CHECK(expandedFour.panels.size() == 4);
+    checkInsideAndDisjoint(expandedFour, { 18, 18, 1084, 804 });
+    int expandedVisible = 0;
+    int expandedMain = 0;
+    for (const auto& p : expandedFour.panels)
+    {
+        expandedVisible += p.visible ? 1 : 0;
+        if (p.id == 2)
+        {
+            ++expandedMain;
+            CHECK(p.bounds.width > 500);
+        }
+        else
+            CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
+    }
+    CHECK(expandedVisible == 4 && expandedMain == 1);
+
+    auto expandedSingle = calculateExpandedPanelLayout(
+        { 0, 0, 900, 520 }, makePanels(1), 1, 1.0f, 8);
+    CHECK(!expandedSingle.overflow && expandedSingle.panels.size() == 1);
+    CHECK(expandedSingle.panels[0].bounds.width == 900);
+    CHECK(expandedSingle.panels[0].bounds.height == 520);
+
+    auto expandedTooSmall = calculateExpandedPanelLayout(
+        { 0, 0, 500, 300 }, makePanels(4), 1, 1.0f, 8);
+    CHECK(expandedTooSmall.overflow && expandedTooSmall.panels.size() == 4);
+    int expandedSmallVisible = 0;
+    for (const auto& p : expandedTooSmall.panels)
+        expandedSmallVisible += p.visible ? 1 : 0;
+    CHECK(expandedSmallVisible == 1);
+
+    CHECK(calculateExpandedPanelLayout(
+        { 0, 0, 900, 520 }, makePanels(2), 99, 1.0f, 8).invalidInput);
 
     auto duplicateIds = makePanels(2);
     duplicateIds[1].id = duplicateIds[0].id;

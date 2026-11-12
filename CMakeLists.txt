@@ -58,6 +58,19 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/UI/ThemeManager.h
     Source/UI/AuxiliaryPanelLayout.cpp
     Source/UI/AuxiliaryPanelLayout.h
+    Source/UI/AuxiliaryPanelWindowManager.cpp
+    Source/UI/AuxiliaryPanelWindowManager.h
+    Source/UI/FXEditPanel.cpp
+    Source/UI/FXEditPanel.h
+    Source/UI/AutoChordsPanel.cpp
+    Source/UI/AutoChordsPanel.h
+    Source/UI/ImportGuitarPanel.cpp
+    Source/UI/ImportGuitarPanel.h
+    Source/UI/SettingsPanel.cpp
+    Source/UI/SettingsPanel.h
+    Source/UI/PerformanceDisplay.cpp
+    Source/UI/PerformanceDisplay.h
+    Source/Performance/AutoChordEngine.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
@@ -114,6 +127,15 @@ if(BUILD_TESTING)
         juce::juce_recommended_warning_flags
     )
     add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
+endif()
+
+# JUCE-free chord recognition and guitar fingering contract.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chord_engine_tests
+        tests/AutoChordEngineTests.cpp
+    )
+    target_include_directories(ppgu_auto_chord_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chord_engine_contract COMMAND ppgu_auto_chord_engine_tests)
 endif()
 
 # Dependency-free SFZ parser regression tests.

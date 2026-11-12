@@ -221,12 +221,46 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     options.filenameSuffix = "settings";
     options.folderName = "L3XTOWN";
     uiProperties.setStorageParameters(options);
+    fxEditPanel = std::make_unique<PPGUFXEditPanel>(processor.parameters, themeManager.getPalette());
+    autoChordsPanel = std::make_unique<PPGUAutoChordsPanel>(themeManager.getPalette());
+    importGuitarPanel = std::make_unique<PPGUImportGuitarPanel>(
+        [this] { chooseSfzFile(); }, themeManager.getPalette());
+    settingsPanel = std::make_unique<PPGUSettingsPanel>(processor.parameters, themeManager.getPalette());
+    performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, themeManager.getPalette());
+
+    auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(
+        themeManager.getPalette(), uiProperties.getUserSettings());
+    auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel,
+        [this](const PPGUThemeManager::Palette& p) { fxEditPanel->setPalette(p); });
+    auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel,
+        [this](const PPGUThemeManager::Palette& p) { autoChordsPanel->setPalette(p); });
+    auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel,
+        [this](const PPGUThemeManager::Palette& p) { importGuitarPanel->setPalette(p); });
+    auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel,
+        [this](const PPGUThemeManager::Palette& p) { settingsPanel->setPalette(p); });
+    auxiliaryPanels->addPanel(5, "PERFORMANCE  /  LIVE MIDI MONITOR", *performanceDisplay,
+        [this](const PPGUThemeManager::Palette& p) { performanceDisplay->setPalette(p); });
+
+    for (size_t i = 0; i < panelButtons.size(); ++i)
+    {
+        auto& button = panelButtons[i];
+        button.setClickingTogglesState(false);
+        button.onClick = [this, i] {
+            if (auxiliaryPanels)
+                auxiliaryPanels->openPanel(static_cast<int>(i) + 1);
+        };
+        addAndMakeVisible(button);
+    }
+
     loadSavedSkin();
     applyPalette();
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    if (auxiliaryPanels)
+        auxiliaryPanels->closeAll();
+    auxiliaryPanels.reset();
     setLookAndFeel(nullptr);
 }
 
@@ -298,7 +332,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
- a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
+ a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);
+ auto panelTools=a.removeFromTop(30);const int toolGap=8;const int toolWidth=(panelTools.getWidth()-toolGap*4)/5;
+ for(size_t i=0;i<panelButtons.size();++i){auto cell=panelTools.removeFromLeft(toolWidth);panelButtons[i].setBounds(cell.reduced(2,2));if(i+1<panelButtons.size())panelTools.removeFromLeft(toolGap);}
+ a.removeFromTop(8);auto panels=a.removeFromTop(318);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
  ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
@@ -527,6 +564,16 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
         keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, p.warning.withAlpha(0.30f));
         keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, p.ledOn.withAlpha(0.88f));
     }
+
+    for (auto& button : panelButtons)
+    {
+        button.setColour(juce::TextButton::buttonColourId, p.panelElevated);
+        button.setColour(juce::TextButton::buttonOnColourId, p.accent);
+        button.setColour(juce::TextButton::textColourOffId, p.textPrimary);
+        button.setColour(juce::TextButton::textColourOnId, p.windowBg);
+    }
+    if (auxiliaryPanels)
+        auxiliaryPanels->setPalette(p);
 
     repaint();
 }
