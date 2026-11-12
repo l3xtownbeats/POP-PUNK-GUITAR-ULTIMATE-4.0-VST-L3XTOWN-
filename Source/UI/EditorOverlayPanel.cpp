@@ -17,7 +17,7 @@ PPGUEditorOverlayPanel::PPGUEditorOverlayPanel(const juce::String& title, juce::
     }
     expandButton.setTooltip("Expand / restore panel");
     closeButton.setTooltip("Close panel");
-    expandButton.onClick = [this] { expanded = !expanded; if (expandCallback) expandCallback(expanded); };
+    expandButton.onClick = [this] { expanded = !expanded; expandButton.setButtonText(expanded ? "□" : "▣"); if (expandCallback) expandCallback(expanded); };
     closeButton.onClick = [this] { if (closeCallback) closeCallback(); };
     addAndMakeVisible(content);
 }
