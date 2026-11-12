@@ -454,3 +454,18 @@ Important: Freesound's visible CC0 badge is not sufficient on its own for an ass
 - **Freesound**: the search surfaced both authentic CC0 recordings and synthetic items mislabeled/tagged as guitar. Reject synthetic results even when CC0; verify the uploader's own text against the license badge; some downloads require login, so they fail the strict acquisition rule.
 
 No Freesound files were downloaded in this pass. No hashes or audio measurements have been generated for these research leads.
+
+
+### Cabinet IR acquisition sweep — 2026-11-12 (license decisions)
+
+**GREEN / commercial use and redistribution confirmed by publisher: Darwin's Cat editor's bundled Jester Dyne Productions IR packs.**
+- Brutal Pack: 15 IRs, modified 4×12 Behringer BG412S, Vintage 30 / Rockdriver Jr / Eminence DV-77 speaker captures, SM57/e606/Pyle microphones and blends. Publisher explicitly identifies it as CC0/public domain.
+- Emerald Pack: 6 IRs, Marshall 1960AX / Greenback, SM57 and e606. Publisher states both packs are free for commercial use and no attribution is required.
+- Combined count: 21 cabinet IRs. The publisher page says the full ZIP (44.1 and 48 kHz variants) can be downloaded from the browser editor/export area, without signup. Source and license evidence: https://darwinscat.com/sound-utils/cabinet-ir-utility .
+- **Status in PPGU: GREEN-LICENSE / NOT YET ACQUIRED.** The page was reviewed, but this environment did not successfully retrieve the ZIP bytes. No archive SHA-256, extracted per-file SHA-256, WAV metadata manifest, duplicate scan, listening test or integration has been performed. Do not mark as downloaded or included yet.
+
+**GREEN-LICENSE / separate pack:** Darwin's Cat / Felitronics Guitar Cabinet IR pack v1.1, 69 IRs, 24-bit mono WAV at 44.1/48/96 kHz, CC BY 4.0, attribution required: “IR: Darwin's Cat, darwinscat.com”. Source: https://darwinscat.com/felitronics/ir/guitar-cab-free-irs . Status remains acquisition/QC pending.
+
+**RED for embedding despite free commercial music-use:** Overdriven.fr free IRs (including M-212-GB55 G4, 44 WAV files, 24-bit/44.1 kHz, 100 ms) may be used in musical/video creations for commercial purposes, but the publisher expressly prohibits redistribution with software/hardware products without written agreement. Therefore do not bundle these IRs in PPGU absent written permission. Sources: https://overdriven.fr/overdriven/index.php/m-212-gb55-g4-free-guitar-cab-impulse-responses-download/ and https://overdriven.fr/overdriven/index.php/about/ .
+
+**Acquisition attempt:** attempted direct retrieval of the Overdriven download endpoint from this runtime; download failed. Darwin's browser-export ZIP was not retrievable through the available file-transfer route in this pass. This is a tool/access limitation, not evidence that the publisher's download is broken. No assets were added to the actual soundbank folder.
