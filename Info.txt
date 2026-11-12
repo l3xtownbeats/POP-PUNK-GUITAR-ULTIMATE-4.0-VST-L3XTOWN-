@@ -601,7 +601,7 @@ Commits:
 - Исправлен расчёт строк в AuxiliaryPanelLayout без потенциального переполнения count + columns - 1.
   - Commit: 27c63782005401aecf63457fa114fc96eecec6cd
 - Исправлен вызов CHECK в geometry tests с braced initializer.
-  - Commit: проверить по GitHub commit history; SHA не записывается наугад.
+  - Commit: 7f3bbd4e2eed86454200caf194dade0b55b89e82.
 - Generator дополнительно отклоняет дубли/разрывы registry и не перезаписывает unmerged pack; builder вынесен в отдельную функцию для тестирования.
   - Commits: 7162c3382de75590a45a10fa313f88ab4a109d96; 707c192e6015fc833a5085ea3d8795bef0bd1200
 - Validator умеет повторно проверять pack со статусом MERGED и сверять entries с canonical registry.
@@ -613,3 +613,7 @@ Commits:
 - Skin_053..Skin_102 не сгенерированы: библиотека не увеличивалась без просмотра результата. Генератор и его тесты подготовлены.
 - Полная Windows x64 Release сборка, JUCE 7.0.12 compile, CTest, pluginval strictness 5, VST3 package и FL Studio 20 acceptance остаются обязательными незакрытыми этапами.
 - Текущий статус — усиленная исходная интеграция и тестовая инфраструктура, а не подтверждённый готовый VST3.
+- Исправлена сериализация pack manifest после atomic merge: commit b09dfd49f024276ebc27976715f5266ae3f1b0c6, затем добавлено durable pack state и backup: a7f994001a84534d9672c8d2e00f540bcbfdc701; d248179a56d4d0810e8096e7bdf5a187f1709077; 3e6671c1bc4d162bc63caa6612a9d3678b094cef.
+- Улучшен contrast fallback и вариативность визуальных материалов Skin Studio: commit dd491f6ccbe9db4b94d681cf854eed937dee923c.
+- ThemeManager registry tests переведены на динамический список тем и проверку fallback/error cases: 0410e3bc860f6a60978e0aeda729c4c110af81de; JSON escaping исправлен отдельным commit 47d76574d52006258ded247498e0f9979352e7dd.
+- Skin_052 registry merge и базовые backups: 608205ec5142582d84429425e63a9e52d53c7b5b; merge tool hardening: 8a1176765c8007bbe3db354d3572d35625cf54f4.
