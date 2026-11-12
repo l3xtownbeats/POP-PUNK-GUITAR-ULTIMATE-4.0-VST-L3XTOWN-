@@ -423,3 +423,20 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Windows workflow завершился FAILURE на шаге `Run CTest regression suite`. Поэтому CTest, последующие pluginval/package gates и COMPLETE ZIP не подтверждены этим run.
 - Build/host status остаётся: BUILD VERIFIED — NO; FL Studio 20 HOST-VERIFIED — NO; Skin_052 — PACK GENERATED / G1–G4 VALIDATION PASS (на SHA bf436ae...), NOT MERGED / NOT RUNTIME-INTEGRATED.
 - Run URL: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43123677115
+
+
+### REV 14 / run #860 — подробный результат Windows Release + CTest (12 November 2026)
+
+**Статус: RELEASE BUILD PASS; CTEST FAIL (11/12); PLUGINVAL/PACKAGING NOT RUN; NO COMPLETE ZIP.**
+
+- Workflow run #860 / ID `43123677115`, branch `main`, source SHA `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`.
+- Успешно завершились: preset catalog validator; portable preset examples validator; APVTS registry validator; REV 14 skin pack G1–G4 validator; sample library/license validation; JUCE BinaryData include/link/order gate; x64 Release configure; **Build VST3 and test executables**.
+- Компиляция VST3 и тестовых executable завершилась успешно. Это подтверждает build stage на указанном SHA, но не полный release acceptance.
+- CTest: **11 из 12 тестов PASS (92%)**. Единственный FAIL: `ppgu_skin_manifest_contract` — сообщение `SKIN: unregistered skin folders present: Skin_052`.
+- Причина по логу: папка `SKIN/Skin_052` присутствует в рабочем дереве, но не зарегистрирована в `SKIN/theme_manifest.json`. Это ожидаемая точка несогласованности между новым reference pack и legacy registry; нельзя обходить её удалением проверки или фиктивной регистрацией без проверки полного контракта.
+- Остальные тесты PASS: SFZ parser, Pattern Scheduler, Chord Transition, Sample Pool, Page Cache Slots, Bounded SPSC Queue, Sample Streaming Service, Sample Metadata Index, ThemeManager contract, Sound Asset Registry contract, Processor Pattern Integration.
+- Из-за CTest failure шаги Locate VST3 bundle, pluginval strictness 5 и COMPLETE packaging были SKIPPED. Artifact `POP-PUNK-GUITAR-SOURCE-REVIEW` (ID `13901643916`) — только source-review snapshot, **не установщик и не готовый VST3 ZIP**.
+- Следующий безопасный фикс: согласовать Skin_052 с registry/pack-merge contract и непрерывной нумерацией; проверить assets/schema/manifest и merge tool; затем повторить полный Windows Release → CTest → VST3 locate → pluginval strictness 5 → COMPLETE ZIP.
+- Не менять audio/APVTS/MIDI/preset/SoundBank код ради обхода skin contract. Не объявлять BUILD VERIFIED как полную готовность продукта; host acceptance в FL Studio 20 и CPU/RAM profiling остаются неподтверждёнными.
+- Run: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43123677115
+
