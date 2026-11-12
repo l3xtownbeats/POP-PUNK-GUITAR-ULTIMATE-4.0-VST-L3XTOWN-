@@ -678,3 +678,12 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 **Validation:** source read-back/static symbol checks passed. Windows VST3 GitHub Actions run `43205333451` was IN_PROGRESS at log time on `3a79120704482765ba9e74a923be8ac1ff6de19b`. No local compile, CTest, pluginval or DAW listening result claimed. Stereo width/mono-sum/headroom/CPU automated tests remain required.
 
 **Status:** source implementation committed; CI/audio validation pending.
+
+
+## 2026-11-12 — Individual FX rack colors and response graphics
+
+**Branch:** `work/ppgu-toolchain-qa-rev17-1`
+**Commit:** `7c7e8244fbb4ca785cae3d413f814d1e334804e1`; parent `3a79120704482765ba9e74a923be8ac1ff6de19b`.
+**File:** `Source/PluginEditor.cpp`; blob SHA `3d88ba26102ad5de7b65048da66ab98805c246c9`.
+**Change:** FX rack buttons use effect-specific accent families; FX Edit response guides now differ by algorithm class (compressor knee, EQ bands, distortion saturation, chorus/flanger modulation, delay taps, reverb decay, cabinet band-pass, DOUBLE stereo pair). These are visual guides only and do not claim live metering or measured DSP response.
+**Validation:** source read-back/static inspection only. Build and UI screenshot validation pending.
