@@ -236,6 +236,8 @@ void PPGUMultiWindowWorkspace::paint(juce::Graphics& g)
 void PPGUMultiWindowWorkspace::handleClose(int id)
 {
     closePanel(id);
+    if (windows.empty())
+        setVisible(false);
 }
 
 void PPGUMultiWindowWorkspace::reorderPanels(int draggedId, int targetId)
