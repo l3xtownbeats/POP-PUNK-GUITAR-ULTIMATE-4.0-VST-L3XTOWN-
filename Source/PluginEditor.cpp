@@ -179,8 +179,21 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour(0xff17171d));
     keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, juce::Colour(0xff34343d));
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.35f));
-    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.85f));
+    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour(0xff287dff).withAlpha(0.92f));
     addAndMakeVisible(*keyboard);
+    keyboardToggleButton.setTooltip("Collapse or expand the on-screen MIDI keyboard");
+    keyboardToggleButton.onClick = [this] { setKeyboardCollapsed(!keyboardCollapsed); };
+    addAndMakeVisible(keyboardToggleButton);
+    for (auto* label : { &activeNotesLabel, &chordLabel })
+    {
+        label->setFont(juce::Font(10.0f, juce::Font::bold));
+        label->setJustificationType(juce::Justification::centredLeft);
+        label->setColour(juce::Label::textColourId, themeManager.getPalette().token("text_secondary"));
+        addAndMakeVisible(*label);
+    }
+    activeNotesLabel.setText("NOTES: —", juce::dontSendNotification);
+    chordLabel.setText("CHORD: —", juce::dontSendNotification);
+    startTimerHz(20);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
     for (size_t i = 0; i < knobs.size(); ++i) {
@@ -212,10 +225,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     uiProperties.setStorageParameters(options);
     loadSavedSkin();
     applyPalette();
+    updateKeyboardReadout();
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    stopTimer();
     setLookAndFeel(nullptr);
 }
 
@@ -286,7 +301,78 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
  for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
  auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+ startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));auto keys=a.removeFromBottom(keyboardCollapsed ? 30 : 82);
+ auto keyHeader=keys.removeFromTop(24);
+ keyboardToggleButton.setBounds(keyHeader.removeFromRight(104).reduced(1,1));
+ chordLabel.setBounds(keyHeader.removeFromRight(190).reduced(4,1));
+ activeNotesLabel.setBounds(keyHeader.reduced(4,1));
+ if(keyboard){keyboard->setVisible(!keyboardCollapsed);if(!keyboardCollapsed)keyboard->setBounds(keys.reduced(2,1));}
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::setKeyboardCollapsed(bool collapsed)
+{
+    keyboardCollapsed = collapsed;
+    keyboardToggleButton.setButtonText(collapsed ? "⌃  SHOW KEYS" : "⌄  HIDE KEYS");
+    if (keyboard)
+        keyboard->setVisible(!collapsed);
+    resized();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::timerCallback()
+{
+    updateKeyboardReadout();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::updateKeyboardReadout()
+{
+    static constexpr const char* noteNames[] = {
+        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    };
+    std::array<bool, 128> noteHeld {};
+    for (int channel = 1; channel <= 16; ++channel)
+        for (int note = 0; note < 128; ++note)
+            if (processor.keyboardState.isNoteOn(channel, note))
+                noteHeld[static_cast<std::size_t>(note)] = true;
+
+    std::array<int, 128> held {};
+    int count = 0;
+    juce::String notesText = "NOTES: ";
+    for (int note = 0; note < 128; ++note)
+    {
+        if (!noteHeld[static_cast<std::size_t>(note)])
+            continue;
+        held[static_cast<std::size_t>(count++)] = note;
+        if (count > 1) notesText += "  ";
+        notesText += noteNames[note % 12] + juce::String(note / 12 - 1);
+    }
+    if (count == 0) notesText += "—";
+    activeNotesLabel.setText(notesText, juce::dontSendNotification);
+
+    const auto chord = ppgu::performance::AutoChordEngine::detect(
+        held.data(), static_cast<std::size_t>(count));
+    if (!chord.valid())
+    {
+        chordLabel.setText("CHORD: —", juce::dontSendNotification);
+        return;
+    }
+    juce::String quality;
+    using Q = ppgu::performance::ChordQuality;
+    switch (chord.quality)
+    {
+        case Q::Major: quality = "maj"; break;
+        case Q::Minor: quality = "min"; break;
+        case Q::Diminished: quality = "dim"; break;
+        case Q::Augmented: quality = "aug"; break;
+        case Q::Sus2: quality = "sus2"; break;
+        case Q::Sus4: quality = "sus4"; break;
+        case Q::Dominant7: quality = "7"; break;
+        case Q::Major7: quality = "maj7"; break;
+        case Q::Minor7: quality = "min7"; break;
+        case Q::Power: quality = "5"; break;
+        default: quality = {}; break;
+    }
+    chordLabel.setText("CHORD: " + juce::String(noteNames[chord.rootPitchClass]) + quality,
+                       juce::dontSendNotification);
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
