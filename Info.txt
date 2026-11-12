@@ -77,7 +77,6 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 Исторические CI-успехи из прежних записей относятся к тем commit SHA и не доказывают сборку текущего HEAD. Старые run IDs и артефакты нельзя выдавать за актуальную проверку.
 
 ## 6.1. SOUND HUNTER — licensing/provenance contract foundation (2026-11-11)
-
 Аудит текущего main не обнаружил production DiscoveryEngine, BankScanner, S6.5 registry или отдельного Discovery source tree. Поэтому второй search/import pipeline не создавался; сделан только изолированный policy-contract foundation перед интеграцией в существующий S6.
 
 Добавлено:
@@ -157,8 +156,7 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 
 Добавлены прямые ссылки на:
 - предыдущий успешный VST3 + samples + presets artifact (run `42821580125`, artifact `13766348419`);
-- текущую сборку и упаковку (run `43017263448`);
-- каталог 300 preset definitions и portable examples;
+- текущую сборку и упаковку (run `43017263448`);- каталог 300 preset definitions и portable examples;
 - SKIN/theme manifests, product cover и interface artwork;
 - архитектурные документы и политику лицензирования.
 
@@ -237,8 +235,7 @@ Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sam
 
 - README.md: `a496394d8f3ad4c8bc0be97bd8cd8ec67a8e618d`
 - DOWNLOAD.md: `846f15c3fab24cba66269a6b77f98e83d1e4d600`
-- Promt.txt legacy-version notice: `56c1f227c8a03bd4996cd22b8587113b14412598`
-- SKIN/README.md fixed-interface policy: `e9e3ef57a0c8a5b28cbc5774265f759b31208cc1`
+- Promt.txt legacy-version notice: `56c1f227c8a03bd4996cd22b8587113b14412598`- SKIN/README.md fixed-interface policy: `e9e3ef57a0c8a5b28cbc5774265f759b31208cc1`
 - docs/MASTER_PRODUCT_SPEC_4_0_RU.md authority notice: `b52b039ca20b7fe56336daba23d0eac0161ae8ed`
 - Info.txt refresh record: `6293460630a9a2da58e94ef68dbba9ac068c25ae`
 
@@ -317,8 +314,7 @@ GitHub Actions run #830 / ID `43115673961` автоматически запущ
 
 Выполнен первый этап обязательной последовательности §16.1:
 - В PPGUPresetData задан уникальный HEADER_NAME "PPGUData.h"; PluginEditor включает именно этот заголовок. Сохранено текущее пространство имён BinaryData, поэтому обращения к встроенному каталогу пресетов не менялись.
-- PPGUTestData объявлен отдельной целью до ppgu_processor_pattern_tests, с HEADER_NAME "PPGUTestData.h" и NAMESPACE PPGUTestData; test target линкует PPGUTestData.
-- Integration test включает <PPGUTestData.h> и проверяет размер встроенного тестового ресурса PPGUTestData::ppgu_test_data_txtSize. Это проверяет не только генерацию заголовка, но и фактическое подключение ресурса в тестовом executable.
+- PPGUTestData объявлен отдельной целью до ppgu_processor_pattern_tests, с HEADER_NAME "PPGUTestData.h" и NAMESPACE PPGUTestData; test target линкует PPGUTestData.- Integration test включает <PPGUTestData.h> и проверяет размер встроенного тестового ресурса PPGUTestData::ppgu_test_data_txtSize. Это проверяет не только генерацию заголовка, но и фактическое подключение ресурса в тестовом executable.
 - Не используется HEADER_NAMESPACE и не используется несуществующий путь PPGUTestData/BinaryData.h. Применены JUCE 7.0.12 параметры HEADER_NAME и NAMESPACE.
 - В ходе разбора run #832 обнаружены дополнительные реальные ошибки компиляции JUCE 7.0.12 в PluginEditor.cpp: juce::String::fromWideCharPointer и trimStartCharacters недоступны. Исправлена конвертация Windows UTF-16 пути через WideCharToMultiByte + juce::String::fromUTF8; удаление префикса теперь использует поддерживаемый trim(). Это не C1083, но без этой коррекции build всё равно останавливался.
 - Добавлен tools/check_binary_data_links.py: проверяет уникальность HEADER_NAME, include -> target link, наличие обеих production/test BinaryData целей и порядок объявления бинарной цели раньше зависимого target. Проверка запускается в workflow до CMake configure; отсутствие линковки должно остановить pipeline до сборки.
@@ -397,8 +393,7 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 Никаких изменений аудио-кода, APVTS IDs, preset data, MIDI или SoundBank в этом skin этапe не выполнялось. `BUILD VERIFIED`, `VALIDATION PASS`, `MERGED` и `INTEGRATED` не присваивались.
 
 
-### REV 14 reference pack — validator result
-Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a32da9006062e2ed1efe060139b`:
+### REV 14 reference pack — validator resultWindows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a32da9006062e2ed1efe060139b`:
 - Validate 300-preset catalog — PASS.
 - Validate portable preset examples — PASS.
 - Validate APVTS registry — PASS.
@@ -477,8 +472,7 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Реализован детерминированный расчёт tiled bounds по доступной рабочей области, числу открытых панелей и DPI scale. При уменьшении ниже желаемых размеров выставляется `compact=true`; если все панели не помещаются даже по minimum size, выставляется `overflow=true` и видимой остаётся первая панель-страница, остальные доступны менеджеру через будущую навигацию. Это геометрическая политика, не готовая UI-навигация.
 - Добавлены `tests/AuxiliaryPanelLayoutTests.cpp`: сценарии 0/1/2/3/4/6 панелей, неперекрытие и границы work area, compact mode, portrait layout, overflow paging, DPI scale и детерминизм.
 - Модуль зарегистрирован в основном plugin target и отдельном CTest target `ppgu_auxiliary_panel_layout_contract` в CMake.
-- Commits: header `5440dec658b0417d439b12ec43975379a91c0a22`; implementation `08fe8cd53dbb1a6d3be0883f476675798a0169b2`; tests `f5eda5866aa5c82795df65b6cc69bc2df5b897e8`; CMake `8783b1078ec52b0449e8339019c0337045a56cf8`.
-- **Локальная сборка/CTest не запускались в этой среде; GitHub Actions result для нового HEAD ещё не подтверждён.** Поэтому тесты пока обозначаются как ADDED, а не PASS.
+- Commits: header `5440dec658b0417d439b12ec43975379a91c0a22`; implementation `08fe8cd53dbb1a6d3be0883f476675798a0169b2`; tests `f5eda5866aa5c82795df65b6cc69bc2df5b897e8`; CMake `8783b1078ec52b0449e8339019c0337045a56cf8`.- **Локальная сборка/CTest не запускались в этой среде; GitHub Actions result для нового HEAD ещё не подтверждён.** Поэтому тесты пока обозначаются как ADDED, а не PASS.
 - Следующий этап после CI: исправить только реальные compiler/test findings; затем построить JUCE window shell/manager с per-panel square maximize/restore и X, SafePointer lifecycle, сохранением bounds и независимым закрытием. До этого независимые окна и compact UI не считаются готовыми.
  
 ## 2026-11-12 — VST3 instrument target verification (source configuration)
@@ -557,8 +551,7 @@ Commits:
 - ThemeManager Skin_052 tests: 939dbdd3f3296c701da91381296e993ccb1e4318
 - Editor registry API: dea269eba772283aee1d8c08cf0b5b982727f655
 - Dynamic skin discovery/menu: dc60913a46d6545c3b1c8d3e47c01921ed73d9e5
-- Registry index/path hardening: f1d3a44889bef6c8089a817da3c32b9f009eb29b
-- Integer narrowing/include correction: 562616280ced80f6e59ce02e2bcc3f7548e3e3bf; 8e4ec1def905c0dbda59a1e1d8fca90e30d40a50
+- Registry index/path hardening: f1d3a44889bef6c8089a817da3c32b9f009eb29b- Integer narrowing/include correction: 562616280ced80f6e59ce02e2bcc3f7548e3e3bf; 8e4ec1def905c0dbda59a1e1d8fca90e30d40a50
 - Skin manifest validator dual-format support: faf3f08c1d357837af527eb123900c6e360b0107
 - PNG/SVG asset validator fixes and CRC/decompression validation: b061fd56ff8d6c8941c1948c5f33d3b146abf7fc; 29ccfd9e93c21cfe3a9a99d73ce0c7902ad1d32b; fc32e3ceda5c32f3bcd22cefa4cfda5277c1a44b
 - Workflow packages both schemas: c05d9559a986f0ae5aab35440a2b9ef20b60215b
@@ -637,8 +630,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Статус:** MERGED (документ спецификации в main) / PENDING (CI-проверка HEAD и технические gates).
 **Коммиты:**
 - MASTER PROMPT: `a114629c27d0dd9d54b4f3d376c7135f3485d9a5`
-- README authority alignment: `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9`
-- INFO entry: создаётся этой записью; итоговый SHA фиксируется в GitHub commit history.
+- README authority alignment: `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9`- INFO entry: создаётся этой записью; итоговый SHA фиксируется в GitHub commit history.
 
 **CI:** Для HEAD `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9` combined status вернул пустой `statuses: []`; доступный workflow lookup вернул пустой список. Этот lookup ограничен PR-triggered runs и первой страницей; отсутствие результатов не доказывает отсутствие всех Actions runs и не является PASS. Windows Release build, CTest, pluginval strictness 5, VST3 packaging — NOT VERIFIED на этом SHA. Локальный `git status` в текущем интерфейсе недоступен; удалённый HEAD main проверен через GitHub commit history.
 
@@ -717,8 +709,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 4. Audio snapshot quiescence, 8-root cap, cancellation/lifetime and 64-voice cache-pressure remain open risks §3.4.
 
 **Self-check §21:**
-1. SHA: preview `d8735b2...`, final asset source `34f0740...`; run #963 / ID `43134831986` is still running at journal time; configure in progress, so no build/test PASS is claimed.
-2. Regression coverage: `tools/validate_skin_pack.py` passed at CI step 6 on exact SHA; `ppgu_skin_manifest_contract` CTest has not yet run.
+1. SHA: preview `d8735b2...`, final asset source `34f0740...`; run #963 / ID `43134831986` is still running at journal time; configure in progress, so no build/test PASS is claimed.2. Regression coverage: `tools/validate_skin_pack.py` passed at CI step 6 on exact SHA; `ppgu_skin_manifest_contract` CTest has not yet run.
 3. R28 non-goals above were not crossed.
 4. Asset repair: IMPLEMENTED; targeted skin asset validation TESTED; overall release pipeline PENDING.
 5. Not done: Windows build, all CTest targets, pluginval strictness 5, packaging, FL Studio 20 host acceptance, CPU/RAM profiling and default-ppgu migration.
@@ -797,7 +788,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Факт:** README ранее ссылался на REV 16.0 как authority и называл CMake test-discovery correction последним source fix. INFO содержит более позднее исправление MSVC C2660 в ThemeManager (commit `8bd10b20...`) и точный результат run #963 (failed compile на предыдущем SHA). По R29 это расхождение исправлено.
 
 **Исправлено:** README теперь называет REV 16.2 действующей спецификацией; указывает ThemeManager JUCE 7.0.12 compile fix как последний source correction; показывает run #963 как FAILED на старом SHA и явно сообщает, что успешный повторный build/CTest/pluginval/package для `8bd10b2...` не подтверждён. Пустой status и PR-only workflow lookup не трактуются как отсутствие всех Actions runs или PASS.
-
 **R28 non-goals:** только README; исходники, тесты, CI workflows, skin data/schema/registry, аудио, APVTS, MIDI, SoundBank, presets и package не менялись.
 
 **R33:** этот документационный этап находится только в `main`; branch rollout по остальным refs не выполнялся. Для этапа действует явная пометка main-only; синхронизация остальных веток NOT YET VERIFIED.
@@ -877,7 +867,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 - §16.1: REV 17.0 классифицирован как MAJOR из-за R34/I4/R16/EXPLICIT-PERMISSION и обновления §2.
 - §17: добавлены resource-path failure, RED SoundBank и правило канонического текста — инвертированные формулировки из патчей не применяются.
 - §2 явно фиксирует, что новый ResourceRootResolver пока NOT IMPLEMENTED / NOT VERIFIED; текущее упоминание соседнего `Skins` — только legacy fallback.
-
 **Preflight / CI перед этапом:**
 - HEAD до изменения: `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`; спецификация до изменения REV 16.5.
 - Последний run #968, ID `43141187492`, SHA `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`: Windows Release build PASS; CTest FAILED; 13/14 targets PASS, включая AuxiliaryPanelLayout, два failure внутри `ppgu_sound_asset_registry_contract`: `test_non_cc0_license_blocks_green` (ожидание сообщения "not an explicitly approved") и `test_unapproved_or_missing_license_evidence_blocks_green` (ожидание "not APPROVED"). Остальные 13? фактически 13 CTest targets прошли, один target завершился failure; VST3 locate, pluginval strictness 5 и packaging SKIPPED. Не объявлять run успешным. Этот дефект не исправлялся данным документным этапом.
@@ -957,8 +946,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **S0:** фактический main HEAD на preflight 9a35ae31c6cddb75ab187e42afa175a7df28fc5d; рабочая ветвь main. Run #1157 завершён успешно на родительском source SHA d687106117555bec443d041d6c6ed6b2bd718ba5. Run #1155 SUCCESS на SHA fe1e77527786e42bf6e838675b6b0efecc4251c7 — исторический baseline, не переносится.
 **S1:** CTest step run #1157 завершился SUCCESS; также успешно завершились validators preset catalog, portable preset examples, APVTS registry/state persistence, skin pack G1-G4, BinaryData links, Release build, pluginval и package. Sample library download был SKIPPED из-за восстановленного cache; sample validation SUCCESS. Это не является подтверждением наличия нового набора WAV сверх фактического package manifest.
 **S3:** визуальная пропагация 21 canonical palette token в Source/PluginEditor.cpp; semantic danger state SFZ button включён commit d687106117555bec443d041d6c6ed6b2bd718ba5. CI #1157 подтверждает Windows Release, CTest, VST3 locate, pluginval strictness 5 и package на этом SHA. Auxiliary windows, Skin Gallery, dynamic discovery/rescan, full visual parity и host visual QA не реализованы/не подтверждены.
-**R28 non-goals:** DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, preset catalog, SoundBank payload, skin schema/registry/assets, ThemeManager decoder, CMake pins и packaging rules не изменялись в этом source change.
-**R32 риски:** quiescence snapshots, 8-root cap, worker recovery, 64-voice cache pressure и cancellation/lifetime races остаются открытыми; этот этап их не затрагивал.
+**R28 non-goals:** DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, preset catalog, SoundBank payload, skin schema/registry/assets, ThemeManager decoder, CMake pins и packaging rules не изменялись в этом source change.**R32 риски:** quiescence snapshots, 8-root cap, worker recovery, 64-voice cache pressure и cancellation/lifetime races остаются открытыми; этот этап их не затрагивал.
 **Self-check §21:** 1) source SHA и run совпадают: да; 2) CTest step: SUCCESS по job log; 3) R28 соблюдён; 4) статусы ограничены доказанным run; 5) осталось: S2, остаточный visual audit S3, S4–S9; 6) main-only, rollout других ветвей не выполнялся.
 **Уточнение статуса:** предыдущая follow-up строка ниже, помечавшая CI для d687106 как PENDING, superseded этой записью после завершения run #1157. Последующий HEAD 9a35ae31c6cddb75ab187e42afa175a7df28fc5d содержит только append-only запись в Info.txt и не имеет отдельного source build run.
 
@@ -1037,7 +1025,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 
 ### REV18 S3 — exact-source CI result #1177 (2026-11-12)
-
 **Validated source SHA:** `e90e7be79a717c74fc94ec634a31f8c7669fb850`. **GitHub Actions:** run #1177 / ID `43235287270`, conclusion **SUCCESS**, event push, workflow `.github/workflows/vst3-build.yml`. **Current documentation/main HEAD before this journal update:** `eb43f6319b3c221e2db143971bc3fdca32498e94`; this is a later Info/CODE-only documentation head and is not the source SHA validated by run #1177.
 
 **Exact successful job steps:** artwork generation/validation; 300-preset factory catalog; portable preset examples; APVTS registry/state persistence; REV14 skin pack G1-G4; source extraction/review artifact; redistributable sample-library license validation (cache restored; network download step skipped); JUCE BinaryData include/link/declaration order; Windows x64 Release configure; VST3 and test executable build; CTest regression suite; VST3 bundle locate; pluginval strictness level 5; host-validation limitation record; packaging of VST3, SOUNDBANK, PRESETS, SKINS, Resources and Assets; artifact upload — all SUCCESS (download step intentionally SKIPPED due to restored cache).
@@ -1117,7 +1104,6 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 ## 2026-11-12 — PATTERN/AUTOCHORDS MIDI-driven one-shot fallback (user re-confirmation)
 
 **Статус:** REQUIREMENT VERIFIED IN MASTER SPEC + JOURNAL UPDATED; RUNTIME IMPLEMENTATION/PLAYBACK ACCEPTANCE NOT VERIFIED.
-
 Пользователь повторно подчеркнул обязательный сценарий, ранее уже внесённый в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15 (fallback contract, lines 56–59):
 - Если подходящего готового guitar loop для выбранного стиля/темпа/артикуляции нет, режим PATTERN вместе с AUTOCHORDS должен уметь собрать исполнение из совместимых записанных guitar one-shots.
 - MIDI pattern является инструкцией исполнения: задаёт моменты ударов, длительности/gate, акценты, velocity, вариации и ритмический рисунок; синхронизация — с tempo хоста.
@@ -1146,4 +1132,89 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 Требование добавлено в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`. Оно относится к UI/layout и не меняет MIDI/chord-generation semantics AutoChords.
 
 **Проверка реализации:** пока не заявлена. AUTOCHORDS backend/UI ранее отмечены как disabled / pending backend; после реализации выполнить статический layout audit и Windows/FL Studio 20 interactive host acceptance. Не считать требование выполненным только по наличию спецификации.
+
+
+## 2026-11-12 — SOUND HUNTER: расширение проверенного каталога источников (раунд 1)
+
+**Статус:** SOURCE DISCOVERY / LICENSE TRIAGE COMPLETE; DOWNLOAD, AUDIO QA И SOUND BANK COMMIT НЕ ВЫПОЛНЕНЫ.
+
+Поиск продолжен с учётом REV 10.1 и требования пользователя: только гитарный контент; приоритет — прямые скачивания без регистрации; лицензия должна разрешать коммерческое использование, изменение, встраивание и распространение самих сэмплов внутри VST/SoundBank. Сайт или факт «free/royalty-free» сам по себе не является разрешением на переупаковку.
+
+### Новые подтверждённые source candidates
+
+1. **Karoryfer — Black And Green Guitars**
+   - Источник: https://shop.karoryfer.com/pages/free-black-and-green-guitars
+   - Репозиторий/лицензия: https://github.com/sfzinstruments/karoryfer.black-and-green-guitars
+   - Примерно 1,500+ сэмплов / около 500 MB; две hollowbody electric guitars (Gretsch Anniversary и Hofner Club), short/long notes, feedback; дополнительные техники: hammer-ons и behind-the-bridge plucks.
+   - Источник автора и LICENSE в репозитории указывают CC0-1.0 / royalty-free commercial use. Высокая ценность для indie/pop-punk текстур, атак и специальных артикуляций.
+   - Статус: GREEN SOURCE CANDIDATE; конкретный архив ещё не скачан и не прошёл SHA-256/audio screening.
+
+2. **Karoryfer — Emilyguitar**
+   - Источник: https://shop.karoryfer.com/pages/free-emilyguitar
+   - Репозиторий/лицензия: https://github.com/sfzinstruments/karoryfer.emilyguitar
+   - 323 WAV, 24-bit/44.1 kHz, около 98 MB; четыре velocity layers, три round robins, release/muting noises, percussion noises; имеются SFZ mappings, включая power/minor/major barre-chord mappings.
+   - Официальная страница Karoryfer сообщает CC0 для free sample libraries; репозиторий содержит CC0 license. Полезен для chord/power-chord/round-robin слоя и AutoChords-подобных MIDI-паттернов после проверки реальных SFZ mappings.
+   - Статус: GREEN SOURCE CANDIDATE; не скачан, не добавлен в registry.
+
+3. **Karoryfer — Shinyguitar**
+   - Источник: https://shop.karoryfer.com/pages/free-shinyguitar
+   - Репозиторий/лицензия: https://github.com/sfzinstruments/karoryfer.shinyguitar
+   - 846 WAV, 24-bit/44.1 kHz, около 352–439 MB в разных описаниях; pickup DI + microphone acoustic blend, четыре velocity layers, round robins, muted plucks, release noises, percussion, simulated vibrato/muting.
+   - Официальная страница и исходный GitHub LICENSE указывают CC0/royalty-free commercial use. Внешний каталог SFZLab показывает отличающуюся CC-BY метку; из-за расхождения каталогов для factory redistribution требуется сохранить оригинальную LICENSE из исходного репозитория и провести отдельную проверку при импорте.
+   - Статус: YELLOW до сверки лицензии/архива на момент скачивания; не AUTO ADD.
+
+4. **FreePats — FSBS Electric Guitar Clean #1 / Clean #2 Jazz / Direct**
+   - Источник: https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html
+   - CC0-1.0 подтверждён на странице каждого набора.
+   - Clean #1: SFZ FLAC 118 MiB или WAV 456 MiB; small FLAC 3.0 MiB или WAV 4.5 MiB.
+   - Clean #2 Jazz: SFZ FLAC 63 MiB или WAV 193 MiB; small FLAC 2.4 MiB или WAV 3.7 MiB.
+   - Direct: SFZ FLAC 74 MiB или WAV 153 MiB.
+   - Полезность: clean rhythm, DI для собственных amp/drive цепочек, джазовый clean как дополнительный тембр. Для первой интеграции предпочтителен FLAC/SFZ либо компактный small variant после проверки поддержки формата в S6.5.
+   - Статус: GREEN SOURCE CANDIDATES; архивы не скачаны.
+
+5. **FreePats — FSBS Electric Guitar Distorted #1 / #2**
+   - Источник: https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html
+   - CC0-1.0 подтверждён на странице.
+   - Distorted #1: SFZ FLAC около 300 MiB / WAV около 600 MiB.
+   - Distorted #2: SFZ FLAC около 129 MiB / WAV около 245 MiB.
+   - Записаны как обработанные amp/effects варианты overdrive/distortion; особенно релевантны PP-NEO2000 и PP-MODERN. Это не заменяет DI/собственный DSP и требует прослушивания на pop-punk миксе.
+   - Статус: GREEN SOURCE CANDIDATES; архивы не скачаны.
+
+6. **FreePats — Spanish Nylon Acoustic Guitar**
+   - Источник: https://freepats.zenvoid.org/Guitar/acoustic-guitar.html
+   - CC0-1.0; SFZ FLAC около 4.5 MiB, SFZ WAV около 6.9 MiB, SF2 около 9.5 MiB.
+   - Источник описывает ограничения исходной записи и фильтрацию шумов; использовать как дополнительный nylon/fingerstyle/acoustic вариант, не как основной premium acoustic слой.
+   - Статус: GREEN SOURCE CANDIDATE; не скачан.
+
+7. **Meta Open Sound — Nylon Guitar / Steel Guitar**
+   - Источник и общая лицензия: https://github.com/facebookincubator/Meta-open-sound
+   - Nylon: 348 multisamples, E2–B5, шесть string zones, три dynamic layers; 48 kHz/24-bit WAV.
+   - Steel: 375 multisamples, E2–C6, шесть струнных зон, три velocity layers; 48 kHz/24-bit WAV.
+   - Инструментальные коллекции CC0-1.0, допускают коммерческое использование, модификацию и redistribution. Отдельный Oculus Audio Pack имеет CC-BY-4.0 и не смешивается с CC0-категорией без attribution review.
+   - В предыдущем журнале уже отмечена неудачная попытка получить Meta archive из-за HTTP 504; это не считать скачиванием. Повторить через Release assets/checksum при следующем download pass.
+   - Статус: GREEN SOURCE CANDIDATES; локальное наличие архива и SHA-256 не подтверждены.
+
+### Источники-каталоги для следующего раунда
+
+- SFZ Instruments — guitar index: https://sfzinstruments.github.io/guitars/
+- Discord SFZ GM Bank: https://github.com/sfzinstruments/Discord-SFZ-GM-Bank — каждый инструмент имеет собственную лицензию; README допускает CC0/CC-BY/equivalent, поэтому проверять конкретный SFZ и исходные samples, не считать весь репозиторий одной лицензией.
+- FreePats GitHub organization: https://github.com/freepats — обнаружены отдельные CC0 electric guitar repositories (clean, jazz, direct, distortion 1/2).
+- Karoryfer free sample libraries: https://shop.karoryfer.com/pages/free-samples — автор указывает CC0 для free sample libraries; исключения/старые версии всё равно сверять по LICENSE конкретного архива.
+
+### Что исключено / не засчитывается
+
+- SampleSwap требует регистрацию для скачивания — не соответствует текущему приоритету «без регистрации»; не добавлять в AUTO ADD.
+- Коммерческие Karoryfer libraries (например, Glockenskull, Snowkiss, Surfkiss, Secret Agent Guitar) не добавлять без отдельной лицензии, прямо разрешающей redistribution/sample-library embedding.
+- Сторонние repacks и Hugging Face repackages не считать приоритетным оригинальным источником, пока не сверены исходная лицензия, полный provenance и права на конкретную переработку.
+- Слитые/пиратские коммерческие банки не импортировать: отсутствие явной лицензии не является разрешением. Такие находки — RED/исключить.
+
+### Текущий фактический итог раунда
+
+- Обнаружены 7 семейств/наборов источников с несколькими вариантами банков.
+- Лицензионные заявления проверены на уровне официальных страниц/репозиториев, но архивы ещё не получены в рабочем каталоге.
+- НОВЫХ скачанных файлов: 0 подтверждено в этом раунде.
+- Новых SHA-256: 0.
+- Новых технически screened assets: 0.
+- SoundBank registry остаётся пустым; approved assets остаётся 0. Это намеренно: нельзя записывать URL-кандидат как готовый asset или выдавать поиск за скачивание.
+- Следующий этап: загрузка оригинальных архивов с официальных Release/download links в quarantine; проверка архива/вложенных SFZ, SHA-256, формата, размеров, sample mapping, velocity/RR/articulations, SNR/clipping/DC/integrity; затем отдельное решение GREEN/YELLOW/RED и только после всех gates — импорт в единый S6.5/SoundBank pipeline.
 
