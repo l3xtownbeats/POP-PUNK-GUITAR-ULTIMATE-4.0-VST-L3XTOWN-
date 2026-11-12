@@ -79,12 +79,35 @@ int main()
         checkInsideAndDisjoint(layout, desktop);
     }
 
+    auto two = calculatePanelLayout(desktop, makePanels(2), 1.0f);
+    CHECK(two.columns == 2 && two.rows == 1);
+    CHECK(two.panels.size() == 2);
+    checkInsideAndDisjoint(two, desktop);
+
+    auto three = calculatePanelLayout(desktop, makePanels(3), 1.0f);
+    CHECK(three.columns == 2 && three.rows == 2);
+    checkInsideAndDisjoint(three, desktop);
+
+    auto five = calculatePanelLayout({ 0, 0, 1600, 1100 }, makePanels(5), 1.0f);
+    CHECK(five.columns == 2 && five.rows == 3 && !five.overflow);
+    checkInsideAndDisjoint(five, { 0, 0, 1600, 1100 });
+
+    auto six = calculatePanelLayout({ 0, 0, 1600, 1100 }, makePanels(6), 1.0f);
+    CHECK(six.columns == 2 && six.rows == 3 && !six.overflow);
+    checkInsideAndDisjoint(six, { 0, 0, 1600, 1100 });
+
+    auto seven = calculatePanelLayout(desktop, makePanels(7), 1.0f);
+    CHECK(seven.overflow && seven.panels.size() == 7);
+    int sevenVisible = 0;
+    for (const auto& p : seven.panels) sevenVisible += p.visible ? 1 : 0;
+    CHECK(sevenVisible == 1 && seven.panels.front().visible);
+
     const PanelRect compactArea { 0, 0, 900, 520 };
     auto compact = calculatePanelLayout(compactArea, makePanels(4), 1.0f);
     CHECK(compact.compact && !compact.overflow);
     checkInsideAndDisjoint(compact, compactArea);
 
-    const PanelRect portraitArea { 0, 0, 520, 1100 };
+    const PanelRect portraitArea { 0, 0, 620, 1100 };
     auto portrait = calculatePanelLayout(portraitArea, makePanels(3), 1.0f);
     CHECK(!portrait.overflow);
     for (const auto& p : portrait.panels)

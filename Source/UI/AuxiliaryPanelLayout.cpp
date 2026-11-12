@@ -71,66 +71,67 @@ PanelLayout calculatePanelLayout(PanelRect area,
         minimumH = std::max(minimumH, scaled(request.minimum.height, scale));
     }
 
-    const auto scaledGap = gap <= 0 ? 0 : scaled(gap, scale);
-    const auto count = static_cast<int>(requests.size());
-    int bestColumns = 0, bestRows = 0;
-    double bestScale = -1.0;
-
-    for (int columns = 1; columns <= count; ++columns)
+    const int count = static_cast<int>(requests.size());
+    int columns = 1;
+    int rows = 1;
+    if (count == 2)
     {
-        const int rows = count / columns + (count % columns == 0 ? 0 : 1);
-        const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (columns - 1);
-        const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (rows - 1);
-        const auto availableW = static_cast<std::int64_t>(area.width) - horizontalGaps;
-        const auto availableH = static_cast<std::int64_t>(area.height) - verticalGaps;
-        if (availableW <= 0 || availableH <= 0)
-            continue;
-
-        const auto cellW = availableW / columns;
-        const auto cellH = availableH / rows;
-        if (cellW < minimumW || cellH < minimumH)
-            continue;
-
-        const double fit = std::min(static_cast<double>(cellW) / desiredW,
-                                    static_cast<double>(cellH) / desiredH);
-        if (fit > bestScale)
-        {
-            bestScale = fit;
-            bestColumns = columns;
-            bestRows = rows;
-        }
+        columns = 2; rows = 1;
     }
-
-    if (bestColumns == 0)
+    else if (count >= 3 && count <= 4)
+    {
+        columns = 2; rows = 2;
+    }
+    else if (count >= 5 && count <= 6)
+    {
+        columns = 2; rows = 3;
+    }
+    else if (count > 6)
     {
         result.overflow = true;
-        result.columns = result.rows = 1;
+        result.columns = 2;
+        result.rows = (count + 1) / 2;
         result.panels.reserve(requests.size());
         for (std::size_t i = 0; i < requests.size(); ++i)
             result.panels.push_back({ requests[i].id, area, i == 0 });
         return result;
     }
 
-    result.columns = bestColumns;
-    result.rows = bestRows;
-    result.compact = bestScale < 1.0;
-    const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (bestColumns - 1);
-    const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (bestRows - 1);
-    const auto cellW = (static_cast<std::int64_t>(area.width) - horizontalGaps) / bestColumns;
-    const auto cellH = (static_cast<std::int64_t>(area.height) - verticalGaps) / bestRows;
+    const auto scaledGap = gap <= 0 ? 0 : scaled(gap, scale);
+    const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (columns - 1);
+    const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (rows - 1);
+    const auto availableW = static_cast<std::int64_t>(area.width) - horizontalGaps;
+    const auto availableH = static_cast<std::int64_t>(area.height) - verticalGaps;
+    const auto cellW = availableW > 0 ? availableW / columns : 0;
+    const auto cellH = availableH > 0 ? availableH / rows : 0;
+
+    if (cellW < minimumW || cellH < minimumH)
+    {
+        result.overflow = true;
+        result.columns = columns;
+        result.rows = rows;
+        result.panels.reserve(requests.size());
+        for (std::size_t i = 0; i < requests.size(); ++i)
+            result.panels.push_back({ requests[i].id, area, i == 0 });
+        return result;
+    }
+
+    result.columns = columns;
+    result.rows = rows;
+    result.compact = cellW < desiredW || cellH < desiredH;
     result.panels.reserve(requests.size());
 
     for (int i = 0; i < count; ++i)
     {
-        const int column = i % bestColumns;
-        const int row = i / bestColumns;
+        const int column = i % columns;
+        const int row = i / columns;
         const auto x = static_cast<std::int64_t>(area.x)
                      + static_cast<std::int64_t>(column) * (cellW + scaledGap);
         const auto y = static_cast<std::int64_t>(area.y)
                      + static_cast<std::int64_t>(row) * (cellH + scaledGap);
-        const auto width = column == bestColumns - 1
+        const auto width = column == columns - 1
             ? static_cast<std::int64_t>(area.x) + area.width - x : cellW;
-        const auto height = row == bestRows - 1
+        const auto height = row == rows - 1
             ? static_cast<std::int64_t>(area.y) + area.height - y : cellH;
 
         result.panels.push_back({ requests[static_cast<std::size_t>(i)].id,

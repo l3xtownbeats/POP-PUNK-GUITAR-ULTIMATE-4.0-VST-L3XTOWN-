@@ -116,6 +116,15 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
 endif()
 
+# JUCE-free chord symbol recognition and guitar fingering foundation.
+if(BUILD_TESTING)
+    add_executable(ppgu_auto_chord_engine_tests
+        tests/AutoChordEngineTests.cpp
+    )
+    target_include_directories(ppgu_auto_chord_engine_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chord_engine_contract COMMAND ppgu_auto_chord_engine_tests)
+endif()
+
 # Dependency-free SFZ parser regression tests.
 if(BUILD_TESTING)
     add_executable(ppgu_sfz_parser_tests
