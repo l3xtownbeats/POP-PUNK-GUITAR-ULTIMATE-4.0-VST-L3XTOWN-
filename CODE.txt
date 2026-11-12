@@ -373,3 +373,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Workflow changes: initialize x64 MSVC with `ilammy/msvc-dev-cmd@v1`; switch to `Ninja Multi-Config`; keep `CMAKE_CXX_COMPILER_LAUNCHER=sccache`.
 - Runtime/source boundary: CI-only; no C++ source, processor, APVTS, DSP, MIDI, sampler, preset, SoundBank or plugin format changes.
 - Validation: exact-SHA CI and non-zero sccache compile requests pending; cache hit-rate/performance improvement not yet claimed.
+
+
+## 2026-11-12 — Main shell palette token cleanup
+
+- **Commit:** `8f1eab9cb8da8a468b98adfe43cb103fe9ae4abe` (parent `66dd3e075dbd9d7e09e5ae7abfe3fb8d30c62390`).
+- **File:** `Source/PluginEditor.cpp`.
+- **Changed:** five main-shell colour assignments now resolve through active palette tokens: MIDI white keys (initialization and palette refresh), rotary outline, LOAD button foreground, FX active-button foreground.
+- **Validation:** exact-SHA run `43188981213` SUCCESS; Windows x64 Release PASS; CTest 14/14 PASS; pluginval strictness 5 PASS.
+- **Boundary:** visual-only source changes; no APVTS/audio/MIDI/sampler/scheduler/preset/SoundBank changes.
+- **Still open:** hardcoded colours in Import Guitar, FX Edit and AutoChords auxiliary panels; runtime skin-switch visual QA; FL Studio 20 host acceptance.
