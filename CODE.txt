@@ -82,3 +82,10 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Prioritized documented CC0 candidates: Meta Open Sound Steel/Nylon, Karoryfer free guitar libraries and FreePats FSBS Clean/Distorted Electric Guitar.
 - Promo/free/demo and loop marketplaces are discovery leads only; ambiguous terms remain YELLOW until exact source-file redistribution rights are established.
 - Registry remains empty; no external sample downloads, hashes, audition, imports or playable presets are claimed by this documentation change.
+
+
+### 2026-11-12 — Guitar Sound Sources Index
+- Added docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md with 20 source/catalogue/asset links for guitar-only multisamples, SFZ/SF2 banks, loops, stems, riffs and one-shots.
+- Sources include Meta Open Sound, SFZ Instruments, Karoryfer, FreePats, VCSL, Selekt, Signature Sounds, Freesound CC0 guitar recordings, OpenGameArt, Pulse Open Loops, SampleStack and Libre Instrument Audio Database.
+- Added per-source clearance tiers and an asset-level ingestion checklist.
+- The document is discovery metadata only: no download, checksum, audition, import, registry population or playable sample is claimed.
