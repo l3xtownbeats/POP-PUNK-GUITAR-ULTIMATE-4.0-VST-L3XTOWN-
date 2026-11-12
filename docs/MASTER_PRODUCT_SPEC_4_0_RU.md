@@ -276,3 +276,37 @@ Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Fou
 - Примеры ритмических рисунков: STRAIGHT 8THS, FAST SKATE-PUNK, GALLOP, HALF-TIME, STOP-TIME ACCENTS, VERSE → OPEN CHORUS, SKANK OFFBEATS, OCTAVE-HOOK GROOVE, ARPEGGIO PATTERN.
 - Доступные варианты зависят от выбранной гитары и реально имеющихся записей/performance maps. Не путать **TREMOLO PICKING** (техника игры) с **TREMOLO EFFECT** (эффект обработки), а **PALM MUTE** (артикуляция) — с тембровым пресетом. Тон/эффекты, техника исполнения и ритмический рисунок — независимые параметры.
 - Выбор техники/стиля может ограничивать список совместимых ритмов; интерфейс должен ясно показывать совместимость и не подменять отсутствующие исполнения синтетической имитацией.
+
+
+### 15.11 Справочник панк-ритм-гитары — обязательная база AutoChords / Pattern Engine (2026-11-12)
+
+Пользователь предоставил полный справочник по ритм-гитаре панк-рока. Использовать его как исходную музыкальную таксономию для проектирования AutoChords, Pattern Browser, MIDI pattern data, performance maps и factory pattern presets. Это не означает, что паттерны уже реализованы или что каждый из них доступен для каждой библиотеки.
+
+**Принципы исполнения:** плотная и ровная пульсация; короткие повторяемые 1–2-тактовые фразы; точность и синхронизация с kick/snare важнее предельной скорости; динамика строится контрастом palm-muted/open, паузами, акцентами и длительностью нот. Паузы должны сохранять метрическую позицию; ghost notes тише основных атак.
+
+**Техники / articulations (отдельная ось от ритма и тембра):**
+- DOWNSTROKE; UPSTROKE; ALTERNATE DOWN-UP;
+- PALM MUTE с уровнями/вариациями приглушения только если это поддерживается исходными samples/articulation maps;
+- OPEN CHORDS; POWER CHORDS; STACCATO / LEFT-HAND MUTE;
+- GHOST NOTES; MUTED BRIDGE / CHUGS;
+- SKANK / OFFBEAT UPSTROKE;
+- OCTAVE / FIFTH MOVES; DOUBLE-STOPS; TREMOLO PICKING;
+- ARPEGGIO / PICKING; SUSTAIN / AMBIENT; STOP-START / SYNCOPATED.
+Не смешивать palm-mute articulation с тембровым пресетом/эффектом, tremolo picking с tremolo FX, а mute/staccato с обычной короткой MIDI-длительностью без соответствующей артикуляции.
+
+**Базовые ритмические паттерны (4/4; восьмые позиции 1-&-2-&-3-&-4-&):**
+- A — STRAIGHT MUTED WALL: восемь равномерных приглушённых атак.
+- B — POP-PUNK VERSE: приглушённые восьмые с запланированными rests; исходная таблица пользователя: P P . P P P . P.
+- C — BRITISH PUNK / STOP-START: open/muted contrast + rests; исходная таблица: V . P P . P V .
+- D — BACKBEAT / GHOST ACCENTS: тихие ghost attacks и выделенные акценты на 2 и 4; исходная таблица: g g V g g V g g. При реализации проверить, что акценты действительно попадают на выбранные beat positions и соответствуют сетке.
+- E — HARDCORE SIXTEENTHS: шестнадцать равномерных атак на сетке 1-e-&-a; continuous downstroke/mute только если артикуляция доступна.
+- F — SKA-PUNK OFFBEATS: rests на долях и атаки на восьмых offbeats (&).
+- G — SIXTEENTH-PAIR DRIVE: пары шестнадцатых с последующей восьмой; исходную запись пользователя нормализовать в точные MIDI onset/duration, не трактовать двусмысленную текстовую группировку как готовую MIDI-таблицу.
+
+**Подстили / groove families:** CLASSIC PUNK (straight eighth-note wall); BRITISH PUNK (stop-start, staccato, open/muted contrast); POP-PUNK (muted verse → open chorus, accents); HARDCORE / SKATE-PUNK (fast sixteenths, high density); SKA-PUNK (offbeat upstroke/skank); POST-PUNK (dry/mechanical eighths, bass-led minimalism). BPM ranges из пользовательского справочника — ориентиры, не жёсткие ограничения и не замена tempo sync.
+
+**Arrangement / section patterns:** VERSE MUTED → CHORUS OPEN; STOP-TIME ACCENTS; HALF-TIME; GALLOP; STRAIGHT 8THS; FAST SKATE-PUNK; OFFBEAT SKANK; OCTAVE-HOOK GROOVE; ARPEGGIO PATTERN. Связь с барабанами: kick ориентировочно 1/3, snare 2/4, но pattern data должен позволять вариации и не жёстко привязываться к одному drum groove.
+
+**Data / UI требования:** каждый паттерн хранить как проверяемую сетку событий (bar, beat/subdivision, duration, velocity/accent, articulation, rest, humanization bounds), иметь счёт/визуализацию, BPM feel tag, substyle tag и совместимость с конкретными guitar sample maps. В AutoChords отдельно выбирать progression, playing style/articulation и rhythm pattern. Добавлять preview/play только после подключения настоящего MIDI/audio routing. Нельзя выдавать текстовую карточку за реализованное исполнение.
+
+**QA:** проверять длину цикла, отсутствие событий в rests, точность сетки, корректность 1/8 и 1/16, loop seam, MIDI note-off/choke, velocity/accent, tempo scaling, swing/humanize bounds и синхронизацию с kick/snare. Проверять, что DOWNSTROKE/UPSTROKE, palm mute, ghost note и open chord поддерживаются реальными performance data. Темп и техника должны быть редактируемыми, не запечёнными в название паттерна.
