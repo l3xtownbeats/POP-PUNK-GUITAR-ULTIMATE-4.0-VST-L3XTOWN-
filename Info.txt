@@ -1253,3 +1253,25 @@ FX EDIT, AutoChords, Import Guitar и Settings должны открыватьс
 Перед правкой сверять текущую активную ветку, HEAD, реальные APVTS IDs, DSP signal path, FX rack mapping, ThemeManager tokens, skin schema и validators. Не переносить предположения и старые аудиты на текущую ветку без повторной проверки. После изменений выполнять доступные структурные проверки и тесты; отдельно фиксировать то, что не удалось собрать или проверить в DAW.
 
 **Не заявляется:** что все индивидуальные FX-панели, DOUBLE DSP, полная маршрутизация, multi-panel workspace или все перечисленные эффекты уже реализованы и приняты. Эта запись фиксирует обязательные требования и критерии проверки; реализация подтверждается только конкретными source changes, тестами и host/audio QA.
+
+## 2026-11-12 — GUI / Theme Shell: skin-aware keyboard materials and invariant MIDI note highlight
+
+**Статус:** SOURCE CHANGE COMMITTED / CONTENT RE-READ VERIFIED / BUILD AND HOST QA PENDING.
+
+**Активная ветка:** `work/signal-forge-panel-shell`  
+**Commit:** `86f22f66defadc39581f8cc944f0b7b6e6a1bda4`
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+Проверены текущие `PluginEditor.cpp`, `ThemeManager`, `theme_manifest.json`, `Skin_052` и overlay/window manager. Реестр содержит 52 темы (Skin 01–51 и Skin 052); ThemeManager уже умеет читать legacy manifests и новый Skin Studio 21-token manifest. Дополнительные панели открываются внутри workspace и используют общую Palette. При этом выбор темы пока остаётся текстовым PopupMenu, а не полноценной визуальной Gallery с preview cards/search/family filters/favorites; hot-swap fade и применение всех typography/material/layout/assets metadata не подтверждены.
+
+**Исправлено в `Source/PluginEditor.cpp`:**
+- тень rotary control переведена с фиксированного чёрного на semantic `shadow` token;
+- белые клавиши MIDI keyboard теперь берут материал из `control_face`;
+- чёрные клавиши берут цвет из `control_bg`;
+- на повторном применении темы сохраняется фиксированная яркая ion-blue подсветка удерживаемых MIDI-нот (`#287DFF`), а не заменяется основным accent цветом темы;
+- hover подсветка по-прежнему использует theme accent glow, то есть hover и фактически нажатая MIDI-нота визуально различаются.
+
+**Повторная проверка после commit:** файл повторно прочитан из GitHub; подтверждены theme shadow token, keyboard material tokens, fixed ion-blue held-note token и отсутствие прежней подмены held-note highlight на accent темы. APVTS IDs, DSP, MIDI routing и sampler code не менялись.
+
+**Не выполнено / не заявляется:** полноценная Theme Gallery; preview/hero image decoding and card layout; family filters/search/favorites; dynamic rescan/hot-swap animation; полный skin-to-component/control parity; runtime DPI matrix; Windows Release/CTest/pluginval/FL Studio 20 QA. Эти задачи остаются следующим GUI implementation slice.
