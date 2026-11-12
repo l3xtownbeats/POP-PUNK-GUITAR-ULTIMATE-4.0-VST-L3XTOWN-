@@ -34,3 +34,11 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Verified inventory IDs: compressorOn, eqOn, distortionOn, chorusOn, delayOn, reverbOn, cabinetOn. Processor's flangerOn is not in runtimeControlInventory and is not exposed as a panel toggle.
 - APVTS IDs/semantics, schema, registry and control inventory unchanged.
 - CI run #1165 / ID 43227783170 is PENDING on exact source SHA 9a428e508b09791396385d5bcde96422f24846de.
+
+
+## 2026-11-12 — S3 canonical palette initialization cleanup
+- Source commit: 7cddfced48661ba1e184fee19107a8323691470c
+- Path: Source/PluginEditor.cpp
+- Scope: removed the six legacy hardcoded fallback colour constants and replaced constructor/configureKnob initial colour assignments with the active canonical ThemeManager palette; rotary LookAndFeel uses controlBorder/textPrimary instead of legacy border/text aliases. No DSP, APVTS, MIDI, sampler, preset, SoundBank, ThemeManager decoder, skin schema/registry, CMake or packaging behavior changed.
+- Static audit: no remaining 0x colour literals, juce::Colours::white, legacy pink/pale/muted/panel2 identifiers, or palette.border/palette.text aliases in PluginEditor.cpp.
+- Verification: new exact-SHA Windows CI pending; do not transfer run #1168 PASS from prior source SHA 38b57b854dc559e5dd7c408b96c6a7821eebbd58.
