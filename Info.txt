@@ -1032,3 +1032,16 @@ POP PUNK GUITAR ULTIMATE остаётся названием продукта; J
 **Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `33732767d20938dc99b6b4c9b43d6e925cab2b25`.
 **Не заявляется:** готовность новых эффектов, looper, tuner, их автоматизации или 14-слотового rack.
 **Следующий этап:** inventory DSP signal chain, parameter IDs и actual processBlock order; после него — module registry и отдельные тестируемые DSP implementations.
+
+
+## 2026-11-12 — Cabinet IR: preset-driven foundation и пользовательский звук
+
+**Статус:** REQUIREMENT ACCEPTED / SPECIFICATION COMMITTED; IR LIBRARY + WORKFLOW IMPLEMENTATION PENDING.
+**Рабочая ветка:** `work/signal-forge-panel-shell`.
+**Решение:** кабинетный блок должен использовать качественные гитарные cabinet IR, ориентированные на профессиональный готовый микс. Выбор рекомендуемого кабинета и его настроек может быть частью каждого guitar preset. Это preset-driven режим по умолчанию, а не жёсткая привязка, запрещающая ручную работу.
+**Clean workflow:** пользователь может выбрать чистый DI/clean guitar preset без cabinet coloration и обработки, сохранить исходное звучание библиотеки, затем независимо выбрать IR, включить Cabinet и настроить собственный тон. FX и Cabinet — независимые пользовательские слои. Режимы: preset cabinet chain, clean/DI base и user cabinet. Нужны настоящий Cabinet Bypass, Reset to Preset Defaults и отдельное сохранение User Preset; заводские пресеты не перезаписываются.
+**Качество и лицензии:** synthetic impulse, уже существующий в processor, не является профессиональной IR-библиотекой и не должен маркироваться как такая. Встраивать только IR с правами на распространение внутри плагина; вести provenance/license/attribution/checksum. Оценивать IR на разных DI-гитарах и пресетах, контролировать CPU/latency, длину IR, normalization, mono/stereo и безопасное переключение без операций в audio thread.
+**Проверка кода:** `Source/PluginProcessor.cpp` содержит текущий короткий synthetic cabinet impulse и cabinetMix/LowCut/HighCut; `FXEditPanel` показывает Cabinet IR. Это существующая базовая coloration, не доказательство наличия качественной библиотеки cabinet IR или preset-to-cabinet mapping.
+**Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `764ef3547977fdc73fc7db71c1333dabc29334d5`.
+**Повторный анализ:** решение не меняет APVTS IDs, семь существующих FX slots или DSP callback. Реализация preset mapping, IR library, UI modes и regression tests остаётся отдельной задачей по R09/R10.
+**Не заявляется:** наличие готовой профессиональной IR-библиотеки, автоматический выбор IR из пресета, clean/DI bypass workflow или проверенная звуковая приёмка.
