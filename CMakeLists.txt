@@ -224,7 +224,7 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_sample_metadata_index_tests COMMAND ppgu_sample_metadata_index_tests)
 endif()
 
-# JUCE-backed runtime contract tests for all 50 skin manifests and safe fallback.
+# JUCE-backed runtime contract tests for every registry theme and safe fallback.
 if(BUILD_TESTING)
     juce_add_console_app(ppgu_theme_manager_tests
         PRODUCT_NAME "PPGU Theme Manager Tests"
