@@ -469,3 +469,25 @@ No Freesound files were downloaded in this pass. No hashes or audio measurements
 **RED for embedding despite free commercial music-use:** Overdriven.fr free IRs (including M-212-GB55 G4, 44 WAV files, 24-bit/44.1 kHz, 100 ms) may be used in musical/video creations for commercial purposes, but the publisher expressly prohibits redistribution with software/hardware products without written agreement. Therefore do not bundle these IRs in PPGU absent written permission. Sources: https://overdriven.fr/overdriven/index.php/m-212-gb55-g4-free-guitar-cab-impulse-responses-download/ and https://overdriven.fr/overdriven/index.php/about/ .
 
 **Acquisition attempt:** attempted direct retrieval of the Overdriven download endpoint from this runtime; download failed. Darwin's browser-export ZIP was not retrievable through the available file-transfer route in this pass. This is a tool/access limitation, not evidence that the publisher's download is broken. No assets were added to the actual soundbank folder.
+
+
+### Search scope expanded by user — any high-quality guitar sounds are eligible (2026-11-12)
+
+The user explicitly removed the restriction to only narrowly defined pop-punk articulations/styles. Search and acquisition may include **any high-quality guitar material**, provided it is genuinely guitar-derived and passes license/access/technical QA. Expand discovery to:
+- electric guitar: clean, jazz, funk, blues, surf, indie, alternative, classic rock, hard rock, punk, metal, ambient, DI, amp/cab/mic captures;
+- acoustic: steel-string, nylon/classical, fingerstyle, strumming, picked, muted, harmonics, slides, natural noises if useful;
+- instrument formats: multisamples, SFZ/SF2, Kontakt/Decent Sampler (where lawful), WAV one-shots, note samples, chords, riffs, phrases, loops, articulations, round robins, velocity layers;
+- guitar-related cabinet IRs and speaker/microphone captures as a separate CABINET_IR bank;
+- isolated guitar recordings and useful performance material even when not specifically pop-punk.
+
+**Do not relax quality, provenance, license, or redistribution checks.** This broadens what may be collected; it does not authorize synthesizer imitations as the main guitar instrument, non-guitar assets, piracy, or embedding samples whose license only permits music-use. All assets remain individually classified by rights and technical status. A high-quality asset can be retained in a reference/quarantine library while embedded redistribution is pending.
+
+### Newly surfaced leads from broad search (not yet acquired)
+- **Guitar-on-Demand — Free Guitar Cabinet IR pack:** real cabinets/speakers/microphone captures; claims four cabinets, multiple power amps, four SM57 positions, 48 kHz mono WAV. License/redistribution terms not verified yet: YELLOW/HOLD; do not embed until publisher terms confirm redistribution in commercial software. Source: https://guitar-on-demand.de/free-guitar-cabinet-irs/ .
+- **SFZ Instruments — Blue Jeans And Moonbeams:** electric + acoustic guitar; catalog lists MIT. Verify exact sample archive and that MIT applies to the audio recordings themselves, not merely accompanying code: YELLOW/HOLD. Source: https://sfzinstruments.github.io/guitars/ .
+- **SFZ Instruments — Metal GTX / Standard Guitar:** multi-articulation guitar libraries with custom license; obtain and inspect exact EULA / written embedding permission before use: YELLOW/HOLD.
+- **Karoryfer commercial catalogue:** Glockenskull, Secret Agent, Snowkiss, Surfkiss. Quality candidates across guitar styles; require embedded-sample redistribution permission from publisher: YELLOW/COMMERCIAL CLEARANCE.
+- **Forward Audio faIR Modern Rock / faIR Post Grunge:** real-hardware cabinet IRs, but download requires signup; user's direct/no-registration preference means lower priority. License still needs inspection before embedding. Source: https://www.forward-audio.com/downloads .
+- **FreePats FSBS clean/jazz/direct/distorted and Spanish nylon** remain approved CC0 candidate families; these were already present in earlier package records and must not be double-counted as newly acquired.
+
+This is a scope expansion, not evidence of downloads. The newly surfaced leads have not been downloaded, hashed, auditioned or integrated in this pass.
