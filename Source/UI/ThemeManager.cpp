@@ -142,15 +142,15 @@ namespace
 
         const auto id = root.getProperty("id", "").toString();
         const auto indexValue = root.getProperty("index", juce::var());
+        const auto index = indexValue.toString().getLargeIntValue();
         if ((!indexValue.isInt() && !indexValue.isInt64())
             || id.length() != 8 || !id.startsWith("skin-")
             || id.substring(5).length() != 3
             || !juce::CharacterFunctions::isDigit(id[5])
             || !juce::CharacterFunctions::isDigit(id[6])
             || !juce::CharacterFunctions::isDigit(id[7])
-            || id.substring(5).getIntValue() != static_cast<int>(indexValue)
-            || static_cast<int>(indexValue) < 52
-            || static_cast<int>(indexValue) > 999)
+            || id.substring(5).getIntValue() != index
+            || index < 52 || index > 999)
         {
             error = "Invalid Skin Studio ID/index pair";
             return false;
@@ -236,7 +236,9 @@ namespace
             || static_cast<bool>(compatibility.getProperty("apvtsChanges", true))
             || static_cast<bool>(compatibility.getProperty("layoutChanges", true))
             || static_cast<bool>(compatibility.getProperty("audioChanges", true))
-            || root.getProperty("reduceInEco", false) != true
+            || !root.getProperty("reduceInEco", juce::var()).isBool()
+            || !static_cast<bool>(root.getProperty("reduceInEco", false))
+            || !root.getProperty("hotSwapFadeMs", juce::var()).isInt()
             || static_cast<int>(root.getProperty("hotSwapFadeMs", 0)) != 150)
         {
             error = "Skin Studio visual-only/ECO/hot-swap contract is invalid";
