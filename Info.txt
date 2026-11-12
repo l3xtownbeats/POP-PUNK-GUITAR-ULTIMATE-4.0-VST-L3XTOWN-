@@ -1297,3 +1297,20 @@ F. Только после этого считать документальны�
 **Границы:** documentation only; production source, DSP, sampler, MIDI, APVTS, presets, SoundBank и UI code не менялись.
 **Статус:** README SYNCHRONIZED; CI PENDING; HOST VERIFICATION PENDING.
 **Следующий шаг:** проверять точный CI SHA, затем продолжить реализацию по A6 и после каждого изменения обновлять README при изменении публичного статуса/характеристик, а Info/CODE — при каждом коммите.
+
+
+## 2026-11-12 — REV.17 A6: Multi-Window automatic tiling integration
+
+**Тип:** UI implementation + geometry contract regression coverage.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Исходный HEAD / parent:** `60f3b12dad135cb7aed37c48b4a5dde919365247`.  
+**Source commits:**  
+- `0b8096d55ea26f01489d4ff257dee39b6022f23d` — подключён `AuxiliaryPanelLayout` к `PPGUMultiWindowWorkspace::layoutPanels()`;  
+- `d4c0e4b7addb622ef2dc2b77fb2dac01634e24f6` — ручное перемещение/изменение размера/maximize больше не запускает автоматическую перекомпоновку.
+
+**ПРОВЕРКА:** в исходниках уже имелись JUCE-free `calculatePanelLayout()`, тесты для 1/2/3/4/6 окон и JUCE workspace с независимыми X/maximize/resize/scroll. Однако workspace не вызывал геометрический модуль: панели оставались каскадными/сохранёнными и автоматическая сетка фактически не работала.  
+**АНАЛИЗ:** повторно писать window manager или geometry engine не требуется. Самый короткий безопасный путь — подключить существующий чистый модуль к существующему workspace, сохранив панели и UI ownership. Целевая сетка ограничена двумя колонками: 1 окно — одна область; 2 — 2×1; 3–4 — 2×2; 5–6 — 2×3. Если минимальные размеры не помещаются, используется scrollable fallback со всеми окнами.  
+**ИСПРАВЛЕНИЕ:** `layoutPanels()` строит requests из реальных PanelSpec, получает placements от `calculatePanelLayout()`, раскладывает окна по ID, сохраняет геометрию и сбрасывает scroll только после успешного tiling. Введён reentrancy guard, чтобы вызовы `resized()` во время layout не запускали рекурсивную компоновку. Ручное drag/resize/maximize сохраняет геометрию и не snap-back'ится; автоматическая сетка пересчитывается при изменении набора панелей или размера workspace. Геометрические тесты расширены на 5 панелей и точные rows/columns для 1–6. Обновлён README модуля.  
+**ПОВТОРНЫЙ АНАЛИЗ:** статически проверены изменения, JUCE 7 API usage (`Viewport::getViewArea/setViewPosition`, `ScopedValueSetter`) и сохранение прежних границ: Audio/DSP/processBlock/sampler/MIDI/APVTS/presets/SoundBank не менялись. Локальная компиляция/CTest в этой среде не запускались. CI run `43173372464` (run #1036) относится к source SHA `0b8096d55ea26f01489d4ff257dee39b6022f23d` и на момент записи IN_PROGRESS; он НЕ подтверждает следующий fix commit `d4c0e4b7...`.  
+**РЕЗУЛЬТАТ:** **SOURCE COMMITTED; A6 PARTIAL / CI PENDING; HOST VISUAL VERIFICATION PENDING.** PASS не заявлен. Следующий шаг — дождаться CI для соответствующего SHA, исправить любые ошибки, затем проверить 1–6 панелей при 100/125/150% DPI и в FL Studio 20.  
+**Риски:** при невозможности разместить все панели в минимальном размере используется прокрутка, а не принудительное уменьшение содержимого; визуальная читаемость 5–6 панелей требует host review.
