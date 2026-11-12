@@ -1719,3 +1719,31 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **Приёмочные тесты:** preset selection → resolve preset manifest → validate/prepare sample assets and mappings → activate ready sampler state → MIDI note produces audible output; Preview A/B matches the actual preset path; all layers/articulations available; no silent preset, missing mapping or stale state; stress-test rapid switching; monitor audio callback for I/O/locks/allocations and glitches.
 
 **РЕЗУЛЬТАТ:** PPGU PRESET BROWSER + PRESET DATA + SAMPLE LIBRARY + SAMPLER CONFIGURATION ARE ONE INTEGRATED INSTRUMENT PRESET WORKFLOW, consistent with sampler-based VST3 instruments/romplers. Требование записано; код и тесты не изменялись. Наличие полного end-to-end поведения в текущей реализации не подтверждено.
+
+
+## 2026-11-12 — Realistic, full-bodied, guitarist-like sound quality for MELODY and PATTERN
+
+**Статус:** CORE AUDIO QUALITY / PERFORMANCE ACCEPTANCE REQUIREMENT ACCEPTED; NOT YET PROVEN BY LISTENING QA.
+
+Пользователь установил единый целевой стандарт звучания для обоих режимов — MELODY и PATTERN: максимально точный, плотный/жирный, фирменный, натуральный и реалистичный звук, воспринимающийся как исполнение настоящего гитариста, а не как механическое срабатывание MIDI-нот или повторение одного и того же семпла.
+
+**Общие требования к качеству тембра:**
+- В первую очередь использовать подходящие высококачественные исходные записи библиотеки и корректные mappings; FX не должны подменять качество исходного материала.
+- Сохранять реалистичные атаки, затухания, сустейн, шумы/нюансы исполнения и различия между артикуляциями там, где они присутствуют в легально доступных записях.
+- Естественно обрабатывать velocity/dynamics, palm mute/open articulation, note transitions, chord voicings и диапазоны; избегать ощущения одной и той же записи, транспонируемой на все клавиши.
+- Плотность/«жир» получать подходящими исходниками, продуманным layering и музыкально оправданным FX/gain staging, не допуская фазовых проблем, клиппинга, чрезмерной компрессии или искусственной окраски там, где нужен dry tone.
+- Не обещать реализм за счёт названий пресетов или эффектов: оценивать реальное звучание.
+
+**MELODY:** одиночные ноты и фразы должны ощущаться как гитарное исполнение: подходящие семплы/артикуляции по нотам и velocity, реалистичная динамика, выразительность, корректные переходы, отсутствие повторяющегося machine-gun эффекта при повторных нотах, естественная длительность и отпускание нот.
+
+**PATTERN:** готовые партии должны звучать как сыгранные гитаристом: музыкально осмысленные down/up strokes, palm-muted/open changes, accents, динамические акценты, chord voicings, переходы между аккордами, вариативность и естественный timing/humanization. Ритм должен оставаться tight и синхронным с DAW; humanization не должна превращать партию в неточную. Нельзя считать Pattern готовым, если scheduler лишь генерирует равномерные события без убедительного гитарного исполнения и подходящего performance/sample content.
+
+**QA / критерии приёмки:**
+1. Прослушивать representative presets во всех основных гитарных семействах в MELODY и PATTERN.
+2. A/B сравнивать исходный сухой звук, обработанные варианты и layering; оценивать естественность, плотность, читаемость микса и отсутствие артефактов.
+3. Проверять низкие/средние/высокие ноты, velocity диапазоны, повторные ноты, sustain/note-off, palm mute/open articulation, аккордовые смены и быстрые ритмические фигуры.
+4. В PATTERN проверять tight host sync, динамику куплет/припев, акценты, переходы, отсутствие stuck notes и механического повторения.
+5. В обоих режимах проводить реальное прослушивание, а не только unit tests или наличие metadata. Автотесты проверяют mapping, события, рендер, отсутствие тишины/клиппинга; человеческая listening QA отдельно подтверждает музыкальную убедительность.
+6. Отдельно контролировать CPU/RAM/latency и real-time safety; качество не должно достигаться ценой блокировок или тяжёлой работы в audio callback.
+
+**РЕЗУЛЬТАТ:** GUITARIST-LIKE REALISM, FULLNESS AND MUSICAL PERFORMANCE ARE REQUIRED FOR BOTH MELODY AND PATTERN. Это целевой критерий, а не заявление о достигнутом качестве. В рамках записи код, семплы и пресеты не изменялись; listening QA и подтверждение остаются открытыми.
