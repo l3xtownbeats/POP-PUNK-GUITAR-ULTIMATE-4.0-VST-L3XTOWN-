@@ -1,0 +1,13 @@
+# PPGU CODE — append-only implementation index
+
+This file is the technical change index for POP PUNK GUITAR ULTIMATE. Info.txt remains the authoritative development journal and status chronology. Never treat a planned item as implemented, a source commit as a successful build, or CI success as DAW host acceptance.
+
+## 2026-11-12 — POP PUNK ULTIMATE SKIN implementation kickoff
+
+- Branch: feature/pop-punk-ultimate-skin-ui
+- Base: main @ 61740417349a19c9d05d699f52017b8ccd37f9fe
+- Scope: Source/PluginEditor.cpp only; preserve processor, DSP, APVTS IDs, MIDI routing, sampler, and attachments.
+- Editor geometry changed to a wide 1648x928 shell with a top header, left preset browser, central performance surface, right AMP & TONE strip, and bottom MIDI keyboard deck.
+- Existing APVTS-bound knobs, FX toggles, preset catalog, and MIDI keyboard remain the live controls; no fake audio controls are introduced.
+- Temporary vector guitar/banner artwork is explicitly a placeholder pending the approved source artwork as packaged skin assets.
+- Not complete: exact visual fidelity to the three approved references; AutoChords and FX EDIT interactive panels; simultaneous panel state; final artwork integration; resize/DPI review; build, CTest, pluginval, package, and FL Studio 20 host validation.

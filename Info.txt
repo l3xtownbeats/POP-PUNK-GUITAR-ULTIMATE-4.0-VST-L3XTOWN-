@@ -923,3 +923,13 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R28 non-goals:** не менялись production validator/policy, DSP/audio callback, APVTS, MIDI, ThemeManager, Skin_052, resource resolver, auxiliary windows, CMake or packaging.
 **CI:** run #970 на исходном SHA завершился FAILED на одном CTest target; после исправления ожидается новый run на точном коммите. Никакой BUILD VERIFIED / TESTED / COMPLETE ZIP статус новому SHA пока не присваивается.
 **Следующий этап:** после CTest PASS вернуться к согласованию Skin_052 через merge tool + schema + registry + ThemeManager; не считать manifest-only запись runtime integration.
+
+
+## 2026-11-12 — POP PUNK ULTIMATE SKIN: approved-shell implementation kickoff
+
+**Статус:** UI SHELL SOURCE REWORK COMMITTED TO FEATURE BRANCH; BUILD/TEST/IMAGE-FIDELITY/DAW VALIDATION PENDING.
+**Основание:** пользователь повторно подтвердил, что три предоставленных изображения — уже утверждённый и обязательный интерфейс продукта, который должен был быть реализован. Это не новая концепция и не запрос на визуальное направление.
+**Решение:** основной интерфейс должен соответствовать третьему изображению; AutoChords — первому; совместное состояние FX EDIT + AutoChords — второму. Не менять композицию и не подменять интерактивные элементы статическим изображением. Skin Engine должен менять оформление, а не структуру или аудиоповедение.
+**Изменение этого этапа:** начат переход главного редактора от прежней вертикальной компоновки 1120x840 к широкому chassis-layout 1648x928: верхняя навигационная зона, левый browser, центральная рабочая область, правая AMP & TONE зона, нижняя клавиатурная дека; существующие APVTS attachments и MIDI keyboard сохраняются. Векторная гитарная графика в коде — временный placeholder, а не финальная замена утверждённому artwork.
+**Ограничения:** этот коммит НЕ завершает визуальное воспроизведение трёх изображений. Отдельные реальные окна AutoChords и FX EDIT, их управление и многопанельная компоновка, финальные изображения/ресурсы, пиксельная сверка и контроль всех существующих функций остаются PENDING. Audio/DSP/APVTS IDs/MIDI не должны изменяться.
+**Проверка:** исходник изменён; Windows Release build, CTest, pluginval, VST3 package и FL Studio 20 acceptance ещё не запускались для нового SHA. Не заявлять BUILT/TESTED/COMPLETE.
