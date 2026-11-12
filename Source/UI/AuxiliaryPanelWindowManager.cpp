@@ -143,54 +143,6 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     updatingLayout = true;
 
     const auto area = getLocalBounds().reduced(18, 18);
-    if (expandedId != 0 && isOpen(expandedId))
-    {
-        // Keep the selected panel large while every other open panel remains
-        // visible in a non-overlapping dock. The former implementation placed
-        // all compact panels at the same coordinates and sent them behind the
-        // expanded panel, making them inaccessible.
-        const auto expanded = std::find_if(windows.begin(), windows.end(),
-            [this](const Window& window) { return window.id == expandedId; });
-        const int dockedCount = getOpenPanelCount() - 1;
-        const int gap = 8;
-        const int dockWidth = dockedCount > 0
-            ? juce::jlimit(240, juce::jmax(240, area.getWidth() / 3), area.getWidth() / 2)
-            : 0;
-        const int mainWidth = dockedCount > 0
-            ? juce::jmax(260, area.getWidth() - dockWidth - gap)
-            : area.getWidth();
-
-        if (expanded != windows.end())
-        {
-            expanded->overlay->setExpanded(true);
-            expanded->overlay->setVisible(true);
-            expanded->overlay->setBounds(area.getX(), area.getY(), mainWidth, area.getHeight());
-            expanded->overlay->toBack();
-        }
-
-        int dockIndex = 0;
-        for (auto& window : windows)
-        {
-            if (!window.open || window.id == expandedId)
-                continue;
-
-            window.overlay->setExpanded(false);
-            window.overlay->setVisible(true);
-            const int availableHeight = area.getHeight() - gap * (dockedCount - 1);
-            const int cellHeight = dockedCount > 0 ? availableHeight / dockedCount : area.getHeight();
-            const int y = area.getY() + dockIndex * (cellHeight + gap);
-            const int height = dockIndex == dockedCount - 1
-                ? area.getBottom() - y : cellHeight;
-            window.overlay->setBounds(area.getRight() - dockWidth, y, dockWidth, height);
-            window.overlay->toFront(false);
-            ++dockIndex;
-        }
-
-        updatingLayout = false;
-        repaint();
-        return;
-    }
-
     std::vector<ppgu::ui::PanelRequest> requests;
     requests.reserve(windows.size());
     for (const auto& window : windows)
@@ -198,6 +150,43 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
         if (!window.open)
             continue;
         requests.push_back({ window.id, { 520, 360 }, { 260, 190 } });
+    }
+
+    if (expandedId != 0 && isOpen(expandedId))
+    {
+        const auto expandedLayout = ppgu::ui::calculateExpandedPanelLayout(
+            { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
+            requests, expandedId, 1.0f, 8);
+
+        if (!expandedLayout.invalidInput && !expandedLayout.overflow)
+        {
+            // Put the main workspace behind the dock; docked panels are then
+            // raised individually so their title bars and close buttons remain usable.
+            for (const auto& placement : expandedLayout.panels)
+            {
+                auto* window = findWindow(placement.id);
+                if (window == nullptr)
+                    continue;
+                const bool isExpanded = placement.id == expandedId;
+                window->overlay->setExpanded(isExpanded);
+                window->overlay->setVisible(placement.visible);
+                const auto& b = placement.bounds;
+                window->overlay->setBounds(b.x, b.y, b.width, b.height);
+                if (isExpanded)
+                    window->overlay->toBack();
+                else
+                    window->overlay->toFront(false);
+            }
+            updatingLayout = false;
+            repaint();
+            return;
+        }
+
+        // If the available area cannot satisfy the dock minimums, restore the
+        // standard grid instead of clipping panels or hiding their controls.
+        expandedId = 0;
+        for (auto& window : windows)
+            window.overlay->setExpanded(false);
     }
 
     const auto layout = ppgu::ui::calculatePanelLayout(
