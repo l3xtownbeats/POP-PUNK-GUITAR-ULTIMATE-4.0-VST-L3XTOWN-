@@ -3,6 +3,11 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "UI/ThemeManager.h"
+#include "UI/AuxiliaryPanelLayout.h"
+#include "UI/PerformanceDisplay.h"
+#include "UI/EditorOverlayPanel.h"
+#include "UI/FXEditPanel.h"
+#include "UI/AutoChordsPanel.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -38,12 +43,16 @@ private:
     void drawPanel(juce::Graphics&, juce::Rectangle<int>);
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
+    void showFxEditPanel();
+    void showAutoChordsPanel();
+    void closeFxEditPanel();
+    void closeAutoChordsPanel();
     PopPunkGuitarUltimateAudioProcessor& processor;
     PPGUThemeManager themeManager;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
+    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" }, fxEditButton { "FX EDIT" }, autoChordsButton { "AUTOCHORDS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
@@ -66,6 +75,11 @@ private:
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
+    std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
+    std::unique_ptr<PPGUFXEditPanel> fxEditContent;
+    std::unique_ptr<PPGUAutoChordsPanel> autoChordsContent;
+    std::unique_ptr<PPGUEditorOverlayPanel> fxEditOverlay;
+    std::unique_ptr<PPGUEditorOverlayPanel> autoChordsOverlay;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
 };
