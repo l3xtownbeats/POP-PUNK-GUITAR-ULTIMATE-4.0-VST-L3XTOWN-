@@ -225,3 +225,31 @@ The user's sound hierarchy for the pattern engine is now:
   - https://www.native-instruments.com/de/products/session-guitarist-strummed-acoustic
 - Status: YELLOW / REFERENCE ONLY. No source audio downloaded or included in PPGU SoundBank.
 
+
+
+## 2026-11-12 research expansion — additional electric-guitar candidates
+
+The following sources were found in a fresh search. They are candidates, not claims of downloaded or integrated assets:
+
+14. FreePats Electric Guitar FSBS Clean — refreshed source version 2026-08-07
+   - Direct-sampled electric guitar; SFZ mapping; CC0 1.0 is stated in the repository README/LICENSE.
+   - Candidate for clean DI/amp tone and later amp/cab processing. Inspect the exact archive, sample coverage, velocity/round-robin and note-off behavior before adding.
+   - https://github.com/freepats/electric-guitar-FSBS-clean
+15. FreePats Electric Guitar FSBS Jazz — source version 2026-08-07
+   - Direct-sampled electric guitar processed for a jazz tone; SFZ; CC0 1.0 stated in repository.
+   - Useful as a contrasting clean/soft electric source, not a pop-punk-specific articulation bank.
+   - https://github.com/freepats/electric-guitar-FSBS-jazz
+16. Nyanshell Strat — customized Stratocaster American Deluxe, SFZ/WAV virtual guitar
+   - Repository describes a custom Strat pickup/strings/recording setup and SFZ player use.
+   - License terms were not established from the surfaced project description; keep YELLOW/quarantine until an explicit license is located. README notes missing mf/f dynamics and common chord samples, so do not assume complete velocity or chord coverage.
+   - https://github.com/nyanshell/nyanshell.strat
+17. fakeguitar — electric guitar SFZ library, reported as having three articulations
+   - Discovered through a third-party sample-library index, not yet verified against the original author repository or archive.
+   - License and redistribution rights are unknown; keep YELLOW/quarantine. Do not package or redistribute until primary-source license evidence and exact archive are checked.
+   - Discovery index: https://github.com/AprilDolly/Free-Audio-Software-List/blob/main/free_sample_libraries.md
+18. Unreal Instruments Metal GTX / Standard Guitar — multi-articulation electric guitar candidates
+   - SFZ Instruments catalogue lists Metal GTX (about 1.3 GB) and Standard Guitar (about 716 MB), with custom licensing rather than CC0.
+   - Potentially valuable for articulation breadth, but not cleared for redistribution. Contact/inspect exact EULA for embedding raw samples in a commercial VST3 before any download intended for bundling.
+   - Catalogue: https://sfzinstruments.github.io/guitars/
+
+**Research conclusion:** FreePats Clean/Jazz are the strongest newly confirmed permissive electric-guitar leads. Nyanshell and fakeguitar are technical leads only until licensing is established. Metal GTX/Standard Guitar may have useful multi-articulation content, but custom terms block bundling until explicitly cleared. None of these findings changes the empty asset registry or proves sample ingestion.
