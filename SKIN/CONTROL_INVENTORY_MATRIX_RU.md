@@ -123,7 +123,7 @@ Current reference design: Skin_052 / SIGNAL FORGE / carbon_studio / STUDIO_CONSO
 
 ## 10. Актуализация gallery / skin inventory — 12.11.2026
 
-Рабочая ветка `work/ppgu-skin-expansion-53-102` публикует 102 темы; canonical default — `skin-052` / SIGNAL FORGE. `SKIN_button` больше не открывает PopupMenu: он открывает встроенную Premium Skin Gallery (panel ID 5) с preview cards, поиском, family filter, active marker и применением темы. Gallery — visual-only и не создаёт новых APVTS/engine features.
+Рабочая ветка `work/ppgu-skin-expansion-53-102` публикует 102 темы; canonical default — `skin-052` / SIGNAL FORGE. `SKIN_button` больше не открывает PopupMenu: он открывает встроенную Premium Skin Gallery (panel ID 5) с preview cards, поиском, family filter, active marker и применением темы. Gallery — visual-only и не создаёт новых APVTS/engine features. FX EDIT, AutoChords, Import Guitar, Settings и Gallery реализуют `PPGUThemeAwarePanel`; ThemeManager palette передаётся в содержимое открытых окон при смене темы, включая окна, открытые позднее.
 
 Не считать готовыми:
 - Favorites и полноценную keyboard navigation внутри gallery;
