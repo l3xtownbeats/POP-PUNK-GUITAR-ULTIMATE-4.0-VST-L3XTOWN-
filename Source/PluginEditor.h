@@ -28,6 +28,7 @@ public:
 private:
     void chooseSfzFile();
     juce::File getRuntimeSkinRoot() const;
+    int getSkinCount() const;
     juce::File getSkinManifest(int index) const;
     void loadSavedSkin();
     bool loadSkinByIndex(int index, bool persist);
