@@ -283,3 +283,71 @@ These are newly researched leads beyond the already integrated 10 CC0 package fa
    - Status: **GREEN repository-level license lead / GUITAR CONTENT UNCONFIRMED**. Do not treat as a guitar asset until a guitar instrument is located and its per-folder provenance checked.
 
 **Priority order for next intake:** (1) find genuinely new electric/steel-string guitar libraries; (2) obtain actual archives; (3) inspect per-asset license and redistribution rights; (4) verify SFZ/WAV maps, articulations, velocities/RR, quality and SHA-256; (5) only then ingest into the asset registry and SoundBank. Keep commercial/custom-license candidates separate. Never count a search result, catalogue entry, or metadata-only discovery as a downloaded library.
+
+
+## 2026-11-12 — broad web sweep: free / royalty-free / CC0 guitar sources
+
+This is a discovery pass, not an ingestion report. “Royalty-free” generally means no per-use royalty for permitted end products; it does **not** automatically grant the right to redistribute raw WAVs inside a sample-based VST. CC0 or explicit sample-library redistribution permission remains the preferred gate.
+
+23. **Meta Open Sound — Nylon Guitar + Steel Guitar (existing source; reaffirmed)**
+   - Official repository explicitly permits commercial use, modification and redistribution for CC0 collections; WAV is 24-bit/48 kHz, SFZ maps, manifests and SHA256SUMS are supplied. Nylon: 348 samples, E2–B5, three dynamic layers. Steel: 375 samples, E2–C6, three velocity layers.
+   - Source: https://github.com/facebookincubator/Meta-open-sound
+   - Status: **GREEN / already inventoried and historically present in CI package**. Do not count as a new library or redownload blindly; compare release/version and hashes first.
+
+24. **FreePats — FSBS Clean / Jazz / Distorted electric guitars (existing source; reaffirmed)**
+   - Official pages explicitly state CC0 1.0; SFZ/WAV/FLAC and SF2 variants. Clean includes full and small banks; Distorted #1 and #2 provide processed overdrive/distortion variants.
+   - Sources: https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html ; https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html
+   - Status: **GREEN / already inventoried and historically present in CI package**. Version/hash comparison only; not a new intake.
+
+25. **Karoryfer Samples — Black And Green Guitars / Emilyguitar / Shinyguitar (existing source; reaffirmed)**
+   - Karoryfer's current free-samples page says its free sample libraries are CC0; the guitar catalogue identifies the three guitar libraries. Black And Green has two hollowbody electric guitars. Preserve each repository's license and source notices.
+   - Sources: https://shop.karoryfer.com/pages/free-samples ; https://sfzinstruments.github.io/guitars/
+   - Status: **GREEN / already inventoried and historically present in CI package**. Do not count as new.
+
+26. **VCSL — Versilian Community Sample Library (guitar-content verification still open)**
+   - Official project page states CC0 and explicitly permits commercial software integration; SFZ version and large downloadable library are available. The collection is broad, not guitar-specific. Locate an actual guitar instrument/folder and inspect its provenance before adding it to the guitar inventory.
+   - Sources: https://versilian-studios.com/vcsl/ ; https://github.com/sgossner/VCSL
+   - Status: **GREEN collection license / GUITAR ASSET NOT YET VERIFIED**. No guitar asset count credited.
+
+27. **Stargate DAW Sample Pack — public-domain / CC0 sample collection**
+   - Repository describes the pack as free, royalty-free, attribution-free and suitable for redistribution; its purpose is to supply samples that can be bundled with DAW projects. It is not established as a guitar bank from the top-level description.
+   - Source: https://github.com/stargatedaw/stargate-sample-pack
+   - Status: **GREEN repository-level licensing lead / GUITAR CONTENT UNCONFIRMED**. Inspect repository tree and individual audio provenance; only guitar-specific files may enter this project.
+
+28. **Discord SFZ GM Bank — steel-string acoustic guitar lead**
+   - The Libre Instrument Audio Database lists a steel-string guitar patch attributed to Jeff Learman and points to this SFZ repository path. This is a secondary index lead; verify the original repository's exact sample license, notices and redistribution terms before treating it as cleared.
+   - Source: https://github.com/sfzinstruments/Discord-SFZ-GM-Bank/tree/master/Discord%20GM/Melodic/026-Acoustic%20Guitar%20(steel)
+   - Secondary index: https://github.com/hcsrtg/libre-instrument-audio-database
+   - Status: **YELLOW / LICENSE AND ASSET PROVENANCE TO VERIFY**.
+
+29. **Splice Sounds — large royalty-free guitar catalog (reference / licensed-use only)**
+   - Official catalog advertises 100% royalty-free guitar samples, loops and one-shots for commercial music production, with individual-sample downloads. That end-use license is not evidence of permission to redistribute raw samples in a competing sample-based plugin. Access may require paid subscription.
+   - Sources: https://splice.com/sounds/instruments/guitar/packs ; https://splice.com/sounds/instruments/guitar/samples
+   - Status: **YELLOW / DO NOT EMBED RAW SOURCE AUDIO** unless a separate written license expressly authorizes sample-library/VST redistribution. May be used by the user for music production under Splice's own terms, not presumed cleared for PPGU.
+
+30. **Pulse Open Loops — CC0 / CC-BY loop catalogue (not guitar-cleared by category alone)**
+   - Catalogue exposes individual license/source details and WAV downloads. The surfaced documentation says its original song-starter kits are synthesized and not stems from recorded performances. It may be useful for generic timing/arrangement research, but no guitar recording is cleared merely by appearing in this catalogue; inspect each item and source credit.
+   - Source: https://pulse.studiosphere.space/open-loops
+   - Status: **YELLOW / ITEM-LEVEL CHECK REQUIRED; no guitar asset credited**.
+
+31. **Producer Space — CC0 packs (not a guitar source in the surfaced catalogue)**
+   - Site states its 18 packs / 2,322 WAV samples are CC0, but surfaced pack categories are vocals, spoken word, FX and MIDI; no guitar sample bank was identified. Do not add to guitar inventory unless a real guitar asset is found.
+   - Source: https://producerspace.com/
+   - Status: **GREEN site license claim / NOT A GUITAR ASSET ON CURRENT EVIDENCE**.
+
+32. **NDA Samples — free rock guitar loops (NOT royalty-free for commercial releases)**
+   - Site says downloads are free, but commercial releases require a 50/50 revenue split. This is not royalty-free and not suitable for PPGU redistribution without a separate agreement.
+   - Source: https://ndacompany.de/loops/rock-guitar
+   - Status: **RED for royalty-free/redistributable SoundBank intake**; do not bundle.
+
+33. **SoundFont / SFZ discovery index — Libre Instrument Audio Database**
+   - Useful cross-reference for guitar patches (nylon, steel, clean electric, distortion) and stated license status. Treat as a discovery index, not primary license evidence; verify original author/repository and sample files individually.
+   - Source: https://github.com/hcsrtg/libre-instrument-audio-database
+   - Status: **DISCOVERY INDEX ONLY**.
+
+### Sweep findings and next action
+- Best confirmed redistributable guitar assets surfaced in this pass are the already-known Meta Open Sound, FreePats and Karoryfer families. They are valuable but not new inventory.
+- New actionable leads requiring folder/archive inspection: Stargate sample pack, Discord SFZ GM steel guitar, and VCSL chordophones. No license status is upgraded on the basis of a secondary catalogue alone.
+- Splice is a strong user-facing royalty-free music-production source, but its standard end-user license must not be confused with redistribution rights for a VST sample library.
+- NDA Samples explicitly has a 50/50 commercial split and is excluded.
+- No new archives were downloaded in this web sweep; no new SHA-256 values, audio quality checks, or SoundBank ingestions were produced.
