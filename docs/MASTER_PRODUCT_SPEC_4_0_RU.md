@@ -310,3 +310,18 @@ Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Fou
 **Data / UI требования:** каждый паттерн хранить как проверяемую сетку событий (bar, beat/subdivision, duration, velocity/accent, articulation, rest, humanization bounds), иметь счёт/визуализацию, BPM feel tag, substyle tag и совместимость с конкретными guitar sample maps. В AutoChords отдельно выбирать progression, playing style/articulation и rhythm pattern. Добавлять preview/play только после подключения настоящего MIDI/audio routing. Нельзя выдавать текстовую карточку за реализованное исполнение.
 
 **QA:** проверять длину цикла, отсутствие событий в rests, точность сетки, корректность 1/8 и 1/16, loop seam, MIDI note-off/choke, velocity/accent, tempo scaling, swing/humanize bounds и синхронизацию с kick/snare. Проверять, что DOWNSTROKE/UPSTROKE, palm mute, ghost note и open chord поддерживаются реальными performance data. Темп и техника должны быть редактируемыми, не запечёнными в название паттерна.
+
+
+## 15.12. SOUND QUALITY GATE — ORGANIC GUITARS ONLY (USER-MANDATED)
+
+**Цель — максимально высокий, профессиональный и музыкально убедительный гитарный звук.** Пользователь прямо запретил «пластмассовые» синтезаторные гитарные тембры. Основой инструмента должны быть реальные записи настоящих электрических и акустических гитар, а не oscillator/wavetable/FM/physical-model имитации гитары и не синтетические guitar one-shots, выдаваемые за живые инструменты.
+
+- Приоритет источников: качественные DI-записи реальных электрогитар; реальные усилители/cab/mic или качественные импульсы кабинетов; реальные акустические steel/nylon-string записи; полноценные multisamples и performance phrases/one-shots, записанные музыкантами.
+- Для pop-punk искать настоящие downstroke power-chords, palm-muted eighths/sixteenths, open chords, octave hooks, chugs, single-note riffs, harmonics и stop-start performances. Не подменять отсутствующие articulations синтетической имитацией.
+- Предпочитать velocity layers, round robins, вариативные атаки/релизы, ноты по диапазону, естественные sustain/decay и корректные note-off. Проверять noise floor, clipping, phase, tuning, timing, transient quality, consistency и пригодность к amp/cab processing.
+- Синтезаторные/искусственно сгенерированные звуки допустимы только как FX/design layer или тестовые сигналы, но не как основной гитарный источник. Явно искусственный/«пластмассовый» характер не проходит GOLD.
+- GOLD требует прослушивания на нескольких нотах и velocity, в solo и в миксе, с clean/crunch/high-gain цепями; проверять циклическую машинность, одинаковые атаки и заметные швы.
+- Коммерческие банки с неясной лицензией можно исследовать и заносить в отдельную очередь потенциальной покупки/лицензирования. Отсутствие запрета не является разрешением. До письменного подтверждения прав на включение и распространение исходных аудиофайлов внутри коммерческого sample-based VST3 такие материалы остаются YELLOW/QUARANTINE.
+- Качество, натуральность, динамика, артикуляции и миксовая пригодность важнее бесплатности и размера библиотеки.
+
+**Acceptance gate:** ни один новый основной гитарный asset не получает GOLD/production status без подтверждения реального гитарного источника, точной лицензии, provenance, SHA-256, технической проверки и прослушивания. Не выдавать синтезаторную имитацию за записанную гитару.
