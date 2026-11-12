@@ -1191,3 +1191,23 @@ Cabinet остаётся отдельной секцией со своим bypas
 **Commits:** registry `ef60a9ed26cabab8e6fcaca44b23cd19da9fbb3d`; factory links `fc49b96785b3f186ddf0168f8b736122b2b3ba32`; validator `1083a9fe0a1e20704daf094e4ff2178df46b273a`.
 
 **Критическое ограничение, подтверждённое source audit:** существующий processor пока не содержит полноценных Rectifier/JCM/Plexi/Vox/Orange amp models; ampGain — линейный gain stage, distortion — tanh soft clip, cabinet — внутренний 64-tap designed/synthetic coloration, а не recorded IR capture. Поэтому новые profiles пока не подключены к реальному звуковому маршруту и не должны считаться PLAYABLE/MIX-READY. Следующий этап — архитектурно совместимый runtime adapter без изменения APVTS IDs/control inventory, затем реальная amp/cab DSP, asset registry, preset serialization/load, regression tests и слуховая приёмка.
+
+
+## 2026-11-12 — POPPUNK ARCHITECT ∞ v3.0: принятие tone-design framework для ANGELA ENGINE
+
+**Статус:** DESIGN STANDARD ACCEPTED / IMPLEMENTATION AND AUDIO VALIDATION PENDING.
+
+**Решение:** пользовательский POPPUNK ARCHITECT ∞ v3.0 принят как обязательный музыкально-технический framework для проектирования artist/song-inspired tones, preset recipes и tone-profile runtime в PPGU. Его задача — не требовать от пользователя конкретный внешний amp/plugin, а собирать достижимый тон из доступных DSP-модулей ANGELA ENGINE по иерархии: точная модель → архитектурный аналог → цепочка доступных блоков → независимые слои/дубли → custom DSP solution.
+
+**Обязательная реализация в PPGU:**
+- Ввести capability-aware tone resolver: запрошенный amp/cab/FX target сопоставляется с реально доступными моделями; каждый fallback фиксирует original target, replacement, rationale, parameters и статус. Никакого молчаливого RAW fallback и никакого заявления об идентичности оригиналу.
+- Сохранить tone intent: gain staging, mid-forward voicing, pick/transient clarity, source/pickup awareness, gate/boost/amp/cab/EQ/compression/space roles, artist/song reference values, tuning/playing notes.
+- Реализовать независимые left/right tone chains только как настоящие независимые signal paths/performances; одинаковый дубль с панорамой не считать double tracking. Pseudo-double допускается как явно помеченный short-delay effect, не как эквивалент.
+- Реализовать cabinet/mic perspective metadata и multi-mic blend только при наличии настоящих измеренных/лицензированных IR или честно маркированных собственных voicings. SM57/MD421 labels не означают, что реальные captures существуют.
+- Все числа из пользовательского справочника — стартовые reference values, не подтверждённые официальные настройки артистов. Нельзя обещать «один в один» или endorsement; использовать Artist-inspired / Song-tone reference.
+- При нехватке конкретной модели запрещено отказывать в построении тона: resolver обязан предложить лучший доступный аналог или custom chain. Но нельзя скрывать технические ограничения, выдумывать наличие DSP/IR или маркировать приблизительный результат как идентичный.
+- Профессиональное качество определяется реальным прослушиванием: solo/full mix, level-matched A/B, power chords, single notes, palm mutes, open chords, velocity, stereo/mono, phase, noise, transient, sustain, headroom и CPU.
+
+**Порядок внедрения:** capability inventory → tone resolver/schema → deterministic fallback tests → runtime amp/cab/DSP implementation → independent layer routing → preset serialization/round-trip → listening QA. Новые APVTS IDs/control semantics не добавлять без I1/I2 audit и MAJOR/state migration решения. Любой audio DSP change — отдельный R10 review/commit с realtime regression tests.
+
+**Не заявляется:** наличие всех перечисленных amp models, IR captures, multi-mic blend, true double-tracking engine, exact artist sound, production-ready tone или слуховая приёмка. Текущий source audit по-прежнему показывает упрощённый amp/drive и synthetic cabinet path; этот framework сам по себе не меняет аудиореализацию.
