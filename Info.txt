@@ -1015,3 +1015,13 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Исправление:** удалены шесть legacy colour constants; начальные цвета constructor/configureKnob теперь читаются из активной Palette; rotary LookAndFeel использует `controlBorder` и `textPrimary`. Статический повторный поиск в PluginEditor.cpp: 0 hardcoded HEX literals, 0 juce::Colours::white, 0 legacy pink/pale/muted/panel2 identifiers, 0 palette.border/text aliases.
 **R28:** DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, ThemeManager decoder, skin schema/registry, CMake pins и packaging rules не менялись.
 **Предыдущая S2 verification:** run #1168 SUCCESS на source SHA `38b57b854dc559e5dd7c408b96c6a7821eebbd58`; это не подтверждает новый source SHA. S2 code/CI PASS, host UI acceptance NOT VERIFIED.
+
+
+### REV18 S3 — auxiliary panel palette cleanup (2026-11-12)
+
+**Source commits:** 1ce79be63025d0149b0fa62c2390dbfbbe8be959, d782e0760501db8ad25bb77995bc03be3a355906, ec83bdd4ffface54eca5d6af726736b403603ed4, e90e7be79a717c74fc94ec634a31f8c7669fb850. **Статус:** SOURCE CHANGE COMMITTED; final exact-tree CI PENDING.
+**Изменения:** удалены constructor-time hardcoded HEX colors из AutoChordsPanel, FXEditPanel, ImportGuitarPanel и SettingsPanel. Начальные значения теперь берутся из переданной canonical Palette; последующий setPalette() сохранён. В AutoChordsPanel label configurator использует активную palette через this capture.
+**Статический анализ:** 4 panel source files — 0 HEX color literals, 0 juce::Colours::white; PluginEditor.cpp — 0 HEX literals, 0 legacy color identifiers/aliases после предыдущего commit 7cddfced48661ba1e184fee19107a8323691470c.
+**Объём:** только визуальная инициализация; DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, ThemeManager decoder, skin schema/registry, CMake pins и packaging rules не менялись.
+**CI note:** runs #1172–#1176 были отменены последовательными push commits; ни один из них не подтверждает эту итоговую серию. Нужен новый run на финальном tree SHA после этой записи. Run #1168 SUCCESS относится к более раннему source SHA и не переносится.
+**S2:** source/build/CTest/pluginval/package PASS на SHA 38b57b854dc559e5dd7c408b96c6a7821eebbd58; host UI acceptance всё ещё NOT VERIFIED. До полного S2 host acceptance не заявлять этап закрытым.
