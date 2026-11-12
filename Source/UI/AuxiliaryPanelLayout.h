@@ -38,4 +38,12 @@ PanelLayout calculatePanelLayout(PanelRect workArea,
                                  const std::vector<PanelRequest>& requests,
                                  float scale,
                                  int gap = 12);
+
+// Places one selected panel in the main workspace and every remaining panel
+// in a vertically stacked dock. Returns overflow instead of clipping.
+PanelLayout calculateExpandedPanelLayout(PanelRect workArea,
+                                         const std::vector<PanelRequest>& requests,
+                                         int expandedId,
+                                         float scale = 1.0f,
+                                         int gap = 8);
 } // namespace ppgu::ui
