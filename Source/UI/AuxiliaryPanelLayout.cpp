@@ -6,10 +6,6 @@
 
 namespace ppgu::ui
 {
-namespace
-{
-}
-
 PanelLayout layoutAuxiliaryPanels(const PanelBounds& workArea,
                                   const std::vector<PanelRequest>& requests)
 {
