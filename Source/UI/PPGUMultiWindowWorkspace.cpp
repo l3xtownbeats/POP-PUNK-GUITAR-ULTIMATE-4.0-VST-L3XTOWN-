@@ -115,13 +115,13 @@ public:
         if (!maximized)
         {
             restoreBoundsBeforeMaximize = getBounds();
-            setBounds(owner.viewport.getViewArea());
             maximized = true;
+            setBounds(owner.viewport.getViewArea());
         }
         else
         {
-            setBounds(restoreBoundsBeforeMaximize);
             maximized = false;
+            setBounds(restoreBoundsBeforeMaximize);
         }
         maximizeButton.setButtonText(maximized ? "❐" : "□");
         owner.handleGeometryChanged(panelId);
