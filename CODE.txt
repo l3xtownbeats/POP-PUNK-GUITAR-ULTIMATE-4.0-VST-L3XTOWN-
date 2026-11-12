@@ -49,3 +49,11 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Paths: Source/UI/AutoChordsPanel.cpp; Source/UI/FXEditPanel.cpp; Source/UI/ImportGuitarPanel.cpp; Source/UI/SettingsPanel.cpp.
 - Scope: removed constructor-time hardcoded HEX colors and white literals; all initial colors now come from the constructor-supplied canonical ThemeManager Palette. AutoChords label configuration captures the panel palette. No DSP/APVTS/MIDI/sampler behavior changed.
 - Verification: static source scan on these four files reports zero HEX color literals and zero juce::Colours::white. Windows CI on final tree pending.
+
+
+## 2026-11-12 — S3 cross-panel palette audit / CI tracking
+- Inspected all 9 Source/UI/*.cpp implementation files: no hardcoded HEX color literals or named JUCE basic-color constants in panel implementation files; audit matches were canonical Palette fields.
+- ThemeManager.cpp validates and decodes all 21 canonical tokens; PluginEditor::applyPalette propagates palette to all 5 content panels, PerformanceDisplay and AuxiliaryPanelWindowManager.
+- Current source under CI: e90e7be79a717c74fc94ec634a31f8c7669fb850; run #1177 / ID 43235287270 IN_PROGRESS at artwork-generation step when recorded.
+- Runs #1172–#1176 cancelled/superseded during rapid successive commits; no PASS inferred. Run #1168 remains valid only for 38b57b854dc559e5dd7c408b96c6a7821eebbd58.
+- S2 host acceptance remains NOT VERIFIED; S3 remains OPEN pending exact-SHA CI and residual audit.
