@@ -104,6 +104,7 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
     viewport.setViewedComponent(nullptr, false);
     viewport.setScrollBarsShown(true, true);
     viewport.setScrollBarThickness(10);
+    viewport.setColour(juce::Viewport::backgroundColourId, backgroundColour);
     addAndMakeVisible(viewport);
     tileSurface = std::make_unique<TileSurface>();
     tileSurface->setOpaque(false);
@@ -190,6 +191,7 @@ void PPGUMultiWindowWorkspace::setSurfaceColours(juce::Colour background,
     borderColour = border;
     headingColour = heading;
     textColour = text;
+    viewport.setColour(juce::Viewport::backgroundColourId, backgroundColour);
     for (auto& window : windows)
         window->setColours(panelColour, borderColour, headingColour, textColour);
     repaint();
