@@ -1175,3 +1175,19 @@ Cabinet остаётся отдельной секцией со своим bypas
 **Решение:** создать отдельный версионированный Artist Tone Profile Registry, используя все 21 существующих `styleProfileId` из 300-bank и песенные ориентиры пользователя. Каждый профиль хранит музыкальную роль, source/pickup hints, amp-family target, cabinet/mic target, ориентиры amp controls 0–10, optional FX intent, tuning/playing notes, availability requirements и provenance note. Song settings — стартовые точки для audition, не утверждение о точных исторических студийных настройках. В 300-bank definitions добавить необязательную ссылку на tone profile ID без изменения APVTS IDs, control inventory или существующей структуры playback. Добавить validator, проверяющий все ссылки, required fields и consistency. Registry metadata не будет автоматически применяться к DSP до отдельного runtime adapter и его тестов.
 
 **Quality gate:** ни один профиль не получает PLAYABLE/MIX-READY/APPROVED только из-за JSON. Нужны source resolution, реальный amp/cab/FX route, preset round-trip, no silent fallback, loudness-matched listening в solo/mix, phase/mono/headroom/noise/CPU checks.
+
+
+## 2026-11-12 — Artist Tone Profile Registry v1.0: данные пресетов связаны с 300-entry factory catalog
+
+**Статус:** METADATA IMPLEMENTED / STRUCTURAL VALIDATION PASS / RUNTIME DSP INTEGRATION PENDING.
+
+**Создано в активной ветке:**
+- `presets/artist_tone_profiles_v1.json`: 21 tone family, совпадающие с существующими 21 `styleProfileId`, плюс 50 song-tone reference cards из предоставленной таблицы. Каждый style profile содержит source/pickup hints, целевую amp family, cabinet/mic perspective, Gain/Bass/Mid/Treble/Presence 0–10, FX intent, tuning и playing/mix notes. Все статусы явно REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION.
+- `presets/factory_bank_300.json`: все 300 существующих Melody/Pattern definitions получили `toneProfileId`, связанный с их текущим `styleProfileId`, и ссылку на registry v1.0. Существующие IDs, counts и playback fields сохранены.
+- `tools/validate_artist_tone_profiles.py`: добавлен validator для 21/50/300 counts, уникальности IDs, обязательных полей, диапазона controls и ссылок factory→registry.
+
+**Повторная структурная проверка содержимого GitHub после записи:** 150 Melody + 150 Pattern; 21 unique profiles; 50 unique song references; 300/300 entries linked; invalid profile links = 0; invalid 0–10 controls = 0; registry pointer/version matches. Это проверка структуры через повторное чтение файлов, не запуск Python validator и не audio/host test.
+
+**Commits:** registry `ef60a9ed26cabab8e6fcaca44b23cd19da9fbb3d`; factory links `fc49b96785b3f186ddf0168f8b736122b2b3ba32`; validator `1083a9fe0a1e20704daf094e4ff2178df46b273a`.
+
+**Критическое ограничение, подтверждённое source audit:** существующий processor пока не содержит полноценных Rectifier/JCM/Plexi/Vox/Orange amp models; ampGain — линейный gain stage, distortion — tanh soft clip, cabinet — внутренний 64-tap designed/synthetic coloration, а не recorded IR capture. Поэтому новые profiles пока не подключены к реальному звуковому маршруту и не должны считаться PLAYABLE/MIX-READY. Следующий этап — архитектурно совместимый runtime adapter без изменения APVTS IDs/control inventory, затем реальная amp/cab DSP, asset registry, preset serialization/load, regression tests и слуховая приёмка.
