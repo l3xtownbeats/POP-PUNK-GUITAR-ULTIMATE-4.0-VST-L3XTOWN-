@@ -1306,3 +1306,12 @@ Reviewed the official Darwin's Cat editor page: Jester Dyne Brutal Pack (15 IRs)
 Reviewed Overdriven.fr free cabinet IR terms. Although musical/video commercial use is permitted, redistribution with audio software/hardware products is expressly forbidden without written agreement. Marked RED for embedding pending written permission; not to bundle.
 
 Felitronics 69-IR pack remains GREEN-LICENSE / acquisition and QA pending under CC BY 4.0 with attribution. No IR archives were integrated during this pass. Actual attempt to fetch Overdriven direct endpoint failed; this does not imply the source site is unavailable to a normal browser.
+
+
+## 2026-11-12 — расширен охват поиска звуковых библиотек по прямому указанию пользователя
+
+Пользователь снял ограничение на поиск только отдельных гитарных техник/жанров: теперь допустимы любые качественные гитарные звуки и записи. Расширить поиск на clean/jazz/funk/blues/surf/indie/alternative/classic rock/hard rock/punk/metal/ambient, DI, amp/cab/mic, стальную и нейлоновую акустику, fingerstyle/strumming/picking, ноты, аккорды, риффы, фразы, лупы, мультисэмплы, SFZ/SF2 и отдельный банк cabinet IR. Пригодные guitar-related ресурсы можно собирать и классифицировать, даже если они не предназначены специально для pop-punk.
+
+Ограничения по качеству, происхождению, конкретной лицензии и праву redistribution/embedding НЕ сняты. Не использовать синтезаторные имитации как основной источник гитары; не включать пиратские или music-use-only банки. Не считать отсутствие запрета разрешением. Коммерческие/неясные активы можно помещать в отдельный quarantine/reference list, но не распространять внутри VST3 без нужных прав.
+
+Индекс источников обновлён; commit: 67f6873304251ab2fcef559e719eec14057e9602. В этот проход обнаружены дополнительные кандидаты Guitar-on-Demand real-cab IR (license pending), Blue Jeans And Moonbeams (MIT needs audio-specific verification), Metal GTX/Standard Guitar (custom license), коммерческие Karoryfer libraries (clearance needed), Forward Audio IR (signup required). Ни один из этих новых архивов в этом проходе не скачан/не проверен на хэши/не прослушан/не интегрирован.
