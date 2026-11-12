@@ -542,3 +542,20 @@ Preset QA record must state target type/role, actual source mapping/articulation
 - Preserve RT safety: filesystem access, decoding, hashing and mapping preparation off the audio thread; publish prepared state safely; no I/O, locks, waits or dynamic allocation in the audio callback.
 - **Acceptance tests:** import multiple distinct guitar WAVs; assign each to several existing and new user presets; save/reload; audition Preview and MIDI in a real VST3/DAW; verify source identity and mapping parity, dry/FX playback and supported modes; prove no factory-only/source-origin whitelist exists; test missing/corrupt/unsupported assets and isolation of failures.
 - **Status:** requirement recorded only. No source code, preset resolver, import pipeline or audio assets changed in this journal update; implementation and end-to-end playback QA remain open.
+
+
+## 2026-11-12 — Clarification: dry/source-direct presets in MELODY are playable polyphonic note instruments
+
+Пользователь уточнил механику MELODY: режим предназначен для игры отдельными клавишами; одна нажатая клавиша запускает соответствующую гитарную ноту, одновременное нажатие нескольких клавиш (например, трёх) формирует аккорд. Это не бесконечное удержание и не воспроизведение бесконечного лупа: каждая нота имеет естественную атаку, sustain и release/затухание, с корректной реакцией на MIDI Note On/Note Off.
+
+**Требования к реализации:**
+- Dry/source-direct пресеты должны полноценно работать в MELODY через существующий SamplerEngine и его реальную полифоническую voice allocation.
+- Одна MIDI-клавиша запускает один соответствующий mapped guitar note/voice; несколько одновременных клавиш запускают несколько независимых голосов и дают аккорд. Не заменять их одним синтезаторным осциллятором или искусственно сгенерированным аккордом.
+- Note On запускает исходную записанную атаку/сэмпл с корректной velocity/articulation mapping. Sustain воспроизводится в пределах реального материала и/или корректно реализованного sustain-loop, если он задан и проверен для данного источника. Note Off запускает release/tail согласно mapping и природе исходной записи; не обрывать ноту резко и не удерживать её бесконечно.
+- Сохранять натуральную динамику и огибающую исходной гитары. Не навязывать синтетический ADSR, который заметно перекрашивает записанный звук. Если для конкретного сэмпла нужна управляемая release-обработка, применять её прозрачно и музыкально, не подменяя исходную атаку/тембр.
+- Одновременные ноты должны корректно суммироваться без клиппинга, взаимного обрыва и утечки voice state; повторные Note On/Off, sustain pedal (если поддержан), all-notes-off, voice stealing и polyphony limits должны обрабатываться безопасно.
+- Не требовать PATTERN loops или chord-pattern assets для игры аккордами в MELODY. PATTERN — отдельный режим заранее записанных ритмических исполнений; MELODY — непосредственное полифоническое воспроизведение отдельных mapped нот.
+
+**Приёмка:** проверить одиночную ноту, трёхнотный и более плотный аккорд, разные velocity, короткое/длинное удержание клавиш, Note Off/release, повторные ноты, одновременное отпускание, voice stealing и отсутствие клиппинга. Сверить Preview и реальный MIDI playback. Прослушать в VST3/DAW.
+
+**Статус:** уточнение требований принято. Это описание целевого поведения, не подтверждение уже реализованного или прослушанного результата; source code/audio assets не изменялись этой записью.
