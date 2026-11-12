@@ -280,3 +280,22 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Проверка:** сверены существующий каталог и APVTS playMode declaration. Полная проверка 300 записей, диапазонов каждого параметра, ссылок на sample profiles и фактического воспроизведения не выполнялась в рамках этой journal-only фиксации.
 
 **Status:** REQUIREMENT RECORDED; PRESET DATA UNCHANGED; IMPLEMENTATION/VALIDATION PENDING.
+
+
+## 2026-11-12 — REV.17 outer shell section chrome
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+**Parent SHA:** `6ea8d5873706890f29496465d6078bd235fee42b`  
+**Files / symbols:**
+- `Source/PluginEditor.h` — `drawPanel(Graphics&, Rectangle<int>, String sectionTitle)`.
+- `Source/PluginEditor.cpp` — `drawPanel()`, `paint()`, `resized()`.
+
+**Change:** добавлены theme-token-driven captions and separators for the three approved shell zones: PRESET LIBRARY, GUITAR ENGINE / PERFORMANCE, SIGNAL CHAIN. Each zone reserves a 34 px header row so painted labels cannot overlap live controls. Existing panel components and APVTS attachments remain the owners of interaction.
+
+**Boundaries:** no DSP, processBlock, sampler, MIDI, APVTS ID/semantics, preset, SoundBank, theme manifest or audio behavior changes. No new controls or fake functionality.
+
+**Verification:** source-level replacement checks passed; build, CTest, pluginval, DPI and FL Studio 20 visual checks pending for resulting SHA. CI run #1043 is on parent SHA `6ea8d5873706890f29496465d6078bd235fee42b` and does not validate this change.
+
+**Status:** SOURCE CHANGE; VALIDATION PENDING.  
+**Next:** exact-SHA CI, then continue only with the approved external shell/theme presentation.
+

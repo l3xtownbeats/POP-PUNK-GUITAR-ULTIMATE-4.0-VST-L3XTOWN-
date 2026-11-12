@@ -734,17 +734,33 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
     addAndMakeVisible(l);
 }
 
-void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juce::Rectangle<int> area)
+void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
+    juce::Graphics& g, juce::Rectangle<int> area, const juce::String& sectionTitle)
 {
     const auto& p = themeManager.getPalette();
-    auto bounds = area.toFloat();
-    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"), bounds.getX(), bounds.getY(),
-                                           p.token("panel"), bounds.getX(), bounds.getBottom(), false));
+    const auto bounds = area.toFloat();
+
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
+                                           bounds.getX(), bounds.getY(),
+                                           p.token("panel"),
+                                           bounds.getX(), bounds.getBottom(), false));
     g.fillRoundedRectangle(bounds, 12.0f);
     g.setColour(p.token("control_border").withAlpha(0.78f));
     g.drawRoundedRectangle(bounds.reduced(0.5f), 12.0f, 1.0f);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(bounds.getX() + 16.0f, bounds.getY() + 1.0f, 42.0f, 2.0f, 1.0f);
+
+    // Section chrome belongs to the visual shell; it does not create or
+    // reassign controls and follows the active theme's semantic palette.
+    g.setColour(p.token("text_secondary"));
+    g.setFont(juce::Font(9.5f, juce::Font::bold));
+    auto heading = area.reduced(15, 7).removeFromTop(19);
+    g.drawText(sectionTitle, heading, juce::Justification::centredLeft, true);
+
+    g.setColour(p.token("accent").withAlpha(0.9f));
+    g.fillRoundedRectangle(bounds.getX() + 15.0f, bounds.getY() + 29.0f,
+                           34.0f, 2.0f, 1.0f);
+    g.setColour(p.token("control_border").withAlpha(0.45f));
+    g.drawHorizontalLine(static_cast<int>(bounds.getY() + 33.0f),
+                         bounds.getX() + 15.0f, bounds.getRight() - 15.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
@@ -762,9 +778,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     area.removeFromLeft(gap);
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
-    drawPanel(g, browser);
-    drawPanel(g, area);
-    drawPanel(g, right);
+    drawPanel(g, browser, "PRESET LIBRARY");
+    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
+    drawPanel(g, right, "SIGNAL CHAIN");
 
     // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
@@ -811,7 +827,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     bounds.removeFromRight(gap);
     auto centre = bounds;
 
-    // Left preset browser: all filtering controls stay together.
+    // Left preset browser: section chrome is reserved above live controls.
+    browser.removeFromTop(34);
     presetBox.setBounds(browser.removeFromTop(42).reduced(3, 3));
     browser.removeFromTop(5);
     categoryBox.setBounds(browser.removeFromTop(34).reduced(3, 2));
@@ -841,7 +858,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     }
     startModeBox.setBounds(centre.removeFromBottom(36).reduced(3, 2));
 
-    // Right rack: amplifier heading and the seven approved FX switches.
+    // Right rack: section chrome is reserved above amplifier and FX headings.
+    right.removeFromTop(34);
     ampTitle.setBounds(right.removeFromTop(32).reduced(5, 2));
     fxTitle.setBounds(right.removeFromTop(28).reduced(5, 1));
     for (size_t i = 0; i < fxButtons.size(); ++i)
