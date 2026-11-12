@@ -3,8 +3,8 @@
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 12 ноября 2026  
-Ветка: `work/signal-forge-consolidation`  
-Последний commit перед текущей записью: `61740417349a19c9d05d699f52017b8ccd37f9fe`
+Ветка: `work/signal-forge-theme-tokens`  
+Последний commit перед текущей записью: `71c2d852c1dc1d138e903fb577533a17ca540002`
 
 ## 1. Назначение и продукт
 
@@ -938,3 +938,19 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Host acceptance:** USER-REPORTED — пользователь проверил свою сборку в FL Studio 20 на Windows 10. Binary SHA/матрица не привязаны к HEAD; это не переносится на будущие сборки.
 **R28 non-goals:** только документация и журнал; C++/DSP/audio callback/MIDI/APVTS, skins/assets/registry/schema, merge tool, CMake, workflow, package и branches кроме новой рабочей ветки не менялись. Ничего не удалялось из исторических журналов/веток/ассетов.
 **Открыто:** добавить Skin_052 cross-contract tests; довести ThemeManager до полноценного применения 21 токена с legacy compatibility; исправить packaging на копирование только зарегистрированных/валидных тем; реализовать ResourceRootResolver; создать default-ppgu и генератор партии 50 тем; JUCE panel shell/manager; Performance Display с реальными данными; AutoChords/FX EDIT backend integration; Release Gate и host test точного нового VST3; CPU/RAM profiling.
+
+
+## 2026-11-12 — ThemeManager canonical 21-token palette API
+
+**Статус:** IMPLEMENTED; Windows Release/CTest CI PENDING.
+**Рабочая ветка:** `work/signal-forge-theme-tokens`.
+**Родительский SHA:** `71c2d852c1dc1d138e903fb577533a17ca540002`.
+**Изменения:**
+- ThemeManager::Palette получил единый API `token(name)` для всех 21 Skin Studio palette tokens: window_bg, panel, panel_elevated, control_bg, control_face, control_border, text_primary, text_secondary, text_disabled, accent, accent_glow, danger, warning, success, lcd_bg, lcd_text, led_on, led_off, shadow, highlight, lowlight.
+- Skin Studio loader теперь сохраняет каждый из 21 токена без потери и формирует совместимые alias-поля существующего редактора из canonical tokens.
+- Legacy skin 1–51 остаются поддержаны: их существующие цвета отображаются в соответствующие canonical tokens; отсутствующие semantic colors получают детерминированные fallback values, не меняющие старую палитру.
+- PluginEditor больше не хранит неиспользуемые глобальные bg/panel и жёстко заданные pink/pale/muted/control background цвета; текущие элементы получают цвета через ThemeManager token API. Внешняя геометрия и APVTS attachments не менялись.
+- ThemeManagerTests проверяет точное значение всех 21 Skin_052 tokens, unknown-token behavior и legacy mapping.
+**R28 non-goals:** не менялись Audio Engine, DSP, audio callback, MIDI routing, APVTS IDs/semantics, presets, SoundBank, Skin_052 assets, registry/schema, merge tool, AuxiliaryPanelLayout, panel shell, CMake и packaging. Это token infrastructure + текущий editor color binding, не полная реализация всех будущих 21-token control styles/layout engine.
+**CI:** run #971 (ID `43146185476`) на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe` — IN_PROGRESS на момент записи; run #972 (ID `43146540434`) на SHA `71c2d852c1dc1d138e903fb577533a17ca540002` — IN_PROGRESS. Новый коммит создаст отдельный run. BUILD VERIFIED/TESTED не присваивать до его завершения.
+**Следующий этап:** проверить 21-token C++ contract в Windows Release; затем отдельным этапом исправить package skin copy на registry-driven, добавить merge-tool/registry/schema cross-contract tests и приступить к JUCE Multi-Window shell/Performance Display.

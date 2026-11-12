@@ -254,17 +254,48 @@ namespace
         palette = PPGUThemeManager::Palette{};
         palette.id = id;
         palette.name = name;
-        palette.canvas = juce::Colour::fromString("ff" + paletteTokens.getProperty("window_bg", juce::var()).toString().substring(1));
-        palette.canvasInset = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_bg", juce::var()).toString().substring(1));
-        palette.surface = juce::Colour::fromString("ff" + paletteTokens.getProperty("panel", juce::var()).toString().substring(1));
-        palette.surfaceSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_bg", juce::var()).toString().substring(1));
-        palette.surfaceRaised = juce::Colour::fromString("ff" + paletteTokens.getProperty("panel_elevated", juce::var()).toString().substring(1));
-        palette.text = juce::Colour::fromString("ff" + paletteTokens.getProperty("text_primary", juce::var()).toString().substring(1));
-        palette.textSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("text_secondary", juce::var()).toString().substring(1));
-        palette.accent = juce::Colour::fromString("ff" + paletteTokens.getProperty("accent", juce::var()).toString().substring(1));
-        palette.accentSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("accent_glow", juce::var()).toString().substring(1));
-        palette.border = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_border", juce::var()).toString().substring(1));
-        palette.focus = palette.accentSecondary;
+
+        const auto readStudioToken = [&paletteTokens](const juce::String& key)
+        {
+            return juce::Colour::fromString(
+                "ff" + paletteTokens.getProperty(key, juce::var()).toString().substring(1));
+        };
+
+        auto& t = palette.tokens;
+        t.windowBg = readStudioToken("window_bg");
+        t.panel = readStudioToken("panel");
+        t.panelElevated = readStudioToken("panel_elevated");
+        t.controlBg = readStudioToken("control_bg");
+        t.controlFace = readStudioToken("control_face");
+        t.controlBorder = readStudioToken("control_border");
+        t.textPrimary = readStudioToken("text_primary");
+        t.textSecondary = readStudioToken("text_secondary");
+        t.textDisabled = readStudioToken("text_disabled");
+        t.accent = readStudioToken("accent");
+        t.accentGlow = readStudioToken("accent_glow");
+        t.danger = readStudioToken("danger");
+        t.warning = readStudioToken("warning");
+        t.success = readStudioToken("success");
+        t.lcdBg = readStudioToken("lcd_bg");
+        t.lcdText = readStudioToken("lcd_text");
+        t.ledOn = readStudioToken("led_on");
+        t.ledOff = readStudioToken("led_off");
+        t.shadow = readStudioToken("shadow");
+        t.highlight = readStudioToken("highlight");
+        t.lowlight = readStudioToken("lowlight");
+
+        // Keep legacy aliases coherent while the editor migrates to token access.
+        palette.canvas = t.windowBg;
+        palette.canvasInset = t.controlBg;
+        palette.surface = t.panel;
+        palette.surfaceSecondary = t.controlBg;
+        palette.surfaceRaised = t.panelElevated;
+        palette.text = t.textPrimary;
+        palette.textSecondary = t.textSecondary;
+        palette.accent = t.accent;
+        palette.accentSecondary = t.accentGlow;
+        palette.border = t.controlBorder;
+        palette.focus = t.highlight;
         palette.usedFallback = false;
         return true;
     }
@@ -482,7 +513,56 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
         return false;
     }
 
+    // Legacy skins predate the flat Skin Studio palette. Preserve their own
+    // visual identity and supply deterministic semantic fallbacks for tokens
+    // that the legacy schema never defined.
+    auto& t = palette.tokens;
+    t.windowBg = palette.canvas;
+    t.panel = palette.surface;
+    t.panelElevated = palette.surfaceRaised;
+    t.controlBg = palette.canvasInset;
+    t.controlFace = palette.surfaceRaised;
+    t.controlBorder = palette.border;
+    t.textPrimary = palette.text;
+    t.textSecondary = palette.textSecondary;
+    t.textDisabled = palette.textSecondary.darker(0.28f);
+    t.accent = palette.accent;
+    t.accentGlow = palette.accentSecondary;
+    t.lcdBg = palette.canvas.darker(0.55f);
+    t.lcdText = palette.text;
+    t.ledOn = palette.accent;
+    t.ledOff = palette.surfaceSecondary.darker(0.45f);
+    t.shadow = palette.canvas.darker(0.40f);
+    t.highlight = palette.focus;
+    t.lowlight = palette.canvas.darker(0.18f);
+
     return true;
+}
+
+juce::Colour PPGUThemeManager::Palette::token(const juce::String& key) const noexcept
+{
+    if (key == "window_bg") return tokens.windowBg;
+    if (key == "panel") return tokens.panel;
+    if (key == "panel_elevated") return tokens.panelElevated;
+    if (key == "control_bg") return tokens.controlBg;
+    if (key == "control_face") return tokens.controlFace;
+    if (key == "control_border") return tokens.controlBorder;
+    if (key == "text_primary") return tokens.textPrimary;
+    if (key == "text_secondary") return tokens.textSecondary;
+    if (key == "text_disabled") return tokens.textDisabled;
+    if (key == "accent") return tokens.accent;
+    if (key == "accent_glow") return tokens.accentGlow;
+    if (key == "danger") return tokens.danger;
+    if (key == "warning") return tokens.warning;
+    if (key == "success") return tokens.success;
+    if (key == "lcd_bg") return tokens.lcdBg;
+    if (key == "lcd_text") return tokens.lcdText;
+    if (key == "led_on") return tokens.ledOn;
+    if (key == "led_off") return tokens.ledOff;
+    if (key == "shadow") return tokens.shadow;
+    if (key == "highlight") return tokens.highlight;
+    if (key == "lowlight") return tokens.lowlight;
+    return {};
 }
 
 bool PPGUThemeManager::loadFromJson(const juce::String& jsonText)

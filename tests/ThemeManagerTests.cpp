@@ -85,6 +85,23 @@ int main()
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
+
+        const auto studioTokens = juce::JSON::parse(skin52Json).getProperty("palette", juce::var());
+        const juce::StringArray tokenNames {
+            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
+            "control_border", "text_primary", "text_secondary", "text_disabled",
+            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
+            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
+        };
+        for (const auto& tokenName : tokenNames)
+        {
+            const auto expected = juce::Colour::fromString(
+                "ff" + studioTokens.getProperty(tokenName, juce::var()).toString().substring(1));
+            expect(manager.getPalette().token(tokenName) == expected,
+                   "Skin_052 token is exposed exactly: " + tokenName);
+        }
+        expect(!manager.getPalette().token("unknown_token").isOpaque(),
+               "unknown token does not silently alias a valid colour");
     }
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
@@ -106,6 +123,14 @@ int main()
     expect(!manager.loadFromJson("{}"), "empty object rejected");
     expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
            "incomplete manifest restores fallback");
+
+    expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");
+    expect(manager.getPalette().token("window_bg") == manager.getPalette().canvas,
+           "legacy window background maps to canonical token");
+    expect(manager.getPalette().token("accent") == manager.getPalette().accent,
+           "legacy accent maps to canonical token");
+    expect(manager.getPalette().token("danger").isOpaque(),
+           "legacy semantic token receives a deterministic fallback");
 
     const auto badColour = validJson.replace("#090C10", "#GG0C10");
     expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
