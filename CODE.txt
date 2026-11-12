@@ -448,3 +448,20 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Neutral/bypassed processing must preserve the source signal and must not introduce hidden tonal/level changes; preset recall must restore source/layer/routing/FX states exactly.
 - QA requires source-only reference presets in every guitar family, plus processed/layered cases, bypass and neutral-filter comparisons, gain staging and clipping checks.
 - **Status:** requirement clarification recorded; no runtime implementation or tests changed/performed in this journal-only update.
+
+
+## 2026-11-12 — Primary sound-design decision order
+
+The user clarified the governing rule: **everything first depends on the preset type and the actual sound available in the library.**
+
+Decision order for every preset:
+1. Define the preset type/role and intended musical character.
+2. Inspect/select suitable real library sources, note/articulation coverage and velocity layers.
+3. Decide whether the source should play dry, use alternate articulations/layers, or combine multiple suitable sources.
+4. Add FX/filters only when musically justified by the target and the actual source material.
+
+Do not design presets around an arbitrary FX list and force unsuitable sources through it. Preserve a source that already achieves the target. If the required source/articulation is missing, report a library coverage gap instead of hiding it with excessive processing or a metadata-only preset.
+
+Preset QA record must state target type/role, actual source mapping/articulation coverage, rationale for layering/FX/filter or SOURCE-ONLY, and listening result. Acceptance is based on source suitability and target sound, not FX count.
+
+**Status:** requirement recorded; no source code, samples or preset implementation changed in this documentation update.
