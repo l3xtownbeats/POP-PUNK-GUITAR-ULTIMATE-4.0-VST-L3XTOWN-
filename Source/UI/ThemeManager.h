@@ -11,17 +11,17 @@ public:
     {
         struct Tokens
         {
-            juce::Colour windowBg { 0xff090c10 };
-            juce::Colour panel { 0xff17232b };
-            juce::Colour panelElevated { 0xff22313b };
-            juce::Colour controlBg { 0xff101820 };
-            juce::Colour controlFace { 0xff22313b };
-            juce::Colour controlBorder { 0xff526875 };
-            juce::Colour textPrimary { 0xfff4fafc };
-            juce::Colour textSecondary { 0xffb5c4cb };
-            juce::Colour textDisabled { 0xff7c8b93 };
-            juce::Colour accent { 0xffb7f34a };
-            juce::Colour accentGlow { 0xff35d7c5 };
+            juce::Colour windowBg { 0xff0b0f12 };
+            juce::Colour panel { 0xff141b20 };
+            juce::Colour panelElevated { 0xff1d2930 };
+            juce::Colour controlBg { 0xff10171b };
+            juce::Colour controlFace { 0xff1d2930 };
+            juce::Colour controlBorder { 0xff53656b };
+            juce::Colour textPrimary { 0xfff3f7f5 };
+            juce::Colour textSecondary { 0xffb7c5c2 };
+            juce::Colour textDisabled { 0xff788984 };
+            juce::Colour accent { 0xffd5ff45 };
+            juce::Colour accentGlow { 0xffb7ff3c };
             juce::Colour danger { 0xffff5a66 };
             juce::Colour warning { 0xffffc857 };
             juce::Colour success { 0xff6ee7a8 };
@@ -34,21 +34,21 @@ public:
             juce::Colour lowlight { 0xff0d1417 };
         };
 
-        juce::String id { "skin-51" };
-        juce::String name { "Blackout Voltage" };
+        juce::String id { "skin-052" };
+        juce::String name { "SIGNAL FORGE" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
-        juce::Colour canvas { 0xff090c10 };
-        juce::Colour canvasInset { 0xff101820 };
-        juce::Colour surface { 0xff17232b };
-        juce::Colour surfaceSecondary { 0xff101820 };
-        juce::Colour surfaceRaised { 0xff22313b };
-        juce::Colour text { 0xfff4fafc };
-        juce::Colour textSecondary { 0xffb5c4cb };
-        juce::Colour accent { 0xffb7f34a };
-        juce::Colour accentSecondary { 0xff35d7c5 };
-        juce::Colour border { 0xff526875 };
-        juce::Colour focus { 0xffb7f34a };
+        juce::Colour canvas { 0xff0b0f12 };
+        juce::Colour canvasInset { 0xff10171b };
+        juce::Colour surface { 0xff141b20 };
+        juce::Colour surfaceSecondary { 0xff10171b };
+        juce::Colour surfaceRaised { 0xff1d2930 };
+        juce::Colour text { 0xfff3f7f5 };
+        juce::Colour textSecondary { 0xffb7c5c2 };
+        juce::Colour accent { 0xffd5ff45 };
+        juce::Colour accentSecondary { 0xffb7ff3c };
+        juce::Colour border { 0xff53656b };
+        juce::Colour focus { 0xffd5ff45 };
         bool usedFallback = true;
 
         juce::Colour token(const juce::String& name) const noexcept;
