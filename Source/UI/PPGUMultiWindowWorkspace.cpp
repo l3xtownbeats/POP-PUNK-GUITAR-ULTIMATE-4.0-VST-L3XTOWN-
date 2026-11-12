@@ -80,14 +80,14 @@ public:
             && !closeButton.getBounds().contains(point)
             && !maximizeButton.getBounds().contains(point);
         dragStartBounds = getBounds();
-        dragStartScreen = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
+        dragStartScreen = event.getEventRelativeTo(getParentComponent()).getPosition();
     }
 
     void mouseDrag(const juce::MouseEvent& event) override
     {
         if (!event.mouseWasDraggedSinceMouseDown())
             return;
-        const auto relative = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
+        const auto relative = event.getEventRelativeTo(getParentComponent()).getPosition();
         if (draggingHeader)
         {
             auto bounds = dragStartBounds.translated(relative.x - dragStartScreen.x, relative.y - dragStartScreen.y);
@@ -194,9 +194,9 @@ public:
 PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
 {
     viewport.setViewedComponent(nullptr, false);
+    viewport.setOpaque(false);
     viewport.setScrollBarsShown(true, true);
     viewport.setScrollBarThickness(10);
-    viewport.setColour(juce::Viewport::backgroundColourId, backgroundColour);
     addAndMakeVisible(viewport);
     tileSurface = std::make_unique<TileSurface>();
     tileSurface->setOpaque(false);
@@ -308,7 +308,6 @@ void PPGUMultiWindowWorkspace::setSurfaceColours(juce::Colour background,
     borderColour = border;
     headingColour = heading;
     textColour = text;
-    viewport.setColour(juce::Viewport::backgroundColourId, backgroundColour);
     for (auto& window : windows)
         window->setColours(panelColour, borderColour, headingColour, textColour);
     repaint();
