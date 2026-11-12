@@ -1113,3 +1113,21 @@ Fresh source research added to `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.
 - Unreal Instruments Metal GTX / Standard Guitar: multi-articulation candidates listed with custom licensing; no bundling until explicit raw-sample redistribution/embedding permission is verified.
 
 This is source discovery and index maintenance only. No new asset is claimed downloaded, licensed for bundling, hashed, auditioned, or integrated. Existing Sound Hunter registry remains the source of truth for ingestion status.
+
+## 2026-11-12 — PATTERN/AUTOCHORDS MIDI-driven one-shot fallback (user re-confirmation)
+
+**Статус:** REQUIREMENT VERIFIED IN MASTER SPEC + JOURNAL UPDATED; RUNTIME IMPLEMENTATION/PLAYBACK ACCEPTANCE NOT VERIFIED.
+
+Пользователь повторно подчеркнул обязательный сценарий, ранее уже внесённый в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15 (fallback contract, lines 56–59):
+- Если подходящего готового guitar loop для выбранного стиля/темпа/артикуляции нет, режим PATTERN вместе с AUTOCHORDS должен уметь собрать исполнение из совместимых записанных guitar one-shots.
+- MIDI pattern является инструкцией исполнения: задаёт моменты ударов, длительности/gate, акценты, velocity, вариации и ритмический рисунок; синхронизация — с tempo хоста.
+- MIDI-клавиша в AUTOCHORDS выбирает chord/voicing и тональность/регистр соответствующего исполнения; движок запускает one-shot события в нужном порядке: например downstroke/upstroke, palm-muted stroke, muted/dead hit, power-chord hit, single-note accent.
+- Источник обязан соответствовать профилю инструмента, артикуляции и стилю. Приоритет — записанные chord/strum one-shots либо согласованные per-string/per-note записи с корректной картой voicing.
+- Запрещено произвольно транспонировать одиночный несвязанный сэмпл и выдавать его за реалистичный полный аккорд. Если подходящих записей нет, нужно честно показать недоступность и использовать совместимый loop/performance; не синтезировать гитару.
+- MELODY остаётся отдельным режимом: каждая клавиша воспроизводит соответствующую отдельную ноту. PATTERN/AUTOCHORDS — chord-specific rhythmic performance, собранное из подходящего loop или совместимых one-shots.
+- Это альтернативный источник внутри существующего Pattern/S6.5 playback pipeline, а не отдельный импортёр или второй SoundBank pipeline.
+
+**Повторная сверка:** требование уже присутствовало в MASTER PRODUCT SPEC; это не новая функция и не было пропущено из спецификации. Повторно зафиксировано в INFO, чтобы не потерять при дальнейшей разработке и поиске звуков.
+
+**Следующие проверки реализации:** проверить runtime AutoChordEngine/PatternScheduler, chord/voicing maps, one-shot articulation maps, host-tempo scheduling, note changes, velocity/accent/gate, transitions, voice/cache pressure и тесты; отдельно проверить наличие подходящих лицензированных one-shot assets. До этого AUTOCHORDS/PATTERN one-shot fallback нельзя объявлять реализованным или playable.
+
