@@ -1213,3 +1213,32 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 В source index присутствуют более ранние записи, утверждающие, что некоторые Karoryfer/FreePats архивы добавлены в automated CI download manifest. В рамках настоящего раунда фактическое наличие этих архивов в текущем SoundBank package, SHA-256, количество WAV и успешное прохождение CI package не проверялись. Поэтому статус ingestion по этим пунктам остаётся UNVERIFIED до проверки конкретного workflow run/artifact и его содержимого. Запись о пустом assets/sound_hunter/registry.json и 0 approved asset относится к asset-level policy registry; она не доказывает отсутствия любых исторических/временных файлов в CI artifacts.
 
 **Следующий проверочный шаг перед новыми загрузками:** открыть актуальный workflow и последний успешный artifact, проверить содержимое SOUNDBANK/ на фактические архивы/извлечённые WAV/SFZ, сравнить с исходным source manifest, затем вычислить/сверить SHA-256 и не загружать повторно уже присутствующие байты. После этого искать новые уникальные источники, в первую очередь отдельные CC0 guitar one-shots/loops без регистрации и дополнительные реальные punk/pop-punk performance packs с явным sample-library redistribution permission.
+
+
+## 2026-11-12 — SOUND HUNTER: проверка фактического CI ingestion и скачанных библиотек
+
+**Статус:** VERIFIED CI DOWNLOAD + LICENSE/METADATA GATES + PACKAGE BUILD SUCCESS; ручное локальное прослушивание и проверка в FL Studio не заявляются.
+
+Проверен GitHub Actions run #1204 (run ID 43253711970, commit 7d9830da1a7e4286d076bb48890e977acb8a6166): workflow завершился SUCCESS. Job подтвердил выполнение шагов «Download redistributable guitar sample libraries», «Validate restored sample library and licenses», «Build VST3 and test executables», «Run CTest regression suite», «Run pluginval strictness level 5» и упаковки полного комплекта.
+
+### Реально скачанные в CI и включённые в пакет гитарные библиотеки
+- Meta Open Sound: Steel Guitar + Nylon Guitar (оригинальные 24-bit/48 kHz WAV; CC0-1.0; исходные SFZ, LICENSE, README, manifest и SHA256SUMS сохраняются рядом).
+- FreePats: FSBS Clean, Distortion 1, Distortion 2, Jazz Electric и Spanish Classical Guitar (CC0-1.0; лицензии проверяются в CI).
+- Karoryfer: Black And Green Guitars, Emilyguitar и Shinyguitar (CC0-1.0; LICENSE-файлы проверяются в CI).
+
+CI-процедура проверяет наличие не менее 100 WAV, обязательные license files, отсутствие Git metadata в redistributable package и формирует SHA256SUMS-POP-PUNK.txt для каждого WAV/FLAC. Cache key ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v2 успешно сохранён; лог показывает передачу 2,713,333,501 байт в cache. Следовательно, эти банки workflow скачал, проверил и включил в комплект.
+
+### Полный артефакт
+- POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE
+- Artifact ID: 13961063281
+- Размер: 2,692,316,003 bytes (~2.51 GiB)
+- SHA-256 ZIP: f858e6bc0335c90bee5618257509da1f64acc14cd1a1864b80366e162ffe8dfd
+- Срок хранения GitHub Actions artifact: до 2027-02-10.
+- Скачать можно из run #1204: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43253711970/artifacts/13961063281
+
+Артефакт 2.69 GB подтверждён GitHub, но connector не смог перенести его в рабочую среду из-за лимита загрузки 512 MiB. Отдельный source-review artifact (18,377,106 bytes) успешно скачан и просмотрен: это snapshot исходников/документации/пресетов/скинов, а не полноценная копия аудиоархивов. Не заявлять, что 2.69 GB архив уже находится локально в этой сессии.
+
+### Границы результата
+CI build и тесты прошли, включая pluginval strictness level 5; однако job отдельно записывает ограничение host validation — фактический запуск в FL Studio 20 на машине пользователя не подтверждён. Также не следует считать, что коммерческие reference libraries (NI Session Guitarist, Mike Naran Pop Punk Riffs, Ultimate Punk Rock Guitars Soundkit) были скачаны или разрешены к redistribution: они остаются reference-only/лицензионно неочищенными. Freesound loop 591622 требует login и не входит в этот подтверждённый список.
+
+**Итог:** подтверждены 10 оригинальных CC0 guitar library packages/families (2 Meta, 5 FreePats, 3 Karoryfer), загруженные в CI, проверенные по лицензиям/метаданным и включённые в полный VST3 package. Следующий шаг — скачать 2.69 GB artifact непосредственно пользователю из GitHub Actions и затем продолжить пополнение новыми уникальными источниками, не дублируя эти библиотеки.
