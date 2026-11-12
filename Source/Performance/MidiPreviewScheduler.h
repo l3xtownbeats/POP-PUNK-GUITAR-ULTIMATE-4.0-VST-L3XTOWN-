@@ -121,7 +121,17 @@ public:
                 if (count < output.size())
                     output[count++] = { 0, EventKind::NoteOn, note,
                                         command.velocity, command.channel };
-                active[activeCount++] = { note, command.channel, command.gateSamples };
+                if (command.gateSamples < static_cast<std::uint32_t>(blockSamples))
+                {
+                    if (count < output.size())
+                        output[count++] = { static_cast<int>(command.gateSamples),
+                                            EventKind::NoteOff, note, 0, command.channel };
+                }
+                else
+                {
+                    active[activeCount++] = { note, command.channel,
+                        command.gateSamples - static_cast<std::uint32_t>(blockSamples) };
+                }
             }
         }
 

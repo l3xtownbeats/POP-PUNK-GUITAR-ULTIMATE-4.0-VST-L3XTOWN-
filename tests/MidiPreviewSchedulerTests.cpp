@@ -32,6 +32,17 @@ int main()
         || !eventIs(events[1], 0, EventKind::NoteOff, 64, 0, 2)
         || !eventIs(events[2], 0, EventKind::NoteOff, 67, 0, 2)) return 6;
 
+    // A gate shorter than one block emits its NoteOff at the exact in-block offset.
+    if (!scheduler.enqueueChord(chord.data(), chord.size(), 100, 12, 1)) return 20;
+    count = scheduler.processBlock(32, events);
+    if (count != 6 || scheduler.activeNoteCount() != 0) return 21;
+    if (!eventIs(events[0], 0, EventKind::NoteOn, 60, 100, 1)
+        || !eventIs(events[1], 0, EventKind::NoteOn, 64, 100, 1)
+        || !eventIs(events[2], 0, EventKind::NoteOn, 67, 100, 1)
+        || !eventIs(events[3], 12, EventKind::NoteOff, 60, 0, 1)
+        || !eventIs(events[4], 12, EventKind::NoteOff, 64, 0, 1)
+        || !eventIs(events[5], 12, EventKind::NoteOff, 67, 0, 1)) return 22;
+
     // A replacement chord must release the old notes before starting the new one.
     if (!scheduler.enqueueChord(chord.data(), chord.size(), 100, 500, 1)) return 7;
     count = scheduler.processBlock(32, events);
