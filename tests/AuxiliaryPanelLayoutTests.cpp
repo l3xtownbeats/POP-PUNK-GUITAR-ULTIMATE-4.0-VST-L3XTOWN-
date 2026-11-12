@@ -59,6 +59,22 @@ void checkInsideAndDisjoint(const PanelLayout& layout, const PanelRect& area)
 
 int main()
 {
+    const auto emptyPages = calculatePanelPageRange(0, 0, 6);
+    CHECK(!emptyPages.invalidInput && emptyPages.pageCount == 0 && emptyPages.begin == 0 && emptyPages.end == 0);
+    const auto onePage = calculatePanelPageRange(6, 0, 6);
+    CHECK(!onePage.invalidInput && onePage.pageCount == 1 && onePage.begin == 0 && onePage.end == 6);
+    const auto twoPagesFirst = calculatePanelPageRange(7, 0, 6);
+    CHECK(!twoPagesFirst.invalidInput && twoPagesFirst.pageCount == 2 && twoPagesFirst.pageIndex == 0 && twoPagesFirst.begin == 0 && twoPagesFirst.end == 6);
+    const auto twoPagesLast = calculatePanelPageRange(7, 1, 6);
+    CHECK(!twoPagesLast.invalidInput && twoPagesLast.pageCount == 2 && twoPagesLast.pageIndex == 1 && twoPagesLast.begin == 6 && twoPagesLast.end == 7);
+    const auto threePages = calculatePanelPageRange(13, 2, 6);
+    CHECK(!threePages.invalidInput && threePages.pageCount == 3 && threePages.pageIndex == 2 && threePages.begin == 12 && threePages.end == 13);
+    const auto clampedPage = calculatePanelPageRange(13, 99, 6);
+    CHECK(!clampedPage.invalidInput && clampedPage.pageIndex == 2 && clampedPage.begin == 12 && clampedPage.end == 13);
+    const auto negativePage = calculatePanelPageRange(7, -4, 6);
+    CHECK(!negativePage.invalidInput && negativePage.pageIndex == 0 && negativePage.begin == 0 && negativePage.end == 6);
+    CHECK(calculatePanelPageRange(7, 0, 0).invalidInput);
+
     const PanelRect desktop { 100, 80, 1600, 900 };
     CHECK(calculatePanelLayout(desktop, {}, 1.0f).panels.empty());
 

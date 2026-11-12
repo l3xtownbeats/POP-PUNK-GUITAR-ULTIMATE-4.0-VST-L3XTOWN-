@@ -29,6 +29,17 @@ struct PanelLayout
     int rows = 0;
 };
 
+struct PanelPageRange
+{
+    std::size_t begin = 0;
+    std::size_t end = 0;
+    std::size_t pageCount = 0;
+    std::size_t pageIndex = 0;
+    bool invalidInput = false;
+};
+
+PanelPageRange calculatePanelPageRange(std::size_t totalPanels, int requestedPage, std::size_t pageSize = 6);
+
 // Pure geometry only: coordinates are physical pixels; scale converts logical
 // panel metrics to physical pixels. Invalid geometry or duplicate IDs return
 // an empty layout with invalidInput=true. Overflow preserves all IDs and marks

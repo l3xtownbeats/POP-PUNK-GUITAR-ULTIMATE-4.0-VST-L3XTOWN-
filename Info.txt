@@ -1275,3 +1275,19 @@ FX EDIT, AutoChords, Import Guitar и Settings должны открыватьс
 **Повторная проверка после commit:** файл повторно прочитан из GitHub; подтверждены theme shadow token, keyboard material tokens, fixed ion-blue held-note token и отсутствие прежней подмены held-note highlight на accent темы. APVTS IDs, DSP, MIDI routing и sampler code не менялись.
 
 **Не выполнено / не заявляется:** полноценная Theme Gallery; preview/hero image decoding and card layout; family filters/search/favorites; dynamic rescan/hot-swap animation; полный skin-to-component/control parity; runtime DPI matrix; Windows Release/CTest/pluginval/FL Studio 20 QA. Эти задачи остаются следующим GUI implementation slice.
+
+
+## 2026-11-12 — REV 18 OMEGA S2 panel integration and FX control audit
+
+**Статус:** SOURCE IMPLEMENTATION COMMITTED; CI PENDING.
+
+В рабочей ветке `work/signal-forge-panel-shell` выполнено:
+- оконный менеджер вспомогательных панелей отображает до шести окон на странице и предоставляет циклическую навигацию PAGE n/N для последующих страниц; искусственный лимит шести одновременно открытых окон снят;
+- при закрытии окон индекс страницы ограничивается актуальным количеством страниц; развёрнутая панель сбрасывается при переходе на другую страницу;
+- состояние открытых панелей сохраняется в пользовательских UI settings при закрытии редактора и восстанавливается при следующем открытии;
+- MIDI Monitor / Performance Display зарегистрирован как пятая самостоятельная панель;
+- верхняя панель быстрого доступа получила пятый пункт MIDI MONITOR;
+- основной FX strip расширен до восьми переключателей: Compressor, EQ, Distortion, Flanger, Chorus, Delay, Reverb, Cabinet IR. Flanger использует существующий параметр `flangerOn`; новые APVTS ID не добавлялись;
+- FX EDIT продолжает предоставлять индивидуальные параметры модулей EQ, Compressor, Distortion, Flanger, Chorus, Delay, Reverb и Cabinet IR.
+
+Lifecycle/persistence/theme handling изменены в исходниках, но runtime стресс-проверка многократного открытия/закрытия, Windows Release build, CTest, pluginval strictness 5 и FL Studio 20 host acceptance остаются PENDING до CI/host evidence. Этот S2 commit не заявляет завершённость DSP amp/cab или FX processing S7: наличие UI/параметров не доказывает полноту DSP.

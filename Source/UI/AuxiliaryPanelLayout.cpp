@@ -8,6 +8,19 @@
 
 namespace ppgu::ui
 {
+PanelPageRange calculatePanelPageRange(std::size_t totalPanels, int requestedPage, std::size_t pageSize)
+{
+    PanelPageRange result;
+    if (pageSize == 0) { result.invalidInput = true; return result; }
+    if (totalPanels == 0) return result;
+    result.pageCount = totalPanels / pageSize + (totalPanels % pageSize == 0 ? 0 : 1);
+    const auto requested = requestedPage < 0 ? std::size_t{ 0 } : static_cast<std::size_t>(requestedPage);
+    result.pageIndex = std::min(requested, result.pageCount - 1);
+    result.begin = result.pageIndex * pageSize;
+    result.end = result.begin + std::min(pageSize, totalPanels - result.begin);
+    return result;
+}
+
 namespace
 {
 int scaled(int value, float scale)

@@ -9,6 +9,7 @@
 #include "UI/AutoChordsPanel.h"
 #include "UI/ImportGuitarPanel.h"
 #include "UI/SettingsPanel.h"
+#include "UI/PerformanceDisplay.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -54,7 +55,7 @@ private:
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
     juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
-    std::array<juce::TextButton, 4> panelButtons { juce::TextButton("FX EDIT"), juce::TextButton("AUTOCHORDS"), juce::TextButton("IMPORT"), juce::TextButton("SETTINGS") };
+    std::array<juce::TextButton, 5> panelButtons { juce::TextButton("FX EDIT"), juce::TextButton("AUTOCHORDS"), juce::TextButton("IMPORT"), juce::TextButton("SETTINGS"), juce::TextButton("MIDI MONITOR") };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
@@ -67,12 +68,15 @@ private:
     std::array<juce::Label, 9> knobLabels;
     std::array<juce::String, 9> knobNames { "GAIN", "TREBLE", "MID", "BASS", "VELOCITY", "DYNAMICS", "SWING", "HUMANIZE", "ACCENT" };
     std::array<juce::String, 9> parameterIDs { "ampGain", "eqHigh", "eqMid", "eqLow", "velocity", "dynamics", "swing", "humanize", "accent" };
-    std::array<juce::TextButton, 7> fxButtons {
+    std::array<juce::TextButton, 8> fxButtons {
         juce::TextButton("COMPRESSOR"), juce::TextButton("EQ"), juce::TextButton("DISTORTION"),
-        juce::TextButton("CHORUS"), juce::TextButton("DELAY"), juce::TextButton("REVERB"),
-        juce::TextButton("CABINET IR")
+        juce::TextButton("FLANGER"), juce::TextButton("CHORUS"), juce::TextButton("DELAY"),
+        juce::TextButton("REVERB"), juce::TextButton("CABINET IR")
     };
-    std::array<juce::String, 7> fxParameterIDs { "compressorOn", "eqOn", "distortionOn", "chorusOn", "delayOn", "reverbOn", "cabinetOn" };
+    std::array<juce::String, 8> fxParameterIDs {
+        "compressorOn", "eqOn", "distortionOn", "flangerOn",
+        "chorusOn", "delayOn", "reverbOn", "cabinetOn"
+    };
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
@@ -84,6 +88,7 @@ private:
     std::unique_ptr<PPGUAutoChordsPanel> autoChordsPanel;
     std::unique_ptr<PPGUImportGuitarPanel> importGuitarPanel;
     std::unique_ptr<PPGUSettingsPanel> settingsPanel;
+    std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
     std::unique_ptr<PPGUAuxiliaryPanelWindowManager> auxiliaryPanels;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)

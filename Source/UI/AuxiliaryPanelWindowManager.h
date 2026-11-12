@@ -20,6 +20,8 @@ public:
     void closeAll();
     bool isOpen(int id) const noexcept;
     int getOpenPanelCount() const noexcept;
+    juce::String getOpenPanelIds() const;
+    void restoreOpenPanels(const juce::String& ids);
     void setPalette(const PPGUThemeManager::Palette& value);
 
     void resized() override;
@@ -37,11 +39,17 @@ private:
     Window* findWindow(int id) noexcept;
     const Window* findWindow(int id) const noexcept;
     void updateLayout();
+    void changePage(int delta);
+    int getPageCount() const noexcept;
 
     PPGUThemeManager::Palette palette;
     std::vector<Window> windows;
     int expandedId = 0;
+    int currentPage = 0;
     bool updatingLayout = false;
+    juce::TextButton previousPageButton { "‹" }, nextPageButton { "›" };
+    juce::Label pageIndicator;
+    static constexpr int panelsPerPage = 6;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PPGUAuxiliaryPanelWindowManager)
 };
