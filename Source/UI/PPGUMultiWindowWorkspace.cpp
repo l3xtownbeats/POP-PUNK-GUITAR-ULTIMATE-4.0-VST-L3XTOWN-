@@ -432,20 +432,41 @@ void PPGUMultiWindowWorkspace::layoutPanels()
         return;
     }
 
-    // If the viewport cannot satisfy every panel's minimum size, retain every
-    // panel on a scrollable surface instead of clipping or silently hiding it.
+    // Overflow uses the helper's minimum-size grid. Every panel is placed
+    // exactly once and remains reachable through the workspace Viewport.
+    if (layout.overflow && !layout.invalidInput
+        && layout.panels.size() == windows.size())
+    {
+        int surfaceWidth = viewWidth;
+        int surfaceHeight = viewHeight;
+        for (const auto& placement : layout.panels)
+        {
+            const auto it = std::find_if(windows.begin(), windows.end(),
+                [&placement](const auto& item)
+                {
+                    return item->getPanelId() == placement.id;
+                });
+            if (it == windows.end() || !placement.visible)
+                continue;
+
+            const auto& b = placement.bounds;
+            (*it)->setPanelBounds({ b.x, b.y, b.width, b.height });
+            surfaceWidth = juce::jmax(surfaceWidth, b.x + b.width + panelGap);
+            surfaceHeight = juce::jmax(surfaceHeight, b.y + b.height + panelGap);
+        }
+        tileSurface->setSize(surfaceWidth, surfaceHeight);
+        return;
+    }
+
+    // Invalid/extreme geometry: keep the previous bounds rather than applying
+    // saturated coordinates that could overflow JUCE's component geometry.
     int surfaceWidth = viewWidth;
     int surfaceHeight = viewHeight;
     for (auto& window : windows)
     {
-        auto bounds = window->getBounds();
-        bounds.setWidth(juce::jmax(static_cast<int>(window->getMinimumSize().width), bounds.getWidth()));
-        bounds.setHeight(juce::jmax(static_cast<int>(window->getMinimumSize().height), bounds.getHeight()));
-        bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
-        window->setPanelBounds(bounds);
+        const auto bounds = window->getBounds();
         surfaceWidth = juce::jmax(surfaceWidth, bounds.getRight() + panelGap);
         surfaceHeight = juce::jmax(surfaceHeight, bounds.getBottom() + panelGap);
     }
-
     tileSurface->setSize(surfaceWidth, surfaceHeight);
 }
