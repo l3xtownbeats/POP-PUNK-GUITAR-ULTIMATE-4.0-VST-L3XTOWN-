@@ -1443,3 +1443,45 @@ F. Только после этого считать документальны�
 No Zone F production UI code has yet been changed in this checkpoint. The next action is T-F1, then T-F2. Documentation-only checkpoint; build/test/host validation not run. Do not treat this entry as implementation.
 
 **Статус:** TASK REGISTER SAVED; ZONE F SOURCE IMPLEMENTATION PENDING.
+
+
+## 2026-11-12 — REV.17 Zone F first production UI pass
+
+**Тип:** production source UI implementation; validation still open.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Source commits:** header `79c74959140109e7569d8595a53bf76ccd237a58`; Zone F implementation `7363037b22c49530f7f439c38b603c651476853e`; initial mode/tempo state correction `07036a2ac86319c840628121a9f203f577f96cae`.  
+**Файлы:** `Source/PluginEditor.h`, `Source/PluginEditor.cpp`.
+
+### ПРОВЕРКА
+- Re-read processor parameter declarations and scheduler runtime reads.
+- Confirmed existing APVTS IDs: `patternSlot` (8 choices), `patternLength` (1/2/4 bars), `syncMode` (Host/Host Start/Internal), `bpm` (20–300), `startOnFirstChord` (bool).
+- Confirmed scheduler reads `syncMode`, `bpm`, `patternSlot`, `patternLength`, and `startOnFirstChord`; the existing main editor already had an APVTS attachment for `syncMode`.
+
+### АНАЛИЗ
+- Existing center column can host Zone F without adding a fourth external column.
+- Existing nine-knob matrix already owns Swing/Humanize/Accent; these were not duplicated.
+- Host BPM is controlled by DAW transport; UI must not let the user edit fallback BPM in Host/Host Start modes.
+
+### ИСПРАВЛЕНИЕ
+- Added Zone F heading and dedicated strip inside the center zone.
+- Added live APVTS attachments for Pattern Slot, Pattern Length, BPM and Start on First Chord; reused the existing Sync Mode ComboBox/attachment.
+- Added labels, palette-token styling, tooltips, and responsive row layout.
+- Pattern Slot, Pattern Length, Sync Mode and Start on First Chord are disabled in MELODY. BPM is enabled only in PATTERN + INTERNAL sync. In Host modes the control is disabled and explicitly labelled as fallback BPM, not misrepresented as the DAW's current tempo.
+- No new APVTS IDs or parameter definitions were introduced.
+
+### ПОВТОРНЫЙ АНАЛИЗ
+- GitHub readback confirmed the new editor header/source blobs.
+- Static source assertions passed for all five APVTS bindings, existence of all five IDs in processor source, Pattern-mode gating, Internal-only BPM editability, and presence of the Zone F strip.
+- Compared REV.17 against the previous Zone F checkpoint: 5 commits ahead, 0 behind; changed files are INFO, CODE, PluginEditor.h and PluginEditor.cpp.
+- Processor/DSP/sampler/MIDI/scheduler/presets/SoundBank/CMake were not changed in this source pass.
+- The code has not yet been compiled. CTest, Windows Release, pluginval, exact-SHA CI and FL Studio 20 visual/interaction checks remain pending. Layout/resize acceptance, especially the agreed 1600×900 default and 1200×700..2400×1500 bounds, is not yet closed.
+
+### РЕЗУЛЬТАТ
+**ZONE F SOURCE UI FIRST PASS IMPLEMENTED; STATIC BINDING CHECK PASS; BUILD/TEST/CI/HOST ACCEPTANCE PENDING.** Do not mark Zone F complete until layout and runtime verification pass.
+
+### Открытые задачи / resume queue
+- T-F4: verify Zone F and nine-knob geometry at current minimum/default/maximum window sizes; reconcile actual 1120×840 and 980×800..1600×1100 bounds with approved 1600×900 and 1200×700..2400×1500 contract.
+- T-F5: full diff review, compile-risk review, and regression review of mode/sync state changes.
+- T-F6: Windows x64 Release, CTest, pluginval strictness 5, exact-SHA GitHub Actions result/logs.
+- T-F7: FL Studio 20 visual and interaction acceptance; verify Pattern Slot/Length, Host/Host Start/Internal, fallback BPM, first chord behavior, state persistence.
+- T-F8: closeout with final commit SHA and test evidence. Continue using this INFO queue if the session or branch context is lost.
