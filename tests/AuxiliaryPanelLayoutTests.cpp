@@ -41,8 +41,13 @@ int main()
         return 2;
 
     const auto tiled = layoutAuxiliaryPanels(work, requests);
-    if (tiled.panels.size() != requests.size() || !tiled.compact)
+    if (tiled.panels.size() != requests.size() || !tiled.compact
+        || tiled.columns != 2 || tiled.rows != 2)
         return 3;
+
+    const auto threePanels = layoutAuxiliaryPanels(work, { requests[0], requests[1], requests[2] });
+    if (threePanels.columns != 2 || threePanels.rows != 2 || threePanels.panels.size() != 3)
+        return 10;
 
     for (std::size_t i = 0; i < tiled.panels.size(); ++i)
     {
