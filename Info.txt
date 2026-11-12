@@ -1077,3 +1077,18 @@ F. Только после этого считать документальны�
 **Статус:** SOURCE PRESENT; regression tests SOURCE PRESENT; TESTED PENDING; HOST VERIFIED — NO; RELEASED — NO.
 **Открытые вопросы:** G1 contrast, точный schema-driven G2/G4 validation, resource loading, approved Dreaming in Neon editor shell, OverlayManager/AutoChords/FX EDIT, secure .ppguskin import, runtime hot-swap/ECO/layout ещё не реализованы end-to-end.
 **Следующий шаг:** E1 продолжить с полной schema-driven control parity и G1/G4 gates, затем O1 overlays. Полный exact-SHA CI обязателен.
+
+
+## 2026-11-12 — REV.17 E1 control-map validator completion
+
+**Тип:** production source correction following regression-test review.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Base HEAD / parent:** `a893cbaa419691fb83801d0d846218aeacd54a52`.
+**Production commit SHA:** `43523a6998e17fdf25999c1df2c26e53f9e81c79`.
+**Файл / символ:** `Source/UI/ThemeManager.cpp` — `validateSkinStudioManifest()`.
+**Изменение:** заменён слабый gate `controls.size() >= 27` на точную проверку канонического набора: все 27 обязательных REV14 IDs плюс `sync_selector`; общий размер должен быть ровно 28. Отсутствующий обязательный ID или любой extra ID отклоняется до применения темы.
+**Связанные regression tests:** `tests/ThemeManagerTests.cpp` (commit `d42f495bb2228ab9e08295c7b0ecca07c70ba8dc`) — missing About и unknown extra ID.
+**Совместимость:** visual manifest validation only; audio/DSP/MIDI/APVTS/presets/SoundBank/editor layout untouched.
+**Проверки:** tests are present but not executed here. Windows Release/CTest/Pluginval/FL Studio pending; CI for this exact SHA pending.
+**Статус:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
+**Следующий шаг:** получить CI exact SHA; затем G1 contrast/G4 identity и перейти к O1.

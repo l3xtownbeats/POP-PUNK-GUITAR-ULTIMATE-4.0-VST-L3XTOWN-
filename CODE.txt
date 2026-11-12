@@ -150,3 +150,18 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **Тесты:** добавлены; execution NOT RUN. CI exact SHA: NOT CONFIRMED. Pluginval/FL Studio: NOT RUN.
 **Статус:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
 **Следующий шаг:** завершить G1/G2/G4 validator и затем O1 overlay implementation.
+
+
+## 2026-11-12 — REV.17 exact Skin Studio control parity
+
+**Тип:** production source correction.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Commit SHA:** `43523a6998e17fdf25999c1df2c26e53f9e81c79`.
+**Parent SHA:** `a893cbaa419691fb83801d0d846218aeacd54a52`.
+**Файл/символ:** `Source/UI/ThemeManager.cpp` — `validateSkinStudioManifest()`.
+**Изменение:** exact control-set enforcement: 27 canonical required IDs plus `sync_selector`, exactly 28 properties; missing/unknown IDs rejected.
+**Связанные tests:** missing About / unapproved extra ID regressions in `tests/ThemeManagerTests.cpp`, introduced in prior production/test commit `d42f495bb2228ab9e08295c7b0ecca07c70ba8dc`.
+**Совместимость:** UI theme manifest validation only; audio and preset contracts unchanged.
+**Тесты/CI:** execution NOT RUN; exact-SHA CI pending; pluginval/host NOT RUN.
+**Статус:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
+**Следующий шаг:** verify exact-SHA workflow and continue G1/G4.
