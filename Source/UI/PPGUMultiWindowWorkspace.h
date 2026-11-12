@@ -45,6 +45,7 @@ private:
     class TileSurface;
 
     void handleClose(int id);
+    void reorderPanels(int draggedId, int targetId);
     void layoutPanels();
 
     juce::Viewport viewport;
