@@ -576,3 +576,36 @@ Preset QA record must state target type/role, actual source mapping/articulation
 **QA:** для каждого выбранного clean-bank preset проверить preset load, реальное покрытие нот, одиночные ноты, аккорды, velocity, Note Off/release, Preview/MIDI parity, отсутствие скрытого FX и корректное восстановление состояния после reload. Требуется прослушивание в VST3/DAW.
 
 **Статус:** требование зафиксировано; фактическая доступность каждого bank source в MELODY и успешное прохождение QA не подтверждены этой записью. Source code и audio assets не менялись.
+
+
+
+## 2026-11-12 — CRITICAL CORE: shared sound-bank/preset integration for BOTH MELODY and PATTERN
+
+Пользователь подтвердил, что MELODY и PATTERN — основа плагина. Проверка подключения библиотеки и пресетов должна охватывать ОБА режима, а не только MELODY. Оптимизация архитектуры: один согласованный preset/source resolution layer над текущим SamplerEngine, но разные корректные performance paths для двух режимов.
+
+### Что проверено в активной ветке на HEAD dc66f1c1bcb22888274197ad4ac83c5c67115513
+- Source/PluginProcessor.cpp: MELODY передаёт MIDI Note On/Off напрямую в sampler.noteOn/noteOff; аккорды возникают полифонией независимых mapped note voices. Это подходящая базовая схема для sample-based Melody.
+- Source/Sampler/SamplePool.h/.cpp: SamplerEngine имеет 64 voice slots, SFZ region lookup, velocity/channel mapping, streaming, Note Off/release. Это действующая основа воспроизведения отдельных mapped notes; реальный preset-to-bank binding и полнота mapping должны быть отдельно подтверждены.
+- Source/PluginProcessor.cpp: текущий PATTERN строит события из встроенных rhythmMasks и MIDI chord notes, затем передаёт их через PatternScheduler в SamplerEngine. Это scheduler-generated note triggering, а НЕ доказательство воспроизведения заранее записанных guitar performance loops/strums.
+- tests/ProcessorPatternIntegrationTests.cpp: есть интеграционный тест реального Processor → PatternScheduler → SamplerEngine → streamed WAV на синтетических fixture samples; он подтверждает часть технического пути, но не натуральные chord/strum performance recordings, preset-bank selection, factory content или качество звучания.
+- presets/factory_bank_300.json и docs/PRESET_BANK_4_0_READINESS_RU.md: 300 entries описаны как каталог целей, а не 300 готовых runtime-пресетов; readiness-документ прямо указывает, что Pattern entries ожидают performance engine/recorded library.
+
+### Целевая оптимизированная архитектура (не ломать существующие основы)
+1. Shared Preset Resolver / Sound Bank Registry: единая модель пресета выбирает реальные assets, mappings, velocity/articulation zones, round-robin, source identity, dry/FX route и metadata. Factory, user и Import Guitar sources проходят один путь; никаких source-origin whitelist. Подготовка/валидация/cache/resolution — вне audio callback; в callback поступает только готовое immutable runtime state через RT-safe publication.
+2. MELODY path: каждая MIDI-клавиша запускает одну mapped guitar note/voice; несколько клавиш дают полифонический аккорд. Реальные source samples, velocity/articulation, round-robin где доступны, естественная recorded attack/sustain/tail, Note Off/release. Dry/direct presets — first-class. Не требовать pattern loops для MELODY.
+3. PATTERN path: MIDI chord/host transport/style/pattern selection выбирают соответствующее заранее записанное оригинальное или лицензированное guitar performance phrase/loop (chord voicing, down/up strums, mutes, accents, stops, transitions). PatternScheduler отвечает за timing, quantization, sync, phrase boundaries и transitions; performance asset player/voice path воспроизводит реальную запись. Не подменять готовые performance recordings автоматически сгенерированными однонотными MIDI-ударами и не маркировать это как готовый Session-Guitarist-style PATTERN.
+4. Shared audio core, distinct musical source type: обе ветки используют общие registry, source resolver, SamplerEngine streaming/cache, preset state и FX routing, но MELODY note zones и PATTERN performance phrases остаются разными типами playback assets. Не пытаться натянуть single-note multisamples на полноценные strum performances без реальных chord/phrase mappings.
+5. Preview parity: preview выбранного пресета/паттерна должен использовать тот же runtime source, mapping/performance asset, articulations, routing и FX, что и фактическое воспроизведение. Нельзя показывать preview одного звука, а играть другой.
+6. Dry-first, FX optional: если библиотечный исходник уже звучит правильно, пресет использует SOURCE/DRY без обязательной обработки. FX включаются только по музыкальной необходимости. Это правило действует в обоих режимах, в том числе для чистых bank и импортированных пользовательских источников.
+
+### Приоритет реализации
+P0 — проверить и довести общий preset/source resolution и безопасную загрузку/сохранение asset references.
+P1 — обеспечить проверенную MELODY полифонию, mappings, velocity, note-off/release, preview parity.
+P2 — заменить/дополнить текущую генерацию generic Pattern note events реальным performance asset playback path; сохранить Scheduler для transport/timing, не выдавать синтетические события за записанные гитарные ритмы.
+P3 — наполнить и проверить каталог: playable preset count считать только по реально загружаемым и прослушанным sources; PATTERN считать готовым только при наличии реального performance asset.
+P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузка, быстрые переключения, missing/corrupt assets, streaming, clipping и restore.
+
+### Результат проверки
+Обнаружен конкретный разрыв: текущий PATTERN runtime генерирует ритмические MIDI-события из масок, а не воспроизводит доказанно реальные записанные гитарные performances. Наличие интеграционного теста подтверждает техническую подачу synthetic WAV через sampler, но не целевой музыкальный результат. MELODY имеет прямой MIDI→SamplerEngine путь, но полноценная привязка preset browser/300 preset definitions к sound bank не подтверждена.
+
+Статус: аудит исходников/тестов выполнен на указанном SHA; это архитектурное решение и отчёт о найденном разрыве. В этой записи source code, preset data и audio assets не изменялись; CI и DAW listening QA не запускались. Не объявлять ни один из двух режимов полностью готовым до прохождения приёмки.
