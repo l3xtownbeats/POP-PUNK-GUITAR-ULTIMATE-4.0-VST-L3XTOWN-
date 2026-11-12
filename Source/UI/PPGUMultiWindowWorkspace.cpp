@@ -56,6 +56,13 @@ public:
     bool isMaximized() const noexcept { return maximized; }
     void restoreBounds(juce::Rectangle<int> bounds) { setBounds(bounds); maximized = false; }
 
+    void setThemePalette(const PPGUThemeManager::Palette& palette)
+    {
+        if (content != nullptr)
+            if (auto* themed = dynamic_cast<PPGUThemeAwarePanel*>(content.get()))
+                themed->setThemePalette(palette);
+    }
+
     void setColours(juce::Colour panel, juce::Colour border,
                     juce::Colour heading, juce::Colour text)
     {
@@ -237,6 +244,8 @@ bool PPGUMultiWindowWorkspace::openPanel(PanelSpec spec)
 
     auto window = std::make_unique<Window>(*this, std::move(spec),
         panelColour, borderColour, headingColour, textColour);
+    if (hasThemePalette)
+        window->setThemePalette(currentThemePalette);
     const auto panelId = window->getPanelId();
     auto bounds = juce::Rectangle<int>(nextCascadeOffset, nextCascadeOffset,
         static_cast<int>(window->getDesiredSize().width), static_cast<int>(window->getDesiredSize().height));
@@ -303,6 +312,14 @@ void PPGUMultiWindowWorkspace::setPanelScale(float scale)
 void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* properties)
 {
     persistenceProperties = properties;
+}
+
+void PPGUMultiWindowWorkspace::setThemePalette(const PPGUThemeManager::Palette& palette)
+{
+    currentThemePalette = palette;
+    hasThemePalette = true;
+    for (auto& window : windows)
+        window->setThemePalette(currentThemePalette);
 }
 
 void PPGUMultiWindowWorkspace::setSurfaceColours(juce::Colour background,
