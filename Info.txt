@@ -977,3 +977,11 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Компоненты:** EditorOverlayPanel (X, maximize/restore), FXEditPanel (APVTS parameter attachments), AutoChordsPanel (UI only; all controls and Preview disabled until real progression/MIDI backend), ImportGuitarPanel (callback to existing async SFZ loader), SettingsPanel (existing APVTS controls), PerformanceDisplay (MidiKeyboardState listener + AutoChordEngine chord detection). CMake now compiles these components. Они пока не подключены к PluginEditor; это будет отдельный следующий коммит.
 **R28 non-goals:** no PluginEditor modifications, no Audio Engine/DSP/MIDI/APVTS changes, no resource/skin/registry changes. UI appearance and backend status are explicit.
 **CI:** this commit will receive its own Windows Release/CTest/pluginval run. Baseline run #971 on SHA 6174041 is SUCCESS with COMPLETE ZIP artifact, but it does not contain these staged UI components.
+
+## 2026-11-12 — Official audio-engine naming
+
+**Каноническое название собственного аудиодвижка PPGU: ANGELA SOUND.**
+Предыдущие рабочие обозначения: SOUND ANGELA / ANGELA sourse.
+POP PUNK GUITAR ULTIMATE остаётся названием продукта; JUCE остаётся framework/integration layer.
+Это изменение терминологии и архитектурного документа, а не заявление о завершённой реализации движка.
+Архитектурное решение: `docs/SOUND_ANGELA_ENGINE_DECISION_RU.md`.
