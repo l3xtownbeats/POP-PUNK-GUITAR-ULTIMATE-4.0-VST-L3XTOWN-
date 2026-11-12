@@ -224,23 +224,43 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         [this] { chooseSfzFile(); }, themeManager.getPalette());
     settingsPanel = std::make_unique<PPGUSettingsPanel>(processor.parameters, themeManager.getPalette());
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, themeManager.getPalette());
+    circleOfFifthsPanel = std::make_unique<PPGUFeatureLandingPanel>(
+        "CIRCLE OF FIFTHS",
+        "Explore the 12 major keys and their relative minor keys.\n\n"
+        "Planned workspace: chord degrees, diatonic harmony, chord qualities, guitar voicings, "
+        "progression building and real-time preview through the selected PPGU preset.\n\n"
+        "This entry panel is intentionally lightweight. Harmony theory, chord audition and MIDI handoff "
+        "are not connected yet; no placeholder controls pretend to perform those actions.",
+        themeManager.getPalette());
+    harmonyAssistantPanel = std::make_unique<PPGUFeatureLandingPanel>(
+        "HARMONY ASSISTANT",
+        "Generate, continue, finish and vary chord progressions. Explore pop-punk verse, chorus, "
+        "bridge and transition ideas, then audition and compare musical suggestions.\n\n"
+        "Every suggestion will require an explicit user action and a real PPGU audio preview. "
+        "The assistant will remain independent of MELODY and PATTERN.\n\n"
+        "Suggestion engine and shared preview backend are not connected yet.",
+        themeManager.getPalette());
     auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(themeManager.getPalette());
     auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel);
     auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel);
     auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel);
     auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel);
     auxiliaryPanels->addPanel(5, "MIDI MONITOR  /  PERFORMANCE", *performanceDisplay);
+    auxiliaryPanels->addPanel(6, "CIRCLE OF FIFTHS  /  HARMONY EXPLORER", *circleOfFifthsPanel);
+    auxiliaryPanels->addPanel(7, "HARMONY ASSISTANT  /  SONGWRITING", *harmonyAssistantPanel);
     for (size_t i = 0; i < panelButtons.size(); ++i)
     {
         auto& button = panelButtons[i];
         button.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
         button.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
-        static constexpr std::array<const char*, 5> panelTooltips {
+        static constexpr std::array<const char*, 7> panelTooltips {
             "Open FX EDIT: eight guitar processing modules and their controls",
             "Open AUTOCHORDS: chord and harmony workspace",
             "Open IMPORT GUITAR: load a licensed SFZ guitar library",
             "Open SETTINGS: plugin and engine settings",
-            "Open MIDI MONITOR: live note and chord activity"
+            "Open MIDI MONITOR: live note and chord activity",
+            "Open CIRCLE OF FIFTHS: explore keys, chords and harmonic relationships",
+            "Open HARMONY ASSISTANT: generate, continue and finish chord progressions"
         };
         button.setTooltip(panelTooltips[i]);
         button.onClick = [this, i] { if (auxiliaryPanels) auxiliaryPanels->openPanel(static_cast<int>(i) + 1); };
@@ -589,6 +609,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  if (importGuitarPanel) importGuitarPanel->setPalette(p);
  if (settingsPanel) settingsPanel->setPalette(p);
  if (performanceDisplay) performanceDisplay->setPalette(p);
+ if (circleOfFifthsPanel) circleOfFifthsPanel->setPalette(p);
+ if (harmonyAssistantPanel) harmonyAssistantPanel->setPalette(p);
  for (auto& button : panelButtons) { button.setColour(juce::TextButton::buttonColourId, p.token("control_bg")); button.setColour(juce::TextButton::textColourOffId, p.token("text_primary")); }
  titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));

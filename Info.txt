@@ -1414,3 +1414,28 @@ X — это именно закрытие панели, а не выключе�
 - Exact-SHA Windows Release, полный CTest и pluginval strictness 5 выполняются после исходных изменений; DAW/FL Studio host acceptance фиксируется отдельно.
 
 **Итог:** это обязательный единый UX-контракт для всех существующих и будущих панелей PPGU. На HEAD bc657968f6e346debc85569911beec77d7bd602b подтверждено наличие базовых X и maximize/restore в EditorOverlayPanel; полная parity-проверка всех панелей и реальный ON/OFF/DSP parity ещё не завершены.
+
+## 2026-11-12 — Harmony Studio navigation entry points added to main plugin shell
+
+**Статус:** SOURCE CHANGE COMMITTED / EXACT-SHA CI PENDING / MUSIC BACKENDS PENDING.
+
+**Branch:** work/signal-forge-panel-shell
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+На текущем source HEAD проверены PluginEditor.h/.cpp, AuxiliaryPanelWindowManager.h/.cpp, EditorOverlayPanel.h/.cpp и CMakeLists.txt.
+
+Подтверждено, что основная навигация ранее содержала пять кнопок и пять зарегистрированных встроенных auxiliary panels. Оконный менеджер уже обеспечивает независимое открытие/закрытие панелей, встроенный overlay, квадратные X и □/▣, maximize/restore и paging. Геометрия navigation row рассчитывается по фактическому количеству кнопок, поэтому расширение списка не требует фиксированных координат.
+
+**Изменения в этом коммите:**
+- Основная навигация расширена с 5 до 7 кнопок: добавлены **CIRCLE OF FIFTHS** и **HARMONY ASSIST**.
+- Зарегистрированы отдельные встроенные окна ID 6 и ID 7 в существующем PPGUAuxiliaryPanelWindowManager.
+- Оба окна используют общий PPGUEditorOverlayPanel: собственные квадратные X (закрывает только выбранное окно) и □/▣ (maximize/restore).
+- Добавлены skin-aware lightweight landing panels с кратким назначением, статусом **FUNCTIONAL BACKEND PENDING** и без фиктивных кнопок/действий.
+- Новые панели используют ту же тему ThemeManager и общий overlay/workspace; отдельный аудиодвижок, MIDI scheduler, sampler, таймер или фоновый поток не создаются.
+- Существующий responsive navigation layout использует panelButtons.size(), поэтому автоматически распределяет ширину семи кнопок.
+- Существующая persistence открытых auxiliary panel IDs сохраняет и восстанавливает новые ID 6/7 через уже общий механизм.
+
+**Границы реализации:** добавлены только навигационные entry points и честные landing windows. Circle of Fifths music-theory model, chord/progression interaction, Harmony Assistant suggestion engine, real shared audio preview, MIDI handoff/export и CPU/RAM measurements остаются PENDING. Не заявляется, что новые инструменты уже музыкально функциональны. MELODY/PATTERN, APVTS, DSP, sampler и preset schema не изменялись.
+
+**Проверка после commit:** повторно прочитать точный SHA/файлы; запустить exact-SHA Windows x64 Release, полный CTest и pluginval strictness 5. FL Studio 20 визуальная приёмка и host/audio QA должны фиксироваться отдельно.

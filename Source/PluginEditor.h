@@ -23,6 +23,68 @@ private:
     PPGUThemeManager::Palette palette;
 };
 
+
+class PPGUFeatureLandingPanel final : public juce::Component
+{
+public:
+    PPGUFeatureLandingPanel(const juce::String& heading, const juce::String& descriptionTextValue,
+                            const PPGUThemeManager::Palette& initialPalette)
+        : titleText(heading), bodyText(descriptionTextValue), palette(initialPalette)
+    {
+        title.setText(titleText, juce::dontSendNotification);
+        title.setFont(juce::Font(22.0f, juce::Font::bold));
+        title.setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(title);
+        body.setText(bodyText, juce::dontSendNotification);
+        body.setFont(juce::Font(14.0f));
+        body.setJustificationType(juce::Justification::topLeft);
+        body.setMinimumHorizontalScale(0.85f);
+        addAndMakeVisible(body);
+        status.setText("DESIGN ENTRY POINT  /  FUNCTIONAL BACKEND PENDING",
+                       juce::dontSendNotification);
+        status.setFont(juce::Font(10.5f, juce::Font::bold));
+        status.setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(status);
+        setPalette(initialPalette);
+    }
+    void setPalette(const PPGUThemeManager::Palette& value)
+    {
+        palette = value;
+        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        body.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        status.setColour(juce::Label::textColourId, palette.token("warning"));
+        repaint();
+    }
+    void paint(juce::Graphics& g) override
+    {
+        auto area = getLocalBounds().toFloat();
+        g.setColour(palette.token("panel_elevated"));
+        g.fillRoundedRectangle(area, 10.0f);
+        g.setColour(palette.token("control_border"));
+        g.drawRoundedRectangle(area.reduced(0.5f), 10.0f, 1.0f);
+        g.setColour(palette.token("accent"));
+        g.fillRoundedRectangle(area.getX() + 18.0f, area.getY() + 16.0f, 4.0f,
+                               juce::jmax(28.0f, area.getHeight() - 32.0f), 2.0f);
+        auto card = area.reduced(18.0f, 14.0f);
+        card.removeFromLeft(18.0f);
+        g.setColour(palette.token("panel").withAlpha(0.62f));
+        g.fillRoundedRectangle(card, 8.0f);
+    }
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(34, 24);
+        title.setBounds(area.removeFromTop(42));
+        area.removeFromTop(10);
+        status.setBounds(area.removeFromBottom(28));
+        area.removeFromBottom(12);
+        body.setBounds(area);
+    }
+private:
+    juce::String titleText, bodyText;
+    PPGUThemeManager::Palette palette;
+    juce::Label title, body, status;
+};
+
 class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
@@ -55,7 +117,7 @@ private:
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
     juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
-    std::array<juce::TextButton, 5> panelButtons { juce::TextButton("FX EDIT"), juce::TextButton("AUTOCHORDS"), juce::TextButton("IMPORT"), juce::TextButton("SETTINGS"), juce::TextButton("MIDI MONITOR") };
+    std::array<juce::TextButton, 7> panelButtons { juce::TextButton("FX EDIT"), juce::TextButton("AUTOCHORDS"), juce::TextButton("IMPORT"), juce::TextButton("SETTINGS"), juce::TextButton("MIDI MONITOR"), juce::TextButton("CIRCLE OF FIFTHS"), juce::TextButton("HARMONY ASSIST") };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
@@ -89,6 +151,8 @@ private:
     std::unique_ptr<PPGUImportGuitarPanel> importGuitarPanel;
     std::unique_ptr<PPGUSettingsPanel> settingsPanel;
     std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
+    std::unique_ptr<PPGUFeatureLandingPanel> circleOfFifthsPanel;
+    std::unique_ptr<PPGUFeatureLandingPanel> harmonyAssistantPanel;
     std::unique_ptr<PPGUAuxiliaryPanelWindowManager> auxiliaryPanels;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
