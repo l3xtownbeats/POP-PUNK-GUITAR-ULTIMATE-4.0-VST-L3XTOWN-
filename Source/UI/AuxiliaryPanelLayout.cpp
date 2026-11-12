@@ -103,11 +103,37 @@ PanelLayout calculatePanelLayout(PanelRect area,
 
     if (bestColumns == 0)
     {
+        // The work area is smaller than the declared minimum panel size.
+        // Keep every open panel reachable instead of hiding all but the first.
+        // The host may show compact/abbreviated panel content at this size.
         result.overflow = true;
-        result.columns = result.rows = 1;
+        result.compact = true;
+        result.columns = static_cast<int>(std::ceil(std::sqrt(static_cast<double>(count))));
+        result.rows = count / result.columns + (count % result.columns == 0 ? 0 : 1);
+        const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (result.columns - 1);
+        const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (result.rows - 1);
+        const auto cellW = std::max<std::int64_t>(1,
+            (static_cast<std::int64_t>(area.width) - horizontalGaps) / result.columns);
+        const auto cellH = std::max<std::int64_t>(1,
+            (static_cast<std::int64_t>(area.height) - verticalGaps) / result.rows);
         result.panels.reserve(requests.size());
-        for (std::size_t i = 0; i < requests.size(); ++i)
-            result.panels.push_back({ requests[i].id, area, i == 0 });
+        for (int i = 0; i < count; ++i)
+        {
+            const int column = i % result.columns;
+            const int row = i / result.columns;
+            const auto x = static_cast<std::int64_t>(area.x)
+                         + static_cast<std::int64_t>(column) * (cellW + scaledGap);
+            const auto y = static_cast<std::int64_t>(area.y)
+                         + static_cast<std::int64_t>(row) * (cellH + scaledGap);
+            const auto width = column == result.columns - 1
+                ? static_cast<std::int64_t>(area.x) + area.width - x : cellW;
+            const auto height = row == result.rows - 1
+                ? static_cast<std::int64_t>(area.y) + area.height - y : cellH;
+            result.panels.push_back({ requests[static_cast<std::size_t>(i)].id,
+                                      { static_cast<int>(x), static_cast<int>(y),
+                                        static_cast<int>(std::max<std::int64_t>(1, width)),
+                                        static_cast<int>(std::max<std::int64_t>(1, height)) }, true });
+        }
         return result;
     }
 

@@ -1,5 +1,6 @@
 #include "PluginEditor.h"
 #include "PPGUData.h"
+#include "UI/AuxiliaryPanelLayout.h"
 
 #include <algorithm>
 #include <cmath>
@@ -68,11 +69,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setWantsKeyboardFocus(true);
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
-    setSize(1120, 840);
+    setSize(1648, 928);
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(980, 800, 1600, 1100);
+    setResizeLimits(1280, 800, 1920, 1200);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
@@ -148,6 +149,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
+    autoChordsButton.onClick = [this] { openOverlay(ppgu::ui::OverlayPanelId::AutoChords); };
+    addAndMakeVisible(autoChordsButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -208,6 +211,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
         addAndMakeVisible(b);
     }
+    for (auto& b : fxButtons)
+        b.onClick = [this] { openOverlay(ppgu::ui::OverlayPanelId::FXEdit); };
+
     ampTitle.setText("AMP & TONE", juce::dontSendNotification);
     fxTitle.setText("FX CHAIN", juce::dontSendNotification);
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
@@ -223,6 +229,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     uiProperties.setStorageParameters(options);
     loadSavedSkin();
     applyPalette();
+    restoreOverlayState();
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
@@ -262,44 +269,196 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
- const auto& p=themeManager.getPalette();g.fillAll(p.canvas);g.setColour(p.canvasInset.withAlpha(.35f));
- for(int x=16;x<getWidth();x+=32)g.drawVerticalLine(x,0,(float)getHeight());
- for(int y=16;y<getHeight();y+=32)g.drawHorizontalLine(y,0,(float)getWidth());
- g.setGradientFill(juce::ColourGradient(p.canvasInset,0,0,p.canvas,0,74,false));g.fillRect(0,0,getWidth(),76);g.setColour(p.accent);g.fillRect(0,0,getWidth(),3);
- auto hero=getLocalBounds().reduced(18);hero.removeFromTop(66);hero.setHeight(184);
- g.setGradientFill(juce::ColourGradient(p.surfaceRaised.brighter(.08f),(float)hero.getX(),(float)hero.getY(),p.canvasInset,(float)hero.getRight(),(float)hero.getBottom(),false));
- g.fillRoundedRectangle(hero.toFloat(),13);g.setColour(p.border);g.drawRoundedRectangle(hero.toFloat().reduced(.5f),13,1);
- auto t=hero.reduced(28,17);g.setColour(p.accentSecondary);g.setFont(juce::Font(9.5f,juce::Font::bold));g.drawText("L3XTOWN AUDIO LAB  /  SIGNATURE INSTRUMENT",t.removeFromTop(18),juce::Justification::left);
- g.setColour(p.text);g.setFont(juce::Font(33,juce::Font::bold));g.drawText("POP PUNK GUITAR",t.removeFromTop(43),juce::Justification::left);
- g.setColour(p.accent);g.setFont(juce::Font(39,juce::Font::bold));g.drawText("ULTIMATE",t.removeFromTop(45),juce::Justification::left);
- g.setColour(p.textSecondary);g.setFont(juce::Font(10.5f));g.drawText("RIFFS  /  HOOKS  /  POWER CHORDS  /  MELODY",t.removeFromTop(17),juce::Justification::left);
- auto gr=hero.removeFromRight((int)(hero.getWidth()*.39f)).reduced(24,12);float x=(float)gr.getX(),y=(float)gr.getY(),w=(float)gr.getWidth(),h=(float)gr.getHeight();
- juce::Path neck;neck.addQuadrilateral(x+w*.56f,y+h*.43f,x+w*.96f,y+h*.05f,x+w*.99f,y+h*.17f,x+w*.65f,y+h*.57f);
- g.setGradientFill(juce::ColourGradient(juce::Colour(0xff8e9299),x+w*.5f,y,juce::Colour(0xff292d35),x+w,y+h,false));g.fillPath(neck);
- juce::Path body;body.startNewSubPath(x+w*.48f,y+h*.48f);body.cubicTo(x+w*.28f,y+h*.24f,x+w*.12f,y+h*.44f,x+w*.27f,y+h*.67f);body.cubicTo(x+w*.37f,y+h*.86f,x+w*.61f,y+h*.83f,x+w*.70f,y+h*.62f);body.cubicTo(x+w*.83f,y+h*.58f,x+w*.84f,y+h*.40f,x+w*.68f,y+h*.39f);body.closeSubPath();
- g.setGradientFill(juce::ColourGradient(juce::Colour(0xffc5c8ce),x+w*.2f,y+h*.3f,juce::Colour(0xff353a43),x+w*.8f,y+h*.8f,false));g.fillPath(body);g.setColour(p.border);g.strokePath(body,juce::PathStrokeType(1.2f));
- g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
- for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
- g.setColour(p.accent);g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
- auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(92);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
- auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
-}
+    const auto& p = themeManager.getPalette();
+    const auto bounds = getLocalBounds();
+    g.fillAll(p.canvas.darker(0.18f));
 
+    // Brushed-metal outer chassis and inset bezel.
+    g.setGradientFill(juce::ColourGradient(p.surfaceRaised.brighter(0.18f), 0.0f, 0.0f,
+                                           p.canvas.darker(0.65f), 0.0f, (float)getHeight(), false));
+    g.fillRoundedRectangle(bounds.toFloat().reduced(2.0f), 13.0f);
+    g.setColour(p.border.withAlpha(0.95f));
+    g.drawRoundedRectangle(bounds.toFloat().reduced(2.5f), 13.0f, 1.5f);
+    g.setColour(p.accent.withAlpha(0.9f));
+    g.fillRect(5, 5, getWidth() - 10, 2);
+
+    // Top navigation strip.
+    auto top = juce::Rectangle<int>(8, 8, getWidth() - 16, 88);
+    g.setGradientFill(juce::ColourGradient(p.surfaceRaised, 0.0f, (float)top.getY(),
+                                           p.canvasInset, 0.0f, (float)top.getBottom(), false));
+    g.fillRoundedRectangle(top.toFloat(), 10.0f);
+    g.setColour(p.border);
+    g.drawRoundedRectangle(top.toFloat(), 10.0f, 1.0f);
+    g.setColour(p.accent);
+    g.fillRoundedRectangle(18.0f, 87.0f, (float)getWidth() - 36.0f, 2.0f, 1.0f);
+
+    // Left preset browser and right amp stack.
+    const int left = 16, topY = 108, bottom = getHeight() - 154;
+    const int leftW = juce::jlimit(250, 330, getWidth() / 5);
+    const int rightW = juce::jlimit(230, 300, getWidth() / 6);
+    auto browser = juce::Rectangle<float>((float)left, (float)topY, (float)leftW, (float)(bottom - topY));
+    auto amp = juce::Rectangle<float>((float)(getWidth() - rightW - 16), (float)(topY + 270),
+                                      (float)rightW, (float)(bottom - topY - 270));
+    for (const auto& panelBounds : { browser, amp })
+    {
+        g.setGradientFill(juce::ColourGradient(p.surfaceRaised, panelBounds.getX(), panelBounds.getY(),
+                                               p.surface.darker(0.25f), panelBounds.getX(), panelBounds.getBottom(), false));
+        g.fillRoundedRectangle(panelBounds, 12.0f);
+        g.setColour(p.border.withAlpha(0.9f));
+        g.drawRoundedRectangle(panelBounds, 12.0f, 1.0f);
+    }
+
+    // Hero guitar banner: vector artwork placeholder preserves the approved composition
+    // until the supplied production artwork is installed as a real skin asset.
+    const float centreX = (float)(left + leftW + 12);
+    const float centreW = (float)(getWidth() - leftW - rightW - 56);
+    auto hero = juce::Rectangle<float>(centreX, (float)topY, centreW, 260.0f);
+    g.setGradientFill(juce::ColourGradient(p.canvasInset, hero.getX(), hero.getY(),
+                                           p.surface, hero.getRight(), hero.getBottom(), false));
+    g.fillRoundedRectangle(hero, 12.0f);
+    g.setColour(p.border);
+    g.drawRoundedRectangle(hero, 12.0f, 1.0f);
+    // Electric-punk paint splashes.
+    juce::Random rng(0x50504755);
+    for (int i = 0; i < 110; ++i)
+    {
+        const float x = hero.getX() + rng.nextFloat() * hero.getWidth();
+        const float y = hero.getY() + rng.nextFloat() * hero.getHeight();
+        const float radius = 1.5f + rng.nextFloat() * 7.0f;
+        g.setColour((i % 2 == 0 ? p.accent : p.accentSecondary).withAlpha(0.08f + rng.nextFloat() * 0.22f));
+        g.fillEllipse(x, y, radius * 1.8f, radius);
+    }
+    // Stylised electric guitar across the banner.
+    juce::Path neck;
+    neck.addQuadrilateral(hero.getX() + hero.getWidth() * 0.34f, hero.getY() + hero.getHeight() * 0.49f,
+                          hero.getX() + hero.getWidth() * 0.97f, hero.getY() + hero.getHeight() * 0.13f,
+                          hero.getX() + hero.getWidth() * 0.98f, hero.getY() + hero.getHeight() * 0.25f,
+                          hero.getX() + hero.getWidth() * 0.38f, hero.getY() + hero.getHeight() * 0.61f);
+    g.setGradientFill(juce::ColourGradient(juce::Colour(0xffd7dce4), hero.getX(), hero.getY(),
+                                           juce::Colour(0xff303844), hero.getRight(), hero.getBottom(), false));
+    g.fillPath(neck);
+    juce::Path body;
+    const float bx = hero.getX() + hero.getWidth() * 0.28f;
+    const float by = hero.getY() + hero.getHeight() * 0.42f;
+    body.startNewSubPath(bx + 50.0f, by + 10.0f);
+    body.cubicTo(bx - 5.0f, by - 35.0f, bx - 38.0f, by + 35.0f, bx + 12.0f, by + 83.0f);
+    body.cubicTo(bx + 62.0f, by + 122.0f, bx + 133.0f, by + 91.0f, bx + 125.0f, by + 38.0f);
+    body.cubicTo(bx + 190.0f, by + 8.0f, bx + 143.0f, by - 37.0f, bx + 82.0f, by - 5.0f);
+    body.closeSubPath();
+    g.setGradientFill(juce::ColourGradient(juce::Colour(0xffdce3ed), bx, by,
+                                           juce::Colour(0xff202631), bx + 150.0f, by + 110.0f, false));
+    g.fillPath(body);
+    g.setColour(p.border);
+    g.strokePath(body, juce::PathStrokeType(1.4f));
+    for (int i = 0; i < 6; ++i)
+    {
+        const float offset = (float)i * 2.1f;
+        g.setColour(juce::Colours::white.withAlpha(0.78f));
+        g.drawLine(hero.getX() + hero.getWidth() * 0.36f + offset, hero.getY() + hero.getHeight() * 0.54f,
+                   hero.getRight() - 18.0f + offset * 0.15f, hero.getY() + 44.0f + offset, 0.8f);
+    }
+    g.setColour(p.text.withAlpha(0.92f));
+    g.setFont(juce::Font(juce::jmin(62.0f, hero.getWidth() * 0.075f), juce::Font::bold));
+    g.drawText("PPGU", hero.toNearestInt().removeFromRight((int)(hero.getWidth() * 0.39f)).withTrimmedTop(42),
+               juce::Justification::centred, false);
+    g.setColour(p.accent);
+    g.setFont(juce::Font(13.0f, juce::Font::bold));
+    g.drawText("POP PUNK GUITAR ULTIMATE", hero.toNearestInt().reduced(20).removeFromBottom(26),
+               juce::Justification::left, false);
+
+    // Amp illustration in the right-hand strip.
+    auto ampFace = amp.reduced(18.0f).withHeight(amp.getHeight() * 0.40f);
+    g.setColour(p.canvas.darker(0.6f));
+    g.fillRoundedRectangle(ampFace, 7.0f);
+    g.setColour(p.border);
+    g.drawRoundedRectangle(ampFace, 7.0f, 1.0f);
+    auto grille = ampFace.reduced(9.0f, 10.0f);
+    g.setColour(p.textSecondary.withAlpha(0.18f));
+    for (int x = 0; x < 15; ++x)
+        g.drawVerticalLine((int)(grille.getX() + x * grille.getWidth() / 15.0f), grille.getY(), grille.getBottom());
+    g.setColour(p.accent.withAlpha(0.65f));
+    g.drawRoundedRectangle(ampFace.reduced(3.0f), 5.0f, 1.0f);
+
+    // Bottom performance deck and keyboard bezel.
+    auto deck = juce::Rectangle<float>(8.0f, (float)getHeight() - 144.0f, (float)getWidth() - 16.0f, 128.0f);
+    g.setGradientFill(juce::ColourGradient(p.surfaceRaised, deck.getX(), deck.getY(),
+                                           p.canvasInset, deck.getX(), deck.getBottom(), false));
+    g.fillRoundedRectangle(deck, 10.0f);
+    g.setColour(p.border);
+    g.drawRoundedRectangle(deck, 10.0f, 1.0f);
+}
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
- auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
- presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
- skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
- a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
- a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
- int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
- ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
- int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
- for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
- auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
-}
+    const auto area = getLocalBounds();
+    auto header = area.reduced(18, 12).removeFromTop(72);
+    titleLabel.setBounds(header.removeFromLeft(190).removeFromTop(38));
+    subtitleLabel.setBounds(28, 68, 190, 16);
+    // Preset browser controls live only in the left browser column.
+    // Do not assign them here: a second setBounds() later in this method
+    // used to overwrite these header bounds and made the header layout misleading.
+    header.removeFromLeft(12);
+    skinButton.setBounds(header.removeFromRight(116).reduced(2, 9));
+    loadButton.setBounds(header.removeFromRight(132).reduced(2, 9));
+    autoChordsButton.setBounds(header.removeFromRight(126).reduced(2, 9));
 
+    const int leftW = juce::jlimit(250, 330, getWidth() / 5);
+    const int rightW = juce::jlimit(230, 300, getWidth() / 6);
+    const int topY = 108;
+    const int bottomY = getHeight() - 154;
+    auto left = juce::Rectangle<int>(16, topY, leftW, bottomY - topY);
+    auto centre = juce::Rectangle<int>(left.getRight() + 12, topY,
+                                       getWidth() - leftW - rightW - 56, bottomY - topY);
+    auto right = juce::Rectangle<int>(getWidth() - rightW - 16, topY + 270,
+                                      rightW, bottomY - topY - 270);
+
+    // Browser column.
+    presetSearch.setBounds(left.removeFromTop(38).reduced(10, 2));
+    categoryBox.setBounds(left.removeFromTop(38).reduced(10, 2));
+    presetBox.setBounds(left.removeFromTop(54).reduced(10, 3));
+    statusLabel.setBounds(left.removeFromBottom(46).reduced(10, 3));
+
+    // Main instrument surface: mode selector, amp controls, FX strip and transport.
+    auto modeRow = centre.removeFromTop(64).reduced(8, 3);
+    melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(3));
+    patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(3));
+    modeBox.setBounds(modeRow.removeFromRight(130).reduced(3, 8));
+    centre.removeFromTop(12);
+    auto ampRow = centre.removeFromTop(174).reduced(10, 4);
+    const int knobW = juce::jmax(1, ampRow.getWidth() / 5);
+    for (size_t i = 4; i < knobs.size(); ++i)
+    {
+        auto cell = ampRow.removeFromLeft(knobW);
+        knobLabels[i].setBounds(cell.removeFromBottom(24));
+        knobs[i].setBounds(cell.reduced(4, 3));
+    }
+    auto fxRow = centre.removeFromBottom(104).reduced(8, 5);
+    fxTitle.setBounds(fxRow.removeFromTop(22));
+    const int fxW = juce::jmax(1, fxRow.getWidth() / (int)fxButtons.size());
+    for (size_t i = 0; i < fxButtons.size(); ++i)
+    {
+        auto cell = fxRow.removeFromLeft(fxW);
+        fxButtons[i].setBounds(cell.reduced(3, 5));
+    }
+    auto transport = centre.removeFromBottom(48).reduced(10, 3);
+    playbackTitle.setBounds(transport);
+
+    // Amp & tone strip: four retained APVTS controls.
+    ampTitle.setBounds(right.removeFromTop(34).reduced(10, 2));
+    right.removeFromTop(112); // cabinet/grille visual
+    const int toneW = juce::jmax(1, right.getWidth() / 4);
+    for (size_t i = 0; i < 4; ++i)
+    {
+        auto cell = right.removeFromLeft(toneW);
+        knobLabels[i].setBounds(cell.removeFromBottom(24));
+        knobs[i].setBounds(cell.reduced(2, 3));
+    }
+
+    // The on-screen MIDI keyboard is a fixed, full-width lower deck.
+    auto keyboardBounds = area.reduced(20, 0).withY(getHeight() - 132).withHeight(104);
+    if (keyboard)
+        keyboard->setBounds(keyboardBounds.reduced(2, 2));
+    layoutOverlays();
+}
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
 {
 #if JUCE_WINDOWS
@@ -535,4 +694,103 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
             else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
         });
     });
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::openOverlay(ppgu::ui::OverlayPanelId id)
+{
+    const auto index = id == ppgu::ui::OverlayPanelId::AutoChords ? 0u : 1u;
+    if (!overlayPanels[index])
+    {
+        overlayPanels[index] = std::make_unique<ppgu::ui::OverlayPanel>(
+            id, processor, [this, index] {
+                persistOverlayState(index, false);
+                if (overlayPanels[index])
+                {
+                    removeChildComponent(overlayPanels[index].get());
+                    overlayPanels[index].reset();
+                    layoutOverlays();
+                }
+            }, [this, index](bool compact) {
+                if (restoringOverlayState) return;
+                if (auto* settings = uiProperties.getUserSettings())
+                {
+                    settings->setValue("overlay." + juce::String(index) + ".compact", compact);
+                    settings->saveIfNeeded();
+                }
+            });
+        addAndMakeVisible(*overlayPanels[index]);
+    }
+    overlayPanels[index]->toFront(false);
+    if (!restoringOverlayState) persistOverlayState(index, true);
+    layoutOverlays();
+}
+void PopPunkGuitarUltimateAudioProcessorEditor::layoutOverlays()
+{
+    std::vector<ppgu::ui::PanelRequest> requests;
+    for (size_t i = 0; i < overlayPanels.size(); ++i)
+        if (overlayPanels[i])
+            requests.push_back({ static_cast<int>(i + 1), { 620, 440 }, { 300, 210 } });
+    if (requests.empty()) return;
+    const auto work = getLocalBounds().reduced(28, 112).withTrimmedBottom(132);
+    const auto scale = 1.0f; // DPI-aware metrics are introduced in O2.
+    const auto result = ppgu::ui::calculatePanelLayout(
+        { work.getX(), work.getY(), work.getWidth(), work.getHeight() }, requests, scale, 12);
+    for (const auto& placement : result.panels)
+    {
+        const auto index = static_cast<size_t>(placement.id - 1);
+        if (index < overlayPanels.size() && overlayPanels[index])
+        {
+            overlayPanels[index]->setBounds(placement.bounds.x, placement.bounds.y,
+                                            placement.bounds.width, placement.bounds.height);
+            if (result.compact || result.overflow)
+                overlayPanels[index]->setCompact(true);
+            persistOverlayState(index, true);
+        }
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::persistOverlayState(size_t index, bool open)
+{
+    if (index >= overlayPanels.size() || restoringOverlayState) return;
+    if (auto* settings = uiProperties.getUserSettings())
+    {
+        const auto prefix = "overlay." + juce::String(static_cast<int>(index)) + ".";
+        settings->setValue(prefix + "open", open);
+        if (overlayPanels[index])
+        {
+            const auto bounds = overlayPanels[index]->getBounds();
+            settings->setValue(prefix + "x", bounds.getX());
+            settings->setValue(prefix + "y", bounds.getY());
+            settings->setValue(prefix + "width", bounds.getWidth());
+            settings->setValue(prefix + "height", bounds.getHeight());
+            settings->setValue(prefix + "compact", overlayPanels[index]->isCompact());
+        }
+        settings->saveIfNeeded();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::restoreOverlayState()
+{
+    auto* settings = uiProperties.getUserSettings();
+    if (settings == nullptr) return;
+    restoringOverlayState = true;
+    for (size_t index = 0; index < overlayPanels.size(); ++index)
+    {
+        const auto prefix = "overlay." + juce::String(static_cast<int>(index)) + ".";
+        if (settings->getBoolValue(prefix + "open", false))
+            openOverlay(index == 0 ? ppgu::ui::OverlayPanelId::AutoChords
+                                   : ppgu::ui::OverlayPanelId::FXEdit);
+        if (overlayPanels[index])
+        {
+            overlayPanels[index]->setCompact(settings->getBoolValue(prefix + "compact", false));
+            const auto x = settings->getIntValue(prefix + "x", -1);
+            const auto y = settings->getIntValue(prefix + "y", -1);
+            const auto w = settings->getIntValue(prefix + "width", 0);
+            const auto h = settings->getIntValue(prefix + "height", 0);
+            if (w >= 300 && h >= 180)
+                overlayPanels[index]->setBounds(juce::Rectangle<int>(x, y, w, h)
+                    .constrainedWithin(getLocalBounds().reduced(12)));
+        }
+    }
+    restoringOverlayState = false;
 }

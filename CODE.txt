@@ -1,0 +1,29 @@
+undefined
+
+## 2026-11-12 — DREAMING IN NEON master overlay contract
+
+- Added `docs/PPGU_NEON_SKIN_MASTER_PROMPT_RU.md` as the binding record for the three approved visual references and explicit UI decisions.
+- Panel model: in-plugin overlays; X/restore-maximize square/ON affordances as applicable; detached panels deferred to N5.
+- N1 knobs use actual APVTS labels (variant A); no new APVTS parameters until separate N6 ticket.
+- FX EDIT parameter controls and GR stay disabled until real parameter/measurement paths exist; AutoChords Preview stays disabled until real audio/MIDI integration.
+- Licensed/CPU/BPM indicators must use truthful sources only.
+- Documentation-only commit; production source unchanged; no build, CTest, pluginval or DAW pass claimed.
+
+## 2026-11-12 — O1 overlay shell
+
+- Added `Source/UI/OverlayPanel.h/.cpp`: in-editor AutoChords and FX EDIT panels, close/compact controls, truthful disabled Preview, real APVTS attachments for seven FX bypass booleans.
+- Added AUTOCHORDS opener and FX-module click-to-open routing in PluginEditor; positions panels using AuxiliaryPanelLayout.
+- Added OverlayPanel source/header to CMake target.
+- UI shell only: no DSP/MIDI/APVTS ID changes. Bounds/open-state persistence, paging/focus manager and complete AutoChords engine remain deferred to O2/O3.
+- Validation not run; no build/CTest/pluginval/DAW pass claimed.
+
+
+## 2026-11-12 — O2 overlay lifecycle persistence
+
+- Extended OverlayPanel callbacks for compact-state persistence and added click-to-front focus behavior.
+- PluginEditor persists per-panel open/compact state and last bounds in the existing PPGU UI PropertiesFile; restores open panels when the editor is recreated.
+- Close removes only the UI component after persisting state; APVTS/audio state remains owned by the processor.
+- Kept the two-panel AuxiliaryPanelLayout as the current supported registry; arbitrary panel paging and verified DPI scaling are not claimed.
+- Fixed the literal escaped newline in the AutoChords key-name initializer.
+- No DSP, audio callback, MIDI routing, APVTS IDs, presets or SoundBank changes.
+- Validation pending on the resulting commit SHA.
