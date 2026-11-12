@@ -1025,3 +1025,12 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Объём:** только визуальная инициализация; DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, ThemeManager decoder, skin schema/registry, CMake pins и packaging rules не менялись.
 **CI note:** runs #1172–#1176 были отменены последовательными push commits; ни один из них не подтверждает эту итоговую серию. Нужен новый run на финальном tree SHA после этой записи. Run #1168 SUCCESS относится к более раннему source SHA и не переносится.
 **S2:** source/build/CTest/pluginval/package PASS на SHA 38b57b854dc559e5dd7c408b96c6a7821eebbd58; host UI acceptance всё ещё NOT VERIFIED. До полного S2 host acceptance не заявлять этап закрытым.
+
+
+### REV18 CI orchestration + cross-panel palette audit (2026-11-12)
+
+**Current source commit under validation:** `e90e7be79a717c74fc94ec634a31f8c7669fb850`. **Run #1177 / ID `43235287270`: IN_PROGRESS** (last checked: artwork generation step; configure/build/CTest/pluginval/package not yet reached). Current main HEAD at time of this note: `c9772b2f9c29cd9304b4825605080736edf4a8d1` (Info-only commit after source SHA).
+**CI history:** runs #1172–#1176 were cancelled/superseded during consecutive source/documentation commits; no PASS is claimed for those SHAs. Run #1177 is the active exact-source validation; its result must be recorded after completion. A prior successful run #1168 applies only to `38b57b854dc559e5dd7c408b96c6a7821eebbd58`.
+**Cross-panel visual audit:** inspected all 9 `Source/UI/*.cpp` implementation files. No hardcoded HEX color literals or named JUCE basic-color constants were found in the UI panel implementations; matches in the audit were canonical Palette field names, not literals. `ThemeManager.cpp` validates and decodes all 21 canonical Skin Studio tokens (lines 278–298), and `PluginEditor::applyPalette()` propagates the active palette to FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PERFORMANCE and AuxiliaryPanelWindowManager.
+**S2 runtime caveat retained:** PerformanceDisplay is a read-only keyboard-state monitor; BPM/bar position intentionally remain unavailable until a real-time-safe transport snapshot exists. Interactive FL Studio 20 acceptance remains NOT VERIFIED.
+**S3 status:** source cleanup committed; full S3 remains OPEN pending exact-SHA CI and remaining residual visual audit. No DSP/APVTS/MIDI/sampler/preset/SoundBank changes in this audit.
