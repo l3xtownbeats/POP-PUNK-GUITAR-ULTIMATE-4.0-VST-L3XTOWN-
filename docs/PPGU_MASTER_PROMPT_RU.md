@@ -1138,3 +1138,46 @@ The following names/settings are **design references**, not a claim that 50 prod
 - Avoid implying endorsement or official artist presets; use “artist-inspired / song-tone reference” naming and appropriate trademark/legal review.
 
 **User-provided reference source note:** the supplied gear/settings document cites Guitar Chalk, Rock Guitar Universe, Ultimate Guitar forum, UberProAudio, Equipboard, MusicRadar, Premier Guitar, Guitar World, Kuassa and GuitarToneAdapt. These claims have not been independently fact-checked in this specification pass; treat numerical settings and gear details as provisional until source-by-source verification. The user-provided reference is the design input, not proof of exact studio settings.
+
+
+## 7.5.12 ARTIST / SONG TONE REFERENCE MAP
+
+**Назначение:** использовать предоставленный пользователем справочник групп, песен, гитар, датчиков, усилителей, кабинетов, педалей и ориентировочных настроек как практическую карту для быстрого создания и настройки artist-inspired / song-tone presets из уже утверждённого каталога PPGU. Это не требование дословно копировать неизвестные студийные цепочки и не подтверждение точности каждой исторической детали.
+
+### A. Быстрый preset workflow
+1. Выбрать исходный инструмент/библиотеку и тип датчика/профиль (если metadata достоверна): bridge humbucker, P-90, single-coil, acoustic и т. п. Не менять физический источник, если соответствующей модели/варианта реально нет.
+2. Выбрать базовую amp family и характер кабинета из реально доступных ANGELA ENGINE modules/assets: Rectifier-style, JCM800/JCM900/Marshall-style, British Plexi, Vox AC30-style, Fender clean/Twin-style, Orange-style и другие подтверждённые варианты. Название бренда/модели применять только при корректной лицензии/основании; иначе использовать style/inspired naming.
+3. Применить песенный/групповой стартовый профиль: Gain/Bass/Mid/Treble/Presence, затем cabinet/IR и только необходимые педали/FX. Все значения 0–10 из пользовательского справочника — стартовые ориентиры для слуховой доводки, не точные универсальные значения физических усилителей и не доказанные artist settings.
+4. Выбрать музыкальную роль: rhythm, palm-muted rhythm, open chords, lead, clean verse, ambient layer. Настройки должны учитывать артикуляцию, velocity, tuning и динамику исполнения; не пытаться получить плотность одним увеличением Gain.
+5. Для «стены» звука поддержать две или более независимые партии/слоя с разными amp/cab/mic voicings и панорамой. Не выдавать простое удвоение одного и того же моно-сигнала за double tracking; если пользователь играет одну MIDI-партию, различия слоёв должны быть осознанно синтезированы и не создавать фазовых проблем.
+6. Сохранить исходный preset и создавать отдельные производные User Presets; A/B с RAW и level-matched сравнение обязательны.
+
+### B. Tone families / быстрые стартовые карты
+- **Blink-182 / Tom DeLonge (классическая эпоха):** основной плотный Rectifier-style rhythm; ориентир 7/5/6/6/5–6 (Gain/Bass/Mid/Treble/Presence), сухой tight cab; альтернативный более мягкий British crunch через JCM900-style clean-channel breakup. Песенные профили Dammit, What's My Age Again?, All the Small Things, The Rock Show, First Date, Stay Together for the Kids, Feeling This и Down — отдельные вариации, а не один неизменный preset. Clean verse / I Miss You — отдельная clean-цепочка.
+- **Angels & Airwaves:** Vox AC30-style chime/crunch или Fender-style clean base; пространственная часть — dotted-eighth delay, stereo delay, reverb и умеренная modulation только для нужной роли. Ambient effects не должны размывать атаку и читаемость.
+- **Sum 41:** агрессивный, но читаемый Rectifier + JCM800-style layered rhythm; ориентир Still Waiting 7/6/5.5/6.5/6; Fat Lip — более высокий gain 8/6.5/5/6.5/6; In Too Deep имеет отдельные clean и driven варианты. Не вырезать середину и не добавлять boost без необходимости.
+- **New Found Glory:** Dual Rectifier-style + V30-inspired 4×12, ориентир My Friends Over You 7/5/6/7/6; gate должен сохранять хвост palm mute и release.
+- **Simple Plan:** Rectifier-style rhythm 7/5/6/6/6; отдельные варианты Perfect, Addicted, I'm Just a Kid; clean/bright parts — Vox-style + умеренный boost, если это поддержано реальной цепочкой.
+- **Green Day:** British Plexi/JCM family, mid-forward amp breakup; Dookie/Basket Case около 6/6/6/5/5; Longview/When I Come Around — более открытый crunch; American Idiot/Holiday — отдельные более плотные варианты; Good Riddance/21 Guns — clean/acoustic-friendly routes, не high-gain.
+- **The Offspring:** Marshall/JCM-style driven rhythm, отдельный Mesa Mark-style более плотный характер; ориентиры Self Esteem / The Kids Aren't Alright 7/6/6/7/6, Come Out and Play 6/6/6/6/5. TS-style mid boost — опционально и только если полезен.
+- **Fall Out Boy:** Orange-style aggressive mid-forward tone; Sugar, We're Goin Down около 7/5/7/6/5; Thnks fr th Mmrs чуть темнее. Не превращать этот тон в scooped metal.
+- **Дополнительный каталог из пользовательской таблицы:** NOFX, Rancid, AFI, Alkaline Trio, Paramore, Yellowcard, Jimmy Eat World, Taking Back Sunday, Brand New, Good Charlotte, Bowling for Soup, Papa Roach, All-American Rejects, Pennywise, Rise Against и другие уже утверждённые группы. Для них создавать отдельные tone families/song variations по существующим требованиям проекта; не исключать Simple Plan, Sum 41, Good Charlotte или New Found Glory.
+
+### C. Cab / mic / production guide
+Использовать доступные и лицензированные IR/модели кабинетов: Rectifier 4×12 / V30-style, Marshall 1960A/1960AV-style (точный speaker metadata обязателен), Orange PPC412/V30-style, EVH 5150-style, Peavey 6505-style. Возможные mic voicings: SM57-style для атаки, MD421-style для тела, ribbon/R-121-style для смягчения верха. Это варианты микрофонной перспективы, не обещание включённой multi-mic IR library. Если доступны два IR — проверять phase/time alignment, mono fold-down, polarity и уровень каждого слоя. Не называть style IR официальным фирменным capture.
+
+### D. Musical / mix rules
+- Pop-punk gain обычно умеренный относительно metal; mids сохраняются, low end tight, palm mute быстрый и собранный.
+- Double/triple tracking — независимые исполнения/слои с контролем фазы; одна копия одного sample не создаёт настоящую ширину.
+- Eb tuning и другие строи должны поддерживаться корректной настройкой/транспозицией источника, если sample mapping это позволяет; нельзя обещать естественный результат за пределами source range.
+- Gate, compression, boost, delay, modulation и reverb — по роли и по слуху, не обязательная цепочка для каждого пресета.
+- Чистые куплеты, открытые аккорды, palm-muted куплеты, chorus rhythm и ambient layers должны быть отдельными musical variations, когда различие реально слышно.
+
+### E. Integrity / quality gates
+- Preset names: использовать формулировки «Artist-inspired» / «Song-tone reference», не подразумевать endorsement или официальный preset группы. Товарные знаки/названия — только в пределах допустимого legal review.
+- Числа и gear details из пользовательского справочника — ориентиры. Источники перечислены пользователем, но в рамках этой записи не проверены постранично; не выдавать настройки за точные исторические настройки артиста.
+- Tone family становится PLAYABLE только при наличии подходящего source и реально работающего amp/cab/FX route либо достоверного baked-in tone. Отсутствие блока/ресурса не допускает silent RAW fallback.
+- MIX-READY / LISTENING-APPROVED — только после level-matched audition в solo/full mix, power chords, single notes, palm mute/open chords, velocity, mono, noise, transient, sustain, headroom и CPU checks.
+- Если текущие исходники/DSP не способны дать нужный характер, пометить PENDING/NEEDS REVIEW. Не клонировать десятки пресетов, меняя только названия и пару чисел.
+
+**Связь с существующим scope:** этот раздел operationalizes §7.5.6 (tone reference), §7.5.7 (electric/clean/acoustic), §7.5.10 (preset sound truth) и §7.5.11 (commercial guitar realism). Не расширяет APVTS IDs/control inventory и не подтверждает реализацию новых моделей усилителей, IR, double-tracking engine или factory presets.
