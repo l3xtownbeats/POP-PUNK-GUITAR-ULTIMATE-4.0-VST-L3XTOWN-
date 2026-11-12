@@ -1081,3 +1081,17 @@ Added `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md` with 20 direct source
 Clearance tiers are explicit: CC0/public-domain and individually certified CC0 are priority; CC-BY requires attribution and redistribution review; packs with vague "royalty-free/free for music" wording remain YELLOW; commercial/subscription assets without explicit embedding rights are excluded. Drum-only, bass, vocals and full mixes are not guitar-bank assets.
 
 This is a source discovery index only. It does not claim that the listed archives have been downloaded, hashed, auditioned, imported or made playable. Actual ingestion must pass the Sound Hunter checks and be recorded in the asset registry.
+
+
+## 2026-11-12 — PATTERN guitar / tone / articulation workflow clarification
+
+Approved user clarification: PATTERN workflow is separated into three independent choices:
+1. Guitar/instrument source (electric/acoustic and available recorded instrument profile).
+2. Tone preset (e.g. Pop Punk Lead, Punk Rock Rhythm, Clean/Crunch/Drive, Flanger or Tremolo tone); tone and FX do not replace performance changes.
+3. Performance articulation/variation (open strum, lead/octave hook, palm mute/tight, muted bridge, sustain/ambient, tremolo picking, arpeggio, stop-start/syncopated, downstroke, alternate down-up), limited to articulations backed by real recordings.
+
+User's primary functionality references: Native Instruments Session Guitarist Electric Sunburst Deluxe and Vintage; Neon is an additional reference. Tom DeLonge's Blink-182 / Angels & Airwaves performance vocabulary is an inspiration target for original patterns (driving downstrokes, power chords, octave hooks, palm-muted verses, open chorus lift and sustained/ambient lead textures), not permission to copy recordings, riffs or proprietary presets.
+
+PATTERN variations must be switchable during playback with host sync and clean transitions. Optional compatible layering may be an advanced feature; it must not be the default behavior and must respect CPU/polyphony limits. Tone effects (flanger, tremolo effect, delay, reverb, distortion) are distinct from playing techniques (tremolo picking, palm mute, strumming, etc.). Every displayed articulation requires a matching recorded performance/one-shot/loop map and runtime verification; unavailable articulations must be marked unavailable rather than simulated with synthetic guitar.
+
+Specification updated in `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.7. This is an approved product requirement, not evidence that the runtime UI, sample maps or playback engine already implement it.
