@@ -30,7 +30,7 @@ juce::String fromWidePath(const wchar_t* value, int length)
 class PPGUImportGuitarPanel final : public juce::Component
 {
 public:
-    explicit PPGUImportGuitarPanel(std::function<void(juce::Label*)> loadActionIn)
+    explicit PPGUImportGuitarPanel(std::function<void(juce::Label*, juce::Button*)> loadActionIn)
         : loadAction(std::move(loadActionIn))
     {
         heading.setText("LICENSED GUITAR LIBRARY", juce::dontSendNotification);
@@ -48,7 +48,7 @@ public:
         status.setColour(juce::Label::textColourId, juce::Colour(0xffd7ffb2));
         addAndMakeVisible(status);
         loadButton.setButtonText("LOAD SFZ");
-        loadButton.onClick = [this] { if (loadAction) loadAction(&status); };
+        loadButton.onClick = [this] { if (loadAction) loadAction(&status, &loadButton); };
         addAndMakeVisible(loadButton);
     }
     void resized() override
@@ -63,7 +63,7 @@ public:
         status.setBounds(area.removeFromTop(90));
     }
 private:
-    std::function<void(juce::Label*)> loadAction;
+    std::function<void(juce::Label*, juce::Button*)> loadAction;
     juce::Label heading, description, status;
     juce::TextButton loadButton;
 };
@@ -578,10 +578,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openImportGuitarPanel()
         spec.desired = { 560, 360 };
         spec.minimum = { 300, 220 };
         spec.content = std::make_unique<PPGUImportGuitarPanel>(
-            [safeThis](juce::Label* targetStatus)
+            [safeThis](juce::Label* targetStatus, juce::Button* targetButton)
             {
                 if (safeThis != nullptr)
-                    safeThis->chooseSfzFile(targetStatus);
+                    safeThis->chooseSfzFile(targetStatus, targetButton);
             });
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
@@ -591,22 +591,27 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openImportGuitarPanel()
     resized();
 }
 
-void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile(juce::Label* panelStatus)
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile(juce::Label* panelStatus, juce::Button* panelLoadButton)
 {
     fileChooser=std::make_unique<juce::FileChooser>("Choose an SFZ guitar instrument",juce::File::getSpecialLocation(juce::File::userHomeDirectory),"*.sfz");
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
     juce::Component::SafePointer<juce::Label> safePanelStatus(panelStatus);
+    juce::Component::SafePointer<juce::Button> safePanelLoadButton(panelLoadButton);
     fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis](const juce::FileChooser& chooser){
         if(safeThis==nullptr) return; const auto selected=chooser.getResult(); if(selected==juce::File{}) return;
         safeThis->loadButton.setEnabled(false);
+        if (safePanelLoadButton != nullptr)
+            safePanelLoadButton->setEnabled(false);
         safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...", juce::dontSendNotification);
         if (safePanelStatus != nullptr)
             safePanelStatus->setText("Loading SFZ in background...", juce::dontSendNotification);
-        safeThis->processor.loadSfzFileAsync(selected, [safeThis, safePanelStatus](ppgu::sampler::LoadReport report)
+        safeThis->processor.loadSfzFileAsync(selected, [safeThis, safePanelStatus, safePanelLoadButton](ppgu::sampler::LoadReport report)
         {
             if (safeThis == nullptr)
                 return;
             safeThis->loadButton.setEnabled(true);
+            if (safePanelLoadButton != nullptr)
+                safePanelLoadButton->setEnabled(true);
             if (report.success)
             {
                 const auto readyText = "READY  /  " + juce::String(static_cast<int>(report.loadedRegions))
