@@ -1234,3 +1234,17 @@ F. Только после этого считать документальны�
 - Исправление: заменить вызов `unexpectedControls->getProperty("About", juce::var())` на `unexpectedControls->getProperty("About")`; смысл проверки лишнего control ID сохранён.
 - Область: только контрактный тест; processBlock, DSP, sampler, MIDI, APVTS и runtime UI не изменялись.
 - Повторная проверка: CI должен подтвердить Configure, Build, CTest, pluginval 5. До завершения статусы BUILD/TEST — NOT VERIFIED.
+
+
+## 2026-11-12 — REV.17 CI correction: SIGNAL FORGE canonical default skin
+
+**Тип:** test-contract correction + append-only journal.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Parent SHA:** `d05c7128ab8f53b4087fce47ff9c52f229017114`.
+**Причина:** Windows x64 CI run `43167387194` compiled all targets successfully, then CTest failed only `ppgu_skin_manifest_contract`: `tests/ValidateSkinManifests.py` hard-coded `DEFAULT_ID = "skin-51"`, while the canonical registry contains 52 entries and correctly declares `defaultSkin = "skin-052"` (SIGNAL FORGE). This was a stale validator expectation, not a manifest defect.
+**Изменение:** update the validator's expected default ID to `skin-052`; retain the manifest's SIGNAL FORGE default and all 52 registered skins. No production UI/audio behavior changed.
+**Пути:** `tests/ValidateSkinManifests.py`, `Info.txt`, `CODE.txt`.
+**Совместимость / invariants:** no DSP, processBlock, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank or runtime skin code changed.
+**Проверка до исправления:** run `43167387194`, SHA `d05c7128ab8f53b4087fce47ff9c52f229017114`: configure PASS; VST3 and test executables BUILD PASS; CTest 13/14 PASS; sole failure was stale `DEFAULT_ID` assertion; pluginval and packaging skipped because CTest failed.
+**Статус:** SOURCE FIXED IN THIS COMMIT; exact-SHA CI / CTest rerun PENDING; pluginval/host verification NOT CLAIMED.
+**Следующий шаг:** verify new SHA CI; do not merge or start dependent implementation waves until green.

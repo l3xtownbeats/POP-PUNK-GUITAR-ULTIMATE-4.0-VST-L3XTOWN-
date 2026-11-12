@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-51"
+DEFAULT_ID = "skin-052"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
