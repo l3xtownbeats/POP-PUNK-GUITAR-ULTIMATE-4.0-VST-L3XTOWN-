@@ -50,7 +50,7 @@ jobs:
               print("PREFLIGHT PASS: 52 existing skins; next batch must be 53-102.")
               already_merged = "false"
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"already_merged={already_merged}\\n")
+              output.write(f"already_merged={already_merged}\n")
           PY
 
       - name: Generate 50 additional visual themes and artwork assets
