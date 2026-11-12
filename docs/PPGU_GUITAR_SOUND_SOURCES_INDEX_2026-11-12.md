@@ -163,3 +163,36 @@ The user's sound hierarchy for the pattern engine is now:
 - For drum one-shots, maintain a separate kit taxonomy (kick/snare/hat/ride/crash/tom/percussion), velocity layers and round-robin variants where available.
 - The pattern engine may reference these materials only after the file is actually downloaded, auditioned, checksum-verified, license-cleared and tested in the target playback path. No synthetic guitar generation or synthetic guitar substitutes.
 - Current entries are discovery leads, not a statement that these new packs have been downloaded or imported.
+
+
+## Follow-up scan: verified high-priority candidates and pattern material
+
+52. Freesound — Pop Punk Guitar Loop, 87 BPM, C major — https://freesound.org/people/deadrobotmusic/sounds/591622/
+    - Asset page identifies it as electric/pop-punk/emo/rock guitar, WAV, 5.517 s, 44.1 kHz, 32-bit, stereo, 1.9 MB and CC0. This is a directly relevant PUNK-tier loop. Download currently requires Freesound login; no account/session was available in this workflow, so the file has NOT been downloaded.
+53. FreePats — FSBS Electric Guitar Clean #1/#2 — https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html
+    - Current page version 2026-08-07; explicitly direct-sampled Fender electric guitar, amplifier/effects processed clean tone, CC0 1.0. WAV/SFZ variants are listed at 456 MiB and 193 MiB; FLAC variants are 118 MiB and 63 MiB. Suitable high-quality GENERAL GUITAR multisample candidates. Source page confirms license and sample origin.
+54. FreePats — FSBS Electric Guitar Direct — https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html
+    - Raw DI direct electric guitar, CC0 1.0; WAV/SFZ 153 MiB and FLAC/SFZ 74 MiB. Strong foundation for the PPGU amp/FX chain; requires amplifier/cabinet processing in the plugin to sound finished.
+55. FreePats — FSBS Electric Guitar Distorted #1/#2 — https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html
+    - Direct-sampled electric guitar processed through amplifier/effects rack for distorted/overdriven tone; CC0 1.0. WAV/SFZ variants listed at 600 MiB and 245 MiB; FLAC/SFZ variants 300 MiB and 129 MiB. High-priority PUNK/ROCK tone candidates.
+56. Meta Open Sound — Steel Guitar / Nylon Guitar release archives — https://github.com/facebookincubator/Meta-open-sound/releases
+    - Release page confirms 24-bit/48 kHz WAV source and CC0 1.0 for both guitar instruments. Steel guitar: 375 samples; nylon guitar: 348 samples; each has SFZ mappings and 3 velocity layers. Strong acoustic/GENERAL GUITAR foundation.
+57. Selekt — drum and percussion sample catalogue — https://selektaudio.com/sound-lab/drums
+    - Page offers filters for one-shots/loops, BPM, key, CC0/CC-BY/Public Domain and categories including kick, snare, hats, cymbals, toms, tambourine and percussion. Candidate source for the separate PUNK drum bank; inspect each item's original source, certificate and exact license before import.
+58. Looperman — Shooting Star, Pop Punk x Emo Guitar, 175 BPM, B major — https://www.looperman.com/loops/detail/421913/shooting-star-pop-punk-x-emo-guitars-free-175bpm-punk-electric-guitar-loop
+    - Uploader describes live guitars, 4/4, pop-punk/rock/alternative/emo. Good pattern-engine candidate but current Looperman terms/uploader permission must be checked for redistribution inside a plugin; not cleared yet.
+59. Looperman — 6 AM, Pop Punk x Rock Guitar, 125 BPM, C major — https://www.looperman.com/loops/detail/419324/6-am-pop-punk-x-rock-guitars-free-125bpm-punk-electric-guitar-loop
+    - Uploader describes live guitars and pop-punk/rock/alternative. Same redistribution review required.
+60. Looperman — MGK x Pop Punk Guitar, 170 BPM, D# — https://www.looperman.com/loops/detail/298054/last-time-mgk-x-pop-punk-guitars-by-tahto-free-170bpm-punk-electric-guitar-loop
+    - Uploader describes live guitars, pop-punk/punk rock. Same redistribution review required.
+61. Soundza — Rock & Indie free packs — https://soundza.com/free-sample-packs/rock-indie
+    - Site explicitly permits commercial music use but prohibits reselling or redistributing unmodified sounds as a pack. Do not embed raw source samples in the distributed PPGU SoundBank without separate written permission.
+62. Pulse Open Loops — CC0 complete song-starter kits — https://pulse.studiosphere.space/open-loops/kits
+    - 24 kits; four-bar drums/bass/chords/percussion WAVs; CC0. However the page explicitly says these are original oscillator/noise synthesis, not stems from recorded performances. Do NOT use them as guitar recordings or as evidence of real guitar sound. They may be considered only as generic pattern-engine timing/arrangement references, not guitar assets.
+
+### Download and import status — important
+
+- The current GitHub connector can read/write UTF-8 repository text and inspect GitHub Actions, but it does not expose a general binary upload/download-to-repository action for arbitrary sample archives.
+- Freesound's directly relevant CC0 pop-punk loop page requires login to download; no authenticated Freesound connection is available in this task.
+- The Meta and FreePats pages confirm high-quality, redistributable candidate libraries and their licenses, but this pass has not placed their WAV archives into the PPGU repository or verified their local SHA-256.
+- Therefore these are source/license-verified candidates, not imported audio assets. Do not count them toward the packaged SoundBank size or claim they are playable in the engine yet.
