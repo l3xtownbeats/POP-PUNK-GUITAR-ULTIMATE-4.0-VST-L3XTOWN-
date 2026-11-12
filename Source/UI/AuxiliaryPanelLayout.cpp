@@ -18,7 +18,9 @@ PanelLayout layoutAuxiliaryPanels(const PanelBounds& workArea,
                           static_cast<double>(workArea.height);
 
     // Choose a stable grid close to the work-area aspect ratio.
-    int columns = std::max(1, static_cast<int>(std::ceil(std::sqrt(count * aspect))));
+    int columns = (count == 3 || count == 4)
+        ? 2
+        : std::max(1, static_cast<int>(std::ceil(std::sqrt(count * aspect))));
     columns = std::min(columns, count);
     int rows = (count + columns - 1) / columns;
 
