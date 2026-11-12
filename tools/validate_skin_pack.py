@@ -233,9 +233,38 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
                 fail(f"{theme_path}: invalid grid coordinates for {control_id}")
             if min(x, y) < 0 or min(w, h) < 1 or x + w > 12 or y + h > 16:
                 fail(f"{theme_path}: grid outside 12x16 for {control_id}")
+            if (not isinstance(control.get("presentation"), str)
+                    or not isinstance(control.get("runtimeBinding"), str)):
+                fail(f"{theme_path}: presentation/runtimeBinding missing for {control_id}")
 
         if theme.get("reduceInEco") is not True or theme.get("hotSwapFadeMs") != 150:
             fail(f"{theme_path}: ECO/hotSwap contract mismatch")
+
+        typography = theme.get("typography")
+        if not isinstance(typography, dict):
+            fail(f"{theme_path}: typography must be an object")
+        if (not all(isinstance(typography.get(key), str) and typography[key].strip()
+                    for key in ("ui", "display", "weight"))
+                or not isinstance(typography.get("scale"), (int, float))
+                or isinstance(typography.get("scale"), bool)
+                or not 0.5 <= typography["scale"] <= 2.0
+                or not isinstance(typography.get("letterSpacing"), (int, float))):
+            fail(f"{theme_path}: typography values are invalid")
+
+        effects = theme.get("effects")
+        if not isinstance(effects, dict):
+            fail(f"{theme_path}: effects must be an object")
+        for key in ("material", "texture", "bezel", "crest", "glow"):
+            if not isinstance(effects.get(key), str) or not effects[key].strip():
+                fail(f"{theme_path}: effects.{key} must be a non-empty string")
+        for key in ("shadowDepth", "edgeHighlight"):
+            value = effects.get(key)
+            if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0.0 <= value <= 1.0:
+                fail(f"{theme_path}: effects.{key} must be within 0..1")
+        if any(effects.get(key) != expected for key, expected in (
+            ("texture", "svg/texture.svg"), ("bezel", "svg/bezel.svg"), ("crest", "svg/crest.svg")
+        )):
+            fail(f"{theme_path}: effects asset paths must match the SVG asset contract")
         compatibility = theme.get("compatibility")
         if not isinstance(compatibility, dict) or any(
             compatibility.get(key) is not False
