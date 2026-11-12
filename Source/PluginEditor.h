@@ -47,6 +47,7 @@ private:
     void showAutoChordsPanel();
     void closeFxEditPanel();
     void closeAutoChordsPanel();
+    void layoutAuxiliaryPanels();
     PopPunkGuitarUltimateAudioProcessor& processor;
     PPGUThemeManager themeManager;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
