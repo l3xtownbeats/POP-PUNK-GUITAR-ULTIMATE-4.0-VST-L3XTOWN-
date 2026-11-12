@@ -582,3 +582,34 @@ Commits:
 - Skin Studio control grid пока metadata-only; AuxiliaryPanelLayout — pure geometry, не JUCE window manager. Отдельные popup windows, independent close/maximize, z-order/focus, bounds persistence и compact tiling не реализованы.
 - Текущий fallback/default остаётся Blackout Voltage skin-51. Требование REV 14.3 о default-ppgu / Dreaming in Neon нельзя объявлять выполненным без трёх исходных reference images и отдельной интеграции.
 - COMPLETE ZIP не публиковать до подтверждённого Windows Release → CTest → VST3 locate → pluginval → packaging PASS; FL Studio 20 host acceptance остаётся отдельной проверкой.
+## 2026-11-12 — follow-up static audit and regression hardening
+
+**Статус: CODE COMMITTED / CI NOT YET OBSERVED. No build, CTest, pluginval or host PASS is claimed.**
+
+Дополнительная проверка выявила и исправила несколько краевых случаев после первоначальной интеграции:
+
+- ThemeManager теперь направляет все ID с тремя и более цифрами в Skin Studio parser; ранее проверка id.length == 8 ограничивала будущие темы только тремя цифрами.
+  - Commit: b8883967913ab90eff5e6e6e334f48531f4fcb08
+- Atomic merge теперь записывает корректный newline в pack manifest, а не буквальные символы \\n.
+  - Commit: 3cb9341f51f3598315b4cab862591d359a5b9fc6
+- Добавлен release-active Python test для генератора: 50 уникальных записей, непрерывные индексы, 4 layout variants, семейства, contrast thresholds, PNG CRC/dimensions, SVG active-content rejection.
+  - Commit: 55ae994511e3381e3d524d085eafc7aa9b839775
+- Тест зарегистрирован в CTest.
+  - Commit: 6fbc8ae2a9a9e798ba104527ea14fa6b276777b4
+- Добавлена валидация typography/effects/control bindings для Skin Studio pack.
+  - Commit: d3ee2aaf1212fc500325b7a21213eb7a8f3e917b
+- Исправлен расчёт строк в AuxiliaryPanelLayout без потенциального переполнения count + columns - 1.
+  - Commit: 27c63782005401aecf63457fa114fc96eecec6cd
+- Исправлен вызов CHECK в geometry tests с braced initializer.
+  - Commit: проверить по GitHub commit history; SHA не записывается наугад.
+- Generator дополнительно отклоняет дубли/разрывы registry и не перезаписывает unmerged pack; builder вынесен в отдельную функцию для тестирования.
+  - Commits: 7162c3382de75590a45a10fa313f88ab4a109d96; 707c192e6015fc833a5085ea3d8795bef0bd1200
+- Validator умеет повторно проверять pack со статусом MERGED и сверять entries с canonical registry.
+  - Commits: 29ccfd9e93c21cfe3a9a99d73ce0c7902ad1d32b; d3ee2aaf1212fc500325b7a21213eb7a8f3e917b
+
+### Текущая граница проверки
+- Последний доступный GitHub combined commit status для HEAD b8883967913ab90eff5e6e6e334f48531f4fcb08 вернул пустой список checks. Это не PASS и не подтверждает запуск workflow.
+- CMake target ppgu_skin_batch_generator_contract добавлен, но фактический запуск CTest не подтверждён.
+- Skin_053..Skin_102 не сгенерированы: библиотека не увеличивалась без просмотра результата. Генератор и его тесты подготовлены.
+- Полная Windows x64 Release сборка, JUCE 7.0.12 compile, CTest, pluginval strictness 5, VST3 package и FL Studio 20 acceptance остаются обязательными незакрытыми этапами.
+- Текущий статус — усиленная исходная интеграция и тестовая инфраструктура, а не подтверждённый готовый VST3.
