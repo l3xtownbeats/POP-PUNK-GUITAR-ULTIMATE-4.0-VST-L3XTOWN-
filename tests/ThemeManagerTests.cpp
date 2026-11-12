@@ -39,6 +39,25 @@ int main()
         }
     }
 
+    const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
+    const auto skin52Json = skin52Manifest.loadFileAsString();
+    expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
+    const bool skin52Loaded = manager.loadFromFile(skin52Manifest);
+    expect(skin52Loaded, "Skin Studio 052 manifest accepted"
+           + (skin52Loaded ? juce::String{} : ": " + manager.getLastError()));
+    if (skin52Loaded)
+    {
+        expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
+        expect(manager.getPalette().name == "Carbon Relay", "Skin_052 name is decoded");
+        expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
+        expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12), "Skin_052 window background is mapped");
+    }
+
+    const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
+    expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
+    expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
+           "invalid Skin Studio manifest restores default fallback");
+
     const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
     const auto validJson = defaultManifest.loadFileAsString();
     expect(validJson.isNotEmpty(), "Skin_51 manifest readable");
