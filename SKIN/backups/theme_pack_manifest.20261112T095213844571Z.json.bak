@@ -1,0 +1,511 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "contract": "PPGU SKIN STUDIO REV 14",
+  "status": "GENERATED_NOT_MERGED",
+  "startIndex": 53,
+  "endIndex": 102,
+  "totalSkins": 50,
+  "themes": [
+    {
+      "id": "skin-053",
+      "index": 53,
+      "name": "Carbon Studio 01",
+      "family": "carbon_studio",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_053/theme.json",
+      "preview": "Skin_053/assets/preview.png",
+      "hero": "Skin_053/assets/hero.png"
+    },
+    {
+      "id": "skin-054",
+      "index": 54,
+      "name": "Carbon Studio 02",
+      "family": "carbon_studio",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_054/theme.json",
+      "preview": "Skin_054/assets/preview.png",
+      "hero": "Skin_054/assets/hero.png"
+    },
+    {
+      "id": "skin-055",
+      "index": 55,
+      "name": "Carbon Studio 03",
+      "family": "carbon_studio",
+      "layout": "RACK_SIDE",
+      "path": "Skin_055/theme.json",
+      "preview": "Skin_055/assets/preview.png",
+      "hero": "Skin_055/assets/hero.png"
+    },
+    {
+      "id": "skin-056",
+      "index": 56,
+      "name": "Carbon Studio 04",
+      "family": "carbon_studio",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_056/theme.json",
+      "preview": "Skin_056/assets/preview.png",
+      "hero": "Skin_056/assets/hero.png"
+    },
+    {
+      "id": "skin-057",
+      "index": 57,
+      "name": "Carbon Studio 05",
+      "family": "carbon_studio",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_057/theme.json",
+      "preview": "Skin_057/assets/preview.png",
+      "hero": "Skin_057/assets/hero.png"
+    },
+    {
+      "id": "skin-058",
+      "index": 58,
+      "name": "Carbon Studio 06",
+      "family": "carbon_studio",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_058/theme.json",
+      "preview": "Skin_058/assets/preview.png",
+      "hero": "Skin_058/assets/hero.png"
+    },
+    {
+      "id": "skin-059",
+      "index": 59,
+      "name": "Carbon Studio 07",
+      "family": "carbon_studio",
+      "layout": "RACK_SIDE",
+      "path": "Skin_059/theme.json",
+      "preview": "Skin_059/assets/preview.png",
+      "hero": "Skin_059/assets/hero.png"
+    },
+    {
+      "id": "skin-060",
+      "index": 60,
+      "name": "Carbon Studio 08",
+      "family": "carbon_studio",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_060/theme.json",
+      "preview": "Skin_060/assets/preview.png",
+      "hero": "Skin_060/assets/hero.png"
+    },
+    {
+      "id": "skin-061",
+      "index": 61,
+      "name": "Neon Basement 01",
+      "family": "neon_basement",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_061/theme.json",
+      "preview": "Skin_061/assets/preview.png",
+      "hero": "Skin_061/assets/hero.png"
+    },
+    {
+      "id": "skin-062",
+      "index": 62,
+      "name": "Neon Basement 02",
+      "family": "neon_basement",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_062/theme.json",
+      "preview": "Skin_062/assets/preview.png",
+      "hero": "Skin_062/assets/hero.png"
+    },
+    {
+      "id": "skin-063",
+      "index": 63,
+      "name": "Neon Basement 03",
+      "family": "neon_basement",
+      "layout": "RACK_SIDE",
+      "path": "Skin_063/theme.json",
+      "preview": "Skin_063/assets/preview.png",
+      "hero": "Skin_063/assets/hero.png"
+    },
+    {
+      "id": "skin-064",
+      "index": 64,
+      "name": "Neon Basement 04",
+      "family": "neon_basement",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_064/theme.json",
+      "preview": "Skin_064/assets/preview.png",
+      "hero": "Skin_064/assets/hero.png"
+    },
+    {
+      "id": "skin-065",
+      "index": 65,
+      "name": "Neon Basement 05",
+      "family": "neon_basement",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_065/theme.json",
+      "preview": "Skin_065/assets/preview.png",
+      "hero": "Skin_065/assets/hero.png"
+    },
+    {
+      "id": "skin-066",
+      "index": 66,
+      "name": "Neon Basement 06",
+      "family": "neon_basement",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_066/theme.json",
+      "preview": "Skin_066/assets/preview.png",
+      "hero": "Skin_066/assets/hero.png"
+    },
+    {
+      "id": "skin-067",
+      "index": 67,
+      "name": "Neon Basement 07",
+      "family": "neon_basement",
+      "layout": "RACK_SIDE",
+      "path": "Skin_067/theme.json",
+      "preview": "Skin_067/assets/preview.png",
+      "hero": "Skin_067/assets/hero.png"
+    },
+    {
+      "id": "skin-068",
+      "index": 68,
+      "name": "Neon Basement 08",
+      "family": "neon_basement",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_068/theme.json",
+      "preview": "Skin_068/assets/preview.png",
+      "hero": "Skin_068/assets/hero.png"
+    },
+    {
+      "id": "skin-069",
+      "index": 69,
+      "name": "Chrome Parade 01",
+      "family": "chrome_parade",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_069/theme.json",
+      "preview": "Skin_069/assets/preview.png",
+      "hero": "Skin_069/assets/hero.png"
+    },
+    {
+      "id": "skin-070",
+      "index": 70,
+      "name": "Chrome Parade 02",
+      "family": "chrome_parade",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_070/theme.json",
+      "preview": "Skin_070/assets/preview.png",
+      "hero": "Skin_070/assets/hero.png"
+    },
+    {
+      "id": "skin-071",
+      "index": 71,
+      "name": "Chrome Parade 03",
+      "family": "chrome_parade",
+      "layout": "RACK_SIDE",
+      "path": "Skin_071/theme.json",
+      "preview": "Skin_071/assets/preview.png",
+      "hero": "Skin_071/assets/hero.png"
+    },
+    {
+      "id": "skin-072",
+      "index": 72,
+      "name": "Chrome Parade 04",
+      "family": "chrome_parade",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_072/theme.json",
+      "preview": "Skin_072/assets/preview.png",
+      "hero": "Skin_072/assets/hero.png"
+    },
+    {
+      "id": "skin-073",
+      "index": 73,
+      "name": "Chrome Parade 05",
+      "family": "chrome_parade",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_073/theme.json",
+      "preview": "Skin_073/assets/preview.png",
+      "hero": "Skin_073/assets/hero.png"
+    },
+    {
+      "id": "skin-074",
+      "index": 74,
+      "name": "Chrome Parade 06",
+      "family": "chrome_parade",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_074/theme.json",
+      "preview": "Skin_074/assets/preview.png",
+      "hero": "Skin_074/assets/hero.png"
+    },
+    {
+      "id": "skin-075",
+      "index": 75,
+      "name": "Chrome Parade 07",
+      "family": "chrome_parade",
+      "layout": "RACK_SIDE",
+      "path": "Skin_075/theme.json",
+      "preview": "Skin_075/assets/preview.png",
+      "hero": "Skin_075/assets/hero.png"
+    },
+    {
+      "id": "skin-076",
+      "index": 76,
+      "name": "Chrome Parade 08",
+      "family": "chrome_parade",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_076/theme.json",
+      "preview": "Skin_076/assets/preview.png",
+      "hero": "Skin_076/assets/hero.png"
+    },
+    {
+      "id": "skin-077",
+      "index": 77,
+      "name": "Wood Summer 01",
+      "family": "wood_summer",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_077/theme.json",
+      "preview": "Skin_077/assets/preview.png",
+      "hero": "Skin_077/assets/hero.png"
+    },
+    {
+      "id": "skin-078",
+      "index": 78,
+      "name": "Wood Summer 02",
+      "family": "wood_summer",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_078/theme.json",
+      "preview": "Skin_078/assets/preview.png",
+      "hero": "Skin_078/assets/hero.png"
+    },
+    {
+      "id": "skin-079",
+      "index": 79,
+      "name": "Wood Summer 03",
+      "family": "wood_summer",
+      "layout": "RACK_SIDE",
+      "path": "Skin_079/theme.json",
+      "preview": "Skin_079/assets/preview.png",
+      "hero": "Skin_079/assets/hero.png"
+    },
+    {
+      "id": "skin-080",
+      "index": 80,
+      "name": "Wood Summer 04",
+      "family": "wood_summer",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_080/theme.json",
+      "preview": "Skin_080/assets/preview.png",
+      "hero": "Skin_080/assets/hero.png"
+    },
+    {
+      "id": "skin-081",
+      "index": 81,
+      "name": "Wood Summer 05",
+      "family": "wood_summer",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_081/theme.json",
+      "preview": "Skin_081/assets/preview.png",
+      "hero": "Skin_081/assets/hero.png"
+    },
+    {
+      "id": "skin-082",
+      "index": 82,
+      "name": "Wood Summer 06",
+      "family": "wood_summer",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_082/theme.json",
+      "preview": "Skin_082/assets/preview.png",
+      "hero": "Skin_082/assets/hero.png"
+    },
+    {
+      "id": "skin-083",
+      "index": 83,
+      "name": "Wood Summer 07",
+      "family": "wood_summer",
+      "layout": "RACK_SIDE",
+      "path": "Skin_083/theme.json",
+      "preview": "Skin_083/assets/preview.png",
+      "hero": "Skin_083/assets/hero.png"
+    },
+    {
+      "id": "skin-084",
+      "index": 84,
+      "name": "Wood Summer 08",
+      "family": "wood_summer",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_084/theme.json",
+      "preview": "Skin_084/assets/preview.png",
+      "hero": "Skin_084/assets/hero.png"
+    },
+    {
+      "id": "skin-085",
+      "index": 85,
+      "name": "Vintage Tape 01",
+      "family": "vintage_tape",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_085/theme.json",
+      "preview": "Skin_085/assets/preview.png",
+      "hero": "Skin_085/assets/hero.png"
+    },
+    {
+      "id": "skin-086",
+      "index": 86,
+      "name": "Vintage Tape 02",
+      "family": "vintage_tape",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_086/theme.json",
+      "preview": "Skin_086/assets/preview.png",
+      "hero": "Skin_086/assets/hero.png"
+    },
+    {
+      "id": "skin-087",
+      "index": 87,
+      "name": "Vintage Tape 03",
+      "family": "vintage_tape",
+      "layout": "RACK_SIDE",
+      "path": "Skin_087/theme.json",
+      "preview": "Skin_087/assets/preview.png",
+      "hero": "Skin_087/assets/hero.png"
+    },
+    {
+      "id": "skin-088",
+      "index": 88,
+      "name": "Vintage Tape 04",
+      "family": "vintage_tape",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_088/theme.json",
+      "preview": "Skin_088/assets/preview.png",
+      "hero": "Skin_088/assets/hero.png"
+    },
+    {
+      "id": "skin-089",
+      "index": 89,
+      "name": "Vintage Tape 05",
+      "family": "vintage_tape",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_089/theme.json",
+      "preview": "Skin_089/assets/preview.png",
+      "hero": "Skin_089/assets/hero.png"
+    },
+    {
+      "id": "skin-090",
+      "index": 90,
+      "name": "Vintage Tape 06",
+      "family": "vintage_tape",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_090/theme.json",
+      "preview": "Skin_090/assets/preview.png",
+      "hero": "Skin_090/assets/hero.png"
+    },
+    {
+      "id": "skin-091",
+      "index": 91,
+      "name": "Vintage Tape 07",
+      "family": "vintage_tape",
+      "layout": "RACK_SIDE",
+      "path": "Skin_091/theme.json",
+      "preview": "Skin_091/assets/preview.png",
+      "hero": "Skin_091/assets/hero.png"
+    },
+    {
+      "id": "skin-092",
+      "index": 92,
+      "name": "Vintage Tape 08",
+      "family": "vintage_tape",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_092/theme.json",
+      "preview": "Skin_092/assets/preview.png",
+      "hero": "Skin_092/assets/hero.png"
+    },
+    {
+      "id": "skin-093",
+      "index": 93,
+      "name": "Sunset Suburb 01",
+      "family": "sunset_suburb",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_093/theme.json",
+      "preview": "Skin_093/assets/preview.png",
+      "hero": "Skin_093/assets/hero.png"
+    },
+    {
+      "id": "skin-094",
+      "index": 94,
+      "name": "Sunset Suburb 02",
+      "family": "sunset_suburb",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_094/theme.json",
+      "preview": "Skin_094/assets/preview.png",
+      "hero": "Skin_094/assets/hero.png"
+    },
+    {
+      "id": "skin-095",
+      "index": 95,
+      "name": "Sunset Suburb 03",
+      "family": "sunset_suburb",
+      "layout": "RACK_SIDE",
+      "path": "Skin_095/theme.json",
+      "preview": "Skin_095/assets/preview.png",
+      "hero": "Skin_095/assets/hero.png"
+    },
+    {
+      "id": "skin-096",
+      "index": 96,
+      "name": "Sunset Suburb 04",
+      "family": "sunset_suburb",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_096/theme.json",
+      "preview": "Skin_096/assets/preview.png",
+      "hero": "Skin_096/assets/hero.png"
+    },
+    {
+      "id": "skin-097",
+      "index": 97,
+      "name": "Sunset Suburb 05",
+      "family": "sunset_suburb",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_097/theme.json",
+      "preview": "Skin_097/assets/preview.png",
+      "hero": "Skin_097/assets/hero.png"
+    },
+    {
+      "id": "skin-098",
+      "index": 98,
+      "name": "Sunset Suburb 06",
+      "family": "sunset_suburb",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_098/theme.json",
+      "preview": "Skin_098/assets/preview.png",
+      "hero": "Skin_098/assets/hero.png"
+    },
+    {
+      "id": "skin-099",
+      "index": 99,
+      "name": "Sunset Suburb 07",
+      "family": "sunset_suburb",
+      "layout": "RACK_SIDE",
+      "path": "Skin_099/theme.json",
+      "preview": "Skin_099/assets/preview.png",
+      "hero": "Skin_099/assets/hero.png"
+    },
+    {
+      "id": "skin-100",
+      "index": 100,
+      "name": "Sunset Suburb 08",
+      "family": "sunset_suburb",
+      "layout": "COMPACT_MINI",
+      "path": "Skin_100/theme.json",
+      "preview": "Skin_100/assets/preview.png",
+      "hero": "Skin_100/assets/hero.png"
+    },
+    {
+      "id": "skin-101",
+      "index": 101,
+      "name": "Hazard Line",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_101/theme.json",
+      "preview": "Skin_101/assets/preview.png",
+      "hero": "Skin_101/assets/hero.png"
+    },
+    {
+      "id": "skin-102",
+      "index": 102,
+      "name": "Whiteout Bleach",
+      "family": "special",
+      "layout": "WORKSTATION_TOPBAR",
+      "path": "Skin_102/theme.json",
+      "preview": "Skin_102/assets/preview.png",
+      "hero": "Skin_102/assets/hero.png"
+    }
+  ]
+}

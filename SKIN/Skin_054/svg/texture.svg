@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+<defs><linearGradient id="g54" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7CFFCB" stop-opacity=".42"/><stop offset="1" stop-color="#99FFD6" stop-opacity=".04"/>
+</linearGradient></defs>
+<rect width="800" height="450" fill="url(#g54)"/>
+<path d="M-40 154 L840 314" stroke="#7CFFCB" stroke-opacity=".42" stroke-width="3"/>
+<path d="M134 450 L474 0" stroke="#99FFD6" stroke-opacity=".32" stroke-width="2"/>
+<path d="M300 330 C274 260 334 205 390 235 C470 270 435 365 365 380 Z" fill="none" stroke="#7CFFCB" stroke-width="8"/>
+<path d="M380 270 L524 100" stroke="#99FFD6" stroke-width="13" stroke-linecap="round"/>
+<text x="36" y="410" fill="#7CFFCB" font-family="sans-serif" font-size="16" letter-spacing="45">TEXTURE</text>
+</svg>

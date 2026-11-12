@@ -1,0 +1,2254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://l3xtownbeats.github.io/ppgu/skin/theme.schema.rev14.json",
+  "title": "PPGU REV14 Skin Theme",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "index",
+    "name",
+    "family",
+    "layout",
+    "description",
+    "palette",
+    "typography",
+    "effects",
+    "reduceInEco",
+    "hotSwapFadeMs",
+    "controls",
+    "assets",
+    "compatibility"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^skin-[0-9]{3,}$"
+    },
+    "index": {
+      "type": "integer",
+      "minimum": 52
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "enum": [
+        "carbon_studio",
+        "neon_basement",
+        "chrome_parade",
+        "wood_summer",
+        "vintage_tape",
+        "sunset_suburb",
+        "special"
+      ]
+    },
+    "layout": {
+      "enum": [
+        "STUDIO_CONSOLE",
+        "WORKSTATION_TOPBAR",
+        "RACK_SIDE",
+        "COMPACT_MINI"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "palette": {
+      "type": "object",
+      "required": [
+        "window_bg",
+        "panel",
+        "panel_elevated",
+        "control_bg",
+        "control_face",
+        "control_border",
+        "text_primary",
+        "text_secondary",
+        "text_disabled",
+        "accent",
+        "accent_glow",
+        "danger",
+        "warning",
+        "success",
+        "lcd_bg",
+        "lcd_text",
+        "led_on",
+        "led_off",
+        "shadow",
+        "highlight",
+        "lowlight"
+      ],
+      "properties": {
+        "window_bg": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "panel": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "panel_elevated": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "control_bg": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "control_face": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "control_border": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "text_primary": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "text_secondary": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "text_disabled": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "accent_glow": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "danger": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "warning": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "success": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "lcd_bg": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "lcd_text": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "led_on": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "led_off": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "shadow": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "highlight": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "lowlight": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "typography": {
+      "type": "object",
+      "required": [
+        "ui",
+        "display",
+        "weight",
+        "scale",
+        "letterSpacing"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ui": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 2
+        },
+        "letterSpacing": {
+          "type": "number"
+        }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "required": [
+        "material",
+        "texture",
+        "bezel",
+        "crest",
+        "shadowDepth",
+        "edgeHighlight",
+        "glow"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "material": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "bezel": {
+          "type": "string"
+        },
+        "crest": {
+          "type": "string"
+        },
+        "shadowDepth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "edgeHighlight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "glow": {
+          "type": "string"
+        }
+      }
+    },
+    "reduceInEco": {
+      "type": "boolean",
+      "const": true
+    },
+    "hotSwapFadeMs": {
+      "type": "integer",
+      "const": 150
+    },
+    "controls": {
+      "type": "object",
+      "required": [
+        "preset_browser",
+        "mode_selector",
+        "knob01",
+        "knob02",
+        "knob03",
+        "knob04",
+        "knob05",
+        "knob06",
+        "knob07",
+        "knob08",
+        "knob09",
+        "fx_switch01",
+        "fx_switch02",
+        "fx_switch03",
+        "fx_switch04",
+        "fx_switch05",
+        "fx_switch06",
+        "fx_switch07",
+        "midi_keyboard",
+        "LCD_display",
+        "LED_indicator",
+        "SKIN_button",
+        "Import_Guitar",
+        "Auto_Discover",
+        "Curator",
+        "Settings",
+        "About"
+      ],
+      "properties": {
+        "preset_browser": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "mode_selector": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob01": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob02": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob03": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob04": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob05": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob06": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob07": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob08": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "knob09": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch01": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch02": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch03": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch04": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch05": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch06": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fx_switch07": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "midi_keyboard": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "LCD_display": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "LED_indicator": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "SKIN_button": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Import_Guitar": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Auto_Discover": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Curator": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Settings": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "About": {
+          "type": "object",
+          "required": [
+            "grid",
+            "presentation",
+            "runtimeBinding"
+          ],
+          "properties": {
+            "grid": {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "runtimeBinding": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "assets": {
+      "type": "object",
+      "required": [
+        "preview",
+        "hero",
+        "texture",
+        "bezel",
+        "crest"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "preview": {
+          "type": "string"
+        },
+        "hero": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "bezel": {
+          "type": "string"
+        },
+        "crest": {
+          "type": "string"
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "minimumPluginVersion",
+        "apvtsChanges",
+        "layoutChanges",
+        "audioChanges"
+      ],
+      "properties": {
+        "minimumPluginVersion": {
+          "type": "string"
+        },
+        "apvtsChanges": {
+          "const": false
+        },
+        "layoutChanges": {
+          "const": false
+        },
+        "audioChanges": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "designStatus": {
+      "type": "string",
+      "enum": [
+        "DESIGNED_NOT_RUNTIME_INTEGRATED",
+        "PACK_GENERATED",
+        "VALIDATION_PASS",
+        "MERGED",
+        "INTEGRATED"
+      ]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "x-ppgu-contract": {
+    "contract": "PPGU SKIN STUDIO REV 14.0",
+    "product": "POP PUNK GUITAR ULTIMATE",
+    "layoutGrid": {
+      "columns": 12,
+      "rows": 16,
+      "coordinateSystem": "zero-based x/y top-left; w/h spans",
+      "minimumReadableCellPx": {
+        "width": 48,
+        "height": 36
+      }
+    },
+    "requiredControlIds": [
+      "preset_browser",
+      "mode_selector",
+      "knob01",
+      "knob02",
+      "knob03",
+      "knob04",
+      "knob05",
+      "knob06",
+      "knob07",
+      "knob08",
+      "knob09",
+      "fx_switch01",
+      "fx_switch02",
+      "fx_switch03",
+      "fx_switch04",
+      "fx_switch05",
+      "fx_switch06",
+      "fx_switch07",
+      "midi_keyboard",
+      "LCD_display",
+      "LED_indicator",
+      "SKIN_button",
+      "Import_Guitar",
+      "Auto_Discover",
+      "Curator",
+      "Settings",
+      "About"
+    ],
+    "paletteTokens": [
+      "window_bg",
+      "panel",
+      "panel_elevated",
+      "control_bg",
+      "control_face",
+      "control_border",
+      "text_primary",
+      "text_secondary",
+      "text_disabled",
+      "accent",
+      "accent_glow",
+      "danger",
+      "warning",
+      "success",
+      "lcd_bg",
+      "lcd_text",
+      "led_on",
+      "led_off",
+      "shadow",
+      "highlight",
+      "lowlight"
+    ],
+    "runtimeControlInventory": {
+      "preset_browser": {
+        "kind": "composite",
+        "runtimeStatus": "implemented",
+        "components": [
+          "presetBox",
+          "categoryBox",
+          "presetSearch"
+        ],
+        "function": "Preset selection plus category/text filtering. Filtering is non-destructive and must not load another preset.",
+        "controlType": "browser",
+        "directParameterBinding": false,
+        "componentsExact": [
+          "presetBox",
+          "categoryBox",
+          "presetSearch"
+        ]
+      },
+      "mode_selector": {
+        "kind": "composite",
+        "runtimeStatus": "partial",
+        "components": [
+          "modeBox",
+          "melodyTab",
+          "patternTab"
+        ],
+        "parameterIds": [
+          "playMode"
+        ],
+        "function": "MELODY/PATTERN selection; PUNK GROUP is reserved and not yet exposed as a working mode.",
+        "controlType": "selector",
+        "parameterDefinitions": [
+          {
+            "id": "playMode",
+            "type": "choice",
+            "choices": [
+              "Melody",
+              "Pattern"
+            ],
+            "defaultIndex": 0,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "supportedRuntimeChoices": [
+          "MELODY",
+          "PATTERN"
+        ],
+        "reservedUnavailableChoices": [
+          "PUNK GROUP"
+        ]
+      },
+      "knob01": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[0]",
+        "parameterIds": [
+          "ampGain"
+        ],
+        "label": "GAIN",
+        "function": "Amplifier gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "ampGain",
+            "type": "float",
+            "min": 0,
+            "max": 10,
+            "default": 5,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob02": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[1]",
+        "parameterIds": [
+          "eqHigh"
+        ],
+        "label": "TREBLE",
+        "function": "High-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqHigh",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob03": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[2]",
+        "parameterIds": [
+          "eqMid"
+        ],
+        "label": "MID",
+        "function": "Mid-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqMid",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob04": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[3]",
+        "parameterIds": [
+          "eqLow"
+        ],
+        "label": "BASS",
+        "function": "Low-frequency EQ gain.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "eqLow",
+            "type": "float",
+            "min": -12,
+            "max": 12,
+            "default": 0,
+            "step": 0.1,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob05": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[4]",
+        "parameterIds": [
+          "velocity"
+        ],
+        "label": "VELOCITY",
+        "function": "MIDI velocity response.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "velocity",
+            "type": "float",
+            "min": 0,
+            "max": 2,
+            "default": 1,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob06": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[5]",
+        "parameterIds": [
+          "dynamics"
+        ],
+        "label": "DYNAMICS",
+        "function": "Velocity-to-dynamics response.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "dynamics",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0.5,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob07": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[6]",
+        "parameterIds": [
+          "swing"
+        ],
+        "label": "SWING",
+        "function": "Pattern swing amount.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "swing",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob08": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[7]",
+        "parameterIds": [
+          "humanize"
+        ],
+        "label": "HUMANIZE",
+        "function": "Pattern timing/feel humanization.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "humanize",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "knob09": {
+        "kind": "rotary",
+        "runtimeStatus": "implemented",
+        "component": "knobs[8]",
+        "parameterIds": [
+          "accent"
+        ],
+        "label": "ACCENT",
+        "function": "Pattern accent amount.",
+        "controlType": "knob",
+        "parameterDefinitions": [
+          {
+            "id": "accent",
+            "type": "float",
+            "min": 0,
+            "max": 1,
+            "default": 0.75,
+            "step": 0.001,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "numeric-textbox-below",
+          "source": "PluginEditor.cpp:configureKnob"
+        }
+      },
+      "fx_switch01": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[0]",
+        "parameterIds": [
+          "compressorOn"
+        ],
+        "label": "COMPRESSOR",
+        "function": "Compressor bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "compressorOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch02": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[1]",
+        "parameterIds": [
+          "eqOn"
+        ],
+        "label": "EQ",
+        "function": "Equalizer bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "eqOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch03": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[2]",
+        "parameterIds": [
+          "distortionOn"
+        ],
+        "label": "DISTORTION",
+        "function": "Distortion bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "distortionOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch04": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[3]",
+        "parameterIds": [
+          "chorusOn"
+        ],
+        "label": "CHORUS",
+        "function": "Chorus bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "chorusOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": false,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch05": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[4]",
+        "parameterIds": [
+          "delayOn"
+        ],
+        "label": "DELAY",
+        "function": "Delay bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "delayOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": false,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch06": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[5]",
+        "parameterIds": [
+          "reverbOn"
+        ],
+        "label": "REVERB",
+        "function": "Reverb bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "reverbOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "fx_switch07": {
+        "kind": "toggle",
+        "runtimeStatus": "implemented",
+        "component": "fxButtons[6]",
+        "parameterIds": [
+          "cabinetOn"
+        ],
+        "label": "CABINET IR",
+        "function": "Cabinet processing bypass/enable.",
+        "controlType": "switch",
+        "parameterDefinitions": [
+          {
+            "id": "cabinetOn",
+            "type": "bool",
+            "range": [
+              false,
+              true
+            ],
+            "default": true,
+            "source": "PluginProcessor.cpp:createParameterLayout"
+          }
+        ],
+        "valueDisplay": {
+          "style": "two-state-toggle",
+          "source": "PluginEditor.cpp:fxButtons"
+        }
+      },
+      "midi_keyboard": {
+        "kind": "keyboard",
+        "runtimeStatus": "implemented",
+        "component": "keyboard",
+        "function": "On-screen MIDI keyboard; note events are sent to the instrument.",
+        "controlType": "keyboard",
+        "midiBinding": "juce::MidiKeyboardState",
+        "noteRange": {
+          "minimum": 36,
+          "maximum": 84
+        },
+        "source": "PluginEditor.cpp:keyboard->setAvailableRange"
+      },
+      "LCD_display": {
+        "kind": "display",
+        "runtimeStatus": "partial",
+        "component": "statusLabel",
+        "function": "Current status, preset and library feedback. A dedicated hardware-style LCD treatment is a visual goal.",
+        "controlType": "LCD",
+        "parameterBinding": null,
+        "componentType": "juce::Label",
+        "visualStatus": "statusLabel only; no dedicated LCD widget"
+      },
+      "LED_indicator": {
+        "kind": "indicator",
+        "runtimeStatus": "not_implemented",
+        "function": "Reserved activity/status indicator. No live MIDI/audio meter is currently wired; never fabricate activity.",
+        "controlType": "LED",
+        "parameterBinding": null,
+        "componentType": null,
+        "visualStatus": "not implemented; must not simulate activity"
+      },
+      "SKIN_button": {
+        "kind": "action",
+        "runtimeStatus": "implemented",
+        "component": "skinButton",
+        "function": "Opens visual theme selection; Ctrl+K shortcut.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "actionBinding": "skinButton -> showSkinMenu; Ctrl+K"
+      },
+      "Import_Guitar": {
+        "kind": "action",
+        "runtimeStatus": "implemented",
+        "component": "loadButton",
+        "function": "Opens SFZ selection and requests asynchronous guitar library loading.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "actionBinding": "loadButton -> chooseSfzFile -> asynchronous processor SFZ load"
+      },
+      "Auto_Discover": {
+        "kind": "action",
+        "runtimeStatus": "not_implemented",
+        "function": "Reserved for production Sound Hunter/S6 discovery. Must remain unavailable until integrated.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
+      },
+      "Curator": {
+        "kind": "panel_action",
+        "runtimeStatus": "not_implemented",
+        "function": "Reserved for Sound Hunter curator/library review. Must remain unavailable until integrated.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
+      },
+      "Settings": {
+        "kind": "panel_action",
+        "runtimeStatus": "not_implemented",
+        "function": "Reserved settings panel; do not expose an active non-functional action.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
+      },
+      "About": {
+        "kind": "panel_action",
+        "runtimeStatus": "not_implemented",
+        "function": "Reserved About panel; enable only when it reports actual product/build metadata.",
+        "controlType": "button",
+        "parameterBinding": null,
+        "availability": "not implemented; disabled/unavailable until real feature integration"
+      }
+    },
+    "additionalCurrentControls": {
+      "sync_selector": {
+        "runtimeStatus": "implemented",
+        "component": "startModeBox",
+        "parameterIds": [
+          "syncMode"
+        ],
+        "function": "Host / Host Start / Internal transport synchronization."
+      },
+      "preset_category": {
+        "runtimeStatus": "implemented",
+        "component": "categoryBox",
+        "function": "All / Melody / Pattern filter."
+      },
+      "preset_search": {
+        "runtimeStatus": "implemented",
+        "component": "presetSearch",
+        "function": "Catalog search without loading a different preset."
+      },
+      "library_load_status": {
+        "runtimeStatus": "implemented",
+        "component": "statusLabel",
+        "function": "SFZ load progress/result and missing-library feedback."
+      },
+      "product_brand": {
+        "runtimeStatus": "implemented",
+        "components": [
+          "titleLabel",
+          "subtitleLabel"
+        ],
+        "function": "Product identity."
+      }
+    },
+    "rules": {
+      "themeChangesOnly": [
+        "visual tokens",
+        "materials",
+        "typography",
+        "decorative artwork",
+        "asset references"
+      ],
+      "mustNotChange": [
+        "APVTS IDs",
+        "parameter ranges/defaults",
+        "attachments",
+        "MIDI",
+        "presets",
+        "processor state",
+        "audio engine"
+      ],
+      "missingRuntimeControls": "Keep IDs in parity contract; never claim unavailable functionality. A disabled placeholder is acceptable only with an honest reason and cannot simulate activity.",
+      "layoutOwnership": "Coordinates are design metadata until a layout engine consumes them. Existing JUCE bounds and hit targets remain authoritative."
+    },
+    "inventorySource": {
+      "editor": "Source/PluginEditor.h and Source/PluginEditor.cpp",
+      "processorParameters": "Source/PluginProcessor.cpp:createParameterLayout",
+      "auditDate": "2026-11-12",
+      "note": "UI control ranges are copied from APVTS parameter declarations; reserved controls are explicitly marked unavailable and are not represented as implemented."
+    }
+  }
+}

@@ -1,0 +1,799 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://l3xtownbeats.github.io/ppgu/skin-theme.schema.json",
+  "title": "PPGU Skin Theme Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "index",
+    "name",
+    "description",
+    "cluster",
+    "identity",
+    "tokens",
+    "assets",
+    "assetSpec",
+    "compatibility",
+    "validation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^skin-[0-9]{2}$"
+    },
+    "index": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 51
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "cluster": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "material",
+        "lighting",
+        "mood"
+      ],
+      "properties": {
+        "material": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lighting": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mood": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "tokens": {
+      "type": "object",
+      "required": [
+        "canvas",
+        "surfaces",
+        "borders",
+        "typography",
+        "rotary",
+        "sliders",
+        "buttons",
+        "tabs",
+        "comboBoxes",
+        "keyboard",
+        "meters",
+        "icons",
+        "thumbnails",
+        "windowChrome",
+        "hero",
+        "accents",
+        "texture",
+        "lighting"
+      ],
+      "properties": {
+        "canvas": {
+          "type": "object",
+          "required": [
+            "base",
+            "inset"
+          ],
+          "properties": {
+            "base": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inset": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "surfaces": {
+          "type": "object",
+          "required": [
+            "primary",
+            "secondary",
+            "raised",
+            "overlay"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "raised": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "overlay": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "borders": {
+          "type": "object",
+          "required": [
+            "subtle",
+            "strong",
+            "focus"
+          ],
+          "properties": {
+            "subtle": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "strong": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "focus": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "typography": {
+          "type": "object",
+          "required": [
+            "primary",
+            "secondary",
+            "disabled",
+            "onAccent"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "onAccent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "rotary": {
+          "type": "object",
+          "required": [
+            "body",
+            "ring",
+            "track",
+            "value",
+            "pointer",
+            "disabled"
+          ],
+          "properties": {
+            "body": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "ring": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "track": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "pointer": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "sliders": {
+          "type": "object",
+          "required": [
+            "track",
+            "fill",
+            "thumb",
+            "disabled"
+          ],
+          "properties": {
+            "track": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "fill": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "thumb": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "buttons": {
+          "type": "object",
+          "required": [
+            "primary",
+            "secondary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "object",
+              "required": [
+                "background",
+                "foreground",
+                "hover",
+                "pressed",
+                "disabled"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "foreground": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "hover": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "pressed": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "disabled": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "secondary": {
+              "type": "object",
+              "required": [
+                "background",
+                "foreground",
+                "hover",
+                "pressed",
+                "disabled"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "foreground": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "hover": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "pressed": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "disabled": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "tabs": {
+          "type": "object",
+          "required": [
+            "activeBackground",
+            "activeText",
+            "inactiveBackground",
+            "inactiveText",
+            "indicator"
+          ],
+          "properties": {
+            "activeBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "activeText": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inactiveBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "inactiveText": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "indicator": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "comboBoxes": {
+          "type": "object",
+          "required": [
+            "background",
+            "foreground",
+            "border",
+            "hover",
+            "menuBackground",
+            "selection"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "foreground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "hover": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "menuBackground": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "selection": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "keyboard": {
+          "type": "object",
+          "required": [
+            "whiteKey",
+            "blackKey",
+            "whitePressed",
+            "blackPressed",
+            "keyBorder",
+            "octaveLabel"
+          ],
+          "properties": {
+            "whiteKey": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "blackKey": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "whitePressed": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "blackPressed": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "keyBorder": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "octaveLabel": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "meters": {
+          "type": "object",
+          "required": [
+            "low",
+            "medium",
+            "high",
+            "background"
+          ],
+          "properties": {
+            "low": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "medium": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "high": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "icons": {
+          "type": "object",
+          "required": [
+            "primary",
+            "secondary",
+            "accent",
+            "disabled"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "thumbnails": {
+          "type": "object",
+          "required": [
+            "background",
+            "border",
+            "selected",
+            "caption"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "selected": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "caption": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "windowChrome": {
+          "type": "object",
+          "required": [
+            "background",
+            "title",
+            "border",
+            "close"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "title": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "close": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "hero": {
+          "type": "object",
+          "required": [
+            "background",
+            "accent",
+            "secondaryAccent",
+            "highlight"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondaryAccent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "highlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "accents": {
+          "type": "object",
+          "required": [
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "tertiary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "texture": {
+          "type": "object",
+          "required": [
+            "material",
+            "enabled",
+            "intensity",
+            "asset"
+          ],
+          "properties": {
+            "material": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "asset": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "lighting": {
+          "type": "object",
+          "required": [
+            "profile",
+            "glow",
+            "glowIntensity",
+            "edgeHighlight"
+          ],
+          "properties": {
+            "profile": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "glowIntensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "edgeHighlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "object",
+      "required": [
+        "preview",
+        "hero"
+      ],
+      "properties": {
+        "preview": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hero": {
+          "type": "string",
+          "minLength": 1
+        },
+        "texture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "assetSpec": {
+      "type": "object",
+      "required": [
+        "preview",
+        "hero"
+      ],
+      "properties": {
+        "preview": {
+          "type": "object",
+          "required": [
+            "width",
+            "height",
+            "format"
+          ],
+          "properties": {
+            "width": {
+              "const": 480
+            },
+            "height": {
+              "const": 300
+            },
+            "format": {
+              "const": "png"
+            }
+          }
+        },
+        "hero": {
+          "type": "object",
+          "required": [
+            "width",
+            "height",
+            "format"
+          ],
+          "properties": {
+            "width": {
+              "const": 1200
+            },
+            "height": {
+              "const": 420
+            },
+            "format": {
+              "const": "webp"
+            }
+          }
+        },
+        "texture": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "const": 1024
+            },
+            "height": {
+              "const": 1024
+            },
+            "format": {
+              "const": "png"
+            }
+          }
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "minimumPluginVersion",
+        "apvtsChanges",
+        "layoutChanges",
+        "audioChanges"
+      ],
+      "properties": {
+        "minimumPluginVersion": {
+          "type": "string"
+        },
+        "apvtsChanges": {
+          "const": false
+        },
+        "layoutChanges": {
+          "const": false
+        },
+        "audioChanges": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "json",
+        "assets",
+        "runtime",
+        "flStudio20"
+      ],
+      "properties": {
+        "json": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "flStudio20": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

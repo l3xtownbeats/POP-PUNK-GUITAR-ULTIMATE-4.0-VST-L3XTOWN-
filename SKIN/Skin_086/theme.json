@@ -1,0 +1,351 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-086",
+  "index": 86,
+  "name": "Vintage Tape 02",
+  "family": "vintage_tape",
+  "layout": "WORKSTATION_TOPBAR",
+  "description": "Vintage Tape 02: a distinct vintage tape visual shell for PPGU.",
+  "palette": {
+    "window_bg": "#111014",
+    "panel": "#21191B",
+    "panel_elevated": "#302326",
+    "control_bg": "#191417",
+    "control_face": "#2A1F21",
+    "control_border": "#53656B",
+    "text_primary": "#F3F7F5",
+    "text_secondary": "#B7C5C2",
+    "text_disabled": "#879791",
+    "accent": "#F4D35E",
+    "accent_glow": "#F6DD81",
+    "danger": "#FF5A66",
+    "warning": "#FFC857",
+    "success": "#6EE7A8",
+    "lcd_bg": "#08110E",
+    "lcd_text": "#D7FFB2",
+    "led_on": "#F4D35E",
+    "led_off": "#33443B",
+    "shadow": "#050708",
+    "highlight": "#90A7A0",
+    "lowlight": "#0D1417"
+  },
+  "typography": {
+    "ui": "Segoe UI",
+    "display": "Consolas",
+    "weight": "semibold",
+    "scale": 1.0,
+    "letterSpacing": 0.4
+  },
+  "effects": {
+    "material": "vintage tape finish",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg",
+    "shadowDepth": 0.32,
+    "edgeHighlight": 0.22,
+    "glow": "restrained accent LED lighting"
+  },
+  "reduceInEco": true,
+  "hotSwapFadeMs": 150,
+  "controls": {
+    "preset_browser": {
+      "grid": {
+        "x": 2,
+        "y": 0,
+        "w": 5,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "mode_selector": {
+      "grid": {
+        "x": 7,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "SKIN_button": {
+      "grid": {
+        "x": 10,
+        "y": 0,
+        "w": 2,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "LCD_display": {
+      "grid": {
+        "x": 0,
+        "y": 2,
+        "w": 8,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "LED_indicator": {
+      "grid": {
+        "x": 8,
+        "y": 2,
+        "w": 1,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Import_Guitar": {
+      "grid": {
+        "x": 9,
+        "y": 2,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob01": {
+      "grid": {
+        "x": 0,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob02": {
+      "grid": {
+        "x": 2,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob03": {
+      "grid": {
+        "x": 4,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob04": {
+      "grid": {
+        "x": 6,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob05": {
+      "grid": {
+        "x": 8,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob06": {
+      "grid": {
+        "x": 10,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob07": {
+      "grid": {
+        "x": 2,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob08": {
+      "grid": {
+        "x": 5,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob09": {
+      "grid": {
+        "x": 8,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch01": {
+      "grid": {
+        "x": 0,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch02": {
+      "grid": {
+        "x": 3,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch03": {
+      "grid": {
+        "x": 6,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch04": {
+      "grid": {
+        "x": 9,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch05": {
+      "grid": {
+        "x": 0,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch06": {
+      "grid": {
+        "x": 4,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch07": {
+      "grid": {
+        "x": 8,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "midi_keyboard": {
+      "grid": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Auto_Discover": {
+      "grid": {
+        "x": 0,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Curator": {
+      "grid": {
+        "x": 3,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Settings": {
+      "grid": {
+        "x": 6,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "About": {
+      "grid": {
+        "x": 9,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "sync_selector": {
+      "grid": {
+        "x": 9,
+        "y": 3,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.png",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg"
+  },
+  "compatibility": {
+    "minimumPluginVersion": "4.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "designStatus": "GENERATED_NOT_MERGED",
+  "notes": [
+    "Generated by tools/generate_skin_batch.py.",
+    "Visual-only theme: no APVTS, live layout, audio or MIDI changes.",
+    "Control coordinates remain metadata until the runtime layout engine consumes them."
+  ]
+}
