@@ -1,12 +1,29 @@
 #include "AuxiliaryPanelLayout.h"
 
-#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <limits>
 #include <set>
 #include <vector>
 
 using namespace ppgu::ui;
 
-static std::vector<PanelRequest> makePanels(int count)
+namespace
+{
+int failures = 0;
+
+void check(bool condition, const char* expression, int line)
+{
+    if (!condition)
+    {
+        ++failures;
+        std::cerr << "FAIL line " << line << ": " << expression << '\n';
+    }
+}
+
+#define CHECK(expression) check((expression), #expression, __LINE__)
+
+std::vector<PanelRequest> makePanels(int count)
 {
     std::vector<PanelRequest> panels;
     for (int i = 0; i < count; ++i)
@@ -14,67 +31,128 @@ static std::vector<PanelRequest> makePanels(int count)
     return panels;
 }
 
-static bool overlaps(const PanelRect& a, const PanelRect& b)
+bool overlaps(const PanelRect& a, const PanelRect& b)
 {
-    return a.x < b.x + b.width && b.x < a.x + a.width
-        && a.y < b.y + b.height && b.y < a.y + a.height;
+    const auto ar = static_cast<long long>(a.x) + a.width;
+    const auto ab = static_cast<long long>(a.y) + a.height;
+    const auto br = static_cast<long long>(b.x) + b.width;
+    const auto bb = static_cast<long long>(b.y) + b.height;
+    return a.x < br && b.x < ar && a.y < bb && b.y < ab;
+}
+
+void checkInsideAndDisjoint(const PanelLayout& layout, const PanelRect& area)
+{
+    for (const auto& p : layout.panels)
+    {
+        CHECK(p.visible);
+        CHECK(p.bounds.x >= area.x && p.bounds.y >= area.y);
+        CHECK(static_cast<long long>(p.bounds.x) + p.bounds.width
+              <= static_cast<long long>(area.x) + area.width);
+        CHECK(static_cast<long long>(p.bounds.y) + p.bounds.height
+              <= static_cast<long long>(area.y) + area.height);
+    }
+    for (std::size_t i = 0; i < layout.panels.size(); ++i)
+        for (std::size_t j = i + 1; j < layout.panels.size(); ++j)
+            CHECK(!overlaps(layout.panels[i].bounds, layout.panels[j].bounds));
+}
 }
 
 int main()
 {
     const PanelRect desktop { 100, 80, 1600, 900 };
-    assert(calculatePanelLayout(desktop, {}, 1.0f).panels.empty());
+    CHECK(calculatePanelLayout(desktop, {}, 1.0f).panels.empty());
 
     auto one = calculatePanelLayout(desktop, makePanels(1), 1.0f);
-    assert(one.panels.size() == 1 && one.panels[0].visible);
-    assert(!one.compact && !one.overflow);
+    CHECK(one.panels.size() == 1 && one.panels[0].visible);
+    CHECK(!one.compact && !one.overflow && !one.invalidInput);
+    checkInsideAndDisjoint(one, desktop);
 
     for (int count : { 2, 3, 4, 6 })
     {
         auto layout = calculatePanelLayout(desktop, makePanels(count), 1.0f);
-        assert(layout.panels.size() == static_cast<std::size_t>(count));
-        assert(!layout.overflow);
+        CHECK(layout.panels.size() == static_cast<std::size_t>(count));
+        CHECK(!layout.overflow && !layout.invalidInput);
         for (const auto& p : layout.panels)
         {
-            assert(p.visible);
-            assert(p.bounds.x >= desktop.x && p.bounds.y >= desktop.y);
-            assert(p.bounds.x + p.bounds.width <= desktop.x + desktop.width);
-            assert(p.bounds.y + p.bounds.height <= desktop.y + desktop.height);
-            assert(p.bounds.width >= 280 && p.bounds.height >= 190);
+            CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
         }
-        for (std::size_t i = 0; i < layout.panels.size(); ++i)
-            for (std::size_t j = i + 1; j < layout.panels.size(); ++j)
-                assert(!overlaps(layout.panels[i].bounds, layout.panels[j].bounds));
+        checkInsideAndDisjoint(layout, desktop);
     }
 
-    auto compact = calculatePanelLayout({ 0, 0, 900, 520 }, makePanels(4), 1.0f);
-    assert(compact.compact && !compact.overflow);
+    const PanelRect compactArea { 0, 0, 900, 520 };
+    auto compact = calculatePanelLayout(compactArea, makePanels(4), 1.0f);
+    CHECK(compact.compact && !compact.overflow);
+    checkInsideAndDisjoint(compact, compactArea);
 
-    auto portrait = calculatePanelLayout({ 0, 0, 520, 1100 }, makePanels(3), 1.0f);
-    assert(!portrait.overflow);
+    const PanelRect portraitArea { 0, 0, 520, 1100 };
+    auto portrait = calculatePanelLayout(portraitArea, makePanels(3), 1.0f);
+    CHECK(!portrait.overflow);
     for (const auto& p : portrait.panels)
-        assert(p.bounds.width >= 280 && p.bounds.height >= 190);
+        CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);
+    checkInsideAndDisjoint(portrait, portraitArea);
 
     auto overflow = calculatePanelLayout({ 0, 0, 420, 260 }, makePanels(4), 1.0f);
-    assert(overflow.overflow && overflow.panels.size() == 4);
+    CHECK(overflow.overflow && overflow.panels.size() == 4);
     int visible = 0;
     for (const auto& p : overflow.panels) visible += p.visible ? 1 : 0;
-    assert(visible == 1);
+    CHECK(visible == 1);
+    CHECK(overflow.panels.front().visible);
 
-    auto dpi = calculatePanelLayout({ 0, 0, 1800, 1000 }, makePanels(4), 1.5f);
-    assert(!dpi.overflow);
+    const PanelRect dpiArea { 0, 0, 1800, 1000 };
+    auto dpi = calculatePanelLayout(dpiArea, makePanels(4), 1.5f);
+    CHECK(!dpi.overflow && !dpi.invalidInput);
     for (const auto& p : dpi.panels)
-        assert(p.bounds.width >= 420 && p.bounds.height >= 285);
+        CHECK(p.bounds.width >= 420 && p.bounds.height >= 285);
+    checkInsideAndDisjoint(dpi, dpiArea);
 
     auto repeated = calculatePanelLayout(desktop, makePanels(4), 1.0f);
     auto repeatedAgain = calculatePanelLayout(desktop, makePanels(4), 1.0f);
-    assert(repeated.columns == repeatedAgain.columns && repeated.rows == repeatedAgain.rows);
+    CHECK(repeated.columns == repeatedAgain.columns && repeated.rows == repeatedAgain.rows);
     for (std::size_t i = 0; i < repeated.panels.size(); ++i)
     {
-        assert(repeated.panels[i].bounds.x == repeatedAgain.panels[i].bounds.x);
-        assert(repeated.panels[i].bounds.y == repeatedAgain.panels[i].bounds.y);
-        assert(repeated.panels[i].bounds.width == repeatedAgain.panels[i].bounds.width);
-        assert(repeated.panels[i].bounds.height == repeatedAgain.panels[i].bounds.height);
+        CHECK(repeated.panels[i].id == repeatedAgain.panels[i].id);
+        CHECK(repeated.panels[i].bounds.x == repeatedAgain.panels[i].bounds.x);
+        CHECK(repeated.panels[i].bounds.y == repeatedAgain.panels[i].bounds.y);
+        CHECK(repeated.panels[i].bounds.width == repeatedAgain.panels[i].bounds.width);
+        CHECK(repeated.panels[i].bounds.height == repeatedAgain.panels[i].bounds.height);
     }
+
+    auto duplicateIds = makePanels(2);
+    duplicateIds[1].id = duplicateIds[0].id;
+    auto duplicateResult = calculatePanelLayout(desktop, duplicateIds, 1.0f);
+    CHECK(duplicateResult.invalidInput && duplicateResult.panels.empty());
+
+    auto invalidSize = makePanels(1);
+    invalidSize[0].minimum.width = 0;
+    auto invalidSizeResult = calculatePanelLayout(desktop, invalidSize, 1.0f);
+    CHECK(invalidSizeResult.invalidInput && invalidSizeResult.panels.empty());
+
+    auto invertedSize = makePanels(1);
+    invertedSize[0].minimum.width = invertedSize[0].desired.width + 1;
+    CHECK(calculatePanelLayout(desktop, invertedSize, 1.0f).invalidInput);
+
+    CHECK(calculatePanelLayout({ 0, 0, 0, 100 }, makePanels(1), 1.0f).invalidInput);
+    CHECK(calculatePanelLayout({ std::numeric_limits<int>::max() - 2, 0, 10, 10 },
+                               makePanels(1), 1.0f).invalidInput);
+
+    auto negativeGap = calculatePanelLayout(desktop, makePanels(2), 1.0f, -50);
+    CHECK(!negativeGap.invalidInput && !negativeGap.overflow);
+    checkInsideAndDisjoint(negativeGap, desktop);
+
+    auto badScale = calculatePanelLayout(desktop, makePanels(2),
+                                         std::numeric_limits<float>::quiet_NaN());
+    CHECK(!badScale.invalidInput && !badScale.overflow);
+
+    auto extremeScale = calculatePanelLayout(desktop, makePanels(2),
+                                              std::numeric_limits<float>::max());
+    CHECK(extremeScale.overflow && !extremeScale.invalidInput);
+
+    if (failures != 0)
+    {
+        std::cerr << failures << " AuxiliaryPanelLayout check(s) failed.\n";
+        return 1;
+    }
+
+    std::cout << "AuxiliaryPanelLayout contract tests passed.\n";
     return 0;
 }
