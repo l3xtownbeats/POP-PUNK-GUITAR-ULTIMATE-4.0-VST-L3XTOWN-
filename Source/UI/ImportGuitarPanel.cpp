@@ -1,4 +1,5 @@
 #include "ImportGuitarPanel.h"
+#include <utility>
 
 PPGUImportGuitarPanel::PPGUImportGuitarPanel(std::function<void()> callback)
     : browseCallback(std::move(callback))
