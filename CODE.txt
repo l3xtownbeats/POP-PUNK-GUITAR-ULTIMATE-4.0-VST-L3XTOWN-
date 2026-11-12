@@ -57,3 +57,10 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Current source under CI: e90e7be79a717c74fc94ec634a31f8c7669fb850; run #1177 / ID 43235287270 IN_PROGRESS at artwork-generation step when recorded.
 - Runs #1172–#1176 cancelled/superseded during rapid successive commits; no PASS inferred. Run #1168 remains valid only for 38b57b854dc559e5dd7c408b96c6a7821eebbd58.
 - S2 host acceptance remains NOT VERIFIED; S3 remains OPEN pending exact-SHA CI and residual audit.
+
+
+### REV18 S3 exact-source CI result
+- Validated source SHA: e90e7be79a717c74fc94ec634a31f8c7669fb850.
+- GitHub Actions run #1177 / ID 43235287270: SUCCESS.
+- Windows x64 Release configure, VST3/test executable build, CTest, VST3 locate, pluginval strictness 5, package job and artifact upload all SUCCESS; sample library license validation SUCCESS from restored cache (download skipped).
+- Evidence and limitations recorded append-only in Info.txt. Host/FL Studio 20 acceptance remains NOT VERIFIED; no COMPLETE ZIP release claimed.
