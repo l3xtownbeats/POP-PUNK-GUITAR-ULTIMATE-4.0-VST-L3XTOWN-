@@ -2033,3 +2033,25 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 
 **Проверка:** source read-back и статическая сверка названий/групп выполнены. Новая сборка CI после этого commit ещё не подтверждена. Это графические guides, не измерители фактической АЧХ/компрессии/реверберации; реальные DSP анализаторы не заявляются.
 **Статус:** IMPLEMENTED / BUILD VALIDATION PENDING / VISUAL QA PENDING.
+
+
+## 12.11.2026 — SIGNAL FORGE FX / DOUBLE WIDTH implementation pass
+
+Ветка: `work/ppgu-toolchain-qa-rev17-1`. Основание: актуальный HEAD проверен перед изменениями.
+
+### Проверка → анализ
+- В параметрах существовали `doubleTrackOn` и `doubleTrackMix`, но подтверждённой обработки DOUBLE не было.
+- В главной панели было 7 FX-кнопок; Flanger имел параметры и DSP, но не отдельную кнопку в rack.
+- FX EDIT имел общую раскладку регуляторов и один акцентный цвет; визуальная индивидуальность отдельных процессоров была недостаточной.
+
+### Исправления в исходниках
+- Добавлен отдельный DOUBLE WIDTH control, использующий прежние parameter IDs для сохранения совместимости проектов.
+- Реализована Haas-inspired Mid/Side ширина от одного источника: Mid сохраняется, задержанный high-passed Mid добавляется в Side; mono fold-down сохраняет Mid.
+- Буфер DOUBLE выделяется только в `prepareToPlay`; callback не выделяет память и не блокирует потоки. Включение/выключение и MIX сглаживаются примерно за 10 ms.
+- Добавлен Flanger в rack без изменения существующих parameter IDs; FX slots расширены до 8, плюс отдельный DOUBLE WIDTH control.
+- FX EDIT получил индивидуальные цветовые акценты, заголовки и подписи response-view для Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR и DOUBLE WIDTH.
+
+### Повторный анализ / ограничения
+- Это source-level implementation pass; Windows/VST3 build, DAW playback, listening, mono compatibility measurement, phase/correlation and CPU QA ещё не подтверждены.
+- DOUBLE — Haas-inspired width stage, а не второй take. В mono output он намеренно не создаёт искусственную ширину.
+- Skin control schema/legacy skin packs требуют отдельной миграции с 7 FX switches на новые control IDs; текущие изменения не объявляются завершёнными для всех skins.
