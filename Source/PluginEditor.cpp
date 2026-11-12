@@ -29,7 +29,7 @@ juce::String fromWidePath(const wchar_t* value, int length)
 
 // Scrollable visual browser for the complete registry. Preview images are loaded
 // lazily by visible cards so opening the gallery does not decode all 102 PNGs.
-class PPGUSkinGalleryPanel final : public juce::Component
+class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     struct Skin
@@ -97,6 +97,23 @@ public:
     ~PPGUSkinGalleryPanel() override
     {
         viewport.setViewedComponent(nullptr, false);
+    }
+
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        search.setColour(juce::TextEditor::backgroundColourId, palette.token("control_bg"));
+        search.setColour(juce::TextEditor::textColourId, palette.token("text_primary"));
+        search.setColour(juce::TextEditor::outlineColourId, palette.token("control_border"));
+        search.setColour(juce::TextEditor::focusedOutlineColourId, palette.token("accent"));
+        familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+        familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+        familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        grid.setPalette(palette);
+        repaint();
     }
 
     void resized() override
@@ -175,6 +192,8 @@ private:
             }
         }
 
+        void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+
         void mouseEnter(const juce::MouseEvent&) override { hovered = true; repaint(); }
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
         void mouseUp(const juce::MouseEvent& event) override
@@ -204,6 +223,11 @@ private:
     class Grid final : public juce::Component
     {
     public:
+        void setPalette(const PPGUThemeManager::Palette& value)
+        {
+            for (auto& card : cards)
+                card->setPalette(value);
+        }
         void clearCards() { cards.clear(); }
         void addCard(std::unique_ptr<Card> card)
         {
@@ -278,7 +302,7 @@ private:
 };
 
 // UI-only settings panel: controls the auxiliary workspace and theme preference.
-class PPGUSettingsPanel final : public juce::Component
+class PPGUSettingsPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     PPGUSettingsPanel(PPGUThemeManager::Palette paletteIn, float panelScaleIn, int panelGapIn,
@@ -343,6 +367,22 @@ public:
         addAndMakeVisible(galleryButton);
     }
 
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        scaleLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        gapLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        configureSlider(scaleSlider, 0.5, 1.5, 0.05, scaleSlider.getValue());
+        configureSlider(gapSlider, 0.0, 32.0, 1.0, gapSlider.getValue());
+        restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        galleryButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
+        galleryButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        repaint();
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(12);
@@ -386,7 +426,7 @@ private:
 };
 
 // Import panel delegates to the existing asynchronous SFZ loader and reports its real result.
-class PPGUImportGuitarPanel final : public juce::Component
+class PPGUImportGuitarPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     explicit PPGUImportGuitarPanel(std::function<void(juce::Label*, juce::Button*)> loadActionIn)
@@ -410,6 +450,17 @@ public:
         loadButton.onClick = [this] { if (loadAction) loadAction(&status, &loadButton); };
         addAndMakeVisible(loadButton);
     }
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        status.setColour(juce::Label::textColourId, palette.token("lcd_text"));
+        loadButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
+        loadButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        repaint();
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(18);
@@ -422,6 +473,7 @@ public:
         status.setBounds(area.removeFromTop(90));
     }
 private:
+    PPGUThemeManager::Palette palette;
     std::function<void(juce::Label*, juce::Button*)> loadAction;
     juce::Label heading, description, status;
     juce::TextButton loadButton;
@@ -636,7 +688,7 @@ private:
 
 namespace
 {
-class PPGUFXEditPanel final : public juce::Component
+class PPGUFXEditPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     explicit PPGUFXEditPanel(juce::AudioProcessorValueTreeState& state, int initialEffect)
@@ -700,18 +752,45 @@ public:
         selectGroup(effectSelector.getSelectedId() - 1);
     }
 
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        graphCaption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        status.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        effectSelector.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+        effectSelector.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+        effectSelector.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        effectSelector.setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+        powerButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        powerButton.setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+        powerButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        powerButton.setColour(juce::TextButton::textColourOnId, palette.token("window_bg"));
+        for (auto& control : controls)
+        {
+            control.label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
+            control.slider->setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
+            control.slider->setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
+            control.slider->setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
+            control.slider->setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
+            control.slider->setColour(juce::Slider::textBoxBackgroundColourId, palette.token("control_bg"));
+            control.slider->setColour(juce::Slider::textBoxOutlineColourId, palette.token("control_border"));
+        }
+        repaint();
+    }
+
     void paint(juce::Graphics& g) override
     {
-        g.fillAll(juce::Colour(0xff0c1218));
+        g.fillAll(palette.token("window_bg"));
         auto area = getLocalBounds().toFloat().reduced(12.0f);
-        g.setColour(juce::Colour(0xff263944));
+        g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
         if (!graphArea.isEmpty())
         {
             auto graph = graphArea.toFloat();
-            g.setColour(juce::Colour(0xff101c24));
+            g.setColour(palette.token("control_bg"));
             g.fillRoundedRectangle(graph, 8.0f);
-            g.setColour(juce::Colour(0xff304550));
+            g.setColour(palette.token("control_border"));
             for (int i = 1; i < 5; ++i)
                 g.drawHorizontalLine(graphArea.getY() + graphArea.getHeight() * i / 5, graphArea.getX(), graphArea.getRight());
             for (int i = 1; i < 9; ++i)
@@ -721,7 +800,7 @@ public:
             curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
                           graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
                           static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
-            g.setColour(juce::Colour(0xffb7f34a));
+            g.setColour(palette.token("accent"));
             g.strokePath(curve, juce::PathStrokeType(2.0f));
         }
     }
@@ -790,6 +869,7 @@ private:
         resized();
         repaint();
     }
+    PPGUThemeManager::Palette palette;
     juce::AudioProcessorValueTreeState& apvts;
     std::vector<Group> groups;
     std::vector<Control> controls;
@@ -801,7 +881,7 @@ private:
     int selectedGroup = 0;
 };
 
-class PPGUAutoChordsPanel final : public juce::Component
+class PPGUAutoChordsPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
@@ -837,10 +917,29 @@ public:
         modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
         patternLabel.setText("RHYTHM PATTERN SLOT", juce::dontSendNotification);
     }
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
+        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
+            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        offButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        for (auto* box : { &keyBox, &modeBox, &patternBox })
+        {
+            box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+            box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+            box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+            box->setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+        }
+        repaint();
+    }
+
     void paint(juce::Graphics& g) override
     {
-        g.fillAll(juce::Colour(0xff0c1218));
-        g.setColour(juce::Colour(0xff263944));
+        g.fillAll(palette.token("window_bg"));
+        g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
     }
     void resized() override
@@ -860,6 +959,7 @@ public:
         patternBox.setBounds(area.removeFromTop(44).removeFromLeft(360));
     }
 private:
+    PPGUThemeManager::Palette palette;
     juce::AudioProcessorValueTreeState& apvts;
     juce::Label title, stateLabel, keyLabel, modeLabel, patternLabel;
     juce::TextButton offButton;
@@ -1517,8 +1617,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
+ {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
          p.token("control_border"), p.token("accent"), p.token("text_primary"));
+     auxiliaryWorkspace->setThemePalette(p);
+ }
  titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
