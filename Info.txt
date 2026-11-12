@@ -485,3 +485,14 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 
 - Повторно проверен текущий `CMakeLists.txt`: JUCE plugin target содержит `FORMATS VST3`, `IS_SYNTH TRUE`, `NEEDS_MIDI_INPUT TRUE`, `NEEDS_MIDI_OUTPUT FALSE`, `IS_MIDI_EFFECT FALSE`. Конфигурация соответствует намерению PPGU быть MIDI-управляемым VST3 instrument, а не audio effect.
 - Это проверка исходной конфигурации, не доказательство успешной сборки нового HEAD и не FL Studio 20 host acceptance. Реальный scan/load/MIDI/audio/state test в FL Studio 20 остаётся отдельным обязательным gate.
+
+## 2026-11-12 — FL Studio 20: пользователь подтвердил запуск VST3
+
+**Статус: USER-REPORTED HOST LAUNCH CONFIRMED / FULL HOST ACCEPTANCE PARTIAL.**
+
+- Пользователь подтвердил, что POP PUNK GUITAR ULTIMATE запускается в FL Studio 20.
+- Это важная практическая проверка совместимости VST3 с целевой DAW на стороне пользователя; ранее статус FL Studio 20 host verification был указан как неподтверждённый.
+- Граница подтверждения: на текущем этапе зафиксирован именно успешный запуск/открытие плагина. Отдельные проверки MIDI note-on/off, звучания сэмплов, смены пресетов, automation/state restore, длительной стабильности и CPU/RAM пользователь пока не описывал; эти пункты остаются в acceptance checklist.
+- Не выдавать пользовательский smoke test за полный QA/host acceptance и не менять DSP/APVTS/MIDI на основании одного факта запуска.
+- Следующий UI этап: подключить AuxiliaryPanelLayout к реальному JUCE window manager, затем вынести существующие AMP & TONE, FX CHAIN и PLAYBACK controls в независимые окна с индивидуальными square maximize/restore и X close. Нереализованные Settings/About/Curator/Auto Discover не добавлять как фиктивные рабочие панели.
+
