@@ -57,7 +57,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("output", "Output", -24.0f, 12.0f, 0.0f, 0.01f));
     p.add( std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "playMode", 1 }, "Play Mode",
-        juce::StringArray { "Melody", "Pattern" }, 0));
+        juce::StringArray { "Melody", "Rhythm" }, 0));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "articulation", 1 }, "Articulation",
         juce::StringArray { "Open", "Palm Mute", "Flageolet", "Tremolo" }, 0));
