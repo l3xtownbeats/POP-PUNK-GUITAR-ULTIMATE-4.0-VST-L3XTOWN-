@@ -70,6 +70,11 @@ public:
 
     void setPanelBounds(juce::Rectangle<int> bounds)
     {
+        if (maximized)
+        {
+            maximized = false;
+            maximizeButton.setButtonText("□");
+        }
         setBounds(bounds);
     }
 
@@ -332,6 +337,9 @@ juce::String PPGUMultiWindowWorkspace::geometryKey(int id, const juce::String& s
 
 void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
 {
+    if (layingOutPanels)
+        return;
+
     const auto it = std::find_if(windows.begin(), windows.end(),
         [id](const auto& item) { return item->getPanelId() == id; });
     if (it == windows.end())
@@ -370,20 +378,70 @@ void PPGUMultiWindowWorkspace::reorderPanels(int draggedId, int targetId)
 
 void PPGUMultiWindowWorkspace::layoutPanels()
 {
-    if (tileSurface == nullptr)
+    if (tileSurface == nullptr || layingOutPanels)
         return;
 
-    const auto view = viewport.getLocalBounds();
-    int surfaceWidth = juce::jmax(1, view.getWidth());
-    int surfaceHeight = juce::jmax(1, view.getHeight());
+    juce::ScopedValueSetter<bool> layoutGuard(layingOutPanels, true);
+    const auto view = viewport.getViewArea();
+    const int viewWidth = juce::jmax(1, view.getWidth());
+    const int viewHeight = juce::jmax(1, view.getHeight());
 
+    std::vector<ppgu::ui::PanelRequest> requests;
+    requests.reserve(windows.size());
+    for (const auto& window : windows)
+        requests.push_back({ window->getPanelId(), window->getDesiredSize(),
+                             window->getMinimumSize() });
+
+    const auto layout = ppgu::ui::calculatePanelLayout(
+        { 0, 0, viewWidth, viewHeight }, requests, panelScale, panelGap);
+
+    if (!layout.invalidInput && !layout.overflow
+        && layout.panels.size() == windows.size())
+    {
+        for (const auto& placement : layout.panels)
+        {
+            const auto it = std::find_if(windows.begin(), windows.end(),
+                [&placement](const auto& item)
+                {
+                    return item->getPanelId() == placement.id;
+                });
+            if (it != windows.end() && placement.visible)
+            {
+                const auto& b = placement.bounds;
+                (*it)->setPanelBounds({ b.x, b.y, b.width, b.height });
+            }
+        }
+
+        tileSurface->setSize(viewWidth, viewHeight);
+        viewport.setViewPosition(0, 0);
+
+        if (persistenceProperties != nullptr)
+        {
+            for (const auto& window : windows)
+            {
+                if (window->isMaximized())
+                    continue;
+                const auto bounds = window->getBounds();
+                persistenceProperties->setValue(geometryKey(window->getPanelId(), "bounds"),
+                    juce::String(bounds.getX()) + "," + juce::String(bounds.getY()) + ","
+                    + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
+            }
+            persistenceProperties->saveIfNeeded();
+        }
+        return;
+    }
+
+    // If the viewport cannot satisfy every panel's minimum size, retain every
+    // panel on a scrollable surface instead of clipping or silently hiding it.
+    int surfaceWidth = viewWidth;
+    int surfaceHeight = viewHeight;
     for (auto& window : windows)
     {
         auto bounds = window->getBounds();
         bounds.setWidth(juce::jmax(static_cast<int>(window->getMinimumSize().width), bounds.getWidth()));
         bounds.setHeight(juce::jmax(static_cast<int>(window->getMinimumSize().height), bounds.getHeight()));
         bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
-        window->setBounds(bounds);
+        window->setPanelBounds(bounds);
         surfaceWidth = juce::jmax(surfaceWidth, bounds.getRight() + panelGap);
         surfaceHeight = juce::jmax(surfaceHeight, bounds.getBottom() + panelGap);
     }

@@ -67,11 +67,15 @@ int main()
     CHECK(!one.compact && !one.overflow && !one.invalidInput);
     checkInsideAndDisjoint(one, desktop);
 
-    for (int count : { 2, 3, 4, 6 })
+    CHECK(one.columns == 1 && one.rows == 1);
+
+    for (int count : { 2, 3, 4, 5, 6 })
     {
         auto layout = calculatePanelLayout(desktop, makePanels(count), 1.0f);
         CHECK(layout.panels.size() == static_cast<std::size_t>(count));
         CHECK(!layout.overflow && !layout.invalidInput);
+        CHECK(layout.columns == 2);
+        CHECK(layout.rows == (count + 1) / 2);
         for (const auto& p : layout.panels)
         {
             CHECK(p.bounds.width >= 280 && p.bounds.height >= 190);

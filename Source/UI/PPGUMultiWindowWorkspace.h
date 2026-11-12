@@ -59,6 +59,7 @@ private:
     juce::PropertiesFile* persistenceProperties = nullptr;
     int nextCascadeOffset = 0;
     float panelScale = 1.0f;
+    bool layingOutPanels = false;
     juce::Colour backgroundColour { 0xff090c10 };
     juce::Colour panelColour { 0xff17232b };
     juce::Colour borderColour { 0xff526875 };

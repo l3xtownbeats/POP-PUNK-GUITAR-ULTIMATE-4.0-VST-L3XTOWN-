@@ -76,7 +76,10 @@ PanelLayout calculatePanelLayout(PanelRect area,
     int bestColumns = 0, bestRows = 0;
     double bestScale = -1.0;
 
-    for (int columns = 1; columns <= count; ++columns)
+    // Keep the approved workspace grid predictable: one column for a
+    // single panel, then at most two columns (up to a 2x3 layout).
+    const int maximumColumns = std::min(count, 2);
+    for (int columns = 1; columns <= maximumColumns; ++columns)
     {
         const int rows = count / columns + (count % columns == 0 ? 0 : 1);
         const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (columns - 1);
