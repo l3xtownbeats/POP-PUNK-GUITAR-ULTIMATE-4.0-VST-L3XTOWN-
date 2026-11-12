@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
+          key: ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v2
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -140,16 +140,32 @@ jobs:
             $dest = Join-Path $sampleRoot $item.folder
             git clone --depth 1 "https://github.com/freepats/$($item.repo).git" $dest
             if (-not (Get-ChildItem $dest -Recurse -Filter '*.sfz' | Select-Object -First 1)) { throw "SFZ map missing for $($item.repo)." }
-            if (-not (Test-Path (Join-Path $dest 'LICENSE.txt'))) { throw "License missing for $($item.repo)." }
+            $licenseCandidates = @('LICENSE.txt','LICENSE')
+            if (-not ($licenseCandidates | Where-Object { Test-Path (Join-Path $dest $_) } | Select-Object -First 1)) { throw "License missing for $($item.repo)." }
+          }
+
+          # Additional real-recorded FreePats instruments, CC0 1.0:
+          # jazz electric guitar and Spanish classical acoustic guitar.
+          $additionalFreePats = @(
+            @{ repo='electric-guitar-FSBS-jazz'; folder='FreePats-Jazz-Electric' },
+            @{ repo='spanish-classical-guitar'; folder='FreePats-Spanish-Classical' }
+          )
+          foreach ($item in $additionalFreePats) {
+            $dest = Join-Path $sampleRoot $item.folder
+            git clone --depth 1 "https://github.com/freepats/$($item.repo).git" $dest
+            if (-not (Get-ChildItem $dest -Recurse -Filter '*.sfz' | Select-Object -First 1)) { throw "SFZ map missing for $($item.repo)." }
+            $licenseCandidates = @('LICENSE.txt','LICENSE')
+            if (-not ($licenseCandidates | Where-Object { Test-Path (Join-Path $dest $_) } | Select-Object -First 1)) { throw "License missing for $($item.repo)." }
+            if (-not ((Get-ChildItem $dest -Recurse -File -Include '*.flac','*.wav' | Measure-Object).Count -gt 0)) { throw "No recorded audio found for $($item.repo)." }
           }
 
           # Keep source licenses and SFZ maps, but strip cloned Git metadata
           # from the redistributable package and its reusable CI cache.
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
             Remove-Item -Recurse -Force
-          $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
-          $hashLines = foreach ($file in $wavFiles) {
+          $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $_.Extension -in @('.wav','.flac') }
+          if ($audioFiles.Count -lt 100) { throw "Expected a substantial recorded-audio library; only $($audioFiles.Count) WAV/FLAC files found." }
+          $hashLines = foreach ($file in $audioFiles) {
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
             "$hash  $relative"
@@ -159,12 +175,15 @@ jobs:
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1 and Distortion 2 electric guitars, CC0 1.0.
+          - FreePats FSBS Clean, Distortion 1, Distortion 2 and Jazz electric guitars, CC0 1.0.
             https://github.com/freepats/electric-guitar-FSBS-clean
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
+            https://github.com/freepats/electric-guitar-FSBS-jazz
+          - FreePats Spanish Classical Guitar, CC0 1.0.
+            https://github.com/freepats/spanish-classical-guitar
           Original license files, SFZ maps and source checksum manifests are retained beside the samples.
-          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
+          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV and FLAC file.
           '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
 
       - name: Validate restored sample library and licenses
