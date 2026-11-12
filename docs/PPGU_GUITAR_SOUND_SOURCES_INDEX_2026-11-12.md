@@ -351,3 +351,31 @@ This is a discovery pass, not an ingestion report. “Royalty-free” generally 
 - Splice is a strong user-facing royalty-free music-production source, but its standard end-user license must not be confused with redistribution rights for a VST sample library.
 - NDA Samples explicitly has a 50/50 commercial split and is excluded.
 - No new archives were downloaded in this web sweep; no new SHA-256 values, audio quality checks, or SoundBank ingestions were produced.
+
+
+## 2026-11-12 — коммерческие библиотеки, royalty-free и правило «нет запрета»
+
+Пользователь расширил критерии поиска: помимо бесплатных CC0/CC-BY источников искать коммерческие банки, бесплатные и royalty-free библиотеки, а также платные библиотеки, которые потенциально могут быть лицензированы для PPGU.
+
+**Критически важное юридическое разграничение:**
+- Отсутствие фразы «запрещено использовать бесплатно» или отсутствие явного запрета на встраивание НЕ означает разрешение распространять исходные WAV/AIFF/SFZ/Kontakt-сэмплы внутри коммерческого VST3.
+- «Royalty-free» обычно означает отсутствие повторных отчислений за разрешённое использование в музыкальном произведении; само по себе это не даёт права переупаковывать исходные сэмплы в sample-based instrument или soundbank.
+- «Free download», «free for commercial use», «use in music», «royalty-free» и «no copyright» не равнозначны праву на redistribution, sublicensing или embedding.
+- Для PPGU требуется либо открытая лицензия, явно разрешающая коммерческое использование, модификацию и распространение конкретных аудиофайлов (CC0; CC BY при выполнении атрибуции), либо отдельное письменное разрешение правообладателя на встраивание и распространение исходных sample assets в составе коммерческого VST3/sample-based virtual instrument, включая нужные права конечных пользователей.
+- Если лицензия молчит о таком способе использования, статус YELLOW/LEGAL REVIEW, а не GREEN. Если запрещает sound-library/sample-based products, redistribution, extraction или sublicensing — RED для встраивания, даже если разрешено использовать звуки в готовых треках.
+- Коммерческие банки вести в отдельном «потенциально лицензируемом» списке. Покупка обычной пользовательской лицензии не считается разрешением на PPGU.
+
+**Проверенные примеры условий (не исчерпывающий обзор рынка):**
+1. Hypersamples EULA запрещает включать материалы в sample-based products/virtual instruments и распространять их как sound library без express written consent. RED для обычной лицензии: https://www.hypersamples.com/legal.html
+2. Audiotent EULA запрещает распространять исходные материалы как часть другой sample library/sound bank/competing digital product и включать их в продукт, позволяющий пользователям извлекать исходные материалы. RED для обычной лицензии: https://www.audiotent.com/pages/audiotent-end-user-licence-agreement-eula
+3. Meta Open Sound подтверждает обратный пример: гитарные WAV и SFZ CC0 1.0 с прямым разрешением коммерческого использования, изменения и распространения: https://github.com/facebookincubator/Meta-open-sound
+4. VCSL официально заявляет CC0 и разрешает коммерческое ПО, включая интеграцию в DAW/сэмплеры; конкретный guitar patch ещё требуется найти и проверить: https://versilian-studios.com/vcsl/
+
+**Три корзины поиска:**
+- GREEN OPEN: CC0 / Public Domain / CC BY с выполнением атрибуции и правами на сами аудиозаписи.
+- YELLOW COMMERCIAL CLEARANCE: коммерческие/royalty-free банки, для которых можно запросить расширенную лицензию на embedded sample distribution. Не включать до письменного согласования.
+- RED / MUSIC-ONLY: лицензии только на использование в музыкальных произведениях или прямой запрет redistribution/sample-based products. Только звуковой референс, не SoundBank.
+
+Поиск охватывает dry electric guitar DI, palm-muted power chords, muted chugs, downstroke/alternate picking, punk riffs, octave hooks, open chords, acoustic steel/nylon, clean/crunch/distorted multisamples, one-shots и performance phrases.
+
+**Статус:** выполнен первичный web scan лицензионных моделей и добавлено правило оценки коммерческих банков. Новые коммерческие архивы не скачаны и не интегрированы; новых asset hashes нет. Никакой коммерческий банк не переводится в GREEN без точной лицензии на embedded redistribution.
