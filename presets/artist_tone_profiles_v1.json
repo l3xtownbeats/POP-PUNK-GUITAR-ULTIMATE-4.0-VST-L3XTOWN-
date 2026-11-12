@@ -1,0 +1,1120 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryId": "ppgu.artist-tone-profiles",
+  "status": "REFERENCE_DATA_NOT_RUNTIME_DSP",
+  "scale": {
+    "name": "0-10",
+    "meaning": "Starting points for audition, not exact historical studio settings."
+  },
+  "rules": [
+    "Artist/song names identify stylistic references only; no endorsement or official artist preset is implied.",
+    "Use only source assets and DSP modules that are actually available and legally cleared.",
+    "Never silently substitute RAW/DI for a missing amp, cabinet, IR, source or processing module.",
+    "Do not claim PLAYABLE, MIX-READY or LISTENING-APPROVED from metadata alone.",
+    "Do not duplicate one identical signal and label it authentic double tracking; use independent performances or validated differentiated layers.",
+    "Acoustic sources must not inherit electric amp/cab chains by default."
+  ],
+  "profiles": [
+    {
+      "id": "blink-182",
+      "displayName": "Blink-182",
+      "sourceProfileHint": "high-output bridge humbucker",
+      "ampFamilyTarget": "Rectifier-style driven + JCM900-style breakup",
+      "cabinetVoiceTarget": "Rectifier 4x12 V30-inspired",
+      "micPerspectiveTarget": "SM57-style attack + MD421-style body",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "fxIntent": "dry; optional short delay for clean parts",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Tight palm-muted verses, open power chords; moderate gain preserves chord definition.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "sum-41",
+      "displayName": "Sum 41",
+      "sourceProfileHint": "bridge humbucker; JB-style output",
+      "ampFamilyTarget": "Rectifier-style + JCM800-style layered rhythm",
+      "cabinetVoiceTarget": "Rectifier V30-style + British 4x12",
+      "micPerspectiveTarget": "SM57-style + MD421-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 5.5,
+        "treble": 6.5,
+        "presence": 6
+      },
+      "fxIntent": "minimal; optional mid boost only if required",
+      "tuningHint": "Eb / D#",
+      "playingAndMixNotes": "Layered amp characters are separate parts/paths; preserve mids and pick attack.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "simple-plan",
+      "displayName": "Simple Plan",
+      "sourceProfileHint": "bridge humbucker; medium/high output",
+      "ampFamilyTarget": "Dual Rectifier-style; Vox-style clean",
+      "cabinetVoiceTarget": "Rectifier 4x12 V30-inspired",
+      "micPerspectiveTarget": "SM57-style off-axis",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "fxIntent": "optional light OD boost; clean parts use restrained modulation",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Polished melodic crunch; tight low end and bright but controlled top.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "new-found-glory",
+      "displayName": "New Found Glory",
+      "sourceProfileHint": "Les Paul-style bridge humbucker",
+      "ampFamilyTarget": "Dual Rectifier-style",
+      "cabinetVoiceTarget": "Rectifier 4x12 V30-inspired",
+      "micPerspectiveTarget": "SM57-style slightly off-axis",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "fxIntent": "noise gate with short hold; no heavy ambience",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Fast downstrokes, tight palm mute, open chorus power chords.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "good-charlotte",
+      "displayName": "Good Charlotte",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "British/Rectifier hybrid crunch",
+      "cabinetVoiceTarget": "British 4x12 or V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "fxIntent": "short room only when needed",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Mid-forward compact rhythm; octave hooks need articulation.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "mest",
+      "displayName": "Mest",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Rectifier/JCM-style pop-punk crunch",
+      "cabinetVoiceTarget": "V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style + ribbon-style blend",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "subtle room/delay for melodic leads",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Melodic rhythm/lead balance; keep upper mids smooth.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "angels-airwaves",
+      "displayName": "Angels & Airwaves",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Vox AC30-style chime/crunch + Fender-style clean",
+      "cabinetVoiceTarget": "2x12/4x12 style, clean cabinet profile",
+      "micPerspectiveTarget": "condenser/ribbon-style ambience perspective",
+      "ampControls": {
+        "gain": 5,
+        "bass": 7,
+        "mid": 8,
+        "treble": 8,
+        "presence": 6
+      },
+      "fxIntent": "dotted-eighth delay, stereo delay, reverb/modulation as role requires",
+      "tuningHint": "E standard / song-specific",
+      "playingAndMixNotes": "Layered ambient parts; keep dry attack intelligible beneath tails.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "the-all-american-rejects",
+      "displayName": "The All-American Rejects",
+      "sourceProfileHint": "bridge humbucker; source-dependent",
+      "ampFamilyTarget": "British/modern pop-rock crunch",
+      "cabinetVoiceTarget": "British 4x12 or V30-inspired",
+      "micPerspectiveTarget": "SM57-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "fxIntent": "controlled delay/reverb on leads only",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Radio-ready polished crunch; acoustic and clean layers remain separate.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "mgk",
+      "displayName": "MGK",
+      "sourceProfileHint": "bridge humbucker; high-output source",
+      "ampFamilyTarget": "Modern saturated pop-punk amp-style",
+      "cabinetVoiceTarget": "V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style + ribbon-style blend",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 5.5,
+        "treble": 7,
+        "presence": 6
+      },
+      "fxIntent": "optional tight OD; short ambience sparingly",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Modern aggressive rhythm without flattening transients.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "avril-lavigne",
+      "displayName": "Avril Lavigne",
+      "sourceProfileHint": "bridge humbucker or source-specific clean guitar",
+      "ampFamilyTarget": "Modern British/US pop-punk crunch",
+      "cabinetVoiceTarget": "V30-inspired or balanced 2x12",
+      "micPerspectiveTarget": "SM57-style off-axis",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "subtle chorus/delay only on selected clean/lead parts",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Bright melodic rhythm; preserve vocal space and chord clarity.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "the-offspring",
+      "displayName": "The Offspring",
+      "sourceProfileHint": "bridge humbucker or P90-style source",
+      "ampFamilyTarget": "JCM2000/Marshall-style + Mesa Mark-style variants",
+      "cabinetVoiceTarget": "British 4x12 / V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style + MD421-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "fxIntent": "optional TS-style mid boost; restrained gate",
+      "tuningHint": "E / Eb song-specific",
+      "playingAndMixNotes": "Fast downstrokes; tight lows; layered parts must be independently performed or articulated.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "green-day",
+      "displayName": "Green Day",
+      "sourceProfileHint": "P90 or bridge humbucker; source-specific",
+      "ampFamilyTarget": "British Plexi/JCM-style amp breakup",
+      "cabinetVoiceTarget": "British 4x12 G12-style inspired",
+      "micPerspectiveTarget": "SM57-style off-axis",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 5.5,
+        "presence": 5
+      },
+      "fxIntent": "minimal; tremolo/chorus only on selected songs",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Mid-forward crunch; density from performance layers, not excessive gain.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "bowling-for-soup",
+      "displayName": "Bowling for Soup",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "British pop-punk crunch",
+      "cabinetVoiceTarget": "British 4x12 style",
+      "micPerspectiveTarget": "SM57-style",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "light room/reverb if needed",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Bright upbeat rhythm with controlled low end.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "sugarcult",
+      "displayName": "Sugarcult",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Polished British/modern crunch",
+      "cabinetVoiceTarget": "V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style + ribbon-style",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "fxIntent": "short stereo delay on leads; restrained chorus",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Glossy wide rhythm without artificial stereo duplication.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "all-time-low",
+      "displayName": "All Time Low",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Modern melodic crunch / clean-to-crunch",
+      "cabinetVoiceTarget": "V30-inspired 4x12 or clean 2x12",
+      "micPerspectiveTarget": "SM57-style",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "tempo delay/reverb on lead roles only",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Modern polished dynamic shifts; maintain pick articulation.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "fall-out-boy",
+      "displayName": "Fall Out Boy",
+      "sourceProfileHint": "Gretsch/Tele-style or bridge humbucker source profile",
+      "ampFamilyTarget": "Orange-style aggressive mids / modern high-mid crunch",
+      "cabinetVoiceTarget": "Orange PPC-style 2x12/4x12 V30-inspired",
+      "micPerspectiveTarget": "SM57-style + ribbon-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 7,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "noise control; octave/wham effects only on designated parts",
+      "tuningHint": "E / song-specific",
+      "playingAndMixNotes": "Mid-forward, syncopated, punchy; avoid scooped metal tone.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "yellowcard",
+      "displayName": "Yellowcard",
+      "sourceProfileHint": "bridge humbucker plus steel-string acoustic layers",
+      "ampFamilyTarget": "British crunch + acoustic steel-string",
+      "cabinetVoiceTarget": "V30-inspired 4x12; acoustic remains DI/appropriate acoustic chain",
+      "micPerspectiveTarget": "SM57-style electric; acoustic mic perspective separate",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "fxIntent": "selective delay; acoustic room/plate subtly",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Layered electric/acoustic parts; phase and mono checks mandatory.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "my-chemical-romance",
+      "displayName": "My Chemical Romance",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "British high-mid crunch / modern high gain",
+      "cabinetVoiceTarget": "British 4x12 or V30-inspired",
+      "micPerspectiveTarget": "SM57-style + MD421-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "fxIntent": "role-specific delay/reverb; not on every rhythm",
+      "tuningHint": "E / Eb song-specific",
+      "playingAndMixNotes": "Dynamic quiet-to-explosive sections; octave leads remain distinct.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "less-than-jake",
+      "displayName": "Less Than Jake",
+      "sourceProfileHint": "single-coil/bridge humbucker source-specific",
+      "ampFamilyTarget": "Clean-to-crunch British combo/stack",
+      "cabinetVoiceTarget": "2x12 clean or British 4x12",
+      "micPerspectiveTarget": "SM57-style",
+      "ampControls": {
+        "gain": 4,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "short room; avoid long tails on offbeat chops",
+      "tuningHint": "E / Eb song-specific",
+      "playingAndMixNotes": "Crisp ska offbeat chops; fast transient and tight release.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "fenix-tx",
+      "displayName": "Fenix TX",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Bright skate-punk British/Rectifier-style crunch",
+      "cabinetVoiceTarget": "V30-inspired 4x12",
+      "micPerspectiveTarget": "SM57-style off-axis",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "fxIntent": "minimal room",
+      "tuningHint": "Eb",
+      "playingAndMixNotes": "Fast eighth-note rhythm, palm-muted verses and open choruses.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    },
+    {
+      "id": "midtown",
+      "displayName": "Midtown",
+      "sourceProfileHint": "bridge humbucker",
+      "ampFamilyTarget": "Urgent British/modern emo-pop-punk crunch",
+      "cabinetVoiceTarget": "British 4x12 / V30-inspired",
+      "micPerspectiveTarget": "SM57-style + ribbon-style",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "fxIntent": "selective delay on octave leads",
+      "tuningHint": "Eb / song-specific",
+      "playingAndMixNotes": "Urgent rhythm with ringing octave hooks and dynamic transitions.",
+      "availability": "REFERENCE_ONLY_PENDING_RUNTIME_AND_ASSET_VALIDATION"
+    }
+  ],
+  "songReferences": [
+    {
+      "id": "green-day-basket-case",
+      "artist": "Green Day",
+      "title": "Basket Case",
+      "ampControls": {
+        "gain": 6,
+        "bass": 6,
+        "mid": 6,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "British Plexi-style crunch; double-tracked performance",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-longview",
+      "artist": "Green Day",
+      "title": "Longview",
+      "ampControls": {
+        "gain": 5,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Open British crunch; controlled gain",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-when-i-come-around",
+      "artist": "Green Day",
+      "title": "When I Come Around",
+      "ampControls": {
+        "gain": 5,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Open chord crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-american-idiot",
+      "artist": "Green Day",
+      "title": "American Idiot",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 7
+      },
+      "notes": "Tighter modern driven rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-holiday",
+      "artist": "Green Day",
+      "title": "Holiday",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "British crunch; firm mids",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-boulevard-of-broken-dreams",
+      "artist": "Green Day",
+      "title": "Boulevard of Broken Dreams",
+      "ampControls": {
+        "gain": 3,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 4
+      },
+      "notes": "Clean/edge-of-breakup; tremolo/space only as needed",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-good-riddance",
+      "artist": "Green Day",
+      "title": "Good Riddance (Time of Your Life)",
+      "ampControls": {
+        "gain": 1,
+        "bass": 5,
+        "mid": 6,
+        "treble": 5,
+        "presence": 2
+      },
+      "notes": "Acoustic/clean source route; no electric high gain",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "green-day-21-guns",
+      "artist": "Green Day",
+      "title": "21 Guns",
+      "ampControls": {
+        "gain": 1,
+        "bass": 5,
+        "mid": 6,
+        "treble": 5,
+        "presence": 3
+      },
+      "notes": "Clean base; separate driven section variation",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-dammit",
+      "artist": "Blink-182",
+      "title": "Dammit",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "notes": "Mesa-style crunch; open chord clarity",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-whats-my-age-again",
+      "artist": "Blink-182",
+      "title": "What's My Age Again?",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "notes": "Tight Rectifier-style rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-all-the-small-things",
+      "artist": "Blink-182",
+      "title": "All the Small Things",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "notes": "Bright pop-punk crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-the-rock-show",
+      "artist": "Blink-182",
+      "title": "The Rock Show",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "notes": "More saturated chorus rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-first-date",
+      "artist": "Blink-182",
+      "title": "First Date",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Separate clean/crunch verse and driven chorus variants",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-stay-together-for-the-kids",
+      "artist": "Blink-182",
+      "title": "Stay Together for the Kids",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Dynamic clean-to-driven arrangement",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "blink-182-i-miss-you",
+      "artist": "Blink-182",
+      "title": "I Miss You",
+      "ampControls": {
+        "gain": 2,
+        "bass": 5,
+        "mid": 5,
+        "treble": 6,
+        "presence": 3
+      },
+      "notes": "Clean/ambient chain, not Rectifier rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "sum-41-fat-lip",
+      "artist": "Sum 41",
+      "title": "Fat Lip",
+      "ampControls": {
+        "gain": 8,
+        "bass": 6.5,
+        "mid": 5,
+        "treble": 6.5,
+        "presence": 6
+      },
+      "notes": "JCM-style high drive; keep chord articulation",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "sum-41-in-too-deep-clean",
+      "artist": "Sum 41",
+      "title": "In Too Deep (Clean)",
+      "ampControls": {
+        "gain": 1,
+        "bass": 5,
+        "mid": 6,
+        "treble": 5,
+        "presence": 4
+      },
+      "notes": "Clean verse/intro",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "sum-41-in-too-deep-drive",
+      "artist": "Sum 41",
+      "title": "In Too Deep (Driven)",
+      "ampControls": {
+        "gain": 8,
+        "bass": 6,
+        "mid": 6,
+        "treble": 4,
+        "presence": 4
+      },
+      "notes": "Separate driven section",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "sum-41-still-waiting",
+      "artist": "Sum 41",
+      "title": "Still Waiting",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 5.5,
+        "treble": 6.5,
+        "presence": 6
+      },
+      "notes": "Rectifier/JCM800-inspired independent layered parts",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "offspring-self-esteem",
+      "artist": "The Offspring",
+      "title": "Self Esteem",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Fast downstroke rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "offspring-the-kids-arent-alright",
+      "artist": "The Offspring",
+      "title": "The Kids Aren't Alright",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Tight bright rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "offspring-come-out-and-play",
+      "artist": "The Offspring",
+      "title": "Come Out and Play",
+      "ampControls": {
+        "gain": 6,
+        "bass": 6,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Mesa Mark-style mid-focused crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "offspring-youre-gonna-go-far-kid",
+      "artist": "The Offspring",
+      "title": "You're Gonna Go Far, Kid",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Optional TS-style boost; validate mids",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "nofx-linoleum",
+      "artist": "NOFX",
+      "title": "Linoleum",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Skate-punk crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "nofx-the-decline",
+      "artist": "NOFX",
+      "title": "The Decline",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Long-form dynamic punk rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "nofx-franco-un-american",
+      "artist": "NOFX",
+      "title": "Franco Un-American",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Tight mid-forward rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "rancid-ruby-soho",
+      "artist": "Rancid",
+      "title": "Ruby Soho",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "Dry punk crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "rancid-time-bomb",
+      "artist": "Rancid",
+      "title": "Time Bomb",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 7,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "Mid-forward offbeat chops",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "afi-girls-not-grey",
+      "artist": "AFI",
+      "title": "Girl's Not Grey",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 5,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Bright alternative punk drive",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "afi-miss-murder",
+      "artist": "AFI",
+      "title": "Miss Murder",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 5,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Tight modern punk drive",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "alkaline-trio-radio",
+      "artist": "Alkaline Trio",
+      "title": "Radio",
+      "ampControls": {
+        "gain": 6,
+        "bass": 6,
+        "mid": 6,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "Dark midrange crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "alkaline-trio-mercy-me",
+      "artist": "Alkaline Trio",
+      "title": "Mercy Me",
+      "ampControls": {
+        "gain": 6,
+        "bass": 6,
+        "mid": 6,
+        "treble": 5,
+        "presence": 4
+      },
+      "notes": "Slightly darker crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "fall-out-boy-sugar-were-going-down",
+      "artist": "Fall Out Boy",
+      "title": "Sugar, We're Goin Down",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 7,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Orange-style aggressive mids; syncopated stops",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "fall-out-boy-thnks-fr-th-mmrs",
+      "artist": "Fall Out Boy",
+      "title": "Thnks fr th Mmrs",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Slightly darker high-mid crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "paramore-misery-business",
+      "artist": "Paramore",
+      "title": "Misery Business",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 7,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "Mid-forward fast rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "paramore-still-into-you",
+      "artist": "Paramore",
+      "title": "Still Into You",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Polished melodic crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "paramore-thats-what-you-get",
+      "artist": "Paramore",
+      "title": "That's What You Get",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Bright pop-rock crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "new-found-glory-my-friends-over-you",
+      "artist": "New Found Glory",
+      "title": "My Friends Over You",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Dual Rectifier/V30-inspired tight rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "yellowcard-ocean-avenue",
+      "artist": "Yellowcard",
+      "title": "Ocean Avenue",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 7,
+        "presence": 5
+      },
+      "notes": "Electric crunch plus separate acoustic layers",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "jimmy-eat-world-the-middle",
+      "artist": "Jimmy Eat World",
+      "title": "The Middle",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 7,
+        "treble": 5,
+        "presence": 5
+      },
+      "notes": "Mid-forward melodic rock rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "taking-back-sunday-youre-so-last-summer",
+      "artist": "Taking Back Sunday",
+      "title": "You're So Last Summer",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Urgent emo-pop-punk crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "brand-new-the-quiet-things",
+      "artist": "Brand New",
+      "title": "The Quiet Things",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Dynamic mid-forward rhythm",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "simple-plan-perfect",
+      "artist": "Simple Plan",
+      "title": "Perfect",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Polished crunch; dynamic clean/driven sections",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "simple-plan-im-just-a-kid",
+      "artist": "Simple Plan",
+      "title": "I'm Just a Kid",
+      "ampControls": {
+        "gain": 8,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Dense chorus rhythm; preserve pick attack",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "good-charlotte-the-anthem",
+      "artist": "Good Charlotte",
+      "title": "The Anthem",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Punchy mid-forward power chords",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "bowling-for-soup-1985",
+      "artist": "Bowling for Soup",
+      "title": "1985",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Bright upbeat crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "papa-roach-last-resort",
+      "artist": "Papa Roach",
+      "title": "Last Resort",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 5,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Tighter heavier alt-rock; not default pop-punk profile",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "all-american-rejects-dirty-little-secret",
+      "artist": "The All-American Rejects",
+      "title": "Dirty Little Secret",
+      "ampControls": {
+        "gain": 7,
+        "bass": 6,
+        "mid": 6,
+        "treble": 7,
+        "presence": 6
+      },
+      "notes": "Radio-ready bright crunch",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "pennywise-bro-hymn",
+      "artist": "Pennywise",
+      "title": "Bro Hymn",
+      "ampControls": {
+        "gain": 6,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 5
+      },
+      "notes": "Fast skate-punk power chords",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    },
+    {
+      "id": "rise-against-prayer-of-the-refugee",
+      "artist": "Rise Against",
+      "title": "Prayer of the Refugee",
+      "ampControls": {
+        "gain": 7,
+        "bass": 5,
+        "mid": 6,
+        "treble": 6,
+        "presence": 6
+      },
+      "notes": "Urgent tight rhythm; preserve attack",
+      "status": "REFERENCE_ONLY_PENDING_RUNTIME_AND_LISTENING"
+    }
+  ]
+}
