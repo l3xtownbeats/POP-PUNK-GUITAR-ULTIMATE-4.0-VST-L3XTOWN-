@@ -426,3 +426,23 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests:** gallery and arithmetic source readback checked. Windows VST3 workflow `43195592441` was IN_PROGRESS on code SHA `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b`; no build/CTest/pluginval/host PASS claimed at this record. FL Studio 20 visual acceptance remains pending.
 
 **Status:** 102-THEME PACK PUBLISHED; GALLERY SOURCE IMPLEMENTED; EXACT-SHA BUILD / TEST / HOST VALIDATION PENDING.
+
+
+## 2026-11-12 — Persistent auxiliary Workspace Settings panel
+
+**Type:** production UI feature.
+**Branch:** `work/ppgu-skin-expansion-53-102`.
+**Commits:**
+- `359f4269f5fe56b24384af89ddc930b6b77fc04a` — `Source/PluginEditor.h`: declares `openSettingsPanel()` and `settingsButton`.
+- `19e3f9f3d61f19582e18cdab7ae0ba6446607d46` — `Source/PluginEditor.cpp`: adds `PPGUSettingsPanel`, settings top-bar action, persisted workspace preferences and reset/open-gallery actions.
+- Documentation updates: `546d11b80947307b7aff1636bfb2e979fce714a7`, `ad9d04c5d79147d75e019cb53cc8c0892d1101f0`, `591e2251b66f94add4d94bae6c2e3a0b97f82f2c`, `ebf9f7965c80053ca1a1b7e1033889cbe5de6d3a`.
+
+**Symbols:** `PPGUSettingsPanel`; `PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel`; `settingsButton`; `PPGUMultiWindowWorkspace::setPanelScale`, `setPanelGap`.
+
+**Behavior:** settings panel ID 6 exposes real controls for auxiliary panel scale (0.50–1.50) and spacing (0–32 px), with persisted values `workspacePanelScale` and `workspacePanelGap`. It can restore canonical SIGNAL FORGE (Skin_052) or open the theme gallery. The panel is hosted by the existing multi-window workspace and uses safe editor callbacks.
+
+**Compatibility:** UI/workspace only. No APVTS IDs/semantics, processor, DSP, audio callback, sampler, MIDI, preset or SoundBank changes. No global engine/device settings or About panel claimed.
+
+**Tests:** source/readback inspected. Windows VST3 workflow `43196006789` was IN_PROGRESS on SHA `591e2251...`, including settings source commit `19e3f9...`; exact-SHA build/CTest/pluginval and FL Studio host result pending. `ebf9...` is workspace documentation only.
+
+**Status:** SETTINGS PANEL SOURCE IMPLEMENTED; VALIDATION PENDING.
