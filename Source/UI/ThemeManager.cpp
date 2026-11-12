@@ -129,6 +129,137 @@ namespace
 
         return true;
     }
+
+    bool validateSkinStudioManifest(const juce::var& root,
+                                    PPGUThemeManager::Palette& palette,
+                                    juce::String& error)
+    {
+        if (root.getProperty("schemaVersion", "").toString() != "1.0.0")
+        {
+            error = "Unsupported Skin Studio schema version";
+            return false;
+        }
+
+        const auto id = root.getProperty("id", "").toString();
+        const auto indexValue = root.getProperty("index", juce::var());
+        if ((!indexValue.isInt() && !indexValue.isInt64())
+            || id.length() != 8 || !id.startsWith("skin-")
+            || id.substring(5).length() != 3
+            || !juce::CharacterFunctions::isDigit(id[5])
+            || !juce::CharacterFunctions::isDigit(id[6])
+            || !juce::CharacterFunctions::isDigit(id[7])
+            || id.substring(5).getIntValue() != static_cast<int>(indexValue)
+            || static_cast<int>(indexValue) < 52
+            || static_cast<int>(indexValue) > 999)
+        {
+            error = "Invalid Skin Studio ID/index pair";
+            return false;
+        }
+
+        const auto name = root.getProperty("name", "").toString().trim();
+        if (name.isEmpty())
+        {
+            error = "Skin Studio theme name is missing";
+            return false;
+        }
+
+        const auto family = root.getProperty("family", "").toString();
+        if (family != "carbon_studio" && family != "neon_basement"
+            && family != "chrome_parade" && family != "wood_summer"
+            && family != "vintage_tape" && family != "sunset_suburb"
+            && family != "special")
+        {
+            error = "Invalid Skin Studio theme family";
+            return false;
+        }
+
+        const auto layout = root.getProperty("layout", "").toString();
+        if (layout != "STUDIO_CONSOLE" && layout != "WORKSTATION_TOPBAR"
+            && layout != "RACK_SIDE" && layout != "COMPACT_MINI")
+        {
+            error = "Invalid Skin Studio layout";
+            return false;
+        }
+
+        juce::var paletteTokens;
+        if (!hasObject(root, "palette", paletteTokens))
+        {
+            error = "Skin Studio palette object is missing";
+            return false;
+        }
+
+        const juce::StringArray requiredColours {
+            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
+            "control_border", "text_primary", "text_secondary", "text_disabled",
+            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
+            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
+        };
+        const auto* paletteObject = paletteTokens.getDynamicObject();
+        if (paletteObject == nullptr || paletteObject->getProperties().size() != requiredColours.size())
+        {
+            error = "Skin Studio palette must contain exactly 21 tokens";
+            return false;
+        }
+
+        for (const auto& key : requiredColours)
+        {
+            if (!isHexColour(paletteTokens.getProperty(key, juce::var())))
+            {
+                error = "Invalid Skin Studio HEX token: " + key;
+                return false;
+            }
+        }
+
+        juce::var controls;
+        if (!hasObject(root, "controls", controls)
+            || controls.getDynamicObject() == nullptr
+            || controls.getDynamicObject()->getProperties().size() < 27)
+        {
+            error = "Skin Studio control map is incomplete";
+            return false;
+        }
+
+        juce::var assets;
+        if (!hasObject(root, "assets", assets)
+            || assets.getProperty("preview", "").toString() != "assets/preview.png"
+            || assets.getProperty("hero", "").toString() != "assets/hero.png"
+            || !hasStringProperty(assets, "texture")
+            || !hasStringProperty(assets, "bezel")
+            || !hasStringProperty(assets, "crest"))
+        {
+            error = "Skin Studio asset paths are incomplete";
+            return false;
+        }
+
+        juce::var compatibility;
+        if (!hasObject(root, "compatibility", compatibility)
+            || static_cast<bool>(compatibility.getProperty("apvtsChanges", true))
+            || static_cast<bool>(compatibility.getProperty("layoutChanges", true))
+            || static_cast<bool>(compatibility.getProperty("audioChanges", true))
+            || root.getProperty("reduceInEco", false) != true
+            || static_cast<int>(root.getProperty("hotSwapFadeMs", 0)) != 150)
+        {
+            error = "Skin Studio visual-only/ECO/hot-swap contract is invalid";
+            return false;
+        }
+
+        palette = PPGUThemeManager::Palette{};
+        palette.id = id;
+        palette.name = name;
+        palette.canvas = juce::Colour::fromString("ff" + paletteTokens.getProperty("window_bg").toString().substring(1));
+        palette.canvasInset = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_bg").toString().substring(1));
+        palette.surface = juce::Colour::fromString("ff" + paletteTokens.getProperty("panel").toString().substring(1));
+        palette.surfaceSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_bg").toString().substring(1));
+        palette.surfaceRaised = juce::Colour::fromString("ff" + paletteTokens.getProperty("panel_elevated").toString().substring(1));
+        palette.text = juce::Colour::fromString("ff" + paletteTokens.getProperty("text_primary").toString().substring(1));
+        palette.textSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("text_secondary").toString().substring(1));
+        palette.accent = juce::Colour::fromString("ff" + paletteTokens.getProperty("accent").toString().substring(1));
+        palette.accentSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("accent_glow").toString().substring(1));
+        palette.border = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_border").toString().substring(1));
+        palette.focus = palette.accentSecondary;
+        palette.usedFallback = false;
+        return true;
+    }
 }
 
 bool PPGUThemeManager::readColour(const juce::var& object,
@@ -170,6 +301,9 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
         error = "Theme index must be an integer";
         return false;
     }
+    if (id.length() == 8)
+        return validateSkinStudioManifest(root, palette, error);
+
     if (id.length() != 7 || !id.startsWith("skin-")
         || !juce::CharacterFunctions::isDigit(id[5])
         || !juce::CharacterFunctions::isDigit(id[6])
