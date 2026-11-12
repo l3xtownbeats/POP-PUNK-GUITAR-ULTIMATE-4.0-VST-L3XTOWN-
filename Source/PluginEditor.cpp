@@ -47,13 +47,13 @@ public:
         : skins(std::move(skinsIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
     {
         heading.setText("VISUAL SKIN GALLERY", juce::dontSendNotification);
-        heading.setFont(juce::Font(19.0f, juce::Font::bold));
+        heading.setFont(juce::Font(17.0f, juce::Font::bold));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
         subtitle.setText("Browse the complete PPGU collection. Select a card to apply its visual system.",
                          juce::dontSendNotification);
-        subtitle.setFont(juce::Font(11.0f));
+        subtitle.setFont(juce::Font(10.0f));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(subtitle);
 
@@ -102,15 +102,15 @@ public:
     void resized() override
     {
         auto area = getLocalBounds().reduced(16);
-        heading.setBounds(area.removeFromTop(28));
-        subtitle.setBounds(area.removeFromTop(22));
-        area.removeFromTop(8);
-        auto filters = area.removeFromTop(36);
+        heading.setBounds(area.removeFromTop(24));
+        subtitle.setBounds(area.removeFromTop(18));
+        area.removeFromTop(4);
+        auto filters = area.removeFromTop(32);
         search.setBounds(filters.removeFromLeft(juce::jmin(300, filters.getWidth() / 2)).reduced(1, 2));
         filters.removeFromLeft(8);
         familyFilter.setBounds(filters.removeFromLeft(190).reduced(1, 2));
         countLabel.setBounds(filters);
-        area.removeFromTop(8);
+        area.removeFromTop(4);
         viewport.setBounds(area);
         rebuildCards();
     }
@@ -134,7 +134,7 @@ private:
             g.setColour(item.active ? item.accent : palette.token("control_border"));
             g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
 
-            auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(104.0f);
+            auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
             if (item.preview.existsAsFile())
             {
                 const auto image = juce::ImageCache::getFromFile(item.preview);
@@ -149,14 +149,14 @@ private:
                 paintFallback(g, previewArea);
 
             auto textArea = bounds.reduced(10.0f, 8.0f);
-            textArea.removeFromTop(110);
+            textArea.removeFromTop(78);
             g.setColour(palette.token("text_primary"));
             g.setFont(juce::Font(12.5f, juce::Font::bold));
-            g.drawText(item.name, textArea.removeFromTop(19.0f), juce::Justification::centredLeft, true);
+            g.drawText(item.name, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
             g.setColour(palette.token("text_secondary"));
             g.setFont(juce::Font(9.0f));
             g.drawText(item.family + "  /  " + item.layout,
-                       textArea.removeFromTop(16.0f), juce::Justification::centredLeft, true);
+                       textArea.removeFromTop(14.0f), juce::Justification::centredLeft, true);
 
             if (item.active)
             {
@@ -216,7 +216,7 @@ private:
         {
             constexpr int gap = 12;
             constexpr int minCardWidth = 205;
-            constexpr int cardHeight = 174;
+            constexpr int cardHeight = 136;
             const int columns = juce::jmax(1, (getWidth() - gap) / (minCardWidth + gap));
             const int cardWidth = juce::jmax(160, (getWidth() - gap * (columns + 1)) / columns);
             for (int i = 0; i < static_cast<int>(cards.size()); ++i)
@@ -261,7 +261,7 @@ private:
         const int minCardWidth = 205;
         const int columns = juce::jmax(1, (viewport.getWidth() - gap) / (minCardWidth + gap));
         const int rows = (grid.getCardCount() + columns - 1) / columns;
-        const int cardHeight = 174;
+        const int cardHeight = 136;
         grid.setSize(juce::jmax(1, viewport.getWidth()),
                      juce::jmax(viewport.getHeight(), gap + rows * (cardHeight + gap)));
         grid.resized();
@@ -291,7 +291,7 @@ public:
           openGallery(std::move(openGalleryIn))
     {
         heading.setText("WORKSPACE SETTINGS", juce::dontSendNotification);
-        heading.setFont(juce::Font(18.0f, juce::Font::bold));
+        heading.setFont(juce::Font(16.0f, juce::Font::bold));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
@@ -299,7 +299,7 @@ public:
                              "Audio processing, MIDI and instrument parameters are not changed.",
                              juce::dontSendNotification);
         description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
-        description.setFont(juce::Font(11.0f));
+        description.setFont(juce::Font(10.0f));
         description.setJustificationType(juce::Justification::topLeft);
         addAndMakeVisible(description);
 
@@ -307,7 +307,7 @@ public:
         gapLabel.setText("SPACE BETWEEN PANELS", juce::dontSendNotification);
         for (auto* label : { &scaleLabel, &gapLabel })
         {
-            label->setFont(juce::Font(10.0f, juce::Font::bold));
+            label->setFont(juce::Font(9.5f, juce::Font::bold));
             label->setColour(juce::Label::textColourId, palette.token("accent"));
             addAndMakeVisible(*label);
         }
@@ -345,19 +345,19 @@ public:
 
     void resized() override
     {
-        auto area = getLocalBounds().reduced(16);
-        heading.setBounds(area.removeFromTop(22));
-        description.setBounds(area.removeFromTop(30));
-        area.removeFromTop(4);
+        auto area = getLocalBounds().reduced(12);
+        heading.setBounds(area.removeFromTop(20));
+        description.setBounds(area.removeFromTop(24));
+        area.removeFromTop(2);
         scaleLabel.setBounds(area.removeFromTop(14));
-        scaleSlider.setBounds(area.removeFromTop(24));
-        area.removeFromTop(4);
+        scaleSlider.setBounds(area.removeFromTop(20));
+        area.removeFromTop(2);
         gapLabel.setBounds(area.removeFromTop(14));
-        gapSlider.setBounds(area.removeFromTop(24));
-        area.removeFromTop(4);
-        restoreButton.setBounds(area.removeFromTop(26).removeFromLeft(270));
-        area.removeFromTop(4);
-        galleryButton.setBounds(area.removeFromTop(26).removeFromLeft(220));
+        gapSlider.setBounds(area.removeFromTop(20));
+        area.removeFromTop(2);
+        restoreButton.setBounds(area.removeFromTop(22).removeFromLeft(270));
+        area.removeFromTop(2);
+        galleryButton.setBounds(area.removeFromTop(22).removeFromLeft(220));
     }
 
 private:
@@ -365,7 +365,7 @@ private:
                          double interval, double value)
     {
         slider.setSliderStyle(juce::Slider::LinearHorizontal);
-        slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 58, 22);
+        slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 52, 18);
         slider.setRange(minimum, maximum, interval);
         slider.setValue(juce::jlimit(minimum, maximum, value), juce::dontSendNotification);
         slider.setColour(juce::Slider::trackColourId, palette.token("control_border"));
