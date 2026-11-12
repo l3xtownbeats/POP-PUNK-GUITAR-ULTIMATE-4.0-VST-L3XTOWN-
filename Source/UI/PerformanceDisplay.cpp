@@ -85,7 +85,7 @@ juce::String PPGUPerformanceDisplay::makeChordName(const std::array<bool, 128>& 
             && pitchClasses[static_cast<std::size_t>((root + 3) % 12)]
             && pitchClasses[static_cast<std::size_t>((root + 7) % 12)];
         if (major && unique == 3) return juce::String(names[root]) + " Maj";
-        if (minor && unique == 3) return juce::String(names[root]) + " Min";
+        if (minor && unique == 3) return juce::String(names[root]) + "m";
     }
     return "NOTE SET";
 }
