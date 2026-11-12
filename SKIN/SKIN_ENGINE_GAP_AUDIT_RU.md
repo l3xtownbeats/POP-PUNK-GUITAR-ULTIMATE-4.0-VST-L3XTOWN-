@@ -110,3 +110,8 @@ PUNK GROUP, dedicated LED, Auto Discover, Curator, Settings и About пока н
 Skin generation/validation/merge/publish подтверждены run `43195205929`. Windows VST3 workflow `43195592441` на code SHA `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b` был IN_PROGRESS на момент этой актуализации; до финального результата нельзя ставить BUILD/CTest/pluginval PASS. Host review не выполняется автоматически этим workflow.
 
 **Итог:** 102 themes + searchable preview gallery SOURCE PRESENT / PACK PUBLISHED; complete Skin Engine acceptance NOT COMPLETE.
+
+
+## Settings panel correction — 12.11.2026
+
+Settings is no longer a deferred/absent panel in this branch. `settingsButton` opens `PPGUSettingsPanel` (workspace panel ID 6). Implemented real persisted options are auxiliary panel scale, panel gap, restore canonical SIGNAL FORGE and open Skin Gallery. This does not complete product-wide settings: audio/engine settings, MIDI settings, global UI scaling, performance options and About are not represented by this small workspace settings panel.
