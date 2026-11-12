@@ -35,18 +35,18 @@ PPGUAutoChordsPanel::PPGUAutoChordsPanel(const PPGUThemeManager::Palette& initia
     for (auto* box : { &key, &scale, &progression })
         addAndMakeVisible(*box);
 
-    for (auto* button : styleChoices)
+    for (auto& button : styleChoices)
         addAndMakeVisible(button);
-    for (auto* button : rhythmChoices)
+    for (auto& button : rhythmChoices)
         addAndMakeVisible(button);
 
     // These are intentionally presented as a visual preview only until the
     // chord/performance event routing is implemented and acceptance-tested.
-    for (auto* button : styleChoices) {
+    for (auto& button : styleChoices) {
         button.setEnabled(false);
         button.setTooltip("Unavailable until a compatible recorded performance map is connected.");
     }
-    for (auto* button : rhythmChoices) {
+    for (auto& button : rhythmChoices) {
         button.setEnabled(false);
         button.setTooltip("Unavailable until AutoChords pattern playback is connected.");
     }
@@ -94,11 +94,11 @@ void PPGUAutoChordsPanel::setPalette(const PPGUThemeManager::Palette& value)
         box->setColour(juce::ComboBox::outlineColourId, palette.controlBorder);
         box->setColour(juce::ComboBox::arrowColourId, palette.accent);
     }
-    for (auto* button : styleChoices) {
+    for (auto& button : styleChoices) {
         button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
         button->setColour(juce::TextButton::textColourOffId, palette.textDisabled);
     }
-    for (auto* button : rhythmChoices) {
+    for (auto& button : rhythmChoices) {
         button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
         button->setColour(juce::TextButton::textColourOffId, palette.textDisabled);
     }
