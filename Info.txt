@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `63bca7aed262e002264c6986e95a052118481e70`
+Последний commit перед текущей записью: `fe53d00a1c4f1841cebfbb9e2357775cb14ae8d3`
 
 ## 1. Назначение и продукт
 
@@ -788,3 +788,18 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 6. Ветки: 42 refs обнаружены; этап явно помечен main-only; синхронизация остальных веток NOT YET VERIFIED.
 
 **Следующий этап по R24:** новый Windows CI на source SHA после compile fix; затем все CTest targets PASS, включая `ppgu_auxiliary_panel_layout_contract`; только после этого переходить к default-ppgu + ThemeManager 21-token contract migration.
+
+## 2026-11-12 — README alignment with REV 16.2 and latest compile evidence
+
+**Статус:** IMPLEMENTED / DOCUMENTATION ONLY; Windows rebuild remains PENDING.  
+**Коммит README:** `fe53d00a1c4f1841cebfbb9e2357775cb14ae8d3`.
+
+**Факт:** README ранее ссылался на REV 16.0 как authority и называл CMake test-discovery correction последним source fix. INFO содержит более позднее исправление MSVC C2660 в ThemeManager (commit `8bd10b20...`) и точный результат run #963 (failed compile на предыдущем SHA). По R29 это расхождение исправлено.
+
+**Исправлено:** README теперь называет REV 16.2 действующей спецификацией; указывает ThemeManager JUCE 7.0.12 compile fix как последний source correction; показывает run #963 как FAILED на старом SHA и явно сообщает, что успешный повторный build/CTest/pluginval/package для `8bd10b2...` не подтверждён. Пустой status и PR-only workflow lookup не трактуются как отсутствие всех Actions runs или PASS.
+
+**R28 non-goals:** только README; исходники, тесты, CI workflows, skin data/schema/registry, аудио, APVTS, MIDI, SoundBank, presets и package не менялись.
+
+**R33:** этот документационный этап находится только в `main`; branch rollout по остальным refs не выполнялся. Для этапа действует явная пометка main-only; синхронизация остальных веток NOT YET VERIFIED.
+
+**Self-check §21:** SHA README `fe53d00...`; contract test не применим к текстовой правке; CI build status пуст/не PASS; release gates остаются PENDING. Не выполнены Windows rebuild, все CTest targets, pluginval, COMPLETE ZIP, FL Studio 20 acceptance и profiling.
