@@ -1248,3 +1248,23 @@ F. Только после этого считать документальны�
 **Проверка до исправления:** run `43167387194`, SHA `d05c7128ab8f53b4087fce47ff9c52f229017114`: configure PASS; VST3 and test executables BUILD PASS; CTest 13/14 PASS; sole failure was stale `DEFAULT_ID` assertion; pluginval and packaging skipped because CTest failed.
 **Статус:** SOURCE FIXED IN THIS COMMIT; exact-SHA CI / CTest rerun PENDING; pluginval/host verification NOT CLAIMED.
 **Следующий шаг:** verify new SHA CI; do not merge or start dependent implementation waves until green.
+
+
+## 2026-11-12 — SIGNAL FORGE v7 accepted / baseline CI verified
+
+**Тип:** accepted UI specification + CI verification record; production source code не менялся этой записью.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Базовый SHA:** `881732c44214ea9160150fc69cd77ad7d85d5bc0`.  
+**Спецификация:** `docs/PPGU_SIGNAL_FORGE_V7_MASTER_RU.md`.  
+**Результат A6:**  
+1. ПРОВЕРКА — branch HEAD подтверждён как `881732c44214ea9160150fc69cd77ad7d85d5bc0`; run `43169004397` относится к тому же SHA.  
+2. АНАЛИЗ — предыдущий единственный CTest failure был устаревшим ожиданием default ID; validator уже синхронизирован с registry `skin-052`.  
+3. ИСПРАВЛЕНИЕ — принятый v7 стандарт сохранён в canonical docs; production source не изменялся.  
+4. ПОВТОРНЫЙ АНАЛИЗ — Windows x64 Release configure/build PASS; CTest 14/14 PASS; pluginval strictness 5 PASS; packaging PASS. Workflow run завершён success на точном SHA.  
+5. РЕЗУЛЬТАТ — baseline build/test/package GREEN. Это не подтверждает Skin System completion, performance gates или FL Studio 20 host verification.
+
+**CI:** run `43169004397`, job `131017504187`, conclusion SUCCESS.  
+**Артефакт:** `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`, artifact ID `13922345092`, SHA-256 `5c41c1f7024211edd47edf2c2abf19a934e5b071d7087bb9147f38518dd9e25a`, size 1,665,371,260 bytes.  
+**Host:** FL Studio 20 manual acceptance NOT VERIFIED by CI.  
+**Открытые вопросы:** runtime skin switch сейчас palette-only через popup, не полноценная gallery; complete asset hot-swap/zero-residue/key-reactivity gates не доказаны. Registry default `skin-052` / SIGNAL FORGE расходится с v7 NEON PUNK default; ThemeManager fallback `skin-51` — отдельное legacy значение. Initial five-skin naming/collection and APVTS display mapping remain migration tasks.  
+**Следующий шаг:** F3/F4 — начать с Skin Gallery + single-theme architecture audit, сохраняя неизменными audio/DSP/sampler/MIDI/APVTS semantics; перед изменением отдельно согласовать/зафиксировать безопасную migration map для initial five skins and control labels.

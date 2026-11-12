@@ -189,3 +189,20 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Проверка до исправления:** run `43167387194`, SHA `d05c7128ab8f53b4087fce47ff9c52f229017114`: configure PASS; VST3 and test executables BUILD PASS; CTest 13/14 PASS; sole failure was stale `DEFAULT_ID` assertion; pluginval and packaging skipped because CTest failed.
 **Статус:** SOURCE FIXED IN THIS COMMIT; exact-SHA CI / CTest rerun PENDING; pluginval/host verification NOT CLAIMED.
 **Следующий шаг:** verify new SHA CI; do not merge or start dependent implementation waves until green.
+
+
+## 2026-11-12 — SIGNAL FORGE v7 master standard accepted; baseline pipeline verified
+
+**Тип:** specification/documentation + exact-SHA CI record; production source unchanged.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Base SHA:** `881732c44214ea9160150fc69cd77ad7d85d5bc0`.  
+**Документ:** `docs/PPGU_SIGNAL_FORGE_V7_MASTER_RU.md`.  
+**Затронутые production symbols:** none.  
+**Причина:** сохранить принятый пользователем обязательный стандарт Skin System v7 как канонический документ для дальнейших F3–F10 работ.  
+**Изменение:** добавлена полная структурированная спецификация терминологии, инвариантов, зон A–H, модулей, initial five skins, A6, фронтов, гейтов и запретных областей.  
+**Проверка:** A6 cycle completed for documentation transaction. Baseline CI run `43169004397` on exact base SHA: Windows x64 Release configure/build PASS; CTest 14/14 PASS; pluginval strictness 5 PASS; package/upload PASS.  
+**Артефакт:** ID `13922345092`; SHA-256 `5c41c1f7024211edd47edf2c2abf19a934e5b071d7087bb9147f38518dd9e25a`.  
+**Совместимость:** no changes to DSP, processBlock, sampler, MIDI, APVTS, presets, SoundBank or production UI source.  
+**Ограничения:** FL Studio 20 host verification NOT performed; CPU/RAM/paint-time/hot-swap zero-residue not measured; full Skin Gallery not implemented.  
+**Статус:** SPECIFICATION ACCEPTED; BASELINE CI GREEN; SKIN SYSTEM PARTIAL.  
+**Следующий шаг:** implement and test the Skin Gallery and theme persistence/asset pipeline in isolated changes; resolve initial five-skin registry mapping before changing default identity.
