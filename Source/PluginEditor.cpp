@@ -35,7 +35,7 @@ public:
     struct Skin
     {
         int index = 0;
-        juce::String name, family, familyKey, layout;
+        juce::String id, name, family, familyKey, layout;
         juce::File preview;
         juce::Colour accent { 0xffd5ff45 };
         bool active = false;
@@ -102,17 +102,20 @@ public:
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
+        for (auto& skin : skins)
+            skin.active = skin.id == palette.id;
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         search.setColour(juce::TextEditor::backgroundColourId, palette.token("control_bg"));
         search.setColour(juce::TextEditor::textColourId, palette.token("text_primary"));
         search.setColour(juce::TextEditor::outlineColourId, palette.token("control_border"));
         search.setColour(juce::TextEditor::focusedOutlineColourId, palette.token("accent"));
+        search.setTextToShowWhenEmpty("SEARCH THEMES...", palette.token("text_secondary"));
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
-        grid.setPalette(palette);
+        rebuildCards();
         repaint();
     }
 
@@ -185,10 +188,11 @@ private:
             }
             else
             {
-                g.setColour(palette.token("accent").withAlpha(0.9f));
-                g.setFont(juce::Font(8.5f, juce::Font::bold));
-                g.drawText("CLICK TO APPLY", 10, getHeight() - 18, getWidth() - 20, 12,
-                           juce::Justification::centredRight);
+                g.setColour(palette.token("accent"));
+                g.fillRoundedRectangle(getWidth() - 54.0f, 10.0f, 44.0f, 17.0f, 5.0f);
+                g.setColour(palette.token("window_bg"));
+                g.setFont(juce::Font(8.0f, juce::Font::bold));
+                g.drawText("APPLY", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
             }
         }
 
@@ -1510,6 +1514,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
             PPGUSkinGalleryPanel::Skin item;
             item.index = index;
+            item.id = candidate.getPalette().id;
             item.name = candidate.getPalette().name;
             item.family = family;
             item.familyKey = familyKey.isNotEmpty() ? familyKey : "legacy";
