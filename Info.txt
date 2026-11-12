@@ -1263,3 +1263,26 @@ UX-контракт: выбор гармонического/chord preset и в�
 В `Source/UI/AutoChordsPanel.h/.cpp` обновлена визуальная структура AutoChords: тёмная многослойная поверхность с карточками; левая колонка HARMONY PRESETS с выбором progression/key/scale и preview; правая колонка разделена на PLAYING STYLE / ARTICULATION и RHYTHM PATTERN; добавлены наглядные chip-кнопки OPEN CHORDS, PALM MUTE, POWER CHORDS, DOWNSTROKE, ALTERNATE, CHUGS, SKANK, ARPEGGIO и STRAIGHT 8THS, FAST SKATE-PUNK, GALLOP, HALF-TIME, STOP-START, VERSE→CHORUS, OFFBEAT, OCTAVE HOOK. Добавлены визуальная иерархия, тонкие контуры, градиентные карточки, акцентные маркеры, статусный footer и адаптивная раскладка колонок.
 
 **Честный статус:** это UI-only visual refresh. Компоненты выбора и preview оставлены отключёнными, поскольку chord-generation/performance MIDI routing в панели не подключён; недоступные стили не выдаются за работающие. Не менялись APVTS, DSP, MIDI/audio callback и sampler. Экранная клавиатура основного окна не затрагивалась. Коммиты: `decdb496` (header), `20f7edc` (panel implementation). **Компиляция, CTest, pluginval и визуальная проверка в FL Studio после этих изменений ещё не выполнены**; до них считать правку UNVERIFIED.
+
+
+## 2026-11-12 — AutoChords compile-level source correction
+
+During a follow-up source audit, six range-for loops in `Source/UI/AutoChordsPanel.cpp` used `auto* button` while iterating `std::array<juce::TextButton, 8>` values. Corrected them to iterate by reference (`auto& button`). Commit: `14a84efcb3314a3776236a0cdd2e58a8d0baddec`.
+
+**Status:** source-level correction committed; it is not a successful compile claim. Build, CTest, pluginval, resize/DPI visual tests and FL Studio 20 host checks still need to run against this commit.
+
+## 2026-11-12 — User rhythm-guitar reference adopted
+
+The complete user-provided guide “Ритмические стили и приёмы ритм-гитары в панк-роке” is now incorporated into `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`, section 15.11 (commit `f001985cc5ce49409a4836c52f2721a476347944`). It becomes the musical reference for AutoChords / Pattern Engine: punk rhythm principles; downstroke/upstroke/alternate; palm mute/open/staccato/ghost notes; straight eighths, stop-start, backbeat, sixteenths, ska offbeats, sixteenth-pair drive; classic/British/pop-punk/hardcore/ska/post-punk groove families; verse-muted → chorus-open transitions; kick/snare alignment; count grid and QA rules.
+
+The text is treated as a musical source reference, not proof of implemented patterns. Ambiguous text notation must be normalized into explicit MIDI event grids and checked for rests, onset positions, note durations, articulations and loop boundaries. A pattern is enabled only where the selected guitar's performance data supports it.
+
+## 2026-11-12 — Guitar-library discovery is a continuing top priority
+
+User explicitly reaffirmed that finding and downloading new guitar libraries is a priority alongside UI/engine work. Expanded `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md` with new intake candidates and their evidence/status (commit `5530df36733a0f69618946bf0700fcd3cfa8509a`):
+- **Guitar DI Lite (Boyss-Sound-e-Scapes):** promising dry electric SFZ/WAV candidate; exact Lite sample count and redistribution license still need archive-level verification. YELLOW/quarantine; no bundling yet.
+- **Blue Jeans And Moonbeams / Ella Gitauru:** electric + steel-string acoustic; catalogue lists MIT, but audio-asset redistribution/attribution terms require exact archive/user-guide review. YELLOW/quarantine.
+- **FreePats FSBS Clean/Jazz 2026-08-07:** CC0 update watch; these families are already represented in the previously confirmed inventory, so compare version/hash and do not count as new or duplicate.
+- **VCSL:** CC0 repository lead, but guitar-family content has not been confirmed; do not import unrelated orchestral content.
+
+**Download/integration truth:** this research pass found and documented candidates; it did not download or integrate these new candidate archives. Next intake priority is to obtain actual archives where accessible, preserve source provenance, inspect the exact license, compute SHA-256, validate SFZ/WAV mappings and sample quality, then ingest only legally cleared guitar assets. No candidate is to be called “downloaded”, “included” or “integrated” before those steps are complete.
