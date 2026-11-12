@@ -74,3 +74,11 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Both main editor and Import Guitar panel now receive the actual LOADING / SUCCESS / FAILURE status from the existing loader callback; cancellation leaves status unchanged.
 - SafePointer guard and existing asynchronous sampler path retained. No DSP, sampler lifecycle, MIDI, APVTS, preset, SoundBank, skin or packaging contract changes.
 - Exact-SHA CI pending for the combined source/journal commit; host acceptance remains NOT VERIFIED.
+
+
+### 2026-11-12 — Guitar-only Sound Hunter scope
+- Added H11 source coverage for electric/acoustic guitar multisamples, one-shots, riffs, progressions, rhythm patterns, loops, fills, transitions, stems and processed guitar textures.
+- Excluded drum-only packs, bass, vocals and full song mixes from Guitar SoundBank.
+- Prioritized documented CC0 candidates: Meta Open Sound Steel/Nylon, Karoryfer free guitar libraries and FreePats FSBS Clean/Distorted Electric Guitar.
+- Promo/free/demo and loop marketplaces are discovery leads only; ambiguous terms remain YELLOW until exact source-file redistribution rights are established.
+- Registry remains empty; no external sample downloads, hashes, audition, imports or playable presets are claimed by this documentation change.
