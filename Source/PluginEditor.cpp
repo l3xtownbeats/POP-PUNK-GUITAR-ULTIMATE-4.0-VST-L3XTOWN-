@@ -218,6 +218,27 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
         addAndMakeVisible(*l);
     }
+    fxEditPanel = std::make_unique<PPGUFXEditPanel>(processor.parameters, themeManager.getPalette());
+    autoChordsPanel = std::make_unique<PPGUAutoChordsPanel>(themeManager.getPalette());
+    importGuitarPanel = std::make_unique<PPGUImportGuitarPanel>(
+        [this] { chooseSfzFile(); }, themeManager.getPalette());
+    settingsPanel = std::make_unique<PPGUSettingsPanel>(processor.parameters, themeManager.getPalette());
+    auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(themeManager.getPalette());
+    auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel);
+    auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel);
+    auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel);
+    auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel);
+    for (size_t i = 0; i < panelButtons.size(); ++i)
+    {
+        auto& button = panelButtons[i];
+        button.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
+        button.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+        button.onClick = [this, i] { if (auxiliaryPanels) auxiliaryPanels->openPanel(static_cast<int>(i) + 1); };
+        addAndMakeVisible(button);
+    }
+    addAndMakeVisible(*auxiliaryPanels);
+    auxiliaryPanels->setVisible(false);
+
     juce::PropertiesFile::Options options;
     options.applicationName = "PPGU";
     options.filenameSuffix = "settings";
@@ -291,11 +312,15 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
+ if(auxiliaryPanels) auxiliaryPanels->setBounds(getLocalBounds());
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
- a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
+ a.removeFromTop(8);auto statusRow=a.removeFromTop(26);
+ auto buttonArea=statusRow.removeFromRight(376);
+ for(auto& button:panelButtons) button.setBounds(buttonArea.removeFromLeft(94).reduced(2,1));
+ statusLabel.setBounds(statusRow);a.removeFromTop(10);auto panels=a.removeFromTop(356);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
  ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
@@ -528,6 +553,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);
+ if (auxiliaryPanels) auxiliaryPanels->setPalette(p);
+ if (fxEditPanel) fxEditPanel->setPalette(p);
+ if (autoChordsPanel) autoChordsPanel->setPalette(p);
+ if (importGuitarPanel) importGuitarPanel->setPalette(p);
+ if (settingsPanel) settingsPanel->setPalette(p);
+ for (auto& button : panelButtons) { button.setColour(juce::TextButton::buttonColourId, p.token("control_bg")); button.setColour(juce::TextButton::textColourOffId, p.token("text_primary")); }
  titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
