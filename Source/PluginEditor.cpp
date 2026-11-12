@@ -307,6 +307,7 @@ public:
         addAndMakeVisible(effectSelector);
 
         powerButton.setButtonText("POWER");
+        powerButton.setClickingTogglesState(true);
         addAndMakeVisible(powerButton);
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
         graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
@@ -440,7 +441,7 @@ public:
         title.setFont(juce::Font(20.0f, juce::Font::bold));
         title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
         addAndMakeVisible(title);
-        stateLabel.setText("CONFIGURATION PREVIEW — CHORD-GENERATION ENGINE NOT CONNECTED", juce::dontSendNotification);
+        stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
         stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
         addAndMakeVisible(stateLabel);
         offButton.setButtonText("AUTOCHORDS OFF");
@@ -450,7 +451,8 @@ public:
 
         keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
         modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
-        patternBox.addItemList({ "I - V - vi - IV", "I - vi - IV - V", "i - VI - III - VII", "I - IV - V - I" }, 1);
+        patternBox.addItemList({ "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4",
+                                   "Pattern 5", "Pattern 6", "Pattern 7", "Pattern 8" }, 1);
         addAndMakeVisible(keyBox);
         addAndMakeVisible(modeBox);
         addAndMakeVisible(patternBox);
@@ -464,7 +466,7 @@ public:
         }
         keyLabel.setText("KEY", juce::dontSendNotification);
         modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
-        patternLabel.setText("PROGRESSION PRESET", juce::dontSendNotification);
+        patternLabel.setText("RHYTHM PATTERN SLOT", juce::dontSendNotification);
     }
     void paint(juce::Graphics& g) override
     {
