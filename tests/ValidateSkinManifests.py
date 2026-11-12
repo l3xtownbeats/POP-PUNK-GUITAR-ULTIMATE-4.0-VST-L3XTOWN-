@@ -86,7 +86,128 @@ def validate_colour_tree(value, where: str, errors: list[str]) -> None:
             validate_colour_tree(child, where, errors)
 
 
+def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[str]) -> None:
+    folder = f"Skin_{index:03d}"
+    path = SKIN_ROOT / folder / "theme.json"
+    data = load_json(path, errors)
+    if not isinstance(data, dict):
+        return
+    where = f"SKIN/{folder}/theme.json"
+    expected_id = f"skin-{index:03d}"
+
+    for key, expected in (("schemaVersion", "1.0.0"), ("id", expected_id), ("index", index)):
+        if data.get(key) != expected:
+            fail(errors, where, f"{key} must equal {expected!r}")
+    if not isinstance(data.get("name"), str) or not data["name"].strip():
+        fail(errors, where, "name must be a non-empty string")
+    if not isinstance(data.get("description"), str) or not data["description"].strip():
+        fail(errors, where, "description must be a non-empty string")
+    if data.get("family") not in ("carbon_studio", "neon_basement", "chrome_parade",
+                                  "wood_summer", "vintage_tape", "sunset_suburb", "special"):
+        fail(errors, where, "invalid family")
+    if data.get("layout") not in ("STUDIO_CONSOLE", "WORKSTATION_TOPBAR",
+                                  "RACK_SIDE", "COMPACT_MINI"):
+        fail(errors, where, "invalid layout")
+
+    schema = load_json(SKIN_ROOT / "control_schema.json", errors)
+    contract = schema.get("x-ppgu-contract", {}) if isinstance(schema, dict) else {}
+    required = contract.get("requiredControlIds", [])
+    palette_tokens = contract.get("paletteTokens", [])
+    if len(palette_tokens) != 21 or len(set(palette_tokens)) != 21:
+        fail(errors, "SKIN/control_schema.json", "paletteTokens must contain 21 unique tokens")
+
+    palette = data.get("palette")
+    if not isinstance(palette, dict):
+        fail(errors, where, "palette must be an object")
+        palette = {}
+    if set(palette) != set(palette_tokens):
+        fail(errors, where, "palette must contain exactly the 21 control_schema tokens")
+    for token in palette_tokens:
+        value = palette.get(token)
+        if not isinstance(value, str) or not HEX.fullmatch(value):
+            fail(errors, where, f"palette.{token} must be #RRGGBB")
+
+    if isinstance(palette, dict):
+        for fg, bg, minimum in (
+            ("text_primary", "window_bg", 4.0),
+            ("text_secondary", "window_bg", 4.0),
+            ("text_disabled", "window_bg", 4.0),
+            ("lcd_text", "lcd_bg", 4.0),
+            ("accent", "panel", 2.2),
+        ):
+            if HEX.fullmatch(str(palette.get(fg, ""))) and HEX.fullmatch(str(palette.get(bg, ""))):
+                ratio = contrast(palette[fg], palette[bg])
+                if ratio < minimum:
+                    fail(errors, where, f"{fg}/{bg} contrast {ratio:.2f}:1 is below {minimum:.1f}:1")
+
+    controls = data.get("controls")
+    if not isinstance(controls, dict):
+        fail(errors, where, "controls must be an object")
+        controls = {}
+    missing = sorted(set(required) - set(controls))
+    if missing:
+        fail(errors, where, "missing control IDs: " + ", ".join(missing))
+    for control_id, control in controls.items():
+        grid = control.get("grid", {}) if isinstance(control, dict) else {}
+        x, y, w, h = (grid.get(key) for key in ("x", "y", "w", "h")) if isinstance(grid, dict) else (None, None, None, None)
+        if not all(isinstance(value, int) and not isinstance(value, bool) for value in (x, y, w, h)):
+            fail(errors, where, f"invalid grid coordinates for {control_id}")
+        elif min(x, y) < 0 or min(w, h) < 1 or x + w > 12 or y + h > 16:
+            fail(errors, where, f"grid bounds outside 12x16 for {control_id}")
+
+    if data.get("reduceInEco") is not True or data.get("hotSwapFadeMs") != 150:
+        fail(errors, where, "ECO/hot-swap contract mismatch")
+    compatibility = data.get("compatibility")
+    if not isinstance(compatibility, dict) or any(compatibility.get(key) is not False
+                                                   for key in ("apvtsChanges", "layoutChanges", "audioChanges")):
+        fail(errors, where, "compatibility must declare APVTS/layout/audio changes false")
+
+    assets = data.get("assets")
+    expected_assets = {
+        "preview": "assets/preview.png",
+        "hero": "assets/hero.png",
+        "texture": "svg/texture.svg",
+        "bezel": "svg/bezel.svg",
+        "crest": "svg/crest.svg",
+    }
+    if not isinstance(assets, dict):
+        fail(errors, where, "assets must be an object")
+        assets = {}
+    for key, expected in expected_assets.items():
+        if assets.get(key) != expected:
+            fail(errors, where, f"assets.{key} must be {expected!r}")
+
+    preview = SKIN_ROOT / folder / expected_assets["preview"]
+    hero = SKIN_ROOT / folder / expected_assets["hero"]
+    if not preview.is_file() or png_dimensions(preview) != (360, 240):
+        fail(errors, where, "preview must exist and be a 360x240 PNG")
+    if not hero.is_file() or png_dimensions(hero) != (800, 450):
+        fail(errors, where, "hero must exist and be an 800x450 PNG")
+    for key in ("texture", "bezel", "crest"):
+        svg_path = SKIN_ROOT / folder / expected_assets[key]
+        if not svg_path.is_file():
+            fail(errors, where, f"missing {svg_path.relative_to(ROOT)}")
+        else:
+            try:
+                safe_svg(svg_path)
+            except Exception as exc:
+                fail(errors, where, str(exc))
+
+    if registry_entry.get("id") != expected_id or registry_entry.get("index") != index:
+        fail(errors, where, "registry id/index does not match manifest")
+    if registry_entry.get("path") != f"{folder}/theme.json":
+        fail(errors, where, "registry path does not match canonical manifest path")
+    if registry_entry.get("preview") != f"{folder}/assets/preview.png":
+        fail(errors, where, "registry preview path does not match manifest")
+    if registry_entry.get("hero") != f"{folder}/assets/hero.png":
+        fail(errors, where, "registry hero path does not match manifest")
+
+
 def validate_theme(index: int, registry_entry: dict, errors: list[str]) -> None:
+    if index >= 52:
+        validate_skin_studio_theme(index, registry_entry, errors)
+        return
+
     folder = f"Skin_{index:02d}"
     path = SKIN_ROOT / folder / "theme.json"
     data = load_json(path, errors)
@@ -228,7 +349,12 @@ def main() -> int:
     for index in range(1, expected_count + 1):
         validate_theme(index, by_index.get(index, {}), errors)
 
-    registered_folders = {f"Skin_{index:02d}" for index in range(1, expected_count + 1)}
+    registered_folders = {
+        Path(entry.get("path", "")).parent.name
+        for entry in entries if isinstance(entry, dict) and isinstance(entry.get("path"), str)
+    }
+    if len(registered_folders) != expected_count:
+        fail(errors, "SKIN/theme_manifest.json", "registry paths must resolve to unique skin folders")
     actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
     if actual_folders != registered_folders:
         missing = sorted(registered_folders - actual_folders)
@@ -245,7 +371,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, exact folder parity, 18 token groups, nested control tokens, compatibility flags and selected WCAG contrast pairs verified.")
+    print(f"{expected_count} registry manifests, exact folder parity, legacy and Skin Studio contracts, control maps, assets and contrast pairs verified.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 
