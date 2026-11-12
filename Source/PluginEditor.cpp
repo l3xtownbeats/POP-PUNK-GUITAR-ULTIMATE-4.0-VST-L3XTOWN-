@@ -722,7 +722,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::layoutOverlays()
             requests.push_back({ static_cast<int>(i + 1), { 620, 440 }, { 300, 210 } });
     if (requests.empty()) return;
     const auto work = getLocalBounds().reduced(28, 112).withTrimmedBottom(132);
-    const auto scale = getDesktopScaleFactor();
+    const auto scale = 1.0f; // DPI-aware metrics are introduced in O2.
     const auto result = ppgu::ui::calculatePanelLayout(
         { work.getX(), work.getY(), work.getWidth(), work.getHeight() }, requests, scale, 12);
     for (const auto& placement : result.panels)

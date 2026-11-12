@@ -34,7 +34,7 @@ OverlayPanel::OverlayPanel(OverlayPanelId panelId, PopPunkGuitarUltimateAudioPro
     addAndMakeVisible(status);
 
     if (id == OverlayPanelId::AutoChords) {
-        for (int i = 0; i < 12; ++i) keyBox.addItem(juce::String::charToString("C C# D D# E F F# G G# A A# B"[i]), i + 1);
+        const char* keys[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };\n        for (int i = 0; i < 12; ++i) keyBox.addItem(keys[i], i + 1);
         modeBox.addItem("MAJOR", 1); modeBox.addItem("MINOR", 2); modeBox.addItem("CUSTOM", 3);
         patternBox.addItem("I – V – vi – IV", 1);
         patternBox.addItem("I – vi – IV – V", 2);
