@@ -1057,3 +1057,23 @@ F. Только после этого считать документальны�
 **Reconciliation:** текущий master prompt на выбранной ветке — REV 17.1, а не REV 17.0. Фазы E1→O1→O2→S1→E2→E3→(E4/O3) приняты как canonical для frontend; N0 — обязательный preflight, N1–N6 — прежние roadmap labels и не конкурируют с этой последовательностью. Источник доказательства реализации — source/build config на точном SHA; INFO/CODE — журналы, а не замена коду.
 **Проверки:** документационная проверка только; build/CTest/pluginval/FL Studio/packaging CI не запускались и PASS не присваивался.
 **Следующий шаг:** повторный N0 preflight и implementation E1 отдельной атомарной транзакцией с полным CI на точном SHA.
+
+
+## 2026-11-12 — REV.17 E1 preflight correction: dimension overflow + control parity
+
+**Тип:** production source + regression tests.
+**Продукт:** POP PUNK GUITAR ULTIMATE VST REV.17; Master Prompt REV 17.1 UNIFIED.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Base HEAD / parent:** `a66c46d58c88e8248535af235a53ad9cb6348a53`.
+**Production/test commit:** `d42f495bb2228ab9e08295c7b0ecca07c70ba8dc`.
+**Изменённые файлы:**
+- `Source/UI/ThemeManager.cpp` — `validateAssetSpec()`: сравнение width/height выполняется в исходном 64-bit домене до любого сужения; исключено переполнение int64 → int, позволявшее специально подобранному размеру совпасть с допустимым после wraparound.
+- `tests/ThemeManagerTests.cpp` — добавлены регрессии на width=4294967776 (wraparound к 480 при прежнем int-cast), отсутствие обязательного About control и наличие неразрешённого extra control.
+
+**Причина:** preflight выявил реальный integer-overflow дефект в проверке размеров skin asset и неполную проверку control map: прежняя проверка `controls.size() >= 27` пропускала отсутствующий обязательный ID и неизвестные дополнительные ID.
+**Изменение поведения:** overflow dimension теперь отвергается; контрольные IDs Skin_052 проверяются против утверждённого набора через отдельные regression cases. Важно: текущая реализация контроля количества сама по себе ещё не реализует полный runtime schema resolver; дальнейшая интеграция полного parity validator остаётся обязательной.
+**Совместимость / non-goals:** изменены только theme validation и тесты. DSP, audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, PluginEditor layout и host behavior не менялись.
+**Проверки:** regression tests добавлены, но локальный Windows Release build/CTest не запускался в этой среде; результаты тестов — NOT RUN. CI для данного commit SHA не подтверждён. Pluginval и FL Studio 20 — NOT RUN.
+**Статус:** SOURCE PRESENT; regression tests SOURCE PRESENT; TESTED PENDING; HOST VERIFIED — NO; RELEASED — NO.
+**Открытые вопросы:** G1 contrast, точный schema-driven G2/G4 validation, resource loading, approved Dreaming in Neon editor shell, OverlayManager/AutoChords/FX EDIT, secure .ppguskin import, runtime hot-swap/ECO/layout ещё не реализованы end-to-end.
+**Следующий шаг:** E1 продолжить с полной schema-driven control parity и G1/G4 gates, затем O1 overlays. Полный exact-SHA CI обязателен.

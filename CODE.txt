@@ -133,3 +133,20 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **Tests/CI:** not run; no BUILD/CTest/pluginval/host/release PASS claimed.
 **Статус:** DESIGNED; implementation PENDING.
 **Следующий шаг:** N0 preflight; implement E1 as a separate scoped change and run full exact-SHA gates.
+
+
+## 2026-11-12 — REV.17 E1 validator hardening (overflow + control-map regression coverage)
+
+**Тип:** production source + tests.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Production/test commit SHA:** `d42f495bb2228ab9e08295c7b0ecca07c70ba8dc`.
+**Parent SHA:** `a66c46d58c88e8248535af235a53ad9cb6348a53`.
+**Файлы и символы:**
+- `Source/UI/ThemeManager.cpp` — `validateAssetSpec()`: заменено небезопасное narrowing-сравнение int64 dimensions на сравнение исходного значения с ожидаемым размером в int64.
+- `tests/ThemeManagerTests.cpp` — `main()`: добавлены проверки hostile width wraparound, отсутствующего обязательного control ID и лишнего control ID.
+
+**Причина/результат:** устранён подтверждённый статическим анализом integer wraparound в skin asset dimensions; добавлены regression cases, демонстрирующие недостаточность старого простого size>=27 gate.
+**Совместимость:** только visual theme manifest validation; Audio/DSP/MIDI/APVTS/presets/SoundBank и plugin editor layout не затронуты.
+**Тесты:** добавлены; execution NOT RUN. CI exact SHA: NOT CONFIRMED. Pluginval/FL Studio: NOT RUN.
+**Статус:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
+**Следующий шаг:** завершить G1/G2/G4 validator и затем O1 overlay implementation.
