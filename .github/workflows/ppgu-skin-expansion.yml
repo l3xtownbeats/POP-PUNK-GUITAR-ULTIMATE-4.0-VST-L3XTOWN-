@@ -85,3 +85,5 @@ jobs:
             git commit -m "feat(skins): add premium visual themes 53-102"
             git push origin HEAD:work/ppgu-skin-expansion-53-102
           fi
+
+# Re-triggered after confirming the previous push did not produce generated skin files.
