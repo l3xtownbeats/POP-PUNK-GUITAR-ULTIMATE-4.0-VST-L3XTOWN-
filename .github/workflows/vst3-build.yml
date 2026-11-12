@@ -184,6 +184,15 @@ jobs:
             "$hash  $relative"
           }
           $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt')
+          # Hard cap for the redistributable guitar SoundBank. 25 GB is the preferred
+          # target; 30 GB is an absolute ceiling, measured before archive creation.
+          $audioBytes = ($audioFiles | Measure-Object -Property Length -Sum).Sum
+          $maxBytes = 30GB
+          if ($audioBytes -gt $maxBytes) {
+            throw "Guitar SoundBank exceeds the 30 GB hard limit: $([math]::Round($audioBytes / 1GB, 2)) GB."
+          }
+          Write-Host ("Guitar SoundBank audio payload: {0:N2} GB (preferred target: <=25 GB; hard cap: 30 GB)" -f ($audioBytes / 1GB))
+
           @'
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
