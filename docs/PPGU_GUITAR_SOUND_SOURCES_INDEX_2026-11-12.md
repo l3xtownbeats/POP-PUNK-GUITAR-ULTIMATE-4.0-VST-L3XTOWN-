@@ -210,3 +210,18 @@ The user's sound hierarchy for the pattern engine is now:
 - Freesound's directly relevant CC0 pop-punk loop page requires login to download; no authenticated Freesound connection is available in this task.
 - The Meta and FreePats pages confirm high-quality, redistributable candidate libraries and their licenses, but this pass has not placed their WAV archives into the PPGU repository or verified their local SHA-256.
 - Therefore these are source/license-verified candidates, not imported audio assets. Do not count them toward the packaged SoundBank size or claim they are playable in the engine yet.
+
+
+## 68. Native Instruments Session Guitarist / Komplete Start — REFERENCE ONLY, NOT A REDISTRIBUTABLE SOURCE
+- Official Session Guitarist products are commercial Kontakt instruments; a free Kontakt Player is only the playback host and does not make paid Session Guitarist sample content free.
+- Native Instruments' current EULA permits included samples/instruments for music and audio productions, but expressly prohibits using them to create a sound library or sample-based virtual instrument, and prohibits repackaging samples/loops as standalone sample content.
+- The Native Instruments subscription terms separately prohibit using subscription content as a sound library or sample-based product. Therefore no Session Guitarist/Kontakt/Komplete Start audio is to be extracted, transformed, resampled, or bundled into PPGU unless a separate written license explicitly grants that right.
+- Permitted development use: study publicly demonstrated playing techniques, articulation concepts, arrangement patterns and broad tonal characteristics; then create independent PPGU recordings from musicians / cleared CC0 recordings, with original performances and sound design. Do not recreate protected recordings or redistribute source audio.
+- Official references:
+  - https://www.native-instruments.com/products/kontakt-player
+  - https://www.native-instruments.com/collections/free
+  - https://www.native-instruments.com/pages/end-user-license-agreement
+  - https://www.native-instruments.com/pages/subscription-terms-and-conditions
+  - https://www.native-instruments.com/de/products/session-guitarist-strummed-acoustic
+- Status: YELLOW / REFERENCE ONLY. No source audio downloaded or included in PPGU SoundBank.
+
