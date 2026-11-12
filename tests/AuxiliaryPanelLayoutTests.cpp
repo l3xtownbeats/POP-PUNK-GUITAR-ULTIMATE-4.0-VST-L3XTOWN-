@@ -131,9 +131,9 @@ int main()
     invertedSize[0].minimum.width = invertedSize[0].desired.width + 1;
     CHECK(calculatePanelLayout(desktop, invertedSize, 1.0f).invalidInput);
 
-    CHECK(calculatePanelLayout({ 0, 0, 0, 100 }, makePanels(1), 1.0f).invalidInput);
-    CHECK(calculatePanelLayout({ std::numeric_limits<int>::max() - 2, 0, 10, 10 },
-                               makePanels(1), 1.0f).invalidInput);
+    CHECK((calculatePanelLayout(PanelRect{ 0, 0, 0, 100 }, makePanels(1), 1.0f).invalidInput));
+    CHECK((calculatePanelLayout(PanelRect{ std::numeric_limits<int>::max() - 2, 0, 10, 10 },
+                                 makePanels(1), 1.0f).invalidInput));
 
     auto negativeGap = calculatePanelLayout(desktop, makePanels(2), 1.0f, -50);
     CHECK(!negativeGap.invalidInput && !negativeGap.overflow);
