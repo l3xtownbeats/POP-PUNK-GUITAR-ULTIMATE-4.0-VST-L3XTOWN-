@@ -40,32 +40,42 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 def parse_sfz(path: Path):
+    """Read common SFZ section inheritance without decoding sample audio."""
     regions = []
+    inherited = {"global": {}, "master": {}, "group": {}}
+    scope = "control"
     current = None
+    token_pattern = re.compile(r'<[^>]+>|([A-Za-z0-9_]+)\s*=\s*(?:"([^"]*)"|([^\s]+))')
     for line_no, raw in enumerate(path.read_text(encoding="utf-8-sig", errors="replace").splitlines(), 1):
         line = raw.split("//", 1)[0].strip()
         if not line:
             continue
-        if "<region>" in line:
-            if current is not None and current.get("sample"):
-                regions.append(current)
-            current = {"line": line_no}
-            line = line.replace("<region>", " ")
-        elif re.search(r"<(?:global|master|group|control)>", line):
-            # Inheritance is intentionally not guessed by this small tool.
-            # The production SFZ parser remains authoritative for playback.
-            if current is not None and current.get("sample"):
-                regions.append(current)
-            current = None
-            continue
-        if current is None:
-            continue
-        for match in re.finditer(r'([A-Za-z0-9_]+)\s*=\s*(?:"([^"]*)"|([^\s]+))', line):
-            current[match.group(1).lower()] = match.group(2) if match.group(2) is not None else match.group(3)
-    if current is not None and current.get("sample"):
-        regions.append(current)
+        if line.startswith("#include") or "default_path=" in line:
+            raise ValueError(f"line {line_no}: #include/default_path needs manual resolution before packaging")
+        for match in token_pattern.finditer(line):
+            token = match.group(0)
+            if token.startswith("<"):
+                tag = token[1:-1].strip().lower()
+                if tag == "region":
+                    if current is not None and current.get("sample"): regions.append(current)
+                    current = {}
+                    current.update(inherited["global"]); current.update(inherited["master"]); current.update(inherited["group"])
+                    current["line"] = line_no; scope = "region"
+                elif tag in ("global", "master", "group"):
+                    if current is not None and current.get("sample"): regions.append(current)
+                    current = None; scope = tag
+                    if tag == "master": inherited["master"] = {}; inherited["group"] = {}
+                    elif tag == "group": inherited["group"] = {}
+                else:
+                    if current is not None and current.get("sample"): regions.append(current)
+                    current = None; scope = "control"
+                continue
+            key = match.group(1).lower()
+            value = match.group(2) if match.group(2) is not None else match.group(3)
+            if scope == "region" and current is not None: current[key] = value
+            elif scope in inherited: inherited[scope][key] = value
+    if current is not None and current.get("sample"): regions.append(current)
     return regions
-
 def safe_sample_path(root: Path, sample: str) -> Path:
     candidate = (root / sample.replace("\\", os.sep)).resolve()
     base = root.resolve()
