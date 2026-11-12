@@ -51,6 +51,8 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginEditor.h
     Source/UI/ThemeManager.cpp
     Source/UI/ThemeManager.h
+    Source/UI/AuxiliaryPanelLayout.cpp
+    Source/UI/AuxiliaryPanelLayout.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
@@ -94,6 +96,20 @@ endif()
 # Keep installation separate from compilation: the CI job validates and archives
 # the generated JUCE VST3 bundle without writing to a machine-wide plugin folder.
 
+
+# Pure geometry contract for independent auxiliary editor panels.
+if(BUILD_TESTING)
+    add_executable(ppgu_auxiliary_panel_layout_tests
+        Source/UI/AuxiliaryPanelLayout.cpp
+        tests/AuxiliaryPanelLayoutTests.cpp
+    )
+    target_include_directories(ppgu_auxiliary_panel_layout_tests PRIVATE Source/UI)
+    target_link_libraries(ppgu_auxiliary_panel_layout_tests PRIVATE
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
+endif()
 
 # Dependency-free SFZ parser regression tests.
 include(CTest)
