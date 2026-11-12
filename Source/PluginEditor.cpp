@@ -275,6 +275,228 @@ private:
     juce::String keyText { "CHROMATIC" };
 };
 
+
+namespace
+{
+class PPGUFXEditPanel final : public juce::Component
+{
+public:
+    explicit PPGUFXEditPanel(juce::AudioProcessorValueTreeState& state, int initialEffect)
+        : apvts(state)
+    {
+        groups = {
+            { "COMPRESSOR", "compressorOn", { { "THRESHOLD", "compressorThreshold" }, { "RATIO", "compressorRatio" }, { "ATTACK", "compressorAttack" }, { "RELEASE", "compressorRelease" }, { "AMOUNT", "compressorAmount" } } },
+            { "EQ", "eqOn", { { "LOW", "eqLow" }, { "MID", "eqMid" }, { "HIGH", "eqHigh" }, { "LOW FREQ", "eqLowFreq" }, { "MID FREQ", "eqMidFreq" }, { "MID Q", "eqMidQ" }, { "HIGH FREQ", "eqHighFreq" } } },
+            { "DISTORTION", "distortionOn", { { "DRIVE", "distortionDrive" }, { "TONE", "distortionTone" }, { "MIX", "distortionMix" } } },
+            { "CHORUS", "chorusOn", { { "RATE", "chorusRate" }, { "DEPTH", "chorusDepth" }, { "MIX", "chorusMix" } } },
+            { "FLANGER", "flangerOn", { { "RATE", "flangerRate" }, { "DEPTH", "flangerDepth" }, { "FEEDBACK", "flangerFeedback" }, { "MIX", "flangerMix" } } },
+            { "DELAY", "delayOn", { { "TIME", "delayTime" }, { "FEEDBACK", "delayFeedback" }, { "MIX", "delayMix" } } },
+            { "REVERB", "reverbOn", { { "ROOM", "reverbRoomSize" }, { "DAMPING", "reverbDamping" }, { "MIX", "reverbMix" } } },
+            { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
+        };
+
+        title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
+        title.setFont(juce::Font(20.0f, juce::Font::bold));
+        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        addAndMakeVisible(title);
+
+        for (size_t i = 0; i < groups.size(); ++i)
+            effectSelector.addItem(groups[i].name, static_cast<int>(i + 1));
+        effectSelector.setSelectedId(juce::jlimit(1, static_cast<int>(groups.size()), initialEffect + 1), juce::dontSendNotification);
+        effectSelector.onChange = [this] { selectGroup(effectSelector.getSelectedId() - 1); };
+        addAndMakeVisible(effectSelector);
+
+        powerButton.setButtonText("POWER");
+        addAndMakeVisible(powerButton);
+        graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
+        graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        addAndMakeVisible(graphCaption);
+        status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
+        status.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        addAndMakeVisible(status);
+
+        for (size_t groupIndex = 0; groupIndex < groups.size(); ++groupIndex)
+        {
+            for (const auto& item : groups[groupIndex].parameters)
+            {
+                auto label = std::make_unique<juce::Label>();
+                label->setText(item.first, juce::dontSendNotification);
+                label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+                label->setFont(juce::Font(11.0f, juce::Font::bold));
+                addAndMakeVisible(*label);
+
+                auto slider = std::make_unique<juce::Slider>();
+                slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+                slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
+                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffb7f34a));
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff43545e));
+                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xffe7f0f4));
+                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xffe7f0f4));
+                addAndMakeVisible(*slider);
+
+                auto attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, item.second, *slider);
+                controls.push_back({ static_cast<int>(groupIndex), std::move(label), std::move(slider), std::move(attachment) });
+            }
+        }
+        selectGroup(effectSelector.getSelectedId() - 1);
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(juce::Colour(0xff0c1218));
+        auto area = getLocalBounds().toFloat().reduced(12.0f);
+        g.setColour(juce::Colour(0xff263944));
+        g.drawRoundedRectangle(area, 10.0f, 1.0f);
+        auto graph = graphArea.toFloat();
+        g.setColour(juce::Colour(0xff101c24));
+        g.fillRoundedRectangle(graph, 8.0f);
+        g.setColour(juce::Colour(0xff304550));
+        for (int i = 1; i < 5; ++i)
+            g.drawHorizontalLine(graphArea.getY() + graphArea.getHeight() * i / 5, graphArea.getX(), graphArea.getRight());
+        for (int i = 1; i < 9; ++i)
+            g.drawVerticalLine(graphArea.getX() + graphArea.getWidth() * i / 9, graphArea.getY(), graphArea.getBottom());
+        juce::Path curve;
+        curve.startNewSubPath(static_cast<float>(graphArea.getX()), static_cast<float>(graphArea.getCentreY()));
+        curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
+                      graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
+                      static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
+        g.setColour(juce::Colour(0xffb7f34a));
+        g.strokePath(curve, juce::PathStrokeType(2.0f));
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(20);
+        title.setBounds(area.removeFromTop(34));
+        auto top = area.removeFromTop(44);
+        effectSelector.setBounds(top.removeFromLeft(230).reduced(2, 4));
+        powerButton.setBounds(top.removeFromLeft(110).reduced(2, 4));
+        graphCaption.setBounds(top);
+        graphArea = area.removeFromBottom(170).reduced(4, 8);
+        status.setBounds(area.removeFromBottom(24));
+        area.removeFromBottom(8);
+        const int visibleCount = static_cast<int>(std::count_if(controls.begin(), controls.end(),
+            [this](const Control& c) { return c.group == selectedGroup; }));
+        const int columns = visibleCount > 5 ? 4 : juce::jmax(1, visibleCount);
+        const int cellWidth = juce::jmax(1, area.getWidth() / columns);
+        int index = 0;
+        for (auto& control : controls)
+        {
+            if (control.group != selectedGroup)
+            {
+                control.label->setVisible(false);
+                control.slider->setVisible(false);
+                continue;
+            }
+            control.label->setVisible(true);
+            control.slider->setVisible(true);
+            auto cell = juce::Rectangle<int>(area.getX() + (index % columns) * cellWidth,
+                area.getY() + (index / columns) * 118, cellWidth, 118).reduced(6, 2);
+            control.label->setBounds(cell.removeFromTop(20));
+            control.slider->setBounds(cell);
+            ++index;
+        }
+    }
+
+private:
+    struct Group
+    {
+        juce::String name, enabledParameter;
+        std::vector<std::pair<juce::String, juce::String>> parameters;
+    };
+    struct Control
+    {
+        int group;
+        std::unique_ptr<juce::Label> label;
+        std::unique_ptr<juce::Slider> slider;
+        std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attachment;
+    };
+    void selectGroup(int index)
+    {
+        selectedGroup = juce::jlimit(0, static_cast<int>(groups.size()) - 1, index);
+        powerAttachment.reset();
+        powerAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+            apvts, groups[static_cast<size_t>(selectedGroup)].enabledParameter, powerButton);
+        resized();
+        repaint();
+    }
+    juce::AudioProcessorValueTreeState& apvts;
+    std::vector<Group> groups;
+    std::vector<Control> controls;
+    juce::Label title, graphCaption, status;
+    juce::ComboBox effectSelector;
+    juce::TextButton powerButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> powerAttachment;
+    juce::Rectangle<int> graphArea;
+    int selectedGroup = 0;
+};
+
+class PPGUAutoChordsPanel final : public juce::Component
+{
+public:
+    explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
+    {
+        title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
+        title.setFont(juce::Font(20.0f, juce::Font::bold));
+        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        addAndMakeVisible(title);
+        stateLabel.setText("CONFIGURATION PREVIEW — CHORD-GENERATION ENGINE NOT CONNECTED", juce::dontSendNotification);
+        stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
+        addAndMakeVisible(stateLabel);
+        offButton.setButtonText("AUTOCHORDS OFF");
+        offButton.setEnabled(false);
+        offButton.setTooltip("The AutoChords MIDI-generation engine is not implemented yet.");
+        addAndMakeVisible(offButton);
+
+        keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
+        modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
+        patternBox.addItemList({ "I - V - vi - IV", "I - vi - IV - V", "i - VI - III - VII", "I - IV - V - I" }, 1);
+        addAndMakeVisible(keyBox);
+        addAndMakeVisible(modeBox);
+        addAndMakeVisible(patternBox);
+        keyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleRoot", keyBox);
+        modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleMode", modeBox);
+        patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
+        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
+        {
+            label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+            addAndMakeVisible(*label);
+        }
+        keyLabel.setText("KEY", juce::dontSendNotification);
+        modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
+        patternLabel.setText("PROGRESSION PRESET", juce::dontSendNotification);
+    }
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(juce::Colour(0xff0c1218));
+        g.setColour(juce::Colour(0xff263944));
+        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
+    }
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(24);
+        title.setBounds(area.removeFromTop(38));
+        stateLabel.setBounds(area.removeFromTop(32));
+        offButton.setBounds(area.removeFromTop(44).removeFromLeft(210).reduced(2));
+        area.removeFromTop(24);
+        keyLabel.setBounds(area.removeFromTop(22));
+        keyBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
+        area.removeFromTop(20);
+        modeLabel.setBounds(area.removeFromTop(22));
+        modeBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
+        area.removeFromTop(20);
+        patternLabel.setBounds(area.removeFromTop(22));
+        patternBox.setBounds(area.removeFromTop(44).removeFromLeft(360));
+    }
+private:
+    juce::AudioProcessorValueTreeState& apvts;
+    juce::Label title, stateLabel, keyLabel, modeLabel, patternLabel;
+    juce::TextButton offButton;
+    juce::ComboBox keyBox, modeBox, patternBox;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keyAttachment, modeAttachment, patternAttachment;
+};
+}
+
 // Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
