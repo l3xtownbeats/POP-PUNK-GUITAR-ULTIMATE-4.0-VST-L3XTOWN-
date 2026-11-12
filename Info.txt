@@ -1519,3 +1519,23 @@ F. Только после этого считать документальны�
 **РЕЗУЛЬТАТ:** 102 themes GENERATED / VALIDATED / MERGED / PUBLISHED; premium visual gallery SOURCE IMPLEMENTED; exact-SHA Windows build and runtime visual acceptance PENDING.
 
 **Следующий шаг:** получить результат Windows VST3 workflow на SHA `bc5f753...`; исправить любые compile/CTest/pluginval failures, затем провести полный GUI control parity / DPI / panel geometry audit.
+
+
+## 2026-11-12 — Persistent Workspace Settings panel
+
+**Тип:** UI feature + control inventory/documentation update.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Source commits:**
+- `359f4269f5fe56b24384af89ddc930b6b77fc04a` (parent `49ea1956b0fceaffd23216efb6d9c1fc05415145`) — declaration for settings panel/button.
+- `19e3f9f3d61f19582e18cdab7ae0ba6446607d46` (parent `359f4269f5fe56b24384af89ddc930b6b77fc04a`) — implementation of `PPGUSettingsPanel` and persistent settings.
+**Documentation commits:** `546d11b80947307b7aff1636bfb2e979fce714a7`, `ad9d04c5d79147d75e019cb53cc8c0892d1101f0`, `591e2251b66f94add4d94bae6c2e3a0b97f82f2c`, `ebf9f7965c80053ca1a1b7e1033889cbe5de6d3a`.
+
+**ПРОВЕРКА:** утверждённая архитектура multi-window предусматривала Settings panel, но фактический editor не имел кнопки/компонента Settings.
+
+**ИСПРАВЛЕНИЕ:** добавлены top-bar `SETTINGS` button и child panel ID 6. Реальные настройки: auxiliary panel scale (0.50–1.50), panel gap (0–32 px), restore canonical SIGNAL FORGE theme, open Skin Gallery. Scale/gap сохраняются через JUCE ApplicationProperties (`workspacePanelScale`, `workspacePanelGap`) и применяются к `PPGUMultiWindowWorkspace`. Панель явно сообщает, что не меняет audio processing/MIDI/APVTS.
+
+**Границы:** реализованы только UI/workspace preferences. Глобальные engine/device settings и About не заявляются. DSP, processor, APVTS IDs/semantics, MIDI, sampler, presets, SoundBank и audio callback не менялись.
+
+**Тесты/CI:** исходники и readback проверены. Windows workflow `43196006789` на SHA `591e2251...` был IN_PROGRESS на момент записи; он включает source commit `19e3f9...` и весь Skin_053–102 pack. Build/CTest/pluginval/host PASS не заявлять до завершения. Последующий commit `ebf9...` меняет только workspace README, production source не меняет.
+
+**РЕЗУЛЬТАТ:** Settings workspace panel SOURCE IMPLEMENTED; exact-SHA Windows validation PENDING. Control Inventory и skin/workspace docs обновлены.
