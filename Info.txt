@@ -1988,3 +1988,34 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 6. Theme Gallery must discover themes dynamically, include previews/search/family/favorites and honest error states; no hardcoded 1..51 cap.
 
 **Статус:** выполнен ограниченный source audit и создана спецификация. В этом цикле PluginEditor, ThemeManager, AutoChords engine и audio code не менялись; CI/visual/DAW acceptance не запускались. Следующий implementation pass должен отдельно реализовать keyboard collapse + ion-blue theme token and test AutoChords PATTERN-only routing before claiming completion.
+
+
+## 2026-11-12 — ANGELA ENGINE: DOUBLE stereo width and individually color-coded FX
+
+**Тип:** production DSP + UI code change.
+**Ветка:** `work/ppgu-toolchain-qa-rev17-1`.
+**Исходный HEAD:** `2a8e86eb69ec56ae4736ecbc7a12d43a58b54877`.
+**Последовательность commits:**
+- `cc08faa2953abdd9bfd5e10033a6ff6d359d9a42` — `Source/PluginProcessor.h`; parent `2a8e86eb69ec56ae4736ecbc7a12d43a58b54877`.
+- `c896073e528fffebbba21d84e613e944a2f87ddb` — `Source/PluginProcessor.cpp`; parent `cc08faa2953abdd9bfd5e10033a6ff6d359d9a42`.
+- `21751abc444d4428d750cb67e5a98f72002ced73` — `Source/PluginEditor.h`; parent `c896073e528fffebbba21d84e613e944a2f87ddb`.
+- `3a79120704482765ba9e74a923be8ac1ff6de19b` — `Source/PluginEditor.cpp`; parent `21751abc444d4428d750cb67e5a98f72002ced73`.
+
+**Что изменено:**
+1. Реализован первый DSP stage DOUBLE: один исходный сигнал формирует дополнительную Side-составляющую через 12 ms preallocated mid-delay и high-pass около 180 Hz. Это Haas-inspired stereo thickening, а не второй голос/дубль и не Chorus.
+2. Существующий Mid сохраняется; добавленная Side-составляющая имеет противоположную полярность в L/R, поэтому простое L+R mono fold-down по конструкции сохраняет Mid. Низ удерживается ближе к центру. `doubleTrackOn` и `doubleTrackMix` подключены к реальному DSP.
+3. Буфер выделяется в `prepareToPlay`, сбрасывается в `releaseResources`; в callback нет выделения памяти, блокировок или I/O. Mono output path не изменяется.
+4. FX Edit получил индивидуальные цветовые подписи: Compressor amber, EQ cyan, Distortion green, Chorus violet, Flanger blue, Delay orange, Reverb teal, Cabinet silver, Double Width ion-blue. Цвет панели, заголовка и регуляторов меняется по выбранному эффекту.
+5. Main FX rack расширен с 7 до 9 элементов: Flanger и Double Width теперь доступны отдельными кнопками. В существующем списке FX slots Flanger добавлен восьмым элементом без перестановки старых slot IDs.
+
+**Точные file blob SHAs на HEAD:**
+- `Source/PluginProcessor.h`: `fd7383965edf1439ca1257a602319172f96a8a9b`
+- `Source/PluginProcessor.cpp`: `b5151bf95fe215396f01258ab365e4d3328ac7f0`
+- `Source/PluginEditor.h`: `d75798f369101ae66c40af6826a8e4434c82ea0f`
+- `Source/PluginEditor.cpp`: `79b873bfcf5d7c37a3d15d2c4c7116f35fae1392`
+
+**Проверка:** source files перечитаны после записи; подтверждены DOUBLE parameter reads, preallocated delay, 9 UI controls, 9 FX groups и новые color accents. GitHub Actions Windows VST3 workflow автоматически запущен: run `43205333451`, head SHA `3a79120704482765ba9e74a923be8ac1ff6de19b`; на момент записи статус IN_PROGRESS. Сборка/CTest/pluginval/DAW listening и измерения mono correlation/CPU ещё не подтверждены.
+
+**Ограничения:** текущий DOUBLE — первый mono-compatible Haas-inspired widener, а не финальная psychoacoustic stereo suite. Нужны автоматические DSP tests на mono sum, stereo width, bypass, on/off transitions, mono/stereo bus layouts, clipping/peak headroom и host listening. FX панели уже имеют индивидуальные accent identities; отдельные графические формы/компоновки каждого эффекта — следующий UI pass.
+
+**Статус:** IMPLEMENTED / CI VALIDATION IN PROGRESS / AUDIO QA PENDING.
