@@ -96,3 +96,22 @@ These are engine parameters, not automatically GUI controls. Each must be assign
 - [ ] FL Studio 20 host acceptance passed.
 
 **Status: AUDIT COMPLETE; UI REPAIR NOT YET COMPLETE.** This register records verified findings and acceptance criteria. It does not claim that the UI fixes or build tests have already been completed.
+
+
+## Repair pass 1 — main-shell geometry (2026-11-12)
+
+- [x] Replaced the legacy AMP / FX / PLAYBACK three-column control placement with the approved high-level zones: left preset browser, center instrument/performance controls, right AMP & TONE / FX rack, lower performance and MIDI strip.
+- [x] Grouped preset selector, category filter and search in the left browser region.
+- [x] Repositioned all nine existing knobs together in a 3×3 center grid; all nine original APVTS SliderAttachments and parameter IDs were preserved.
+- [x] Kept the seven existing FX buttons together in the right rack; all seven original APVTS ButtonAttachments and IDs were preserved.
+- [x] Removed the legacy oversized hero/banner painting so it no longer occupies the main instrument area.
+- [x] Kept the existing MIDI keyboard and live Performance Display in the lower full-width strip.
+- [x] Retained the existing top-bar actions that are genuinely implemented: Skin, Import Guitar and AutoChords.
+- [ ] Exact pixel-level comparison against the three original mockup image files — not performed in this pass.
+- [ ] Runtime skin-schema-to-bounds mapping — not implemented in this pass.
+- [ ] New top-bar actions (Auto Discover, Curator, Settings, About, preset navigation/favorite) — not implemented.
+- [ ] PUNK GROUP mode — not implemented; the existing MELODY/PATTERN behaviour remains unchanged.
+- [ ] Multi-window matrix and all DPI/resize states — not tested in this pass.
+- [ ] Build, automated tests and FL Studio 20 validation — not run; no build runner/host was invoked.
+
+**Repair pass 1 status: SOURCE LAYOUT REORGANIZED; BUILD/HOST VALIDATION PENDING.** This is a source-level UI repair, not a claim of a successful compiled plugin.
