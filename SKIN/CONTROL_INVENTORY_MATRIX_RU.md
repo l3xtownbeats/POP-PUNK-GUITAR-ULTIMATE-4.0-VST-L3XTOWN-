@@ -2,7 +2,7 @@
 
 Дата актуализации: 12 ноября 2026. Источник истины по обязательным ID и layout grid: `control_schema.json`. Источник фактической реализации: `Source/PluginEditor.h/.cpp` и `Source/PluginProcessor.cpp`.
 
-## 1. Фактический GUI в рабочей ветке REV.17 (`work/ppgu-skin-expansion-53-102`)
+## 1. Фактический GUI в рабочей ветке REV.17 (`POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`)
 
 В текущем редакторе подтверждены:
 - Заголовок PPGU / L3XTOWN AUDIO LAB.
