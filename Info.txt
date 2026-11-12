@@ -1771,3 +1771,28 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **Приёмка:** реальный end-to-end test preset/pattern selection → performance asset resolution → preview playback → host-synced loop playback → MIDI chord adaptation → clean chord/loop/preset transitions → SamplerEngine output. Обязательны прослушивание реальных записей, проверка музыкальности переходов, отсутствие тишины/stuck notes/glitches, проверка темпа и coverage. Pattern metadata или scheduler events без реального recorded performance source не считаются готовым PATTERN.
 
 **РЕЗУЛЬТАТ:** PATTERN'S PRIMARY PERFORMANCE SOURCE IS A LICENSE-CLEARED RECORDED GUITAR PERFORMANCE/LOOP LIBRARY, using the functional interaction model of Session Guitarist — Electric Sunburst Deluxe as reference. PPGU must use original/licensed content and its own implementation. This journal update changes no code or audio assets; availability of a production-ready performance library and full runtime path remains unverified/open.
+
+
+## 2026-11-12 — Absolute top-level sound quality priority: authentic recorded guitar, no synthetic/plastic character
+
+**СТАТУС:** TOP-LEVEL PRODUCT ACCEPTANCE PRIORITY — USER CONFIRMED.
+
+Главная задача PPGU — добиться настоящего, реалистичного гитарного звучания без пластикового, искусственного, явно эмулированного или синтезаторного оттенка. Этот приоритет распространяется на весь продукт, все гитарные типы, заводские пресеты, MELODY и PATTERN. Качество должно восприниматься как реальное исполнение настоящего гитариста.
+
+**Иерархия приоритетов звукового дизайна:**
+1. Качественные, подходящие и юридически разрешённые реальные гитарные записи/исполнения в библиотеке.
+2. Корректные source mappings: ноты, диапазоны, velocity layers, артикуляции, round-robin/alternate takes и performance phrases там, где они доступны.
+3. Естественная динамика, атака/затухание, sustain/release, переходы нот и аккордов, вариативность исполнения.
+4. Музыкально оправданное layering для плотности и характера, без фазовых проблем и искусственного удвоения.
+5. FX/filters только по необходимости и по замыслу конкретного пресета; они не должны маскировать слабый/неподходящий исходный материал и не должны автоматически добавляться.
+6. Техническая оптимизация CPU/RAM/latency не должна подменять или снижать целевой стандарт звучания; при конфликте оптимизировать реализацию, а не превращать гитару в синтезатор.
+
+**Запрещённые признаки качества:** слышимые синтетические осцилляторные/пластиковые тембры вместо гитарных записей; один и тот же семпл, механически транспонируемый по всему диапазону без корректного маппинга; machine-gun повторы; неестественные velocity jumps; искусственные атаки/хвосты; грубые loop seams; неестественные chord transitions; избыточный FX/компрессия; фазовая грязь, клиппинг и слышимые артефакты стриминга.
+
+**MELODY acceptance:** убедительные реальные гитарные ноты и фразы с натуральными артикуляциями, динамикой и переходами; повторные ноты не должны звучать механически при наличии вариативных исходников.
+
+**PATTERN acceptance:** основа — реальные лицензированные/собственные записанные performance loops и фразы. Исполнение должно звучать как настоящая записанная гитарная партия; MIDI chord adaptation, host sync и переходы не должны разрушать натуральность записи. PatternScheduler не заменяет отсутствие performance library.
+
+**QA GATE:** обязательное человеческое прослушивание на реальной DAW/аудиовыходе representative presets и всех основных режимов; A/B с исходными библиотечными записями; проверка разных регистров, velocity, повторных нот, аккордовых смен, темпа, loop boundaries, dry/FX/layer variants. Автоматические тесты дополняют, но не заменяют listening QA. Каждый дефект «пластика», синтетического оттенка, механичности или артефактов регистрировать и устранять до принятия пресета. Отдельно вести объективные тесты mapping, clipping, silence, glitches, CPU/RAM и real-time safety.
+
+**РЕЗУЛЬТАТ:** AUTHENTIC, REALISTIC, RECORDED-GUITAR CHARACTER WITH NO SYNTHETIC/PLASTIC FLAVOR IS THE HIGHEST PRODUCT SOUND REQUIREMENT. Не является утверждением, что этот стандарт уже достигнут; все соответствующие пресеты и режимы должны пройти реальную listening QA. Запись не меняет код или аудиобиблиотеку.
