@@ -65,14 +65,14 @@ private:
     std::array<juce::Label, 9> knobLabels;
     std::array<juce::String, 9> knobNames { "GAIN", "TREBLE", "MID", "BASS", "VELOCITY", "DYNAMICS", "SWING", "HUMANIZE", "ACCENT" };
     std::array<juce::String, 9> parameterIDs { "ampGain", "eqHigh", "eqMid", "eqLow", "velocity", "dynamics", "swing", "humanize", "accent" };
-    std::array<juce::TextButton, 7> fxButtons {
+    std::array<juce::TextButton, 9> fxButtons {
         juce::TextButton("COMPRESSOR"), juce::TextButton("EQ"), juce::TextButton("DISTORTION"),
-        juce::TextButton("CHORUS"), juce::TextButton("DELAY"), juce::TextButton("REVERB"),
-        juce::TextButton("CABINET IR")
+        juce::TextButton("CHORUS"), juce::TextButton("FLANGER"), juce::TextButton("DELAY"),
+        juce::TextButton("REVERB"), juce::TextButton("CABINET IR"), juce::TextButton("DOUBLE WIDTH")
     };
-    std::array<juce::String, 7> fxParameterIDs { "compressorOn", "eqOn", "distortionOn", "chorusOn", "delayOn", "reverbOn", "cabinetOn" };
+    std::array<juce::String, 9> fxParameterIDs { "compressorOn", "eqOn", "distortionOn", "chorusOn", "flangerOn", "delayOn", "reverbOn", "cabinetOn", "doubleTrackOn" };
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
-    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
+    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 9> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
     juce::Label patternSlotLabel, patternLengthLabel, syncModeLabel, bpmLabel;
     juce::ComboBox patternSlotBox, patternLengthBox;
