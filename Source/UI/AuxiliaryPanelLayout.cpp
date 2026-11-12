@@ -141,4 +141,117 @@ PanelLayout calculatePanelLayout(PanelRect area,
 
     return result;
 }
+PanelLayout calculateExpandedPanelLayout(PanelRect area,
+                                         const std::vector<PanelRequest>& requests,
+                                         int expandedId,
+                                         float scale,
+                                         int gap)
+{
+    PanelLayout result;
+    if (requests.empty())
+        return result;
+
+    if (!validArea(area)
+        || requests.size() > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+    {
+        result.invalidInput = true;
+        return result;
+    }
+
+    if (!std::isfinite(scale) || scale <= 0.0f)
+        scale = 1.0f;
+
+    std::set<int> ids;
+    const PanelRequest* expanded = nullptr;
+    int dockMinimumWidth = 1;
+    int dockMinimumHeight = 1;
+    int expandedMinimumWidth = 1;
+    for (const auto& request : requests)
+    {
+        if (!ids.insert(request.id).second
+            || request.desired.width <= 0 || request.desired.height <= 0
+            || request.minimum.width <= 0 || request.minimum.height <= 0
+            || request.minimum.width > request.desired.width
+            || request.minimum.height > request.desired.height)
+        {
+            result.invalidInput = true;
+            return result;
+        }
+
+        if (request.id == expandedId)
+        {
+            expanded = &request;
+            expandedMinimumWidth = scaled(request.minimum.width, scale);
+        }
+        else
+        {
+            dockMinimumWidth = std::max(dockMinimumWidth, scaled(request.minimum.width, scale));
+            dockMinimumHeight = std::max(dockMinimumHeight, scaled(request.minimum.height, scale));
+        }
+    }
+
+    if (expanded == nullptr)
+    {
+        result.invalidInput = true;
+        return result;
+    }
+
+    const int count = static_cast<int>(requests.size());
+    const int dockedCount = count - 1;
+    const int scaledGap = gap <= 0 ? 0 : scaled(gap, scale);
+    const auto totalVerticalGap = static_cast<std::int64_t>(scaledGap) * std::max(0, dockedCount - 1);
+    const auto dockCellHeight = dockedCount > 0
+        ? (static_cast<std::int64_t>(area.height) - totalVerticalGap) / dockedCount
+        : area.height;
+
+    if (dockedCount > 0)
+    {
+        const int preferredDockWidth = std::max(dockMinimumWidth, scaled(240, scale));
+        const int maximumDockWidth = area.width - scaledGap - expandedMinimumWidth;
+        if (maximumDockWidth < preferredDockWidth || dockCellHeight < dockMinimumHeight)
+        {
+            result.overflow = true;
+            result.panels.reserve(requests.size());
+            for (std::size_t i = 0; i < requests.size(); ++i)
+                result.panels.push_back({ requests[i].id, area, requests[i].id == expandedId });
+            return result;
+        }
+
+        const int dockWidth = std::min(maximumDockWidth,
+            std::max(preferredDockWidth, scaled(area.width / 3, scale)));
+        const int mainWidth = area.width - dockWidth - scaledGap;
+        result.columns = 2;
+        result.rows = dockedCount;
+        result.compact = true;
+        result.panels.reserve(requests.size());
+
+        int dockIndex = 0;
+        for (const auto& request : requests)
+        {
+            if (request.id == expandedId)
+            {
+                result.panels.push_back({ request.id,
+                    { area.x, area.y, mainWidth, area.height }, true });
+                continue;
+            }
+
+            const auto y = static_cast<std::int64_t>(area.y)
+                         + static_cast<std::int64_t>(dockIndex) * (static_cast<std::int64_t>(dockCellHeight) + scaledGap);
+            const auto height = dockIndex == dockedCount - 1
+                ? static_cast<std::int64_t>(area.y) + area.height - y
+                : dockCellHeight;
+            result.panels.push_back({ request.id,
+                { area.x + mainWidth + scaledGap, static_cast<int>(y),
+                  dockWidth, static_cast<int>(height) }, true });
+            ++dockIndex;
+        }
+        return result;
+    }
+
+    result.columns = 1;
+    result.rows = 1;
+    result.panels.push_back({ expandedId, area, true });
+    return result;
+}
+
 } // namespace ppgu::ui
