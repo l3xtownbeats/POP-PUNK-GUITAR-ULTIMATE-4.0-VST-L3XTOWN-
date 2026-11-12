@@ -7,7 +7,7 @@
 
 **A dedicated pop-punk guitar instrument for riffs, hooks, power chords and high-energy rhythm parts.**
 
-[CURRENT BUILD](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444) · [DOWNLOAD CENTER](DOWNLOAD.md) · [ENGINEERING LOG](Info.txt) · [DOCUMENTATION](docs/)
+[GITHUB ACTIONS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions) · [DOWNLOAD CENTER](DOWNLOAD.md) · [ENGINEERING LOG](Info.txt) · [DOCUMENTATION](docs/)
 
 ![Windows x64](https://img.shields.io/badge/PLATFORM-Windows%20x64-20242b?style=for-the-badge)
 ![VST3](https://img.shields.io/badge/FORMAT-VST3-8c245e?style=for-the-badge)
@@ -35,12 +35,12 @@ The product direction is immediate playability, a focused control surface and an
 
 **Source HEAD and authoritative engineering status:** see the latest dated entry in [Info.txt](Info.txt); CI status is always evaluated against the exact SHA recorded there.
 
-The latest source audit fixed CMake test discovery: `include(CTest)` now initializes `BUILD_TESTING` before every conditional test target, including the auxiliary-panel geometry contract. This is a source-level correction only.
+The latest recorded source correction fixes CMake test discovery: `include(CTest)` initializes `BUILD_TESTING` before conditional test targets, including the auxiliary-panel geometry contract. This is a source-level correction only; no build or test PASS is inferred from it.
 
-**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. The queried commit has an empty combined-status list and no associated workflow runs in the available PR-run lookup; neither result means PASS. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
+**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. The combined-status query for the recorded source HEAD returned no status checks. The available workflow lookup is limited to PR-triggered runs and returned no entries; that does not establish that no other Actions runs exist and is not a PASS. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
 
 - [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
-- [Current source commit](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/e05a12b0830ba323bc9fcd9166eae9e7ca701092)
+- [Current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
 - [Single engineering journal — Info.txt](Info.txt)
 
 No COMPLETE ZIP is declared available until the current source build, all registered regression tests, pluginval and package validation pass. FL Studio 20 acceptance remains a separate manual gate.
