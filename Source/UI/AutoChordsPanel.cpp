@@ -45,28 +45,28 @@ PPGUAutoChordsPanel::PPGUAutoChordsPanel(const PPGUThemeManager::Palette& initia
 void PPGUAutoChordsPanel::setPalette(const PPGUThemeManager::Palette& value)
 {
     palette = value;
-    title.setColour(juce::Label::textColourId, palette.token("text_primary"));
-    note.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+    title.setColour(juce::Label::textColourId, palette.textPrimary);
+    note.setColour(juce::Label::textColourId, palette.textSecondary);
     for (auto* box : { &mode, &key, &progression })
     {
-        box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
-        box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
-        box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
-        box->setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+        box->setColour(juce::ComboBox::backgroundColourId, palette.controlBg);
+        box->setColour(juce::ComboBox::textColourId, palette.textPrimary);
+        box->setColour(juce::ComboBox::outlineColourId, palette.controlBorder);
+        box->setColour(juce::ComboBox::arrowColourId, palette.accent);
     }
     for (auto* label : { &modeLabel, &keyLabel, &progressionLabel })
-        label->setColour(juce::Label::textColourId, palette.token("accent"));
-    preview.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
-    preview.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        label->setColour(juce::Label::textColourId, palette.accent);
+    preview.setColour(juce::TextButton::buttonColourId, palette.accent);
+    preview.setColour(juce::TextButton::textColourOffId, palette.windowBg);
     repaint();
 }
 
 void PPGUAutoChordsPanel::paint(juce::Graphics& g)
 {
-    g.fillAll(palette.token("window_bg"));
-    g.setColour(palette.token("panel"));
+    g.fillAll(palette.windowBg);
+    g.setColour(palette.panel);
     g.fillRoundedRectangle(getLocalBounds().toFloat().reduced(2.0f), 10.0f);
-    g.setColour(palette.token("accent"));
+    g.setColour(palette.accent);
     g.setFont(juce::Font(12.0f, juce::Font::bold));
     g.drawText("HARMONY SETUP", getLocalBounds().reduced(20, 68).removeFromTop(20), juce::Justification::left);
 }

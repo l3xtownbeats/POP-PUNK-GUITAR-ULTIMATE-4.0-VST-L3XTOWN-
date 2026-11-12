@@ -17,11 +17,11 @@ PPGUPerformanceDisplay::PPGUPerformanceDisplay(juce::MidiKeyboardState& state,
         label.setJustificationType(juce::Justification::centredLeft);
         label.setInterceptsMouseClicks(false, false);
     };
-    configure(noteValue, 21.0f, palette.token("text_primary"), true);
-    configure(chordValue, 26.0f, palette.token("accent"), true);
-    configure(detailValue, 10.0f, palette.token("text_secondary"), false);
-    configure(velocityValue, 11.0f, palette.token("text_primary"), true);
-    configure(midiValue, 10.0f, palette.token("text_secondary"), true);
+    configure(noteValue, 21.0f, palette.textPrimary, true);
+    configure(chordValue, 26.0f, palette.accent, true);
+    configure(detailValue, 10.0f, palette.textSecondary, false);
+    configure(velocityValue, 11.0f, palette.textPrimary, true);
+    configure(midiValue, 10.0f, palette.textSecondary, true);
     noteValue.setText("--", juce::dontSendNotification);
     chordValue.setText("--", juce::dontSendNotification);
     detailValue.setText("PLAY A NOTE OR CHORD  /  LIVE MIDI MONITOR", juce::dontSendNotification);
@@ -33,18 +33,17 @@ PPGUPerformanceDisplay::PPGUPerformanceDisplay(juce::MidiKeyboardState& state,
     for (auto* component : labels)
         addAndMakeVisible(*component);
     keyboardState.addListener(this);
-    startTimerHz(20);
     setPalette(palette);
 }
 
 void PPGUPerformanceDisplay::setPalette(const PPGUThemeManager::Palette& value)
 {
     palette = value;
-    noteValue.setColour(juce::Label::textColourId, palette.token("text_primary"));
-    chordValue.setColour(juce::Label::textColourId, palette.token("accent"));
-    detailValue.setColour(juce::Label::textColourId, palette.token("text_secondary"));
-    velocityValue.setColour(juce::Label::textColourId, palette.token("text_primary"));
-    midiValue.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+    noteValue.setColour(juce::Label::textColourId, palette.textPrimary);
+    chordValue.setColour(juce::Label::textColourId, palette.accent);
+    detailValue.setColour(juce::Label::textColourId, palette.textSecondary);
+    velocityValue.setColour(juce::Label::textColourId, palette.textPrimary);
+    midiValue.setColour(juce::Label::textColourId, palette.textSecondary);
     repaint();
 }
 
@@ -104,6 +103,14 @@ juce::String PPGUPerformanceDisplay::makeChordName(const std::array<bool, 128>& 
     return juce::String(names[chord.rootPitchClass]) + suffix;
 }
 
+void PPGUPerformanceDisplay::visibilityChanged()
+{
+    if (isShowing())
+        startTimerHz(20);
+    else
+        stopTimer();
+}
+
 void PPGUPerformanceDisplay::timerCallback()
 {
     std::array<bool, 128> snapshot {};
@@ -128,14 +135,14 @@ void PPGUPerformanceDisplay::timerCallback()
 void PPGUPerformanceDisplay::paint(juce::Graphics& g)
 {
     auto b = getLocalBounds().toFloat();
-    g.setGradientFill(juce::ColourGradient(palette.token("panel_elevated").brighter(0.08f), b.getX(), b.getY(),
-                                           palette.token("window_bg").darker(0.15f), b.getRight(), b.getBottom(), false));
+    g.setGradientFill(juce::ColourGradient(palette.panelElevated.brighter(0.08f), b.getX(), b.getY(),
+                                           palette.windowBg.darker(0.15f), b.getRight(), b.getBottom(), false));
     g.fillRoundedRectangle(b, 10.0f);
-    g.setColour(palette.token("accent").withAlpha(0.85f));
+    g.setColour(palette.accent.withAlpha(0.85f));
     g.fillRoundedRectangle(b.getX(), b.getY() + 10.0f, 3.0f, b.getHeight() - 20.0f, 1.5f);
-    g.setColour(palette.token("control_border"));
+    g.setColour(palette.controlBorder);
     g.drawRoundedRectangle(b.reduced(0.5f), 10.0f, 1.0f);
-    g.setColour(palette.token("text_secondary"));
+    g.setColour(palette.textSecondary);
     g.setFont(9.0f);
     g.drawText("PERFORMANCE", getLocalBounds().reduced(12, 4).removeFromTop(14), juce::Justification::left);
 }

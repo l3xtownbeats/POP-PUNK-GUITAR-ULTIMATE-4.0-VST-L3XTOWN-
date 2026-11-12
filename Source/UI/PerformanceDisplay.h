@@ -21,6 +21,7 @@ private:
     void handleNoteOn(juce::MidiKeyboardState*, int channel, int note, float velocity) override;
     void handleNoteOff(juce::MidiKeyboardState*, int channel, int note, float velocity) override;
     void timerCallback() override;
+    void visibilityChanged() override;
     juce::String makeNoteName(int note) const;
     juce::String makeChordName(const std::array<bool, 128>& active) const;
 

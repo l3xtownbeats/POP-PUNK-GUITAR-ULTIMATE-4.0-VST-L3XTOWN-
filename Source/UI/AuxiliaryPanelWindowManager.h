@@ -15,7 +15,8 @@ public:
 
     explicit PPGUAuxiliaryPanelWindowManager(
         const PPGUThemeManager::Palette& initialPalette,
-        juce::PropertiesFile* persistentSettings = nullptr);
+        juce::PropertiesFile* persistentSettings = nullptr,
+        juce::Component* displayAnchor = nullptr);
     ~PPGUAuxiliaryPanelWindowManager();
 
     bool addPanel(int id, const juce::String& title, juce::Component& content,
@@ -33,10 +34,11 @@ private:
     const Entry* findEntry(int id) const noexcept;
     void toggleExpanded(int id);
     void updateLayout();
-    void saveWindowState(const Entry& entry);
+    void saveWindowState(Entry& entry);
 
     PPGUThemeManager::Palette palette;
     juce::PropertiesFile* settings = nullptr;
+    juce::Component::SafePointer<juce::Component> displayAnchor;
     std::vector<std::unique_ptr<Entry>> entries;
     int expandedId = 0;
     int focusedId = 0;

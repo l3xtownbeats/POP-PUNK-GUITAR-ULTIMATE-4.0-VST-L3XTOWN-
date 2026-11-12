@@ -12,7 +12,7 @@ public:
                                 const juce::String& title,
                                 juce::Component& content,
                                 const PPGUThemeManager::Palette& initialPalette)
-        : juce::DocumentWindow(title, initialPalette.token("panel"),
+        : juce::DocumentWindow(title, initialPalette.panel,
               juce::DocumentWindow::closeButton | juce::DocumentWindow::maximiseButton, true),
           owner(ownerToUse), panelId(panelIdToUse)
     {
@@ -22,7 +22,7 @@ public:
             juce::DocumentWindow::closeButton | juce::DocumentWindow::maximiseButton, false);
         setTitleBarTextCentred(false);
         setResizable(true, true);
-        setResizeLimits(420, 300, 1800, 1200);
+        setResizeLimits(260, 190, 1800, 1200);
         setDropShadowEnabled(true);
         setContentNonOwned(&content, false);
         applyPalette(initialPalette);
@@ -52,8 +52,8 @@ public:
 
     void applyPalette(const PPGUThemeManager::Palette& value)
     {
-        setBackgroundColour(value.token("panel"));
-        setColour(juce::DocumentWindow::textColourId, value.token("text_primary"));
+        setBackgroundColour(value.panel);
+        setColour(juce::DocumentWindow::textColourId, value.textPrimary);
         repaint();
     }
 
@@ -66,14 +66,16 @@ struct PPGUAuxiliaryPanelWindowManager::Entry
 {
     int id = 0;
     bool open = false;
+    juce::Rectangle<int> normalBounds;
     PaletteUpdater paletteUpdater;
     std::unique_ptr<PPGUAuxiliaryDocumentWindow> window;
 };
 
 PPGUAuxiliaryPanelWindowManager::PPGUAuxiliaryPanelWindowManager(
     const PPGUThemeManager::Palette& initialPalette,
-    juce::PropertiesFile* persistentSettings)
-    : palette(initialPalette), settings(persistentSettings)
+    juce::PropertiesFile* persistentSettings,
+    juce::Component* displayAnchorToUse)
+    : palette(initialPalette), settings(persistentSettings), displayAnchor(displayAnchorToUse)
 {
 }
 
@@ -109,10 +111,17 @@ bool PPGUAuxiliaryPanelWindowManager::openPanel(int id)
 
     if (!entry->open && settings != nullptr)
     {
-        const auto saved = settings->getValue(
-            "auxPanel." + juce::String(id) + ".windowState");
+        const auto prefix = "auxPanel." + juce::String(id) + ".";
+        const auto saved = settings->getValue(prefix + "windowState");
         if (saved.isNotEmpty())
             entry->window->restoreWindowStateFromString(saved);
+
+        const int x = settings->getIntValue(prefix + "normalX", -1);
+        const int y = settings->getIntValue(prefix + "normalY", -1);
+        const int w = settings->getIntValue(prefix + "normalW", 0);
+        const int h = settings->getIntValue(prefix + "normalH", 0);
+        if (x >= 0 && y >= 0 && w >= 260 && h >= 190)
+            entry->normalBounds = { x, y, w, h };
     }
 
     entry->open = true;
@@ -151,7 +160,7 @@ void PPGUAuxiliaryPanelWindowManager::closePanel(int id)
 void PPGUAuxiliaryPanelWindowManager::closeAll()
 {
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    for (const auto& entry : entries)
+    for (auto& entry : entries)
     {
         if (entry->open)
             saveWindowState(*entry);
@@ -213,17 +222,39 @@ void PPGUAuxiliaryPanelWindowManager::toggleExpanded(int id)
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
     if (!isOpen(id))
         return;
-    expandedId = expandedId == id ? 0 : id;
+
+    if (expandedId == id)
+    {
+        expandedId = 0;
+    }
+    else
+    {
+        if (getOpenPanelCount() == 1)
+            if (auto* entry = findEntry(id))
+                entry->normalBounds = entry->window->getBounds();
+        expandedId = id;
+    }
     focusedId = id;
     updateLayout();
 }
 
-void PPGUAuxiliaryPanelWindowManager::saveWindowState(const Entry& entry)
+void PPGUAuxiliaryPanelWindowManager::saveWindowState(Entry& entry)
 {
     if (settings == nullptr || entry.window == nullptr)
         return;
-    settings->setValue("auxPanel." + juce::String(entry.id) + ".windowState",
-                       entry.window->getWindowStateAsString());
+
+    if (expandedId == 0 && getOpenPanelCount() == 1)
+        entry.normalBounds = entry.window->getBounds();
+
+    const auto prefix = "auxPanel." + juce::String(entry.id) + ".";
+    settings->setValue(prefix + "windowState", entry.window->getWindowStateAsString());
+    if (!entry.normalBounds.isEmpty())
+    {
+        settings->setValue(prefix + "normalX", entry.normalBounds.getX());
+        settings->setValue(prefix + "normalY", entry.normalBounds.getY());
+        settings->setValue(prefix + "normalW", entry.normalBounds.getWidth());
+        settings->setValue(prefix + "normalH", entry.normalBounds.getHeight());
+    }
 }
 
 void PPGUAuxiliaryPanelWindowManager::updateLayout()
@@ -232,24 +263,29 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     if (getOpenPanelCount() == 0)
         return;
 
-    const auto* display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
+    const auto& displays = juce::Desktop::getInstance().getDisplays();
+    const auto* display = displayAnchor != nullptr
+        ? displays.getDisplayForRect(displayAnchor->getScreenBounds()) : nullptr;
+    if (display == nullptr)
+        display = displays.getPrimaryDisplay();
+
     auto area = display != nullptr ? display->userArea : juce::Rectangle<int>(0, 0, 1280, 720);
-    const float scale = display != nullptr ? display->scale : 1.0f;
     area = area.reduced(12);
     if (area.isEmpty())
         area = { 0, 0, 1280, 720 };
 
+    constexpr float logicalScale = 1.0f; // userArea and top-level Component bounds are logical pixels.
     std::vector<ppgu::ui::PanelRequest> requests;
     requests.reserve(entries.size());
     for (const auto& entry : entries)
         if (entry->open)
-            requests.push_back({ entry->id, { 760, 560 }, { 420, 300 } });
+            requests.push_back({ entry->id, { 760, 560 }, { 260, 190 } });
 
     if (expandedId != 0 && isOpen(expandedId))
     {
         const auto expanded = ppgu::ui::calculateExpandedPanelLayout(
             { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
-            requests, expandedId, scale, 8);
+            requests, expandedId, logicalScale, 8);
         if (!expanded.invalidInput && !expanded.overflow)
         {
             for (const auto& placement : expanded.panels)
@@ -274,13 +310,14 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
         if (entry == nullptr)
             return;
         entry->window->setExpandedState(false);
-        auto bounds = entry->window->getBounds();
-        if (bounds.getWidth() < 420 || bounds.getHeight() < 300
+        auto bounds = entry->normalBounds.isEmpty() ? entry->window->getBounds() : entry->normalBounds;
+        if (bounds.getWidth() < 260 || bounds.getHeight() < 190
             || !area.contains(bounds.getCentre()))
             bounds = area.withSizeKeepingCentre(
                 juce::jmin(760, area.getWidth()), juce::jmin(560, area.getHeight()));
         else
             bounds = bounds.constrainedWithin(area);
+        entry->normalBounds = bounds;
         entry->window->setBounds(bounds);
         entry->window->setVisible(true);
         return;
@@ -288,7 +325,7 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
 
     const auto layout = ppgu::ui::calculatePanelLayout(
         { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
-        requests, scale, 12);
+        requests, logicalScale, 12);
 
     if (layout.invalidInput)
         return;

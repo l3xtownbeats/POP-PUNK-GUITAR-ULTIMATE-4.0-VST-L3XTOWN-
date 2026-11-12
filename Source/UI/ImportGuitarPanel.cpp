@@ -27,20 +27,20 @@ PPGUImportGuitarPanel::PPGUImportGuitarPanel(std::function<void()> callback,
 void PPGUImportGuitarPanel::setPalette(const PPGUThemeManager::Palette& value)
 {
     palette = value;
-    title.setColour(juce::Label::textColourId, palette.token("text_primary"));
-    description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
-    status.setColour(juce::Label::textColourId, palette.token("accent"));
-    browse.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
-    browse.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+    title.setColour(juce::Label::textColourId, palette.textPrimary);
+    description.setColour(juce::Label::textColourId, palette.textSecondary);
+    status.setColour(juce::Label::textColourId, palette.accent);
+    browse.setColour(juce::TextButton::buttonColourId, palette.accent);
+    browse.setColour(juce::TextButton::textColourOffId, palette.windowBg);
     repaint();
 }
 void PPGUImportGuitarPanel::setStatus(const juce::String& text) { status.setText(text, juce::dontSendNotification); }
 void PPGUImportGuitarPanel::paint(juce::Graphics& g)
 {
-    g.fillAll(palette.token("window_bg"));
-    g.setColour(palette.token("panel"));
+    g.fillAll(palette.windowBg);
+    g.setColour(palette.panel);
     g.fillRoundedRectangle(getLocalBounds().toFloat().reduced(2.0f), 10.0f);
-    g.setColour(palette.token("accent"));
+    g.setColour(palette.accent);
     g.fillRoundedRectangle(22.0f, 68.0f, 54.0f, 3.0f, 1.5f);
 }
 void PPGUImportGuitarPanel::resized()

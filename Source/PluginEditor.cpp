@@ -229,7 +229,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, themeManager.getPalette());
 
     auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(
-        themeManager.getPalette(), uiProperties.getUserSettings());
+        themeManager.getPalette(), uiProperties.getUserSettings(), this);
     auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel,
         [this](const PPGUThemeManager::Palette& p) { fxEditPanel->setPalette(p); });
     auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel,

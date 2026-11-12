@@ -54,13 +54,13 @@ void PPGUFXEditPanel::selectModule(int index)
         control->slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         control->slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 66, 18);
         control->slider.setRange(range.start, range.end, range.interval);
-        control->slider.setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
-        control->slider.setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
-        control->slider.setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
-        control->slider.setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
+        control->slider.setColour(juce::Slider::rotarySliderFillColourId, palette.accent);
+        control->slider.setColour(juce::Slider::rotarySliderOutlineColourId, palette.controlBorder);
+        control->slider.setColour(juce::Slider::thumbColourId, palette.textPrimary);
+        control->slider.setColour(juce::Slider::textBoxTextColourId, palette.textPrimary);
         control->caption.setText(control->label, juce::dontSendNotification);
         control->caption.setFont(juce::Font(10.0f, juce::Font::bold));
-        control->caption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        control->caption.setColour(juce::Label::textColourId, palette.textSecondary);
         control->caption.setJustificationType(juce::Justification::centred);
         control->attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(state, control->id, control->slider);
         addAndMakeVisible(control->slider);
@@ -73,37 +73,37 @@ void PPGUFXEditPanel::selectModule(int index)
 void PPGUFXEditPanel::setPalette(const PPGUThemeManager::Palette& value)
 {
     palette = value;
-    hint.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+    hint.setColour(juce::Label::textColourId, palette.textSecondary);
     for (auto& module : modules)
     {
-        module.select.setColour(juce::TextButton::buttonColourId, palette.token("control_bg"));
-        module.select.setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
-        module.select.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
-        module.enabled.setColour(juce::TextButton::buttonColourId, palette.token("control_bg"));
-        module.enabled.setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
-        module.enabled.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        module.select.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        module.select.setColour(juce::TextButton::buttonOnColourId, palette.accent);
+        module.select.setColour(juce::TextButton::textColourOffId, palette.textPrimary);
+        module.enabled.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        module.enabled.setColour(juce::TextButton::buttonOnColourId, palette.accent);
+        module.enabled.setColour(juce::TextButton::textColourOffId, palette.textPrimary);
     }
     for (auto& control : controls)
     {
-        control->slider.setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
-        control->slider.setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
-        control->slider.setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
-        control->slider.setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
-        control->caption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        control->slider.setColour(juce::Slider::rotarySliderFillColourId, palette.accent);
+        control->slider.setColour(juce::Slider::rotarySliderOutlineColourId, palette.controlBorder);
+        control->slider.setColour(juce::Slider::thumbColourId, palette.textPrimary);
+        control->slider.setColour(juce::Slider::textBoxTextColourId, palette.textPrimary);
+        control->caption.setColour(juce::Label::textColourId, palette.textSecondary);
     }
     repaint();
 }
 
 void PPGUFXEditPanel::paint(juce::Graphics& g)
 {
-    g.fillAll(palette.token("window_bg"));
+    g.fillAll(palette.windowBg);
     auto left = getLocalBounds().removeFromLeft(174).toFloat();
-    g.setColour(palette.token("panel"));
+    g.setColour(palette.panel);
     g.fillRoundedRectangle(left.reduced(2.0f), 9.0f);
     auto work = getLocalBounds().toFloat().withTrimmedLeft(184.0f).reduced(10.0f);
-    g.setColour(palette.token("panel_elevated"));
+    g.setColour(palette.panelElevated);
     g.fillRoundedRectangle(work, 9.0f);
-    g.setColour(palette.token("accent"));
+    g.setColour(palette.accent);
     g.setFont(juce::Font(11.0f, juce::Font::bold));
     g.drawText(modules[static_cast<std::size_t>(selectedModule)].name + "  /  PROCESSING", work.removeFromTop(22.0f), juce::Justification::left);
 }
