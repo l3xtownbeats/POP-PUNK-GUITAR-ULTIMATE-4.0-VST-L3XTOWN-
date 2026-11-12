@@ -8,3 +8,11 @@ undefined
 - FX EDIT parameter controls and GR stay disabled until real parameter/measurement paths exist; AutoChords Preview stays disabled until real audio/MIDI integration.
 - Licensed/CPU/BPM indicators must use truthful sources only.
 - Documentation-only commit; production source unchanged; no build, CTest, pluginval or DAW pass claimed.
+
+## 2026-11-12 — O1 overlay shell
+
+- Added `Source/UI/OverlayPanel.h/.cpp`: in-editor AutoChords and FX EDIT panels, close/compact controls, truthful disabled Preview, real APVTS attachments for seven FX bypass booleans.
+- Added AUTOCHORDS opener and FX-module click-to-open routing in PluginEditor; positions panels using AuxiliaryPanelLayout.
+- Added OverlayPanel source/header to CMake target.
+- UI shell only: no DSP/MIDI/APVTS ID changes. Bounds/open-state persistence, paging/focus manager and complete AutoChords engine remain deferred to O2/O3.
+- Validation not run; no build/CTest/pluginval/DAW pass claimed.

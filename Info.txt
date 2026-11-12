@@ -9,3 +9,11 @@ undefined
 **Спецификация:** `docs/PPGU_NEON_SKIN_MASTER_PROMPT_RU.md`.
 **Non-goals:** в этой документальной порции production source не менялся; никаких фиктивных состояний/контролов не включать.
 **Проверки:** документ и журналы фиксируются в одном commit; CI/build/CTest/pluginval/DAW PASS не заявляются.
+
+## 2026-11-12 — O1 overlay panel shell integrated
+
+**Статус:** SOURCE PRESENT / INTEGRATED; build and contract validation PENDING.
+**Ветка:** feature/pop-punk-ultimate-skin-ui; parent SHA d936a078f9ad64f927857eb4c115cddf919c4c0d.
+**Изменения:** добавлен OverlayPanel для AutoChords и FX EDIT внутри главного окна; FX EDIT использует существующие семь APVTS bool-параметров через ButtonAttachment; AutoChords предоставляет UI-выбор Key/Mode/Pattern и детерминированный readout. Preview остаётся disabled. Кнопки FX открывают FX EDIT; добавлена кнопка AUTOCHORDS. Тайлинг выполняется через AuxiliaryPanelLayout.
+**Ограничения:** это O1 shell, не полная реализация AutoChords audio/MIDI. Персистенция bounds/open-state, paging, focus manager и z-order manager остаются O2. FX-параметры/GR/кривая не реализованы и не имитируются. Панели закрываются с уничтожением UI-компонента; аудио/APVTS state не сбрасывается.
+**Проверки:** commit-level source review only; build, CTest, pluginval strictness 5 и FL Studio 20 не запускались; CI PASS не заявлен.

@@ -1,5 +1,6 @@
 #include "PluginEditor.h"
 #include "PPGUData.h"
+#include "UI/AuxiliaryPanelLayout.h"
 
 #include <algorithm>
 #include <cmath>
@@ -148,6 +149,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
+    autoChordsButton.onClick = [this] { openOverlay(ppgu::ui::OverlayPanelId::AutoChords); };
+    addAndMakeVisible(autoChordsButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -208,6 +211,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
         addAndMakeVisible(b);
     }
+    for (auto& b : fxButtons)
+        b.onClick = [this] { openOverlay(ppgu::ui::OverlayPanelId::FXEdit); };
+
     ampTitle.setText("AMP & TONE", juce::dontSendNotification);
     fxTitle.setText("FX CHAIN", juce::dontSendNotification);
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
@@ -392,6 +398,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     header.removeFromLeft(12);
     skinButton.setBounds(header.removeFromRight(116).reduced(2, 9));
     loadButton.setBounds(header.removeFromRight(132).reduced(2, 9));
+    autoChordsButton.setBounds(header.removeFromRight(126).reduced(2, 9));
 
     const int leftW = juce::jlimit(250, 330, getWidth() / 5);
     const int rightW = juce::jlimit(230, 300, getWidth() / 6);
@@ -449,6 +456,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     auto keyboardBounds = area.reduced(20, 0).withY(getHeight() - 132).withHeight(104);
     if (keyboard)
         keyboard->setBounds(keyboardBounds.reduced(2, 2));
+    layoutOverlays();
 }
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
 {
@@ -685,4 +693,47 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
             else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
         });
     });
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::openOverlay(ppgu::ui::OverlayPanelId id)
+{
+    const auto index = id == ppgu::ui::OverlayPanelId::AutoChords ? 0u : 1u;
+    if (!overlayPanels[index])
+    {
+        overlayPanels[index] = std::make_unique<ppgu::ui::OverlayPanel>(
+            id, processor, [this, index] {
+                if (overlayPanels[index])
+                {
+                    removeChildComponent(overlayPanels[index].get());
+                    overlayPanels[index].reset();
+                    layoutOverlays();
+                }
+            });
+        addAndMakeVisible(*overlayPanels[index]);
+    }
+    overlayPanels[index]->toFront(false);
+    layoutOverlays();
+}
+void PopPunkGuitarUltimateAudioProcessorEditor::layoutOverlays()
+{
+    std::vector<ppgu::ui::PanelRequest> requests;
+    for (size_t i = 0; i < overlayPanels.size(); ++i)
+        if (overlayPanels[i])
+            requests.push_back({ static_cast<int>(i + 1), { 620, 440 }, { 300, 210 } });
+    if (requests.empty()) return;
+    const auto work = getLocalBounds().reduced(28, 112).withTrimmedBottom(132);
+    const auto scale = getDesktopScaleFactor();
+    const auto result = ppgu::ui::calculatePanelLayout(
+        { work.getX(), work.getY(), work.getWidth(), work.getHeight() }, requests, scale, 12);
+    for (const auto& placement : result.panels)
+    {
+        const auto index = static_cast<size_t>(placement.id - 1);
+        if (index < overlayPanels.size() && overlayPanels[index])
+        {
+            overlayPanels[index]->setBounds(placement.bounds.x, placement.bounds.y,
+                                            placement.bounds.width, placement.bounds.height);
+            if (result.compact || result.overflow)
+                overlayPanels[index]->setCompact(true);
+        }
+    }
 }

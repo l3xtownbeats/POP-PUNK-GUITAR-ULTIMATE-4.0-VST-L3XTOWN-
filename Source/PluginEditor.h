@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "UI/ThemeManager.h"
+#include "UI/OverlayPanel.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -44,7 +45,7 @@ private:
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
+    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
@@ -67,6 +68,9 @@ private:
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
+    std::array<std::unique_ptr<ppgu::ui::OverlayPanel>, 2> overlayPanels;
+    void openOverlay(ppgu::ui::OverlayPanelId);
+    void layoutOverlays();
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
 };
