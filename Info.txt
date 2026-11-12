@@ -1656,3 +1656,20 @@ The supplied guide is preserved as a user reference, but some examples need musi
 7. Verify Windows x64 Release, full CTest and pluginval strictness 5 on the exact resulting commit; separately perform FL Studio 20 host acceptance.
 
 **Current implementation status:** only the previously recorded basic PME eight-eighth downstroke/palm-mute grid contract is implemented in source. The expanded A–G reference patterns, all other substyle patterns, practice curriculum UI, sample articulations, voicing mapping and complete playback integration remain PENDING.
+
+## 2026-11-12 — Обязательное решение: компактный Pattern Workspace UX
+
+**Статус:** UX REQUIREMENT ACCEPTED / IMPLEMENTATION PENDING.
+
+Пользователь утвердил обязательный принцип: интерфейс Pattern Workspace должен быть максимально понятным, интуитивным, компактным, визуально премиальным и не загромождённым. Плоские длинные списки с постоянной прокруткой не являются основным способом навигации. Использовать компактные раскрываемые категории/подкатегории (понятность навигации Nexus) и наглядный подход Session Guitarist без копирования его защищённого UI/контента.
+
+Принятое устройство:
+- Слева — независимый выбор GUITAR / SOUND PRESETS (чем играть).
+- Справа — единый PLAYING STYLE, объединяющий технику исполнения и ритмический рисунок (как играть); не заставлять пользователя отдельно проходить TECHNIQUE и RHYTHM.
+- Жанры/подстили, artist-inspired характеры и секции песни — компактные фильтры/контекст, а не обязательная цепочка экранов.
+- Основные варианты видны сразу; расширенные параметры раскрываются по запросу. Не перегружать интерфейс лишними кнопками, уровнями меню и повторяющимися терминами.
+- Звук и стиль исполнения выбираются независимо.
+- Поиск, фильтрация и отрисовка каталога не должны выполняться в audio callback; не добавлять сетевые/файловые операции или лишнюю работу в realtime path.
+- Preview и воспроизведение обозначать как доступные только после фактической интеграции backend.
+
+Требование внесено в MASTER PROMPT как R35. Это обязательное UX-ограничение для дальнейшего проектирования и реализации; само по себе не означает, что интерфейс уже реализован или протестирован.
