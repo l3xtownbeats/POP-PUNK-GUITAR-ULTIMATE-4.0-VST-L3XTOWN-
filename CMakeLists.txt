@@ -61,6 +61,10 @@ target_sources(PopPunkGuitarUltimate PRIVATE
     Source/UI/FXEditPanel.h
     Source/UI/AutoChordsPanel.cpp
     Source/UI/AutoChordsPanel.h
+    Source/UI/ImportGuitarPanel.cpp
+    Source/UI/ImportGuitarPanel.h
+    Source/UI/SettingsPanel.cpp
+    Source/UI/SettingsPanel.h
     Source/Sampler/SfzParser.cpp
     Source/Sampler/SfzParser.h
     Source/Sampler/SamplePool.cpp
