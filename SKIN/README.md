@@ -1,16 +1,25 @@
 # PPGU — skin manifests, palette runtime и Skin Studio
 
-## Фактическое состояние
+## Фактическое состояние — рабочая ветка REV.17
 
-В JUCE editor реализовано переключение визуальных палитр через кнопку **SKIN** и Ctrl+K. Выбор сохраняется в пользовательских настройках. Runtime skin root — папка `Skins/` рядом с VST3 bundle; в исходном дереве разработчика используется `SKIN/`.
+Актуальная рабочая ветка: `work/ppgu-skin-expansion-53-102`.
 
-`ThemeManager` поддерживает два versioned manifest contract:
-- `Skin_01`…`Skin_51`: legacy nested-token schema `theme.schema.json`.
-- `Skin_052` и последующие Skin Studio themes: плоская 21-token palette + control map по `control_schema.json`.
+- Runtime registry содержит **102 темы**: legacy `Skin_01`…`Skin_51` и Skin Studio `Skin_052`…`Skin_102`.
+- Каноническая тема по умолчанию и fallback — **SIGNAL FORGE (`skin-052`)**.
+- `ThemeManager` поддерживает legacy nested-token schema для Skin_01…51 и Skin Studio 21-token palette/control-map schema для Skin_052+.
+- Кнопка **SKIN** и Ctrl+K открывают встроенную в Multi-Window Workspace **Premium Skin Gallery**: карточки с preview, именем, семейством/layout, активной темой, поиском и фильтром семейств. Нажатие на карточку применяет тему и сохраняет stable ID.
+- Preview PNG декодируются лениво по мере отображения карточек. Отсутствующая preview-картинка даёт fallback-card, а не блокирует выбор палитры.
+- Skin_053–102 с PNG preview/hero и SVG bezel/crest/texture опубликованы в commit `3a2ceb52062be112429f96d411ae223d87df17a6`; workflow `43195205929` завершился SUCCESS. Registry: 102 entries, pack state MERGED, default skin-052.
 
-Для новых Skin Studio тем в редакторе применяются палитровые цвета. Координаты `controls.*.grid` пока остаются design metadata: они **не управляют реальным расположением JUCE controls**. Отдельная Theme Gallery, живой layout reflow, независимые popup windows и panel manager не должны считаться реализованными до отдельного кода и host acceptance.
+Оставшиеся ограничения, которые нельзя выдавать за готовые:
+- Favorites, полноценная клавиатурная навигация внутри gallery и фоновой filesystem watcher/rescan не реализованы.
+- `controls.*.grid` остаётся design metadata и не перестраивает реальные JUCE controls.
+- 150 ms animated hot-swap, ECO animation policy и asset memory LRU/budget не подтверждены.
+- Не все декоративные материалы Skin Studio (texture/bezel/crest) загружаются как отдельные runtime layers; текущая gallery использует preview artwork, а editor — semantic palette.
+- Runtime control parity по всем обязательным IDs остаётся частичной: отсутствующие LED/Auto Discover/Curator/Settings/About не становятся активными только из-за skin manifest.
+- Windows x64 build/CTest/pluginval и FL Studio 20 host acceptance должны подтверждаться отдельно на точном SHA.
 
-Текущий fallback/default в коде — **Blackout Voltage (skin-51)**. Skin_052 Carbon Relay добавлен в реестр как selectable theme; это не изменение официального default. Любая смена темы должна оставаться visual-only: не менять APVTS, MIDI, presets, sampler или DSP.
+Все изменения тем остаются visual-only: не менять APVTS, MIDI, presets, sampler, DSP или audio callback.
 
 ## Форматы и каталоги
 
