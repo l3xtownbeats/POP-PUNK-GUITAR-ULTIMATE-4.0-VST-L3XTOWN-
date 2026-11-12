@@ -1,7 +1,7 @@
 # PPGU — Auxiliary Panel Manager / технический контракт
 
 Дата: 12 ноября 2026  
-Статус: SOURCE INTEGRATED / CI VERIFIED ON PREVIOUS SOURCE SHA / HOST UI ACCEPTANCE PENDING  
+Статус: SOURCE INTEGRATED / EXACT-SOURCE CI VERIFIED (#1177, e90e7be) / HOST UI ACCEPTANCE PENDING  
 Архитектура соответствует утверждённому UX «окно внутри окна»: панели являются дочерними overlay-компонентами внутри главного editor, а не отдельными top-level DocumentWindow.
 
 ## 1. Границы и ownership
@@ -48,5 +48,6 @@
 ## 6. Verification
 
 - Source integration commit: `38b57b854dc559e5dd7c408b96c6a7821eebbd58`.
-- GitHub Actions run #1168 / ID `43230019761` на exact source SHA: Windows x64 Release configure/build, CTest, VST3 locate, pluginval strictness 5 и package steps SUCCESS.
-- CI PASS подтверждает compile/test/package gates, но не заменяет визуальную проверку интерфейса в DAW.
+- GitHub Actions run #1177 / ID `43235287270` на exact source SHA `e90e7be79a717c74fc94ec634a31f8c7669fb850`: Windows x64 Release configure, VST3 + test executable build, CTest, VST3 locate, pluginval strictness 5, package job и artifact upload SUCCESS. Sample library/license validation SUCCESS из restored cache; download step SKIPPED.
+- Более ранний run #1168 / ID `43230019761` относится только к source SHA `38b57b854dc559e5dd7c408b96c6a7821eebbd58` и не используется как подтверждение текущего SHA.
+- CI PASS подтверждает compile/test/package gates, но не заменяет визуальную проверку интерфейса в DAW. FL Studio 20 interactive acceptance, multi-monitor/DPI, open/close, maximize/restore, persistence и teardown остаются NOT VERIFIED.
