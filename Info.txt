@@ -3,8 +3,8 @@
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 12 ноября 2026  
-Ветка: `work/signal-forge-ui-integration`  
-Последний commit перед текущей записью: `57fe40044532eeab4bc66ccec37bce865904d455`
+Ветка: `work/signal-forge-panel-shell`  
+Последний commit перед текущей записью: `a669c9b067aa0ab36d0bc090f10821af66671d29`
 
 ## 1. Назначение и продукт
 
@@ -966,3 +966,14 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Branch audit:** `feature/auxiliary-panel-layout` is 51 commits ahead and 88 behind main; it contains useful UI panel files but is divergent and includes stale skin count/layout API. No wholesale merge. `work/integrate-uploaded-theme-manager`, `ui/modern-neon-stage-shell`, `feat/theme-system-20-full-skins`, `feature/m4-autochords-foundation`, and `feature/pattern-melody-fx-spec` are also divergent. Only isolated, audited files are candidates for selective integration.
 **R28 non-goals:** no change to processor/audio engine/MIDI routing/APVTS IDs, SoundBank, skin registry/schema, ThemeManager, VST3 packaging or main branch.
 **CI:** run #973 for token API on SHA `57fe40044532eeab4bc66ccec37bce865904d455` was IN_PROGRESS at time of this stage; this geometry/chord commit receives a separate exact-SHA CI run. Do not claim TESTED until it completes.
+
+
+## 2026-11-12 — SIGNAL FORGE panel components staged
+
+**Статус:** UI COMPONENTS IMPLEMENTED/STAGED; NOT YET CONNECTED TO PLUGINEDITOR.
+**Рабочая ветка:** `work/signal-forge-panel-shell`.
+**Родительский SHA:** `a669c9b067aa0ab36d0bc090f10821af66671d29`.
+**Selective source audit:** взяты только панели из diverged `feature/auxiliary-panel-layout`; legacy PluginEditor/skin count 51/layout API не переносились. Все компоненты переведены на PPGUThemeManager 21-token palette и имеют compact bounds.
+**Компоненты:** EditorOverlayPanel (X, maximize/restore), FXEditPanel (APVTS parameter attachments), AutoChordsPanel (UI only; all controls and Preview disabled until real progression/MIDI backend), ImportGuitarPanel (callback to existing async SFZ loader), SettingsPanel (existing APVTS controls), PerformanceDisplay (MidiKeyboardState listener + AutoChordEngine chord detection). CMake now compiles these components. Они пока не подключены к PluginEditor; это будет отдельный следующий коммит.
+**R28 non-goals:** no PluginEditor modifications, no Audio Engine/DSP/MIDI/APVTS changes, no resource/skin/registry changes. UI appearance and backend status are explicit.
+**CI:** this commit will receive its own Windows Release/CTest/pluginval run. Baseline run #971 on SHA 6174041 is SUCCESS with COMPLETE ZIP artifact, but it does not contain these staged UI components.
