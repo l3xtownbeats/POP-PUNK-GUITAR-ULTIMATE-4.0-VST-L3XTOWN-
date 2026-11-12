@@ -27,3 +27,11 @@ undefined
 **Ограничения:** менеджер пока ограничен двумя зарегистрированными панелями; полноценный paging для произвольного числа панелей и DPI-aware layout остаются отдельными задачами. Ручная проверка восстановления bounds в FL Studio 20 не выполнена.
 **Инварианты:** DSP, audio callback, MIDI routing, APVTS IDs, presets и SoundBank не изменялись.
 **Проверки:** source-level review only; CI/build/CTest/pluginval strictness 5/FL Studio 20 не заявляются.
+
+## 2026-11-12 — O2 Windows CI compile correction
+
+**Статус:** SOURCE CORRECTION COMMITTED; CI rerun PENDING.
+**Базовый SHA:** 998ae54fd86492dc9f7ec599ade4491aecaf6256.
+**Причина:** Windows Release CI #984 завершился ошибкой компиляции OverlayPanel.cpp: heterogeneous braced initializer-list смешивал указатели на разные JUCE component types, из-за чего MSVC не мог вывести общий тип.
+**Изменение:** AutoChords controls теперь перечисляются через явно типизированный std::array<juce::Component*, 5> в compact и expanded layout paths. Поведение и параметры не меняются.
+**Проверки:** ошибка подтверждена логом workflow run 43152703528, job 130965436965; исправление ожидает нового Windows CI. CTest/pluginval не запускались из-за остановки сборки. Perf targets и performance budgets не измерялись.

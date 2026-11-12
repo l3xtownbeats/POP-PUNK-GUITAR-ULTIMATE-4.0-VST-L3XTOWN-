@@ -27,3 +27,10 @@ undefined
 - Fixed the literal escaped newline in the AutoChords key-name initializer.
 - No DSP, audio callback, MIDI routing, APVTS IDs, presets or SoundBank changes.
 - Validation pending on the resulting commit SHA.
+
+## 2026-11-12 — O2 Windows CI compile correction
+
+- Replaced heterogeneous braced pointer initializer lists in OverlayPanel::resized with explicitly typed std::array<juce::Component*, 5>.
+- Root cause: MSVC C3535/C2440 during Windows Release build at OverlayPanel.cpp compact/expanded AutoChords control visibility loops.
+- No DSP, callback, MIDI, APVTS IDs, preset or SoundBank changes.
+- CI rerun pending; no build/CTest/pluginval pass claimed.

@@ -116,15 +116,20 @@ void OverlayPanel::resized()
     sizeButton.setBounds(header.removeFromRight(36).reduced(2, 0));
     status.setBounds(area.removeFromBottom(24));
     if (compact) {
-        for (auto* c : { static_cast<juce::Component*>(&keyBox), &modeBox, &patternBox,
-                         &chordReadout, &previewButton })
-            c->setVisible(false);
+        const std::array<juce::Component*, 5> autoChordsControls {
+            &keyBox, &modeBox, &patternBox, &chordReadout, &previewButton
+        };
+        for (auto* component : autoChordsControls)
+            component->setVisible(false);
         for (auto& b : fxButtons) b.setVisible(false);
         return;
     }
     if (id == OverlayPanelId::AutoChords) {
-        for (auto* c : { static_cast<juce::Component*>(&keyBox), &modeBox, &patternBox,
-                         &chordReadout, &previewButton }) c->setVisible(true);
+        const std::array<juce::Component*, 5> autoChordsControls {
+            &keyBox, &modeBox, &patternBox, &chordReadout, &previewButton
+        };
+        for (auto* component : autoChordsControls)
+            component->setVisible(true);
         auto row = area.removeFromTop(42);
         keyBox.setBounds(row.removeFromLeft(row.getWidth() / 3).reduced(3));
         modeBox.setBounds(row.removeFromLeft(row.getWidth() / 2).reduced(3));
