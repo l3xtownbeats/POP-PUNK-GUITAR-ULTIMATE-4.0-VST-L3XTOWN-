@@ -393,3 +393,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Confirmed processor has real `flangerOn` APVTS parameter and active Flanger DSP, while main editor FX rack has only seven toggles. FX Edit already contains Flanger parameter controls.
 - **Approved next source fix:** add FLANGER as the eighth main FX rack toggle, bound to existing `flangerOn`; no new APVTS IDs or DSP changes.
 - Build-guide status: useful checklist/reference, not an authoritative source snapshot. Do not claim its unimplemented features.
+
+
+## 2026-11-12 — Factory preset playability / audible differentiation gate
+
+- **Requirement:** every factory preset must load, produce sound, and be audibly distinct; the bank must cover both style-inspired pop-punk references from the approved group list and general-purpose pop-punk guitar tones in varied roles/voicings.
+- **Catalog reality:** `presets/factory_bank_300.json` has 300 definitions, not 300 verified playable sounds. Some PATTERN definitions explicitly await Pattern Engine integration and recorded performance samples.
+- **Style coverage:** preserve references including Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, The All-American Rejects, MGK and Avril Lavigne-era direction. Create original genre-inspired tones; do not copy protected recordings or exact parts.
+- **General factory coverage:** clean, bright/crunch, high-gain rhythm, palm-muted, open power chords, octave/lead, acoustic/clean layer, tight muted chugs and other genuinely distinct pop-punk guitar roles.
+- **Acceptance:** valid playable source/mapping or working synthesis path; note/velocity ranges; functioning parameter/FX state; no silent/missing-sample presets; meaningful timbral/articulation/dynamics/performance differences. Duplicate settings with different names do not count.
+- **QA:** inventory all 300 by mode/assets/mapping/parameter deltas/readiness; automated load/render smoke tests; A/B and listening review; track coverage and failures. PATTERN entries remain pending until the scheduler and required performance source actually produce the described groove.
+- **Status:** REQUIREMENT LOCKED; implementation and listening QA pending. No source/audio changes or test claims are made by this documentation entry.
