@@ -206,3 +206,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Ограничения:** FL Studio 20 host verification NOT performed; CPU/RAM/paint-time/hot-swap zero-residue not measured; full Skin Gallery not implemented.  
 **Статус:** SPECIFICATION ACCEPTED; BASELINE CI GREEN; SKIN SYSTEM PARTIAL.  
 **Следующий шаг:** implement and test the Skin Gallery and theme persistence/asset pipeline in isolated changes; resolve initial five-skin registry mapping before changing default identity.
+
+
+## 2026-11-12 — SIGNAL FORGE v10.1 specification clarification
+
+**Тип:** documentation / engineering contract; no production symbols changed.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Parent SHA:** `7a4abc486038ad820fba6af04d5fdbd5c2238797`.
+**Файл:** `docs/PPGU_SIGNAL_FORGE_V10_1_ENGINEERING_CLARIFICATION_RU.md`.
+**Суть:** уточнены audio-thread hard guarantees vs measurable UI cost; CPU/RAM/hot-swap/key latency methodology; bounded asset cache and immutable skin snapshots; unlimited library vs resident quotas; portable content-root resolution and path traversal protections; SPDX/license review; single-source-of-truth schemas; package manifest and tiered acceptance gates.
+**Совместимость:** production source unchanged; DSP/processBlock/sampler/MIDI/APVTS/presets/SoundBank untouched.
+**Тесты:** documentation-only. No compile, CTest, pluginval, performance, host or release pass claimed. Exact-SHA CI pending.
+**Статус:** SPECIFICATION CLARIFIED; implementation status unchanged.

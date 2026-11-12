@@ -1268,3 +1268,18 @@ F. Только после этого считать документальны�
 **Host:** FL Studio 20 manual acceptance NOT VERIFIED by CI.  
 **Открытые вопросы:** runtime skin switch сейчас palette-only через popup, не полноценная gallery; complete asset hot-swap/zero-residue/key-reactivity gates не доказаны. Registry default `skin-052` / SIGNAL FORGE расходится с v7 NEON PUNK default; ThemeManager fallback `skin-51` — отдельное legacy значение. Initial five-skin naming/collection and APVTS display mapping remain migration tasks.  
 **Следующий шаг:** F3/F4 — начать с Skin Gallery + single-theme architecture audit, сохраняя неизменными audio/DSP/sampler/MIDI/APVTS semantics; перед изменением отдельно согласовать/зафиксировать безопасную migration map для initial five skins and control labels.
+
+
+## 2026-11-12 — SIGNAL FORGE v10.1 engineering clarification
+
+**Тип:** specification clarification; documentation-only transaction.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Parent SHA:** `7a4abc486038ad820fba6af04d5fdbd5c2238797`.
+**Документ:** `docs/PPGU_SIGNAL_FORGE_V10_1_ENGINEERING_CLARIFICATION_RU.md`.
+**Причина:** устранить неоднозначные и физически некорректные критерии v10 без снижения функциональных требований: абсолютный CPU/RAM zero, методика latency/CPU/RAM, unlimited resources vs quotas, portable VST3 content root, лицензии, single-source-of-truth, безопасный asset lifecycle и уровни гейтов.
+**Изменение:** введена инженерная редакция v10.1 с измеримыми определениями, безопасным immutable snapshot lifecycle, bounded cache, manifest/path security, точной моделью статусов и tiered gates. v10 остаётся функциональным источником требований; v10.1 уточняет критерии измерения и реализации.
+**Пути:** `docs/PPGU_SIGNAL_FORGE_V10_1_ENGINEERING_CLARIFICATION_RU.md`, `Info.txt`, `CODE.txt`.
+**Границы:** документация only; production source, DSP, processBlock, sampler, MIDI, APVTS, presets, SoundBank и UI не менялись.
+**Проверка:** GitHub branch HEAD verified before edit; local Windows compile-check не применим к документационному изменению и в этой среде не выполнялся. CI exact resulting SHA — PENDING.
+**Статус:** SPECIFICATION CLARIFIED; IMPLEMENTATION UNCHANGED; CI PENDING.
+**Следующий шаг:** проверить CI точного SHA; затем выполнять отдельные source commits по tiered gates и A6.
