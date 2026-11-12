@@ -1,10 +1,10 @@
-# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 16.4 UNIFIED (FINAL)
+# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 16.5 UNIFIED (FINAL)
 
 Единый операционный документ: законы, инварианты, реестр правил R01–R33,
 SUPERTEAM, движок, SoundBank, скины, окна, тесты, журнал, приёмка, DoD,
 протоколы (открытие/закрытие сессии, отката, разногласий, публикации),
 каталог отказов, self-check, шаблоны, глоссарий, non-goals.
-Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
+Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
 версия фиксируется в INFO на каждом этапе.
 Иерархия истины: INFO → control inventory/schema → этот промт → устные
 договорённости. При расхождении фактов INFO первичен, правку вносит
@@ -186,26 +186,44 @@ CPU/RAM подтверждаются только измерениями. Ани
     фактического зарегистрированного и разрешённого к распространению
     payload, а не декларацией, числом записей или размером исходных
     архивов. Дубликаты, отклонённые и неразрешённые assets не учитываются.
-5.7 КЛАССЫ ИСТОЧНИКОВ: GREEN (CC0/Public Domain) — AUTO ADD только при
-    прохождении всех экранов §5.1, GUITAR_CONFIRMED и APPROVED legal
-    review; права на включение и распространение в составе продукта
-    проверяются на уровне каждого asset. YELLOW (CC-BY / CC-BY-SA /
-    Pixabay License и иные лицензии с атрибуцией) — только ручной импорт,
-    обязательны provenance и агрегированный LICENSES.txt с точной
-    атрибуцией и условиями; CC-BY-SA получает явное copyleft /
-    share-alike предупреждение и отдельную проверку совместимости
-    распространения. Ручной импорт сам по себе НЕ означает разрешение
-    на включение в коммерческий SoundBank: условия должны разрешать
-    соответствующее использование и распространение. CC-BY-NC,
-    CC-BY-ND и иные ограничения, несовместимые с коммерческим
-    распространением/адаптацией продукта, не включаются в заводской
-    SoundBank без отдельного письменного разрешения правообладателя.
-    RED — лицензии, запрещающие редистрибуцию в составе библиотеки или
-    продукта (Looperman и аналогичные), неизвестные права и
-    COPYRIGHT SUSPECT: в SoundBank не добавляются; допустимое личное
-    использование в отдельной пользовательской продакшн-сессии не
-    превращает asset в distributable library content. RED не может быть
-    переопределён curator'ом; попытка commit блокируется.
+5.7 КЛАССЫ ИСТОЧНИКОВ И CLEARANCE BASIS: GREEN — AUTO ADD после
+    экранов §5.1, GUITAR_CONFIRMED и provenance/evidence:
+    (a) CC0/Public Domain — точная лицензия конкретного asset подтверждена,
+        archived evidence сохранено; автоматический канал без отдельной
+        тяжёлой ручной проверки;
+    (b) CC-BY — допускается в заводской SoundBank при точном attribution
+        text на asset и агрегированном LICENSES.txt; ingest формирует
+        атрибуцию автоматически. Отдельная curator-процедура не требуется,
+        если стандартные условия однозначны и нет дополнительных ограничений;
+    (c) EXPLICIT_PERMISSION — включая Looperman: RED до получения
+        проверяемого разрешения правообладателя, прямо охватывающего
+        commercial use, embedding in VST3, redistribution и redistribution
+        as part of a sample library. После проверки конкретный asset
+        переводится в GREEN с clearanceBasis=EXPLICIT_PERMISSION;
+    (d) OWN_RECORDING / OWN_DSP — собственные записи и созданный PPGU DSP
+        контент допускаются при provenance происхождения; для DSP фиксируются
+        generator, version и параметры/seed;
+    (e) COMMERCIAL_REDISTRIBUTION — коммерческие royalty-free библиотеки
+        допускаются, если лицензия прямо разрешает commercial use, embedding
+        in products и redistribution as a sample library; evidence архивируется.
+    YELLOW — CC-BY-SA, Pixabay License и иные специальные/нестандартные
+        условия: допускаются к рассмотрению/локальному импорту; перевод в
+        GREEN только после подтверждения совместимости всех условий.
+        CC-BY-SA не маркируется автоматическим copyleft-предупреждением:
+        точные obligations определяются текстом применимой лицензии.
+    RED — отсутствие прав на редистрибуцию, Looperman без explicit permission,
+        неизвестная лицензия, несовместимые NC/ND/ограничения и неразрешённый
+        COPYRIGHT SUSPECT. RED-кандидат можно сохранить в реестре и commit как
+        RED/YELLOW для учёта, но нельзя включать в factory payload.
+        COPYRIGHT SUSPECT блокирует GREEN/AUTO ADD, а не фиксацию кандидата.
+        Пользовательский запрос не отменяет обязательные права (§14.3).
+    Для каждого GREEN asset обязательны точный SPDX/LicenseRef, source,
+    file SHA-256, license evidence, verifiedAt и clearanceBasis; общие
+    флаги commercialUse/redistribution/modificationAllowed должны быть true,
+    а дополнительные ограничения — пустыми. Для CC-BY обязательны
+    attributionText и LICENSES.txt. Для permission/commercial clearance
+    обязательны evidence и scope: commercial use, embedding, redistribution
+    и sample-library redistribution.
 5.8 КАНАЛ ПРИЁМА: только существующий S6.5 (R04); второй search/import
     pipeline запрещён. Инструмент приёма — tools/guitar_ingest.py:
     офлайн-скрининг §5.1, SHA-256, provenance JSON, отчёт PASS/REJECT,
@@ -447,9 +465,11 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
     партии отделён от счётчиков реестра).
     REV 16.3 = MINOR: актуализированы фактический снимок §2 и этапы R24.
     REV 16.4 = MINOR: §5 дополнен 5.6–5.8 (SoundBank build-out 7–10 GB,
-    классы источников GREEN/YELLOW/RED, приём через S6.5 и ingest-инструмент);
-    конфликт запроса «Looperman в банк» с §5.1 зафиксирован — закон
-    лицензии побеждает (§14.3).)
+    классы источников GREEN/YELLOW/RED, приём через S6.5 и ingest-инструмент).
+    REV 16.5 = MINOR: §5.7 уточнён для CC0/PD AUTO ADD, CC-BY с атрибуцией,
+    explicit permission для Looperman, собственных записей/DSP и коммерческих
+    royalty-free библиотек; copyright-suspect блокирует GREEN, но не commit
+    RED/YELLOW кандидата.)
 16.2 Ссылки на правила — только по R-ID; на инварианты — по I-ID.
 16.3 Документ — docs/PPGU_MASTER_PROMPT_RU.md; версия в INFO на этапе.
 16.4 Внутреннее противоречие документа — ошибка, фиксируется в INFO.
@@ -471,9 +491,9 @@ Skin gap audit (51 папка против 50-слотовой schema; Skin_51 �
     runtime-структуру.
 Package layout (SKINS/ как исходники, нет runtime Skins/) → R31.
 INFO hygiene (шапка отстаёт от записей; два раздела 6.2) → R32.
-SoundBank RED-источники (Looperman и т. п.) → §5.7: запрет включения
-    в распространяемый SoundBank при разрешённом личном использовании
-    только в рамках условий источника.
+SoundBank clearance (REV 16.5) → §5.7: Looperman RED до explicit
+    permission; CC-BY допускается с атрибуцией; CC0/PD, собственные
+    записи/DSP и коммерческие библиотеки — по clearanceBasis/evidence.
 Мета-правило: новый FAIL без известного шаблона — сначала диагностика
     в INFO, потом фикс; не угадывать по симптомам.
 

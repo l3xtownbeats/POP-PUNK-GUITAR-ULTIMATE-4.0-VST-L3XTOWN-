@@ -1,7 +1,7 @@
 # Sound Asset Sources and License Policy — PPGU 4.0
 
 Date: 2026-11-10
-Status: research shortlist and integration policy. No third-party audio files are bundled by this document.
+Status: research shortlist and integration policy. No third-party audio files are bundled by this document. Updated for PPGU REV 16.5.
 
 ## Product policy
 
@@ -35,10 +35,24 @@ The user library must not have an artificial product-level cap on number of BANK
 
 ### Freesound and similar per-file archives
 - Each file must be reviewed individually.
-- CC0 may be eligible; CC BY may be eligible with exact attribution; CC BY-SA requires compatibility review; CC BY-NC is not eligible for the commercial/distributable plugin bundle.
+- CC0/Public Domain: GREEN/AUTO ADD after technical §5.1 screening, exact per-asset license evidence, provenance and SHA-256; a website filter alone is insufficient.
+- CC BY: GREEN/factory SoundBank when the exact license permits commercial redistribution and exact attribution text is recorded. The ingest pipeline generates per-asset attribution and aggregate LICENSES.txt; no heavy manual curator step is needed for an unambiguous standard CC-BY grant.
+- CC BY-SA: YELLOW until ShareAlike obligations and compatibility with product/library distribution are assessed. Record actual obligations; do not apply a generic copyleft label.
+- CC BY-NC / incompatible ND / other restrictions: not factory-eligible unless separate explicit permission covers the intended product distribution.
+- Looperman: RED until verifiable explicit author/rightsholder permission covers commercial use, VST3 embedding, redistribution, and redistribution as a sample library. Then reclassify that specific asset GREEN with clearanceBasis=EXPLICIT_PERMISSION and archived evidence.
+- Own recordings: eligible with provenance identifying recording session, performers/rights holder and confirmation that PPGU controls the necessary recording/performance rights.
+- Own DSP content (including generated cabinet IR): eligible with provenance recording generator, version, parameters/seed and reproducible generation details.
+- Commercial royalty-free libraries: eligible only when the purchased license explicitly permits commercial use, product embedding and redistribution as a sample library; archive license and entitlement evidence.
+- COPYRIGHT SUSPECT does not block committing a RED/YELLOW candidate record, but blocks GREEN/AUTO ADD until resolved.
 - User-imported files can be used locally by that user, but the plugin must not repackage or redistribute them without appropriate rights.
 
 ## License acceptance workflow
+
+### Factory clearance bases
+
+Every GREEN asset declares one `license.clearanceBasis`: `CC0_PD_VERIFIED`, `CC_BY_ATTRIBUTION`, `EXPLICIT_PERMISSION`, `OWN_RECORDING`, `OWN_DSP`, or `COMMERCIAL_REDISTRIBUTION`. This does not replace the archived license/evidence, asset SHA-256, technical screens or guitar confirmation. Permission/commercial bases require evidence expressly covering commercial use, product embedding, redistribution and sample-library redistribution. CC-BY requires exact attribution text and aggregate LICENSES.txt. OWN_DSP records generator/version/parameters; OWN_RECORDING records rights holder and recording provenance.
+
+
 
 For every candidate asset/library:
 1. Record canonical source URL, creator/rights holder, title, version, retrieval date and file list.

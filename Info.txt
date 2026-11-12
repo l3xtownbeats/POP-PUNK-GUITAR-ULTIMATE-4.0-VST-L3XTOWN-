@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `c0c8e977053aa3fd3bcea9933c95a556ac70b79c`
+Последний commit перед текущей записью: `09646ec42df3f64d9d44242905dae5e98ad87eda`
 
 ## 1. Назначение и продукт
 
@@ -846,3 +846,16 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 4. Статус документа — MERGED в main; SoundBank ingest — PLANNED; SoundBank 7–10 GB — PLANNED; BUILD VERIFIED / TESTED для REV 16.4 не заявляются.
 5. Не сделано: `tools/guitar_ingest.py`, `SAMPLEBANK_BUILD_PLAN.md`, B1–B4, LICENSES.txt, фактическая библиотека 7–10 GB, FL Studio 20 host acceptance и CPU/RAM profiling.
 6. Этап main-only; остальные 41 ветка не синхронизированы, rollout NOT YET VERIFIED.
+
+
+## 2026-11-12 — REV 16.5: расширение легальных каналов SoundBank
+
+**Статус:** POLICY + REGISTRY GATE IMPLEMENTED; ingest-инструмент и end-to-end партии ещё PENDING.
+**Основание:** пользователь подтвердил каналы CC0/PD, CC-BY с атрибуцией, Looperman после явного разрешения правообладателя, собственные записи/DSP и коммерческие royalty-free библиотеки с правом встраивания/редистрибуции.
+**Изменение спецификации:** REV 16.5 UNIFIED (FINAL), MINOR; REV 16.4 сохранена как историческая редакция.
+**Политика:** CC0/PD — AUTO ADD после §5.1 и evidence; CC-BY — GREEN с точным attribution text и агрегированным LICENSES.txt; CC-BY-SA и специальные условия — YELLOW до проверки совместимости; Looperman — RED до проверяемого разрешения автора на коммерческое встраивание и распространение внутри sample library; собственные записи/DSP — GREEN с provenance; коммерческие royalty-free — GREEN при явном allowed-use для embedding и sample-library redistribution. COPYRIGHT SUSPECT не блокирует commit RED/YELLOW кандидата, но блокирует GREEN/AUTO ADD.
+**Код:** validator получает clearanceBasis для CC0_PD_VERIFIED, CC_BY_ATTRIBUTION, EXPLICIT_PERMISSION, OWN_RECORDING, OWN_DSP, COMMERCIAL_REDISTRIBUTION; §5.1, SHA-256, GUITAR_CONFIRMED и запрет неразрешённых ограничений сохранены.
+**Non-goals:** аудиодвижок, callback, APVTS, MIDI, presets, SoundBank payload, S6.5 runtime и packaging не менялись. guitar_ingest.py, LICENSES.txt generation и B1–B4 остаются PENDING.
+**Совместимость:** пользователь подтвердил запуск VST3 в FL Studio 20 и Windows 10 version 1809; это пользовательская host acceptance evidence, не CI-результат.
+**CI:** run #967 (43139137563) SUCCESS на SHA c0c8e977053aa3fd3bcea9933c95a556ac70b79c; PASS не переносится на новый SHA. Новый CI ожидает commit.
+**R33:** этап main-only; остальные ветки не обновлялись.

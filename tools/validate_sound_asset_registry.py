@@ -62,15 +62,11 @@ def _check(condition: bool, errors: list[str], where: str, message: str) -> None
 
 
 def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
-    """Return policy eligibility and the exact unmet gates for an asset."""
+    """Check technical and asset-level distribution clearance for factory GREEN."""
     reasons: list[str] = []
-    source = asset.get("source", {})
-    file_info = asset.get("file", {})
-    license_info = asset.get("license", {})
-    screening = asset.get("screening", {})
-    classification = asset.get("classification", {})
-    curator = asset.get("curator", {})
-
+    source, file_info = asset.get("source", {}), asset.get("file", {})
+    license_info, screening = asset.get("license", {}), asset.get("screening", {})
+    classification, curator = asset.get("classification", {}), asset.get("curator", {})
     if asset.get("decision") != "GREEN":
         reasons.append("asset decision is not GREEN")
     if not _valid_url(source.get("pageUrl")) or not _valid_url(source.get("downloadUrl")):
@@ -109,11 +105,12 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
         reasons.append("license verification date is missing or invalid")
     if not _valid_url(license_info.get("licenseUrl")):
         reasons.append("license URL/evidence link is missing or invalid")
-    if not _nonempty(license_info.get("evidencePath")):
+    evidence_path = license_info.get("evidencePath")
+    if not _nonempty(evidence_path):
         reasons.append("archived license evidence path is missing")
     else:
         try:
-            evidence = (root / license_info["evidencePath"]).resolve()
+            evidence = (root / evidence_path).resolve()
             evidence.relative_to(root.resolve())
         except (OSError, ValueError, RuntimeError):
             reasons.append("license evidence path is invalid or escapes registry root")
@@ -121,19 +118,75 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
             if not evidence.is_file():
                 reasons.append("archived license evidence file is missing")
 
-    if not isinstance(license_info.get("spdxId"), str) or license_info.get("spdxId") not in ALLOWED_GREEN_LICENSES:
-        reasons.append("license is not an explicitly approved CC0/Public-Domain identifier")
+    basis, spdx = license_info.get("clearanceBasis"), license_info.get("spdxId")
     for key in ("commercialUse", "redistribution", "modificationAllowed"):
         if license_info.get(key) is not True:
             reasons.append(f"license does not explicitly permit {key}")
-    if license_info.get("legalReview") != "APPROVED":
-        reasons.append("asset-level legal review is not APPROVED")
-    if license_info.get("attributionRequired") is not False:
-        reasons.append("attribution requirement is unresolved or present")
+    if license_info.get("additionalRestrictions") not in ([], None):
+        reasons.append("additional license restrictions require review")
     if license_info.get("shareAlike") is not False:
         reasons.append("share-alike condition is unresolved or present")
-    if license_info.get("additionalRestrictions") not in ([], None):
-        reasons.append("additional license restrictions require manual review")
+
+    required_scope = {"commercial_use", "embedding", "redistribution", "sample_library_redistribution"}
+    scope = license_info.get("permissionScope", [])
+    if not isinstance(scope, list):
+        scope = []
+    if basis == "CC0_PD_VERIFIED":
+        if spdx not in ALLOWED_GREEN_LICENSES:
+            reasons.append("CC0_PD_VERIFIED requires CC0/Public-Domain SPDX")
+        if license_info.get("attributionRequired") is not False:
+            reasons.append("CC0/Public Domain must not carry unresolved attribution obligations")
+    elif basis == "CC_BY_ATTRIBUTION":
+        if not isinstance(spdx, str) or re.fullmatch(r"CC-BY-(?:2.0|2.5|3.0|4.0)", spdx) is None:
+            reasons.append("CC_BY_ATTRIBUTION requires a standard CC-BY SPDX identifier")
+        if license_info.get("attributionRequired") is not True or not _nonempty(license_info.get("attributionText")):
+            reasons.append("CC-BY requires exact per-asset attributionText")
+        if license_info.get("legalReview") == "REJECTED":
+            reasons.append("CC-BY license was rejected")
+    elif basis == "EXPLICIT_PERMISSION":
+        if spdx != "LicenseRef-Explicit-Permission":
+            reasons.append("EXPLICIT_PERMISSION requires LicenseRef-Explicit-Permission")
+        if not required_scope.issubset(set(scope)):
+            reasons.append("explicit permission scope must cover commercial use, embedding, redistribution and sample-library redistribution")
+        if license_info.get("legalReview") != "APPROVED":
+            reasons.append("explicit permission requires APPROVED evidence review")
+        ppath = license_info.get("permissionEvidencePath")
+        if not _nonempty(ppath):
+            reasons.append("explicit permission evidence path is missing")
+        else:
+            try:
+                pfile = (root / ppath).resolve()
+                pfile.relative_to(root.resolve())
+                if not pfile.is_file():
+                    reasons.append("permission evidence file is missing")
+            except (OSError, ValueError, RuntimeError):
+                reasons.append("permission evidence path escapes registry root")
+    elif basis == "OWN_RECORDING":
+        if spdx != "LicenseRef-PPGU-Own-Recording":
+            reasons.append("OWN_RECORDING requires LicenseRef-PPGU-Own-Recording")
+        if license_info.get("ownershipConfirmed") is not True or not _nonempty(license_info.get("rightsHolder")):
+            reasons.append("own recording requires ownershipConfirmed and rightsHolder")
+        if not required_scope.issubset(set(scope)):
+            reasons.append("own recording rights scope is incomplete")
+    elif basis == "OWN_DSP":
+        if spdx != "LicenseRef-PPGU-Own-DSP":
+            reasons.append("OWN_DSP requires LicenseRef-PPGU-Own-DSP")
+        for key in ("generator", "generatorVersion", "parameterSummary"):
+            if not _nonempty(license_info.get(key)):
+                reasons.append(f"own DSP provenance requires {key}")
+        if license_info.get("ownershipConfirmed") is not True:
+            reasons.append("own DSP provenance requires ownershipConfirmed")
+        if not required_scope.issubset(set(scope)):
+            reasons.append("own DSP rights scope is incomplete")
+    elif basis == "COMMERCIAL_REDISTRIBUTION":
+        if spdx != "LicenseRef-Commercial-Royalty-Free":
+            reasons.append("COMMERCIAL_REDISTRIBUTION requires LicenseRef-Commercial-Royalty-Free")
+        if not required_scope.issubset(set(scope)):
+            reasons.append("commercial license scope must cover commercial use, embedding, redistribution and sample-library redistribution")
+        if license_info.get("legalReview") != "APPROVED":
+            reasons.append("commercial redistribution license requires APPROVED evidence review")
+    else:
+        reasons.append("clearanceBasis is missing or not approved for factory GREEN")
 
     if screening.get("status") != "PASS":
         reasons.append("technical screening has not passed")
@@ -147,7 +200,6 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
         reasons.append("DC offset is missing or exceeds 0.0001")
     if screening.get("integrity") != "PASS":
         reasons.append("file integrity check has not passed")
-
     if classification.get("guitarStatus") != "GUITAR_CONFIRMED":
         reasons.append("guitar content is not confirmed")
     profiles = classification.get("profiles")
@@ -156,15 +208,13 @@ def green_auto_add_gates(asset: dict, root: Path) -> tuple[bool, list[str]]:
         reasons.append("one or more valid style profiles are required")
     if classification.get("reviewRequired") is not False:
         reasons.append("classification requires manual review")
-
     if curator.get("copyrightSuspect") is not False:
-        reasons.append("copyright-suspect flag is set or unresolved")
+        reasons.append("copyright-suspect flag is unresolved; GREEN is blocked")
     if curator.get("manualReviewRequired") is not False:
         reasons.append("manual curator review is required")
     if curator.get("status") == "REJECT":
         reasons.append("asset was rejected by curator")
     return not reasons, reasons
-
 
 def validate_registry(data: object, root: Path) -> tuple[list[str], int]:
     errors: list[str] = []

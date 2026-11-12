@@ -33,7 +33,7 @@ class SoundAssetRegistryTests(unittest.TestCase):
             },
             "file": {"relativePath": "samples/guitar.wav", "sha256": digest, "directDownload": True},
             "license": {
-                "spdxId": "CC0-1.0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+                "spdxId": "CC0-1.0", "clearanceBasis": "CC0_PD_VERIFIED", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
                 "evidencePath": "licenses/CC0.txt", "verifiedAt": "2026-11-11",
                 "commercialUse": True, "redistribution": True, "modificationAllowed": True,
                 "attributionRequired": False, "shareAlike": False,
@@ -117,6 +117,62 @@ class SoundAssetRegistryTests(unittest.TestCase):
         registry["assets"].append({**self.asset, "decision": "YELLOW"})
         errors, _ = validate_registry(registry, self.root)
         self.assertTrue(any("duplicate assetId" in e for e in errors))
+
+    def test_cc_by_with_exact_attribution_is_factory_green(self):
+        asset = {**self.asset, "license": {
+            **self.asset["license"], "spdxId": "CC-BY-4.0",
+            "clearanceBasis": "CC_BY_ATTRIBUTION",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+            "attributionRequired": True,
+            "attributionText": "Author — Guitar Sample, CC BY 4.0"
+        }}
+        errors, count = validate_registry(self.registry(asset), self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 1)
+
+    def test_looperman_explicit_permission_can_be_green(self):
+        (self.root / "licenses" / "permission.txt").write_text(
+            "Permission to embed and redistribute in commercial sample library.", encoding="utf-8")
+        asset = {**self.asset, "license": {
+            **self.asset["license"], "spdxId": "LicenseRef-Explicit-Permission",
+            "clearanceBasis": "EXPLICIT_PERMISSION", "legalReview": "APPROVED",
+            "permissionScope": ["commercial_use", "embedding", "redistribution",
+                                "sample_library_redistribution"],
+            "permissionEvidencePath": "licenses/permission.txt",
+            "attributionRequired": False
+        }}
+        errors, count = validate_registry(self.registry(asset), self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 1)
+
+    def test_own_dsp_requires_generator_provenance(self):
+        asset = {**self.asset, "license": {
+            **self.asset["license"], "spdxId": "LicenseRef-PPGU-Own-DSP",
+            "clearanceBasis": "OWN_DSP", "ownershipConfirmed": True,
+            "generator": "PPGU IR Synth", "generatorVersion": "1.0",
+            "parameterSummary": "seed=42; room=small",
+            "permissionScope": ["commercial_use", "embedding", "redistribution",
+                                "sample_library_redistribution"],
+            "attributionRequired": False
+        }}
+        errors, count = validate_registry(self.registry(asset), self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 1)
+
+    def test_copyright_suspect_can_be_committed_as_red_candidate(self):
+        red = {**self.asset, "decision": "RED",
+               "curator": {**self.asset["curator"], "copyrightSuspect": True}}
+        errors, count = validate_registry(self.registry(red), self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 0)
+
+    def test_cc_by_sa_is_not_auto_add(self):
+        yellow = {**self.asset, "decision": "YELLOW",
+                  "license": {**self.asset["license"], "spdxId": "CC-BY-SA-4.0",
+                              "clearanceBasis": "CC_BY_SA_REVIEW"}}
+        errors, count = validate_registry(self.registry(yellow), self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 0)
 
     def test_empty_registry_is_valid_and_approves_nothing(self):
         errors, count = validate_registry(
