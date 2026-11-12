@@ -1845,3 +1845,31 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПРОВЕРКА / ПРИЁМКА:** импортировать несколько разных пользовательских гитарных WAV; назначить каждый источник в разные существующие и пользовательские пресеты; сохранить/перезапустить проект; проверить Preview и реальное MIDI-воспроизведение, FX и все реально поддерживаемые режимы; убедиться, что нет проверки factory-only/whitelist/source-origin; проверить missing/corrupt/unsupported assets и отсутствие влияния на другие пресеты. Проверить результат в VST3/DAW и провести listening QA.
 
 **РЕЗУЛЬТАТ:** Imported Guitar assets must be first-class, freely assignable local playback sources for PPGU presets, with no artificial origin/category/factory restrictions. Only genuine technical failures may prevent playback; redistribution licensing remains a separate packaging concern. Requirement recorded; implementation and end-to-end QA remain unverified. No source code or audio assets changed in this journal update.
+
+
+## 2026-11-12 — Expand factory/user preset range with authentic library-direct dry guitar presets
+
+**СТАТУС:** USER PRODUCT DIRECTION — ACCEPTED; PRESET CONTENT/PLAYBACK QA NOT YET VERIFIED.
+
+Пользователь разрешил и предложил расширять список пресетов за счёт непосредственного использования исходных гитарных звуков из библиотеки без дополнительной обработки, когда сами записи уже звучат качественно и музыкально.
+
+**Обязательная логика:**
+- Добавить отдельное направление пресетов типа LIBRARY DIRECT / SOURCE PURE / DRY GUITAR: пресет использует подходящий исходный библиотечный гитарный звук напрямую, без обязательных FX, фильтров, усилителей, кабинетов, сатурации или иной тональной обработки.
+- Не считать отсутствие FX недостатком или незавершённостью пресета. Качественный исходный Clean Acoustic, Clean Electric, Crunch, Lead и любой другой подходящий гитарный источник может быть полноценным самостоятельным пресетом.
+- Выбирать исходники по реальному звучанию, качеству записи, регистру, динамике, velocity/articulation coverage и музыкальному назначению. Не создавать дополнительные пресеты только путём переименования одного и того же файла или произвольных параметрических копий.
+- Один исходник может дать несколько действительно обоснованных вариантов, если в библиотеке есть реальные alternate takes, артикуляции, velocity layers, регистры или исполнения. Различия должны быть слышимыми и подтверждёнными; не дублировать формально.
+- Пресет должен автоматически разрешать соответствующий source/mapping и быть готовым к MIDI-воспроизведению сразу после загрузки. Preview обязан воспроизводить тот же исходный звук и mapping, что и live MIDI.
+- В dry/source-direct варианте сохранить исходный аудиоматериал и его тембр. Не применять незаявленную нормализацию, эквализацию, компрессию, transient shaping или иные изменения, меняющие характер записи. Допускаются только прозрачные технические операции, необходимые для корректного playback и управления уровнем, без подмены/перекраски исходного звука; gain staging не должен менять сам sample data.
+- FX остаются доступными как опциональный выбор/вариант другого пресета, но не должны автоматически включаться ради заполнения цепочки. Для каждого пресета фиксировать режим SOURCE/DRY либо SOURCE+FX и обосновывать решение.
+- Применять тот же принцип к гитарным звукам, добавленным через Import Guitar: если импортированный источник технически валиден и имеет корректное mapping, его можно использовать как dry/direct preset source без искусственных ограничений.
+- Все ассеты должны соответствовать правилам локального использования и отдельным требованиям к лицензии при распространении внутри factory bank/поставки. Пользовательские локальные источники не копировать в factory package без разрешения.
+
+**QA / ПРИЁМКА:**
+1. Составить inventory подходящих исходных гитарных записей и отметить те, которые уже звучат полноценно без обработки.
+2. Создать/расширить библиотеку dry/source-direct пресетов по реальному покрытию библиотеки и гитарным семействам; не назначать вымышленные ноты/артикуляции.
+3. Проверить точный bypass FX/filter chain, source identity, mapping, отсутствие скрытой обработки и сохранение исходного тембра.
+4. Сравнить Preview и MIDI playback; проверить регистры, velocity, повторные ноты, ноты/аккорды и уровень без клиппинга.
+5. Прослушать в реальном VST3/DAW; убедиться, что пресеты звучат натурально и отличаются за счёт реальных источников/исполнений, а не только названий.
+6. Проверить сохранение пользовательских пресетов и Imported Guitar source references после reload.
+
+**РЕЗУЛЬТАТ:** Expand the preset catalog with authentic library-direct dry guitar presets wherever the original recordings already deliver the intended sound. No FX are mandatory; preserve the original source and make processing optional. This is an accepted product direction, not a claim that the additional presets have already been built or auditioned. No source code or audio assets changed in this journal update.
