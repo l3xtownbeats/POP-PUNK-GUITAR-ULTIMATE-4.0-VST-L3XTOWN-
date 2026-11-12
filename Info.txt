@@ -1500,3 +1500,23 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **РЕЗУЛЬТАТ:** APPROVED WINDOW SIZE BOUNDS APPLIED IN SOURCE; visual resize, compile, CTest, pluginval, CI and FL Studio 20 acceptance pending.
 
 **Resume queue update:** T-F4 size bounds corrected; still verify component clipping/overlap at 1200×700, 1600×900 and 2400×1500, and implement/test the approved scale presets + persisted zoom. T-F5..T-F8 remain open.
+
+
+## 2026-11-12 — Build acceleration toolchain decision and CI integration
+
+**Рабочая ветка:** `work/ppgu-toolchain-qa-rev17-1`.  
+**Source baseline:** `505a4a29ac4bea639f70cdedfc8dc08e76786ec5` (REV.17 main).  
+**Workflow commit:** `66dd3e075dbd9d7e09e5ae7abfe3fb8d30c62390`.  
+**Статус:** IMPLEMENTED IN CI CONFIGURATION; EXACT-SHA BUILD VALIDATION PENDING.
+
+**ПРОВЕРКА:** основной проект уже использует JUCE 7.0.12, C++20, CMake, Visual Studio 2022 x64, CTest и pluginval strictness 5. Workflow ранее выполнял обычную сборку без compiler cache. Повторное сравнение refs показало, что старая ветка `work/visual-shell-spec-rev17-1` отстаёт от REV.17 main на 10 коммитов и имеет 5 собственных коммитов; она не используется как база для дальнейших source changes. Создана свежая рабочая ветка от актуального main SHA.
+
+**АНАЛИЗ:** второй plugin framework (iPlug2/DPF/HISE) не нужен и создаст дублирование архитектуры. JUCE остаётся единственной основой. Для ускорения повторных C++ компиляций выбран sccache с GitHub Actions cache backend; он не меняет runtime, DSP, APVTS или формат VST3. Faust/CHOWdsp оставлены как точечные исследовательские инструменты, не как новые обязательные зависимости. ccache/PCH не добавляются параллельно с sccache.
+
+**ИСПРАВЛЕНИЕ:** в `.github/workflows/vst3-build.yml` добавлен pinned Mozilla sccache action `v0.0.11`, включён `SCCACHE_GHA_ENABLED`, CMake получает `CMAKE_CXX_COMPILER_LAUNCHER=sccache`, после сборки выводится статистика cache hits/misses. Существующие Windows x64 Release, CTest, pluginval strictness 5 и packaging gates сохранены. Изменён только CI workflow.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** workflow change committed, но на момент записи новый workflow ещё не завершён. Нельзя заявлять cache hit, сокращение времени, успешную компиляцию или регрессионный PASS до проверки run на exact SHA. Если MSVC/sccache compatibility или cache backend вызывает ошибку, исправить workflow либо отключить launcher без изменения исходной архитектуры.
+
+**РЕЗУЛЬТАТ:** sccache CI integration committed; build/CTest/pluginval/package result PENDING. FL Studio 20 manual host acceptance остаётся отдельным gate.
+
+**Выбранный стек:** JUCE 7.0.12 + C++20 + CMake + Visual Studio 2022 + VST3 SDK через JUCE + sccache (CI) + CTest + pluginval. Другие framework/toolchains не подключать без конкретной измеряемой причины.
