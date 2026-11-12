@@ -347,3 +347,16 @@ if(BUILD_TESTING)
     target_include_directories(ppgu_harmony_progression_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_harmony_progression_engine_contract COMMAND ppgu_harmony_progression_tests)
 endif()
+
+# Shared bounded MIDI preview command/event contract (JUCE-free).
+# UI/message thread is the single producer; the audio thread is the single consumer.
+if(BUILD_TESTING)
+    add_executable(ppgu_midi_preview_scheduler_tests
+        tests/MidiPreviewSchedulerTests.cpp
+    )
+    target_include_directories(ppgu_midi_preview_scheduler_tests PRIVATE
+        Source/Performance
+        Source/Sampler
+    )
+    add_test(NAME ppgu_midi_preview_scheduler_contract COMMAND ppgu_midi_preview_scheduler_tests)
+endif()

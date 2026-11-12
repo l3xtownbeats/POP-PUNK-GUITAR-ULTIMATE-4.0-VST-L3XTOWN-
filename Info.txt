@@ -1457,3 +1457,21 @@ X — это именно закрытие панели, а не выключе�
 **Ограничения:** это пока только теория/генерация символов. Нет UI binding, выбора ключа/режима, секвенсора, chord voicings для результата, preview через существующий sampler, Note-Off/Stop/Loop, MIDI export/drag-out или handoff в MIDI Workspace. Нет доказательства DAW/FL Studio host acceptance. Не заявлять Circle of Fifths/Harmony Assistant готовыми.
 
 **Следующий обязательный этап:** проверить exact-SHA Windows Release + полный CTest + pluginval; затем добавить тестируемый shared MIDI event/playback contract и только после него подключать реальный preview к существующему sampler без второго engine и без изменений обычного MELODY/PATTERN.
+
+
+## 2026-11-12 — Shared MIDI preview command contract
+
+**Статус:** SOURCE COMMITTED / EXACT-SHA CI PENDING. Это изолированный realtime-safe MIDI preview foundation; аудио-сэмплер ещё не подключён к preview events.
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+- Проверен существующий PatternScheduler, sample-accurate chord transition timeline, SPSC queue и реальный processor MIDI path.
+- В проекте уже есть bounded SPSC queue, но нет отдельного UI-to-audio preview command contract с управляемым сроком нот и гарантированным завершением chord preview.
+- Добавлен `MidiPreviewScheduler`: single-producer/single-consumer command bridge с фиксированной ёмкостью, командами PlayChord/Stop, максимум 6 нот, ограниченными параметрами, sample-count gate и явными NoteOff для истечения длительности, замены аккорда и Stop.
+- Обработка audio-thread side использует только фиксированные массивы, без mutex, allocation, wait, callback или второго sampler. События сортируются sample-offset; NoteOff ставится раньше NoteOn при одинаковом offset.
+- Добавлены тесты NoteOn, удержания, NoteOff по длительности, замены аккорда, Stop, некорректных аргументов и queue overflow.
+- Подключён JUCE-free CTest target. Production processor, MELODY, PATTERN, sampler и MIDI routing не изменялись.
+
+**Ограничения и важный риск:** этот контракт пока не маршрутизирует события в SamplerEngine. Его нельзя напрямую подключить к текущему sampler по зарезервированному MIDI channel: это может конфликтовать с живым MIDI DAW на том же канале/ноте. Для безопасного preview требуется следующий шаг — идентифицируемые sampler voice handles или отдельный внутренний voice ownership token, чтобы Stop/NoteOff preview не отпускал ноты пользователя. До решения этого конфликта preview UI остаётся отключённым.
+
+**Следующий шаг:** спроектировать и протестировать voice ownership/release contract на SamplerEngine; затем интегрировать в processor с отдельной очисткой preview voices при закрытии/Stop, не меняя обычный MIDI MELODY/PATTERN.
