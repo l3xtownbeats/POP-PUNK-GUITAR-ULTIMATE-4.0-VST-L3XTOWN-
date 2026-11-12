@@ -1448,3 +1448,20 @@ F. Только после этого считать документальны�
 **Проверки и статус:** GitHub подтвердил создание ветки и двух commits. По доступному результату workflow run ID / job logs пока не получены; фактический запуск генерации, G1–G4 PASS, merge и появление skins 53–102 остаются **PENDING**. Не считать 102 темы реализованными до появления generated commit и успешного readback validators.
 
 **Следующий шаг:** получить результат Actions; при PASS проверить registry/folder parity и сами preview/hero/SVG assets, затем продолжить runtime Theme Gallery (preview cards, search, family filters, favorites, keyboard navigation), secure asset loading, 150 ms transition и ECO/DPI gates.
+
+
+## 2026-11-12 — Skin_052 canonical fallback alignment
+
+**Тип:** UI/theme bug fix + regression test. **Ветка:** `work/ppgu-skin-expansion-53-102`.
+
+Проверка выявила рассогласование: реестр и сохранённое предпочтение используют `skin-052` / SIGNAL FORGE, но аварийная палитра ThemeManager и тесты продолжали считать fallback-идентичностью `skin-51` / Blackout Voltage. При отсутствующей или повреждённой теме интерфейс визуально переходил на другую тему и сообщал неверный ID.
+
+Исправлено:
+- `Source/UI/ThemeManager.h`: fallback ID/name и 21 semantic palette token приведены к точным значениям canonical `SKIN/Skin_052/theme.json`; compatibility aliases синхронизированы с этой палитрой.
+- `tests/ThemeManagerTests.cpp`: проверки fallback ID обновлены на `skin-052`, добавлена проверка имени SIGNAL FORGE; историческая Skin_51 остаётся тестом legacy manifest loading.
+
+Коммиты: `1b112ae2eeec837af4493f54dd61406433162a2b` (header), `b006b78add4250daa0cd83a41f5b50df6730a981` (tests). Изменения только visual/theme fallback и тесты; APVTS, DSP, sampler, MIDI, presets и audio callback не затронуты.
+
+**Проверки:** diff/readback выполнены. C++ build, CTest и host/pluginval на этих SHA не запускались; статус — IMPLEMENTED / VALIDATION PENDING, не BUILD PASS.
+
+**Связанный этап:** генерация Skin_053–102 всё ещё не подтверждена: canonical registry остаётся 52, pack manifest остаётся Skin_052 only. Workflow retrigger commit `5402f087fbc12a30b7923f951ee806ac126f576f` не дал доступного run/status результата через текущий GitHub connector.
