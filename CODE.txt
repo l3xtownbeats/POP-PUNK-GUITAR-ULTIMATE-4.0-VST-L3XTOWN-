@@ -96,3 +96,27 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **CI run / artifacts:**
 **Статус:** IMPLEMENTED / VALIDATION PENDING / PASS / FAIL / REVERTED.
 **Следующий шаг:**
+
+
+## 2026-11-12 — MASTER JOURNAL GOVERNANCE / FULL PRODUCT CHANGE LEDGER
+
+**Type:** documentation / process contract only. No production source, tests, assets, presets, SoundBank, skins, audio or UI code changed.
+**Branch:** `work/signal-forge-theme-tokens`
+**INFO policy commit:** `f29eac4725b55f0d732b0132f907f614d2af2c9d`
+**INFO blob:** `95c16e6b121fd02b474cd5b2f0828759a8a6e830`
+
+**Scope now covered by the mandatory ledger:** product identity and VST3 platform; audio engine/core/voice and realtime architecture; sampler/SFZ/WAV/streaming/cache; MIDI, Melody, Pattern, chord/performance systems; DSP and FX; banks, libraries, samples, articulations, layers, loops, IR and licensing; factory/user presets and browser; GUI shell, controls, windows, settings and state; Skin Engine/Skin Studio/themes/layouts/assets/gallery; import/discovery/curation; diagnostics, performance budgets, tests, CI, pluginval, DAW host verification, packaging/release; defects, risks, rejected designs, roadmap and technical debt.
+
+**Mandatory source-of-truth hierarchy:** current canonical source tree and build config prove implementation; tests/CI prove only checks actually run on exact SHA; specifications define intended behavior; INFO is the append-only project chronology and status ledger; CODE is the append-only exact code/change index; schemas/manifests/license evidence govern only their declared scope. Conflicts must be investigated and reconciled explicitly, never silently overwritten.
+
+**Mandatory per-change transaction:** branch/HEAD preflight and compare all relevant newer work; inspect related specs, schemas, code and tests; make a scoped change preserving invariants; run checks on exact SHA; update INFO and CODE with identical branch/commit/parent/path/symbol/test/status references; read both files back and cross-check consistency. If either journal is missing or inconsistent, status remains JOURNAL INCOMPLETE.
+
+**Correction policy:** preserve historical entries. Fix inaccurate/obsolete facts with a dated Correction/Supersedes entry identifying the wrong statement, evidence, corrected fact and affected documents. Mark superseded/rejected/invalid material explicitly. Never replace newer work with older code. A later timestamp alone is insufficient; compare actual file changes, merge-base, compatibility and tests.
+
+**Status vocabulary:** REQUIRED / DESIGNED / SOURCE PRESENT / INTEGRATED / TESTED / HOST VERIFIED / RELEASED, plus PARTIAL / BLOCKED / DEFERRED / SUPERSEDED / REJECTED / INVALID as applicable. Never infer implementation from a spec, parameter ID, UI placeholder, manifest or asset. Never claim BUILD/CTest/pluginval/FL Studio/release PASS without exact-SHA evidence.
+
+**Per-change record must include:** UTC timestamp, product/revision, branch/base HEAD/parent/result SHA; change class; defect/requirement and reason; exact paths and symbols; before/after; unchanged invariants; compatibility/migration; test commands/configuration/results/logs/artifacts; CI run IDs; host verification separately; known issues/risks; next action. Documentation-only changes must say production code was unchanged.
+
+**Product-wide reconciliation obligation:** keep INFO, CODE, master prompt, architecture docs, audits, control schema, theme manifests, bank/preset schemas, licensing records, build files and tests mutually consistent. Avoid competing specifications; designate one canonical source per domain and link supporting documents. Before release, reconcile all records and actual package/binary on one release candidate SHA.
+
+**Completion rule:** every accepted decision, code/content/config change, correction, revert, failed test and discovered defect is recorded. Journal updates are part of the change, not optional administration.
