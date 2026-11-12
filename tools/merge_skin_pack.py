@@ -143,7 +143,7 @@ def main() -> int:
             json.dumps(new_registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         pack_temp.write_text(
-            json.dumps(pack, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8"
+            json.dumps(pack, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         registry_temp.replace(registry_path)
         pack_temp.replace(args.manifest)
