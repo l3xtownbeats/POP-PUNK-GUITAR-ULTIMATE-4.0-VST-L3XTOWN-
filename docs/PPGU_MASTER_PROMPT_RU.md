@@ -1027,3 +1027,114 @@ Runtime-структура — VST3/ и единый корень `POP PUNK GUIT
 8. **Honest product scope.** Если доступный sample content или DSP не позволяет получить нужное качество, не выдавать preset за профессиональный. Сначала улучшить source/library/voice engine или DSP, либо оставить функцию PENDING. Меньше действительно качественных пресетов лучше большого каталога посредственных звуков.
 
 **Acceptance principle:** коммерческое качество оценивается на слух и в миксе, не по количеству контролов, сложности DSP, названию модели или наличию графического интерфейса. Приоритет: натуральность и музыкальная выразительность → динамика/играбельность → тональный характер пресета → mix translation → ресурсы и удобство.
+
+
+## 7.5.12 ARTIST-INSPIRED POP-PUNK SIGNAL PATHS & SONG PRESET REFERENCE
+
+**Назначение:** использовать предоставленный пользователем справочник как исходную карту тембров и музыкальных ролей для ANGELA ENGINE, Factory Preset Browser и будущего Sound Design. Это reference/start-point data, а не доказательство точной студийной цепи конкретного артиста и не утверждение об официальной аутентичности. Указанные ручки 0–10 — стартовые значения, которые необходимо адаптировать под конкретную модель усилителя, source guitar, выходной уровень и IR. Не выдавать их за подтверждённые оригинальные настройки, если нет проверяемого источника.
+
+### A. Общая архитектура signal path
+
+Поддерживаемая логическая цепь (только реально реализованные модули):
+**Instrument / Source → Tuner (utility, не аудио-эффект) → Noise Gate (опционально) → Compressor (опционально) → Drive / Boost (опционально) → Amp / Preamp → Cabinet + IR / Mic blend → Post-cab modulation / delay / reverb (по роли) → Output trim / safety limiter (если реализован).**
+
+- Amp и Cabinet — отдельные стадии; amp model и cabinet/IR должны быть заменяемыми независимо.
+- Gate не обязателен для каждого звука: он должен сохранять естественный release, хвосты и динамику palm mute.
+- Не ставить тяжёлый distortion pedal автоматически перед уже перегруженным amp. Boost/OD допускается только если нужен конкретному профилю.
+- Reverb обычно мал или выключен для сухих ритмов; пространственные эффекты — по музыкальной роли.
+- Master normalization не должна уничтожать динамику или создавать скачки громкости. Применять безопасный output trim/headroom, а не «громче = лучше».
+- Double/triple tracking — отдельные независимые исполнения/слои, а не простое копирование одного и того же сигнала. Если плагин предлагает stereo width/doubling, честно маркировать это как эффект, не как реальный double tracking.
+- Eb/D# tuning — функция транспонирования/строя только при наличии корректной реализации; не менять высоту нот скрыто в обычном preset.
+
+### B. Artist-inspired tone families and routing targets
+
+**blink-182 / Tom DeLonge — classic era:** bridge humbucker/high-output source profile; Mesa Rectifier-style driven rhythm as one voice, optional JCM900-style clean-channel breakup/crunch as a distinct voice. Starting Recto profile: Gain 6–7, Bass 5, Mid 6, Treble 6, Presence 5–6; dry rhythm. JCM clean-breakup variant: Gain up to 10 with amp-specific calibration, Bass 5–6, Mid 6–7, Treble 6–7, Presence 5. Song targets: Dammit, What's My Age Again?, All the Small Things, The Rock Show, First Date, Stay Together for the Kids, Reckless Abandon, Feeling This, Down; I Miss You is a separate clean/ambient role. Do not force one distortion preset onto every section/song.
+
+**Angels & Airwaves / Tom DeLonge:** Vox AC30-style chime/crunch and Fender Twin-style clean as separate amp characters; multi-layer ambient arrangements with tempo-synced dotted-eighth delay, stereo delay, controlled reverb, optional modulation. The Adventure target: AC30 Top Boost-like bright, mid-rich edge-of-breakup; Twin-like clean alternative. Ambient FX are post-cab where appropriate. Avoid turning every A&A preset into a wet wash; preserve pick attack and note definition.
+
+**Sum 41:** Rectifier-style dense left voice + JCM800-style cutting right voice as an optional two-amp/two-cab production template, not a fake mono preset. Still Waiting starting profile: Gain 7–8, Bass 6, Mid 5–6, Treble 6.5, Presence 6. Fat Lip: Gain 8, Bass 6.5, Mid 5, Treble 6.5, Presence 6, Resonance 5. In Too Deep has separate clean and driven versions. No automatic boost pedal where the target chain does not call for one.
+
+**New Found Glory / Chad Gilbert:** Dual Rectifier-style rhythm + V30-style 4×12 target, tight gate with natural mute tails. My Friends Over You starting profile: Gain 7, Bass 5, Mid 6, Treble 7, Presence 6. Easycore variation may add controlled low-end weight without masking kick/bass or blurring power chords.
+
+**Simple Plan / Jeff Stinco:** Rectifier-style driven rhythm; Vox AC30-style clean/light drive; optional TS-style boost, compressor, delay, modulation only in song/role-specific variants. Starting rhythm: Gain 7, Bass 5, Mid 6, Treble 6, Presence 6. Distinguish Perfect, Addicted, I'm Just a Kid and clean/bridge parts by role rather than using one universal patch.
+
+**Green Day / Billie Joe Armstrong:** British Plexi/JCM-style amp breakup is central; Dookie-style target is mid-forward crunch, not scooped metal distortion. Starting Dookie profile: Gain 5–6, Bass 5, Mid 6, Treble 5–6, Presence 5. Song targets include Basket Case, Longview, When I Come Around, American Idiot, Holiday, Boulevard of Broken Dreams, Good Riddance, 21 Guns, Know Your Enemy. Clean songs/sections must remain clean; BD-2/boost/tremolo only in suitable variants.
+
+**The Offspring:** Marshall JCM2000/DSL-style driven voice, Vox AC30 clean/alternate voice, optional Mesa Mark-style older dense voice; TS-style mid boost only where appropriate. Starting rhythm: Gain 7, Bass 6, Mid 6, Treble 7, Presence 6. Song targets: Self Esteem, The Kids Aren't Alright, Come Out and Play, You're Gonna Go Far, Kid. Downstroke feel and multi-track arrangement are performance/production concepts, not EQ presets.
+
+**Fall Out Boy:** Orange Dual Dark/Thunderverb-style aggressive-mid amp character, V30 cabinet target, tighter and more mid-forward than a scooped high-gain tone. Sugar, We're Goin Down: Gain 7, Bass 5, Mid 7, Treble 6, Presence 5; Thnks fr th Mmrs: Gain 7, Bass 5, Mid 6, Treble 6, Presence 5. Keep clean/processed source distinctions honest.
+
+### C. Cabinet / microphone / IR production targets
+
+- Mesa Rectifier 4×12 / V30; Marshall 1960A / G12T-75 and 1960AV / V30 as distinct cabinet identities; Orange PPC412 / V30; EVH 5150 4×12; Peavey 6505 4×12.
+- Dual-mic blend target: SM57-like close mic slightly off cone center + MD421-like or ribbon-like second perspective. Mic labels are descriptive only unless the IR is actually captured/licensed from that microphone/cab combination.
+- IR assets require provenance, license/redistribution permission, checksum, sample rate, length, normalization and mono/stereo metadata. Do not bundle proprietary IRs without permission; use original/licensed IRs or clearly labelled inspired models.
+- Double-IR blend is optional and must be phase-aware, level-matched and mono-checked. No assumption that two IRs always sound better.
+- Existing temporary synthetic cabinet coloration must not be presented as an authentic studio capture or professional IR.
+
+### D. Song preset reference catalogue (50 starting points)
+
+The following names/settings are **design references**, not a claim that 50 production-ready presets already exist. Create separate definitions only when the source and runtime chain can genuinely deliver the named sound; otherwise mark PENDING / missing dependency. Gain/Bass/Mid/Treble/Presence are starting values on 0–10 scale:
+
+1. Green Day — Basket Case: 6/6/6/5/5
+2. Green Day — Longview: 5/5/6/6/5
+3. Green Day — When I Come Around: 5/5/6/6/5
+4. Green Day — American Idiot: 7/5/6/6/7
+5. Green Day — Holiday: 6/5/6/6/6
+6. Green Day — Boulevard of Broken Dreams: 3/5/6/6/4 (clean + tremolo role)
+7. Green Day — Good Riddance: 1/5/6/5/2 (clean)
+8. Green Day — 21 Guns: 1/5/6/5/3 (clean)
+9. blink-182 — Dammit: 6/5/6/7/5
+10. blink-182 — What's My Age Again?: 6/5/6/7/5
+11. blink-182 — All the Small Things: 6/5/6/7/5
+12. blink-182 — The Rock Show: 7/5/6/7/5
+13. blink-182 — First Date: 6/5/6/6/5
+14. blink-182 — Stay Together for the Kids: 6/5/6/6/5
+15. blink-182 — I Miss You: 2/5/5/6/3 (clean)
+16. Sum 41 — Fat Lip: 8/6.5/5/6.5/6
+17. Sum 41 — In Too Deep (clean): 1/5/6/5/4
+18. Sum 41 — In Too Deep (driven): 8/6/6/4/4
+19. Sum 41 — Still Waiting: 7/6/5.5/6.5/6 (dual Rectifier/JCM-style concept)
+20. The Offspring — Self Esteem: 7/6/6/7/6
+21. The Offspring — The Kids Aren't Alright: 7/6/6/7/6
+22. The Offspring — Come Out and Play: 6/6/6/6/5
+23. The Offspring — You're Gonna Go Far, Kid: 7/6/6/7/6 (optional mid boost)
+24. NOFX — Linoleum: 6/5/6/6/5
+25. NOFX — The Decline: 6/5/6/6/5
+26. NOFX — Franco Un-American: 6/5/6/6/5
+27. Rancid — Ruby Soho: 6/5/6/5/5
+28. Rancid — Time Bomb: 6/5/7/5/5
+29. AFI — Girl's Not Grey: 7/5/5/7/6
+30. AFI — Miss Murder: 7/5/5/7/6
+31. Alkaline Trio — Radio: 6/6/6/5/5
+32. Alkaline Trio — Mercy Me: 6/6/6/5/4
+33. Fall Out Boy — Sugar, We're Goin Down: 7/5/7/6/5
+34. Fall Out Boy — Thnks fr th Mmrs: 7/5/6/6/5
+35. Paramore — Misery Business: 7/6/7/5/5
+36. Paramore — Still Into You: 6/5/6/6/5
+37. Paramore — That's What You Get: 6/5/6/6/5
+38. New Found Glory — My Friends Over You: 7/5/6/7/6
+39. Yellowcard — Ocean Avenue: 6/5/6/7/5
+40. Jimmy Eat World — The Middle: 7/5/7/5/5
+41. Taking Back Sunday — You're So Last Summer: 7/5/6/6/6
+42. Brand New — The Quiet Things: 7/5/6/6/6
+43. Simple Plan — Perfect: 7/5/6/6/6
+44. Simple Plan — I'm Just a Kid: 8/5/6/6/6
+45. Good Charlotte — The Anthem: 7/6/6/6/6
+46. Bowling for Soup — 1985: 6/5/6/6/5
+47. Papa Roach — Last Resort: 7/6/5/6/6
+48. The All-American Rejects — Dirty Little Secret: 7/6/6/7/6
+49. Pennywise — Bro Hymn: 6/5/6/6/5
+50. Rise Against — Prayer of the Refugee: 7/5/6/6/6
+
+### E. Validation and production requirements
+
+- Every song/artist-inspired preset has explicit source guitar profile, pickup/source assumptions, tuning if implemented, amp model, cabinet/IR, FX order, output trim, role (rhythm/lead/clean/ambient), and status.
+- Distinct song sections may require separate clean/crunch/driven/ambient variants. Do not flatten an entire song to one patch if the reference calls for contrast.
+- Validate single note, open chord, power chord, palm mute, fast downstroke, velocity range, sustain/release, stereo width and mono fold-down.
+- Validate solo and full mix with kick/bass/vocal reference, gain staging, headroom, noise gate tails and level-matched A/B.
+- Do not manufacture the illusion of double tracking by duplicating identical samples; if simulated widening is offered, label it accurately.
+- Preset browser states remain DEFINITION → SOURCE AVAILABLE → DSP AVAILABLE → PLAYABLE → MIX-READY → LISTENING-APPROVED. Artist/song name alone never grants approval.
+- Avoid implying endorsement or official artist presets; use “artist-inspired / song-tone reference” naming and appropriate trademark/legal review.
+
+**User-provided reference source note:** the supplied gear/settings document cites Guitar Chalk, Rock Guitar Universe, Ultimate Guitar forum, UberProAudio, Equipboard, MusicRadar, Premier Guitar, Guitar World, Kuassa and GuitarToneAdapt. These claims have not been independently fact-checked in this specification pass; treat numerical settings and gear details as provisional until source-by-source verification. The user-provided reference is the design input, not proof of exact studio settings.
