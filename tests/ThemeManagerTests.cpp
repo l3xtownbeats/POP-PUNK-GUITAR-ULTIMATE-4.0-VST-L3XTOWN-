@@ -92,8 +92,8 @@ int main()
     expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
-    const auto badStudioCompatibility = skin52Json.replace(""audioChanges": false",
-                                                            ""audioChanges": true");
+    const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
+                                                            "\"audioChanges\": true");
     expect(!manager.loadFromJson(badStudioCompatibility),
            "audio-changing Skin Studio theme rejected");
     expect(manager.getPalette().usedFallback,
@@ -111,12 +111,12 @@ int main()
     expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
     expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
 
-    const auto badCompatibility = validJson.replace(""audioChanges": false",
-                                                     ""audioChanges": true");
+    const auto badCompatibility = validJson.replace("\"audioChanges\": false",
+                                                     "\"audioChanges\": true");
     expect(!manager.loadFromJson(badCompatibility), "legacy audio-changing theme rejected");
     expect(manager.getPalette().usedFallback, "legacy compatibility failure restores fallback");
 
-    const auto mismatchedIndex = validJson.replace(""index": 51", ""index": 50");
+    const auto mismatchedIndex = validJson.replace("\"index\": 51", "\"index\": 50");
     expect(!manager.loadFromJson(mismatchedIndex), "legacy ID/index mismatch rejected");
     expect(manager.getPalette().usedFallback, "legacy ID/index failure restores fallback");
 
