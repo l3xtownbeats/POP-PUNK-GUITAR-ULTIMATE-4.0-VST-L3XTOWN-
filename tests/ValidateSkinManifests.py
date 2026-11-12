@@ -390,7 +390,7 @@ def main() -> int:
         return 1
 
     if registry.get("defaultSkin") != DEFAULT_ID:
-        fail(errors, "SKIN/theme_manifest.json", "defaultSkin must be skin-51")
+        fail(errors, "SKIN/theme_manifest.json", f"defaultSkin must be {DEFAULT_ID}")
     if registry.get("selector") != "SKIN":
         fail(errors, "SKIN/theme_manifest.json", "selector must be SKIN")
 
