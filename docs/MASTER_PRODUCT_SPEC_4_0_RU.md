@@ -224,3 +224,28 @@ Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Fou
 - Style references: use the musical vocabulary and broad performance characteristics associated with Tom DeLonge's work in Blink-182 and Angels & Airwaves as an inspiration target (driving downstroke power-chord rhythms, octave/lead hooks, palm-muted verse patterns, open chorus lift, sustained/ambient lead textures and suitable modulation). Do not copy recordings, exact riffs, proprietary presets, or claim an artist-authentic recreation. Create original patterns and use only legally cleared genuine guitar recordings.
 - Sunburst Deluxe and Session Guitarist Vintage are primary UX/functionality references; Session Guitarist Neon is an additional reference for variation and performance organization. They are references, not dependencies and not sources of samples.
 - Every visible articulation must map to an actual recorded loop/one-shot/performance map and pass audibility/runtime tests. If no compatible recording exists, disable or clearly mark the option as unavailable; never fake it with an unrelated sample or synthetic guitar.
+
+
+### 15.8 Базовые гитарные техники и ритмические рисунки — пользовательское дополнение (2026-11-12)
+
+В PATTERN catalog / articulation library предусмотреть следующие техники и музыкальные рисунки, если для них доступны подходящие реальные записи и корректные performance maps:
+
+**Артикуляции и приёмы**
+- Palm mute; open chords / открытые аккорды; downstroke; upstroke; alternate down-up.
+- Power chords, включая staccato power-chord hits.
+- Chugs / короткие приглушённые ритмические удары.
+- Double-stops; octave playing / октавные акценты и хуки.
+- Muted-string scratches / приглушённые удары по струнам между аккордами.
+- Skank / offbeat upstroke.
+- Tremolo picking как техника исполнения (отдельно от tremolo effect).
+
+**Ритмические рисунки**
+- Straight eighth-note strumming / ровные восьмые.
+- Skank / offbeat pattern.
+- Gallop rhythm.
+- Stop-time / stop-start accents.
+- Half-time feel.
+- Чередование приглушённых и открытых аккордов, включая verse-to-chorus lift.
+- Октавные хуки и double-stop fills между аккордами.
+
+Термины из голосового сообщения, распознанные неоднозначно («crank», «debit», «stocktime», «how-fo-time»), сохранить как pending terminology; не создавать под ними отдельные функции до уточнения точного музыкального термина. Все названия в интерфейсе должны соответствовать реальному исполнению, а не только MIDI-ритму. Каждый элемент включается в доступные пресету варианты лишь при наличии подходящих записей/one-shots/performance data; отсутствие материала явно отмечается, без синтеза гитары.
