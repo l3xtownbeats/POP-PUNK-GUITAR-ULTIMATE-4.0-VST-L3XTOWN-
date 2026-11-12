@@ -22,6 +22,27 @@ public:
         juce::Colour accentSecondary { 0xff35d7c5 };
         juce::Colour border { 0xff526875 };
         juce::Colour focus { 0xffb7f34a };
+
+        // Canonical Skin Studio palette: retain all 21 manifest tokens.
+        juce::Colour windowBg { 0xff0b0f12 };
+        juce::Colour panel { 0xff17232b };
+        juce::Colour panelElevated { 0xff22313b };
+        juce::Colour controlBg { 0xff101820 };
+        juce::Colour controlFace { 0xff26343a };
+        juce::Colour controlBorder { 0xff53656b };
+        juce::Colour textPrimary { 0xfff4fafc };
+        juce::Colour textDisabled { 0xff788984 };
+        juce::Colour accentGlow { 0xffb7ff3c };
+        juce::Colour danger { 0xffff5a66 };
+        juce::Colour warning { 0xffffc857 };
+        juce::Colour success { 0xff6ee7a8 };
+        juce::Colour lcdBg { 0xff08110e };
+        juce::Colour lcdText { 0xffd7ffb2 };
+        juce::Colour ledOn { 0xffa8ff42 };
+        juce::Colour ledOff { 0xff33443b };
+        juce::Colour shadow { 0xff050708 };
+        juce::Colour highlight { 0xff90a7a0 };
+        juce::Colour lowlight { 0xff0d1417 };
         bool usedFallback = true;
     };
 

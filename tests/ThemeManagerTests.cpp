@@ -85,6 +85,28 @@ int main()
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
+        const auto& studioPalette = manager.getPalette();
+        expect(studioPalette.windowBg == juce::Colour(0xff0b0f12), "token window_bg is retained");
+        expect(studioPalette.panel == juce::Colour(0xff141b20), "token panel is retained");
+        expect(studioPalette.panelElevated == juce::Colour(0xff1d2930), "token panel_elevated is retained");
+        expect(studioPalette.controlBg == juce::Colour(0xff10171b), "token control_bg is retained");
+        expect(studioPalette.controlFace == juce::Colour(0xff26343a), "token control_face is retained");
+        expect(studioPalette.controlBorder == juce::Colour(0xff53656b), "token control_border is retained");
+        expect(studioPalette.textPrimary == juce::Colour(0xfff3f7f5), "token text_primary is retained");
+        expect(studioPalette.textSecondary == juce::Colour(0xffb7c5c2), "token text_secondary is retained");
+        expect(studioPalette.textDisabled == juce::Colour(0xff788984), "token text_disabled is retained");
+        expect(studioPalette.accent == juce::Colour(0xffd5ff45), "token accent is retained");
+        expect(studioPalette.accentGlow == juce::Colour(0xffb7ff3c), "token accent_glow is retained");
+        expect(studioPalette.danger == juce::Colour(0xffff5a66), "token danger is retained");
+        expect(studioPalette.warning == juce::Colour(0xffffc857), "token warning is retained");
+        expect(studioPalette.success == juce::Colour(0xff6ee7a8), "token success is retained");
+        expect(studioPalette.lcdBg == juce::Colour(0xff08110e), "token lcd_bg is retained");
+        expect(studioPalette.lcdText == juce::Colour(0xffd7ffb2), "token lcd_text is retained");
+        expect(studioPalette.ledOn == juce::Colour(0xffa8ff42), "token led_on is retained");
+        expect(studioPalette.ledOff == juce::Colour(0xff33443b), "token led_off is retained");
+        expect(studioPalette.shadow == juce::Colour(0xff050708), "token shadow is retained");
+        expect(studioPalette.highlight == juce::Colour(0xff90a7a0), "token highlight is retained");
+        expect(studioPalette.lowlight == juce::Colour(0xff0d1417), "token lowlight is retained");
     }
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");

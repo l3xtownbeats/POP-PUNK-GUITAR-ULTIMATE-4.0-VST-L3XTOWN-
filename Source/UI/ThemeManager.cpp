@@ -265,6 +265,42 @@ namespace
         palette.accentSecondary = juce::Colour::fromString("ff" + paletteTokens.getProperty("accent_glow", juce::var()).toString().substring(1));
         palette.border = juce::Colour::fromString("ff" + paletteTokens.getProperty("control_border", juce::var()).toString().substring(1));
         palette.focus = palette.accentSecondary;
+
+        const auto readStudioToken = [&paletteTokens](const char* token,
+                                                        juce::Colour& destination)
+        {
+            const auto value = paletteTokens.getProperty(juce::Identifier(token), juce::var());
+            if (!isHexColour(value))
+                return false;
+            destination = juce::Colour::fromString("ff" + value.toString().substring(1));
+            return destination.isOpaque();
+        };
+        if (!readStudioToken("window_bg", palette.windowBg)
+            || !readStudioToken("panel", palette.panel)
+            || !readStudioToken("panel_elevated", palette.panelElevated)
+            || !readStudioToken("control_bg", palette.controlBg)
+            || !readStudioToken("control_face", palette.controlFace)
+            || !readStudioToken("control_border", palette.controlBorder)
+            || !readStudioToken("text_primary", palette.textPrimary)
+            || !readStudioToken("text_secondary", palette.textSecondary)
+            || !readStudioToken("text_disabled", palette.textDisabled)
+            || !readStudioToken("accent", palette.accent)
+            || !readStudioToken("accent_glow", palette.accentGlow)
+            || !readStudioToken("danger", palette.danger)
+            || !readStudioToken("warning", palette.warning)
+            || !readStudioToken("success", palette.success)
+            || !readStudioToken("lcd_bg", palette.lcdBg)
+            || !readStudioToken("lcd_text", palette.lcdText)
+            || !readStudioToken("led_on", palette.ledOn)
+            || !readStudioToken("led_off", palette.ledOff)
+            || !readStudioToken("shadow", palette.shadow)
+            || !readStudioToken("highlight", palette.highlight)
+            || !readStudioToken("lowlight", palette.lowlight))
+        {
+            error = "One or more canonical Skin Studio tokens could not be decoded";
+            return false;
+        }
+
         palette.usedFallback = false;
         return true;
     }

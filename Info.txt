@@ -923,3 +923,15 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R28 non-goals:** не менялись production validator/policy, DSP/audio callback, APVTS, MIDI, ThemeManager, Skin_052, resource resolver, auxiliary windows, CMake or packaging.
 **CI:** run #970 на исходном SHA завершился FAILED на одном CTest target; после исправления ожидается новый run на точном коммите. Никакой BUILD VERIFIED / TESTED / COMPLETE ZIP статус новому SHA пока не присваивается.
 **Следующий этап:** после CTest PASS вернуться к согласованию Skin_052 через merge tool + schema + registry + ThemeManager; не считать manifest-only запись runtime integration.
+
+
+## 2026-11-12 — Skin Studio canonical 21-token palette model
+
+**Статус:** SOURCE CHANGE COMMITTED; BUILD/CTest PENDING (новый SHA).
+**Preflight:** ветка `main`, HEAD `4861db4d5221f275882ac3c107eb742d1e0b3838`; изменение выполняется только в main (R33). Фактическая спецификация в текущем HEAD — REV 17.0; REV 17.1 в репозитории не обнаружена и не считается merged.
+**Проверка:** Skin Studio validator уже требовал ровно 21 HEX-токен, однако runtime Palette сохраняла только производные canvas/surface/text/accent/border цвета. Остальные значения терялись после разбора manifest.
+**Исправление:** расширена `PPGUThemeManager::Palette` всеми 21 именованными полями; Skin Studio decoder явно декодирует каждый ключ после schema validation; ThemeManagerTests проверяет точное значение каждого токена на Skin_052 Carbon Relay. Существующие alias-поля и legacy parser сохранены.
+**Non-goals:** PluginEditor rendering, gallery, layout, resource resolver, theme registry/schema/assets, APVTS, DSP/audio callback, MIDI, presets, SoundBank, CMake/pins и packaging не менялись. Это полный runtime decode/storage contract, но НЕ утверждение, что все 21 токен уже визуально подключён ко всем компонентам.
+**Проверка после изменения:** исходники и assertions добавлены; локальный MSVC/JUCE build и CTest не запускались в этой среде. Новый CI должен подтвердить compile/test на точном commit SHA. Host/FL Studio 20 и visual QA — NOT VERIFIED.
+**Открыто:** применить канонические поля к LookAndFeel, editor и всем auxiliary panels; добавить Gallery Preview/Apply/Cancel; dynamic discovery/rescan; hot-swap fade/ECO/DPI tests. Исторические CI PASS не переносятся на этот SHA.
+**R28/R33:** изменение ограничено ThemeManager Palette/parser, unit tests и INFO; только main, другие ветви не синхронизированы.
