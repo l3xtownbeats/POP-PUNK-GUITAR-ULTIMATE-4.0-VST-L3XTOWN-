@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse, json, re, sys
 from pathlib import Path
 try:
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter
 except ImportError as exc:
     raise SystemExit("Pillow required: python -m pip install pillow") from exc
 
@@ -34,44 +34,81 @@ def mix(a, b, t):
     return tuple(round(x + (y-x)*t) for x,y in zip(a,b))
 
 def render(size, title, index, accent_hex, secondary_hex, bg_hex, mood):
-    w,h=size
+    """Render a consistent skin artwork card using Pillow's native image ops.
+
+    Build-time artwork generation runs for all legacy skins. A one-column
+    gradient + blurred accent mask avoids the previous Python per-pixel loop,
+    keeping Windows CI responsive while preserving the original composition.
+    """
+    w, h = size
     accent, secondary, bg = map(rgb, (accent_hex, secondary_hex, bg_hex))
-    image=Image.new("RGB", size)
-    px=image.load()
-    top=mix(bg, secondary, .12)
-    bottom=mix(bg, (4,7,12), .35)
-    for y in range(h):
-        base=mix(top,bottom,y/max(1,h-1))
-        for x in range(w):
-            glow=max(0.0,1.0-(((x-w*.76)/(w*.9))**2+((y-h*.48)/(h*.9))**2))
-            px[x,y]=mix(base,accent,glow*.11)
-    d=ImageDraw.Draw(image,"RGBA")
-    font=ImageFont.load_default()
-    for x in range(0,w,max(24,w//24)):
-        d.line((x,0,x,h),fill=(180,220,240,12),width=1)
-    for y in range(0,h,max(24,h//12)):
-        d.line((0,y,w,y),fill=(180,220,240,10),width=1)
-    d.rounded_rectangle((10,10,w-11,h-11),radius=max(7,w//70),outline=(*accent,180),width=max(2,w//500))
-    cx,cy=int(w*.76),int(h*.55)
-    scale=min(w/1200,h/420)
-    bw,bh=int(145*scale),int(190*scale)
-    nw,nh=int(34*scale),int(245*scale)
-    d.ellipse((cx-bw,cy-bh//2,cx+bw,cy+bh//2),fill=(17,22,30,255),outline=(*accent,255),width=max(2,int(4*scale)))
-    d.ellipse((cx-int(bw*.62),cy-int(bh*.32),cx+int(bw*.62),cy+int(bh*.32)),fill=(*secondary,100),outline=(230,240,250,180),width=max(1,int(2*scale)))
-    d.polygon([(cx-nw//2,cy-bh//3),(cx+nw//2,cy-bh//3),(cx+nw//2,cy-bh//3-nh),(cx-nw//2,cy-bh//3-nh)],fill=(105,116,128,255),outline=(230,238,245,230))
-    for fret in range(1,9):
-        fy=cy-bh//3-int(nh*fret/9)
-        d.line((cx-nw//2,fy,cx+nw//2,fy),fill=(20,25,31,230),width=1)
-    for string in range(-2,3):
-        sx=cx+string*max(1,int(2*scale))
-        d.line((sx,cy-bh//3-nh,sx,cy+bh//3),fill=(245,248,250,185),width=1)
-    for py in (cy-int(24*scale),cy+int(24*scale)):
-        d.rounded_rectangle((cx-int(42*scale),py-max(2,int(5*scale)),cx+int(42*scale),py+max(2,int(5*scale))),radius=3,fill=(215,225,235,240))
-    left=int(w*.055); ty=int(h*.31)
-    d.text((left,ty),"POP PUNK GUITAR",font=font,fill=(240,246,250,255))
-    d.text((left,ty+max(18,int(h*.09))),"ULTIMATE",font=font,fill=(*accent,255))
-    d.text((left,ty+max(40,int(h*.21))),title[:38],font=font,fill=(205,218,228,250))
-    d.text((left,h-max(28,int(h*.12))),f"SKIN {index:02d} / {mood[:28]}",font=font,fill=(*secondary,240))
+    top = mix(bg, secondary, .12)
+    bottom = mix(bg, (4, 7, 12), .35)
+
+    gradient = Image.new("RGB", (1, h))
+    gradient.putdata([
+        mix(top, bottom, y / max(1, h - 1))
+        for y in range(h)
+    ])
+    resampling = getattr(Image, "Resampling", Image)
+    image = gradient.resize((w, h), resampling.BILINEAR)
+
+    # Approximate the subtle off-centre accent bloom with a blurred mask.
+    glow_mask = Image.new("L", (w, h), 0)
+    glow_draw = ImageDraw.Draw(glow_mask)
+    cx, cy = int(w * .76), int(h * .48)
+    rx, ry = int(w * .90), int(h * .90)
+    glow_draw.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=28)
+    glow_mask = glow_mask.filter(ImageFilter.GaussianBlur(radius=max(2, w // 18)))
+    accent_layer = Image.new("RGB", (w, h), accent)
+    image = Image.composite(accent_layer, image, glow_mask)
+
+    d = ImageDraw.Draw(image, "RGBA")
+    font = ImageFont.load_default()
+    for x in range(0, w, max(24, w // 24)):
+        d.line((x, 0, x, h), fill=(180, 220, 240, 12), width=1)
+    for y in range(0, h, max(24, h // 12)):
+        d.line((0, y, w, y), fill=(180, 220, 240, 10), width=1)
+
+    d.rounded_rectangle((10, 10, w - 11, h - 11), radius=max(7, w // 70),
+                        outline=(*accent, 180), width=max(2, w // 500))
+    cx, cy = int(w * .76), int(h * .55)
+    scale = min(w / 1200, h / 420)
+    bw, bh = int(145 * scale), int(190 * scale)
+    nw, nh = int(34 * scale), int(245 * scale)
+    d.ellipse((cx - bw, cy - bh // 2, cx + bw, cy + bh // 2),
+              fill=(17, 22, 30, 255), outline=(*accent, 255),
+              width=max(2, int(4 * scale)))
+    d.ellipse((cx - int(bw * .62), cy - int(bh * .32),
+               cx + int(bw * .62), cy + int(bh * .32)),
+              fill=(*secondary, 100), outline=(230, 240, 250, 180),
+              width=max(1, int(2 * scale)))
+    d.polygon([(cx - nw // 2, cy - bh // 3), (cx + nw // 2, cy - bh // 3),
+               (cx + nw // 2, cy - bh // 3 - nh),
+               (cx - nw // 2, cy - bh // 3 - nh)],
+              fill=(105, 116, 128, 255), outline=(230, 238, 245, 230))
+    for fret in range(1, 9):
+        fy = cy - bh // 3 - int(nh * fret / 9)
+        d.line((cx - nw // 2, fy, cx + nw // 2, fy),
+               fill=(20, 25, 31, 230), width=1)
+    for string in range(-2, 3):
+        sx = cx + string * max(1, int(2 * scale))
+        d.line((sx, cy - bh // 3 - nh, sx, cy + bh // 3),
+               fill=(245, 248, 250, 185), width=1)
+    for py in (cy - int(24 * scale), cy + int(24 * scale)):
+        d.rounded_rectangle((cx - int(42 * scale), py - max(2, int(5 * scale)),
+                             cx + int(42 * scale), py + max(2, int(5 * scale))),
+                            radius=3, fill=(215, 225, 235, 240))
+
+    left, ty = int(w * .055), int(h * .31)
+    d.text((left, ty), "POP PUNK GUITAR", font=font, fill=(240, 246, 250, 255))
+    d.text((left, ty + max(18, int(h * .09))), "ULTIMATE",
+           font=font, fill=(*accent, 255))
+    d.text((left, ty + max(40, int(h * .21))), title[:38],
+           font=font, fill=(205, 218, 228, 250))
+    d.text((left, h - max(28, int(h * .12))),
+           f"SKIN {index:02d} / {mood[:28]}", font=font,
+           fill=(*secondary, 240))
     return image
 
 def main():
