@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `df6a492824dd016fd10f928f28318984ee1f7c23`
+Последний commit перед текущей записью: `c0c8e977053aa3fd3bcea9933c95a556ac70b79c`
 
 ## 1. Назначение и продукт
 
@@ -813,3 +813,36 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Non-goals:** APVTS, DSP, MIDI, SoundBank, skin registry, theme indices, ThemeManager default, JUCE/CMake pins и control inventory не менялись. FL Studio 20 host acceptance и CPU/RAM profiling не выполняются этим этапом.
 **Верификация:** ожидает новый CI на новом SHA. Run #965 (ID `43135885498`) — SUCCESS на SHA `63bca7aed262e002264c6986e95a052118481e70`; текущий main до изменения — `df6a492824dd016fd10f928f28318984ee1f7c23`, поэтому PASS не переносится (R23). Run #965 подтвердил Windows Release, CTest, locate VST3, pluginval strictness 5 и packaging; ручной FL Studio 20 host test и CPU/RAM profiling остаются NOT VERIFIED.
 **Открытый blocker:** I7 требует `default-ppgu`, но registry, ThemeManager fallback и ThemeManagerTests пока используют `skin-51` / Blackout Voltage. Не изменено: переход затрагивает runtime/fallback semantics и требует отдельного этапа с тестами.
+
+
+## 2026-11-12 — PPGU MASTER PROMPT REV 16.4 / SoundBank build-out policy
+
+**Статус:** MERGED (спецификация обновлена в main); BUILD/TEST статусы для этого документа не присваиваются.  
+**Коммит спецификации:** `c0c8e977053aa3fd3bcea9933c95a556ac70b79c` — `docs/PPGU_MASTER_PROMPT_RU.md`.  
+**Версия:** REV 16.4 UNIFIED (FINAL), заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3.
+
+**Факт изменения:**
+- Заголовок, цепочка замен и история §16.1 обновлены до REV 16.4.
+- В §5 добавлены 5.6–5.8: целевой фактический SoundBank payload 7–10 GB; B1 one-shots (~1.7 GB), B2 loops (~5 GB), B3 IR/FX (~1 GB), B4 polish + обязательное GOLD-прослушивание; классы GREEN/YELLOW/RED; приём только через существующий S6.5 и инструмент `tools/guitar_ingest.py`.
+- В §17 добавлено правило для RED-источников, включая Looperman: личное использование в рамках лицензии не разрешает включение в распространяемый SoundBank.
+- Уточнено, что ручной импорт YELLOW не равен автоматическому разрешению на коммерческую упаковку; CC-BY-SA требует copyleft/share-alike предупреждения и отдельной проверки совместимости.
+- Изменения ограничены документацией. DSP/audio callback, APVTS, MIDI, SoundBank assets/registry, presets, CMake, workflows, packaging, skins и UI не менялись.
+
+**CI / SHA (R07/R23):**
+- Предыдущий run #966, ID `43137801862`, SUCCESS на родительском SHA `462853df014d835fbc653ebf2c20ba3bc21cbc9c`: Windows Release build, все CTest targets, VST3 locate, pluginval strictness 5 и packaging — PASS.
+- Этот PASS не переносится на документный SHA `c0c8e977...`. На момент записи новый CI run для документационного коммита не обнаружен; никаких BUILD VERIFIED / TESTED утверждений для нового SHA нет. Документная проверка — сверка требуемых секций и формулировок.
+- Проверка репозитория показала, что `tools/guitar_ingest.py` и `SAMPLEBANK_BUILD_PLAN.md` на main пока отсутствуют (GitHub Contents API вернул NOT_FOUND). Поэтому 5.8 задаёт целевой инструмент/канал, но инструмент ещё НЕ IMPLEMENTED; фактическое наполнение SoundBank и достижение 7–10 GB не выполнены.
+
+**R28 non-goals:** только мастер-спецификация. Не создавались ingest-код, sample assets, LICENSES.txt, SFZ, registry entries, tests или build changes. RED/YELLOW/CC-BY-SA policy не изменяет уже принятые лицензии отдельных assets без asset-level review.
+
+**Открытые задачи/риски:** реализовать и протестировать `tools/guitar_ingest.py` через S6.5; проверить PCM/IEEE-float WAV, stereo handling, clipping/DC/SNR, malformed files, safe SFZ paths, provenance and license aggregation; затем выполнить B1–B4 отдельными этапами. Целевой объём SoundBank пока PLANNED, не BUILT/INTEGRATED.
+
+**R33:** в репозитории обнаружено 42 ветки включая main. REV 16.4 и INFO-запись — main-only; распространение по остальным 41 веткам не выполнялось, NOT YET VERIFIED.
+
+**Self-check §21:**
+1. Документный SHA: `c0c8e977053aa3fd3bcea9933c95a556ac70b79c`. Run #966 PASS относится к родителю `462853df...`; CI для REV 16.4 SHA не подтверждён.
+2. Изменение спецификации проверено чтением обновлённых §5.6–5.8, §16.1 и §17; CTest contract для текстового изменения не добавлялся и не запускался.
+3. R28 соблюдён: код, аудио, сэмплы, реестры и сборка не затронуты.
+4. Статус документа — MERGED в main; SoundBank ingest — PLANNED; SoundBank 7–10 GB — PLANNED; BUILD VERIFIED / TESTED для REV 16.4 не заявляются.
+5. Не сделано: `tools/guitar_ingest.py`, `SAMPLEBANK_BUILD_PLAN.md`, B1–B4, LICENSES.txt, фактическая библиотека 7–10 GB, FL Studio 20 host acceptance и CPU/RAM profiling.
+6. Этап main-only; остальные 41 ветка не синхронизированы, rollout NOT YET VERIFIED.
