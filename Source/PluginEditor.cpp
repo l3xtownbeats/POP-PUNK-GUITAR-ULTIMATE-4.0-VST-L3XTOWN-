@@ -749,27 +749,30 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
- const auto& p=themeManager.getPalette();g.fillAll(p.token("window_bg"));g.setColour(p.token("lowlight").withAlpha(.35f));
- for(int x=16;x<getWidth();x+=32)g.drawVerticalLine(x,0,(float)getHeight());
- for(int y=16;y<getHeight();y+=32)g.drawHorizontalLine(y,0,(float)getWidth());
- g.setGradientFill(juce::ColourGradient(p.token("control_bg"),0,0,p.token("window_bg"),0,74,false));g.fillRect(0,0,getWidth(),76);g.setColour(p.token("accent"));g.fillRect(0,0,getWidth(),3);
- auto hero=getLocalBounds().reduced(18);hero.removeFromTop(66);hero.setHeight(184);
- g.setGradientFill(juce::ColourGradient(p.token("panel_elevated").brighter(.08f),(float)hero.getX(),(float)hero.getY(),p.token("control_bg"),(float)hero.getRight(),(float)hero.getBottom(),false));
- g.fillRoundedRectangle(hero.toFloat(),13);g.setColour(p.token("control_border"));g.drawRoundedRectangle(hero.toFloat().reduced(.5f),13,1);
- auto t=hero.reduced(28,17);g.setColour(p.token("accent_glow"));g.setFont(juce::Font(9.5f,juce::Font::bold));g.drawText("L3XTOWN AUDIO LAB  /  SIGNATURE INSTRUMENT",t.removeFromTop(18),juce::Justification::left);
- g.setColour(p.token("text_primary"));g.setFont(juce::Font(33,juce::Font::bold));g.drawText("POP PUNK GUITAR",t.removeFromTop(43),juce::Justification::left);
- g.setColour(p.token("accent"));g.setFont(juce::Font(39,juce::Font::bold));g.drawText("ULTIMATE",t.removeFromTop(45),juce::Justification::left);
- g.setColour(p.token("text_secondary"));g.setFont(juce::Font(10.5f));g.drawText("RIFFS  /  HOOKS  /  POWER CHORDS  /  MELODY",t.removeFromTop(17),juce::Justification::left);
- auto gr=hero.removeFromRight((int)(hero.getWidth()*.39f)).reduced(24,12);float x=(float)gr.getX(),y=(float)gr.getY(),w=(float)gr.getWidth(),h=(float)gr.getHeight();
- juce::Path neck;neck.addQuadrilateral(x+w*.56f,y+h*.43f,x+w*.96f,y+h*.05f,x+w*.99f,y+h*.17f,x+w*.65f,y+h*.57f);
- g.setGradientFill(juce::ColourGradient(juce::Colour(0xff8e9299),x+w*.5f,y,juce::Colour(0xff292d35),x+w,y+h,false));g.fillPath(neck);
- juce::Path body;body.startNewSubPath(x+w*.48f,y+h*.48f);body.cubicTo(x+w*.28f,y+h*.24f,x+w*.12f,y+h*.44f,x+w*.27f,y+h*.67f);body.cubicTo(x+w*.37f,y+h*.86f,x+w*.61f,y+h*.83f,x+w*.70f,y+h*.62f);body.cubicTo(x+w*.83f,y+h*.58f,x+w*.84f,y+h*.40f,x+w*.68f,y+h*.39f);body.closeSubPath();
- g.setGradientFill(juce::ColourGradient(juce::Colour(0xffc5c8ce),x+w*.2f,y+h*.3f,juce::Colour(0xff353a43),x+w*.8f,y+h*.8f,false));g.fillPath(body);g.setColour(p.token("control_border"));g.strokePath(body,juce::PathStrokeType(1.2f));
- g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
- for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
- g.setColour(p.token("accent"));g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
- auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(152);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
- auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
+    const auto& p = themeManager.getPalette();
+    g.fillAll(p.token("window_bg"));
+    auto area = getLocalBounds().reduced(14);
+    area.removeFromTop(48);
+    area.removeFromBottom(132);
+    area.removeFromTop(8);
+    const int gap = 10;
+    const int browserWidth = juce::jlimit(190, 250, area.getWidth() / 5);
+    const int rightWidth = juce::jlimit(230, 300, area.getWidth() / 4);
+    auto browser = area.removeFromLeft(browserWidth);
+    area.removeFromLeft(gap);
+    auto right = area.removeFromRight(rightWidth);
+    area.removeFromRight(gap);
+    drawPanel(g, browser);
+    drawPanel(g, area);
+    drawPanel(g, right);
+
+    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
+    auto badge = area.removeFromTop(3);
+    g.setColour(p.token("accent"));
+    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
+    g.setColour(p.token("text_secondary").withAlpha(0.12f));
+    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
+        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
