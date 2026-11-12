@@ -215,6 +215,40 @@ int main()
                           << ", final RMS=" << finalChordRms << "\n";
                 result = 1;
             }
+
+            // Preview is routed through the same production sampler and must
+            // stop its own voices without touching ordinary host-owned notes.
+            setParameter(processor, "playMode", 0.0f);
+            const auto previewChord = chordA;
+            if (!processor.enqueuePreviewChord(previewChord.data(), previewChord.size(),
+                                                110, 512, 1))
+            {
+                std::cerr << "Could not enqueue internal preview chord.\n";
+                result = 1;
+            }
+            juce::AudioBuffer<float> previewBlock(2, 128);
+            juce::MidiBuffer noMidi;
+            processor.processBlock(previewBlock, noMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            previewBlock.clear();
+            juce::MidiBuffer noMidi2;
+            processor.processBlock(previewBlock, noMidi2);
+            if (rms(previewBlock, 0, previewBlock.getNumSamples()) <= 0.001)
+            {
+                std::cerr << "Internal preview did not reach the shared sampler output.\n";
+                result = 1;
+            }
+            if (!processor.stopPreview())
+            {
+                std::cerr << "Could not enqueue preview Stop.\n";
+                result = 1;
+            }
+            for (int block = 0; block < 6; ++block)
+            {
+                juce::AudioBuffer<float> stopBlock(2, 128);
+                juce::MidiBuffer stopMidi;
+                processor.processBlock(stopBlock, stopMidi);
+            }
         }
     }
 

@@ -9,6 +9,7 @@
 #include <vector>
 #include "Sampler/SamplePool.h"
 #include "Performance/PatternScheduler.h"
+#include "Performance/MidiPreviewScheduler.h"
 
 class PopPunkGuitarUltimateAudioProcessor final : public juce::AudioProcessor
 {
@@ -44,6 +45,11 @@ public:
                           std::function<void(ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
 
+    // UI/message-thread producer API; events are consumed by processBlock.
+    [[nodiscard]] bool enqueuePreviewChord(const int* notes, std::size_t count,
+        int velocity, std::uint32_t gateSamples, int channel = 1) noexcept;
+    [[nodiscard]] bool stopPreview() noexcept;
+
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -56,6 +62,8 @@ private:
     int maximumBlockSize = 512;
     ppgu::sampler::SamplerEngine sampler;
     ppgu::performance::PatternScheduler patternScheduler;
+    ppgu::performance::MidiPreviewScheduler previewScheduler;
+    static constexpr std::uint32_t previewVoiceOwnerToken = 0x50504755u;
     ppgu::performance::BlockClock patternTransportClock;
     std::array<std::array<bool, 128>, 16> patternHeldNotes {};
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};

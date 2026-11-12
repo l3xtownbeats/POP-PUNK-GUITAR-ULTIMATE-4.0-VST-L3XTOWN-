@@ -152,6 +152,14 @@ public:
         return count;
     }
 
+    // Audio-thread or stopped-host lifecycle only; drains queued commands.
+    void reset() noexcept
+    {
+        PreviewCommand discarded;
+        while (commands.tryPop(discarded)) {}
+        activeCount = 0;
+    }
+
     [[nodiscard]] std::size_t activeNoteCount() const noexcept { return activeCount; }
     [[nodiscard]] bool commandQueueEmpty() const noexcept { return commands.empty(); }
 

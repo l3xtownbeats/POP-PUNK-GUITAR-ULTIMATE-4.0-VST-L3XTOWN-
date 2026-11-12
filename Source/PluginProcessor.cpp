@@ -237,6 +237,7 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
 
 void PopPunkGuitarUltimateAudioProcessor::releaseResources()
 {
+    previewScheduler.reset();
     sampler.reset();
     reverb.reset();
     for (auto& line : delayBuffers)
@@ -255,6 +256,17 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
     compressorEnvelope.fill(0.0f);
     for (auto& history : cabinetHistory) history.fill(0.0f);
     cabinetWritePosition = 0;
+}
+
+bool PopPunkGuitarUltimateAudioProcessor::enqueuePreviewChord(const int* notes, std::size_t count,
+    int velocity, std::uint32_t gateSamples, int channel) noexcept
+{
+    return previewScheduler.enqueueChord(notes, count, velocity, gateSamples, channel);
+}
+
+bool PopPunkGuitarUltimateAudioProcessor::stopPreview() noexcept
+{
+    return previewScheduler.enqueueStop();
 }
 
 bool PopPunkGuitarUltimateAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
@@ -309,6 +321,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     if (playMode != previousPlayMode)
     {
         sampler.allNotesOff();
+        previewScheduler.reset();
         patternScheduler.reset(patternTransportClock.startPpq);
         for (auto& channel : patternHeldNotes) channel.fill(false);
         patternCycleStarted = false;
@@ -337,10 +350,48 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
         static_cast<double>(parameters.getRawParameterValue("tuning")->load(std::memory_order_relaxed)));
 
+    std::array<ppgu::performance::PreviewEvent,
+        ppgu::performance::MidiPreviewScheduler::maximumEventsPerBlock> previewEvents {};
+    const auto previewEventCount = previewScheduler.processBlock(samples, previewEvents);
+    std::size_t previewEventIndex = 0;
+
+    // All internal preview voices use a distinct owner token. Host NoteOff,
+    // Pattern transitions and preview Stop cannot release one another's notes.
     auto renderSegment = [&](int start, int length)
     {
-        if (length > 0)
-            sampler.render(buffer, start, length);
+        const int end = start + juce::jmax(0, length);
+        int cursor = start;
+        while (previewEventIndex < previewEventCount
+            && previewEvents[previewEventIndex].sampleOffset <= end)
+        {
+            const auto& event = previewEvents[previewEventIndex];
+            const int eventSample = juce::jlimit(cursor, end, event.sampleOffset);
+            if (eventSample > cursor)
+                sampler.render(buffer, cursor, eventSample - cursor);
+            cursor = eventSample;
+
+            if (event.kind == ppgu::performance::EventKind::NoteOn)
+            {
+                if (velocityScale > 0.0f)
+                {
+                    const float normalized = juce::jlimit(0.0f, 1.0f,
+                        static_cast<float>(event.velocity) / 127.0f);
+                    const float dynamics = juce::jlimit(0.0f, 1.0f,
+                        parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
+                    const float shaped = std::pow(normalized, 2.0f - 1.5f * dynamics);
+                    const int scaled = juce::jlimit(1, 127,
+                        juce::roundToInt(shaped * 127.0f * velocityScale));
+                    const bool triggered = sampler.noteOnOwned(event.note, scaled, maximumVoices,
+                        event.channel, globalTuningSemitones, previewVoiceOwnerToken);
+                    juce::ignoreUnused(triggered);
+                }
+            }
+            else
+                sampler.noteOffOwned(event.note, event.channel, previewVoiceOwnerToken);
+            ++previewEventIndex;
+        }
+        if (end > cursor)
+            sampler.render(buffer, cursor, end - cursor);
     };
 
     if (playMode == 0)
@@ -359,6 +410,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             {
                 panicRequested.store(true, std::memory_order_release);
                 sampler.panic(fadeLength);
+                previewScheduler.reset();
             }
             else if (message.isNoteOn() && velocityScale > 0.0f)
             {
@@ -540,6 +592,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     for (auto& held : patternHeldNotes) held.fill(false);
                     panicRequested.store(true, std::memory_order_release);
                     sampler.panic(fadeLength);
+                    previewScheduler.reset();
                     patternScheduler.clearPendingNoteOffs();
                     patternCycleStarted = false;
                     previousPatternChordCount = 0;

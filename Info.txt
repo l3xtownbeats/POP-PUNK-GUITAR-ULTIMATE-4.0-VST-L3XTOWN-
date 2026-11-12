@@ -1475,3 +1475,20 @@ X — это именно закрытие панели, а не выключе�
 **Ограничения и важный риск:** этот контракт пока не маршрутизирует события в SamplerEngine. Его нельзя напрямую подключить к текущему sampler по зарезервированному MIDI channel: это может конфликтовать с живым MIDI DAW на том же канале/ноте. Для безопасного preview требуется следующий шаг — идентифицируемые sampler voice handles или отдельный внутренний voice ownership token, чтобы Stop/NoteOff preview не отпускал ноты пользователя. До решения этого конфликта preview UI остаётся отключённым.
 
 **Следующий шаг:** спроектировать и протестировать voice ownership/release contract на SamplerEngine; затем интегрировать в processor с отдельной очисткой preview voices при закрытии/Stop, не меняя обычный MIDI MELODY/PATTERN.
+
+
+## 2026-11-12 — Sampler voice ownership and shared processor preview integration
+
+**Статус:** SOURCE COMMITTED / EXACT-SHA CI PENDING. Internal chord preview now has a production processor route; full FL Studio host acceptance remains pending.
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+- Устранён ранее отмеченный конфликт: обычный DAW NoteOff по pitch/channel мог бы случайно отпустить внутреннюю preview-ноту, если бы preview использовал тот же sampler без идентификации владельца.
+- В SamplerEngine добавлен `ownerToken` для каждой voice. Обычный MIDI и Pattern сохраняют owner 0; preview использует отдельный внутренний token.
+- Добавлены `noteOnOwned`, `noteOffOwned` и `releaseOwnedVoices`. SFZ group/off_by choke ограничен также владельцем, чтобы preview не заглушал DAW guitar voice и наоборот.
+- `PopPunkGuitarUltimateAudioProcessor` получил UI/message-thread producer API `enqueuePreviewChord` и `stopPreview`; команды проходят через bounded SPSC scheduler и исполняются внутри существующего processBlock.
+- Preview-события sample-accurately разделяют render segments и направляются в тот же SamplerEngine, с теми же velocity/dynamics/tuning/voice limit. Второй sampler/DSP/sample pool не создаётся.
+- Owner-specific NoteOff/Stop изолирует preview от host notes. Host panic, смена play mode и releaseResources очищают preview scheduler state.
+- Добавлена processor integration regression для реального SFZ→processor→shared sampler preview route и Stop; отдельный SamplePool regression проверяет owner isolation при одинаковых pitch/channel.
+
+**Ограничения:** UI Circle/Harmony пока не связан с этим API; пользовательский выбор ключа/аккорда и музыкальная генерация не запускают preview автоматически. Не заявлять готовые Harmony Studio UI, MIDI Workspace или AutoChords. CPU/RAM overhead и FL Studio 20 acceptance ещё не измерены.
