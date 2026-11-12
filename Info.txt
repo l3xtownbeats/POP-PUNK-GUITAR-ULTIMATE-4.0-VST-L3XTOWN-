@@ -1556,3 +1556,25 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** run `43188981213` built the Windows x64 Release target, passed CTest 14/14 and pluginval strictness 5 on this exact SHA. No processor/DSP/APVTS/sampler/MIDI/preset/SoundBank files changed. Auxiliary Import Guitar, FX Edit and AutoChords panels still contain hardcoded colours; they are explicitly not closed by this pass. The run validated source compilation, not manual visual parity or FL Studio 20.
 
 **РЕЗУЛЬТАТ:** MAIN SHELL TOKEN CLEANUP BUILD-VALIDATED; AUXILIARY PANEL TOKEN MIGRATION AND VISUAL QA OPEN.
+
+## 2026-11-12 — User-supplied BUILD GUIDE compatibility audit
+
+**Reference:** user-provided `PPGU BUILD GUIDE 1.0.0`.  
+**Audited branch:** `work/ppgu-toolchain-qa-rev17-1`.  
+**Status:** REFERENCE REVIEWED; DO NOT TREAT THE GUIDE AS A SOURCE SNAPSHOT.
+
+**ПРОВЕРКА:** compared guide claims against current `CMakeLists.txt`, `Source/PluginProcessor.h/.cpp`, `Source/PluginEditor.h/.cpp` and runtime theme registry logic.
+
+**АНАЛИЗ / подтверждённые расхождения:**
+- Current engine is `ppgu::sampler::SamplerEngine` + `ppgu::performance::PatternScheduler`; the claimed `KarplusSynth.h` / Karplus–Strong 64-voice architecture is not present in this branch and must not be transplanted.
+- The AutoChords panel explicitly reports that MIDI chord generation/custom mode/preview engine are not connected; its OFF button is disabled. Do not claim AutoChords is implemented.
+- Current factory catalog is `presets/factory_bank_300.json` (300 entries), not an 8-preset bank.
+- Current skin runtime uses the repository theme registry and Skin Studio/legacy manifest validation, not the guide's simple five-file JSON-only package.
+- Current editor's fixed FX rack exposes seven toggles. Processor parameter declaration and audio processing both confirm a real `flangerOn` parameter and Flanger DSP stage, and FX Edit already exposes Flanger parameters. This is a verified UI parity omission, not a missing DSP feature.
+- Build/package workflow currently uses repository's actual CMake target and runtime package structure; guide paths/target names must be checked before reuse.
+
+**ИСПРАВЛЕНИЕ / решение:** retain the guide as a product/installation checklist only. Preserve the actual sampler/scheduler architecture. Add the missing eighth FLANGER toggle to the existing main FX rack, bind it to existing `flangerOn`, and preserve the existing APVTS ID. Keep AutoChords visibly disabled until its engine is genuinely implemented.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** Flanger APVTS parameter and processBlock DSP references were found in `Source/PluginProcessor.cpp`; no new parameter or DSP implementation is needed for the UI parity correction. Exact-SHA build for the active Ninja Multi-Config workflow is still pending.
+
+**РЕЗУЛЬТАТ:** BUILD GUIDE ACCEPTED AS A CHECKLIST, NOT AS AUTHORITATIVE SOURCE; FLANGER UI PARITY FIX APPROVED; KARPLUS/FAKE AUTOCHORDS TRANSPLANT REJECTED.
