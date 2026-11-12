@@ -86,7 +86,6 @@ public:
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
-        grid.setPalette(palette);
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
         viewport.setScrollBarsShown(true, false);
@@ -130,7 +129,7 @@ private:
         void paint(juce::Graphics& g) override
         {
             auto bounds = getLocalBounds().toFloat().reduced(1.0f);
-            g.setColour(palette.token("panel"));
+            g.setColour(hovered ? palette.token("panel_elevated") : palette.token("panel"));
             g.fillRoundedRectangle(bounds, 9.0f);
             g.setColour(item.active ? item.accent : palette.token("control_border"));
             g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
@@ -161,8 +160,6 @@ private:
 
             if (item.active)
             {
-                auto badge = bounds.removeFromTop(0).removeFromRight(0);
-                juce::ignoreUnused(badge);
                 g.setColour(item.accent);
                 g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
@@ -207,7 +204,6 @@ private:
     class Grid final : public juce::Component
     {
     public:
-        void setPalette(const PPGUThemeManager::Palette& value) { palette = value; }
         void clearCards() { cards.clear(); }
         void addCard(std::unique_ptr<Card> card)
         {
@@ -234,7 +230,6 @@ private:
         }
 
     private:
-        PPGUThemeManager::Palette palette;
         std::vector<std::unique_ptr<Card>> cards;
     };
 
@@ -1307,6 +1302,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
         }
 
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+        const auto gallerySkinCount = static_cast<int>(skins.size());
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
             std::move(skins), themeManager.getPalette(),
             [safe](int index)
@@ -1324,7 +1320,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = galleryPanelId;
-        spec.title = "SKIN GALLERY  /  " + juce::String(skins.size()) + " THEMES";
+        spec.title = "SKIN GALLERY  /  " + juce::String(gallerySkinCount) + " THEMES";
         spec.desired = { 940, 700 };
         spec.minimum = { 500, 380 };
         spec.content = std::move(gallery);
