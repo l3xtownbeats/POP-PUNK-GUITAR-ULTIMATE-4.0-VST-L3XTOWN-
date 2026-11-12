@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Define BUILD_TESTING before any test target is conditionally declared.
+# CTest's default option is ON; placing this here prevents early test blocks
+# from being silently skipped because BUILD_TESTING was still undefined.
+include(CTest)
+
 # Pin JUCE 7 as required by v33 FINAL. FetchContent keeps the dependency reproducible.
 FetchContent_Declare(
     JUCE
@@ -112,7 +117,6 @@ if(BUILD_TESTING)
 endif()
 
 # Dependency-free SFZ parser regression tests.
-include(CTest)
 if(BUILD_TESTING)
     add_executable(ppgu_sfz_parser_tests
         Source/Sampler/SfzParser.cpp
