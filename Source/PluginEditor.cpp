@@ -66,11 +66,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setWantsKeyboardFocus(true);
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
-    setSize(1120, 840);
+    setSize(1120, 900);
     setResizable(true, true);
-    // The current fixed-height control stack needs ~788 px including outer margins.
-    // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(980, 800, 1600, 1100);
+    // Reserve a dedicated live-performance strip above the MIDI keyboard.
+    setResizeLimits(980, 900, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, pale);
@@ -146,6 +145,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
+    for (auto* button : { &fxEditButton, &autoChordsButton })
+    {
+        button->setColour(juce::TextButton::buttonColourId, panel2);
+        button->setColour(juce::TextButton::textColourOffId, pale);
+        addAndMakeVisible(*button);
+    }
+    fxEditButton.onClick = [this] { showFxEditPanel(); };
+    autoChordsButton.onClick = [this] { showAutoChordsPanel(); };
+    fxEditButton.setTooltip("Open the detailed effects workspace");
+    autoChordsButton.setTooltip("Open the harmony and chord progression workspace");
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -190,6 +199,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
+    performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState);
+    addAndMakeVisible(*performanceDisplay);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
     for (size_t i = 0; i < knobs.size(); ++i) {
@@ -225,7 +236,92 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    fxEditOverlay.reset();
+    autoChordsOverlay.reset();
+    fxEditContent.reset();
+    autoChordsContent.reset();
+    performanceDisplay.reset();
     setLookAndFeel(nullptr);
+}
+
+
+
+void PopPunkGuitarUltimateAudioProcessorEditor::showFxEditPanel()
+{
+    if (fxEditOverlay)
+    {
+        fxEditOverlay->toFront(true);
+        return;
+    }
+    fxEditContent = std::make_unique<PPGUFXEditPanel>(processor.parameters);
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+    fxEditOverlay = std::make_unique<PPGUEditorOverlayPanel>(
+        "FX EDIT  /  EFFECTS RACK", *fxEditContent,
+        [safe] { juce::MessageManager::callAsync([safe] { if (safe) safe->closeFxEditPanel(); }); },
+        [safe](bool) { juce::MessageManager::callAsync([safe] { if (safe) safe->layoutAuxiliaryPanels(); }); });
+    addAndMakeVisible(*fxEditOverlay);
+    layoutAuxiliaryPanels();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::showAutoChordsPanel()
+{
+    if (autoChordsOverlay)
+    {
+        autoChordsOverlay->toFront(true);
+        return;
+    }
+    autoChordsContent = std::make_unique<PPGUAutoChordsPanel>();
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+    autoChordsOverlay = std::make_unique<PPGUEditorOverlayPanel>(
+        "AUTOCHORDS  /  HARMONY", *autoChordsContent,
+        [safe] { juce::MessageManager::callAsync([safe] { if (safe) safe->closeAutoChordsPanel(); }); },
+        [safe](bool) { juce::MessageManager::callAsync([safe] { if (safe) safe->layoutAuxiliaryPanels(); }); });
+    addAndMakeVisible(*autoChordsOverlay);
+    layoutAuxiliaryPanels();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::closeFxEditPanel()
+{
+    if (fxEditOverlay)
+    {
+        removeChildComponent(fxEditOverlay.get());
+        fxEditOverlay.reset();
+        fxEditContent.reset();
+        layoutAuxiliaryPanels();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::closeAutoChordsPanel()
+{
+    if (autoChordsOverlay)
+    {
+        removeChildComponent(autoChordsOverlay.get());
+        autoChordsOverlay.reset();
+        autoChordsContent.reset();
+        layoutAuxiliaryPanels();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::layoutAuxiliaryPanels()
+{
+    const ppgu::ui::PanelBounds workArea { 18, 74, juce::jmax(1, getWidth() - 36), juce::jmax(1, getHeight() - 92) };
+    std::vector<ppgu::ui::PanelRequest> requests;
+    if (fxEditOverlay)
+        requests.push_back({ "fx-edit", fxEditOverlay->isExpanded() ? workArea.width : 760,
+                             fxEditOverlay->isExpanded() ? workArea.height : 560, 420, 300 });
+    if (autoChordsOverlay)
+        requests.push_back({ "auto-chords", autoChordsOverlay->isExpanded() ? workArea.width : 760,
+                             autoChordsOverlay->isExpanded() ? workArea.height : 560, 420, 300 });
+    const auto layout = ppgu::ui::layoutAuxiliaryPanels(workArea, requests);
+    for (const auto& placement : layout.panels)
+    {
+        const juce::Rectangle<int> bounds(placement.bounds.x, placement.bounds.y,
+                                          placement.bounds.width, placement.bounds.height);
+        if (placement.id == "fx-edit" && fxEditOverlay)
+            fxEditOverlay->setBounds(bounds);
+        else if (placement.id == "auto-chords" && autoChordsOverlay)
+            autoChordsOverlay->setBounds(bounds);
+    }
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
@@ -279,7 +375,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
  g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
  for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
  g.setColour(p.accent);g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
- auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(92);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
+ auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(146);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
  auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
 }
 
@@ -287,7 +383,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
- skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
+ skinButton.setBounds(head.removeFromRight(86).reduced(2,8));
+ autoChordsButton.setBounds(head.removeFromRight(108).reduced(2,8));
+ fxEditButton.setBounds(head.removeFromRight(82).reduced(2,8));
+ loadButton.setBounds(head.removeFromRight(100).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
  a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
@@ -295,7 +394,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
  for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
  auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+ startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto perf=a.removeFromBottom(54);if(performanceDisplay)performanceDisplay->setBounds(perf.reduced(2,2));auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+ layoutAuxiliaryPanels();
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
