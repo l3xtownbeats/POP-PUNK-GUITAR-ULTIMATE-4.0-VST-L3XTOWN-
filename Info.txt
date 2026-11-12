@@ -1856,3 +1856,30 @@ ARTIST STYLE не должен превращаться в обязательн�
 - Refactor or replace internals only when justified by a concrete defect, measurable performance gain, stability requirement, or compatibility need.
 - Do not add product features, background services, cloud/network dependencies, extra engines, or elaborate abstractions merely because they seem impressive.
 - Keep implementation as simple as possible while fully meeting the approved requirements. No scope creep; no weakening of already accepted functionality.
+
+
+## 2026-11-12 — Sound library sourcing pass (research + download attempt)
+
+**Статус:** SOURCE RESEARCH COMPLETED FOR THIS PASS; DOWNLOADS BLOCKED BY CURRENT FILE-TRANSFER ENVIRONMENT; NO NEW AUDIO IMPORTED.
+
+Проверены официальные страницы и release metadata следующих библиотек:
+
+| Источник / библиотека | Материал | Лицензия по источнику | Оценка для PPGU | Состояние |
+|---|---|---|---|---|
+| Meta Open Sound — Steel Guitar | 375 WAV, 24-bit/48 kHz, SFZ, E2–C6, 3 velocity layers; release ZIP 663,385,210 bytes | CC0 1.0; release SHA-256 опубликован upstream | Первый акустический/тестовый кандидат; использовать существующую clearance-запись; проверить SFZ runtime и streaming memory before shipping | LICENSE CLEARED; FILE NOT DOWNLOADED IN THIS PASS |
+| Meta Open Sound — Nylon Guitar | 348 WAV, 24-bit/48 kHz, SFZ, E2–B5, 3 dynamic layers | CC0 1.0 | Допустить после реализации/проверки keyswitch и velocity-crossfade semantics, указанных в существующей clearance-записи | LICENSE CLEARED; INTEGRATION BLOCKED; FILE NOT DOWNLOADED |
+| FreePats FSBS Electric Guitar Clean #1 | SFZ WAV 456 MiB / FLAC 118 MiB; small WAV 4.5 MiB; page version 2026-08-07 | CC0 1.0, заявлено на странице банка | Приоритетный электрогитарный кандидат; сохранить SFZ и оригинальный lossless payload; small package только для проверки импорта, не как финальная замена | SOURCE/CC0 VERIFIED AT PAGE; ARCHIVE AND PER-FILE HASH NOT VERIFIED; NOT DOWNLOADED |
+| FreePats FSBS Electric Guitar Clean #2 (Jazz) | SFZ WAV 193 MiB / FLAC 63 MiB; small WAV 3.7 MiB | CC0 1.0, заявлено на странице банка | Дополнительный clean вариант; audition/classification required | PENDING DOWNLOAD/SCREENING |
+| FreePats FSBS Electric Guitar Direct | SFZ WAV 153 MiB / FLAC 74 MiB | CC0 1.0, заявлено на странице банка | DI source for existing amp/FX chain; проверить фактический сигнал/зоны | PENDING DOWNLOAD/SCREENING |
+| Karoryfer Emilyguitar v1.001 | 323 WAV, 24-bit/44.1 kHz, 6 SFZ maps, ZIP 103,484,350 bytes | CC0; upstream release says same as before but CC0; creator's free-library page states CC0 | Хороший первый компактный электрогитарный импортер/совместимость SFZ | LICENSE VERIFIED; NOT DOWNLOADED |
+| Karoryfer Black And Green Guitars v1.000 | 1,500+ samples, two hollowbody electrics, ZIP 481,838,512 bytes | CC0; creator page and SFZ catalogue | Дополнительные articulations/texture; listen and map before factory classification | LICENSE VERIFIED; NOT DOWNLOADED |
+| Karoryfer Shinyguitar v1.002 | Guitar library, ZIP 368,411,844 bytes | CC0; upstream release says same as before but CC0; creator free-library page states CC0 | Candidate for clean/character layer; inspect GUI/SFZ files and audio | LICENSE VERIFIED; NOT DOWNLOADED |
+| Blue Jeans And Moonbeams | Electric/acoustic guitar | Catalogue lists MIT; exact audio-package license/evidence needs review | YELLOW/manual review; do not bundle yet | NOT CLEARED |
+| DAOWAVES 33 Rock Riffs Amped | 33 WAV riffs, 44.1 kHz/32-bit, 90/120/150 BPM, loop+tail | Page says free commercial use; no clear sample-library/VST redistribution grant located | May be usable as user-produced music/arrangement source only if terms permit; not factory SoundBank | YELLOW; NOT CLEARED FOR EMBEDDING |
+| Pop Punk Loop Pack (3,600+ loops) | Processed + DI loops, one-shots and guitar patterns | Royalty-free marketing alone does not prove raw WAV embedding/redistribution | Do not package; obtain explicit sample-library redistribution license | YELLOW; NOT CLEARED |
+
+Official discovery and license references reviewed: Meta Open Sound README/releases; FreePats Clean Electric Guitar page; SFZ Instruments guitar catalogue; Karoryfer free samples page/releases; DAOWAVES 33 Rock Riffs page. Exact links are stored in SOUNDBANK/SOURCES_PENDING.md.
+
+**Download attempt:** The current environment refused direct binary release assets even though their release metadata and official links are visible. No archive landed in the working filesystem in this pass; therefore no extraction, audio conversion, checksum verification, SFZ runtime test, or SoundBank insertion is claimed. The existing registry remains empty and no asset is GREEN/AUTO ADD as a result of this research. Do not fabricate sample files or hashes.
+
+**Next action:** retry binary transfer through an enabled file/browser transfer route; start with FreePats small WAV package or Emilyguitar, then Meta Steel, FreePats full Clean/Direct, Black And Green, Shinyguitar and Meta Nylon after SFZ semantics are covered. Preserve original lossless files, source SFZ, license evidence and upstream checksums. Convert only when needed by the existing sampler; conversion never changes license obligations.
