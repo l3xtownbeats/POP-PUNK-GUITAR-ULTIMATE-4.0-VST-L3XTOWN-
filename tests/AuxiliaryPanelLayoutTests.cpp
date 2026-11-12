@@ -118,6 +118,29 @@ int main()
         for (std::size_t j = i + 1; j < twoColumnOverflow.panels.size(); ++j)
             CHECK(!overlaps(twoColumnOverflow.panels[i].bounds, twoColumnOverflow.panels[j].bounds));
 
+    // Mixed-size panels must use per-row/per-column minimums instead of
+    // imposing the largest minimum on every window. This keeps all six
+    // approved auxiliary panels visible at the default editor workspace size.
+    std::vector<PanelRequest> mixedPanels {
+        { 1, { 520, 360 }, { 280, 190 } },
+        { 2, { 520, 360 }, { 280, 190 } },
+        { 3, { 520, 360 }, { 280, 190 } },
+        { 4, { 940, 700 }, { 500, 320 } },
+        { 5, { 700, 520 }, { 420, 260 } },
+        { 6, { 520, 360 }, { 280, 190 } }
+    };
+    auto mixed = calculatePanelLayout({ 0, 0, 1092, 812 }, mixedPanels, 1.0f, 12);
+    CHECK(!mixed.invalidInput && !mixed.overflow);
+    CHECK(mixed.panels.size() == 6 && mixed.columns == 2 && mixed.rows == 3);
+    for (std::size_t i = 0; i < mixed.panels.size(); ++i)
+    {
+        CHECK(mixed.panels[i].visible);
+        const auto& request = mixedPanels[i];
+        CHECK(mixed.panels[i].bounds.width >= request.minimum.width);
+        CHECK(mixed.panels[i].bounds.height >= request.minimum.height);
+    }
+    checkInsideAndDisjoint(mixed, { 0, 0, 1092, 812 });
+
     const PanelRect dpiArea { 0, 0, 1800, 1000 };
     auto dpi = calculatePanelLayout(dpiArea, makePanels(4), 1.5f);
     CHECK(!dpi.overflow && !dpi.invalidInput);
