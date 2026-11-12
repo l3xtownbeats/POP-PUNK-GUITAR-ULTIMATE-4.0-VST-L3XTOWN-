@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU SKIN STUDIO REV 14.0",
-  "status": "RUNTIME_PALETTE_SUPPORT_COMMITTED_CI_PENDING_LAYOUT_METADATA_ONLY",
+  "status": "MERGED",
   "startIndex": 52,
   "endIndex": 52,
   "totalSkins": 1,
@@ -17,5 +17,6 @@
       "preview": "Skin_052/assets/preview.png",
       "hero": "Skin_052/assets/hero.png"
     }
-  ]
+  ],
+  "mergedRegistryTotal": 52
 }
