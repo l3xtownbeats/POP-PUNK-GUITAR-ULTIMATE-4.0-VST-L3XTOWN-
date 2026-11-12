@@ -16,8 +16,10 @@ with tempfile.TemporaryDirectory() as temp:
         wav.writeframes(b"\x00\x00" * 480)
     sfz = root / "guitar.sfz"
     sfz.write_text(
-        "<region> sample=note.wav key=40 lovel=1 hivel=63 seq_length=2 seq_position=1\n"
-        "<region> sample=note.wav key=40 lovel=64 hivel=127 seq_length=2 seq_position=2\n",
+        "<global> ampeg_release=0.2\\n"
+        "<group> sample=note.wav seq_length=2\\n"
+        "<region> key=40 lovel=1 hivel=63 seq_position=1\\n"
+        "<region> key=40 lovel=64 hivel=127 seq_position=2\\n",
         encoding="utf-8"
     )
     manifest = sf.build_manifest(sfz)
