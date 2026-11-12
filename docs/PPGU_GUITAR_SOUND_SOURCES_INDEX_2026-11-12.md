@@ -22,7 +22,7 @@ This is a discovery index for guitar-only content. A listing is not proof that e
    - FreePats repositories: https://github.com/freepats
 6. FreePats Nylon Acoustic Guitar — https://freepats.zenvoid.org/Guitar/acoustic-guitar.html
    - Spanish classical nylon guitar; SFZ WAV/FLAC and SF2; page states CC0 1.0.
-7. Blue Jeans And Moonbeams — https://docs.google.com/document/d/1nq4V8JQX5G9uQx8nYzK7y3z9kQWJx3k5/
+7. Blue Jeans And Moonbeams — https://docs.google.com/document/d/15XBK9LqTsNRG14JD23bidiAvaEaj8UXcT8O8PDTnS3o/edit
    - SFZ catalogue lists MIT; verify the canonical author release and license before use. (Catalogue entry is discovery evidence, not sufficient source-file clearance.)
 8. Versilian Community Sample Library — https://versilian-studios.com/vcsl/
    - Collection claims CC0 and explicit commercial-software integration permission. Check exact guitar instrument and archive contents; not all instruments are guitars.
