@@ -352,6 +352,35 @@ R21 [Полнота payload] Пакет без полного набора ас�
     параметры и значения по центру; график обработки/кривая, GR-метр,
     Knee/Mix и effect presets. Элементы подключаются к существующим
     реальным параметрам; неподдерживаемая функция явно disabled/PENDING.
+7.5.1 FX CATALOG BASELINE (принято по пользовательскому перечню):
+    Каталог обработки гитары должен предусматривать отдельные модули:
+    (1) Overdrive; (2) Distortion; (3) Fuzz; (4) Delay; (5) Reverb;
+    (6) Chorus; (7) Flanger; (8) Phaser; (9) Tremolo; (10) Wah-Wah;
+    (11) Compressor; (12) Equalizer; (13) Pitch Shifter/Octaver;
+    (14) Envelope Filter / Auto-Wah. Overdrive и Distortion — разные
+    модели drive, Fuzz — самостоятельная нелинейная модель. Wah-Wah
+    поддерживает MIDI/automation expression control (CC/host parameter);
+    Envelope Filter реагирует на огибающую входного сигнала. Pitch
+    Shifter/Octaver должен иметь режимы октавы/интервалов и dry/wet.
+    Looper и Tuner — отдельные performance/utilities, не FX insert:
+    Looper записывает/повторяет audio layers с bounded memory и явными
+    transport/overdub/clear controls; Tuner получает реальный входной
+    сигнал, показывает note/cents и mute/bypass. Их realtime/transport
+    contracts и UX проектируются отдельно.
+    Архитектура допускает выбор/перестановку поддерживаемых модулей
+    в FX chain; текущие 7 slot IDs и I1/I2 не переименовывать и не
+    расширять без отдельного MAJOR-решения/миграции state. Пока
+    сохраняется семислотовый rack, каталог модулей и число одновременно
+    активных слотов — разные понятия. Cabinet/amp stage остаётся
+    отдельным блоком моделирования кабинета/усилителя, не заменяет
+    перечисленные эффекты.
+    Реализация поэтапная: сначала module registry + stable IDs/state
+    mapping + contract tests; затем DSP отдельно для каждого эффекта;
+    затем FX EDIT UI/automation/presets; отдельно Looper и Tuner.
+    Каждый DSP этап проходит R10 audio review, zero-alloc/lock/I/O
+    realtime contract и regression tests. Наличие названия в каталоге,
+    параметров или UI не означает DSP implementation. Неисполненные
+    модули маркировать PLANNED/PENDING, не имитировать работу.
 7.6 PERFORMANCE DISPLAY — компактное информационное табло над MIDI
     keyboard. Поля: текущий аккорд (например Am), отдельная нота/октава
     (C3), выбранная тональность (A Minor), тип аккорда, текущий/следующий
