@@ -305,3 +305,20 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 **Implementation commit:** `4381c1d1d60e9769173b89922d52bb0967b98bcf` (parent `6ea8d5873706890f29496465d6078bd235fee42b`).
 **Exact-SHA CI:** run #1044 / ID `43180948804`, PENDING at closure. The source patch and INFO/CODE entries were fetched back and checked; no build or host pass is claimed. This commit is a journal-only follow-up and leaves production source unchanged.
+
+
+## 2026-11-12 — REV.17 Zone F specification addendum
+
+**Change class:** documentation/specification only; no production source or test code changed.  
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Specification commit:** `c6fccfbf6d960fb0fcb362eaa4128bd4b461e637`.  
+**INFO journal commit:** `ebe8987922c83fb748d0cffa377c9dacc21d41a0`.  
+**Path:** `docs/PPGU_MASTER_SPEC_PACKAGE_RU.md`, section `4.4 ZONE F — STRUMMER & GROOVE / PATTERN CONTROL STRIP`.
+
+**Added contract:** Zone F is a logical central-workspace section for Pattern/Strummer controls, not a fourth external column. It binds only existing IDs `patternSlot`, `patternLength`, `syncMode`, `bpm`, and `startOnFirstChord`; Pattern-only controls are disabled in Melody mode. Tempo is editable only for Internal sync; Host tempo is read-only when playhead tempo is available. Existing C controls swing/humanize/accent are not duplicated.
+
+**Deferred controls:** `swingBase`, `patternQuantize`, `preserveHumanTiming`, `articulation`, `pickStyle`, `endingLength`, `palmHitOnEnding`, `stringSlapOnEnding` remain unavailable/disabled until runtime binding and scheduler behavior are verified.
+
+**Compatibility boundary:** no APVTS IDs/semantics, scheduler, MIDI, DSP, preset schema, SoundBank, or production UI source changed. No implementation or test pass is claimed.
+
+**Status:** SPECIFICATION UPDATED; UI IMPLEMENTATION AND EXACT-SHA VALIDATION PENDING.
