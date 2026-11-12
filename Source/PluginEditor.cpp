@@ -140,12 +140,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     refreshPresetList();
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-    loadButton.onClick = [this] { chooseSfzFile(); };
+    loadButton.onClick = [this] { showImportGuitarPanel(); };
     addAndMakeVisible(loadButton);
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
-    for (auto* button : { &fxEditButton, &autoChordsButton })
+    for (auto* button : { &fxEditButton, &autoChordsButton, &settingsButton })
     {
         button->setColour(juce::TextButton::buttonColourId, panel2);
         button->setColour(juce::TextButton::textColourOffId, pale);
@@ -153,8 +153,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     fxEditButton.onClick = [this] { showFxEditPanel(); };
     autoChordsButton.onClick = [this] { showAutoChordsPanel(); };
+    settingsButton.onClick = [this] { showSettingsPanel(); };
     fxEditButton.setTooltip("Open the detailed effects workspace");
     autoChordsButton.setTooltip("Open the harmony and chord progression workspace");
+    settingsButton.setTooltip("Open performance and engine settings");
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -238,8 +240,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorE
 {
     fxEditOverlay.reset();
     autoChordsOverlay.reset();
+    importGuitarOverlay.reset();
+    settingsOverlay.reset();
     fxEditContent.reset();
     autoChordsContent.reset();
+    importGuitarContent.reset();
+    settingsContent.reset();
     performanceDisplay.reset();
     setLookAndFeel(nullptr);
 }
@@ -302,6 +308,57 @@ void PopPunkGuitarUltimateAudioProcessorEditor::closeAutoChordsPanel()
     }
 }
 
+
+void PopPunkGuitarUltimateAudioProcessorEditor::showImportGuitarPanel()
+{
+    if (importGuitarOverlay) { importGuitarOverlay->toFront(true); return; }
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+    importGuitarContent = std::make_unique<PPGUImportGuitarPanel>([safe] {
+        if (safe) safe->chooseSfzFile();
+    });
+    importGuitarOverlay = std::make_unique<PPGUEditorOverlayPanel>(
+        "IMPORT GUITAR  /  SFZ LIBRARY", *importGuitarContent,
+        [safe] { juce::MessageManager::callAsync([safe] { if (safe) safe->closeImportGuitarPanel(); }); },
+        [safe](bool) { juce::MessageManager::callAsync([safe] { if (safe) safe->layoutAuxiliaryPanels(); }); });
+    addAndMakeVisible(*importGuitarOverlay);
+    layoutAuxiliaryPanels();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::closeImportGuitarPanel()
+{
+    if (importGuitarOverlay)
+    {
+        removeChildComponent(importGuitarOverlay.get());
+        importGuitarOverlay.reset();
+        importGuitarContent.reset();
+        layoutAuxiliaryPanels();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::showSettingsPanel()
+{
+    if (settingsOverlay) { settingsOverlay->toFront(true); return; }
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+    settingsContent = std::make_unique<PPGUSettingsPanel>(processor.parameters);
+    settingsOverlay = std::make_unique<PPGUEditorOverlayPanel>(
+        "SETTINGS  /  PERFORMANCE", *settingsContent,
+        [safe] { juce::MessageManager::callAsync([safe] { if (safe) safe->closeSettingsPanel(); }); },
+        [safe](bool) { juce::MessageManager::callAsync([safe] { if (safe) safe->layoutAuxiliaryPanels(); }); });
+    addAndMakeVisible(*settingsOverlay);
+    layoutAuxiliaryPanels();
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::closeSettingsPanel()
+{
+    if (settingsOverlay)
+    {
+        removeChildComponent(settingsOverlay.get());
+        settingsOverlay.reset();
+        settingsContent.reset();
+        layoutAuxiliaryPanels();
+    }
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::layoutAuxiliaryPanels()
 {
     const ppgu::ui::PanelBounds workArea { 18, 74, juce::jmax(1, getWidth() - 36), juce::jmax(1, getHeight() - 92) };
@@ -312,6 +369,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::layoutAuxiliaryPanels()
     if (autoChordsOverlay)
         requests.push_back({ "auto-chords", autoChordsOverlay->isExpanded() ? workArea.width : 760,
                              autoChordsOverlay->isExpanded() ? workArea.height : 560, 420, 300 });
+    if (importGuitarOverlay)
+        requests.push_back({ "import-guitar", importGuitarOverlay->isExpanded() ? workArea.width : 760,
+                             importGuitarOverlay->isExpanded() ? workArea.height : 560, 420, 300 });
+    if (settingsOverlay)
+        requests.push_back({ "settings", settingsOverlay->isExpanded() ? workArea.width : 760,
+                             settingsOverlay->isExpanded() ? workArea.height : 560, 420, 300 });
     const auto layout = ppgu::ui::layoutAuxiliaryPanels(workArea, requests);
     for (const auto& placement : layout.panels)
     {
@@ -321,6 +384,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::layoutAuxiliaryPanels()
             fxEditOverlay->setBounds(bounds);
         else if (placement.id == "auto-chords" && autoChordsOverlay)
             autoChordsOverlay->setBounds(bounds);
+        else if (placement.id == "import-guitar" && importGuitarOverlay)
+            importGuitarOverlay->setBounds(bounds);
+        else if (placement.id == "settings" && settingsOverlay)
+            settingsOverlay->setBounds(bounds);
     }
 }
 
@@ -384,9 +451,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(86).reduced(2,8));
- autoChordsButton.setBounds(head.removeFromRight(108).reduced(2,8));
- fxEditButton.setBounds(head.removeFromRight(82).reduced(2,8));
- loadButton.setBounds(head.removeFromRight(100).reduced(2,8));
+ settingsButton.setBounds(head.removeFromRight(76).reduced(2,8));
+ autoChordsButton.setBounds(head.removeFromRight(100).reduced(2,8));
+ fxEditButton.setBounds(head.removeFromRight(72).reduced(2,8));
+ loadButton.setBounds(head.removeFromRight(88).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
  a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(356);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
@@ -434,7 +502,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  ampTitle.setColour(juce::Label::textColourId,p.accent);fxTitle.setColour(juce::Label::textColourId,p.accent);playbackTitle.setColour(juce::Label::textColourId,p.accent);
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.surfaceSecondary);b->setColour(juce::ComboBox::textColourId,p.text);b->setColour(juce::ComboBox::outlineColourId,p.border);b->setColour(juce::ComboBox::arrowColourId,p.accent);}
  presetSearch.setColour(juce::TextEditor::backgroundColourId,p.surfaceSecondary);presetSearch.setColour(juce::TextEditor::textColourId,p.text);presetSearch.setColour(juce::TextEditor::outlineColourId,p.border);presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.focus);presetSearch.setColour(juce::TextEditor::highlightColourId,p.accent.withAlpha(.3f));
- loadButton.setColour(juce::TextButton::buttonColourId,p.accent);loadButton.setColour(juce::TextButton::textColourOffId,p.canvas);skinButton.setColour(juce::TextButton::buttonColourId,p.surfaceRaised);skinButton.setColour(juce::TextButton::textColourOffId,p.text);for(auto* b:{&fxEditButton,&autoChordsButton}){b->setColour(juce::TextButton::buttonColourId,p.surfaceSecondary);b->setColour(juce::TextButton::textColourOffId,p.text);}skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
+ loadButton.setColour(juce::TextButton::buttonColourId,p.accent);loadButton.setColour(juce::TextButton::textColourOffId,p.canvas);skinButton.setColour(juce::TextButton::buttonColourId,p.surfaceRaised);skinButton.setColour(juce::TextButton::textColourOffId,p.text);for(auto* b:{&fxEditButton,&autoChordsButton,&settingsButton}){b->setColour(juce::TextButton::buttonColourId,p.surfaceSecondary);b->setColour(juce::TextButton::textColourOffId,p.text);}skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
  for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.surfaceSecondary);b->setColour(juce::TextButton::buttonOnColourId,p.accent);b->setColour(juce::TextButton::textColourOffId,p.text);b->setColour(juce::TextButton::textColourOnId,p.canvas);}
  for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.accent);s.setColour(juce::Slider::rotarySliderOutlineColourId,p.border);s.setColour(juce::Slider::thumbColourId,p.text);s.setColour(juce::Slider::textBoxTextColourId,p.text);}
  for(auto& l:knobLabels)l.setColour(juce::Label::textColourId,p.textSecondary);
@@ -505,11 +573,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
     fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis](const juce::FileChooser& chooser){
         if(safeThis==nullptr) return; const auto selected=chooser.getResult(); if(selected==juce::File{}) return;
-        safeThis->loadButton.setEnabled(false); safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...",juce::dontSendNotification);
+        safeThis->loadButton.setEnabled(false); safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...",juce::dontSendNotification); if(safeThis->importGuitarContent) safeThis->importGuitarContent->setStatus("LOADING SFZ IN BACKGROUND...");
         safeThis->processor.loadSfzFileAsync(selected,[safeThis](ppgu::sampler::LoadReport report){
             if(safeThis==nullptr) return; safeThis->loadButton.setEnabled(true);
-            if(report.success) safeThis->statusLabel.setText("READY  /  "+juce::String(static_cast<int>(report.loadedRegions))+" REGIONS  /  "+juce::String(static_cast<int>(report.loadedSamples))+" WAV SAMPLES",juce::dontSendNotification);
-            else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
+            if(report.success) { const auto message = "READY  /  "+juce::String(static_cast<int>(report.loadedRegions))+" REGIONS  /  "+juce::String(static_cast<int>(report.loadedSamples))+" WAV SAMPLES"; safeThis->statusLabel.setText(message,juce::dontSendNotification); if(safeThis->importGuitarContent) safeThis->importGuitarContent->setStatus(message); }
+            else { const auto message = report.errors.empty()?juce::String("SFZ LOAD FAILED"):juce::String(report.errors.front()); safeThis->statusLabel.setText(message,juce::dontSendNotification); if(safeThis->importGuitarContent) safeThis->importGuitarContent->setStatus(message); }
         });
     });
 }
