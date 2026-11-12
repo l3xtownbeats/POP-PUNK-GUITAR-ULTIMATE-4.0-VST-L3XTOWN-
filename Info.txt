@@ -1578,3 +1578,22 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** Flanger APVTS parameter and processBlock DSP references were found in `Source/PluginProcessor.cpp`; no new parameter or DSP implementation is needed for the UI parity correction. Exact-SHA build for the active Ninja Multi-Config workflow is still pending.
 
 **РЕЗУЛЬТАТ:** BUILD GUIDE ACCEPTED AS A CHECKLIST, NOT AS AUTHORITATIVE SOURCE; FLANGER UI PARITY FIX APPROVED; KARPLUS/FAKE AUTOCHORDS TRANSPLANT REJECTED.
+
+
+## 2026-11-12 — Factory preset playability and sound-differentiation requirement
+
+**Статус:** PRODUCT REQUIREMENT ACCEPTED; IMPLEMENTATION / LISTENING QA PENDING.
+
+**ПРОВЕРКА:** текущий `presets/factory_bank_300.json` содержит 300 catalog definitions, но INFO уже фиксирует, что наличие 300 записей не доказывает, что все они playable. В самом каталоге часть PATTERN entries прямо помечена как `catalog-definition-awaiting-pattern-engine-and-recorded-performance-library`; их groove/performance metadata пока нельзя выдавать за реально звучащие законченные пресеты.
+
+**АНАЛИЗ:** пользователь подтвердил обязательное требование: каждый заводской пресет должен реально загружаться, звучать и иметь слышимо отличимый характер. Банк должен включать две взаимодополняющие категории:
+1. Original style-inspired presets, передающие общие музыкальные характеристики выбранных pop-punk/alternative групп из утверждённого списка (включая Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, The All-American Rejects, MGK и Avril Lavigne-era references), без копирования защищённых записей/точных партий.
+2. Универсальные default pop-punk guitar presets разных типов: clean, bright/crunch, high-gain rhythm, palm-muted, open power chords, octave/lead, acoustic/clean layer, tight muted chugs и другие действительно разные тембры/игровые роли.
+
+**КРИТЕРИИ ПРИЁМКИ:** каждый preset должен иметь валидные sample/instrument mapping или реально работающий synthesis path; корректные диапазоны нот и velocity; рабочие параметры/FX; отсутствие silent/missing-sample presets; уникальную комбинацию тембра, артикуляции, динамики и/или performance groove. Одинаковые настройки с разными названиями не засчитываются. Проверять автоматизированным preset-load/render smoke test и затем прослушиванием representative/full-bank batches; вести таблицу покрытия и исправлений. PATTERN preset не считать готовым, пока PatternScheduler реально воспроизводит требуемую артикуляцию/ритм и для неё доступны разрешённые к распространению performance samples либо эквивалентный работающий механизм.
+
+**ИСПРАВЛЕНИЕ / ПЛАН:** сначала провести инвентаризацию всех 300 definitions по mode, source assets, mapping, parameter deltas и readiness status; сгруппировать style-inspired и general factory presets; выявить пустые/дублирующие/неподключённые записи; затем довести загрузку и звучание каждой записи и проверить различимость по A/B. Не уменьшать число пресетов ради красивой цифры и не объявлять 300 готовыми до прохождения проверки.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** на момент этой записи реализация всех 300 playable presets и полный listening QA не подтверждены. Новая сборка/тесты по данному требованию не запускались; аудиодвижок и preset catalog в рамках записи не изменялись.
+
+**РЕЗУЛЬТАТ:** REQUIREMENT LOCKED; 300 PRESET DEFINITIONS ≠ 300 VERIFIED PLAYABLE PRESETS. PLAYABILITY, AUDIBLE DIFFERENTIATION, STYLE COVERAGE AND LISTENING QA ARE OPEN RELEASE GATES.
