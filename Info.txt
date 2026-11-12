@@ -1057,3 +1057,20 @@ F. Только после этого считать документальны�
 **Reconciliation:** текущий master prompt на выбранной ветке — REV 17.1, а не REV 17.0. Фазы E1→O1→O2→S1→E2→E3→(E4/O3) приняты как canonical для frontend; N0 — обязательный preflight, N1–N6 — прежние roadmap labels и не конкурируют с этой последовательностью. Источник доказательства реализации — source/build config на точном SHA; INFO/CODE — журналы, а не замена коду.
 **Проверки:** документационная проверка только; build/CTest/pluginval/FL Studio/packaging CI не запускались и PASS не присваивался.
 **Следующий шаг:** повторный N0 preflight и implementation E1 отдельной атомарной транзакцией с полным CI на точном SHA.
+
+
+## 2026-11-12 — Performance specification: FL Studio 20 / Windows 10 budgets
+
+**Статус:** PERFORMANCE SPEC DESIGNED; implementation PENDING (P1–P5).  
+**Ветка:** `work/signal-forge-theme-tokens`.  
+**Документ:** `docs/PPGU_PERFORMANCE_SPEC_RU.md`.  
+**Документальный commit:** `8f34e1d2524f8074a09c70aaa0656683c04e9a9b`.  
+**Production source:** не менялся.
+
+Зафиксированы измеримые целевые бюджеты: CPU <= 2% (4 voices) и <= 15% (64 voices stress); RAM <= 60 MB idle / <= 512 MB полный SoundBank; preset load <= 300 ms; first sound <= 50 ms; 0 allocations in `processBlock` (hard gate); peak callback <= 60% буфера при 128 samples. Добавлены требования к `ppgu_perf_bench`, allocation audit, regression gate 10% и HOST VERIFIED только по измерениям в FL Studio 20 для конкретного binary SHA и конфигурации.
+
+**P1 CI evidence:** runs #971 (ID `43146185476`) и #972 (ID `43146540434`) проверены по jobs: оба завершились `completed / success`; в обоих успешно прошли Release configure, VST3/test executable build, CTest, VST3 locate, pluginval strictness 5 и packaging. Это подтверждает только указанные workflow runs и их SHA, не performance budgets и не текущий новый document commit. ThemeManager hardening/green CI acceptance нужно считать отдельно по точным исходным SHA.
+
+**Порядок:** P1 (CI + ThemeManager hardening) → P2 (benchmark + allocation baseline) → P3 (оптимизация по профайлеру) → P4 (R4 stress + FL Studio 20 host check) → P5 (новые функции после подтверждения бюджетов).
+
+**Self-check:** документальный этап; production source/tests/build files не менялись. Performance measurements отсутствуют; бюджеты заданы, не подтверждены. Ни BUILD PASS, ни HOST VERIFIED, ни RELEASE READY на основании этой записи не присваиваются.
