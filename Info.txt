@@ -1079,3 +1079,19 @@ Cabinet остаётся отдельной секцией со своим bypas
 Требования к DSP: click-free переключение, сохранение состояния/хвостов без неожиданных сбросов, UI indicator синхронизирован с реальным DSP. Нужны contract/regression tests для индивидуального bypass, master bypass, восстановления состояний и независимости Cabinet/Looper/Tuner.
 **Master Specification commit:** fb807d8123cdbb17f9d61442b7cc6b24b9a1ea9a.
 **Не заявляется:** наличие реализованных кнопок, завершённого DSP bypass или пройденных тестов.
+
+
+## 2026-11-12 — Полный pop-punk guitar production: электрогитара, clean и акустика
+
+**Статус:** PRODUCTION SCOPE ACCEPTED / PRESET + DSP IMPLEMENTATION PENDING.
+Уточнение пользователя: использовать все подходящие возможности PPGU/ANGELA ENGINE для получения отличного поп-панк звучания не только перегруженной электрогитары, но и чистой электрогитары, акустической steel-string, nylon/classical и acoustic DI. Цель — музыкально выразительные, качественные и готовые к миксу звуки.
+**Electric driven:** mid-forward crunch, tight low end, power-chord separation, pick/palm-mute dynamics; умеренный gain, amp/cab/IR и OD boost по необходимости.
+**Clean electric:** bright/chime, warm/thick, edge-of-breakup, punchy/compressed и spacious/ambient; по вкусу мягкие chorus/delay/reverb/tremolo/modulation.
+**Acoustic steel-string:** натуральный корпус и атака, ясность струн, контролируемые low-mid, гладкий верх; варианты intimate/dry, bright strummed, warm rhythmic, wide layered, polished pop mix и ambient. Возможны corrective EQ, HPF, gentle compression, transient/resonance control, subtle saturation, room/plate/hall reverb, stereo width/delay — только когда полезно.
+**Nylon/classical:** сохранить мягкую атаку, древесный тембр и разборчивость; отдельные warm/bright/intimate/cinematic варианты, не переносить автоматически steel-string EQ.
+**Acoustic DI/pickup:** отдельная обработка quack/резонансов/низов и обратной связи, сохраняя динамику; electric amp/cab не применять автоматически.
+**Layered production:** поддержать двойные ритм-партии, L/R layers, octave accents, clean arpeggios и acoustic layers с проверкой фазы, mono compatibility, masking и clipping.
+**Preset taxonomy:** инструмент, характер, музыкальная роль, source library/articulation, pickup/source profile, amp/cab (если применимо), FX chain, индивидуальные bypass states и output trim. Clean/DI base должен оставаться действительно чистым; обработанные версии — отдельные presets. Cabinet IR не назначать акустике автоматически.
+**Качество:** проверять каждый preset в solo и полном миксе с loudness matching; атака, читаемость аккордов, sustain, шум, резонансы, stereo/mono, headroom и CPU. Использовать только разрешённые для распространения assets. Неподдерживаемые текущим DSP возможности отмечать PENDING, не объявлять пресет production-ready.
+**Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `551030d122b01c6911da089a8bbcd12eb4854d82`.
+**Не заявляется:** готовые acoustic/electric preset banks, завершённая обработка всех типов гитар или проведённая звуковая приёмка.
