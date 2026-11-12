@@ -55,6 +55,7 @@ private:
     std::unique_ptr<TileSurface> tileSurface;
     std::vector<std::unique_ptr<Window>> windows;
     int panelGap = 12;
+    std::unique_ptr<juce::PropertiesFile> ownedProperties;
     juce::PropertiesFile* persistenceProperties = nullptr;
     int nextCascadeOffset = 0;
     float panelScale = 1.0f;
