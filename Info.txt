@@ -1134,3 +1134,14 @@ Cabinet остаётся отдельной секцией со своим bypas
 
 Подробный контракт добавляется в docs/PPGU_MASTER_PROMPT_RU.md §7.5.10.  
 **Не заявляется:** реализованный sound-design workflow, A/B engine, все 14 FX DSP или готовые factory sound variations до подтверждения исходниками и тестами.
+
+
+## 2026-11-12 — Preset Sound Truth: выбранный пресет обязан звучать как заявлено
+
+**Статус:** PRODUCT INVARIANT ACCEPTED / RUNTIME VALIDATION PENDING.  
+Уточнение пользователя принято как обязательное правило: при выборе пресета с конкретным характером пользователь должен слышать именно этот характер, а не необработанную гитару. RAW/NO FX допустим только для настоящего исходного звучания. Исключение: исходный sample/instrument сам по себе уже содержит нужный baked-in tone и действительно звучит так без дополнительной обработки — тогда дополнительный FX не обязателен, но такой preset не относится к RAW/NO FX.
+
+Установлены два допустимых пути формирования тона: подходящий уже обработанный/записанный source либо исходная гитара через реально работающую цепочку ANGELA ENGINE. Silent fallback запрещён: при отсутствии sample, amp, cabinet/IR или DSP preset должен явно сообщить unavailable/degraded и указать недостающий ресурс, а не незаметно переключаться на DI/RAW или случайный звук. Browser обязан различать definition/source/DSP availability/playable/mix-ready/listening-approved. Название и категория должны соответствовать слышимому результату; готовность подтверждается runtime проверкой, loudness-matched audition в solo/mix и regression tests.
+
+Подробный контракт: `docs/PPGU_MASTER_PROMPT_RU.md` §7.5.10; commit `eb7dae5fa4f9b00640cf614c51e3889457a64992`.
+**Не заявляется:** что preset validation, silent-fallback guard, полноценный runtime routing или слуховая приёмка уже реализованы. Это обязательное требование к реализации.
