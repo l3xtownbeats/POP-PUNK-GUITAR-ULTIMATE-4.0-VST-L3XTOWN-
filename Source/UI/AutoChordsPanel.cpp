@@ -95,12 +95,12 @@ void PPGUAutoChordsPanel::setPalette(const PPGUThemeManager::Palette& value)
         box->setColour(juce::ComboBox::arrowColourId, palette.accent);
     }
     for (auto& button : styleChoices) {
-        button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
-        button->setColour(juce::TextButton::textColourOffId, palette.textDisabled);
+        button.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        button.setColour(juce::TextButton::textColourOffId, palette.textDisabled);
     }
     for (auto& button : rhythmChoices) {
-        button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
-        button->setColour(juce::TextButton::textColourOffId, palette.textDisabled);
+        button.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        button.setColour(juce::TextButton::textColourOffId, palette.textDisabled);
     }
     preview.setColour(juce::TextButton::buttonColourId, palette.accent);
     preview.setColour(juce::TextButton::textColourOffId, palette.windowBg);
