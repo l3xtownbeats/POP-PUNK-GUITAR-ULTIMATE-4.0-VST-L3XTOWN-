@@ -497,3 +497,22 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 ## 2026-11-12 — Canonical REV.17 branch
 
 `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17` is now the canonical work branch, created from `e5000be105fa059d5f903f6efc17f530ccfee412`. The previous `work/ppgu-skin-expansion-53-102` branch remains as historical source lineage. All further code changes and fixes must be committed to REV.17 only.
+
+
+## 2026-11-12 — Fast artwork generation and REV.17 skin workflow
+
+**Type:** build-time performance / CI branch migration.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+**Commits:**
+- `86f88acd2091f122d6ab8aba03a81aaa645d9927` — `tools/T2_generate_missing_artwork.py`: Pillow native gradient resize and blurred mask replace Python per-pixel rendering.
+- `0dc6cde8441896e05ac9115831dc7679b5995965` — radial concentric bloom mask restores the intended soft accent glow.
+- `9efe5e01efb227b303811e9213df99ebc4afa18b` — skin expansion workflow branch, checkout and push target migrated to REV.17.
+- `962e0992ba68012b1ae518f9b11080fc72980d37` — correct GITHUB_OUTPUT line emission.
+- `7da4593d6906e29a22044cd553689efacbbaa490` — idempotent 102-theme preflight; validation still runs when pack already merged.
+- `1e21cd712279254ee306f5a253745fd61e75b5b2`, `6a51c592c2b08111f8fe0492e25b7eb8efe11ba2`, `00442768e786d727a7a7627be7afa8c3ce206e52` — branch references in skin docs updated.
+
+**Behavior:** legacy preview/hero generation no longer loops over every pixel in Python. Skin workflow no longer targets the historical work branch or assumes only 52 skins; it validates the existing merged 102-theme registry without regenerating it.
+
+**CI:** REV.17 skin workflow run `43198014508` SUCCESS. Windows VST3 workflow `43198145160` was IN_PROGRESS on source SHA `0dc6cde...`; final C++ build/CTest/pluginval/package pending.
+
+**Status:** artwork generator and skin CI source committed; exact-SHA Windows validation pending.
