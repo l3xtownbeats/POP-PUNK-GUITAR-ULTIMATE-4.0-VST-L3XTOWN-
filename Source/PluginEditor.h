@@ -39,6 +39,7 @@ private:
     void loadSavedSkin();
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
+    void openSettingsPanel();
     void applyPalette();
     void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
@@ -52,7 +53,7 @@ private:
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" };
+    juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
