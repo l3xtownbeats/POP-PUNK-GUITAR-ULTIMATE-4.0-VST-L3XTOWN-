@@ -4,6 +4,7 @@
 #include <memory>
 #include <array>
 #include <vector>
+#include <utility>
 
 class PPGUFXEditPanel final : public juce::Component
 {
