@@ -172,6 +172,23 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     startModeBox.setColour(juce::ComboBox::outlineColourId, themeManager.getPalette().token("accent").withAlpha(0.5f));
     addAndMakeVisible(startModeBox);
     startModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "syncMode", startModeBox);
+
+    // Preview is an independent, host-automatable performance feature.
+    previewLabel.setText("PREVIEW", juce::dontSendNotification);
+    previewLabel.setFont(juce::Font(10.5f, juce::Font::bold));
+    previewLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_secondary"));
+    previewLabel.setJustificationType(juce::Justification::centredLeft);
+    addAndMakeVisible(previewLabel);
+    previewEnableSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    previewEnableSlider.setRange(0.0, 1.0, 1.0);
+    previewEnableSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    previewEnableSlider.setTooltip("Enable or disable internal pattern/chord preview without affecting live MIDI playback");
+    previewEnableSlider.setColour(juce::Slider::trackColourId, themeManager.getPalette().token("accent"));
+    previewEnableSlider.setColour(juce::Slider::thumbColourId, themeManager.getPalette().token("text_primary"));
+    previewEnableSlider.setColour(juce::Slider::backgroundColourId, themeManager.getPalette().token("control_bg"));
+    addAndMakeVisible(previewEnableSlider);
+    previewEnableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        processor.parameters, "previewEnabled", previewEnableSlider);
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
     keyboard->setKeyWidth(18.0f);

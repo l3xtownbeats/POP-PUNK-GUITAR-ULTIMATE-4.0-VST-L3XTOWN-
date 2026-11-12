@@ -260,6 +260,38 @@ int main()
                 juce::MidiBuffer stopMidi;
                 processor.processBlock(stopBlock, stopMidi);
             }
+
+            // Preview can be disabled independently from the instrument.
+            // A disabled preview rejects new UI commands and its queued/active
+            // preview-owned voices are cleared by the next audio block.
+            if (!setParameter(processor, "previewEnabled", 0.0f))
+                result = 1;
+            if (processor.enqueuePreviewChord(previewChord.data(), previewChord.size(), 100, 512, 1))
+            {
+                std::cerr << "Disabled preview accepted a new command.\\n";
+                result = 1;
+            }
+            juce::AudioBuffer<float> disabledPreviewBlock(2, 128);
+            juce::MidiBuffer disabledPreviewMidi;
+            processor.processBlock(disabledPreviewBlock, disabledPreviewMidi);
+            if (!setParameter(processor, "previewEnabled", 1.0f)
+                || !processor.enqueuePreviewChord(previewChord.data(), previewChord.size(), 100, 512, 1))
+            {
+                std::cerr << "Preview did not recover after being re-enabled.\\n";
+                result = 1;
+            }
+            juce::AudioBuffer<float> reenabledPreviewBlock(2, 128);
+            juce::MidiBuffer reenabledPreviewMidi;
+            processor.processBlock(reenabledPreviewBlock, reenabledPreviewMidi);
+            if (rms(reenabledPreviewBlock, 0, reenabledPreviewBlock.getNumSamples()) <= 0.001)
+            {
+                std::cerr << "Re-enabled preview did not reach the shared sampler.\\n";
+                result = 1;
+            }
+            processor.stopPreview();
+            juce::AudioBuffer<float> finalStopBlock(2, 128);
+            juce::MidiBuffer finalStopMidi;
+            processor.processBlock(finalStopBlock, finalStopMidi);
         }
     }
 

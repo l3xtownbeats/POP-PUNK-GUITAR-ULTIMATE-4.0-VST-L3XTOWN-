@@ -1793,3 +1793,15 @@ ARTIST STYLE не должен превращаться в обязательн�
 - Проверить: OFF до/во время preview, быстрые ON/OFF переключения, отсутствие зависших голосов, отсутствие preview-команд после OFF, отсутствие роста CPU/RAM и отсутствие влияния на host MIDI/основное воспроизведение.
 
 **Performance contract:** PREVIEW OFF — нулевой preview workload в steady state; PREVIEW ON — только bounded, измеряемая дополнительная нагрузка. Это не разрешение запускать preview до готовности backend.
+
+
+## 2026-11-12 — PREVIEW ENABLE CONTROL AND REALTIME OWNERSHIP
+
+**Статус:** backend/UI control added in source; requires build and test on the resulting commit before it can be called verified.
+
+- Added host-automatable APVTS boolean parameter `previewEnabled` (default ON) and a compact horizontal slider in the PLAYBACK area.
+- When OFF, new preview commands are rejected; the audio thread drains pending preview commands and releases only voices tagged with the preview owner token. Live host MIDI and Pattern-owned voices are not intentionally stopped by this control.
+- When ON again, preview commands use the same shared sampler and bounded scheduler; no second sampler or DSP chain is created.
+- Added processor integration regression coverage for OFF rejection and ON recovery.
+- The control is independent from the instrument's master, voice count, play mode, and host MIDI input.
+- This source change is not a build/test PASS until CI and local Windows x64 checks run against the exact commit SHA.

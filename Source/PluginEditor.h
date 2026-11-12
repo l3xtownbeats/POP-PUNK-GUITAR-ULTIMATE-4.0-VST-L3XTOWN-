@@ -123,9 +123,11 @@ private:
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
     std::vector<FactoryPreset> factoryPresets;
     std::vector<int> visiblePresetIndices;
-    juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle;
+    juce::Label titleLabel, subtitleLabel, statusLabel, ampTitle, fxTitle, playbackTitle, previewLabel;
     juce::TextButton melodyTab { "♫  MELODY" }, patternTab { "PATTERN" };
     juce::ComboBox modeBox, startModeBox;
+    juce::Slider previewEnableSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> previewEnableAttachment;
     std::array<juce::Slider, 9> knobs;
     std::array<juce::Label, 9> knobLabels;
     std::array<juce::String, 9> knobNames { "GAIN", "TREBLE", "MID", "BASS", "VELOCITY", "DYNAMICS", "SWING", "HUMANIZE", "ACCENT" };

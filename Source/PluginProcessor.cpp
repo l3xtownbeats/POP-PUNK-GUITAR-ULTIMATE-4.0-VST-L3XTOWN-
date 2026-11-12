@@ -49,6 +49,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     // Global / performance controls.
     p.add(floatParameter("master", "Master", 0.0f, 1.0f, 0.8f));
     p.add(floatParameter("voices", "Voices", 1.0f, 64.0f, 32.0f, 1.0f));
+    p.add(boolParameter("previewEnabled", "Preview Enabled", true));
     p.add(floatParameter("velocity", "Velocity Response", 0.0f, 2.0f, 1.0f));
     p.add(floatParameter("dynamics", "Velocity Dynamics", 0.0f, 1.0f, 0.5f));
     p.add(floatParameter("palmMuteThreshold", "Palm Mute Threshold", 1.0f, 127.0f, 55.0f, 1.0f));
@@ -261,6 +262,9 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
 bool PopPunkGuitarUltimateAudioProcessor::enqueuePreviewChord(const int* notes, std::size_t count,
     int velocity, std::uint32_t gateSamples, int channel) noexcept
 {
+    const auto* enabled = parameters.getRawParameterValue("previewEnabled");
+    if (enabled == nullptr || enabled->load(std::memory_order_relaxed) <= 0.5f)
+        return false;
     return previewScheduler.enqueueChord(notes, count, velocity, gateSamples, channel);
 }
 
@@ -349,9 +353,18 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
         static_cast<double>(parameters.getRawParameterValue("tuning")->load(std::memory_order_relaxed)));
 
+    const bool previewEnabled = parameters.getRawParameterValue("previewEnabled")->load(std::memory_order_relaxed) > 0.5f;
+    if (!previewEnabled)
+    {
+        // Disabling preview is an audio-thread-owned hard stop: discard pending
+        // commands and release only preview-owned voices, never host MIDI voices.
+        previewScheduler.reset();
+        sampler.releaseOwnedVoices(previewVoiceOwnerToken);
+    }
     std::array<ppgu::performance::PreviewEvent,
         ppgu::performance::MidiPreviewScheduler::maximumEventsPerBlock> previewEvents {};
-    const auto previewEventCount = previewScheduler.processBlock(samples, previewEvents);
+    const auto previewEventCount = previewEnabled
+        ? previewScheduler.processBlock(samples, previewEvents) : 0;
     std::size_t previewEventIndex = 0;
 
     // All internal preview voices use a distinct owner token. Host NoteOff,
