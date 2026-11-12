@@ -321,7 +321,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     if (playMode != previousPlayMode)
     {
         sampler.allNotesOff();
-        previewScheduler.reset();
         patternScheduler.reset(patternTransportClock.startPpq);
         for (auto& channel : patternHeldNotes) channel.fill(false);
         patternCycleStarted = false;

@@ -1488,7 +1488,7 @@ X — это именно закрытие панели, а не выключе�
 - Добавлены `noteOnOwned`, `noteOffOwned` и `releaseOwnedVoices`. SFZ group/off_by choke ограничен также владельцем, чтобы preview не заглушал DAW guitar voice и наоборот.
 - `PopPunkGuitarUltimateAudioProcessor` получил UI/message-thread producer API `enqueuePreviewChord` и `stopPreview`; команды проходят через bounded SPSC scheduler и исполняются внутри существующего processBlock.
 - Preview-события sample-accurately разделяют render segments и направляются в тот же SamplerEngine, с теми же velocity/dynamics/tuning/voice limit. Второй sampler/DSP/sample pool не создаётся.
-- Owner-specific NoteOff/Stop изолирует preview от host notes. Host panic, смена play mode и releaseResources очищают preview scheduler state.
+- Owner-specific NoteOff/Stop изолирует preview от host notes. Host panic и releaseResources очищают preview scheduler state; переключение MELODY/PATTERN не меняет и не перехватывает пользовательский preview.
 - Добавлена processor integration regression для реального SFZ→processor→shared sampler preview route и Stop; отдельный SamplePool regression проверяет owner isolation при одинаковых pitch/channel.
 
 **Ограничения:** UI Circle/Harmony пока не связан с этим API; пользовательский выбор ключа/аккорда и музыкальная генерация не запускают preview автоматически. Не заявлять готовые Harmony Studio UI, MIDI Workspace или AutoChords. CPU/RAM overhead и FL Studio 20 acceptance ещё не измерены.
