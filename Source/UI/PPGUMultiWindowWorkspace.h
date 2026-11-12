@@ -2,9 +2,17 @@
 
 #include <JuceHeader.h>
 #include "AuxiliaryPanelLayout.h"
+#include "ThemeManager.h"
 
 #include <memory>
 #include <vector>
+
+class PPGUThemeAwarePanel
+{
+public:
+    virtual ~PPGUThemeAwarePanel() = default;
+    virtual void setThemePalette(const PPGUThemeManager::Palette& palette) = 0;
+};
 
 // JUCE child-panel workspace. Panels are independent, closable views hosted
 // inside the plugin editor; this component does not own processor/audio state.
@@ -32,6 +40,7 @@ public:
     void setPanelGap(int pixels);
     void setPanelScale(float scale);
     void setPersistenceProperties(juce::PropertiesFile* properties);
+    void setThemePalette(const PPGUThemeManager::Palette& palette);
     void setSurfaceColours(juce::Colour background,
                            juce::Colour panel,
                            juce::Colour border,
@@ -60,6 +69,8 @@ private:
     int nextCascadeOffset = 0;
     float panelScale = 1.0f;
     bool layingOutPanels = false;
+    bool hasThemePalette = false;
+    PPGUThemeManager::Palette currentThemePalette;
     juce::Colour backgroundColour { 0xff090c10 };
     juce::Colour panelColour { 0xff17232b };
     juce::Colour borderColour { 0xff526875 };
