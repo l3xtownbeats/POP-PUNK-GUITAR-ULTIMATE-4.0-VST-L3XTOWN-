@@ -320,7 +320,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
     if (playMode != previousPlayMode)
     {
-        sampler.allNotesOff();
+        sampler.releaseOwnedVoices(0);
         patternScheduler.reset(patternTransportClock.startPpq);
         for (auto& channel : patternHeldNotes) channel.fill(false);
         patternCycleStarted = false;
@@ -336,7 +336,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     if (playMode == 1
         && (patternTransportClock.transportStopped || patternTransportClock.transportDiscontinuity))
     {
-        sampler.allNotesOff();
+        sampler.releaseOwnedVoices(0);
         patternScheduler.clearPendingNoteOffs();
         patternCycleStarted = false;
         previousPatternChordCount = 0;
@@ -474,7 +474,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 previousPatternChordCount, count, changePpq, patternCycleStartPpq, startOnFirstChord);
 
             if (decision.releaseVoices)
-                sampler.allNotesOff();
+                sampler.releaseOwnedVoices(0);
             if (decision.clearPendingNoteOffs)
                 patternScheduler.clearPendingNoteOffs();
             if (decision.startPatternCycle)
@@ -492,7 +492,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
         auto restartPatternForSettings = [&](int count)
         {
-            sampler.allNotesOff();
+            sampler.releaseOwnedVoices(0);
             patternScheduler.clearPendingNoteOffs();
             patternCycleStarted = count > 0;
             if (count > 0)
@@ -613,7 +613,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 if (chordDiffers(nextNotes, nextCount, nextChannel))
                     updateChordState(eventSample, nextNotes, nextCount, nextChannel);
             });
-        if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
+        if (patternScheduler.consumePendingOverflow()) sampler.releaseOwnedVoices(0);
     }
 
     // AMP & TONE: low/mid/high split with persistent one-pole filter states.

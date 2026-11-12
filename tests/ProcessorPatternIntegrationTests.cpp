@@ -238,6 +238,17 @@ int main()
                 std::cerr << "Internal preview did not reach the shared sampler output.\n";
                 result = 1;
             }
+            // Changing MELODY/PATTERN must not steal the helper's preview voice.
+            setParameter(processor, "playMode", 1.0f);
+            juce::AudioBuffer<float> modeSwitchBlock(2, 128);
+            juce::MidiBuffer modeSwitchMidi;
+            processor.processBlock(modeSwitchBlock, modeSwitchMidi);
+            if (rms(modeSwitchBlock, 0, modeSwitchBlock.getNumSamples()) <= 0.001)
+            {
+                std::cerr << "MELODY/PATTERN switch interrupted an independently-owned preview voice.\n";
+                result = 1;
+            }
+
             if (!processor.stopPreview())
             {
                 std::cerr << "Could not enqueue preview Stop.\n";
