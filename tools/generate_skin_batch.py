@@ -195,8 +195,17 @@ def main() -> int:
         return 2
 
     existing_total = registry.get("totalSkins")
-    if not isinstance(existing_total, int) or isinstance(existing_total, bool) or existing_total != len(registry.get("themes", [])):
+    registry_entries = registry.get("themes")
+    if (not isinstance(existing_total, int) or isinstance(existing_total, bool)
+            or not isinstance(registry_entries, list) or existing_total != len(registry_entries)):
         print("Registry totalSkins does not match themes array.", file=sys.stderr)
+        return 2
+    registry_indices = [item.get("index") for item in registry_entries if isinstance(item, dict)]
+    registry_ids = [item.get("id") for item in registry_entries if isinstance(item, dict)]
+    if (len(registry_indices) != existing_total or len(registry_ids) != existing_total
+            or len(set(registry_indices)) != existing_total or len(set(registry_ids)) != existing_total
+            or sorted(registry_indices) != list(range(1, existing_total + 1))):
+        print("Registry IDs/indices are not unique and continuous.", file=sys.stderr)
         return 2
     start = existing_total + 1
     end = start + 49
@@ -207,8 +216,12 @@ def main() -> int:
     if manifest_path.exists():
         try:
             old_pack = json.loads(manifest_path.read_text(encoding="utf-8"))
-            if old_pack.get("startIndex", 0) > existing_total:
-                print("An unmerged skin pack already occupies the next registry range.", file=sys.stderr)
+            old_status = old_pack.get("status")
+            if old_status == "GENERATED_NOT_MERGED":
+                print("An unmerged skin pack already exists; validate and merge it before generating another batch.", file=sys.stderr)
+                return 2
+            if old_status != "MERGED":
+                print("Existing theme_pack_manifest.json has an unknown merge state.", file=sys.stderr)
                 return 2
         except json.JSONDecodeError as exc:
             print(f"Existing pack manifest is invalid: {exc}", file=sys.stderr)
