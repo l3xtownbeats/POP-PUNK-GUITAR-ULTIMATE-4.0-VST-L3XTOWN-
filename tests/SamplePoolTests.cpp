@@ -691,6 +691,24 @@ int main()
         return 1;
     }
 
+    // Internal preview Stop must also terminate one-shot regions; ordinary
+    // owner-0 MIDI NoteOff must preserve their natural one-shot playback.
+    ppgu::sampler::SamplerEngine previewOneShotEngine;
+    previewOneShotEngine.prepare(44100.0);
+    if (!previewOneShotEngine.loadSfz(sfzFile).success
+        || !previewOneShotEngine.noteOnOwned(60, 100, 64, 1, 0.0, 0x50504755u))
+    {
+        std::cerr << "Could not prepare preview one-shot ownership regression.\n";
+        return 1;
+    }
+    previewOneShotEngine.noteOffOwned(60, 1, 0x50504755u);
+    previewOneShotEngine.render(longRender, 0, longRender.getNumSamples());
+    if (previewOneShotEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Preview Stop did not release an SFZ one-shot voice.\n";
+        return 1;
+    }
+
     // M2 acceptance regression: 100 repeated guitar hits at changing
     // velocities must remain finite and avoid abrupt discontinuities.
     ppgu::sampler::SamplerEngine repeatedHitEngine;

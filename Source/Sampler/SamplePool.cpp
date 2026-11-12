@@ -531,7 +531,7 @@ void SamplerEngine::noteOffOwned(int midiNote, int midiChannel, std::uint32_t ow
     for (auto& voice : voices)
         if (voice.region != nullptr && voice.note == midiNote && voice.midiChannel == midiChannel
             && voice.ownerToken == ownerToken && !voice.releasing)
-            if (voice.region->loopMode != 4)
+            if (voice.region->loopMode != 4 || ownerToken != 0)
             {
                 if (voice.region->loopMode == 2 || voice.region->loopMode == 3)
                     voice.direction = 1;
