@@ -1492,3 +1492,25 @@ X — это именно закрытие панели, а не выключе�
 - Добавлена processor integration regression для реального SFZ→processor→shared sampler preview route и Stop; отдельный SamplePool regression проверяет owner isolation при одинаковых pitch/channel.
 
 **Ограничения:** UI Circle/Harmony пока не связан с этим API; пользовательский выбор ключа/аккорда и музыкальная генерация не запускают preview автоматически. Не заявлять готовые Harmony Studio UI, MIDI Workspace или AutoChords. CPU/RAM overhead и FL Studio 20 acceptance ещё не измерены.
+
+
+
+## 2026-11-12 — Downpalm mute PME groove contract
+
+**Статус:** SOURCE CONTRACT ADDED / EXACT-SHA CI PENDING / SAMPLER ARTICULATION AND UI INTEGRATION PENDING.
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+Зафиксировано обязательное жанровое требование пользователя: **Downpalm mute (PME — palm-muted downstrokes)** — ровные восьмые вниз по струнам с приглушением ладонью; никаких upstrokes; целевой быстрый диапазон 160–200 BPM. Референсная стилистика: Green Day, Ramones, Descendents. Это стилистические ориентиры, не копирование конкретных партий.
+
+Добавлен JUCE-free контракт DownpalmMutePattern:
+- ровно 8 равномерных событий на такт 4/4, позиции 0.0–3.5 PPQ с шагом 0.5;
+- направление каждого события фиксировано Down (upstroke невозможно представить этим типом);
+- артикуляция каждого события фиксирована PalmMute;
+- BPM строго валидируется в диапазоне 160–200; velocity 1–127; gate ratio 0–1;
+- gate короче или равен восьмой, чтобы поддерживать чёткое разделение ударов;
+- генерация использует фиксированный массив, без heap allocation и realtime callback.
+
+Добавлен CTest контракт для равномерности сетки, down-only/palm-muted инвариантов, границ BPM и invalid-input/no-write поведения.
+
+**Граница реализации:** это проверяемая модель ритмического рисунка, не готовый слышимый гитарный preset. Её ещё нужно связать с аккордовыми voicings/струнами, реальной PME sample/SFZ артикуляцией и Pattern playback; пока нельзя утверждать, что sampler воспроизводит PME с корректным palm-muted тембром. UI и пресеты также не подключены. Обычные MELODY/PATTERN и MIDI routing этим изменением не меняются.

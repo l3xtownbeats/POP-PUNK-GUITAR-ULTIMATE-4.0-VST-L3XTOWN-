@@ -360,3 +360,13 @@ if(BUILD_TESTING)
     )
     add_test(NAME ppgu_midi_preview_scheduler_contract COMMAND ppgu_midi_preview_scheduler_tests)
 endif()
+
+
+# Canonical pop-punk downpalm mute (PME) groove contract; JUCE-free.
+if(BUILD_TESTING)
+    add_executable(ppgu_downpalm_mute_pattern_tests
+        tests/DownpalmMutePatternTests.cpp
+    )
+    target_include_directories(ppgu_downpalm_mute_pattern_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_downpalm_mute_pattern_contract COMMAND ppgu_downpalm_mute_pattern_tests)
+endif()
