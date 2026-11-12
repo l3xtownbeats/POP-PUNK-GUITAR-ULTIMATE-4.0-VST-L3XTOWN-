@@ -446,3 +446,30 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests:** source/readback inspected. Windows VST3 workflow `43196006789` was IN_PROGRESS on SHA `591e2251...`, including settings source commit `19e3f9...`; exact-SHA build/CTest/pluginval and FL Studio host result pending. `ebf9...` is workspace documentation only.
 
 **Status:** SETTINGS PANEL SOURCE IMPLEMENTED; VALIDATION PENDING.
+
+
+## 2026-11-12 — Mixed-size auxiliary panel layout and fallback alias parity
+
+**Type:** production UI geometry + regression tests.
+**Branch:** `work/ppgu-skin-expansion-53-102`.
+**Commits:**
+- `c94bffc7bef6c4d1f9b4309b5e79f7a4827ce9f7` — `Source/UI/AuxiliaryPanelLayout.cpp`: independent per-column desired/minimum widths and per-row desired/minimum heights; binary-search compact scale; deterministic 1/2-column fit; scroll-grid overflow fallback.
+- `0d66dd171f42441fc4e955eda96aa06101095f72` — `tests/AuxiliaryPanelLayoutTests.cpp`: six heterogeneous panels fit in a 1092×812 workspace without overflow/overlap and each panel retains its own minimum dimensions.
+- `58d0c52e37927723571c2a287ad6ad17c01b36db` — `Source/PluginEditor.cpp`: gallery/settings min heights changed to 500×320 and 420×260.
+- `f7583c7bcfd1533530f0677751c64031da57fb4e` — Settings panel compact geometry.
+- `5631d680e225fe2cd7e20331a8fe9f4319e7f27c` — overflow candidate selection prefers width-fit and rejects unrepresentable geometry.
+- `bc40e2955658986e4430d0a27f725a9111758271` — gallery preview/cards compacted for simultaneous 2×3 display.
+- `4b012497cde0cfffc77e16d107f8d6a2ebbb9267` — `Source/UI/ThemeManager.h`: fallback `Palette::focus` now equals canonical Skin_052 `highlight`.
+- `8b6089c8196cf1e2ec293daa0e39c018def9094d` — `tests/ThemeManagerTests.cpp`: focus/highlight alias parity assertion.
+- `b1e1054bd6dd0020074b440e97b95ae58189d08e` — `SKIN/theme_manifest.json`: registry status reflects 102 merged themes and gallery source implementation; validation still pending.
+- `68b0fa29443855f2e126c2e0511d014ffbbdb37f` — `Source/UI/PPGUMultiWindowWorkspace.cpp`: reset viewport scroll to origin after opening a panel.
+
+**Reason:** global maximum panel minimums unnecessarily constrained every child window and prevented the approved five/six-panel workspace from shrinking efficiently. The fallback compatibility alias also diverged from the loaded Skin_052 mapping.
+
+**Behavior:** rows and columns now size independently based on the panels placed in them. The 2×3 test case covers FX/AutoChords/Import + Gallery + Settings and a sixth panel in the default editor workspace. If the full set cannot fit, every panel remains reachable on a minimum-size scroll grid; width-fit is preferred to avoid needless horizontal scrolling. New panels open at the top of the viewport. Gallery and Settings compact layouts fit their declared minimum heights.
+
+**Compatibility:** no audio, processor, APVTS, MIDI, sampler, preset or SoundBank changes.
+
+**Tests:** source/readback inspected; new pure geometry and fallback alias assertions added. Windows workflow `43196750439` was PENDING on source commit `68b0fa...`; exact-SHA build/CTest/pluginval and FL Studio host acceptance pending. Skin generation/validation run `43195205929` SUCCESS.
+
+**Status:** SOURCE IMPLEMENTED; TESTS ADDED; EXACT-SHA CI PENDING.
