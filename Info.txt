@@ -1369,3 +1369,11 @@ F. Только после этого считать документальны�
 **РЕЗУЛЬТАТ:** SOURCE CHANGE COMMITTED; BUILD/TEST/HOST VERIFICATION PENDING. Не объявлять PASS до workflow результата на точном SHA.  
 **Следующий шаг:** проверить точный CI; затем продолжить внешний shell — выравнивание верхней панели, контраст/состояния контролов и согласованность всех пяти обязательных тем, не переходя к DSP/движку.
 
+
+
+## 2026-11-12 — Journal closure: outer shell section chrome commit reference
+
+**Source implementation commit SHA:** `4381c1d1d60e9769173b89922d52bb0967b98bcf`.  
+**Parent SHA:** `6ea8d5873706890f29496465d6078bd235fee42b`.  
+**Exact-SHA workflow:** run #1044, ID `43180948804`, source SHA `4381c1d1d60e9769173b89922d52bb0967b98bcf`; status was PENDING at journal closure.  
+**Verification boundary:** source diff and both journal entries were read back from GitHub; build/test/pluginval/host result not yet available. This addendum closes the implementation record with the resulting SHA; it does not change production source.

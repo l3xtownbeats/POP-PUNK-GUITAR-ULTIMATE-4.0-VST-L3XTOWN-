@@ -299,3 +299,9 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Status:** SOURCE CHANGE; VALIDATION PENDING.  
 **Next:** exact-SHA CI, then continue only with the approved external shell/theme presentation.
 
+
+
+## Journal closure — outer shell section chrome
+
+**Implementation commit:** `4381c1d1d60e9769173b89922d52bb0967b98bcf` (parent `6ea8d5873706890f29496465d6078bd235fee42b`).
+**Exact-SHA CI:** run #1044 / ID `43180948804`, PENDING at closure. The source patch and INFO/CODE entries were fetched back and checked; no build or host pass is claimed. This commit is a journal-only follow-up and leaves production source unchanged.
