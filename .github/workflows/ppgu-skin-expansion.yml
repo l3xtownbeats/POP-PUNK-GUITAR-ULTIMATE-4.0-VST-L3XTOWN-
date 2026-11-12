@@ -3,7 +3,7 @@ name: PPGU Skin Expansion 53-102
 on:
   push:
     branches:
-      - work/ppgu-skin-expansion-53-102
+      - POP-PUNK-GUITAR-ULTIMATE-VST-REV.17
     paths:
       - .github/workflows/ppgu-skin-expansion.yml
   workflow_dispatch:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: ppgu-skin-expansion-53-102
+  group: ppgu-skin-expansion-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout skin expansion branch
         uses: actions/checkout@v4
         with:
-          ref: work/ppgu-skin-expansion-53-102
+          ref: POP-PUNK-GUITAR-ULTIMATE-VST-REV.17
           fetch-depth: 0
 
       - name: Set up Python
@@ -32,28 +32,41 @@ jobs:
           python-version: '3.12'
 
       - name: Preflight current registry and generator
+        id: preflight
         run: |
-          python tools/generate_skin_batch.py --dry-run
           python - <<'PY'
-          import json
+          import json, os, subprocess, sys
           from pathlib import Path
           registry = json.loads(Path("SKIN/theme_manifest.json").read_text(encoding="utf-8"))
+          pack = json.loads(Path("SKIN/theme_pack_manifest.json").read_text(encoding="utf-8"))
           assert registry["totalSkins"] == len(registry["themes"])
-          assert registry["totalSkins"] == 52, registry["totalSkins"]
           assert registry["defaultSkin"] == "skin-052"
-          print("PREFLIGHT PASS: 52 existing skins; next batch must be 53-102.")
+          if registry["totalSkins"] == 102 and pack.get("status") == "MERGED":
+              print("PREFLIGHT PASS: Skin_053-102 is already merged; validation-only run.")
+              already_merged = "true"
+          else:
+              assert registry["totalSkins"] == 52, registry["totalSkins"]
+              subprocess.run([sys.executable, "tools/generate_skin_batch.py", "--dry-run"], check=True)
+              print("PREFLIGHT PASS: 52 existing skins; next batch must be 53-102.")
+              already_merged = "false"
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"already_merged={already_merged}\\n")
           PY
 
       - name: Generate 50 additional visual themes and artwork assets
+        if: steps.preflight.outputs.already_merged != 'true'
         run: python tools/generate_skin_batch.py
 
       - name: Validate generated pack (G1-G4)
+        if: steps.preflight.outputs.already_merged != 'true'
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
       - name: Merge pack into canonical theme registry
+        if: steps.preflight.outputs.already_merged != 'true'
         run: python tools/merge_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
       - name: Revalidate merged pack and all skin manifests
+        if: steps.preflight.outputs.already_merged != 'true'
         run: |
           python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
           python tests/ValidateSkinManifests.py
@@ -75,6 +88,7 @@ jobs:
           PY
 
       - name: Commit generated skins and canonical registry
+        if: steps.preflight.outputs.already_merged != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -86,9 +100,9 @@ jobs:
             # UI/source commits may land while artwork is generated. Rebase the
             # generated pack commit onto the current branch head before pushing.
             for attempt in 1 2 3; do
-              git fetch origin work/ppgu-skin-expansion-53-102
-              git rebase origin/work/ppgu-skin-expansion-53-102
-              if git push origin HEAD:work/ppgu-skin-expansion-53-102; then
+              git fetch origin POP-PUNK-GUITAR-ULTIMATE-VST-REV.17
+              git rebase origin/POP-PUNK-GUITAR-ULTIMATE-VST-REV.17
+              if git push origin HEAD:POP-PUNK-GUITAR-ULTIMATE-VST-REV.17; then
                 exit 0
               fi
               echo "Push raced with another branch update (attempt $attempt); retrying."
