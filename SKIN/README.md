@@ -15,7 +15,7 @@
 - Favorites, полноценная клавиатурная навигация внутри gallery и фоновой filesystem watcher/rescan не реализованы.
 - `controls.*.grid` остаётся design metadata и не перестраивает реальные JUCE controls.
 - 150 ms animated hot-swap, ECO animation policy и asset memory LRU/budget не подтверждены.
-- Не все декоративные материалы Skin Studio (texture/bezel/crest) загружаются как отдельные runtime layers; текущая gallery использует preview artwork, а editor — semantic palette.
+- Не все декоративные материалы Skin Studio (texture/bezel/crest) загружаются как отдельные runtime layers; gallery использует preview artwork, а editor и все открытые auxiliary panels получают semantic palette через theme-aware panel contract.
 - Runtime control parity по всем обязательным IDs остаётся частичной: отсутствующие LED/Auto Discover/Curator/About не становятся активными только из-за skin manifest. Settings panel имеет реальные UI-only настройки workspace.
 - Windows x64 build/CTest/pluginval и FL Studio 20 host acceptance должны подтверждаться отдельно на точном SHA.
 
