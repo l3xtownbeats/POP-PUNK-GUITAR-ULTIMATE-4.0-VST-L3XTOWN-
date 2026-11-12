@@ -218,3 +218,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Совместимость:** production source unchanged; DSP/processBlock/sampler/MIDI/APVTS/presets/SoundBank untouched.
 **Тесты:** documentation-only. No compile, CTest, pluginval, performance, host or release pass claimed. Exact-SHA CI pending.
 **Статус:** SPECIFICATION CLARIFIED; implementation status unchanged.
+
+
+## 2026-11-12 — README product page coherence refresh
+
+**Тип:** documentation page rewrite; no production symbols changed.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Parent SHA:** `700f56dbbeeab0e7e02559a29dfa9a5d92772b23`.
+**Пути:** `README.md`, `Info.txt`, `CODE.txt`.
+**Суть:** полностью обновлена публичная главная страница GitHub: шапка и навигация, технические характеристики, visual identity NEON PUNK, обязательная skin collection, interface inventory zones A–H, performance targets, one-folder content model, licensing, acceptance tiers and documentation index. Удалены устаревшие/противоречивые сведения и ссылки на main; статусы DESIGN/SOURCE/TEST/HOST/RELEASE разведены.
+**Границы:** source code, DSP, processBlock, sampler, MIDI, APVTS, presets and SoundBank untouched.
+**Проверка:** входной HEAD `700f56dbbeeab0e7e02559a29dfa9a5d92772b23`; README/Info/CODE fetched from the REV.17 branch. CI run `43171568092` for parent SHA was IN_PROGRESS at edit time; exact resulting SHA requires its own CI confirmation. No local compile-check performed for documentation-only change.
+**Статус:** DOCUMENTATION UPDATED; CI PENDING; implementation unchanged.

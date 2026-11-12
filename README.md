@@ -3,15 +3,16 @@
 <img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN AUDIO LAB" width="100%">
 
 # POP PUNK GUITAR ULTIMATE
-### L3XTOWN AUDIO LAB · WINDOWS x64 · VST3 INSTRUMENT
+### SIGNAL FORGE · REV.17 · WINDOWS 10 x64 · VST3 · JUCE 7.0.12 · C++20
 
-**A dedicated pop-punk guitar instrument for riffs, hooks, power chords and high-energy rhythm parts.**
+**A focused pop-punk guitar instrument for riffs, power chords, tight rhythm parts and melodic hooks.**
 
-[GITHUB ACTIONS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions) · [DOWNLOAD CENTER](DOWNLOAD.md) · [ENGINEERING LOG](Info.txt) · [DOCUMENTATION](docs/)
+[REV.17 BRANCH](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/POP-PUNK-GUITAR-ULTIMATE-VST-REV-17) · [ACTIONS / BUILDS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions) · [DOWNLOAD & INSTALL](DOWNLOAD.md) · [ENGINEERING JOURNAL](Info.txt) · [CODE CHANGELOG](CODE.txt) · [DOCUMENTATION INDEX](docs/)
 
-![Windows x64](https://img.shields.io/badge/PLATFORM-Windows%20x64-20242b?style=for-the-badge)
+![Windows x64](https://img.shields.io/badge/PLATFORM-Windows%2010%20x64-20242b?style=for-the-badge)
 ![VST3](https://img.shields.io/badge/FORMAT-VST3-8c245e?style=for-the-badge)
-![C++20](https://img.shields.io/badge/CORE-C%2B%2B20-20242b?style=for-the-badge)
+![JUCE](https://img.shields.io/badge/JUCE-7.0.12-20242b?style=for-the-badge)
+![C++](https://img.shields.io/badge/CORE-C%2B%2B20-20242b?style=for-the-badge)
 ![Status](https://img.shields.io/badge/STATUS-ACTIVE%20DEVELOPMENT-d69b28?style=for-the-badge)
 
 **PLAY. CREATE. ROCK.**
@@ -20,165 +21,164 @@
 
 ---
 
-## Product
+## Project status — read before downloading
 
-**POP PUNK GUITAR ULTIMATE (PPGU)** is an independently developed Windows VST3 guitar instrument for pop-punk, skate-punk, melodic punk and alternative-rock production. Its two complementary workflows are:
+PPGU is an actively developed Windows VST3 instrument. This repository page distinguishes **product intent**, **source presence**, **automated test evidence**, and **manual host acceptance**. A specification or UI mockup is not proof that a feature is implemented.
 
-- **MELODY** — chromatic MIDI keyboard playing for riffs, octave lines, hooks and lead parts.
-- **PATTERN** — chord-oriented rhythm workflow intended for tight downstrokes, palm-muted verses, open choruses, offbeats and arpeggiated parts.
+- **Active development branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`
+- **Documentation baseline before this README update:** `700f56dbbeeab0e7e02559a29dfa9a5d92772b23`
+- **Current engineering specification:** SIGNAL FORGE v10 + v10.1 engineering clarification.
+- **Latest CI evidence before this README update:** run [#43169004397](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43169004397), SUCCESS on parent SHA `881732c44214ea9160150fc69cd77ad7d85d5bc0`.
+- **CI for the current pre-README SHA:** run [#43171568092](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43171568092) was IN PROGRESS when this page was refreshed. Do not infer a result until the run completes and its `head_sha` matches the checked-out commit.
+- **FL Studio 20 HOST VERIFIED:** not yet claimed.
+- **Performance targets:** targets only until a reproducible measurement report is attached.
+- **Release status:** no current-HEAD release package is declared approved by this page.
 
-The product direction is immediate playability, a focused control surface and an efficient sample-based engine suitable for songwriting on modest Windows systems.
+A green run on an earlier SHA does not certify a later commit. Release claims require build, full CTest, pluginval, package audit and host evidence on the same release-candidate SHA.
 
-> **Development status:** this is an active engineering project, not a declared final commercial release. The status table distinguishes implemented code from features that have passed release acceptance.
+## Product concept and playing workflow
 
-## Current build status
+**POP PUNK GUITAR ULTIMATE (PPGU)** is designed as a sample-based virtual guitar instrument for pop-punk, skate-punk, melodic punk, emo and alternative rock.
 
-**Source HEAD and authoritative engineering status:** see the latest dated entry in [Info.txt](Info.txt); CI status is always evaluated against the exact source SHA.
+- **MELODY:** chromatic MIDI playing for riffs, octave lines, hooks and lead parts.
+- **PATTERN:** chord/rhythm-oriented playing for downstrokes, palm-muted verses, open choruses, offbeats and arpeggiated parts.
+- **PUNK GROUP:** planned/required playing-mode workflow; its production completeness must be established from source and tests, not from this description.
+- **Sound design direction:** tight palm mutes, bright open power chords, driven rhythm guitars, clean picked parts, octave hooks and appropriately licensed acoustic/nylon textures.
 
-The latest recorded C++ source correction is the JUCE 7.0.12 `juce::var::getProperty` call fix in `Source/UI/ThemeManager.cpp`, commit `8bd10b20cc9303452d19a46fcf4edea3e11488f1`. It corrects the two-argument API usage in Skin Studio palette mapping. The fix is committed source, not a verified Windows build.
+Functional reference direction includes the playability and articulation concepts of Session Guitarist Sunburst Deluxe. It is a behaviour reference only: no proprietary code, samples, graphics or other protected assets are included or implied.
 
-**Latest detailed CI evidence:** run #963 (ID `43134831986`) on the previous source SHA `34f074057b9e7572b60e64549de7006bc2307f61` passed configure but failed while compiling VST3/test executables with MSVC C2660 in ThemeManager. CTest, VST3 locate, pluginval strictness 5 and packaging were skipped. The source fix `8bd10b2...` has no confirmed successful rerun in the available evidence. Its combined-status query returned no status checks; the available commit workflow lookup is PR-triggered only and returned no entries, which does not establish the absence of push-triggered runs.
+## Visual identity and skin system
 
-Therefore Windows Release build, all CTest targets, pluginval strictness 5 and VST3 packaging remain **PENDING / NOT VERIFIED** for the fixed source. FL Studio 20 acceptance and CPU/RAM profiling are also pending. No COMPLETE ZIP is declared available.
+### Intended primary skin — NEON PUNK
 
-- [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
-- [Current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
-- [Single engineering journal — Info.txt](Info.txt)
+The accepted SIGNAL FORGE design direction is:
+- black / dark-metal chassis and restrained machined-metal surfaces;
+- electric neon-blue outlines, key illumination and signal accents;
+- punk paint splashes, textured graphic details and the PPGU crown/monogram;
+- high-contrast typography, readable labels, professional rotary controls, switches and LED indicators;
+- clear hierarchy between preset browsing, playing controls, effects, amplifier section, keyboard and performance status.
 
-No COMPLETE ZIP is declared available until the current source build, all registered regression tests, pluginval and package validation pass. FL Studio 20 acceptance remains a separate manual gate.
+### Required initial skin collection
 
-#832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
+| Skin | Visual direction | Default |
+|---|---|---:|
+| **NEON PUNK** | Black metal, neon blue, punk textures and PPGU crown | **Yes** |
+| **BLACK METAL** | Restrained black / graphite minimalism | No |
+| **CYBER BLUE** | Cool cybernetic blue lighting | No |
+| **DARK INDUSTRIAL** | Industrial dark metal and utility styling | No |
+| **CLASSIC STUDIO** | Professional neutral studio surface | No |
 
-- [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
-- [Current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
-- [Single engineering journal — Info.txt](Info.txt)
+The skin is a visual data layer, not a separate plugin build. All skins must share the same controls, APVTS mappings, DSP, sampler, MIDI behaviour and additional-window functionality. User-added skins are intended to be discovered as data packages without rebuilding the plugin.
 
-No COMPLETE ZIP is declared available until the current source build, all registered regression tests, pluginval and package validation pass. FL Studio 20 acceptance remains a separate manual gate.
+**Implementation truth:** the source audit previously found a palette-oriented skin selector and a registry of 52 entries, but did not prove the complete v10 contract. In particular, the full SKINS Gallery, exact five-skin naming/default mapping, asset lifecycle, hot-swap timing, persistence, zero-residue and all-skin control parity remain acceptance items until source-level implementation and tests prove them. Do not treat a manifest entry or preview image as a working skin.
 
-### Previous package
+## Interface inventory — zones A–H
 
-[Download previous Windows x64 VST3 artifact](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip) · [Previous successful run](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
+The required interface inventory is preserved across all skins:
 
-This package comes from an earlier source revision and layout. Do not confuse it with current HEAD.
-
-## Premium plugin interface
-
-The actual JUCE editor now has a premium **Blackout Voltage** direction: matte-black graphite surfaces, machined-metal rotary controls, acid-lime primary accents and electric-teal signal highlights. The layout is built around the guitar workflow rather than a decorative concept mockup.
-
-The editor retains the existing working control surface and APVTS attachments:
-- Factory preset catalog selector, category filter and search.
-- MELODY / PATTERN mode controls.
-- Licensed SFZ loader and library status.
-- Nine rotary controls and seven effect switches.
-- MIDI keyboard and playback sync selection.
-
-A real **SKIN** menu is connected to ThemeManager. It loads validated palettes from the `Skins` folder beside the installed `.vst3` bundle, saves the selected skin, and opens with **Ctrl+K**. The default palette is Blackout Voltage; the registry contains 52 registered skin entries (including the Skin Studio Carbon Relay entry); runtime acceptance for the latest source revision remains pending. Theme changes are visual-only and do not alter APVTS IDs, DSP, sampler, MIDI behaviour or audio.
-
-The hero guitar hardware illustration is drawn by JUCE Graphics. Manifest preview/hero/texture files are not required by the palette-only runtime and are not claimed as shipped assets. Runtime switching, persistence, fallback, contrast and audio invariance require a successful current Windows CI run and manual FL Studio 20 acceptance. No concept artwork is presented as a host screenshot.
-
-## Implementation status
-
-| Area | Repository evidence | Release status |
-|---|---|---|
-| VST3 / JUCE project | CMake project and JUCE processor/editor source | Current source build / test / package validation not verified for current HEAD |
-| SFZ/WAV sampler | Parser/playback path, metadata and streaming components | Full-library and stress acceptance pending |
-| Voice management | 64 preallocated sampler voice slots | 64-voice stress acceptance pending |
-| Streaming | Background page streaming and fixed page-cache components | Lifecycle / recovery stress pending |
-| MIDI / editor | Melody and Pattern controls, MIDI keyboard, APVTS attachments | Current-host acceptance pending |
-| Preset catalogue | 300 authored definitions (150 Melody + 150 Pattern) | Not 300 confirmed playable presets |
-| Pattern runtime | Scheduler/transport components | End-to-end sampler playback acceptance pending |
-| DSP | Compressor/EQ/Distortion/Chorus/Delay/Reverb/Cabinet controls and DSP components | Signal-quality and host acceptance pending |
-| SoundBank | Redistributable sample sources and license metadata in build pipeline | Current package must be verified from CI artifact |
-| UI | Blackout Voltage premium shell, SKIN selector and 52 registered skin entries | Current CI / host acceptance pending |
-| Sound Hunter | Policy and registry contract tooling | Production discovery/curation pending |
-| FL Studio 20 | Target host | Manual acceptance on current HEAD not confirmed |
-| CPU / RAM | Defined engineering targets | No release-grade measurements claimed |
-
-### Catalogue count is not playable count
-
-The catalogue contains **300 preset definitions**. This is not a claim that all 300 are fully mapped, audible and accepted in the running plugin. The release report must state the verified playable count as **N / 300** after runtime audition and validation.
-
-## Sound and instrument design
-
-Target sound palette:
-
-- Tight palm-muted eighth notes and low-string chugs.
-- Bright open power chords and wide chorus rhythm guitars.
-- Crunch and driven rhythm tones.
-- Clean picked patterns, octave hooks and melodic leads.
-- Acoustic / nylon textures where licensed source material supports them.
-
-The architecture combines sample playback and DSP processing. The audio thread is designed to avoid file/network I/O, blocking locks, dynamic allocation after note start and GUI work. Streaming, ownership and snapshot reclamation remain explicit QA gates.
-
-### Factory catalogue and preset formats
-
-- [300-definition factory catalogue](presets/factory_bank_300.json)
-- [Factory bank data](presets/factory_preset_bank_v1.json)
-- [Melody example](presets/examples/Example-Melody.ppgm)
-- [Pattern example](presets/examples/Example-Pattern.ppgp)
-- [Preset readiness audit](docs/PRESET_BANK_4_0_READINESS_RU.md)
-
-The canonical user-bank conversion format is .pgp; .ppg is not accepted. User imports and discovered content belong in the user library outside the plugin binary.
-
-## Technical profile
-
-| Specification | Current project / target |
+| Zone | Required content |
 |---|---|
-| Product | Windows VST3 virtual guitar instrument |
-| Target OS | Windows 10 version 1809+ x64 |
-| Target DAW | FL Studio 20 |
-| Language | C++20 |
-| Current JUCE pin | 7.0.12 |
-| Build system | CMake; current minimum differs from REV 13.0 target |
-| Compiler target | MSVC / Visual Studio 2022, x64 |
-| Audio validation profile | 48 kHz, 64-sample buffer |
-| MIDI | Note, velocity and channel mapping |
-| Sample format | WAV mapped through SFZ |
-| Sampler capacity | 64 physical voice slots; default musical polyphony target 32 |
-| UI | Blackout Voltage premium shell with visual-only palette switching |
-| Package target | VST3 + SOUNDBANK + PRESETS + sibling Skins + runtime resources and assets |
+| **A — TOP BAR** | PPGU crown/logo, preset previous/next, favourite, preset name/category, statistics, search, SKINS, Import Guitar, Auto Discover, Curator, Settings, About |
+| **B — PRESET BROWSER** | BROWSER / FAVORITES / CATEGORIES; eight named sound categories and counts; preset artwork, title, description and information |
+| **C — PLAYING CORE** | MELODY / PATTERN / PUNK GROUP; hero artwork; nine rotary controls with their existing APVTS mappings |
+| **D — FX CHAIN** | Compressor, EQ, Distortion, Chorus, Delay, Reverb and Cabinet IR with truthful on/off state |
+| **E — AUTOCHORDS** | On/off, chord mode, key, pattern editor, speed, current chord, fretboard, progression pads, preview and options |
+| **F — FX EDIT** | Effect selection, power, effect presets, mapped parameters, gain-reduction meter, processing graph and mix |
+| **G — AMP & TONE** | Amp model, Gain/Bass/Treble and level indication |
+| **H — PERFORMANCE / KEYBOARD** | Pitch/Mod, MIDI keyboard, real key-reactive glow, chord/note/transport/tempo/sync/volume and status strip |
 
-CPU targets, RAM ceilings, cold-start time and latency stability are engineering acceptance targets—not measured product claims—until the current release build is profiled on the reference machine.
+The inventory is a completeness contract, not a statement that every panel is already implemented. A control is accepted only when its visible element, action, mapping (where applicable) and test/status are documented together. Existing APVTS IDs and parameter semantics are not to be renamed for visual convenience.
 
-## SoundBank, licensing and provenance
+## Core architecture and technical characteristics
 
-Only sample content whose exact license permits redistribution inside a third-party instrument may ship. Every included bank must retain provenance, license evidence and checksum information.
+| Item | Target / contract |
+|---|---|
+| Plugin format | VST3 instrument |
+| OS / host | Windows 10 x64; FL Studio 20 target |
+| Framework / language | JUCE 7.0.12; C++20 |
+| Build | CMake; MSVC x64 Release |
+| Sample source format | WAV through SFZ mapping |
+| Voice capacity | 64 preallocated sampler voice slots; default musical polyphony target 32 |
+| Audio callback | No file/network I/O, GUI work, blocking filesystem access or unbounded allocation |
+| Library | Background indexing/streaming, bounded resident page cache and validated resource paths |
+| Presets | Factory definitions and user-bank formats; playable count must be runtime-verified |
+| Skin assets | Manifest-driven, validated, bounded cache; background decode; safe fallback |
+| Content root | Portable `PPGU/` home with VST3, SOUNDBANK, PRESETS, SKINS, Resources and Assets |
+| Compatibility | Existing DSP, sampler, MIDI routing and APVTS contract preserved during skin work |
 
-- [Sample-library sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
-- [Meta Open Sound clearance notes](licenses/META_OPEN_SOUND_CLEARANCE.md)
-- [SoundBank engine audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
-- [Streaming/page-cache design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
+### Performance targets — not yet measured claims
 
-Commercial Kontakt libraries, proprietary stems and recordings are not included or implied by the style references.
+- First audible response target: ≤50 ms for an already-loaded preset and resident preview data.
+- Indexed preset switch target: ≤300 ms p95 without blocking the audio thread.
+- Skin swap target: approximately 150 ms p95 with assets already decoded.
+- CPU targets: ≤2% at 4 voices and ≤15% at 64 voices under a fixed, documented benchmark profile.
+- RAM targets: ≤60 MB idle and ≤512 MB with the complete resident bank under a documented measurement profile.
+- Audio callback peak target: ≤60% of the available buffer time at 128 samples.
+- Skin work must not introduce audio-thread allocations or alter rendered audio. UI CPU, paint time and skin-owned memory are measured separately; “zero footprint” is verified by methodology, not assumed.
 
-## Engineering and release gates
+## Coherence, portable content and expansion
 
-1. Resolve and verify the generated JUCE binary-data build regression.
-2. Complete Windows x64 Release build for the current source SHA.
-3. Run the full CTest suite.
-4. Locate and validate the VST3 bundle.
-5. Pass pluginval at strictness level 5.
-6. Verify the exact package tree, sample count, licenses, manifests and checksums.
-7. Perform manual FL Studio 20 host acceptance.
-8. Measure CPU/RAM and complete outstanding streaming, voice and lifecycle stress tests.
-9. Only then publish the canonical archive:
+The intended portable content home is:
 
-**POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip**
+```text
+PPGU/
+├── VST3/        plugin bundle (or standard Windows VST3 install)
+├── SOUNDBANK/   WAV, SFZ, provenance, licenses and checksums
+├── PRESETS/     factory and user preset data
+├── SKINS/       built-in and user-added skin packages
+├── Resources/   manifests, documentation and legal notices
+└── Assets/      shared graphics and runtime assets
+```
 
-The exact package layout is documented in [DOWNLOAD.md](DOWNLOAD.md); the runtime `Skins/` directory must sit beside the VST3 bundle. An artifact from an older commit or earlier successful run does not satisfy current-HEAD release gates.
+On Windows, standard VST3 installation and portable content-root mode must both be supported. The content resolver must use validated paths and safe fallback behaviour. “Unlimited” means no compile-time count ceiling for user libraries/skins; decoded memory and streaming caches remain bounded by configurable quotas.
 
-## Documentation
+A release package must be relocatable as a complete folder, reject duplicate/unsafe paths, verify manifests and checksums, and contain only redistributable content. New sample libraries and skins are data additions, not reasons to fork the plugin.
 
-- [Download center and installation](DOWNLOAD.md)
-- [Single engineering journal / authoritative status](Info.txt)
-- [Product and engine specification](docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
-- [Production priorities](docs/PRODUCTION_PRIORITIES_4_0.md)
+## Licensing and open-source policy
+
+- Reuse of ideas and UX patterns is encouraged.
+- Open-source code may be embedded only after checking the exact version, SPDX license, commercial/closed-source compatibility, notices, attribution and linking obligations.
+- Proprietary product code, samples, artwork and protected assets are not copied.
+- Unclear or incompatible license means the component is not shipped.
+- Every embedded third-party block must be listed in the Open Source Ledger and in the package notices.
+
+See [sample-library sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md) and the `licenses/` directory.
+
+## Engineering protocol and acceptance
+
+The binding development standard is **SIGNAL FORGE v10 MASTER**, clarified by **v10.1 Engineering Clarification**. The universal work cycle is:
+
+**ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ**
+
+One commit addresses one cause. Every change updates `Info.txt` and `CODE.txt` synchronously. The branch is updated with a non-forced, expected-SHA guard. A task is not complete merely because it is designed or documented.
+
+Release acceptance is grouped into:
+1. **Integrity & safety:** schemas, manifests, path validation, licenses, checksums.
+2. **Build:** Windows x64 configure, compile, link and VST3 validation.
+3. **Correctness:** full CTest, lifecycle, fallback, control parity and regression tests.
+4. **Realtime:** callback allocation/timing, dropout and audio-identity tests.
+5. **UI:** key reactivity, DPI, panel/window behaviour and approved mockup comparison.
+6. **Performance:** reproducible CPU/RAM/paint/hot-swap/streaming measurements.
+7. **Host & package:** pluginval strictness 5, FL Studio 20 manual test, relocation smoke test and ZIP audit.
+
+A release gate must use one exact source SHA and a package manifest tied to that SHA. CI success alone does not establish FL Studio 20 host verification.
+
+## Documentation and project records
+
+- [SIGNAL FORGE v10.1 engineering clarification](docs/PPGU_SIGNAL_FORGE_V10_1_ENGINEERING_CLARIFICATION_RU.md)
+- [SIGNAL FORGE v7 skin-system master record](docs/PPGU_SIGNAL_FORGE_V7_MASTER_RU.md)
+- [Single authoritative engineering journal — Info.txt](Info.txt)
+- [Append-only code change index — CODE.txt](CODE.txt)
+- [Download and installation status](DOWNLOAD.md)
 - [Preset bank readiness](docs/PRESET_BANK_4_0_READINESS_RU.md)
-- [SoundBank audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
-- [Skin/UI gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
-- [Sample sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
+- [SoundBank code audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
+- [Sample streaming/page-cache design](docs/SAMPLE_STREAMING_PAGE_CACHE_DESIGN_RU.md)
+- [Sample-library sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
+- [Skin engine gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
+- [Master product specification](docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
+- [Production priorities](docs/PRODUCTION_PRIORITIES_4_0.md)
 
-**Specification authority:** MASTER PROMPT REV 16.2 UNIFIED (FINAL) is stored in [docs/PPGU_MASTER_PROMPT_RU.md](docs/PPGU_MASTER_PROMPT_RU.md) and supersedes REV 10/13/14/15.x. Factual project status and conflict resolution remain governed by [Info.txt](Info.txt), then the control inventory/schema, then REV 16.2.
+**Authority order:** actual source tree and build configuration establish what is implemented; tests/CI establish what is verified; `Info.txt` records project status and decisions; `CODE.txt` indexes source changes; specifications define intended behaviour. Any disagreement is recorded and investigated, never silently reconciled by editing history.
 
 ---
 

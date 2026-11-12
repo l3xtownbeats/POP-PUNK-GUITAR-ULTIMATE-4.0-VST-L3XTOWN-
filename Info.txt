@@ -1283,3 +1283,17 @@ F. Только после этого считать документальны�
 **Проверка:** GitHub branch HEAD verified before edit; local Windows compile-check не применим к документационному изменению и в этой среде не выполнялся. CI exact resulting SHA — PENDING.
 **Статус:** SPECIFICATION CLARIFIED; IMPLEMENTATION UNCHANGED; CI PENDING.
 **Следующий шаг:** проверить CI точного SHA; затем выполнять отдельные source commits по tiered gates и A6.
+
+
+## 2026-11-12 — README product page coherence refresh
+
+**Тип:** documentation / public project-page synchronization.
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+**Parent SHA:** `700f56dbbeeab0e7e02559a29dfa9a5d92772b23`.
+**Пути:** `README.md`, `Info.txt`, `CODE.txt`.
+**Причина:** пользователь потребовал полностью поддерживать GitHub-страницу продукта — шапку, характеристики, визуальную концепцию, функциональную опись и актуальный статус — синхронно с принятыми спецификациями и фактическим состоянием исходников.
+**Изменение:** README полностью переписан как единая актуальная страница продукта: обновлены header/badges/navigation, ветка REV.17, текущий CI статус, визуальный стандарт NEON PUNK, пять обязательных skins, зоны A–H, технический профиль, performance targets, portable PPGU root, licensing, release gates и ссылки на журналы/спецификации. Устаревшие ссылки на main и противоречивое описание Blackout Voltage как основного визуального направления удалены. Нереализованные и непроверенные возможности явно обозначены как требования/acceptance items, а не готовые функции.
+**Проверка:** GitHub branch HEAD прочитан перед изменением; README и журналы прочитаны. На момент обновления CI run `43171568092` для parent SHA `700f56dbbeeab0e7e02559a29dfa9a5d92772b23` имел статус IN_PROGRESS; предыдущий SUCCESS относится к SHA `881732c44214ea9160150fc69cd77ad7d85d5bc0`. Ни один новый build/host/performance pass не заявлен. После commit повторно проверить README, INFO, CODE и CI точного SHA.
+**Границы:** documentation only; production source, DSP, sampler, MIDI, APVTS, presets, SoundBank и UI code не менялись.
+**Статус:** README SYNCHRONIZED; CI PENDING; HOST VERIFICATION PENDING.
+**Следующий шаг:** проверять точный CI SHA, затем продолжить реализацию по A6 и после каждого изменения обновлять README при изменении публичного статуса/характеристик, а Info/CODE — при каждом коммите.
