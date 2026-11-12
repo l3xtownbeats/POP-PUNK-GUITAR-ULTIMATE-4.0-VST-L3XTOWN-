@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9`
+Последний commit перед текущей записью: `4dba81f487c2c508661afee48676cc719f32ad9c`
 
 ## 1. Назначение и продукт
 
@@ -664,3 +664,23 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 3. R28 соблюдён: код движка, APVTS, MIDI, SoundBank, skins и UI не менялся.
 4. REV 16.0 — MERGED как файл в main; технические gates остаются PENDING.
 5. Не сделаны и явно перечислены выше: полная skin inventory audit, Windows build, CTest, pluginval, package, host acceptance, profiling.
+
+
+## 2026-11-12 — Устранение устаревших ссылок и статусов загрузки
+
+**Статус:** DOCUMENTATION CORRECTED / TECHNICAL VALIDATION PENDING.  
+**Коммиты:** README `00051fcc41fae358f1b8508aa67648d2a4c43d7e`; DOWNLOAD.md `4dba81f487c2c508661afee48676cc719f32ad9c`.
+
+**Факт аудита:** предыдущие README/DOWNLOAD содержали несогласованные указатели: README называл старый workflow run #832 текущей сборкой и ссылался на старый source SHA; DOWNLOAD.md представлял run #832 как текущий release candidate, описывал устаревшее число «51 palette manifests» и утверждал runtime package layout без подтверждённого актуального COMPLETE ZIP. Эти утверждения могли направить пользователя к артефакту/сборке не того SHA.
+
+**Исправлено:**
+- README ведёт на общий Actions и актуальную ветку main, а не на устаревший run/commit.
+- Формулировка CI ограничена фактически проверенным: пустой combined status и PR-only workflow lookup не трактуются как отсутствие всех runs или PASS.
+- DOWNLOAD.md переписан: текущий COMPLETE ZIP явно не подтверждён; старый artifact помечен историческим; runtime `Skins/` показан как требуемая структура рядом с VST3, а не как уже собранный пакет.
+- Удалены устаревшие фиксированные заявления о 51 теме. Число должно определяться authoritative registry/schema.
+
+**Не выполнено:** Windows Release build, все CTest targets, pluginval strictness 5, package assertions/ZIP, FL Studio 20 acceptance и CPU/RAM profiling. Аудио-код, APVTS, MIDI, SoundBank и skin data не менялись.
+
+**R28 non-goals:** только устранение неверных ссылок/статусов в документации. Никакие build, UI, audio, skin schema/registry или packaging workflow изменения не заявляются.
+
+**Следующий блокер по R24:** закончить полную файловую инвентаризацию всех skin folders и согласованность legacy schema / Skin Studio schema / registry / validators; затем получить фактический Windows CI на точном SHA.
