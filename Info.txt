@@ -1404,3 +1404,42 @@ F. Только после этого считать документальны�
 **РЕЗУЛЬТАТ:** ZONE F SPECIFIED; UI IMPLEMENTATION / BUILD / CTEST / PLUGINVAL / FL STUDIO 20 HOST CHECK PENDING. Production source unchanged.
 
 **Следующий шаг:** отдельная source-задача — подключить F к существующим APVTS attachments и разместить в центральной области; перед этим проверить реальное использование каждого параметра и геометрию на минимальном размере окна.
+
+
+## 2026-11-12 — REV.17 restart checkpoint: Zone F UI implementation queue
+
+**Тип:** persistent work checkpoint / implementation task register.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Confirmed branch tip:** `c147c9e28d0117dfe035fe801716eaeaf0e3f9ab` (branch compare against this SHA: identical; ahead 0 / behind 0).  
+**Source baseline blobs:** `PluginEditor.h 12a3454218a20f55144987148803b89d861f4705`; `PluginEditor.cpp ea9f8074deb545255cdbd0cec15cdb8a6ea8ec6a`; `PluginProcessor.cpp 0e3e88fece554f82f0ca8d70fb01ea79be122eef`; `CMakeLists.txt 6c4123aa4146bff27cd1d956c3dc98beda671de2`.  
+**Specification anchor:** `docs/PPGU_MASTER_SPEC_PACKAGE_RU.md`, §4.4 Zone F.  
+**Purpose:** this queue is a durable restart point if the session, browser tab, network, or working context is interrupted. It records unfinished work, exact starting branch/SHA, files, constraints, and next actions. Update it as tasks are completed; do not erase historical entries.
+
+### ПРОВЕРКА
+- Branch `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17` exists and currently resolves to `c147c9e28d0117dfe035fe801716eaeaf0e3f9ab`; compare reports identical to the last Zone F journal commit.
+- Zone F is present in the accepted specification but not yet present as a visible control section in `PluginEditor.h/.cpp`.
+- Existing APVTS declarations and runtime scheduler reads were located for `patternSlot`, `patternLength`, `syncMode`, `bpm`, and `startOnFirstChord`. Existing `startModeBox` is already attached to `syncMode`; existing AutoChords panel also binds `patternSlot`.
+- Current main editor has three external zones and a 3×3 knob matrix. Current editor startup/resize limits are 1120×840 and 980×800..1600×1100, which differ from the approved 1600×900 / 1200×700..2400×1500 visual-shell target and require a separate resize/layout compatibility pass.
+
+### АНАЛИЗ
+- Zone F can be implemented as a logical strip inside the central zone, not a fourth external column.
+- Use only existing APVTS IDs and real attachments. No new IDs, no invented controls, no changes to scheduler, processBlock, MIDI, sampler, DSP, presets, or SoundBank.
+- Keep swing/humanize/accent in the existing nine-knob matrix; do not duplicate them in F.
+- Pattern-specific controls must be visibly disabled in MELODY. In PATTERN, enable only controls with verified bindings.
+- Host/Host Start tempo is read-only; Internal tempo is editable. If DAW tempo is unavailable to the UI, show the existing fallback BPM only as such; do not invent host tempo.
+- Re-evaluate central layout at minimum supported dimensions before accepting geometry.
+
+### OPEN TASKS — resume in this order
+1. **T-F1 — Binding audit:** verify exact parameter choice labels/defaults and runtime consumption for all five approved F controls; inspect mode selection callbacks and any duplicate attachment side effects.
+2. **T-F2 — Zone F source implementation:** add Pattern Slot, Pattern Length, Sync Mode (reuse existing control), BPM, and Start on First Chord controls in a compact central strip; create only APVTS attachments to existing IDs; theme every surface via palette tokens; preserve all existing IDs/semantics.
+3. **T-F3 — Mode/sync state behavior:** disable Pattern-only controls in MELODY; enable in PATTERN; make BPM editable only for Internal sync and read-only for Host/Host Start; avoid overwriting DAW transport state.
+4. **T-F4 — Layout review:** keep the three-column outer shell; fit F without overlapping the 3×3 knobs, section headers, keyboard, or performance display; check 1200×700 minimum and default/maximum sizes. Reconcile the existing 1120×840/980×800..1600×1100 bounds with approved 1600×900 and 1200×700..2400×1500 contract in a separate explicit resize change.
+5. **T-F5 — Static verification:** inspect diff; verify each attachment ID exists; verify no duplicate/missing component registration, no accidental mode index 2, no hard-coded theme colors, and no audio/DSP file changes.
+6. **T-F6 — Regression/build:** run available unit/CTest suite, Windows x64 Release build, pluginval strictness 5; inspect exact-SHA GitHub Actions run and logs.
+7. **T-F7 — Host acceptance:** visually inspect and operate in FL Studio 20 at minimum/default/resized sizes; verify preset switching, MELODY/PATTERN switching, sync modes, and parameter persistence.
+8. **T-F8 — Closeout:** append actual findings to INFO and CODE, commit source and journals on this branch, read back files/commit diff, then check CI on exact resulting SHA. Never mark tests or host acceptance PASS without evidence.
+
+### CURRENT STOP POINT
+No Zone F production UI code has yet been changed in this checkpoint. The next action is T-F1, then T-F2. Documentation-only checkpoint; build/test/host validation not run. Do not treat this entry as implementation.
+
+**Статус:** TASK REGISTER SAVED; ZONE F SOURCE IMPLEMENTATION PENDING.
