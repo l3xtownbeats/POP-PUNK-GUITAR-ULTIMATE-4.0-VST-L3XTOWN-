@@ -383,3 +383,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Validation:** exact-SHA run `43188981213` SUCCESS; Windows x64 Release PASS; CTest 14/14 PASS; pluginval strictness 5 PASS.
 - **Boundary:** visual-only source changes; no APVTS/audio/MIDI/sampler/scheduler/preset/SoundBank changes.
 - **Still open:** hardcoded colours in Import Guitar, FX Edit and AutoChords auxiliary panels; runtime skin-switch visual QA; FL Studio 20 host acceptance.
+
+## 2026-11-12 — BUILD GUIDE compatibility audit and Flanger UI parity task
+
+- Audited user-supplied BUILD GUIDE 1.0.0 against current CMake, processor and editor sources.
+- Confirmed current architecture is `SamplerEngine` + `PatternScheduler`; no `KarplusSynth` implementation exists in the active branch. Do not transplant alternate engine code.
+- Confirmed AutoChords panel is explicitly setup-only and disabled; engine behavior remains NOT IMPLEMENTED.
+- Confirmed current factory catalog is 300 presets, not 8; runtime skin registry is not the guide's five-file-only layout.
+- Confirmed processor has real `flangerOn` APVTS parameter and active Flanger DSP, while main editor FX rack has only seven toggles. FX Edit already contains Flanger parameter controls.
+- **Approved next source fix:** add FLANGER as the eighth main FX rack toggle, bound to existing `flangerOn`; no new APVTS IDs or DSP changes.
+- Build-guide status: useful checklist/reference, not an authoritative source snapshot. Do not claim its unimplemented features.
