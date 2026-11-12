@@ -1286,3 +1286,14 @@ User explicitly reaffirmed that finding and downloading new guitar libraries is 
 - **VCSL:** CC0 repository lead, but guitar-family content has not been confirmed; do not import unrelated orchestral content.
 
 **Download/integration truth:** this research pass found and documented candidates; it did not download or integrate these new candidate archives. Next intake priority is to obtain actual archives where accessible, preserve source provenance, inspect the exact license, compute SHA-256, validate SFZ/WAV mappings and sample quality, then ingest only legally cleared guitar assets. No candidate is to be called “downloaded”, “included” or “integrated” before those steps are complete.
+
+
+## 2026-11-12 — расширен критерий поиска: commercial / royalty-free / потенциально лицензируемые банки
+
+Пользователь попросил искать не только бесплатные открытые банки, но также коммерческие библиотеки и royalty-free источники, включая те, где на странице не найден прямой запрет на бесплатное использование. Это расширяет DISCOVERY, но не отменяет legal gate для поставки сэмплов внутри PPGU.
+
+Зафиксировано в `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md` (commit `6f68ab51ce5b8e94af094a5889de078eeb67a9a0`): три статуса GREEN OPEN / YELLOW COMMERCIAL CLEARANCE / RED MUSIC-ONLY. Отсутствие запрета не равно разрешению на redistribution/embedding. Royalty-free music-use не равно праву включать исходные WAV в sample-based VST3. Для коммерческого банка требуется отдельная письменная лицензия на embedded sample distribution либо открытая лицензия с правом распространения конкретных аудиоактивов. Hypersamples и Audiotent EULA приведены как примеры ограничений; Meta Open Sound CC0 и VCSL CC0 — примеры более подходящих разрешительных моделей.
+
+Поиск расширен на dry DI, palm-muted power chords, chugs, punk riffs, octave hooks, open chords, акустику, clean/crunch/distorted multisamples, one-shots и performance phrases.
+
+Фактический статус этого раунда: изучены лицензионные модели и обновлён индекс. Новые коммерческие банки не скачаны, не оплачены и не интегрированы; новых SHA-256 и approved assets нет. Не считать отсутствие запрета на сайте достаточным основанием для включения в дистрибутив.
