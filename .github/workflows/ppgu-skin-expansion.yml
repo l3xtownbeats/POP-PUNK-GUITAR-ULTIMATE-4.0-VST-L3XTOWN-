@@ -83,7 +83,19 @@ jobs:
             echo "No generated skin changes to commit."
           else
             git commit -m "feat(skins): add premium visual themes 53-102"
-            git push origin HEAD:work/ppgu-skin-expansion-53-102
+            # UI/source commits may land while artwork is generated. Rebase the
+            # generated pack commit onto the current branch head before pushing.
+            for attempt in 1 2 3; do
+              git fetch origin work/ppgu-skin-expansion-53-102
+              git rebase origin/work/ppgu-skin-expansion-53-102
+              if git push origin HEAD:work/ppgu-skin-expansion-53-102; then
+                exit 0
+              fi
+              echo "Push raced with another branch update (attempt $attempt); retrying."
+              sleep 2
+            done
+            echo "Unable to publish generated skin pack after three retries." >&2
+            exit 1
           fi
 
 # Re-triggered after confirming the previous push did not produce generated skin files.
