@@ -1006,3 +1006,12 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Ограничение:** Windows/FL Studio 20 interactive UI acceptance (multi-monitor/DPI, открыть/закрыть все окна, maximize/restore, persistence/teardown) всё ещё NOT VERIFIED. Поэтому S2 code/CI gates PASS, но полный UI acceptance не закрыт. Не переносить CI PASS на будущие source commits.
 **S2 failure history retained:** #1163 failed на первоначальном API mismatch; #1164/#1165 статусы superseded фактическим полным #1168 на более позднем source HEAD. Риски R32 остаются OPEN.
 **Следующий шаг по REV18:** не переходить через незакрытый host acceptance. Продолжить S2 verification/audit: проверить editor/window manager ownership, focus paging/geometry, persisted bounds, APVTS attachments и runtime inventory на актуальном HEAD; устранить только доказанные дефекты, затем новый exact-SHA CI. После доступной host acceptance — переход к S3 residual visual audit.
+
+
+### REV18 S3 — legacy color fallback cleanup (2026-11-12)
+
+**Source commit:** `7cddfced48661ba1e184fee19107a8323691470c`. **Статус:** SOURCE CHANGE COMMITTED; exact-SHA Windows CI PENDING.
+**Проверка:** аудит `Source/PluginEditor.cpp` выявил legacy hardcoded fallback constants и использование alias-полей `palette.border/text` в rotary LookAndFeel. Конструктор задавал фиксированные цвета для title, preset/search, tabs, keyboard, FX controls и knob labels, хотя позднее `applyPalette()` перезаписывал часть цветов. Это оставляло legacy fallback path и не обеспечивало чистый canonical-token путь.
+**Исправление:** удалены шесть legacy colour constants; начальные цвета constructor/configureKnob теперь читаются из активной Palette; rotary LookAndFeel использует `controlBorder` и `textPrimary`. Статический повторный поиск в PluginEditor.cpp: 0 hardcoded HEX literals, 0 juce::Colours::white, 0 legacy pink/pale/muted/panel2 identifiers, 0 palette.border/text aliases.
+**R28:** DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, ThemeManager decoder, skin schema/registry, CMake pins и packaging rules не менялись.
+**Предыдущая S2 verification:** run #1168 SUCCESS на source SHA `38b57b854dc559e5dd7c408b96c6a7821eebbd58`; это не подтверждает новый source SHA. S2 code/CI PASS, host UI acceptance NOT VERIFIED.
