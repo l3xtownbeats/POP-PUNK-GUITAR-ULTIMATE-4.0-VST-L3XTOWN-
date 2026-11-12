@@ -1145,3 +1145,16 @@ Cabinet остаётся отдельной секцией со своим bypas
 
 Подробный контракт: `docs/PPGU_MASTER_PROMPT_RU.md` §7.5.10; commit `eb7dae5fa4f9b00640cf614c51e3889457a64992`.
 **Не заявляется:** что preset validation, silent-fallback guard, полноценный runtime routing или слуховая приёмка уже реализованы. Это обязательное требование к реализации.
+
+
+## 2026-11-12 — Artist / Song Tone Reference Map для упрощённой настройки пресетов
+
+**Статус:** USER REFERENCE ACCEPTED / PRESET MAPPING & IMPLEMENTATION PENDING.
+Пользователь передал справочник по blink-182/Tom DeLonge, Angels & Airwaves, Sum 41, New Found Glory, Simple Plan, Green Day, The Offspring, Fall Out Boy и сводным песенным профилям. Решено использовать его как практическую карту быстрого sound design для уже утверждённого каталога групп/песен из master specification и INFO: выбор source/pickup profile → amp family → cabinet/mic voicing → стартовые Gain/Bass/Mid/Treble/Presence → role-specific FX → A/B → отдельный User Preset.
+
+Значения 0–10 трактуются как ориентиры для старта, а не точные универсальные физические настройки или подтверждённые artist settings. Названия — artist-inspired/song-tone reference, без заявления endorsement/официальной связи. Необходимо сохранить весь ранее утверждённый каталог, включая Sum 41, Simple Plan, Good Charlotte и New Found Glory. Дополнительные группы из таблицы используются как расширяемые tone families; массовое создание одинаковых пресетов с разными именами запрещено.
+
+Практические решения: Rectifier/JCM800/JCM900/Plexi/Vox AC30/Fender clean/Orange families; V30/Marshall/Orange-style cabinet voicings и SM57/MD421/ribbon-style mic perspectives — только когда реально доступны соответствующие модели/IR и корректные metadata. Layered wall-of-sound требует независимых партий/слоёв, проверки фазы/mono и не должна имитироваться простым дублированием идентичного сигнала. Gate/boost/compression/delay/modulation — по музыкальной роли, не автоматически для всех presets. Clean/ambient/song sections должны иметь отдельные варианты, если это слышимое отличие.
+
+Подробный контракт: `docs/PPGU_MASTER_PROMPT_RU.md` §7.5.12.  
+**Не заявляется:** точность всех исторических gear claims, наличие всех amp/cab/IR моделей, multi-mic engine, double-tracking engine, factory presets или их слуховая приёмка. Нужны аудит исходников, реализация, regression tests и audition.
