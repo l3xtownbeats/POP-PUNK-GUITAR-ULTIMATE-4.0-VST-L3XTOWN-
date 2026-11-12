@@ -272,6 +272,32 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));
     const int samples = buffer.getNumSamples();
     keyboardState.processNextMidiBuffer(midi, 0, samples, true);
+
+    // Publish a lock-free, UI-only snapshot after keyboard-generated events
+    // have been merged. The editor polls atomics; it never takes the MIDI
+    // keyboard state's lock or calls into the audio engine.
+    for (const auto metadata : midi)
+    {
+        const auto& message = metadata.getMessage();
+        const int channel = juce::jlimit(0, 15, message.getChannel() - 1);
+        if (message.isAllNotesOff() || message.isAllSoundOff())
+        {
+            for (auto& held : displayHeldNotes[static_cast<size_t>(channel)])
+                held.store(false, std::memory_order_relaxed);
+        }
+        else if (message.isNoteOn())
+        {
+            displayHeldNotes[static_cast<size_t>(channel)]
+                            [static_cast<size_t>(message.getNoteNumber())]
+                .store(true, std::memory_order_relaxed);
+        }
+        else if (message.isNoteOff())
+        {
+            displayHeldNotes[static_cast<size_t>(channel)]
+                            [static_cast<size_t>(message.getNoteNumber())]
+                .store(false, std::memory_order_relaxed);
+        }
+    }
     const int maximumVoices = juce::jlimit(1, ppgu::sampler::SamplerEngine::maximumVoices,
         static_cast<int>(parameters.getRawParameterValue("voices")->load(std::memory_order_relaxed)));
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
