@@ -235,6 +235,14 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         auto& button = panelButtons[i];
         button.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
         button.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+        static constexpr std::array<const char*, 5> panelTooltips {
+            "Open FX EDIT: eight guitar processing modules and their controls",
+            "Open AUTOCHORDS: chord and harmony workspace",
+            "Open IMPORT GUITAR: load a licensed SFZ guitar library",
+            "Open SETTINGS: plugin and engine settings",
+            "Open MIDI MONITOR: live note and chord activity"
+        };
+        button.setTooltip(panelTooltips[i]);
         button.onClick = [this, i] { if (auxiliaryPanels) auxiliaryPanels->openPanel(static_cast<int>(i) + 1); };
         addAndMakeVisible(button);
     }
@@ -327,12 +335,19 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
- a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
- a.removeFromTop(8);auto statusRow=a.removeFromTop(26);
- auto buttonArea=statusRow.removeFromRight(376);
- const int panelButtonWidth = buttonArea.getWidth() / static_cast<int>(panelButtons.size());
- for(auto& button:panelButtons) button.setBounds(buttonArea.removeFromLeft(panelButtonWidth).reduced(2,1));
- statusLabel.setBounds(statusRow);a.removeFromTop(10);auto panels=a.removeFromTop(356);
+ a.removeFromTop(10);a.removeFromTop(160);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
+ a.removeFromTop(6);auto statusRow=a.removeFromTop(22);statusLabel.setBounds(statusRow);
+ a.removeFromTop(4);auto navigationRow=a.removeFromTop(34);
+ const int navGap=6;
+ const int totalNavGaps=navGap*static_cast<int>(panelButtons.size()-1);
+ const int panelButtonWidth=juce::jmax(1,(navigationRow.getWidth()-totalNavGaps)/static_cast<int>(panelButtons.size()));
+ for(size_t i=0;i<panelButtons.size();++i)
+ {
+     auto buttonBounds=navigationRow.removeFromLeft(panelButtonWidth);
+     panelButtons[i].setBounds(buttonBounds.reduced(1,2));
+     if(i+1<panelButtons.size()) navigationRow.removeFromLeft(navGap);
+ }
+ a.removeFromTop(6);auto panels=a.removeFromTop(356);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
  ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}

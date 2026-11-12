@@ -78,7 +78,7 @@ private:
         "chorusOn", "delayOn", "reverbOn", "cabinetOn"
     };
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 9> knobAttachments;
-    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 7> fxAttachments;
+    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>, 8> fxAttachments;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment, startModeAttachment;
     std::unique_ptr<juce::MidiKeyboardComponent> keyboard;
     juce::TextButton keyboardToggleButton { "⌄  HIDE KEYS" };
