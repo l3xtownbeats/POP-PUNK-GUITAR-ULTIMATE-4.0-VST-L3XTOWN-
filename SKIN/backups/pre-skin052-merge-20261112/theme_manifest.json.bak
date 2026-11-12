@@ -1,0 +1,469 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "totalSkins": 51,
+  "defaultSkin": "skin-51",
+  "selector": "SKIN",
+  "status": "runtime-palette-switching-implemented-pending-validation",
+  "themes": [
+    {
+      "id": "skin-01",
+      "index": 1,
+      "name": "Neon Riot",
+      "cluster": "B",
+      "path": "Skin_01/theme.json",
+      "preview": "Skin_01/assets/preview.png",
+      "hero": "Skin_01/assets/hero.webp"
+    },
+    {
+      "id": "skin-02",
+      "index": 2,
+      "name": "Dark Metal",
+      "cluster": "C",
+      "path": "Skin_02/theme.json",
+      "preview": "Skin_02/assets/preview.png",
+      "hero": "Skin_02/assets/hero.webp"
+    },
+    {
+      "id": "skin-03",
+      "index": 3,
+      "name": "Modern Studio",
+      "cluster": "A",
+      "path": "Skin_03/theme.json",
+      "preview": "Skin_03/assets/preview.png",
+      "hero": "Skin_03/assets/hero.webp"
+    },
+    {
+      "id": "skin-04",
+      "index": 4,
+      "name": "Punk Rock",
+      "cluster": "B",
+      "path": "Skin_04/theme.json",
+      "preview": "Skin_04/assets/preview.png",
+      "hero": "Skin_04/assets/hero.webp"
+    },
+    {
+      "id": "skin-05",
+      "index": 5,
+      "name": "Electric Guitar",
+      "cluster": "C",
+      "path": "Skin_05/theme.json",
+      "preview": "Skin_05/assets/preview.png",
+      "hero": "Skin_05/assets/hero.webp"
+    },
+    {
+      "id": "skin-06",
+      "index": 6,
+      "name": "Dark Carbon",
+      "cluster": "C",
+      "path": "Skin_06/theme.json",
+      "preview": "Skin_06/assets/preview.png",
+      "hero": "Skin_06/assets/hero.webp"
+    },
+    {
+      "id": "skin-07",
+      "index": 7,
+      "name": "Neon Cyber",
+      "cluster": "B",
+      "path": "Skin_07/theme.json",
+      "preview": "Skin_07/assets/preview.png",
+      "hero": "Skin_07/assets/hero.webp"
+    },
+    {
+      "id": "skin-08",
+      "index": 8,
+      "name": "Vintage Amplifier",
+      "cluster": "C",
+      "path": "Skin_08/theme.json",
+      "preview": "Skin_08/assets/preview.png",
+      "hero": "Skin_08/assets/hero.webp"
+    },
+    {
+      "id": "skin-09",
+      "index": 9,
+      "name": "Minimal Black",
+      "cluster": "A",
+      "path": "Skin_09/theme.json",
+      "preview": "Skin_09/assets/preview.png",
+      "hero": "Skin_09/assets/hero.webp"
+    },
+    {
+      "id": "skin-10",
+      "index": 10,
+      "name": "Glass UI",
+      "cluster": "C",
+      "path": "Skin_10/theme.json",
+      "preview": "Skin_10/assets/preview.png",
+      "hero": "Skin_10/assets/hero.webp"
+    },
+    {
+      "id": "skin-11",
+      "index": 11,
+      "name": "Sunset Drive",
+      "cluster": "B",
+      "path": "Skin_11/theme.json",
+      "preview": "Skin_11/assets/preview.png",
+      "hero": "Skin_11/assets/hero.webp"
+    },
+    {
+      "id": "skin-12",
+      "index": 12,
+      "name": "Arctic Blue",
+      "cluster": "C",
+      "path": "Skin_12/theme.json",
+      "preview": "Skin_12/assets/preview.png",
+      "hero": "Skin_12/assets/hero.webp"
+    },
+    {
+      "id": "skin-13",
+      "index": 13,
+      "name": "Toxic Green",
+      "cluster": "B",
+      "path": "Skin_13/theme.json",
+      "preview": "Skin_13/assets/preview.png",
+      "hero": "Skin_13/assets/hero.webp"
+    },
+    {
+      "id": "skin-14",
+      "index": 14,
+      "name": "Purple Voltage",
+      "cluster": "B",
+      "path": "Skin_14/theme.json",
+      "preview": "Skin_14/assets/preview.png",
+      "hero": "Skin_14/assets/hero.webp"
+    },
+    {
+      "id": "skin-15",
+      "index": 15,
+      "name": "Blood Red",
+      "cluster": "B",
+      "path": "Skin_15/theme.json",
+      "preview": "Skin_15/assets/preview.png",
+      "hero": "Skin_15/assets/hero.webp"
+    },
+    {
+      "id": "skin-16",
+      "index": 16,
+      "name": "Ocean Stage",
+      "cluster": "C",
+      "path": "Skin_16/theme.json",
+      "preview": "Skin_16/assets/preview.png",
+      "hero": "Skin_16/assets/hero.webp"
+    },
+    {
+      "id": "skin-17",
+      "index": 17,
+      "name": "Golden Era",
+      "cluster": "C",
+      "path": "Skin_17/theme.json",
+      "preview": "Skin_17/assets/preview.png",
+      "hero": "Skin_17/assets/hero.webp"
+    },
+    {
+      "id": "skin-18",
+      "index": 18,
+      "name": "Mono Chrome",
+      "cluster": "C",
+      "path": "Skin_18/theme.json",
+      "preview": "Skin_18/assets/preview.png",
+      "hero": "Skin_18/assets/hero.webp"
+    },
+    {
+      "id": "skin-19",
+      "index": 19,
+      "name": "Festival Lights",
+      "cluster": "B",
+      "path": "Skin_19/theme.json",
+      "preview": "Skin_19/assets/preview.png",
+      "hero": "Skin_19/assets/hero.webp"
+    },
+    {
+      "id": "skin-20",
+      "index": 20,
+      "name": "Studio Olive",
+      "cluster": "C",
+      "path": "Skin_20/theme.json",
+      "preview": "Skin_20/assets/preview.png",
+      "hero": "Skin_20/assets/hero.webp"
+    },
+    {
+      "id": "skin-21",
+      "index": 21,
+      "name": "Neon Flagship",
+      "cluster": "A",
+      "path": "Skin_21/theme.json",
+      "preview": "Skin_21/assets/preview.png",
+      "hero": "Skin_21/assets/hero.webp"
+    },
+    {
+      "id": "skin-22",
+      "index": 22,
+      "name": "Deep Space Studio",
+      "cluster": "A",
+      "path": "Skin_22/theme.json",
+      "preview": "Skin_22/assets/preview.png",
+      "hero": "Skin_22/assets/hero.webp"
+    },
+    {
+      "id": "skin-23",
+      "index": 23,
+      "name": "Velvet Circuit",
+      "cluster": "A",
+      "path": "Skin_23/theme.json",
+      "preview": "Skin_23/assets/preview.png",
+      "hero": "Skin_23/assets/hero.webp"
+    },
+    {
+      "id": "skin-24",
+      "index": 24,
+      "name": "Amber Tube Room",
+      "cluster": "A",
+      "path": "Skin_24/theme.json",
+      "preview": "Skin_24/assets/preview.png",
+      "hero": "Skin_24/assets/hero.webp"
+    },
+    {
+      "id": "skin-25",
+      "index": 25,
+      "name": "Acoustic Atelier",
+      "cluster": "A",
+      "path": "Skin_25/theme.json",
+      "preview": "Skin_25/assets/preview.png",
+      "hero": "Skin_25/assets/hero.webp"
+    },
+    {
+      "id": "skin-26",
+      "index": 26,
+      "name": "Ivory Session",
+      "cluster": "A",
+      "path": "Skin_26/theme.json",
+      "preview": "Skin_26/assets/preview.png",
+      "hero": "Skin_26/assets/hero.webp"
+    },
+    {
+      "id": "skin-27",
+      "index": 27,
+      "name": "Chrome Velocity",
+      "cluster": "A",
+      "path": "Skin_27/theme.json",
+      "preview": "Skin_27/assets/preview.png",
+      "hero": "Skin_27/assets/hero.webp"
+    },
+    {
+      "id": "skin-28",
+      "index": 28,
+      "name": "Clear Signal",
+      "cluster": "A",
+      "path": "Skin_28/theme.json",
+      "preview": "Skin_28/assets/preview.png",
+      "hero": "Skin_28/assets/hero.webp"
+    },
+    {
+      "id": "skin-29",
+      "index": 29,
+      "name": "Prism Deck",
+      "cluster": "A",
+      "path": "Skin_29/theme.json",
+      "preview": "Skin_29/assets/preview.png",
+      "hero": "Skin_29/assets/hero.webp"
+    },
+    {
+      "id": "skin-30",
+      "index": 30,
+      "name": "Pure Control",
+      "cluster": "A",
+      "path": "Skin_30/theme.json",
+      "preview": "Skin_30/assets/preview.png",
+      "hero": "Skin_30/assets/hero.webp"
+    },
+    {
+      "id": "skin-31",
+      "index": 31,
+      "name": "Skate Voltage",
+      "cluster": "B",
+      "path": "Skin_31/theme.json",
+      "preview": "Skin_31/assets/preview.png",
+      "hero": "Skin_31/assets/hero.webp"
+    },
+    {
+      "id": "skin-32",
+      "index": 32,
+      "name": "Gig Poster Luxe",
+      "cluster": "B",
+      "path": "Skin_32/theme.json",
+      "preview": "Skin_32/assets/preview.png",
+      "hero": "Skin_32/assets/hero.webp"
+    },
+    {
+      "id": "skin-33",
+      "index": 33,
+      "name": "Checker Riot",
+      "cluster": "B",
+      "path": "Skin_33/theme.json",
+      "preview": "Skin_33/assets/preview.png",
+      "hero": "Skin_33/assets/hero.webp"
+    },
+    {
+      "id": "skin-34",
+      "index": 34,
+      "name": "Midnight City",
+      "cluster": "B",
+      "path": "Skin_34/theme.json",
+      "preview": "Skin_34/assets/preview.png",
+      "hero": "Skin_34/assets/hero.webp"
+    },
+    {
+      "id": "skin-35",
+      "index": 35,
+      "name": "Arena Pulse",
+      "cluster": "B",
+      "path": "Skin_35/theme.json",
+      "preview": "Skin_35/assets/preview.png",
+      "hero": "Skin_35/assets/hero.webp"
+    },
+    {
+      "id": "skin-36",
+      "index": 36,
+      "name": "Sticker Luxe",
+      "cluster": "B",
+      "path": "Skin_36/theme.json",
+      "preview": "Skin_36/assets/preview.png",
+      "hero": "Skin_36/assets/hero.webp"
+    },
+    {
+      "id": "skin-37",
+      "index": 37,
+      "name": "Carbon Sprint",
+      "cluster": "B",
+      "path": "Skin_37/theme.json",
+      "preview": "Skin_37/assets/preview.png",
+      "hero": "Skin_37/assets/hero.webp"
+    },
+    {
+      "id": "skin-38",
+      "index": 38,
+      "name": "Electric Boulevard",
+      "cluster": "B",
+      "path": "Skin_38/theme.json",
+      "preview": "Skin_38/assets/preview.png",
+      "hero": "Skin_38/assets/hero.webp"
+    },
+    {
+      "id": "skin-39",
+      "index": 39,
+      "name": "Aftershow Gold",
+      "cluster": "B",
+      "path": "Skin_39/theme.json",
+      "preview": "Skin_39/assets/preview.png",
+      "hero": "Skin_39/assets/hero.webp"
+    },
+    {
+      "id": "skin-40",
+      "index": 40,
+      "name": "Signal Redline",
+      "cluster": "B",
+      "path": "Skin_40/theme.json",
+      "preview": "Skin_40/assets/preview.png",
+      "hero": "Skin_40/assets/hero.webp"
+    },
+    {
+      "id": "skin-41",
+      "index": 41,
+      "name": "Arctic Glasshouse",
+      "cluster": "C",
+      "path": "Skin_41/theme.json",
+      "preview": "Skin_41/assets/preview.png",
+      "hero": "Skin_41/assets/hero.webp"
+    },
+    {
+      "id": "skin-42",
+      "index": 42,
+      "name": "Moss Circuit",
+      "cluster": "C",
+      "path": "Skin_42/theme.json",
+      "preview": "Skin_42/assets/preview.png",
+      "hero": "Skin_42/assets/hero.webp"
+    },
+    {
+      "id": "skin-43",
+      "index": 43,
+      "name": "Copper Workshop",
+      "cluster": "C",
+      "path": "Skin_43/theme.json",
+      "preview": "Skin_43/assets/preview.png",
+      "hero": "Skin_43/assets/hero.webp"
+    },
+    {
+      "id": "skin-44",
+      "index": 44,
+      "name": "Mono Blueprint",
+      "cluster": "C",
+      "path": "Skin_44/theme.json",
+      "preview": "Skin_44/assets/preview.png",
+      "hero": "Skin_44/assets/hero.webp"
+    },
+    {
+      "id": "skin-45",
+      "index": 45,
+      "name": "Rose Quartz",
+      "cluster": "C",
+      "path": "Skin_45/theme.json",
+      "preview": "Skin_45/assets/preview.png",
+      "hero": "Skin_45/assets/hero.webp"
+    },
+    {
+      "id": "skin-46",
+      "index": 46,
+      "name": "Solar Bronze",
+      "cluster": "C",
+      "path": "Skin_46/theme.json",
+      "preview": "Skin_46/assets/preview.png",
+      "hero": "Skin_46/assets/hero.webp"
+    },
+    {
+      "id": "skin-47",
+      "index": 47,
+      "name": "Teal Machine",
+      "cluster": "C",
+      "path": "Skin_47/theme.json",
+      "preview": "Skin_47/assets/preview.png",
+      "hero": "Skin_47/assets/hero.webp"
+    },
+    {
+      "id": "skin-48",
+      "index": 48,
+      "name": "Concrete Stage",
+      "cluster": "C",
+      "path": "Skin_48/theme.json",
+      "preview": "Skin_48/assets/preview.png",
+      "hero": "Skin_48/assets/hero.webp"
+    },
+    {
+      "id": "skin-49",
+      "index": 49,
+      "name": "Ultraviolet Club",
+      "cluster": "B",
+      "path": "Skin_49/theme.json",
+      "preview": "Skin_49/assets/preview.png",
+      "hero": "Skin_49/assets/hero.webp"
+    },
+    {
+      "id": "skin-50",
+      "index": 50,
+      "name": "Platinum Room",
+      "cluster": "C",
+      "path": "Skin_50/theme.json",
+      "preview": "Skin_50/assets/preview.png",
+      "hero": "Skin_50/assets/hero.webp"
+    },
+    {
+      "id": "skin-51",
+      "index": 51,
+      "name": "Blackout Voltage",
+      "cluster": "B",
+      "path": "Skin_51/theme.json",
+      "preview": "Skin_51/assets/preview.png",
+      "hero": "Skin_51/assets/hero.webp"
+    }
+  ]
+}
