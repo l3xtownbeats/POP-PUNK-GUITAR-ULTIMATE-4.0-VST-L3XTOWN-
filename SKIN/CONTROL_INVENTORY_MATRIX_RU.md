@@ -47,7 +47,7 @@ Gallery implemented with previews/search/family filter. Favorites, full gallery 
 | Import_Guitar | loadButton | SFZ file chooser + async library load | IMPLEMENTED |
 | Auto_Discover | none | Reserved for production Sound Hunter/S6 discovery | NOT IMPLEMENTED |
 | Curator | none | Reserved for production library curation/review | NOT IMPLEMENTED |
-| Settings | none | No settings panel in current editor | NOT IMPLEMENTED |
+| Settings | settingsButton + `PPGUSettingsPanel` | Persisted auxiliary panel scale and spacing; restore SIGNAL FORGE default; jump to Skin Gallery | IMPLEMENTED (UI-only) |
 | About | none | No About panel in current editor | NOT IMPLEMENTED |
 
 A skin may map every required ID, but that does not create the missing processor/UI feature. Missing features must be shown as unavailable/disabled with an honest reason; no fake LED activity, fake scanner, fake curator or active dummy buttons.
@@ -132,3 +132,14 @@ Current reference design: Skin_052 / SIGNAL FORGE / carbon_studio / STUDIO_CONSO
 - runtime consumption of `controls.*.grid` and full schema-to-component parity assertion.
 
 Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated commit `3a2ceb52062be112429f96d411ae223d87df17a6`. Windows build/CTest/pluginval and FL Studio 20 acceptance remain separately pending.
+
+
+### Settings panel implementation update — 12.11.2026
+
+`SETTINGS` button opens child panel ID 6 inside `PPGUMultiWindowWorkspace`. Real controls:
+- Auxiliary panel scale: 0.50–1.50; applies to workspace tiling and persists as `workspacePanelScale`.
+- Panel gap: 0–32 px; applies to workspace and persists as `workspacePanelGap`.
+- Restore SIGNAL FORGE default: loads canonical Skin_052 through ThemeManager and persists stable ID.
+- Open Skin Gallery: opens the existing gallery panel alongside Settings.
+
+No audio, APVTS, MIDI or processor parameters are changed. About remains NOT IMPLEMENTED; no fake controls are added.
