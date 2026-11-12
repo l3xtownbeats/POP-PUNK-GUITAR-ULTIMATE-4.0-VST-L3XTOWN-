@@ -507,3 +507,57 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 6. Добавить все .cpp/.h в CMake, unit tests, затем Windows Release → CTest → pluginval strictness 5 → package; после этого отдельно проверить в FL Studio 20.
 
 **Последний подтверждённый факт по предыдущей CI-ветке:** run #867 ранее был в процессе; позднее был обнаружен compile issue в `AuxiliaryPanelLayout.cpp` из-за пустого anonymous namespace, и создан исправляющий commit. Результат нового CI для последующих UI-коммитов в этой записи ещё не подтверждён.
+
+
+### 12 November 2026 — SIGNAL FORGE Editor integration, step B
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Commit at journal update:** pending (this Info.txt update follows UI integration commit `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`).  
+**Status:** EDITOR SOURCE INTEGRATION ADDED / WINDOWS CI RUN #900 IN PROGRESS / NOT YET BUILD-VERIFIED.
+
+Выполнена следующая интеграция UI-компонентов непосредственно в `PluginEditor`:
+
+1. **Внутренние панели и tiled workspace**
+   - FX EDIT, AutoChords, Import Guitar и Settings теперь открываются как дочерние overlay-компоненты внутри главного JUCE Editor; это не отдельные системные окна.
+   - Верхняя шапка остаётся видимой. У каждой панели есть квадрат expand/restore и X close.
+   - Открытые панели передаются в `layoutAuxiliaryPanels()`; geometry manager автоматически перераспределяет bounds. При четырёх панелях используется сетка 2×2, при трёх — 2 колонки / 2 строки, при двух — 2 колонки. При одной панели она занимает рабочую область в expanded state.
+   - Close callbacks отложены через MessageManager::callAsync и SafePointer, чтобы не уничтожать панель непосредственно внутри callback её кнопки.
+   - Layout module обновлён; regression test теперь явно проверяет 2×2 для 3/4 панелей, отсутствие перекрытия и containment в рабочей области.
+
+2. **FX EDIT**
+   - Подключён к `processor.parameters` через реальные APVTS SliderAttachment/ButtonAttachment.
+   - В панели восемь модулей: Compressor, EQ, Distortion, Flanger, Chorus, Delay, Reverb, Cabinet IR.
+   - Проведена сверка 27 используемых FX control IDs с `PluginProcessor.cpp:createParameterLayout()`: неизвестных ID в текущем списке не обнаружено. Новые APVTS IDs не добавлялись.
+   - Flanger использует существующие `flangerOn/flangerRate/flangerDepth/flangerFeedback/flangerMix` параметры; остальные модули используют существующие параметры движка.
+   - Параметрические графики и FX preset browser ещё не реализованы; не отображаются как готовые функции.
+
+3. **AutoChords**
+   - Панель подключена к внутреннему workspace, содержит режим Major/Minor/Custom, Key и несколько вариантов progression.
+   - Preview остаётся disabled, так как генерация аккордов и MIDI routing в движок ещё не подключены. Выборы сейчас являются UI-настройками, не управляют генератором.
+
+4. **Import Guitar**
+   - Верхняя кнопка IMPORT открывает внутреннюю панель.
+   - Кнопка Browse запускает существующий асинхронный SFZ loader; отображаются статусы loading/success/error. Фоновая загрузка остаётся в существующем механизме процессора.
+
+5. **Settings**
+   - Добавлена панель с реальными APVTS attachments для Voices, Master, Tuning, Pan, Output dB и Palm Mute Velocity Threshold.
+   - Параметры используют существующие диапазоны/шаги из processor parameter layout; аудиокод и parameter IDs не менялись.
+
+6. **Performance Display**
+   - Подключено над MIDI-клавиатурой. Для размещения display минимальная высота Editor увеличена до 900 px (default 1120×900).
+   - Отображает активные ноты, последнюю MIDI-ноту, velocity, MIDI activity и простые triad labels (Major / minor notation) по состоянию `MidiKeyboardState`.
+   - Не показывает фиктивные BPM, PPQ, такт/долю, тональность или progression: host transport telemetry ещё не подключена к display. Chord detector пока ограничен простыми трёхзвучиями и нуждается в отдельном наборе тестов.
+
+**Изменённые зоны:** `Source/PluginEditor.h/.cpp`, `Source/UI/*Panel*`, `Source/UI/PerformanceDisplay.*`, `Source/UI/AuxiliaryPanelLayout.cpp`, `tests/AuxiliaryPanelLayoutTests.cpp`, `CMakeLists.txt`. Все новые UI .cpp/.h подключены в VST3 target.
+
+**Аудио и сохранность проекта:** `PluginProcessor.cpp/.h`, DSP, audio callback, APVTS registry/IDs, MIDI scheduler и preset schema в этом этапе не изменялись. UI controls привязаны только к уже существующим параметрам. Полноценный runtime test в FL Studio 20 пока не проводился.
+
+**CI:** Windows workflow run #900 / ID `43130081529`, source SHA `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`, запущен после UI/CMake/test wiring и находился в `in_progress` при записи. До завершения run нельзя объявлять Windows Release build, CTest, pluginval или packaging успешными. Предыдущие runs #891–#899 отменены более новыми push и не являются доказательством прохождения сборки.
+
+**Следующие обязательные шаги:**
+- получить результат run #900 и разобрать compiler/CTest/pluginval logs;
+- исправить любые build issues на этой же feature branch и обновить журнал;
+- добавить тесты chord detector и проверить thread-safety/overlapping MIDI note semantics;
+- подключить валидный host BPM/PPQ/bar/beat snapshot к Performance Display только при наличии данных host playhead;
+- улучшить компактные размеры/scrolling панелей и проверить визуальную читаемость при 3–4 одновременно открытых панелях;
+- после успешного CI проверить VST3 в FL Studio 20, не смешивая CI build с host acceptance.
