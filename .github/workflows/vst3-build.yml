@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v2
+          key: ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v3-audited
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -229,6 +229,10 @@ jobs:
           }
           $gitDirs = Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git'
           if ($gitDirs.Count -gt 0) { throw 'Git metadata must not be included in the redistributable sample package.' }
+
+      - name: Audit guitar SoundBank payload, SHA-256 coverage and source licenses
+        shell: pwsh
+        run: python tools/audit_soundbank.py --root Samples --preferred-gb 25 --hard-limit-gb 30
 
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh
