@@ -687,3 +687,12 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 **File:** `Source/PluginEditor.cpp`; blob SHA `3d88ba26102ad5de7b65048da66ab98805c246c9`.
 **Change:** FX rack buttons use effect-specific accent families; FX Edit response guides now differ by algorithm class (compressor knee, EQ bands, distortion saturation, chorus/flanger modulation, delay taps, reverb decay, cabinet band-pass, DOUBLE stereo pair). These are visual guides only and do not claim live metering or measured DSP response.
 **Validation:** source read-back/static inspection only. Build and UI screenshot validation pending.
+
+
+[2026-11-12] SIGNAL FORGE FX + DOUBLE WIDTH
+Branch: work/ppgu-toolchain-qa-rev17-1
+
+- Source/PluginProcessor.h: preallocated DOUBLE delay and smoothed mix state.
+- Source/PluginProcessor.cpp: append Flanger to FX slot metadata; allocate/reset DOUBLE delay outside processBlock; implement Haas-inspired Mid/Side widening with 12 ms delayed high-passed Mid contribution and 10 ms mix smoothing; preserve legacy doubleTrackOn/doubleTrackMix IDs with corrected display names.
+- Source/PluginEditor.h/.cpp: expand main FX controls to Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR, and DOUBLE WIDTH; add unique FX accent palettes and effect-specific panel title/response caption.
+- QA status: source review only. No verified Windows VST3 build or DAW listening test yet. Skin schema and all legacy skin packs still need a controlled control-inventory migration.
