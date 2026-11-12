@@ -318,10 +318,10 @@ public:
         powerButton.setColour(juce::TextButton::textColourOnId, palette.token("window_bg"));
         addAndMakeVisible(powerButton);
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
-        graphCaption.setColour(juce::Label::textColourId, palette.token("textSecondary"));
+        graphCaption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(graphCaption);
         status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
-        status.setColour(juce::Label::textColourId, palette.token("textSecondary"));
+        status.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(status);
 
         for (size_t groupIndex = 0; groupIndex < groups.size(); ++groupIndex)
@@ -455,20 +455,30 @@ private:
 class PPGUAutoChordsPanel final : public juce::Component
 {
 public:
-    explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
+    explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state,
+                                  const PPGUThemeManager::Palette& activePalette)
+        : apvts(state), palette(activePalette)
     {
         title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
         title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
         stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
-        stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
+        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
         addAndMakeVisible(stateLabel);
         offButton.setButtonText("AUTOCHORDS OFF");
         offButton.setEnabled(false);
         offButton.setTooltip("The AutoChords MIDI-generation engine is not implemented yet.");
         addAndMakeVisible(offButton);
 
+        for (auto* box : { &keyBox, &modeBox, &patternBox })
+        {
+            box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+            box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+            box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        }
+        offButton.setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_disabled"));
         keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
         modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
         patternBox.addItemList({ "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4",
@@ -512,6 +522,7 @@ public:
     }
 private:
     juce::AudioProcessorValueTreeState& apvts;
+    PPGUThemeManager::Palette palette;
     juce::Label title, stateLabel, keyLabel, modeLabel, patternLabel;
     juce::TextButton offButton;
     juce::ComboBox keyBox, modeBox, patternBox;
@@ -1229,7 +1240,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openAutoChordsPanel()
         spec.title = "AUTOCHORDS  /  HARMONY WORKSPACE";
         spec.desired = { 900, 620 };
         spec.minimum = { 560, 420 };
-        spec.content = std::make_unique<PPGUAutoChordsPanel>(processor.parameters);
+        spec.content = std::make_unique<PPGUAutoChordsPanel>(processor.parameters, themeManager.getPalette());
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
     }
