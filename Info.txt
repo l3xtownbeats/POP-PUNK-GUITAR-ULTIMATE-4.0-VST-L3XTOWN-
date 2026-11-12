@@ -880,7 +880,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **Preflight / CI перед этапом:**
 - HEAD до изменения: `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`; спецификация до изменения REV 16.5.
-- Последний run #968, ID `43141187492`, SHA `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`: Windows Release build PASS; CTest FAILED; 12/14 targets PASS, включая AuxiliaryPanelLayout, два failure внутри `ppgu_sound_asset_registry_contract`: `test_non_cc0_license_blocks_green` (ожидание сообщения "not an explicitly approved") и `test_unapproved_or_missing_license_evidence_blocks_green` (ожидание "not APPROVED"). Остальные 13? фактически 13 CTest targets прошли, один target завершился failure; VST3 locate, pluginval strictness 5 и packaging SKIPPED. Не объявлять run успешным. Этот дефект не исправлялся данным документным этапом.
+- Последний run #968, ID `43141187492`, SHA `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`: Windows Release build PASS; CTest FAILED; 13/14 targets PASS, включая AuxiliaryPanelLayout, два failure внутри `ppgu_sound_asset_registry_contract`: `test_non_cc0_license_blocks_green` (ожидание сообщения "not an explicitly approved") и `test_unapproved_or_missing_license_evidence_blocks_green` (ожидание "not APPROVED"). Остальные 13? фактически 13 CTest targets прошли, один target завершился failure; VST3 locate, pluginval strictness 5 и packaging SKIPPED. Не объявлять run успешным. Этот дефект не исправлялся данным документным этапом.
 - Run #968 не относится к REV 17.0 SHA; новый CI результат для `de4cce04...` на момент записи не подтверждён.
 - Старый run #966 PASS на SHA `462853df...` не переносится на REV 17.0.
 
