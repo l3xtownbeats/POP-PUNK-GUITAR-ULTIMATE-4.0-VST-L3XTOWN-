@@ -667,6 +667,64 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     startModeBox.setColour(juce::ComboBox::outlineColourId, themeManager.getPalette().token("accent").withAlpha(0.5f));
     addAndMakeVisible(startModeBox);
     startModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "syncMode", startModeBox);
+
+    // Zone F / STRUMMER & GROOVE: live APVTS bindings to existing processor parameters.
+    for (int slot = 1; slot <= 8; ++slot)
+        patternSlotBox.addItem("SLOT " + juce::String(slot), slot);
+    patternLengthBox.addItem("1 BAR", 1);
+    patternLengthBox.addItem("2 BARS", 2);
+    patternLengthBox.addItem("4 BARS", 3);
+    patternSlotBox.setTextWhenNothingSelected("PATTERN SLOT");
+    patternLengthBox.setTextWhenNothingSelected("LENGTH");
+    patternSlotAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.parameters, "patternSlot", patternSlotBox);
+    patternLengthAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+        processor.parameters, "patternLength", patternLengthBox);
+
+    bpmSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    bpmSlider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 52, 20);
+    bpmSlider.setRange(20.0, 300.0, 0.1);
+    bpmSlider.setNumDecimalPlacesToDisplay(1);
+    bpmAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        processor.parameters, "bpm", bpmSlider);
+    bpmSlider.setTooltip("Fallback BPM; editable only for Internal sync.");
+    startOnFirstChordButton.setButtonText("START ON FIRST CHORD");
+    startOnFirstChordButton.setClickingTogglesState(true);
+    startOnFirstChordButton.setTooltip("Start the Pattern scheduler when the first chord arrives.");
+    startOnFirstChordAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        processor.parameters, "startOnFirstChord", startOnFirstChordButton);
+
+    const auto updatePatternControlState = [this]
+    {
+        const bool patternMode = modeBox.getSelectedId() == 2;
+        patternSlotBox.setEnabled(patternMode);
+        patternLengthBox.setEnabled(patternMode);
+        startModeBox.setEnabled(patternMode);
+        startOnFirstChordButton.setEnabled(patternMode);
+        const bool internalClock = startModeBox.getSelectedId() == 3;
+        bpmSlider.setEnabled(patternMode && internalClock);
+        bpmSlider.setTooltip(internalClock
+            ? "Internal clock tempo (20–300 BPM)."
+            : "Host tempo is controlled by the DAW; fallback BPM is read-only here.");
+    };
+    modeBox.onChange = updatePatternControlState;
+    startModeBox.onChange = updatePatternControlState;
+
+    for (auto* label : { &patternSlotLabel, &patternLengthLabel, &syncModeLabel, &bpmLabel })
+    {
+        label->setFont(juce::Font(8.5f, juce::Font::bold));
+        label->setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(*label);
+    }
+    patternSlotLabel.setText("PATTERN SLOT", juce::dontSendNotification);
+    patternLengthLabel.setText("LENGTH", juce::dontSendNotification);
+    syncModeLabel.setText("SYNC MODE", juce::dontSendNotification);
+    bpmLabel.setText("TEMPO / BPM", juce::dontSendNotification);
+    addAndMakeVisible(patternSlotBox);
+    addAndMakeVisible(patternLengthBox);
+    addAndMakeVisible(bpmSlider);
+    addAndMakeVisible(startOnFirstChordButton);
+
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
     keyboard->setKeyWidth(18.0f);
@@ -782,6 +840,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
+    auto centreChrome = area;
+    centreChrome.removeFromTop(42);
+    centreChrome.removeFromTop(6);
+    const int zoneFHeight = juce::jlimit(104, 116, centreChrome.getHeight() / 5);
+    drawPanel(g, centreChrome.removeFromBottom(zoneFHeight), "F  /  STRUMMER & GROOVE");
+
     // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
     g.setColour(p.token("accent"));
@@ -841,8 +905,31 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+
+    // Zone F is a logical strip within the center column, never a fourth column.
+    const int zoneFHeight = juce::jlimit(104, 116, centre.getHeight() / 5);
+    auto zoneF = centre.removeFromBottom(zoneFHeight).reduced(10, 5);
+    zoneF.removeFromTop(34); // drawPanel() owns the section heading.
+    zoneF.removeFromTop(2);
+    auto firstRow = zoneF.removeFromTop(zoneF.getHeight() / 2);
+    auto secondRow = zoneF;
+    const auto placeField = [](juce::Rectangle<int> field, juce::Label& label, juce::Component& control)
+    {
+        label.setBounds(field.removeFromTop(13));
+        control.setBounds(field.reduced(1, 0));
+    };
+    const int firstWidth = firstRow.getWidth();
+    auto slotField = firstRow.removeFromLeft(firstWidth * 27 / 100);
+    auto lengthField = firstRow.removeFromLeft(firstWidth * 31 / 100);
+    auto syncField = firstRow;
+    placeField(slotField, patternSlotLabel, patternSlotBox);
+    placeField(lengthField, patternLengthLabel, patternLengthBox);
+    placeField(syncField, syncModeLabel, startModeBox);
+    auto tempoField = secondRow.removeFromLeft(secondRow.getWidth() * 42 / 100);
+    placeField(tempoField, bpmLabel, bpmSlider);
+    startOnFirstChordButton.setBounds(secondRow.reduced(4, 7));
+
     auto knobArea = centre;
-    knobArea.removeFromBottom(42);
     const int cols = 3;
     const int rows = 3;
     const int cellW = juce::jmax(1, knobArea.getWidth() / cols);
@@ -856,8 +943,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         knobLabels[i].setBounds(cell.removeFromTop(20));
         knobs[i].setBounds(cell.reduced(2, 1));
     }
-    startModeBox.setBounds(centre.removeFromBottom(36).reduced(3, 2));
-
     // Right rack: section chrome is reserved above amplifier and FX headings.
     right.removeFromTop(34);
     ampTitle.setBounds(right.removeFromTop(32).reduced(5, 2));
@@ -1031,7 +1116,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
          p.token("control_border"), p.token("accent"), p.token("text_primary"));
  titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
- for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
+ for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox,&patternSlotBox,&patternLengthBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
+ for(auto* label:{&patternSlotLabel,&patternLengthLabel,&syncModeLabel,&bpmLabel})label->setColour(juce::Label::textColourId,p.token("text_secondary"));
+ bpmSlider.setColour(juce::Slider::trackColourId,p.token("control_border"));bpmSlider.setColour(juce::Slider::backgroundColourId,p.token("control_bg"));bpmSlider.setColour(juce::Slider::thumbColourId,p.token("accent"));bpmSlider.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));bpmSlider.setColour(juce::Slider::textBoxBackgroundColourId,p.token("control_bg"));bpmSlider.setColour(juce::Slider::textBoxOutlineColourId,p.token("control_border"));
+ startOnFirstChordButton.setColour(juce::ToggleButton::textColourId,p.token("text_primary"));startOnFirstChordButton.setColour(juce::ToggleButton::tickColourId,p.token("accent"));startOnFirstChordButton.setColour(juce::ToggleButton::tickDisabledColourId,p.token("text_disabled"));
  presetSearch.setColour(juce::TextEditor::backgroundColourId,p.token("control_bg"));presetSearch.setColour(juce::TextEditor::textColourId,p.token("text_primary"));presetSearch.setColour(juce::TextEditor::outlineColourId,p.token("control_border"));presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.token("highlight"));presetSearch.setColour(juce::TextEditor::highlightColourId,p.token("accent").withAlpha(.3f));
  loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
  for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b->setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b->setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b->setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
