@@ -351,3 +351,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Applied:** default 1600×900; resizable minimum 1200×700; maximum 2400×1500.
 - **Reason:** align the real editor constructor with the accepted visual-shell specification and reserve enough central area for Zone F.
 - **Pending:** visual overlap/clipping check at min/default/max; scale presets 50/60/75/80/90/100/110/125/150% and persistence; compile/CTest/pluginval/exact-SHA CI/FL Studio 20.
+
+
+## 2026-11-12 — CI compiler cache integration
+
+- **Branch:** `work/ppgu-toolchain-qa-rev17-1`
+- **Base:** `505a4a29ac4bea639f70cdedfc8dc08e76786ec5`
+- **Commit:** `66dd3e075dbd9d7e09e5ae7abfe3fb8d30c62390`
+- **File:** `.github/workflows/vst3-build.yml`
+- **Change:** pinned `mozilla-actions/sccache-action@v0.0.11`; enabled GitHub Actions cache backend; configured CMake C++ compiler launcher as `sccache`; added `sccache --show-stats` after compilation.
+- **Preserved:** JUCE 7.0.12, C++20, Visual Studio 2022 x64, VST3 target, CTest, pluginval strictness 5 and packaging sequence.
+- **Boundary:** CI-only change; no production C++/DSP/APVTS/sampler/MIDI/preset/SoundBank changes.
+- **Validation:** exact-SHA Windows build and cache statistics pending; no build-speed improvement is claimed before measurement.
