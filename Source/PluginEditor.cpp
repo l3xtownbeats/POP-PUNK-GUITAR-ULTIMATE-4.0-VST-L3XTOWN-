@@ -824,16 +824,18 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+    auto knobArea = centre;
+    knobArea.removeFromBottom(42);
     const int cols = 3;
     const int rows = 3;
-    const int cellW = juce::jmax(1, centre.getWidth() / cols);
-    const int cellH = juce::jmax(1, (centre.getHeight() - 48) / rows);
+    const int cellW = juce::jmax(1, knobArea.getWidth() / cols);
+    const int cellH = juce::jmax(1, knobArea.getHeight() / rows);
     for (size_t i = 0; i < knobs.size(); ++i)
     {
         const int col = static_cast<int>(i) % cols;
         const int row = static_cast<int>(i) / cols;
-        auto cell = juce::Rectangle<int>(centre.getX() + col * cellW,
-            centre.getY() + row * cellH, cellW, cellH).reduced(3, 2);
+        auto cell = juce::Rectangle<int>(knobArea.getX() + col * cellW,
+            knobArea.getY() + row * cellH, cellW, cellH).reduced(3, 2);
         knobLabels[i].setBounds(cell.removeFromTop(20));
         knobs[i].setBounds(cell.reduced(2, 1));
     }
