@@ -27,6 +27,13 @@ public:
         closeButton.onClick = [this] { owner.handleClose(panelId); };
         addAndMakeVisible(closeButton);
 
+        maximizeButton.setButtonText("□");
+        maximizeButton.setTooltip("MAXIMIZE / RESTORE");
+        maximizeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
+        maximizeButton.setColour(juce::TextButton::textColourOffId, text);
+        maximizeButton.onClick = [this] { toggleMaximize(); };
+        addAndMakeVisible(maximizeButton);
+
         if (content != nullptr)
         {
             content->setBounds(0, 0, desired.width, desired.height);
@@ -40,6 +47,8 @@ public:
     int getPanelId() const noexcept { return panelId; }
     ppgu::ui::PanelSize getDesiredSize() const noexcept { return desired; }
     ppgu::ui::PanelSize getMinimumSize() const noexcept { return minimum; }
+    bool isMaximized() const noexcept { return maximized; }
+    void restoreBounds(juce::Rectangle<int> bounds) { setBounds(bounds); maximized = false; }
 
     void setColours(juce::Colour panel, juce::Colour border,
                     juce::Colour heading, juce::Colour text)
@@ -50,6 +59,8 @@ public:
         closeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
         closeButton.setColour(juce::TextButton::textColourOffId, text);
         closeButton.setColour(juce::TextButton::buttonOnColourId, border);
+        maximizeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
+        maximizeButton.setColour(juce::TextButton::textColourOffId, text);
         repaint();
     }
 
@@ -60,25 +71,67 @@ public:
 
     void mouseDown(const juce::MouseEvent& event) override
     {
-        draggingHeader = event.y < 42 && !closeButton.getBounds().contains(event.getPosition());
+        const auto point = event.getPosition();
+        resizing = !maximized && point.x >= getWidth() - 22 && point.y >= getHeight() - 22;
+        draggingHeader = !resizing && point.y < 42
+            && !closeButton.getBounds().contains(point)
+            && !maximizeButton.getBounds().contains(point);
+        dragStartBounds = getBounds();
+        dragStartScreen = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
     }
 
     void mouseDrag(const juce::MouseEvent& event) override
     {
-        if (!draggingHeader || !event.mouseWasDraggedSinceMouseDown())
+        if (!event.mouseWasDraggedSinceMouseDown())
             return;
         const auto relative = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
-        for (const auto& candidate : owner.windows)
+        if (resizing)
         {
-            if (candidate->getPanelId() != panelId && candidate->getBounds().contains(relative))
-            {
-                owner.reorderPanels(panelId, candidate->getPanelId());
-                break;
-            }
+            auto bounds = dragStartBounds;
+            bounds.setSize(juce::jmax(static_cast<int>(minimum.width), dragStartBounds.getWidth() + relative.x - dragStartScreen.x),
+                           juce::jmax(static_cast<int>(minimum.height), dragStartBounds.getHeight() + relative.y - dragStartScreen.y));
+            setBounds(bounds);
+            owner.handleGeometryChanged(panelId);
+        }
+        else if (draggingHeader)
+        {
+            auto bounds = dragStartBounds.translated(relative.x - dragStartScreen.x, relative.y - dragStartScreen.y);
+            bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
+            setBounds(bounds);
+            owner.handleGeometryChanged(panelId);
         }
     }
 
-    void mouseUp(const juce::MouseEvent&) override { draggingHeader = false; }
+    void mouseDoubleClick(const juce::MouseEvent& event) override
+    {
+        if (event.y < 42 && !closeButton.getBounds().contains(event.getPosition())
+            && !maximizeButton.getBounds().contains(event.getPosition()))
+            toggleMaximize();
+    }
+
+    void mouseUp(const juce::MouseEvent&) override
+    {
+        draggingHeader = false;
+        resizing = false;
+        owner.handleGeometryChanged(panelId);
+    }
+
+    void toggleMaximize()
+    {
+        if (!maximized)
+        {
+            restoreBoundsBeforeMaximize = getBounds();
+            setBounds(owner.viewport.getViewArea());
+            maximized = true;
+        }
+        else
+        {
+            setBounds(restoreBoundsBeforeMaximize);
+            maximized = false;
+        }
+        maximizeButton.setButtonText(maximized ? "❐" : "□");
+        owner.handleGeometryChanged(panelId);
+    }
 
     void paint(juce::Graphics& g) override
     {
@@ -96,10 +149,24 @@ public:
         auto area = getLocalBounds().reduced(10);
         auto header = area.removeFromTop(32);
         closeButton.setBounds(header.removeFromRight(28));
+        header.removeFromRight(4);
+        maximizeButton.setBounds(header.removeFromRight(28));
         title.setBounds(header);
         area.removeFromTop(10);
         if (content != nullptr)
             content->setBounds(area);
+    }
+
+    void paintOverChildren(juce::Graphics& g) override
+    {
+        if (!maximized)
+        {
+            juce::Path grip;
+            grip.startNewSubPath(static_cast<float>(getWidth() - 5), static_cast<float>(getHeight() - 16));
+            grip.lineTo(static_cast<float>(getWidth() - 16), static_cast<float>(getHeight() - 5));
+            g.setColour(borderColour.brighter(0.4f));
+            g.strokePath(grip, juce::PathStrokeType(2.0f));
+        }
     }
 
 private:
@@ -109,9 +176,13 @@ private:
     ppgu::ui::PanelSize minimum;
     std::unique_ptr<juce::Component> content;
     juce::Label title;
-    juce::TextButton closeButton;
+    juce::TextButton closeButton, maximizeButton;
     juce::Colour panelColour, borderColour;
+    juce::Rectangle<int> dragStartBounds, restoreBoundsBeforeMaximize;
+    juce::Point<int> dragStartScreen;
     bool draggingHeader = false;
+    bool resizing = false;
+    bool maximized = false;
 };
 
 class PPGUMultiWindowWorkspace::TileSurface final : public juce::Component
@@ -154,6 +225,18 @@ bool PPGUMultiWindowWorkspace::openPanel(PanelSpec spec)
 
     auto window = std::make_unique<Window>(*this, std::move(spec),
         panelColour, borderColour, headingColour, textColour);
+    const auto panelId = window->getPanelId();
+    auto bounds = juce::Rectangle<int>(nextCascadeOffset, nextCascadeOffset,
+        static_cast<int>(window->getDesiredSize().width), static_cast<int>(window->getDesiredSize().height));
+    nextCascadeOffset = (nextCascadeOffset + 34) % 170;
+    if (persistenceProperties != nullptr)
+    {
+        juce::StringArray values;
+        values.addTokens(persistenceProperties->getValue(geometryKey(panelId, "bounds")), ",", "");
+        if (values.size() == 4)
+            bounds = { values[0].getIntValue(), values[1].getIntValue(), values[2].getIntValue(), values[3].getIntValue() };
+    }
+    window->setBounds(bounds);
     tileSurface->addAndMakeVisible(*window);
     windows.push_back(std::move(window));
     layoutPanels();
@@ -204,6 +287,11 @@ void PPGUMultiWindowWorkspace::setPanelScale(float scale)
     layoutPanels();
 }
 
+void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* properties)
+{
+    persistenceProperties = properties;
+}
+
 void PPGUMultiWindowWorkspace::setSurfaceColours(juce::Colour background,
                                                   juce::Colour panel,
                                                   juce::Colour border,
@@ -233,6 +321,29 @@ void PPGUMultiWindowWorkspace::paint(juce::Graphics& g)
     g.fillAll(backgroundColour);
 }
 
+juce::String PPGUMultiWindowWorkspace::geometryKey(int id, const juce::String& suffix) const
+{
+    return "workspace.panel." + juce::String(id) + "." + suffix;
+}
+
+void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
+{
+    const auto it = std::find_if(windows.begin(), windows.end(),
+        [id](const auto& item) { return item->getPanelId() == id; });
+    if (it == windows.end())
+        return;
+
+    const auto bounds = (*it)->getBounds();
+    if (persistenceProperties != nullptr && !(*it)->isMaximized())
+    {
+        persistenceProperties->setValue(geometryKey(id, "bounds"),
+            juce::String(bounds.getX()) + "," + juce::String(bounds.getY()) + ","
+            + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
+        persistenceProperties->saveIfNeeded();
+    }
+    layoutPanels();
+}
+
 void PPGUMultiWindowWorkspace::handleClose(int id)
 {
     closePanel(id);
@@ -258,64 +369,20 @@ void PPGUMultiWindowWorkspace::layoutPanels()
     if (tileSurface == nullptr)
         return;
 
-    const auto count = static_cast<int>(windows.size());
-    if (count == 0)
-    {
-        tileSurface->setSize(1, 1);
-        return;
-    }
-
     const auto view = viewport.getLocalBounds();
-    const ppgu::ui::PanelRect area { 0, 0,
-        juce::jmax(1, view.getWidth()), juce::jmax(1, view.getHeight()) };
+    int surfaceWidth = juce::jmax(1, view.getWidth());
+    int surfaceHeight = juce::jmax(1, view.getHeight());
 
-    std::vector<ppgu::ui::PanelRequest> requests;
-    requests.reserve(windows.size());
-    for (const auto& window : windows)
+    for (auto& window : windows)
     {
-        requests.push_back({ window->getPanelId(),
-            window->getDesiredSize(), window->getMinimumSize() });
+        auto bounds = window->getBounds();
+        bounds.setWidth(juce::jmax(static_cast<int>(window->getMinimumSize().width), bounds.getWidth()));
+        bounds.setHeight(juce::jmax(static_cast<int>(window->getMinimumSize().height), bounds.getHeight()));
+        bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
+        window->setBounds(bounds);
+        surfaceWidth = juce::jmax(surfaceWidth, bounds.getRight() + panelGap);
+        surfaceHeight = juce::jmax(surfaceHeight, bounds.getBottom() + panelGap);
     }
 
-    auto layout = ppgu::ui::calculatePanelLayout(area, requests, panelScale, panelGap);
-    if (!layout.overflow && !layout.invalidInput)
-    {
-        tileSurface->setSize(area.width, area.height);
-        for (const auto& placement : layout.panels)
-        {
-            const auto it = std::find_if(windows.begin(), windows.end(),
-                [&placement](const auto& item) { return item->getPanelId() == placement.id; });
-            if (it != windows.end())
-                (*it)->setPanelBounds({ placement.bounds.x, placement.bounds.y,
-                                       placement.bounds.width, placement.bounds.height });
-        }
-        return;
-    }
-
-    // When the viewport cannot fit every minimum-size panel, keep every panel
-    // alive in a scrollable grid instead of hiding all but the first panel.
-    int minWidth = 1, minHeight = 1;
-    for (const auto& window : windows)
-    {
-        minWidth = juce::jmax(minWidth, static_cast<int>(std::ceil(window->getMinimumSize().width * panelScale)));
-        minHeight = juce::jmax(minHeight, static_cast<int>(std::ceil(window->getMinimumSize().height * panelScale)));
-    }
-
-    const int gap = static_cast<int>(std::ceil(panelGap * panelScale));
-    const int columns = juce::jmax(1, (area.width + gap) / (minWidth + gap));
-    const int rows = (count + columns - 1) / columns;
-    const int surfaceWidth = juce::jmax(area.width, columns * minWidth + (columns - 1) * gap);
-    const int surfaceHeight = juce::jmax(area.height, rows * minHeight + (rows - 1) * gap);
     tileSurface->setSize(surfaceWidth, surfaceHeight);
-
-    for (int i = 0; i < count; ++i)
-    {
-        const int column = i % columns;
-        const int row = i / columns;
-        const int x = column * (minWidth + gap);
-        const int y = row * (minHeight + gap);
-        const int width = column == columns - 1 ? surfaceWidth - x : minWidth;
-        const int height = row == rows - 1 ? surfaceHeight - y : minHeight;
-        windows[static_cast<std::size_t>(i)]->setPanelBounds({ x, y, width, height });
-    }
 }
