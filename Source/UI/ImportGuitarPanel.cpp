@@ -7,18 +7,18 @@ PPGUImportGuitarPanel::PPGUImportGuitarPanel(std::function<void()> callback,
 {
     title.setText("IMPORT GUITAR LIBRARY", juce::dontSendNotification);
     title.setFont(juce::Font(18.0f, juce::Font::bold));
-    title.setColour(juce::Label::textColourId, juce::Colour(0xfff4f0f4));
+    title.setColour(juce::Label::textColourId, palette.textPrimary);
     addAndMakeVisible(title);
     description.setText("Load a licensed SFZ guitar instrument. The sampler validates regions and WAV references, then loads the library asynchronously.", juce::dontSendNotification);
     description.setFont(juce::Font(12.0f));
-    description.setColour(juce::Label::textColourId, juce::Colour(0xffaab2bf));
+    description.setColour(juce::Label::textColourId, palette.textSecondary);
     addAndMakeVisible(description);
     status.setText("READY  /  SELECT AN SFZ FILE", juce::dontSendNotification);
     status.setFont(juce::Font(11.0f, juce::Font::bold));
-    status.setColour(juce::Label::textColourId, juce::Colour(0xffed238b));
+    status.setColour(juce::Label::textColourId, palette.accent);
     addAndMakeVisible(status);
-    browse.setColour(juce::TextButton::buttonColourId, juce::Colour(0xffed238b));
-    browse.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    browse.setColour(juce::TextButton::buttonColourId, palette.accent);
+    browse.setColour(juce::TextButton::textColourOffId, palette.windowBg);
     browse.onClick = [this] { if (browseCallback) browseCallback(); };
     addAndMakeVisible(browse);
     setPalette(palette);
