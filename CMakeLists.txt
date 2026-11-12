@@ -49,6 +49,21 @@ juce_add_plugin(PopPunkGuitarUltimate
     VST3_COPY_DIR "${PPGU_FL_VST3_DIR}"
 )
 
+# Runtime themes are shipped beside the VST3 bundle, matching the editor's
+# sibling Skins/ discovery contract. This is visual data only; it is not linked
+# into the audio binary or accessed from the audio callback.
+if(TARGET PopPunkGuitarUltimate_VST3)
+    set(PPGU_RUNTIME_SKINS_DIR "$<TARGET_FILE_DIR:PopPunkGuitarUltimate_VST3>/../../../Skins")
+    add_custom_command(TARGET PopPunkGuitarUltimate_VST3 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${PPGU_RUNTIME_SKINS_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/SKIN"
+            "${PPGU_RUNTIME_SKINS_DIR}"
+        COMMENT "Packaging PPGU visual themes beside the VST3 bundle"
+        VERBATIM
+    )
+endif()
+
 target_sources(PopPunkGuitarUltimate PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginProcessor.h
