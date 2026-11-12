@@ -161,7 +161,7 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
 
     const auto layout = ppgu::ui::calculatePanelLayout(
         { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
-        requests, 12, 1.0);
+        requests, 1.0f, 12);
 
     for (auto& window : windows)
     {
