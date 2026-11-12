@@ -1747,3 +1747,27 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 6. Отдельно контролировать CPU/RAM/latency и real-time safety; качество не должно достигаться ценой блокировок или тяжёлой работы в audio callback.
 
 **РЕЗУЛЬТАТ:** GUITARIST-LIKE REALISM, FULLNESS AND MUSICAL PERFORMANCE ARE REQUIRED FOR BOTH MELODY AND PATTERN. Это целевой критерий, а не заявление о достигнутом качестве. В рамках записи код, семплы и пресеты не изменялись; listening QA и подтверждение остаются открытыми.
+
+
+## 2026-11-12 — PATTERN is based on recorded guitar performance loops / phrases
+
+**Статус:** USER CLARIFICATION ACCEPTED; RECORDED PERFORMANCE LIBRARY AND FULL PLAYBACK PATH NOT YET VERIFIED.
+
+Пользователь уточнил, что PATTERN должен опираться на механику готовых записанных гитарных лупов, ритмов, аккомпанементов и стилистик боя/исполнения по функциональному принципу Native Instruments Session Guitarist — Electric Sunburst Deluxe. Это уточняет ранее записанное требование «готовый исполняемый аккомпанемент»: приоритет — реальные заранее сыгранные performance loops/phrases, а не только алгоритмическая генерация отдельных strum MIDI events.
+
+**Целевое поведение PATTERN:**
+- Библиотека содержит оригинально записанные гитаристом ритмические performance phrases/loops для разных pop-punk и смежных стилей: ритмы, бои, аккомпанементы, варианты куплета/припева, palm-muted/open, downstroke/upstroke, акценты, остановки, переходы и вариации.
+- Пользователь выбирает пресет и стиль/паттерн в браузере; при включённом Preview слышит фактическое исполнение из соответствующей performance library.
+- При игре входящих MIDI-аккордов/нот система подбирает/адаптирует подходящий заранее записанный performance материал к гармонии в рамках поддерживаемых chord/phrase mappings; смена аккорда должна приводить к музыкально корректному продолжению/переходу, а не к случайному транспонированию неподходящей записи.
+- Performance content должен синхронизироваться с host tempo/transport и корректно обрабатывать loop boundaries, start/stop, chord changes, preset/pattern changes и note lifecycle. Если для варианта доступны разные recorded takes/variations, использовать их для естественного исполнения и снижения повторяемости.
+- Pattern settings могут выбирать/управлять стилем, интенсивностью, динамикой, swing/humanize и вариантами исполнения только в пределах того, что поддерживает реальный performance content. Не изображать несуществующие артикуляции/варианты параметрами UI.
+- SamplerEngine воспроизводит соответствующие performance recordings через подготовленный playback path; PatternScheduler может координировать выбор, запуск, синхронизацию и переходы, но не должен подменять отсутствующую записанную библиотеку одной лишь генерацией триггеров.
+
+**Архитектурные/лицензионные ограничения:**
+- Создавать собственные performance recordings и/или использовать только библиотеки, лицензия которых явно разрешает включение и распространение исходных записей внутри коммерческого/распространяемого плагина. Не извлекать и не копировать proprietary loops, samples, MIDI, artwork или код Session Guitarist / Electric Sunburst Deluxe.
+- Для каждого performance asset вести provenance, SHA-256, license/redistribution clearance, tempo, meter, key/chord coverage, articulation/style tags, loop length, recording/take metadata и technical validation.
+- Подготовка/декодирование/поиск ассетов выполняются вне audio callback; потоковое/буферное воспроизведение и переключения должны оставаться RT-safe.
+
+**Приёмка:** реальный end-to-end test preset/pattern selection → performance asset resolution → preview playback → host-synced loop playback → MIDI chord adaptation → clean chord/loop/preset transitions → SamplerEngine output. Обязательны прослушивание реальных записей, проверка музыкальности переходов, отсутствие тишины/stuck notes/glitches, проверка темпа и coverage. Pattern metadata или scheduler events без реального recorded performance source не считаются готовым PATTERN.
+
+**РЕЗУЛЬТАТ:** PATTERN'S PRIMARY PERFORMANCE SOURCE IS A LICENSE-CLEARED RECORDED GUITAR PERFORMANCE/LOOP LIBRARY, using the functional interaction model of Session Guitarist — Electric Sunburst Deluxe as reference. PPGU must use original/licensed content and its own implementation. This journal update changes no code or audio assets; availability of a production-ready performance library and full runtime path remains unverified/open.
