@@ -46,6 +46,7 @@ private:
     std::vector<Window> windows;
     int expandedId = 0;
     int currentPage = 0;
+    int pageCapacity = panelsPerPage;
     bool updatingLayout = false;
     juce::TextButton previousPageButton { "‹" }, nextPageButton { "›" };
     juce::Label pageIndicator;

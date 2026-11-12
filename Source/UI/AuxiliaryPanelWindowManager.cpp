@@ -61,7 +61,7 @@ bool PPGUAuxiliaryPanelWindowManager::openPanel(int id)
     {
         window->open = true;
         addAndMakeVisible(*window->overlay);
-        currentPage = (getOpenPanelCount() - 1) / panelsPerPage;
+        currentPage = (getOpenPanelCount() - 1) / juce::jmax(1, pageCapacity);
     }
     window->overlay->setVisible(true);
     setVisible(true);
@@ -140,7 +140,7 @@ void PPGUAuxiliaryPanelWindowManager::restoreOpenPanels(const juce::String& ids)
 
 int PPGUAuxiliaryPanelWindowManager::getPageCount() const noexcept
 {
-    const auto range = ppgu::ui::calculatePanelPageRange(static_cast<std::size_t>(getOpenPanelCount()), 0, static_cast<std::size_t>(panelsPerPage));
+    const auto range = ppgu::ui::calculatePanelPageRange(static_cast<std::size_t>(getOpenPanelCount()), 0, static_cast<std::size_t>(juce::jmax(1, pageCapacity)));
     return juce::jmax(1, static_cast<int>(range.pageCount));
 }
 
@@ -202,28 +202,69 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     updatingLayout = true;
     std::vector<Window*> openWindows; openWindows.reserve(windows.size());
     for (auto& window : windows) if (window.open) openWindows.push_back(&window);
+    const auto fullArea = getLocalBounds().reduced(18, 18);
+    const int total = static_cast<int>(openWindows.size());
+    pageCapacity = juce::jmin(panelsPerPage, juce::jmax(1, total));
+    std::vector<ppgu::ui::PanelRequest> probeRequests;
+    auto makeRequests = [&openWindows](int first, int count)
+    {
+        std::vector<ppgu::ui::PanelRequest> requests; requests.reserve(static_cast<std::size_t>(count));
+        for (int i = 0; i < count; ++i) requests.push_back({ openWindows[static_cast<std::size_t>(first + i)]->id, { 520, 360 }, { 260, 190 } });
+        return requests;
+    };
+    // Reduce page capacity until the current viewport can show every panel on the page.
+    while (pageCapacity > 1)
+    {
+        auto testArea = fullArea;
+        if (total > pageCapacity) testArea.removeFromBottom(34);
+        probeRequests = makeRequests(0, pageCapacity);
+        const auto probe = ppgu::ui::calculatePanelLayout({ testArea.getX(), testArea.getY(), testArea.getWidth(), testArea.getHeight() }, probeRequests, 1.0f, 12);
+        if (!probe.invalidInput && !probe.overflow) break;
+        --pageCapacity;
+    }
     const int pageCount = getPageCount(); currentPage = juce::jlimit(0, pageCount - 1, currentPage);
     const bool hasPaging = pageCount > 1;
     previousPageButton.setVisible(hasPaging); nextPageButton.setVisible(hasPaging); pageIndicator.setVisible(hasPaging);
-    if (hasPaging) pageIndicator.setText("PAGE " + juce::String(currentPage + 1) + " / " + juce::String(pageCount), juce::dontSendNotification);
-    auto area = getLocalBounds().reduced(18, 18);
-    if (hasPaging) { auto footer = area.removeFromBottom(34); previousPageButton.setBounds(footer.removeFromLeft(42).reduced(2)); nextPageButton.setBounds(footer.removeFromRight(42).reduced(2)); pageIndicator.setBounds(footer); }
-    const auto pageRange = ppgu::ui::calculatePanelPageRange(openWindows.size(), currentPage, static_cast<std::size_t>(panelsPerPage));
-    std::vector<ppgu::ui::PanelRequest> requests; requests.reserve(pageRange.end - pageRange.begin);
+    auto area = fullArea;
+    if (hasPaging)
+    {
+        auto footer = area.removeFromBottom(34);
+        previousPageButton.setBounds(footer.removeFromLeft(42).reduced(2));
+        nextPageButton.setBounds(footer.removeFromRight(42).reduced(2));
+        pageIndicator.setBounds(footer);
+        pageIndicator.setText("PAGE " + juce::String(currentPage + 1) + " / " + juce::String(pageCount), juce::dontSendNotification);
+    }
+    const auto pageRange = ppgu::ui::calculatePanelPageRange(openWindows.size(), currentPage, static_cast<std::size_t>(pageCapacity));
+    const auto requests = makeRequests(static_cast<int>(pageRange.begin), static_cast<int>(pageRange.end - pageRange.begin));
     for (auto& window : windows) if (window.open) window.overlay->setVisible(false);
-    for (std::size_t i = pageRange.begin; i < pageRange.end; ++i) requests.push_back({ openWindows[i]->id, { 520, 360 }, { 260, 190 } });
-    if (expandedId != 0 && isOpen(expandedId)) { const bool onPage = std::any_of(requests.begin(), requests.end(), [this](const ppgu::ui::PanelRequest& request) { return request.id == expandedId; }); if (!onPage) expandedId = 0; }
+    if (expandedId != 0 && isOpen(expandedId))
+    {
+        const bool onPage = std::any_of(requests.begin(), requests.end(), [this](const ppgu::ui::PanelRequest& request) { return request.id == expandedId; });
+        if (!onPage) expandedId = 0;
+    }
     if (expandedId != 0 && !requests.empty())
     {
         const auto expandedLayout = ppgu::ui::calculateExpandedPanelLayout({ area.getX(), area.getY(), area.getWidth(), area.getHeight() }, requests, expandedId, 1.0f, 8);
         if (!expandedLayout.invalidInput && !expandedLayout.overflow)
         {
-            for (const auto& placement : expandedLayout.panels) { auto* window = findWindow(placement.id); if (!window) continue; const bool isExpanded = placement.id == expandedId; window->overlay->setExpanded(isExpanded); window->overlay->setVisible(placement.visible); const auto& b = placement.bounds; window->overlay->setBounds(b.x,b.y,b.width,b.height); if (isExpanded) window->overlay->toBack(); else window->overlay->toFront(false); }
+            for (const auto& placement : expandedLayout.panels)
+            {
+                auto* window = findWindow(placement.id); if (!window) continue;
+                const bool isExpanded = placement.id == expandedId;
+                window->overlay->setExpanded(isExpanded); window->overlay->setVisible(placement.visible);
+                const auto& b = placement.bounds; window->overlay->setBounds(b.x,b.y,b.width,b.height);
+                if (isExpanded) window->overlay->toBack(); else window->overlay->toFront(false);
+            }
             updatingLayout = false; repaint(); return;
         }
         expandedId = 0; for (auto& window : windows) window.overlay->setExpanded(false);
     }
     const auto layout = ppgu::ui::calculatePanelLayout({ area.getX(), area.getY(), area.getWidth(), area.getHeight() }, requests, 1.0f, 12);
-    for (const auto& placement : layout.panels) { auto* window = findWindow(placement.id); if (!window) continue; window->overlay->setVisible(placement.visible); if (placement.visible) { const auto& b = placement.bounds; window->overlay->setBounds(b.x,b.y,b.width,b.height); } }
+    for (const auto& placement : layout.panels)
+    {
+        auto* window = findWindow(placement.id); if (!window) continue;
+        window->overlay->setVisible(placement.visible);
+        if (placement.visible) { const auto& b = placement.bounds; window->overlay->setBounds(b.x,b.y,b.width,b.height); }
+    }
     updatingLayout = false; repaint();
 }

@@ -1291,3 +1291,6 @@ FX EDIT, AutoChords, Import Guitar и Settings должны открыватьс
 - FX EDIT продолжает предоставлять индивидуальные параметры модулей EQ, Compressor, Distortion, Flanger, Chorus, Delay, Reverb и Cabinet IR.
 
 Lifecycle/persistence/theme handling изменены в исходниках, но runtime стресс-проверка многократного открытия/закрытия, Windows Release build, CTest, pluginval strictness 5 и FL Studio 20 host acceptance остаются PENDING до CI/host evidence. Этот S2 commit не заявляет завершённость DSP amp/cab или FX processing S7: наличие UI/параметров не доказывает полноту DSP.
+
+
+Дополнение к S2 paging: число окон на странице адаптируется не только к количеству открытых панелей (максимум 6), но и к реальному размеру редактора. Если сетка 2xN не помещается в доступную область, менеджер уменьшает page capacity до первого валидного размера, резервирует нижнюю навигационную полосу и показывает остальные панели на следующих страницах. Добавлены pure-contract cases для компактной страницы из двух панелей и последней неполной страницы. Runtime GUI/resize стресс-тест и CI остаются PENDING.

@@ -73,6 +73,10 @@ int main()
     CHECK(!clampedPage.invalidInput && clampedPage.pageIndex == 2 && clampedPage.begin == 12 && clampedPage.end == 13);
     const auto negativePage = calculatePanelPageRange(7, -4, 6);
     CHECK(!negativePage.invalidInput && negativePage.pageIndex == 0 && negativePage.begin == 0 && negativePage.end == 6);
+    const auto compactViewportPages = calculatePanelPageRange(5, 1, 2);
+    CHECK(!compactViewportPages.invalidInput && compactViewportPages.pageCount == 3 && compactViewportPages.begin == 2 && compactViewportPages.end == 4);
+    const auto compactViewportLast = calculatePanelPageRange(5, 2, 2);
+    CHECK(!compactViewportLast.invalidInput && compactViewportLast.begin == 4 && compactViewportLast.end == 5);
     CHECK(calculatePanelPageRange(7, 0, 0).invalidInput);
 
     const PanelRect desktop { 100, 80, 1600, 900 };
