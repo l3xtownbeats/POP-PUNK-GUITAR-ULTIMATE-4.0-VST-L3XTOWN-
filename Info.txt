@@ -1520,3 +1520,21 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **РЕЗУЛЬТАТ:** sccache CI integration committed; build/CTest/pluginval/package result PENDING. FL Studio 20 manual host acceptance остаётся отдельным gate.
 
 **Выбранный стек:** JUCE 7.0.12 + C++20 + CMake + Visual Studio 2022 + VST3 SDK через JUCE + sccache (CI) + CTest + pluginval. Другие framework/toolchains не подключать без конкретной измеряемой причины.
+
+
+## 2026-11-12 — Compiler-cache validation and generator correction
+
+**Branch:** `work/ppgu-toolchain-qa-rev17-1`  
+**Prior exact-SHA run:** `43188981213`, commit `8f1eab9cb8da8a468b98adfe43cb103fe9ae4abe`, SUCCESS.  
+**Workflow correction commit:** `b3ba87cfd575efdaba62438c57a07be742f31111`.  
+**Current branch HEAD at journal update:** `b3ba87cfd575efdaba62438c57a07be742f31111`.
+
+**ПРОВЕРКА:** the Windows Release build, all 14 CTest tests and pluginval strictness 5 passed on the prior exact SHA with the initial sccache integration. However, `sccache --show-stats` reported **0 compile requests / 0 compilations / 0 cache hits / 0 misses**. Therefore the build passed but the compiler cache was NOT actually in the compiler invocation path.
+
+**АНАЛИЗ:** the initial Visual Studio generator did not route MSVC compile commands through the configured CMake compiler launcher. Reporting the integration as a performance success would be incorrect. Keep the existing MSVC toolchain and multi-config Release behavior, but use Ninja Multi-Config, which supports CMake compiler launchers, after explicitly initializing the x64 MSVC developer environment.
+
+**ИСПРАВЛЕНИЕ:** workflow now initializes x64 MSVC using `ilammy/msvc-dev-cmd@v1`, configures with `-G "Ninja Multi-Config"`, and retains `-DCMAKE_CXX_COMPILER_LAUNCHER=sccache`. Build/test/pluginval/package gates remain in place. No production source, APVTS, DSP, MIDI, sampler or preset changes.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** workflow commit is present; exact-SHA run with Ninja Multi-Config and non-zero sccache compile requests is pending. The cache feature remains PARTIAL until logs prove compiler interception and a later comparable run demonstrates hits. No build-time reduction is claimed.
+
+**РЕЗУЛЬТАТ:** previous code build PASS; initial cache effectiveness FAIL (not invoked); generator/toolchain correction IMPLEMENTED; validation PENDING.  
