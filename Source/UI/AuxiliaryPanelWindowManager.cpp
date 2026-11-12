@@ -145,26 +145,47 @@ void PPGUAuxiliaryPanelWindowManager::updateLayout()
     const auto area = getLocalBounds().reduced(18, 18);
     if (expandedId != 0 && isOpen(expandedId))
     {
+        // Keep the selected panel large while every other open panel remains
+        // visible in a non-overlapping dock. The former implementation placed
+        // all compact panels at the same coordinates and sent them behind the
+        // expanded panel, making them inaccessible.
+        const auto expanded = std::find_if(windows.begin(), windows.end(),
+            [this](const Window& window) { return window.id == expandedId; });
+        const int dockedCount = getOpenPanelCount() - 1;
+        const int gap = 8;
+        const int dockWidth = dockedCount > 0
+            ? juce::jlimit(240, juce::jmax(240, area.getWidth() / 3), area.getWidth() / 2)
+            : 0;
+        const int mainWidth = dockedCount > 0
+            ? juce::jmax(260, area.getWidth() - dockWidth - gap)
+            : area.getWidth();
+
+        if (expanded != windows.end())
+        {
+            expanded->overlay->setExpanded(true);
+            expanded->overlay->setVisible(true);
+            expanded->overlay->setBounds(area.getX(), area.getY(), mainWidth, area.getHeight());
+            expanded->overlay->toBack();
+        }
+
+        int dockIndex = 0;
         for (auto& window : windows)
         {
-            if (!window.open)
+            if (!window.open || window.id == expandedId)
                 continue;
+
+            window.overlay->setExpanded(false);
             window.overlay->setVisible(true);
-            if (window.id == expandedId)
-            {
-                window.overlay->setBounds(area);
-                window.overlay->toFront(false);
-            }
-            else
-            {
-                const auto compactWidth = juce::jmax(220, area.getWidth() / 4);
-                const auto compactHeight = juce::jmax(150, area.getHeight() / 3);
-                window.overlay->setBounds(area.getRight() - compactWidth - 8,
-                                          area.getY() + 8,
-                                          compactWidth, compactHeight);
-                window.overlay->toBack();
-            }
+            const int availableHeight = area.getHeight() - gap * (dockedCount - 1);
+            const int cellHeight = dockedCount > 0 ? availableHeight / dockedCount : area.getHeight();
+            const int y = area.getY() + dockIndex * (cellHeight + gap);
+            const int height = dockIndex == dockedCount - 1
+                ? area.getBottom() - y : cellHeight;
+            window.overlay->setBounds(area.getRight() - dockWidth, y, dockWidth, height);
+            window.overlay->toFront(false);
+            ++dockIndex;
         }
+
         updatingLayout = false;
         repaint();
         return;
