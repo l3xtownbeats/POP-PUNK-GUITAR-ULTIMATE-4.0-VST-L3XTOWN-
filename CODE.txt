@@ -632,3 +632,28 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 **Приоритет исполнения:** P0 — единый preset/source resolver, полифонический MELODY, сухие bank sources, Preview/live parity и persistence; P1 — записанная performance library и asset-driven PATTERN; P2 — все 300 реальных пресетов, Import Guitar/Bank и browser; P3 — performance/stability/installer/licensing/release QA.
 
 **Статус:** это проверка выбранных исходников и зафиксированный план; в этом обновлении исходный код, preset definitions и audio assets не менялись. Никакие коммерческие readiness/DAW listening gates не объявлены пройденными.
+
+
+## 2026-11-12 — Interface continuation: premium static skins, collapsible keyboard, chord display and AutoChords contract
+
+Пользователь уточнил продуктовую концепцию оболочки: профессиональный скин/тема важнее декоративной анимации; требуется экономный UI, внутренняя система окон, нижняя MIDI-клавиатура со статичной ion-blue подсветкой удерживаемых нот, отображение названия аккорда и возможность сворачивать клавиатуру. AutoChords — расширенная chord helper механика, доступная только в PATTERN, с отображением аккорда и выбором ноты/root для транспонирования; в MELODY не должна перехватывать или изменять MIDI.
+
+Проведена проверка актуальной ветки на HEAD e444048112acdbdc6b637a9679e91c368df8fa98:
+- PluginEditor уже содержит PPGUPerformanceDisplay с определением note/chord names и MidiKeyboardComponent с keyDown overlay.
+- Подсветка клавиш сейчас использует общий theme accent; отдельная ion-blue семантика не гарантирована.
+- В просмотренном PluginEditor.h/.cpp не обнаружена отдельная кнопка сворачивания/разворачивания клавиатуры.
+- PPGUMultiWindowWorkspace уже размещает FX EDIT, AutoChords и Import Guitar; Settings не следует выдавать за готовую панель до реализации.
+- Текущий skin audit указывает на неполную миграцию токенов, фиксированный диапазон 1..51 и отсутствие полноценной Theme Gallery.
+- AutoChords UI/chord display наличие не доказывает, что PATTERN-only transpose/bypass полностью реализованы в engine. Это отдельный функциональный QA gate.
+
+Создана подробная спецификация docs/PPGU_INTERFACE_UX_EXECUTION_SPEC_RU.md (commit 6809372ea867dc789ba46e1faf1940f8ca892a91).
+
+Приняты решения:
+1. Static premium skin first; no always-on animation/glow. Reduced-motion/ECO default.
+2. Held MIDI keys show simultaneous static ion-blue highlights; chord monitor shows note names and chord only when confidently recognized.
+3. Keyboard collapse is UI-only: never stops MIDI input, changes play mode or affects audio.
+4. AutoChords is PATTERN-only; OFF bypasses transformations. In MELODY it is disabled and must not intercept or transform notes. Root/transposition UI must display source and resulting chord.
+5. All real auxiliary windows inherit active theme tokens and retain visible independent close controls; no fake Settings/About placeholders.
+6. Theme Gallery must discover themes dynamically, include previews/search/family/favorites and honest error states; no hardcoded 1..51 cap.
+
+**Статус:** выполнен ограниченный source audit и создана спецификация. В этом цикле PluginEditor, ThemeManager, AutoChords engine и audio code не менялись; CI/visual/DAW acceptance не запускались. Следующий implementation pass должен отдельно реализовать keyboard collapse + ion-blue theme token and test AutoChords PATTERN-only routing before claiming completion.
