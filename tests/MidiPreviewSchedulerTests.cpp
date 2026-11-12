@@ -78,6 +78,21 @@ int main()
         if (!bounded.enqueueChord(chord.data(), 3, 100, 100)) return 17;
     if (bounded.enqueueStop()) return 18;
 
+    // A burst is coalesced to the latest explicit intent; capacity stays bounded.
+    MidiPreviewScheduler coalesced;
+    if (!coalesced.enqueueChord(chord.data(), 3, 100, 100)) return 23;
+    if (!coalesced.enqueueChord(replacement.data(), 2, 90, 100)) return 24;
+    if (!coalesced.enqueueStop()) return 25;
+    count = coalesced.processBlock(64, events);
+    if (count != 0 || coalesced.activeNoteCount() != 0) return 26;
+    if (!coalesced.enqueueChord(replacement.data(), 2, 90, 100)) return 27;
+    if (!coalesced.enqueueChord(chord.data(), 3, 100, 100)) return 28;
+    count = coalesced.processBlock(64, events);
+    if (count != 3 || coalesced.activeNoteCount() != 3) return 29;
+    if (!eventIs(events[0], 0, EventKind::NoteOn, 60, 100, 1)
+        || !eventIs(events[1], 0, EventKind::NoteOn, 64, 100, 1)
+        || !eventIs(events[2], 0, EventKind::NoteOn, 67, 100, 1)) return 30;
+
     std::cout << "MIDI preview scheduler contract tests passed\n";
     return 0;
 }

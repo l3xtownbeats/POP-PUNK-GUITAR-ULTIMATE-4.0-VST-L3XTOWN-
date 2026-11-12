@@ -101,36 +101,39 @@ public:
         }
         activeCount = retained;
 
-        PreviewCommand command;
+        // Coalesce a burst of UI commands to the latest intent. This bounds
+        // each block to at most 6 old NoteOffs + 6 NoteOns + 6 NoteOffs.
+        PreviewCommand command, latestCommand;
+        bool haveCommand = false;
         while (commands.tryPop(command))
         {
-            if (command.kind == PreviewCommandKind::Stop
-                || command.kind == PreviewCommandKind::PlayChord)
-            {
-                for (std::size_t i = 0; i < activeCount; ++i)
-                    emitOff(active[i], 0);
-                activeCount = 0;
-            }
+            latestCommand = command;
+            haveCommand = true;
+        }
 
-            if (command.kind != PreviewCommandKind::PlayChord)
-                continue;
+        if (haveCommand)
+        {
+            for (std::size_t i = 0; i < activeCount; ++i)
+                emitOff(active[i], 0);
+            activeCount = 0;
 
-            for (std::size_t i = 0; i < command.noteCount && i < maximumChordNotes; ++i)
+            if (latestCommand.kind == PreviewCommandKind::PlayChord)
             {
-                const auto note = command.notes[i];
-                if (count < output.size())
+                for (std::size_t i = 0; i < latestCommand.noteCount && i < maximumChordNotes; ++i)
+                {
+                    const auto note = latestCommand.notes[i];
                     output[count++] = { 0, EventKind::NoteOn, note,
-                                        command.velocity, command.channel };
-                if (command.gateSamples < static_cast<std::uint32_t>(blockSamples))
-                {
-                    if (count < output.size())
-                        output[count++] = { static_cast<int>(command.gateSamples),
-                                            EventKind::NoteOff, note, 0, command.channel };
-                }
-                else
-                {
-                    active[activeCount++] = { note, command.channel,
-                        command.gateSamples - static_cast<std::uint32_t>(blockSamples) };
+                                        latestCommand.velocity, latestCommand.channel };
+                    if (latestCommand.gateSamples < static_cast<std::uint32_t>(blockSamples))
+                    {
+                        output[count++] = { static_cast<int>(latestCommand.gateSamples),
+                                            EventKind::NoteOff, note, 0, latestCommand.channel };
+                    }
+                    else
+                    {
+                        active[activeCount++] = { note, latestCommand.channel,
+                            latestCommand.gateSamples - static_cast<std::uint32_t>(blockSamples) };
+                    }
                 }
             }
         }
