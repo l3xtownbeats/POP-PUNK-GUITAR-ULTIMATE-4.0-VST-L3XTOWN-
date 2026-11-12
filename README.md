@@ -33,11 +33,11 @@ The product direction is immediate playability, a focused control surface and an
 
 ## Current build status
 
-**Current source HEAD:** `e05a12b0830ba323bc9fcd9166eae9e7ca701092` (main).
+**Current source HEAD at this documentation update:** `ce5ee12b5eb4b10fb8d2a3b7659e202b5a803f5c` (main).
 
 The latest source audit fixed CMake test discovery: `include(CTest)` now initializes `BUILD_TESTING` before every conditional test target, including the auxiliary-panel geometry contract. This is a source-level correction only.
 
-**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
+**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. The queried commit has an empty combined-status list and no associated workflow runs in the available PR-run lookup; neither result means PASS. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
 
 - [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
 - [Current source commit](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/commit/e05a12b0830ba323bc9fcd9166eae9e7ca701092)
@@ -70,7 +70,7 @@ The hero guitar hardware illustration is drawn by JUCE Graphics. Manifest previe
 
 | Area | Repository evidence | Release status |
 |---|---|---|
-| VST3 / JUCE project | CMake project and JUCE processor/editor source | Current source build / test / package validation pending run #832 |
+| VST3 / JUCE project | CMake project and JUCE processor/editor source | Current source build / test / package validation not verified for current HEAD |
 | SFZ/WAV sampler | Parser/playback path, metadata and streaming components | Full-library and stress acceptance pending |
 | Voice management | 64 preallocated sampler voice slots | 64-voice stress acceptance pending |
 | Streaming | Background page streaming and fixed page-cache components | Lifecycle / recovery stress pending |
