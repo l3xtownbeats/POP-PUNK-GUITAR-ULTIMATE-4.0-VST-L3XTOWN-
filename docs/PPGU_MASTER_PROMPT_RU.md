@@ -581,6 +581,85 @@ R21 [Полнота payload] Пакет без полного набора ас�
     Factory presets read-only; пользовательские варианты сохраняются
     отдельно как User Presets. Проверять level-match, mono compatibility,
     transient/palm-mute clarity, CPU и отсутствие clipping.
+7.5.7 FULL POP-PUNK GUITAR PRODUCTION — ELECTRIC + CLEAN + ACOUSTIC:
+    Tonal brief applies to the complete guitar instrument, not only
+    distorted electric guitar. ANGELA ENGINE and PPGU preset system must
+    produce polished, mix-ready tones for driven electric, clean electric,
+    acoustic steel-string, nylon/classical and layered/hybrid guitar parts.
+    The target is excellent musical sound and usable production, not a
+    single stereotyped distortion chain.
+
+    A) DRIVEN ELECTRIC:
+       crunchy/mid-forward rhythm; tight low end; clear power-chord
+       separation; pick attack and palm-mute dynamics; controlled gain;
+       optional OD/boost, amp voicing, cabinet/IR, EQ and compression
+       in a sensible order. Provide rhythm, lead, octave, muted and
+       high-energy modern variants without defaulting to metal saturation.
+    B) CLEAN ELECTRIC:
+       several distinct clean characters: bright/chime, warm/thick,
+       edge-of-breakup, compressed/punchy and spacious/ambient. Preserve
+       transient and chord definition. Optional subtle chorus, delay,
+       reverb, tremolo, modulation, EQ and compression; tasteful settings
+       by default. Include clean-to-crunch transitions where supported.
+    C) ACOUSTIC STEEL-STRING:
+       natural body, string articulation, pick/finger detail, controlled
+       low-mid resonance, smooth high end and believable stereo space.
+       Provide intimate/dry, bright strummed, warm rhythmic, wide layered,
+       polished pop mix and ambient acoustic variations. Processing may
+       include high-pass/low-cut, corrective/tonal EQ, gentle compression,
+       transient shaping where implemented, subtle saturation, de-esser/
+       resonance control where justified, short room/plate/hall reverb,
+       stereo width and delay. Avoid harsh pick noise, boxiness, boomy
+       low end and artificial over-processing.
+    D) NYLON / CLASSICAL:
+       preserve soft attack, woody body and note separation; provide
+       intimate, warm, bright and cinematic/pop-layered variants. Do not
+       force steel-string EQ or aggressive pick transients onto nylon.
+    E) ACOUSTIC-ELECTRIC / DI INPUT:
+       offer dedicated pickup/DI cleanup and tone shaping to reduce
+       quack, harsh resonances and feedback-prone lows; retain realistic
+       dynamics. Do not label a generic electric-guitar amp/cab chain as
+       an acoustic preset unless it is an intentional creative effect.
+    F) LAYERED POP ARRANGEMENTS:
+       support complementary double-tracked rhythm, left/right layers,
+       octave accents, clean arpeggios and acoustic layers. Factory
+       presets should make parts sit together without phase cancellation,
+       excessive width, clipping or masking. Provide mono compatibility
+       and level-matched audition guidance.
+
+    PRESET TAXONOMY / BROWSER TAGS:
+       Instrument: Electric / Acoustic Steel / Nylon / Acoustic DI / Hybrid.
+       Character: Clean / Chime / Warm / Edge / Crunch / Distortion /
+       High Gain / Palm Mute / Lead / Arpeggio / Strummed / Ambient.
+       Role: Intro / Verse / Chorus / Bridge / Lead / Layer / DI Base.
+       Each preset records source library/instrument, articulation,
+       pickup/source profile, amp (if applicable), cabinet/IR (if applicable),
+       FX chain and individual bypass states, output trim and tags.
+       A clean acoustic preset must not inherit electric amp/cab defaults.
+
+    PROCESSING PRINCIPLES:
+       Use every existing and future plugin capability when it improves
+       the result, but never add processing merely because it exists.
+       Build distinct, intentional chains per source and musical role.
+       Keep clean/DI base presets genuinely clean and non-destructive;
+       make processed versions separate presets. Cabinet bypass remains
+       independent; electric guitar cabinet IR is not automatically applied
+       to acoustic/nylon sources. Acoustic cabinet/speaker coloration is
+       an optional creative effect only, never a default acoustic path.
+       FX modules remain individually bypassable and MASTER FX BYPASS
+       must preserve each module's saved state.
+
+    QUALITY / ACCEPTANCE:
+       Audition each family in solo and full mix, at matched loudness;
+       evaluate transient clarity, chord separation, note sustain, noise,
+       resonance, stereo/mono compatibility, headroom and CPU. Check
+       several source libraries and articulations; no preset may rely on
+       one sample set to conceal weaknesses. Document reference chain,
+       source/license, intended musical role and known limitations.
+       Use only legally distributable sample/IR assets. If a desired
+       sound is not yet supported by the current sampler/DSP, mark it
+       PENDING and implement/test the required capability before claiming
+       the preset is playable or production-ready.
 7.6 PERFORMANCE DISPLAY — компактное информационное табло над MIDI
     keyboard. Поля: текущий аккорд (например Am), отдельная нота/октава
     (C3), выбранная тональность (A Minor), тип аккорда, текущий/следующий
