@@ -253,3 +253,33 @@ The following sources were found in a fresh search. They are candidates, not cla
    - Catalogue: https://sfzinstruments.github.io/guitars/
 
 **Research conclusion:** FreePats Clean/Jazz are the strongest newly confirmed permissive electric-guitar leads. Nyanshell and fakeguitar are technical leads only until licensing is established. Metal GTX/Standard Guitar may have useful multi-articulation content, but custom terms block bundling until explicitly cleared. None of these findings changes the empty asset registry or proves sample ingestion.
+
+
+## 2026-11-12 — new guitar-library discovery queue (priority: download + legal/technical intake)
+
+These are newly researched leads beyond the already integrated 10 CC0 package families. A search result or product page is not proof of a downloaded archive. No candidate below is marked integrated.
+
+19. **Guitar DI Lite — Boyss-Sound-e-Scapes (free 7th-anniversary Lite release)**
+   - Official product page describes a dry electric-guitar multisample instrument; the full Guitar DI has 5 round robins and 3 velocity layers, but do not assume Lite has identical coverage. Third-party Nov 7, 2026 report describes the Lite pack as 96 WAV samples, 2 RR and 3 velocity layers; verify against the actual download.
+   - Formats on the developer page: SFZ, Kontakt, Decent Sampler and unlocked WAV. Dry DI could be useful as a source for PPGU's own amp/cab processing.
+   - Official source: https://www.boyss-sound-e-scapes.com/guitar-di
+   - **License:** no explicit redistribution/embedding permission was established from the surfaced official page. Status **YELLOW / QUARANTINE**. Download for inspection only if the archive is accessible; do not bundle or redistribute samples until the included license or written permission explicitly covers embedding in a commercial sample-based VST.
+   - Technical intake: inspect actual Lite archive, SFZ mappings, note range, velocity/RR coverage, note-off, loop/sustain behavior, file size and SHA-256.
+
+20. **Blue Jeans And Moonbeams / Ella Gitauru — Malaclypse the Younger**
+   - SFZ Instruments catalogue lists MIT; includes S-type electric and steel-string acoustic guitar. A recent technical review reports Ella Gitauru has four velocity layers and a 231 MB RAR of Ogg samples, and that its user guide includes MIT boilerplate plus an attribution condition for distributed alterations.
+   - Catalogue: https://sfzinstruments.github.io/guitars/
+   - **License:** promising but not yet approved for packaging. Treat as **YELLOW / QUARANTINE** until the exact archive's guide/license and rights over the sound recordings are reviewed. MIT software wording alone must not be assumed to clear third-party audio. Confirm whether redistributed sample assets and commercial plugin embedding are explicitly permitted; preserve required notices/attribution if cleared.
+   - Technical intake: verify exact version, archive contents, sample format/rate, velocity coverage, key/fret mapping, articulation/key-switch data and SHA-256.
+
+21. **FreePats FSBS Clean / Jazz (2026-08-07 versions) — update watch, not a new integrated library**
+   - Official FreePats states CC0 1.0 and provides SFZ WAV/FLAC options. These versions are already represented in the previously confirmed FreePats family inventory; do not count them as new assets or duplicate the download unless archive checksums/version show a genuinely new payload.
+   - Sources: https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html ; https://github.com/freepats/electric-guitar-FSBS-clean ; https://github.com/freepats/electric-guitar-FSBS-jazz
+   - Status: **GREEN license / version-refresh candidate**; compare manifests and hashes before replacing existing files.
+
+22. **VCSL — Versilian Community Sample Library**
+   - Repository declares CC0 and publishes an SFZ release; broad orchestral collection, not a dedicated pop-punk guitar pack. Search inventory for any guitar-family content before considering it relevant; avoid importing unrelated instruments.
+   - Source: https://github.com/sgossner/VCSL
+   - Status: **GREEN repository-level license lead / GUITAR CONTENT UNCONFIRMED**. Do not treat as a guitar asset until a guitar instrument is located and its per-folder provenance checked.
+
+**Priority order for next intake:** (1) find genuinely new electric/steel-string guitar libraries; (2) obtain actual archives; (3) inspect per-asset license and redistribution rights; (4) verify SFZ/WAV maps, articulations, velocities/RR, quality and SHA-256; (5) only then ingest into the asset registry and SoundBank. Keep commercial/custom-license candidates separate. Never count a search result, catalogue entry, or metadata-only discovery as a downloaded library.
