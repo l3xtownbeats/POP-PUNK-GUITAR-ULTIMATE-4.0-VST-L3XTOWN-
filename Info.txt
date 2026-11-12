@@ -1596,3 +1596,63 @@ Pattern playback должен использовать существующий 
 7. Выполнить exact-SHA Windows x64 Release, полный CTest и pluginval strictness 5; затем отдельно FL Studio 20 acceptance.
 
 **Текущий результат:** каталог требований внесён в INFO. Реализован только предыдущий базовый PME groove contract; все остальные техники, подстили, реальная articulation/voicing mapping, loop/preview UI и звуковая приёмка остаются PENDING.
+
+
+## 2026-11-12 — Full reference: Punk-rock rhythm guitar styles, patterns and practice guide
+
+**Статус:** REFERENCE / PRODUCT REQUIREMENTS RECORDED. This is the user's expanded reference document. It supplements the previously recorded rhythm-technique catalogue and PME contract. Recording this guide does not mean the patterns, audio articulations, UI or training features are implemented.
+
+### Scope of the reference
+
+The guide covers:
+1. Core punk rhythm principles: rhythm guitar as the engine; repeatable 1–2 bar motifs; timing and drum synchronization; energy from rests, accents, muting and note-length contrast.
+2. Right-hand techniques: downstrokes, palm muting with adjustable pressure/intensity, open strokes, staccato via note damping.
+3. Rhythm devices: straight eighths, rests, offbeat/backbeat accents, mixed subdivisions, short repeated riffs, fifth/octave movement, sixteenth-note walls, ghost notes and phrase-ending gaps.
+4. Counted patterns A–G:
+   - A: continuous palm-muted eighth-note wall.
+   - B: verse-like PM pattern with rests.
+   - C: broken British-punk-inspired open/PM pattern with rests.
+   - D: quiet ghost-note pulse with stronger backbeat accents.
+   - E: continuous palm-muted sixteenths, downstroke.
+   - F: ska-style offbeat strokes.
+   - G: paired sixteenth-note double hits combined with eighth-note events.
+5. Substyles: classic punk, British punk, pop-punk, punk-hardcore/skate-punk, ska-punk and post-punk.
+6. Practical substyle examples and approximate tempo ranges: classic punk 130–170 BPM; pop-punk 150–180 BPM; British punk 120–160 BPM; hardcore/skate-punk 180–220+ BPM. These are illustrative ranges, not hard engine limits.
+7. Rhythm-section relationship: kick on 1/3, snare on 2/4 as a common reference, hats/ride as pulse, and tight synchronization with drum loops.
+8. Common playing errors and technique notes: excessive palm pressure, rushing, losing count through rests, over-tension, and starting too fast.
+9. Listening/analysis references named by the user: Green Day “Basket Case”; Ramones “Blitzkrieg Bop”; The Clash “London Calling” and “Should I Stay or Should I Go”; Sex Pistols “Anarchy in the U.K.”; Blink-182 “Dammit”.
+10. A six-stage practice curriculum from quarter-note downstrokes at 60–80 BPM through eighths, palm muting, rests/accents, gradual speed increases, sixteenths and playing with recordings.
+11. A compact A–F pattern cheat sheet and tempo summary.
+
+### Product implications for PPGU
+
+- Treat rhythm pattern, subdivision, stroke direction, articulation, accent/ghost-note level, rests, note gate, voicing, bar length and section role as distinct editable dimensions.
+- Support both 1-bar and 2-bar patterns, loop/repeat, controlled variation and clear counted-grid visualization.
+- Pattern grid should display count syllables appropriate to subdivision: quarter/eighth grid (1 & 2 & 3 & 4 &) and sixteenth grid (1 e & a ...).
+- Support explicit downstroke-only modes for classic punk, PME and hardcore wall; allow upstroke/offbeat mode where required for ska-punk. Never let ska settings alter the PME contract.
+- Support palm-muted, open, staccato and ghost-note articulations only when the corresponding sample/DSP behavior exists. Ghost notes require a genuinely quieter/appropriate articulation or controlled dynamics, not merely a label.
+- Support power-fifth and octave voicings and playable guitar string/fretboard mappings.
+- Expose practical pattern templates A–G as original genre exercises, not reproductions of protected recordings.
+- Keep drum-grid alignment and deterministic timing; rests must not create stuck notes at pattern or transport boundaries.
+- The practice guide is a reference for future learning/help content, not a claim that an interactive lesson system exists.
+
+### Editorial/notation checks required before implementation
+
+The supplied guide is preserved as a user reference, but some examples need musical normalization before they become executable presets:
+- Pattern D's written row “г г В г г В г г” places stronger strokes at slot 3 and slot 6 of the eighth-note grid, which does not straightforwardly correspond to the stated backbeat on beats 2 and 4. Resolve against explicit beat indices before implementation.
+- Pattern G's description says “on each beat: a pair of sixteenths + an eighth”, but its displayed row is visually ambiguous. Define exact PPQ positions and event count before implementation.
+- Pattern F uses offbeat strokes; select down/up stroke direction as an explicit ska articulation choice rather than assuming downstroke-only.
+- “Downstroke pulse on every beat and every ‘and’” describes eighth-note downstrokes; the sixteenth-note wall is a separate, more demanding subdivision.
+- “Ramones-style” and other artist/song names are stylistic listening references only. Do not copy copyrighted riffs, MIDI, tabs or recordings.
+
+### Implementation and verification sequence
+
+1. Translate each A–G pattern into an unambiguous event grid with exact PPQ positions, direction, articulation, velocity/accent, gate and rest behavior.
+2. Add separate tests for each pattern's event positions, subdivisions, repeat boundaries, note-off behavior, direction and articulation.
+3. Inspect the existing PatternScheduler, PatternEvent, sampler region selection and SFZ articulation mapping before wiring patterns.
+4. Implement PM/Open/Staccato/Ghost only with real supported sound behavior and legally distributable assets.
+5. Integrate through the existing Pattern/Processor/Sampler path and bounded real-time-safe event handling.
+6. Add pattern browser/editor and practice guide UI only after backend behavior is real.
+7. Verify Windows x64 Release, full CTest and pluginval strictness 5 on the exact resulting commit; separately perform FL Studio 20 host acceptance.
+
+**Current implementation status:** only the previously recorded basic PME eight-eighth downstroke/palm-mute grid contract is implemented in source. The expanded A–G reference patterns, all other substyle patterns, practice curriculum UI, sample articulations, voicing mapping and complete playback integration remain PENDING.
