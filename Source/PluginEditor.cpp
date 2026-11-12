@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdint>
 #include <string>
+#include <set>
 #if JUCE_WINDOWS
  #ifndef NOMINMAX
   #define NOMINMAX
@@ -37,7 +38,7 @@ namespace
 }
 
 
-namespace { void getPluginModuleAnchor() {} constexpr int ppguSkinCount = 51; }
+namespace { void getPluginModuleAnchor() {} }
 
 void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
 {
@@ -309,23 +310,140 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
  auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
  auto dev=juce::File::getCurrentWorkingDirectory().getChildFile("SKIN");return dev.isDirectory()?dev:beside;
 }
-juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int i) const
-{return runtimeSkinRoot.getChildFile(juce::String::formatted("Skin_%02d",i)).getChildFile("theme.json");}
+int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
+{
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return 0;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    if (!registry.isObject())
+        return 0;
+
+    const auto totalValue = registry.getProperty("totalSkins", juce::var());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if ((!totalValue.isInt() && !totalValue.isInt64()) || themes == nullptr)
+        return 0;
+
+    const auto total = static_cast<int>(totalValue);
+    if (total < 1 || total != static_cast<int>(themes->size()))
+        return 0;
+
+    std::set<int> indices;
+    std::set<std::string> ids;
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject())
+            return 0;
+
+        const auto indexValue = entry.getProperty("index", juce::var());
+        const auto id = entry.getProperty("id", "").toString();
+        const auto path = entry.getProperty("path", "").toString();
+        if ((!indexValue.isInt() && !indexValue.isInt64())
+            || id.isEmpty() || path.isEmpty()
+            || path.startsWith("/") || path.contains("..")
+            || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
+            return 0;
+
+        const auto index = static_cast<int>(indexValue);
+        if (index < 1 || index > total || !indices.insert(index).second
+            || !ids.insert(id.toStdString()).second)
+            return 0;
+    }
+
+    return static_cast<int>(indices.size()) == total ? total : 0;
+}
+
+juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
+{
+    if (index < 1)
+        return {};
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return {};
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return {};
+
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject())
+            continue;
+        const auto indexValue = entry.getProperty("index", juce::var());
+        if ((!indexValue.isInt() && !indexValue.isInt64())
+            || static_cast<int>(indexValue) != index)
+            continue;
+
+        const auto relativePath = entry.getProperty("path", "").toString();
+        if (relativePath.isEmpty() || relativePath.startsWith("/")
+            || relativePath.contains("..") || !relativePath.startsWith("Skin_")
+            || !relativePath.endsWith("/theme.json"))
+            return {};
+
+        const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
+        return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
+    }
+    return {};
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
- auto* s=uiProperties.getUserSettings();auto id=s?s->getValue("skinId","skin-51"):juce::String("skin-51");int i=id.startsWith("skin-")?id.substring(5).getIntValue():0;
- if(i<1||i>ppguSkinCount||!loadSkinByIndex(i,false)){themeManager.resetToDefault();applyPalette();}
+    auto* settings = uiProperties.getUserSettings();
+    const auto id = settings ? settings->getValue("skinId", "skin-51") : juce::String("skin-51");
+    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
+    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    {
+        themeManager.resetToDefault();
+        applyPalette();
+    }
 }
-bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int i,bool save)
+
+bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool save)
 {
- if(i<1||i>ppguSkinCount)return false;bool ok=themeManager.loadFromFile(getSkinManifest(i));if(!ok)themeManager.resetToDefault();applyPalette();if(save)persistSkinPreference();return ok;
+    if (index < 1 || index > getSkinCount())
+        return false;
+
+    const auto manifest = getSkinManifest(index);
+    const bool loaded = manifest.existsAsFile() && themeManager.loadFromFile(manifest);
+    if (!loaded)
+        themeManager.resetToDefault();
+    applyPalette();
+    if (save && loaded)
+        persistSkinPreference();
+    return loaded;
 }
+
 void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
 {
- juce::PopupMenu menu;menu.addSectionHeader("SELECT VISUAL SHELL");for(int i=1;i<=ppguSkinCount;++i){PPGUThemeManager candidate;if(candidate.loadFromFile(getSkinManifest(i))){auto p=candidate.getPalette();menu.addItem(i,p.name,true,p.id==themeManager.getPalette().id);}}
- if(menu.getNumItems()==0)menu.addItem(ppguSkinCount,"BLACKOUT VOLTAGE  /  DEFAULT",true,true);
- juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
- menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinButton),[safe](int id){if(safe&&id>=1&&id<=ppguSkinCount)safe->loadSkinByIndex(id,true);});
+    juce::PopupMenu menu;
+    menu.addSectionHeader("SELECT VISUAL SHELL");
+    const auto skinCount = getSkinCount();
+    for (int index = 1; index <= skinCount; ++index)
+    {
+        PPGUThemeManager candidate;
+        const auto manifest = getSkinManifest(index);
+        if (manifest.existsAsFile() && candidate.loadFromFile(manifest))
+        {
+            const auto palette = candidate.getPalette();
+            menu.addItem(index, palette.name, true, palette.id == themeManager.getPalette().id);
+        }
+    }
+
+    if (menu.getNumItems() == 0)
+        menu.addItem(0, "No valid themes found", false);
+
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+    menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinButton),
+        [safe](int selectedIndex)
+        {
+            if (safe && selectedIndex >= 1 && selectedIndex <= safe->getSkinCount())
+                safe->loadSkinByIndex(selectedIndex, true);
+        });
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
