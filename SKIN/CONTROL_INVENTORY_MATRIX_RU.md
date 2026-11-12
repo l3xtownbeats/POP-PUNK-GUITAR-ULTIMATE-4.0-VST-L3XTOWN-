@@ -2,7 +2,7 @@
 
 Дата актуализации: 12 ноября 2026. Источник истины по обязательным ID и layout grid: `control_schema.json`. Источник фактической реализации: `Source/PluginEditor.h/.cpp` и `Source/PluginProcessor.cpp`.
 
-## 1. Фактический GUI в main
+## 1. Фактический GUI в рабочей ветке REV.17 (`work/ppgu-skin-expansion-53-102`)
 
 В текущем редакторе подтверждены:
 - Заголовок PPGU / L3XTOWN AUDIO LAB.
@@ -14,9 +14,9 @@
 - Семь FX bypass toggles с APVTS attachments.
 - Start/sync selector (HOST / HOST START / INTERNAL; APVTS `syncMode`).
 - On-screen MIDI keyboard.
-- Кнопка SKIN, popup selector, Ctrl+K, сохранение skin ID в UI Properties и применение существующей палитры.
+- Кнопка SKIN открывает Premium Skin Gallery: 102 registry themes, preview cards, search, family filter, active marker, click-to-apply; Ctrl+K открывает ту же панель. Stable skin ID сохраняется в UI Properties.
 
-Это не полноценная галерея. В main пока нет preview cards, поиска/избранного по темам, background rescan, dedicated gallery, плавного 150 ms fade или ECO policy.
+Gallery implemented with previews/search/family filter. Favorites, full gallery keyboard navigation, background rescan, 150 ms fade and ECO policy remain NOT IMPLEMENTED.
 
 ## 2. Обязательные REV 14 control IDs
 
@@ -43,7 +43,7 @@
 | midi_keyboard | keyboard | On-screen MIDI note input | IMPLEMENTED |
 | LCD_display | statusLabel | Preset/library/status feedback; currently not a dedicated LCD widget | PARTIAL |
 | LED_indicator | none | Activity/status indicator; no real meter/activity source is wired | NOT IMPLEMENTED |
-| SKIN_button | skinButton | Opens current skin popup; Ctrl+K shortcut | PARTIAL |
+| SKIN_button | skinButton + `PPGUSkinGalleryPanel` / Ctrl+K | Opens searchable 102-theme preview gallery; applies selected visual palette and persists skin ID | IMPLEMENTED (favorites/keyboard browsing deferred) |
 | Import_Guitar | loadButton | SFZ file chooser + async library load | IMPLEMENTED |
 | Auto_Discover | none | Reserved for production Sound Hunter/S6 discovery | NOT IMPLEMENTED |
 | Curator | none | Reserved for production library curation/review | NOT IMPLEMENTED |
@@ -96,7 +96,7 @@ These IDs are processor parameters, not automatically visible controls. The Skin
 
 REV 14 defines 12 columns × 16 rows, zero-based x/y with w/h spans. Layout metadata currently describes design placement only; existing JUCE bounds and hit targets remain authoritative until a dedicated layout engine consumes the map. No skin may change APVTS attachments, control meaning, parameter values, MIDI behavior or audio processing.
 
-Current reference design: Skin_052 / Carbon Relay / carbon_studio / STUDIO_CONSOLE. It maps all 27 mandatory IDs and the existing sync selector. It is DESIGN metadata, not yet runtime-integrated.
+Current reference design: Skin_052 / SIGNAL FORGE / carbon_studio / STUDIO_CONSOLE. Skin Studio manifests 52–102 are accepted by ThemeManager; their grid metadata is still design metadata and does not reposition real JUCE controls.
 
 ## 8. Acceptance state
 
@@ -119,3 +119,16 @@ Current reference design: Skin_052 / Carbon Relay / carbon_studio / STUDIO_CONSO
 - Перед удалением/заменой проверить наличие функции в других панелях/окнах и записать решение в INFO/CODE. При неоднозначности — сначала зафиксировать конфликт, не удалять молча.
 
 Приёмка: каждый видимый control имеет запись в Control Inventory и подтверждённое назначение; каждый обязательный control присутствует; макетные элементы без функционального основания не остаются в интерфейсе.
+
+
+## 10. Актуализация gallery / skin inventory — 12.11.2026
+
+Рабочая ветка `work/ppgu-skin-expansion-53-102` публикует 102 темы; canonical default — `skin-052` / SIGNAL FORGE. `SKIN_button` больше не открывает PopupMenu: он открывает встроенную Premium Skin Gallery (panel ID 5) с preview cards, поиском, family filter, active marker и применением темы. Gallery — visual-only и не создаёт новых APVTS/engine features.
+
+Не считать готовыми:
+- Favorites и полноценную keyboard navigation внутри gallery;
+- LED indicator, Auto Discover, Curator, Settings, About;
+- 150 ms fade, ECO policy, background watcher, memory/LRU asset cache;
+- runtime consumption of `controls.*.grid` and full schema-to-component parity assertion.
+
+Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated commit `3a2ceb52062be112429f96d411ae223d87df17a6`. Windows build/CTest/pluginval and FL Studio 20 acceptance remain separately pending.
