@@ -696,12 +696,12 @@ int main()
     ppgu::sampler::SamplerEngine previewOneShotEngine;
     previewOneShotEngine.prepare(44100.0);
     if (!previewOneShotEngine.loadSfz(sfzFile).success
-        || !previewOneShotEngine.noteOnOwned(60, 100, 64, 1, 0.0, 0x50504755u))
+        || !previewOneShotEngine.noteOnOwned(60, 100, 64, 4, 0.0, 0x50504755u))
     {
         std::cerr << "Could not prepare preview one-shot ownership regression.\n";
         return 1;
     }
-    previewOneShotEngine.noteOffOwned(60, 1, 0x50504755u);
+    previewOneShotEngine.noteOffOwned(60, 4, 0x50504755u);
     previewOneShotEngine.render(longRender, 0, longRender.getNumSamples());
     if (previewOneShotEngine.getActiveVoiceCount() != 0)
     {
