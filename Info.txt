@@ -1115,3 +1115,22 @@ Cabinet остаётся отдельной секцией со своим bypas
 
 Подробный контракт: docs/PPGU_MASTER_PROMPT_RU.md §7.5.9.  
 **Не заявляется:** наличие UI-графы, автоматического создания пресетов или полностью bypassed DSP signal path до реализации и regression tests.
+
+
+## 2026-11-12 — RAW → SOUND DESIGN: non-destructive guitar transformation workflow
+
+**Статус:** PRODUCT / WORKFLOW DECISION ACCEPTED; IMPLEMENTATION PENDING.  
+Принято архитектурное решение: исходная гитара должна быть отправной точкой для самостоятельного создания любых музыкально уместных вариантов звучания, а не одноразовым RAW-пресетом. Основной маршрут пользователя: **Import / Select Guitar → Audition RAW (NO FX) → Create Sound → Shape → A/B → Save as User Preset**.
+
+- **RAW остаётся эталоном.** NO FX / RAW preset — неизменяемая точка возврата к исходному материалу. Ни одна обработка не должна незаметно менять исходные samples, mapping, velocity layers, round-robin или артикуляции.
+- **Неразрушающие производные.** Команда Create Sound / Save As создаёт отдельный User Preset с собственной цепочкой ANGELA ENGINE. Можно создавать несколько независимых вариантов из одного источника: clean, crunch, pop-punk rhythm, high-gain, ambient, acoustic/hybrid и собственные пользовательские комбинации. Это стартовые роли, не жёсткие ограничения.
+- **Source-aware стартовые цепочки.** Движок предлагает подходящие отправные точки с учётом типа исходника (driven/clean electric, steel acoustic, nylon, acoustic DI, hybrid), но пользователь может вручную менять доступные блоки. Электрический amp/cab не навязывается акустике; cabinet/IR и эффекты не включаются скрытно.
+- **Контролируемая свобода.** Пользователь может формировать тон через amp, cabinet/IR, 14 FX типов, EQ, dynamics и пространственные эффекты в пределах реально реализованных модулей. UI не показывает недоступный DSP как работающий. Preset не маркируется production-ready без проверки звука, уровней, headroom, mono compatibility и нагрузки.
+- **Мгновенное сравнение.** Предусмотреть A/B между RAW и текущей обработанной версией, loudness-matched audition и Reset to RAW / Reset to Preset Defaults. Сравнение не должно сбрасывать или перезаписывать сохранённые User Presets.
+- **Происхождение и наследование.** Производный preset хранит ссылку на стабильные library/instrument/asset IDs, mapping/source profile и собственную цепь обработки. Изменение источника или mapping диагностируется; missing assets не подменяются молча. Factory и RAW presets не перезаписываются.
+- **Удобство без перегруза.** В Preset Browser и Import Guitars дать понятные действия Audition RAW, Create Sound и Save As; расширенные параметры остаются в FX EDIT / amp-cab panels. Не создавать второй независимый preset engine и не дублировать ingest pipeline.
+
+**Приёмка:** тесты RAW immutability; создание нескольких независимых производных; сериализация/повторная загрузка; source-aware defaults; A/B и reset; level matching; missing-source handling; отсутствие скрытого DSP; отсутствие audio-thread I/O/locks/allocations. Слуховая приёмка на DI/электрических/акустических источниках в solo и mix.
+
+Подробный контракт добавляется в docs/PPGU_MASTER_PROMPT_RU.md §7.5.10.  
+**Не заявляется:** реализованный sound-design workflow, A/B engine, все 14 FX DSP или готовые factory sound variations до подтверждения исходниками и тестами.
