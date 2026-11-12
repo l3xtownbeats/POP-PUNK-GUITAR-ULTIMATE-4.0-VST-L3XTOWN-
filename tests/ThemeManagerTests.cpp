@@ -19,8 +19,9 @@ namespace
 int main()
 {
     PPGUThemeManager manager;
-    expect(manager.getPalette().id == "skin-51", "default theme ID");
+    expect(manager.getPalette().id == "skin-052", "default theme ID");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
+    expect(manager.getPalette().name == "SIGNAL FORGE", "fallback identity matches the canonical default skin");
 
     const auto root = juce::File::getCurrentWorkingDirectory();
     const auto skinRoot = root.getChildFile("SKIN");
@@ -70,7 +71,7 @@ int main()
 
     const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
     const auto validJson = defaultManifest.loadFileAsString();
-    expect(validJson.isNotEmpty(), "Skin_51 fallback manifest readable");
+    expect(validJson.isNotEmpty(), "legacy Skin_51 manifest readable");
 
     const auto wrappedWidth = validJson.replace("\"width\": 480",
                                                 "\"width\": 4294967776");
@@ -134,7 +135,7 @@ int main()
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
-    expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
     const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
@@ -145,11 +146,11 @@ int main()
            "Skin Studio compatibility failure restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
-    expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
-           "malformed JSON restores Blackout Voltage fallback");
+    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
+           "malformed JSON restores SIGNAL FORGE fallback");
 
     expect(!manager.loadFromJson("{}"), "empty object rejected");
-    expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
            "incomplete manifest restores fallback");
 
     expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");
