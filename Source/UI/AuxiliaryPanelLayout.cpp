@@ -72,3 +72,5 @@ PanelLayout layoutAuxiliaryPanels(const PanelBounds& workArea,
 
     return result;
 }
+
+} // namespace ppgu::ui

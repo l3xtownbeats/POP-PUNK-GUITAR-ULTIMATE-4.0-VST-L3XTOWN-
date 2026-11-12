@@ -562,3 +562,16 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - подключить валидный host BPM/PPQ/bar/beat snapshot к Performance Display только при наличии данных host playhead;
 - улучшить компактные размеры/scrolling панелей и проверить визуальную читаемость при 3–4 одновременно открытых панелях;
 - после успешного CI проверить VST3 в FL Studio 20, не смешивая CI build с host acceptance.
+
+### 12 November 2026 — REV 14.2 preflight: Windows compiler blockers isolated
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Base SHA:** `4589b311750af505c75db697559a134c89db403f`  
+**Status:** COMPILER FIXES PREPARED FOR CI / SKIN REGISTRY MIGRATION STILL BLOCKED / NO NEW SKINS GENERATED.
+
+- Rechecked Windows workflow run #900 (ID `43130081529`, source SHA `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`). Configure passed; build failed before CTest. Compiler diagnostics identify a missing namespace-closing brace in `Source/UI/AuxiliaryPanelLayout.cpp` (MSVC C1075) and an ill-typed heterogeneous braced pointer list in `Source/UI/PerformanceDisplay.cpp` (MSVC C3535/C2440/C2665).
+- Prepared a narrow source correction: close `ppgu::ui` namespace and use an explicitly typed `std::array<juce::Component*, 5>` for the five labels. No processor, DSP, audio callback, APVTS, MIDI, preset or SoundBank files are changed.
+- **REV 14 skin blocker remains intentionally open.** The current registry contains 51 legacy themes and defaults to `skin-51`; legacy `theme.schema.json` constrains index to 51 and the current `ThemeManager` accepts only the legacy nested `tokens` format and IDs 01–51. Skin_052 instead uses the REV 14 `palette/family/layout/controls` format described by `control_schema.json`. The existing `merge_skin_pack.py` validates the REV 14 pack but writes its entries into the legacy registry without migrating the runtime manager/schema. Therefore, blindly running it or increasing only the schema maximum would create a false registration and would not make Skin_052 loadable. No fake registry entry or bypass was made.
+- The current `theme_pack_manifest.json` contains exactly one designed entry (Skin_052), not 50. The legacy registry is still at 51. A batch generator and the other 49 packages do not yet exist.
+- Next gates: (1) land and CI-check the compile correction; (2) design a backward-compatible registry/schema/runtime migration so Skin_052 is genuinely loadable and the legacy 51-theme fallback test remains valid; (3) run the official merge and full CTest 12/12 on the resulting SHA; only then generate the next 50-skin batch. Separate native popup windows and the reference-matched default editor composition remain unimplemented; existing overlays are not equivalent to independent popup windows.
+- No BUILD VERIFIED, INTEGRATED, COMPLETE or FL Studio 20 acceptance status is claimed.

@@ -1,6 +1,7 @@
 #include "PerformanceDisplay.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 namespace
@@ -32,8 +33,11 @@ PPGUPerformanceDisplay::PPGUPerformanceDisplay(juce::MidiKeyboardState& state)
     detailValue.setText("PLAY A NOTE OR CHORD  /  LIVE MIDI MONITOR", juce::dontSendNotification);
     velocityValue.setText("VEL --", juce::dontSendNotification);
     midiValue.setText("MIDI IDLE", juce::dontSendNotification);
-    for (auto* c : { static_cast<juce::Component*>(&noteValue), &chordValue, &detailValue, &velocityValue, &midiValue })
-        addAndMakeVisible(*c);
+    const std::array<juce::Component*, 5> labels {
+        &noteValue, &chordValue, &detailValue, &velocityValue, &midiValue
+    };
+    for (auto* component : labels)
+        addAndMakeVisible(*component);
     keyboardState.addListener(this);
     startTimerHz(20);
 }
