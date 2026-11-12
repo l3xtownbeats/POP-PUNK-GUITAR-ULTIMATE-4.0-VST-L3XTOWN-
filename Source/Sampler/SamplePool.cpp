@@ -470,6 +470,14 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
 
 bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
 {
+    return noteOnOwned(midiNote, velocity, maximumActiveVoices, midiChannel,
+                       globalTuningSemitones, 0);
+}
+
+bool SamplerEngine::noteOnOwned(int midiNote, int velocity, int maximumActiveVoices,
+                                int midiChannel, double globalTuningSemitones,
+                                std::uint32_t ownerToken) noexcept
+{
     const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
     if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
         return false;
@@ -480,7 +488,8 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         for (auto& activeVoice : voices)
             if (activeVoice.region != nullptr
                 && activeVoice.region->group == region->offBy
-                && activeVoice.midiChannel == midiChannel)
+                && activeVoice.midiChannel == midiChannel
+                && activeVoice.ownerToken == ownerToken)
                 releaseVoice(activeVoice);
 
     const int voiceIndex = chooseVoice(juce::jlimit(1, maximumVoices, maximumActiveVoices));
@@ -491,6 +500,7 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     voice.region = region;
     voice.note = midiNote;
     voice.midiChannel = juce::jlimit(1, 16, midiChannel);
+    voice.ownerToken = ownerToken;
     voice.direction = 1;
     voice.position = static_cast<double>(region->startFrame);
     const double safeGlobalTuning = std::isfinite(globalTuningSemitones)
@@ -513,14 +523,27 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
 
 void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept
 {
+    noteOffOwned(midiNote, midiChannel, 0);
+}
+
+void SamplerEngine::noteOffOwned(int midiNote, int midiChannel, std::uint32_t ownerToken) noexcept
+{
     for (auto& voice : voices)
-        if (voice.region != nullptr && voice.note == midiNote && voice.midiChannel == midiChannel && !voice.releasing)
+        if (voice.region != nullptr && voice.note == midiNote && voice.midiChannel == midiChannel
+            && voice.ownerToken == ownerToken && !voice.releasing)
             if (voice.region->loopMode != 4)
             {
                 if (voice.region->loopMode == 2 || voice.region->loopMode == 3)
                     voice.direction = 1;
                 releaseVoice(voice);
             }
+}
+
+void SamplerEngine::releaseOwnedVoices(std::uint32_t ownerToken) noexcept
+{
+    for (auto& voice : voices)
+        if (voice.region != nullptr && voice.ownerToken == ownerToken)
+            releaseVoice(voice);
 }
 
 void SamplerEngine::allNotesOff() noexcept

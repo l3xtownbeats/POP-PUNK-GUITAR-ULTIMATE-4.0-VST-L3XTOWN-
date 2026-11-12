@@ -664,6 +664,33 @@ int main()
         return 1;
     }
 
+    // Internal preview ownership must not let a DAW NoteOff release the preview
+    // voice playing the same pitch and MIDI channel.
+    ppgu::sampler::SamplerEngine ownershipEngine;
+    ownershipEngine.prepare(44100.0);
+    if (!ownershipEngine.loadSfz(channelChokeSfz).success
+        || !ownershipEngine.noteOnOwned(60, 100, 64, 1, 0.0, 0x50504755u)
+        || !ownershipEngine.noteOn(60, 100, 64, 1))
+    {
+        std::cerr << "Could not prepare owner-token voice isolation regression.\n";
+        return 1;
+    }
+    ownershipEngine.render(chokeRendered, 0, chokeRendered.getNumSamples());
+    ownershipEngine.noteOff(60, 1); // Must release owner 0 only.
+    ownershipEngine.render(chokeRendered, 0, chokeRendered.getNumSamples());
+    if (ownershipEngine.getActiveVoiceCount() != 1)
+    {
+        std::cerr << "DAW NoteOff incorrectly released an internally-owned preview voice.\n";
+        return 1;
+    }
+    ownershipEngine.releaseOwnedVoices(0x50504755u);
+    ownershipEngine.render(chokeRendered, 0, chokeRendered.getNumSamples());
+    if (ownershipEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Owner-specific preview release did not release its voices.\n";
+        return 1;
+    }
+
     // M2 acceptance regression: 100 repeated guitar hits at changing
     // velocities must remain finite and avoid abrupt discontinuities.
     ppgu::sampler::SamplerEngine repeatedHitEngine;

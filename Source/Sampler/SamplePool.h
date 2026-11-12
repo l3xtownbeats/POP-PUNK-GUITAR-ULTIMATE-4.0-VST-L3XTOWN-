@@ -124,7 +124,13 @@ public:
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
     [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0) noexcept;
+    // Owner-aware voices let an internal preview release only its own notes;
+    // ownerToken 0 is reserved for ordinary DAW/Pattern playback.
+    [[nodiscard]] bool noteOnOwned(int midiNote, int velocity, int maximumActiveVoices,
+        int midiChannel, double globalTuningSemitones, std::uint32_t ownerToken) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
+    void noteOffOwned(int midiNote, int midiChannel, std::uint32_t ownerToken) noexcept;
+    void releaseOwnedVoices(std::uint32_t ownerToken) noexcept;
     void allNotesOff() noexcept;
     void panic(int fadeSamples) noexcept;
     void render(juce::AudioBuffer<float>& output, int startSample, int numSamples) noexcept;
@@ -148,6 +154,7 @@ private:
         std::uint64_t streamingMissSamples = 0;
         int note = -1;
         int midiChannel = 1;
+        std::uint32_t ownerToken = 0;
     };
 
     [[nodiscard]] int chooseVoice(int maximumActiveVoices) noexcept;
