@@ -993,3 +993,21 @@ Runtime-структура — VST3/ и единый корень `POP PUNK GUIT
 Термины: UI category = NO FX; descriptive tag = RAW / UNPROCESSED. CLEAN не является синонимом NO FX.
 
 Статус до реализации: принято как обязательное требование; наличие категории, автогенерации и истинного no-processing signal path не заявляется до реализации и тестов.
+
+
+## 7.5.10 PRESET SOUND TRUTH — SELECTED PRESET MUST ACTUALLY SOUND AS DESCRIBED
+
+**Ключевой продуктовый инвариант:** выбор пресета в Preset Browser обязан вызывать именно заявленное звучание. Нельзя показывать пользователю preset с характером Crunch / Distortion / Pop-Punk Rhythm / Ambient / Acoustic и фактически проигрывать необработанную гитару, если только сам исходный sample/instrument уже не содержит этот характер и действительно не звучит так без дополнительной обработки.
+
+1. **Звук важнее названия.** Имя, категория, artwork и описание пресета должны соответствовать слышимому результату. Preset считается реализованным только если его signal path или исходный baked-in source действительно создаёт заявленный характер.
+2. **Два допустимых способа получить нужный тон.** (A) подходящий source/instrument/sample, в котором нужный тон уже записан/запечён; (B) корректный исходный инструмент плюс реально работающая цепочка ANGELA ENGINE (amp/cab/IR/DSP), формирующая нужный тон. Комбинация этих способов допустима. Не требовать FX ради FX, если источник уже звучит правильно.
+3. **RAW — только RAW.** NO FX / RAW категория предназначена исключительно для исходного звучания библиотеки без тональной обработки. Не помещать в неё обработанные или baked-in tone presets. Обратно: не выдавать NO FX за готовый Crunch/Distortion/Pop-Punk preset только потому, что UI показывает соответствующее имя.
+4. **Никаких silent fallback.** Если preset ссылается на отсутствующий sample, amp, cabinet/IR или DSP module, нельзя молча проигрывать DI/RAW или другой случайный звук. Preset должен явно получить статус unavailable/degraded, показать отсутствующий компонент и предложить исправить источник/ресурс. Degraded playback разрешён только с явным предупреждением и без заявления, что это полноценный оригинальный preset.
+5. **Capability-aware browser.** Preset Browser должен публиковать/активировать только реально поддерживаемые варианты на текущей сборке и доступном SoundBank. Для неподдерживаемых или неполных пресетов показывать честный статус, не маскировать отсутствие DSP декоративным UI. Каталог definitions сам по себе не доказывает playable status.
+6. **Preset validation contract.** Каждое factory/user preset definition должно иметь source references, source type/profile, ожидаемый signal chain или baked-in tone declaration, необходимые resources/modules, gain/output trim и ожидаемую tonal role. Перед маркировкой READY проверить разрешение всех ссылок, реальный runtime route, отсутствие bypass/fallback ошибок, выходной уровень/headroom и воспроизводимость после save/load.
+7. **Audition and acceptance.** Каждый пресет прослушивается в solo и в типичном полном миксе, с loudness-matched A/B against reference. Проверить, что пользователь с первого запуска слышит именно заявленный характер; отдельно проверить chord clarity, attack, palm mute, sustain, velocity response, noise, mono compatibility и clipping. Preset, не прошедший слуховую приёмку, остаётся PENDING/NEEDS REVIEW.
+8. **Honest UI status.** Разделять DEFINITION, SOURCE AVAILABLE, DSP AVAILABLE, PLAYABLE, MIX-READY и LISTENING-APPROVED. Не называть preset готовым только потому, что он присутствует в JSON/Browser.
+
+**Приёмочные тесты:** missing source/module не даёт silent RAW fallback; preset label/category согласованы с source/chain; baked-in tone корректно классифицируется вне NO FX; RAW всегда сохраняет исходный сигнал; load/save round-trip сохраняет маршрут и звучание; preset availability корректно обновляется при missing/recovered assets; проверка всех заявленных tone families.
+
+**Правило для команды:** если пользователь выбрал определённый звук — он должен услышать этот звук. Если движок пока не способен его сформировать, интерфейс честно сообщает об ограничении, а не подменяет обещанный тон необработанной гитарой.
