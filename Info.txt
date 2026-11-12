@@ -1693,3 +1693,29 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **QA / критерий:** для каждого пресета документировать intended preset type/role, конкретный source mapping и доступные артикуляции, обоснование layering/FX/filter (или явное SOURCE-ONLY), а также результат прослушивания. Пресет принимается по соответствию реальному исходному материалу и целевому звуку, а не по числу включённых эффектов.
 
 **РЕЗУЛЬТАТ:** PRESET TYPE + ACTUAL LIBRARY SOURCE ARE THE PRIMARY DETERMINANTS; FX/FILTERS/LAYERING ARE OPTIONAL SECONDARY DESIGN CHOICES. Запись требований; исходный код, библиотека и пресеты не менялись.
+
+
+## 2026-11-12 — Preset browser and sample library operate as one sampler-instrument preset system
+
+**Статус:** CORE PRODUCT BEHAVIOUR ACCEPTED; CURRENT END-TO-END IMPLEMENTATION REQUIRES SOURCE AUDIT.
+
+Пользователь уточнил, что PPGU должен вести себя как полноценные sampler-based VST3 instrument plugins / sample-based synthesizers / romplers. Пресет и соответствующий ему звуковой материал — единая рабочая сущность, а не независимые элементы, которые пользователь должен вручную состыковывать.
+
+**Обязательный пользовательский сценарий:**
+1. Пользователь открывает Preset Browser и выбирает пресет.
+2. Если Preview включён, предпрослушивание воспроизводит звук именно выбранного пресета — с теми же исходными sample sources, слоями, артикуляциями, velocity mapping и FX/routing, что будут использоваться при реальной игре.
+3. При выборе пресета его звуковая конфигурация вместе с необходимыми библиотечными сэмплами/маппингами подхватывается как единое целое: выбранный тип гитары, один или несколько source samples, key/velocity/articulation mappings, layering, FX/filter states и routing.
+4. После завершения переключения MIDI-игра должна сразу звучать выбранным пресетом. Не допускается состояние, когда имя пресета уже сменилось, но sample mapping ещё не готов, отсутствует или выдаёт тишину.
+5. Переключение должно быть быстрым, предсказуемым и без слышимых обрывов/щелчков; ошибки отсутствующих/повреждённых ресурсов должны явно сообщаться, а не маскироваться тишиной.
+
+**Требование к реализации и real-time safety:**
+- Preset manifest должен ссылаться на конкретные зарегистрированные и проверенные sample assets и mapping data; preset без пригодного source mapping не считается полноценным playable preset.
+- Подготовка файлов, декодирование, построение mapping и тяжёлая загрузка выполняются вне audio callback. Audio thread не должен выполнять файловый I/O, блокирующие ожидания, тяжёлую аллокацию или потенциально долгие операции.
+- Использовать безопасную подготовку нового preset/sample state и атомарную/RT-safe передачу готового состояния движку. До готовности новой конфигурации не публиковать её как активную; сохранять предыдущий рабочий звук либо выдавать понятное состояние загрузки/ошибки — но не переключать UI на новый пресет с беззвучным engine state.
+- Учитывать существующий SamplerEngine, preallocated voices, sample cache/streaming, immutable snapshots и lifetime ресурсов; не заменять архитектуру без необходимости.
+- Preview и live playback должны использовать один и тот же preset resolution / sample mapping / sound construction / FX path, с отдельным preview trigger/voice lifecycle, чтобы preview достоверно представлял результат.
+- Проверить смену пресета во время удерживаемых нот, частые быстрые переключения, отмену устаревших запросов, отсутствующие assets, cache pressure и корректное освобождение ресурсов без audio-thread stalls.
+
+**Приёмочные тесты:** preset selection → resolve preset manifest → validate/prepare sample assets and mappings → activate ready sampler state → MIDI note produces audible output; Preview A/B matches the actual preset path; all layers/articulations available; no silent preset, missing mapping or stale state; stress-test rapid switching; monitor audio callback for I/O/locks/allocations and glitches.
+
+**РЕЗУЛЬТАТ:** PPGU PRESET BROWSER + PRESET DATA + SAMPLE LIBRARY + SAMPLER CONFIGURATION ARE ONE INTEGRATED INSTRUMENT PRESET WORKFLOW, consistent with sampler-based VST3 instruments/romplers. Требование записано; код и тесты не изменялись. Наличие полного end-to-end поведения в текущей реализации не подтверждено.
