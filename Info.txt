@@ -1314,3 +1314,17 @@ F. Только после этого считать документальны�
 **ПОВТОРНЫЙ АНАЛИЗ:** статически проверены изменения, JUCE 7 API usage (`Viewport::getViewArea/setViewPosition`, `ScopedValueSetter`) и сохранение прежних границ: Audio/DSP/processBlock/sampler/MIDI/APVTS/presets/SoundBank не менялись. Локальная компиляция/CTest в этой среде не запускались. CI run `43173372464` (run #1036) относится к source SHA `0b8096d55ea26f01489d4ff257dee39b6022f23d` и на момент записи IN_PROGRESS; он НЕ подтверждает следующий fix commit `d4c0e4b7...`.  
 **РЕЗУЛЬТАТ:** **SOURCE COMMITTED; A6 PARTIAL / CI PENDING; HOST VISUAL VERIFICATION PENDING.** PASS не заявлен. Следующий шаг — дождаться CI для соответствующего SHA, исправить любые ошибки, затем проверить 1–6 панелей при 100/125/150% DPI и в FL Studio 20.  
 **Риски:** при невозможности разместить все панели в минимальном размере используется прокрутка, а не принудительное уменьшение содержимого; визуальная читаемость 5–6 панелей требует host review.
+
+
+## 2026-11-12 — REV.17 FX EDIT responsive layout correction
+
+**Тип:** UI layout bug fix; FX EDIT only.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Parent SHA:** `fccdf9647d7088246a0bfe129c5ddd943ec274a1`.  
+**Файл / символы:** `Source/PluginEditor.cpp`, `PPGUFXEditPanel::paint()`, `PPGUFXEditPanel::resized()`.  
+**ПРОВЕРКА:** FX EDIT резервировал фиксированные 170 px под график и фиксировал высоту ячейки регулятора 118 px. На минимальном размере панели 620×440 семирегуляторный EQ (2 ряда) мог выходить за доступную область; график отнимал место даже когда важнее показать все параметры.  
+**АНАЛИЗ:** дефект локален для геометрии UI. APVTS attachments, FX parameter IDs, Power mapping и DSP менять не требуется.  
+**ИСПРАВЛЕНИЕ:** высота графика теперь адаптивна к высоте окна (140/90/0 px); при компактном размере график скрывается и не рисуется. Высота ячеек вычисляется из фактической доступной высоты и числа рядов, а не фиксируется константой. Все активные контролы получают bounds внутри доступной области.  
+**ПОВТОРНЫЙ АНАЛИЗ:** проверены границы патча: изменены только paint/layout FX EDIT; APVTS, processBlock, DSP, sampler, MIDI, presets и SoundBank не затронуты. Статическая проверка исходника выполнена; компиляция и CTest ещё не запускались.  
+**РЕЗУЛЬТАТ:** SOURCE CHANGE PREPARED; build/CTest/pluginval/FL Studio 20 visual verification PENDING. Не заявляется PASS.  
+**Следующий шаг:** проверить exact-SHA CI и затем пройти FX EDIT на 620×440, 900×620 и 1000×680, включая EQ (7 controls).

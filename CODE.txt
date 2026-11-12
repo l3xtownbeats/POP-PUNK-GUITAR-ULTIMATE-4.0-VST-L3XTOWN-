@@ -248,3 +248,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Verification:** static source review only; local Windows build/CTest not run. CI run `43173372464` targets the first source commit only and was IN_PROGRESS at journal time; final source SHA CI pending. FL Studio 20 host/DPI acceptance not run.  
 **Status:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.  
 **Next:** exact-SHA CI, then visual checks for 1–6 panels and 100/125/150% DPI.
+
+
+## 2026-11-12 — REV.17 FX EDIT responsive layout correction
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+**Parent:** `fccdf9647d7088246a0bfe129c5ddd943ec274a1`  
+**File / symbols:** `Source/PluginEditor.cpp` — `PPGUFXEditPanel::paint()`, `PPGUFXEditPanel::resized()`.  
+**Change:** FX EDIT graph height adapts to panel height; graph is hidden/omitted at compact sizes; control cell height is calculated from visible control count, columns, rows and available client area. Fixes potential clipping of the 7-control EQ group at the 620×440 minimum panel size.  
+**Boundaries:** no APVTS IDs/attachments, FX enable mappings, DSP, processBlock, sampler, MIDI, presets or SoundBank changes.  
+**Verification:** static source/patch review only; compile, CTest, pluginval, performance and FL Studio 20 host checks pending on resulting SHA.  
+**Status:** SOURCE CHANGE PREPARED; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.

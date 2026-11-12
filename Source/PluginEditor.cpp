@@ -348,21 +348,24 @@ public:
         auto area = getLocalBounds().toFloat().reduced(12.0f);
         g.setColour(juce::Colour(0xff263944));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
-        auto graph = graphArea.toFloat();
-        g.setColour(juce::Colour(0xff101c24));
-        g.fillRoundedRectangle(graph, 8.0f);
-        g.setColour(juce::Colour(0xff304550));
-        for (int i = 1; i < 5; ++i)
-            g.drawHorizontalLine(graphArea.getY() + graphArea.getHeight() * i / 5, graphArea.getX(), graphArea.getRight());
-        for (int i = 1; i < 9; ++i)
-            g.drawVerticalLine(graphArea.getX() + graphArea.getWidth() * i / 9, graphArea.getY(), graphArea.getBottom());
-        juce::Path curve;
-        curve.startNewSubPath(static_cast<float>(graphArea.getX()), static_cast<float>(graphArea.getCentreY()));
-        curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
-                      graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
-                      static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
-        g.setColour(juce::Colour(0xffb7f34a));
-        g.strokePath(curve, juce::PathStrokeType(2.0f));
+        if (!graphArea.isEmpty())
+        {
+            auto graph = graphArea.toFloat();
+            g.setColour(juce::Colour(0xff101c24));
+            g.fillRoundedRectangle(graph, 8.0f);
+            g.setColour(juce::Colour(0xff304550));
+            for (int i = 1; i < 5; ++i)
+                g.drawHorizontalLine(graphArea.getY() + graphArea.getHeight() * i / 5, graphArea.getX(), graphArea.getRight());
+            for (int i = 1; i < 9; ++i)
+                g.drawVerticalLine(graphArea.getX() + graphArea.getWidth() * i / 9, graphArea.getY(), graphArea.getBottom());
+            juce::Path curve;
+            curve.startNewSubPath(static_cast<float>(graphArea.getX()), static_cast<float>(graphArea.getCentreY()));
+            curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
+                          graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
+                          static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
+            g.setColour(juce::Colour(0xffb7f34a));
+            g.strokePath(curve, juce::PathStrokeType(2.0f));
+        }
     }
 
     void resized() override
@@ -373,13 +376,19 @@ public:
         effectSelector.setBounds(top.removeFromLeft(230).reduced(2, 4));
         powerButton.setBounds(top.removeFromLeft(110).reduced(2, 4));
         graphCaption.setBounds(top);
-        graphArea = area.removeFromBottom(170).reduced(4, 8);
+        const int graphHeight = getHeight() >= 600 ? 140 : (getHeight() >= 500 ? 90 : 0);
+        graphCaption.setVisible(graphHeight > 0);
+        graphArea = graphHeight > 0
+            ? area.removeFromBottom(graphHeight).reduced(4, 8)
+            : juce::Rectangle<int>{};
         status.setBounds(area.removeFromBottom(24));
         area.removeFromBottom(8);
         const int visibleCount = static_cast<int>(std::count_if(controls.begin(), controls.end(),
             [this](const Control& c) { return c.group == selectedGroup; }));
         const int columns = visibleCount > 5 ? 4 : juce::jmax(1, visibleCount);
+        const int rows = (visibleCount + columns - 1) / columns;
         const int cellWidth = juce::jmax(1, area.getWidth() / columns);
+        const int cellHeight = juce::jmax(1, area.getHeight() / juce::jmax(1, rows));
         int index = 0;
         for (auto& control : controls)
         {
@@ -391,8 +400,10 @@ public:
             }
             control.label->setVisible(true);
             control.slider->setVisible(true);
-            auto cell = juce::Rectangle<int>(area.getX() + (index % columns) * cellWidth,
-                area.getY() + (index / columns) * 118, cellWidth, 118).reduced(6, 2);
+            const int column = index % columns;
+            const int row = index / columns;
+            auto cell = juce::Rectangle<int>(area.getX() + column * cellWidth,
+                area.getY() + row * cellHeight, cellWidth, cellHeight).reduced(6, 2);
             control.label->setBounds(cell.removeFromTop(20));
             control.slider->setBounds(cell);
             ++index;
