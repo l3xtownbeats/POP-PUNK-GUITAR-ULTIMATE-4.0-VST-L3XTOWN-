@@ -527,3 +527,58 @@ Commits:
 - Release-active tests and edge cases: `e7018e574f65f5df8a65d559d1eb4b0291b3100e`
 
 Проверки локально не запускались: в этой среде нет клонированного Windows/JUCE build workspace. До подтверждения GitHub Actions CTest этот этап имеет статус COMMITTED / VALIDATION PENDING, не PASS. Тесты geometry не означают, что JUCE auxiliary windows/window manager уже реализованы.
+
+## 2026-11-12 — Skin_052 merge, ThemeManager compatibility and registry-driven discovery
+
+**Статус: SOURCE INTEGRATION COMMITTED / CI VALIDATION PENDING. COMPLETE ZIP НЕ СОЗДАН.**
+
+### Registry merge and backups
+- Перед merge созданы резервные копии canonical registry, legacy theme schema и REV14 control schema в SKIN/backups/pre-skin052-merge-20261112/.
+- Skin_052 Carbon Relay зарегистрирован как skin-052, index 52, path Skin_052/theme.json; totalSkins=52, skinRange=1..52. Существующие 51 темы и defaultSkin=skin-51 сохранены.
+- Legacy theme.schema.json остаётся схемой Skin_01..Skin_51. Новые Skin Studio manifests валидируются отдельным SKIN/control_schema.json; две структуры не объявляются взаимозаменяемыми.
+- Merge tool усилен проверкой целостности текущего реестра, уникальности ID/index, непрерывности индексов, pack range и атомарной записью после backup трёх схем/реестра.
+
+Commits:
+- Registry backup: 9ecb2fc8f4556575558095e3137d4280f2ac6711
+- Legacy schema backup: 77e46a521073ba4d445a23d0aecb8517a3424fb6
+- REV14 control schema backup: eaf0c2d48c7587d5c73b89cb181013860ad4a66e
+- Skin_052 registry merge: 608205ec5142582d84429425e63a9e52d53c7b5b
+- Merge tooling hardening: 8a1176765c8007bbe3db354d3572d35625cf54f4
+
+### ThemeManager and live editor discovery
+- ThemeManager теперь распознаёт legacy two-digit IDs и Skin Studio three-digit IDs, проверяет 21 точный HEX token, family/layout, control map, asset paths, ECO/hot-swap и visual-only compatibility. Palette mapping выполняется только в UI/control thread.
+- Добавлен ThemeManager test для Skin_052, проверки ID/name/palette mapping и fallback при повреждённом Skin Studio HEX.
+- PluginEditor больше не содержит фиксированный ppguSkinCount=51 и не строит путь Skin_%02d. Количество и manifest paths берутся из theme_manifest.json; проверяются непрерывность/уникальность индексов, ID/index relation и безопасный относительный путь.
+- Workflow runtime package включает legacy theme.schema.json и REV14 control_schema.json. README SKIN обновлён и различает палитровое переключение, metadata layout и пока отсутствующие gallery/window features.
+
+Commits:
+- ThemeManager Skin Studio support: 96082e04339600d73c0acbc54dc68a2b497ca919
+- ThemeManager type/index hardening: bf9028ed2a084e4306c1a86962fdb214079b5331
+- ThemeManager Skin_052 tests: 939dbdd3f3296c701da91381296e993ccb1e4318
+- Editor registry API: dea269eba772283aee1d8c08cf0b5b982727f655
+- Dynamic skin discovery/menu: dc60913a46d6545c3b1c8d3e47c01921ed73d9e5
+- Registry index/path hardening: f1d3a44889bef6c8089a817da3c32b9f009eb29b
+- Integer narrowing/include correction: 562616280ced80f6e59ce02e2bcc3f7548e3e3bf; 8e4ec1def905c0dbda59a1e1d8fca90e30d40a50
+- Skin manifest validator dual-format support: faf3f08c1d357837af527eb123900c6e360b0107
+- PNG/SVG asset validator fixes and CRC/decompression validation: b061fd56ff8d6c8941c1948c5f33d3b146abf7fc; 29ccfd9e93c21cfe3a9a99d73ce0c7902ad1d32b; fc32e3ceda5c32f3bcd22cefa4cfda5277c1a44b
+- Workflow packages both schemas: c05d9559a986f0ae5aab35440a2b9ef20b60215b
+- Skin_052/pack status and documentation: 649ad91fed498a43a26c6b183d10ff3f6dc4d08f; 9c9c9462d862c6a1ec4d5a4501e5c44c5d881e69; d47c3e22a41ea73ab4cfefaea098b0e5b709bbdb
+
+### 50-theme generator
+- Добавлен tools/generate_skin_batch.py: один запуск готовит 50 тем (6 семейств × 8 + Hazard Line и Whiteout Bleach), 4 layout variants, 21 palette tokens с auto-contrast correction, все control mappings, 360x240/800x450 PNG, три безопасных SVG слоя и pack manifest.
+- Генератор не перезаписывает существующие Skin_* папки, использует следующий индекс из registry, после генерации запускает G1–G4 validator и откатывает неполный batch при ошибке.
+- Generator commit: 27d3f86dc9c918b2193b5a2f462d7561532b67e9.
+- **Генератор ещё не запускался; Skin_053..Skin_102 не созданы и не зарегистрированы.**
+
+### AuxiliaryPanelLayout hardening
+- Добавлены duplicate PanelId / invalid dimensions / invalid work area checks, безопасная арифметика int64, защита от переполнений DPI/gap/координат и документированный invalidInput result.
+- Переведены тесты с assert на Release-active CHECK: проверки теперь реально исполняются при NDEBUG.
+- Commits: 4ffab94fe5dbd38edd21628e6dc50f2658bdd9ad; 27c63782005401aecf63457fa114fc96eecec6cd; e7018e574f65f5df8a65d559d1eb4b0291b3100e.
+
+### Validation boundary / remaining blockers
+- На момент этой записи новый Windows workflow run для итогового HEAD и его CTest/pluginval/package result не подтверждены. Локальный Windows/JUCE build workspace в этой среде отсутствует; сетевой git clone недоступен. Поэтому все новые изменения имеют статус COMMITTED / CI PENDING, не PASS.
+- Старый run #860 остаётся историческим FAIL 11/12 из-за незарегистрированного Skin_052; он относится к прежнему SHA и не является проверкой новых commits.
+- Runtime palette loading нового формата и dynamic registry source committed, но Windows compile, CTest 12/12, pluginval strictness 5, Skin_052 hot-swap в FL Studio 20 и sound/audio invariance ещё требуют подтверждения.
+- Skin Studio control grid пока metadata-only; AuxiliaryPanelLayout — pure geometry, не JUCE window manager. Отдельные popup windows, independent close/maximize, z-order/focus, bounds persistence и compact tiling не реализованы.
+- Текущий fallback/default остаётся Blackout Voltage skin-51. Требование REV 14.3 о default-ppgu / Dreaming in Neon нельзя объявлять выполненным без трёх исходных reference images и отдельной интеграции.
+- COMPLETE ZIP не публиковать до подтверждённого Windows Release → CTest → VST3 locate → pluginval → packaging PASS; FL Studio 20 host acceptance остаётся отдельной проверкой.
