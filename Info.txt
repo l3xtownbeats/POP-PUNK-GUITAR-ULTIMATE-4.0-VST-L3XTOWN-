@@ -415,3 +415,11 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - MIDI keyboard: MIDI state component, доступный диапазон нот 36–84. `SKIN_button` открывает существующее меню и доступен через Ctrl+K; `Import_Guitar` привязан к LOAD SFZ.
 - Изменения только в документации/контракте скинов; `PluginEditor`, AudioProcessor, APVTS, MIDI, пресеты и аудио-код не изменялись.
 - Commit control inventory: `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`. Новый CI run ожидается для этого commit; до его завершения свежий G1–G4 PASS не заявляется.
+
+
+### REV 14 / CI update — run #860 (12 November 2026)
+- Run #860 / ID 43123677115 проверял source SHA `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`, включающий актуальный control inventory.
+- Skin pack validator G1–G4 — PASS; preset catalog, portable examples и APVTS registry validators — PASS.
+- Windows workflow завершился FAILURE на шаге `Run CTest regression suite`. Поэтому CTest, последующие pluginval/package gates и COMPLETE ZIP не подтверждены этим run.
+- Build/host status остаётся: BUILD VERIFIED — NO; FL Studio 20 HOST-VERIFIED — NO; Skin_052 — PACK GENERATED / G1–G4 VALIDATION PASS (на SHA bf436ae...), NOT MERGED / NOT RUNTIME-INTEGRATED.
+- Run URL: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43123677115
