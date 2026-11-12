@@ -16,7 +16,7 @@
 - `controls.*.grid` остаётся design metadata и не перестраивает реальные JUCE controls.
 - 150 ms animated hot-swap, ECO animation policy и asset memory LRU/budget не подтверждены.
 - Не все декоративные материалы Skin Studio (texture/bezel/crest) загружаются как отдельные runtime layers; текущая gallery использует preview artwork, а editor — semantic palette.
-- Runtime control parity по всем обязательным IDs остаётся частичной: отсутствующие LED/Auto Discover/Curator/Settings/About не становятся активными только из-за skin manifest.
+- Runtime control parity по всем обязательным IDs остаётся частичной: отсутствующие LED/Auto Discover/Curator/About не становятся активными только из-за skin manifest. Settings panel имеет реальные UI-only настройки workspace.
 - Windows x64 build/CTest/pluginval и FL Studio 20 host acceptance должны подтверждаться отдельно на точном SHA.
 
 Все изменения тем остаются visual-only: не менять APVTS, MIDI, presets, sampler, DSP или audio callback.
