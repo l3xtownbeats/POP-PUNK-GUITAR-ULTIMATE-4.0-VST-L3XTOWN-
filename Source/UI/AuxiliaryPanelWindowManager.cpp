@@ -63,6 +63,17 @@ bool PPGUAuxiliaryPanelWindowManager::openPanel(int id)
         addAndMakeVisible(*window->overlay);
         currentPage = (getOpenPanelCount() - 1) / juce::jmax(1, pageCapacity);
     }
+    else
+    {
+        int openIndex = 0;
+        for (const auto& candidate : windows)
+        {
+            if (!candidate.open) continue;
+            if (candidate.id == id) break;
+            ++openIndex;
+        }
+        currentPage = openIndex / juce::jmax(1, pageCapacity);
+    }
     window->overlay->setVisible(true);
     setVisible(true);
     window->overlay->toFront(false);
