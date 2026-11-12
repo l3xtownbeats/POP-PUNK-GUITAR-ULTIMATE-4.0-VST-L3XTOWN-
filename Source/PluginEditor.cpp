@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <string>
 #include <set>
+#include <limits>
 #if JUCE_WINDOWS
  #ifndef NOMINMAX
   #define NOMINMAX
@@ -328,7 +329,7 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
 
     const auto total64 = totalValue.toString().getLargeIntValue();
     if (total64 < 1 || total64 > std::numeric_limits<int>::max()
-        || total64 != static_cast<juce::int64>(themes->size()))
+        || total64 != static_cast<std::int64_t>(themes->size()))
         return 0;
     const auto total = static_cast<int>(total64);
 
