@@ -541,11 +541,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setWantsKeyboardFocus(true);
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
-    setSize(1120, 840);
+    setSize(1600, 900);
     setResizable(true, true);
-    // The current fixed-height control stack needs ~788 px including outer margins.
-    // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(980, 800, 1600, 1100);
+    // Approved product shell bounds. The central Zone F strip and lower
+    // performance/keyboard area are laid out responsively within these limits.
+    setResizeLimits(1200, 700, 2400, 1500);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
