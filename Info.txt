@@ -35,3 +35,13 @@ undefined
 **Причина:** Windows Release CI #984 завершился ошибкой компиляции OverlayPanel.cpp: heterogeneous braced initializer-list смешивал указатели на разные JUCE component types, из-за чего MSVC не мог вывести общий тип.
 **Изменение:** AutoChords controls теперь перечисляются через явно типизированный std::array<juce::Component*, 5> в compact и expanded layout paths. Поведение и параметры не меняются.
 **Проверки:** ошибка подтверждена логом workflow run 43152703528, job 130965436965; исправление ожидает нового Windows CI. CTest/pluginval не запускались из-за остановки сборки. Perf targets и performance budgets не измерялись.
+
+## 2026-11-12 — Performance specification: FL Studio 20 / Windows 10 budgets
+
+**Статус:** PERFORMANCE SPEC DESIGNED; implementation PENDING (P1–P5).
+**Документ:** `docs/PPGU_PERFORMANCE_SPEC_RU.md`.
+**Ветка:** feature/pop-punk-ultimate-skin-ui; reference baseline includes historical work/signal-forge-theme-tokens context, without assuming current branch HEAD equals user-supplied 57fe400.
+**Бюджеты:** CPU <= 2% (4 voices), <= 15% (64-voice stress); RAM <= 60 MB idle / <= 512 MB full SoundBank; preset load <= 300 ms; first sound <= 50 ms; 0 allocations in processBlock (hard gate); peak callback <= 60% buffer at 128 samples.
+**Гейты:** ppgu_perf_bench, 10% regression gate, HOST VERIFIED only from FL Studio 20 measurements tied to exact binary SHA.
+**Порядок:** P1 CI + ThemeManager hardening -> P2 baseline -> P3 data-driven tuning -> P4 stress + host check -> P5 feature expansion.
+**Self-check:** документальный этап; production source unchanged in this entry; CI PASS not assigned; measurements absent; all budgets remain targets, not achieved results.

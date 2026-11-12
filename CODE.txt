@@ -34,3 +34,10 @@ undefined
 - Root cause: MSVC C3535/C2440 during Windows Release build at OverlayPanel.cpp compact/expanded AutoChords control visibility loops.
 - No DSP, callback, MIDI, APVTS IDs, preset or SoundBank changes.
 - CI rerun pending; no build/CTest/pluginval pass claimed.
+
+## 2026-11-12 — Performance specification
+
+- Added `docs/PPGU_PERFORMANCE_SPEC_RU.md` with measurable CPU/RAM/latency budgets, callback prohibitions, streaming/UI/build/host requirements, CI gates and P1–P5 order.
+- Specification only: no production performance behavior is certified or changed by this entry.
+- Reference branch short SHA supplied by user (57fe400) is not treated as current branch HEAD; active feature branch remains unchanged.
+- No benchmark, allocation audit, CTest performance target, host measurement or performance PASS is claimed.
