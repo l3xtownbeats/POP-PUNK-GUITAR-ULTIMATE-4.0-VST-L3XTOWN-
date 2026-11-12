@@ -1413,3 +1413,12 @@ Status: accepted product requirements; implementation status must be verified se
 5. IMPLEMENTATION STATUS RULE
 - A specification or journal entry is not proof of implementation. Mark each item as implemented only after source inspection, tests and CI evidence.
 - Required workflow: CHECK → ANALYZE → IMPLEMENT/FIX → RETEST → REPORT.
+
+
+## 2026-11-12 — FreePats Direct DI added to SoundBank intake
+
+- Verified upstream repository `freepats/electric-guitar-FSBS-direct`, root `LICENSE.txt` and `README.txt`: CC0 1.0; dry, direct-recorded electric-guitar signal.
+- Upstream tree contains SFZ mapping and WAV sample assets under `samples/bridge`; source repository is approximately 267,817 KB before Git metadata removal.
+- Added source folder `Samples/FreePats-Direct` to the existing download/validation/SHA-256/audit/package pipeline. No new sampler or engine was introduced.
+- Cache key bumped to force retrieval of the expanded bank. Download, file count, payload size and audit are NOT yet confirmed; verify the next GitHub Actions run and packaged artifact before marking imported.
+- Audit-script license-candidate handling was fixed in commit `49f841f60cf3cc8a527603d9cf3d49bb25e3ecc7`; this commit extends intake on top of that fix.

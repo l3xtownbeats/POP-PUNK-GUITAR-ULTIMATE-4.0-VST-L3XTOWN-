@@ -19,6 +19,7 @@ SOURCES = {
     "FreePats-Distortion-1": ("FreePats FSBS Distortion 1", ("LICENSE.txt", "LICENSE")),
     "FreePats-Distortion-2": ("FreePats FSBS Distortion 2", ("LICENSE.txt", "LICENSE")),
     "FreePats-Jazz-Electric": ("FreePats Jazz Electric Guitar", ("LICENSE.txt", "LICENSE")),
+    "FreePats-Direct": ("FreePats FSBS Direct Electric Guitar DI", ("LICENSE.txt", "LICENSE")),
     "FreePats-Spanish-Classical": ("FreePats Spanish Classical Guitar", ("LICENSE.txt", "LICENSE")),
     "Karoryfer-Black-And-Green": ("Karoryfer Black And Green Guitars", "LICENSE"),
     "Karoryfer-Emilyguitar": ("Karoryfer Emilyguitar", "LICENSE"),

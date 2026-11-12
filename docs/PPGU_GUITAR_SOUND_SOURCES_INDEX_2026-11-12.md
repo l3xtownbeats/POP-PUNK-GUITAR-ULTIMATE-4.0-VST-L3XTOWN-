@@ -15,6 +15,8 @@ This is a discovery index for guitar-only content. A listing is not proof that e
    - Creator states free sample libraries are CC0, but old downloads may have older terms. Verify the LICENSE inside the exact archive.
    - Includes Emilyguitar and other instruments; Black And Green / Shinyguitar are listed in the SFZ catalogue.
 4. FreePats Clean Electric Guitar — https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html
+- Additional FreePats FSBS Electric Guitar Direct (dry DI): https://github.com/freepats/electric-guitar-FSBS-direct
+  - CC0 1.0 confirmed in the repository LICENSE.txt and README; bridge-pickup direct recordings with multiple round robins and soft/hard dynamics. Added to the automated intake pipeline as `FreePats-Direct`; conversion/engine compatibility is verified separately.
    - FSBS Clean #1/#2, including SFZ WAV/FLAC and SF2; page states CC0 1.0.
    - GitHub source bank: https://github.com/freepats/electric-guitar-FSBS-clean
 5. FreePats Distorted Electric Guitar — https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html

@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v3-audited
+          key: ppgu-samples-meta-v1.1.0-freepats-expanded-cc0-v4-direct-di
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -148,7 +148,8 @@ jobs:
           # jazz electric guitar and Spanish classical acoustic guitar.
           $additionalFreePats = @(
             @{ repo='electric-guitar-FSBS-jazz'; folder='FreePats-Jazz-Electric' },
-            @{ repo='spanish-classical-guitar'; folder='FreePats-Spanish-Classical' }
+            @{ repo='spanish-classical-guitar'; folder='FreePats-Spanish-Classical' },
+            @{ repo='electric-guitar-FSBS-direct'; folder='FreePats-Direct' }
           )
           foreach ($item in $additionalFreePats) {
             $dest = Join-Path $sampleRoot $item.folder
@@ -197,7 +198,7 @@ jobs:
           Sample library sources included in this package:
           - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
             https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1, Distortion 2 and Jazz electric guitars, CC0 1.0.
+          - FreePats FSBS Clean, Direct DI, Distortion 1, Distortion 2 and Jazz electric guitars, CC0 1.0.
           - Karoryfer Black And Green Guitars, Emilyguitar and Shinyguitar, CC0 1.0.
             https://github.com/sfzinstruments/karoryfer.black-and-green-guitars
             https://github.com/sfzinstruments/karoryfer.emilyguitar
@@ -206,6 +207,7 @@ jobs:
             https://github.com/freepats/electric-guitar-FSBS-dist1
             https://github.com/freepats/electric-guitar-FSBS-dist2
             https://github.com/freepats/electric-guitar-FSBS-jazz
+            https://github.com/freepats/electric-guitar-FSBS-direct
           - FreePats Spanish Classical Guitar, CC0 1.0.
             https://github.com/freepats/spanish-classical-guitar
           Original license files, SFZ maps and source checksum manifests are retained beside the samples.
@@ -223,7 +225,8 @@ jobs:
             'Meta-meta-nylon-guitar/LICENSE',
             'FreePats-Clean/LICENSE.txt',
             'FreePats-Distortion-1/LICENSE.txt',
-            'FreePats-Distortion-2/LICENSE.txt'
+            'FreePats-Distortion-2/LICENSE.txt',
+            'FreePats-Direct/LICENSE.txt'
           )) {
             if (-not (Test-Path (Join-Path $sampleRoot $license))) { throw "Required sample license missing: $license" }
           }
