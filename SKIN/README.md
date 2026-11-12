@@ -1,35 +1,54 @@
-# PPGU — единый визуальный интерфейс и графические ресурсы
+# PPGU — skin manifests, palette runtime и Skin Studio
 
-## Текущий продуктовый принцип
+## Фактическое состояние
 
-PPGU использует **один фиксированный фирменный интерфейс** — реальный JUCE editor из Source/PluginEditor.cpp и Source/PluginEditor.h. В текущей реализации задана палитра dark charcoal / magenta. В продукте не должно быть переключателя графических тем, галереи скинов или демонстрации фиктивного runtime hot-swap.
+В JUCE editor реализовано переключение визуальных палитр через кнопку **SKIN** и Ctrl+K. Выбор сохраняется в пользовательских настройках. Runtime skin root — папка `Skins/` рядом с VST3 bundle; в исходном дереве разработчика используется `SKIN/`.
 
-Фактические элементы редактора: выбор/поиск/фильтр factory presets, режимы MELODY и PATTERN, загрузка SFZ и статус библиотеки, девять rotary controls, семь FX switches и MIDI keyboard. Внешний вид и расположение элементов должны соответствовать работающему editor source, а не придуманному концепту.
+`ThemeManager` поддерживает два versioned manifest contract:
+- `Skin_01`…`Skin_51`: legacy nested-token schema `theme.schema.json`.
+- `Skin_052` и последующие Skin Studio themes: плоская 21-token palette + control map по `control_schema.json`.
 
-## Важное различие: artwork ≠ runtime UI
+Для новых Skin Studio тем в редакторе применяются палитровые цвета. Координаты `controls.*.grid` пока остаются design metadata: они **не управляют реальным расположением JUCE controls**. Отдельная Theme Gallery, живой layout reflow, независимые popup windows и panel manager не должны считаться реализованными до отдельного кода и host acceptance.
 
-- assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg — брендовая обложка репозитория.
-- assets/PPGU_BLACKOUT_VOLTAGE_SKIN.svg — отдельный дизайн-концепт, не текущий runtime UI и не скриншот VST3.
-- Cover Interface.jpg — artwork/визуальный материал; не маркировать его как подтверждённый host capture без проверки происхождения.
-- Единственное доказательство реального вида плагина — свежий screenshot/capture из собранного VST3 в совместимом host.
+Текущий fallback/default в коде — **Blackout Voltage (skin-51)**. Skin_052 Carbon Relay добавлен в реестр как selectable theme; это не изменение официального default. Любая смена темы должна оставаться visual-only: не менять APVTS, MIDI, presets, sampler или DSP.
 
-## Каталог старых skin manifests
+## Форматы и каталоги
 
-Каталог SKIN/ и его manifests сохраняются как инженерные/исторические материалы. Они не доказывают наличие законченных selectable skins и не должны рекламироваться как продуктовая функция. Не копировать незавершённые manifests в runtime package и не создавать искусственные preview/hero/texture assets для видимости готовности.
+- `theme_manifest.json` — canonical registry, источник количества, ID, индексов и относительных путей.
+- `theme.schema.json` — legacy manifest contract для Skin_01…Skin_51; не использовать его как schema для Skin Studio.
+- `control_schema.json` — REV14 Skin Studio schema, 21 palette tokens, required control IDs и layout grid.
+- `theme_pack_manifest.json` — состав следующего неслитого Skin Studio pack.
+- `Skin_NNN/theme.json` — новая тема; PNG preview/hero и SVG texture/bezel/crest находятся рядом в соответствующих подкаталогах.
+- `backups/` — сохранённые версии registry/schema перед merge; резервные копии не являются runtime themes.
 
-## Что должно быть проверено перед публикацией UI-скриншота
+## Skin Studio pipeline
 
-1. Текущий Windows x64 VST3 собран из зафиксированного commit SHA.
-2. Плагин открыт в FL Studio 20 или другом явно названном host.
-3. На изображении показан именно запущенный editor, а не SVG-концепт или графический макет.
-4. Скриншот соответствует актуальному build и не скрывает отсутствующие элементы.
-5. В README указан commit/run, с которого сделан capture.
+Из корня репозитория:
+
+```bash
+python tools/generate_skin_batch.py --dry-run
+python tools/generate_skin_batch.py
+python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+python tools/merge_skin_pack.py --dry-run
+python tools/merge_skin_pack.py
+python tests/ValidateSkinManifests.py
+```
+
+Генератор по умолчанию готовит ровно 50 тем: шесть визуальных семейств по восемь вариантов и две специальные темы. Он читает следующий индекс из canonical registry, не перезаписывает существующие папки, создаёт PNG/SVG assets и запускает G1–G4 validator. Merge сначала валидирует pack, проверяет непрерывность/уникальность registry, создаёт backups и только затем атомарно обновляет реестр. Он сохраняет legacy и REV14 schemas раздельно.
+
+Не запускайте merge, если pack validator не завершился PASS. Не удаляйте папки для обхода registry parity и не меняйте счётчик вручную.
+
+## Release package
+
+Workflow собирает sibling runtime folder `Skins/` рядом с VST3 bundle и включает canonical registry, legacy schema и REV14 control schema. Количество тем берётся из registry, а не из фиксированного числа. Полный ZIP публикуется только после Windows x64 Release, полного CTest, pluginval strictness 5 и успешной упаковки. Это всё ещё не заменяет ручную проверку загрузки/переключения в FL Studio 20.
+
+## Artwork и host evidence
+
+PNG/SVG assets — ресурсы skin pack, но сами по себе не доказывают внешний вид или корректность собранного плагина. Единственное доказательство реального UI — свежий capture собранного VST3 в host с указанием commit SHA и CI run. Не маркировать дизайн-макет как screenshot плагина.
 
 ## Связанные документы
 
-- [Главная страница продукта](../README.md)
-- [Аудит текущего UI / прежнего Skin Engine](SKIN_ENGINE_GAP_AUDIT_RU.md)
-- [Матрица фактических контролов](CONTROL_INVENTORY_MATRIX_RU.md)
-- [Техническая спецификация](../docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
-
-**Правило:** не называть концепт-арт готовой темой и не называть manifest полноценным runtime skin.
+- `../README.md` — продукт.
+- `SKIN_ENGINE_GAP_AUDIT_RU.md` — оставшиеся runtime gaps.
+- `CONTROL_INVENTORY_MATRIX_RU.md` — фактические controls.
+- `../docs/MASTER_PRODUCT_SPEC_4_0_RU.md` — продуктовая спецификация.
