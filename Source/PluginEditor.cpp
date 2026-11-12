@@ -277,6 +277,114 @@ private:
     juce::Viewport viewport;
 };
 
+// UI-only settings panel: controls the auxiliary workspace and theme preference.
+class PPGUSettingsPanel final : public juce::Component
+{
+public:
+    PPGUSettingsPanel(PPGUThemeManager::Palette paletteIn, float panelScaleIn, int panelGapIn,
+                      std::function<void(float)> scaleChangedIn,
+                      std::function<void(int)> gapChangedIn,
+                      std::function<void()> restoreThemeIn,
+                      std::function<void()> openGalleryIn)
+        : palette(std::move(paletteIn)), scaleChanged(std::move(scaleChangedIn)),
+          gapChanged(std::move(gapChangedIn)), restoreTheme(std::move(restoreThemeIn)),
+          openGallery(std::move(openGalleryIn))
+    {
+        heading.setText("WORKSPACE SETTINGS", juce::dontSendNotification);
+        heading.setFont(juce::Font(18.0f, juce::Font::bold));
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addAndMakeVisible(heading);
+
+        description.setText("These options affect auxiliary panels and visual preferences only. "
+                             "Audio processing, MIDI and instrument parameters are not changed.",
+                             juce::dontSendNotification);
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        description.setFont(juce::Font(11.0f));
+        description.setJustificationType(juce::Justification::topLeft);
+        addAndMakeVisible(description);
+
+        scaleLabel.setText("AUXILIARY PANEL SCALE", juce::dontSendNotification);
+        gapLabel.setText("SPACE BETWEEN PANELS", juce::dontSendNotification);
+        for (auto* label : { &scaleLabel, &gapLabel })
+        {
+            label->setFont(juce::Font(10.0f, juce::Font::bold));
+            label->setColour(juce::Label::textColourId, palette.token("accent"));
+            addAndMakeVisible(*label);
+        }
+
+        configureSlider(scaleSlider, 0.5, 1.5, 0.05, panelScaleIn);
+        scaleSlider.setTextValueSuffix(" x");
+        scaleSlider.onValueChange = [this]
+        {
+            if (scaleChanged)
+                scaleChanged(static_cast<float>(scaleSlider.getValue()));
+        };
+        addAndMakeVisible(scaleSlider);
+
+        configureSlider(gapSlider, 0.0, 32.0, 1.0, panelGapIn);
+        gapSlider.setTextValueSuffix(" px");
+        gapSlider.onValueChange = [this]
+        {
+            if (gapChanged)
+                gapChanged(static_cast<int>(std::lround(gapSlider.getValue())));
+        };
+        addAndMakeVisible(gapSlider);
+
+        restoreButton.setButtonText("RESTORE SIGNAL FORGE DEFAULT");
+        restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        restoreButton.onClick = [this] { if (restoreTheme) restoreTheme(); };
+        addAndMakeVisible(restoreButton);
+
+        galleryButton.setButtonText("OPEN SKIN GALLERY");
+        galleryButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
+        galleryButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        galleryButton.onClick = [this] { if (openGallery) openGallery(); };
+        addAndMakeVisible(galleryButton);
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(20);
+        heading.setBounds(area.removeFromTop(28));
+        description.setBounds(area.removeFromTop(48));
+        area.removeFromTop(14);
+        scaleLabel.setBounds(area.removeFromTop(20));
+        scaleSlider.setBounds(area.removeFromTop(38));
+        area.removeFromTop(14);
+        gapLabel.setBounds(area.removeFromTop(20));
+        gapSlider.setBounds(area.removeFromTop(38));
+        area.removeFromTop(18);
+        restoreButton.setBounds(area.removeFromTop(38).removeFromLeft(270));
+        area.removeFromTop(8);
+        galleryButton.setBounds(area.removeFromTop(38).removeFromLeft(220));
+    }
+
+private:
+    void configureSlider(juce::Slider& slider, double minimum, double maximum,
+                         double interval, double value)
+    {
+        slider.setSliderStyle(juce::Slider::LinearHorizontal);
+        slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 58, 22);
+        slider.setRange(minimum, maximum, interval);
+        slider.setValue(juce::jlimit(minimum, maximum, value), juce::dontSendNotification);
+        slider.setColour(juce::Slider::trackColourId, palette.token("control_border"));
+        slider.setColour(juce::Slider::backgroundColourId, palette.token("control_bg"));
+        slider.setColour(juce::Slider::thumbColourId, palette.token("accent"));
+        slider.setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
+        slider.setColour(juce::Slider::textBoxBackgroundColourId, palette.token("control_bg"));
+        slider.setColour(juce::Slider::textBoxOutlineColourId, palette.token("control_border"));
+    }
+
+    PPGUThemeManager::Palette palette;
+    std::function<void(float)> scaleChanged;
+    std::function<void(int)> gapChanged;
+    std::function<void()> restoreTheme, openGallery;
+    juce::Label heading, description, scaleLabel, gapLabel;
+    juce::Slider scaleSlider, gapSlider;
+    juce::TextButton restoreButton, galleryButton;
+};
+
 // Import panel delegates to the existing asynchronous SFZ loader and reports its real result.
 class PPGUImportGuitarPanel final : public juce::Component
 {
@@ -874,6 +982,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         themeManager.getPalette().token("accent"), themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(*auxiliaryWorkspace);
     auxiliaryWorkspace->setVisible(false);
+    settingsButton.setTooltip("Workspace scale, panel spacing and visual defaults.");
+    settingsButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("panel_elevated"));
+    settingsButton.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+    settingsButton.onClick = [this] { openSettingsPanel(); };
+    addAndMakeVisible(settingsButton);
     skinButton.setTooltip("Open the premium visual skin gallery. Ctrl+K.");
     skinButton.onClick = [this] { openSkinGalleryPanel(); };
     addAndMakeVisible(skinButton);
@@ -958,6 +1071,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     options.filenameSuffix = "settings";
     options.folderName = "L3XTOWN";
     uiProperties.setStorageParameters(options);
+    if (auto* settings = uiProperties.getUserSettings())
+    {
+        auxiliaryWorkspace->setPanelScale(static_cast<float>(settings->getDoubleValue("workspacePanelScale", 1.0)));
+        auxiliaryWorkspace->setPanelGap(settings->getIntValue("workspacePanelGap", 12));
+    }
     loadSavedSkin();
     applyPalette();
 }
@@ -1054,6 +1172,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     subtitleLabel.setBounds(18, 47, 150, 14);
     header.removeFromLeft(8);
     skinButton.setBounds(header.removeFromRight(78).reduced(2, 5));
+    settingsButton.setBounds(header.removeFromRight(92).reduced(2, 5));
     autoChordsButton.setBounds(header.removeFromRight(112).reduced(2, 5));
     loadButton.setBounds(header.removeFromRight(112).reduced(2, 5));
     header.removeFromRight(8);
@@ -1331,6 +1450,69 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+
+    constexpr int settingsPanelId = 6;
+    if (!auxiliaryWorkspace->isPanelOpen(settingsPanelId))
+    {
+        auto* properties = uiProperties.getUserSettings();
+        const auto panelScale = properties != nullptr
+            ? static_cast<float>(properties->getDoubleValue("workspacePanelScale", 1.0)) : 1.0f;
+        const auto panelGap = properties != nullptr
+            ? properties->getIntValue("workspacePanelGap", 12) : 12;
+
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+        auto content = std::make_unique<PPGUSettingsPanel>(
+            themeManager.getPalette(), panelScale, panelGap,
+            [safe](float value)
+            {
+                if (safe == nullptr || safe->auxiliaryWorkspace == nullptr)
+                    return;
+                safe->auxiliaryWorkspace->setPanelScale(value);
+                if (auto* settings = safe->uiProperties.getUserSettings())
+                {
+                    settings->setValue("workspacePanelScale", static_cast<double>(value));
+                    settings->saveIfNeeded();
+                }
+            },
+            [safe](int value)
+            {
+                if (safe == nullptr || safe->auxiliaryWorkspace == nullptr)
+                    return;
+                safe->auxiliaryWorkspace->setPanelGap(value);
+                if (auto* settings = safe->uiProperties.getUserSettings())
+                {
+                    settings->setValue("workspacePanelGap", value);
+                    settings->saveIfNeeded();
+                }
+            },
+            [safe]
+            {
+                if (safe != nullptr)
+                    safe->loadSkinByIndex(52, true);
+            },
+            [safe]
+            {
+                if (safe != nullptr)
+                    safe->openSkinGalleryPanel();
+            });
+
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = settingsPanelId;
+        spec.title = "SETTINGS  /  WORKSPACE";
+        spec.desired = { 700, 520 };
+        spec.minimum = { 420, 320 };
+        spec.content = std::move(content);
+        auxiliaryWorkspace->openPanel(std::move(spec));
+    }
+
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
@@ -1341,7 +1523,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
  presetSearch.setColour(juce::TextEditor::backgroundColourId,p.token("control_bg"));presetSearch.setColour(juce::TextEditor::textColourId,p.token("text_primary"));presetSearch.setColour(juce::TextEditor::outlineColourId,p.token("control_border"));presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.token("highlight"));presetSearch.setColour(juce::TextEditor::highlightColourId,p.token("accent").withAlpha(.3f));
- loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
+ loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));settingsButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));settingsButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
  for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b->setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b->setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b->setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
  for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.token("accent"));s.setColour(juce::Slider::rotarySliderOutlineColourId,p.token("control_border"));s.setColour(juce::Slider::thumbColourId,p.token("text_primary"));s.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));}
  for(auto& l:knobLabels)l.setColour(juce::Label::textColourId,p.token("text_secondary"));
