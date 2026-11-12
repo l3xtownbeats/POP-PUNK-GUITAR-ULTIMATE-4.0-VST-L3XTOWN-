@@ -2,15 +2,13 @@
 
 PPGUFXEditPanel::PPGUFXEditPanel(juce::AudioProcessorValueTreeState& apvts) : state(apvts)
 {
-    modules = {
-        { "COMPRESSOR", "compressorOn", { { "compressorThreshold", "THRESHOLD" }, { "compressorRatio", "RATIO" }, { "compressorAttack", "ATTACK" }, { "compressorRelease", "RELEASE" }, { "compressorAmount", "AMOUNT" } } },
-        { "EQ", "eqOn", { { "eqLow", "LOW" }, { "eqMid", "MID" }, { "eqHigh", "HIGH" }, { "eqLowFreq", "LOW FREQ" }, { "eqMidFreq", "MID FREQ" }, { "eqMidQ", "MID Q" }, { "eqHighFreq", "HIGH FREQ" } } },
-        { "DISTORTION", "distortionOn", { { "distortionDrive", "DRIVE" }, { "distortionTone", "TONE" }, { "distortionMix", "MIX" } } },
-        { "CHORUS", "chorusOn", { { "chorusRate", "RATE" }, { "chorusDepth", "DEPTH" }, { "chorusMix", "MIX" } } },
-        { "DELAY", "delayOn", { { "delayTime", "TIME" }, { "delayFeedback", "FEEDBACK" }, { "delayMix", "MIX" } } },
-        { "REVERB", "reverbOn", { { "reverbRoomSize", "ROOM" }, { "reverbDamping", "DAMPING" }, { "reverbMix", "MIX" } } },
-        { "CABINET IR", "cabinetOn", { { "cabinetMix", "MIX" }, { "cabinetLowCut", "LOW CUT" }, { "cabinetHighCut", "HIGH CUT" } } }
-    };
+    modules[0].name = "COMPRESSOR"; modules[0].enabledId = "compressorOn"; modules[0].controls = { { "compressorThreshold", "THRESHOLD" }, { "compressorRatio", "RATIO" }, { "compressorAttack", "ATTACK" }, { "compressorRelease", "RELEASE" }, { "compressorAmount", "AMOUNT" } };
+    modules[1].name = "EQ"; modules[1].enabledId = "eqOn"; modules[1].controls = { { "eqLow", "LOW" }, { "eqMid", "MID" }, { "eqHigh", "HIGH" }, { "eqLowFreq", "LOW FREQ" }, { "eqMidFreq", "MID FREQ" }, { "eqMidQ", "MID Q" }, { "eqHighFreq", "HIGH FREQ" } };
+    modules[2].name = "DISTORTION"; modules[2].enabledId = "distortionOn"; modules[2].controls = { { "distortionDrive", "DRIVE" }, { "distortionTone", "TONE" }, { "distortionMix", "MIX" } };
+    modules[3].name = "CHORUS"; modules[3].enabledId = "chorusOn"; modules[3].controls = { { "chorusRate", "RATE" }, { "chorusDepth", "DEPTH" }, { "chorusMix", "MIX" } };
+    modules[4].name = "DELAY"; modules[4].enabledId = "delayOn"; modules[4].controls = { { "delayTime", "TIME" }, { "delayFeedback", "FEEDBACK" }, { "delayMix", "MIX" } };
+    modules[5].name = "REVERB"; modules[5].enabledId = "reverbOn"; modules[5].controls = { { "reverbRoomSize", "ROOM" }, { "reverbDamping", "DAMPING" }, { "reverbMix", "MIX" } };
+    modules[6].name = "CABINET IR"; modules[6].enabledId = "cabinetOn"; modules[6].controls = { { "cabinetMix", "MIX" }, { "cabinetLowCut", "LOW CUT" }, { "cabinetHighCut", "HIGH CUT" } };
     for (int i = 0; i < static_cast<int>(modules.size()); ++i)
     {
         auto& module = modules[static_cast<std::size_t>(i)];
