@@ -342,11 +342,11 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "RUNTIME_PALETTE_SUPPORT_COMMITTED_CI_PENDING_LAYOUT_METADATA_ONLY",
+  "designStatus": "RUNTIME_PALETTE_SUPPORT_CI_VERIFIED_LAYOUT_METADATA_ONLY",
   "notes": [
-    "All 27 mandatory REV 14 control IDs are mapped.",
-    "PUNK GROUP, LED activity, Auto Discover, Curator, Settings and About are contract placeholders until their runtime functionality is implemented; never present them as active working features.",
+    "Skin_052 supplies all 27 mandatory REV 14 control IDs in its theme manifest; this is contract coverage, not a claim that every placeholder control has runtime functionality.",
+    "PUNK GROUP, LED activity, Auto Discover, Curator, Settings and About remain contract placeholders until their runtime functionality is implemented; never present them as active working features.",
     "Control coordinates are design metadata. Existing JUCE bounds remain authoritative until a dedicated layout engine consumes this map.",
-    "ThemeManager and registry-driven editor support are committed; CI validation is pending. Control coordinates remain metadata and do not reflow the live JUCE editor."
+    "ThemeManager dual-format parsing, 21-token palette mapping and registry-driven skin selection passed Windows Release, all 15 CTest targets, pluginval strictness 5 and packaging on SHA a669c9b067aa0ab36d0bc090f10821af66671d29 (run #974). Layout coordinates remain metadata and do not reflow the live JUCE editor."
   ]
 }

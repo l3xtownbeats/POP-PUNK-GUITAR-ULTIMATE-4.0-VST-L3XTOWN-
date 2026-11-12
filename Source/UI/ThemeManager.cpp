@@ -153,6 +153,14 @@ namespace
             error = "Invalid Skin Studio ID/index pair";
             return false;
         }
+        const auto canonicalId = juce::String("skin-")
+            + juce::String(static_cast<juce::int64>(index)).paddedLeft('0', 3);
+        if (id != canonicalId)
+        {
+            error = "Skin Studio ID must use canonical three-digit-minimum index formatting";
+            return false;
+        }
+
         for (int position = 5; position < id.length(); ++position)
         {
             if (!juce::CharacterFunctions::isDigit(id[position]))
@@ -217,12 +225,29 @@ namespace
         }
 
         juce::var controls;
-        if (!hasObject(root, "controls", controls)
-            || controls.getDynamicObject() == nullptr
-            || controls.getDynamicObject()->getProperties().size() < 27)
+        if (!hasObject(root, "controls", controls) || controls.getDynamicObject() == nullptr)
         {
             error = "Skin Studio control map is incomplete";
             return false;
+        }
+
+        const juce::StringArray requiredControlIds {
+            "preset_browser", "mode_selector",
+            "knob01", "knob02", "knob03", "knob04", "knob05",
+            "knob06", "knob07", "knob08", "knob09",
+            "fx_switch01", "fx_switch02", "fx_switch03", "fx_switch04",
+            "fx_switch05", "fx_switch06", "fx_switch07",
+            "midi_keyboard", "LCD_display", "LED_indicator", "SKIN_button",
+            "Import_Guitar", "Auto_Discover", "Curator", "Settings", "About"
+        };
+        const auto* controlObject = controls.getDynamicObject();
+        for (const auto& controlId : requiredControlIds)
+        {
+            if (!controlObject->hasProperty(juce::Identifier(controlId)))
+            {
+                error = juce::String("Skin Studio control map is missing required ID: ") + controlId;
+                return false;
+            }
         }
 
         juce::var assets;

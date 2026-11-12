@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Safely merge a validated REV14 Skin Studio pack into the canonical registry.
 
-Legacy theme.schema.json remains the schema for legacy themes. New Skin Studio
-manifests are governed by control_schema.json; this merge never rewrites one
-schema to pretend the two manifest formats are interchangeable.
+Legacy theme.schema.json owns indices 1..51. control_schema.json is the full
+Skin Studio schema for indices 52+ and carries the shared 21-token/control-ID
+contract. The merge never rewrites one schema to blur the two formats.
 """
 from __future__ import annotations
 
@@ -62,6 +62,17 @@ def main() -> int:
     existing_total = registry.get("totalSkins")
     if not isinstance(existing_total, int) or isinstance(existing_total, bool) or existing_total != len(existing):
         return fail("Registry totalSkins does not match its themes array.")
+    if registry.get("skinRange") != {"first": 1, "last": existing_total}:
+        return fail("Registry skinRange must match first=1 and last=totalSkins.")
+    for item in existing:
+        if not isinstance(item, dict):
+            return fail("Registry contains a malformed theme entry.")
+        index = item.get("index")
+        if not isinstance(index, int) or isinstance(index, bool) or index < 1:
+            return fail("Registry contains a non-positive or non-integer index.")
+        expected_id = f"skin-{index:02d}" if index <= 51 else f"skin-{index:03d}"
+        if item.get("id") != expected_id:
+            return fail(f"Registry index {index} has non-canonical ID; refusing merge.")
     if pack.get("status") != "GENERATED_NOT_MERGED":
         return fail("Only a GENERATED_NOT_MERGED pack may be merged.")
 

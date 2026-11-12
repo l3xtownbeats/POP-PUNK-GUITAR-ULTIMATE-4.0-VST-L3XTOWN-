@@ -124,11 +124,81 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
     if not isinstance(tokens, list) or len(tokens) != 21 or len(tokens) != len(set(tokens)):
         fail("control_schema.json must define exactly 21 unique palette tokens")
 
+    # Keep the two manifest generations deliberately separate and adjacent:
+    # legacy theme.schema.json owns indices 1..51; control_schema.json owns 52+.
+    legacy_schema = load_json(root / "theme.schema.json")
+    studio_properties = schema.get("properties", {}) if isinstance(schema, dict) else {}
+    legacy_properties = legacy_schema.get("properties", {}) if isinstance(legacy_schema, dict) else {}
+    studio_id = studio_properties.get("id", {})
+    studio_index = studio_properties.get("index", {})
+    legacy_id = legacy_properties.get("id", {})
+    legacy_index = legacy_properties.get("index", {})
+    palette_schema = studio_properties.get("palette", {})
+    controls_schema = studio_properties.get("controls", {})
+    top_required = {
+        "schemaVersion", "id", "index", "name", "family", "layout", "description",
+        "palette", "typography", "effects", "reduceInEco", "hotSwapFadeMs",
+        "controls", "assets", "compatibility",
+    }
+    if (schema.get("type") != "object" or schema.get("additionalProperties") is not False
+            or not top_required.issubset(set(schema.get("required", [])))):
+        fail("control_schema.json root object/required contract is incomplete")
+    if (studio_id.get("pattern") != r"^skin-[0-9]{3,}$"
+            or studio_index.get("minimum") != 52
+            or legacy_id.get("pattern") != r"^skin-[0-9]{2}$"
+            or legacy_index.get("minimum") != 1
+            or legacy_index.get("maximum") != 51
+            or legacy_index.get("maximum") + 1 != studio_index.get("minimum")):
+        fail("legacy/Skin Studio schema index boundaries overlap or have a gap")
+    if (set(palette_schema.get("required", [])) != set(tokens)
+            or set(palette_schema.get("properties", {})) != set(tokens)
+            or palette_schema.get("additionalProperties") is not False):
+        fail("control_schema.json palette properties do not match the 21-token contract")
+    if (set(controls_schema.get("required", [])) != set(required)
+            or controls_schema.get("additionalProperties") is not True):
+        fail("control_schema.json required control IDs do not match x-ppgu-contract")
+
     existing_total = registry.get("totalSkins")
     if not isinstance(existing_total, int) or isinstance(existing_total, bool):
         fail("theme_manifest.json totalSkins is not an integer")
     if not isinstance(registry.get("themes"), list) or len(registry["themes"]) != existing_total:
         fail("theme registry totalSkins does not match its themes array")
+    if registry.get("skinRange") != {"first": 1, "last": existing_total}:
+        fail("theme registry skinRange must match first=1 and last=totalSkins")
+
+    registry_indices = []
+    registry_ids = set()
+    for registered in registry["themes"]:
+        if not isinstance(registered, dict):
+            fail("theme registry contains a malformed entry")
+        index = registered.get("index")
+        if not isinstance(index, int) or isinstance(index, bool) or index < 1:
+            fail("theme registry index must be a positive integer")
+        expected_id = f"skin-{index:02d}" if index <= 51 else f"skin-{index:03d}"
+        folder_name = f"Skin_{index:02d}" if index <= 51 else f"Skin_{index:03d}"
+        if registered.get("id") != expected_id:
+            fail(f"theme registry index {index} has a non-canonical ID")
+        if registered.get("path") != f"{folder_name}/theme.json":
+            fail(f"theme registry index {index} has a non-canonical manifest path")
+        if registered.get("preview") != f"{folder_name}/assets/preview.png":
+            fail(f"theme registry index {index} has a non-canonical preview path")
+        hero_path = registered.get("hero")
+        if not isinstance(hero_path, str) or not hero_path.startswith(f"{folder_name}/assets/hero."):
+            fail(f"theme registry index {index} has a non-canonical hero path")
+        if not (root / registered["path"]).is_file():
+            fail(f"theme registry index {index} references missing manifest: {registered['path']}")
+        # Legacy 1..51 entries predate the Skin Studio artwork payload. Their
+        # preview/hero values are reserved paths, not proof that those files exist.
+        # Skin Studio 52+ must ship the complete validated artwork payload.
+        if index >= 52:
+            for relative in (registered["preview"], hero_path):
+                if not (root / relative).is_file():
+                    fail(f"Skin Studio registry index {index} references missing artwork: {relative}")
+        registry_indices.append(index)
+        registry_ids.add(expected_id)
+    if (len(registry_ids) != existing_total
+            or sorted(registry_indices) != list(range(1, existing_total + 1))):
+        fail("theme registry IDs/indices are not unique and continuous")
 
     entries = pack.get("themes")
     if not isinstance(entries, list) or not entries:

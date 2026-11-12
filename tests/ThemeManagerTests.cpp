@@ -32,6 +32,11 @@ int main()
     expect(registry.isObject(), "skin registry is a JSON object");
     expect(themes != nullptr, "skin registry contains a themes array");
     expect(totalValue.isInt() || totalValue.isInt64(), "skin registry totalSkins is an integer");
+    const auto skinRange = registry.getProperty("skinRange", juce::var());
+    expect(static_cast<int>(skinRange.getProperty("first", 0)) == 1,
+           "registry skinRange begins at 1");
+    expect(static_cast<int>(skinRange.getProperty("last", 0)) == static_cast<int>(totalValue),
+           "registry skinRange last matches totalSkins");
 
     if (themes != nullptr && (totalValue.isInt() || totalValue.isInt64()))
     {
@@ -55,6 +60,9 @@ int main()
                 continue;
 
             const auto index = indexValue.toString().getLargeIntValue();
+            const auto expectedId = juce::String("skin-")
+                + juce::String(static_cast<juce::int64>(index)).paddedLeft('0', index <= 51 ? 2 : 3);
+            expect(id == expectedId, id + " uses canonical ID formatting");
             const auto manifest = skinRoot.getChildFile(relativePath);
             const bool loaded = manifest.existsAsFile() && manager.loadFromFile(manifest);
             expect(loaded, id + " manifest accepted"
@@ -85,6 +93,23 @@ int main()
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
+        const auto studioRoot = juce::JSON::parse(skin52Json);
+        const auto studioControls = studioRoot.getProperty("controls", juce::var());
+        const auto* controlObject = studioControls.getDynamicObject();
+        const juce::StringArray requiredControlIds {
+            "preset_browser", "mode_selector",
+            "knob01", "knob02", "knob03", "knob04", "knob05",
+            "knob06", "knob07", "knob08", "knob09",
+            "fx_switch01", "fx_switch02", "fx_switch03", "fx_switch04",
+            "fx_switch05", "fx_switch06", "fx_switch07",
+            "midi_keyboard", "LCD_display", "LED_indicator", "SKIN_button",
+            "Import_Guitar", "Auto_Discover", "Curator", "Settings", "About"
+        };
+        expect(controlObject != nullptr, "Skin_052 controls is a JSON object");
+        if (controlObject != nullptr)
+            for (const auto& controlId : requiredControlIds)
+                expect(controlObject->hasProperty(juce::Identifier(controlId)),
+                       juce::String("Skin_052 contains required control ID: ") + controlId);
 
         const auto studioTokens = juce::JSON::parse(skin52Json).getProperty("palette", juce::var());
         const juce::StringArray tokenNames {
@@ -115,6 +140,20 @@ int main()
            "audio-changing Skin Studio theme rejected");
     expect(manager.getPalette().usedFallback,
            "Skin Studio compatibility failure restores fallback");
+
+    const auto badStudioId = skin52Json.replace("\"id\": \"skin-052\"",
+                                                "\"id\": \"skin-000052\"");
+    expect(!manager.loadFromJson(badStudioId),
+           "non-canonical Skin Studio ID formatting is rejected");
+    expect(manager.getPalette().usedFallback,
+           "non-canonical Skin Studio ID restores fallback");
+
+    const auto badStudioControls = skin52Json.replace("\"preset_browser\": {",
+                                                      "\"preset_browser_removed\": {");
+    expect(!manager.loadFromJson(badStudioControls),
+           "missing required Skin Studio control ID is rejected");
+    expect(manager.getPalette().usedFallback,
+           "missing Skin Studio control restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
     expect(manager.getPalette().id == "skin-51" && manager.getPalette().usedFallback,

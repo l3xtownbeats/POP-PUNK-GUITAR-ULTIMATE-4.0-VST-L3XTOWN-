@@ -3,8 +3,8 @@
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 12 ноября 2026  
-Ветка: `work/signal-forge-ui-integration`  
-Последний commit перед текущей записью: `57fe40044532eeab4bc66ccec37bce865904d455`
+Ветка: `work/skin052-runtime-integration`  
+Последний commit перед текущей записью: `a669c9b067aa0ab36d0bc090f10821af66671d29`
 
 ## 1. Назначение и продукт
 
@@ -14,19 +14,34 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 
 | Область | Фактический статус |
 |---|---|
-| VST3 / JUCE production target | Есть в проекте; актуальная сборка на текущем HEAD не подтверждена |
-| WAV/SFZ sampler | Реализован существующий playback path |
+| VST3 / JUCE production target | Полный Windows x64 Release Gate PASS на main SHA 6174041 (run #971) и на development SHA a669c9b (run #974); отдельный panel-source SHA 3c5755e также прошёл Release Gate (run #975). |
+| WAV/SFZ sampler | Существующий playback path реализован; полная коммерческая SoundBank-приёмка не подтверждена |
 | WAV metadata index / background page streaming / fixed page cache | Реализованы базовые компоненты |
 | SFZ mapping, velocity/key/channel и round-robin | Реализованы отдельные механизмы; полнота SFZ-совместимости не заявляется |
-| Pattern Scheduler | Есть транспортные и scheduler-компоненты; полная runtime-приёмка не подтверждена |
-| FX | В коде есть DSP-компоненты; полная продуктовая/host-приёмка не подтверждена |
-| 300 preset definitions | Каталог/определения присутствуют в проекте; все 300 не считать гарантированно playable |
-| SoundBank S6 / BankScanner | Полноценный универсальный scanner и end-to-end pipeline не подтверждены |
-| Общий PPGU Audio Engine для Guitar/Bass | DESIGNED, отдельный production target не выделен |
-| Bass Edition | PLANNED, не готов |
-| Sound Asset Registry REV 17.0 | Validator/policy gate и 16 unit cases есть; ingest/search automation и populated asset registry не подтверждены |
-| FL Studio 20 / Windows 10 | Пользователь подтвердил проверку своей сборки; binary SHA не зафиксирован, для нового release binary нужна повторная проверка |
+| Pattern Scheduler | Транспортные и scheduler-компоненты есть; host/runtime приёмка на новом бинарнике не заявлена |
+| FX | DSP-компоненты есть; полный FX EDIT UI, графики и FX presets не завершены |
+| 300 preset definitions | Каталог присутствует; все 300 не считать гарантированно playable |
+| SoundBank S6 / BankScanner | Production scanner, ingest automation и payload 7–10 GB остаются PENDING |
+| Bass Edition / общий Guitar-Bass Audio Engine | PLANNED/DESIGNED; отдельный production target не выделен |
+| Skin registry | 52 записи; Skin_052 Carbon Relay зарегистрирован, pack status MERGED |
+| Skin schemas | Разделение намеренное: `theme.schema.json` — legacy 1–51; `control_schema.json` — полный Skin Studio schema 52+ и общий 21-token/27-control contract |
+| ThemeManager на main | Dual-format loader существует, но main использует legacy Palette subset; canonical 21-token API и editor token binding находятся в development branch |
+| Skin_052 runtime | Palette parsing и registry selection CI-verified на SHA a669c9b; текущий этап добавляет строгую синхронизацию canonical IDs, required controls, skinRange и schema/validator |
+| Legacy skin artwork | Для Skin_01..Skin_51 theme.json присутствуют; preview/hero в репозитории отсутствуют и генерируются transiently в CI. Skin_052 имеет committed preview/hero PNG и SVG assets |
+| default-ppgu / 50 new themes | Не созданы; текущий default — skin-51 / Blackout Voltage |
+| ResourceRootResolver R34 | Не реализован |
+| AuxiliaryPanelLayout / AutoChordEngine | Геометрия 1–6 окон и chord-recognition/voicing foundation прошли 15/15 CTest на SHA a669c9b; JUCE shell/manager ещё не интегрирован |
+| SIGNAL FORGE panel components | Компоненты FX EDIT, AutoChords, Import Guitar, Settings, Performance Display и overlay shell staged на ветке 3c5755e; CMake build/CTest/pluginval/package PASS, но PluginEditor их пока не создаёт |
+| Packaging | Workflow генерирует legacy artwork, но package step ещё копирует все Skin_* каталоги с последующей проверкой количества; registry-only filtering не перенесён в main |
+| FL Studio 20 / Windows 10 | Пользователь подтвердил проверку своей сборки; binary SHA и тестовая матрица не зафиксированы, поэтому для нового release binary нужна повторная проверка |
 | CPU/RAM цели | Не подтверждены актуальными измерениями |
+
+**Подтверждённые CI runs (каждый статус относится только к указанному SHA):**
+- #971 / `43146185476` / `61740417349a19c9d05d699f52017b8ccd37f9fe`: Windows Release PASS, CTest 14/14, VST3 locate PASS, pluginval strictness 5 PASS, packaging/upload PASS.
+- #973 / `43146758028` / `57fe40044532eeab4bc66ccec37bce865904d455`: canonical 21-token API branch, full Release Gate PASS, CTest 14/14.
+- #974 / `43147392578` / `a669c9b067aa0ab36d0bc090f10821af66671d29`: token API + panel geometry + AutoChordEngine foundation, full Release Gate PASS, CTest 15/15.
+- #975 / `43148076624` / `3c5755ee6b0302525816d6417bf24d32860af17a`: staged panel source components, full Release Gate PASS, CTest 15/15, pluginval strictness 5 and package/upload PASS. Это не означает, что панели уже подключены к PluginEditor.
+- Active cross-contract branch: `work/skin052-runtime-integration`, based on `a669c9b...`; changes in this stage have their own CI PENDING.
 
 ## 3. Подтверждённая техническая база и риски
 
@@ -966,3 +981,17 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Branch audit:** `feature/auxiliary-panel-layout` is 51 commits ahead and 88 behind main; it contains useful UI panel files but is divergent and includes stale skin count/layout API. No wholesale merge. `work/integrate-uploaded-theme-manager`, `ui/modern-neon-stage-shell`, `feat/theme-system-20-full-skins`, `feature/m4-autochords-foundation`, and `feature/pattern-melody-fx-spec` are also divergent. Only isolated, audited files are candidates for selective integration.
 **R28 non-goals:** no change to processor/audio engine/MIDI routing/APVTS IDs, SoundBank, skin registry/schema, ThemeManager, VST3 packaging or main branch.
 **CI:** run #973 for token API on SHA `57fe40044532eeab4bc66ccec37bce865904d455` was IN_PROGRESS at time of this stage; this geometry/chord commit receives a separate exact-SHA CI run. Do not claim TESTED until it completes.
+
+
+## 2026-11-12 — Skin_052 schema/registry/ThemeManager cross-contract hardening (REV 17.2)
+
+**Статус:** IMPLEMENTED; CI PENDING на новом commit SHA.
+**Рабочая ветка:** `work/skin052-runtime-integration`.
+**Родительский SHA:** `a669c9b067aa0ab36d0bc090f10821af66671d29`.
+**Проверенный контракт до изменения:** registry содержит 52 темы и `skinRange={first:1,last:52}`; `theme_pack_manifest.json` имеет status=MERGED. Два schema-файла — не дубликаты: legacy `theme.schema.json` ограничен ID 1–51; `control_schema.json` является полным Skin Studio schema для ID 52+ и несёт 21 palette token / 27 required control IDs. ThemeManager dual-format parser уже загружает Skin_052 palette.
+**Аудит дерева:** все 52 `theme.json` manifest paths существуют. Для legacy Skin_01..Skin_051 registry preview/hero paths пока не имеют соответствующих файлов в исходном дереве; CI workflow генерирует их transiently. Skin_052 preview/hero PNG и SVG assets присутствуют в репозитории и проходят G1–G4. Эти отсутствующие legacy artwork файлы не объявляются готовыми committed assets.
+**Изменения этого этапа:** ThemeManager runtime parser теперь требует canonical Skin Studio ID formatting и все 27 required control IDs (вместо одной проверки количества); ThemeManagerTests покрывает canonical IDs, skinRange и отказ при missing control/неcanonical ID; validator проверяет границы двух schemas, совпадение schema required arrays с x-ppgu-contract, canonical registry IDs/paths, skinRange и наличие manifest/artwork для Skin Studio; merge tool выполняет те же registry range/ID preflight checks до merge; Skin_052 designStatus обновлён по run #974.
+**R28 non-goals:** Audio Engine, DSP/audio callback, MIDI routing, APVTS IDs/semantics, sampler, SoundBank, preset definitions, registry entries/indices, palette values и package workflow не менялись. Новые темы/default-ppgu не генерировались; UI panels не интегрировались в PluginEditor.
+**CI baseline:** #971 main SHA 6174041 PASS 14/14; #973 SHA 57fe400 PASS 14/14; #974 SHA a669c9b PASS 15/15; #975 SHA 3c5755e PASS 15/15. Эти результаты не переносятся на новый commit; его собственный CI PENDING.
+**Host acceptance:** FL Studio 20 / Windows 10 — USER-REPORTED для ранее проверенной пользователем сборки; не является host verification нового binary.
+**Следующий шаг:** дождаться точного CI этого commit; при PASS перейти к default-ppgu и генерации 50 тем одним deterministic script с полными artwork assets, затем продолжить full 21-token control mapping / ResourceRootResolver и интеграцию UI workspace.

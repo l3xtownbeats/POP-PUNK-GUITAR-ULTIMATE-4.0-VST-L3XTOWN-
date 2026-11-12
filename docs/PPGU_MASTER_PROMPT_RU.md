@@ -1,10 +1,10 @@
-# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 17.1 UNIFIED (MINOR)
+# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 17.2 UNIFIED (MINOR)
 
 Единый операционный документ: законы, инварианты, реестр правил R01–R34,
 SUPERTEAM, движок, SoundBank, скины, окна, тесты, журнал, приёмка, DoD,
 протоколы (открытие/закрытие сессии, отката, разногласий, публикации),
 каталог отказов, self-check, шаблоны, глоссарий, non-goals.
-Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4/17.0. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
+Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4/17.0/17.1. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
 версия фиксируется в INFO на каждом этапе.
 Иерархия истины: INFO → control inventory/schema → этот промт → устные
 договорённости. При расхождении фактов INFO первичен, правку вносит
@@ -97,48 +97,76 @@ Electric Sunburst Deluxe):
 ═══════════════════════════════════════════════════════════════
 §2. ТЕКУЩЕЕ ФАКТИЧЕСКОЕ СОСТОЯНИЕ (обновлять по §18 перед этапом)
 ═══════════════════════════════════════════════════════════════
-Подтверждено по исходникам main на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe`:
-WAV/SFZ playback path; metadata index; background page streaming; fixed
-page cache; SFZ mapping (velocity/key/channel/RR); транспорт и Pattern
-Scheduler — компонентно; DSP-компоненты FX; 300 preset definitions
-(НЕ все playable); Sound Asset Registry validator с CC0/PD, CC-BY,
-EXPLICIT_PERMISSION, OWN_RECORDING/OWN_DSP и commercial redistribution
-policy; 16 unit cases в `tests/TestSoundAssetRegistry.py`.
-Skin registry содержит 52 записи. Skin_052 Carbon Relay уже присутствует
-в `SKIN/theme_manifest.json`, а `theme_pack_manifest.json` имеет статус
-MERGED; `merge_skin_pack.py`, REV14 pack validator и отдельная
-`control_schema.json` существуют. Это не считать полным 21-token
-runtime: ThemeManager распознаёт Skin Studio, проверяет 21 palette token,
-но переносит в текущий Palette только используемое подмножество; полный
-токенизированный LookAndFeel/layout engine не реализован. Legacy
-`theme.schema.json` ограничен индексами 1–51, Skin Studio
-`control_schema.json` начинается с 52 — это разделение форматов, а не
-повод смешивать схемы.
-PluginEditor уже подключён к ThemeManager, имеет SKIN menu, Ctrl+K,
-palette application и persistence; часть базовых цветов/knob setup всё
-ещё задана константами. Skin layout coordinates пока metadata: runtime
-layout engine отсутствует. Default остаётся skin-51 / Blackout Voltage,
-не default-ppgu. ResourceRootResolver R34 не реализован; текущий поиск
-ресурсов — legacy fallback.
-AuxiliaryPanelLayout — JUCE-free geometry module; shell/manager,
-реальные независимые панели, Performance Display, полный AutoChords UI
-и FX EDIT UI не реализованы. Реальный статус geometry CTest и Release
-Gate для нового SHA определяется только GitHub Actions.
-Пользователь подтвердил проверку плагина в FL Studio 20 на Windows 10.
-Это USER-REPORTED HOST ACCEPTANCE для использованной пользователем
-сборки; её binary SHA и тестовая матрица не зафиксированы, поэтому это
-не заменяет проверку нового Release ZIP.
-Run #971 (ID `43146185476`) на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe`
-на момент REV 17.1 подготовки — IN_PROGRESS; итоговые build/CTest/
-pluginval/package статусы не присваивать до завершения.
-Открыто: полный 21-token runtime mapping + legacy compatibility;
-default-ppgu; ResourceRootResolver; artwork/payload и generation 50 тем;
-panel shell/manager; Performance Display с реальными данными; полноценные
-AutoChords/FX EDIT; package registry-only filtering; full Release Gate;
-повторная host acceptance нового точного бинарника; CPU/RAM profiling;
-rollout по другим веткам (R33).
-Исторические run #859/#860 и старый gap-аудит ниже/в INFO остаются
-историческими фактами и не описывают текущее состояние.
+Подтверждено по исходникам и exact-SHA CI:
+
+MAIN `61740417349a19c9d05d699f52017b8ccd37f9fe`:
+- WAV/SFZ playback path; metadata index; background page streaming; fixed
+  page cache; SFZ mapping; Pattern Scheduler components; FX DSP components;
+  300 preset definitions (НЕ все playable); Sound Asset Registry policy.
+- Skin registry total=52; Skin_052 Carbon Relay зарегистрирован, pack
+  status=MERGED. Legacy `theme.schema.json` owns indices 1–51;
+  `control_schema.json` is the full Skin Studio schema for indices 52+
+  and contains the 21 palette token / 27 required control contract.
+- ThemeManager on MAIN still maps the Skin Studio palette through its
+  legacy Palette subset; canonical `Palette::token(name)` API and editor
+  token binding exist on development branch, not yet merged to MAIN.
+- Registry default remains skin-51 / Blackout Voltage; `default-ppgu`
+  is NOT created. ResourceRootResolver R34 is NOT implemented.
+- Legacy Skin_01..Skin_051 manifests exist, but preview/hero files are
+  not committed in the repository tree; workflow generates legacy artwork
+  transiently. Skin_052 has committed preview/hero PNG and SVG assets.
+- Workflow package stage still copies all `Skin_*` directories and then
+  checks counts; registry-only copy filtering is NOT yet integrated into
+  MAIN.
+
+DEVELOPMENT BRANCHES (statuses do not transfer between SHAs):
+- `work/signal-forge-theme-tokens`, SHA
+  `57fe40044532eeab4bc66ccec37bce865904d455`: canonical 21-token API,
+  legacy mapping and current PluginEditor token binding; run #973
+  (`43146758028`) FULL RELEASE GATE PASS, CTest 14/14.
+- `work/signal-forge-ui-integration`, SHA
+  `a669c9b067aa0ab36d0bc090f10821af66671d29`: token API + AuxiliaryPanel
+  geometry contract + JUCE-free AutoChordEngine; run #974
+  (`43147392578`) FULL RELEASE GATE PASS, CTest 15/15.
+- `work/signal-forge-panel-shell`, SHA
+  `3c5755ee6b0302525816d6417bf24d32860af17a`: panel source modules
+  staged and CMake-compiled; run #975 (`43148076624`) FULL RELEASE GATE
+  PASS, CTest 15/15, pluginval strictness 5 and package/upload PASS.
+  These components are NOT yet instantiated by PluginEditor; this is
+  source/build verification, not integrated UI acceptance.
+- Active branch `work/skin052-runtime-integration` is based on SHA
+  `a669c9b...`; strict schema/registry/ThemeManager cross-contract
+  hardening is being committed and its own CI is PENDING.
+
+MAIN Release Gate: run #971 (`43146185476`) on exact SHA
+`61740417349a19c9d05d699f52017b8ccd37f9fe` — Windows x64 Release build,
+CTest 14/14, VST3 locate, pluginval strictness 5, packaging and artifact
+upload all PASS. This does not transfer to other SHAs.
+
+AuxiliaryPanelLayout geometry and AutoChordEngine foundation are tested
+on SHA a669c9b; the independent JUCE panel shell/manager is not integrated.
+Performance Display, AutoChords MIDI generation, FX graph/effect presets,
+default-ppgu, generation of 50 new themes and ResourceRootResolver remain
+open. The staged Performance Display component must be connected to actual
+host MIDI/transport telemetry before any value is described as live.
+
+Пользователь подтвердил проверку своей сборки в FL Studio 20 на Windows 10.
+Это USER-REPORTED HOST ACCEPTANCE для ранее проверенной сборки; её binary
+SHA и тестовая матрица не зафиксированы, поэтому это не заменяет проверку
+нового Release ZIP и не переносится на будущие бинарники.
+
+Открыто: завершить Skin_052 cross-contract (canonical IDs, exact required
+control IDs, schema boundaries, registry skinRange and validator/merge
+alignment); выполнить полный CTest на exact SHA; создать default-ppgu и
+сгенерировать партию 50 тем одним deterministic script с полными assets;
+завершить применение 21 tokens ко всем controls и legacy compatibility;
+ResourceRootResolver; registry-only packaging; интегрировать JUCE panel
+shell/manager, Performance Display с реальным host MIDI/transport,
+AutoChords backend и FX EDIT graph/presets; затем полный Release Gate,
+повторная FL Studio 20 host acceptance exact binary и CPU/RAM profiling;
+branch rollout по R33.
+
+
 
 §3. ДВИЖОК (аудио)
 ═══════════════════════════════════════════════════════════════
@@ -458,17 +486,20 @@ R30 [Schema-вычисляемые packaging-утверждения] Packaging a
     configure; false positive чинить сужением scope, не ослаблением.
 R23 [PASS привязан к SHA] PASS фиксируется только на свой SHA; новые
     коммиты = новый run.
-R24 [Порядок этапов] (1) завершить контракт Skin_052: merge tool,
-    legacy/Skin Studio schemas, registry, ThemeManager и contract tests
-    должны согласованно подтверждать одну тему; Skin_052 уже записан в
-    registry и pack status MERGED, но это не закрывает полный runtime
-    token contract; (2) все CTest targets PASS на точном SHA; (3) создать
-    default-ppgu (R18) и сгенерировать партию 50 тем одним скриптом (R19);
-    (4) завершить ThemeManager 21-token runtime mapping с поддержкой
-    legacy skins 1–51 и Skin Studio 52+, включая R34 ResourceRootResolver;
-    (5) реализовать shell/manager, Performance Display, AutoChords и
-    FX EDIT по §7; (6) полный Release Gate (R22); (7) повторная FL Studio
-    20 host acceptance на точном новом бинарнике; (8) CPU/RAM profiling.
+R24 [Порядок этапов] (1) завершить Skin_052 cross-contract:
+    merge tool, legacy/Skin Studio schemas, registry skinRange/canonical
+    IDs, ThemeManager exact required-control validation и validator tests
+    должны согласованно подтверждать одну тему; Skin_052 уже в registry
+    и pack status MERGED, но cross-contract hardening остаётся отдельным
+    gate; (2) все CTest targets PASS на точном SHA; (3) создать
+    default-ppgu (R18) и сгенерировать партию 50 тем одним deterministic
+    script (R19), включая полный preview/hero/SVG payload; (4) завершить
+    21-token runtime mapping для всех controls с legacy skins 1–51 и
+    Skin Studio 52+, затем ResourceRootResolver R34; (5) реализовать
+    JUCE shell/manager, Performance Display на реальных host MIDI/transport
+    данных, AutoChords backend и FX EDIT graph/presets по §7; (6) полный
+    Release Gate (R22); (7) повторная FL Studio 20 host acceptance на
+    точном новом бинарнике; (8) CPU/RAM profiling.
     Уже сообщённая пользователем проверка FL Studio 20/Windows 10
     фиксируется как USER-REPORTED HOST ACCEPTANCE, но не переносится на
     последующие бинарники без повторной проверки.
