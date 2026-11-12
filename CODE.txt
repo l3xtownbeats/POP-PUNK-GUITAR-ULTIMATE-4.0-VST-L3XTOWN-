@@ -473,3 +473,22 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests:** source/readback inspected; new pure geometry and fallback alias assertions added. Windows workflow `43196750439` was PENDING on source commit `68b0fa...`; exact-SHA build/CTest/pluginval and FL Studio host acceptance pending. Skin generation/validation run `43195205929` SUCCESS.
 
 **Status:** SOURCE IMPLEMENTED; TESTS ADDED; EXACT-SHA CI PENDING.
+
+
+## 2026-11-12 — Live ThemeManager palette propagation for workspace children
+
+**Type:** UI architecture / runtime theming.
+**Branch:** `work/ppgu-skin-expansion-53-102`.
+**Commits:**
+- `81aecb1620124d80cfdd62304b73471c84f43f5e` — `Source/UI/PPGUMultiWindowWorkspace.h`: introduces `PPGUThemeAwarePanel` contract and workspace `setThemePalette`.
+- `fbe79dfdd6c387cf8d4462930e2f4ba4f9bf2c06` — `Source/UI/PPGUMultiWindowWorkspace.cpp`: stores active palette, updates open panel content and applies palette to newly opened panels via interface dispatch.
+- `21137e2cb81198bb0ef773c2936d14417f60097e` — `Source/PluginEditor.cpp`: FX EDIT, AutoChords, Import Guitar, Settings and Skin Gallery implement `PPGUThemeAwarePanel`; token colors applied to their labels, buttons, combos, sliders, graph surfaces, status and cards. `applyPalette()` propagates the new palette through workspace.
+- `ff027621afee2f5cfb551ca5423eb8fb332cae52` — gallery active card state tracks the live palette ID and APPLY badge is compact.
+
+**Behavior:** theme changes recolour all open auxiliary panels; panels opened later inherit the current theme automatically. No panel needs to be closed/reopened to update its visual tokens.
+
+**Compatibility:** no processor/DSP/audio callback/APVTS/MIDI/sampler/preset/SoundBank changes. Main editor still has remaining hardcoded decorative colors; full token-only parity is not claimed.
+
+**Tests:** source/readback inspected. Windows VST3 build, CTest and pluginval still pending on the latest branch head after this source chain. Skin expansion workflow `43195205929` SUCCESS.
+
+**Status:** LIVE AUXILIARY THEME PROPAGATION SOURCE IMPLEMENTED; EXACT-SHA VALIDATION PENDING.
