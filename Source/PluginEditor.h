@@ -27,7 +27,7 @@ public:
     void resized() override;
 
 private:
-    void chooseSfzFile(juce::Label* panelStatus = nullptr);
+    void chooseSfzFile(juce::Label* panelStatus = nullptr, juce::Button* panelLoadButton = nullptr);
     void openImportGuitarPanel();
     juce::File getRuntimeSkinRoot() const;
     int getSkinCount() const;
