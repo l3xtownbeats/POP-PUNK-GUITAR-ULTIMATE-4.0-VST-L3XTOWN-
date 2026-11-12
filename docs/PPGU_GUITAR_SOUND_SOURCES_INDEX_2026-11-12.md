@@ -165,6 +165,12 @@ The user's sound hierarchy for the pattern engine is now:
 - Current entries are discovery leads, not a statement that these new packs have been downloaded or imported.
 
 
+
+63. FreePats — FSBS Jazz Electric Guitar — https://github.com/freepats/electric-guitar-FSBS-jazz
+    - Real Fender electric guitar direct-sampled and processed through an amplifier/effects rack for a jazz tone; repository README identifies CC0 1.0 and contains SFZ mappings, FLAC recordings and LICENSE.txt. Suitable as GENERAL GUITAR / clean-jazz colour; archive is now added to the automated CI download manifest.
+64. FreePats — Spanish Classical Guitar — https://github.com/freepats/spanish-classical-guitar
+    - Real Spanish classical guitar recordings; repository README identifies CC0 1.0 and includes SFZ mappings, FLAC samples and LICENSE. Suitable for GENERAL GUITAR acoustic layers and melodic/chordal pattern material; archive is now added to the automated CI download manifest.
+
 ## Follow-up scan: verified high-priority candidates and pattern material
 
 52. Freesound — Pop Punk Guitar Loop, 87 BPM, C major — https://freesound.org/people/deadrobotmusic/sounds/591622/
