@@ -476,6 +476,111 @@ R21 [Полнота payload] Пакет без полного набора ас�
     realtime contract и regression tests. Наличие названия в каталоге,
     параметров или UI не означает DSP implementation. Неисполненные
     модули маркировать PLANNED/PENDING, не имитировать работу.
+7.5.6 POP-PUNK TONE REFERENCE → ANGELA ENGINE / PRESET DESIGN:
+    Пользовательская справка по поп-панку — исходный tonal brief для
+    движка, заводских пресетов, amp/cab voicing и FX. Это стартовые
+    ориентиры, не универсальные физические настройки и не утверждение,
+    что конкретная группа всегда использовала ровно эти значения.
+    Все исходные шкалы 0–10 переводятся в единый внутренний диапазон
+    и калибруются отдельно для каждой модели усилителя; одинаковая цифра
+    Gain на Plexi/JCM, Rectifier и high-gain head не обязана давать
+    одинаковое усиление. Приоритет — слуховая читаемость аккордов,
+    атака, tight low end и сохранение середины, а не совпадение цифр.
+
+    GLOBAL POP-PUNK VOICE:
+    яркий быстрый crunch/medium gain; ноты power chord различимы;
+    mids остаются впереди, бас контролируемый, верх артикулированный;
+    gain ниже ожидаемого, пока не доказана необходимость большего;
+    если гитара теряется в миксе — сначала проверять mids/кабинет/IR
+    и arrangement, а не автоматически поднимать gain. Palm-mute attack
+    и динамика исполнения — часть целевого звука.
+
+    BASE FACTORY STARTING POINTS (0–10; amp model dependent):
+    CLEAN: Gain 1–2, Bass 5–6, Mid 6, Treble 6, Presence 4;
+      intro, bridge, clean verse. Цель — плотный, не стерильный clean.
+    CRUNCH: Gain 4–5, Bass 5, Mid 6–7, Treble 6, Presence 5–6;
+      лёгкий drive и читаемый ритм.
+    POP-PUNK RHYTHM / DISTORTION: Gain 5.5–6, Bass 5, Mid 5.5,
+      Treble 7, Presence 6; основной стартовый rhythm voice.
+    HIGH-GAIN / MODERN: Gain 7–8, Bass около 6, Mid 5–7,
+      Treble 5–6.5, Presence 6; для современных плотных ритмов/соло,
+      но без неконтролируемой компрессии и потери pick attack.
+    Эти значения — стартовые значения пресета, не физические положения
+    регуляторов конкретного реального усилителя.
+
+    STYLE PRESET FAMILIES:
+    A) 90s SKATE PUNK (NOFX/Lagwagon/Strung Out direction):
+       Plexi/JCM800-style British crunch; Gain 4–5, Mids 6–7,
+       Treble 5–6, Bass 4–5. Приоритет — articulation и midrange.
+    B) EARLY-2000s POP-PUNK (blink-182 / Sum 41 / New Found Glory):
+       Rectifier-family rhythm voice; Gain 6–7, Bass 5–6, Mids 6–7,
+       Treble 5–6. Отдельный Sum 41-inspired вариант: Gain 8, Treble
+       6.5, Mid 5, Bass 6.5, Presence 6, Tone Shift OFF (середина
+       не вырезается). Для clean parts допускается Vox AC30-style
+       chime/clean voice как отдельный amp path/preset.
+    C) MODERN POP-PUNK / MELODIC HARDCORE (The Wonder Years / Neck Deep
+       direction): Gain 7–8 как верхняя отправная точка, tight low end,
+       выразительная середина; high-gain amp stage и/или умеренный
+       overdrive boost перед amp. Предусмотреть Orange Rockerverb,
+       Peavey 6505 MH, Mesa Mini Rectifier, Blackstar HT-inspired
+       voicings, если amp model architecture/license permits.
+    D) THICK CLEAN + BOOST / HAPPY CLEAN:
+       clean amp + OD pedal (Drive near 0, Tone/Level около 12 часов)
+       либо second amp channel; низ не раздувать, mids/treble сохраняют
+       читаемость, лёгкий chunk на palm mute. Vox/JCM/Fender-style
+       clean platforms — отдельные варианты, не один универсальный clean.
+    E) GREEN DAY-ERA BRITISH STACK direction — отдельный исторический
+       reference preset с собственным amp/drive calibration; не смешивать
+       его описания «all controls at noon / gain & master high» с общим
+       правилом moderate gain. Уровень выхода и gain staging должны
+       оставаться безопасными и level-matched.
+
+    PICKUP / SOURCE COMPENSATION:
+    Предусмотреть source profile Humbucker vs Single Coil (и Neutral).
+    Humbucker: при необходимости немного меньше low end и больше
+    верхней артикуляции; Single Coil: не делать звук тонким — сохранить
+    mids/body и контролировать верх. Это адаптивная стартовая коррекция,
+    не жёсткое правило; пользователь может отключить её.
+
+    CABINET PRESET MAPPING:
+    Кабинет и усилитель — связанные, но независимо заменяемые элементы.
+    Style/factory presets могут рекомендовать amp + cabinet + IR + mic
+    placement, но Cabinet остаётся ручным и заменяемым в clean/DI workflow.
+    Обязательные cabinet families: Marshall 1960A (G12T-75 variants),
+    Marshall 1960AV (V30 variants), Orange PPC412 (4x V30), Mesa/Boogie
+    Rectifier 4x12; дополнительные варианты EVH 5150 4x12 и Peavey 6505
+    4x12 — полезные кандидаты для modern/high-gain punk. Точный speaker
+    set фиксировать по конкретному IR asset metadata, а не по общему
+    названию модели. Не считать разные ревизии взаимозаменяемыми.
+
+    FX PRESET PHILOSOPHY:
+    FX — средства формирования звука, а не обязательный постоянно
+    включённый набор. Factory presets используют минимально достаточную
+    цепь: optional OD/boost before amp; amp drive; cabinet; restrained
+    EQ/Compressor only when needed; modulation/time FX обычно умеренные
+    и чаще для clean, intro, lead или texture. Не добавлять сильный
+    chorus, fuzz или чрезмерную compression по умолчанию в основной
+    pop-punk rhythm. Drive pedal + amp gain должны быть сбалансированы:
+    при включении OD boost amp gain может быть ниже.
+    Preset хранит индивидуальные ON/OFF состояния каждого FX; MASTER FX
+    BYPASS остаётся временным глобальным bypass и не переписывает preset.
+    FX bypass controls and Cabinet bypass remain independent.
+
+    ENGINE / PARAMETER IMPLEMENTATION RULE:
+    Сначала сверить реальный APVTS parameter inventory, state schema,
+    preset serialization и существующие amp/DSP blocks. Не изображать
+    Bass/Mid/Treble/Presence/Tone Shift как работающие amp controls,
+    если DSP и parameter IDs их не реализуют. Не переиспользовать
+    ampGain/ampTone или post-EQ IDs под другую семантику. Любые новые
+    host-visible APVTS IDs требуют отдельного compatibility/state
+    migration review по I1/I2; до этого — только спецификация и
+    внутренний preset mapping без ложных UI-контролов.
+    Каждому factory preset назначить: style family, source/pickup profile,
+    amp model/voicing, calibrated gain/EQ values, cabinet/IR recommendation,
+    FX chain + individual bypass states, output level target и tags.
+    Factory presets read-only; пользовательские варианты сохраняются
+    отдельно как User Presets. Проверять level-match, mono compatibility,
+    transient/palm-mute clarity, CPU и отсутствие clipping.
 7.6 PERFORMANCE DISPLAY — компактное информационное табло над MIDI
     keyboard. Поля: текущий аккорд (например Am), отдельная нота/октава
     (C3), выбранная тональность (A Minor), тип аккорда, текущий/следующий
