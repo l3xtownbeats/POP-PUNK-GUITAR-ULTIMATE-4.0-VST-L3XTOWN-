@@ -428,3 +428,29 @@ Scope: real recorded guitar only; commercial use plus redistribution/embedding o
 - **License status: YELLOW, not approved for embedding yet.** Publisher says the free demo carries the same license as the full library, but the reviewed page does not itself provide enough explicit wording to establish redistribution of raw WAV samples inside a commercial third-party VST3. Obtain and archive the complete license/EULA or written permission from the publisher before integration. Free download route is presented through a download/checkout interface; it is not yet verified as a direct no-account/no-captcha download. Therefore it does not currently satisfy the user's strict access criterion.
 - **Quality status: UNVERIFIED.** Technical format and multisampling details are publisher claims; no archive was downloaded in this pass, no SHA-256 was computed, and no samples were auditioned or checked for 1–10 second duration, noise, clipping, duplicates, or mapping integrity. Do not count it as integrated or GOLD.
 - Supporting references: official publisher pages above; third-party overview confirms the advertised 96 WAV / 24-bit / 44.1 kHz and round-robin/velocity details but is not a licensing authority: https://www.audiartist.com/guitar-di-lite-free-kontakt-sfz-decent-sampler-wav/ .
+
+
+### Freesound individual CC0 guitar finds — research leads, NOT admitted to the embedded library
+
+The following exact asset pages surfaced in the follow-up search. Their visible metadata indicates real recorded guitar, CC0, WAV and acceptable sample rate; however, Freesound requires login to download at least some of these assets. That fails the strict direct/no-registration criterion, and no files were acquired or auditioned. Keep them in HOLD; do not integrate or count toward the library until an authorized acquisition route and full audio QA are completed.
+
+| Asset / author | Page | Visible technical metadata | Decision |
+|---|---|---|---|
+| Electric Guitar one note D — owstu | https://freesound.org/people/owstu/sounds/727725/ | WAV, 4.739 s, 44.1 kHz, 16-bit mono, CC0 | HOLD: login shown; audition and embedded redistribution review still required |
+| Electric Guitar chord strum — owstu | https://freesound.org/people/owstu/sounds/727730/ | WAV, 3.522 s, 44.1 kHz, 16-bit stereo, CC0 | HOLD: login shown; chord voicing/tone and noise not auditioned |
+| Electric Guitar single notes — owstu | https://freesound.org/people/owstu/sounds/727727/ | WAV, 5.187 s, 44.1 kHz, 16-bit mono, CC0 | HOLD: login shown; note coverage and musical usefulness unverified |
+| Guitar riff.wav — Volrak | https://freesound.org/people/Volrak/sounds/328169/ | WAV, 3.960 s, 44.1 kHz, 16-bit mono, CC0 | HOLD: login shown; uploader notes audible noise; not a clean multisample |
+| Guitar Riff — yO_ey | https://freesound.org/people/yO_ey/sounds/808262/ | WAV, 2.852 s, 48 kHz, 24-bit stereo, CC0 | HOLD: no audition; riff rather than playable note set |
+| Plugging in electric guitar, no amp — ottoojala | https://freesound.org/people/ottoojala/sounds/877011/ | WAV, 5.339 s, 44.1 kHz, 16-bit mono, CC0 | REJECT for instrument bank: mostly cable plug/unplug sound; short strums only at end |
+| Guitar Riff 2 — mr-guitarra | https://freesound.org/people/mr-guitarra/sounds/434954/ | WAV, 10.689 s, 44.1 kHz, 32-bit stereo, CC0 | REJECT against 1–10 s limit; riff is a phrase, not a multisample |
+| Chug Riff — bangcorrupt | https://freesound.org/people/bangcorrupt/sounds/832833/ | WAV, 44.259 s, 96 kHz, 24-bit stereo; uploader explicitly says non-commercial only | RED: not cleared for commercial use despite a conflicting CC0 badge on the page; uploader's own terms control the decision |
+
+Important: Freesound's visible CC0 badge is not sufficient on its own for an asset whose uploader text contradicts it. The Chug Riff item is excluded. These examples are not a substitute for a multisampled instrument: isolated riffs/phrases cannot supply chromatic playable notes, round-robins or consistent velocity layers without extensive editing and still would not become authentic missing articulations.
+
+### Source-site access findings
+
+- **SampleSwap guitar multisample directory** explicitly states that users must log in or register to download. It therefore fails the requested no-registration condition, even though the site describes its library as free. Do not include its 9.4 GB aggregate archive in the direct-download shortlist: https://sampleswap.org/filebrowser-new.php?d=INSTRUMENTS+%28MULTISAMPLED%29%2FGUITAR%2F .
+- **YouTube Audio Library / YouTube-hosted content** is not a blanket sample redistribution license. YouTube Terms restrict downloading/reproducing/distributing content except where specifically authorized or with rights-holder permission. Treat individual music-use permissions as insufficient for embedding source audio in a commercial VST3: https://www.youtube.com/t/terms .
+- **Freesound**: the search surfaced both authentic CC0 recordings and synthetic items mislabeled/tagged as guitar. Reject synthetic results even when CC0; verify the uploader's own text against the license badge; some downloads require login, so they fail the strict acquisition rule.
+
+No Freesound files were downloaded in this pass. No hashes or audio measurements have been generated for these research leads.
