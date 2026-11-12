@@ -5,6 +5,38 @@ import argparse, json, shutil, subprocess, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+def verify_runtime_rev14_support(root: Path, pack: dict) -> None:
+    """Fail closed until schema AND runtime can consume REV14 palette packages."""
+    schema_path = root / "theme.schema.json"
+    runtime_header = Path("Source/UI/ThemeManager.h")
+    runtime_source = Path("Source/UI/ThemeManager.cpp")
+    try:
+        schema_text = schema_path.read_text(encoding="utf-8")
+        header_text = runtime_header.read_text(encoding="utf-8")
+        source_text = runtime_source.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(f"REV14 runtime preflight cannot read required contract files: {exc}") from exc
+
+    # These are deliberate capability gates, not version guesses: a merge is
+    # forbidden until the JSON schema declares the palette format and the
+    # ThemeManager exposes both the REV14 parser and token lookup API.
+    missing = []
+    if '"palette"' not in schema_text:
+        missing.append("theme.schema.json REV14 palette branch")
+    if "validateRev14Manifest" not in source_text:
+        missing.append("ThemeManager REV14 manifest parser")
+    if "token(" not in header_text:
+        missing.append("ThemeManager::token() lookup API")
+    if not missing:
+        return
+
+    details = ", ".join(missing)
+    raise RuntimeError(
+        "Refusing skin-pack merge: runtime integration is incomplete (" + details + "). "
+        "A staged pack must not be written into the legacy runtime registry."
+    )
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--root",type=Path,default=Path("SKIN"))
@@ -12,6 +44,15 @@ def main():
     parser.add_argument("--dry-run",action="store_true")
     args=parser.parse_args()
     root=args.root
+    try:
+        pack_preflight = json.loads(args.manifest.read_text(encoding="utf-8"))
+        if pack_preflight.get("status") != "DESIGNED_NOT_RUNTIME_INTEGRATED":
+            raise RuntimeError("Pack status must be DESIGNED_NOT_RUNTIME_INTEGRATED before runtime merge.")
+        verify_runtime_rev14_support(root, pack_preflight)
+    except (OSError, json.JSONDecodeError, RuntimeError) as exc:
+        print(f"MERGE PREFLIGHT FAILED: {exc}", file=sys.stderr)
+        return 4
+
     validator=Path("tools/validate_skin_pack.py")
     result=subprocess.run([sys.executable,str(validator),"--root",str(root),"--manifest",str(args.manifest)],capture_output=True,text=True)
     if result.returncode:
