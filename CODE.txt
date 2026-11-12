@@ -489,3 +489,15 @@ Preset QA record must state target type/role, actual source mapping/articulation
 - Automated tests must cover mappings, event generation, rendered output, silence/clipping and real-time safety. Human listening QA is separately required to judge musical realism, tone and mix presence; metadata/unit tests alone cannot pass this gate.
 - Monitor CPU/RAM/latency and keep file I/O, locks, waits and heavy work out of the audio callback.
 - **Status:** quality target accepted; no code/sample/preset changes in this journal-only update. Real listening acceptance is still open; no claim that the target has already been achieved.
+
+
+## 2026-11-12 — PATTERN performance source: recorded loops and guitar phrases
+
+- User clarified that PATTERN should use the functional performance mechanism of Session Guitarist — Electric Sunburst Deluxe: ready-made, pre-recorded guitar loops/phrases, rhythms, strumming styles and accompaniments are the primary performance source.
+- This refines the prior PATTERN specification: do not rely solely on PatternScheduler generating isolated generic strum events. Scheduler may coordinate selection, timing, host sync, phrase/loop boundaries and transitions, while SamplerEngine plays actual recorded performance assets.
+- Provide original pop-punk/adjacent recorded styles and variations (verse/chorus, palm-muted/open, down/up strokes, accents, stops, transitions, alternate takes). Preview must audition the actual selected performance content.
+- Incoming MIDI chord/note data must select/adapt supported recorded phrase/chord material musically; avoid arbitrary pitch-shifting of unsuitable recordings. Chord changes and loop transitions must remain coherent and glitch-free.
+- PATTERN controls only expose behaviors/variations genuinely supported by the recorded content. Tempo/transport sync, start/stop, loop boundaries and preset/pattern switching are mandatory.
+- Use original recordings or assets whose licenses explicitly permit embedding and redistribution in the plugin. Do not copy proprietary Session Guitarist/Electric Sunburst samples, loops, MIDI, artwork or code. Track provenance, SHA-256, redistribution rights, tempo/meter/key/chord coverage, articulation/style tags and technical QA.
+- **Acceptance:** preset/pattern → performance asset resolution → preview → host-synced loop → MIDI chord adaptation → clean transitions → SamplerEngine audible output, plus human listening QA. Scheduler metadata/events without real recorded performance assets do not pass.
+- **Status:** requirement recorded; no code/audio assets changed. Production performance library and end-to-end runtime implementation remain unverified/open.
