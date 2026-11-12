@@ -948,3 +948,16 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 
 **Follow-up source correction:** commit `d687106117555bec443d041d6c6ed6b2bd718ba5` routes the canonical `danger` token to the pressed state of the LOAD SFZ button (without changing toggle or loading behavior). This is the current source implementation SHA for the visual propagation task; CI for this exact SHA is PENDING.
+
+
+## 2026-11-12 — REV 18 S0/S1 + S3 visual propagation CI confirmation
+
+**Статус:** S0 PREFLIGHT VERIFIED; S1 REGISTRY CTEST ALIGNMENT VERIFIED; S3 visual-token source change BUILD VERIFIED / TESTED / VALIDATION PASS / PACKAGE PASS на точном SHA исходников. Это не закрывает весь этап S3: полный визуальный audit hardcoded colors, legacy fallback, hot-swap fade/ECO и visual QA остаются открытыми.
+**Ветка:** main. **Source SHA:** d687106117555bec443d041d6c6ed6b2bd718ba5. **Run:** #1157 / ID 43221038914 — SUCCESS; Windows x64 Release configure/build, CTest regression suite, VST3 locate, pluginval strictness 5 и package steps — SUCCESS. Run относится только к source SHA d687106117555bec443d041d6c6ed6b2bd718ba5, не к последующему Info-only HEAD 9a35ae31c6cddb75ab187e42afa175a7df28fc5d.
+**S0:** фактический main HEAD на preflight 9a35ae31c6cddb75ab187e42afa175a7df28fc5d; рабочая ветвь main. Run #1157 завершён успешно на родительском source SHA d687106117555bec443d041d6c6ed6b2bd718ba5. Run #1155 SUCCESS на SHA fe1e77527786e42bf6e838675b6b0efecc4251c7 — исторический baseline, не переносится.
+**S1:** CTest step run #1157 завершился SUCCESS; также успешно завершились validators preset catalog, portable preset examples, APVTS registry/state persistence, skin pack G1-G4, BinaryData links, Release build, pluginval и package. Sample library download был SKIPPED из-за восстановленного cache; sample validation SUCCESS. Это не является подтверждением наличия нового набора WAV сверх фактического package manifest.
+**S3:** визуальная пропагация 21 canonical palette token в Source/PluginEditor.cpp; semantic danger state SFZ button включён commit d687106117555bec443d041d6c6ed6b2bd718ba5. CI #1157 подтверждает Windows Release, CTest, VST3 locate, pluginval strictness 5 и package на этом SHA. Auxiliary windows, Skin Gallery, dynamic discovery/rescan, full visual parity и host visual QA не реализованы/не подтверждены.
+**R28 non-goals:** DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, preset catalog, SoundBank payload, skin schema/registry/assets, ThemeManager decoder, CMake pins и packaging rules не изменялись в этом source change.
+**R32 риски:** quiescence snapshots, 8-root cap, worker recovery, 64-voice cache pressure и cancellation/lifetime races остаются открытыми; этот этап их не затрагивал.
+**Self-check §21:** 1) source SHA и run совпадают: да; 2) CTest step: SUCCESS по job log; 3) R28 соблюдён; 4) статусы ограничены доказанным run; 5) осталось: S2, остаточный visual audit S3, S4–S9; 6) main-only, rollout других ветвей не выполнялся.
+**Уточнение статуса:** предыдущая follow-up строка ниже, помечавшая CI для d687106 как PENDING, superseded этой записью после завершения run #1157. Последующий HEAD 9a35ae31c6cddb75ab187e42afa175a7df28fc5d содержит только append-only запись в Info.txt и не имеет отдельного source build run.
