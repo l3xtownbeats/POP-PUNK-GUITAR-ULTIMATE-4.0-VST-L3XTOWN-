@@ -120,3 +120,16 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **Product-wide reconciliation obligation:** keep INFO, CODE, master prompt, architecture docs, audits, control schema, theme manifests, bank/preset schemas, licensing records, build files and tests mutually consistent. Avoid competing specifications; designate one canonical source per domain and link supporting documents. Before release, reconcile all records and actual package/binary on one release candidate SHA.
 
 **Completion rule:** every accepted decision, code/content/config change, correction, revert, failed test and discovered defect is recorded. Journal updates are part of the change, not optional administration.
+
+## 2026-11-12 — PPGU Master Spec Package / Neon Skin + Overlay + Secure Import
+
+**Тип:** documentation / architecture specification; production source change отсутствует.
+**Ветка:** `work/signal-forge-theme-tokens`.
+**Base / parent SHA:** `03545e718e7276756a56605fad3de0a0e1933dfd`.
+**Документ:** `docs/PPGU_MASTER_SPEC_PACKAGE_RU.md`.
+**Изменённые production paths/symbols:** none.
+**Суть:** зафиксированы frontend phase sequence E1→O1→O2→S1→E2→E3→E4/O3; OverlayPanel/OverlayManager contracts; SkinManifest 21-token + exact control parity; .ppguskin secure import, ZIP/asset/SVG protections, quarantine and SHA-256; contract-test acceptance matrix.
+**Compatibility / non-goals:** DSP, audio callback, MIDI, APVTS IDs/semantics, presets, SoundBank, existing control behavior unchanged. No implementation or test target is claimed by this documentation entry.
+**Tests/CI:** not run; no BUILD/CTest/pluginval/host/release PASS claimed.
+**Статус:** DESIGNED; implementation PENDING.
+**Следующий шаг:** N0 preflight; implement E1 as a separate scoped change and run full exact-SHA gates.

@@ -1042,3 +1042,18 @@ F. Только после этого считать документальны�
 - Перед релизом сверить INFO, CODE, product specs, manifests, schemas, license/provenance records, tests, package contents и actual binary на одном release candidate SHA.
 
 **Итоговое правило:** любое наше принятое решение, изменение, исправление, добавление, удаление, перенос, тест, отказ от подхода и обнаруженный дефект должны быть отражены в согласованной истории. Всегда используем самые свежие подтверждённые наработки; устаревшее сохраняем только как историю и явно помечаем SUPERSEDED/REJECTED/INVALID, не выдавая за актуальное.
+
+
+## 2026-11-12 — PPGU Master Spec Package / Neon Skin + Overlay + Secure Import
+
+**Тип:** documentation / architecture requirements only.
+**Ветка:** `work/signal-forge-theme-tokens`.
+**Base HEAD / parent:** `03545e718e7276756a56605fad3de0a0e1933dfd`.
+**Master prompt checked:** `docs/PPGU_MASTER_PROMPT_RU.md` REV 17.1 UNIFIED (minor), blob `b2368ba8d2f19b5a93175d244a5a5baf149009c7`.
+**Новый документ:** `docs/PPGU_MASTER_SPEC_PACKAGE_RU.md`.
+**Статус:** MASTER SPEC PACKAGE DESIGNED; implementation PENDING (E1/O1/O2/S1/E2/E3).
+**Production source/tests/build/assets:** НЕ менялись.
+**Содержание:** утверждённые макеты Dreaming in Neon; overlay manager/panel lifecycle; 21-token Neon Skin Engine; resource resolver, atomic palette snapshots, hot-swap/ECO/layout; secure .ppguskin pipeline с ZIP caps 50/200 MB, exact schema/control parity, G1/G2/G4, quarantine/SHA-256, безопасный SVG; contract-test matrix и phase gates.
+**Reconciliation:** текущий master prompt на выбранной ветке — REV 17.1, а не REV 17.0. Фазы E1→O1→O2→S1→E2→E3→(E4/O3) приняты как canonical для frontend; N0 — обязательный preflight, N1–N6 — прежние roadmap labels и не конкурируют с этой последовательностью. Источник доказательства реализации — source/build config на точном SHA; INFO/CODE — журналы, а не замена коду.
+**Проверки:** документационная проверка только; build/CTest/pluginval/FL Studio/packaging CI не запускались и PASS не присваивался.
+**Следующий шаг:** повторный N0 preflight и implementation E1 отдельной атомарной транзакцией с полным CI на точном SHA.
