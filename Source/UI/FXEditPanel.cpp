@@ -16,17 +16,17 @@ PPGUFXEditPanel::PPGUFXEditPanel(juce::AudioProcessorValueTreeState& apvts,
     {
         auto& module = modules[static_cast<std::size_t>(i)];
         module.select.setButtonText(module.name);
-        module.select.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff252a33));
-        module.select.setColour(juce::TextButton::textColourOffId, juce::Colour(0xffe8eaf0));
+        module.select.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        module.select.setColour(juce::TextButton::textColourOffId, palette.textPrimary);
         module.select.onClick = [this, i] { selectModule(i); };
         addAndMakeVisible(module.select);
         if (module.hasEnabledSwitch && state.getParameter(module.enabledId) != nullptr)
         {
             module.enabled.setButtonText("ON");
             module.enabled.setClickingTogglesState(true);
-            module.enabled.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff252a33));
-            module.enabled.setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffed238b));
-            module.enabled.setColour(juce::TextButton::textColourOffId, juce::Colour(0xffe8eaf0));
+            module.enabled.setColour(juce::TextButton::buttonColourId, palette.controlBg);
+            module.enabled.setColour(juce::TextButton::buttonOnColourId, palette.accent);
+            module.enabled.setColour(juce::TextButton::textColourOffId, palette.textPrimary);
             module.enabledAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(state, module.enabledId, module.enabled);
             addAndMakeVisible(module.enabled);
         }
@@ -39,7 +39,7 @@ PPGUFXEditPanel::PPGUFXEditPanel(juce::AudioProcessorValueTreeState& apvts,
     }
     hint.setText("LIVE PARAMETERS  /  CHANGES ARE LINKED TO THE PLUGIN ENGINE", juce::dontSendNotification);
     hint.setFont(juce::Font(10.0f, juce::Font::bold));
-    hint.setColour(juce::Label::textColourId, juce::Colour(0xff9ba4b2));
+    hint.setColour(juce::Label::textColourId, palette.textSecondary);
     addAndMakeVisible(hint);
     selectModule(0);
     setPalette(palette);
