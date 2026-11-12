@@ -476,3 +476,16 @@ Preset QA record must state target type/role, actual source mapping/articulation
 - Real-time safety: perform file I/O, decoding and expensive preparation off the audio callback; publish only a fully prepared state via RT-safe/atomic handoff; preserve the previous valid sound or clearly report loading/failure rather than activating a silent state. Respect existing SamplerEngine/cache/streaming/preallocated-voice architecture and resource lifetimes.
 - Acceptance path: browser selection → manifest resolution → asset/mapping validation and preparation → ready state activation → audible MIDI output; preview/live-path parity; rapid-switch stress; missing/corrupt assets; held-note transitions; no stale state, audio glitches, callback I/O/locks/allocations.
 - **Status:** product requirement recorded. No code or test changes in this journal-only update; current end-to-end behaviour remains to be verified.
+
+
+## 2026-11-12 — Guitarist-like realism and full-bodied sound: MELODY + PATTERN
+
+- **User requirement:** both MELODY and PATTERN must deliver the most accurate, full-bodied, signature, natural and realistic guitar sound possible — perceived as a real guitarist playing, not mechanical MIDI triggering.
+- Prioritize suitable high-quality legal library sources and correct note/articulation/velocity mappings. FX must not be used to disguise unsuitable or poor source material.
+- Preserve realistic attack, decay, sustain and performance nuances where present in source recordings; provide natural velocity response, palm-muted/open articulation, note/chord transitions and note release. Avoid repetitive machine-gun playback where alternate takes/round robins or other suitable variation are available.
+- Fullness may come from appropriate source selection, musical layering and justified processing with proper gain/headroom; avoid phase cancellation, clipping, excessive compression and unwanted coloration.
+- **MELODY QA:** note/velocity/articulation mapping, expressive dynamics, repeated-note variation, transitions, sustain/release and realistic phrase playback.
+- **PATTERN QA:** believable down/up strokes, mute/open changes, accents, chord voicings/transitions, groove variation and controlled humanization while remaining tight to host tempo/transport; no stuck notes or mechanically uniform patterns.
+- Automated tests must cover mappings, event generation, rendered output, silence/clipping and real-time safety. Human listening QA is separately required to judge musical realism, tone and mix presence; metadata/unit tests alone cannot pass this gate.
+- Monitor CPU/RAM/latency and keep file I/O, locks, waits and heavy work out of the audio callback.
+- **Status:** quality target accepted; no code/sample/preset changes in this journal-only update. Real listening acceptance is still open; no claim that the target has already been achieved.
