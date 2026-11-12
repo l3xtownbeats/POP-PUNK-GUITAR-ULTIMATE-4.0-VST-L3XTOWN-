@@ -70,6 +70,23 @@
 
 Реально работающая UI-логика: Chord Mode Major/Minor/Custom, Key, Pattern, вычисление текущего аккорда и аппликатуры, progression buttons, loop UI-state, Chord Info и Reset. Tempo читается из transport. ON, Preview, Sync to Tempo, Smart Transpose остаются disabled до соответствующей реальной интеграции. Не рисовать фиктивную waveform.
 
+### 4.4 ZONE F — STRUMMER & GROOVE / PATTERN CONTROL STRIP
+
+**Назначение:** отдельная функциональная зона F закрывает пробел между AutoChords (E), AMP & TONE (G) и нижней Performance-зоной (H). Она управляет воспроизведением Pattern/Strummer и располагается в центральной рабочей области — непосредственно под основными контролами C и над нижней FX/Performance областью; на компактной ширине допускается перенос в отдельную вкладку центральной панели. Это логическая UI-зона, а не новая внешняя колонка.
+
+**Активные контролы — только существующие APVTS IDs:**
+- PATTERN SLOT — `patternSlot` (1–8).
+- PATTERN LENGTH — `patternLength` (1/2/4 bars).
+- SYNC MODE — `syncMode` (Host / Host Start / Internal).
+- TEMPO — `bpm`; пользовательское значение применяется только в Internal sync. В Host-режимах показывать темп DAW как read-only, если он доступен из playhead.
+- START ON FIRST CHORD — `startOnFirstChord`.
+
+**Поведение:** зона F активна в режиме PATTERN; в режиме MELODY её pattern-only контролы отключаются визуально и не меняют параметры. Выбор Pattern Slot/Length/Sync/Tempo должен управлять уже существующим scheduler path; никаких имитационных переключателей или UI-only значений. Значения Swing/Humanize/Accent остаются в девяти основных ручках C и не дублируются в F.
+
+**Расширения, не включать как рабочие контролы до подтверждения runtime binding:** `swingBase`, `patternQuantize`, `preserveHumanTiming`, `articulation`, `pickStyle`, `endingLength`, `palmHitOnEnding`, `stringSlapOnEnding`. Их наличие в APVTS declaration само по себе не доказывает завершённую обработку в scheduler/audio path; до отдельной проверки — disabled/hidden, без ложного статуса готовности.
+
+**Границы:** не добавлять APVTS IDs, не менять значения/семантику `playMode` (только Melody/Pattern), scheduler, MIDI, DSP или preset schema в рамках визуальной интеграции. Все элементы F используют активную палитру и общий ThemeableLookAndFeel. На текущем исходном состоянии это принятое требование к UI; факт реализации зоны F и её host-приёмки не заявляется.
+
 ### 4.3 FX EDIT overlay
 
 Список Compressor/EQ/Distortion/Chorus/Delay/Reverb/Cabinet IR связан с семью существующими bool параметрами. Активная подсветка допустима только при включённом соответствующем FX. Threshold/Ratio/Attack/Release/Makeup/Knee/Mix, GR meter и compressor curve disabled/empty до наличия реальных параметров и taps.
