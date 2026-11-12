@@ -133,3 +133,24 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **Tests/CI:** not run; no BUILD/CTest/pluginval/host/release PASS claimed.
 **Статус:** DESIGNED; implementation PENDING.
 **Следующий шаг:** N0 preflight; implement E1 as a separate scoped change and run full exact-SHA gates.
+
+
+## 2026-11-12 — Performance specification document
+
+**Тип:** documentation / performance requirements; production code change отсутствует.  
+**Ветка:** `work/signal-forge-theme-tokens`.  
+**Документ commit:** `8f34e1d2524f8074a09c70aaa0656683c04e9a9b`.  
+**INFO journal commit:** `8235bdf9863bb5ce3c49ee39376169a4d6081ebf`.  
+**Файл:** `docs/PPGU_PERFORMANCE_SPEC_RU.md`.
+
+**Причина:** закрепить измеримые CPU/RAM/latency/realtime требования для Windows 10 / FL Studio 20 / VST3 x64 / JUCE 7.0.12 / C++20.
+
+**Содержание:** заданы CPU <=2% при 4 voices и <=15% при 64 voices; RAM <=60 MB idle и <=512 MB с полным SoundBank; preset load <=300 ms; first sound <=50 ms; ноль аллокаций в `processBlock`; peak callback <=60% буфера при 128 samples. Определены правила realtime memory/cache/streaming, worker pool, UI repaint/timers/ECO, Release flags, FL Studio host constraints, `ppgu_perf_bench`, 10% regression gate и host verification.
+
+**CI evidence:** runs #971 / `43146185476` и #972 / `43146540434` имеют terminal job conclusion `success`. Это не является performance benchmark и не подтверждает бюджеты. ThemeManager hardening и все дальнейшие изменения требуют проверки на точных SHA.
+
+**Совместимость / non-goals:** production C++, tests, CMake и workflows не менялись; аудиоповедение и APVTS не затрагивались. Не заявлены IMPLEMENTED, PERF PASS, HOST VERIFIED или RELEASE READY.
+
+**Тесты:** не запускались для документационного commit; performance baseline отсутствует.  
+**Статус:** DESIGNED / DOCUMENTED; implementation PENDING.  
+**Следующий шаг:** сверить точный branch HEAD и ThemeManager hardening после terminal CI; затем отдельным коммитом добавить `ppgu_perf_bench` и allocation-audit build (P2).
