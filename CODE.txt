@@ -361,3 +361,19 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests / CI:** workflow file and commits confirmed by GitHub readback. No Actions run ID, job logs, G1–G4 result, merge result, generated asset commit, Windows build, pluginval or FL Studio host result available at journal time. Status: **PIPELINE COMMITTED; EXECUTION/VALIDATION PENDING**.
 
 **Next:** inspect the workflow run and generated commit; verify 102 manifests, exact folder parity, PNG dimensions/CRC, safe SVG, contrast and control parity. Then implement/verify the runtime Theme Gallery and transition/ECO/DPI gates.
+
+
+## 2026-11-12 — Canonical Skin_052 fallback alignment
+
+**Тип:** UI/theme production code + regression test.
+**Ветка:** `work/ppgu-skin-expansion-53-102`.
+**Commits:** `1b112ae2eeec837af4493f54dd61406433162a2b`; `b006b78add4250daa0cd83a41f5b50df6730a981`.
+**Файлы:**
+- `Source/UI/ThemeManager.h` — `PPGUThemeManager::Palette`: default `id/name`, 21 token defaults, legacy color aliases.
+- `tests/ThemeManagerTests.cpp` — canonical fallback ID/name assertions; legacy Skin_51 fixture label.
+
+**Причина:** fallback identity was stale (`skin-51` / Blackout Voltage) while the canonical registry default is `skin-052` / SIGNAL FORGE.
+**Изменения:** fallback values now match the exact Skin_052 palette from `SKIN/Skin_052/theme.json`; tests assert the canonical fallback identity.
+**Совместимость / non-goals:** visual-only; no APVTS IDs/semantics, processor, DSP, sampler, MIDI, preset or audio-thread changes.
+**Тесты:** diff and GitHub readback inspected. C++ build/CTest/pluginval/FL Studio not run on these commits. **Статус:** IMPLEMENTED / VALIDATION PENDING.
+**Следующий шаг:** restore reliable workflow execution for Skin_053–102; then add visual gallery and runtime asset previews after validating generated pack.
