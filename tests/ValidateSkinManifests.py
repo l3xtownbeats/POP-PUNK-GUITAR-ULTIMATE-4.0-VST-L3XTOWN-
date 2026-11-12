@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -228,13 +229,46 @@ def main() -> int:
     for index in range(1, expected_count + 1):
         validate_theme(index, by_index.get(index, {}), errors)
 
+    # A REV 14 pack may be staged beside the legacy runtime registry, but it
+    # must remain explicitly non-runtime-integrated and pass its own full G1-G4
+    # validator. Staged folders are not silently added to the runtime registry.
+    pending_folders: set[str] = set()
+    pack_path = SKIN_ROOT / "theme_pack_manifest.json"
+    if pack_path.is_file():
+        pack = load_json(pack_path, errors)
+        if isinstance(pack, dict) and pack.get("status") == "DESIGNED_NOT_RUNTIME_INTEGRATED":
+            pack_entries = pack.get("themes")
+            if not isinstance(pack_entries, list) or not pack_entries:
+                fail(errors, "SKIN/theme_pack_manifest.json", "staged pack must contain a non-empty themes array")
+            else:
+                expected_start = expected_count + 1
+                pack_indices = [entry.get("index") for entry in pack_entries if isinstance(entry, dict)]
+                if (pack.get("startIndex") != expected_start
+                        or pack.get("endIndex") != expected_count + len(pack_entries)
+                        or pack.get("totalSkins") != len(pack_entries)
+                        or sorted(pack_indices) != list(range(expected_start, expected_count + len(pack_entries)))):
+                    fail(errors, "SKIN/theme_pack_manifest.json", "staged pack range/count is not continuous with the legacy registry")
+                else:
+                    result = subprocess.run(
+                        [sys.executable, str(ROOT / "tools" / "validate_skin_pack.py"),
+                         "--root", str(SKIN_ROOT), "--manifest", str(pack_path)],
+                        capture_output=True, text=True, check=False)
+                    if result.returncode != 0:
+                        detail = (result.stdout + "\\n" + result.stderr).strip()
+                        fail(errors, "SKIN/theme_pack_manifest.json",
+                             "staged REV 14 pack failed G1-G4 validation: " + detail)
+                    else:
+                        pending_folders = {f"Skin_{index:03d}" for index in pack_indices}
+                        print("STAGED REV 14 PACK: " + "; ".join(line for line in result.stdout.splitlines() if line.startswith("PASS ")))
+
     registered_folders = {f"Skin_{index:02d}" for index in range(1, expected_count + 1)}
     actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
-    if actual_folders != registered_folders:
-        missing = sorted(registered_folders - actual_folders)
-        unregistered = sorted(actual_folders - registered_folders)
+    expected_folders = registered_folders | pending_folders
+    if actual_folders != expected_folders:
+        missing = sorted(expected_folders - actual_folders)
+        unregistered = sorted(actual_folders - expected_folders)
         if missing:
-            fail(errors, "SKIN", "registered skin folders missing: " + ", ".join(missing))
+            fail(errors, "SKIN", "registered or staged skin folders missing: " + ", ".join(missing))
         if unregistered:
             fail(errors, "SKIN", "unregistered skin folders present: " + ", ".join(unregistered))
 
@@ -245,7 +279,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, exact folder parity, 18 token groups, nested control tokens, compatibility flags and selected WCAG contrast pairs verified.")
+    print(f"{expected_count} runtime registry manifests plus {len(pending_folders)} independently validated staged REV 14 manifest(s); no staged theme is treated as runtime-registered.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 

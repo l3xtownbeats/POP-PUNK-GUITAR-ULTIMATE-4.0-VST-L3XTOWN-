@@ -575,3 +575,17 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - The current `theme_pack_manifest.json` contains exactly one designed entry (Skin_052), not 50. The legacy registry is still at 51. A batch generator and the other 49 packages do not yet exist.
 - Next gates: (1) land and CI-check the compile correction; (2) design a backward-compatible registry/schema/runtime migration so Skin_052 is genuinely loadable and the legacy 51-theme fallback test remains valid; (3) run the official merge and full CTest 12/12 on the resulting SHA; only then generate the next 50-skin batch. Separate native popup windows and the reference-matched default editor composition remain unimplemented; existing overlays are not equivalent to independent popup windows.
 - No BUILD VERIFIED, INTEGRATED, COMPLETE or FL Studio 20 acceptance status is claimed.
+
+
+### 12 November 2026 — Skin contract validator: staged-pack separation
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Base SHA:** `f20eb81db15c118289ab7793a334935e2e814323`  
+**Status:** VALIDATOR CHANGE PREPARED / CI REQUIRED.
+
+- Corrected the legacy skin-folder parity contract so it distinguishes runtime-registered legacy themes from explicitly staged REV 14 packages.
+- A staged pack is accepted only when its status is exactly `DESIGNED_NOT_RUNTIME_INTEGRATED`, its indices form the contiguous range immediately after the legacy registry, and the independent `tools/validate_skin_pack.py` validator passes all G1-G4 checks (palette contrast, control parity, PNG/SVG assets, identity and numbering).
+- Staged folders remain outside `theme_manifest.json`; this does **not** claim Skin_052 is runtime-loadable or integrated into ThemeManager. Any unlisted Skin_* directory still fails exact folder parity.
+- Legacy registry validation and the default `skin-51` fallback contract remain unchanged.
+- No DSP, audio callback, APVTS, MIDI, preset, sampler or ThemeManager runtime code changed.
+- Next gate: Windows CI must demonstrate that the existing skin contract failure is resolved and all CTest targets pass. This validator change is not runtime integration and does not authorize a skin batch merge.
