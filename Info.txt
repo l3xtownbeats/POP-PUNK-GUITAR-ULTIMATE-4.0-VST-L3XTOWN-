@@ -1495,3 +1495,27 @@ F. Только после этого считать документальны�
 **РЕЗУЛЬТАТ:** fallback palette correction IMPLEMENTED; multi-window overflow grid IMPLEMENTED / EXACT-SHA VALIDATION PENDING; skin batch generation/validation passed in runner, publication BLOCKED by push race, retry workflow running.
 
 **Следующий шаг:** дождаться нового skin workflow, проверить commit и 102 folders/assets; затем дождаться Windows VST3 build + CTest + pluginval на окончательном SHA и продолжить полный runtime Gallery/control parity audit.
+
+
+## 2026-11-12 — Premium Skin Gallery + publication of Skin_053–102
+
+**Тип:** GUI feature + theme data/assets + CI publication.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Source commits:**
+- `9054f92b4bd5b559a67eb68ed00a72dcd6f23b96` (parent `7b56be7f202edd07c46b3ba8dbf7a64718d9f07a`) — добавлен searchable gallery component с previews.
+- `065279795c421a9b01e10e288faa1a8bb0eb2a1d` (parent `9054f92b4bd5b559a67eb68ed00a72dcd6f23b96`) — исправлены карточки/счётчик gallery.
+- `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b` (parent `065279795c421a9b01e10e288faa1a8bb0eb2a1d`) — безопасное насыщение размеров scroll surface.
+**Skin data commit:** `3a2ceb52062be112429f96d411ae223d87df17a6` (GitHub Actions bot).
+**Skin workflow:** run `43195205929` — SUCCESS; all generation, G1–G4 validation, merge, full manifest revalidation, final 102 registry checks and commit/push steps succeeded.
+
+**ПРОВЕРКА:** до этого этапа выбор темы был обычным PopupMenu без визуальных карточек, фильтра и preview. Skin workflow успешно опубликовал indices 53–102. Readback на ветке подтвердил `totalSkins=102`, 102 registry entries, `defaultSkin=skin-052`, pack `MERGED`, range 53–102, `mergedRegistryTotal=102`; обязательные theme.json, preview.png, hero.png, bezel.svg, crest.svg и texture.svg присутствуют для каждого индекса 53–102 (0 missing paths).
+
+**ИСПРАВЛЕНИЕ / GUI:** `PPGUSkinGalleryPanel` встроен в `PluginEditor.cpp`; кнопка SKIN и Ctrl+K открывают его как отдельную панель внутри утверждённого `PPGUMultiWindowWorkspace`. Gallery содержит searchable cards, family filter (включая legacy themes), count, active marker и image previews. PNG загружаются лениво по мере отрисовки карточек, чтобы не декодировать всю библиотеку сразу. Выбор темы вызывает существующий ThemeManager path, сохраняет preference и закрывает gallery panel. Внешние панели/аудио-параметры не переназначаются.
+
+**CI / тесты:** skin workflow SUCCESS на run `43195205929`; generated commit `3a2ceb...` прочитан обратно. Windows VST3 workflow `43195592441` на SHA `bc5f753...` был IN_PROGRESS на момент записи; C++ build, CTest, pluginval и package пока не объявляются PASS. FL Studio 20 visual/host acceptance остаётся отдельным этапом.
+
+**Границы:** GUI/theme-only. DSP, processBlock, audio callback, sampler, MIDI, APVTS IDs/semantics, presets and SoundBank не изменялись.
+
+**РЕЗУЛЬТАТ:** 102 themes GENERATED / VALIDATED / MERGED / PUBLISHED; premium visual gallery SOURCE IMPLEMENTED; exact-SHA Windows build and runtime visual acceptance PENDING.
+
+**Следующий шаг:** получить результат Windows VST3 workflow на SHA `bc5f753...`; исправить любые compile/CTest/pluginval failures, затем провести полный GUI control parity / DPI / panel geometry audit.
