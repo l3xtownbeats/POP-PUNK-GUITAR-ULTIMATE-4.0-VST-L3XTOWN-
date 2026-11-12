@@ -1034,3 +1034,14 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Cross-panel visual audit:** inspected all 9 `Source/UI/*.cpp` implementation files. No hardcoded HEX color literals or named JUCE basic-color constants were found in the UI panel implementations; matches in the audit were canonical Palette field names, not literals. `ThemeManager.cpp` validates and decodes all 21 canonical Skin Studio tokens (lines 278–298), and `PluginEditor::applyPalette()` propagates the active palette to FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PERFORMANCE and AuxiliaryPanelWindowManager.
 **S2 runtime caveat retained:** PerformanceDisplay is a read-only keyboard-state monitor; BPM/bar position intentionally remain unavailable until a real-time-safe transport snapshot exists. Interactive FL Studio 20 acceptance remains NOT VERIFIED.
 **S3 status:** source cleanup committed; full S3 remains OPEN pending exact-SHA CI and remaining residual visual audit. No DSP/APVTS/MIDI/sampler/preset/SoundBank changes in this audit.
+
+
+### REV18 S3 — exact-source CI result #1177 (2026-11-12)
+
+**Validated source SHA:** `e90e7be79a717c74fc94ec634a31f8c7669fb850`. **GitHub Actions:** run #1177 / ID `43235287270`, conclusion **SUCCESS**, event push, workflow `.github/workflows/vst3-build.yml`. **Current documentation/main HEAD before this journal update:** `eb43f6319b3c221e2db143971bc3fdca32498e94`; this is a later Info/CODE-only documentation head and is not the source SHA validated by run #1177.
+
+**Exact successful job steps:** artwork generation/validation; 300-preset factory catalog; portable preset examples; APVTS registry/state persistence; REV14 skin pack G1-G4; source extraction/review artifact; redistributable sample-library license validation (cache restored; network download step skipped); JUCE BinaryData include/link/declaration order; Windows x64 Release configure; VST3 and test executable build; CTest regression suite; VST3 bundle locate; pluginval strictness level 5; host-validation limitation record; packaging of VST3, SOUNDBANK, PRESETS, SKINS, Resources and Assets; artifact upload — all SUCCESS (download step intentionally SKIPPED due to restored cache).
+
+**Status:** BUILD VERIFIED / CTEST PASS / PLUGINVAL-5 PASS / PACKAGE JOB PASS for exact source SHA `e90e7be...`. This does **not** establish FL Studio 20 host acceptance, runtime sound quality, interactive UI acceptance, 30-minute stability, or release readiness. S2 host acceptance remains NOT VERIFIED; S3 visual audit remains OPEN for residual review. The successful package job produced a workflow artifact, but no COMPLETE ZIP release is declared or published by this journal entry.
+
+**Next action:** preserve this exact-SHA evidence; continue REV18 in order, first finish residual S3 audit and do not advance beyond S2 until host acceptance is addressed under REV18 rules. Do not transfer run #1177 PASS to later source SHAs.
