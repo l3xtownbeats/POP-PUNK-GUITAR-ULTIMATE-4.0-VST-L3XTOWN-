@@ -79,14 +79,14 @@ def contrast(a: str, b: str) -> float:
 
 def png_dimensions(path: Path) -> tuple[int, int]:
     raw = path.read_bytes()
-    if len(raw) < 24 or raw[:8] != b"\\x89PNG\\r\\n\\x1a\\n" or raw[12:16] != b"IHDR":
+    if len(raw) < 24 or raw[:8] != b"\x89PNG\r\n\x1a\n" or raw[12:16] != b"IHDR":
         raise ValueError(f"{path}: invalid PNG header")
     return struct.unpack(">II", raw[16:24])
 
 
 def safe_svg(path: Path) -> None:
     raw = path.read_text(encoding="utf-8")
-    if re.search(r"<\\s*script|\\bon[a-z]+\\s*=|(?:href|src)\\s*=\\s*['\\\"]https?://", raw, re.I):
+    if re.search(r"<\s*script|\bon[a-z]+\s*=|(?:href|src)\s*=\s*['"]https?://", raw, re.I):
         raise ValueError(f"{path}: active script/event/external URL is forbidden")
     root = ET.fromstring(raw)
     if not root.tag.endswith("svg"):
