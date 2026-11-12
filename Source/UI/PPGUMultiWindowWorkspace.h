@@ -31,6 +31,7 @@ public:
 
     void setPanelGap(int pixels);
     void setPanelScale(float scale);
+    void setPersistenceProperties(juce::PropertiesFile* properties);
     void setSurfaceColours(juce::Colour background,
                            juce::Colour panel,
                            juce::Colour border,
@@ -45,6 +46,8 @@ private:
     class TileSurface;
 
     void handleClose(int id);
+    void handleGeometryChanged(int id);
+    juce::String geometryKey(int id, const juce::String& suffix) const;
     void reorderPanels(int draggedId, int targetId);
     void layoutPanels();
 
@@ -52,6 +55,8 @@ private:
     std::unique_ptr<TileSurface> tileSurface;
     std::vector<std::unique_ptr<Window>> windows;
     int panelGap = 12;
+    juce::PropertiesFile* persistenceProperties = nullptr;
+    int nextCascadeOffset = 0;
     float panelScale = 1.0f;
     juce::Colour backgroundColour { 0xff090c10 };
     juce::Colour panelColour { 0xff17232b };
