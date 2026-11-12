@@ -1346,3 +1346,15 @@ Source inventory check: five navigation buttons map one-to-one to panel IDs 1–
 **R10/R28 boundary:** этот аудит не меняет DSP/MIDI/APVTS/preset/Sampler lifecycle и не снимает disabled-state до готовности backend. AutoChords backend integration выделяется отдельным этапом; существующие S2 panel-shell изменения остаются в своей области.
 
 **Итог:** причина найдена и зафиксирована. AutoChords в MELODY на audited SHA не реализован функционально. Нельзя считать его исправленным на основании успешной общей сборки; требуется отдельная реализация и профильные integration tests.
+
+
+## 2026-11-12 — AutoChords neon mockup visual reconstruction
+
+**Статус:** UI SOURCE COMMITTED / EXACT-SHA CI PENDING / AUDIO BACKEND PENDING.
+**Parent SHA:** `2dbca5f64ae69fb2c6d98495bb48f8c35c11e72e`
+
+AutoChords content panel обновлён в направлении утверждённого Dreaming in Neon / Pop Punk Guitar mockup: графитовые glass-like секции, неоновая обводка/glow, theme-token палитра, title/status header, Harmony Configuration, Live Chord Monitor, chord progression tiles, performance options, Preview/Reset footer. В панели присутствуют документированные ON/OFF, Major/Minor/Custom, Key, Pattern/Progression, Current Chord, Preview, Sync to Tempo, Smart Transpose, inversion, duration, rhythm и execution style. Компактная/расширенная компоновка адаптируется к размеру overlay; общие X и □ остаются в заголовке EditorOverlayPanel.
+
+Все элементы без подключённого MIDI/audio backend остаются disabled с явными PENDING подсказками; это не выдаётся за готовую функциональность. Не добавлены APVTS IDs, не менялись processor/DSP/MIDI. Визуальная палитра использует ThemeManager tokens, без hardcoded hex.
+
+**Ограничения статуса:** 90–95% pixel-match нельзя объявлять без визуального сравнения с исходным утверждённым изображением; CI и host visual acceptance нового SHA ожидаются. MELODY AutoChords backend остаётся отдельной обязательной задачей.
