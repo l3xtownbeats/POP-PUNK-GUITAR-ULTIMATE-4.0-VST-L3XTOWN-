@@ -72,3 +72,41 @@ PUNK GROUP, dedicated LED, Auto Discover, Curator, Settings и About пока н
 8. G5/G6/G7 automated/manual acceptance; Windows Release, CTest, pluginval strictness 5; separate FL Studio 20 host check.
 
 **Честный вывод:** в main теперь есть начальная palette switch implementation и reference pack Skin_052. Полноценная Theme Gallery и REV 14 runtime engine пока не закрыты.
+
+
+---
+
+# Актуализация аудита — 12.11.2026, рабочая ветка REV.17
+
+Этот addendum **заменяет устаревшие snapshot-утверждения выше** о fallback skin-51, registry из 51 темы, отсутствии gallery и непроведённом merge Skin_052/53–102. Исторические наблюдения сохранены как снимок более раннего состояния ветки main.
+
+**Текущая ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Gallery/source chain:** `9054f92b4bd5b559a67eb68ed00a72dcd6f23b96`, `065279795c421a9b01e10e288faa1a8bb0eb2a1d`.  
+**Overflow workspace fix:** `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b`.  
+**Skin data commit:** `3a2ceb52062be112429f96d411ae223d87df17a6`.  
+**Skin CI:** run `43195205929` — SUCCESS.
+
+## 1. Проверенное текущее состояние
+
+- Canonical registry содержит 102 entries; default/fallback = `skin-052` / SIGNAL FORGE.
+- Skin Studio pack 53–102 имеет status MERGED; registry total = 102.
+- Для всех 50 новых тем опубликованы theme.json, preview.png, hero.png, bezel.svg, crest.svg и texture.svg; проверка путей дала 0 missing.
+- ThemeManager поддерживает legacy Skin_01–51 и Skin Studio Skin_052+; fallback 21-token palette проверяется тестами.
+- Gallery находится в `PPGUSkinGalleryPanel` внутри `PluginEditor.cpp`; SKIN и Ctrl+K открывают panel ID 5 в Multi-Window Workspace. Реализованы search, family filter, preview cards, active marker, click-to-apply и сохранение skin ID.
+- Multi-window overflow теперь размещает все панели в minimum-size scroll grid; pure geometry tests обновлены для 1- и 2-column overflow, non-overlap и impossible geometry.
+
+## 2. Оставшиеся runtime/QA gaps
+
+1. Favorites, полноценная keyboard navigation в gallery, background watcher/debounce/rescan — NOT IMPLEMENTED.
+2. 150 ms theme hot-swap fade — NOT IMPLEMENTED / NOT HOST VERIFIED.
+3. ECO animation policy, image memory budget/LRU и lazy loading всех non-preview SVG/texture layers — NOT IMPLEMENTED.
+4. Layout metadata `controls.*.grid` пока не управляет JUCE bounds; реальные компоненты остаются в текущем editor layout.
+5. Полная runtime parity validation между schema IDs и реальными JUCE Components/attachments не завершена. LED, Auto Discover, Curator, Settings и About остаются NOT IMPLEMENTED; не показывать их как работающие.
+6. Полная очистка hardcoded decorative colours по всем UI components не завершена.
+7. 100/125/150% DPI visual review и FL Studio 20 host acceptance — PENDING.
+
+## 3. Exact-SHA validation
+
+Skin generation/validation/merge/publish подтверждены run `43195205929`. Windows VST3 workflow `43195592441` на code SHA `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b` был IN_PROGRESS на момент этой актуализации; до финального результата нельзя ставить BUILD/CTest/pluginval PASS. Host review не выполняется автоматически этим workflow.
+
+**Итог:** 102 themes + searchable preview gallery SOURCE PRESENT / PACK PUBLISHED; complete Skin Engine acceptance NOT COMPLETE.
