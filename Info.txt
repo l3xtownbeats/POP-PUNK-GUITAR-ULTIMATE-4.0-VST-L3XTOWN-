@@ -1211,3 +1211,45 @@ Cabinet остаётся отдельной секцией со своим bypas
 **Порядок внедрения:** capability inventory → tone resolver/schema → deterministic fallback tests → runtime amp/cab/DSP implementation → independent layer routing → preset serialization/round-trip → listening QA. Новые APVTS IDs/control semantics не добавлять без I1/I2 audit и MAJOR/state migration решения. Любой audio DSP change — отдельный R10 review/commit с realtime regression tests.
 
 **Не заявляется:** наличие всех перечисленных amp models, IR captures, multi-mic blend, true double-tracking engine, exact artist sound, production-ready tone или слуховая приёмка. Текущий source audit по-прежнему показывает упрощённый amp/drive и synthetic cabinet path; этот framework сам по себе не меняет аудиореализацию.
+
+## 2026-11-12 — FX module identity, workspace panels и DOUBLE semantics: консолидация требований пользователя
+
+**Статус:** PRODUCT REQUIREMENTS ACCEPTED / CURRENT-SOURCE IMPLEMENTATION AUDIT REQUIRED.
+
+### 1. Индивидуальный дизайн FX-модулей
+
+Пользователь утвердил, что FX-блоки не должны выглядеть как одинаковые универсальные панели с заменой только названия. Каждый эффект получает собственную визуальную идентичность: характерный акцентный цвет, подписи, шкалы/индикаторы, геометрию и композицию регуляторов, соответствующие его звуковой функции. Цвет — не единственное различие; при этом все модули остаются частью единой премиальной дизайн-системы PPGU и подчиняются ThemeManager.
+
+Базовые визуальные ориентиры:
+- Distortion — зелёный акцент;
+- Compressor — янтарный;
+- EQ — cyan;
+- Flanger — electric blue;
+- Chorus — violet;
+- Delay — orange;
+- Reverb — teal;
+- Cabinet — steel/metal.
+
+Это семантические акценты, а не жёсткие независимые цвета, конфликтующие с выбранной темой. Необходимо предусмотреть корректную адаптацию к Neon Punk, Black Metal, Cyber Blue, Dark Industrial, Classic Studio, Carbon/Studio, Chrome/Metal, Vintage/Classic и Dark Premium. Количество FX-модулей может увеличиваться, если это оправдано реальными DSP-возможностями и пользовательским сценарием. Нельзя показывать визуально доступный эффект как работающий, если его DSP или маршрутизация не реализованы.
+
+### 2. DOUBLE — точное назначение
+
+**DOUBLE = Stereo Width / Haas-style Thickening.** Это эффект расширения/утолщения стереообраза одного гитарного исполнения. Это НЕ вторая одновременно играющая гитара, НЕ вторая записанная партия, НЕ true double tracking и НЕ Chorus.
+
+Сохранить существующие APVTS IDs `doubleTrackOn` и `doubleTrackMix`, если текущий source audit подтверждает их наличие и семантику. UI-названия: `DOUBLE ON/OFF` и `DOUBLE MIX`. Разместить в отдельном разделе Performance / Stereo Width, отдельно от Chorus и Flanger.
+
+DSP-контракт: центр и низкие частоты должны оставаться устойчивыми; требуется проверка mono compatibility, phase correlation, transient integrity и отсутствия нежелательной comb filtering. Нельзя считать простую задержку одного канала полноценной реализацией без проверки. Эффект должен корректно работать в MELODY и PATTERN, включая palm mute. Существование параметров само по себе не доказывает наличие DSP signal path.
+
+### 3. Дополнительные рабочие панели и поведение workspace
+
+FX EDIT, AutoChords, Import Guitar и Settings должны открываться как встроенные панели поверх рабочего пространства плагина, сохраняя верхнюю панель и постоянную кнопку закрытия X. Каждая панель открывается и закрывается независимо. При одновременном открытии нескольких панелей они должны компактно размещаться так, чтобы основные элементы каждой оставались видимыми; предусмотреть maximize/restore. Не переводить это поведение в набор независимых системных окон без отдельного решения пользователя.
+
+### 4. Контроль качества и порядок выполнения
+
+Для каждой задачи обязателен цикл:
+
+**ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ.**
+
+Перед правкой сверять текущую активную ветку, HEAD, реальные APVTS IDs, DSP signal path, FX rack mapping, ThemeManager tokens, skin schema и validators. Не переносить предположения и старые аудиты на текущую ветку без повторной проверки. После изменений выполнять доступные структурные проверки и тесты; отдельно фиксировать то, что не удалось собрать или проверить в DAW.
+
+**Не заявляется:** что все индивидуальные FX-панели, DOUBLE DSP, полная маршрутизация, multi-panel workspace или все перечисленные эффекты уже реализованы и приняты. Эта запись фиксирует обязательные требования и критерии проверки; реализация подтверждается только конкретными source changes, тестами и host/audio QA.
