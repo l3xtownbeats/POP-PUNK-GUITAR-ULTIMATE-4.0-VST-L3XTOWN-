@@ -246,7 +246,7 @@ def main() -> int:
                 if (pack.get("startIndex") != expected_start
                         or pack.get("endIndex") != expected_count + len(pack_entries)
                         or pack.get("totalSkins") != len(pack_entries)
-                        or sorted(pack_indices) != list(range(expected_start, expected_count + len(pack_entries)))):
+                        or sorted(pack_indices) != list(range(expected_start, expected_count + len(pack_entries) + 1))):
                     fail(errors, "SKIN/theme_pack_manifest.json", "staged pack range/count is not continuous with the legacy registry")
                 else:
                     result = subprocess.run(

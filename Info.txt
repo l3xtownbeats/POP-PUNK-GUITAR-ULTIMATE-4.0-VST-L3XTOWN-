@@ -621,3 +621,17 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - This is a safety barrier, not runtime migration and not a merge. Skin_052 remains staged and unregistered. No registry, schema, ThemeManager, DSP, APVTS, MIDI, presets or SoundBank files were changed.
 - Rationale: the current legacy schema requires the old nested `tokens` structure and caps the ID format at two digits; ThemeManager accepts only that legacy format and has no REV14 token API. The existing merge script would otherwise append an incompatible entry and produce a false runtime registration.
 - Next stage: implement the backwards-compatible REV14 parser/token API and schema branch, add Skin_052 runtime and legacy regression tests, then run the official merge tool only after those gates are present. CI must validate this guard on this exact commit.
+
+
+### 12 November 2026 — Correct staged skin range boundary
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Base SHA:** `780c16e9db094d6c2b4ac605abc73cd395f86450`  
+**Status:** OFF-BY-ONE FIX COMMITTED / CI REQUIRED.
+
+- Investigated Windows workflow run `#43132077079` on SHA `c1ad4b45358eaa3a459140d47e5617913d12edde`. Build/configure succeeded; CTest was 12/13, with only `ppgu_skin_manifest_contract` failing.
+- Exact cause: staged-pack validation treated the inclusive `endIndex` as an exclusive Python range bound. For the current one-item pack (index 52), the expected range was incorrectly empty, so the staged folder was not added to the expected folder set.
+- Corrected the range comparison to include the declared end index. This preserves all protections: staged status must remain `DESIGNED_NOT_RUNTIME_INTEGRATED`; indices must be contiguous; G1-G4 still run independently; staged themes remain outside the runtime registry; unknown folders still fail.
+- This is a validator correctness fix only. It does not register or runtime-integrate Skin_052, does not modify the schema/ThemeManager, and does not alter DSP, APVTS, MIDI, presets or SoundBank.
+- The REV15 merge-tool fail-closed guard remains in place. The guard intentionally blocks merge until the schema palette branch, ThemeManager REV14 parser and `token()` API exist.
+- Required next verification: Windows CI on this new SHA, including all CTest targets. No PASS is claimed yet.
