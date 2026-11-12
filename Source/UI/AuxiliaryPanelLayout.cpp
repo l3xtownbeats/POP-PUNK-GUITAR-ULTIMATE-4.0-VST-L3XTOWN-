@@ -106,11 +106,45 @@ PanelLayout calculatePanelLayout(PanelRect area,
 
     if (bestColumns == 0)
     {
+        // Overflow is a scrollable workspace, not a hidden-panel/page mode.
+        // Preserve every panel at its scaled minimum size and tile it on a
+        // surface that the owning JUCE Viewport can scroll.
         result.overflow = true;
-        result.columns = result.rows = 1;
+        const auto canUseTwoColumns =
+            static_cast<std::int64_t>(minimumW) * 2 + scaledGap <= area.width;
+        result.columns = canUseTwoColumns ? 2 : 1;
+        result.rows = count / result.columns + (count % result.columns == 0 ? 0 : 1);
+        const auto surfaceWidth = static_cast<std::int64_t>(result.columns) * minimumW
+                                + static_cast<std::int64_t>(result.columns - 1) * scaledGap;
+        const auto surfaceHeight = static_cast<std::int64_t>(result.rows) * minimumH
+                                 + static_cast<std::int64_t>(result.rows - 1) * scaledGap;
+        if (surfaceWidth > std::numeric_limits<int>::max()
+            || surfaceHeight > std::numeric_limits<int>::max())
+        {
+            result.invalidInput = true;
+            result.panels.clear();
+            return result;
+        }
+
         result.panels.reserve(requests.size());
-        for (std::size_t i = 0; i < requests.size(); ++i)
-            result.panels.push_back({ requests[i].id, area, i == 0 });
+        for (int i = 0; i < count; ++i)
+        {
+            const int column = i % result.columns;
+            const int row = i / result.columns;
+            const auto x = static_cast<std::int64_t>(area.x)
+                         + static_cast<std::int64_t>(column) * (minimumW + static_cast<std::int64_t>(scaledGap));
+            const auto y = static_cast<std::int64_t>(area.y)
+                         + static_cast<std::int64_t>(row) * (minimumH + static_cast<std::int64_t>(scaledGap));
+            if (x + minimumW > std::numeric_limits<int>::max()
+                || y + minimumH > std::numeric_limits<int>::max())
+            {
+                result.invalidInput = true;
+                result.panels.clear();
+                return result;
+            }
+            result.panels.push_back({ requests[static_cast<std::size_t>(i)].id,
+                { static_cast<int>(x), static_cast<int>(y), minimumW, minimumH }, true });
+        }
         return result;
     }
 
