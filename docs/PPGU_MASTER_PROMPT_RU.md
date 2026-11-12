@@ -1,10 +1,10 @@
-# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 17.0 UNIFIED (FINAL)
+# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 17.1 UNIFIED (MINOR)
 
 Единый операционный документ: законы, инварианты, реестр правил R01–R34,
 SUPERTEAM, движок, SoundBank, скины, окна, тесты, журнал, приёмка, DoD,
 протоколы (открытие/закрытие сессии, отката, разногласий, публикации),
 каталог отказов, self-check, шаблоны, глоссарий, non-goals.
-Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
+Заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4/17.0. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
 версия фиксируется в INFO на каждом этапе.
 Иерархия истины: INFO → control inventory/schema → этот промт → устные
 договорённости. При расхождении фактов INFO первичен, правку вносит
@@ -97,47 +97,48 @@ Electric Sunburst Deluxe):
 ═══════════════════════════════════════════════════════════════
 §2. ТЕКУЩЕЕ ФАКТИЧЕСКОЕ СОСТОЯНИЕ (обновлять по §18 перед этапом)
 ═══════════════════════════════════════════════════════════════
-Подтверждено: WAV/SFZ playback path; metadata index; background page
-streaming; fixed page cache; SFZ mapping (velocity/key/channel/RR);
-транспорт/Pattern Scheduler компонентно; DSP-компоненты FX; 300 preset
-definitions (НЕ все playable); policy contract SOUND HUNTER в tooling
-(validate_sound_asset_registry.py + пустой versioned registry, 12 unit
-cases, CTest target); редактор Blackout Voltage (skin-51): кнопка SKIN,
-палитры, Ctrl+K, persistence; legacy runtime fallback ищет `Skins` рядом с .vst3; новый
-    ResourceRootResolver по R34 пока NOT IMPLEMENTED / NOT VERIFIED;
-AuxiliaryPanelLayout (geometry + тесты зарегистрированы, PASS в CI не
-подтверждён); control inventory в репо (commit bf436ae...).
-ОТКРЫТЫЙ RELEASE BLOCKER: run #859 (SHA d0eecea...) — skin pack
-validator G1–G4 PASS для Skin_052 «Carbon Relay» (PACK GENERATED /
-NOT MERGED / NOT RUNTIME-INTEGRATED; layout-координаты — metadata).
-Run #860 (SHA bf436ae...) — Release build PASS, CTest 11/12,
-единственный FAIL ppgu_skin_manifest_contract («unregistered skin
-folders present: Skin_052»); pluginval и packaging SKIPPED; COMPLETE
-ZIP не создавался.
-Исторические уроки: run #826 (ID 43017263448): MSVC C1083 на
-ppgu_processor_pattern_tests (generated BinaryData.h) — fix коммитом
-0ef0ebe (отдельная binary-data цель PPGUTestData с fixture
-tests/assets/ppgu_test_data.txt); run #827 (ID 43113647167) создан,
-на момент записи QUEUED — результат НЕ подтверждён (R07).
-Gap-аудит skin engine (commit be8b162): PluginEditor не использует
-PPGUThemeManager, цвета хардкодом; нет SKIN-кнопки/галереи/previews/
-Ctrl+K/hot-swap/persistence/rescan; ThemeManager валидирует лишь часть
-manifest; 51 папка Skin_01..Skin_51 при 50-слотовой schema (Skin_51
-вне диапазона, не зарегистрирован); per-skin preview.png/hero.webp/
-texture.png и полный комплект SVG/PNG control artwork отсутствуют;
-packaging кладёт исходники в SKINS/ внутри ZIP без runtime `Skins/`
-рядом с .vst3; нет UI/DPI/accessibility/LRU/persistence/
-audio-invariance/hot-swap тестов.
-Packaging-assertions содержат хардкод «ровно 50 theme manifests» —
-заменяется schema-вычисляемым (R30).
-Не подтверждено: runtime skin switching; ThemeManager 21-token;
-галерея/hot-swap/rescan; PUNK GROUP в playMode (сейчас MELODY/PATTERN);
-LED_indicator, Auto_Discover, Curator, Settings, About (ID в
-parity-контракте, кода нет); AuxiliaryPanelLayout PASS в CI; window
-shell/manager; FL Studio 20 host acceptance; CPU/RAM profiling;
-playable listening count пресетов; artwork части тем; all-branch
-rollout refresh (41 ветка, R33).
-Это снимок на дату последней записи INFO; перед этапом обновлять (§18).
+Подтверждено по исходникам main на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe`:
+WAV/SFZ playback path; metadata index; background page streaming; fixed
+page cache; SFZ mapping (velocity/key/channel/RR); транспорт и Pattern
+Scheduler — компонентно; DSP-компоненты FX; 300 preset definitions
+(НЕ все playable); Sound Asset Registry validator с CC0/PD, CC-BY,
+EXPLICIT_PERMISSION, OWN_RECORDING/OWN_DSP и commercial redistribution
+policy; 16 unit cases в `tests/TestSoundAssetRegistry.py`.
+Skin registry содержит 52 записи. Skin_052 Carbon Relay уже присутствует
+в `SKIN/theme_manifest.json`, а `theme_pack_manifest.json` имеет статус
+MERGED; `merge_skin_pack.py`, REV14 pack validator и отдельная
+`control_schema.json` существуют. Это не считать полным 21-token
+runtime: ThemeManager распознаёт Skin Studio, проверяет 21 palette token,
+но переносит в текущий Palette только используемое подмножество; полный
+токенизированный LookAndFeel/layout engine не реализован. Legacy
+`theme.schema.json` ограничен индексами 1–51, Skin Studio
+`control_schema.json` начинается с 52 — это разделение форматов, а не
+повод смешивать схемы.
+PluginEditor уже подключён к ThemeManager, имеет SKIN menu, Ctrl+K,
+palette application и persistence; часть базовых цветов/knob setup всё
+ещё задана константами. Skin layout coordinates пока metadata: runtime
+layout engine отсутствует. Default остаётся skin-51 / Blackout Voltage,
+не default-ppgu. ResourceRootResolver R34 не реализован; текущий поиск
+ресурсов — legacy fallback.
+AuxiliaryPanelLayout — JUCE-free geometry module; shell/manager,
+реальные независимые панели, Performance Display, полный AutoChords UI
+и FX EDIT UI не реализованы. Реальный статус geometry CTest и Release
+Gate для нового SHA определяется только GitHub Actions.
+Пользователь подтвердил проверку плагина в FL Studio 20 на Windows 10.
+Это USER-REPORTED HOST ACCEPTANCE для использованной пользователем
+сборки; её binary SHA и тестовая матрица не зафиксированы, поэтому это
+не заменяет проверку нового Release ZIP.
+Run #971 (ID `43146185476`) на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe`
+на момент REV 17.1 подготовки — IN_PROGRESS; итоговые build/CTest/
+pluginval/package статусы не присваивать до завершения.
+Открыто: полный 21-token runtime mapping + legacy compatibility;
+default-ppgu; ResourceRootResolver; artwork/payload и generation 50 тем;
+panel shell/manager; Performance Display с реальными данными; полноценные
+AutoChords/FX EDIT; package registry-only filtering; full Release Gate;
+повторная host acceptance нового точного бинарника; CPU/RAM profiling;
+rollout по другим веткам (R33).
+Исторические run #859/#860 и старый gap-аудит ниже/в INFO остаются
+историческими фактами и не описывают текущее состояние.
 
 §3. ДВИЖОК (аудио)
 ═══════════════════════════════════════════════════════════════
@@ -316,23 +317,60 @@ R21 [Полнота payload] Пакет без полного набора ас�
     COMPLETE ZIP (урок #830).
 
 ═══════════════════════════════════════════════════════════════
-§7. ОКНА (Auxiliary Panel Manager)
+§7. ОКНА, PERFORMANCE DISPLAY И EDIT WORKSPACE
 ═══════════════════════════════════════════════════════════════
-7.1 Геометрия реализована (AuxiliaryPanelLayout; tiled bounds, compact,
-    overflow paging, DPI, детерминизм; CTest
-    ppgu_auxiliary_panel_layout_contract). ПЕРВЫЙ шаг — PASS в CI.
-7.2 Затем: window shell/manager (maximize/restore/X, SafePointer,
-    сохранение bounds) → AutoChords и FX EDIT → системные окна
-    (Settings, About, Curator, Import Guitar, Auto Discover, GALLERY).
-7.3 AUTOCHORDS: Chord Mode (Major/Minor/Custom), Key, Pattern (+редактор),
-    Mode (Strum), Speed (x1.0), Current Chord с апплиатурой и стрелками,
-    Progression (Am-F-C-G-Am + ∞), Chord Info, Preview (play + waveform),
-    Options (Sync to Tempo, Smart Transpose) + Reset.
-7.4 FX EDIT: список эффектов (Compressor/EQ/Distortion/Chorus/Delay/
-    Reverb/Cabinet IR), power-кнопка, селектор модели, 5 ручек со
-    значениями, GR-метр -24..0, график кривой, Knee, Mix.
-7.5 Требования: окна не влияют на DSP (R03); z-order/focus, bounds/
-    resize, compact mode, DPI, persistence состояния окон.
+7.1 AuxiliaryPanelLayout — чистый JUCE-free geometry module. Он
+    рассчитывает tiled bounds, compact/overflow, DPI и детерминированное
+    размещение. Это только геометрия, НЕ готовый window shell/manager.
+    PASS присваивается только по CTest точного SHA.
+7.2 Следующий слой — JUCE window shell/manager внутри одного PluginEditor:
+    отдельное состояние каждой панели, maximize/restore/X, SafePointer,
+    z-order/focus, сохранение bounds и восстановление. Это внутренние
+    дочерние панели, НЕ отдельные системные окна Windows.
+7.3 Multi-Window поведение (последнее утверждённое решение):
+    - одна открытая панель занимает почти всю рабочую область;
+    - две — две колонки; три — адаптивная сетка 2x2; четыре — 2x2;
+      пять-шесть — адаптивная сетка до 2x3;
+    - точная геометрия выбирается AuxiliaryPanelLayout по доступной
+      площади, минимальным размерам и DPI; перечисленные схемы — целевые,
+      а не жёстко зашитые координаты;
+    - у каждой панели собственные заголовок и кнопка X; закрытие одной
+      панели пересчитывает layout, закрытие всех возвращает Main Performance;
+    - при нехватке места включается compact/overflow paging, элементы не
+      обрезаются и не перекрываются; перемещение/порядок панелей не должно
+      ломать автоматическую компоновку.
+    Верхняя панель плагина остаётся доступной.
+7.4 AUTOCHORDS: компактная рабочая панель показывает ON/OFF,
+    Major/Minor/Custom, Key, Pattern, Current Chord и Preview. Expanded
+    режим раскрывает progression editor, обращения аккордов, длительность,
+    ритм, способ исполнения, Sync to Tempo, Smart Transpose и Reset.
+    Аккорды отображаются музыкально (C, Dm, Em, F, G, Am и т. п.).
+    Preview должен использовать реальный audio/MIDI path; фиктивное
+    воспроизведение и декоративные статусы запрещены.
+7.5 FX EDIT: список Compressor/EQ/Distortion/Chorus/Delay/Reverb/
+    Cabinet IR слева; настройки выбранного эффекта, power, модель,
+    параметры и значения по центру; график обработки/кривая, GR-метр,
+    Knee/Mix и effect presets. Элементы подключаются к существующим
+    реальным параметрам; неподдерживаемая функция явно disabled/PENDING.
+7.6 PERFORMANCE DISPLAY — компактное информационное табло над MIDI
+    keyboard. Поля: текущий аккорд (например Am), отдельная нота/октава
+    (C3), выбранная тональность (A Minor), тип аккорда, текущий/следующий
+    аккорд, progression (Am–F–C–G), такт:доля:tick, BPM, MIDI IN/activity,
+    последняя Velocity 0–127. Нота/Velocity/activity берутся из реального
+    MIDI; BPM и такт — из host transport; chord/progression — из реального
+    chord/AutoChords state. Если источник недоступен, показывать нейтральное
+    состояние (— / NO MIDI / HOST SYNC OFF), а не выдуманные значения.
+7.7 Два уровня интерфейса: Main Performance для игры и быстрых действий;
+    Edit Workspace для FX EDIT, AutoChords, Import Guitar, Settings,
+    About, Curator, Auto Discover и SKINS Gallery. Performance Display
+    остаётся частью Main Performance и не подменяет источник данных.
+7.8 Инварианты реализации: окно/скин/layout не меняют DSP output (R03),
+    не блокируют audio callback, не создают allocation/lock в callback;
+    не меняют архитектуру Audio Engine, MIDI routing, APVTS IDs или
+    semantics. UI использует существующие processor/parameter APIs.
+    Если для функциональности панели отсутствует backend, сначала
+    отдельный согласованный этап; нельзя выдавать UI-макет за готовую
+    функцию. DPI 100/125/150 и resize обязательны.
 
 ═══════════════════════════════════════════════════════════════
 §8. ЕДИНЫЙ ЖУРНАЛ INFO
@@ -420,14 +458,20 @@ R30 [Schema-вычисляемые packaging-утверждения] Packaging a
     configure; false positive чинить сужением scope, не ослаблением.
 R23 [PASS привязан к SHA] PASS фиксируется только на свой SHA; новые
     коммиты = новый run.
-R24 [Порядок этапов] (1) инвентаризация ВСЕХ незарегистрированных
-    skin-папок (включая Skin_51 вне диапазона), синхронное расширение
-    schema/registry/validator и merge всех пакетов корректным
-    инструментом; (2) CTest все targets PASS; (3) AuxiliaryPanelLayout
-    PASS в CI; (4) default-ppgu (R18) + миграция ThemeManager (R14) —
-    один контракторный коммит; (5) партия 50 тем одним скриптом (R19);
-    (6) окна по §7; (7) release gate (R22); (8) host acceptance;
-    (9) profiling.
+R24 [Порядок этапов] (1) завершить контракт Skin_052: merge tool,
+    legacy/Skin Studio schemas, registry, ThemeManager и contract tests
+    должны согласованно подтверждать одну тему; Skin_052 уже записан в
+    registry и pack status MERGED, но это не закрывает полный runtime
+    token contract; (2) все CTest targets PASS на точном SHA; (3) создать
+    default-ppgu (R18) и сгенерировать партию 50 тем одним скриптом (R19);
+    (4) завершить ThemeManager 21-token runtime mapping с поддержкой
+    legacy skins 1–51 и Skin Studio 52+, включая R34 ResourceRootResolver;
+    (5) реализовать shell/manager, Performance Display, AutoChords и
+    FX EDIT по §7; (6) полный Release Gate (R22); (7) повторная FL Studio
+    20 host acceptance на точном новом бинарнике; (8) CPU/RAM profiling.
+    Уже сообщённая пользователем проверка FL Studio 20/Windows 10
+    фиксируется как USER-REPORTED HOST ACCEPTANCE, но не переносится на
+    последующие бинарники без повторной проверки.
 R25 [Запрет обхода] Обход реестра/валидаторов ради зелёного CTest
     запрещён; обход = откат.
 R28 [Non-goals этапа] Каждый этап явно перечисляет, чего он НЕ делает.
@@ -503,7 +547,10 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
     REV 17.0 = MAJOR: добавлен R34 (единый портативный корень ресурсов и
     JUCE-free ResourceRootResolver), изменены I4/R16/R31/§9.5; введён
     класс EXPLICIT-PERMISSION с письменным разрешением и provenance;
-    уточнены §2, §15 и §17.
+    уточнены §2, §15 и §17. REV 17.1 = MINOR: актуализирован §2 по
+    состоянию Skin_052/Sound Registry/host acceptance/CI; §7 объединяет
+    Multi-Window, Main Performance/Edit Workspace и Performance Display;
+    R24 приведён к фактическому порядку следующих этапов.
 16.2 Ссылки на правила — только по R-ID; на инварианты — по I-ID.
 16.3 Документ — docs/PPGU_MASTER_PROMPT_RU.md; версия в INFO на этапе.
 16.4 Внутреннее противоречие документа — ошибка, фиксируется в INFO.

@@ -3,8 +3,8 @@
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 12 ноября 2026  
-Ветка: `main`  
-Последний commit перед текущей записью: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`
+Ветка: `work/signal-forge-consolidation`  
+Последний commit перед текущей записью: `61740417349a19c9d05d699f52017b8ccd37f9fe`
 
 ## 1. Назначение и продукт
 
@@ -24,8 +24,8 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 | SoundBank S6 / BankScanner | Полноценный универсальный scanner и end-to-end pipeline не подтверждены |
 | Общий PPGU Audio Engine для Guitar/Bass | DESIGNED, отдельный production target не выделен |
 | Bass Edition | PLANNED, не готов |
-| SOUND HUNTER REV 10.1 | DESIGNED, production-поиск и автонаполнение не реализованы |
-| FL Studio 20 host verification | Не подтверждена для актуального HEAD |
+| Sound Asset Registry REV 17.0 | Validator/policy gate и 16 unit cases есть; ingest/search automation и populated asset registry не подтверждены |
+| FL Studio 20 / Windows 10 | Пользователь подтвердил проверку своей сборки; binary SHA не зафиксирован, для нового release binary нужна повторная проверка |
 | CPU/RAM цели | Не подтверждены актуальными измерениями |
 
 ## 3. Подтверждённая техническая база и риски
@@ -53,18 +53,20 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 
 Принято: один общий низкоуровневый PPGU Audio Engine и два самостоятельных продукта — Guitar Edition и Bass Edition. Общими могут стать streaming, WAV/SFZ reader, cache, queues, state/preset infrastructure, MIDI primitives, FX infrastructure и QA. Guitar/Bass артикуляции, SoundBank, presets, product identity и UI-профили остаются раздельными. Это архитектурное решение, не готовая реализация.
 
-## 5. REV 10.1 — SOUND HUNTER
+## 5. SOUND HUNTER / SOUND ASSET REGISTRY — актуальная политика
 
-Зафиксировано в `docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md`:
-- GREEN/YELLOW/RED проверяются на уровне каждого конкретного asset; сайт сам по себе не гарантирует лицензию;
-- AUTO ADD — только для подтверждённых CC0/PD файлов с provenance, SHA-256, техническим screening и guitar-only gate;
-- YELLOW — ручной импорт; RED — исключён;
-- DEEP SEARCH расширяет существующий S6.5 pipeline, второй pipeline запрещён;
-- сетевые операции и анализ файлов выполняются вне audio callback;
-- GOLD требует технической проверки и человеческого прослушивания; COPYRIGHT SUSPECT блокирует commit;
-- MELODY 30 / PATTERN 50 / PUNK GROUP 40 — цели, не достигнутые показатели.
+Текущая политика задаётся MASTER PROMPT REV 17.0 §5.7 и
+`tools/validate_sound_asset_registry.py`: GREEN требует asset-level
+provenance, SHA-256, технического screening, подтверждённого guitar content
+и допустимого clearanceBasis (CC0/PD, CC-BY с точной атрибуцией,
+EXPLICIT_PERMISSION с проверенным письменным разрешением, собственные
+записи/DSP или коммерческая лицензия на embedding + redistribution).
+YELLOW не попадает в AUTO ADD; RED нельзя повышать решением куратора.
 
-Статус: DESIGNED. DeepSearchWorker, StyleClassifier, CuratorPanel, GREEN registry, новые проверенные звуки и H9 tests ещё не подтверждены как реализованные.
+Статус: POLICY/VALIDATOR IMPLEMENTED; 16 unit cases присутствуют.
+Автоматический discovery/ingest, заполненный production registry,
+полный SoundBank payload 7–10 GB и GOLD listening review остаются PENDING.
+Не создавать второй ingest pipeline: расширять только утверждённый S6.5.
 
 ## 6. Последние подтверждённые изменения
 
@@ -923,3 +925,16 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R28 non-goals:** не менялись production validator/policy, DSP/audio callback, APVTS, MIDI, ThemeManager, Skin_052, resource resolver, auxiliary windows, CMake or packaging.
 **CI:** run #970 на исходном SHA завершился FAILED на одном CTest target; после исправления ожидается новый run на точном коммите. Никакой BUILD VERIFIED / TESTED / COMPLETE ZIP статус новому SHA пока не присваивается.
 **Следующий этап:** после CTest PASS вернуться к согласованию Skin_052 через merge tool + schema + registry + ThemeManager; не считать manifest-only запись runtime integration.
+
+
+## 2026-11-12 — REV 17.1 / SIGNAL FORGE scope consolidation
+
+**Статус:** SPECIFICATION CONSOLIDATED; UI IMPLEMENTATION PENDING.
+**Рабочая ветка:** `work/signal-forge-consolidation`.
+**Родительский SHA:** `61740417349a19c9d05d699f52017b8ccd37f9fe`.
+**Изменения:** `docs/PPGU_MASTER_PROMPT_RU.md` обновлён до REV 17.1 MINOR; §2 заменён устаревший снимок REV 15/16 на проверенные факты main; §7 свёл повторяющиеся сообщения пользователя в единый контракт Main Performance / Edit Workspace / Multi-Window / Performance Display / AutoChords / FX EDIT; R24 обновлён под уже зарегистрированный Skin_052 и актуальный порядок работ. В INFO уточнён текущий Sound Asset Registry REV 17.0 и зафиксировано пользовательское подтверждение FL Studio 20 на Windows 10.
+**Skin_052 audit:** registry totalSkins=52; Skin_052 entry exists; `theme_pack_manifest.json` status=MERGED; merge tool, REV14 validator, legacy schema (1–51), Skin Studio schema (52+) и runtime dual-format ThemeManager path существуют. ThemeManager валидирует 21 palette token, но текущий Palette/LookAndFeel использует лишь подмножество; full 21-token control mapping и layout engine не завершены. Это partial runtime support, не полный skin contract.
+**CI baseline:** run #971, ID `43146185476`, SHA `61740417349a19c9d05d699f52017b8ccd37f9fe`, на момент записи IN_PROGRESS. Этот статус не подтверждает сборку/CTest/pluginval/package; результат проверить отдельно. Документный commit на новой ветке создаст собственный run, если workflow path filter его запустит.
+**Host acceptance:** USER-REPORTED — пользователь проверил свою сборку в FL Studio 20 на Windows 10. Binary SHA/матрица не привязаны к HEAD; это не переносится на будущие сборки.
+**R28 non-goals:** только документация и журнал; C++/DSP/audio callback/MIDI/APVTS, skins/assets/registry/schema, merge tool, CMake, workflow, package и branches кроме новой рабочей ветки не менялись. Ничего не удалялось из исторических журналов/веток/ассетов.
+**Открыто:** добавить Skin_052 cross-contract tests; довести ThemeManager до полноценного применения 21 токена с legacy compatibility; исправить packaging на копирование только зарегистрированных/валидных тем; реализовать ResourceRootResolver; создать default-ppgu и генератор партии 50 тем; JUCE panel shell/manager; Performance Display с реальными данными; AutoChords/FX EDIT backend integration; Release Gate и host test точного нового VST3; CPU/RAM profiling.
