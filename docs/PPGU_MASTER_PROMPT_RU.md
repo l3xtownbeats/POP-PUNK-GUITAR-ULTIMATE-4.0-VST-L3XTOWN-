@@ -1,10 +1,10 @@
-# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 16.0 UNIFIED
+# MASTER PROMPT — POP PUNK GUITAR ULTIMATE (PPGU) — REV 16.2 UNIFIED (FINAL)
 
-Единый операционный документ: законы, инварианты, реестр правил R01–R32,
+Единый операционный документ: законы, инварианты, реестр правил R01–R33,
 SUPERTEAM, движок, SoundBank, скины, окна, тесты, журнал, приёмка, DoD,
 протоколы (открытие/закрытие сессии, отката, разногласий, публикации),
 каталог отказов, self-check, шаблоны, глоссарий, non-goals.
-Заменяет REV 10/13/14/15.x. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
+Заменяет REV 10/13/14/15.x/16.0/16.1. Хранится как docs/PPGU_MASTER_PROMPT_RU.md;
 версия фиксируется в INFO на каждом этапе.
 Иерархия истины: INFO → control inventory/schema → этот промт → устные
 договорённости. При расхождении фактов INFO первичен, правку вносит
@@ -20,7 +20,13 @@ R01 [Pin-версии] JUCE 7.0.12, CMake 3.22, C++20, Windows x64, хост —
     регрессией, не внутри рабочего этапа. Уточнение JUCE API: в 7.0.12
     juce_add_binary_data принимает NAMESPACE, а не HEADER_NAMESPACE;
     примеры из черновых REV не копировать — сверять с JUCE CMake API
-    закреплённой версии (урок #827).
+    закреплённой версии (урок #827). В JUCE 7.0.12 juce_add_binary_data
+    принимает NAMESPACE, а не HEADER_NAMESPACE; сгенерированный заголовок —
+    BinaryData.h через include directory (через JuceHeader.h при
+    JUCE_TARGET_HAS_BINARY_DATA); путь <Namespace>/BinaryData.h из черновых
+    REV не используется. Зафиксированное расхождение чернового REV 13
+    (требует JUCE 8 / CMake >= 3.24) против pinned 7.0.12 / 3.22
+    разрешается в пользу R01 до отдельного этапа миграции.
 R02 [Один движок] Один Audio Engine семейства Guitar/Bass: общие
     streaming, WAV/SFZ reader, cache, queues, state/preset infra, MIDI
     primitives, FX infrastructure, QA. Артикуляции, SoundBank, пресеты,
@@ -46,6 +52,12 @@ R09 [Запрет молчаливого расширения объёма] Но
     сначала запись решения в INFO, потом код.
 R10 [Аудио-ревью] Изменения аудио-области — только ревью (A)+(B),
     отдельный коммит и regression-тесты (§9.2).
+R33 [Веточная гигиена] Рабочие этапы ведутся в main (или короткоживущих
+    ветках, сливаемых сразу после зелёного CI). Каждый закоммиченный
+    этап обязан быть разлит на ВСЕ актуальные ветки или явно помечен
+    как main-only; состояние «этап есть в main, а ветки не обновлены»
+    фиксируется в INFO как NOT YET VERIFIED, пока не подтверждено
+    (урок refresh-этапа: 41 ветка, all-branch rollout не верифицирован).
 
 ═══════════════════════════════════════════════════════════════
 §0.1. ИНВАРИАНТЫ ПРОЕКТА (менять запрещено без MAJOR-версии промта)
@@ -53,9 +65,9 @@ R10 [Аудио-ревью] Изменения аудио-области — т�
 I1 APVTS parameter IDs и их семантика.
 I2 Control inventory (набор control-ID).
 I3 Pin-версии R01.
-I4 Имя runtime-каталога тем: ровно `Skins`, рядом с .vst3. Распакованный
-    пакет обязан создавать runtime-структуру (R31); регистронезависимость
-    Windows не основание смешивать имена.
+I4 Имя runtime-каталога тем: ровно `Skins`, рядом с .vst3.
+    Распакованный пакет обязан создавать runtime-структуру (R31);
+    регистронезависимость Windows не основание смешивать SKINS/ и Skins/.
 I5 INFO как единственный журнал.
 I6 Словарь статусов §13.1.
 I7 Имя дефолт-скина: DEFAULT POP PUNK GUITAR ULTIMATE SKIN (default-ppgu).
@@ -86,29 +98,44 @@ Electric Sunburst Deluxe):
 Подтверждено: WAV/SFZ playback path; metadata index; background page
 streaming; fixed page cache; SFZ mapping (velocity/key/channel/RR);
 транспорт/Pattern Scheduler компонентно; DSP-компоненты FX; 300 preset
-definitions (НЕ все playable); policy contract SOUND HUNTER в tooling;
-редактор Blackout Voltage (skin-51): кнопка SKIN, палитры, Ctrl+K,
-persistence; runtime ищет `Skins` рядом с .vst3; AuxiliaryPanelLayout
-(geometry + тесты зарегистрированы, PASS в CI не подтверждён); control
-inventory в репо.
-Открытые дефекты инфраструктуры (зафиксированы аудитами и CI):
-- run #826: MSVC C1083 (generated BinaryData.h) — зафиксирован фикс
-  коммитом 0ef0ebe (PPGUTestData binary-data цель); run #827 создан,
-  на момент записи queued. Queued ≠ BUILT (R07).
-- Skin-дерево содержит папки, не зарегистрированные в
-  schema/registry/validator (аудит: 51 папка при 50-слотовой schema);
-  «папка есть» ≠ «зарегистрирована» (R26/R17).
-- Packaging-утверждение «ровно 50 theme manifests» — хардкод, подлежит
-  замене на schema-вычисляемое (R30).
-- Packaging кладёт SKINS/ как исходники и не создаёт runtime-структуру
-  Skins/ рядом с .vst3 в комплекте (R31).
-Не подтверждено: runtime skin switching; ThemeManager 21-token; галерея/
-hot-swap/rescan; PUNK GROUP в playMode; LED_indicator, Auto_Discover,
-Curator, Settings, About; window shell/manager; host acceptance;
-profiling; artwork части тем.
+definitions (НЕ все playable); policy contract SOUND HUNTER в tooling
+(validate_sound_asset_registry.py + пустой versioned registry, 12 unit
+cases, CTest target); редактор Blackout Voltage (skin-51): кнопка SKIN,
+палитры, Ctrl+K, persistence; runtime ищет `Skins` рядом с .vst3;
+AuxiliaryPanelLayout (geometry + тесты зарегистрированы, PASS в CI не
+подтверждён); control inventory в репо (commit bf436ae...).
+ОТКРЫТЫЙ RELEASE BLOCKER: run #859 (SHA d0eecea...) — skin pack
+validator G1–G4 PASS для Skin_052 «Carbon Relay» (PACK GENERATED /
+NOT MERGED / NOT RUNTIME-INTEGRATED; layout-координаты — metadata).
+Run #860 (SHA bf436ae...) — Release build PASS, CTest 11/12,
+единственный FAIL ppgu_skin_manifest_contract («unregistered skin
+folders present: Skin_052»); pluginval и packaging SKIPPED; COMPLETE
+ZIP не создавался.
+Исторические уроки: run #826 (ID 43017263448): MSVC C1083 на
+ppgu_processor_pattern_tests (generated BinaryData.h) — fix коммитом
+0ef0ebe (отдельная binary-data цель PPGUTestData с fixture
+tests/assets/ppgu_test_data.txt); run #827 (ID 43113647167) создан,
+на момент записи QUEUED — результат НЕ подтверждён (R07).
+Gap-аудит skin engine (commit be8b162): PluginEditor не использует
+PPGUThemeManager, цвета хардкодом; нет SKIN-кнопки/галереи/previews/
+Ctrl+K/hot-swap/persistence/rescan; ThemeManager валидирует лишь часть
+manifest; 51 папка Skin_01..Skin_51 при 50-слотовой schema (Skin_51
+вне диапазона, не зарегистрирован); per-skin preview.png/hero.webp/
+texture.png и полный комплект SVG/PNG control artwork отсутствуют;
+packaging кладёт исходники в SKINS/ внутри ZIP без runtime `Skins/`
+рядом с .vst3; нет UI/DPI/accessibility/LRU/persistence/
+audio-invariance/hot-swap тестов.
+Packaging-assertions содержат хардкод «ровно 50 theme manifests» —
+заменяется schema-вычисляемым (R30).
+Не подтверждено: runtime skin switching; ThemeManager 21-token;
+галерея/hot-swap/rescan; PUNK GROUP в playMode (сейчас MELODY/PATTERN);
+LED_indicator, Auto_Discover, Curator, Settings, About (ID в
+parity-контракте, кода нет); AuxiliaryPanelLayout PASS в CI; window
+shell/manager; FL Studio 20 host acceptance; CPU/RAM profiling;
+playable listening count пресетов; artwork части тем; all-branch
+rollout refresh (41 ветка, R33).
 Это снимок на дату последней записи INFO; перед этапом обновлять (§18).
 
-═══════════════════════════════════════════════════════════════
 §3. ДВИЖОК (аудио)
 ═══════════════════════════════════════════════════════════════
 3.1 SamplerEngine: 64 предвыделенных voice slots; cache miss не блокирует
@@ -191,10 +218,15 @@ R18 [Дефолт-скин] «DEFAULT POP PUNK GUITAR ULTIMATE SKIN» (default-p
     — 1:1 по §11. Рабочие имена в UI не показывать. Blackout Voltage
     остаётся темой, слетает с дефолта отдельным коммитом с
     fallback-тестом.
-R19 [Партии] 6 семейств x 8 + 2 special = 50 тем; каждая — собственный
-    характер; генерация одним скриптом tools/generate_skin_batch.py за
-    один прогон; генератор сам пишет манифест, валидатор читает его из
-    того же прогона.
+R19 [Партии] Объём партии: 6 семейств x 8 + 2 special = 50
+    (carbon_studio, neon_basement, chrome_parade, wood_summer,
+    vintage_tape, sunset_suburb + Hazard Line, светлая Whiteout Bleach).
+    Число 50 — ОБЪЁМ партии, НЕ счётчик реестра: стартовый индекс,
+    нумерация и регистрация всегда берутся из schema/manifest по
+    R17/R26 и НЕ хардкодятся. Каждая тема — собственный характер,
+    НЕ копия с другим hex; генерация одним скриптом
+    tools/generate_skin_batch.py за один прогон; генератор сам пишет
+    манифест, валидатор читает его из того же прогона.
 R20 [Устойчивость] Битая тема не роняет плагин: валидация, откат на
     default-ppgu + сообщение.
 R21 [Полнота payload] Пакет без полного набора ассетов не попадает в
@@ -232,25 +264,28 @@ R32 [Гигиена журнала] INFO — единственный журна
 ═══════════════════════════════════════════════════════════════
 §9. ТЕСТЫ
 ═══════════════════════════════════════════════════════════════
-9.1 CTest targets — авторитетный список в CMake (не число в промте):
-    SFZ parser, Pattern Scheduler, Chord Transition, Sample Pool, Page
-    Cache Slots, Bounded SPSC Queue, Sample Streaming Service, Sample
-    Metadata Index, ThemeManager contract, Sound Asset Registry
-    contract, Processor Pattern Integration, ppgu_skin_manifest_contract,
+9.1 CTest targets — авторитетный список в CMake (НЕ число ни в промте,
+    ни в CI, ни в INFO): SFZ parser, Pattern Scheduler, Chord
+    Transition, Sample Pool, Page Cache Slots, Bounded SPSC Queue,
+    Sample Streaming Service, Sample Metadata Index, ThemeManager
+    contract, Sound Asset Registry contract, Processor Pattern
+    Integration, ppgu_skin_manifest_contract,
     ppgu_auxiliary_panel_layout_contract (и все будущие). КРИТЕРИЙ
     ПРИЁМКИ — «все targets PASS на этом SHA»; фиксированные счётчики
     («12/12») не использовать ни в промте, ни в CI, ни в INFO.
-9.2 Regression-покрытие ДО изменения ownership: 8-root cap; отмена
-    metadata scan; drain при stop; overflow/cache-full counters; worker
-    exception/recovery через инъекционный seam (БЕЗ hooks в audio
-    callback); destruction processor при загрузке; 64 voices под
-    cache pressure.
+9.2 Regression-покрытие ДО изменения ownership (по итогам coverage
+    audit): лимит 8 уникальных streaming roots; отмена длительного
+    metadata scan; полный drain очереди при stop; service-level
+    queue-overflow/cache-full counters; worker exception/recovery
+    через инъекционный seam (БЕЗ тестовых hooks в audio callback);
+    destruction processor во время загрузки; 64 voices под cache
+    pressure.
 9.3 Skin-гейты G1–G4: контраст text/bg >= 4.0, accent/panel >= 2.2;
     паритет; ассеты/размеры; непрерывность ID и уникальность.
-9.4 Skin runtime-тесты: 1000 hot-swap'ов; persistence; ECO; DPI.
-9.5 Чистые модули — JUCE-free где возможно.
+9.4 Skin runtime-тесты: 1000 hot-swap'ов; persistence; ECO; DPI
+    100/125/150.
+9.5 Чистые модули (как AuxiliaryPanelLayout) — JUCE-free где возможно.
 
-═══════════════════════════════════════════════════════════════
 §10. ФОРМАТ РАБОТЫ И СКОРОСТЬ
 ═══════════════════════════════════════════════════════════════
 10.1 Один коммит на подэтап; один CI-запуск на пакет.
@@ -355,15 +390,20 @@ R29 [Гейт документации] README/DOWNLOAD публикуются �
 - имена групп/артистов/чужих продуктов в UI и названиях;
 - обновлять JUCE/CMake в рабочем этапе (R01);
 - выдавать манифесты за скины; переносить PASS между SHA (R07, §13);
+- оставлять этап не разлитым по веткам без пометки (R33);
 - нарушать инварианты §0.1.
 
 ═══════════════════════════════════════════════════════════════
 §16. УПРАВЛЕНИЕ ЭТИМ ДОКУМЕНТОМ
 ═══════════════════════════════════════════════════════════════
 16.1 MINOR (+0.1) — уточнения без изменения законов/инвариантов/реестра;
-    MAJOR (+1.0) — изменение §0/§0.1/реестра R01–R32. Каждое изменение —
+    MAJOR (+1.0) — изменение §0/§0.1/реестра R01–R33. Каждое изменение —
     запись в INFO. (REV 16.0 = MAJOR: добавлены R30–R32, уточнены R07,
-    R15, R24, I4.)
+    R15, R24, I4. REV 16.1 = MAJOR: добавлен R33, уточнены R01/§2/§15.
+    REV 16.2 = MINOR: удалён остаточный счётчик из §9.1, восстановлены
+    точные факты блокера в §2 (runs #859/#860), self-check §21 дополнен
+    веточным пунктом 6, устранено противоречие R19↔R17/R30 (объём
+    партии отделён от счётчиков реестра).)
 16.2 Ссылки на правила — только по R-ID; на инварианты — по I-ID.
 16.3 Документ — docs/PPGU_MASTER_PROMPT_RU.md; версия в INFO на этапе.
 16.4 Внутреннее противоречие документа — ошибка, фиксируется в INFO.
@@ -404,9 +444,9 @@ INFO hygiene (шапка отстаёт от записей; два раздел
   [ ] self-check §21 пройден письменно;
   [ ] INFO-запись добавлена (не раньше факта); шапка INFO обновлена
       до даты последней записи (R32);
-  [ ] риски §3.4 обновлены.
+  [ ] риски §3.4 обновлены;
+  [ ] статус разлития этапа по веткам зафиксирован (R33).
 
-═══════════════════════════════════════════════════════════════
 §19. ШАБЛОНЫ
 ═══════════════════════════════════════════════════════════════
 19.1 INFO:
@@ -446,5 +486,6 @@ Runtime-структура — рабочий каталог Skins/ рядом �
 3) Какие non-goals (R28) не нарушены?
 4) Какие статусы словаря §13.1 присвоены и чем подтверждены?
 5) Что осталось НЕ сделанным — перечислено ли в INFO явно?
+6) Этап разлит на все актуальные ветки или явно помечен main-only (R33)?
 Если любой пункт не отвечает со ссылкой на факт — артефакт остаётся в
 статусе PENDING, объявление финальным запрещено (R07).
