@@ -1597,3 +1597,22 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** на момент этой записи реализация всех 300 playable presets и полный listening QA не подтверждены. Новая сборка/тесты по данному требованию не запускались; аудиодвижок и preset catalog в рамках записи не изменялись.
 
 **РЕЗУЛЬТАТ:** REQUIREMENT LOCKED; 300 PRESET DEFINITIONS ≠ 300 VERIFIED PLAYABLE PRESETS. PLAYABILITY, AUDIBLE DIFFERENTIATION, STYLE COVERAGE AND LISTENING QA ARE OPEN RELEASE GATES.
+
+
+## 2026-11-12 — PATTERN mode ready accompaniment requirement
+
+**Статус:** PRODUCT REQUIREMENT ACCEPTED; END-TO-END PATTERN PLAYBACK NOT YET VERIFIED.
+
+**ПРОВЕРКА:** в factory catalog есть PATTERN definitions с groove, articulation, palmMuteMap, accentMap, humanize и ссылками на incoming host MIDI chords. При этом часть записей явно имеет статус `catalog-definition-awaiting-pattern-engine-and-recorded-performance-library`. Наличие PatternScheduler в исходниках само по себе не подтверждает, что пользователь уже получает законченный аккомпанемент при выборе каждого PATTERN-пресета.
+
+**АНАЛИЗ / утверждённое поведение:** PATTERN — самостоятельный режим готового гитарного аккомпанемента. При выборе PATTERN-пресета пользователь должен получать исполняемую ритм-партию в выбранной стилистике, а не только тембр одиночных нот или описание groove. Пресет определяет характер ритмики, артикуляцию, рисунок down/up strokes, palm-mute/open-chord чередование, акценты, динамику и музыкальный характер. Настройки пользователя управляют интенсивностью/скоростью/свингом/humanize и другими предусмотренными контролами. Аккомпанемент должен следовать MIDI-аккордам/нотному входу пользователя там, где это предусмотрено режимом, синхронизироваться с host tempo/transport и корректно останавливаться/менять аккорд/переключать пресет без зависших нот.
+
+**Содержание банка:** PATTERN-пресеты должны охватывать разные готовые варианты куплетов, припевов, palm-muted verses, открытых аккордов, downstroke eighths, alternate picking, syncopated stops, octave hooks, ska/offbeat и другие поп-панк/смежные ритмические стили. Сохраняются style-inspired направления утверждённого списка групп и универсальные заводские pop-punk patterns. Все партии должны быть оригинальными, без копирования защищённых записей/точных транскрипций.
+
+**КРИТЕРИИ ПРИЁМКИ:** выбор PATTERN-пресета запускает реальный слышимый pattern playback; pattern реагирует на предусмотренные настройки и входные MIDI-аккорды; темп и transport следуют хосту; есть корректные note-off/stop/loop/пресетные переходы; разные пресеты дают слышимо разные ритмические рисунки и артикуляции. Автоматические MIDI/render tests дополняются прослушиванием. Не считать PATTERN готовым только по JSON metadata или наличию scheduler class.
+
+**ИСПРАВЛЕНИЕ / план:** провести end-to-end аудит пути preset selection → pattern data → PatternScheduler → MIDI/audio event generation → SamplerEngine → audible output. Проверить, какие паттерны уже реально поддержаны, какие ждут performance samples/артикуляции, затем закрыть пробелы без замены текущей SamplerEngine/PatternScheduler архитектуры. Обеспечить понятный выбор/предпрослушивание ритмических вариантов и сохранение preset-specific groove.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** эта запись фиксирует требование; код PatternScheduler, sampler, preset catalog и DSP в рамках записи не изменялся. Полноценное end-to-end PATTERN playback для всего каталога не подтверждено.
+
+**РЕЗУЛЬТАТ:** PATTERN READY ACCOMPANIMENT REQUIREMENT LOCKED; FULL PRESET-DRIVEN, HOST-SYNCED, AUDIBLY DISTINCT PATTERN PLAYBACK REMAINS AN OPEN IMPLEMENTATION / QA GATE.
