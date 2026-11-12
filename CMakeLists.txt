@@ -261,7 +261,14 @@ if(BUILD_TESTING)
             NAME ppgu_sound_asset_registry_contract
             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSoundAssetRegistry.py
         )
+        add_test(
+            NAME ppgu_skin_batch_generator_contract
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSkinBatchGenerator.py
+        )
         set_tests_properties(ppgu_sound_asset_registry_contract PROPERTIES
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+        set_tests_properties(ppgu_skin_batch_generator_contract PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
     endif()
