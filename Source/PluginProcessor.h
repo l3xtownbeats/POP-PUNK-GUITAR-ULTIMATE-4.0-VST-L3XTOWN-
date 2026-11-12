@@ -87,6 +87,7 @@ private:
     std::vector<float> doubleWidthDelay;
     size_t doubleWidthWritePosition = 0;
     float doubleWidthLowpassState = 0.0f;
+    float doubleWidthMixSmoothed = 0.0f;
     std::array<float, 2> eqLowState {};
     std::array<float, 2> eqHighState {};
     std::array<float, 2> compressorEnvelope {};
