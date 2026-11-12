@@ -33,11 +33,21 @@ The product direction is immediate playability, a focused control surface and an
 
 ## Current build status
 
-**Source HEAD and authoritative engineering status:** see the latest dated entry in [Info.txt](Info.txt); CI status is always evaluated against the exact SHA recorded there.
+**Source HEAD and authoritative engineering status:** see the latest dated entry in [Info.txt](Info.txt); CI status is always evaluated against the exact source SHA.
 
-The latest recorded source correction fixes CMake test discovery: `include(CTest)` initializes `BUILD_TESTING` before conditional test targets, including the auxiliary-panel geometry contract. This is a source-level correction only; no build or test PASS is inferred from it.
+The latest recorded C++ source correction is the JUCE 7.0.12 `juce::var::getProperty` call fix in `Source/UI/ThemeManager.cpp`, commit `8bd10b20cc9303452d19a46fcf4edea3e11488f1`. It corrects the two-argument API usage in Skin Studio palette mapping. The fix is committed source, not a verified Windows build.
 
-**Current verification:** no GitHub Actions run or commit status checks are currently visible for this HEAD through the available repository status query. The combined-status query for the recorded source HEAD returned no status checks. The available workflow lookup is limited to PR-triggered runs and returned no entries; that does not establish that no other Actions runs exist and is not a PASS. Therefore Windows Release build, CTest, pluginval strictness 5 and VST3 packaging are **NOT VERIFIED** for current HEAD. The older run #832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
+**Latest detailed CI evidence:** run #963 (ID `43134831986`) on the previous source SHA `34f074057b9e7572b60e64549de7006bc2307f61` passed configure but failed while compiling VST3/test executables with MSVC C2660 in ThemeManager. CTest, VST3 locate, pluginval strictness 5 and packaging were skipped. The source fix `8bd10b2...` has no confirmed successful rerun in the available evidence. Its combined-status query returned no status checks; the available commit workflow lookup is PR-triggered only and returned no entries, which does not establish the absence of push-triggered runs.
+
+Therefore Windows Release build, all CTest targets, pluginval strictness 5 and VST3 packaging remain **PENDING / NOT VERIFIED** for the fixed source. FL Studio 20 acceptance and CPU/RAM profiling are also pending. No COMPLETE ZIP is declared available.
+
+- [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
+- [Current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
+- [Single engineering journal — Info.txt](Info.txt)
+
+No COMPLETE ZIP is declared available until the current source build, all registered regression tests, pluginval and package validation pass. FL Studio 20 acceptance remains a separate manual gate.
+
+#832 / commit `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b` is historical evidence only and must not be treated as validation of current source.
 
 - [GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
 - [Current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
@@ -168,7 +178,7 @@ The exact package layout is documented in [DOWNLOAD.md](DOWNLOAD.md); the runtim
 - [Skin/UI gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
 - [Sample sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
 
-**Specification authority:** MASTER PROMPT REV 16.0 UNIFIED is stored in [docs/PPGU_MASTER_PROMPT_RU.md](docs/PPGU_MASTER_PROMPT_RU.md) and supersedes REV 10/13/14/15.x. Factual project status and conflict resolution remain governed by [Info.txt](Info.txt), then the control inventory/schema, then REV 16.0.
+**Specification authority:** MASTER PROMPT REV 16.2 UNIFIED (FINAL) is stored in [docs/PPGU_MASTER_PROMPT_RU.md](docs/PPGU_MASTER_PROMPT_RU.md) and supersedes REV 10/13/14/15.x. Factual project status and conflict resolution remain governed by [Info.txt](Info.txt), then the control inventory/schema, then REV 16.2.
 
 ---
 
