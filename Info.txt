@@ -1297,3 +1297,12 @@ User explicitly reaffirmed that finding and downloading new guitar libraries is 
 Поиск расширен на dry DI, palm-muted power chords, chugs, punk riffs, octave hooks, open chords, акустику, clean/crunch/distorted multisamples, one-shots и performance phrases.
 
 Фактический статус этого раунда: изучены лицензионные модели и обновлён индекс. Новые коммерческие банки не скачаны, не оплачены и не интегрированы; новых SHA-256 и approved assets нет. Не считать отсутствие запрета на сайте достаточным основанием для включения в дистрибутив.
+
+
+## 2026-11-12 — Cabinet IR license sweep and acquisition attempt
+
+Reviewed the official Darwin's Cat editor page: Jester Dyne Brutal Pack (15 IRs) and Emerald Pack (6 IRs) are stated by publisher to be CC0/public domain / free for commercial use with no attribution. Total 21 IRs. The browser page indicates ZIP download in the editor and no signup. Recorded as GREEN-LICENSE / NOT ACQUIRED; the current runtime did not provide a successful transfer of the ZIP bytes, so no archive hash, extracted file hashes, WAV metadata, duplicate scan, audition or integration exists yet.
+
+Reviewed Overdriven.fr free cabinet IR terms. Although musical/video commercial use is permitted, redistribution with audio software/hardware products is expressly forbidden without written agreement. Marked RED for embedding pending written permission; not to bundle.
+
+Felitronics 69-IR pack remains GREEN-LICENSE / acquisition and QA pending under CC BY 4.0 with attribution. No IR archives were integrated during this pass. Actual attempt to fetch Overdriven direct endpoint failed; this does not imply the source site is unavailable to a normal browser.
