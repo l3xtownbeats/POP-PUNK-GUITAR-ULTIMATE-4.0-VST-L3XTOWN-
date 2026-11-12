@@ -1,29 +1,10 @@
-# PPGU CODE — append-only implementation index
+undefined
 
-This file is the technical change index for POP PUNK GUITAR ULTIMATE. Info.txt remains the authoritative development journal and status chronology. Never treat a planned item as implemented, a source commit as a successful build, or CI success as DAW host acceptance.
+## 2026-11-12 — DREAMING IN NEON master overlay contract
 
-## 2026-11-12 — POP PUNK ULTIMATE SKIN implementation kickoff
-
-- Branch: feature/pop-punk-ultimate-skin-ui
-- Base: main @ 61740417349a19c9d05d699f52017b8ccd37f9fe
-- Scope: Source/PluginEditor.cpp only; preserve processor, DSP, APVTS IDs, MIDI routing, sampler, and attachments.
-- Editor geometry changed to a wide 1648x928 shell with a top header, left preset browser, central performance surface, right AMP & TONE strip, and bottom MIDI keyboard deck.
-- Existing APVTS-bound knobs, FX toggles, preset catalog, and MIDI keyboard remain the live controls; no fake audio controls are introduced.
-- Temporary vector guitar/banner artwork is explicitly a placeholder pending the approved source artwork as packaged skin assets.
-- Not complete: exact visual fidelity to the three approved references; AutoChords and FX EDIT interactive panels; simultaneous panel state; final artwork integration; resize/DPI review; build, CTest, pluginval, package, and FL Studio 20 host validation.
-
-## 2026-11-12 — UI acceptance matrix and journal governance
-
-- User reconfirmed the complete UI/control/panel acceptance matrix and explicitly required continuous development/change journaling.
-- The three approved reference images remain binding: main UI=image 3; AutoChords=image 1; FX EDIT + AutoChords=image 2.
-- Fresh PR #27 review: Draft/open; head `888733fdac84b6f7fc28731dcabddb4bb2ea019a`; no confirmed CI PASS obtained from the combined-status query.
-- Audit findings: auxiliary panel components/window manager are not wired into PluginEditor; AuxiliaryPanelLayout is geometry-only and its overflow branch exposes only the first panel; preset/search/category controls are assigned twice in resized(), so browser bounds override header bounds; guitar hero is still a source-commented placeholder.
-- This entry changes documentation only. No production code, build, tests, pluginval, package, or DAW verification performed.
-- Governance: append Info.txt and CODE.txt together on each implementation commit; record exact SHA and evidence; never promote PLANNED/IMPLEMENTED/BUILT/TESTED/DAW VERIFIED without corresponding proof.
-
-## 2026-11-12 — UI layout regression correction
-
-- Removed duplicate header bounds assignments for presetBox, presetSearch and categoryBox; these controls are owned by the left browser column.
-- AuxiliaryPanelLayout overflow now computes a compact tiled placement for every requested panel and marks all placements visible instead of exposing only the first panel.
-- Updated geometry regressions to assert all overflow panels are visible, inside the work area, and non-overlapping; extreme scale retains all panel placements.
-- Status: source changes implemented; build, CTest, pluginval and FL Studio 20 verification pending. No JUCE panel host has been wired yet.
+- Added `docs/PPGU_NEON_SKIN_MASTER_PROMPT_RU.md` as the binding record for the three approved visual references and explicit UI decisions.
+- Panel model: in-plugin overlays; X/restore-maximize square/ON affordances as applicable; detached panels deferred to N5.
+- N1 knobs use actual APVTS labels (variant A); no new APVTS parameters until separate N6 ticket.
+- FX EDIT parameter controls and GR stay disabled until real parameter/measurement paths exist; AutoChords Preview stays disabled until real audio/MIDI integration.
+- Licensed/CPU/BPM indicators must use truthful sources only.
+- Documentation-only commit; production source unchanged; no build, CTest, pluginval or DAW pass claimed.
