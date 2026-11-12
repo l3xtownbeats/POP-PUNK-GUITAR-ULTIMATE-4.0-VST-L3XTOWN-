@@ -418,3 +418,15 @@ F. Package: атомарная публикация и отчёт; затем п
 **Definition of Done:** один подготовленный пакет импортируется один раз и корректно используется в обоих режимах; отображается честная карта возможностей; playback и MIDI проходят тесты; память не удваивается из-за наличия двух режимов.
 
 Статус: SPECIFICATION APPROVED; реализация и проверка в VST3 ещё не подтверждены.
+
+## 15.16. SOUND FORGE FIRST IMPLEMENTATION SLICE — 2026-11-12
+
+Added `tools/soundforge/ppgu_soundforge.py`: dependency-free offline CLI with `scan` and `package` commands. It reads common SFZ `<global>`, `<master>`, `<group>`, `<region>` inheritance; checks referenced mono/stereo WAV headers, path traversal, missing assets, sample rate and frame count; computes SHA-256 in 1 MiB chunks; reports note range, velocity ranges/layer count, round-robin length and conservative articulation-name hints; writes `instrument-package.json`; packages referenced SFZ/WAV into a staging directory and publishes separately. It does not modify source assets or run inside VST3.
+
+Added `tests/TestSoundForge.py`, registered as `ppgu_soundforge_contract` in CTest, and `tools/soundforge/README.md`.
+
+Runtime integration finding: `PopPunkGuitarUltimateAudioProcessor` already owns one `SamplerEngine sampler`. Melody mode sends direct MIDI notes to it; Pattern/Rhythm mode sends scheduled MIDI events to the same sampler. Thus one loaded SFZ bank is already shared between both modes; only event generation differs. The visible mode label is now RHYTHM while the internal parameter ID/index and preset category remain backward-compatible.
+
+New source discovery: Boyss-Sound-e-Scapes Guitar DI Lite (96 WAV, 24-bit/44.1 kHz, 2 round robins, 3 velocity layers, dry DI) is a strong candidate for Melody mode and amp/cab processing. Official developer page: https://www.boyss-sound-e-scapes.com/7th-year-free-pack . Current environment could not retrieve binary downloads (DNS/network unavailable); asset is NOT recorded as downloaded or integrated. Existing CI workflow already clones FreePats and Karoryfer CC0 sources and downloads Meta Open Sound releases.
+
+Status: CLI implementation committed; automated CI verification pending. Full denoise/enhancement, audio editing, GUI and automatic velocity/RR authoring remain future work. The first slice validates and packages existing maps; it does not invent unsupported articulations or generate new recorded performances.
