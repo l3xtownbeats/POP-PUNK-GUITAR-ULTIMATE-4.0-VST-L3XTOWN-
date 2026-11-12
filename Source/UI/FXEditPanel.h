@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include <memory>
+#include <array>
 #include <vector>
 
 class PPGUFXEditPanel final : public juce::Component
@@ -29,7 +30,7 @@ private:
     };
     void selectModule(int index);
     juce::AudioProcessorValueTreeState& state;
-    std::vector<Module> modules;
+    std::array<Module, 7> modules;
     std::vector<std::unique_ptr<Control>> controls;
     int selectedModule = 0;
     juce::Label hint;
