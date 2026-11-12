@@ -657,3 +657,24 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 6. Theme Gallery must discover themes dynamically, include previews/search/family/favorites and honest error states; no hardcoded 1..51 cap.
 
 **Статус:** выполнен ограниченный source audit и создана спецификация. В этом цикле PluginEditor, ThemeManager, AutoChords engine и audio code не менялись; CI/visual/DAW acceptance не запускались. Следующий implementation pass должен отдельно реализовать keyboard collapse + ion-blue theme token and test AutoChords PATTERN-only routing before claiming completion.
+
+
+## 2026-11-12 — DOUBLE width DSP + color-coded FX controls
+
+**Branch:** `work/ppgu-toolchain-qa-rev17-1`
+**Source commits:** `cc08faa2953abdd9bfd5e10033a6ff6d359d9a42` → `c896073e528fffebbba21d84e613e944a2f87ddb` → `21751abc444d4428d750cb67e5a98f72002ced73` → `3a79120704482765ba9e74a923be8ac1ff6de19b`
+**Parent of first source commit:** `2a8e86eb69ec56ae4736ecbc7a12d43a58b54877`
+
+**Changed files / exact blob SHAs:**
+- `Source/PluginProcessor.h` — `fd7383965edf1439ca1257a602319172f96a8a9b`; added preallocated DOUBLE delay state.
+- `Source/PluginProcessor.cpp` — `b5151bf95fe215396f01258ab365e4d3328ac7f0`; prepare/release lifecycle, 8th FX slot appended, mono-compatible Haas-inspired Mid/Side widening DSP.
+- `Source/PluginEditor.h` — `d75798f369101ae66c40af6826a8e4434c82ea0f`; FX controls/attachments expanded 7→9; added Flanger and Double Width.
+- `Source/PluginEditor.cpp` — `79b873bfcf5d7c37a3d15d2c4c7116f35fae1392`; nine FX edit groups and per-effect accent identities.
+
+**DSP contract:** preserve original Mid; derive high-passed delayed Mid Side layer (12 ms, 180 Hz HP corner), scale with existing `doubleTrackMix`, emit L=M+S/R=M-S. Mono fold-down preserves Mid algebraically. Buffer allocated outside callback. Mono output remains unchanged.
+
+**UI contract:** unique accent families: Compressor amber, EQ cyan, Distortion green, Chorus violet, Flanger blue, Delay orange, Reverb teal, Cabinet silver, Double Width ion-blue. Main rack has nine direct controls.
+
+**Validation:** source read-back/static symbol checks passed. Windows VST3 GitHub Actions run `43205333451` was IN_PROGRESS at log time on `3a79120704482765ba9e74a923be8ac1ff6de19b`. No local compile, CTest, pluginval or DAW listening result claimed. Stereo width/mono-sum/headroom/CPU automated tests remain required.
+
+**Status:** source implementation committed; CI/audio validation pending.
