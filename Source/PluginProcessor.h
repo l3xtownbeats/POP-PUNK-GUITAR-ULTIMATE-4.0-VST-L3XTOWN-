@@ -49,9 +49,18 @@ public:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     bool consumePanicRequest() noexcept { return panicRequested.exchange(false, std::memory_order_acq_rel); }
+    // Lock-free read model for the UI; never query MidiKeyboardState from a UI timer.
+    bool isMidiNoteHeld(int midiNote) const noexcept
+    {
+        if (midiNote < 0 || midiNote >= 128) return false;
+        for (const auto& channel : displayHeldNotes)
+            if (channel[static_cast<size_t>(midiNote)].load(std::memory_order_relaxed)) return true;
+        return false;
+    }
 
 private:
     std::atomic<bool> panicRequested { false };
+    std::array<std::array<std::atomic<bool>, 128>, 16> displayHeldNotes {};
     double currentSampleRate = 44100.0;
     int maximumBlockSize = 512;
     ppgu::sampler::SamplerEngine sampler;
