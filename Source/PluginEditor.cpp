@@ -28,27 +28,16 @@ juce::String fromWidePath(const wchar_t* value, int length)
 
 // Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
 
-namespace
-{
-    const juce::Colour bg { 0xff111116 };
-    const juce::Colour panel { 0xff202027 };
-    const juce::Colour panel2 { 0xff17171d };
-    const juce::Colour pink { 0xffed238b };
-    const juce::Colour pale { 0xfff4f0f4 };
-    const juce::Colour muted { 0xffaaa8b2 };
-}
-
-
 namespace { void getPluginModuleAnchor() {} }
 
 void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
 {
  const float d=juce::jmin((float)w,(float)h)*.76f,r=d*.5f,cx=x+w*.5f,cy=y+h*.5f-2,angle=start+pos*(end-start);
  g.setColour(palette.shadow.withAlpha(.62f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
- juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.border);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+ juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.controlBorder);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
  juce::Path value;value.addCentredArc(cx,cy,r+5,r+5,0,start,angle,true);g.setColour(slider.isEnabled()?palette.accentGlow:palette.textDisabled.withAlpha(.72f));g.strokePath(value,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- g.setGradientFill(juce::ColourGradient(palette.controlFace.brighter(.12f),cx,cy-r,palette.controlBg.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
- juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.text);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.ledOn);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
+ g.setGradientFill(juce::ColourGradient(palette.controlFace.brighter(.12f),cx,cy-r,palette.controlBg.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.controlBorder);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
+ juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.textPrimary);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.ledOn);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
 }
 void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool hi,bool down)
 {
@@ -69,34 +58,35 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
     setSize(1120, 840);
+    const auto& initialPalette = themeManager.getPalette();
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
     setResizeLimits(980, 800, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
-    titleLabel.setColour(juce::Label::textColourId, pale);
+    titleLabel.setColour(juce::Label::textColourId, initialPalette.textPrimary);
     addAndMakeVisible(titleLabel);
     subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
     subtitleLabel.setFont(juce::Font(9.5f, juce::Font::bold));
-    subtitleLabel.setColour(juce::Label::textColourId, pink);
+    subtitleLabel.setColour(juce::Label::textColourId, initialPalette.accent);
     addAndMakeVisible(subtitleLabel);
     presetBox.setTextWhenNothingSelected("FACTORY PRESET CATALOG");
-    presetBox.setColour(juce::ComboBox::backgroundColourId, panel2);
-    presetBox.setColour(juce::ComboBox::textColourId, pale);
-    presetBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    presetBox.setColour(juce::ComboBox::backgroundColourId, initialPalette.controlBg);
+    presetBox.setColour(juce::ComboBox::textColourId, initialPalette.textPrimary);
+    presetBox.setColour(juce::ComboBox::outlineColourId, initialPalette.accent.withAlpha(0.5f));
     addAndMakeVisible(presetBox);
     categoryBox.addItem("ALL PRESETS", 1);
     categoryBox.addItem("MELODY", 2);
     categoryBox.addItem("PATTERN", 3);
     categoryBox.setSelectedId(1, juce::dontSendNotification);
-    categoryBox.setColour(juce::ComboBox::backgroundColourId, panel2);
-    categoryBox.setColour(juce::ComboBox::textColourId, pale);
+    categoryBox.setColour(juce::ComboBox::backgroundColourId, initialPalette.controlBg);
+    categoryBox.setColour(juce::ComboBox::textColourId, initialPalette.textPrimary);
     addAndMakeVisible(categoryBox);
-    presetSearch.setTextToShowWhenEmpty("SEARCH PRESETS...", muted);
-    presetSearch.setColour(juce::TextEditor::backgroundColourId, panel2);
-    presetSearch.setColour(juce::TextEditor::textColourId, pale);
-    presetSearch.setColour(juce::TextEditor::outlineColourId, pink.withAlpha(0.4f));
+    presetSearch.setTextToShowWhenEmpty("SEARCH PRESETS...", initialPalette.textSecondary);
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, initialPalette.controlBg);
+    presetSearch.setColour(juce::TextEditor::textColourId, initialPalette.textPrimary);
+    presetSearch.setColour(juce::TextEditor::outlineColourId, initialPalette.accent.withAlpha(0.4f));
     addAndMakeVisible(presetSearch);
     loadFactoryPresetCatalog();
     presetBox.onChange = [this] { if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size())) applyFactoryPreset(visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId()-1)]); };
@@ -141,8 +131,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     categoryBox.onChange = refreshPresetList;
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
-    loadButton.setColour(juce::TextButton::buttonColourId, pink);
-    loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    loadButton.setColour(juce::TextButton::buttonColourId, initialPalette.accent);
+    loadButton.setColour(juce::TextButton::textColourOffId, initialPalette.windowBg);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
@@ -158,39 +148,39 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             : "LIBRARY FILE NOT FOUND  /  " + savedSfzFile.getFileName(),
             juce::dontSendNotification);
     }
-    statusLabel.setColour(juce::Label::textColourId, muted);
+    statusLabel.setColour(juce::Label::textColourId, initialPalette.textSecondary);
     statusLabel.setFont(juce::Font(11.0f));
     addAndMakeVisible(statusLabel);
     melodyTab.setClickingTogglesState(false);
     patternTab.setClickingTogglesState(false);
     for (auto* b : { &melodyTab, &patternTab }) {
-        b->setColour(juce::TextButton::buttonColourId, panel2);
-        b->setColour(juce::TextButton::textColourOffId, pale);
+        b->setColour(juce::TextButton::buttonColourId, initialPalette.controlBg);
+        b->setColour(juce::TextButton::textColourOffId, initialPalette.textPrimary);
         addAndMakeVisible(*b);
     }
     modeBox.addItem("MELODY", 1);
     modeBox.addItem("PATTERN", 2);
-    modeBox.setColour(juce::ComboBox::backgroundColourId, panel2);
-    modeBox.setColour(juce::ComboBox::textColourId, pale);
-    modeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    modeBox.setColour(juce::ComboBox::backgroundColourId, initialPalette.controlBg);
+    modeBox.setColour(juce::ComboBox::textColourId, initialPalette.textPrimary);
+    modeBox.setColour(juce::ComboBox::outlineColourId, initialPalette.accent.withAlpha(0.5f));
     addAndMakeVisible(modeBox);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "playMode", modeBox);
     startModeBox.addItem("HOST", 1);
     startModeBox.addItem("HOST START", 2);
     startModeBox.addItem("INTERNAL", 3);
-    startModeBox.setColour(juce::ComboBox::backgroundColourId, panel2);
-    startModeBox.setColour(juce::ComboBox::textColourId, pale);
-    startModeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    startModeBox.setColour(juce::ComboBox::backgroundColourId, initialPalette.controlBg);
+    startModeBox.setColour(juce::ComboBox::textColourId, initialPalette.textPrimary);
+    startModeBox.setColour(juce::ComboBox::outlineColourId, initialPalette.accent.withAlpha(0.5f));
     addAndMakeVisible(startModeBox);
     startModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "syncMode", startModeBox);
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
     keyboard->setKeyWidth(18.0f);
-    keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour(0xffe8e7eb));
-    keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour(0xff17171d));
-    keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, juce::Colour(0xff34343d));
-    keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
-    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
+    keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, initialPalette.highlight);
+    keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, initialPalette.controlBg);
+    keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, initialPalette.controlBorder);
+    keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, initialPalette.accent.withAlpha(0.35f));
+    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, initialPalette.accent.withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
     patternTab.onClick = [this] { modeBox.setSelectedId(2); };
@@ -201,10 +191,10 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     for (size_t i = 0; i < fxButtons.size(); ++i) {
         auto& b = fxButtons[i];
         b.setClickingTogglesState(true);
-        b.setColour(juce::TextButton::buttonColourId, panel2);
-        b.setColour(juce::TextButton::buttonOnColourId, pink);
-        b.setColour(juce::TextButton::textColourOffId, pale);
-        b.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+        b.setColour(juce::TextButton::buttonColourId, initialPalette.controlBg);
+        b.setColour(juce::TextButton::buttonOnColourId, initialPalette.accent);
+        b.setColour(juce::TextButton::textColourOffId, initialPalette.textPrimary);
+        b.setColour(juce::TextButton::textColourOnId, initialPalette.windowBg);
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
         addAndMakeVisible(b);
     }
@@ -213,7 +203,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
     for (auto* l : { &ampTitle, &fxTitle, &playbackTitle }) {
         l->setFont(juce::Font(15.0f, juce::Font::bold));
-        l->setColour(juce::Label::textColourId, pink);
+        l->setColour(juce::Label::textColourId, initialPalette.accent);
         addAndMakeVisible(*l);
     }
     juce::PropertiesFile::Options options;
@@ -272,17 +262,18 @@ PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorE
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
 {
+    const auto& p = themeManager.getPalette();
     s.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     s.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 46, 16);
-    s.setColour(juce::Slider::rotarySliderFillColourId, pink);
-    s.setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
-    s.setColour(juce::Slider::thumbColourId, pale);
-    s.setColour(juce::Slider::textBoxTextColourId, pale);
+    s.setColour(juce::Slider::rotarySliderFillColourId, p.accent);
+    s.setColour(juce::Slider::rotarySliderOutlineColourId, p.controlBorder);
+    s.setColour(juce::Slider::thumbColourId, p.textPrimary);
+    s.setColour(juce::Slider::textBoxTextColourId, p.textPrimary);
     s.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     addAndMakeVisible(s);
     l.setText(name, juce::dontSendNotification);
     l.setFont(juce::Font(9.5f, juce::Font::bold));
-    l.setColour(juce::Label::textColourId, muted);
+    l.setColour(juce::Label::textColourId, p.textSecondary);
     l.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(l);
 }
