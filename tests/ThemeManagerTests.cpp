@@ -88,7 +88,7 @@ int main()
     if (skin52Loaded)
     {
         expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
-        expect(manager.getPalette().name == "Carbon Relay", "Skin_052 name is decoded");
+        expect(manager.getPalette().name == "SIGNAL FORGE", "Skin_052 SIGNAL FORGE name is decoded");
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
