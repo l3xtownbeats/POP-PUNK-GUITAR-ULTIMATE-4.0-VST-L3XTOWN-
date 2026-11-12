@@ -67,3 +67,54 @@ This is a discovery index for guitar-only content. A listing is not proof that e
 For every selected asset: exact asset-level license; source URL and creator; original archive; SHA-256; file format/sample rate/bit depth/channels; duration; tempo/key/meter for loops; guitar articulation/type; audition; duplicate/fingerprint check; and confirmation that the current sampler supports the format. Network/download/archive parsing must never run in the audio callback.
 
 Current repository Sound Hunter registry is not proof of completed ingestion. This index records candidate sources only; do not claim files downloaded or playable until the actual archive and checksum are present in the project.
+
+
+## Expanded musician/sample-provider scan — 2026-11-12
+
+21. Ghosthack — Free Sample Packs — https://www.ghosthack.de/free_sample_packs/
+    - Site advertises 10,000+ free sounds across 346 packs / 40+ GB and states handmade, AI-free and royalty-free for commercial music use. This is a discovery portal, not a guitar-only pack. Filter for guitar-only files and inspect the license for each pack.
+22. Ghosthack — Guitar Sounds — https://www.ghosthack.live/guitar-sounds
+    - Live-recorded and processed guitar one-shots, acoustic/electric loops, slides, ambiences, textures and song-kit stems; BPM/key labels are described. Royalty-free for music use, but Ghosthack's terms prohibit redistribution/repacking of the samples. YELLOW/RED for embedding source WAVs in PPGU unless separate written permission is obtained.
+23. Ghosthack — Guitar Loops & One-Shots — https://www.ghosthack.live/guitar-loops-and-one-shots
+    - Curated WAV loop/one-shot packs. Their FAQ describes royalty-free use in commercial projects, not redistribution of source samples. Do not bundle raw files based on that wording.
+24. Function Loops — Free Sample Packs — https://www.functionloops.com/free-samples.html
+    - Includes “Deep Twin Guitars”: site describes 650+ MB of live-performed guitar sessions, BPM/key labels, 24-bit WAV and royalty-free use in productions. Royalty-free music-use wording does not establish raw-file redistribution rights; request written permission before bundling.
+25. SoundShockAudio — Free Guitar Sample Packs — https://soundshockaudio.com/guitar-sample-packs/
+    - Current discovery catalogue reports 45 free guitar packs, including Vibrations, Rico Spanish Guitar, Lo-Fi Guitars and processed-guitar collections. Treat as a discovery index; verify each original creator, file and license. It also lists non-guitar packs, which must be excluded.
+26. Slooply — Free Guitar Samples & Loops — https://slooply.com/collection/free-guitar-samples-loops
+    - Catalogue currently lists 333 public guitar samples, including acoustic/electric riffs, chord progressions and loops, WAV with BPM/key metadata. “Free” availability is not enough to establish raw-sample redistribution; individual license evidence required.
+27. Noiiz / Samplephonics — Tampered Guitars — https://www.noiiz.com/sounds/packs/208
+    - 332 sounds, 861 MB ZIP; live session guitarist Carey Clayton; fingerpicking, distorted washes, processed pads, rhythmic patterns, reverse phrases and soundscapes. Paid/membership catalogue. Not cleared for redistribution; use for reference or obtain explicit license.
+28. Samplephonics — Tampered Guitars Freebie — https://www.samplephonics.com/products/free/guitar/tampered-guitars-freebie
+    - Free selection of processed guitar WAVs, described as royalty-free for music use; download now routed through Noiiz. Source redistribution is not established.
+29. Samplephonics — Acoustic Grooves Freebie — https://www.samplephonics.com/products/free/guitar/acoustic-grooves-freebie
+    - Free selection from a larger live-recorded acoustic pack; full collection describes strummed chords, solos, melodies and fingerpicking. Verify the exact freebie license and Noiiz delivery terms.
+30. Abletunes — Free Acoustic Guitar Loops — https://abletunes.com/blog/free-acoustic-guitar-loops/
+    - 20 free WAV loops sampled from a 255-loop live acoustic guitar pack; full pack is described as 24-bit WAV, 120–126 BPM and minimally processed. Freebie/music-use permission does not by itself grant raw WAV redistribution.
+31. Abletunes — Acoustic Guitar Volume 1 — https://abletunes.com/product/sample-packs/acoustic-guitars-sample-pack-vol1
+    - 255 live acoustic guitar loops, 915 MB, 24-bit WAV, key/tempo-labelled; paid pack. Royalty-free for music production, but not automatically cleared for bundling in a sampler.
+32. Godlike Loops — Godlike Guitars — https://godlikeloops.com/product/godlike-guitars/
+    - Free pack claims 10 acoustic/electric guitar loops, MIDI, 24-bit WAV, stems, key/tempo labels and royalty-free use in commercial compositions. Need confirm whether the current license permits redistribution of the original WAV/stems inside a commercial plugin.
+33. Unison — Free Packs — https://unison.audio/free-packs
+    - Includes Free Guitar Loops and Beatmaker Guitar Pack teaser. Download eligibility and music-use terms should be checked per pack; no raw-source redistribution clearance established.
+34. FiftySounds — Free Loops and Samples — https://www.fiftysounds.com/royalty-free-music/free-loops-and-samples.html
+    - Individual WAV guitar loops are available. However, its license expressly prohibits selling, reselling, sublicensing or distributing its music; exclude from bundled SoundBank.
+35. Lots of Sounds — Guitar Sounds, Riffs and Loops — https://www.lotsofsounds.com/sounds/category/music-loops/guitar
+    - Catalogue reports 892 CC0 guitar-tagged sounds, including live chord strums, electric solos and processed guitar recordings. The catalogue also contains mislabeled/non-guitar and synthetic entries; inspect and audition each file. MP3 delivery, so not suitable as multisample source without conversion and quality review; CC0 makes eligible individual assets candidates for bundling.
+36. Freesound — https://freesound.org/
+    - Broad source of live-recorded guitar strums, chords, riffs, slides, harmonics and room/amp recordings. Search individual guitar-only files; select CC0 assets for the easiest redistribution path. CC-BY needs attribution and legal review; NC/ND/unknown excluded.
+37. Splice — Guitar samples — https://splice.com/sounds/instruments/guitar/samples
+    - Large catalog with live sounds and electric guitar filters; subscription/credit downloads. Splice grants royalty-free use in music, but that is not a general right to redistribute the raw sample as a competing sample library/plugin content. Do not bundle without a separate license.
+38. NDA Samples — Rock Guitar Loops — https://ndacompany.de/loops/rock-guitar
+    - Real-instrument, non-AI guitar loops offered as free MP3 downloads; terms require a 50/50 split for commercial releases. Not royalty-free and not suitable for PPGU distribution without a separate agreement.
+39. Musician's HQ — Free Guitar Sample Packs & Loops — https://musicianshq.com/free-guitar-sample-packs-loops/
+    - Secondary discovery roundup mentioning Ghosthack, Abletunes and Echo Sound Works. Use it to discover packs, not as license evidence.
+40. FiftySounds license — https://mail.fiftysounds.com/music-license.html
+    - Explicitly disallows reselling, sublicensing or distributing its music; this overrides generic “free/commercial use” descriptions for our embedding decision.
+
+### License classification from this scan
+
+- **GREEN candidates:** individual CC0 guitar assets from Meta Open Sound, FreePats, verified CC0 Freesound entries, and verified CC0 entries at Lots of Sounds. Still preserve the exact file-level evidence and check that the content is actually a live guitar.
+- **YELLOW / permission needed:** Ghosthack, Function Loops, Samplephonics/Noiiz, Abletunes, Godlike Loops, Unison, Slooply, Pasin Guitar Loops and any pack described only as royalty-free/free for music use.
+- **RED / exclude from bundled source files under current terms:** FiftySounds music and NDA Samples rock guitar loops; MusicRadar SampleRadar and Splice are also not cleared for raw sample redistribution under their standard music-use licenses.
+- No missing license text is treated as permission. Silence is UNKNOWN, not GREEN.
