@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
+#include <limits>
 
 class PPGUMultiWindowWorkspace::Window final : public juce::Component
 {
@@ -451,8 +453,12 @@ void PPGUMultiWindowWorkspace::layoutPanels()
 
             const auto& b = placement.bounds;
             (*it)->setPanelBounds({ b.x, b.y, b.width, b.height });
-            surfaceWidth = juce::jmax(surfaceWidth, b.x + b.width + panelGap);
-            surfaceHeight = juce::jmax(surfaceHeight, b.y + b.height + panelGap);
+            const auto right = static_cast<std::int64_t>(b.x) + b.width + panelGap;
+            const auto bottom = static_cast<std::int64_t>(b.y) + b.height + panelGap;
+            surfaceWidth = juce::jmax(surfaceWidth, static_cast<int>(
+                juce::jmin<std::int64_t>(right, std::numeric_limits<int>::max())));
+            surfaceHeight = juce::jmax(surfaceHeight, static_cast<int>(
+                juce::jmin<std::int64_t>(bottom, std::numeric_limits<int>::max())));
         }
         tileSurface->setSize(surfaceWidth, surfaceHeight);
         return;
