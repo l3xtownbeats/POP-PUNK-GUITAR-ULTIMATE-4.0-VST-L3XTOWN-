@@ -1465,3 +1465,33 @@ F. Только после этого считать документальны�
 **Проверки:** diff/readback выполнены. C++ build, CTest и host/pluginval на этих SHA не запускались; статус — IMPLEMENTED / VALIDATION PENDING, не BUILD PASS.
 
 **Связанный этап:** генерация Skin_053–102 всё ещё не подтверждена: canonical registry остаётся 52, pack manifest остаётся Skin_052 only. Workflow retrigger commit `5402f087fbc12a30b7923f951ee806ac126f576f` не дал доступного run/status результата через текущий GitHub connector.
+
+
+## 2026-11-12 — SIGNAL FORGE fallback correction + multi-window overflow grid
+
+**Тип:** UI production fixes, regression tests, CI reliability correction.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Production/test commits (последовательная цепочка):**
+- `e0d0b4f5f996d188dddf6533f50a072cb23d33dd` (parent `2b57be04bd91b8b21ac997128df8c1f9a60e9157`) — исправлен fallback `controlFace` и устаревшее имя fallback в комментарии.
+- `c62b1f39befffd1b4b7248915828a3e1ff0eb227` (parent `e0d0b4f5f996d188dddf6533f50a072cb23d33dd`) — overflow layout переводит все панели на minimum-size grid.
+- `6bbae523d1f28905699636d8d1984776edd37d84` (parent `c62b1f39befffd1b4b7248915828a3e1ff0eb227`) — уточнён контракт overflow.
+- `9d71f922d25478d8fb7a6fb335fb452011b972c0` (parent `6bbae523d1f28905699636d8d1984776edd37d84`) — тесты требуют видимости всех overflow panels.
+- `291f49b98d5eadb2236cc364275c93aa8b1de524` (parent `9d71f922d25478d8fb7a6fb335fb452011b972c0`) — workspace использует scrollable overflow grid.
+- `60eddf7420df03908bca177246db6b7b312ccb73` (parent `291f49b98d5eadb2236cc364275c93aa8b1de524`) — проверены все 21 fallback tokens.
+- `da62bd8db1d91de33aebba499f069a2af8fc9a3d` (parent `60eddf7420df03908bca177246db6b7b312ccb73`) — skin generator CI rebase/retry before publishing.
+
+**ПРОВЕРКА:** найдено несоответствие `controlFace`: C++ fallback был `#1D2930`, тогда как canonical Skin_052 manifest задаёт `#26343A`. Также overflow helper помечал только первую панель видимой, а UI workspace при overflow сохранял прежние bounds; это не гарантировало размещение всех окон без наложений.
+
+**АНАЛИЗ:** fallback palette должна совпадать со всеми 21 tokens Skin_052, иначе ошибка загрузки темы даёт другой визуальный результат. При недостатке площади все дополнительные панели должны оставаться достижимыми и видимыми, а не пропадать за одной активной панелью. Для узкого viewport выбран scrollable grid с minimum-size tiles; две колонки используются только если помещается минимальная ширина двух панелей.
+
+**ИСПРАВЛЕНИЕ:** `ThemeManager.h` исправляет control face и комментарий. `ThemeManagerTests.cpp` проверяет все 21 fallback token. `AuxiliaryPanelLayout.cpp/.h` создают grid, в котором каждая overflow placement видима; тесты проверяют 1-column и 2-column overflow, отсутствие overlap и невозможную геометрию. `PPGUMultiWindowWorkspace.cpp` размещает каждое окно по этим bounds на scrollable surface.
+
+**CI / генерация Skin_053–102:** workflow run `43194302212` подтвердил успешные preflight, генерацию 50 папок, G1–G4, merge, revalidation и итоговые проверки 102 тем. Финальный commit/push шаг завершился отказом GitHub из-за гонки с обновлением remote branch (`fetch first`), поэтому созданные runner assets не были сохранены в ветке. Исправление workflow `da62bd8...` добавляет fetch/rebase/retry перед push; новый run `43195205929` на момент этой записи IN_PROGRESS. До успешного generated commit и readback нельзя считать 102 skins опубликованными.
+
+**Границы:** изменения визуальные/UI и тестовые; DSP, processBlock, audio callback, sampler, MIDI, APVTS IDs/semantics, presets и SoundBank не изменялись.
+
+**Тесты:** diff/readback проверены. Изменённые C++ contract tests и Windows VST3 build ещё ожидают exact-SHA CI; не заявлять PASS до завершения workflow. FL Studio 20 host acceptance отдельно не подтверждён.
+
+**РЕЗУЛЬТАТ:** fallback palette correction IMPLEMENTED; multi-window overflow grid IMPLEMENTED / EXACT-SHA VALIDATION PENDING; skin batch generation/validation passed in runner, publication BLOCKED by push race, retry workflow running.
+
+**Следующий шаг:** дождаться нового skin workflow, проверить commit и 102 folders/assets; затем дождаться Windows VST3 build + CTest + pluginval на окончательном SHA и продолжить полный runtime Gallery/control parity audit.
