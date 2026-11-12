@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `fe53d00a1c4f1841cebfbb9e2357775cb14ae8d3`
+Последний commit перед текущей записью: `df6a492824dd016fd10f928f28318984ee1f7c23`
 
 ## 1. Назначение и продукт
 
@@ -803,3 +803,13 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R33:** этот документационный этап находится только в `main`; branch rollout по остальным refs не выполнялся. Для этапа действует явная пометка main-only; синхронизация остальных веток NOT YET VERIFIED.
 
 **Self-check §21:** SHA README `fe53d00...`; contract test не применим к текстовой правке; CI build status пуст/не PASS; release gates остаются PENDING. Не выполнены Windows rebuild, все CTest targets, pluginval, COMPLETE ZIP, FL Studio 20 acceptance и profiling.
+
+## 2026-11-12 — Legacy skin artwork generation gate (REV 16.2 / R15, R21, R22, R32)
+
+**Статус:** IMPLEMENTED IN SOURCE / CI VALIDATION PENDING.  
+**Аудит:** `tools/validate_skin_pack.py` проверяет текущий pack manifest (Skin_052), а не все 52 темы. CTest `ppgu_skin_manifest_contract` проходит по registry и проверяет manifests, однако до этого этапа не проверял фактическое наличие/декодирование artwork для legacy Skin_01..Skin_51. В дереве GitHub для этих 51 папок присутствовали theme.json, но отсутствовали preview/hero изображения; Skin_052 имеет отдельный PNG/SVG payload. Манифесты сами по себе не гарантировали полный runtime artwork payload.
+**Исправление:** добавлен `tools/T2_generate_missing_artwork.py`: детерминированно генерирует оригинальные `assets/preview.png` (480x300) и `assets/hero.webp` (1200x420) для legacy Skin_01..Skin_51 из палитры и identity темы; существующие файлы не перезаписываются без `--force`; `--check` выполняет проверку без генерации. Skin_052+ исключены из генератора и остаются под REV14 validator.
+**CI:** workflow устанавливает Pillow, запускает генератор и затем его проверочный режим до skin validator/build. Отсутствующее или повреждённое legacy artwork становится release-blocking.
+**Non-goals:** APVTS, DSP, MIDI, SoundBank, skin registry, theme indices, ThemeManager default, JUCE/CMake pins и control inventory не менялись. FL Studio 20 host acceptance и CPU/RAM profiling не выполняются этим этапом.
+**Верификация:** ожидает новый CI на новом SHA. Run #965 (ID `43135885498`) — SUCCESS на SHA `63bca7aed262e002264c6986e95a052118481e70`; текущий main до изменения — `df6a492824dd016fd10f928f28318984ee1f7c23`, поэтому PASS не переносится (R23). Run #965 подтвердил Windows Release, CTest, locate VST3, pluginval strictness 5 и packaging; ручной FL Studio 20 host test и CPU/RAM profiling остаются NOT VERIFIED.
+**Открытый blocker:** I7 требует `default-ppgu`, но registry, ThemeManager fallback и ThemeManagerTests пока используют `skin-51` / Blackout Voltage. Не изменено: переход затрагивает runtime/fallback semantics и требует отдельного этапа с тестами.
