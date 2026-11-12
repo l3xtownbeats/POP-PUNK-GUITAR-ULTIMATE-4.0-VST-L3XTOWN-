@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <numeric>
 #include <set>
 
 namespace ppgu::ui
@@ -52,7 +53,12 @@ PanelLayout calculatePanelLayout(PanelRect area,
         scale = 1.0f;
 
     std::set<int> ids;
-    int desiredW = 1, desiredH = 1, minimumW = 1, minimumH = 1;
+    std::vector<int> desiredWidths, minimumWidths, desiredHeights, minimumHeights;
+    desiredWidths.reserve(requests.size());
+    minimumWidths.reserve(requests.size());
+    desiredHeights.reserve(requests.size());
+    minimumHeights.reserve(requests.size());
+
     for (const auto& request : requests)
     {
         if (!ids.insert(request.id).second
@@ -65,65 +71,179 @@ PanelLayout calculatePanelLayout(PanelRect area,
             return result;
         }
 
-        desiredW = std::max(desiredW, scaled(request.desired.width, scale));
-        desiredH = std::max(desiredH, scaled(request.desired.height, scale));
-        minimumW = std::max(minimumW, scaled(request.minimum.width, scale));
-        minimumH = std::max(minimumH, scaled(request.minimum.height, scale));
+        desiredWidths.push_back(scaled(request.desired.width, scale));
+        minimumWidths.push_back(scaled(request.minimum.width, scale));
+        desiredHeights.push_back(scaled(request.desired.height, scale));
+        minimumHeights.push_back(scaled(request.minimum.height, scale));
     }
 
-    const auto scaledGap = gap <= 0 ? 0 : scaled(gap, scale);
-    const auto count = static_cast<int>(requests.size());
-    int bestColumns = 0, bestRows = 0;
-    double bestScale = -1.0;
-
-    // Keep the approved workspace grid predictable: one column for a
-    // single panel, then at most two columns (up to a 2x3 layout).
+    const int scaledGap = gap <= 0 ? 0 : scaled(gap, scale);
+    const int count = static_cast<int>(requests.size());
     const int maximumColumns = std::min(count, 2);
+
+    struct Candidate
+    {
+        int columns = 0;
+        int rows = 0;
+        double factor = -1.0;
+        std::vector<int> widths;
+        std::vector<int> heights;
+        std::int64_t minimumOverflow = std::numeric_limits<std::int64_t>::max();
+        bool feasible = false;
+    };
+
+    Candidate bestFit;
+    Candidate bestOverflow;
+
+    const auto roundedAtScale = [](int desired, int minimum, double factor)
+    {
+        const auto value = static_cast<std::int64_t>(std::llround(
+            static_cast<long double>(desired) * static_cast<long double>(factor)));
+        return static_cast<int>(std::max<std::int64_t>(minimum,
+            std::min<std::int64_t>(std::numeric_limits<int>::max(), value)));
+    };
+
     for (int columns = 1; columns <= maximumColumns; ++columns)
     {
         const int rows = count / columns + (count % columns == 0 ? 0 : 1);
-        const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (columns - 1);
-        const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (rows - 1);
-        const auto availableW = static_cast<std::int64_t>(area.width) - horizontalGaps;
-        const auto availableH = static_cast<std::int64_t>(area.height) - verticalGaps;
-        if (availableW <= 0 || availableH <= 0)
-            continue;
+        std::vector<int> colDesired(static_cast<std::size_t>(columns), 1);
+        std::vector<int> colMinimum(static_cast<std::size_t>(columns), 1);
+        std::vector<int> rowDesired(static_cast<std::size_t>(rows), 1);
+        std::vector<int> rowMinimum(static_cast<std::size_t>(rows), 1);
 
-        const auto cellW = availableW / columns;
-        const auto cellH = availableH / rows;
-        if (cellW < minimumW || cellH < minimumH)
-            continue;
-
-        const double fit = std::min(static_cast<double>(cellW) / desiredW,
-                                    static_cast<double>(cellH) / desiredH);
-        if (fit > bestScale)
+        for (int i = 0; i < count; ++i)
         {
-            bestScale = fit;
-            bestColumns = columns;
-            bestRows = rows;
+            const int column = i % columns;
+            const int row = i / columns;
+            const auto index = static_cast<std::size_t>(i);
+            colDesired[static_cast<std::size_t>(column)] =
+                std::max(colDesired[static_cast<std::size_t>(column)], desiredWidths[index]);
+            colMinimum[static_cast<std::size_t>(column)] =
+                std::max(colMinimum[static_cast<std::size_t>(column)], minimumWidths[index]);
+            rowDesired[static_cast<std::size_t>(row)] =
+                std::max(rowDesired[static_cast<std::size_t>(row)], desiredHeights[index]);
+            rowMinimum[static_cast<std::size_t>(row)] =
+                std::max(rowMinimum[static_cast<std::size_t>(row)], minimumHeights[index]);
         }
+
+        const auto gapWidth = static_cast<std::int64_t>(scaledGap) * (columns - 1);
+        const auto gapHeight = static_cast<std::int64_t>(scaledGap) * (rows - 1);
+        const auto sum = [](const std::vector<int>& values)
+        {
+            std::int64_t total = 0;
+            for (const auto value : values)
+                total += value;
+            return total;
+        };
+
+        const auto minWidth = sum(colMinimum) + gapWidth;
+        const auto minHeight = sum(rowMinimum) + gapHeight;
+        if (minWidth > std::numeric_limits<int>::max()
+            || minHeight > std::numeric_limits<int>::max())
+        {
+            bestOverflow.minimumOverflow = -1;
+            bestOverflow.columns = columns;
+            bestOverflow.rows = rows;
+            bestOverflow.widths = colMinimum;
+            bestOverflow.heights = rowMinimum;
+            continue;
+        }
+
+        Candidate overflowCandidate;
+        overflowCandidate.columns = columns;
+        overflowCandidate.rows = rows;
+        overflowCandidate.widths = colMinimum;
+        overflowCandidate.heights = rowMinimum;
+        overflowCandidate.minimumOverflow =
+            std::max<std::int64_t>(0, minWidth - area.width)
+            + std::max<std::int64_t>(0, minHeight - area.height);
+        if (overflowCandidate.minimumOverflow < bestOverflow.minimumOverflow
+            || (overflowCandidate.minimumOverflow == bestOverflow.minimumOverflow
+                && columns > bestOverflow.columns))
+            bestOverflow = std::move(overflowCandidate);
+
+        if (minWidth > area.width || minHeight > area.height)
+            continue;
+
+        const auto fits = [&](double factor)
+        {
+            std::int64_t width = gapWidth;
+            std::int64_t height = gapHeight;
+            for (std::size_t i = 0; i < colDesired.size(); ++i)
+                width += roundedAtScale(colDesired[i], colMinimum[i], factor);
+            for (std::size_t i = 0; i < rowDesired.size(); ++i)
+                height += roundedAtScale(rowDesired[i], rowMinimum[i], factor);
+            return width <= area.width && height <= area.height;
+        };
+
+        double low = 0.0;
+        double high = 1.0;
+        for (int iteration = 0; iteration < 48; ++iteration)
+        {
+            const double middle = (low + high) * 0.5;
+            if (fits(middle))
+                low = middle;
+            else
+                high = middle;
+        }
+
+        Candidate candidate;
+        candidate.columns = columns;
+        candidate.rows = rows;
+        candidate.factor = low;
+        candidate.feasible = true;
+        for (std::size_t i = 0; i < colDesired.size(); ++i)
+            candidate.widths.push_back(roundedAtScale(colDesired[i], colMinimum[i], low));
+        for (std::size_t i = 0; i < rowDesired.size(); ++i)
+            candidate.heights.push_back(roundedAtScale(rowDesired[i], rowMinimum[i], low));
+
+        const auto currentBetter = candidate.factor > bestFit.factor + 1.0e-9
+            || (std::abs(candidate.factor - bestFit.factor) <= 1.0e-9
+                && candidate.columns > bestFit.columns);
+        if (currentBetter)
+            bestFit = std::move(candidate);
     }
 
-    if (bestColumns == 0)
+    if (!bestFit.feasible)
     {
-        // Overflow is a scrollable workspace, not a hidden-panel/page mode.
-        // Preserve every panel at its scaled minimum size and tile it on a
-        // surface that the owning JUCE Viewport can scroll.
         result.overflow = true;
-        const auto canUseTwoColumns =
-            static_cast<std::int64_t>(minimumW) * 2 + scaledGap <= area.width;
-        result.columns = canUseTwoColumns ? 2 : 1;
-        result.rows = count / result.columns + (count % result.columns == 0 ? 0 : 1);
-        const auto surfaceWidth = static_cast<std::int64_t>(result.columns) * minimumW
-                                + static_cast<std::int64_t>(result.columns - 1) * scaledGap;
-        const auto surfaceHeight = static_cast<std::int64_t>(result.rows) * minimumH
-                                 + static_cast<std::int64_t>(result.rows - 1) * scaledGap;
-        if (surfaceWidth > std::numeric_limits<int>::max()
-            || surfaceHeight > std::numeric_limits<int>::max())
+        if (bestOverflow.columns == 0 || bestOverflow.minimumOverflow == -1)
+        {
+            result.invalidInput = true;
+            return result;
+        }
+
+        result.columns = bestOverflow.columns;
+        result.rows = bestOverflow.rows;
+        const auto totalWidth = std::accumulate(bestOverflow.widths.begin(),
+            bestOverflow.widths.end(), static_cast<std::int64_t>(scaledGap)
+                * (bestOverflow.columns - 1));
+        const auto totalHeight = std::accumulate(bestOverflow.heights.begin(),
+            bestOverflow.heights.end(), static_cast<std::int64_t>(scaledGap)
+                * (bestOverflow.rows - 1));
+        if (totalWidth > std::numeric_limits<int>::max()
+            || totalHeight > std::numeric_limits<int>::max()
+            || static_cast<std::int64_t>(area.x) + totalWidth > std::numeric_limits<int>::max()
+            || static_cast<std::int64_t>(area.y) + totalHeight > std::numeric_limits<int>::max())
         {
             result.invalidInput = true;
             result.panels.clear();
             return result;
+        }
+
+        std::vector<int> xPositions(static_cast<std::size_t>(result.columns));
+        std::vector<int> yPositions(static_cast<std::size_t>(result.rows));
+        std::int64_t position = area.x;
+        for (int column = 0; column < result.columns; ++column)
+        {
+            xPositions[static_cast<std::size_t>(column)] = static_cast<int>(position);
+            position += bestOverflow.widths[static_cast<std::size_t>(column)] + scaledGap;
+        }
+        position = area.y;
+        for (int row = 0; row < result.rows; ++row)
+        {
+            yPositions[static_cast<std::size_t>(row)] = static_cast<int>(position);
+            position += bestOverflow.heights[static_cast<std::size_t>(row)] + scaledGap;
         }
 
         result.panels.reserve(requests.size());
@@ -131,48 +251,57 @@ PanelLayout calculatePanelLayout(PanelRect area,
         {
             const int column = i % result.columns;
             const int row = i / result.columns;
-            const auto x = static_cast<std::int64_t>(area.x)
-                         + static_cast<std::int64_t>(column) * (minimumW + static_cast<std::int64_t>(scaledGap));
-            const auto y = static_cast<std::int64_t>(area.y)
-                         + static_cast<std::int64_t>(row) * (minimumH + static_cast<std::int64_t>(scaledGap));
-            if (x + minimumW > std::numeric_limits<int>::max()
-                || y + minimumH > std::numeric_limits<int>::max())
-            {
-                result.invalidInput = true;
-                result.panels.clear();
-                return result;
-            }
             result.panels.push_back({ requests[static_cast<std::size_t>(i)].id,
-                { static_cast<int>(x), static_cast<int>(y), minimumW, minimumH }, true });
+                { xPositions[static_cast<std::size_t>(column)],
+                  yPositions[static_cast<std::size_t>(row)],
+                  bestOverflow.widths[static_cast<std::size_t>(column)],
+                  bestOverflow.heights[static_cast<std::size_t>(row)] }, true });
         }
         return result;
     }
 
-    result.columns = bestColumns;
-    result.rows = bestRows;
-    result.compact = bestScale < 1.0;
-    const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (bestColumns - 1);
-    const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (bestRows - 1);
-    const auto cellW = (static_cast<std::int64_t>(area.width) - horizontalGaps) / bestColumns;
-    const auto cellH = (static_cast<std::int64_t>(area.height) - verticalGaps) / bestRows;
-    result.panels.reserve(requests.size());
+    result.columns = bestFit.columns;
+    result.rows = bestFit.rows;
+    result.compact = bestFit.factor < 0.999999;
 
+    const auto totalWidth = std::accumulate(bestFit.widths.begin(), bestFit.widths.end(),
+        static_cast<std::int64_t>(scaledGap) * (result.columns - 1));
+    const auto totalHeight = std::accumulate(bestFit.heights.begin(), bestFit.heights.end(),
+        static_cast<std::int64_t>(scaledGap) * (result.rows - 1));
+    const auto extraWidth = static_cast<std::int64_t>(area.width) - totalWidth;
+    const auto extraHeight = static_cast<std::int64_t>(area.height) - totalHeight;
+    for (int column = 0; column < result.columns; ++column)
+        bestFit.widths[static_cast<std::size_t>(column)] += static_cast<int>(
+            extraWidth / result.columns + (column == result.columns - 1 ? extraWidth % result.columns : 0));
+    for (int row = 0; row < result.rows; ++row)
+        bestFit.heights[static_cast<std::size_t>(row)] += static_cast<int>(
+            extraHeight / result.rows + (row == result.rows - 1 ? extraHeight % result.rows : 0));
+
+    std::vector<int> xPositions(static_cast<std::size_t>(result.columns));
+    std::vector<int> yPositions(static_cast<std::size_t>(result.rows));
+    std::int64_t position = area.x;
+    for (int column = 0; column < result.columns; ++column)
+    {
+        xPositions[static_cast<std::size_t>(column)] = static_cast<int>(position);
+        position += bestFit.widths[static_cast<std::size_t>(column)] + scaledGap;
+    }
+    position = area.y;
+    for (int row = 0; row < result.rows; ++row)
+    {
+        yPositions[static_cast<std::size_t>(row)] = static_cast<int>(position);
+        position += bestFit.heights[static_cast<std::size_t>(row)] + scaledGap;
+    }
+
+    result.panels.reserve(requests.size());
     for (int i = 0; i < count; ++i)
     {
-        const int column = i % bestColumns;
-        const int row = i / bestColumns;
-        const auto x = static_cast<std::int64_t>(area.x)
-                     + static_cast<std::int64_t>(column) * (cellW + scaledGap);
-        const auto y = static_cast<std::int64_t>(area.y)
-                     + static_cast<std::int64_t>(row) * (cellH + scaledGap);
-        const auto width = column == bestColumns - 1
-            ? static_cast<std::int64_t>(area.x) + area.width - x : cellW;
-        const auto height = row == bestRows - 1
-            ? static_cast<std::int64_t>(area.y) + area.height - y : cellH;
-
+        const int column = i % result.columns;
+        const int row = i / result.columns;
         result.panels.push_back({ requests[static_cast<std::size_t>(i)].id,
-                                  { static_cast<int>(x), static_cast<int>(y),
-                                    static_cast<int>(width), static_cast<int>(height) }, true });
+            { xPositions[static_cast<std::size_t>(column)],
+              yPositions[static_cast<std::size_t>(row)],
+              bestFit.widths[static_cast<std::size_t>(column)],
+              bestFit.heights[static_cast<std::size_t>(row)] }, true });
     }
 
     return result;
