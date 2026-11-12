@@ -1616,3 +1616,23 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** эта запись фиксирует требование; код PatternScheduler, sampler, preset catalog и DSP в рамках записи не изменялся. Полноценное end-to-end PATTERN playback для всего каталога не подтверждено.
 
 **РЕЗУЛЬТАТ:** PATTERN READY ACCOMPANIMENT REQUIREMENT LOCKED; FULL PRESET-DRIVEN, HOST-SYNCED, AUDIBLY DISTINCT PATTERN PLAYBACK REMAINS AN OPEN IMPLEMENTATION / QA GATE.
+
+
+## 2026-11-12 — Session Guitarist Deluxe PATTERN / MELODY product interaction reference
+
+**Статус:** UX / PRODUCT BASELINE ACCEPTED; PPGU IMPLEMENTATION PARITY NOT YET VERIFIED.
+
+**ПРОВЕРКА:** пользователь подтвердил, что функциональная основа PPGU — линейка Native Instruments Session Guitarist Deluxe, прежде всего разделение на два рабочих режима PATTERN и MELODY. Это уточняет продуктовую модель и приоритеты интерфейса/поведения.
+
+**АНАЛИЗ / принятое поведение:**
+- **PATTERN:** готовое исполняемое гитарное сопровождение. Пользователь выбирает стиль/паттерн и пресет, подаёт MIDI-аккорды/ноты в соответствии с режимом, а инструмент исполняет ритмическую партию с артикуляциями, динамикой, акцентами, приглушением и синхронизацией с host tempo/transport. Разные паттерны должны иметь реально разные ритмические рисунки и звучание.
+- **MELODY:** режим самостоятельного исполнения отдельных нот с MIDI-клавиатуры/партии DAW, где ноты запускают соответствующие гитарные семплы/артикуляции, а не готовый аккордовый pattern. Пресет определяет тембр и поведение инструмента; velocity, диапазон нот и доступные артикуляции должны корректно влиять на звук.
+- **Общие принципы UX:** быстрое переключение PATTERN/MELODY; ясное отображение активного режима; единая логика выбора пресета и звукового характера; предсказуемое поведение MIDI; host sync там, где нужен PATTERN; низкая задержка и безопасная работа audio thread.
+
+**ГРАНИЦЫ РЕФЕРЕНСА:** Session Guitarist Deluxe используется как функциональный и UX-ориентир. Не копировать закрытый код, proprietary samples, фирменные графические материалы или точные защищённые партии. PPGU сохраняет собственные звуковую библиотеку, архитектуру SamplerEngine + PatternScheduler, идентичность, интерфейс и набор функций.
+
+**ИСПРАВЛЕНИЕ / план:** провести parity matrix по двум режимам: пользовательский сценарий, MIDI input, preset selection, articulation mapping, performance behavior, host sync, note lifecycle, transitions, preview и factory content. Сопоставить с текущей реализацией, разделить VERIFIED / PARTIAL / NOT IMPLEMENTED и закрывать пробелы на существующей архитектуре без замены движка.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** данная запись фиксирует уточнённую основу продукта. Код, DSP, sampler, scheduler и preset bank в рамках записи не изменялись; полноценная функциональная parity обоих режимов не подтверждена.
+
+**РЕЗУЛЬТАТ:** SESSION GUITARIST DELUXE PATTERN / MELODY WORKFLOW ACCEPTED AS THE PRODUCT UX/FUNCTIONAL REFERENCE; PPGU MUST IMPLEMENT ITS OWN COMPLETE, TESTED PATTERN AND MELODY WORKFLOWS. PARITY AUDIT AND IMPLEMENTATION REMAIN OPEN.
