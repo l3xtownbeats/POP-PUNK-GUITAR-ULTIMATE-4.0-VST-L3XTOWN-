@@ -649,3 +649,16 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Non-goals: no ThemeManager migration, no Skin_052 merge, no schema/registry changes, no batch generation, no DSP/audio/APVTS/MIDI/preset/SoundBank changes, no host acceptance and no COMPLETE ZIP publication.
 - Regression coverage: the Windows package step now enforces exact registry-to-payload parity and declared asset presence. CI on the new commit is required; no result is inherited from this SHA.
 - Open risks unchanged: Skin_052 remains staged and not runtime-integrated; ThemeManager remains legacy-only; FL Studio 20 host acceptance and CPU/RAM profiling remain unverified.
+
+
+### 12 November 2026 — Correct malformed package-step script block
+
+**Branch:** feature/auxiliary-panel-layout  
+**Base SHA:** 98b73997081d8fb60c6b981d075939e3dfff1f93  
+**Status:** WORKFLOW SCRIPT DEFECT DIAGNOSED / CORRECTION COMMITTED; CI REQUIRED.
+
+- Windows workflow #957 (run ID 43133843979, exact SHA 98b73997081d8fb60c6b981d075939e3dfff1f93) failed before creating a job; no job logs were available. Workflow inspection found the packaging PowerShell block truncated at its path-regex line.
+- Root cause: malformed workflow script text, not a CMake, CTest, pluginval or payload failure. The previous commit's packaging behavior is not validated.
+- Replaced the entire block with a complete PowerShell section, using a [.] path expression and character-based path normalization to avoid escaping ambiguity. Registered-only copying and declared-asset existence checks remain; staged Skin_052 stays excluded.
+- Non-goals: no skin merge, no ThemeManager/schema/registry migration, no new skins, no audio/APVTS/MIDI/preset/SoundBank changes, no host acceptance, no publication.
+- Verification required: inspect jobs and logs on the new SHA before further edits. Run #928 remains FAILED at packaging; #957 remains FAILED before job execution.

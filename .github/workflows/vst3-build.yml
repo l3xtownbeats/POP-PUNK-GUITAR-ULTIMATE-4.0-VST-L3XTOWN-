@@ -254,7 +254,33 @@ jobs:
           }
           $registeredIds = @{}
           foreach ($theme in $skinRegistry.themes) {
-            if ($theme.path -notmatch '^Skin_[0-9]{2,3}/theme\\.json
+            if ($theme.path -notmatch '^Skin_[0-9]{2,3}/theme[.]json$') {
+              throw "Unsafe or unsupported registered skin path: $($theme.path)"
+            }
+            if ($registeredIds.ContainsKey([string]$theme.id)) {
+              throw "Duplicate registered skin ID: $($theme.id)"
+            }
+            $registeredIds[[string]$theme.id] = $true
+            $sourceManifest = Join-Path $sourceSkins $theme.path
+            if (-not (Test-Path -LiteralPath $sourceManifest -PathType Leaf)) {
+              throw "Registered source skin manifest missing: $($theme.path)"
+            }
+            $themeData = Get-Content -LiteralPath $sourceManifest -Raw | ConvertFrom-Json
+            if ($themeData.id -ne $theme.id -or [int]$themeData.index -ne [int]$theme.index) {
+              throw "Source skin identity mismatch for $($theme.path)."
+            }
+            $sourceFolder = Split-Path -Parent $sourceManifest
+            foreach ($assetProperty in $themeData.assets.PSObject.Properties) {
+              if ([string]::IsNullOrWhiteSpace([string]$assetProperty.Value)) { continue }
+              $assetPath = Join-Path $sourceFolder ([string]$assetProperty.Value)
+              if (-not (Test-Path -LiteralPath $assetPath -PathType Leaf)) {
+                throw "Registered skin '$($theme.id)' is missing asset '$($assetProperty.Value)'."
+              }
+            }
+            Copy-Item -LiteralPath $sourceFolder -Destination $runtimeSkins -Recurse
+          }
+          Copy-Item -LiteralPath $skinRegistryPath -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $sourceSkins 'theme.schema.json') -Destination $runtimeSkins
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
@@ -271,7 +297,7 @@ jobs:
           if ($skinManifests.Count -ne $expectedSkinCount) { throw "Runtime Skins manifest count mismatch: registry=$expectedSkinCount, files=$($skinManifests.Count)." }
           $packagedManifestPaths = @{}
           foreach ($skinManifest in $skinManifests) {
-            $relativeManifest = $skinManifest.FullName.Substring($runtimeSkins.Length + 1).Replace('\\','/')
+            $relativeManifest = $skinManifest.FullName.Substring($runtimeSkins.Length + 1).Replace([char]92,[char]47)
             $packagedManifestPaths[$relativeManifest] = $true
           }
           foreach ($theme in $skinRegistry.themes) {
