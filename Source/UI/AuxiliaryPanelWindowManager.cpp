@@ -1,360 +1,395 @@
 #include "AuxiliaryPanelWindowManager.h"
-#include "AuxiliaryPanelLayout.h"
 
 #include <algorithm>
 #include <utility>
 
-class PPGUAuxiliaryDocumentWindow final : public juce::DocumentWindow
-{
-public:
-    PPGUAuxiliaryDocumentWindow(PPGUAuxiliaryPanelWindowManager& ownerToUse,
-                                int panelIdToUse,
-                                const juce::String& title,
-                                juce::Component& content,
-                                const PPGUThemeManager::Palette& initialPalette)
-        : juce::DocumentWindow(title, initialPalette.panel,
-              juce::DocumentWindow::closeButton | juce::DocumentWindow::maximiseButton, true),
-          owner(ownerToUse), panelId(panelIdToUse)
-    {
-        setUsingNativeTitleBar(false);
-        setTitleBarHeight(36);
-        setTitleBarButtonsRequired(
-            juce::DocumentWindow::closeButton | juce::DocumentWindow::maximiseButton, false);
-        setTitleBarTextCentred(false);
-        setResizable(true, true);
-        setResizeLimits(260, 190, 1800, 1200);
-        setDropShadowEnabled(true);
-        setContentNonOwned(&content, false);
-        applyPalette(initialPalette);
-        setVisible(false);
-    }
-
-    ~PPGUAuxiliaryDocumentWindow() override
-    {
-        clearContentComponent();
-    }
-
-    void closeButtonPressed() override
-    {
-        owner.closePanel(panelId);
-    }
-
-    void maximiseButtonPressed() override
-    {
-        owner.toggleExpanded(panelId);
-    }
-
-    void setExpandedState(bool expanded)
-    {
-        if (auto* button = getMaximiseButton())
-            button->setTooltip(expanded ? "Restore panel workspace" : "Expand panel workspace");
-    }
-
-    void applyPalette(const PPGUThemeManager::Palette& value)
-    {
-        setBackgroundColour(value.panel);
-        setColour(juce::DocumentWindow::textColourId, value.textPrimary);
-        repaint();
-    }
-
-private:
-    PPGUAuxiliaryPanelWindowManager& owner;
-    const int panelId;
-};
-
-struct PPGUAuxiliaryPanelWindowManager::Entry
-{
-    int id = 0;
-    bool open = false;
-    juce::Rectangle<int> normalBounds;
-    PaletteUpdater paletteUpdater;
-    std::unique_ptr<PPGUAuxiliaryDocumentWindow> window;
-};
-
 PPGUAuxiliaryPanelWindowManager::PPGUAuxiliaryPanelWindowManager(
-    const PPGUThemeManager::Palette& initialPalette,
-    juce::PropertiesFile* persistentSettings,
-    juce::Component* displayAnchorToUse)
-    : palette(initialPalette), settings(persistentSettings), displayAnchor(displayAnchorToUse)
+    const PPGUThemeManager::Palette& initialPalette)
+    : palette(initialPalette)
 {
-}
+    setOpaque(false);
+    setInterceptsMouseClicks(true, true);
 
-PPGUAuxiliaryPanelWindowManager::~PPGUAuxiliaryPanelWindowManager()
-{
-    closeAll();
-    entries.clear();
+    for (auto* button : { &previousPageButton, &nextPageButton })
+    {
+        button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        button->setColour(juce::TextButton::textColourOffId, palette.textPrimary);
+        addAndMakeVisible(*button);
+    }
+    previousPageButton.setTooltip("Previous panel page");
+    nextPageButton.setTooltip("Next panel page");
+    previousPageButton.onClick = [this] { changePage(-1); };
+    nextPageButton.onClick = [this] { changePage(1); };
+
+    pageIndicator.setJustificationType(juce::Justification::centred);
+    pageIndicator.setColour(juce::Label::textColourId, palette.textSecondary);
+    pageIndicator.setFont(juce::Font(10.0f, juce::Font::bold));
+    addAndMakeVisible(pageIndicator);
+    setVisible(false);
 }
 
 bool PPGUAuxiliaryPanelWindowManager::addPanel(
-    int id, const juce::String& title, juce::Component& content,
-    PaletteUpdater paletteUpdater)
+    int id, const juce::String& title, juce::Component& content)
 {
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    if (id <= 0 || title.isEmpty() || findEntry(id) != nullptr)
+    if (id <= 0 || title.isEmpty() || findWindow(id) != nullptr)
         return false;
 
-    auto entry = std::make_unique<Entry>();
-    entry->id = id;
-    entry->paletteUpdater = std::move(paletteUpdater);
-    entry->window = std::make_unique<PPGUAuxiliaryDocumentWindow>(
-        *this, id, title, content, palette);
-    entries.push_back(std::move(entry));
+    Window window;
+    window.id = id;
+    const auto shortTitle = title.upToFirstOccurrenceOf(" / ", false, false);
+    window.launcher = std::make_unique<juce::TextButton>(shortTitle);
+    window.launcher->setClickingTogglesState(true);
+    window.launcher->setColour(juce::TextButton::buttonColourId, palette.panelElevated);
+    window.launcher->setColour(juce::TextButton::buttonOnColourId, palette.accent);
+    window.launcher->setColour(juce::TextButton::textColourOffId, palette.textPrimary);
+    window.launcher->setColour(juce::TextButton::textColourOnId, palette.windowBg);
+    window.launcher->setTooltip("Open / close " + shortTitle);
+    window.launcher->onClick = [this, id]
+    {
+        if (isOpen(id))
+            closePanel(id);
+        else
+            openPanel(id);
+    };
+    addAndMakeVisible(*window.launcher);
+
+    window.overlay = std::make_unique<PPGUEditorOverlayPanel>(
+        title, content,
+        [this, id] { closePanel(id); },
+        [this, id](bool expanded)
+        {
+            if (expanded)
+                expandedId = id;
+            else if (expandedId == id)
+                expandedId = 0;
+            updateLayout();
+        },
+        palette);
+
+    windows.push_back(std::move(window));
     return true;
 }
 
 bool PPGUAuxiliaryPanelWindowManager::openPanel(int id)
 {
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    auto* entry = findEntry(id);
-    if (entry == nullptr)
+    auto* window = findWindow(id);
+    if (window == nullptr)
         return false;
 
-    if (!entry->open && settings != nullptr)
+    if (!window->open)
     {
-        const auto prefix = "auxPanel." + juce::String(id) + ".";
-        const auto saved = settings->getValue(prefix + "windowState");
-        if (saved.isNotEmpty())
-            entry->window->restoreWindowStateFromString(saved);
-
-        const int x = settings->getIntValue(prefix + "normalX", -1);
-        const int y = settings->getIntValue(prefix + "normalY", -1);
-        const int w = settings->getIntValue(prefix + "normalW", 0);
-        const int h = settings->getIntValue(prefix + "normalH", 0);
-        if (x >= 0 && y >= 0 && w >= 260 && h >= 190)
-            entry->normalBounds = { x, y, w, h };
+        window->open = true;
+        addAndMakeVisible(*window->overlay);
+        int openIndex = 0;
+        for (const auto& candidate : windows)
+        {
+            if (!candidate.open)
+                continue;
+            if (candidate.id == id)
+                break;
+            ++openIndex;
+        }
+        currentPage = openIndex / juce::jmax(1, pageCapacity);
     }
 
-    entry->open = true;
-    focusedId = id;
+    window->launcher->setToggleState(true, juce::dontSendNotification);
+    window->overlay->setVisible(true);
+    setVisible(true);
     updateLayout();
-    entry->window->setVisible(true);
-    entry->window->toFront(true);
     return true;
 }
 
 void PPGUAuxiliaryPanelWindowManager::closePanel(int id)
 {
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    auto* entry = findEntry(id);
-    if (entry == nullptr || !entry->open)
+    auto* window = findWindow(id);
+    if (window == nullptr || !window->open)
         return;
 
-    saveWindowState(*entry);
-    entry->open = false;
-    entry->window->setVisible(false);
+    window->open = false;
+    window->launcher->setToggleState(false, juce::dontSendNotification);
+    window->overlay->setVisible(false);
     if (expandedId == id)
         expandedId = 0;
-    if (focusedId == id)
+
+    if (getOpenPanelCount() == 0)
     {
-        focusedId = 0;
-        for (const auto& candidate : entries)
-            if (candidate->open)
-            {
-                focusedId = candidate->id;
-                break;
-            }
+        currentPage = 0;
+        setVisible(false);
     }
+    else
+        currentPage = juce::jmin(currentPage, getPageCount() - 1);
+
     updateLayout();
 }
 
 void PPGUAuxiliaryPanelWindowManager::closeAll()
 {
     jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    for (auto& entry : entries)
-    {
-        if (entry->open)
-            saveWindowState(*entry);
-        entry->open = false;
-        if (entry->window)
-        {
-            entry->window->setExpandedState(false);
-            entry->window->setVisible(false);
-        }
-    }
     expandedId = 0;
-    focusedId = 0;
-    if (settings != nullptr)
-        settings->saveIfNeeded();
+    currentPage = 0;
+    for (auto& window : windows)
+    {
+        window.open = false;
+        window.launcher->setToggleState(false, juce::dontSendNotification);
+        window.overlay->setVisible(false);
+        window.overlay->setExpanded(false);
+    }
+    setVisible(false);
+    updateLayout();
+    repaint();
 }
 
 bool PPGUAuxiliaryPanelWindowManager::isOpen(int id) const noexcept
 {
-    const auto* entry = findEntry(id);
-    return entry != nullptr && entry->open;
+    const auto* window = findWindow(id);
+    return window != nullptr && window->open;
 }
 
 int PPGUAuxiliaryPanelWindowManager::getOpenPanelCount() const noexcept
 {
-    return static_cast<int>(std::count_if(entries.begin(), entries.end(),
-        [](const auto& entry) { return entry->open; }));
+    return static_cast<int>(std::count_if(windows.begin(), windows.end(),
+        [](const Window& window) { return window.open; }));
+}
+
+juce::String PPGUAuxiliaryPanelWindowManager::getOpenPanelIds() const
+{
+    juce::StringArray ids;
+    for (const auto& window : windows)
+        if (window.open)
+            ids.add(juce::String(window.id));
+    return ids.joinIntoString(",");
+}
+
+void PPGUAuxiliaryPanelWindowManager::restoreOpenPanels(const juce::String& ids)
+{
+    jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
+    closeAll();
+    juce::StringArray values;
+    values.addTokens(ids, ",", "");
+    for (const auto& value : values)
+    {
+        const int id = value.getIntValue();
+        if (id > 0)
+            openPanel(id);
+    }
+    currentPage = 0;
+    updateLayout();
+}
+
+int PPGUAuxiliaryPanelWindowManager::getPageCount() const noexcept
+{
+    const auto range = ppgu::ui::calculatePanelPageRange(
+        static_cast<std::size_t>(getOpenPanelCount()), 0,
+        static_cast<std::size_t>(juce::jmax(1, pageCapacity)));
+    return juce::jmax(1, static_cast<int>(range.pageCount));
+}
+
+void PPGUAuxiliaryPanelWindowManager::changePage(int delta)
+{
+    jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
+    const int pages = getPageCount();
+    if (pages <= 1)
+        return;
+    currentPage = (currentPage + delta + pages) % pages;
+    expandedId = 0;
+    for (auto& window : windows)
+        window.overlay->setExpanded(false);
+    updateLayout();
 }
 
 void PPGUAuxiliaryPanelWindowManager::setPalette(
     const PPGUThemeManager::Palette& value)
 {
     palette = value;
-    for (auto& entry : entries)
+    for (auto& window : windows)
     {
-        entry->window->applyPalette(palette);
-        if (entry->paletteUpdater)
-            entry->paletteUpdater(palette);
+        window.overlay->setPalette(palette);
+        window.launcher->setColour(juce::TextButton::buttonColourId, palette.panelElevated);
+        window.launcher->setColour(juce::TextButton::buttonOnColourId, palette.accent);
+        window.launcher->setColour(juce::TextButton::textColourOffId, palette.textPrimary);
+        window.launcher->setColour(juce::TextButton::textColourOnId, palette.windowBg);
     }
+    for (auto* button : { &previousPageButton, &nextPageButton })
+    {
+        button->setColour(juce::TextButton::buttonColourId, palette.controlBg);
+        button->setColour(juce::TextButton::textColourOffId, palette.textPrimary);
+    }
+    pageIndicator.setColour(juce::Label::textColourId, palette.textSecondary);
+    repaint();
 }
 
-PPGUAuxiliaryPanelWindowManager::Entry*
-PPGUAuxiliaryPanelWindowManager::findEntry(int id) noexcept
+void PPGUAuxiliaryPanelWindowManager::paint(juce::Graphics& g)
 {
-    const auto it = std::find_if(entries.begin(), entries.end(),
-        [id](const auto& entry) { return entry->id == id; });
-    return it == entries.end() ? nullptr : it->get();
+    if (getOpenPanelCount() > 0)
+        g.fillAll(palette.shadow.withAlpha(0.58f));
 }
 
-const PPGUAuxiliaryPanelWindowManager::Entry*
-PPGUAuxiliaryPanelWindowManager::findEntry(int id) const noexcept
+void PPGUAuxiliaryPanelWindowManager::resized()
 {
-    const auto it = std::find_if(entries.begin(), entries.end(),
-        [id](const auto& entry) { return entry->id == id; });
-    return it == entries.end() ? nullptr : it->get();
-}
-
-void PPGUAuxiliaryPanelWindowManager::toggleExpanded(int id)
-{
-    jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    if (!isOpen(id))
-        return;
-
-    if (expandedId == id)
-    {
-        expandedId = 0;
-    }
-    else
-    {
-        if (getOpenPanelCount() == 1)
-            if (auto* entry = findEntry(id))
-                entry->normalBounds = entry->window->getBounds();
-        expandedId = id;
-    }
-    focusedId = id;
     updateLayout();
 }
 
-void PPGUAuxiliaryPanelWindowManager::saveWindowState(Entry& entry)
+PPGUAuxiliaryPanelWindowManager::Window*
+PPGUAuxiliaryPanelWindowManager::findWindow(int id) noexcept
 {
-    if (settings == nullptr || entry.window == nullptr)
-        return;
+    const auto it = std::find_if(windows.begin(), windows.end(),
+        [id](const Window& window) { return window.id == id; });
+    return it == windows.end() ? nullptr : &*it;
+}
 
-    if (expandedId == 0 && getOpenPanelCount() == 1)
-        entry.normalBounds = entry.window->getBounds();
-
-    const auto prefix = "auxPanel." + juce::String(entry.id) + ".";
-    settings->setValue(prefix + "windowState", entry.window->getWindowStateAsString());
-    if (!entry.normalBounds.isEmpty())
-    {
-        settings->setValue(prefix + "normalX", entry.normalBounds.getX());
-        settings->setValue(prefix + "normalY", entry.normalBounds.getY());
-        settings->setValue(prefix + "normalW", entry.normalBounds.getWidth());
-        settings->setValue(prefix + "normalH", entry.normalBounds.getHeight());
-    }
+const PPGUAuxiliaryPanelWindowManager::Window*
+PPGUAuxiliaryPanelWindowManager::findWindow(int id) const noexcept
+{
+    const auto it = std::find_if(windows.begin(), windows.end(),
+        [id](const Window& window) { return window.id == id; });
+    return it == windows.end() ? nullptr : &*it;
 }
 
 void PPGUAuxiliaryPanelWindowManager::updateLayout()
 {
-    jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
-    if (getOpenPanelCount() == 0)
+    if (updatingLayout)
         return;
+    updatingLayout = true;
 
-    const auto& displays = juce::Desktop::getInstance().getDisplays();
-    const auto* display = displayAnchor != nullptr
-        ? displays.getDisplayForRect(displayAnchor->getScreenBounds()) : nullptr;
-    if (display == nullptr)
-        display = displays.getPrimaryDisplay();
+    std::vector<Window*> openWindows;
+    openWindows.reserve(windows.size());
+    for (auto& window : windows)
+        if (window.open)
+            openWindows.push_back(&window);
 
-    auto area = display != nullptr ? display->userArea : juce::Rectangle<int>(0, 0, 1280, 720);
-    area = area.reduced(12);
-    if (area.isEmpty())
-        area = { 0, 0, 1280, 720 };
+    auto area = getLocalBounds().reduced(18, 18);
+    auto launcherBar = area.removeFromTop(launcherBarHeight);
+    const int launcherCount = static_cast<int>(windows.size());
+    if (launcherCount > 0)
+    {
+        const int launcherGap = 6;
+        const int launcherWidth = juce::jmax(1,
+            (launcherBar.getWidth() - launcherGap * (launcherCount - 1)) / launcherCount);
+        for (int i = 0; i < launcherCount; ++i)
+        {
+            auto& window = windows[static_cast<std::size_t>(i)];
+            window.launcher->setBounds(launcherBar.removeFromLeft(launcherWidth).reduced(1));
+            window.launcher->setToggleState(window.open, juce::dontSendNotification);
+            if (i + 1 < launcherCount)
+                launcherBar.removeFromLeft(launcherGap);
+        }
+    }
+    area.removeFromTop(8);
 
-    constexpr float logicalScale = 1.0f; // userArea and top-level Component bounds are logical pixels.
-    std::vector<ppgu::ui::PanelRequest> requests;
-    requests.reserve(entries.size());
-    for (const auto& entry : entries)
-        if (entry->open)
-            requests.push_back({ entry->id, { 760, 560 }, { 260, 190 } });
+    const int total = static_cast<int>(openWindows.size());
+    pageCapacity = juce::jmin(panelsPerPage, juce::jmax(1, total));
+
+    const auto makeRequests = [&openWindows](int first, int count)
+    {
+        std::vector<ppgu::ui::PanelRequest> requests;
+        requests.reserve(static_cast<std::size_t>(count));
+        for (int i = 0; i < count; ++i)
+            requests.push_back({ openWindows[static_cast<std::size_t>(first + i)]->id,
+                                 { 520, 360 }, { 260, 190 } });
+        return requests;
+    };
+
+    while (pageCapacity > 1)
+    {
+        auto testArea = area;
+        if (total > pageCapacity)
+            testArea.removeFromBottom(34);
+        const auto probeRequests = makeRequests(0, pageCapacity);
+        const auto probe = ppgu::ui::calculatePanelLayout(
+            { testArea.getX(), testArea.getY(), testArea.getWidth(), testArea.getHeight() },
+            probeRequests, 1.0f, 12);
+        if (!probe.invalidInput && !probe.overflow)
+            break;
+        --pageCapacity;
+    }
+
+    const int pageCount = getPageCount();
+    currentPage = juce::jlimit(0, pageCount - 1, currentPage);
+    const bool hasPaging = pageCount > 1;
+    previousPageButton.setVisible(hasPaging);
+    nextPageButton.setVisible(hasPaging);
+    pageIndicator.setVisible(hasPaging);
+
+    if (hasPaging)
+    {
+        auto footer = area.removeFromBottom(34);
+        previousPageButton.setBounds(footer.removeFromLeft(42).reduced(2));
+        nextPageButton.setBounds(footer.removeFromRight(42).reduced(2));
+        pageIndicator.setBounds(footer);
+        pageIndicator.setText("PAGE " + juce::String(currentPage + 1)
+            + " / " + juce::String(pageCount), juce::dontSendNotification);
+    }
+
+    const auto pageRange = ppgu::ui::calculatePanelPageRange(
+        openWindows.size(), static_cast<std::size_t>(currentPage),
+        static_cast<std::size_t>(pageCapacity));
+    const auto requests = makeRequests(static_cast<int>(pageRange.begin),
+        static_cast<int>(pageRange.end - pageRange.begin));
+
+    for (auto& window : windows)
+        if (window.open)
+            window.overlay->setVisible(false);
 
     if (expandedId != 0 && isOpen(expandedId))
     {
-        const auto expanded = ppgu::ui::calculateExpandedPanelLayout(
+        const bool onPage = std::any_of(requests.begin(), requests.end(),
+            [this](const ppgu::ui::PanelRequest& request) { return request.id == expandedId; });
+        if (!onPage)
+            expandedId = 0;
+    }
+
+    if (expandedId != 0 && !requests.empty())
+    {
+        const auto expandedLayout = ppgu::ui::calculateExpandedPanelLayout(
             { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
-            requests, expandedId, logicalScale, 8);
-        if (!expanded.invalidInput && !expanded.overflow)
+            requests, expandedId, 1.0f, 8);
+        if (!expandedLayout.invalidInput && !expandedLayout.overflow)
         {
-            for (const auto& placement : expanded.panels)
+            for (const auto& placement : expandedLayout.panels)
             {
-                auto* entry = findEntry(placement.id);
-                if (entry == nullptr)
+                auto* window = findWindow(placement.id);
+                if (window == nullptr)
                     continue;
-                entry->window->setExpandedState(placement.id == expandedId);
-                entry->window->setVisible(placement.visible);
-                if (placement.visible)
-                    entry->window->setBounds(placement.bounds.x, placement.bounds.y,
-                                             placement.bounds.width, placement.bounds.height);
+                const bool isExpanded = placement.id == expandedId;
+                window->overlay->setExpanded(isExpanded);
+                window->overlay->setVisible(placement.visible);
+                const auto& bounds = placement.bounds;
+                window->overlay->setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+                if (isExpanded)
+                    window->overlay->toBack();
+                else
+                    window->overlay->toFront(false);
             }
+            updatingLayout = false;
+            repaint();
             return;
         }
         expandedId = 0;
-    }
-
-    if (requests.size() == 1)
-    {
-        auto* entry = findEntry(requests.front().id);
-        if (entry == nullptr)
-            return;
-        entry->window->setExpandedState(false);
-        auto bounds = entry->normalBounds.isEmpty() ? entry->window->getBounds() : entry->normalBounds;
-        if (bounds.getWidth() < 260 || bounds.getHeight() < 190
-            || !area.contains(bounds.getCentre()))
-            bounds = area.withSizeKeepingCentre(
-                juce::jmin(760, area.getWidth()), juce::jmin(560, area.getHeight()));
-        else
-            bounds = bounds.constrainedWithin(area);
-        entry->normalBounds = bounds;
-        entry->window->setBounds(bounds);
-        entry->window->setVisible(true);
-        return;
+        for (auto& window : windows)
+            window.overlay->setExpanded(false);
     }
 
     const auto layout = ppgu::ui::calculatePanelLayout(
         { area.getX(), area.getY(), area.getWidth(), area.getHeight() },
-        requests, logicalScale, 12);
-
-    if (layout.invalidInput)
-        return;
-
-    if (layout.overflow)
-    {
-        auto* focused = findEntry(focusedId);
-        if (focused == nullptr || !focused->open)
-            focused = findEntry(requests.front().id);
-        for (const auto& entry : entries)
+        requests, 1.0f, 12);
+    if (!layout.invalidInput)
+        for (const auto& placement : layout.panels)
         {
-            const bool visible = entry->open && entry.get() == focused;
-            entry->window->setExpandedState(false);
-            entry->window->setVisible(visible);
-            if (visible)
-                entry->window->setBounds(area);
+            auto* window = findWindow(placement.id);
+            if (window == nullptr)
+                continue;
+            window->overlay->setExpanded(false);
+            window->overlay->setVisible(placement.visible);
+            if (placement.visible)
+            {
+                const auto& bounds = placement.bounds;
+                window->overlay->setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
         }
-        return;
-    }
 
-    for (const auto& placement : layout.panels)
-    {
-        auto* entry = findEntry(placement.id);
-        if (entry == nullptr)
-            continue;
-        entry->window->setExpandedState(false);
-        entry->window->setVisible(placement.visible);
-        if (placement.visible)
-            entry->window->setBounds(placement.bounds.x, placement.bounds.y,
-                                     placement.bounds.width, placement.bounds.height);
-    }
+    updatingLayout = false;
+    repaint();
 }

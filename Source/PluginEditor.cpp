@@ -228,18 +228,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     settingsPanel = std::make_unique<PPGUSettingsPanel>(processor.parameters, themeManager.getPalette());
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor.keyboardState, themeManager.getPalette());
 
-    auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(
-        themeManager.getPalette(), uiProperties.getUserSettings(), this);
-    auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel,
-        [this](const PPGUThemeManager::Palette& p) { fxEditPanel->setPalette(p); });
-    auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel,
-        [this](const PPGUThemeManager::Palette& p) { autoChordsPanel->setPalette(p); });
-    auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel,
-        [this](const PPGUThemeManager::Palette& p) { importGuitarPanel->setPalette(p); });
-    auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel,
-        [this](const PPGUThemeManager::Palette& p) { settingsPanel->setPalette(p); });
-    auxiliaryPanels->addPanel(5, "PERFORMANCE  /  LIVE MIDI MONITOR", *performanceDisplay,
-        [this](const PPGUThemeManager::Palette& p) { performanceDisplay->setPalette(p); });
+    auxiliaryPanels = std::make_unique<PPGUAuxiliaryPanelWindowManager>(themeManager.getPalette());
+    auxiliaryPanels->addPanel(1, "FX EDIT  /  EFFECT PROCESSING", *fxEditPanel);
+    auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel);
+    auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel);
+    auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel);
+    auxiliaryPanels->addPanel(5, "PERFORMANCE  /  LIVE MIDI MONITOR", *performanceDisplay);
 
     for (size_t i = 0; i < panelButtons.size(); ++i)
     {
@@ -252,6 +246,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         addAndMakeVisible(button);
     }
 
+    addAndMakeVisible(*auxiliaryPanels);
+    auxiliaryPanels->setVisible(false);
+    if (auto* userSettings = uiProperties.getUserSettings())
+        auxiliaryPanels->restoreOpenPanels(userSettings->getValue("openAuxiliaryPanels"));
+
     loadSavedSkin();
     applyPalette();
 }
@@ -259,8 +258,15 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
     if (auxiliaryPanels)
+    {
+        if (auto* userSettings = uiProperties.getUserSettings())
+        {
+            userSettings->setValue("openAuxiliaryPanels", auxiliaryPanels->getOpenPanelIds());
+            uiProperties.saveIfNeeded();
+        }
         auxiliaryPanels->closeAll();
-    auxiliaryPanels.reset();
+        auxiliaryPanels.reset();
+    }
     setLookAndFeel(nullptr);
 }
 
@@ -328,6 +334,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
+ if(auxiliaryPanels)auxiliaryPanels->setBounds(getLocalBounds());
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
@@ -572,8 +579,12 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
         button.setColour(juce::TextButton::textColourOffId, p.textPrimary);
         button.setColour(juce::TextButton::textColourOnId, p.windowBg);
     }
-    if (auxiliaryPanels)
-        auxiliaryPanels->setPalette(p);
+    if (fxEditPanel) fxEditPanel->setPalette(p);
+    if (autoChordsPanel) autoChordsPanel->setPalette(p);
+    if (importGuitarPanel) importGuitarPanel->setPalette(p);
+    if (settingsPanel) settingsPanel->setPalette(p);
+    if (performanceDisplay) performanceDisplay->setPalette(p);
+    if (auxiliaryPanels) auxiliaryPanels->setPalette(p);
 
     repaint();
 }
