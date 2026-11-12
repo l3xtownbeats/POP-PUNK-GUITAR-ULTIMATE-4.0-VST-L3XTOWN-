@@ -137,9 +137,28 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
     if (not isinstance(start, int) or isinstance(start, bool)
             or not isinstance(end, int) or isinstance(end, bool)
             or pack.get("totalSkins") != len(entries)
-            or start != existing_total + 1
-            or end != existing_total + len(entries)):
-        fail("pack range/count is not continuous with current registry")
+            or end != start + len(entries) - 1):
+        fail("pack range/count is internally inconsistent")
+
+    pack_status = pack.get("status")
+    if pack_status == "GENERATED_NOT_MERGED":
+        if start != existing_total + 1:
+            fail("unmerged pack must begin immediately after the current registry")
+    elif pack_status == "MERGED":
+        if start < 1 or end > existing_total:
+            fail("merged pack range is outside the current registry")
+        registry_by_index = {
+            item.get("index"): item for item in registry["themes"] if isinstance(item, dict)
+        }
+        for packed in entries:
+            registered = registry_by_index.get(packed.get("index"))
+            if not isinstance(registered, dict):
+                fail(f"merged pack index {packed.get('index')} is absent from registry")
+            for key in ("id", "index", "name", "family", "layout", "path", "preview", "hero"):
+                if registered.get(key) != packed.get(key):
+                    fail(f"merged registry entry mismatch at index {packed.get('index')}: {key}")
+    else:
+        fail("pack status must be GENERATED_NOT_MERGED or MERGED")
 
     indices = []
     ids = set()
