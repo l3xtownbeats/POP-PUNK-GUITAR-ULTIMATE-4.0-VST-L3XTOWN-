@@ -94,6 +94,7 @@ PanelLayout calculatePanelLayout(PanelRect area,
 
     Candidate bestFit;
     Candidate bestOverflow;
+    bool bestOverflowFitsWidth = false;
 
     const auto roundedAtScale = [](int desired, int minimum, double factor)
     {
@@ -140,27 +141,26 @@ PanelLayout calculatePanelLayout(PanelRect area,
         const auto minHeight = sum(rowMinimum) + gapHeight;
         if (minWidth > std::numeric_limits<int>::max()
             || minHeight > std::numeric_limits<int>::max())
-        {
-            bestOverflow.minimumOverflow = -1;
-            bestOverflow.columns = columns;
-            bestOverflow.rows = rows;
-            bestOverflow.widths = colMinimum;
-            bestOverflow.heights = rowMinimum;
             continue;
-        }
 
         Candidate overflowCandidate;
         overflowCandidate.columns = columns;
         overflowCandidate.rows = rows;
         overflowCandidate.widths = colMinimum;
         overflowCandidate.heights = rowMinimum;
-        overflowCandidate.minimumOverflow =
-            std::max<std::int64_t>(0, minWidth - area.width)
-            + std::max<std::int64_t>(0, minHeight - area.height);
-        if (overflowCandidate.minimumOverflow < bestOverflow.minimumOverflow
-            || (overflowCandidate.minimumOverflow == bestOverflow.minimumOverflow
-                && columns > bestOverflow.columns))
+        const bool fitsWidth = minWidth <= area.width;
+        overflowCandidate.minimumOverflow = fitsWidth
+            ? std::max<std::int64_t>(0, minHeight - area.height)
+            : (minWidth - area.width) + std::max<std::int64_t>(0, minHeight - area.height);
+        if ((fitsWidth && !bestOverflowFitsWidth)
+            || (fitsWidth == bestOverflowFitsWidth
+                && (overflowCandidate.minimumOverflow < bestOverflow.minimumOverflow
+                    || (overflowCandidate.minimumOverflow == bestOverflow.minimumOverflow
+                        && columns > bestOverflow.columns))))
+        {
             bestOverflow = std::move(overflowCandidate);
+            bestOverflowFitsWidth = fitsWidth;
+        }
 
         if (minWidth > area.width || minHeight > area.height)
             continue;
@@ -207,7 +207,7 @@ PanelLayout calculatePanelLayout(PanelRect area,
     if (!bestFit.feasible)
     {
         result.overflow = true;
-        if (bestOverflow.columns == 0 || bestOverflow.minimumOverflow == -1)
+        if (bestOverflow.columns == 0)
         {
             result.invalidInput = true;
             return result;
