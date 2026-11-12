@@ -88,3 +88,14 @@ Names and visual direction are initial product labels; do not change the approve
 ## Current status
 
 This document records the approved direction and verified baseline only. It does not claim that the REV 7 assets have been recovered, the NEON default has been implemented, the gallery exists, the 15 themes are finished, or any new build has passed. Each gate must be updated only with exact source/CI/host evidence.
+
+
+## Дополнительная проверка источника NEON — 2026-11-13
+
+Обнаружена связанная, но пока не подтверждённая как REV 7 ветка `feature/pop-punk-ultimate-skin-ui` (HEAD `b98a235b434c74142e06215c39378f1b6f805404`). В ней найден документ `docs/PPGU_NEON_SKIN_MASTER_PROMPT_RU.md` (blob `f4f4c5f1f701040d7afadb41fb746150121dae4a`), который называет skin **DREAMING IN NEON** и описывает комплект из трёх визуальных референсов: главное окно, AutoChords overlay и совместное состояние FX EDIT + AutoChords. Документ утверждает, что все три изображения получены и одобрены, но не называет их файловые пути и не связывает их с REV 7.
+
+Ветка `ui/modern-neon-stage-shell` (HEAD `dfd4968a4b600c6b6c0d59601c7c7115cb9f2e1a`) содержит несколько графических файлов с неинформативными именами, включая два одинаковых blob SHA `2092de6a631b74e980e53572776c38d51595c7c0`, а также `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png`, `f463fdae-275c-47c2-96fa-e7dddbb3695f.png` и `Cover Interface.jpg`. Пока не установлено, какие именно три файла соответствуют трём референсам из master prompt и являются ли они макетом REV 7 с точным названием «Неоновый интерфейс PPGU для поп-панк гитары».
+
+Поиск всех доступных веток (список из 54 веток на момент проверки), поиск веток по `REV`, `REV 7`, `rev7`, а также поиск коммитов по `REV 7`, `Неоновый интерфейс PPGU` и `neon interface` не выявил отдельную ветку или коммит REV 7. Это не доказывает отсутствие источника в истории репозитория: поиск GitHub ограничен индексированием и может не находить старые/неиндексированные объекты.
+
+**Решение:** найденный DREAMING IN NEON master prompt — сильная зацепка для восстановления, но он не подменяет явно названный пользователем эталон REV 7. Не менять runtime default, fallback, palette, artwork или геометрию до визуальной сверки трёх оригинальных референсов и подтверждения их происхождения. Следующий безопасный шаг — установить связь между тремя файлами, master prompt и REV 7, затем зафиксировать их blob SHA и роли.
