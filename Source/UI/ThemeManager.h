@@ -15,7 +15,7 @@ public:
             juce::Colour panel { 0xff141b20 };
             juce::Colour panelElevated { 0xff1d2930 };
             juce::Colour controlBg { 0xff10171b };
-            juce::Colour controlFace { 0xff1d2930 };
+            juce::Colour controlFace { 0xff26343a };
             juce::Colour controlBorder { 0xff53656b };
             juce::Colour textPrimary { 0xfff3f7f5 };
             juce::Colour textSecondary { 0xffb7c5c2 };
@@ -57,7 +57,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the safe Blackout Voltage palette.
+    // A failed load always restores the canonical SIGNAL FORGE palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;
