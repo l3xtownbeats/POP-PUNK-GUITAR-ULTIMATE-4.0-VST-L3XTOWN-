@@ -1350,3 +1350,11 @@ Felitronics 69-IR pack remains GREEN-LICENSE / acquisition and QA pending under 
 
 ### 9.5 Статус
 RESOURCE CONTRACT APPROVED AS DESIGN. Это архитектурное решение, не реализованный SOUND FORGE, не измеренный benchmark и не подтверждение неизменного энергопотребления. Следующий шаг — baseline profiling существующего sampler (idle, 1/16/32/64 voices, streaming/cache pressure, preset load) и затем реализация offline processor с тестами ограничений памяти/потоков.
+
+## 2026-11-12 — SOUND FORGE: оптимизированный простой план реализации
+
+Пользователь запросил максимально творческую оптимизацию задач при простой реализации и минимальном потреблении CPU/RAM/энергии. Принято SIMPLE-FIRST решение: не строить большую платформу и не переписывать sampler. Сначала один offline CLI-инструмент поверх существующих JUCE codecs, SFZ parser, SampleMetadataIndex, streaming sampler и SoundBank contracts; GUI — поздняя тонкая оболочка. Первый маршрут WAV + SFZ. Единый pipeline: ADD → SCAN → CHECK → PREVIEW → PREPARE → BUILD → VERIFY → PUBLISH. Оригиналы immutable, manifest/checksum, идемпотентность, атомарная публикация.
+
+Отложено/исключено из первой версии: AI denoise/source separation, neural upscaling, auto-mastering, обязательный GPU, daemon/background polling, отдельная БД/формат, сеть внутри VST, переписывание sampler. Offline jobs: один worker, чанковая обработка, один preview, bounded memory/temp files, low-power mode. Runtime не сканирует/не хэширует/не конвертирует и не выполняет I/O в audio callback.
+
+Этапы: A baseline profiling; B scan+manifest; C verify+SHA-256/dedup; D 2–3 безопасные операции подготовки с A/B; E SFZ/build validation; F atomic package и только затем простая GUI. Подробная спецификация добавлена в MASTER_PRODUCT_SPEC_4_0_RU.md §15.14. Статус: DESIGN/SPECIFICATION ONLY; реализации и benchmark пока не подтверждены.
