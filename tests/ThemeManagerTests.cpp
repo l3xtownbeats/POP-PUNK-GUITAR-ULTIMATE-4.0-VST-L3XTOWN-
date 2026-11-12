@@ -44,6 +44,7 @@ int main()
     expect(fallbackTokens.shadow == juce::Colour(0xff050708), "fallback shadow matches Skin_052");
     expect(fallbackTokens.highlight == juce::Colour(0xff90a7a0), "fallback highlight matches Skin_052");
     expect(fallbackTokens.lowlight == juce::Colour(0xff0d1417), "fallback lowlight matches Skin_052");
+    expect(manager.getPalette().focus == fallbackTokens.highlight, "fallback focus alias matches canonical highlight token");
 
 
     const auto root = juce::File::getCurrentWorkingDirectory();
