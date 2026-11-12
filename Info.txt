@@ -1095,3 +1095,12 @@ Cabinet остаётся отдельной секцией со своим bypas
 **Качество:** проверять каждый preset в solo и полном миксе с loudness matching; атака, читаемость аккордов, sustain, шум, резонансы, stereo/mono, headroom и CPU. Использовать только разрешённые для распространения assets. Неподдерживаемые текущим DSP возможности отмечать PENDING, не объявлять пресет production-ready.
 **Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `551030d122b01c6911da089a8bbcd12eb4854d82`.
 **Не заявляется:** готовые acoustic/electric preset banks, завершённая обработка всех типов гитар или проведённая звуковая приёмка.
+
+
+## 2026-11-12 — Import Guitars: общая библиотека и интеграция ANGELA ENGINE
+
+**Статус:** REQUIREMENT ACCEPTED / END-TO-END IMPLEMENTATION PENDING.  
+Зафиксировано обязательное поведение: успешно импортированные гитарные библиотеки становятся частью общей расширяемой Factory/User Sound Library и доступны ANGELA ENGINE и preset runtime. Пресеты могут выбирать импортированные инструменты, mapping, velocity layers, round-robin и артикуляции; движок применяет source-aware sampler/performance/DSP processing для музыкального улучшения звучания. Электрические, clean, steel acoustic, nylon, acoustic DI и hybrid источники получают подходящие цепочки; электрический amp/cab не навязывается акустике. Добавлены требования к preview/browser, manifest/stable IDs, лицензированию/provenance/SHA-256, missing-file scan/rescan, безопасной потоковой загрузке, переносимости и User Presets без перезаписи Factory.
+
+Подробный контракт: `docs/PPGU_MASTER_PROMPT_RU.md` §7.5.8.  
+**Важно:** эта запись фиксирует решение, а не подтверждает готовность полного импорта, runtime-интеграции или улучшения звука. Требуются реализация и end-to-end regression tests.
