@@ -1076,7 +1076,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile(juce::Label* panel
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
     juce::Component::SafePointer<juce::Label> safePanelStatus(panelStatus);
     juce::Component::SafePointer<juce::Button> safePanelLoadButton(panelLoadButton);
-    fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis](const juce::FileChooser& chooser){
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis, safePanelStatus, safePanelLoadButton](const juce::FileChooser& chooser){
         if(safeThis==nullptr) return; const auto selected=chooser.getResult(); if(selected==juce::File{}) return;
         safeThis->loadButton.setEnabled(false);
         if (safePanelLoadButton != nullptr)
