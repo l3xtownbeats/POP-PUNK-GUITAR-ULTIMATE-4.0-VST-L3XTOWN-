@@ -1596,3 +1596,26 @@ F. Только после этого считать документальны�
 **Reason:** normalize the user-requested REV.17 branch name into a valid Git ref (Git does not permit spaces in branch names). All subsequent implementation/fixes are to be committed only to this REV.17 branch. The prior `work/ppgu-skin-expansion-53-102` branch is retained as the source history, not the active work target.
 
 **Build evidence in progress:** Windows workflow run `43197596467` was started on source commit `557570861655b1b5c028c741835e319326d01c68`, which is included in this branch's history. Final result pending.
+
+
+## 2026-11-12 — REV.17 artwork generator and skin CI branch migration
+
+**Canonical branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+
+**Artwork generator commits:**
+- `86f88acd2091f122d6ab8aba03a81aaa645d9927` (parent `5a08e955e35fdc8e2f2f836d01871668a37d0eee`) — replaced the Python per-pixel gradient loop in `tools/T2_generate_missing_artwork.py` with Pillow native gradient resize and blurred mask operations.
+- `0dc6cde8441896e05ac9115831dc7679b5995965` (parent `00442768e786d727a7a7627be7afa8c3ce206e52`) — changed bloom mask to concentric radial opacity, preserving the off-centre accent glow.
+
+**Skin workflow migration:**
+- `9efe5e01efb227b303811e9213df99ebc4afa18b` — workflow checkout, trigger and generated push target migrated to REV.17.
+- `962e0992ba68012b1ae518f9b11080fc72980d37` — preflight writes a valid GitHub Actions output.
+- `7da4593d6906e29a22044cd553689efacbbaa490` — workflow always validates merged pack; skips generation/commit when 102-theme pack is already MERGED.
+- `1e21cd712279254ee306f5a253745fd61e75b5b2`, `6a51c592c2b08111f8fe0492e25b7eb8efe11ba2`, `00442768e786d727a7a7627be7afa8c3ce206e52` — current skin/audit/control docs now point to REV.17.
+
+**ПРОВЕРКА:** previous legacy artwork generator performed Python work for every pixel of 51 preview and 51 hero images. The old skin workflow was hardcoded to the historical branch and assumed a 52-theme registry, so it would fail if rerun after the 102-theme merge.
+
+**ИСПРАВЛЕНИЕ:** artwork gradient and bloom now use Pillow native image operations; radial accent bloom remains soft and off-centre. Skin workflow targets REV.17 and detects an already merged 102-theme registry; it skips only generation/merge/commit and still reruns full pack/manifest validation. Generated-pack push rebase/retry remains active.
+
+**CI:** skin workflow run `43198014508` on REV.17 SUCCESS (preflight recognized merged pack; full validation and final registry assertions passed). Windows VST3 run `43198145160` on SHA `0dc6cde...` was IN_PROGRESS at journal time; exact build/CTest/pluginval result pending.
+
+**РЕЗУЛЬТАТ:** fast legacy artwork generator SOURCE UPDATED; skin workflow is REV.17-safe and idempotent; full Windows VST3 validation pending.
