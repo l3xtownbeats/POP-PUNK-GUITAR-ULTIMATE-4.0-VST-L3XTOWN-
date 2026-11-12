@@ -480,3 +480,30 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Performance Display должен использовать реальные MIDI-события; chord symbol отображается только при надёжном распознавании, иначе показываются ноты.
 - Не изменялись PluginProcessor, DSP, audio callback, APVTS parameter IDs, MIDI scheduler или preset schema.
 - Локальная компиляция/CTest, Windows Release, pluginval strictness 5 и проверка в FL Studio 20 пока НЕ запускались. Не считать этап A прошедшим до CI.
+
+
+### 12 November 2026 — SIGNAL FORGE UI implementation notes (continued)
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Status:** UI SOURCE SCAFFOLDS PRESENT / EDITOR INTEGRATION AND BUILD VALIDATION PENDING.
+
+В рамках продолжения работ добавлены исходные компоненты в `Source/UI/`:
+
+- `PerformanceDisplay.h/.cpp` — компактное табло над MIDI-клавиатурой: активная нота, базовое распознавание простых трёхзвучных Major/Minor, список активных нот, velocity и MIDI activity. Компонент слушает `juce::MidiKeyboardState` и обновляет интерфейс таймером на Message Thread. Это первый рабочий каркас отображения MIDI-состояния, а не полная телеметрия: тональность, такт/доля, BPM и progression пока не подключены; распознавание расширенных/неоднозначных аккордов ещё требует отдельного тестирования.
+- `EditorOverlayPanel.h/.cpp` — оболочка внутренней панели с заголовком, expand/restore и close. Пока не является оконным менеджером: нет общего lifecycle/tiling/drag/resize/persistence и фактического подключения к редактору.
+- `FXEditPanel.h/.cpp` — UI-каркас списка семи FX-модулей и rotary-контролов через APVTS attachments. Перед подключением обязательно сверить все parameter IDs и типы/диапазоны с `createParameterLayout()`; неизвестные ID пропускаются, поэтому данный каркас нельзя считать полным FX EDIT.
+- `AutoChordsPanel.h/.cpp` — UI-каркас выбора Major/Minor/Custom, Key и progression. Preview намеренно отключён: генерация AutoChords/MIDI пока не подключена и не должна имитироваться.
+- В `PluginEditor.h` добавлены объявления/включения будущих компонентов и методы управления FX Edit/AutoChords. Это только подготовка заголовка; соответствующая реализация в `PluginEditor.cpp`, подключение компонентов к layout и отображение над MIDI-клавиатурой ещё не завершены.
+- Geometry module `AuxiliaryPanelLayout` и его тесты остаются отдельной основой для будущего общего менеджера панелей.
+
+**Важно по сборке:** на момент записи новые UI source files ещё не подтверждены как включённые в CMake target; полная интеграция в PluginEditor не завершена. Не заявлять BUILD PASS, CTest PASS, pluginval PASS или FL Studio 20 acceptance. Не переносить эти изменения в `main` до аудита параметров, корректного CMake wiring и полного CI.
+
+**Зафиксированные ограничения следующего этапа:**
+1. Сверить каждый FX APVTS ID с реальным `PluginProcessor.cpp:createParameterLayout()`; не создавать новые/похожие ID и не менять существующие.
+2. Исправить/проверить безопасное владение JUCE Components и их lifecycle при открытии/закрытии внутренних панелей.
+3. Реализовать общий manager: одна панель — почти вся рабочая область; несколько — плиточная/компактная раскладка; X close и квадрат expand/restore на каждой панели; header остаётся доступен.
+4. Добавить Import Guitar и Settings только на основе реально существующих функций; не выдавать UI-заглушки за реализованные действия.
+5. Подключить Performance Display в PluginEditor, проверить источник MIDI-событий, note-off/overlap semantics и реальные host tempo/position только при наличии валидного playhead.
+6. Добавить все .cpp/.h в CMake, unit tests, затем Windows Release → CTest → pluginval strictness 5 → package; после этого отдельно проверить в FL Studio 20.
+
+**Последний подтверждённый факт по предыдущей CI-ветке:** run #867 ранее был в процессе; позднее был обнаружен compile issue в `AuxiliaryPanelLayout.cpp` из-за пустого anonymous namespace, и создан исправляющий commit. Результат нового CI для последующих UI-коммитов в этой записи ещё не подтверждён.
