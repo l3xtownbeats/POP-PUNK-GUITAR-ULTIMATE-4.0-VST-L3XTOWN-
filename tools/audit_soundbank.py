@@ -59,8 +59,11 @@ def main() -> int:
         if not source_root.is_dir():
             errors.append(f"required source folder missing: {folder} ({label})")
             continue
-        if not (source_root / license_name).is_file():
-            errors.append(f"license evidence missing: {folder}/{license_name}")
+        license_candidates = [license_name]
+        if folder.startswith("FreePats-"):
+            license_candidates = ["LICENSE.txt", "LICENSE"]
+        if not any((source_root / candidate).is_file() for candidate in license_candidates):
+            errors.append(f"license evidence missing in source root: {folder}")
         sfz = list(source_root.rglob("*.sfz"))
         if not sfz:
             errors.append(f"SFZ mapping missing: {folder}")
