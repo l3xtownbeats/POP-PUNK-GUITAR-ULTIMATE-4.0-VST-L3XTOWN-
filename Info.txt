@@ -975,3 +975,70 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Текущий Skin Engine статус:** 21-token API и legacy mapping зафиксированы в рабочей ветке; полная Gallery, runtime discovery/resource-root integration, secure asset loading, layout application, ECO/hot-swap guarantees, control parity и G5–G7 runtime acceptance ещё не считаются завершёнными. Никакой новый C++/DSP код этой записью не менялся.
 
 **Тип коммита:** documentation / journal bootstrap only. Audio, UI source, tests, assets, registry, schema, build scripts и workflows этой записью не изменяются.
+
+
+## 2026-11-12 — MASTER JOURNAL GOVERNANCE: полнота, согласованность, свежесть и исправление ошибок
+
+**Статус:** POLICY ACCEPTED / DOCUMENTATION ONLY. Production source code, audio engine, UI, presets, SoundBank, skins и assets этим этапом не изменялись.
+
+### 1. Обязательный охват документации — весь продукт без исключений
+INFO и CODE должны вместе обеспечивать исчерпывающую историю PPGU: описание продукта и его версий; VST3 identity, platform/toolchain/build/installer; Audio Engine, ядро, voice lifecycle/scheduler, sampler/ROMpler, DSP/FX, MIDI и realtime guarantees; SFZ/WAV readers, streaming/page cache, workers/queues/snapshots; SoundBank, banks, sample libraries, sample mapping, velocity layers, RR, articulations, loops, stacks, tuning, IR; factory/user presets, preset browser/categories/favorites/preview/state; Melody, Pattern, chord/AutoChords/performance engine; оболочка/GUI, все окна и панели, WindowManager, controls/APVTS attachments, accessibility/DPI; Skin Engine/Skin Studio, theme tokens, themes, layouts, gallery, assets, validation/merge/runtime; Import Guitar, Auto Discover/DiscoveryEngine, Curator, license/provenance/security; settings/user data; diagnostics/telemetry/resource budgets; tests, CI, pluginval, host verification, packaging, release; known defects, technical debt, rejected approaches, risks, decisions and roadmap.
+Каждая область описывается не только как желаемая функция, но с отдельным фактическим состоянием и точными доказательствами.
+
+### 2. Разделение источников истины
+- Исходный код и build configuration на выбранном актуальном commit — источник истины о реально реализованном поведении.
+- Тесты и CI — источник истины только о проверках, реально исполненных на конкретном SHA и конфигурации.
+- Product/Architecture specifications — источник требований и принятых решений, но не доказательство реализации.
+- INFO — главный append-only журнал решений, состояния, аудита, рисков, тестов и истории проекта.
+- CODE — append-only журнал каждого изменения исходников, тестов, сборки, ресурсов и документации с commit/parent SHA и точными путями/символами.
+- Manifest/schema/registry/licensing evidence — источник истины только в пределах своей предметной области и версии.
+При расхождении нельзя молча выбрать удобную версию: зафиксировать конфликт, проверить исходный код/историю/тесты, определить authoritative record, затем явно оформить reconciliation/correction запись со ссылками на старые и новые SHA.
+
+### 3. Обязательный preflight перед каждым этапом
+1. Получить актуальный список branches и HEADs; не считать ранее выбранную ветку актуальной без проверки.
+2. Проверить последние commits, compare, merge-base, tree/path changes, рабочую ветку и main; определить, где находятся самые свежие полезные наработки.
+3. Сравнить связанные файлы/функции, а не только даты commit: более поздний commit может не содержать нужного изменения, а ветка может отставать от другой по отдельному модулю.
+4. Проверить INFO/CODE, master prompt, спецификации, аудит, manifests/schemas, license records, tests и workflows.
+5. Использовать свежие совместимые изменения; не перезаписывать, не откатывать и не заменять новые наработки старыми. Если перенос/merge необходим — сохранить историю и обосновать выбор.
+6. До изменения определить scope, invariants, зависимости, acceptance tests и документы, которые требуется синхронно обновить.
+
+### 4. Правило непротиворечивости и устранения недочётов
+- Перед добавлением новой спецификации сверять её с действующими master prompt, архитектурными решениями, schema, кодом и тестами.
+- Дублирующиеся требования объединять ссылками на canonical document; не создавать несколько конкурирующих «источников истины».
+- Исправлять опечатки, неверные пути/имена символов, устаревшие SHA, ложные статусы, противоречивые числа, устаревшие предположения и ошибочные решения. Исторические записи не стирать: добавлять Correction/Supersedes запись, объяснять, что было неверно, почему, какой источник подтвердил исправление и какие документы теперь актуальны.
+- Для каждой функции явно указывать: REQUIRED / DESIGNED / SOURCE PRESENT / INTEGRATED / TESTED / HOST VERIFIED / RELEASED; не повышать статус без доказательств.
+- Различать реализованное, частично реализованное, зарезервированное, спроектированное, экспериментальное и отложенное. APVTS parameter, schema entry, UI mock, manifest, artwork или документ не доказывает работающую end-to-end функцию.
+- Любой rollback/revert должен быть осознанным, иметь причину, ссылку на исходный commit и анализ потери более новых изменений.
+- Если свежая правка противоречит инварианту (например realtime safety, audio invariance, лицензия, стабильный APVTS ID), не применять её вслепую: остановить интеграцию, зарегистрировать конфликт и выбрать безопасное решение.
+
+### 5. Жизненный цикл каждой правки — обязательная транзакция
+Для каждого логического изменения:
+A. Preflight и фиксация исходного HEAD/parent.
+B. Изменение только обоснованного scope; сохранение совместимости и инвариантов.
+C. Тесты/проверки на точном SHA; отрицательные результаты и ограничения также записывать.
+D. Обновить INFO и CODE: один и тот же commit SHA, parent, branch, paths, symbols, причины, изменения, совместимость, тесты/CI, статусы, риски, follow-up. Если production code не менялся — явно сказать.
+E. Перечитать обе записи после commit и проверить, что ссылки, SHA, статусы и описание совпадают.
+F. Только после этого считать документальный этап завершённым.
+Если один журнал не обновлён, второй не совпадает или запись не прошла read-back verification — этап остаётся JOURNAL INCOMPLETE, нельзя заявлять о полном завершении.
+
+### 6. Обязательная структура карточки изменения
+- Date/time (UTC), product/revision, branch, base HEAD, parent SHA, resulting commit SHA.
+- Change class: source / test / build / UI / skin / soundbank / preset / content / license / docs / CI / packaging / revert.
+- Motivation / defect or requirement.
+- Exact files and symbols; what changed and what did not change.
+- Before/after behavior and compatibility / migration notes.
+- Related specification, schema, manifest, license and previous journal entry.
+- Tests with command/configuration, exact SHA, pass/fail/skipped, logs/artifacts and limitations.
+- CI run ID/status and host validation separately.
+- Open issues, regressions, risk and next action.
+- Explicit status; no implied success.
+
+### 7. Неприкосновенные правила качества
+- Не заявлять BUILD PASS, CTEST PASS, PLUGINVAL PASS, FL STUDIO VERIFIED или RELEASE READY без подтверждения на точном commit SHA.
+- Не переносить PASS с предыдущего SHA на новый.
+- Не подменять полный исходный код кратким описанием в CODE: код хранится в canonical source tree, а CODE даёт точный commit и индекс изменений.
+- Не объявлять дизайн/план/asset pack готовой интеграцией.
+- Не удалять историю; исправлять историю отдельными корректирующими записями.
+- Перед релизом сверить INFO, CODE, product specs, manifests, schemas, license/provenance records, tests, package contents и actual binary на одном release candidate SHA.
+
+**Итоговое правило:** любое наше принятое решение, изменение, исправление, добавление, удаление, перенос, тест, отказ от подхода и обнаруженный дефект должны быть отражены в согласованной истории. Всегда используем самые свежие подтверждённые наработки; устаревшее сохраняем только как историю и явно помечаем SUPERSEDED/REJECTED/INVALID, не выдавая за актуальное.
