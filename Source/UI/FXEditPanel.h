@@ -27,6 +27,7 @@ private:
     struct Module
     {
         juce::String name, enabledId;
+        bool hasEnabledSwitch = true;
         std::vector<std::pair<juce::String, juce::String>> controls;
         juce::TextButton select;
         juce::TextButton enabled;

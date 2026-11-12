@@ -7,7 +7,7 @@ PPGUFXEditPanel::PPGUFXEditPanel(juce::AudioProcessorValueTreeState& apvts,
     modules[0].name = "COMPRESSOR"; modules[0].enabledId = "compressorOn"; modules[0].controls = { { "compressorThreshold", "THRESHOLD" }, { "compressorRatio", "RATIO" }, { "compressorAttack", "ATTACK" }, { "compressorRelease", "RELEASE" }, { "compressorAmount", "AMOUNT" } };
     modules[1].name = "EQ"; modules[1].enabledId = "eqOn"; modules[1].controls = { { "eqLow", "LOW" }, { "eqMid", "MID" }, { "eqHigh", "HIGH" }, { "eqLowFreq", "LOW FREQ" }, { "eqMidFreq", "MID FREQ" }, { "eqMidQ", "MID Q" }, { "eqHighFreq", "HIGH FREQ" } };
     modules[2].name = "DISTORTION"; modules[2].enabledId = "distortionOn"; modules[2].controls = { { "distortionDrive", "DRIVE" }, { "distortionTone", "TONE" }, { "distortionMix", "MIX" } };
-    modules[3].name = "FLANGER"; modules[3].enabledId = "flangerOn"; modules[3].controls = { { "flangerRate", "RATE" }, { "flangerDepth", "DEPTH" }, { "flangerFeedback", "FEEDBACK" }, { "flangerMix", "MIX" } };
+    modules[3].name = "FLANGER"; modules[3].enabledId.clear(); modules[3].hasEnabledSwitch = false; modules[3].controls = { { "flangerRate", "RATE" }, { "flangerDepth", "DEPTH" }, { "flangerFeedback", "FEEDBACK" }, { "flangerMix", "MIX" } };
     modules[4].name = "CHORUS"; modules[4].enabledId = "chorusOn"; modules[4].controls = { { "chorusRate", "RATE" }, { "chorusDepth", "DEPTH" }, { "chorusMix", "MIX" } };
     modules[5].name = "DELAY"; modules[5].enabledId = "delayOn"; modules[5].controls = { { "delayTime", "TIME" }, { "delayFeedback", "FEEDBACK" }, { "delayMix", "MIX" } };
     modules[6].name = "REVERB"; modules[6].enabledId = "reverbOn"; modules[6].controls = { { "reverbRoomSize", "ROOM" }, { "reverbDamping", "DAMPING" }, { "reverbMix", "MIX" } };
@@ -20,13 +20,22 @@ PPGUFXEditPanel::PPGUFXEditPanel(juce::AudioProcessorValueTreeState& apvts,
         module.select.setColour(juce::TextButton::textColourOffId, juce::Colour(0xffe8eaf0));
         module.select.onClick = [this, i] { selectModule(i); };
         addAndMakeVisible(module.select);
-        module.enabled.setButtonText("ON");
-        module.enabled.setClickingTogglesState(true);
-        module.enabled.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff252a33));
-        module.enabled.setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffed238b));
-        module.enabled.setColour(juce::TextButton::textColourOffId, juce::Colour(0xffe8eaf0));
-        module.enabledAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(state, module.enabledId, module.enabled);
-        addAndMakeVisible(module.enabled);
+        if (module.hasEnabledSwitch && state.getParameter(module.enabledId) != nullptr)
+        {
+            module.enabled.setButtonText("ON");
+            module.enabled.setClickingTogglesState(true);
+            module.enabled.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff252a33));
+            module.enabled.setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffed238b));
+            module.enabled.setColour(juce::TextButton::textColourOffId, juce::Colour(0xffe8eaf0));
+            module.enabledAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(state, module.enabledId, module.enabled);
+            addAndMakeVisible(module.enabled);
+        }
+        else
+        {
+            module.enabled.setVisible(false);
+            module.enabled.setEnabled(false);
+            module.select.setTooltip("Flanger parameters are available; its enable switch is not part of the approved seven-switch runtime inventory.");
+        }
     }
     hint.setText("LIVE PARAMETERS  /  CHANGES ARE LINKED TO THE PLUGIN ENGINE", juce::dontSendNotification);
     hint.setFont(juce::Font(10.0f, juce::Font::bold));
@@ -116,9 +125,17 @@ void PPGUFXEditPanel::resized()
     for (auto& module : modules)
     {
         auto row = left.removeFromTop(rowHeight);
-        module.select.setBounds(row.removeFromLeft(108));
-        row.removeFromLeft(4);
-        module.enabled.setBounds(row);
+        if (module.hasEnabledSwitch)
+        {
+            module.select.setBounds(row.removeFromLeft(108));
+            row.removeFromLeft(4);
+            module.enabled.setBounds(row);
+        }
+        else
+        {
+            module.select.setBounds(row);
+            module.enabled.setBounds({});
+        }
         left.removeFromTop(compact ? 1 : 3);
     }
     hint.setBounds(getLocalBounds().removeFromBottom(22).reduced(190, 0));
