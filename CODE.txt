@@ -25,3 +25,12 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Root cause: initial S2 port used a nonexistent Palette::token() API; main's Palette contract is the 21 direct colour fields. Fixed all panel color access and JUCE color setter signatures.
 - Additional behavior: editor-display-aware placement; logical-coordinate sizing; compact 260x190 minimum for 2x3 tiling; persisted normal bounds for expand/restore; PerformanceDisplay timer active only while visible.
 - Verification: run #1163 / ID 43226541896 failed at Build VST3 and test executables on SHA ae0334b7bcc51a31c46b959bd6ed0d5417b356fb; configure passed. Run #1164 / ID 43227468469 is QUEUED on exact corrective SHA c143d811756a8cc935400c5f7cab8dc04b75d0a7.
+
+
+### S2 FX inventory parity correction
+- Source commit: 9a428e508b09791396385d5bcde96422f24846de
+- Paths: Source/UI/FXEditPanel.h; Source/UI/FXEditPanel.cpp.
+- Symbols: PPGUFXEditPanel::Module::hasEnabledSwitch; module setup; seven inventory-bound ButtonAttachments; Flanger parameter page without an extra enable switch.
+- Verified inventory IDs: compressorOn, eqOn, distortionOn, chorusOn, delayOn, reverbOn, cabinetOn. Processor's flangerOn is not in runtimeControlInventory and is not exposed as a panel toggle.
+- APVTS IDs/semantics, schema, registry and control inventory unchanged.
+- CI run #1165 / ID 43227783170 is PENDING on exact source SHA 9a428e508b09791396385d5bcde96422f24846de.
