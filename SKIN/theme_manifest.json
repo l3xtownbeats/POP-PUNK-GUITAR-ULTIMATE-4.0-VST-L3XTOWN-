@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
-  "totalSkins": 51,
+  "totalSkins": 52,
   "defaultSkin": "skin-51",
   "selector": "SKIN",
   "status": "runtime-palette-switching-implemented-pending-validation",
@@ -464,6 +464,20 @@
       "path": "Skin_51/theme.json",
       "preview": "Skin_51/assets/preview.png",
       "hero": "Skin_51/assets/hero.webp"
+    },
+    {
+      "id": "skin-052",
+      "index": 52,
+      "name": "Carbon Relay",
+      "family": "carbon_studio",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_052/theme.json",
+      "preview": "Skin_052/assets/preview.png",
+      "hero": "Skin_052/assets/hero.png"
     }
-  ]
+  ],
+  "skinRange": {
+    "first": 1,
+    "last": 52
+  }
 }
