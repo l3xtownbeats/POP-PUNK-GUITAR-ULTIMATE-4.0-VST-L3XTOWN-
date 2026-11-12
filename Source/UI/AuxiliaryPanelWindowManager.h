@@ -30,6 +30,7 @@ private:
     {
         int id = 0;
         juce::Component* content = nullptr;
+        bool open = false;
         std::unique_ptr<PPGUEditorOverlayPanel> overlay;
     };
 
