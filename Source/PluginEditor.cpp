@@ -1013,8 +1013,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = fxEditPanelId;
         spec.title = "FX EDIT  /  SIGNAL FORGE";
-        spec.desired = { 1000.0f, 680.0f };
-        spec.minimum = { 620.0f, 440.0f };
+        spec.desired = { 1000, 680 };
+        spec.minimum = { 620, 440 };
         spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
@@ -1033,8 +1033,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openAutoChordsPanel()
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = autoChordsPanelId;
         spec.title = "AUTOCHORDS  /  HARMONY WORKSPACE";
-        spec.desired = { 900.0f, 620.0f };
-        spec.minimum = { 560.0f, 420.0f };
+        spec.desired = { 900, 620 };
+        spec.minimum = { 560, 420 };
         spec.content = std::make_unique<PPGUAutoChordsPanel>(processor.parameters);
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
