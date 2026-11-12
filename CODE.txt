@@ -343,3 +343,11 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Static verification:** all five parameter bindings and processor IDs found; runtime scheduler reads confirmed; Zone F rendered in center strip; no DSP/processor/CMake files changed.
 - **Pending:** full geometry/resize QA; Windows x64 build; CTest; pluginval strictness 5; exact-SHA CI; FL Studio 20 host acceptance.
 - **Resume queue:** T-F4 layout/resize; T-F5 diff/regression review; T-F6 build/test/CI; T-F7 host acceptance; T-F8 closeout. See INFO for exact checklist and baseline.
+
+
+## 2026-11-12 — Zone F window bounds alignment
+
+- **Source commit:** `07e76344f5875d8d0fa3b9d823b032734abfc070` — `Source/PluginEditor.cpp`.
+- **Applied:** default 1600×900; resizable minimum 1200×700; maximum 2400×1500.
+- **Reason:** align the real editor constructor with the accepted visual-shell specification and reserve enough central area for Zone F.
+- **Pending:** visual overlap/clipping check at min/default/max; scale presets 50/60/75/80/90/100/110/125/150% and persistence; compile/CTest/pluginval/exact-SHA CI/FL Studio 20.
