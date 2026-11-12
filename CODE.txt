@@ -340,3 +340,24 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Verification:** documentation readback required; no source implementation or runtime test is claimed. UI component parity, exact visual match, build, CTest, pluginval and FL Studio 20 host verification remain pending.
 
 **Status:** REQUIREMENT RECORDED; IMPLEMENTATION/VALIDATION PENDING.
+
+
+## 2026-11-12 — Skin expansion 53-102 automation and default-skin contract repair
+
+**Type:** test correction + CI workflow; generated theme payload not yet present.  
+**Branch:** `work/ppgu-skin-expansion-53-102`  
+**Base:** `work/visual-shell-spec-rev17-1` at `9042cd1ccc325f4aca130fa917d310df9dd965f0`.  
+**Commits:** `2f485a358e9d99efd26a0276a81701b332535d18`, `58cd62a2b3444ad22c6d5d4f91751c55a603fac5`.  
+**Journal follow-up:** `Info.txt` update commit `e3a60d0047afe6d5ef8306c2889e2b18a78bbcd3`.
+
+**Files / symbols:**
+- `tests/ValidateSkinManifests.py` — `DEFAULT_ID` remains the single expected default; stale literal assertion `skin-51` replaced by a message derived from `DEFAULT_ID`, matching canonical `skin-052`.
+- `.github/workflows/ppgu-skin-expansion.yml` — new `generate-validate-merge` workflow for Skin Studio indices 53–102. Runs preflight, `tools/generate_skin_batch.py`, `tools/validate_skin_pack.py`, `tools/merge_skin_pack.py`, and `tests/ValidateSkinManifests.py`; verifies 102 registry entries and preserves Skin_052 as default; commits generated payload only after all gates pass.
+
+**Before/after:** the existing test incorrectly rejected the registry's documented `defaultSkin: skin-052`. It now checks the canonical default constant. The next 50-theme batch has a reproducible CI path instead of being manually represented as completed.
+
+**Invariants:** no production C++/JUCE editor, ThemeManager, APVTS, audio/DSP, sampler, MIDI, preset, or existing skin data changed in these commits. No generated `Skin_053`–`Skin_102` folders are claimed at this point.
+
+**Tests / CI:** workflow file and commits confirmed by GitHub readback. No Actions run ID, job logs, G1–G4 result, merge result, generated asset commit, Windows build, pluginval or FL Studio host result available at journal time. Status: **PIPELINE COMMITTED; EXECUTION/VALIDATION PENDING**.
+
+**Next:** inspect the workflow run and generated commit; verify 102 manifests, exact folder parity, PNG dimensions/CRC, safe SVG, contrast and control parity. Then implement/verify the runtime Theme Gallery and transition/ECO/DPI gates.
