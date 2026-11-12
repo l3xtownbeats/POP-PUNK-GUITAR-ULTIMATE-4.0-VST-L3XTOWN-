@@ -125,7 +125,7 @@ int main()
         expect(unexpectedControls != nullptr, "Skin_052 controls object is mutable for extra-key test");
         if (unexpectedControls != nullptr)
             unexpectedControls->setProperty("unapproved_control",
-                                             unexpectedControls->getProperty("About", juce::var()));
+                                             unexpectedControls->getProperty("About"));
         expect(!manager.loadFromJson(juce::JSON::toString(unexpectedControl)),
                "Skin_052 rejects an unapproved extra control ID");
         expect(manager.getPalette().usedFallback,

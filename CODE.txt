@@ -165,3 +165,13 @@ CODE.txt обязан указывать точный commit SHA и пути з�
 **Тесты/CI:** execution NOT RUN; exact-SHA CI pending; pluginval/host NOT RUN.
 **Статус:** SOURCE PRESENT; TESTED PENDING; HOST VERIFIED NO; RELEASED NO.
 **Следующий шаг:** verify exact-SHA workflow and continue G1/G4.
+
+
+[2026-11-12] TEST FIX — ThemeManager JUCE 7 API
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV-17
+Base SHA: f490ab2abb41f9325189181601699e4bb8e0a634
+Files: tests/ThemeManagerTests.cpp, Info.txt, CODE.txt
+Change: Correct DynamicObject::getProperty call in extra-control contract test to JUCE 7.0.12 one-argument API.
+Reason: CI run 43166352726 failed compiling ppgu_theme_manager_tests with MSVC C2660 at ThemeManagerTests.cpp:128.
+Scope: test source and append-only journals only; no production audio/UI behavior changed.
+Verification: pending CI on resulting commit SHA; no passing build claimed.
