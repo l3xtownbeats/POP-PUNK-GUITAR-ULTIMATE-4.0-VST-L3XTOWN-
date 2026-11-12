@@ -1365,3 +1365,13 @@ RESOURCE CONTRACT APPROVED AS DESIGN. Это архитектурное реше
 Rhythm Mode: аккорды, power chords, down/upstroke, palm mute, chugs, octave hooks, skank/offbeat, stop-start и tempo-synced patterns. Melody Mode: одиночные ноты, риффы, лиды, арпеджио, соло, note-off и доступные артикуляции; phrase/lick trigger только при наличии записанных performance assets. UI показывает только реальные возможности карты инструмента. Общий voice budget, общий streaming cache, отдельные параметры исполнения каждого режима.
 
 Подробная спецификация: MASTER_PRODUCT_SPEC_4_0_RU.md §15.15. Статус: SPECIFICATION APPROVED; код, сборка и runtime tests ещё не подтверждены.
+
+## 2026-11-12 — Sound Forge: first implementation slice
+
+Implemented tools/soundforge/ppgu_soundforge.py (offline CLI scan/package), tests/TestSoundForge.py (CTest contract), and tools/soundforge/README.md. The tool scans SFZ/WAV maps, supports common global/master/group inheritance, validates relative sample paths and mono/stereo WAV metadata, computes SHA-256 in 1 MiB chunks, reports note/velocity/RR/articulation hints, and packages referenced WAVs/SFZ plus instrument-package.json into a staging folder. Source assets are not modified. First slice does not perform denoising/mastering or create new performances.
+
+Code inspection confirmed existing shared-runtime architecture: one processor-owned SamplerEngine is used by direct Melody MIDI events and scheduled Pattern/Rhythm events. UI choice now displays RHYTHM; internal playMode parameter ID/index is unchanged for compatibility.
+
+New library candidate found: Boyss-Sound-e-Scapes Guitar DI Lite (96 WAV, 24-bit/44.1kHz, 2 RR x 3 velocity layers, dry electric DI), official page https://www.boyss-sound-e-scapes.com/7th-year-free-pack . Binary acquisition was attempted but this environment has no DNS/network access; NOT downloaded, NOT added to Samples, NOT integrated. Existing workflow already retrieves Meta Open Sound, FreePats and Karoryfer libraries.
+
+CI run triggered by current HEAD: 43279230546 (run 1232), status checked as in progress. Do not mark implementation verified until it completes successfully.
