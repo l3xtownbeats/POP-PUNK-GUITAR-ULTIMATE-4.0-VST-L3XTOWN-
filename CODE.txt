@@ -332,3 +332,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Queue:** T-F1 parameter/runtime audit → T-F2 Zone F controls/attachments → T-F3 mode/sync behavior → T-F4 layout/resize → T-F5 static diff checks → T-F6 Windows Release/CTest/pluginval/exact-SHA CI → T-F7 FL Studio 20 host acceptance → T-F8 append-only closeout.
 - **Boundaries:** logical center strip only; no fourth outer column; no new APVTS IDs; no DSP/MIDI/sampler/scheduler/preset/SoundBank changes; no fake controls; swing/humanize/accent remain in the existing knob matrix.
 - **Status:** restart checkpoint recorded; production UI implementation pending; no build/test/host pass claimed.
+
+
+## 2026-11-12 — REV.17 Zone F first UI implementation
+
+- **Source files:** `Source/PluginEditor.h`, `Source/PluginEditor.cpp`.
+- **Commits:** header `79c74959140109e7569d8595a53bf76ccd237a58`; main UI `7363037b22c49530f7f439c38b603c651476853e`; mode/tempo correction `07036a2ac86319c840628121a9f203f577f96cae`.
+- **Bindings:** existing `patternSlot`, `patternLength`, `syncMode`, `bpm`, `startOnFirstChord`; no new APVTS IDs. Swing/Humanize/Accent remain in the nine-knob matrix.
+- **Behavior:** Pattern-only controls disabled in MELODY; BPM editable only in PATTERN + INTERNAL; Host modes retain read-only fallback BPM indication.
+- **Static verification:** all five parameter bindings and processor IDs found; runtime scheduler reads confirmed; Zone F rendered in center strip; no DSP/processor/CMake files changed.
+- **Pending:** full geometry/resize QA; Windows x64 build; CTest; pluginval strictness 5; exact-SHA CI; FL Studio 20 host acceptance.
+- **Resume queue:** T-F4 layout/resize; T-F5 diff/regression review; T-F6 build/test/CI; T-F7 host acceptance; T-F8 closeout. See INFO for exact checklist and baseline.
