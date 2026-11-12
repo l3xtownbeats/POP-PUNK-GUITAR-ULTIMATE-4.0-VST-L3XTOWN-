@@ -1309,3 +1309,5 @@ Lifecycle/persistence/theme handling изменены в исходниках, �
 Не добавлялись фиктивные кнопки Looper/Tuner/MASTER FX BYPASS: журнал различает эти требования и реализованные функции; их UI не следует показывать до наличия подтверждённого backend/параметров и соответствующего этапа. FX EDIT остаётся видимой кнопкой, поскольку панель реально создаётся, регистрируется и подключена к обработчику открытия.
 
 Source inventory check: five navigation buttons map one-to-one to panel IDs 1–5; eight FX switches map one-to-one to eight attachment slots. Windows Release, CTest, pluginval and host GUI verification remain PENDING until exact-SHA CI/host evidence.
+
+Дополнение к GUI parity: после перестройки навигации синхронизирована геометрия `paint()` и `resized()`: hero header 160 px, navigation strip имеет отдельную skin-aware подложку, карточки AMP & TONE / FX CHAIN / PLAYBACK совпадают с фактическими bounds компонентов. Это source-level alignment; визуальная приёмка на Windows DPI/host ещё ожидает реального запуска.

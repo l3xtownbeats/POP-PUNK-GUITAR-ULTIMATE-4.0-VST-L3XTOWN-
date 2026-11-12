@@ -310,7 +310,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
  for(int x=16;x<getWidth();x+=32)g.drawVerticalLine(x,0,(float)getHeight());
  for(int y=16;y<getHeight();y+=32)g.drawHorizontalLine(y,0,(float)getWidth());
  g.setGradientFill(juce::ColourGradient(p.token("control_bg"),0,0,p.token("window_bg"),0,74,false));g.fillRect(0,0,getWidth(),76);g.setColour(p.token("accent"));g.fillRect(0,0,getWidth(),3);
- auto hero=getLocalBounds().reduced(18);hero.removeFromTop(66);hero.setHeight(184);
+ auto hero=getLocalBounds().reduced(18);hero.removeFromTop(66);hero.setHeight(160);
  g.setGradientFill(juce::ColourGradient(p.token("panel_elevated").brighter(.08f),(float)hero.getX(),(float)hero.getY(),p.token("control_bg"),(float)hero.getRight(),(float)hero.getBottom(),false));
  g.fillRoundedRectangle(hero.toFloat(),13);g.setColour(p.token("control_border"));g.drawRoundedRectangle(hero.toFloat().reduced(.5f),13,1);
  auto t=hero.reduced(28,17);g.setColour(p.token("accent_glow"));g.setFont(juce::Font(9.5f,juce::Font::bold));g.drawText("L3XTOWN AUDIO LAB  /  SIGNATURE INSTRUMENT",t.removeFromTop(18),juce::Justification::left);
@@ -325,7 +325,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
  g.setColour(juce::Colour(0xff171a20));g.fillRoundedRectangle(x+w*.42f,y+h*.45f,w*.22f,h*.18f,4);g.setColour(juce::Colour(0xffaeb4bc));g.fillRoundedRectangle(x+w*.43f,y+h*.49f,w*.20f,h*.035f,2);g.fillRoundedRectangle(x+w*.43f,y+h*.56f,w*.20f,h*.035f,2);
  for(int i=0;i<6;++i){float o=(float)i*1.4f;g.setColour(juce::Colours::white.withAlpha(.72f));g.drawLine(x+w*.55f+o,y+h*.46f,x+w*.96f+o*.2f,y+h*.12f,.65f);}
  g.setColour(p.token("accent"));g.fillEllipse(x+w*.56f,y+h*.69f,7,7);g.fillEllipse(x+w*.64f,y+h*.66f,7,7);
- auto panels=getLocalBounds().reduced(18);panels.removeFromTop(356);panels.removeFromBottom(92);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
+ auto navigation=getLocalBounds().reduced(18);navigation.removeFromTop(56+10+160+10+52+6+22+4);navigation= navigation.removeFromTop(34);
+ g.setColour(p.token("panel").withAlpha(.72f));g.fillRoundedRectangle(navigation.toFloat(),8.0f);
+ g.setColour(p.token("control_border").withAlpha(.55f));g.drawRoundedRectangle(navigation.toFloat().reduced(.5f),8.0f,1.0f);
+ auto panels=getLocalBounds().reduced(18);panels.removeFromTop(360);panels.removeFromBottom(88);int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);
  auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);drawPanel(g,amp);drawPanel(g,fx);drawPanel(g,panels);
 }
 
