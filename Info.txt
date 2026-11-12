@@ -1095,3 +1095,10 @@ User's primary functionality references: Native Instruments Session Guitarist El
 PATTERN variations must be switchable during playback with host sync and clean transitions. Optional compatible layering may be an advanced feature; it must not be the default behavior and must respect CPU/polyphony limits. Tone effects (flanger, tremolo effect, delay, reverb, distortion) are distinct from playing techniques (tremolo picking, palm mute, strumming, etc.). Every displayed articulation requires a matching recorded performance/one-shot/loop map and runtime verification; unavailable articulations must be marked unavailable rather than simulated with synthetic guitar.
 
 Specification updated in `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.7. This is an approved product requirement, not evidence that the runtime UI, sample maps or playback engine already implement it.
+
+
+## 2026-11-12 — User-provided PATTERN technique and rhythm vocabulary
+
+Added confirmed terms to `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.8: palm mute, open chords, downstroke/upstroke/alternate picking, staccato power chords, chugs, skank/offbeat upstrokes, straight eighths, gallop, stop-time/stop-start, half-time, double-stops, octave hooks, muted-string scratches between chords, and muted-verse/open-chorus contrast. These are requirements for real recorded articulations/performance maps, not synthetic guitar functions.
+
+Voice transcription also contained uncertain words ("crank", "debit", "stocktime", "how-fo-time"). Preserved as pending terminology rather than guessing their intended musical names.
