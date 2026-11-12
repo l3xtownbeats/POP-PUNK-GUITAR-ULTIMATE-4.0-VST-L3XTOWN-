@@ -1,56 +1,144 @@
 #!/usr/bin/env python3
-"""Merge a validated PPGU skin pack into theme_manifest.json with timestamped backups."""
+"""Safely merge a validated REV14 Skin Studio pack into the canonical registry.
+
+Legacy theme.schema.json remains the schema for legacy themes. New Skin Studio
+manifests are governed by control_schema.json; this merge never rewrites one
+schema to pretend the two manifest formats are interchangeable.
+"""
 from __future__ import annotations
-import argparse, json, shutil, subprocess, sys
+
+import argparse
+import json
+import shutil
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-def main():
-    parser=argparse.ArgumentParser()
-    parser.add_argument("--root",type=Path,default=Path("SKIN"))
-    parser.add_argument("--manifest",type=Path,default=Path("SKIN/theme_pack_manifest.json"))
-    parser.add_argument("--dry-run",action="store_true")
-    args=parser.parse_args()
-    root=args.root
-    validator=Path("tools/validate_skin_pack.py")
-    result=subprocess.run([sys.executable,str(validator),"--root",str(root),"--manifest",str(args.manifest)],capture_output=True,text=True)
+
+def fail(message: str, code: int = 2) -> int:
+    print(message, file=sys.stderr)
+    return code
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path("SKIN"))
+    parser.add_argument("--manifest", type=Path, default=Path("SKIN/theme_pack_manifest.json"))
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+
+    root = args.root
+    registry_path = root / "theme_manifest.json"
+    legacy_schema_path = root / "theme.schema.json"
+    studio_schema_path = root / "control_schema.json"
+    validator = Path("tools/validate_skin_pack.py")
+
+    if not validator.is_file():
+        return fail(f"Skin pack validator not found: {validator}")
+    if not registry_path.is_file() or not legacy_schema_path.is_file() or not studio_schema_path.is_file():
+        return fail("Registry or one of the versioned theme schemas is missing.")
+    if not args.manifest.is_file():
+        return fail(f"Skin pack manifest not found: {args.manifest}")
+
+    result = subprocess.run(
+        [sys.executable, str(validator), "--root", str(root), "--manifest", str(args.manifest)],
+        capture_output=True, text=True
+    )
     if result.returncode:
-        print(result.stdout+result.stderr,file=sys.stderr); return result.returncode
-    registry_path=root/"theme_manifest.json"
-    schema_path=root/"theme.schema.json"
-    registry=json.loads(registry_path.read_text(encoding="utf-8"))
-    pack=json.loads(args.manifest.read_text(encoding="utf-8"))
-    existing=registry.get("themes",[])
-    if registry.get("totalSkins")!=pack["startIndex"]-1:
-        print("Registry changed since pack validation; refusing merge.",file=sys.stderr); return 2
-    additions=[]
-    for item in sorted(pack["themes"],key=lambda x:x["index"]):
-        folder=root/f"Skin_{item['index']:03d}"
-        theme=json.loads((folder/"theme.json").read_text(encoding="utf-8"))
-        additions.append({"id":theme["id"],"index":theme["index"],"name":theme["name"],
-                          "family":theme["family"],"layout":theme["layout"],
-                          "path":f"Skin_{theme['index']:03d}/theme.json",
-                          "preview":f"Skin_{theme['index']:03d}/assets/preview.png",
-                          "hero":f"Skin_{theme['index']:03d}/assets/hero.png"})
-    ids={x["id"] for x in existing}
-    if any(x["id"] in ids for x in additions):
-        print("Duplicate skin ID; refusing merge.",file=sys.stderr); return 3
-    new_registry=dict(registry)
-    new_registry["themes"]=existing+additions
-    new_registry["totalSkins"]=len(new_registry["themes"])
-    new_registry["skinRange"]={"first":min(x["index"] for x in new_registry["themes"]),
-                               "last":max(x["index"] for x in new_registry["themes"])}
+        print(result.stdout, end="")
+        print(result.stderr, end="", file=sys.stderr)
+        return result.returncode
+
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        pack = json.loads(args.manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return fail(f"Cannot read merge inputs: {exc}")
+
+    existing = registry.get("themes")
+    if not isinstance(existing, list) or not existing:
+        return fail("Registry themes must be a non-empty array.")
+    existing_total = registry.get("totalSkins")
+    if not isinstance(existing_total, int) or isinstance(existing_total, bool) or existing_total != len(existing):
+        return fail("Registry totalSkins does not match its themes array.")
+
+    existing_ids = [item.get("id") for item in existing if isinstance(item, dict)]
+    existing_indices = [item.get("index") for item in existing if isinstance(item, dict)]
+    if len(existing_ids) != len(existing) or len(existing_indices) != len(existing):
+        return fail("Registry contains malformed theme entries.")
+    if len(set(existing_ids)) != existing_total or len(set(existing_indices)) != existing_total:
+        return fail("Registry contains duplicate IDs or indices.")
+    if sorted(existing_indices) != list(range(1, existing_total + 1)):
+        return fail("Registry indices are not continuous from 1 to totalSkins.")
+
+    start, end, count = pack.get("startIndex"), pack.get("endIndex"), pack.get("totalSkins")
+    themes = pack.get("themes")
+    if (not isinstance(themes, list) or not themes
+            or start != existing_total + 1
+            or end != existing_total + len(themes)
+            or count != len(themes)):
+        return fail("Registry changed or pack range/count is inconsistent; refusing merge.")
+
+    additions = []
+    for item in sorted(themes, key=lambda value: value.get("index", -1)):
+        if not isinstance(item, dict):
+            return fail("Pack contains a malformed theme entry.")
+        index = item.get("index")
+        folder = root / f"Skin_{index:03d}"
+        try:
+            theme = json.loads((folder / "theme.json").read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            return fail(f"Cannot read {folder / 'theme.json'}: {exc}")
+        additions.append({
+            "id": theme["id"],
+            "index": theme["index"],
+            "name": theme["name"],
+            "family": theme["family"],
+            "layout": theme["layout"],
+            "path": f"Skin_{theme['index']:03d}/theme.json",
+            "preview": f"Skin_{theme['index']:03d}/assets/preview.png",
+            "hero": f"Skin_{theme['index']:03d}/assets/hero.png",
+        })
+
+    all_ids = existing_ids + [item["id"] for item in additions]
+    all_indices = existing_indices + [item["index"] for item in additions]
+    if len(set(all_ids)) != len(all_ids) or len(set(all_indices)) != len(all_indices):
+        return fail("Duplicate theme ID or index; refusing merge.")
+    if sorted(all_indices) != list(range(1, existing_total + len(additions) + 1)):
+        return fail("Merged registry would not have continuous indices; refusing merge.")
+
+    new_registry = dict(registry)
+    new_registry["themes"] = existing + additions
+    new_registry["totalSkins"] = len(new_registry["themes"])
+    new_registry["skinRange"] = {"first": 1, "last": new_registry["totalSkins"]}
+
     if args.dry_run:
-        print(f"DRY RUN: would merge {len(additions)} skin(s); total={new_registry['totalSkins']}")
+        print(result.stdout, end="")
+        print(f"DRY RUN: would merge {len(additions)} theme(s); total={new_registry['totalSkins']}.")
+        print("No files or backups were changed.")
         return 0
-    backup_dir=root/"backups"
-    backup_dir.mkdir(parents=True,exist_ok=True)
-    stamp=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    shutil.copy2(registry_path,backup_dir/f"theme_manifest.{stamp}.json.bak")
-    shutil.copy2(schema_path,backup_dir/f"theme.schema.{stamp}.json.bak")
-    registry_path.write_text(json.dumps(new_registry,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    print(f"MERGED {len(additions)} skin(s); registry total={new_registry['totalSkins']}; backup={backup_dir}")
+
+    backup_dir = root / "backups"
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    backup_paths = [
+        (registry_path, backup_dir / f"theme_manifest.{stamp}.json.bak"),
+        (legacy_schema_path, backup_dir / f"theme.schema.legacy.{stamp}.json.bak"),
+        (studio_schema_path, backup_dir / f"control_schema.{stamp}.json.bak"),
+    ]
+    for source, destination in backup_paths:
+        shutil.copy2(source, destination)
+
+    temporary = registry_path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(new_registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    temporary.replace(registry_path)
+
+    print(f"MERGED {len(additions)} theme(s); registry total={new_registry['totalSkins']}.")
+    print(f"Backups created in {backup_dir}.")
+    print("Legacy and Skin Studio schemas were preserved independently.")
     return 0
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     raise SystemExit(main())
