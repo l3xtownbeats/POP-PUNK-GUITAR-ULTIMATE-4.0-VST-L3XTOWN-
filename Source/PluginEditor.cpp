@@ -793,5 +793,4 @@ void PopPunkGuitarUltimateAudioProcessorEditor::restoreOverlayState()
         }
     }
     restoringOverlayState = false;
-    layoutOverlays();
 }
