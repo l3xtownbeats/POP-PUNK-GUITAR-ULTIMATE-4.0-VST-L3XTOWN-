@@ -496,3 +496,12 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Не выдавать пользовательский smoke test за полный QA/host acceptance и не менять DSP/APVTS/MIDI на основании одного факта запуска.
 - Следующий UI этап: подключить AuxiliaryPanelLayout к реальному JUCE window manager, затем вынести существующие AMP & TONE, FX CHAIN и PLAYBACK controls в независимые окна с индивидуальными square maximize/restore и X close. Нереализованные Settings/About/Curator/Auto Discover не добавлять как фиктивные рабочие панели.
 
+## 2026-11-12 — FL Studio 20: MIDI keyboard sound confirmation
+
+**Статус: USER-REPORTED MIDI/AUDIO SMOKE TEST CONFIRMED.**
+
+- В ответ на уточнение пользователь подтвердил, что MIDI-клавиатура в открытом плагине воспроизводит звук гитары.
+- Теперь подтверждены два пользовательских smoke-test факта: (1) VST3 открывается в FL Studio 20; (2) MIDI-клавиатура вызывает слышимое воспроизведение гитарного звука.
+- Это не заменяет проверку внешнего MIDI-контроллера/host MIDI input, note-off/choke, polyphony/voice stealing, длительной стабильности, preset recall, automation/state restore, pluginval и CPU/RAM profiling.
+- Следующий технический приоритет остаётся UI: безопасная реализация отдельных окон AMP & TONE, FX CHAIN и PLAYBACK с независимым закрытием и maximize/restore. Перед интеграцией сохранять текущие control attachments и не менять parameter IDs/audio callback.
+
