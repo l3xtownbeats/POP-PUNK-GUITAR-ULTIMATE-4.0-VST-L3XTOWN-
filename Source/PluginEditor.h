@@ -38,7 +38,7 @@ private:
     juce::File getSkinManifest(int index) const;
     void loadSavedSkin();
     bool loadSkinByIndex(int index, bool persist);
-    void showSkinMenu();
+    void openSkinGalleryPanel();
     void applyPalette();
     void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
