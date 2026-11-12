@@ -1539,3 +1539,30 @@ F. Только после этого считать документальны�
 **Тесты/CI:** исходники и readback проверены. Windows workflow `43196006789` на SHA `591e2251...` был IN_PROGRESS на момент записи; он включает source commit `19e3f9...` и весь Skin_053–102 pack. Build/CTest/pluginval/host PASS не заявлять до завершения. Последующий commit `ebf9...` меняет только workspace README, production source не меняет.
 
 **РЕЗУЛЬТАТ:** Settings workspace panel SOURCE IMPLEMENTED; exact-SHA Windows validation PENDING. Control Inventory и skin/workspace docs обновлены.
+
+
+## 2026-11-12 — Heterogeneous 2×3 workspace fit, compact panels and fallback alias parity
+
+**Тип:** UI layout algorithm + regression tests + metadata correction.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`.  
+**Source/test commits:**
+- `c94bffc7bef6c4d1f9b4309b5e79f7a4827ce9f7` (parent `9e113ae0da0581d3813201b71e7d31a2ceee8ece`) — per-column width / per-row height minimum algorithm for mixed-size panels.
+- `0d66dd171f42441fc4e955eda96aa06101095f72` (parent `c94bffc7bef6c4d1f9b4309b5e79f7a4827ce9f7`) — regression case proving six mixed-size panels fit in 1092×812 with no overflow or overlap.
+- `58d0c52e37927723571c2a287ad6ad17c01b36db` (parent `0d66dd171f42441fc4e955eda96aa06101095f72`) — gallery/settings minimum panel heights adjusted for compact grid.
+- `f7583c7bcfd1533530f0677751c64031da57fb4e` (parent `58d0c52e37927723571c2a287ad6ad17c01b36db`) — compact Settings content geometry.
+- `5631d680e225fe2cd7e20331a8fe9f4319e7f27c` (parent `f7583c7bcfd1533530f0677751c64031da57fb4e`) — overflow prefers a width-fitting grid and rejects impossible integer geometry.
+- `bc40e2955658986e4430d0a27f725a9111758271` (parent `5631d680e225fe2cd7e20331a8fe9f4319e7f27c`) — compact gallery cards/preview for 2×3 layout.
+- `4b012497cde0cfffc77e16d107f8d6a2ebbb9267` (parent `bc40e2955658986e4430d0a27f725a9111758271`) — fallback `focus` alias now matches canonical `highlight` token.
+- `8b6089c8196cf1e2ec293daa0e39c018def9094d` (parent `4b012497cde0cfffc77e16d107f8d6a2ebbb9267`) — alias regression assertion.
+- `b1e1054bd6dd0020074b440e97b95ae58189d08e` (parent `8b6089c8196cf1e2ec293daa0e39c018def9094d`) — canonical registry status refreshed after 102-theme merge.
+- `68b0fa29443855f2e126c2e0511d014ffbbdb37f` (parent `b1e1054bd6dd0020074b440e97b95ae58189d08e`) — viewport resets to top when a new workspace panel opens.
+
+**ПРОВЕРКА:** global max minimum dimensions caused the largest gallery/settings minimum to be imposed on every panel. Five/six auxiliary panels could overflow despite smaller FX/AutoChords/Import windows being individually shrinkable. Additionally, fallback alias `focus` remained accent yellow while the loaded Skin_052 mapping used `highlight` grey-green.
+
+**ИСПРАВЛЕНИЕ:** layout helper now computes independent column widths and row heights from each panel's own desired/minimum dimensions, chooses the best 1- or 2-column candidate and uses a scrollable minimum-size grid only when the whole set cannot fit. Gallery min is 500×320; Settings min is 420×260; existing panels retain their own declared minimums. Gallery cards and Settings content were compacted so the approved 2×3 layout can show all six panels at the default workspace size. Overflow selection avoids horizontal scrolling when a width-fitting column arrangement exists. New regression test uses six heterogeneous requests in 1092×812 and asserts every panel meets its own minimum and all bounds are visible/disjoint. New panel opens reset viewport position to top. Fallback `focus` alias now matches `highlight`.
+
+**Границы:** visual/workspace-only; no DSP, processor, audio callback, sampler, MIDI, APVTS IDs/semantics, presets or SoundBank changes.
+
+**CI:** Windows workflow run `43196750439` on SHA `68b0fa29443855f2e126c2e0511d014ffbbdb37f` was PENDING at journal time; earlier runs were cancelled by subsequent commits. Build/CTest/pluginval/host PASS not yet claimed. Skin expansion run `43195205929` remains SUCCESS and pack commit `3a2ceb52062be112429f96d411ae223d87df17a6` remains published.
+
+**РЕЗУЛЬТАТ:** mixed-size 2×3 layout SOURCE IMPLEMENTED; fallback alias parity SOURCE/TEST UPDATED; exact-SHA validation PENDING.
