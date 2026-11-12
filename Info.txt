@@ -454,3 +454,16 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - основное окно плагина сохраняет понятную иерархию и управляемость; закрытие дополнительной панели не должно сбрасывать её настройки или состояние проекта без отдельного решения.
 
 Это UX-контракт для последующей реализации. Текущая REV 14 Skin_052/layout metadata сама по себе не доказывает наличие независимых окон, оконного менеджера, auto-tiling/compact mode или persistence. В текущем исходном состоянии такие функции не отмечаются как IMPLEMENTED или TESTED. Перед реализацией требуется спроектировать единый panel/window manager, lifecycle, z-order/focus, bounds/resize, compact layout, DPI scaling и тесты на сохранение состояния. Аудио-поток, APVTS и MIDI не должны зависеть от открытия/закрытия UI-панелей.
+
+
+## 2026-11-12 — Auxiliary Panel Manager design baseline
+
+**Статус: UX CONTRACT SPECIFIED / CODE IMPLEMENTATION PENDING.**
+
+- На main добавлен документ `docs/AUXILIARY_PANEL_MANAGER_DESIGN_RU.md` (commit `a2d59a196ad9fc40c9ffa0030cca85eea3eb0df5`).
+- Зафиксирована архитектура отдельных top-level JUCE окон с независимыми PanelId, собственными квадратной кнопкой maximize/restore и X, независимым закрытием, сохранением состояния и восстановлением bounds.
+- Определён детерминированный tile/compact layout по доступной экранной work area с учётом DPI, multi-monitor и сценария, когда одновременно открыты все панели.
+- Зафиксированы требования к Message Thread, SafePointer/lifetime, teardown и запрет зависимости audio callback/APVTS/MIDI от оконного состояния.
+- Нереализованные Settings/About/Curator/Auto Discover нельзя выдавать за готовые функции или заполнять фиктивными активными заглушками.
+- Следующий coding task: pure geometry module AuxiliaryPanelLayout + unit tests; после этого — window shell/manager. Это дизайн-этап, не реализация: отдельные окна, auto-tiling и compact mode пока НЕ IMPLEMENTED и НЕ TESTED.
+- Отдельный известный release blocker остаётся: run #860 CTest 11/12 из-за Skin_052, не зарегистрированной в legacy theme registry. Не обходить проверку; skin pack merge/registry consistency требует отдельного корректного исправления до полного Release → CTest → pluginval → package acceptance.
