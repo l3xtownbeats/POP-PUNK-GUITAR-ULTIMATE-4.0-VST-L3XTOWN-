@@ -102,7 +102,7 @@ PUNK GROUP, dedicated LED, Auto Discover, Curator, Settings и About пока н
 3. ECO animation policy, image memory budget/LRU и lazy loading всех non-preview SVG/texture layers — NOT IMPLEMENTED.
 4. Layout metadata `controls.*.grid` пока не управляет JUCE bounds; реальные компоненты остаются в текущем editor layout.
 5. Полная runtime parity validation между schema IDs и реальными JUCE Components/attachments не завершена. LED, Auto Discover, Curator, Settings и About остаются NOT IMPLEMENTED; не показывать их как работающие.
-6. Полная очистка hardcoded decorative colours по всем UI components не завершена.
+6. Theme-aware palette propagation реализована для FX EDIT, AutoChords, Import Guitar, Settings и Skin Gallery через `PPGUThemeAwarePanel`; полная очистка оставшихся hardcoded decorative colours в основном editor UI ещё не завершена.
 7. 100/125/150% DPI visual review и FL Studio 20 host acceptance — PENDING.
 
 ## 3. Exact-SHA validation
@@ -115,3 +115,8 @@ Skin generation/validation/merge/publish подтверждены run `431952059
 ## Settings panel correction — 12.11.2026
 
 Settings is no longer a deferred/absent panel in this branch. `settingsButton` opens `PPGUSettingsPanel` (workspace panel ID 6). Implemented real persisted options are auxiliary panel scale, panel gap, restore canonical SIGNAL FORGE and open Skin Gallery. This does not complete product-wide settings: audio/engine settings, MIDI settings, global UI scaling, performance options and About are not represented by this small workspace settings panel.
+
+
+## Live panel palette propagation — 12.11.2026
+
+`PPGUThemeAwarePanel` is now the common contract for workspace child content. `PPGUMultiWindowWorkspace` stores the current `PPGUThemeManager::Palette`, applies it to panels already open, and applies it immediately to newly opened panels. FX EDIT, AutoChords, Import Guitar, Settings and Skin Gallery implement the contract and recolour their labels, controls, graphs/cards and status text. Theme switching remains UI-only. Remaining hardcoded colours in the main editor and future components still require audit; do not claim complete zero-hardcoded-colour parity.
