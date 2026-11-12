@@ -179,8 +179,9 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(boolParameter("reverbOn", "Reverb On", true));
     p.add(floatParameter("reverbMix", "Reverb Mix", 0.0f, 1.0f, 0.12f));
     p.add(boolParameter("cabinetOn", "Cabinet IR On", true));
-    p.add(boolParameter("doubleTrackOn", "Double Track On", false));
-    p.add(floatParameter("doubleTrackMix", "Double Track Mix", 0.0f, 1.0f, 0.5f));
+    // Keep legacy IDs for session compatibility; this is stereo width, not a second take.
+    p.add(boolParameter("doubleTrackOn", "DOUBLE Stereo Width On", false));
+    p.add(floatParameter("doubleTrackMix", "DOUBLE Width", 0.0f, 1.0f, 0.5f));
 
     return p;
 }
@@ -207,6 +208,7 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     doubleWidthDelay.assign(doubleWidthCapacity, 0.0f);
     doubleWidthWritePosition = 0;
     doubleWidthLowpassState = 0.0f;
+    doubleWidthMixSmoothed = 0.0f;
     for (int channel = 0; channel < 2; ++channel)
     {
         delayBuffers[static_cast<size_t>(channel)].assign(delayCapacity, 0.0f);
@@ -252,6 +254,7 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
     std::fill(doubleWidthDelay.begin(), doubleWidthDelay.end(), 0.0f);
     doubleWidthWritePosition = 0;
     doubleWidthLowpassState = 0.0f;
+    doubleWidthMixSmoothed = 0.0f;
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
@@ -862,7 +865,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                                                      / static_cast<float>(currentSampleRate));
         auto* left = buffer.getWritePointer(0);
         auto* right = buffer.getWritePointer(1);
-        const float sideAmount = doubleWidthOn ? doubleWidthMix * 0.45f : 0.0f;
+        const float targetMix = doubleWidthOn ? doubleWidthMix : 0.0f;
+        const float mixSmoothing = 1.0f - std::exp(-1.0f / (0.010f * static_cast<float>(currentSampleRate)));
         for (int sample = 0; sample < samples; ++sample)
         {
             const float mid = 0.5f * (left[sample] + right[sample]);
@@ -872,7 +876,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             const float delayedMid = doubleWidthDelay[readPosition];
             doubleWidthLowpassState += hpCoefficient * (delayedMid - doubleWidthLowpassState);
             const float generatedSide = delayedMid - doubleWidthLowpassState;
-            const float widenedSide = originalSide + generatedSide * sideAmount;
+            doubleWidthMixSmoothed += (targetMix - doubleWidthMixSmoothed) * mixSmoothing;
+            const float widenedSide = originalSide + generatedSide * (doubleWidthMixSmoothed * 0.45f);
             left[sample] = mid + widenedSide;
             right[sample] = mid - widenedSide;
             doubleWidthWritePosition = (doubleWidthWritePosition + 1) % delayLength;
