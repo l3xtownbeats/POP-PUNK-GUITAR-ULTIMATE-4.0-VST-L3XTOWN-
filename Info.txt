@@ -512,7 +512,8 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 ### 12 November 2026 — SIGNAL FORGE Editor integration, step B
 
 **Branch:** `feature/auxiliary-panel-layout`  
-**Commit at journal update:** pending (this Info.txt update follows UI integration commit `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`).  
+**UI source integration commit:** `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`.  
+**Journal update commit:** `90af4a92af9c0c3c0d43c2c331265d101bff7d2c`.  
 **Status:** EDITOR SOURCE INTEGRATION ADDED / WINDOWS CI RUN #900 IN PROGRESS / NOT YET BUILD-VERIFIED.
 
 Выполнена следующая интеграция UI-компонентов непосредственно в `PluginEditor`:
@@ -552,7 +553,7 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 
 **Аудио и сохранность проекта:** `PluginProcessor.cpp/.h`, DSP, audio callback, APVTS registry/IDs, MIDI scheduler и preset schema в этом этапе не изменялись. UI controls привязаны только к уже существующим параметрам. Полноценный runtime test в FL Studio 20 пока не проводился.
 
-**CI:** Windows workflow run #900 / ID `43130081529`, source SHA `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`, запущен после UI/CMake/test wiring и находился в `in_progress` при записи. До завершения run нельзя объявлять Windows Release build, CTest, pluginval или packaging успешными. Предыдущие runs #891–#899 отменены более новыми push и не являются доказательством прохождения сборки.
+**CI:** Windows workflow run #900 / ID `43130081529`, source SHA `373eb7b5302ab0231b4cb5fffec55c8a3ebf9fa5`. На момент последней проверки validators завершились успешно, `Configure x64 Release` выполнялся; build, CTest, pluginval и packaging ещё ожидали завершения configure. До завершения run нельзя объявлять Windows Release build, CTest, pluginval или packaging успешными. Предыдущие runs #891–#899 отменены более новыми push и не являются доказательством прохождения сборки.
 
 **Следующие обязательные шаги:**
 - получить результат run #900 и разобрать compiler/CTest/pluginval logs;
