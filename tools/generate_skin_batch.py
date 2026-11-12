@@ -173,6 +173,34 @@ def write_svg(path: Path, accent: str, accent2: str, seed: int, layer: str) -> N
     path.write_text(svg, encoding="utf-8")
 
 
+def build_pack_entries(start: int) -> list[dict]:
+    families = [family for family in FAMILIES for _ in range(8)] + ["special", "special"]
+    names = {
+        "carbon_studio": "Carbon Studio",
+        "neon_basement": "Neon Basement",
+        "chrome_parade": "Chrome Parade",
+        "wood_summer": "Wood Summer",
+        "vintage_tape": "Vintage Tape",
+        "sunset_suburb": "Sunset Suburb",
+        "special": ("Hazard Line", "Whiteout Bleach"),
+    }
+    entries = []
+    for offset, family in enumerate(families):
+        index = start + offset
+        name = names[family][offset - 48] if family == "special" else f"{names[family]} {offset % 8 + 1:02d}"
+        entries.append({
+            "id": f"skin-{index:03d}",
+            "index": index,
+            "name": name,
+            "family": family,
+            "layout": LAYOUTS[offset % len(LAYOUTS)],
+            "path": f"Skin_{index:03d}/theme.json",
+            "preview": f"Skin_{index:03d}/assets/preview.png",
+            "hero": f"Skin_{index:03d}/assets/hero.png",
+        })
+    return entries
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("SKIN"))
@@ -227,31 +255,7 @@ def main() -> int:
             print(f"Existing pack manifest is invalid: {exc}", file=sys.stderr)
             return 2
 
-    families = [family for family in FAMILIES for _ in range(8)] + ["special", "special"]
-    names = {
-        "carbon_studio": "Carbon Studio",
-        "neon_basement": "Neon Basement",
-        "chrome_parade": "Chrome Parade",
-        "wood_summer": "Wood Summer",
-        "vintage_tape": "Vintage Tape",
-        "sunset_suburb": "Sunset Suburb",
-        "special": ("Hazard Line", "Whiteout Bleach"),
-    }
-    layouts = list(LAYOUTS)
-    entries = []
-    for offset, family in enumerate(families):
-        index = start + offset
-        name = names[family][offset - 48] if family == "special" else f"{names[family]} {offset % 8 + 1:02d}"
-        entries.append({
-            "id": f"skin-{index:03d}",
-            "index": index,
-            "name": name,
-            "family": family,
-            "layout": layouts[offset % len(layouts)],
-            "path": f"Skin_{index:03d}/theme.json",
-            "preview": f"Skin_{index:03d}/assets/preview.png",
-            "hero": f"Skin_{index:03d}/assets/hero.png",
-        })
+    entries = build_pack_entries(start)
 
     pack = {
         "schemaVersion": "1.0.0",
