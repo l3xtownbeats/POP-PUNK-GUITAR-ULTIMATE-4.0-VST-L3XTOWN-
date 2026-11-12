@@ -1485,3 +1485,18 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 - T-F6: Windows x64 Release, CTest, pluginval strictness 5, exact-SHA GitHub Actions result/logs.
 - T-F7: FL Studio 20 visual and interaction acceptance; verify Pattern Slot/Length, Host/Host Start/Internal, fallback BPM, first chord behavior, state persistence.
 - T-F8: closeout with final commit SHA and test evidence. Continue using this INFO queue if the session or branch context is lost.
+
+
+## 2026-11-12 — REV.17 Zone F layout bounds alignment
+
+**Тип:** responsive shell geometry correction.  
+**Source commit:** `07e76344f5875d8d0fa3b9d823b032734abfc070`.  
+**File:** `Source/PluginEditor.cpp`.
+
+**ПРОВЕРКА:** editor constructor still used 1120×840 default and 980×800..1600×1100 resize bounds, conflicting with the approved shell specification.  
+**АНАЛИЗ:** the new Zone F strip is allocated from the central content height and uses responsive row widths; the keyboard/performance strip remains a fixed lower region.  
+**ИСПРАВЛЕНИЕ:** set default editor size to 1600×900 and resize limits to 1200×700 minimum / 2400×1500 maximum.  
+**ПОВТОРНЫЙ АНАЛИЗ:** the source-level layout remains three outer columns; Zone F remains inside the center column. No APVTS, audio, MIDI, sampler, scheduler, DSP, presets or SoundBank changes. The separate scale preset selector (50/60/75/80/90/100/110/125/150%) and saved zoom behavior are still not implemented.  
+**РЕЗУЛЬТАТ:** APPROVED WINDOW SIZE BOUNDS APPLIED IN SOURCE; visual resize, compile, CTest, pluginval, CI and FL Studio 20 acceptance pending.
+
+**Resume queue update:** T-F4 size bounds corrected; still verify component clipping/overlap at 1200×700, 1600×900 and 2400×1500, and implement/test the approved scale presets + persisted zoom. T-F5..T-F8 remain open.
