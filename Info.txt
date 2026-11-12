@@ -1131,3 +1131,19 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 
 **Следующие проверки реализации:** проверить runtime AutoChordEngine/PatternScheduler, chord/voicing maps, one-shot articulation maps, host-tempo scheduling, note changes, velocity/accent/gate, transitions, voice/cache pressure и тесты; отдельно проверить наличие подходящих лицензированных one-shot assets. До этого AUTOCHORDS/PATTERN one-shot fallback нельзя объявлять реализованным или playable.
 
+## 2026-11-12 — AUTOCHORDS display must not obstruct plugin keyboard
+
+**Статус:** USER REQUIREMENT CONFIRMED / SPECIFICATION AND JOURNAL UPDATED; VISUAL RUNTIME ACCEPTANCE PENDING.
+
+Пользователь уточнил обязательное UI-правило: **Display AutoChords не должен перекрывать клавиши экранной клавиатуры плагина.** Клавиши должны оставаться полностью видимыми, доступными для нажатия мышью и однозначно интерактивными во всех состояниях AutoChords, размерах редактора, раскладках окон и темах.
+
+Требования к реализации:
+- AutoChords отображается в отдельной неперекрывающейся области над/рядом с клавиатурой либо в отдельном изменяемом/вспомогательном окне.
+- При нехватке места содержимое AutoChords должно перестраиваться, прокручиваться, сворачиваться или уменьшаться; overlay поверх клавиш запрещён.
+- Не допускаются перехват pointer hit-testing, перекрытие MIDI-клавиш или уменьшение доступной области клавиатуры.
+- Проверить минимальный размер редактора, resize extremes, tiled/expanded auxiliary windows, DPI scaling, границы клавиатуры и переходы открытия/закрытия AutoChords.
+
+Требование добавлено в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`. Оно относится к UI/layout и не меняет MIDI/chord-generation semantics AutoChords.
+
+**Проверка реализации:** пока не заявлена. AUTOCHORDS backend/UI ранее отмечены как disabled / pending backend; после реализации выполнить статический layout audit и Windows/FL Studio 20 interactive host acceptance. Не считать требование выполненным только по наличию спецификации.
+
