@@ -401,3 +401,28 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests:** test source updated and GitHub readback checked. Exact-SHA C++/Windows build and CTest are pending. Skin generator run `43194302212` passed generation, G1–G4 validation, merge and final 102 registry verification, but generated commit push failed with non-fast-forward because the branch advanced concurrently. Workflow retry fix commit `da62bd8...`; run `43195205929` was IN_PROGRESS at journal time. No Windows build/pluginval/FL Studio PASS claimed.
 
 **Status:** SOURCE CHANGES COMMITTED; EXACT-SHA VALIDATION PENDING; 50-SKIN PUBLICATION RETRY RUNNING.
+
+
+## 2026-11-12 — Searchable Premium Skin Gallery and Skin_053–102 pack
+
+**Type:** production GUI feature + generated visual theme assets.
+**Branch:** `work/ppgu-skin-expansion-53-102`.
+**Source commits:**
+- `9054f92b4bd5b559a67eb68ed00a72dcd6f23b96` — `Source/PluginEditor.cpp`: new `PPGUSkinGalleryPanel`, card grid, preview images, search, family filter, active theme marker; `openSkinGalleryPanel()` builds the gallery from validated runtime manifests.
+- `065279795c421a9b01e10e288faa1a8bb0eb2a1d` — gallery card hover styling, active badge cleanup and stable theme count after moving the card collection.
+- `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b` — `Source/UI/PPGUMultiWindowWorkspace.cpp`: saturating scroll-surface extent arithmetic.
+- `7b56be7f202edd07c46b3ba8dbf7a64718d9f07a` — `Source/PluginEditor.h`: gallery entry point declaration.
+**Generated data commit:** `3a2ceb52062be112429f96d411ae223d87df17a6`.
+**CI:** skin expansion run `43195205929` SUCCESS.
+
+**Files / symbols:** `PPGUSkinGalleryPanel::{Skin,Card,Grid,rebuildCards,resized}`; `PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel`; `getSkinCount`, `getSkinManifest`, `loadSkinByIndex`; `PPGUMultiWindowWorkspace::layoutPanels`.
+
+**Behavior:** SKIN button and Ctrl+K open a child gallery panel in the approved multi-window workspace. Cards are generated from the registry/manifests and expose theme name, family/layout, preview, active status and click-to-apply. Search and family filters operate on the 102-item registry. Preview decoding is deferred to card paint. Applying a theme uses the existing ThemeManager and preference persistence path, then closes the gallery.
+
+**Skin pack verification:** generated commit readback confirms 102 registry entries, canonical default `skin-052`, pack state `MERGED`, indices 53–102, merged total 102. For each of 50 new skins, theme manifest + preview PNG + hero PNG + bezel/crest/texture SVG paths were present (0 missing). Workflow run `43195205929` completed successfully through generate, G1–G4, merge, manifest validation, final registry assertions and push.
+
+**Compatibility:** no processor, DSP, audio callback, sampler, MIDI, APVTS IDs/semantics, preset or SoundBank changes.
+
+**Tests:** gallery and arithmetic source readback checked. Windows VST3 workflow `43195592441` was IN_PROGRESS on code SHA `bc5f753b7bbc1f76c4c8c5cfc578e4b356c1181b`; no build/CTest/pluginval/host PASS claimed at this record. FL Studio 20 visual acceptance remains pending.
+
+**Status:** 102-THEME PACK PUBLISHED; GALLERY SOURCE IMPLEMENTED; EXACT-SHA BUILD / TEST / HOST VALIDATION PENDING.
