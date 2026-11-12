@@ -83,6 +83,10 @@ private:
     std::array<std::vector<float>, 2> delayBuffers;
     std::array<std::vector<float>, 2> chorusBuffers;
     std::array<std::vector<float>, 2> flangerBuffers;
+    // Preallocated mono mid-channel delay for mono-compatible stereo widening.
+    std::vector<float> doubleWidthDelay;
+    size_t doubleWidthWritePosition = 0;
+    float doubleWidthLowpassState = 0.0f;
     std::array<float, 2> eqLowState {};
     std::array<float, 2> eqHighState {};
     std::array<float, 2> compressorEnvelope {};
