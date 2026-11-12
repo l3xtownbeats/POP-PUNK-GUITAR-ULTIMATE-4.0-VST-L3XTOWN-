@@ -36,7 +36,7 @@ int main()
     if (themes != nullptr && (totalValue.isInt() || totalValue.isInt64()))
     {
         const auto total = totalValue.toString().getLargeIntValue();
-        expect(total == static_cast<juce::int64>(themes->size()),
+        expect(total == static_cast<long long>(themes->size()),
                "registry totalSkins matches entry count");
 
         for (const auto& entry : *themes)
