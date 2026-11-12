@@ -71,7 +71,7 @@ def main() -> int:
             errors.append(f"license evidence missing: {folder}")
             continue
         license_text = license_path.read_text(encoding="utf-8-sig", errors="replace")
-        cc0_match = re.search(r"CC0\\s*(?:1\\.0|v1\\.0)|Creative Commons Zero", license_text, re.IGNORECASE)
+        cc0_match = re.search(r"CC0\s*(?:1\.0|v1\.0)|Creative Commons Zero", license_text, re.IGNORECASE)
         license_status = "CC0-1.0 text detected" if cc0_match else "REVIEW_REQUIRED"
         source_assets = []
         for path in sorted(source_root.rglob("*")):
