@@ -404,3 +404,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Acceptance:** valid playable source/mapping or working synthesis path; note/velocity ranges; functioning parameter/FX state; no silent/missing-sample presets; meaningful timbral/articulation/dynamics/performance differences. Duplicate settings with different names do not count.
 - **QA:** inventory all 300 by mode/assets/mapping/parameter deltas/readiness; automated load/render smoke tests; A/B and listening review; track coverage and failures. PATTERN entries remain pending until the scheduler and required performance source actually produce the described groove.
 - **Status:** REQUIREMENT LOCKED; implementation and listening QA pending. No source/audio changes or test claims are made by this documentation entry.
+
+
+## 2026-11-12 — PATTERN mode ready accompaniment acceptance requirement
+
+- **Requirement:** PATTERN is a playable ready-accompaniment mode, not merely a sound preset or groove label. Selecting a PATTERN preset must produce an audible rhythm guitar performance in the selected style.
+- **Preset-driven behavior:** groove, down/up strokes, palm-muted/open-chord articulation, accents, dynamics, rhythmic variation and stylistic character are defined by the selected pattern preset; user controls adjust supported performance parameters.
+- **Musical input/host:** follow incoming MIDI chord/notes where specified; synchronize to host tempo/transport; handle chord changes, stop, note-off, loops and preset changes without stuck notes.
+- **Coverage:** verse/chorus patterns, palm-muted verses, open-chord choruses, downstroke eighths, alternate picking, syncopated stops, octave hooks, ska/offbeat and other varied pop-punk rhythms. Include original style-inspired references from the approved group list plus general factory patterns; no copied recordings or exact protected transcriptions.
+- **Acceptance:** end-to-end preset selection → pattern data → PatternScheduler → event generation → SamplerEngine → audible output; host sync; MIDI response; clean stop/transition; audibly distinct rhythm/articulation across patterns. Require automated MIDI/render tests plus listening review.
+- **Current limitation:** JSON pattern metadata and existence of PatternScheduler do not prove working accompaniment. Some catalog entries explicitly await Pattern Engine/performance library integration. Full catalog PATTERN playback is not verified.
+- **Implementation direction:** audit and complete the existing PatternScheduler + SamplerEngine path; do not replace the approved architecture. This documentation update changes no source or DSP code and makes no test-pass claim.
+- **Status:** REQUIREMENT LOCKED; end-to-end implementation and QA remain open.
