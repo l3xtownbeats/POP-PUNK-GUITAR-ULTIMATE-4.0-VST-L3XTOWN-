@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "skin-052",
   "index": 52,
-  "name": "Carbon Relay",
+  "name": "SIGNAL FORGE",
   "family": "carbon_studio",
   "layout": "STUDIO_CONSOLE",
   "description": "A precision studio surface: matte carbon weave, graphite hardware, cool mineral typography and a high-visibility acid-lime signal colour.",
@@ -342,7 +342,7 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "RUNTIME_PALETTE_SUPPORT_COMMITTED_CI_PENDING_LAYOUT_METADATA_ONLY",
+  "designStatus": "SIGNAL_FORGE_DEFAULT_THEME_PALETTE_RUNTIME_READY_LAYOUT_RENDERING_IN_PROGRESS",
   "notes": [
     "All 27 mandatory REV 14 control IDs are mapped.",
     "PUNK GROUP, LED activity, Auto Discover, Curator, Settings and About are contract placeholders until their runtime functionality is implemented; never present them as active working features.",
