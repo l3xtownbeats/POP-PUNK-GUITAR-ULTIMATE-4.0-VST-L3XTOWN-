@@ -11,3 +11,12 @@ This file is the technical change index for POP PUNK GUITAR ULTIMATE. Info.txt r
 - Existing APVTS-bound knobs, FX toggles, preset catalog, and MIDI keyboard remain the live controls; no fake audio controls are introduced.
 - Temporary vector guitar/banner artwork is explicitly a placeholder pending the approved source artwork as packaged skin assets.
 - Not complete: exact visual fidelity to the three approved references; AutoChords and FX EDIT interactive panels; simultaneous panel state; final artwork integration; resize/DPI review; build, CTest, pluginval, package, and FL Studio 20 host validation.
+
+## 2026-11-12 — UI acceptance matrix and journal governance
+
+- User reconfirmed the complete UI/control/panel acceptance matrix and explicitly required continuous development/change journaling.
+- The three approved reference images remain binding: main UI=image 3; AutoChords=image 1; FX EDIT + AutoChords=image 2.
+- Fresh PR #27 review: Draft/open; head `888733fdac84b6f7fc28731dcabddb4bb2ea019a`; no confirmed CI PASS obtained from the combined-status query.
+- Audit findings: auxiliary panel components/window manager are not wired into PluginEditor; AuxiliaryPanelLayout is geometry-only and its overflow branch exposes only the first panel; preset/search/category controls are assigned twice in resized(), so browser bounds override header bounds; guitar hero is still a source-commented placeholder.
+- This entry changes documentation only. No production code, build, tests, pluginval, package, or DAW verification performed.
+- Governance: append Info.txt and CODE.txt together on each implementation commit; record exact SHA and evidence; never promote PLANNED/IMPLEMENTED/BUILT/TESTED/DAW VERIFIED without corresponding proof.
