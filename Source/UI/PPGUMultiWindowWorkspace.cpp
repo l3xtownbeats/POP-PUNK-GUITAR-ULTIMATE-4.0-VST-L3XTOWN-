@@ -353,7 +353,8 @@ void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
             + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
         persistenceProperties->saveIfNeeded();
     }
-    layoutPanels();
+    // Manual drag/resize/maximize is user geometry, not a request to retile.
+    // Automatic tiling runs only when the panel set or workspace size changes.
 }
 
 void PPGUMultiWindowWorkspace::handleClose(int id)
