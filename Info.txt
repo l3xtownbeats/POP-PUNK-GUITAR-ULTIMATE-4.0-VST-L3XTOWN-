@@ -1102,3 +1102,14 @@ Specification updated in `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.7. This is an
 Added confirmed terms to `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.8: palm mute, open chords, downstroke/upstroke/alternate picking, staccato power chords, chugs, skank/offbeat upstrokes, straight eighths, gallop, stop-time/stop-start, half-time, double-stops, octave hooks, muted-string scratches between chords, and muted-verse/open-chorus contrast. These are requirements for real recorded articulations/performance maps, not synthetic guitar functions.
 
 Voice transcription also contained uncertain words ("crank", "debit", "stocktime", "how-fo-time"). Preserved as pending terminology rather than guessing their intended musical names.
+
+
+## 2026-11-12 — Additional guitar-library discovery
+
+Fresh source research added to `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md`:
+- FreePats FSBS Clean and Jazz (2026-08-07 source versions): direct-sampled electric guitar, SFZ, repository states CC0 1.0; candidate sources pending archive-level inspection.
+- Nyanshell Strat: custom Strat SFZ/WAV candidate; license not established and README indicates incomplete dynamics/chord coverage — YELLOW/quarantine.
+- fakeguitar: third-party index reports SFZ and three articulations; primary source/license not verified — YELLOW/quarantine.
+- Unreal Instruments Metal GTX / Standard Guitar: multi-articulation candidates listed with custom licensing; no bundling until explicit raw-sample redistribution/embedding permission is verified.
+
+This is source discovery and index maintenance only. No new asset is claimed downloaded, licensed for bundling, hashed, auditioned, or integrated. Existing Sound Hunter registry remains the source of truth for ingestion status.
