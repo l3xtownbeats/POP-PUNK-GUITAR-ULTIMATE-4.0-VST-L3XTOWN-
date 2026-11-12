@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `34f074057b9e7572b60e64549de7006bc2307f61`
+Последний commit перед текущей записью: `8bd10b20cc9303452d19a46fcf4edea3e11488f1`
 
 ## 1. Назначение и продукт
 
@@ -722,3 +722,34 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 3. R28 non-goals above were not crossed.
 4. Asset repair: IMPLEMENTED; targeted skin asset validation TESTED; overall release pipeline PENDING.
 5. Not done: Windows build, all CTest targets, pluginval strictness 5, packaging, FL Studio 20 host acceptance, CPU/RAM profiling and default-ppgu migration.
+
+
+## 2026-11-12 — Windows MSVC compile defect: Skin Studio palette mapping
+
+**Статус:** SOURCE FIX COMMITTED / WINDOWS REBUILD PENDING.  
+**Коммит:** `8bd10b20cc9303452d19a46fcf4edea3e11488f1`.  
+**Предыдущая проверка:** run #963, ID `43134831986`, source SHA `34f074057b9e7572b60e64549de7006bc2307f61`.
+
+**Симптом (точный лог MSVC):** `Source/UI/ThemeManager.cpp(257..266): error C2660: 'juce::var::getProperty': function does not take 1 arguments`. Windows x64 Release configure прошёл; компиляция VST3/test targets завершилась failure. CTest, VST3 locate, pluginval и packaging были skipped.
+
+**Причина:** в Skin Studio palette mapper девять уникальных вызовов `juce::var::getProperty` (десять чтений с повторным `control_bg`) были написаны с одним аргументом. В JUCE 7.0.12 метод требует пару `(Identifier, defaultReturnValue)`; остальные вызовы в ThemeManager уже используют два аргумента.
+
+**Фикс:** все palette token lookups теперь передают `juce::var()` как default value; ни mapping семантика, ни цвета, ни fallback, ни schema validation не менялись. Изменён только `Source/UI/ThemeManager.cpp`.
+
+**Регрессионное покрытие:** `tests/ThemeManagerTests.cpp` уже проверяет загрузку всех registry manifests, включая Skin_052 ID/name/window-background mapping, а также отклонение invalid HEX/compatibility и восстановление fallback. CTest `ppgu_theme_manager_contract` зарегистрирован; фактический запуск после фикса ожидается на новом SHA.
+
+**CI по точному старому SHA:** run #963 подтвердил:
+- PASS: factory catalog, portable preset examples, APVTS layout, Skin Studio G1–G4 PNG/SVG validator, sample cache/license check, BinaryData pre-configure check, x64 Release configure.
+- FAILED: Build VST3 and test executables (MSVC C2660 above).
+- SKIPPED: CTest, VST3 locate, pluginval strictness 5, package.
+
+**R28 non-goals:** не менялись DSP/audio callback, APVTS IDs/semantics, MIDI, sampler ownership, presets, SoundBank, skin registry/schema, control inventory и UI behaviour. Изменён только compile-time API usage в ThemeManager.
+
+**Следующие шаги:** новый Windows run на `8bd10b20...` должен подтвердить compile; затем все CTest targets, pluginval и package. Предупреждения MSVC C4324 (cache-line alignment), C4458 (локальный `flags`) и C4100 (неиспользуемый `eventSample`) зафиксированы как non-fatal; не менять аудио-код ради косметики без R10 review.
+
+**Self-check §21:**
+1. Failure доказан на SHA `34f0740...` run #963; source fix commit SHA `8bd10b20...`; новый CI результат ещё PENDING.
+2. `ppgu_theme_manager_contract` покрывает Skin_052 mapping и fallback; новый CI CTest ещё не запускался.
+3. R28 non-goals соблюдены.
+4. Статус source fix — IMPLEMENTED; BUILD VERIFIED / TESTED для нового SHA пока не присваиваются.
+5. Осталось: Windows rebuild, полный CTest, pluginval, package, FL Studio 20 acceptance, profiling.
