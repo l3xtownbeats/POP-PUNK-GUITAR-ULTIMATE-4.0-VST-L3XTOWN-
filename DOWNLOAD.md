@@ -11,66 +11,66 @@
 
 ---
 
-## Current release candidate — run #832
+## Current release status
 
-**Status:** current Windows workflow is validating the Blackout Voltage premium editor, 51 palette manifests and sibling runtime `Skins/` layout. The run is not yet complete; no current ZIP is published.
+**No current COMPLETE ZIP is verified or published.** The repository contains source code, sample/preset resources and skin data, but the current main revision has not been proven by a complete Windows Release → all CTest targets → VST3 locate → pluginval strictness 5 → packaging pipeline.
 
-[**OPEN CURRENT WINDOWS BUILD #832**](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43116474444)
+The latest checked commit-status query returned no status checks. The available commit workflow lookup is limited to PR-triggered runs and cannot establish the full repository Actions history. Do not interpret either result as a successful build.
 
-- Source SHA: `8c5be46c2676258fffb9fee2c5feab7bac5dfa1b`
-- Current complete ZIP: **not yet published**
-- Run #827 had build/CTest/pluginval pass but package validation fail on the old 50-versus-51 skin count.
-- Do not install an older artifact as though it were the current release.
+- [Open GitHub Actions](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions)
+- [Open current main branch](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/main)
+- [Single engineering journal](Info.txt)
 
-## Previous build — historical artifact
+## Previous artifact — historical only
 
-[Download previous VST3 + sample content package](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
+[Download previous VST3 + sample content artifact](https://api.github.com/repos/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/artifacts/13766348419/zip)
 
-[Open its successful workflow run](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
+[Open historical successful workflow run](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/42821580125)
 
-This artifact comes from an earlier source revision and package layout. It is for historical testing only and is not the canonical REV 13.0 release package.
+This artifact belongs to an earlier source revision and package layout. It is not the current release candidate and must not be presented as a verified build of current main.
 
-## Required final package
+## Required COMPLETE package layout
 
-The release archive name is fixed:
+The release archive name is:
 
 **POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip**
 
-Expected top-level layout:
+The package must provide the VST3 bundle and its runtime skin directory as siblings, so extracting the archive creates the expected runtime relationship without manual file moves:
 
 ```text
 POP_PUNK_GUITAR_ULTIMATE/
 ├── VST3/
+│   └── POP PUNK GUITAR ULTIMATE.vst3/
+├── Skins/                 # runtime themes; count derived from registry/schema
 ├── SOUNDBANK/
 ├── PRESETS/
-├── Skins/             # 51 palette manifests; sibling of VST3 bundle
 ├── Resources/
 ├── Assets/
 ├── MANIFEST.json
 └── INSTALL_AND_CONTENTS.txt
 ```
 
-The live JUCE editor uses the Blackout Voltage premium shell and a real SKIN menu. The runtime directory contains 51 validated palette manifests; all themes share one control layout. The editor draws its hero guitar artwork in JUCE Graphics. Per-theme preview/hero/texture images are not required by this palette-only runtime and are not claimed as shipped assets.
+Source-only skin authoring data may be included additionally, but it cannot replace the runtime `Skins/` directory. Package assertions must derive counts from the authoritative manifests, not hardcoded values.
 
-## Release contents
+## Product content and verification
 
 - Windows x64 VST3 instrument.
-- Redistributable guitar SoundBank with source licenses and checksums.
+- Redistributable guitar SoundBank with source licenses, provenance and checksums.
 - Factory preset data and supported user-bank examples.
-- Runtime resources and assets required by the actual editor.
+- Runtime resources and skin data required by the actual editor.
 - Installation instructions, manifest and package contents list.
 
-The 300 factory catalogue records are definitions, not 300 verified playable presets. The release report must publish the tested playable count as N/300.
+The 300 factory catalogue records are definitions, not 300 verified playable presets. A release report must state the tested playable count as N/300.
 
-## Installation (after a verified package is published)
+## Installation — only after a verified package is published
 
 1. Extract the archive.
-2. Copy the .vst3 bundle into C:\Program Files\Common Files\VST3\.
-3. Keep the SoundBank in the package-prescribed location and do not rename its folders.
+2. Copy the `.vst3` bundle into `C:\Program Files\Common Files\VST3\`.
+3. Keep the sibling runtime `Skins/` directory in the exact package-prescribed location relative to the installed bundle.
 4. Rescan VST3 plugins in FL Studio 20.
-5. Load the instrument, use SKIN or Ctrl+K to choose a visual palette, then select a verified preset or licensed SFZ library and audition it with MIDI.
+5. Load the instrument and audition only verified presets or licensed SFZ libraries with MIDI.
 
-Use INSTALL_AND_CONTENTS.txt shipped with the exact package. Do not apply instructions from a different artifact revision.
+Follow the `INSTALL_AND_CONTENTS.txt` shipped with the exact package. Do not apply instructions from another artifact revision.
 
 ## References
 
