@@ -12,6 +12,7 @@ import re
 import struct
 import sys
 import xml.etree.ElementTree as ET
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -79,9 +80,50 @@ def contrast(a: str, b: str) -> float:
 
 def png_dimensions(path: Path) -> tuple[int, int]:
     raw = path.read_bytes()
-    if len(raw) < 24 or raw[:8] != b"\x89PNG\r\n\x1a\n" or raw[12:16] != b"IHDR":
-        raise ValueError(f"{path}: invalid PNG header")
-    return struct.unpack(">II", raw[16:24])
+    signature = b"\x89PNG\r\n\x1a\n"
+    if len(raw) < 33 or raw[:8] != signature:
+        raise ValueError(f"{path}: invalid PNG signature")
+
+    offset = 8
+    width = height = bit_depth = colour_type = None
+    image_data = bytearray()
+    saw_end = False
+    while offset + 12 <= len(raw):
+        length = struct.unpack(">I", raw[offset:offset + 4])[0]
+        chunk_type = raw[offset + 4:offset + 8]
+        chunk_end = offset + 12 + length
+        if chunk_end > len(raw):
+            raise ValueError(f"{path}: truncated PNG chunk")
+        chunk_data = raw[offset + 8:offset + 8 + length]
+        expected_crc = struct.unpack(">I", raw[offset + 8 + length:chunk_end])[0]
+        actual_crc = zlib.crc32(chunk_type + chunk_data) & 0xFFFFFFFF
+        if actual_crc != expected_crc:
+            raise ValueError(f"{path}: PNG chunk CRC mismatch")
+        if chunk_type == b"IHDR":
+            if width is not None or length != 13:
+                raise ValueError(f"{path}: invalid PNG IHDR")
+            width, height, bit_depth, colour_type, compression, filtering, interlace = struct.unpack(">IIBBBBB", chunk_data)
+            if compression != 0 or filtering != 0 or interlace != 0:
+                raise ValueError(f"{path}: unsupported PNG encoding")
+        elif chunk_type == b"IDAT":
+            image_data.extend(chunk_data)
+        elif chunk_type == b"IEND":
+            if length != 0:
+                raise ValueError(f"{path}: invalid PNG IEND")
+            saw_end = True
+            offset = chunk_end
+            break
+        offset = chunk_end
+
+    if not saw_end or width is None or height is None or not image_data:
+        raise ValueError(f"{path}: incomplete PNG structure")
+    channels = {2: 3, 6: 4}.get(colour_type)
+    if bit_depth != 8 or channels is None:
+        raise ValueError(f"{path}: expected 8-bit RGB/RGBA PNG")
+    decoded = zlib.decompress(bytes(image_data))
+    if len(decoded) != height * (1 + width * channels):
+        raise ValueError(f"{path}: decoded PNG pixel payload has an invalid size")
+    return width, height
 
 
 def safe_svg(path: Path) -> None:
@@ -197,10 +239,15 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
 
     preview = SKIN_ROOT / folder / expected_assets["preview"]
     hero = SKIN_ROOT / folder / expected_assets["hero"]
-    if not preview.is_file() or png_dimensions(preview) != (360, 240):
-        fail(errors, where, "preview must exist and be a 360x240 PNG")
-    if not hero.is_file() or png_dimensions(hero) != (800, 450):
-        fail(errors, where, "hero must exist and be an 800x450 PNG")
+    for image_path, expected_size, label in (
+        (preview, (360, 240), "preview"),
+        (hero, (800, 450), "hero"),
+    ):
+        try:
+            if not image_path.is_file() or png_dimensions(image_path) != expected_size:
+                fail(errors, where, f"{label} must be a valid {expected_size[0]}x{expected_size[1]} PNG")
+        except Exception as exc:
+            fail(errors, where, f"{label} asset validation failed: {exc}")
     for key in ("texture", "bezel", "crest"):
         svg_path = SKIN_ROOT / folder / expected_assets[key]
         if not svg_path.is_file():
