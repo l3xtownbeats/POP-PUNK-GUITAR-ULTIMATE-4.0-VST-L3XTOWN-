@@ -1311,3 +1311,38 @@ Lifecycle/persistence/theme handling изменены в исходниках, �
 Source inventory check: five navigation buttons map one-to-one to panel IDs 1–5; eight FX switches map one-to-one to eight attachment slots. Windows Release, CTest, pluginval and host GUI verification remain PENDING until exact-SHA CI/host evidence.
 
 Дополнение к GUI parity: после перестройки навигации синхронизирована геометрия `paint()` и `resized()`: hero header 160 px, navigation strip имеет отдельную skin-aware подложку, карточки AMP & TONE / FX CHAIN / PLAYBACK совпадают с фактическими bounds компонентов. Это source-level alignment; визуальная приёмка на Windows DPI/host ещё ожидает реального запуска.
+
+
+## 2026-11-12 — AutoChords MELODY mode defect audit (REV 18 follow-up)
+
+**Статус:** ROOT CAUSE CONFIRMED IN SOURCE / BACKEND INTEGRATION REQUIRED / NO FIX CLAIMED.
+**Audit target SHA:** `d98794f92771df23567c8b02d6b679f863e11c88`  
+**Exact-SHA CI:** run #1162 / ID `43226106697` — SUCCESS; Windows x64 Release configure/build, full configured CTest regression suite, VST3 locate, pluginval strictness 5 and COMPLETE package steps all completed successfully. This CI validates the audited source state, not AutoChords functionality or FL Studio host behavior.
+
+### Проверка → анализ → результат
+
+Повторно проверены Source/UI/AutoChordsPanel.cpp, Source/UI/AutoChordsPanel.h, Source/Performance/AutoChordEngine.h, Source/PluginProcessor.cpp, Source/PluginEditor.cpp, tests/AutoChordEngineTests.cpp, tests/ProcessorPatternIntegrationTests.cpp и §7.4/§7.8 MASTER PROMPT.
+
+Подтверждённая причина неисправности AutoChords:
+- AutoChords panel создаётся и зарегистрирована в auxiliary workspace под ID 2; навигационная кнопка AUTOCHORDS подключена к openPanel(2). Следовательно, панель существует в shell, но это не означает работоспособность её функций.
+- В AutoChordsPanel.cpp SCALE/KEY/PROGRESSION явно переводятся в disabled; PREVIEW также явно disabled. Текст панели прямо сообщает, что MIDI chord-generation routing ещё не подключён.
+- AutoChordEngine.h содержит только распознавание уже сыгранного аккорда (detect) и генератор гитарной аппликатуры (FingeringGenerator); он не создаёт progression MIDI events и не подключён к processor.
+- В PluginProcessor.cpp ветка MELODY намеренно отправляет каждую входящую MIDI-ноту напрямую в sampler и не использует AutoChordEngine. Pattern имеет отдельный chord-held/scheduler path. Поэтому AutoChords в MELODY не может включиться/генерировать аккорды в текущей реализации.
+- Существующие AutoChordEngine unit tests подтверждают распознавание и fingering, но не MIDI generation, preview audio path, UI enable/disable, state persistence или MELODY integration.
+
+Это подтверждённый функциональный gap, а не проблема только графической кнопки. Простое снятие setEnabled(false) запрещено: оно создало бы фиктивно активные элементы без реального MIDI/audio backend.
+
+### Обязательный следующий implementation slice
+
+Реализовать AutoChords end-to-end как отдельный согласованный backend этап с сохранением MELODY note-by-note поведения при AutoChords OFF:
+1. ON/OFF и Scale Major/Minor/Custom, Key, Pattern/Progression, Current Chord и Preview согласно MASTER PROMPT §7.4.
+2. Реальный chord/progression generation и voice/note lifecycle в MELODY; точные note-on/note-off, retrigger, panic/all-notes-off, channel handling и отсутствие зависших нот.
+3. Preview использует тот же реальный MIDI/audio route, что и playback; никакого декоративного preview.
+4. Lock-free/audio-thread-safe управление; без heap allocation, blocking lock или UI access в audio callback.
+5. Использовать существующие parameter/state contracts; новые APVTS IDs и изменение общих MIDI semantics не вводить без отдельной проверки соответствия MASTER PROMPT и INFO.
+6. Добавить processor-level integration tests для MELODY AutoChords ON/OFF, Major/Minor/Custom, progression changes, note-off/panic, repeated notes, mode switching и regression обычного MELODY/PATTERN.
+7. Только после backend/test PASS включить все контролы UI и оформить compact/expanded editor, сохранение состояния и текущий chord/progression из реальных данных.
+
+**R10/R28 boundary:** этот аудит не меняет DSP/MIDI/APVTS/preset/Sampler lifecycle и не снимает disabled-state до готовности backend. AutoChords backend integration выделяется отдельным этапом; существующие S2 panel-shell изменения остаются в своей области.
+
+**Итог:** причина найдена и зафиксирована. AutoChords в MELODY на audited SHA не реализован функционально. Нельзя считать его исправленным на основании успешной общей сборки; требуется отдельная реализация и профильные integration tests.
