@@ -325,3 +325,58 @@ Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Fou
 - Качество, натуральность, динамика, артикуляции и миксовая пригодность важнее бесплатности и размера библиотеки.
 
 **Acceptance gate:** ни один новый основной гитарный asset не получает GOLD/production status без подтверждения реального гитарного источника, точной лицензии, provenance, SHA-256, технической проверки и прослушивания. Не выдавать синтезаторную имитацию за записанную гитару.
+
+
+## 15.14. SOUND FORGE — SIMPLE-FIRST IMPLEMENTATION PLAN (2026-11-12)
+
+### Принцип
+Не строить большую платформу и не вводить второй формат/движок. Реализовать короткий надёжный путь поверх существующих JUCE audio formats, SFZ parser, SampleMetadataIndex, streaming sampler и SoundBank/Discovery contracts. Сначала полезный offline CLI-инструмент; GUI — тонкая оболочка над теми же операциями позже. Не создавать отдельный сервис, базу данных, daemon, plugin-in-plugin или обязательную AI-инфраструктуру.
+
+### Единый простой pipeline
+1. ADD — пользователь выбирает папку/архив; исходники не меняются.
+2. SCAN — рекурсивно читаются поддерживаемые форматы и метаданные; без полного декодирования в RAM.
+3. CHECK — проверка читаемости, длительности, частоты, каналов, пикового уровня, clipping/DC, тишины и SHA-256; fingerprint/dedup запускается по запросу или при импорте.
+4. PREVIEW — один временный preview stream с ограниченным буфером.
+5. PREPARE — только выбранные операции: trim silence, gain/peak management, fade/click repair, resample, channel conversion, loop analysis. Никакая обработка не включена автоматически, если она может изменить тембр.
+6. BUILD — сформировать/обновить SFZ map или существующую внутреннюю карту, используя уже поддерживаемые поля. Не создавать новый playback format без доказанной необходимости.
+7. VERIFY — повторное чтение результата, checksum, metadata, A/B preview и smoke playback через существующий sampler.
+8. PUBLISH — атомарно поместить готовый пакет в SoundBank; неуспешные/неясные файлы остаются в quarantine.
+
+### Минимальный первый релиз
+- Один исполняемый offline tool ppgu-soundforge (или существующая утилита проекта, если она уже есть) и команды scan, prepare, build, verify.
+- Один manifest на пакет: source path, original hash, output hash, format, sample rate, channels, frames, transformations, warnings, tool version.
+- Один профиль подготовки PPGU_PLAYBACK_DEFAULT; остальные профили добавлять только при реальном запросе.
+- WAV и SFZ — первый поддерживаемый маршрут. SF2/AIFF/FLAC/OGG подключать по одному только через существующие JUCE codecs и тесты; неизвестные форматы — безопасно отклонять/помечать manual import.
+- Сохранить исходники и результаты раздельно; повторный запуск идемпотентен и не создаёт дубликаты.
+
+### Что НЕ делать в первой версии
+- Не делать AI denoise, source separation, neural upscaling, автоматический amp modelling или тяжёлый spectral repair.
+- Не делать массовый auto-mastering и loudness normalization всех сэмплов.
+- Не выполнять network search/download внутри плагина.
+- Не добавлять постоянные фоновые потоки, GPU requirement, database server или сложную многопоточную очередь.
+- Не переписывать sampler и не менять его кэш/voice limits ради SOUND FORGE.
+
+### Ресурсная политика
+- Offline worker по умолчанию один; обработка чанками; ограниченное число одновременно открытых файлов; preview максимум один.
+- VST3 во время playback не выполняет scan/hash/convert/resample/fingerprint и не ждёт файловых операций.
+- Low Power mode: один worker, меньшая длина чанка/паузы между заданиями, пауза по команде; никакого непрерывного polling.
+- Все кэши и временные файлы ограничены; preflight свободного места; cancel удаляет незавершённые временные файлы, но не оригиналы.
+- Для каждого job измерять wall time, peak RAM, CPU time, threads, bytes read/write и размер результата. Сравнивать с базовой сборкой на одном устройстве.
+
+### Порядок работ — короткие вертикальные этапы
+A. Baseline: измерить текущий VST idle, 1/16/32/64 voices, bank load, cache pressure; записать точные результаты и настройки.
+B. Scan + manifest: добавить безопасный сканер WAV/SFZ и воспроизводимый manifest; тесты malformed files, huge files, symlinks, cancellation.
+C. Verify + dedup: SHA-256, metadata checks, exact duplicate detection; perceptual fingerprint оставить отдельной опцией.
+D. Prepare: реализовать 2–3 безопасные операции, каждая с A/B, сохранением оригинала и unit tests; не добавлять «улучшение» без измеримой пользы.
+E. Build: создавать корректную карту инструмента через текущий SFZ/sampler path; проверять note/velocity coverage и missing samples.
+F. Package: атомарная публикация и отчёт; затем простая GUI-оболочка, если CLI workflow подтверждён.
+
+### Definition of Done
+- Полный pipeline проходит на тестовом наборе и реальных тестовых библиотеках.
+- Оригиналы не меняются; повторный запуск не портит и не дублирует результаты.
+- Peak RAM offline ограничен и измерен; VST audio callback не делает I/O и не блокируется.
+- VST idle CPU не получает дополнительной постоянной нагрузки; realtime CPU/RAM не ухудшаются сверх заранее установленного измеримого допуска.
+- В отчёте есть фактические benchmark-данные, а не обещания.
+- Build, unit tests, CTest и pluginval проходят; FL Studio 20 проверяется отдельно на реальной Windows-системе.
+
+Статус: SPECIFICATION ONLY до реализации и тестов. План минимизирует число компонентов, повторно использует существующий код и ставит простую работающую вертикальную версию выше большой, но незавершённой архитектуры.
