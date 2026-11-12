@@ -1,0 +1,10 @@
+# POP PUNK GUITAR ULTIMATE — CODE CHANGE INDEX
+Append-only index of source changes. INFO (Info.txt) remains the authoritative factual chronology; this file indexes source symbols, paths and verification evidence.
+
+## 2026-11-12 — 21-token visual palette propagation
+- Source commit: d687106117555bec443d041d6c6ed6b2bd718ba5
+- Paths: Source/PluginEditor.cpp
+- Symbols/areas: PPGUPremiumLookAndFeel::drawRotarySlider; drawButtonBackground; drawComboBox; PopPunkGuitarUltimateAudioProcessorEditor::paint; drawPanel; applyPalette; LOAD SFZ pressed-state semantic danger colour.
+- Scope: visual palette propagation only; no DSP/audio callback, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, ThemeManager decoder, schema/registry, CMake or packaging-rule changes.
+- Verification: GitHub Actions run #1157 / ID 43221038914 on exact source SHA d687106117555bec443d041d6c6ed6b2bd718ba5 — Windows Release configure/build PASS; CTest step PASS; VST3 locate PASS; pluginval strictness 5 PASS; package step PASS. Host visual acceptance NOT VERIFIED.
+- Related factual record: Info.txt entry “REV 18 S0/S1 + S3 visual propagation CI confirmation”, appended at commit 576328b24e194b4d98ee9109ced859c5ed03e10b.
