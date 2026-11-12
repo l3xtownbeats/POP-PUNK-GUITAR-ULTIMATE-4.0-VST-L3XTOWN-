@@ -954,3 +954,24 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R28 non-goals:** не менялись Audio Engine, DSP, audio callback, MIDI routing, APVTS IDs/semantics, presets, SoundBank, Skin_052 assets, registry/schema, merge tool, AuxiliaryPanelLayout, panel shell, CMake и packaging. Это token infrastructure + текущий editor color binding, не полная реализация всех будущих 21-token control styles/layout engine.
 **CI:** run #971 (ID `43146185476`) на SHA `61740417349a19c9d05d699f52017b8ccd37f9fe` — IN_PROGRESS на момент записи; run #972 (ID `43146540434`) на SHA `71c2d852c1dc1d138e903fb577533a17ca540002` — IN_PROGRESS. Новый коммит создаст отдельный run. BUILD VERIFIED/TESTED не присваивать до его завершения.
 **Следующий этап:** проверить 21-token C++ contract в Windows Release; затем отдельным этапом исправить package skin copy на registry-driven, добавить merge-tool/registry/schema cross-contract tests и приступить к JUCE Multi-Window shell/Performance Display.
+
+
+## 2026-11-12 — INFO/CODE журнал: обязательный режим непрерывной фиксации разработки
+
+**Статус:** JOURNAL POLICY RECORDED; implementation work remains governed by the current Skin Engine priority.
+**Основание:** прямое указание пользователя вести INFO и CODE как постоянные журналы разработки, исправлений, правок и изменений в реальном времени, включая полный исходный код плагина.
+
+**Обязательный порядок ведения:**
+- `Info.txt` — единая хронология проекта: решения, требования, аудит, изменения, исправления, затронутые файлы, причины, ограничения, результаты тестов/CI, точные commit SHA, статусы PASS/FAIL/PENDING и следующие шаги. Исторические записи не переписывать и не удалять; новые факты добавлять append-only.
+- `CODE.txt` — отдельный хронологический журнал исходного кода: для каждого изменения фиксировать commit SHA/parent, путь файла, класс/функцию/символ, характер изменения, причину, совместимость, тесты и статус. Исправления и откаты связывать с исходной записью.
+- Полный актуальный исходный код хранится в канонических исходных файлах репозитория (`Source/`, `tests/`, `tools/`, build/config files и другие реально используемые каталоги). CODE.txt является индексом и журналом изменений, а не второй вручную копируемой версией исходников: это предотвращает расхождение дублированного кода с рабочими файлами. Для каждого code change записывать точный путь и commit SHA, чтобы восстановить полный код на любой ревизии.
+- Каждое изменение вносить в код и журналы в рамках одного логического этапа; если запись журнала не создана, этап не считается документально закрытым. Сначала проверить текущую ветку/HEAD и существующие изменения; никогда не заменять более новые файлы или коммиты старыми данными.
+- Не объявлять сборку, тесты, host acceptance или release PASS без результата на точном SHA. Старые результаты CI не переносятся на новые коммиты.
+
+**Приоритет проекта:** Skin Engine — задача №1 до завершения полноценной интеграции и проверок. Audio Engine, DSP, audio callback, APVTS semantics/IDs, MIDI, presets, SoundBank и существующее поведение функциональных контролов остаются неприкосновенными в рамках Skin Engine.
+
+**Точка фиксации:** рабочая ветка `work/signal-forge-theme-tokens`; исходный HEAD перед этой записью `57fe40044532eeab4bc66ccec37bce865904d455` (ThemeManager canonical 21-token palette API). Main HEAD на момент проверки: `61740417349a19c9d05d699f52017b8ccd37f9fe`. Эта запись не утверждает, что рабочая ветка является самой новой среди всех 44 веток; перед следующим кодовым изменением требуется повторный branch/HEAD preflight и сравнение актуальных изменений.
+
+**Текущий Skin Engine статус:** 21-token API и legacy mapping зафиксированы в рабочей ветке; полная Gallery, runtime discovery/resource-root integration, secure asset loading, layout application, ECO/hot-swap guarantees, control parity и G5–G7 runtime acceptance ещё не считаются завершёнными. Никакой новый C++/DSP код этой записью не менялся.
+
+**Тип коммита:** documentation / journal bootstrap only. Audio, UI source, tests, assets, registry, schema, build scripts и workflows этой записью не изменяются.
