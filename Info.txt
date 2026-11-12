@@ -1045,3 +1045,11 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Status:** BUILD VERIFIED / CTEST PASS / PLUGINVAL-5 PASS / PACKAGE JOB PASS for exact source SHA `e90e7be...`. This does **not** establish FL Studio 20 host acceptance, runtime sound quality, interactive UI acceptance, 30-minute stability, or release readiness. S2 host acceptance remains NOT VERIFIED; S3 visual audit remains OPEN for residual review. The successful package job produced a workflow artifact, but no COMPLETE ZIP release is declared or published by this journal entry.
 
 **Next action:** preserve this exact-SHA evidence; continue REV18 in order, first finish residual S3 audit and do not advance beyond S2 until host acceptance is addressed under REV18 rules. Do not transfer run #1177 PASS to later source SHAs.
+
+
+### REV18 S2 — SFZ import status parity correction (2026-11-12)
+
+**Проверка:** статический audit PPGUImportGuitarPanel показал, что его Browse callback запускал тот же chooseSfzFile() асинхронный loader, но результат загрузки обновлял только основной statusLabel редактора. Внутренний статус панели оставался READY / SELECT SFZ FILE даже во время загрузки, после успеха или ошибки. Это нарушало обязательный UI-to-engine parity: экран панели не отражал реальное состояние операции.
+**Исправление:** chooseSfzFile() теперь синхронно по UI callback обновляет основной статус и PPGUImportGuitarPanel::setStatus() на этапах LOADING, SUCCESS и FAILURE. Существующий asynchronous SFZ loader, SafePointer lifetime guard, параметры, DSP и sampler lifecycle не менялись.
+**Объём:** только Source/PluginEditor.cpp; no APVTS IDs/semantics, MIDI routing, DSP/audio callback, sampler lifecycle, SFZ validation, SoundBank, preset catalog, skin schema/registry, ThemeManager, CMake pins или packaging rules changes.
+**Повторная проверка:** отмена FileChooser не меняет статус; успешная/неуспешная загрузка передаёт один и тот же фактический результат обоим UI-индикаторам. Exact-SHA CI требуется; до его завершения BUILD VERIFIED / TESTED не заявлять. FL Studio 20 manual host acceptance остаётся NOT VERIFIED.

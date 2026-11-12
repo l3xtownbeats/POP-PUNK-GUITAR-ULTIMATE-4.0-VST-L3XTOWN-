@@ -638,15 +638,48 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
 {
-    fileChooser=std::make_unique<juce::FileChooser>("Choose an SFZ guitar instrument",juce::File::getSpecialLocation(juce::File::userHomeDirectory),"*.sfz");
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Choose an SFZ guitar instrument",
+        juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+        "*.sfz");
+
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
-    fileChooser->launchAsync(juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectFiles,[safeThis](const juce::FileChooser& chooser){
-        if(safeThis==nullptr) return; const auto selected=chooser.getResult(); if(selected==juce::File{}) return;
-        safeThis->loadButton.setEnabled(false); safeThis->statusLabel.setText("LOADING SFZ IN BACKGROUND...",juce::dontSendNotification);
-        safeThis->processor.loadSfzFileAsync(selected,[safeThis](ppgu::sampler::LoadReport report){
-            if(safeThis==nullptr) return; safeThis->loadButton.setEnabled(true);
-            if(report.success) safeThis->statusLabel.setText("READY  /  "+juce::String(static_cast<int>(report.loadedRegions))+" REGIONS  /  "+juce::String(static_cast<int>(report.loadedSamples))+" WAV SAMPLES",juce::dontSendNotification);
-            else safeThis->statusLabel.setText(report.errors.empty()?"SFZ LOAD FAILED":juce::String(report.errors.front()),juce::dontSendNotification);
+    fileChooser->launchAsync(
+        juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
+        [safeThis](const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr)
+                return;
+
+            const auto selected = chooser.getResult();
+            if (selected == juce::File{})
+                return;
+
+            const auto loadingText = juce::String("LOADING SFZ IN BACKGROUND...");
+            safeThis->loadButton.setEnabled(false);
+            safeThis->statusLabel.setText(loadingText, juce::dontSendNotification);
+            if (safeThis->importGuitarPanel)
+                safeThis->importGuitarPanel->setStatus(loadingText);
+
+            safeThis->processor.loadSfzFileAsync(selected,
+                [safeThis](ppgu::sampler::LoadReport report)
+                {
+                    if (safeThis == nullptr)
+                        return;
+
+                    safeThis->loadButton.setEnabled(true);
+                    const auto resultText = report.success
+                        ? "READY  /  " + juce::String(static_cast<int>(report.loadedRegions))
+                            + " REGIONS  /  "
+                            + juce::String(static_cast<int>(report.loadedSamples))
+                            + " WAV SAMPLES"
+                        : (report.errors.empty()
+                            ? juce::String("SFZ LOAD FAILED")
+                            : juce::String(report.errors.front()));
+
+                    safeThis->statusLabel.setText(resultText, juce::dontSendNotification);
+                    if (safeThis->importGuitarPanel)
+                        safeThis->importGuitarPanel->setStatus(resultText);
+                });
         });
-    });
 }

@@ -14,7 +14,7 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Source commit: ae0334b7bcc51a31c46b959bd6ed0d5417b356fb
 - Paths: CMakeLists.txt; Source/PluginEditor.h; Source/PluginEditor.cpp; Source/UI/AuxiliaryPanelWindowManager.h/.cpp; Source/UI/AuxiliaryPanelLayout.h/.cpp; Source/UI/FXEditPanel.h/.cpp; Source/UI/AutoChordsPanel.h/.cpp; Source/UI/ImportGuitarPanel.h/.cpp; Source/UI/SettingsPanel.h/.cpp; Source/UI/PerformanceDisplay.h/.cpp; Source/Performance/AutoChordEngine.h; tests/AuxiliaryPanelLayoutTests.cpp; tests/AutoChordEngineTests.cpp.
 - Symbols/areas: PPGUAuxiliaryPanelWindowManager; PPGUAuxiliaryDocumentWindow; calculatePanelLayout; calculateExpandedPanelLayout; PopPunkGuitarUltimateAudioProcessorEditor panel launchers/teardown/applyPalette; PPGUFXEditPanel; PPGUAutoChordsPanel; PPGUImportGuitarPanel; PPGUSettingsPanel; PPGUPerformanceDisplay; AutoChordEngine.
-- Scope: independent JUCE top-level panel windows, X/expand action, tiled/expanded/overflow geometry, PropertiesFile window-state persistence, editor-owned panel content lifetime, existing APVTS attachments, existing async SFZ callback, read-only MIDI monitor.
+- Scope: in-editor child overlay panels (not native top-level DocumentWindow instances), X/expand action, tiled/expanded/overflow geometry, PropertiesFile open-panel persistence, editor-owned panel content lifetime, existing APVTS attachments, existing async SFZ callback, read-only MIDI monitor.
 - R28: no DSP/audio callback, sampler lifecycle, MIDI routing/emission, APVTS IDs/semantics, preset catalog, SoundBank, ThemeManager, skin schema/registry/assets or packaging rule changes. CMake source/test registration added because main did not compile the staged panel files.
 - Tests added/updated: ppgu_auxiliary_panel_layout_contract; ppgu_auto_chord_engine_contract. CI #1163 / ID 43226541896 on exact source SHA ae0334b7bcc51a31c46b959bd6ed0d5417b356fb is IN_PROGRESS; no build/test/pluginval/package result claimed yet.
 
@@ -66,3 +66,11 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Evidence and limitations recorded append-only in Info.txt. Host/FL Studio 20 acceptance remains NOT VERIFIED; no COMPLETE ZIP release claimed.
 
 - docs/AUXILIARY_PANEL_MANAGER_DESIGN_RU.md: refreshed exact-source CI evidence to run #1177 on e90e7be79a717c74fc94ec634a31f8c7669fb850; explicitly retained FL Studio 20 interactive host acceptance as NOT VERIFIED.
+
+
+### S2 — SFZ import status parity
+- Source path: Source/PluginEditor.cpp; PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile().
+- Corrected mismatch: Import Guitar panel's status label previously remained at its initial READY text while the shared asynchronous SFZ load was running or had failed/succeeded; only the main editor status was updated.
+- Both main editor and Import Guitar panel now receive the actual LOADING / SUCCESS / FAILURE status from the existing loader callback; cancellation leaves status unchanged.
+- SafePointer guard and existing asynchronous sampler path retained. No DSP, sampler lifecycle, MIDI, APVTS, preset, SoundBank, skin or packaging contract changes.
+- Exact-SHA CI pending for the combined source/journal commit; host acceptance remains NOT VERIFIED.
