@@ -313,7 +313,7 @@ public:
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
         graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
         addAndMakeVisible(graphCaption);
-        status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
+        status.setText("Each processor has its own color, response view and live APVTS controls.", juce::dontSendNotification);
         status.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
         addAndMakeVisible(status);
 
@@ -505,7 +505,22 @@ private:
         const auto accent = groups[static_cast<size_t>(selectedGroup)].accent;
         powerAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
             apvts, groups[static_cast<size_t>(selectedGroup)].enabledParameter, powerButton);
-        title.setColour(juce::Label::textColourId, accent);
+        static const std::array<juce::String, 9> panelTitles {
+            "SIGNAL FORGE  /  COMPRESSOR", "SIGNAL FORGE  /  EQUALIZER",
+            "SIGNAL FORGE  /  DISTORTION", "SIGNAL FORGE  /  CHORUS",
+            "SIGNAL FORGE  /  FLANGER", "SIGNAL FORGE  /  DELAY",
+            "SIGNAL FORGE  /  REVERB", "SIGNAL FORGE  /  CABINET IR",
+            "SIGNAL FORGE  /  DOUBLE STEREO WIDTH"
+        };
+        static const std::array<juce::String, 9> graphCaptions {
+            "DYNAMIC RANGE  /  COMPRESSION CURVE", "FREQUENCY RESPONSE  /  3-BAND EQ",
+            "SOFT CLIP  /  SATURATION TRANSFER", "MODULATION  /  CHORUS MOVEMENT",
+            "COMB FILTER  /  FLANGER SWEEP", "ECHO REPEATS  /  FEEDBACK PATH",
+            "DIFFUSE DECAY  /  ROOM TAIL", "CABINET TONE  /  FILTER RESPONSE",
+            "MID-SIDE FIELD  /  STEREO WIDTH"
+        };
+        title.setText(panelTitles[static_cast<size_t>(selectedGroup)], juce::dontSendNotification);
+        graphCaption.setText(graphCaptions[static_cast<size_t>(selectedGroup)], juce::dontSendNotification);
         powerButton.setColour(juce::TextButton::buttonColourId, accent.darker(0.75f));
         powerButton.setColour(juce::TextButton::buttonOnColourId, accent);
         for (auto& control : controls)
