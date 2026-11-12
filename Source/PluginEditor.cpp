@@ -1441,7 +1441,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
         spec.id = galleryPanelId;
         spec.title = "SKIN GALLERY  /  " + juce::String(gallerySkinCount) + " THEMES";
         spec.desired = { 940, 700 };
-        spec.minimum = { 500, 380 };
+        spec.minimum = { 500, 320 };
         spec.content = std::move(gallery);
         auxiliaryWorkspace->openPanel(std::move(spec));
     }
@@ -1504,7 +1504,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
         spec.id = settingsPanelId;
         spec.title = "SETTINGS  /  WORKSPACE";
         spec.desired = { 700, 520 };
-        spec.minimum = { 420, 320 };
+        spec.minimum = { 420, 260 };
         spec.content = std::move(content);
         auxiliaryWorkspace->openPanel(std::move(spec));
     }
