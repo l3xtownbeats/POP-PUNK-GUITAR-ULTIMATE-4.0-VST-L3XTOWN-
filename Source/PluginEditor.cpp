@@ -52,7 +52,7 @@ void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int 
 }
 void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool hi,bool down)
 {
- auto r=b.getLocalBounds().toFloat().reduced(.5f);auto c=b.getToggleState()?palette.success:base;if(!b.isEnabled())c=palette.lowlight;else if(down)c=c.darker(.18f);else if(hi)c=c.brighter(.12f);
+ auto r=b.getLocalBounds().toFloat().reduced(.5f);auto c=b.getToggleState()?palette.success:base;if(!b.isEnabled())c=palette.lowlight;else if(down)c=(b.getButtonText()=="LOAD SFZ"?palette.danger:c.darker(.18f));else if(hi)c=c.brighter(.12f);
  g.setGradientFill(juce::ColourGradient(c.brighter(.08f),r.getX(),r.getY(),c.darker(.16f),r.getX(),r.getBottom(),false));g.fillRoundedRectangle(r,7);g.setColour(b.isEnabled()?palette.controlBorder:palette.lowlight);g.drawRoundedRectangle(r,7,1);
  if(b.getToggleState()&&b.isEnabled()){g.setColour(palette.highlight);g.fillRoundedRectangle(r.removeFromLeft(3),1.5f);}
 }
