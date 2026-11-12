@@ -1158,3 +1158,20 @@ Cabinet остаётся отдельной секцией со своим bypas
 
 Подробный контракт: `docs/PPGU_MASTER_PROMPT_RU.md` §7.5.12.  
 **Не заявляется:** точность всех исторических gear claims, наличие всех amp/cab/IR моделей, multi-mic engine, double-tracking engine, factory presets или их слуховая приёмка. Нужны аудит исходников, реализация, regression tests и audition.
+
+
+## 2026-11-12 — Tone Profile Registry: аудит интеграции и следующий implementation slice
+
+**Статус:** SOURCE AUDIT COMPLETE / TONE PROFILE DATA IMPLEMENTATION IN PROGRESS.
+
+**Проверка текущих исходников активной ветки `work/signal-forge-panel-shell`:**
+- `presets/factory_bank_300.json` содержит 150 Melody + 150 Pattern definitions и 21 `styleProfileId`; catalog прямо предупреждает, что definitions не означают playable presets.
+- В текущих 300 definitions встречаются только базовые `drive`, `tone`, `reverb`, `outputDb` (и текстовые velocity/palmMute/RR hints для Melody). Нет явного amp family, cabinet/IR ID, mic perspective, source/pickup profile или полноценной song-tone routing metadata.
+- Текущий audio processor имеет `ampGain` как линейное усиление и простой 3-band one-pole EQ; distortion stage — bounded tanh soft clip. Это не полноценная модель Rectifier/JCM/Plexi/Vox/Orange amp dynamics.
+- Cabinet path использует внутренний 64-tap damped synthetic IR, прямо прокомментированный как designed cabinet colour, не сторонний recorded cabinet capture; отдельного IR browser/registry в проверенных файлах не найдено.
+- FX rack имеет 7 slot IDs и ограниченный набор выбора (Compressor/EQ/Distortion/Chorus/Delay/Reverb/Cabinet IR); UI перечисляет 8 блоков, но это не доказывает полноценный DSP или гибкую маршрутизацию каталога из 14 типов.
+- Важно: эти факты запрещают объявлять artist/song tone presets production-ready сейчас. Необходимо развивать profile metadata параллельно с реальным amp/cab DSP и source assets, не маскируя их параметрами каталога.
+
+**Решение:** создать отдельный версионированный Artist Tone Profile Registry, используя все 21 существующих `styleProfileId` из 300-bank и песенные ориентиры пользователя. Каждый профиль хранит музыкальную роль, source/pickup hints, amp-family target, cabinet/mic target, ориентиры amp controls 0–10, optional FX intent, tuning/playing notes, availability requirements и provenance note. Song settings — стартовые точки для audition, не утверждение о точных исторических студийных настройках. В 300-bank definitions добавить необязательную ссылку на tone profile ID без изменения APVTS IDs, control inventory или существующей структуры playback. Добавить validator, проверяющий все ссылки, required fields и consistency. Registry metadata не будет автоматически применяться к DSP до отдельного runtime adapter и его тестов.
+
+**Quality gate:** ни один профиль не получает PLAYABLE/MIX-READY/APPROVED только из-за JSON. Нужны source resolution, реальный amp/cab/FX route, preset round-trip, no silent fallback, loudness-matched listening в solo/mix, phase/mono/headroom/noise/CPU checks.
