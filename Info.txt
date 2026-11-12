@@ -2,9 +2,9 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 11 ноября 2026  
+Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `1bf2c9474b66808951cd3409f4b1e27bfbda39ea`
+Последний commit перед текущей записью: `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9`
 
 ## 1. Назначение и продукт
 
@@ -630,3 +630,37 @@ Commits:
 Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 Проверка GitHub combined status для нового HEAD и workflow run ещё не подтверждены на момент записи. Поэтому включение geometry test исправлено в исходнике, но фактическое появление теста в CTest, Windows Release build, полный CTest, pluginval strictness 5 и VST3 package остаются VALIDATION PENDING. Не считать этот source fix доказательством успешной сборки.
+
+
+## 2026-11-12 — Принятие MASTER PROMPT REV 16.0 UNIFIED
+
+**Статус:** MERGED (документ спецификации в main) / PENDING (CI-проверка HEAD и технические gates).
+**Коммиты:**
+- MASTER PROMPT: `a114629c27d0dd9d54b4f3d376c7135f3485d9a5`
+- README authority alignment: `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9`
+- INFO entry: создаётся этой записью; итоговый SHA фиксируется в GitHub commit history.
+
+**CI:** Для HEAD `ff16c26e2bff86c53d5af62a42081f7eaaaaf4d9` combined status вернул пустой `statuses: []`; доступный workflow lookup вернул пустой список. Этот lookup ограничен PR-triggered runs и первой страницей; отсутствие результатов не доказывает отсутствие всех Actions runs и не является PASS. Windows Release build, CTest, pluginval strictness 5, VST3 packaging — NOT VERIFIED на этом SHA. Локальный `git status` в текущем интерфейсе недоступен; удалённый HEAD main проверен через GitHub commit history.
+
+**Факт:**
+- REV 16.0 сохранён в `docs/PPGU_MASTER_PROMPT_RU.md`; он заменяет REV 10/13/14/15.x как рабочую спецификацию.
+- README больше не объявляет REV 13.0 действующим authority и направляет к REV 16.0 и INFO.
+- Preflight: прочитаны последние записи INFO о Skin_052 merge, follow-up static audit и CMake test-discovery correction. Выявлено, что шапка INFO отставала от последней даты записей; дата обновлена. Также обнаружен исторический повтор номера `6.2`; он не переименовывался автоматически, чтобы не менять исторические ссылки. Новые записи используют уникальные датированные заголовки.
+- Зафиксировано расхождение: §2 REV 16.0 содержит snapshot «51 папка / 50-слотовая schema», тогда как более поздняя запись INFO подтверждает merge Skin_052 и 52 entries в registry. По иерархии §0 и R08 фактическим источником остаётся INFO; §2 требует обновления после полного аудита skin tree/schema/registry/validator.
+- CMakeLists.txt содержит ранний `include(CTest)`; source fix `a686f627...` зафиксирован ранее, но реальное включение всех test targets и их PASS не подтверждено.
+- Skin_053..Skin_102 не генерировались. COMPLETE ZIP не создавался. Audio engine, APVTS, MIDI, SoundBank и control inventory не менялись.
+
+**Этап / R28 non-goals:** только фиксация спецификации и синхронизация указателя README. Не выполнялись: skin schema/registry migrations; генерация тем; UI/window implementation; audio/DSP/Sampler changes; Windows build; CTest; pluginval; packaging; host acceptance; profiling.
+
+**Риски / следующие действия:**
+1. По R24 следующий технический этап начинается с полной инвентаризации всех skin-папок и сверки schema/registry/validator, включая Skin_051/052 и незарегистрированные каталоги; до завершения не расширять диапазон и не запускать генерацию партии.
+2. После инвентаризации — Windows Release configure/build и все CTest targets из CMake на одном SHA; AuxiliaryPanelLayout отдельно должен иметь фактический CI PASS.
+3. Доступный workflow lookup не предоставляет полного списка всех repository Actions runs; для CI доказательств нужен доступ к конкретному run/job/log либо пригодный workflow trigger.
+4. Аудио ownership/quiescence, 8-root cap, cancellation/lifetime и 64-voice cache-pressure остаются открытыми рисками §3.4.
+
+**Self-check §21:**
+1. SHA: документ `a114629...`, README `ff16c26...`; CI на `ff16c26...` — пустой combined status и пустой PR-only lookup, значит PENDING, не PASS.
+2. Для документационных изменений отдельный contract-test не предусмотрен; проверка — чтение сохранённого файла и diff/commit. Технические CTest targets не запускались.
+3. R28 соблюдён: код движка, APVTS, MIDI, SoundBank, skins и UI не менялся.
+4. REV 16.0 — MERGED как файл в main; технические gates остаются PENDING.
+5. Не сделаны и явно перечислены выше: полная skin inventory audit, Windows build, CTest, pluginval, package, host acceptance, profiling.
