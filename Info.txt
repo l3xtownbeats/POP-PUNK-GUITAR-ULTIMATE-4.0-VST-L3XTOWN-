@@ -980,8 +980,8 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 ## 2026-11-12 — Official audio-engine naming
 
-**Каноническое название собственного аудиодвижка PPGU: ANGELA SOUND.**
-Предыдущие рабочие обозначения: SOUND ANGELA / ANGELA sourse.
+**Каноническое название собственного аудиодвижка PPGU: ANGELA_ENGINE.**
+Предыдущие рабочие обозначения: SOUND ANGELA / ANGELA SOUND / ANGELA sourse.
 POP PUNK GUITAR ULTIMATE остаётся названием продукта; JUCE остаётся framework/integration layer.
 Это изменение терминологии и архитектурного документа, а не заявление о завершённой реализации движка.
 Архитектурное решение: `docs/SOUND_ANGELA_ENGINE_DECISION_RU.md`.
