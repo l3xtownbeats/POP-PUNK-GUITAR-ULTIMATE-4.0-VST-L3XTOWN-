@@ -635,3 +635,17 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - This is a validator correctness fix only. It does not register or runtime-integrate Skin_052, does not modify the schema/ThemeManager, and does not alter DSP, APVTS, MIDI, presets or SoundBank.
 - The REV15 merge-tool fail-closed guard remains in place. The guard intentionally blocks merge until the schema palette branch, ThemeManager REV14 parser and `token()` API exist.
 - Required next verification: Windows CI on this new SHA, including all CTest targets. No PASS is claimed yet.
+
+
+### 12 November 2026 — REV 15.3 packaging gate: exclude staged, unregistered skins
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Base SHA:** `a87b17e1722d039454efbf8d1a1366c612749384`  
+**Status:** ROOT CAUSE CONFIRMED / PACKAGING FIX COMMITTED; CI REQUIRED.
+
+- Windows workflow #928 (run ID `43132941804`, SHA `a87b17e1722d039454efbf8d1a1366c612749384`) completed configure, Release build, all CTest targets, VST3 discovery and pluginval strictness 5 successfully. The package step failed with the exact error: `Runtime Skins manifest count mismatch: registry=51, files=52.`
+- Root cause: the packaging step copied every `SKIN/Skin_*` directory, including staged Skin_052, even though the runtime registry correctly contains only 51 registered themes. This is a packaging-source selection defect, not a reason to weaken the registry/validator or to register Skin_052 prematurely.
+- Corrective change: package only paths enumerated by `theme_manifest.json`; validate path shape, unique IDs, source manifest identity and every declared asset before copying. The final package independently verifies that its theme manifest set equals the runtime registry exactly. Unregistered/staged packs remain excluded until official merge and runtime integration.
+- Non-goals: no ThemeManager migration, no Skin_052 merge, no schema/registry changes, no batch generation, no DSP/audio/APVTS/MIDI/preset/SoundBank changes, no host acceptance and no COMPLETE ZIP publication.
+- Regression coverage: the Windows package step now enforces exact registry-to-payload parity and declared asset presence. CI on the new commit is required; no result is inherited from this SHA.
+- Open risks unchanged: Skin_052 remains staged and not runtime-integrated; ThemeManager remains legacy-only; FL Studio 20 host acceptance and CPU/RAM profiling remain unverified.

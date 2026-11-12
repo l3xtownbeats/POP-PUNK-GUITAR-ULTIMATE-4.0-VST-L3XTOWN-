@@ -242,13 +242,124 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          # Runtime skin payload is a sibling of VST3/, so both can be copied
-          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
+          # Ship only runtime-registered skins. Staged/unregistered packs stay
+          # out of the install payload until the official merge + runtime gates pass.
           $runtimeSkins = Join-Path $release 'Skins'
-          Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
-            Copy-Item -Destination $runtimeSkins -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
+          $sourceSkins = Join-Path $env:PROJECT_DIR 'SKIN'
+          $skinRegistryPath = Join-Path $sourceSkins 'theme_manifest.json'
+          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
+          $expectedSkinCount = [int]$skinRegistry.totalSkins
+          if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) {
+            throw 'Source skin registry totalSkins does not match its themes array.'
+          }
+          $registeredIds = @{}
+          foreach ($theme in $skinRegistry.themes) {
+            if ($theme.path -notmatch '^Skin_[0-9]{2,3}/theme\\.json
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
+
+          # Keep human-readable install notes and provenance in Resources.
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
+
+          $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
+          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
+          $expectedSkinCount = [int]$skinRegistry.totalSkins
+          if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Runtime skin registry totalSkins does not match its themes array.' }
+          $skinManifests = Get-ChildItem $runtimeSkins -Recurse -File -Filter 'theme.json'
+          if ($skinManifests.Count -ne $expectedSkinCount) { throw "Runtime Skins manifest count mismatch: registry=$expectedSkinCount, files=$($skinManifests.Count)." }
+          $packagedManifestPaths = @{}
+          foreach ($skinManifest in $skinManifests) {
+            $relativeManifest = $skinManifest.FullName.Substring($runtimeSkins.Length + 1).Replace('\\','/')
+            $packagedManifestPaths[$relativeManifest] = $true
+          }
+          foreach ($theme in $skinRegistry.themes) {
+            if (-not $packagedManifestPaths.ContainsKey([string]$theme.path)) {
+              throw "Registered runtime skin manifest missing from exact package set: $($theme.path)"
+            }
+            $manifestPath = Join-Path $runtimeSkins $theme.path
+            if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Registered runtime skin manifest missing: $($theme.path)" }
+            $themeData = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+            if ($themeData.id -ne $theme.id -or $themeData.index -ne $theme.index) {
+              throw "Runtime skin identity mismatch for $($theme.path)."
+            }
+            $compatibility = $themeData.compatibility
+            if ($compatibility.apvtsChanges -or $compatibility.layoutChanges -or $compatibility.audioChanges) {
+              throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
+            }
+          }
+          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
+          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
+          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
+          $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
+          if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
+
+          @'
+          POP PUNK GUITAR ULTIMATE — WINDOWS x64 VST3 PACKAGE
+          ===================================================
+          VST3/       The compiled VST3 plugin bundle.
+          SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
+          PRESETS/    Factory catalog (300 entries) and portable preset examples.
+          Skins/      Exactly the runtime-registered visual palette manifests; copy beside the VST3 bundle.
+          Resources/  Install notes, source/license summary, checksums and skin documentation.
+          Assets/     Product artwork and visual assets.
+
+          INSTALL:
+          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
+             C:\Program Files\Common Files\VST3\
+             Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
+          2. In the plugin, use its SFZ load control and select an instrument SFZ
+             from SOUNDBANK/. Keep SOUNDBANK on disk.
+          3. The factory preset catalog is embedded in the plugin and also shipped
+             as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
+          4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
+             Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
+          5. See Resources/ for source attribution, licenses, checksums and documentation.
+
+          Automated CMake build, CTest and pluginval results are reported by this workflow.
+          FL Studio 20 manual host acceptance remains a separate step and is not implied.
+          '@ | Set-Content -Encoding utf8 (Join-Path $release 'INSTALL_AND_CONTENTS.txt')
+
+          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip'
+          if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
+          Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip
+          if-no-files-found: error
+
+) {
+              throw "Unsafe or unsupported registered skin path: $($theme.path)"
+            }
+            if ($registeredIds.ContainsKey([string]$theme.id)) {
+              throw "Duplicate registered skin ID: $($theme.id)"
+            }
+            $registeredIds[[string]$theme.id] = $true
+            $sourceManifest = Join-Path $sourceSkins $theme.path
+            if (-not (Test-Path -LiteralPath $sourceManifest -PathType Leaf)) {
+              throw "Registered source skin manifest missing: $($theme.path)"
+            }
+            $themeData = Get-Content -LiteralPath $sourceManifest -Raw | ConvertFrom-Json
+            if ($themeData.id -ne $theme.id -or [int]$themeData.index -ne [int]$theme.index) {
+              throw "Source skin identity mismatch for $($theme.path)."
+            }
+            $sourceFolder = Split-Path -Parent $sourceManifest
+            foreach ($assetProperty in $themeData.assets.PSObject.Properties) {
+              if ([string]::IsNullOrWhiteSpace([string]$assetProperty.Value)) { continue }
+              $assetPath = Join-Path $sourceFolder ([string]$assetProperty.Value)
+              if (-not (Test-Path -LiteralPath $assetPath -PathType Leaf)) {
+                throw "Registered skin '$($theme.id)' is missing asset '$($assetProperty.Value)'."
+              }
+            }
+            $folderName = Split-Path -Leaf $sourceFolder
+            Copy-Item -LiteralPath $sourceFolder -Destination $runtimeSkins -Recurse
+          }
+          Copy-Item -LiteralPath $skinRegistryPath -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $sourceSkins 'theme.schema.json') -Destination $runtimeSkins
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
