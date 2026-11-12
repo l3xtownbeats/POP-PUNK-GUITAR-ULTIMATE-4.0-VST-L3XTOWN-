@@ -1072,3 +1072,12 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 Официальные веб-источники проверены 2026-11-12: Meta Open Sound README/AGENTS; Karoryfer Free Samples; FreePats Clean Electric Guitar; FreePats Distorted Electric Guitar. Точные ссылки и требования отражены в §H11.
 
 **Важно:** registry `assets/sound_hunter/registry.json` остаётся пустым. Это изменение расширяет спецификацию и приоритеты поиска, но не является доказательством скачивания, SHA-256 screening, прослушивания или добавления WAV в playable SoundBank. Такие операции должны пройти существующий S6.5 pipeline; никаких неразрешённых файлов в релиз не включать.
+
+
+## 2026-11-12 — Guitar sound download source index
+
+Added `docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md` with 20 direct source/catalogue links covering CC0 multisample guitars, acoustic/nylon and electric clean/distorted SFZ banks, guitar loops, riffs, stems and one-shots. Includes Meta Open Sound, SFZ Instruments, Karoryfer, FreePats, VCSL, Selekt, Signature Sounds, individual Freesound CC0 assets, OpenGameArt, Pulse Open Loops, SampleStack and the Libre Instrument Audio Database.
+
+Clearance tiers are explicit: CC0/public-domain and individually certified CC0 are priority; CC-BY requires attribution and redistribution review; packs with vague "royalty-free/free for music" wording remain YELLOW; commercial/subscription assets without explicit embedding rights are excluded. Drum-only, bass, vocals and full mixes are not guitar-bank assets.
+
+This is a source discovery index only. It does not claim that the listed archives have been downloaded, hashed, auditioned, imported or made playable. Actual ingestion must pass the Sound Hunter checks and be recorded in the asset registry.
