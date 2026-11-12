@@ -467,3 +467,16 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Нереализованные Settings/About/Curator/Auto Discover нельзя выдавать за готовые функции или заполнять фиктивными активными заглушками.
 - Следующий coding task: pure geometry module AuxiliaryPanelLayout + unit tests; после этого — window shell/manager. Это дизайн-этап, не реализация: отдельные окна, auto-tiling и compact mode пока НЕ IMPLEMENTED и НЕ TESTED.
 - Отдельный известный release blocker остаётся: run #860 CTest 11/12 из-за Skin_052, не зарегистрированной в legacy theme registry. Не обходить проверку; skin pack merge/registry consistency требует отдельного корректного исправления до полного Release → CTest → pluginval → package acceptance.
+
+
+### 12 November 2026 — Auxiliary Panel Layout / implementation step A
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Status:** PURE GEOMETRY MODULE ADDED / NOT YET BUILT OR INTEGRATED INTO EDITOR.
+
+- Добавлены `Source/UI/AuxiliaryPanelLayout.h/.cpp`: детерминированная геометрия 0..N внутренних панелей, равномерная раскладка по рабочей области, compact/overflow flags, проверяемые прямоугольники без перекрытия.
+- Добавлен `tests/AuxiliaryPanelLayoutTests.cpp`; CMake подключает модуль к плагину и отдельный CTest target `ppgu_auxiliary_panel_layout_tests`.
+- UX baseline уточнён согласно последнему решению пользователя: overlay-панели внутри основного editor, а не отдельные системные окна. Одна панель занимает почти всю рабочую область; несколько панелей укладываются плиткой; основная шапка остаётся доступной.
+- Performance Display должен использовать реальные MIDI-события; chord symbol отображается только при надёжном распознавании, иначе показываются ноты.
+- Не изменялись PluginProcessor, DSP, audio callback, APVTS parameter IDs, MIDI scheduler или preset schema.
+- Локальная компиляция/CTest, Windows Release, pluginval strictness 5 и проверка в FL Studio 20 пока НЕ запускались. Не считать этап A прошедшим до CI.
