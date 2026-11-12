@@ -22,13 +22,20 @@ PPGUPerformanceDisplay::PPGUPerformanceDisplay(juce::MidiKeyboardState& state,
     configure(detailValue, 10.0f, palette.textSecondary, false);
     configure(velocityValue, 11.0f, palette.textPrimary, true);
     configure(midiValue, 10.0f, palette.textSecondary, true);
+    configure(bpmValue, 10.0f, palette.textSecondary, true);
+    configure(positionValue, 10.0f, palette.textSecondary, true);
     noteValue.setText("--", juce::dontSendNotification);
     chordValue.setText("--", juce::dontSendNotification);
     detailValue.setText("PLAY A NOTE OR CHORD  /  LIVE MIDI MONITOR", juce::dontSendNotification);
     velocityValue.setText("VEL --", juce::dontSendNotification);
-    midiValue.setText("MIDI IDLE", juce::dontSendNotification);
-    const std::array<juce::Component*, 5> labels {
-        &noteValue, &chordValue, &detailValue, &velocityValue, &midiValue
+    midiValue.setText("NO MIDI", juce::dontSendNotification);
+    bpmValue.setText("HOST SYNC OFF", juce::dontSendNotification);
+    positionValue.setText("BAR --:--:---", juce::dontSendNotification);
+    bpmValue.setTooltip("Host transport is unavailable until a real-time-safe processor snapshot is exposed.");
+    positionValue.setTooltip("Bar:beat:tick is unavailable without a real-time-safe host transport snapshot.");
+    const std::array<juce::Component*, 7> labels {
+        &noteValue, &chordValue, &detailValue, &velocityValue, &midiValue,
+        &bpmValue, &positionValue
     };
     for (auto* component : labels)
         addAndMakeVisible(*component);
@@ -44,6 +51,8 @@ void PPGUPerformanceDisplay::setPalette(const PPGUThemeManager::Palette& value)
     detailValue.setColour(juce::Label::textColourId, palette.textSecondary);
     velocityValue.setColour(juce::Label::textColourId, palette.textPrimary);
     midiValue.setColour(juce::Label::textColourId, palette.textSecondary);
+    bpmValue.setColour(juce::Label::textColourId, palette.textSecondary);
+    positionValue.setColour(juce::Label::textColourId, palette.textSecondary);
     repaint();
 }
 
@@ -127,9 +136,11 @@ void PPGUPerformanceDisplay::timerCallback()
     const int velocity = latestVelocity.load(std::memory_order_relaxed);
     noteValue.setText(note >= 0 ? makeNoteName(note) : "--", juce::dontSendNotification);
     chordValue.setText(makeChordName(snapshot), juce::dontSendNotification);
-    detailValue.setText(count > 0 ? notes : "PLAY A NOTE OR CHORD  /  LIVE MIDI MONITOR", juce::dontSendNotification);
+    detailValue.setText(count > 0
+        ? notes + "  /  KEY --  /  NEXT --"
+        : "KEY --  /  NEXT --  /  PROGRESSION OFF", juce::dontSendNotification);
     velocityValue.setText(count > 0 ? "VEL " + juce::String(velocity) : "VEL --", juce::dontSendNotification);
-    midiValue.setText(count > 0 ? "MIDI ACTIVE" : "MIDI IDLE", juce::dontSendNotification);
+    midiValue.setText(count > 0 ? "MIDI IN" : "NO MIDI", juce::dontSendNotification);
 }
 
 void PPGUPerformanceDisplay::paint(juce::Graphics& g)
@@ -142,20 +153,17 @@ void PPGUPerformanceDisplay::paint(juce::Graphics& g)
     g.fillRoundedRectangle(b.getX(), b.getY() + 10.0f, 3.0f, b.getHeight() - 20.0f, 1.5f);
     g.setColour(palette.controlBorder);
     g.drawRoundedRectangle(b.reduced(0.5f), 10.0f, 1.0f);
-    g.setColour(palette.textSecondary);
-    g.setFont(9.0f);
-    g.drawText("PERFORMANCE", getLocalBounds().reduced(12, 4).removeFromTop(14), juce::Justification::left);
 }
 
 void PPGUPerformanceDisplay::resized()
 {
-    auto a = getLocalBounds().reduced(14, 20);
-    auto left = a.removeFromLeft(76);
-    noteValue.setBounds(left.removeFromTop(30));
-    auto chord = a.removeFromLeft(130);
-    chordValue.setBounds(chord.removeFromTop(32));
-    auto right = a.removeFromRight(88);
+    auto a = getLocalBounds().reduced(12, 8);
+    noteValue.setBounds(a.removeFromLeft(74));
+    chordValue.setBounds(a.removeFromLeft(94));
+    auto right = a.removeFromRight(82);
     velocityValue.setBounds(right.removeFromTop(20));
     midiValue.setBounds(right.removeFromTop(18));
+    positionValue.setBounds(a.removeFromRight(122));
+    bpmValue.setBounds(a.removeFromRight(96));
     detailValue.setBounds(a);
 }

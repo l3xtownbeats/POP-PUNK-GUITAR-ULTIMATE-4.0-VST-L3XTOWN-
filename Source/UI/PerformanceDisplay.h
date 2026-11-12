@@ -30,6 +30,6 @@ private:
     std::array<std::atomic<bool>, 128> activeNotes {};
     std::atomic<int> latestNote { -1 };
     std::atomic<int> latestVelocity { 0 };
-    juce::Label noteValue, chordValue, detailValue, velocityValue, midiValue;
+    juce::Label noteValue, chordValue, detailValue, velocityValue, midiValue, bpmValue, positionValue;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PPGUPerformanceDisplay)
 };

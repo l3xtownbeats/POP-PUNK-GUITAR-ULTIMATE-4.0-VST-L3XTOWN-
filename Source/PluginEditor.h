@@ -51,10 +51,9 @@ private:
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
     juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
-    std::array<juce::TextButton, 5> panelButtons {
+    std::array<juce::TextButton, 4> panelButtons {
         juce::TextButton("FX EDIT"), juce::TextButton("AUTOCHORDS"),
-        juce::TextButton("IMPORT"), juce::TextButton("SETTINGS"),
-        juce::TextButton("PERFORMANCE")
+        juce::TextButton("IMPORT"), juce::TextButton("SETTINGS")
     };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;

@@ -233,7 +233,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     auxiliaryPanels->addPanel(2, "AUTOCHORDS  /  PATTERN HARMONY", *autoChordsPanel);
     auxiliaryPanels->addPanel(3, "IMPORT GUITAR  /  SOUND LIBRARY", *importGuitarPanel);
     auxiliaryPanels->addPanel(4, "SETTINGS  /  ENGINE", *settingsPanel);
-    auxiliaryPanels->addPanel(5, "PERFORMANCE  /  LIVE MIDI MONITOR", *performanceDisplay);
+    addAndMakeVisible(*performanceDisplay);
 
     for (size_t i = 0; i < panelButtons.size(); ++i)
     {
@@ -334,21 +334,21 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
- if(auxiliaryPanels)auxiliaryPanels->setBounds(getLocalBounds());
+ if(auxiliaryPanels){auto workspace=getLocalBounds().reduced(18);workspace.removeFromTop(66);auxiliaryPanels->setBounds(workspace);}
  auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
  skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
- a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
+ a.removeFromTop(10);a.removeFromTop(156);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
  a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);
- auto panelTools=a.removeFromTop(30);const int toolGap=8;const int toolWidth=(panelTools.getWidth()-toolGap*4)/5;
+ auto panelTools=a.removeFromTop(30);const int toolGap=8;const int toolCount=static_cast<int>(panelButtons.size());const int toolWidth=(panelTools.getWidth()-toolGap*(toolCount-1))/toolCount;
  for(size_t i=0;i<panelButtons.size();++i){auto cell=panelTools.removeFromLeft(toolWidth);panelButtons[i].setBounds(cell.reduced(2,2));if(i+1<panelButtons.size())panelTools.removeFromLeft(toolGap);}
- a.removeFromTop(8);auto panels=a.removeFromTop(318);
+ a.removeFromTop(8);auto panels=a.removeFromTop(280);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
  ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
  int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
  for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
  auto controls=play.removeFromTop(270);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+ startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(8);if(performanceDisplay)performanceDisplay->setBounds(a.removeFromTop(58));a.removeFromTop(10);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
