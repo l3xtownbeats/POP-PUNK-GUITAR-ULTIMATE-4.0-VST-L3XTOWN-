@@ -363,12 +363,82 @@ public:
             for (int i = 1; i < 9; ++i)
                 g.drawVerticalLine(graphArea.getX() + graphArea.getWidth() * i / 9, graphArea.getY(), graphArea.getBottom());
             juce::Path curve;
-            curve.startNewSubPath(static_cast<float>(graphArea.getX()), static_cast<float>(graphArea.getCentreY()));
-            curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
-                          graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
-                          static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
+            const float gx = static_cast<float>(graphArea.getX());
+            const float gy = static_cast<float>(graphArea.getY());
+            const float gw = static_cast<float>(graphArea.getWidth());
+            const float gh = static_cast<float>(graphArea.getHeight());
+            const float cy = gy + gh * 0.5f;
+            switch (selectedGroup)
+            {
+                case 0: // Compressor transfer curve with a visible knee.
+                    curve.startNewSubPath(gx, gy + gh * 0.88f);
+                    curve.lineTo(gx + gw * 0.42f, gy + gh * 0.52f);
+                    curve.cubicTo(gx + gw * 0.53f, gy + gh * 0.43f,
+                                  gx + gw * 0.58f, gy + gh * 0.34f,
+                                  gx + gw, gy + gh * 0.16f);
+                    break;
+                case 1: // Three-band EQ response.
+                    curve.startNewSubPath(gx, cy);
+                    curve.cubicTo(gx + gw * 0.12f, cy, gx + gw * 0.13f, gy + gh * 0.18f, gx + gw * 0.28f, gy + gh * 0.34f);
+                    curve.cubicTo(gx + gw * 0.40f, gy + gh * 0.46f, gx + gw * 0.42f, gy + gh * 0.46f, gx + gw * 0.50f, cy);
+                    curve.cubicTo(gx + gw * 0.60f, gy + gh * 0.70f, gx + gw * 0.68f, gy + gh * 0.78f, gx + gw * 0.76f, cy);
+                    curve.cubicTo(gx + gw * 0.86f, gy + gh * 0.25f, gx + gw * 0.91f, gy + gh * 0.25f, gx + gw, cy);
+                    break;
+                case 2: // Distortion transfer: smooth saturation S curve.
+                    curve.startNewSubPath(gx, gy + gh * 0.94f);
+                    curve.cubicTo(gx + gw * 0.30f, gy + gh * 0.92f, gx + gw * 0.26f, gy + gh * 0.12f, gx + gw * 0.50f, gy + gh * 0.08f);
+                    curve.cubicTo(gx + gw * 0.74f, gy + gh * 0.04f, gx + gw * 0.70f, gy + gh * 0.88f, gx + gw, gy + gh * 0.86f);
+                    break;
+                case 3: // Chorus: slow, smooth modulation.
+                case 4: // Flanger: faster modulation.
+                    for (int point = 0; point <= 96; ++point)
+                    {
+                        const float t = static_cast<float>(point) / 96.0f;
+                        const float cycles = selectedGroup == 3 ? 1.5f : 4.0f;
+                        const float yy = cy - std::sin(t * juce::MathConstants<float>::twoPi * cycles) * gh * (selectedGroup == 3 ? 0.22f : 0.34f);
+                        if (point == 0) curve.startNewSubPath(gx + t * gw, yy);
+                        else curve.lineTo(gx + t * gw, yy);
+                    }
+                    break;
+                case 5: // Delay: distinct echo taps with decaying level.
+                    for (int tap = 0; tap < 6; ++tap)
+                    {
+                        const float x = gx + gw * (0.08f + tap * 0.15f);
+                        const float height = gh * 0.40f * std::pow(0.68f, static_cast<float>(tap));
+                        curve.startNewSubPath(x, cy - height);
+                        curve.lineTo(x, cy + height);
+                    }
+                    break;
+                case 6: // Reverb: decaying diffuse tail.
+                    for (int point = 0; point <= 96; ++point)
+                    {
+                        const float t = static_cast<float>(point) / 96.0f;
+                        const float envelope = std::exp(-4.2f * t);
+                        const float yy = cy - std::sin(t * juce::MathConstants<float>::twoPi * 10.0f) * gh * 0.34f * envelope;
+                        if (point == 0) curve.startNewSubPath(gx + t * gw, yy);
+                        else curve.lineTo(gx + t * gw, yy);
+                    }
+                    break;
+                case 7: // Cabinet response: low/high cut band-pass contour.
+                    curve.startNewSubPath(gx, gy + gh * 0.90f);
+                    curve.cubicTo(gx + gw * 0.10f, gy + gh * 0.88f, gx + gw * 0.12f, gy + gh * 0.20f, gx + gw * 0.30f, gy + gh * 0.18f);
+                    curve.lineTo(gx + gw * 0.70f, gy + gh * 0.18f);
+                    curve.cubicTo(gx + gw * 0.88f, gy + gh * 0.18f, gx + gw * 0.90f, gy + gh * 0.82f, gx + gw, gy + gh * 0.90f);
+                    break;
+                default: // DOUBLE WIDTH: paired L/R phase-separated visual traces.
+                    for (int point = 0; point <= 96; ++point)
+                    {
+                        const float t = static_cast<float>(point) / 96.0f;
+                        const float phase = t * juce::MathConstants<float>::twoPi * 2.0f;
+                        const float upper = cy - 0.18f * gh - std::sin(phase) * gh * 0.16f;
+                        const float lower = cy + 0.18f * gh + std::sin(phase + 0.55f) * gh * 0.16f;
+                        if (point == 0) { curve.startNewSubPath(gx + t * gw, upper); }
+                        else curve.lineTo(gx + t * gw, upper);
+                    }
+                    break;
+            }
             g.setColour(groups[static_cast<size_t>(selectedGroup)].accent);
-            g.strokePath(curve, juce::PathStrokeType(2.0f));
+            g.strokePath(curve, juce::PathStrokeType(2.2f));
         }
     }
 
@@ -762,10 +832,16 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     for (size_t i = 0; i < fxButtons.size(); ++i) {
         auto& b = fxButtons[i];
         b.setClickingTogglesState(true);
-        b.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
-        b.setColour(juce::TextButton::buttonOnColourId, themeManager.getPalette().token("accent"));
-        b.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
-        b.setColour(juce::TextButton::textColourOnId, themeManager.getPalette().token("window_bg"));
+        static const std::array<juce::Colour, 9> fxAccents {
+            juce::Colour(0xffffb74d), juce::Colour(0xff4dc8e8), juce::Colour(0xff55d66f),
+            juce::Colour(0xffb58af4), juce::Colour(0xff55a8ff), juce::Colour(0xffff8c52),
+            juce::Colour(0xff43d6c4), juce::Colour(0xffc3cbd4), juce::Colour(0xff4c9dff)
+        };
+        const auto fxAccent = fxAccents[i];
+        b.setColour(juce::TextButton::buttonColourId, fxAccent.darker(0.78f));
+        b.setColour(juce::TextButton::buttonOnColourId, fxAccent);
+        b.setColour(juce::TextButton::textColourOffId, fxAccent.brighter(0.45f));
+        b.setColour(juce::TextButton::textColourOnId, juce::Colour(0xff101820));
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
         b.onClick = [this, i] { openFxEditPanel(static_cast<int>(i)); };
         addAndMakeVisible(b);
