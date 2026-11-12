@@ -974,3 +974,22 @@ Runtime-структура — VST3/ и единый корень `POP PUNK GUIT
 10. **Приёмка.** Contract tests на ingest→registry→browser→preview→sampler→preset round-trip; key/velocity/articulation mapping; license gate; missing files/rescan; cancellation; concurrent load/unload; multiple libraries; cache/voice stress; no audio-thread I/O/locks/allocations. Проверить звучание solo и в миксе на электрических и акустических источниках с loudness matching. UI/manifest/asset availability не доказывают готовность runtime playback.
 
 **Статус до реализации:** требование принято; полная end-to-end интеграция не считается IMPLEMENTED или TESTED до кода, contract/regression tests и успешной проверки на конкретном SHA.
+
+
+## 7.5.9 NO FX — ORIGINAL / RAW GUITAR PRESET CATEGORY
+
+Обязательное поведение Preset Browser и Import Guitars: для каждого успешно импортированного и корректно mapped guitar instrument создавать отдельный базовый preset без обработки и помещать его в самостоятельную категорию/графу Preset Browser NO FX (дополнительная подпись: RAW / UNPROCESSED). Это отдельный тип/категория пресета, а не просто выключенный визуальный FX EDIT.
+
+1. Исходное звучание. NO FX воспроизводит звук импортированной библиотеки максимально близко к исходнику: исходные samples, velocity layers, round-robin, key ranges, articulations и release behavior сохраняются. Не добавлять amp coloration, cabinet/IR, insert FX, EQ, compression, saturation, modulation, delay или reverb. Все соответствующие processing stages действительно bypassed/neutral.
+2. Не путать с Clean. CLEAN может содержать чистый усилитель, cabinet, EQ или пространственную обработку. NO FX / RAW означает отсутствие тональной/пространственной обработки вообще. Это две разные категории и разные состояния preset.
+3. Preset Browser. Выделить отдельную видимую графу/категорию NO FX рядом с остальными preset categories; добавить быстрый фильтр. В карточке показывать source/library, instrument, format, mapping status и наличие/отсутствие source assets. Не прятать RAW presets среди обычных Clean/Factory presets.
+4. Автоматическое создание. После успешного импорта и проверки mapping автоматически создавать NO FX base preset для каждого импортированного инструмента/варианта, который можно корректно воспроизвести. Использовать стабильную связь preset ID ↔ library ID ↔ instrument/asset IDs; повторный import/rescan не должен создавать дубликаты.
+5. Защита пользовательских данных. Автоматическое обновление metadata/mapping не должно молча перезаписывать пользовательские изменения. При изменении source mapping создавать новую версию/предлагать refresh; сохранённые пользовательские производные пресеты остаются независимыми.
+6. Создание производных звуков. Из NO FX preset пользователь может создать Save As / Create Processed Preset, добавить amp/cab/IR и FX и сохранить новый User Preset. Исходный NO FX preset остаётся неизменным; Factory presets также не перезаписываются.
+7. Честный уровень. Допускается только безопасная техническая защита от клиппинга/денормализации, если она прозрачна и не меняет тембр; никакая скрытая loudness enhancement/normalization/EQ не должна выдавать себя за RAW. Любой технический output trim должен быть явно показан и отключаем.
+8. Надёжность. Missing source assets отображаются как unavailable, а не заменяются молча другим звуком. Preview, load и preset round-trip проверяются на реальном исходном материале.
+9. Приёмка. Tests: auto-create per valid instrument; NO FX category visibility/filter; true bypass of every processing stage including amp/cab; source articulation/velocity fidelity; no duplicate on rescan; stable preset IDs; missing asset; user edits and derived preset preservation; serialization/round-trip. Слуховая приёмка — level-matched сравнение с исходным материалом.
+
+Термины: UI category = NO FX; descriptive tag = RAW / UNPROCESSED. CLEAN не является синонимом NO FX.
+
+Статус до реализации: принято как обязательное требование; наличие категории, автогенерации и истинного no-processing signal path не заявляется до реализации и тестов.
