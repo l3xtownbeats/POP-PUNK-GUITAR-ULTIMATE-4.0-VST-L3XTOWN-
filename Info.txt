@@ -1439,3 +1439,21 @@ X — это именно закрытие панели, а не выключе�
 **Границы реализации:** добавлены только навигационные entry points и честные landing windows. Circle of Fifths music-theory model, chord/progression interaction, Harmony Assistant suggestion engine, real shared audio preview, MIDI handoff/export и CPU/RAM measurements остаются PENDING. Не заявляется, что новые инструменты уже музыкально функциональны. MELODY/PATTERN, APVTS, DSP, sampler и preset schema не изменялись.
 
 **Проверка после commit:** повторно прочитать точный SHA/файлы; запустить exact-SHA Windows x64 Release, полный CTest и pluginval strictness 5. FL Studio 20 визуальная приёмка и host/audio QA должны фиксироваться отдельно.
+
+
+## 2026-11-12 — Harmony theory foundation (Circle of Fifths + progression model)
+
+**Статус:** SOURCE COMMITTED / EXACT-SHA CI PENDING. Это первый функциональный backend-слой Harmony Studio; UI entry panels пока остаются landing panels.
+
+### Проверка → анализ → исправление → повторный анализ → результат
+
+- Проверены существующий `AutoChordEngine`, его unit tests, текущий `PluginProcessor`, CMake test layout и правила из INFO.
+- Существующий AutoChordEngine умеет распознавать входящие аккорды и строить ограниченный guitar fingering, но не создаёт диатонические прогрессии, не предоставляет модель Circle of Fifths и не интегрирован в MELODY/MIDI/audio routing.
+- Добавлен отдельный JUCE-free `HarmonyProgressionEngine`: 12 major key pitch classes, относительные миноры, порядок Circle of Fifths, имена pitch classes, 8 детерминированных шаблонов четырёхаккордовых прогрессий для Major и Natural Minor, degree/roman numeral, chord quality и pitch-class masks.
+- Алгоритм bounded, без heap allocation, sampler, MIDI scheduler, таймеров или фоновых потоков; предназначен для вызова по явному действию пользователя на message/control thread.
+- Добавлен самостоятельный CTest контракт с проверками C major I–V–vi–IV, A natural minor i–VI–III–VII, circle ordering, relative minor, note names и invalid input/no-write guarantees.
+- Подключён отдельный CMake test target. Существующий AutoChordEngine и processor DSP/MIDI пути не изменены.
+
+**Ограничения:** это пока только теория/генерация символов. Нет UI binding, выбора ключа/режима, секвенсора, chord voicings для результата, preview через существующий sampler, Note-Off/Stop/Loop, MIDI export/drag-out или handoff в MIDI Workspace. Нет доказательства DAW/FL Studio host acceptance. Не заявлять Circle of Fifths/Harmony Assistant готовыми.
+
+**Следующий обязательный этап:** проверить exact-SHA Windows Release + полный CTest + pluginval; затем добавить тестируемый shared MIDI event/playback contract и только после него подключать реальный preview к существующему sampler без второго engine и без изменений обычного MELODY/PATTERN.

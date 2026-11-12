@@ -337,3 +337,13 @@ if(BUILD_TESTING)
     juce_generate_juce_header(ppgu_processor_pattern_tests)
     add_test(NAME ppgu_processor_pattern_integration COMMAND ppgu_processor_pattern_tests)
 endif()
+
+# Deterministic, bounded Circle of Fifths / diatonic progression theory tests.
+# This layer has no JUCE, sampler, MIDI or audio-thread dependency.
+if(BUILD_TESTING)
+    add_executable(ppgu_harmony_progression_tests
+        tests/HarmonyProgressionEngineTests.cpp
+    )
+    target_include_directories(ppgu_harmony_progression_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_harmony_progression_engine_contract COMMAND ppgu_harmony_progression_tests)
+endif()
