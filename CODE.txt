@@ -465,3 +465,14 @@ Do not design presets around an arbitrary FX list and force unsuitable sources t
 Preset QA record must state target type/role, actual source mapping/articulation coverage, rationale for layering/FX/filter or SOURCE-ONLY, and listening result. Acceptance is based on source suitability and target sound, not FX count.
 
 **Status:** requirement recorded; no source code, samples or preset implementation changed in this documentation update.
+
+
+## 2026-11-12 — Integrated sampler-VSTi preset selection / preview / sample loading
+
+- User clarified the intended behaviour: PPGU operates like a sample-based VST3 instrument/synthesizer/rompler. A preset and its playable sample content are one integrated instrument state, not a name/preset record disconnected from sample loading.
+- Selecting a preset in Preset Browser resolves its actual guitar source(s), sample mappings, key/velocity/articulation ranges, layers, FX/filter states and routing as one configuration.
+- If Preview is enabled, preview must use the same resolved source/layer/articulation/FX path as actual MIDI playback, so the user hears how that selected preset will sound.
+- Once a new preset state is ready and activated, MIDI notes must immediately produce its sound. Never display a newly selected preset as active while its sample mapping is missing/unready and the instrument is silent.
+- Real-time safety: perform file I/O, decoding and expensive preparation off the audio callback; publish only a fully prepared state via RT-safe/atomic handoff; preserve the previous valid sound or clearly report loading/failure rather than activating a silent state. Respect existing SamplerEngine/cache/streaming/preallocated-voice architecture and resource lifetimes.
+- Acceptance path: browser selection → manifest resolution → asset/mapping validation and preparation → ready state activation → audible MIDI output; preview/live-path parity; rapid-switch stress; missing/corrupt assets; held-note transitions; no stale state, audio glitches, callback I/O/locks/allocations.
+- **Status:** product requirement recorded. No code or test changes in this journal-only update; current end-to-end behaviour remains to be verified.
