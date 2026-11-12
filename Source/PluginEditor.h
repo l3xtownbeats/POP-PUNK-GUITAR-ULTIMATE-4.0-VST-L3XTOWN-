@@ -8,6 +8,8 @@
 #include "UI/EditorOverlayPanel.h"
 #include "UI/FXEditPanel.h"
 #include "UI/AutoChordsPanel.h"
+#include "UI/ImportGuitarPanel.h"
+#include "UI/SettingsPanel.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -47,13 +49,17 @@ private:
     void showAutoChordsPanel();
     void closeFxEditPanel();
     void closeAutoChordsPanel();
+    void showImportGuitarPanel();
+    void closeImportGuitarPanel();
+    void showSettingsPanel();
+    void closeSettingsPanel();
     void layoutAuxiliaryPanels();
     PopPunkGuitarUltimateAudioProcessor& processor;
     PPGUThemeManager themeManager;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" }, fxEditButton { "FX EDIT" }, autoChordsButton { "AUTOCHORDS" };
+    juce::TextButton loadButton { "IMPORT" }, skinButton { "SKIN  v" }, fxEditButton { "FX EDIT" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
@@ -79,8 +85,12 @@ private:
     std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
     std::unique_ptr<PPGUFXEditPanel> fxEditContent;
     std::unique_ptr<PPGUAutoChordsPanel> autoChordsContent;
+    std::unique_ptr<PPGUImportGuitarPanel> importGuitarContent;
+    std::unique_ptr<PPGUSettingsPanel> settingsContent;
     std::unique_ptr<PPGUEditorOverlayPanel> fxEditOverlay;
     std::unique_ptr<PPGUEditorOverlayPanel> autoChordsOverlay;
+    std::unique_ptr<PPGUEditorOverlayPanel> importGuitarOverlay;
+    std::unique_ptr<PPGUEditorOverlayPanel> settingsOverlay;
     std::unique_ptr<juce::FileChooser> fileChooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopPunkGuitarUltimateAudioProcessorEditor)
 };
