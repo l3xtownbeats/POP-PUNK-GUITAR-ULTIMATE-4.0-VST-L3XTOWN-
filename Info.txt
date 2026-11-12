@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `4dba81f487c2c508661afee48676cc719f32ad9c`
+Последний commit перед текущей записью: `34f074057b9e7572b60e64549de7006bc2307f61`
 
 ## 1. Назначение и продукт
 
@@ -684,3 +684,41 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R28 non-goals:** только устранение неверных ссылок/статусов в документации. Никакие build, UI, audio, skin schema/registry или packaging workflow изменения не заявляются.
 
 **Следующий блокер по R24:** закончить полную файловую инвентаризацию всех skin folders и согласованность legacy schema / Skin Studio schema / registry / validators; затем получить фактический Windows CI на точном SHA.
+
+
+## 2026-11-12 — Skin_052 PNG integrity repair and registry inventory
+
+**Статус:** IMPLEMENTED; targeted G1–G4 asset validation PASSED in CI; full Windows build / CTest / pluginval / package remain PENDING.  
+**Спецификация:** MASTER PROMPT REV 16.0 UNIFIED.  
+**Коммиты:**
+- Preview PNG regenerated with valid PNG chunk CRCs: `d8735b2bc47da1cfe5923a87dc8d2c61007ce2ba`.
+- Hero PNG regenerated with valid PNG chunk CRCs: `34f074057b9e7572b60e64549de7006bc2307f61`.
+
+**CI:** workflow run #963, ID `43134831986`, source SHA `34f074057b9e7572b60e64549de7006bc2307f61`. At journal time: Windows job running; steps 3–13 completed successfully, including factory catalog, portable preset examples, APVTS layout, Skin Studio G1–G4 validator, source selection/artifact upload, cached sample library validation and BinaryData pre-configure checker. Step 14 `Configure x64 Release` is `in_progress`; build, CTest, VST3 locate, pluginval and packaging are pending. This is not BUILD VERIFIED and not COMPLETE ZIP.
+
+**Симптом → причина → фикс:**
+- CI runs #954, #960 and #961 failed at `tools/validate_skin_pack.py` with exact error `SKIN\\Skin_052\\assets\\preview.png: PNG CRC mismatch`. The run stopped before CMake configure; build and tests were skipped.
+- After replacing preview, run #962 exposed the same CRC defect in `SKIN/Skin_052/assets/hero.png`.
+- Both files were regenerated as valid 8-bit RGB PNGs with the required dimensions (preview 360×240, hero 800×450). The generated assets use a carbon/graphite palette with restrained cyan/magenta signal accents; no schema, registry, runtime code or audio code changed.
+- Run #963 passed the complete pre-build Skin Studio validator, including PNG decoding/CRC and dimensions, G1 contrast, G2 control parity, G3 PNG/SVG structure and G4 identity/continuity. This is the targeted evidence for the asset repair.
+
+**Инвентаризация R24 / R26:**
+- Repository tree contains exactly 52 skin folders and exactly 52 `theme.json` files: `Skin_01`…`Skin_51` plus `Skin_052`.
+- `SKIN/theme_manifest.json` declares `totalSkins=52`; all 52 indices are continuous 1…52 and each entry points to the matching manifest. Folder set and registry path set match exactly; no unregistered `Skin_*` directory was found in this tree snapshot.
+- Schema split is intentional and explicit: `theme.schema.json` is legacy 1…51 (two-digit IDs); `control_schema.json` governs Skin Studio 52+ (three-or-more-digit IDs). Skin_052 is `skin-052`, index 52. Do not rewrite the legacy schema to pretend both manifest contracts are identical.
+- Remaining authority conflict: current registry/runtime fallback is still `skin-51` (Blackout Voltage), while REV 16.0 invariant I7 requires `default-ppgu`. This is not silently changed here; R24 places default-ppgu plus ThemeManager migration after all CTest targets PASS. Current master prompt §2 also needs its stale 51/50-folder snapshot refreshed from this audit and INFO.
+
+**R28 non-goals:** no changes to audio/DSP, APVTS IDs/semantics, MIDI, preset catalog, SoundBank, skin schema/registry, control inventory, ThemeManager or PluginEditor. No Skin_053..Skin_102 generation. No COMPLETE ZIP publication.
+
+**Риски / следующие шаги:**
+1. Await run #963; diagnose configure/build/CTest/pluginval/package failures from exact logs, one fix per substage.
+2. After all CTest targets PASS, proceed in R24 order to default-ppgu + ThemeManager 21-token contract as one contractor commit, with fallback regression.
+3. Full runtime skin switching/hot-swap/ECO/DPI, 1000-swap audio invariance, gallery and window manager remain unverified/unimplemented as recorded in prior INFO.
+4. Audio snapshot quiescence, 8-root cap, cancellation/lifetime and 64-voice cache-pressure remain open risks §3.4.
+
+**Self-check §21:**
+1. SHA: preview `d8735b2...`, final asset source `34f0740...`; run #963 / ID `43134831986` is still running at journal time; configure in progress, so no build/test PASS is claimed.
+2. Regression coverage: `tools/validate_skin_pack.py` passed at CI step 6 on exact SHA; `ppgu_skin_manifest_contract` CTest has not yet run.
+3. R28 non-goals above were not crossed.
+4. Asset repair: IMPLEMENTED; targeted skin asset validation TESTED; overall release pipeline PENDING.
+5. Not done: Windows build, all CTest targets, pluginval strictness 5, packaging, FL Studio 20 host acceptance, CPU/RAM profiling and default-ppgu migration.
