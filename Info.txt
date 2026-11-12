@@ -961,3 +961,24 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **R32 риски:** quiescence snapshots, 8-root cap, worker recovery, 64-voice cache pressure и cancellation/lifetime races остаются открытыми; этот этап их не затрагивал.
 **Self-check §21:** 1) source SHA и run совпадают: да; 2) CTest step: SUCCESS по job log; 3) R28 соблюдён; 4) статусы ограничены доказанным run; 5) осталось: S2, остаточный visual audit S3, S4–S9; 6) main-only, rollout других ветвей не выполнялся.
 **Уточнение статуса:** предыдущая follow-up строка ниже, помечавшая CI для d687106 как PENDING, superseded этой записью после завершения run #1157. Последующий HEAD 9a35ae31c6cddb75ab187e42afa175a7df28fc5d содержит только append-only запись в Info.txt и не имеет отдельного source build run.
+
+
+## 2026-11-12 — REV 18 S2 auxiliary panel runtime integration
+
+**Статус:** SOURCE CHANGE COMMITTED; Windows Release/CTest/pluginval/package CI PENDING; Windows/FL Studio 20 window acceptance NOT VERIFIED.
+**Ветка:** main. **Source SHA:** `ae0334b7bcc51a31c46b959bd6ed0d5417b356fb`. **Run:** #1163 / ID `43226541896` — IN_PROGRESS на точном SHA.
+**Изменения:**
+- Подключены пять panel content components: FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PERFORMANCE. Для каждой панели создан отдельный top-level JUCE DocumentWindow; native title bar отключён, JUCE title bar предоставляет X и square maximize action. Maximize action переключает expanded workspace через правый dock, а не перекрывает остальные окна.
+- `PPGUAuxiliaryPanelWindowManager` владеет окнами; содержимое панелей остаётся owned editor-side и не уничтожается при X/закрытии. Окна используют Safe lifetime по синхронной manager ownership; closeAll вызывается при teardown editor.
+- Geometry использует `calculatePanelLayout` и `calculateExpandedPanelLayout`: 1=single, 2=2x1, 3–4=2x2, 5–6=2x3; если рабочая область не позволяет минимальные размеры, включается focus paging вместо overlap. Expanded mode — main workspace + правый dock; при нехватке места откат к обычной сетке.
+- Состояние размера/позиции окна сохраняется в PropertiesFile; повторное открытие восстанавливает window state, затем bounds ограничиваются текущей рабочей областью.
+- FX EDIT подключён только к существующим APVTS IDs; SETTINGS использует существующие APVTS IDs. IMPORT вызывает существующий asynchronous SFZ loader. AUTOCHORDS controls и Preview остаются disabled (MIDI backend не имитируется). PERFORMANCE — read-only MIDI monitor/chord display, без MIDI emission.
+- В editor добавлены пять launch buttons; смена skin передаёт все 21-token palette в окна и panel components.
+- Обновлены pure geometry tests и добавлен JUCE-free AutoChordEngine contract test.
+- CMake получил только source/test registration для этих файлов. Это необходимая stage-local wiring: проверка main до изменения показала, что staged panel files фактически отсутствовали в main target, вопреки предположению REV 18 §1 «CMake уже компилирует их». JUCE/CMake pins, build flags и packaging rules не менялись.
+**Selective port:** использованы только panel components/layout/test source из `work/signal-forge-panel-shell`; branch целиком не сливалась (ветвь diverged: 66 ahead / 8 behind; там также находились unrelated preset/ThemeManager изменения).
+**R28 non-goals:** DSP/audio callback, sampler lifecycle, MIDI routing/emission, APVTS IDs/semantics, preset catalog, SoundBank payload, ThemeManager, skin schema/registry/assets и packaging rules не менялись. CMake source/test wiring — минимальное исключение, необходимое для компиляции явно заданного S2.
+**R32 риски:** quiescence snapshots, 8-root cap, worker recovery, 64-voice cache pressure и cancellation/lifetime races не затрагивались; остаются OPEN.
+**Проверка:** source/geometry wiring committed; run #1163 ещё выполняется, поэтому BUILD VERIFIED / TESTED / pluginval PASS / package PASS не присваиваются. Host UI, multi-monitor и multi-DPI acceptance — NOT VERIFIED.
+**Открыто:** дождаться полного CI #1163; устранить compile/test failures отдельными patch-коммитами; затем провести Windows/FL Studio 20 UI acceptance для X/maximize/restore, simultaneous windows, compact/overflow paging, persistence и teardown. Не переходить к S3/S4 до закрытия S2.
+**Self-check §21:** 1) source SHA/run совпадают: run #1163 IN_PROGRESS на `ae0334b...`; 2) geometry + AutoChordEngine tests добавлены, фактический CTest — PENDING; 3) R28 соблюдён с явно описанным CMake source/test wiring; 4) статус ограничен SOURCE CHANGE COMMITTED; 5) осталось CI и host UI acceptance; 6) main-only, branch rollout не выполнялся.
