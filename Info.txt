@@ -1377,3 +1377,30 @@ F. Только после этого считать документальны�
 **Parent SHA:** `6ea8d5873706890f29496465d6078bd235fee42b`.  
 **Exact-SHA workflow:** run #1044, ID `43180948804`, source SHA `4381c1d1d60e9769173b89922d52bb0967b98bcf`; status was PENDING at journal closure.  
 **Verification boundary:** source diff and both journal entries were read back from GitHub; build/test/pluginval/host result not yet available. This addendum closes the implementation record with the resulting SHA; it does not change production source.
+
+
+## 2026-11-12 — REV.17 visual specification correction: Zone F added
+
+**Тип:** документационное уточнение принятой визуальной архитектуры; production source не менялся.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Предыдущий source/document commit:** `4381c1d1d60e9769173b89922d52bb0967b98bcf`.  
+**Спецификация:** `docs/PPGU_MASTER_SPEC_PACKAGE_RU.md`.  
+**Спецификация commit:** `c6fccfbf6d960fb0fcb362eaa4128bd4b461e637`.
+
+**ПРОВЕРКА:** в пользовательской карте зон были A, B, C, D, E, G, H; F отсутствовала. Текущая оболочка использует три внешние колонки, а processor уже объявляет существующие Pattern-параметры `patternSlot`, `patternLength`, `syncMode`, `bpm`, `startOnFirstChord`. В текущем UI отдельная зона F не реализована.
+
+**АНАЛИЗ:** для заполнения пропуска не нужна новая внешняя колонка и нельзя создавать фиктивные контролы/APVTS IDs. Зона F должна быть логической секцией центральной рабочей области, отвечающей за Pattern/Strummer, с привязкой только к уже существующим параметрам. Параметры, найденные только в декларации APVTS и не подтверждённые runtime binding, нельзя выдавать за готовые функции.
+
+**ИСПРАВЛЕНИЕ:** в master spec добавлена **F. STRUMMER & GROOVE / PATTERN CONTROL STRIP**:
+- Pattern Slot — `patternSlot`;
+- Pattern Length — `patternLength`;
+- Sync Mode — `syncMode`;
+- Tempo — `bpm` (редактируемый только в Internal; в Host показывать DAW tempo read-only при доступности);
+- Start on First Chord — `startOnFirstChord`.
+Зона активна в PATTERN; в MELODY pattern-only контролы disabled. Swing/Humanize/Accent остаются в основных ручках C и не дублируются. Дополнительные параметры без подтверждённой runtime обработки перечислены как disabled/deferred.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** сохранены три существующие внешние колонки, текущие APVTS IDs/semantics, два режима playMode, scheduler, MIDI, DSP, presets и SoundBank. Новые параметры не добавлялись. Документальное требование не является доказательством реализации UI.
+
+**РЕЗУЛЬТАТ:** ZONE F SPECIFIED; UI IMPLEMENTATION / BUILD / CTEST / PLUGINVAL / FL STUDIO 20 HOST CHECK PENDING. Production source unchanged.
+
+**Следующий шаг:** отдельная source-задача — подключить F к существующим APVTS attachments и разместить в центральной области; перед этим проверить реальное использование каждого параметра и геометрию на минимальном размере окна.
