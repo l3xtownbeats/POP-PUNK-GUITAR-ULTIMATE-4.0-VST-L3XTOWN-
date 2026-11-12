@@ -8,7 +8,6 @@ namespace ppgu::ui
 {
 namespace
 {
-int clampPositive(int value) { return std::max(0, value); }
 }
 
 PanelLayout layoutAuxiliaryPanels(const PanelBounds& workArea,
