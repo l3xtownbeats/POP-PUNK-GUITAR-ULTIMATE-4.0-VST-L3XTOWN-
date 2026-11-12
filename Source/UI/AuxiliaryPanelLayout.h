@@ -32,7 +32,7 @@ struct PanelLayout
 // Pure geometry only: coordinates are physical pixels; scale converts logical
 // panel metrics to physical pixels. Invalid geometry or duplicate IDs return
 // an empty layout with invalidInput=true. Overflow preserves all IDs and marks
-// only the first panel visible; the window manager owns page navigation.
+// every panel visible on a minimum-size scrollable grid when the work area is too small.
 // No JUCE/UI ownership or audio-thread state.
 PanelLayout calculatePanelLayout(PanelRect workArea,
                                  const std::vector<PanelRequest>& requests,
