@@ -249,11 +249,13 @@ jobs:
             Copy-Item -Destination $runtimeSkins -Recurse
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination $runtimeSkins
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
 
@@ -288,7 +290,7 @@ jobs:
           VST3/       The compiled VST3 plugin bundle.
           SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
           PRESETS/    Factory catalog (300 entries) and portable preset examples.
-          Skins/      51 visual palette manifests; copy beside the VST3 bundle. Hero artwork is drawn by the editor.
+          Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
