@@ -118,9 +118,9 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("dnaBeatAccent", "DNA Beat Accent", 0.0f, 1.0f, 0.7f));
     p.add(floatParameter("dnaFxTaste", "DNA FX Taste", 0.0f, 1.0f, 0.5f));
 
-    // Seven FX slots can be reordered without changing their parameter IDs.
-    const juce::StringArray fxNames { "Compressor", "EQ", "Distortion", "Chorus", "Delay", "Reverb", "Cabinet IR" };
-    for (int slot = 0; slot < 7; ++slot)
+    // Preserve existing slot IDs/order; Flanger is appended as slot 8.
+    const juce::StringArray fxNames { "Compressor", "EQ", "Distortion", "Chorus", "Delay", "Reverb", "Cabinet IR", "Flanger" };
+    for (int slot = 0; slot < 8; ++slot)
         p.add(std::make_unique<juce::AudioParameterChoice>(
             juce::ParameterID { "fxSlot" + juce::String(slot + 1), 1 },
             "FX Slot " + juce::String(slot + 1), fxNames, slot));
@@ -203,6 +203,10 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     const auto delayCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 2.1)) + 4;
     const auto chorusCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.04)) + 4;
     const auto flangerCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.02)) + 4;
+    const auto doubleWidthCapacity = static_cast<size_t>(std::ceil(currentSampleRate * 0.025)) + 4;
+    doubleWidthDelay.assign(doubleWidthCapacity, 0.0f);
+    doubleWidthWritePosition = 0;
+    doubleWidthLowpassState = 0.0f;
     for (int channel = 0; channel < 2; ++channel)
     {
         delayBuffers[static_cast<size_t>(channel)].assign(delayCapacity, 0.0f);
@@ -245,6 +249,9 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
         std::fill(line.begin(), line.end(), 0.0f);
     for (auto& line : flangerBuffers)
         std::fill(line.begin(), line.end(), 0.0f);
+    std::fill(doubleWidthDelay.begin(), doubleWidthDelay.end(), 0.0f);
+    doubleWidthWritePosition = 0;
+    doubleWidthLowpassState = 0.0f;
     delayWritePosition = 0;
     chorusWritePosition = 0;
     flangerWritePosition = 0;
@@ -836,6 +843,39 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             for (int sample = 0; sample < samples; ++sample)
                 data[sample] = dry[static_cast<size_t>(sample)]
                     + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+        }
+    }
+
+    // DOUBLE: Haas-inspired stereo thickening from one source, not a second voice/take.
+    // Mid is preserved; a delayed, high-passed Mid copy augments the Side signal.
+    // L+R fold-down therefore retains the original Mid signal by construction.
+    // Delay storage is allocated in prepareToPlay; no callback allocation or locking.
+    const bool doubleWidthOn = parameters.getRawParameterValue("doubleTrackOn")->load(std::memory_order_relaxed) > 0.5f;
+    const float doubleWidthMix = juce::jlimit(0.0f, 1.0f,
+        parameters.getRawParameterValue("doubleTrackMix")->load(std::memory_order_relaxed));
+    if (buffer.getNumChannels() >= 2 && !doubleWidthDelay.empty())
+    {
+        const auto delayLength = doubleWidthDelay.size();
+        const auto delaySamples = juce::jlimit<size_t>(1, delayLength - 1,
+            static_cast<size_t>(std::llround(currentSampleRate * 0.012)));
+        const float hpCoefficient = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 180.0f
+                                                     / static_cast<float>(currentSampleRate));
+        auto* left = buffer.getWritePointer(0);
+        auto* right = buffer.getWritePointer(1);
+        const float sideAmount = doubleWidthOn ? doubleWidthMix * 0.45f : 0.0f;
+        for (int sample = 0; sample < samples; ++sample)
+        {
+            const float mid = 0.5f * (left[sample] + right[sample]);
+            const float originalSide = 0.5f * (left[sample] - right[sample]);
+            doubleWidthDelay[doubleWidthWritePosition] = mid;
+            const auto readPosition = (doubleWidthWritePosition + delayLength - delaySamples) % delayLength;
+            const float delayedMid = doubleWidthDelay[readPosition];
+            doubleWidthLowpassState += hpCoefficient * (delayedMid - doubleWidthLowpassState);
+            const float generatedSide = delayedMid - doubleWidthLowpassState;
+            const float widenedSide = originalSide + generatedSide * sideAmount;
+            left[sample] = mid + widenedSide;
+            right[sample] = mid - widenedSide;
+            doubleWidthWritePosition = (doubleWidthWritePosition + 1) % delayLength;
         }
     }
 
