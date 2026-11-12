@@ -78,7 +78,6 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 
 ## 6.1. SOUND HUNTER — licensing/provenance contract foundation (2026-11-11)
 Аудит текущего main не обнаружил production DiscoveryEngine, BankScanner, S6.5 registry или отдельного Discovery source tree. Поэтому второй search/import pipeline не создавался; сделан только изолированный policy-contract foundation перед интеграцией в существующий S6.
-
 Добавлено:
 - tools/validate_sound_asset_registry.py — проверка asset-level GREEN/YELLOW/RED записей и вычисляемого AUTO ADD gate;
 - assets/sound_hunter/registry.json — versioned registry, пока пустой;
@@ -157,8 +156,7 @@ GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, с
 Добавлены прямые ссылки на:
 - предыдущий успешный VST3 + samples + presets artifact (run `42821580125`, artifact `13766348419`);
 - текущую сборку и упаковку (run `43017263448`);- каталог 300 preset definitions и portable examples;
-- SKIN/theme manifests, product cover и interface artwork;
-- архитектурные документы и политику лицензирования.
+- SKIN/theme manifests, product cover и interface artwork;- архитектурные документы и политику лицензирования.
 
 В описании явно разграничены реализованные компоненты и незавершённые функции: 300 записей — definitions, а не 300 подтверждённых playable presets; Pattern runtime и runtime skin switching не приняты; FL Studio 20 acceptance для текущего HEAD и CPU/RAM profiling не подтверждены. Предыдущий artifact помечен как старый пакет с прежней структурой; новый ZIP не объявлен готовым до успешного CI run `43017263448`.
 
@@ -238,7 +236,6 @@ Run #827 / 43113647167, source SHA 0ef0ebe934350d57779328a5e0979f1134ae85f2: sam
 - Promt.txt legacy-version notice: `56c1f227c8a03bd4996cd22b8587113b14412598`- SKIN/README.md fixed-interface policy: `e9e3ef57a0c8a5b28cbc5774265f759b31208cc1`
 - docs/MASTER_PRODUCT_SPEC_4_0_RU.md authority notice: `b52b039ca20b7fe56336daba23d0eac0161ae8ed`
 - Info.txt refresh record: `6293460630a9a2da58e94ef68dbba9ac068c25ae`
-
 **Scope boundary:** these commits are on `main`. The repository inventory contains 41 branches; the other 40 branch heads have not yet received this docs-only refresh. No code from those branches was merged, rebased or overwritten. Repository-level Description/Topics metadata also remains unchanged because the connected GitHub actions do not expose repository-metadata writes. Suggested public description: “POP PUNK GUITAR ULTIMATE — Windows x64 VST3 pop-punk guitar instrument built with JUCE/C++20. SFZ/WAV sample engine, MIDI Melody & Pattern workflows, 300 preset definitions. Active development; current build and release gates tracked in Info.txt.”
 
 README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b22330c7` to state explicitly that run #827 validates main only, not the other 40 branches.
@@ -318,7 +315,6 @@ GitHub Actions run #830 / ID `43115673961` автоматически запущ
 - Не используется HEADER_NAMESPACE и не используется несуществующий путь PPGUTestData/BinaryData.h. Применены JUCE 7.0.12 параметры HEADER_NAME и NAMESPACE.
 - В ходе разбора run #832 обнаружены дополнительные реальные ошибки компиляции JUCE 7.0.12 в PluginEditor.cpp: juce::String::fromWideCharPointer и trimStartCharacters недоступны. Исправлена конвертация Windows UTF-16 пути через WideCharToMultiByte + juce::String::fromUTF8; удаление префикса теперь использует поддерживаемый trim(). Это не C1083, но без этой коррекции build всё равно останавливался.
 - Добавлен tools/check_binary_data_links.py: проверяет уникальность HEADER_NAME, include -> target link, наличие обеих production/test BinaryData целей и порядок объявления бинарной цели раньше зависимого target. Проверка запускается в workflow до CMake configure; отсутствие линковки должно остановить pipeline до сборки.
-
 Commits:
 - CMake unique generated headers: d780b0aa0464f7346671b11a67ea7a1219d22ad9
 - Plugin generated header include: 0ccf93ffaf182b0dbcd224063c8afbbccb946d88
@@ -397,8 +393,7 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - Validate 300-preset catalog — PASS.
 - Validate portable preset examples — PASS.
 - Validate APVTS registry — PASS.
-- **Validate PPGU REV 14 skin pack (G1–G4) — PASS.**
-- Confirmed by workflow job step summary; run #859 overall Windows build is still in progress at the time of this entry.
+- **Validate PPGU REV 14 skin pack (G1–G4) — PASS.**- Confirmed by workflow job step summary; run #859 overall Windows build is still in progress at the time of this entry.
 - Therefore Skin_052 status is now **PACK GENERATED / VALIDATION PASS / NOT MERGED / NOT INTEGRATED**. This validation result applies to source SHA `d0eecea...`; subsequent commits require a new run for refreshed CI evidence.
 
 
@@ -477,8 +472,7 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
  
 ## 2026-11-12 — VST3 instrument target verification (source configuration)
 
-- Повторно проверен текущий `CMakeLists.txt`: JUCE plugin target содержит `FORMATS VST3`, `IS_SYNTH TRUE`, `NEEDS_MIDI_INPUT TRUE`, `NEEDS_MIDI_OUTPUT FALSE`, `IS_MIDI_EFFECT FALSE`. Конфигурация соответствует намерению PPGU быть MIDI-управляемым VST3 instrument, а не audio effect.
-- Это проверка исходной конфигурации, не доказательство успешной сборки нового HEAD и не FL Studio 20 host acceptance. Реальный scan/load/MIDI/audio/state test в FL Studio 20 остаётся отдельным обязательным gate.
+- Повторно проверен текущий `CMakeLists.txt`: JUCE plugin target содержит `FORMATS VST3`, `IS_SYNTH TRUE`, `NEEDS_MIDI_INPUT TRUE`, `NEEDS_MIDI_OUTPUT FALSE`, `IS_MIDI_EFFECT FALSE`. Конфигурация соответствует намерению PPGU быть MIDI-управляемым VST3 instrument, а не audio effect.- Это проверка исходной конфигурации, не доказательство успешной сборки нового HEAD и не FL Studio 20 host acceptance. Реальный scan/load/MIDI/audio/state test в FL Studio 20 остаётся отдельным обязательным gate.
 
 ## 2026-11-12 — FL Studio 20: пользователь подтвердил запуск VST3
 
@@ -557,8 +551,7 @@ Commits:
 - Workflow packages both schemas: c05d9559a986f0ae5aab35440a2b9ef20b60215b
 - Skin_052/pack status and documentation: 649ad91fed498a43a26c6b183d10ff3f6dc4d08f; 9c9c9462d862c6a1ec4d5a4501e5c44c5d881e69; d47c3e22a41ea73ab4cfefaea098b0e5b709bbdb
 
-### 50-theme generator
-- Добавлен tools/generate_skin_batch.py: один запуск готовит 50 тем (6 семейств × 8 + Hazard Line и Whiteout Bleach), 4 layout variants, 21 palette tokens с auto-contrast correction, все control mappings, 360x240/800x450 PNG, три безопасных SVG слоя и pack manifest.
+### 50-theme generator- Добавлен tools/generate_skin_batch.py: один запуск готовит 50 тем (6 семейств × 8 + Hazard Line и Whiteout Bleach), 4 layout variants, 21 palette tokens с auto-contrast correction, все control mappings, 360x240/800x450 PNG, три безопасных SVG слоя и pack manifest.
 - Генератор не перезаписывает существующие Skin_* папки, использует следующий индекс из registry, после генерации запускает G1–G4 validator и откатывает неполный batch при ошибке.
 - Generator commit: 27d3f86dc9c918b2193b5a2f462d7561532b67e9.
 - **Генератор ещё не запускался; Skin_053..Skin_102 не созданы и не зарегистрированы.**
@@ -637,8 +630,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Факт:**
 - REV 16.0 сохранён в `docs/PPGU_MASTER_PROMPT_RU.md`; он заменяет REV 10/13/14/15.x как рабочую спецификацию.
 - README больше не объявляет REV 13.0 действующим authority и направляет к REV 16.0 и INFO.
-- Preflight: прочитаны последние записи INFO о Skin_052 merge, follow-up static audit и CMake test-discovery correction. Выявлено, что шапка INFO отставала от последней даты записей; дата обновлена. Также обнаружен исторический повтор номера `6.2`; он не переименовывался автоматически, чтобы не менять исторические ссылки. Новые записи используют уникальные датированные заголовки.
-- Зафиксировано расхождение: §2 REV 16.0 содержит snapshot «51 папка / 50-слотовая schema», тогда как более поздняя запись INFO подтверждает merge Skin_052 и 52 entries в registry. По иерархии §0 и R08 фактическим источником остаётся INFO; §2 требует обновления после полного аудита skin tree/schema/registry/validator.
+- Preflight: прочитаны последние записи INFO о Skin_052 merge, follow-up static audit и CMake test-discovery correction. Выявлено, что шапка INFO отставала от последней даты записей; дата обновлена. Также обнаружен исторический повтор номера `6.2`; он не переименовывался автоматически, чтобы не менять исторические ссылки. Новые записи используют уникальные датированные заголовки.- Зафиксировано расхождение: §2 REV 16.0 содержит snapshot «51 папка / 50-слотовая schema», тогда как более поздняя запись INFO подтверждает merge Skin_052 и 52 entries в registry. По иерархии §0 и R08 фактическим источником остаётся INFO; §2 требует обновления после полного аудита skin tree/schema/registry/validator.
 - CMakeLists.txt содержит ранний `include(CTest)`; source fix `a686f627...` зафиксирован ранее, но реальное включение всех test targets и их PASS не подтверждено.
 - Skin_053..Skin_102 не генерировались. COMPLETE ZIP не создавался. Audio engine, APVTS, MIDI, SoundBank и control inventory не менялись.
 
@@ -717,8 +709,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 ## 2026-11-12 — Windows MSVC compile defect: Skin Studio palette mapping
 
-**Статус:** SOURCE FIX COMMITTED / WINDOWS REBUILD PENDING.  
-**Коммит:** `8bd10b20cc9303452d19a46fcf4edea3e11488f1`.  
+**Статус:** SOURCE FIX COMMITTED / WINDOWS REBUILD PENDING.  **Коммит:** `8bd10b20cc9303452d19a46fcf4edea3e11488f1`.  
 **Предыдущая проверка:** run #963, ID `43134831986`, source SHA `34f074057b9e7572b60e64549de7006bc2307f61`.
 
 **Симптом (точный лог MSVC):** `Source/UI/ThemeManager.cpp(257..266): error C2660: 'juce::var::getProperty': function does not take 1 arguments`. Windows x64 Release configure прошёл; компиляция VST3/test targets завершилась failure. CTest, VST3 locate, pluginval и packaging были skipped.
@@ -797,8 +788,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 ## 2026-11-12 — Legacy skin artwork generation gate (REV 16.2 / R15, R21, R22, R32)
 
 **Статус:** IMPLEMENTED IN SOURCE / CI VALIDATION PENDING.  
-**Аудит:** `tools/validate_skin_pack.py` проверяет текущий pack manifest (Skin_052), а не все 52 темы. CTest `ppgu_skin_manifest_contract` проходит по registry и проверяет manifests, однако до этого этапа не проверял фактическое наличие/декодирование artwork для legacy Skin_01..Skin_51. В дереве GitHub для этих 51 папок присутствовали theme.json, но отсутствовали preview/hero изображения; Skin_052 имеет отдельный PNG/SVG payload. Манифесты сами по себе не гарантировали полный runtime artwork payload.
-**Исправление:** добавлен `tools/T2_generate_missing_artwork.py`: детерминированно генерирует оригинальные `assets/preview.png` (480x300) и `assets/hero.webp` (1200x420) для legacy Skin_01..Skin_51 из палитры и identity темы; существующие файлы не перезаписываются без `--force`; `--check` выполняет проверку без генерации. Skin_052+ исключены из генератора и остаются под REV14 validator.
+**Аудит:** `tools/validate_skin_pack.py` проверяет текущий pack manifest (Skin_052), а не все 52 темы. CTest `ppgu_skin_manifest_contract` проходит по registry и проверяет manifests, однако до этого этапа не проверял фактическое наличие/декодирование artwork для legacy Skin_01..Skin_51. В дереве GitHub для этих 51 папок присутствовали theme.json, но отсутствовали preview/hero изображения; Skin_052 имеет отдельный PNG/SVG payload. Манифесты сами по себе не гарантировали полный runtime artwork payload.**Исправление:** добавлен `tools/T2_generate_missing_artwork.py`: детерминированно генерирует оригинальные `assets/preview.png` (480x300) и `assets/hero.webp` (1200x420) для legacy Skin_01..Skin_51 из палитры и identity темы; существующие файлы не перезаписываются без `--force`; `--check` выполняет проверку без генерации. Skin_052+ исключены из генератора и остаются под REV14 validator.
 **CI:** workflow устанавливает Pillow, запускает генератор и затем его проверочный режим до skin validator/build. Отсутствующее или повреждённое legacy artwork становится release-blocking.
 **Non-goals:** APVTS, DSP, MIDI, SoundBank, skin registry, theme indices, ThemeManager default, JUCE/CMake pins и control inventory не менялись. FL Studio 20 host acceptance и CPU/RAM profiling не выполняются этим этапом.
 **Верификация:** ожидает новый CI на новом SHA. Run #965 (ID `43135885498`) — SUCCESS на SHA `63bca7aed262e002264c6986e95a052118481e70`; текущий main до изменения — `df6a492824dd016fd10f928f28318984ee1f7c23`, поэтому PASS не переносится (R23). Run #965 подтвердил Windows Release, CTest, locate VST3, pluginval strictness 5 и packaging; ручной FL Studio 20 host test и CPU/RAM profiling остаются NOT VERIFIED.
@@ -877,8 +867,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **R33:** этап main-only; синхронизация остальных веток не выполнялась и NOT YET VERIFIED.
 
-**Self-check §21:**
-1. SHA документа: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`; CI на новом SHA — PENDING. Последний завершённый run #968 на родительском SHA FAILED на CTest, детали выше.
+**Self-check §21:**1. SHA документа: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`; CI на новом SHA — PENDING. Последний завершённый run #968 на родительском SHA FAILED на CTest, детали выше.
 2. Документный этап проверен чтением изменённых §5.7, §6, §9.5, §15–§17 и согласованием R31/§20; contract-тест для документа не добавлялся.
 3. R28 соблюдён: implementation/audio/APVTS/MIDI/presets/SoundBank payload/skin assets не менялись.
 4. Статус: SPECIFICATION MERGED; ResourceRootResolver и EXPLICIT-PERMISSION ingest workflow — PLANNED / IMPLEMENTATION PENDING.
@@ -957,8 +946,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Ветка:** main. **Source SHA:** `ae0334b7bcc51a31c46b959bd6ed0d5417b356fb`. **Run:** #1163 / ID `43226541896` — IN_PROGRESS на точном SHA.
 **Изменения:**
 - Подключены пять panel content components: FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PERFORMANCE. Для каждой панели создан отдельный top-level JUCE DocumentWindow; native title bar отключён, JUCE title bar предоставляет X и square maximize action. Maximize action переключает expanded workspace через правый dock, а не перекрывает остальные окна.
-- `PPGUAuxiliaryPanelWindowManager` владеет окнами; содержимое панелей остаётся owned editor-side и не уничтожается при X/закрытии. Окна используют Safe lifetime по синхронной manager ownership; closeAll вызывается при teardown editor.
-- Geometry использует `calculatePanelLayout` и `calculateExpandedPanelLayout`: 1=single, 2=2x1, 3–4=2x2, 5–6=2x3; если рабочая область не позволяет минимальные размеры, включается focus paging вместо overlap. Expanded mode — main workspace + правый dock; при нехватке места откат к обычной сетке.
+- `PPGUAuxiliaryPanelWindowManager` владеет окнами; содержимое панелей остаётся owned editor-side и не уничтожается при X/закрытии. Окна используют Safe lifetime по синхронной manager ownership; closeAll вызывается при teardown editor.- Geometry использует `calculatePanelLayout` и `calculateExpandedPanelLayout`: 1=single, 2=2x1, 3–4=2x2, 5–6=2x3; если рабочая область не позволяет минимальные размеры, включается focus paging вместо overlap. Expanded mode — main workspace + правый dock; при нехватке места откат к обычной сетке.
 - Состояние размера/позиции окна сохраняется в PropertiesFile; повторное открытие восстанавливает window state, затем bounds ограничиваются текущей рабочей областью.
 - FX EDIT подключён только к существующим APVTS IDs; SETTINGS использует существующие APVTS IDs. IMPORT вызывает существующий asynchronous SFZ loader. AUTOCHORDS controls и Preview остаются disabled (MIDI backend не имитируется). PERFORMANCE — read-only MIDI monitor/chord display, без MIDI emission.
 - В editor добавлены пять launch buttons; смена skin передаёт все 21-token palette в окна и panel components.
@@ -1037,8 +1025,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 ### REV18 S2 — SFZ import status parity correction (2026-11-12)
 
 **Проверка:** статический audit PPGUImportGuitarPanel показал, что его Browse callback запускал тот же chooseSfzFile() асинхронный loader, но результат загрузки обновлял только основной statusLabel редактора. Внутренний статус панели оставался READY / SELECT SFZ FILE даже во время загрузки, после успеха или ошибки. Это нарушало обязательный UI-to-engine parity: экран панели не отражал реальное состояние операции.
-**Исправление:** chooseSfzFile() теперь синхронно по UI callback обновляет основной статус и PPGUImportGuitarPanel::setStatus() на этапах LOADING, SUCCESS и FAILURE. Существующий asynchronous SFZ loader, SafePointer lifetime guard, параметры, DSP и sampler lifecycle не менялись.
-**Объём:** только Source/PluginEditor.cpp; no APVTS IDs/semantics, MIDI routing, DSP/audio callback, sampler lifecycle, SFZ validation, SoundBank, preset catalog, skin schema/registry, ThemeManager, CMake pins или packaging rules changes.
+**Исправление:** chooseSfzFile() теперь синхронно по UI callback обновляет основной статус и PPGUImportGuitarPanel::setStatus() на этапах LOADING, SUCCESS и FAILURE. Существующий asynchronous SFZ loader, SafePointer lifetime guard, параметры, DSP и sampler lifecycle не менялись.**Объём:** только Source/PluginEditor.cpp; no APVTS IDs/semantics, MIDI routing, DSP/audio callback, sampler lifecycle, SFZ validation, SoundBank, preset catalog, skin schema/registry, ThemeManager, CMake pins или packaging rules changes.
 **Повторная проверка:** отмена FileChooser не меняет статус; успешная/неуспешная загрузка передаёт один и тот же фактический результат обоим UI-индикаторам. Exact-SHA CI требуется; до его завершения BUILD VERIFIED / TESTED не заявлять. FL Studio 20 manual host acceptance остаётся NOT VERIFIED.
 
 
@@ -1118,7 +1105,6 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 **Следующие проверки реализации:** проверить runtime AutoChordEngine/PatternScheduler, chord/voicing maps, one-shot articulation maps, host-tempo scheduling, note changes, velocity/accent/gate, transitions, voice/cache pressure и тесты; отдельно проверить наличие подходящих лицензированных one-shot assets. До этого AUTOCHORDS/PATTERN one-shot fallback нельзя объявлять реализованным или playable.
 
 ## 2026-11-12 — AUTOCHORDS display must not obstruct plugin keyboard
-
 **Статус:** USER REQUIREMENT CONFIRMED / SPECIFICATION AND JOURNAL UPDATED; VISUAL RUNTIME ACCEPTANCE PENDING.
 
 Пользователь уточнил обязательное UI-правило: **Display AutoChords не должен перекрывать клавиши экранной клавиатуры плагина.** Клавиши должны оставаться полностью видимыми, доступными для нажатия мышью и однозначно интерактивными во всех состояниях AutoChords, размерах редактора, раскладках окон и темах.
@@ -1197,8 +1183,7 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 ### Источники-каталоги для следующего раунда
 
 - SFZ Instruments — guitar index: https://sfzinstruments.github.io/guitars/
-- Discord SFZ GM Bank: https://github.com/sfzinstruments/Discord-SFZ-GM-Bank — каждый инструмент имеет собственную лицензию; README допускает CC0/CC-BY/equivalent, поэтому проверять конкретный SFZ и исходные samples, не считать весь репозиторий одной лицензией.
-- FreePats GitHub organization: https://github.com/freepats — обнаружены отдельные CC0 electric guitar repositories (clean, jazz, direct, distortion 1/2).
+- Discord SFZ GM Bank: https://github.com/sfzinstruments/Discord-SFZ-GM-Bank — каждый инструмент имеет собственную лицензию; README допускает CC0/CC-BY/equivalent, поэтому проверять конкретный SFZ и исходные samples, не считать весь репозиторий одной лицензией.- FreePats GitHub organization: https://github.com/freepats — обнаружены отдельные CC0 electric guitar repositories (clean, jazz, direct, distortion 1/2).
 - Karoryfer free sample libraries: https://shop.karoryfer.com/pages/free-samples — автор указывает CC0 для free sample libraries; исключения/старые версии всё равно сверять по LICENSE конкретного архива.
 
 ### Что исключено / не засчитывается
@@ -1218,3 +1203,13 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 - SoundBank registry остаётся пустым; approved assets остаётся 0. Это намеренно: нельзя записывать URL-кандидат как готовый asset или выдавать поиск за скачивание.
 - Следующий этап: загрузка оригинальных архивов с официальных Release/download links в quarantine; проверка архива/вложенных SFZ, SHA-256, формата, размеров, sample mapping, velocity/RR/articulations, SNR/clipping/DC/integrity; затем отдельное решение GREEN/YELLOW/RED и только после всех gates — импорт в единый S6.5/SoundBank pipeline.
 
+
+## 2026-11-12 — SOUND HUNTER round 1: overlap correction / ingestion boundary
+
+**Статус:** JOURNAL CROSS-CHECK COMPLETE.
+
+При сверке с уже существующим docs/PPGU_GUITAR_SOUND_SOURCES_INDEX_2026-11-12.md обнаружено, что часть кандидатов раунда 1 не является новыми источниками: Meta Open Sound, FreePats Clean/Distorted, Karoryfer Black And Green, Emilyguitar и Shinyguitar уже были перечислены в source index (включая записи 53–56 и 65–67). Предыдущую формулировку «7 семейств/наборов» понимать как повторно проверенные/уточнённые карточки, а не как семь новых уникальных библиотек. Не увеличивать уникальный счётчик источников за счёт дублей.
+
+В source index присутствуют более ранние записи, утверждающие, что некоторые Karoryfer/FreePats архивы добавлены в automated CI download manifest. В рамках настоящего раунда фактическое наличие этих архивов в текущем SoundBank package, SHA-256, количество WAV и успешное прохождение CI package не проверялись. Поэтому статус ingestion по этим пунктам остаётся UNVERIFIED до проверки конкретного workflow run/artifact и его содержимого. Запись о пустом assets/sound_hunter/registry.json и 0 approved asset относится к asset-level policy registry; она не доказывает отсутствия любых исторических/временных файлов в CI artifacts.
+
+**Следующий проверочный шаг перед новыми загрузками:** открыть актуальный workflow и последний успешный artifact, проверить содержимое SOUNDBANK/ на фактические архивы/извлечённые WAV/SFZ, сравнить с исходным source manifest, затем вычислить/сверить SHA-256 и не загружать повторно уже присутствующие байты. После этого искать новые уникальные источники, в первую очередь отдельные CC0 guitar one-shots/loops без регистрации и дополнительные реальные punk/pop-punk performance packs с явным sample-library redistribution permission.
