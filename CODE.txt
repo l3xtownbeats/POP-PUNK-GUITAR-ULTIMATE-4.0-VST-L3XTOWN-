@@ -42,3 +42,10 @@ Append-only index of source changes. INFO (Info.txt) remains the authoritative f
 - Scope: removed the six legacy hardcoded fallback colour constants and replaced constructor/configureKnob initial colour assignments with the active canonical ThemeManager palette; rotary LookAndFeel uses controlBorder/textPrimary instead of legacy border/text aliases. No DSP, APVTS, MIDI, sampler, preset, SoundBank, ThemeManager decoder, skin schema/registry, CMake or packaging behavior changed.
 - Static audit: no remaining 0x colour literals, juce::Colours::white, legacy pink/pale/muted/panel2 identifiers, or palette.border/palette.text aliases in PluginEditor.cpp.
 - Verification: new exact-SHA Windows CI pending; do not transfer run #1168 PASS from prior source SHA 38b57b854dc559e5dd7c408b96c6a7821eebbd58.
+
+
+### S3 follow-up — auxiliary panel canonical palette initialization
+- Source commits: 1ce79be63025d0149b0fa62c2390dbfbbe8be959; d782e0760501db8ad25bb77995bc03be3a355906; ec83bdd4ffface54eca5d6af726736b403603ed4; e90e7be79a717c74fc94ec634a31f8c7669fb850.
+- Paths: Source/UI/AutoChordsPanel.cpp; Source/UI/FXEditPanel.cpp; Source/UI/ImportGuitarPanel.cpp; Source/UI/SettingsPanel.cpp.
+- Scope: removed constructor-time hardcoded HEX colors and white literals; all initial colors now come from the constructor-supplied canonical ThemeManager Palette. AutoChords label configuration captures the panel palette. No DSP/APVTS/MIDI/sampler behavior changed.
+- Verification: static source scan on these four files reports zero HEX color literals and zero juce::Colours::white. Windows CI on final tree pending.
