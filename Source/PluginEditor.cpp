@@ -159,7 +159,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         addAndMakeVisible(*b);
     }
     modeBox.addItem("MELODY", 1);
-    modeBox.addItem("PATTERN", 2);
+    modeBox.addItem("RHYTHM", 2);
     modeBox.setColour(juce::ComboBox::backgroundColourId, initialPalette.controlBg);
     modeBox.setColour(juce::ComboBox::textColourId, initialPalette.textPrimary);
     modeBox.setColour(juce::ComboBox::outlineColourId, initialPalette.accent.withAlpha(0.5f));
