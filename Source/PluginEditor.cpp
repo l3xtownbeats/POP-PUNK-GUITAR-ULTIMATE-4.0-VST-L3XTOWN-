@@ -281,8 +281,9 @@ namespace
 class PPGUFXEditPanel final : public juce::Component
 {
 public:
-    explicit PPGUFXEditPanel(juce::AudioProcessorValueTreeState& state, int initialEffect)
-        : apvts(state)
+    explicit PPGUFXEditPanel(juce::AudioProcessorValueTreeState& state, int initialEffect,
+                             const PPGUThemeManager::Palette& activePalette)
+        : apvts(state), palette(activePalette)
     {
         groups = {
             { "COMPRESSOR", "compressorOn", { { "THRESHOLD", "compressorThreshold" }, { "RATIO", "compressorRatio" }, { "ATTACK", "compressorAttack" }, { "RELEASE", "compressorRelease" }, { "AMOUNT", "compressorAmount" } } },
@@ -297,23 +298,30 @@ public:
 
         title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
 
         for (size_t i = 0; i < groups.size(); ++i)
             effectSelector.addItem(groups[i].name, static_cast<int>(i + 1));
+        effectSelector.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+        effectSelector.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+        effectSelector.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         effectSelector.setSelectedId(juce::jlimit(1, static_cast<int>(groups.size()), initialEffect + 1), juce::dontSendNotification);
         effectSelector.onChange = [this] { selectGroup(effectSelector.getSelectedId() - 1); };
         addAndMakeVisible(effectSelector);
 
         powerButton.setButtonText("POWER");
         powerButton.setClickingTogglesState(true);
+        powerButton.setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+        powerButton.setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+        powerButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        powerButton.setColour(juce::TextButton::textColourOnId, palette.token("window_bg"));
         addAndMakeVisible(powerButton);
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
-        graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        graphCaption.setColour(juce::Label::textColourId, palette.token("textSecondary"));
         addAndMakeVisible(graphCaption);
         status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
-        status.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        status.setColour(juce::Label::textColourId, palette.token("textSecondary"));
         addAndMakeVisible(status);
 
         for (size_t groupIndex = 0; groupIndex < groups.size(); ++groupIndex)
@@ -322,17 +330,17 @@ public:
             {
                 auto label = std::make_unique<juce::Label>();
                 label->setText(item.first, juce::dontSendNotification);
-                label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+                label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
                 label->setFont(juce::Font(11.0f, juce::Font::bold));
                 addAndMakeVisible(*label);
 
                 auto slider = std::make_unique<juce::Slider>();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
-                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffb7f34a));
-                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff43545e));
-                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xffe7f0f4));
-                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xffe7f0f4));
+                slider->setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
+                slider->setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
+                slider->setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
                 addAndMakeVisible(*slider);
 
                 auto attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, item.second, *slider);
@@ -344,16 +352,16 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        g.fillAll(juce::Colour(0xff0c1218));
+        g.fillAll(palette.token("window_bg"));
         auto area = getLocalBounds().toFloat().reduced(12.0f);
-        g.setColour(juce::Colour(0xff263944));
+        g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
         if (!graphArea.isEmpty())
         {
             auto graph = graphArea.toFloat();
-            g.setColour(juce::Colour(0xff101c24));
+            g.setColour(palette.token("lcd_bg"));
             g.fillRoundedRectangle(graph, 8.0f);
-            g.setColour(juce::Colour(0xff304550));
+            g.setColour(palette.token("control_border"));
             for (int i = 1; i < 5; ++i)
                 g.drawHorizontalLine(graphArea.getY() + graphArea.getHeight() * i / 5, graphArea.getX(), graphArea.getRight());
             for (int i = 1; i < 9; ++i)
@@ -363,7 +371,7 @@ public:
             curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
                           graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
                           static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
-            g.setColour(juce::Colour(0xffb7f34a));
+            g.setColour(palette.token("accent"));
             g.strokePath(curve, juce::PathStrokeType(2.0f));
         }
     }
@@ -433,6 +441,7 @@ private:
         repaint();
     }
     juce::AudioProcessorValueTreeState& apvts;
+    PPGUThemeManager::Palette palette;
     std::vector<Group> groups;
     std::vector<Control> controls;
     juce::Label title, graphCaption, status;
@@ -450,7 +459,7 @@ public:
     {
         title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
         stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
         stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
@@ -472,7 +481,7 @@ public:
         patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
         for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
         {
-            label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
             addAndMakeVisible(*label);
         }
         keyLabel.setText("KEY", juce::dontSendNotification);
@@ -481,8 +490,8 @@ public:
     }
     void paint(juce::Graphics& g) override
     {
-        g.fillAll(juce::Colour(0xff0c1218));
-        g.setColour(juce::Colour(0xff263944));
+        g.fillAll(palette.token("window_bg"));
+        g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
     }
     void resized() override
@@ -1200,7 +1209,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
         spec.title = "FX EDIT  /  SIGNAL FORGE";
         spec.desired = { 1000, 680 };
         spec.minimum = { 620, 440 };
-        spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
+        spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect, themeManager.getPalette());
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
     }
