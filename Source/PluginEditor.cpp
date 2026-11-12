@@ -774,19 +774,80 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
- if (auxiliaryWorkspace != nullptr)
-        auxiliaryWorkspace->setBounds(getLocalBounds().reduced(18));
-    auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
- presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
- skinButton.setBounds(head.removeFromRight(94).reduced(2,8));autoChordsButton.setBounds(head.removeFromRight(112).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
- a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
- a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(296);
- int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
- ampTitle.setBounds(amp.removeFromTop(38).reduced(14,2));fxTitle.setBounds(fx.removeFromTop(38).reduced(14,2));playbackTitle.setBounds(play.removeFromTop(38).reduced(12,2));
- int kw=juce::jmax(1,amp.getWidth()/4);for(size_t i=0;i<4;++i){auto cell=amp.removeFromLeft(kw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(5,8));}
- for(size_t i=0;i<fxButtons.size();++i){auto row=fx.removeFromTop(fx.getHeight()/(int)(fxButtons.size()-i));fxButtons[i].setBounds(row.reduced(10,3));}
- auto controls=play.removeFromTop(214);int pw=juce::jmax(1,controls.getWidth()/5);for(size_t i=4;i<9;++i){auto cell=controls.removeFromLeft(pw);knobLabels[i].setBounds(cell.removeFromBottom(23));knobs[i].setBounds(cell.reduced(1,8));}
- startModeBox.setBounds(play.removeFromTop(36).reduced(8,2));a.removeFromTop(8);auto display=a.removeFromTop(52);if(performanceDisplay)performanceDisplay->setBounds(display);a.removeFromTop(8);auto keys=a.removeFromBottom(82);if(keyboard)keyboard->setBounds(keys.reduced(2,4));
+    auto bounds = getLocalBounds().reduced(14);
+    if (auxiliaryWorkspace != nullptr)
+        auxiliaryWorkspace->setBounds(bounds);
+
+    // SIGNAL FORGE three-zone shell: browser / instrument / amp+FX.
+    // Lower performance strip remains full width. APVTS attachments are untouched.
+    auto header = bounds.removeFromTop(48);
+    titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
+    subtitleLabel.setBounds(18, 47, 150, 14);
+    header.removeFromLeft(8);
+    skinButton.setBounds(header.removeFromRight(78).reduced(2, 5));
+    autoChordsButton.setBounds(header.removeFromRight(112).reduced(2, 5));
+    loadButton.setBounds(header.removeFromRight(112).reduced(2, 5));
+    header.removeFromRight(8);
+
+    auto footer = bounds.removeFromBottom(132);
+    statusLabel.setBounds(footer.removeFromBottom(22).reduced(3, 1));
+    footer.removeFromBottom(4);
+    if (performanceDisplay != nullptr)
+        performanceDisplay->setBounds(footer.removeFromTop(42).reduced(2, 1));
+    footer.removeFromTop(5);
+    if (keyboard != nullptr)
+        keyboard->setBounds(footer.reduced(2, 2));
+
+    bounds.removeFromTop(8);
+    const int gap = 10;
+    const int browserWidth = juce::jlimit(190, 250, bounds.getWidth() / 5);
+    const int rightWidth = juce::jlimit(230, 300, bounds.getWidth() / 4);
+    auto browser = bounds.removeFromLeft(browserWidth);
+    bounds.removeFromLeft(gap);
+    auto right = bounds.removeFromRight(rightWidth);
+    bounds.removeFromRight(gap);
+    auto centre = bounds;
+
+    // Left preset browser: all filtering controls stay together.
+    presetBox.setBounds(browser.removeFromTop(42).reduced(3, 3));
+    browser.removeFromTop(5);
+    categoryBox.setBounds(browser.removeFromTop(34).reduced(3, 2));
+    browser.removeFromTop(5);
+    presetSearch.setBounds(browser.removeFromTop(34).reduced(3, 2));
+
+    // Center instrument zone: tabs, mode and all nine performance controls.
+    auto modeRow = centre.removeFromTop(42);
+    melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(2, 3));
+    patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
+    modeBox.setBounds(modeRow.reduced(2, 3));
+    centre.removeFromTop(6);
+    const int cols = 3;
+    const int rows = 3;
+    const int cellW = juce::jmax(1, centre.getWidth() / cols);
+    const int cellH = juce::jmax(1, (centre.getHeight() - 48) / rows);
+    for (size_t i = 0; i < knobs.size(); ++i)
+    {
+        const int col = static_cast<int>(i) % cols;
+        const int row = static_cast<int>(i) / cols;
+        auto cell = juce::Rectangle<int>(centre.getX() + col * cellW,
+            centre.getY() + row * cellH, cellW, cellH).reduced(3, 2);
+        knobLabels[i].setBounds(cell.removeFromTop(20));
+        knobs[i].setBounds(cell.reduced(2, 1));
+    }
+    startModeBox.setBounds(centre.removeFromBottom(36).reduced(3, 2));
+
+    // Right rack: amplifier heading and the seven approved FX switches.
+    ampTitle.setBounds(right.removeFromTop(32).reduced(5, 2));
+    fxTitle.setBounds(right.removeFromTop(28).reduced(5, 1));
+    for (size_t i = 0; i < fxButtons.size(); ++i)
+    {
+        auto row = right.removeFromTop(juce::jmax(1, right.getHeight()
+            / static_cast<int>(fxButtons.size() - i)));
+        fxButtons[i].setBounds(row.reduced(5, 2));
+    }
+
+    // Legacy title is no longer part of the visible main shell.
+    playbackTitle.setVisible(false);
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
