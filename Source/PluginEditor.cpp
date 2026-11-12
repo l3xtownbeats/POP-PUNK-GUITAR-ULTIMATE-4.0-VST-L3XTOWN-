@@ -285,19 +285,20 @@ public:
         : apvts(state)
     {
         groups = {
-            { "COMPRESSOR", "compressorOn", { { "THRESHOLD", "compressorThreshold" }, { "RATIO", "compressorRatio" }, { "ATTACK", "compressorAttack" }, { "RELEASE", "compressorRelease" }, { "AMOUNT", "compressorAmount" } } },
-            { "EQ", "eqOn", { { "LOW", "eqLow" }, { "MID", "eqMid" }, { "HIGH", "eqHigh" }, { "LOW FREQ", "eqLowFreq" }, { "MID FREQ", "eqMidFreq" }, { "MID Q", "eqMidQ" }, { "HIGH FREQ", "eqHighFreq" } } },
-            { "DISTORTION", "distortionOn", { { "DRIVE", "distortionDrive" }, { "TONE", "distortionTone" }, { "MIX", "distortionMix" } } },
-            { "CHORUS", "chorusOn", { { "RATE", "chorusRate" }, { "DEPTH", "chorusDepth" }, { "MIX", "chorusMix" } } },
-            { "FLANGER", "flangerOn", { { "RATE", "flangerRate" }, { "DEPTH", "flangerDepth" }, { "FEEDBACK", "flangerFeedback" }, { "MIX", "flangerMix" } } },
-            { "DELAY", "delayOn", { { "TIME", "delayTime" }, { "FEEDBACK", "delayFeedback" }, { "MIX", "delayMix" } } },
-            { "REVERB", "reverbOn", { { "ROOM", "reverbRoomSize" }, { "DAMPING", "reverbDamping" }, { "MIX", "reverbMix" } } },
-            { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
+            { "COMPRESSOR", "compressorOn", { { "THRESHOLD", "compressorThreshold" }, { "RATIO", "compressorRatio" }, { "ATTACK", "compressorAttack" }, { "RELEASE", "compressorRelease" }, { "AMOUNT", "compressorAmount" } }, juce::Colour(0xffffb74d) },
+            { "EQ", "eqOn", { { "LOW", "eqLow" }, { "MID", "eqMid" }, { "HIGH", "eqHigh" }, { "LOW FREQ", "eqLowFreq" }, { "MID FREQ", "eqMidFreq" }, { "MID Q", "eqMidQ" }, { "HIGH FREQ", "eqHighFreq" } }, juce::Colour(0xff4dc8e8) },
+            { "DISTORTION", "distortionOn", { { "DRIVE", "distortionDrive" }, { "TONE", "distortionTone" }, { "MIX", "distortionMix" } }, juce::Colour(0xff55d66f) },
+            { "CHORUS", "chorusOn", { { "RATE", "chorusRate" }, { "DEPTH", "chorusDepth" }, { "MIX", "chorusMix" } }, juce::Colour(0xffb58af4) },
+            { "FLANGER", "flangerOn", { { "RATE", "flangerRate" }, { "DEPTH", "flangerDepth" }, { "FEEDBACK", "flangerFeedback" }, { "MIX", "flangerMix" } }, juce::Colour(0xff55a8ff) },
+            { "DELAY", "delayOn", { { "TIME", "delayTime" }, { "FEEDBACK", "delayFeedback" }, { "MIX", "delayMix" } }, juce::Colour(0xffff8c52) },
+            { "REVERB", "reverbOn", { { "ROOM", "reverbRoomSize" }, { "DAMPING", "reverbDamping" }, { "MIX", "reverbMix" } }, juce::Colour(0xff43d6c4) },
+            { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } }, juce::Colour(0xffc3cbd4) },
+            { "DOUBLE WIDTH", "doubleTrackOn", { { "WIDTH / MIX", "doubleTrackMix" } }, juce::Colour(0xff4c9dff) }
         };
 
         title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, groups[0].accent);
         addAndMakeVisible(title);
 
         for (size_t i = 0; i < groups.size(); ++i)
@@ -329,7 +330,7 @@ public:
                 auto slider = std::make_unique<juce::Slider>();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
-                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffb7f34a));
+                slider->setColour(juce::Slider::rotarySliderFillColourId, groups[groupIndex].accent);
                 slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff43545e));
                 slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xffe7f0f4));
                 slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xffe7f0f4));
@@ -346,7 +347,10 @@ public:
     {
         g.fillAll(juce::Colour(0xff0c1218));
         auto area = getLocalBounds().toFloat().reduced(12.0f);
-        g.setColour(juce::Colour(0xff263944));
+        const auto accent = groups[static_cast<size_t>(selectedGroup)].accent;
+        g.setColour(accent.withAlpha(0.045f));
+        g.fillRoundedRectangle(area, 10.0f);
+        g.setColour(accent.withAlpha(0.55f));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
         if (!graphArea.isEmpty())
         {
@@ -363,7 +367,7 @@ public:
             curve.cubicTo(graphArea.getX() + graphArea.getWidth() * 0.28f, graphArea.getY() + graphArea.getHeight() * 0.78f,
                           graphArea.getX() + graphArea.getWidth() * 0.62f, graphArea.getY() + graphArea.getHeight() * 0.22f,
                           static_cast<float>(graphArea.getRight()), static_cast<float>(graphArea.getCentreY()));
-            g.setColour(juce::Colour(0xffb7f34a));
+            g.setColour(groups[static_cast<size_t>(selectedGroup)].accent);
             g.strokePath(curve, juce::PathStrokeType(2.0f));
         }
     }
@@ -415,6 +419,7 @@ private:
     {
         juce::String name, enabledParameter;
         std::vector<std::pair<juce::String, juce::String>> parameters;
+        juce::Colour accent;
     };
     struct Control
     {
@@ -427,8 +432,18 @@ private:
     {
         selectedGroup = juce::jlimit(0, static_cast<int>(groups.size()) - 1, index);
         powerAttachment.reset();
+        const auto accent = groups[static_cast<size_t>(selectedGroup)].accent;
         powerAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
             apvts, groups[static_cast<size_t>(selectedGroup)].enabledParameter, powerButton);
+        title.setColour(juce::Label::textColourId, accent);
+        powerButton.setColour(juce::TextButton::buttonColourId, accent.darker(0.75f));
+        powerButton.setColour(juce::TextButton::buttonOnColourId, accent);
+        for (auto& control : controls)
+        {
+            const auto controlAccent = groups[static_cast<size_t>(control.group)].accent;
+            control.slider->setColour(juce::Slider::rotarySliderFillColourId, controlAccent);
+            control.label->setColour(juce::Label::textColourId, controlAccent.brighter(0.35f));
+        }
         resized();
         repaint();
     }
@@ -756,7 +771,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         addAndMakeVisible(b);
     }
     ampTitle.setText("AMP & TONE", juce::dontSendNotification);
-    fxTitle.setText("FX CHAIN", juce::dontSendNotification);
+    fxTitle.setText("FX / STEREO WIDTH", juce::dontSendNotification);
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
     for (auto* l : { &ampTitle, &fxTitle, &playbackTitle }) {
         l->setFont(juce::Font(15.0f, juce::Font::bold));
