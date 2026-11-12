@@ -492,3 +492,8 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests:** source/readback inspected. Windows VST3 build, CTest and pluginval still pending on the latest branch head after this source chain. Skin expansion workflow `43195205929` SUCCESS.
 
 **Status:** LIVE AUXILIARY THEME PROPAGATION SOURCE IMPLEMENTED; EXACT-SHA VALIDATION PENDING.
+
+
+## 2026-11-12 — Canonical REV.17 branch
+
+`POP-PUNK-GUITAR-ULTIMATE-VST-REV.17` is now the canonical work branch, created from `e5000be105fa059d5f903f6efc17f530ccfee412`. The previous `work/ppgu-skin-expansion-53-102` branch remains as historical source lineage. All further code changes and fixes must be committed to REV.17 only.
