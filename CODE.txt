@@ -416,3 +416,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Current limitation:** JSON pattern metadata and existence of PatternScheduler do not prove working accompaniment. Some catalog entries explicitly await Pattern Engine/performance library integration. Full catalog PATTERN playback is not verified.
 - **Implementation direction:** audit and complete the existing PatternScheduler + SamplerEngine path; do not replace the approved architecture. This documentation update changes no source or DSP code and makes no test-pass claim.
 - **Status:** REQUIREMENT LOCKED; end-to-end implementation and QA remain open.
+
+
+## 2026-11-12 — Session Guitarist Deluxe PATTERN / MELODY reference locked
+
+- **User decision:** the product's functional foundation/reference is the Session Guitarist Deluxe line, specifically its PATTERN / MELODY dual-mode workflow.
+- **PATTERN target:** playable preset-driven guitar accompaniment, chord/notes input as defined by the mode, real differentiated rhythm patterns, articulation/dynamics/accent/palm-mute behavior, host tempo/transport sync and robust stop/change handling.
+- **MELODY target:** direct note-by-note MIDI performance triggering mapped guitar samples/articulations; not an accompaniment pattern. Preset tone, note/velocity mapping and articulation behavior must respond correctly.
+- **Shared UX:** fast and obvious mode switching, active-mode indication, consistent preset selection, predictable MIDI behavior, low-latency real-time operation.
+- **Reference boundary:** functional/UX inspiration only. Do not copy proprietary source code, samples, artwork or exact protected performances. Retain PPGU's own identity, content and SamplerEngine + PatternScheduler architecture.
+- **Next QA:** create a PATTERN/MELODY parity matrix and label each behavior VERIFIED / PARTIAL / NOT IMPLEMENTED before implementing gaps.
+- **Status:** reference accepted; source implementation and complete functional parity remain unverified. This journal update changes no runtime code and makes no test-pass claim.
