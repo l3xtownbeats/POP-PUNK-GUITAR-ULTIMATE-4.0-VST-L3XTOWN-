@@ -4,7 +4,7 @@
 
 Последнее обновление: 12 ноября 2026  
 Ветка: `main`  
-Последний commit перед текущей записью: `09646ec42df3f64d9d44242905dae5e98ad87eda`
+Последний commit перед текущей записью: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`
 
 ## 1. Назначение и продукт
 
@@ -859,3 +859,41 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Совместимость:** пользователь подтвердил запуск VST3 в FL Studio 20 и Windows 10 version 1809; это пользовательская host acceptance evidence, не CI-результат.
 **CI:** run #967 (43139137563) SUCCESS на SHA c0c8e977053aa3fd3bcea9933c95a556ac70b79c; PASS не переносится на новый SHA. Новый CI ожидает commit.
 **R33:** этап main-only; остальные ветки не обновлялись.
+
+
+## 2026-11-12 — PPGU MASTER PROMPT REV 17.0 UNIFIED (FINAL)
+
+**Статус:** SPECIFICATION MERGED / IMPLEMENTATION PENDING / CI PENDING для нового SHA.  
+**Коммит спецификации:** `de4cce04b91bfd09c79bebf36b1a465c5f38815e` — `docs/PPGU_MASTER_PROMPT_RU.md`.  
+**Версия:** REV 17.0 UNIFIED (FINAL), MAJOR; заменяет REV 10/13/14/15.x/16.0/16.1/16.2/16.3/16.4/16.5.
+
+**Принятые изменения:**
+- §5.7: добавлен отдельный класс EXPLICIT-PERMISSION. Письменное разрешение автора/правообладателя сохраняется как документ/evidence в provenance; scope должен явно покрывать commercial use, embedding in VST3, redistribution и redistribution as part of a sample library. После проверки класс эквивалентен GREEN для factory SoundBank. `clearanceBasis=EXPLICIT_PERMISSION`; отсутствие документа оставляет ассет RED.
+- §6: R16 заменено — темы читаются только из корня ресурсов R34; AppData не источник; rescan в фоне без перезапуска DAW.
+- Добавлен R34: единая папка `POP PUNK GUITAR ULTIMATE VST` с `Skins/`, `Samples/`, `Presets/`, `LICENSES.txt`; поиск ResourceRootResolver по приоритету PPGU_ROOT.ini рядом с VST3 → env PPGU_ROOT → соседняя папка с маркером → легаси `Skins` рядом с VST3. VST3 разрешено располагать в любом каталоге любого диска; пути не зашиваются; при отсутствии корня — дефолтная палитра/сообщение без падения.
+- I4 сохранён по имени каталога `Skins`, но теперь определяет его внутри общего root; легаси-фолбэк рядом с VST3 сохранён. R31 и §20 синхронизированы с переносимой структурой.
+- §9.5: ResourceRootResolver — JUCE-free и unit-тестируемый.
+- §15: запрещены hardcoded resource paths и включение RED-источников без письменного разрешения автора в factory SoundBank.
+- §16.1: REV 17.0 классифицирован как MAJOR из-за R34/I4/R16/EXPLICIT-PERMISSION и обновления §2.
+- §17: добавлены resource-path failure, RED SoundBank и правило канонического текста — инвертированные формулировки из патчей не применяются.
+- §2 явно фиксирует, что новый ResourceRootResolver пока NOT IMPLEMENTED / NOT VERIFIED; текущее упоминание соседнего `Skins` — только legacy fallback.
+
+**Preflight / CI перед этапом:**
+- HEAD до изменения: `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`; спецификация до изменения REV 16.5.
+- Последний run #968, ID `43141187492`, SHA `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`: Windows Release build PASS; CTest FAILED; 12/14 targets PASS, включая AuxiliaryPanelLayout, два failure внутри `ppgu_sound_asset_registry_contract`: `test_non_cc0_license_blocks_green` (ожидание сообщения "not an explicitly approved") и `test_unapproved_or_missing_license_evidence_blocks_green` (ожидание "not APPROVED"). Остальные 13? фактически 13 CTest targets прошли, один target завершился failure; VST3 locate, pluginval strictness 5 и packaging SKIPPED. Не объявлять run успешным. Этот дефект не исправлялся данным документным этапом.
+- Run #968 не относится к REV 17.0 SHA; новый CI результат для `de4cce04...` на момент записи не подтверждён.
+- Старый run #966 PASS на SHA `462853df...` не переносится на REV 17.0.
+
+**R28 non-goals:** только мастер-спецификация и INFO. Не менялись C++/DSP/audio callback, APVTS, MIDI, runtime resource lookup implementation, ThemeManager, CMake, workflows, skin registry/schema/assets, SoundBank payload, presets и packaging. ResourceRootResolver, его тесты и миграция packaging ещё не реализованы.
+
+**R33:** этап main-only; синхронизация остальных веток не выполнялась и NOT YET VERIFIED.
+
+**Self-check §21:**
+1. SHA документа: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`; CI на новом SHA — PENDING. Последний завершённый run #968 на родительском SHA FAILED на CTest, детали выше.
+2. Документный этап проверен чтением изменённых §5.7, §6, §9.5, §15–§17 и согласованием R31/§20; contract-тест для документа не добавлялся.
+3. R28 соблюдён: implementation/audio/APVTS/MIDI/presets/SoundBank payload/skin assets не менялись.
+4. Статус: SPECIFICATION MERGED; ResourceRootResolver и EXPLICIT-PERMISSION ingest workflow — PLANNED / IMPLEMENTATION PENDING.
+5. Не сделано: ResourceRootResolver C++ module, unit tests, marker parser/validation, env resolver, root fallback UX, ThemeManager integration, background rescan from resolved root, runtime package layout, ingest/provenance implementation, исправление двух упавших assertions sound registry, новый Windows build/CTest/pluginval/package, FL Studio 20 acceptance и CPU/RAM profiling.
+6. Этап main-only; остальные ветки NOT YET VERIFIED.
+
+**Следующий этап:** отдельный технический тикет R34 — сначала JUCE-free ResourceRootResolver + unit tests, затем интеграция с ThemeManager/skin rescan и packaging отдельными изолированными этапами. До этого REV 17.0 описывает целевое поведение, но не является доказательством его реализации.
