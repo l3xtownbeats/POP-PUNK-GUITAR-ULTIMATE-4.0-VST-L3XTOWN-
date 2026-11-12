@@ -589,3 +589,22 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Legacy registry validation and the default `skin-51` fallback contract remain unchanged.
 - No DSP, audio callback, APVTS, MIDI, preset, sampler or ThemeManager runtime code changed.
 - Next gate: Windows CI must demonstrate that the existing skin contract failure is resolved and all CTest targets pass. This validator change is not runtime integration and does not authorize a skin batch merge.
+
+
+### 12 November 2026 — MASTER PROMPT REV 15.0 adopted
+
+**Branch:** `feature/auxiliary-panel-layout`  
+**Base SHA:** `c1ad4b45358eaa3a459140d47e5617913d12edde`  
+**Status:** SPECIFICATION ACCEPTED / IMPLEMENTATION NOT YET VERIFIED.
+
+- REV 15.0 UNIFIED is now the sole governing master specification and supersedes REV 10/13/14 wherever they conflict. The project priority order is safety → realtime guarantees → sound → resources → UX.
+- Pins remain JUCE 7.0.12, CMake 3.22 and C++20; Windows x64 VST3 / FL Studio 20 remains the target. Any framework/toolchain upgrade requires a separate controlled migration and full regression.
+- Reaffirmed audio invariance for all UI/theme/window work; no audio callback blocking or realtime allocation. UI-only stages must not alter DSP, APVTS IDs, MIDI, presets or SoundBank.
+- The existing S6.5 import/search pipeline remains the only pipeline. Asset admission requires per-asset legal status, provenance, SHA-256 and technical screening; AUTO ADD is restricted to confirmed CC0/PD assets with human legal approval. YELLOW remains manual import; RED/COPYRIGHT SUSPECT is excluded.
+- REV 14 skin contract remains mandatory, but REV 15 explicitly requires the real Skin_052 migration/merge path before batch generation. The last validator change only separates staged-pack validation from runtime registration; it is not a substitute for merge, ThemeManager migration or runtime loading. No fake registry entry or validator bypass is authorized.
+- Skin order is now explicit: correctly migrate/merge Skin_052 using the official merge tool with backup and schema alignment; prove the runtime/registry contract and CTest; generate the 50-theme batch and establish default-ppgu; migrate ThemeManager to 21 tokens with legacy compatibility; implement independent auxiliary windows; then run the full release and FL Studio 20 host gates.
+- Default identity is `default-ppgu` / “DEFAULT POP PUNK GUITAR ULTIMATE SKIN”; `skin-51` Blackout Voltage remains available but must cease being the default only in a separate tested commit. Theme runtime root is `Skins` beside the VST3 bundle; AppData is not the source.
+- The 64-voice sampler, 128-snapshot cap, 8-root cap, streaming shutdown, cache/queue pressure, snapshot reclamation and processor-destruction races remain explicit engineering risks. Recovery after worker exception is not to be invented or silently enabled.
+- Test inventory and release gates are updated to REV 15.0. CI results remain SHA-specific. A source change is not a build; CTest PASS is not pluginval PASS; pluginval PASS is not FL Studio 20 host acceptance; no COMPLETE ZIP until the complete release pipeline passes.
+- Rechecked the latest known Windows workflow #905 (run ID `43131233905`, source SHA `f20eb81db15c118289ab7793a334935e2e814323`): x64 Release configure and VST3/test executable build passed; CTest failed (12/13; skin manifest contract); locate VST3, pluginval strictness 5 and packaging were skipped. This result does not apply to later commit `c1ad4b45358eaa3a459140d47e5617913d12edde`.
+- Next implementation action under REV 15.0: inspect and reconcile the actual current Skin_052 package, merge tool, schema, registry, ThemeManager and CTest contracts before making any merge. The prior staged-pack validator change must remain clearly classified as staging validation only until genuine runtime integration is proven.
