@@ -48,7 +48,7 @@ public:
         juce::Colour accent { 0xffd5ff45 };
         juce::Colour accentSecondary { 0xffb7ff3c };
         juce::Colour border { 0xff53656b };
-        juce::Colour focus { 0xffd5ff45 };
+        juce::Colour focus { 0xff90a7a0 };
         bool usedFallback = true;
 
         juce::Colour token(const juce::String& name) const noexcept;
