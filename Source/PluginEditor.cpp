@@ -194,9 +194,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setKeyWidth(18.0f);
     keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, themeManager.getPalette().token("control_face"));
     keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, themeManager.getPalette().token("control_bg"));
-    keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, juce::Colour(0xff34343d));
+    keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, themeManager.getPalette().token("control_border"));
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.35f));
-    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour(0xff287dff).withAlpha(0.92f));
+    keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.92f));
     addAndMakeVisible(*keyboard);
     keyboardToggleButton.setTooltip("Collapse or expand the on-screen MIDI keyboard");
     keyboardToggleButton.onClick = [this] { setKeyboardCollapsed(!keyboardCollapsed); };
@@ -316,7 +316,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
     s.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     s.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 46, 16);
     s.setColour(juce::Slider::rotarySliderFillColourId, themeManager.getPalette().token("accent"));
-    s.setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
+    s.setColour(juce::Slider::rotarySliderOutlineColourId, themeManager.getPalette().token("control_border"));
     s.setColour(juce::Slider::thumbColourId, themeManager.getPalette().token("text_primary"));
     s.setColour(juce::Slider::textBoxTextColourId, themeManager.getPalette().token("text_primary"));
     s.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
