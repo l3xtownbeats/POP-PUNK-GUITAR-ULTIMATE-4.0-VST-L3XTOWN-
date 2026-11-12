@@ -322,3 +322,21 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Compatibility boundary:** no APVTS IDs/semantics, scheduler, MIDI, DSP, preset schema, SoundBank, or production UI source changed. No implementation or test pass is claimed.
 
 **Status:** SPECIFICATION UPDATED; UI IMPLEMENTATION AND EXACT-SHA VALIDATION PENDING.
+
+
+
+## 2026-11-12 — REV.17 GUI control authority / mockup reconciliation
+
+**Change class:** specification + journal only; no production source, tests, build files, assets or binaries changed.  
+**Branch:** `work/visual-shell-spec-rev17-1`.  
+**Parent HEAD before CODE update:** `114c5f4ffec36575be6787913d05a763eda8cae7`.  
+**INFO journal commit:** `114c5f4ffec36575be6787913d05a763eda8cae7`.  
+**Specification commits:** master spec `060a21d2a29c70b689a5e138a910712c92622175`; Control Inventory `8f85573b85623fbac6ff20a9f08d2178c7389e7e`; Theme Visual Identity `ce38a33e5cf104d28a2d95a81d599fada7afbf25`.
+
+**Mandatory rule:** approved development journal + master specification + Control Inventory define the functional GUI contract. The mockup defines visual treatment/placement of those controls, not additional functions. A mockup-only element not required by the approved contract may be removed or replaced with a required control. A required control missing from the mockup/editor must be added to its specified zone and connected to a real component/attachment/action with genuine state and feedback.
+
+**Safety boundary:** removal/replacement is GUI-only. Do not remove working engine/DSP/sampler/MIDI/APVTS functionality, change parameter IDs/semantics, or alter preset/SoundBank data. Do not create fake controls. Unimplemented/unverified functionality must be marked DISABLED / DEFERRED / NOT IMPLEMENTED. Resolve ambiguous conflicts in INFO/CODE before removal. Applies to all five skins.
+
+**Verification:** documentation readback required; no source implementation or runtime test is claimed. UI component parity, exact visual match, build, CTest, pluginval and FL Studio 20 host verification remain pending.
+
+**Status:** REQUIREMENT RECORDED; IMPLEMENTATION/VALIDATION PENDING.
