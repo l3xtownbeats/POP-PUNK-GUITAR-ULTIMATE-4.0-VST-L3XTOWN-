@@ -22,6 +22,29 @@ int main()
     expect(manager.getPalette().id == "skin-052", "default theme ID");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
     expect(manager.getPalette().name == "SIGNAL FORGE", "fallback identity matches the canonical default skin");
+    const auto& fallbackTokens = manager.getPalette().tokens;
+    expect(fallbackTokens.windowBg == juce::Colour(0xff0b0f12), "fallback window background matches Skin_052");
+    expect(fallbackTokens.panel == juce::Colour(0xff141b20), "fallback panel matches Skin_052");
+    expect(fallbackTokens.panelElevated == juce::Colour(0xff1d2930), "fallback elevated panel matches Skin_052");
+    expect(fallbackTokens.controlBg == juce::Colour(0xff10171b), "fallback control background matches Skin_052");
+    expect(fallbackTokens.controlFace == juce::Colour(0xff26343a), "fallback control face matches Skin_052");
+    expect(fallbackTokens.controlBorder == juce::Colour(0xff53656b), "fallback control border matches Skin_052");
+    expect(fallbackTokens.textPrimary == juce::Colour(0xfff3f7f5), "fallback primary text matches Skin_052");
+    expect(fallbackTokens.textSecondary == juce::Colour(0xffb7c5c2), "fallback secondary text matches Skin_052");
+    expect(fallbackTokens.textDisabled == juce::Colour(0xff788984), "fallback disabled text matches Skin_052");
+    expect(fallbackTokens.accent == juce::Colour(0xffd5ff45), "fallback accent matches Skin_052");
+    expect(fallbackTokens.accentGlow == juce::Colour(0xffb7ff3c), "fallback accent glow matches Skin_052");
+    expect(fallbackTokens.danger == juce::Colour(0xffff5a66), "fallback danger matches Skin_052");
+    expect(fallbackTokens.warning == juce::Colour(0xffffc857), "fallback warning matches Skin_052");
+    expect(fallbackTokens.success == juce::Colour(0xff6ee7a8), "fallback success matches Skin_052");
+    expect(fallbackTokens.lcdBg == juce::Colour(0xff08110e), "fallback LCD background matches Skin_052");
+    expect(fallbackTokens.lcdText == juce::Colour(0xffd7ffb2), "fallback LCD text matches Skin_052");
+    expect(fallbackTokens.ledOn == juce::Colour(0xffa8ff42), "fallback LED on matches Skin_052");
+    expect(fallbackTokens.ledOff == juce::Colour(0xff33443b), "fallback LED off matches Skin_052");
+    expect(fallbackTokens.shadow == juce::Colour(0xff050708), "fallback shadow matches Skin_052");
+    expect(fallbackTokens.highlight == juce::Colour(0xff90a7a0), "fallback highlight matches Skin_052");
+    expect(fallbackTokens.lowlight == juce::Colour(0xff0d1417), "fallback lowlight matches Skin_052");
+
 
     const auto root = juce::File::getCurrentWorkingDirectory();
     const auto skinRoot = root.getChildFile("SKIN");
