@@ -662,3 +662,16 @@ Windows workflow run **#859** / run ID `43122843994`, source SHA `d0eeceaac4673a
 - Replaced the entire block with a complete PowerShell section, using a [.] path expression and character-based path normalization to avoid escaping ambiguity. Registered-only copying and declared-asset existence checks remain; staged Skin_052 stays excluded.
 - Non-goals: no skin merge, no ThemeManager/schema/registry migration, no new skins, no audio/APVTS/MIDI/preset/SoundBank changes, no host acceptance, no publication.
 - Verification required: inspect jobs and logs on the new SHA before further edits. Run #928 remains FAILED at packaging; #957 remains FAILED before job execution.
+
+
+### 12 November 2026 — Restore known-good workflow structure; narrow registered-skin copy
+
+**Branch:** feature/auxiliary-panel-layout  
+**Base SHA:** bc7a686a4b6315d08757737428836c7003bdd30a  
+**Status:** WORKFLOW PARSE FAILURE DIAGNOSED BY ZERO-JOB RUNS / MINIMAL PATCH COMMITTED; CI REQUIRED.
+
+- Run #958 (43133933146, SHA bc7a686a4b6315d08757737428836c7003bdd30a) and preceding run #957 (43133843979, SHA 98b73997081d8fb60c6b981d075939e3dfff1f93) both terminated with zero jobs and zero check-runs. The attempted full packaging-block rewrite is therefore treated as invalid workflow input and discarded.
+- Restored the complete workflow file from known-good SHA a87b17e1722d039454efbf8d1a1366c612749384, then changed only the original skin-copy command: it now iterates theme_manifest.json entries and copies their corresponding folders, validating manifest identity and declared asset existence. The existing downstream registry count and identity gates remain intact.
+- This keeps staged Skin_052 outside the runtime payload without weakening schema, registry, validator or package checks.
+- Non-goals: no ThemeManager migration, no merge, no batch skins, no DSP/audio/APVTS/MIDI/preset/SoundBank edits, no host acceptance or release publication.
+- Next verification: inspect whether the next workflow run creates a build job; then examine the package step log on its exact SHA.
