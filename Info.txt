@@ -1375,3 +1375,41 @@ Code inspection confirmed existing shared-runtime architecture: one processor-ow
 New library candidate found: Boyss-Sound-e-Scapes Guitar DI Lite (96 WAV, 24-bit/44.1kHz, 2 RR x 3 velocity layers, dry electric DI), official page https://www.boyss-sound-e-scapes.com/7th-year-free-pack . Binary acquisition was attempted but this environment has no DNS/network access; NOT downloaded, NOT added to Samples, NOT integrated. Existing workflow already retrieves Meta Open Sound, FreePats and Karoryfer libraries.
 
 CI run triggered by current HEAD: 43279230546 (run 1232), status checked as in progress. Do not mark implementation verified until it completes successfully.
+
+============================================================
+HARMONY / CIRCLE OF FIFTHS / GENERATION MANAGER — PROJECT REQUIREMENTS
+============================================================
+
+Status: accepted product requirements; implementation status must be verified separately against source and CI. These are internal features of POP PUNK GUITAR ULTIMATE VST, not separate products or plugins.
+
+1. CIRCLE OF FIFTHS VIEW
+- Interactive visual circle showing all 12 major keys and their relative minor keys.
+- Show clockwise fifth relationships and counter-clockwise fourth relationships.
+- Selecting a key updates the harmony context and highlights its related keys.
+- Provide clear chord/scale-degree context and audition/preview where supported.
+- Keep the view synchronized with the Harmony Manager without forcing changes to the active playing mode.
+
+2. HARMONY MANAGER
+- Work with major and natural-minor diatonic harmony.
+- Display scale degrees using Roman numerals and show chord quality.
+- Build, inspect, reorder and audition chord progressions.
+- Provide useful progression templates, including pop-punk four-chord progressions, while allowing user edits.
+- Keep harmonic analysis and progression data separate from sound rendering; audition through the existing ANGELA ENGINE/shared sampler.
+
+3. GENERATION MANAGER
+- Generate chord progressions from the selected key, mode and constraints.
+- Generate alternative voicings/progression variants and provide repeatable results when a seed is fixed.
+- Supply harmonic material to the existing rhythm/pattern and melody workflows.
+- Support preview before committing generated material; do not overwrite user material without an explicit action.
+- Keep generation bounded and outside the real-time audio callback.
+
+4. INTEGRATION / SAFETY
+- All three functions belong inside the existing POP PUNK GUITAR ULTIMATE VST application and its approved GUI/window system.
+- Reuse existing harmony, MIDI/event, preset/state and ANGELA ENGINE infrastructure wherever possible; do not create duplicate engines or sample banks.
+- These tools are opened and used on demand. They must not autonomously alter Melody Mode, Rhythm/Pattern Mode, current presets or project state.
+- Preserve existing APVTS parameter IDs and backward compatibility. Any new persistent state must be versioned and tested.
+- Add deterministic unit tests for key relationships, relative minors, diatonic chord qualities, progression validity, generation constraints, seed reproducibility and state isolation.
+
+5. IMPLEMENTATION STATUS RULE
+- A specification or journal entry is not proof of implementation. Mark each item as implemented only after source inspection, tests and CI evidence.
+- Required workflow: CHECK → ANALYZE → IMPLEMENT/FIX → RETEST → REPORT.
