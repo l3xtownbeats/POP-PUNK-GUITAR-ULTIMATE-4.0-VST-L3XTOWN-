@@ -78,7 +78,7 @@ PanelLayout calculatePanelLayout(PanelRect area,
 
     for (int columns = 1; columns <= count; ++columns)
     {
-        const int rows = (count + columns - 1) / columns;
+        const int rows = count / columns + (count % columns == 0 ? 0 : 1);
         const auto horizontalGaps = static_cast<std::int64_t>(scaledGap) * (columns - 1);
         const auto verticalGaps = static_cast<std::int64_t>(scaledGap) * (rows - 1);
         const auto availableW = static_cast<std::int64_t>(area.width) - horizontalGaps;
