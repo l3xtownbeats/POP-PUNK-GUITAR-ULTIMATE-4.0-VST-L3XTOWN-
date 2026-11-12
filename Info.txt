@@ -1017,3 +1017,18 @@ POP PUNK GUITAR ULTIMATE остаётся названием продукта; J
 **Повторный анализ:** исходная причина устранена на уровне геометрии и порядка слоёв; автоматические C++ тесты и Windows Release build ещё не запускались/не подтверждены для конечного SHA этой записи.
 **Не заявляется:** готовность всех четырёх панелей, AutoChords MIDI backend, host acceptance, pluginval или релизная сборка.
 **Следующий этап:** получить CI на точном HEAD, исправить любые compile/test failures, затем завершить функциональную связку AutoChords и Performance Display.
+
+
+## 2026-11-12 — Расширенный каталог гитарных эффектов и performance utilities
+
+**Статус:** REQUIREMENTS ACCEPTED / IMPLEMENTATION PLANNED; НЕ DSP-READY.
+**Рабочая ветка:** `work/signal-forge-panel-shell`.
+**Основание:** пользователь утвердил базовый перечень гитарных эффектов и инструментов педалборда.
+**Каталог FX:** Overdrive, Distortion, Fuzz, Delay, Reverb, Chorus, Flanger, Phaser, Tremolo, Wah-Wah, Compressor, EQ, Pitch Shifter/Octaver, Envelope Filter/Auto-Wah.
+**Отдельные utilities:** Looper и Tuner не являются insert FX. Для них нужны отдельные performance/transport/input contracts.
+**Архитектурное решение:** 14 FX-модулей — это каталог типов, а не обещание одновременных 14 insert-слотов. Существующие 7 FX slot IDs/APVTS state и control inventory I1/I2 не менять без отдельного MAJOR-решения и миграции. Сначала module registry/stable IDs/tests; затем независимые DSP-этапы; затем FX EDIT UI/automation/presets. Looper и Tuner — отдельные этапы.
+**Проверка текущего кода:** FX EDIT пока содержит 8 модулей (Compressor, EQ, Distortion, Flanger, Chorus, Delay, Reverb, Cabinet IR). Параметры/обработчики некоторых модулей уже присутствуют в Processor, но наличие параметров не доказывает полноту DSP. Overdrive/Fuzz/Phaser/Tremolo/Wah/Pitch/Envelope Filter/Looper/Tuner в текущем FX EDIT не представлены как готовые функции.
+**Повторный анализ:** не расширять FX UI простыми декоративными переключателями. Новые DSP-пути требуют R10 audio review, realtime safety и regression coverage. Сохранить разделение PLANNED / IMPLEMENTED / TESTED.
+**Изменён документ:** `docs/PPGU_MASTER_PROMPT_RU.md`, commit `33732767d20938dc99b6b4c9b43d6e925cab2b25`.
+**Не заявляется:** готовность новых эффектов, looper, tuner, их автоматизации или 14-слотового rack.
+**Следующий этап:** inventory DSP signal chain, parameter IDs и actual processBlock order; после него — module registry и отдельные тестируемые DSP implementations.
