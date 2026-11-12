@@ -377,3 +377,27 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Совместимость / non-goals:** visual-only; no APVTS IDs/semantics, processor, DSP, sampler, MIDI, preset or audio-thread changes.
 **Тесты:** diff and GitHub readback inspected. C++ build/CTest/pluginval/FL Studio not run on these commits. **Статус:** IMPLEMENTED / VALIDATION PENDING.
 **Следующий шаг:** restore reliable workflow execution for Skin_053–102; then add visual gallery and runtime asset previews after validating generated pack.
+
+
+## 2026-11-12 — SIGNAL FORGE fallback + multi-window overflow grid
+
+**Type:** production UI fixes, tests, CI reliability.
+**Branch:** `work/ppgu-skin-expansion-53-102`.
+**Implementation chain:**
+- `e0d0b4f5f996d188dddf6533f50a072cb23d33dd` — `Source/UI/ThemeManager.h`: `Palette::Tokens::controlFace` corrected from `#1D2930` to canonical `#26343A`; fallback comment now names SIGNAL FORGE.
+- `c62b1f39befffd1b4b7248915828a3e1ff0eb227` — `Source/UI/AuxiliaryPanelLayout.cpp`: overflow placements become a minimum-size scroll grid with all panels visible.
+- `6bbae523d1f28905699636d8d1984776edd37d84` — `Source/UI/AuxiliaryPanelLayout.h`: overflow contract documents all-visible scroll grid.
+- `9d71f922d25478d8fb7a6fb335fb452011b972c0` — `tests/AuxiliaryPanelLayoutTests.cpp`: tests 1/2-column overflow visibility, non-overlap and impossible geometry.
+- `291f49b98d5eadb2236cc364275c93aa8b1de524` — `Source/UI/PPGUMultiWindowWorkspace.cpp`: maps overflow placements to JUCE child windows and sizes the scroll surface.
+- `60eddf7420df03908bca177246db6b7b312ccb73` — `tests/ThemeManagerTests.cpp`: asserts all 21 default fallback tokens.
+- `da62bd8db1d91de33aebba499f069a2af8fc9a3d` — `.github/workflows/ppgu-skin-expansion.yml`: rebase/retry generated pack commit to avoid push rejection when branch advances during generation.
+
+**Defect / reason:** fallback `controlFace` diverged from Skin_052 manifest. Overflow layout previously marked only one panel visible and workspace did not consume grid placements in overflow mode.
+
+**Behavior:** fallback now matches canonical Skin_052's 21 semantic tokens. If viewport cannot fit all panels, panels are tiled at minimum size on a scrollable one- or two-column surface; no panel is silently hidden by the layout contract.
+
+**Compatibility:** no DSP, processBlock, audio callback, sampler, MIDI, APVTS IDs/semantics, presets or SoundBank changes.
+
+**Tests:** test source updated and GitHub readback checked. Exact-SHA C++/Windows build and CTest are pending. Skin generator run `43194302212` passed generation, G1–G4 validation, merge and final 102 registry verification, but generated commit push failed with non-fast-forward because the branch advanced concurrently. Workflow retry fix commit `da62bd8...`; run `43195205929` was IN_PROGRESS at journal time. No Windows build/pluginval/FL Studio PASS claimed.
+
+**Status:** SOURCE CHANGES COMMITTED; EXACT-SHA VALIDATION PENDING; 50-SKIN PUBLICATION RETRY RUNNING.
