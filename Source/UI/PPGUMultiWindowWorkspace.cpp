@@ -10,7 +10,8 @@ public:
            juce::Colour panel, juce::Colour border,
            juce::Colour heading, juce::Colour text)
         : owner(ownerIn), panelId(spec.id), desired(spec.desired), minimum(spec.minimum),
-          content(std::move(spec.content))
+          content(std::move(spec.content)),
+          resizeCorner(*this, &boundsConstrainer)
     {
         title.setText(spec.title, juce::dontSendNotification);
         title.setFont(juce::Font(14.0f, juce::Font::bold));
@@ -33,6 +34,9 @@ public:
         maximizeButton.setColour(juce::TextButton::textColourOffId, text);
         maximizeButton.onClick = [this] { toggleMaximize(); };
         addAndMakeVisible(maximizeButton);
+        boundsConstrainer.setMinimumSize(static_cast<int>(minimum.width), static_cast<int>(minimum.height));
+        resizeCorner.setAlwaysOnTop(true);
+        addAndMakeVisible(resizeCorner);
 
         if (content != nullptr)
         {
@@ -72,8 +76,7 @@ public:
     void mouseDown(const juce::MouseEvent& event) override
     {
         const auto point = event.getPosition();
-        resizing = !maximized && point.x >= getWidth() - 22 && point.y >= getHeight() - 22;
-        draggingHeader = !resizing && point.y < 42
+        draggingHeader = point.y < 42
             && !closeButton.getBounds().contains(point)
             && !maximizeButton.getBounds().contains(point);
         dragStartBounds = getBounds();
@@ -85,15 +88,7 @@ public:
         if (!event.mouseWasDraggedSinceMouseDown())
             return;
         const auto relative = event.getEventRelativeTo(owner.tileSurface.get()).getPosition();
-        if (resizing)
-        {
-            auto bounds = dragStartBounds;
-            bounds.setSize(juce::jmax(static_cast<int>(minimum.width), dragStartBounds.getWidth() + relative.x - dragStartScreen.x),
-                           juce::jmax(static_cast<int>(minimum.height), dragStartBounds.getHeight() + relative.y - dragStartScreen.y));
-            setBounds(bounds);
-            owner.handleGeometryChanged(panelId);
-        }
-        else if (draggingHeader)
+        if (draggingHeader)
         {
             auto bounds = dragStartBounds.translated(relative.x - dragStartScreen.x, relative.y - dragStartScreen.y);
             bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
@@ -112,7 +107,6 @@ public:
     void mouseUp(const juce::MouseEvent&) override
     {
         draggingHeader = false;
-        resizing = false;
         owner.handleGeometryChanged(panelId);
     }
 
@@ -155,6 +149,8 @@ public:
         area.removeFromTop(10);
         if (content != nullptr)
             content->setBounds(area);
+        resizeCorner.setBounds(getWidth() - 18, getHeight() - 18, 18, 18);
+        owner.handleGeometryChanged(panelId);
     }
 
     void paintOverChildren(juce::Graphics& g) override
@@ -177,11 +173,12 @@ private:
     std::unique_ptr<juce::Component> content;
     juce::Label title;
     juce::TextButton closeButton, maximizeButton;
+    juce::ComponentBoundsConstrainer boundsConstrainer;
+    juce::ResizableCornerComponent resizeCorner;
     juce::Colour panelColour, borderColour;
     juce::Rectangle<int> dragStartBounds, restoreBoundsBeforeMaximize;
     juce::Point<int> dragStartScreen;
     bool draggingHeader = false;
-    bool resizing = false;
     bool maximized = false;
 };
 
@@ -204,6 +201,14 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
     tileSurface = std::make_unique<TileSurface>();
     tileSurface->setOpaque(false);
     viewport.setViewedComponent(tileSurface.get(), false);
+
+    juce::PropertiesFile::Options options;
+    options.applicationName = "PPGU";
+    options.filenameSuffix = ".settings";
+    options.folderName = "L3XTOWN";
+    options.osxLibrarySubFolder = "Application Support";
+    ownedProperties = std::make_unique<juce::PropertiesFile>(options);
+    persistenceProperties = ownedProperties.get();
 }
 
 PPGUMultiWindowWorkspace::~PPGUMultiWindowWorkspace()
