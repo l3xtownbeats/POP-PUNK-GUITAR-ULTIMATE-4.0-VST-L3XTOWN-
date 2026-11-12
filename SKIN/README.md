@@ -2,7 +2,7 @@
 
 ## Фактическое состояние — рабочая ветка REV.17
 
-Актуальная рабочая ветка: `work/ppgu-skin-expansion-53-102`.
+Актуальная рабочая ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
 
 - Runtime registry содержит **102 темы**: legacy `Skin_01`…`Skin_51` и Skin Studio `Skin_052`…`Skin_102`.
 - Каноническая тема по умолчанию и fallback — **SIGNAL FORGE (`skin-052`)**.
