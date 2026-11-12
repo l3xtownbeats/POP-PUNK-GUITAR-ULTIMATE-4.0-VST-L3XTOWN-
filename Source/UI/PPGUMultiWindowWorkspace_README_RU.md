@@ -8,7 +8,7 @@ JUCE child-component workspace for independently openable and closable panels in
 - One open panel expands to the available workspace; multiple panels are tiled using the tested, JUCE-free `AuxiliaryPanelLayout` geometry module.
 - Layout is deterministic: two columns, then up to three rows (2×3 for five or six panels), subject to each panel's minimum size and DPI scale.
 - When the available area cannot fit all panel minimums, every panel is tiled at minimum size on a one- or two-column scrollable surface; no panel is silently dropped.
-- Per-panel bounds persistence and palette-driven surface colours.
+- Per-panel bounds persistence, palette-driven window chrome and live palette propagation into theme-aware panel content; newly opened panels inherit the current palette.
 - Workspace owns UI components only; it has no dependency on processor, APVTS, MIDI, sampler, DSP or audio callback.
 
 ## Integration
