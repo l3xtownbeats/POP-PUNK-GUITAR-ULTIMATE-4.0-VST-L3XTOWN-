@@ -501,3 +501,14 @@ Preset QA record must state target type/role, actual source mapping/articulation
 - Use original recordings or assets whose licenses explicitly permit embedding and redistribution in the plugin. Do not copy proprietary Session Guitarist/Electric Sunburst samples, loops, MIDI, artwork or code. Track provenance, SHA-256, redistribution rights, tempo/meter/key/chord coverage, articulation/style tags and technical QA.
 - **Acceptance:** preset/pattern → performance asset resolution → preview → host-synced loop → MIDI chord adaptation → clean transitions → SamplerEngine audible output, plus human listening QA. Scheduler metadata/events without real recorded performance assets do not pass.
 - **Status:** requirement recorded; no code/audio assets changed. Production performance library and end-to-end runtime implementation remain unverified/open.
+
+
+## 2026-11-12 — Highest-priority audio requirement: authentic guitar, no plastic/synth character
+
+- User's top-level requirement: the sound must be genuinely realistic and authentic, with no plastic, artificial emulation or synthesizer-like flavor. This applies to all guitar families, presets, MELODY and PATTERN.
+- Priority order: (1) high-quality suitable legally distributable recorded guitar sources/performance recordings; (2) accurate note/velocity/articulation/round-robin/performance mappings; (3) natural dynamics, attack/decay/sustain/release and transitions; (4) justified layering without phase artifacts; (5) optional preset-specific FX/filter only when musically needed. Do not use FX to disguise poor sources or force processing onto every preset.
+- Do not substitute synthesized tones for recorded guitar sources. Avoid crude transposition across ranges, repetitive machine-gun samples, unnatural velocity steps/envelopes, loop seams, chord transitions, excessive FX/compression, phase problems, clipping and streaming artifacts.
+- MELODY must sound like real played guitar notes/phrases. PATTERN must primarily use original/licensed recorded performance loops/phrases and preserve natural recorded performance through MIDI chord adaptation and host synchronization.
+- **Mandatory human listening QA:** evaluate representative presets and modes in a real DAW/audio path, A/B against source recordings, and test registers, velocity, repeated notes, chord changes, tempo, loop boundaries and dry/FX/layer variants. Automated tests cannot replace listening QA. Log and fix any plastic/synthetic/mechanical character or audible artifacts before preset acceptance.
+- CPU/RAM/latency optimization must preserve the audio-quality target; optimize implementation rather than reducing the instrument to synthetic approximation.
+- **Status:** highest-priority acceptance requirement recorded. No code/audio asset changes and no claim that target quality is already achieved.
