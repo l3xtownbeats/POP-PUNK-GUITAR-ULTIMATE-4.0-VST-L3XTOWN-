@@ -614,6 +614,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     skinButton.setTooltip("Visual theme only. Ctrl+K opens the skin menu.");
     skinButton.onClick = [this] { showSkinMenu(); };
     addAndMakeVisible(skinButton);
+    autoChordsButton.setTooltip("Open chord and harmony configuration workspace.");
+    autoChordsButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
+    autoChordsButton.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+    autoChordsButton.onClick = [this] { openAutoChordsPanel(); };
+    addAndMakeVisible(autoChordsButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -674,6 +679,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         b.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
         b.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
+        b.onClick = [this, i] { openFxEditPanel(static_cast<int>(i)); };
         addAndMakeVisible(b);
     }
     ampTitle.setText("AMP & TONE", juce::dontSendNotification);
@@ -759,7 +765,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         auxiliaryWorkspace->setBounds(getLocalBounds().reduced(18));
     auto a=getLocalBounds().reduced(18);auto head=a.removeFromTop(56);titleLabel.setBounds(head.removeFromLeft(150).removeFromTop(29));subtitleLabel.setBounds(18,47,150,16);head.removeFromLeft(10);
  presetBox.setBounds(head.removeFromLeft(205).reduced(2,8));presetSearch.setBounds(head.removeFromLeft(160).reduced(2,8));categoryBox.setBounds(head.removeFromLeft(128).reduced(2,8));
- skinButton.setBounds(head.removeFromRight(94).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
+ skinButton.setBounds(head.removeFromRight(94).reduced(2,8));autoChordsButton.setBounds(head.removeFromRight(112).reduced(2,8));loadButton.setBounds(head.removeFromRight(106).reduced(2,8));
  a.removeFromTop(10);a.removeFromTop(184);a.removeFromTop(10);auto tabs=a.removeFromTop(52);melodyTab.setBounds(tabs.removeFromLeft(190).reduced(2,3));patternTab.setBounds(tabs.removeFromLeft(190).reduced(8,3));modeBox.setBounds(tabs.removeFromRight(145).reduced(2,7));
  a.removeFromTop(8);statusLabel.setBounds(a.removeFromTop(26));a.removeFromTop(10);auto panels=a.removeFromTop(296);
  int gap=12,usable=panels.getWidth()-gap*2,aw=(int)(usable*.38f),fw=(int)(usable*.35f);auto amp=panels.removeFromLeft(aw);panels.removeFromLeft(gap);auto fx=panels.removeFromLeft(fw);panels.removeFromLeft(gap);auto play=panels;
@@ -995,6 +1001,46 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else
         statusLabel.setText("MELODY TONE: " + preset.soundCharacter + "  /  ONE KEY = ONE NOTE  /  LOAD A LICENSED SFZ BANK", juce::dontSendNotification);
 }
+void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffect)
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+    constexpr int fxEditPanelId = 2101;
+    if (!auxiliaryWorkspace->isPanelOpen(fxEditPanelId))
+    {
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = fxEditPanelId;
+        spec.title = "FX EDIT  /  SIGNAL FORGE";
+        spec.desired = { 1000.0f, 680.0f };
+        spec.minimum = { 620.0f, 440.0f };
+        spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::openAutoChordsPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+    constexpr int autoChordsPanelId = 2102;
+    if (!auxiliaryWorkspace->isPanelOpen(autoChordsPanelId))
+    {
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = autoChordsPanelId;
+        spec.title = "AUTOCHORDS  /  HARMONY WORKSPACE";
+        spec.desired = { 900.0f, 620.0f };
+        spec.minimum = { 560.0f, 420.0f };
+        spec.content = std::make_unique<PPGUAutoChordsPanel>(processor.parameters);
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::openImportGuitarPanel()
 {
     if (auxiliaryWorkspace == nullptr)
