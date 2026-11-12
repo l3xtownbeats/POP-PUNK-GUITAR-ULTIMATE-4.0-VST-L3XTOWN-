@@ -1249,3 +1249,10 @@ CI build и тесты прошли, включая pluginval strictness level 5
 Пользователь утвердил базовую компоновку раздела AutoChords: **слева — выбор пресетов, справа — выбор режимов ритмических рисунков**. Требование внесено в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`, раздел 15.9.
 
 UX-контракт: выбор гармонического/chord preset и выбор performance/rhythm pattern независимы; выбранные состояния визуально выделены; краткое описание и preview показываются только для реально доступных данных. AutoChords не перекрывает и не уменьшает рабочую область экранной MIDI-клавиатуры. При resize/DPI/layout changes колонки адаптируются, клавиатура остаётся полностью видимой и доступной. Это утверждённая спецификация, не заявление о готовой реализации.
+
+
+## 2026-11-12 — AutoChords playing styles clarification
+
+Пользователь уточнил: в правой части AutoChords должны быть явно представлены также стили/техники игры (например OPEN CHORDS, PALM MUTE), а не только ритмические рисунки. Внесено в `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`, раздел 15.10.
+
+Зафиксировано разделение трёх независимых осей: (1) tone preset/тембр и эффекты; (2) playing style/articulation — OPEN CHORDS, PALM MUTE, DOWNSTROKE, UPSTROKE, ALTERNATE DOWN-UP, POWER CHORDS, CHUGS, MUTED BRIDGE, SKANK, OCTAVE HOOKS, DOUBLE-STOPS, TREMOLO PICKING, ARPEGGIO/PICKING, SUSTAIN/AMBIENT, STOP-START; (3) rhythm pattern — STRAIGHT 8THS, FAST SKATE-PUNK, GALLOP, HALF-TIME, STOP-TIME ACCENTS, VERSE→OPEN CHORUS и др. Не смешивать TREMOLO PICKING с TREMOLO EFFECT. Доступность определяется реальными записями и performance maps.
