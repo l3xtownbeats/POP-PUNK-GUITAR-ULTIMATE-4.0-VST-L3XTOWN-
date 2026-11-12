@@ -1514,3 +1514,85 @@ X — это именно закрытие панели, а не выключе�
 Добавлен CTest контракт для равномерности сетки, down-only/palm-muted инвариантов, границ BPM и invalid-input/no-write поведения.
 
 **Граница реализации:** это проверяемая модель ритмического рисунка, не готовый слышимый гитарный preset. Её ещё нужно связать с аккордовыми voicings/струнами, реальной PME sample/SFZ артикуляцией и Pattern playback; пока нельзя утверждать, что sampler воспроизводит PME с корректным palm-muted тембром. UI и пресеты также не подключены. Обычные MELODY/PATTERN и MIDI routing этим изменением не меняются.
+
+
+
+## 2026-11-12 — Punk rhythm-guitar vocabulary and substyle pattern requirements
+
+**Статус:** REQUIREMENTS RECORDED / IMPLEMENTATION PENDING. This entry extends the previously recorded PME contract; it does not claim that the following pattern families are implemented or audible yet.
+
+### Проверка → анализ → фиксация требований → повторный анализ → результат
+
+Пользователь передал каталог базовых техник ритм-гитары и различий панк-подстилей. Зафиксировать его как обязательную функциональную область PPGU Pattern/Rhythm Library, с возможностью комбинировать ритмический рисунок, артикуляцию, направление штриха, динамику и тип аккордового voicing.
+
+### 1. Базовые ритмические техники
+
+1. **Downstroke eighth-note pulse** — равномерные восьмые только вниз, по power chords или всем струнам; прямой, плотный панк-пульс.
+2. **Palm muting with accents** — приглушённые удары с контролируемыми акцентами; поддержать сплошные приглушённые восьмые и чередование PM/open.
+3. **Rests and syncopated gaps** — намеренные пропуски событий на сильных и слабых долях; пауза является полноценным элементом паттерна.
+4. **Mixed subdivisions** — восьмые, шестнадцатые и четверти в одном рисунке; поддержать пары шестнадцатых как double-hit.
+5. **Backbeat/offbeat accents** — акценты на долях 2 и 4 и/или на восьмых offbeat «и»; хранить акцент отдельно от velocity/groove timing.
+6. **Short repeating patterns** — базовая длина 1–2 такта, loop/repeat и вариации без потери исходного рисунка.
+7. **Fifth/octave movement** — power-chord квинты и октавные интервалы вместо обязательных полных аккордов; поддержать короткие staccato удары.
+8. **Sixteenth-note downstroke wall** — плотные шестнадцатые down-only для skate-punk/hardcore, с возможностью задавать темп и артикуляцию отдельно.
+
+### 2. Подстили и ожидаемое поведение
+
+- **Classic punk / Ramones-inspired:** прямые равномерные восьмые downstroke, простые power chords, минимум пауз и украшений.
+- **British punk-inspired:** более рваные рисунки, контраст open/PM, акценты и паузы; сохранять плотный основной пульс.
+- **Pop-punk / Blink-182–Green Day-inspired:** куплетные приглушённые восьмые, более открытые/громкие припевные удары, ясные песенные секции и акценты.
+- **Punk-hardcore / skate-punk:** быстрые шестнадцатые, downstroke pulse/wall, минимальные украшения, tight timing с барабанной сеткой.
+- **Ska-punk:** offbeat/upstroke акценты, короткие staccato chord/interval voicings и/или арпеджио. Это отдельный режим направления штриха и грува; не смешивать с PME/down-only режимом.
+
+### 3. PME — отдельный жёсткий инвариант
+
+Ранее добавленный DownpalmMutePattern остаётся отдельным каноническим стилем:
+- 4/4, 8 равномерных восьмых на такт;
+- 160–200 BPM;
+- каждый stroke — Down + PalmMute;
+- никаких upstroke, открытых ударов, случайного свинга или пропуска ударов в каноническом PME pattern.
+
+Не ослаблять PME-инварианты ради общего Pattern Engine. Другие техники/подстили реализовывать отдельными pattern definitions или явно заданными параметрами, не меняя PME.
+
+### 4. Требования к модели данных и редактору паттернов
+
+Для каждого события/удара предусмотреть:
+- позицию в PPQ или точную долю;
+- длительность/gate;
+- stroke direction (Down/Up/alternate/strum direction, где уместно);
+- articulation (PalmMute/Open/Muted/Staccato и поддерживаемые библиотекой варианты);
+- velocity и отдельный accent flag/strength;
+- rest/no-hit как явное состояние либо эквивалентную разреженную сетку;
+- voicing type (power fifth, octave, full chord, dyad, arpeggio);
+- subdivision (quarter/eighth/sixteenth);
+- bar length, repeat/loop и вариацию;
+- style/substyle tag и section role (verse/chorus/bridge/introduction), если применимо.
+
+Pattern playback должен использовать существующий PatternScheduler/Processor MIDI path и общий SamplerEngine. Не создавать второй playback engine, sampler или отдельную sample pool. Все события должны быть bounded, детерминированными и безопасными для audio thread. События на одинаковом sample offset должны иметь устойчивый порядок; NoteOff перед retrigger NoteOn. PME и остальные down-only паттерны не должны случайно порождать upstroke.
+
+### 5. Требования к звуковому результату
+
+- PM и Open должны вызывать разные реальные SFZ/WAV articulations, а не только менять velocity или длительность.
+- Power fifth/octave/full chord должны выбирать корректные ноты/струны и playable guitar voicings.
+- Accent должен давать контролируемую музыкальную динамику, а не клиппинг.
+- Staccato/rest/gate должны давать чёткие границы и не оставлять зависшие ноты.
+- Preview/Stop/Loop должны использовать общий безопасный preview ownership contract.
+- Все новые звуковые режимы должны иметь подтверждённые лицензии sample assets; нельзя включать чужие коммерческие библиотеки без разрешения на распространение.
+
+### 6. Референсы и границы
+
+Названия Green Day, Ramones, Descendents, Sex Pistols, The Clash и Blink-182 используются как общие стилистические ориентиры. Не копировать ноты, риффы, MIDI, табулатуры или конкретные записи защищённых композиций. Разрабатывать оригинальные паттерны, демонстрирующие общие жанровые приёмы.
+
+Упомянутые пользователем ориентиры для анализа: Basket Case как пример контраста приглушённого куплета и более открытого припева; Ramones как пример прямых восьмых; The Clash как пример пауз и контрастов. Это аналитические ориентиры, а не источник для воспроизведения оригинальных партий.
+
+### 7. Порядок реализации и приёмки
+
+1. Проверить текущие PatternEvent/PatternScheduler и SFZ articulation mapping.
+2. Создать тестируемую библиотеку pattern definitions: PME/downstroke eighths, PM/open accents, rests/syncopation, mixed eighth/sixteenth, backbeat/offbeat, 1–2 bar loops, fifth/octave movement, sixteenth downstroke wall, ska offbeat.
+3. Проверить unit tests: сетка, длины, повторы, паузы, направление штриха, акценты, границы PPQ, валидность параметров и overflow.
+4. Связать каждую артикуляцию и voicing с реальными разрешёнными SFZ/WAV ресурсами.
+5. Подключить генерацию к существующему Pattern playback и preview; проверить Stop, loop boundary, transport stop/seek и отсутствие stuck notes.
+6. Добавить доступное UI-управление и preset integration только после реального backend.
+7. Выполнить exact-SHA Windows x64 Release, полный CTest и pluginval strictness 5; затем отдельно FL Studio 20 acceptance.
+
+**Текущий результат:** каталог требований внесён в INFO. Реализован только предыдущий базовый PME groove contract; все остальные техники, подстили, реальная articulation/voicing mapping, loop/preview UI и звуковая приёмка остаются PENDING.
