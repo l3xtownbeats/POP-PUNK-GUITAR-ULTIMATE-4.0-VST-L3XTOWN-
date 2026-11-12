@@ -131,6 +131,13 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
 endif()
 
+# Pure-data circle-of-fifths model contract (no JUCE or runtime allocation).
+if(BUILD_TESTING)
+    add_executable(ppgu_circle_of_fifths_tests tests/CircleOfFifthsTests.cpp)
+    target_include_directories(ppgu_circle_of_fifths_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_circle_of_fifths_contract COMMAND ppgu_circle_of_fifths_tests)
+endif()
+
 # JUCE-free chord recognition and guitar fingering contract.
 if(BUILD_TESTING)
     add_executable(ppgu_auto_chord_engine_tests
