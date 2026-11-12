@@ -1428,3 +1428,23 @@ F. Только после этого считать документальны�
 **РЕЗУЛЬТАТ:** REQUIREMENT RECORDED IN MASTER SPEC + CONTROL INVENTORY + THEME PARITY DOC. SOURCE IMPLEMENTATION / RUNTIME PARITY TESTS PENDING. Это ключевой обязательный принцип REV.17, не отчёт о завершённой реализации.
 
 **Следующий шаг:** при продолжении shell-разработки провести покомпонентную сверку макета с журналом и реальными JUCE components/attachments/actions; выполнять только точечные GUI-изменения и подтверждать их на точном SHA.
+
+
+## 2026-11-12 — Skin expansion 53-102 pipeline prepared; stale default assertion corrected
+
+**Тип:** test correction + CI automation for the next Skin Studio theme batch.  
+**Ветка:** `work/ppgu-skin-expansion-53-102`  
+**Base:** `work/visual-shell-spec-rev17-1` at `9042cd1ccc325f4aca130fa917d310df9dd965f0`.  
+**Commits:**
+- `2f485a358e9d99efd26a0276a81701b332535d18` — test(skin): align default skin assertion with Skin_052.
+- `58cd62a2b3444ad22c6d5d4f91751c55a603fac5` — ci(skins): generate and validate premium skin batch 53-102.
+
+**Проверка:** canonical registry содержит 52 темы; Skin_052 / SIGNAL FORGE — текущая defaultSkin. Обнаружен устаревший assertion в `tests/ValidateSkinManifests.py`, который ошибочно требовал default skin `skin-51`; он заменён проверкой против единого `DEFAULT_ID = "skin-052"`.
+
+**Изменения:** добавлен workflow `.github/workflows/ppgu-skin-expansion.yml`. Он выполняет preflight 52 существующих тем, запускает штатный генератор 50 тем (53–102), проверяет G1–G4, безопасно объединяет pack в registry, повторно запускает skin validators и проверяет итоговое количество 102. После успешных проверок workflow фиксирует созданные manifests/PNG/SVG assets и обновлённый registry в этой ветке. Существующие 52 темы и default Skin_052 сохраняются.
+
+**Границы:** в этом этапе production GUI/ThemeManager, DSP, audio callback, sampler, MIDI, APVTS IDs/semantics и существующие skin assets не менялись. Это подготовка автоматизированного генерационного/валидационного этапа, не доказательство того, что новые 50 папок уже созданы.
+
+**Проверки и статус:** GitHub подтвердил создание ветки и двух commits. По доступному результату workflow run ID / job logs пока не получены; фактический запуск генерации, G1–G4 PASS, merge и появление skins 53–102 остаются **PENDING**. Не считать 102 темы реализованными до появления generated commit и успешного readback validators.
+
+**Следующий шаг:** получить результат Actions; при PASS проверить registry/folder parity и сами preview/hero/SVG assets, затем продолжить runtime Theme Gallery (preview cards, search, family filters, favorites, keyboard navigation), secure asset loading, 150 ms transition и ECO/DPI gates.
