@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "contract": "PPGU SKIN STUDIO REV 14.0",
+  "status": "RUNTIME_PALETTE_SUPPORT_COMMITTED_CI_PENDING_LAYOUT_METADATA_ONLY",
+  "startIndex": 52,
+  "endIndex": 52,
+  "totalSkins": 1,
+  "themes": [
+    {
+      "id": "skin-052",
+      "index": 52,
+      "name": "Carbon Relay",
+      "family": "carbon_studio",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_052/theme.json",
+      "preview": "Skin_052/assets/preview.png",
+      "hero": "Skin_052/assets/hero.png"
+    }
+  ]
+}
