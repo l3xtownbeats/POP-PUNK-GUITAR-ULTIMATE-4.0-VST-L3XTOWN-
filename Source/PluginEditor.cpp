@@ -345,19 +345,19 @@ public:
 
     void resized() override
     {
-        auto area = getLocalBounds().reduced(20);
-        heading.setBounds(area.removeFromTop(28));
-        description.setBounds(area.removeFromTop(48));
-        area.removeFromTop(14);
-        scaleLabel.setBounds(area.removeFromTop(20));
-        scaleSlider.setBounds(area.removeFromTop(38));
-        area.removeFromTop(14);
-        gapLabel.setBounds(area.removeFromTop(20));
-        gapSlider.setBounds(area.removeFromTop(38));
-        area.removeFromTop(18);
-        restoreButton.setBounds(area.removeFromTop(38).removeFromLeft(270));
-        area.removeFromTop(8);
-        galleryButton.setBounds(area.removeFromTop(38).removeFromLeft(220));
+        auto area = getLocalBounds().reduced(16);
+        heading.setBounds(area.removeFromTop(22));
+        description.setBounds(area.removeFromTop(30));
+        area.removeFromTop(4);
+        scaleLabel.setBounds(area.removeFromTop(14));
+        scaleSlider.setBounds(area.removeFromTop(24));
+        area.removeFromTop(4);
+        gapLabel.setBounds(area.removeFromTop(14));
+        gapSlider.setBounds(area.removeFromTop(24));
+        area.removeFromTop(4);
+        restoreButton.setBounds(area.removeFromTop(26).removeFromLeft(270));
+        area.removeFromTop(4);
+        galleryButton.setBounds(area.removeFromTop(26).removeFromLeft(220));
     }
 
 private:
