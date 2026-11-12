@@ -1940,3 +1940,26 @@ P4 — automated tests + human listening QA в VST3/FL Studio 20, нагрузк
 Обнаружен конкретный разрыв: текущий PATTERN runtime генерирует ритмические MIDI-события из масок, а не воспроизводит доказанно реальные записанные гитарные performances. Наличие интеграционного теста подтверждает техническую подачу synthetic WAV через sampler, но не целевой музыкальный результат. MELODY имеет прямой MIDI→SamplerEngine путь, но полноценная привязка preset browser/300 preset definitions к sound bank не подтверждена.
 
 Статус: аудит исходников/тестов выполнен на указанном SHA; это архитектурное решение и отчёт о найденном разрыве. В этой записи source code, preset data и audio assets не изменялись; CI и DAW listening QA не запускались. Не объявлять ни один из двух режимов полностью готовым до прохождения приёмки.
+
+
+## 2026-11-12 — Commercial product direction and core MELODY/PATTERN audit
+
+Пользователь подтвердил целевой уровень и ориентиры: Session Guitarist / Electric Sunburst Deluxe — гитарная игровая механика и performance workflow; NEXUS 5 и Omnisphere — preset-first/library depth/быстрый browser и готовые согласованные инструменты. Использовать лучшее из подходов, создавая собственный коммерческий продукт; не копировать proprietary code, UI assets, factory presets, recordings или performances.
+
+**Ключевое решение:** основа продукта — связка Preset + SoundBank + Performance. MELODY и PATTERN одинаково важны и должны использовать единую подготовку ресурсов/звуков, но разные музыкальные модели:
+- MELODY: каждая MIDI-клавиша запускает mapped guitar note; одновременные клавиши создают полифонические аккорды; натуральные attack/sustain/release, velocity/articulation mappings; чистые bank sounds и SOURCE/DRY presets работают без принудительных FX.
+- PATTERN: MIDI chord input управляет настоящими записанными гитарными performances/loops/strums, с voicing adaptation, chord transitions, fills/endings и host tempo/transport sync. Не считать процедурную генерацию MIDI-ритма полноценным Session Guitarist-style PATTERN.
+- Preset selection связывает source assets, mappings, layers/articulations, performance data, FX route и state; Preview и live playback обязаны разрешать одинаковый sound state.
+- Factory, User и Imported WAV/SFZ sources должны использоваться через общую валидируемую систему. Отсутствие FX — полноценный вариант; расширять пресеты только реальными звуковыми различиями.
+
+**Аудит исходников REV17 (ограниченный, по проверенным файлам):**
+1. Source/PluginProcessor.cpp: MELODY обрабатывает MIDI Note On/Off напрямую через SamplerEngine и поддерживает voice limit — правильная основа полифонии. Но monoMode объявлен в APVTS со значением по умолчанию true; в проверенном PluginProcessor.cpp обнаружено только объявление, runtime-применение не найдено. Нужно исправить контракт: штатный MELODY полифонический; mono/legato — только явная опция, реально реализованная и протестированная.
+2. Source/PluginProcessor.cpp: PATTERN создаёт rhythmMasks и процедурные MIDI Note On/Off события из удерживаемых MIDI-нот/аккорда; PatternScheduler синхронизирует их с транспортом. Это scheduler/integration foundation, но не playback записанных гитарных performance assets. PATTERN остаётся критическим незакрытым блокером коммерческой готовности.
+3. presets/factory_bank_300.json прямо обозначает каталог как tonal/performance targets, а не подтверждение готовых runtime-пресетов. В readiness audit указано, что 150 Melody ожидают plugin/sample integration, а 150 Pattern — recorded performance library/engine.
+4. Наличие SFZ/WAV SamplerEngine не доказывает завершённую общую preset-to-bank resolution, Imported/User preset persistence или Preview/live parity. Нужен end-to-end audit и QA.
+
+Подробный execution baseline и очередность P0–P3: docs/COMMERCIAL_PRODUCT_EXECUTION_PLAN_RU.md (commit 099cc4efbfe4314dbfc23904374fde38847283fb).
+
+**Приоритет исполнения:** P0 — единый preset/source resolver, полифонический MELODY, сухие bank sources, Preview/live parity и persistence; P1 — записанная performance library и asset-driven PATTERN; P2 — все 300 реальных пресетов, Import Guitar/Bank и browser; P3 — performance/stability/installer/licensing/release QA.
+
+**Статус:** это проверка выбранных исходников и зафиксированный план; в этом обновлении исходный код, preset definitions и audio assets не менялись. Никакие коммерческие readiness/DAW listening gates не объявлены пройденными.
