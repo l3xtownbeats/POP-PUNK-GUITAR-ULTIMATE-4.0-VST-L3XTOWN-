@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import json
 import re
+import struct
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,6 +75,22 @@ def luminance(hex_colour: str) -> float:
 def contrast(a: str, b: str) -> float:
     x, y = sorted((luminance(a), luminance(b)), reverse=True)
     return (x + 0.05) / (y + 0.05)
+
+
+def png_dimensions(path: Path) -> tuple[int, int]:
+    raw = path.read_bytes()
+    if len(raw) < 24 or raw[:8] != b"\\x89PNG\\r\\n\\x1a\\n" or raw[12:16] != b"IHDR":
+        raise ValueError(f"{path}: invalid PNG header")
+    return struct.unpack(">II", raw[16:24])
+
+
+def safe_svg(path: Path) -> None:
+    raw = path.read_text(encoding="utf-8")
+    if re.search(r"<\\s*script|\\bon[a-z]+\\s*=|(?:href|src)\\s*=\\s*['\\\"]https?://", raw, re.I):
+        raise ValueError(f"{path}: active script/event/external URL is forbidden")
+    root = ET.fromstring(raw)
+    if not root.tag.endswith("svg"):
+        raise ValueError(f"{path}: root element is not SVG")
 
 
 def validate_colour_tree(value, where: str, errors: list[str]) -> None:
