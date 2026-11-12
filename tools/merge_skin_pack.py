@@ -140,7 +140,7 @@ def main() -> int:
     pack_temp = args.manifest.with_suffix(args.manifest.suffix + ".tmp")
     try:
         registry_temp.write_text(
-            json.dumps(new_registry, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8"
+            json.dumps(new_registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         pack_temp.write_text(
             json.dumps(pack, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8"
