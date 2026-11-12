@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "UI/ThemeManager.h"
+#include "UI/PPGUMultiWindowWorkspace.h"
 #include <array>
 
 class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
@@ -26,7 +27,8 @@ public:
     void resized() override;
 
 private:
-    void chooseSfzFile();
+    void chooseSfzFile(juce::Label* panelStatus = nullptr);
+    void openImportGuitarPanel();
     juce::File getRuntimeSkinRoot() const;
     int getSkinCount() const;
     juce::File getSkinManifest(int index) const;
@@ -41,10 +43,11 @@ private:
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
     PPGUThemeManager themeManager;
+    std::unique_ptr<PPGUMultiWindowWorkspace> auxiliaryWorkspace;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "LOAD SFZ" }, skinButton { "SKIN  v" };
+    juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
     struct FactoryPreset { juce::String name, category, mode, soundCharacter, groove, articulation; float drive=0.0f, tone=5.0f, reverb=0.0f, outputDb=0.0f; };
