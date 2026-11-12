@@ -945,3 +945,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Границы:** только визуальная отрисовка editor; DSP/audio callback, sampler, MIDI, APVTS, preset catalog, SoundBank, skin schema/registry/assets, ThemeManager decoder, CMake/pins и packaging rules не менялись. Отдельные auxiliary windows отсутствуют в runtime и не объявляются тематизированными.
 **Проверки после изменения:** ожидается новый CI на точном SHA. Ни build, ни CTest, ни pluginval, ни package для нового SHA пока не подтверждены. FL Studio 20 visual QA и multi-DPI acceptance остаются NOT VERIFIED. `danger` привязан к pressed-state LOAD SFZ; `warning` используется как status/keyboard-hover state; semantic state mapping подлежит визуальному QA.
 **Следующий шаг:** после CI PASS — построить Theme Gallery Preview/Apply/Cancel и dynamic runtime catalog/rescan; затем auxiliary panel infrastructure. Не менять DSP/audio path.
+
+
+**Follow-up source correction:** commit `d687106117555bec443d041d6c6ed6b2bd718ba5` routes the canonical `danger` token to the pressed state of the LOAD SFZ button (without changing toggle or loading behavior). This is the current source implementation SHA for the visual propagation task; CI for this exact SHA is PENDING.
