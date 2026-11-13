@@ -114,8 +114,8 @@ target_sources(ppgu_page_cache_contracts PRIVATE Source/Sampler/PageCacheSlots.c
 target_include_directories(ppgu_page_cache_contracts PRIVATE Source/Sampler)
 
 ppgu_add_test(ppgu_metadata_contracts tests/SampleMetadataIndexTests.cpp)
-target_sources(ppgu_metadata_contracts PRIVATE Source/Sampler/SampleMetadataIndex.cpp)
-target_include_directories(ppgu_metadata_contracts PRIVATE Source/Sampler)
+target_include_directories(ppgu_metadata_contracts PRIVATE Source Source/Sampler)
+target_link_libraries(ppgu_metadata_contracts PRIVATE ppgu_sampler)
 
 ppgu_add_test(ppgu_panel_contracts tests/AuxiliaryPanelLayoutTests.cpp)
 target_sources(ppgu_panel_contracts PRIVATE Source/UI/AuxiliaryPanelLayout.cpp)
@@ -142,7 +142,7 @@ target_sources(ppgu_theme_contracts PRIVATE
 add_test(NAME ppgu_theme_contracts COMMAND ppgu_theme_contracts)
 target_include_directories(ppgu_theme_contracts PRIVATE Source Source/UI)
 target_compile_definitions(ppgu_theme_contracts PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
-target_link_libraries(ppgu_theme_contracts PRIVATE juce::juce_core)
+target_link_libraries(ppgu_theme_contracts PRIVATE juce::juce_core juce::juce_graphics)
 juce_generate_juce_header(ppgu_theme_contracts)
 
 # End-to-end MIDI -> PatternScheduler -> SamplerEngine -> rendered audio test.
@@ -160,9 +160,7 @@ target_sources(ppgu_processor_pattern_tests PRIVATE
     Source/UI/PPGUMultiWindowWorkspace.cpp)
 target_include_directories(ppgu_processor_pattern_tests PRIVATE
     Source Source/Sampler Source/Performance Source/UI)
-target_compile_definitions(ppgu_processor_pattern_tests PRIVATE
-    ${PPGU_JUCE_DEFINITIONS}
-    JucePlugin_Name=\"POP PUNK GUITAR ULTIMATE\")
+target_compile_definitions(ppgu_processor_pattern_tests PRIVATE ${PPGU_JUCE_DEFINITIONS})
 target_link_libraries(ppgu_processor_pattern_tests PRIVATE
     ppgu_sampler
     PPGUData

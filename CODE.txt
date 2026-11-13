@@ -557,3 +557,11 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Root cause:** CMake embedded legacy root files `FactoryCatalog.json` / `FactorySfz.sfz`, while the production editor requests the canonical validated `presets/factory_bank_300.json` symbol.
 **Correction:** PPGUData now embeds `presets/factory_bank_300.json`, the same 300-entry catalog validated earlier in the workflow. This preserves the editor's expected generated symbol name without adding a duplicate loader or changing UI/runtime logic.
 **Status:** source correction committed; next exact-SHA build pending.
+
+
+## 2026-11-13 — JUCE module dependencies and standalone processor name
+
+**CI:** run `43451977808`, source SHA `c45de36f9407d83c78a201b64821ed8c6a3ca4ea`. BinaryData preflight and x64 CMake configure passed. Compilation reached plugin/test sources.
+**Build diagnostics:** metadata-index contract target did not inherit JUCE AudioFormats include paths; ThemeManager test linked JUCE Core only although its public palette uses `juce::Colour` from Graphics; standalone processor test passed a fragile custom `JucePlugin_Name` macro value, causing a malformed string token in MSVC.
+**Correction:** metadata test now links the shared `ppgu_sampler` target; ThemeManager test links JUCE Graphics; PluginProcessor.h defines a guarded fallback product name only when JUCE has not supplied the plugin macro; remove the standalone target's duplicate macro override.
+**Status:** source correction committed; next exact-SHA CI build pending.

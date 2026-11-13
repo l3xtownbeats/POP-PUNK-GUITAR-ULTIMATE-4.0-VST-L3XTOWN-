@@ -7,6 +7,11 @@
 #include <memory>
 #include <array>
 #include <vector>
+
+// The VST3 target supplies this JUCE definition. Standalone processor tests do not.
+#ifndef JucePlugin_Name
+ #define JucePlugin_Name "POP PUNK GUITAR ULTIMATE"
+#endif
 #include "Sampler/SamplePool.h"
 #include "Performance/PatternScheduler.h"
 

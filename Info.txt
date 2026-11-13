@@ -1898,3 +1898,15 @@ CI run `43444865889` завершился на шаге BinaryData preflight. Л
 Исправлено: production BinaryData source переключён на `presets/factory_bank_300.json` — тот же каталог, который проходит отдельный 300-preset validator в CI. Дублирующий root legacy bank не выбран как runtime source.
 
 Статус: **SOURCE CORRECTION COMMITTED / BUILD RERUN PENDING**. Успешная компиляция пока не заявляется.
+
+
+## 11.3. JUCE module dependency correction (2026-11-13)
+
+На commit `c45de36f9407d83c78a201b64821ed8c6a3ca4ea` BinaryData preflight и x64 CMake configure прошли. Компиляция выявила:
+- metadata-index test не наследовал include/link dependency JUCE AudioFormats;
+- ThemeManager contract target использовал `juce::Colour`, но линковал только JUCE Core;
+- standalone processor test передавал собственное значение `JucePlugin_Name`, что приводило к ошибке MSVC `newline in constant`.
+
+Исправлено: metadata test использует общий `ppgu_sampler`; ThemeManager test линкует JUCE Graphics; `PluginProcessor.h` имеет guarded fallback имени только для standalone targets; конфликтующее compile definition удалено.
+
+Статус: **SOURCE CORRECTION COMMITTED / BUILD RERUN PENDING**. Компиляция ещё не подтверждена.
