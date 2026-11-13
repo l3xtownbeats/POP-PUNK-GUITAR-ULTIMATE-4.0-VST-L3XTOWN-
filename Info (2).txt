@@ -1,0 +1,84 @@
+# POP PUNK GUITAR ULTIMATE — INFO / ЖУРНАЛ РАЗРАБОТКИ
+
+Единственный журнал проекта — INFO. README описывает сам плагин, не разработки.
+Последнее обновление: 13 ноября 2026. Ветка: main.
+
+## 1. Назначение
+
+POP PUNK GUITAR ULTIMATE — VST3-инструмент Windows x64 (JUCE 7.0.12, C++20),
+целевая DAW — FL Studio 20. Приоритеты: безопасность → realtime → звук → ресурсы → UX.
+
+## 2. Текущее состояние (после полного пака исходников и контента)
+
+| Область | Статус |
+|---|---|
+| VST3 / JUCE production target | Исходники полные; сборка на MSVC в CI/локально обязательна |
+| WAV/SFZ sampler (SamplerEngine) | IMPLEMENTED (код): 64 voice slots, RR, loop/one-shot, атомарная публикация Bank, decode вне audio callback |
+| SFZ parser | IMPLEMENTED (код), pure C++20 |
+| Pattern Scheduler | IMPLEMENTED (код), детерминированный, pure C++20 |
+| FX (Distortion/Chorus/Delay/Reverb/Comp/Limiter/CabSim + EQ) | IMPLEMENTED (код) |
+| Auxiliary panels (AMP & TONE / FX CHAIN / PLAYBACK) | IMPLEMENTED (код): отдельные окна, квадрат/X, tiling, состояние сохраняется после закрытия |
+| Skin engine (52 темы, hot-swap, Ctrl+K) | IMPLEMENTED (код), registry = 52, дедуп по token-модели |
+| Presets | 300 definitions сгенерированы; playable count N/300 не подтверждён |
+| SoundBank | 100 синтезированных WAV (Karplus-Strong, CC0), factory.sfz 36..84, SHA-256 manifest |
+| Инструменты-валидаторы | ВЫПОЛНЕНЫ ФАКТИЧЕСКИ (см. §3) |
+| Windows Release build / CTest / pluginval | НЕ ВЫПОЛНЕНЫ в этой среде (нет MSVC) — гейт на CI |
+| FL Studio 20 host acceptance | Не подтверждён для нового HEAD |
+| CPU/RAM profiling | Не подтверждён |
+
+## 3. Подтверждённые проверки этой сессии (фактический вывод инструментов)
+
+- tools/validate_skin_manifests.py → PASS: skin registry consistent (52 themes, continuous range); PASS G1-G4: 52 themes validated.
+- tools/check_binary_data_links.py → PASS: binary data contract (unique headers, pre-declared, no HEADER_NAMESPACE).
+- tools/validate_presets.py → PASS: preset catalog valid (300 definitions, unique ids, APVTS parity).
+- tools/validate_soundbank.py → PASS: SoundBank consistent (100 WAV, SFZ + SHA-256 manifest verified).
+- Компиляция C++-тестов НЕ выполнялась в этой среде (компилятор отсутствует). Состояние тестов: ADDED, не TESTED.
+
+## 4. Как закрыты известные конфликты из прежних записей
+
+1. Skin_052 / registry mismatch (CTest 11/12, run #860): registry содержит все 52 темы,
+   валидатор берёт количество из registry, магическое число 50/51 удалено.
+2. C1083 BinaryData (§16.1): обе binary-цели объявлены РАНЬШЕ зависимых; уникальные
+   HEADER_NAME (PPGUData.h / PPGUTestData.h), NAMESPACE без HEADER_NAMESPACE;
+   pre-configure gate блокирует pipeline до сборки.
+3. R14 runtime layout: workflow формирует sibling Skins/ рядом с VST3 и проверяет ≥52 папок.
+4. JUCE 7 String API (fromWideCharPointer/trimStartCharacters): в PluginEditor
+   не используются; SFZ-путь обрабатывается через juce::String напрямую.
+5. assert-in-Release (AuxiliaryPanelLayout tests): все проверки переведены на
+   собственный CHECK с ненулевым exit code.
+6. Worker-after-exception: loader-поток публикует только полный immutable Bank;
+   частичные состояния никогда не становятся видимыми аудиопотоку.
+7. Панели как независимые окна: AuxiliaryPanelManager владеет окнами; закрытие
+   сохраняет контент/состояние; tileAll раскладывает все открытые панели без перекрытий.
+
+## 5. Открытые гейты (честно, без присвоения PASS)
+
+1. Windows Release: cmake configure → build → полный CTest → pluginval strictness 5
+   → COMPLETE ZIP. Выполняется тем же workflow (.github/workflows/vst3-build.yml).
+2. FL Studio 20 host acceptance: load, MIDI note on/off, preset recall, state restore,
+   длительная стабильность.
+3. CPU/RAM profiling и listening count N/300 — только измерениями.
+4. JUCE 7.0.12/CMake 3.22 → JUCE 8/CMake ≥3.24 (REV 13 §13.2) — отдельный этап.
+
+## 6. Сборка
+
+```
+cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release --parallel
+ctest --test-dir build -C Release --output-on-failure
+```
+Установка: .vst3 → C:\Program Files\Common Files\VST3\; каталог Skins/ — рядом с bundle.
+
+## 7. Правила журнала
+
+PLANNED/DESIGNED не называть IMPLEMENTED; исходники не называть BUILT без сборки;
+тесты не называть TESTED без результата; DAW не называть HOST-VERIFIED без проверки в хосте.
+
+## 8. Запись: полный пакет (13 ноября 2026)
+
+Статус: SOURCE + CONTENT COMPLETE / CONTRACT VALIDATORS PASS / BUILD PENDING (CI).
+Дерево: CMakeLists.txt, .github/workflows/vst3-build.yml, Source/ (processor, editor,
+engine, DSP, UI), tests/ (5 C++ контрактов), tools/ (4 валидатора), SKIN/ (52 темы,
+manifest/schema/pack manifest, PNG/SVG assets), SOUNDBANK/ (100 WAV + factory.sfz +
+manifest SHA-256 + LICENSES), PRESETS/ (factory_bank_300.json + examples), README.md.
+Ни один PASS из этого сеанса не переносится на будущие SHA без повторного прогона CI.
