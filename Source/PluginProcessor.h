@@ -9,6 +9,7 @@
 #include <vector>
 #include "Sampler/SamplePool.h"
 #include "Performance/PatternScheduler.h"
+#include "Performance/PatternTriggerState.h"
 
 class PopPunkGuitarUltimateAudioProcessor final : public juce::AudioProcessor
 {
@@ -65,6 +66,7 @@ private:
     int maximumBlockSize = 512;
     ppgu::sampler::SamplerEngine sampler;
     ppgu::performance::PatternScheduler patternScheduler;
+    ppgu::performance::PatternTriggerState patternTriggerState;
     ppgu::performance::BlockClock patternTransportClock;
     std::array<std::array<bool, 128>, 16> patternHeldNotes {};
     std::array<ppgu::performance::PatternEvent, 512> patternEvents {};
