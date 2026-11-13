@@ -1815,3 +1815,33 @@ F. Только после этого считать документальны�
 5. ADDITIONAL FUNCTIONS — state recall/import worker/workspace/panic частично готовы; AutoChords, DnD/preview/library manager, meters и parallel DSP отсутствуют.
 - **Порядок дальнейшей реализации:** закрывать найденные gaps последовательно в тех же пяти отделах, сохраняя существующие реализации и APVTS IDs. Сначала сделать полную матрицу зависимостей/acceptance tests, затем внедрять и проверять каждый отдел отдельными коммитами и exact-SHA CI. Финальную сборку/пакет объявлять только после закрытия всех блоков и отдельной host-проверки FL Studio 20 / Windows 10.
 
+
+
+## 2026-11-13 — PPGU window and panel inventory v1 (user-approved status baseline)
+
+**Source:** user-supplied inventory `PPGU — ИНВЕНТАРЬ ОКОН И ПАНЕЛЕЙ (v1, 2026-11-13)`.  
+**Branch checkpoint:** `work/ppgu-completion-integrated-2026-11-13` @ `0308895240a540e4de71886fd98d5fd65ed434b2`.  
+**Change class:** requirements/status baseline only; no production source or tests changed.
+
+**Status model (mandatory):** `IMPLEMENTED+VALIDATED` / `SOURCE PRESENT` / `DESIGNED` / `NOT IMPLEMENTED` / `DISABLED BY DESIGN`. A status transition requires its own scoped INFO entry and exact-SHA evidence. A design or visual mockup alone never proves implementation or visual completion. Disabled-by-design controls must not be rendered as active before their runtime function exists and passes tests.
+
+| # | Window / panel | Purpose | User-supplied status | Open blocker |
+|---|---|---|---|---|
+| 1 | PluginEditor (main window) | Main UI | SOURCE PRESENT | 21-token parity partial; exact-SHA CI |
+| 2 | PPGUMultiWindowWorkspace | Auxiliary panel host | SOURCE PRESENT | OverlayManager not integrated |
+| 3 | Auxiliary panels (mixed sizes) | Parallel panels | SOURCE PRESENT | Geometry CI pending |
+| 4 | Settings panel (ID 6) | Scale/gap/restore/gallery | SOURCE IMPLEMENTED | Validation pending |
+| 5 | Skin Gallery | Theme selection | PARTIAL | Runtime hot-swap, DPI/ECO gates |
+| 6 | FX EDIT | Eight parameter pages | DESIGNED | Source-to-control audit |
+| 7 | Performance | Read-only telemetry | DESIGNED | Never display unconnected data |
+| 8 | AutoChords | Selectors/preview | DISABLED BY DESIGN | Backend/MIDI routing |
+| 9 | Auto Discover | Discovery UI | NOT IMPLEMENTED | Pipeline S6.5 |
+| 10 | Curator | GREEN/YELLOW/RED review | NOT IMPLEMENTED | Production policy integration |
+| 11 | About | Product information | NOT IMPLEMENTED | — |
+| 12 | Overlay windows (popup, z-order, focus, persistence, tiling) | — | NOT IMPLEMENTED | Order: OverlayManager → workspace → windows |
+
+**Reconciliation rule:** this table is the user's current status baseline, not independent proof that every listed source component exists on the checkpoint branch. Before changing any panel, inspect the exact branch tree/source/tests and reconcile the user status with INFO/CODE and prior implementation commits. Do not overwrite stronger exact-SHA evidence or silently inherit statuses from another branch.
+
+**Implementation guardrails:** no panel is declared visually complete from specification alone; disabled-by-design elements remain visibly disabled; each scoped status transition is appended here with source paths, exact commit SHA, tests/CI and remaining host/DPI acceptance. This entry does not claim OverlayManager, FX EDIT, Performance, Auto Discover, Curator, About or complete Skin Gallery functionality is implemented.
+
+**Result:** INVENTORY RECORDED / SOURCE UNCHANGED / VALIDATION OF EACH ROW PENDING.
