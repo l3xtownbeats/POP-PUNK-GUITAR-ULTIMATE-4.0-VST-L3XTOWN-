@@ -215,6 +215,32 @@ int main()
                           << hybridPatternRms << "\\n";
                 result = 1;
             }
+
+            // Releasing the final trigger must return the hybrid route to
+            // ordinary MELODY playback. Warm note 62 before this assertion so
+            // the result measures routing, not an asynchronous first-page miss.
+            juce::AudioBuffer<float> warmSecondChordBlock(1024, 1);
+            juce::MidiBuffer warmSecondChordMidi;
+            warmSecondChordMidi.addEvent(juce::MidiMessage::noteOn(1, 62, static_cast<juce::uint8>(100)), 16);
+            warmSecondChordMidi.addEvent(juce::MidiMessage::noteOff(1, 62), 800);
+            hybridProcessor.processBlock(warmSecondChordBlock, warmSecondChordMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
+            juce::AudioBuffer<float> melodyResumeBlock(2, 2048);
+            juce::MidiBuffer melodyResumeMidi;
+            melodyResumeMidi.addEvent(juce::MidiMessage::noteOff(1, 12), 16);
+            addChordOff(melodyResumeMidi, 16, { 60, 64, 67 });
+            melodyResumeMidi.addEvent(juce::MidiMessage::noteOn(1, 62, static_cast<juce::uint8>(105)), 16);
+            melodyResumeMidi.addEvent(juce::MidiMessage::noteOff(1, 62), 1600);
+            hybridProcessor.processBlock(melodyResumeBlock, melodyResumeMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            const double resumedMelodyRms = rms(melodyResumeBlock, 128, 1400);
+            if (!(resumedMelodyRms > 0.005))
+            {
+                std::cerr << "Releasing the final C0-C1 trigger did not resume ordinary MELODY playback; RMS="
+                          << resumedMelodyRms << "\\n";
+                result = 1;
+            }
         }
     }
 
