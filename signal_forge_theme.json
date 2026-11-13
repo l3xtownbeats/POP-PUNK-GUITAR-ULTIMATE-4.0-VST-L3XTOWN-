@@ -1,0 +1,89 @@
+{
+  "id": "signal-forge-neon",
+  "name": "SIGNAL FORGE / NEON",
+  "version": "1.0.0",
+  "author": "PPGU",
+  "window": {
+    "width": 960,
+    "height": 600,
+    "minWidth": 800,
+    "minHeight": 500,
+    "resizable": true,
+    "scaleAware": true
+  },
+  "background": {
+    "texture": "assets/bg_panel.png",
+    "baseColor": "#0B0E14",
+    "gradientTop": "#10151F",
+    "gradientBottom": "#0A0D12",
+    "noise": 0.04
+  },
+  "panel": {
+    "frame": "assets/frame_border.png",
+    "borderRadius": 10,
+    "borderColor": "#1E2735",
+    "glowColor": "#00E5FF",
+    "glowIntensity": 0.25,
+    "padding": {
+      "x": 14,
+      "y": 12
+    }
+  },
+  "controls": {
+    "knob": {
+      "base": "assets/knob_base.png",
+      "thumb": "assets/knob_thumb.png",
+      "arcColor": "accent.primary",
+      "arcInactive": "border.soft",
+      "glowOnDrag": true
+    },
+    "slider": {
+      "track": "assets/slider_track.png",
+      "thumb": "assets/slider_thumb.png",
+      "fillColor": "accent.primary"
+    },
+    "toggle": {
+      "on": "assets/toggle_on.png",
+      "off": "assets/toggle_off.png"
+    },
+    "button": {
+      "normal": "assets/button_normal.png",
+      "hover": "assets/button_hover.png",
+      "pressed": "assets/button_pressed.png",
+      "disabled": "assets/button_disabled.png",
+      "textColor": "text.primary",
+      "textColorDisabled": "text.disabled"
+    }
+  },
+  "typography": {
+    "font": "fonts/RobotoMono-Bold.ttf",
+    "fontFallback": "monospace",
+    "sizes": {
+      "label": 11,
+      "value": 14,
+      "title": 18
+    },
+    "letterSpacing": 0.5
+  },
+  "animations": {
+    "enabled": true,
+    "knobGlowPulse": {
+      "periodMs": 1600,
+      "amplitude": 0.15
+    },
+    "presetSwitchFade": 220,
+    "ledBlinkOnClip": {
+      "color": "status.error",
+      "periodMs": 320
+    }
+  },
+  "states": {
+    "bypassed": {
+      "dimOverlay": 0.45,
+      "disableGlow": true
+    },
+    "active": {
+      "dimOverlay": 0.0
+    }
+  }
+}

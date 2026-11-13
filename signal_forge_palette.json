@@ -1,0 +1,21 @@
+{
+  "palette": {
+    "bg.base": "#0B0E14",
+    "bg.panel": "#10151F",
+    "border.soft": "#1E2735",
+    "accent.primary": "#00E5FF",
+    "accent.warm": "#FF3B5C",
+    "text.primary": "#E8F1FF",
+    "text.muted": "#8A94A6",
+    "text.disabled": "#5A6478",
+    "status.ok": "#38E07B",
+    "status.warn": "#FFB13B",
+    "status.error": "#FF3B5C"
+  },
+  "usage": {
+    "knobArc": "accent.primary",
+    "clipLED": "status.error",
+    "labels": "text.muted",
+    "values": "text.primary"
+  }
+}

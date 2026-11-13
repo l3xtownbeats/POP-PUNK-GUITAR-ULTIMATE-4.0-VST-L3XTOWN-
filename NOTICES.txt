@@ -1,0 +1,3 @@
+PPGU source code: project-specific (see repo LICENSE).
+Embedded third-party: none beyond JUCE 7.0.12 (AGPLv3/commercial per JUCE policy).
+User-imported samples: licensing responsibility of the importer; import gate records SHA-256 and license evidence.

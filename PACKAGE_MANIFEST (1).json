@@ -1,0 +1,848 @@
+{
+ "project": "POP PUNK GUITAR ULTIMATE",
+ "revision": "REV.17",
+ "generated": "2026-11-13",
+ "zip_sha256": "e0b5e78d592a332f4179e3bfc1e380c17d3f8a075e684b788ade3b0e9e4541ad",
+ "files": [
+  {
+   "path": ".github/workflows/build.yml",
+   "size": 3210,
+   "sha256": "b9107d668fdeeddd141112159af366f3c95d5d5a22b97d4a0cabb715e649a72c"
+  },
+  {
+   "path": "CMakeLists.txt",
+   "size": 3136,
+   "sha256": "2fc715c8b2e433e43bca490d4d6e8fb145e3d5cbb640ef7a30224ea54a914559"
+  },
+  {
+   "path": "CODE.txt",
+   "size": 50469,
+   "sha256": "7236f5416b58298f6c17aff6647ab4780a61b2b65318d4ded8e0602ce0db9aae"
+  },
+  {
+   "path": "DOWNLOAD.md",
+   "size": 1026,
+   "sha256": "43193b2489f419509f5d2abd77344832e381316edc168148b70f335df6241799"
+  },
+  {
+   "path": "Info.txt",
+   "size": 279015,
+   "sha256": "aa7566d84af29010c111ada1787218caab40b07d0171ae51bae7e521e3a8655a"
+  },
+  {
+   "path": "README.md",
+   "size": 13255,
+   "sha256": "02ff3e5366ede61fcb1fbee0f2e35d684e1b5691f6e36bb114c476332f0accc4"
+  },
+  {
+   "path": "Resources/Embedded/FactoryCatalog.json",
+   "size": 57,
+   "sha256": "6d8adfa12aca33cb67b61ce9309f29fded4d3ee613a4803d934601e52beb48ba"
+  },
+  {
+   "path": "Resources/Embedded/FactorySfz.sfz",
+   "size": 51,
+   "sha256": "0ceacf50b18b47a9223f40b72834654fdfccfd293de36200280c165db2e28f89"
+  },
+  {
+   "path": "Resources/TestData/TestProbe.wav",
+   "size": 244,
+   "sha256": "3523920c3e650b1795f4d049e146d4d443bd87ab8ff57e6ab67cb0bf5b1b711b"
+  },
+  {
+   "path": "SKIN/Skin_001/assets/bg.png",
+   "size": 258,
+   "sha256": "1d9d15aaa04a4edf53cec6635ccdfee8d3d9bf738ea0f09c478bfcadb281339b"
+  },
+  {
+   "path": "SKIN/Skin_001/theme_manifest.json",
+   "size": 1254,
+   "sha256": "104ff4e2f9cc88d8001e8282eec992c0e3f3b66d6f8d74e42c98de6f4406b1b0"
+  },
+  {
+   "path": "SKIN/Skin_002/assets/bg.png",
+   "size": 265,
+   "sha256": "c5c7b2d2b341955141d0de6f07a4daeaf018ea20afa18943b6abf4db65d3f174"
+  },
+  {
+   "path": "SKIN/Skin_002/theme_manifest.json",
+   "size": 1256,
+   "sha256": "e5ae955826c57dbb3baf481b6f56246af49d02549ef011a769f5f5d1723ee965"
+  },
+  {
+   "path": "SKIN/Skin_003/assets/bg.png",
+   "size": 269,
+   "sha256": "d24bb98266a5d66fa9e58c5b1e9a670fd00b42e873001a497c94ff92372ea674"
+  },
+  {
+   "path": "SKIN/Skin_003/theme_manifest.json",
+   "size": 1255,
+   "sha256": "0167c499848f6b223e082b1811428fe94345c0730a9f34bbd30af3be23da929c"
+  },
+  {
+   "path": "SKIN/Skin_004/assets/bg.png",
+   "size": 254,
+   "sha256": "c8e9f5ef0ad1d9dd2f22ad451166e834061129fe1606a54aaa641d8f2e79409c"
+  },
+  {
+   "path": "SKIN/Skin_004/theme_manifest.json",
+   "size": 1260,
+   "sha256": "ee90dcc99812622f91df5b482d3d701915893f2163e427c9414325ab74678bdd"
+  },
+  {
+   "path": "SKIN/Skin_005/assets/bg.png",
+   "size": 230,
+   "sha256": "1bcd9963d3768f6337fcebad9c2859dcdb5e2082d35d74b8d3deddc08df67e30"
+  },
+  {
+   "path": "SKIN/Skin_005/theme_manifest.json",
+   "size": 1259,
+   "sha256": "fc410a6f7b3d10ab46a08c165beaa2dc230deae0d785071a7b381c02b2662ca9"
+  },
+  {
+   "path": "SKIN/Skin_006/assets/bg.png",
+   "size": 269,
+   "sha256": "f5ce05e071504a91a3b7188d8177b96c3efbf29f636620b497fe7b98dc15a362"
+  },
+  {
+   "path": "SKIN/Skin_006/theme_manifest.json",
+   "size": 1253,
+   "sha256": "e84ffac1ae4de3f5af18673f379bfc78d3909b42761611412c5f46fbfda6eb3c"
+  },
+  {
+   "path": "SKIN/Skin_007/assets/bg.png",
+   "size": 257,
+   "sha256": "f36b822b971dd996abf12ef39947a522364b47e954715f3ee01a354e50c0500e"
+  },
+  {
+   "path": "SKIN/Skin_007/theme_manifest.json",
+   "size": 1253,
+   "sha256": "c15914064058f1b34ced484da5273f2e046e0081ac08fc4126d0248bc5e893c3"
+  },
+  {
+   "path": "SKIN/Skin_008/assets/bg.png",
+   "size": 263,
+   "sha256": "aac55a6238c7c102c3c472a80324f3a744430202eee522e8d56bbcc364786848"
+  },
+  {
+   "path": "SKIN/Skin_008/theme_manifest.json",
+   "size": 1253,
+   "sha256": "6d6cd67a292a0ddcfd78a9999b019d532e49cde606a23fe2dff3e8a35481b6e7"
+  },
+  {
+   "path": "SKIN/Skin_009/assets/bg.png",
+   "size": 256,
+   "sha256": "fe4a9ae3e9b11986154695dd4282b6ae5f2edcd5598354bfc91c2e76b0a41895"
+  },
+  {
+   "path": "SKIN/Skin_009/theme_manifest.json",
+   "size": 1253,
+   "sha256": "cb3ca3c3aa755c1c436ce435c9415f7946ffaaad915e7ab80b0e56845b09c7f6"
+  },
+  {
+   "path": "SKIN/Skin_010/assets/bg.png",
+   "size": 237,
+   "sha256": "60d8ca6b47c178cf1a696adbf7cc63c3d1ae65d2fe06d0a53c702da948ce10af"
+  },
+  {
+   "path": "SKIN/Skin_010/theme_manifest.json",
+   "size": 1253,
+   "sha256": "99001580d9790fadc86dc462cf6a61e15e695b865e3848d08832eef41fd0db18"
+  },
+  {
+   "path": "SKIN/Skin_011/assets/bg.png",
+   "size": 237,
+   "sha256": "ca5b78226db0734d3f84f1c7370000a80d02deb2ce5083f8ef367a56cd010bb4"
+  },
+  {
+   "path": "SKIN/Skin_011/theme_manifest.json",
+   "size": 1253,
+   "sha256": "dd613211b75713eb0a73fd9a89bafe1dcc95468f5d4c68760d44eb89d9bb0f7a"
+  },
+  {
+   "path": "SKIN/Skin_012/assets/bg.png",
+   "size": 253,
+   "sha256": "1205e28fb907766fc130bdbb79816d9a1eb90a8b53575a2a80d1f4234274af4b"
+  },
+  {
+   "path": "SKIN/Skin_012/theme_manifest.json",
+   "size": 1253,
+   "sha256": "7a9e667cbf34d516472e27bae538f0feda84078e4a252d47b5f11b69cd0f01c6"
+  },
+  {
+   "path": "SKIN/Skin_013/assets/bg.png",
+   "size": 260,
+   "sha256": "6bd765f5a100c3e9139b36f0aa0056905424dba8051fec97c9a640bd5e60d754"
+  },
+  {
+   "path": "SKIN/Skin_013/theme_manifest.json",
+   "size": 1253,
+   "sha256": "d805749174ac8681bf55230c4a44f38ac50cc44de5ffab6747bbffea9c9b5385"
+  },
+  {
+   "path": "SKIN/Skin_014/assets/bg.png",
+   "size": 271,
+   "sha256": "fcfeea49823f418afc92e4d4fa83ae33d15d7964b01b0f6e8a049a1e173993d2"
+  },
+  {
+   "path": "SKIN/Skin_014/theme_manifest.json",
+   "size": 1253,
+   "sha256": "cdda0799fb6a9dd2efa61df2e7a6f19c61b10e849ecf9e471f349a8034efbfeb"
+  },
+  {
+   "path": "SKIN/Skin_015/assets/bg.png",
+   "size": 265,
+   "sha256": "7943d90bd29f212c954793a39506175d589a1bb4352622afff9a56b8cd18b1e4"
+  },
+  {
+   "path": "SKIN/Skin_015/theme_manifest.json",
+   "size": 1253,
+   "sha256": "0c5edce4cd6f95ce3e41cae9e0c75c171c01d418f1118586f56cb37db85e6a60"
+  },
+  {
+   "path": "SKIN/Skin_016/assets/bg.png",
+   "size": 272,
+   "sha256": "85f870cd9556b8f5c0879106547b687030aca07b09468de3009233dd1f724dce"
+  },
+  {
+   "path": "SKIN/Skin_016/theme_manifest.json",
+   "size": 1253,
+   "sha256": "70c0b6913cb8c0a36a0587148d65dd3842552f16b5f5d5587eeace71a2a2fe53"
+  },
+  {
+   "path": "SKIN/Skin_017/assets/bg.png",
+   "size": 239,
+   "sha256": "e3b19fcdfd832cb4f3068c6b52cbfdda461555b1d297205d86ff56a40eb65891"
+  },
+  {
+   "path": "SKIN/Skin_017/theme_manifest.json",
+   "size": 1253,
+   "sha256": "700e8c793f1ac4372498a1cc673b0c32c398e45a0ca4708881837e687b0134bf"
+  },
+  {
+   "path": "SKIN/Skin_018/assets/bg.png",
+   "size": 262,
+   "sha256": "562b36d4a55aafe0051880a80a6bcd61ff8d29e8412c7a2eb5be0a583b627ae3"
+  },
+  {
+   "path": "SKIN/Skin_018/theme_manifest.json",
+   "size": 1253,
+   "sha256": "16680d2d509f2d9c2ab96320481038ba253adb4bd6c549a5c76022e63745c72a"
+  },
+  {
+   "path": "SKIN/Skin_019/assets/bg.png",
+   "size": 274,
+   "sha256": "c9abc249a1c7ffeefbbe552c016f71a0359ffc6ea6d6ffd1afb75aa045e75bad"
+  },
+  {
+   "path": "SKIN/Skin_019/theme_manifest.json",
+   "size": 1253,
+   "sha256": "2828fb535bf132c4746f22256a78fb2a5ad0059e571edb624d26150f8abb968f"
+  },
+  {
+   "path": "SKIN/Skin_020/assets/bg.png",
+   "size": 251,
+   "sha256": "2544d7e5973c00ec5e354ab53bfd13a69daac74dff9682b1853b6c336a996942"
+  },
+  {
+   "path": "SKIN/Skin_020/theme_manifest.json",
+   "size": 1253,
+   "sha256": "befb24e0120d09d5e104986eedb3bde737d23a8699b5545f772229c0b815c10a"
+  },
+  {
+   "path": "SKIN/Skin_021/assets/bg.png",
+   "size": 275,
+   "sha256": "b04182e8e85beda6fe7f9a2cb156ba9bd588d81d629f0834c583488a41aa2bd4"
+  },
+  {
+   "path": "SKIN/Skin_021/theme_manifest.json",
+   "size": 1253,
+   "sha256": "d77ef5ecd1c9074b702f9d4949766b74874310bfdb52b83a8cc1cef49355245b"
+  },
+  {
+   "path": "SKIN/Skin_022/assets/bg.png",
+   "size": 269,
+   "sha256": "056e4112e941261c43a3faded9e8dc477b6968541c5cb89d4b06c6a2e8174990"
+  },
+  {
+   "path": "SKIN/Skin_022/theme_manifest.json",
+   "size": 1253,
+   "sha256": "5bd9a60a24aebce1061fa2e382140c39b32c52b441320888e6a8413effe9bedb"
+  },
+  {
+   "path": "SKIN/Skin_023/assets/bg.png",
+   "size": 267,
+   "sha256": "1fed4077bccd15249f7eeb68959f51f62eeaa55c6340faa79e638ff28b3f04ca"
+  },
+  {
+   "path": "SKIN/Skin_023/theme_manifest.json",
+   "size": 1253,
+   "sha256": "979ae7f8cb83d73245fa0ddda6cfb6d89d37d053de8d6c408d8049dd0a0916c5"
+  },
+  {
+   "path": "SKIN/Skin_024/assets/bg.png",
+   "size": 233,
+   "sha256": "471158c5543748c95977494a04f794a54ac1b06282250308b1de33d6de438b7b"
+  },
+  {
+   "path": "SKIN/Skin_024/theme_manifest.json",
+   "size": 1253,
+   "sha256": "911821c5031def17bfb0949ff1cec1f01dc0a98d1e05e21ea734b783dcb775da"
+  },
+  {
+   "path": "SKIN/Skin_025/assets/bg.png",
+   "size": 268,
+   "sha256": "ab66b547207cbbd60e2f784c5705bde07814af9e48fe69bb0671a40f0c2e632a"
+  },
+  {
+   "path": "SKIN/Skin_025/theme_manifest.json",
+   "size": 1253,
+   "sha256": "728ece96cf1e16adf2f400beb6e876864c277d6b32b9dd0cd0d924fc6911bf27"
+  },
+  {
+   "path": "SKIN/Skin_026/assets/bg.png",
+   "size": 258,
+   "sha256": "20af6eedcd18ccb3a2b91f3b0ad5e0ea474125a68f58c427c2df46554343aff0"
+  },
+  {
+   "path": "SKIN/Skin_026/theme_manifest.json",
+   "size": 1253,
+   "sha256": "17590e341d3aec816f5c9cfe03f805c61dbd2766e07c0628472934bb9ed4e489"
+  },
+  {
+   "path": "SKIN/Skin_027/assets/bg.png",
+   "size": 250,
+   "sha256": "87269539b697b54d3f1d2c91dbe7352d0718de3c9a60f70a01c6348da12ab005"
+  },
+  {
+   "path": "SKIN/Skin_027/theme_manifest.json",
+   "size": 1253,
+   "sha256": "27bbe2d4aae03936be35d90cca9920b2c2fd953a300626dc04a76d6dea877a95"
+  },
+  {
+   "path": "SKIN/Skin_028/assets/bg.png",
+   "size": 263,
+   "sha256": "e8486b16a5d7abf430fe89ca94f0f5cc82e72118a6baf1b35eda6b33d92ed08e"
+  },
+  {
+   "path": "SKIN/Skin_028/theme_manifest.json",
+   "size": 1253,
+   "sha256": "952601d99b0e9d6eb437ea0a3396deba9178018cd6be8e078a7ffc66e12cadc0"
+  },
+  {
+   "path": "SKIN/Skin_029/assets/bg.png",
+   "size": 270,
+   "sha256": "a1b273e3660dbf10074060bda6379ac14e3a61c8aa59ce8d1eddbd4b34c7b66d"
+  },
+  {
+   "path": "SKIN/Skin_029/theme_manifest.json",
+   "size": 1253,
+   "sha256": "e6eec6fc91b492d2310179082065618dad289c17e1d5f171e5823073b65bc774"
+  },
+  {
+   "path": "SKIN/Skin_030/assets/bg.png",
+   "size": 271,
+   "sha256": "3946b73f85cb203ae9355c7c49a97e21f4d2dd994fddce0503ab20e01361ec9d"
+  },
+  {
+   "path": "SKIN/Skin_030/theme_manifest.json",
+   "size": 1253,
+   "sha256": "1ed89632580083c055fa5f74dd462e3abab63484d869780ce087261ddb10f3a1"
+  },
+  {
+   "path": "SKIN/Skin_031/assets/bg.png",
+   "size": 259,
+   "sha256": "0f3732c4dcc5539f401327e79ec800eac45c55c1dc36ad092c6bab614fc451d0"
+  },
+  {
+   "path": "SKIN/Skin_031/theme_manifest.json",
+   "size": 1253,
+   "sha256": "f9b7599c050b56390bf5b87df3d4874be913d6c0c4b879c5df7fa5a9ba8c9be2"
+  },
+  {
+   "path": "SKIN/Skin_032/assets/bg.png",
+   "size": 273,
+   "sha256": "1456eb26a0287deed60ab84e536521f82235cc59cf362dcb4472af7765457bc4"
+  },
+  {
+   "path": "SKIN/Skin_032/theme_manifest.json",
+   "size": 1253,
+   "sha256": "6155c52106d6c1d3af1ce86ace51ef6884533b2267af8465648cdc7ccf3a18eb"
+  },
+  {
+   "path": "SKIN/Skin_033/assets/bg.png",
+   "size": 232,
+   "sha256": "e23bc1ec8253cce7b66f60670932ef11e3e31b3507b3aed50e58d1c032e99989"
+  },
+  {
+   "path": "SKIN/Skin_033/theme_manifest.json",
+   "size": 1253,
+   "sha256": "a1f5d17aae2bb32dad0286c25cf05902a5890fa8c2be5830feb6e75284ae3551"
+  },
+  {
+   "path": "SKIN/Skin_034/assets/bg.png",
+   "size": 266,
+   "sha256": "7a2878be56d49982dddb1e5ddc5b97f316738abda365459257874096a2c84fc5"
+  },
+  {
+   "path": "SKIN/Skin_034/theme_manifest.json",
+   "size": 1253,
+   "sha256": "faa328ab287f8f5f42b71c414ccb1a71dad8a3d7f277495af19ede951fd8f8bc"
+  },
+  {
+   "path": "SKIN/Skin_035/assets/bg.png",
+   "size": 278,
+   "sha256": "32c12cca60b270ddf6245db2905db556624472fc0626c9327344141e1c82cdcc"
+  },
+  {
+   "path": "SKIN/Skin_035/theme_manifest.json",
+   "size": 1253,
+   "sha256": "e9ef019f16ba97c513180eb2dcd54d8dde55b80dc47f364278463220402d7631"
+  },
+  {
+   "path": "SKIN/Skin_036/assets/bg.png",
+   "size": 243,
+   "sha256": "1ca36103a155ea276e54c15030ffecb6a3897842fd80e245677e850069023eab"
+  },
+  {
+   "path": "SKIN/Skin_036/theme_manifest.json",
+   "size": 1253,
+   "sha256": "51b6aff05a59f2fe3fc9b84ff5c30d0da4b989a683ec32b422f955fd45d8ed6c"
+  },
+  {
+   "path": "SKIN/Skin_037/assets/bg.png",
+   "size": 280,
+   "sha256": "82a676af06741f4ae384da1daa81221cda7eab1bf2df37327f9c378c5420fd72"
+  },
+  {
+   "path": "SKIN/Skin_037/theme_manifest.json",
+   "size": 1253,
+   "sha256": "0fcd670ce174efddea69b755cdef42335e57c9e173d31e59cbe1d08c442df11b"
+  },
+  {
+   "path": "SKIN/Skin_038/assets/bg.png",
+   "size": 263,
+   "sha256": "196ec855d1ddc16dfef764c0e31aae8c89d197c949f9301fb19e058ebe1896eb"
+  },
+  {
+   "path": "SKIN/Skin_038/theme_manifest.json",
+   "size": 1253,
+   "sha256": "90bc76ee365c2ccd26a7505a4487f698d00290dc74d2f27a0ef114391915e1c8"
+  },
+  {
+   "path": "SKIN/Skin_039/assets/bg.png",
+   "size": 265,
+   "sha256": "87663173fdd551d01142ec6938cbf3b6d5cee7c6bc90c81bfd992f481c8b831b"
+  },
+  {
+   "path": "SKIN/Skin_039/theme_manifest.json",
+   "size": 1253,
+   "sha256": "f35f325239a38269ab375089d9dc742f0b667912aee47a2e093378d3f4181d46"
+  },
+  {
+   "path": "SKIN/Skin_040/assets/bg.png",
+   "size": 269,
+   "sha256": "55df44ce57fb97f2f164d206b1bd17e6d209bef6975af3c74ae164943fe15eb8"
+  },
+  {
+   "path": "SKIN/Skin_040/theme_manifest.json",
+   "size": 1253,
+   "sha256": "926396f2e5fed2aa95bc100c9d4ddcbb1146c5e368a6996d3e764fcce2fe42b4"
+  },
+  {
+   "path": "SKIN/Skin_041/assets/bg.png",
+   "size": 236,
+   "sha256": "082b69bb1b20972a0517274e58f1349a3657b043b9c3ee2584d634b49b7250ef"
+  },
+  {
+   "path": "SKIN/Skin_041/theme_manifest.json",
+   "size": 1253,
+   "sha256": "9c0a90e8c3741f0b7ecb2ae9d4e90e4ace0dc4b4db1e15c3af39b3e585ae9ae1"
+  },
+  {
+   "path": "SKIN/Skin_042/assets/bg.png",
+   "size": 248,
+   "sha256": "5d5311f890674de8804275bdc149ceb183cf41b3070071a840f4b206d6d697b7"
+  },
+  {
+   "path": "SKIN/Skin_042/theme_manifest.json",
+   "size": 1253,
+   "sha256": "b9209b08752f99a953988b5fd6614b9a4eefb2581336eb6b1f29b44b5dad679c"
+  },
+  {
+   "path": "SKIN/Skin_043/assets/bg.png",
+   "size": 230,
+   "sha256": "833891486f7e63757effb239343a22802b305f5bbbc13582f3a4dc87431a4ad1"
+  },
+  {
+   "path": "SKIN/Skin_043/theme_manifest.json",
+   "size": 1253,
+   "sha256": "a117d53e7439a4f11ed672d20f30320da324dba49b356aff940959aea199cad2"
+  },
+  {
+   "path": "SKIN/Skin_044/assets/bg.png",
+   "size": 230,
+   "sha256": "370605e0993f5f7abd11c16522ff9b8289e4721dbecd3f2a2eb6b17aee370f09"
+  },
+  {
+   "path": "SKIN/Skin_044/theme_manifest.json",
+   "size": 1253,
+   "sha256": "6e5369446335377b3ebc5165d3c15ba841e669a2121f40be95a72368868ff756"
+  },
+  {
+   "path": "SKIN/Skin_045/assets/bg.png",
+   "size": 246,
+   "sha256": "7ad43388ff9599c693b01d866a630f8b03fd5772998577bc54c8c514fb8f0f36"
+  },
+  {
+   "path": "SKIN/Skin_045/theme_manifest.json",
+   "size": 1253,
+   "sha256": "4ec4954400148329b82b5a3594f0403d2f16386332f65359616c8b43a90714f9"
+  },
+  {
+   "path": "SKIN/Skin_046/assets/bg.png",
+   "size": 256,
+   "sha256": "116b9ab7883f9264447ff17359b25abe466775ec38f9ac4c023a97b75ae8e320"
+  },
+  {
+   "path": "SKIN/Skin_046/theme_manifest.json",
+   "size": 1253,
+   "sha256": "375f0d23d501960e892669372b19511459de94d9be292fcd9d6e2664294f1798"
+  },
+  {
+   "path": "SKIN/Skin_047/assets/bg.png",
+   "size": 247,
+   "sha256": "7febf95e7afd64f9d890bc298e35df9cb4249c4c21cd94db02a1443377d70a56"
+  },
+  {
+   "path": "SKIN/Skin_047/theme_manifest.json",
+   "size": 1253,
+   "sha256": "d9b4116155bba23f031650b70e6d5b2c1d9a69723e4909dd2c485132b087287c"
+  },
+  {
+   "path": "SKIN/Skin_048/assets/bg.png",
+   "size": 262,
+   "sha256": "3c3b3ca9da510a8cbccebbf70f087c7de2044567d81632805be18437ab6a0b37"
+  },
+  {
+   "path": "SKIN/Skin_048/theme_manifest.json",
+   "size": 1253,
+   "sha256": "2c1066eb3dc7c8a57fbd60a77fb2c381b1740214f5cef515d76a51779d536334"
+  },
+  {
+   "path": "SKIN/Skin_049/assets/bg.png",
+   "size": 260,
+   "sha256": "1eb85c6b01d4fc997ae7450ebdd9c3e76d14071c2dcb0f02aabef42300f0f5ec"
+  },
+  {
+   "path": "SKIN/Skin_049/theme_manifest.json",
+   "size": 1253,
+   "sha256": "53955ae31f6141c353a55d5fb2837ff103b024161c550c1002fb0c3c4ccd8dd8"
+  },
+  {
+   "path": "SKIN/Skin_050/assets/bg.png",
+   "size": 264,
+   "sha256": "89e8b4f7bd32a2d362c6efb17bfa56c533d558eccdea0480cbf21d0a4c95c3e5"
+  },
+  {
+   "path": "SKIN/Skin_050/theme_manifest.json",
+   "size": 1253,
+   "sha256": "77dcf6925a301703b0aea18a02e84a73f7c864fe5b640922083057d99865945b"
+  },
+  {
+   "path": "SKIN/Skin_051/assets/bg.png",
+   "size": 256,
+   "sha256": "5da11c6e49e4da62ae2c6f3bc87e8769727329a276416e8bcedd9410c94fbe89"
+  },
+  {
+   "path": "SKIN/Skin_051/theme_manifest.json",
+   "size": 1253,
+   "sha256": "e99231c295ef3f0f222a2b0203c7ce4a1c6f3a5c19a77dfc3926a0df34e2f72a"
+  },
+  {
+   "path": "SKIN/Skin_052/assets/bg.png",
+   "size": 258,
+   "sha256": "f0b059373caccd49539a5149dd0616da3ea023c3a3f3b16076c665636e950a64"
+  },
+  {
+   "path": "SKIN/Skin_052/theme_manifest.json",
+   "size": 1253,
+   "sha256": "ca5a25efa6ebb95bfc587578e9836a5e96df84786688e0a0404ff7dea26baad8"
+  },
+  {
+   "path": "SKIN/registry.json",
+   "size": 5747,
+   "sha256": "0cd1c24f3ea25ef2c8324e5e43781bff25504383e7fa0e761445da64debe29e6"
+  },
+  {
+   "path": "SOUNDBANK/policy.json",
+   "size": 490,
+   "sha256": "8498ffab165b029376eee35e37e8bb03c6e2a5aec31d3804a6d54ec4dcebb887"
+  },
+  {
+   "path": "Source/Engine/BoundedSpscQueue.h",
+   "size": 1409,
+   "sha256": "aadf03f22818462c5ddd749caedda5d6a62d79375ba099baeeb129325a2aa3e1"
+  },
+  {
+   "path": "Source/Engine/ChordEngine.cpp",
+   "size": 1169,
+   "sha256": "71477e720fb820f78a8c44b9885831e689af70db0a265523c5cbfba2adb27aee"
+  },
+  {
+   "path": "Source/Engine/ChordEngine.h",
+   "size": 631,
+   "sha256": "97e7feddd7dd96fd278de027b7607fd1caeac84d80ac1396aedeafa8747ca837"
+  },
+  {
+   "path": "Source/Engine/FxChain.cpp",
+   "size": 1706,
+   "sha256": "3696e095b32ba404ade4a77e9e10ed90fdcacf46dbf2f8dc0974f9ced080f54d"
+  },
+  {
+   "path": "Source/Engine/FxChain.h",
+   "size": 775,
+   "sha256": "303e8ba55e286b00d6585fd0c10ca5a7467d32dab641ea8f22c238ca7d146236"
+  },
+  {
+   "path": "Source/Engine/ImportPipeline.cpp",
+   "size": 1970,
+   "sha256": "03a7980c15afd8c351c94f95271b5c35b1aa2a25b4406db2dda5bac52fd03b98"
+  },
+  {
+   "path": "Source/Engine/ImportPipeline.h",
+   "size": 1097,
+   "sha256": "da30d2916cf59c13bfc8526197a3dc5f0c44d82649931ce187bb63218cb3de10"
+  },
+  {
+   "path": "Source/Engine/PageCache.cpp",
+   "size": 921,
+   "sha256": "dad643d7dd7068df57ba9d78f5bf4c1250c48e7baa2248cf0ee9b7062849411d"
+  },
+  {
+   "path": "Source/Engine/PageCache.h",
+   "size": 880,
+   "sha256": "80df1a11e20bd0eececb946cc6ef7df30320b70f1d993fcc8fd8ee15da804c7b"
+  },
+  {
+   "path": "Source/Engine/PatternScheduler.cpp",
+   "size": 1904,
+   "sha256": "a5b0683d6485d59fe1bdbaf35d3099c3324e99cf36119d0941a93388d33e831f"
+  },
+  {
+   "path": "Source/Engine/PatternScheduler.h",
+   "size": 1341,
+   "sha256": "d66f9b4daea5b889c200fdc2bfc23f579910b1ba2c3d178b5ad1b7303daee0ba"
+  },
+  {
+   "path": "Source/Engine/PresetRuntime.cpp",
+   "size": 578,
+   "sha256": "3af753f5639933cc044190d1355db053dbb8471a49c0ffd9ab111b405d7a4316"
+  },
+  {
+   "path": "Source/Engine/PresetRuntime.h",
+   "size": 957,
+   "sha256": "15208790064cc247d079d6892f7accca37b4f6a84b22b37e732e5810b5fda08a"
+  },
+  {
+   "path": "Source/Engine/SamplePool.cpp",
+   "size": 1649,
+   "sha256": "c5e14ca562a6f3279dad4340ce49d7404812bbec58ffcf78f710b49c93753c68"
+  },
+  {
+   "path": "Source/Engine/SamplePool.h",
+   "size": 1932,
+   "sha256": "21c9875e2351847b182e89866c8a9eeb95f70d95c0f8d8fd3ef9e2033827af8a"
+  },
+  {
+   "path": "Source/Engine/SampleStreamingService.cpp",
+   "size": 1305,
+   "sha256": "e4dcb5b9ce7f813763115f2f1a60790dd5a1fe6b8f93a4d1358053f2f5bd8e62"
+  },
+  {
+   "path": "Source/Engine/SampleStreamingService.h",
+   "size": 1233,
+   "sha256": "8fc728e2e49ac16ed2d7d12dc9ad4800f3b8ad505c3cfbb15bf5106645c97019"
+  },
+  {
+   "path": "Source/Engine/SamplerEngine.cpp",
+   "size": 2919,
+   "sha256": "f16e445bf5d1997eff58c00a3fb6650f820a5a56a06aa18c6f071e234f58ff54"
+  },
+  {
+   "path": "Source/Engine/SamplerEngine.h",
+   "size": 1397,
+   "sha256": "503c502d63ffc17ecef68c8526911b9acfafa4c290180c3ccdbf25d5798c9adf"
+  },
+  {
+   "path": "Source/Engine/SfzParser.cpp",
+   "size": 2558,
+   "sha256": "4752e6738c24a22ca82f13c8de3a3ec54945c91bf9f9d4f0a1b64e677ce83c7b"
+  },
+  {
+   "path": "Source/Engine/SfzParser.h",
+   "size": 633,
+   "sha256": "d5dde84fb6da09326fbce923cc7fe50f9031cd63879657fdf11d71f758b14393"
+  },
+  {
+   "path": "Source/Engine/WavIndex.cpp",
+   "size": 561,
+   "sha256": "32689372c8f78161d4e01977db36f0a881ecd606705a83d54ff064fe895173bf"
+  },
+  {
+   "path": "Source/Engine/WavIndex.h",
+   "size": 654,
+   "sha256": "24a6453bd199457569f366891d4b11f292f21729280f9ae6bdf99565f1179687"
+  },
+  {
+   "path": "Source/PluginEditor.cpp",
+   "size": 6082,
+   "sha256": "dd2043006e9468b49d334804b1ce232abe7036e104aa7ccdff2ca66784b91428"
+  },
+  {
+   "path": "Source/PluginEditor.h",
+   "size": 2049,
+   "sha256": "e8315203ac4dfa42f84df9a0cbfcff62b99de12cc6701151eae2c2ea860ef7cc"
+  },
+  {
+   "path": "Source/PluginProcessor.cpp",
+   "size": 5380,
+   "sha256": "efe70ae964878bdb886cb31f90de8a5941cecd6b697223165eccb9439e5e2946"
+  },
+  {
+   "path": "Source/PluginProcessor.h",
+   "size": 2090,
+   "sha256": "ba7922206b55db9c100aa02def86fdac33b503c8a7a65c4e7fec1ef4b91dde05"
+  },
+  {
+   "path": "Source/UI/AuxiliaryPanelLayout.cpp",
+   "size": 2326,
+   "sha256": "8b519dad10b83d269165020c24921420930b9c5dac552ab394c1dc12bd08673a"
+  },
+  {
+   "path": "Source/UI/AuxiliaryPanelLayout.h",
+   "size": 898,
+   "sha256": "5c4d09cf10d705e2fdf810ca9ac5068ce9cb0455133ae2a7389d54de13e98663"
+  },
+  {
+   "path": "Source/UI/MultiWindowWorkspace.cpp",
+   "size": 1285,
+   "sha256": "807b881bc59cc2754efbe0d30d97dda02de52291c0d9a346bccececc609fa70f"
+  },
+  {
+   "path": "Source/UI/MultiWindowWorkspace.h",
+   "size": 1102,
+   "sha256": "a8710f69f72cdcc6d52f9fe8713a71809d3031c0e75756efeea7bde605c88f11"
+  },
+  {
+   "path": "Source/UI/Panels.cpp",
+   "size": 129,
+   "sha256": "aa5d5e46da721d015c1c983a8aeee0d764e44673fb7a2dd12d0d05dba453ff2b"
+  },
+  {
+   "path": "Source/UI/Panels.h",
+   "size": 4685,
+   "sha256": "73053a67e4fad200fda097e4978f10471a459748a7ebc1d1880603660d135004"
+  },
+  {
+   "path": "Source/UI/ThemeManager.cpp",
+   "size": 2199,
+   "sha256": "3b1063d17f775f068d6057cfefeec3fe10c2cabcdd44f712c45e75a6d88fb003"
+  },
+  {
+   "path": "Source/UI/ThemeManager.h",
+   "size": 1519,
+   "sha256": "0b81194d479344d82f629631e0cf53d874071ec59603cc1bd1d982b6788a690b"
+  },
+  {
+   "path": "assets/apvts_registry.json",
+   "size": 457,
+   "sha256": "27fbabb8d9399774dd3149b72e002c8e72195261b6da6bbbac3852652daab0e0"
+  },
+  {
+   "path": "assets/sound_hunter/registry.json",
+   "size": 220,
+   "sha256": "8db3c1f6c7b7178e3547a6ea41f87e0eacca894929fa90d42d9fb81670e8287d"
+  },
+  {
+   "path": "docs/PPGU_GUITAR_SOUND_SOURCES_INDEX.md",
+   "size": 1396,
+   "sha256": "3e5239555ecafc6a40b253352f36f2d04414f3bf72867871935a15cbb8a30879"
+  },
+  {
+   "path": "licenses/NOTICES.txt",
+   "size": 253,
+   "sha256": "db8c5c01dcf80612f8e1ae29ee70bf078ddda091e7e58d7e2c2108c4c838428e"
+  },
+  {
+   "path": "presets/factory_bank_300.json",
+   "size": 182096,
+   "sha256": "a6420e02168d880af28a20f21adece7d6bdc773520bcd3e1293907e2a4b53e64"
+  },
+  {
+   "path": "presets/ppgu-preset-001.json",
+   "size": 590,
+   "sha256": "205a3c3a4a11dc5e741a3ff382cc4d6af10972f29e8907c9fc3325c79d15f0df"
+  },
+  {
+   "path": "presets/ppgu-preset-002.json",
+   "size": 591,
+   "sha256": "83cb877b5a6b2cd701d70fb8b7f8f571d3bedacb5f66bf3a2fb6fce579e8f32c"
+  },
+  {
+   "path": "tests/AuxiliaryPanelTests.cpp",
+   "size": 1293,
+   "sha256": "c4574e9efab3c414750fc96b149f0197dea5f703dde002529f3ceea2ffbb6e04"
+  },
+  {
+   "path": "tests/EngineContractTests.cpp",
+   "size": 2060,
+   "sha256": "01b2763ddfacc8e37e058dab4270d7c10eb57dc32607860dcbea7b16411f0fee"
+  },
+  {
+   "path": "tests/ThemeManagerTests.cpp",
+   "size": 929,
+   "sha256": "5fa7f6d327db108b668a5a731fdd62170eab72a87e636589ef900940bc10bdf8"
+  },
+  {
+   "path": "tools/TestSoundAssetRegistry.py",
+   "size": 3327,
+   "sha256": "805b7f20652101e725eec360d81baa197e739876f6755585704d60620f6a89d0"
+  },
+  {
+   "path": "tools/check_binary_data_links.py",
+   "size": 1882,
+   "sha256": "b514bf4b6c50df895c0be880861250e330174d2fadfb2f6b476698df9190fa76"
+  },
+  {
+   "path": "tools/validate_apvts_registry.py",
+   "size": 1315,
+   "sha256": "3b86d5b5f7dd32eb57362d4bd8dc5073077c94548bb456345157b94500dffd69"
+  },
+  {
+   "path": "tools/validate_guitar_sources_index.py",
+   "size": 700,
+   "sha256": "4ac7dfec9b6653d02ffcda46583a3de159359fa510e854232eff42949d4d2854"
+  },
+  {
+   "path": "tools/validate_preset_catalog.py",
+   "size": 1407,
+   "sha256": "eca273d81ad5b5857a5ab8ac5559687a37143758fb1aaf0a56427f2900588c5d"
+  },
+  {
+   "path": "tools/validate_skin_manifests.py",
+   "size": 3183,
+   "sha256": "724abfdc56abaedf8f51bdf37faa5895c698671d27fca0824960a7381f031973"
+  },
+  {
+   "path": "tools/validate_sound_asset_registry.py",
+   "size": 1812,
+   "sha256": "463923aa847212d984a776c9c02c37adc23471b0cf7da93528b88985e6bd21dd"
+  },
+  {
+   "path": "tools/validate_soundbank.py",
+   "size": 1390,
+   "sha256": "096b63edf9716921ab9b0e5fbbbf0c52e3fc4d17c3df9854dee4ab474a129831"
+  }
+ ]
+}
