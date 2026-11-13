@@ -1,0 +1,28 @@
+{
+  "id": "ppgu-preset-002",
+  "name": "Crunch 01",
+  "category": "Crunch",
+  "description": "Crunch factory voice 2",
+  "params": {
+    "ampGain": 1.99,
+    "eqLow": -9.1,
+    "eqMid": -4.0,
+    "eqHigh": 1.7,
+    "velocity": 1.13,
+    "dynamics": 1.0,
+    "swing": 0.0,
+    "humanize": 0.36,
+    "accent": 1.0,
+    "fxDistortion": false,
+    "fxChorus": false,
+    "fxDelay": false,
+    "fxReverb": false,
+    "fxCompressor": true,
+    "fxLimiter": false,
+    "fxCabSim": true,
+    "fxFlangerPower": false,
+    "playMode": "PATTERN",
+    "patternSpeed": 1.0,
+    "masterVolume": 0.8
+  }
+}
