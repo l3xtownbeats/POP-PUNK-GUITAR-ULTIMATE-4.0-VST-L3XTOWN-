@@ -1500,3 +1500,21 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **РЕЗУЛЬТАТ:** APPROVED WINDOW SIZE BOUNDS APPLIED IN SOURCE; visual resize, compile, CTest, pluginval, CI and FL Studio 20 acceptance pending.
 
 **Resume queue update:** T-F4 size bounds corrected; still verify component clipping/overlap at 1200×700, 1600×900 and 2400×1500, and implement/test the approved scale presets + persisted zoom. T-F5..T-F8 remain open.
+
+## 2026-11-13 — Stage 2 guitar import and library workbench requirement
+
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.  
+**Документ:** `docs/PPGU_GUITAR_IMPORT_AND_LIBRARY_WORKBENCH_STAGE2_RU.md`.  
+**Статус:** требование и техническая спецификация записаны; production implementation не заявляется.
+
+**ПРОВЕРКА:** повторно проверены `assets/sound_hunter/registry.json` (assets: []), `docs/BANK_LIBRARY_SYSTEM_RU.md`, Meta install instructions, current download center, sample registry validator/tests and current Meta download script. В репозитории ранее обнаружены четыре ZIP-архива, но их бинарное содержимое не было прочитано; WAV/SFZ в tree не обнаружены. Локальную папку AppData пользователя GitHub не видит.
+
+**АНАЛИЗ:** уже существуют Sampler-компоненты SamplePool, SampleMetadataIndex, SampleStreamingService, PageCacheSlots, StreamingVoiceReader, WavPageReader и SfzParser. Новая система должна расширять их, не создавать параллельный sampler. Текущий Meta installer делает backup/replace существующей папки и поэтому нарушает новое правило APPEND ONLY.
+
+**ИСПРАВЛЕНИЕ:** записана Stage 2 спецификация: импорт одиночных WAV, папок, ZIP и SFZ; предварительная инвентаризация; hash-based duplicate detection; collision handling; безопасная распаковка; распределение по папкам; Unsorted/Needs Mapping; редактор key/velocity/articulation/round-robin; preview; неразрушающая конвертация WAV PCM16/24/Float32 и FLAC; история, dry-run, отмена, staging и atomic publish.
+
+**ОБЯЗАТЕЛЬНЫЕ ОГРАНИЧЕНИЯ:** APPEND ONLY; существующие файлы не заменять, не перекачивать, не переименовывать и не удалять; оригиналы не изменять; производные форматы сохранять отдельно; disk I/O/decoding/conversion запрещены в processBlock.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** Stage 2 разбит на 2A inventory/import core, 2B classification/organization, 2C Mapping Editor/Preview, 2D Conversion Workbench, 2E verification. Подробные критерии приёмки добавлены в отдельный документ.
+
+**РЕЗУЛЬТАТ:** REQUIREMENT AND TECHNICAL SPECIFICATION COMMITTED. В этой документационной операции WAV не скачивались и не изменялись; импортёр, редактор и конвертер ещё не реализованы и не протестированы. Следующий production шаг — Stage 2A: аудит существующих Sampler API и реализация append-only inventory/import core.
