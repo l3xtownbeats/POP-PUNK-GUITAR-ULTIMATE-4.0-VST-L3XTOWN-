@@ -1794,3 +1794,24 @@ F. Только после этого считать документальны�
 - **Итог MELODY:** STREAMING SFZ/WAV SAMPLER / PITCH MAPPING / VELOCITY REGION SELECTION / RR / NOTE RELEASE / LOOP MODES / POLYPHONY SOURCE IMPLEMENTED; PALM-MUTE VELOCITY SWITCH / ARTICULATION DISPATCH / PITCH BEND / SUSTAIN / MOD-WHEEL / LEGATO-SLIDE-HAMMER-PULL / CROSSFADE MIXING / FACTORY SAMPLE PROFILE INTEGRATION NOT COMPLETE.
 - **Следующий отдел по пользовательскому порядку:** ADDITIONAL FUNCTIONS — аудит AutoChords, library import/preview/mapping, state persistence, panic, meters/performance, worker/multiprocessing, settings and auxiliary windows. После этого будет сводная ведомость всех отделов; только затем — согласованная последовательная реализация и финальная сборка.
 
+
+
+### Поэтапный аудит отделов — 5. ADDITIONAL FUNCTIONS (часть инфраструктуры есть; продуктовые функции неполные)
+- **Plugin state:** `getStateInformation/setStateInformation` сохраняют APVTS ValueTree и текущий SFZ file path; при восстановлении существующий SFZ загружается асинхронно, отсутствующий путь сохраняется для диагностики. Это DAW state recall, но не замена пользовательскому preset/bank file system. Абсолютный путь SFZ не обеспечивает переносимость между компьютерами.
+- **SFZ import:** Import Guitar panel открывает file chooser `*.sfz` и вызывает background loader; статус сообщает regions/WAV count или ошибку. В просмотренном UI нет drag-and-drop target, папочного/ZIP library import, waveform/sample audition, auto-mapping editor, library manifest manager или полноценного BANK import/export. Поэтому зона перетаскивания, о которой спрашивал пользователь, пока не реализована.
+- **AutoChords:** панель существует как setup UI и подключена к scaleRoot/scaleMode/patternSlot APVTS, но сама помечает себя `SETUP ONLY`; AutoChords button disabled, tooltip прямо сообщает, что MIDI-generation engine не реализован. Реальной генерации аккордов/preview/custom mode нет.
+- **Settings / workspace:** независимый multi-window workspace реализует open/close, move, resize, maximize/restore, tiling/viewport, theme propagation и настройку масштаба/расстояния панелей. Settings panel заявлен UI-only и меняет геометрию auxiliary panels/визуальные предпочтения, а не audio engine.
+- **Performance Display / CPU-RAM:** в текущем PluginEditor/Processor не найдено реального CPU/RAM meter или performance display; hard-coded показателей также не найдено. Не добавлять фиктивные проценты — измерители должны быть реальными либо скрыты до реализации.
+- **Worker / multiprocessing:** SFZ load использует отдельный asynchronous ThreadPool с одним worker; streaming services используют собственные фоновые worker threads и bounded page cache (лимит до 8 library roots). Это background I/O concurrency, но отдельного пользовательского multiprocessing control и parallel DSP/voice processing нет. `voices` 1–64 уже управляет sampler polyphony, это не multiprocessing.
+- **Panic:** All Notes Off / All Sound Off обрабатываются в sample-accurate MIDI path, очищают held notes/trigger/pending events и вызывают fade panic; новая hybrid trigger regression включена в прошедшие CTest 16/16.
+- **Дополнительные MIDI/perform controls:** AutoChords, pitch bend/mod-wheel/sustain, user library management и performance meters остаются незакрытыми (см. соответствующие аудиты PATTERN/MELODY).
+- **Итог ADDITIONAL FUNCTIONS:** APVTS+SFZ DAW state recall, asynchronous SFZ loading, bounded streaming workers, panic, auxiliary workspace/settings source implemented; AutoChords engine, DnD import, preview/mapping/library manager, CPU/RAM display, parallel DSP controls and user preset/bank workflows not complete.
+
+### Сводный результат полного поэтапного аудита (перед реализацией финального продукта)
+1. PRESETS — каталог 300 валиден; runtime apply частичный; user preset system и 300 playable presets не готовы.
+2. EFFECTS — основные DSP эффекты присутствуют; ряд APVTS/UI параметров не влияет на звук; reorder FX chain не подключён; sonic tests отсутствуют.
+3. PATTERN — trigger/scheduler/sample-accurate integration проверены; 13 базовых masks есть; секции песни и полноценная performance library отсутствуют.
+4. MELODY — streaming SFZ sampler и базовая polyphony есть; артикуляции, palm mute velocity switch, pitch bend/sustain/mod wheel и factory mapping не готовы.
+5. ADDITIONAL FUNCTIONS — state recall/import worker/workspace/panic частично готовы; AutoChords, DnD/preview/library manager, meters и parallel DSP отсутствуют.
+- **Порядок дальнейшей реализации:** закрывать найденные gaps последовательно в тех же пяти отделах, сохраняя существующие реализации и APVTS IDs. Сначала сделать полную матрицу зависимостей/acceptance tests, затем внедрять и проверять каждый отдел отдельными коммитами и exact-SHA CI. Финальную сборку/пакет объявлять только после закрытия всех блоков и отдельной host-проверки FL Studio 20 / Windows 10.
+
