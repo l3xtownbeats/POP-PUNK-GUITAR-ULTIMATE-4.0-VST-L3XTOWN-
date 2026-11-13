@@ -607,6 +607,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 if (message.isAllNotesOff() || message.isAllSoundOff())
                 {
                     for (auto& held : patternHeldNotes) held.fill(false);
+                    patternTriggerState.clear();
                     panicRequested.store(true, std::memory_order_release);
                     sampler.panic(fadeLength);
                     patternScheduler.clearPendingNoteOffs();
