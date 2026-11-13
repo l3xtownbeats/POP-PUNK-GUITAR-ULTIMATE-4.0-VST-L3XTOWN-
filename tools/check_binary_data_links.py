@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-fast JUCE BinaryData target/include/link/order contract check.
-
-Conflict check: JUCE 7.0.12 uses HEADER_NAME and NAMESPACE. Generated
-headers are included by their HEADER_NAME from the linked target's include
-directories; no target-name subdirectory is generated.
-"""
+"""Fail-fast JUCE BinaryData target/include/link/order contract check."""
 from pathlib import Path
 import re
 import sys
@@ -13,12 +8,15 @@ ROOT = Path(__file__).resolve().parents[1]
 CMAKE = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 ERRORS = []
 
+
 def fail(message):
     ERRORS.append(message)
+
 
 def block(pattern, text=CMAKE):
     match = re.search(pattern, text, re.DOTALL)
     return match.group(1) if match else None
+
 
 binary_blocks = list(re.finditer(
     r"juce_add_binary_data\s*\(\s*(\w+)(.*?)\)",
@@ -28,11 +26,11 @@ binary_targets = {}
 header_owners = {}
 for match in binary_blocks:
     target, body = match.group(1), match.group(2)
-    header = re.search(r'\bHEADER_NAME\s+"([^"]+)"', body)
+    header = re.search(r'\bHEADER_NAME\s+(?:"([^"]+)"|([A-Za-z0-9_.-]+))', body)
     if not header:
         fail(f"{target}: juce_add_binary_data must declare a unique HEADER_NAME")
         continue
-    name = header.group(1)
+    name = header.group(1) or header.group(2)
     if name in header_owners:
         fail(f"Generated header {name} is shared by {header_owners[name]} and {target}")
     header_owners[name] = target
@@ -40,20 +38,27 @@ for match in binary_blocks:
 
 if any(re.search(r"\bHEADER_NAMESPACE\b", match.group(2)) for match in binary_blocks):
     fail("JUCE 7.0.12 does not support HEADER_NAMESPACE; use NAMESPACE")
-if "PPGUTestData/BinaryData.h" in CMAKE:
-    fail("Invalid generated-header path: use <PPGUTestData.h>")
 
-# Every source that includes one of the generated headers must belong to a
-# CMake target which links the corresponding juce_add_binary_data target.
+# BinaryData input paths must exist in the checked-out source tree.
+for match in binary_blocks:
+    target, body = match.group(1), match.group(2)
+    sources = re.search(r"\bSOURCES\b(.*)", body, re.DOTALL)
+    if sources:
+        for token in re.findall(r"(?<![\w/])([A-Za-z0-9_./-]+\.[A-Za-z0-9]+)", sources.group(1)):
+            if not (ROOT / token).is_file():
+                fail(f"{target}: BinaryData source does not exist: {token}")
+
 source_targets = {}
 for match in re.finditer(r"target_sources\s*\(\s*(\w+)(.*?)\)", CMAKE, re.DOTALL):
     target, body = match.group(1), match.group(2)
     for token in re.findall(r"(?<![\w/])((?:Source|tests)/[A-Za-z0-9_./-]+\.(?:cpp|cc|cxx))", body):
-        source_targets.setdefault((ROOT / token).resolve(), set()).add(target)
+        source = (ROOT / token).resolve()
+        if not source.is_file():
+            fail(f"CMake source file does not exist: {token}")
+            continue
+        source_targets.setdefault(source, set()).add(target)
 
 for source, targets in source_targets.items():
-    if not source.is_file():
-        continue
     content = source.read_text(encoding="utf-8")
     for header, binary_target in ((name, target) for target, (name, _) in binary_targets.items()):
         if re.search(r'#\s*include\s*[<"]' + re.escape(header) + r'[>"]', content):
@@ -69,10 +74,8 @@ for source, targets in source_targets.items():
                 if declaration is None or target_decl is None or declaration > target_decl.start():
                     fail(f"{binary_target} must be declared before dependent target {target}")
 
-# Explicit production/test expectations prevent accidental removal of either
-# side of the regression while allowing additional binary-data targets.
 expected = {
-    "PPGUPresetData": ("PPGUData.h", "PopPunkGuitarUltimate", "Source/PluginEditor.cpp"),
+    "PPGUData": ("PPGUData.h", "PPGU", "Source/PluginEditor.cpp"),
     "PPGUTestData": ("PPGUTestData.h", "ppgu_processor_pattern_tests", "tests/ProcessorPatternIntegrationTests.cpp"),
 }
 for binary_target, (header, consumer, source_rel) in expected.items():

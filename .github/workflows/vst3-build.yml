@@ -23,6 +23,14 @@ jobs:
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
+
+      - name: Checkout JUCE 7.0.12
+        uses: actions/checkout@v4
+        with:
+          repository: juce-framework/JUCE
+          ref: 7.0.12
+          path: JUCE
+          persist-credentials: false
       - name: Install artwork generator dependency
         shell: pwsh
         run: python -m pip install --disable-pip-version-check pillow

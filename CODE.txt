@@ -524,3 +524,19 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Файлы:** все 171 файл дерева (вычистка разделителей/отступов), SKIN/Skin_001..052/assets/bg.png (перегенерированы реальные PNG), Resources/TestData/TestProbe.wav (реальный PCM WAV), Info.txt, CODE.txt, README.md.
 **Тесты:** 7 валидаторов G0-G6 — прогон на восстановленном дереве (результаты в Info.txt 6.9).
 **Статус:** IMPLEMENTED / VALIDATION PENDING.
+ 
+## 2026-11-13 — REV.17 build-pipeline source correction
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+**Причина:** CI run `43444865889`, job `131951568748`, остановился на BinaryData preflight. Лог подтвердил, что checker требовал quoted HEADER_NAME и несуществующий target `PPGUPresetData`, хотя CMake объявлял `PPGUData` и `PPGUTestData`.
+
+**Изменения исходников:**
+- `CMakeLists.txt`: приведён к фактическому дереву REV.17; BinaryData теперь использует существующие `FactoryCatalog.json`, `FactorySfz.sfz`, `tests/assets/ppgu_test_data.txt`; sampler собирается из `Source/Sampler`; plugin sources — из актуальных `Source/Plugin*` и `Source/UI`.
+- Добавлены CTest targets для реально существующих тестов Pattern Scheduler, Chord Transition, SFZ, SPSC queue, page cache, metadata index, sample pool, streaming, ThemeManager, auxiliary layout и Processor Pattern integration.
+- `tools/check_binary_data_links.py`: проверяет фактические имена PPGUData/PPGUTestData, unquoted/quoted HEADER_NAME, пути BinaryData и source files, include/link/declaration order.
+- `.github/workflows/vst3-build.yml`: добавлен отдельный checkout JUCE 7.0.12 в `JUCE/`, поскольку в REV.17 нет vendored JUCE directory или git submodule.
+
+**Отдельные блокеры:** root-level OverlayManager/SecureSkinImport tests не включены в CTest: в дереве отсутствуют соответствующие production headers/implementations. Они остаются UNIMPLEMENTED/UNVERIFIED и не объявляются пройденными.
+
+**Проверка до commit:** все literal CMake source/BinaryData paths сверены с recursive tree REV.17; отсутствующих путей не найдено. Это статическая проверка, не CMake configure/build.
+**Статус:** SOURCE PATCH COMMITTED; Windows configure/build, CTest, pluginval и package — PENDING exact-SHA CI.

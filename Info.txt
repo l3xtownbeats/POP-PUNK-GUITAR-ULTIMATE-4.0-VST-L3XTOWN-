@@ -1866,3 +1866,17 @@ Status: accepted product requirements; implementation status must be verified se
 
 **Status:** IMPLEMENTED (source + content) / VALIDATION PENDING (build, CI, host). BUILD VERIFIED не присвоено.
 **Следующий шаг:** push в GitHub -> GitHub Actions (build.yml): все гейты, MSVC Release build, CTest, pluginval strictness 5, COMPLETE ZIP artifact -> FL Studio 20 acceptance.
+
+## 11. REV.17 — исправление конфигурации Windows VST3 build pipeline (2026-11-13)
+
+CI run `43444865889` завершился на шаге BinaryData preflight. Лог ошибки: checker принимал только quoted `HEADER_NAME` и ожидал `PPGUPresetData` / `PopPunkGuitarUltimate`, тогда как фактическая конфигурация содержала `PPGUData` / `PPGU`. В том же CMake были ссылки на отсутствующие `Source/Engine`, `Resources/Embedded`, `Resources/TestData`, `Tests/` и устаревшие test targets.
+
+В REV.17 скорректированы:
+- CMake source graph под фактическую структуру `Source/Sampler`, `Source/Performance`, `Source/UI` и актуальные тесты в `tests/`;
+- BinaryData inputs на существующие factory catalog/SFZ и синтетическую test fixture;
+- BinaryData checker: фактические target names, optional quoting, проверка существования ресурсов и исходников, link/order contract;
+- Windows workflow: checkout JUCE 7.0.12 в `JUCE/` перед CMake configure.
+
+Не реализованные OverlayManager/SecureSkinImport production modules не маскируются пустыми targets и не считаются протестированными. Они остаются отдельными блокерами реализации.
+
+Статус: **SOURCE PATCH COMMITTED / EXACT-SHA CI PENDING**. Успешная конфигурация, компиляция VST3, CTest, pluginval strictness 5, package и FL Studio 20 acceptance пока не подтверждены.
