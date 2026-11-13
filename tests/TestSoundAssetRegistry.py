@@ -240,7 +240,7 @@ def run_tests() -> None:
 
         expect_pass(root, [], "empty registry approves no assets", "0 asset(s), 0 GREEN AUTO ADD eligible")
 
-    print("Sound asset registry CLI tests: 17/17 PASS")
+    print("Sound asset registry CLI tests: 18/18 PASS")
 
 
 if __name__ == "__main__":
