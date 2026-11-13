@@ -133,6 +133,13 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
 endif()
 
+# Approved C0-C1 PATTERN trigger map contract.
+if(BUILD_TESTING)
+    add_executable(ppgu_pattern_trigger_map_tests tests/PatternTriggerMapTests.cpp)
+    target_include_directories(ppgu_pattern_trigger_map_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_pattern_trigger_map_contract COMMAND ppgu_pattern_trigger_map_tests)
+endif()
+
 # Dependency-free SFZ parser regression tests.
 if(BUILD_TESTING)
     add_executable(ppgu_sfz_parser_tests
