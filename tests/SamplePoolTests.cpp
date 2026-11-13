@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <string>
 
 int main()
 {
@@ -534,6 +535,46 @@ int main()
     {
         std::cerr << "Sampler snapshot cap did not reject the next reload safely.\n";
         return 1;
+    }
+
+    // Eight distinct library roots are supported per SamplePool. A ninth root
+    // must be rejected without replacing the last successfully published map.
+    {
+        ppgu::sampler::SamplePool rootLimitPool;
+        for (int rootIndex = 0; rootIndex < 9; ++rootIndex)
+        {
+            const auto libraryPath = root / ("stream-root-" + std::to_string(rootIndex));
+            std::filesystem::create_directories(libraryPath);
+            const juce::File libraryDirectory(libraryPath.string());
+            const auto libraryWav = libraryDirectory.getChildFile("test.wav");
+            const auto librarySfz = libraryDirectory.getChildFile("test.sfz");
+
+            std::error_code copyError;
+            std::filesystem::copy_file(
+                wavFile.getFullPathName().toStdString(),
+                libraryWav.getFullPathName().toStdString(),
+                std::filesystem::copy_options::overwrite_existing,
+                copyError);
+            if (copyError || !librarySfz.replaceWithText("<region> sample=test.wav key=60\n"))
+            {
+                std::cerr << "Could not create distinct streaming-root fixture.\n";
+                return 1;
+            }
+
+            const auto rootLoad = rootLimitPool.loadSfz(librarySfz);
+            if (rootIndex < 8 && !rootLoad.success)
+            {
+                std::cerr << "Sampler rejected one of the first eight streaming roots.\n";
+                return 1;
+            }
+            if (rootIndex == 8
+                && (rootLoad.success || rootLoad.errors.empty()
+                    || rootLimitPool.findRegion(60, 100, 1) == nullptr))
+            {
+                std::cerr << "Sampler did not safely reject the ninth streaming root.\n";
+                return 1;
+            }
+        }
     }
 
     if (!engine.noteOn(60, 100, 2, 1) || !engine.noteOn(60, 110, 2, 2) || !engine.noteOn(60, 120, 2, 1))
