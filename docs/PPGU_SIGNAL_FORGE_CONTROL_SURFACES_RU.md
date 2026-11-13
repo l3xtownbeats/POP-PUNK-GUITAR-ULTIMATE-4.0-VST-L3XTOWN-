@@ -146,3 +146,11 @@ Preview cards, theme name/family/layout, search, family filters, favorites, sele
 | Skin Gallery | Registry, 21-token decoding/visual propagation foundation | Complete gallery/rescan/hot-swap acceptance |
 | Auto Discover / Curator / About | Reserved control IDs | Active scanner/curator/about workflow until runtime implementation |
 
+
+
+## 2026-11-13 — USER REQUEST: FULL WINDOWS VST3 REBUILD
+
+**Request:** пользователь потерял локальную сборку и запросил пересобрать весь проект.
+**Build source:** актуальная ветка `main`; source tree is unchanged by this documentation entry.
+**Required pipeline:** Windows 2022 x64 Release configure/build; full CTest; pluginval strictness 5; complete package with VST3, SOUNDBANK, PRESETS, Skins, Resources and Assets.
+**Acceptance boundary:** CI success does not prove FL Studio 20 host acceptance; that remains a separate manual check. Do not claim a downloadable artifact until the workflow completes and the artifact is confirmed.
