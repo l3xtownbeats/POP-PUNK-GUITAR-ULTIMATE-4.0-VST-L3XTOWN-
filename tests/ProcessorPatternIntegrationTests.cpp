@@ -242,6 +242,34 @@ int main()
                 result = 1;
             }
         }
+
+        // Panic events must also release the held C0-C1 command state.
+        // Otherwise the hybrid processor remains trapped in PATTERN routing
+        // and subsequent ordinary MIDI notes cannot return to MELODY.
+        if (result == 0)
+        {
+            juce::AudioBuffer<float> triggerAgainBlock(2, 13000);
+            juce::MidiBuffer triggerAgainMidi;
+            triggerAgainMidi.addEvent(juce::MidiMessage::noteOn(1, 12, static_cast<juce::uint8>(110)), 16);
+            addChordOn(triggerAgainMidi, 16, { 60, 64, 67 });
+            hybridProcessor.processBlock(triggerAgainBlock, triggerAgainMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
+            juce::AudioBuffer<float> panicResumeBlock(2, 2048);
+            juce::MidiBuffer panicResumeMidi;
+            panicResumeMidi.addEvent(juce::MidiMessage::allNotesOff(1), 16);
+            panicResumeMidi.addEvent(juce::MidiMessage::noteOn(1, 62, static_cast<juce::uint8>(105)), 32);
+            panicResumeMidi.addEvent(juce::MidiMessage::noteOff(1, 62), 1600);
+            hybridProcessor.processBlock(panicResumeBlock, panicResumeMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            const double panicResumeRms = rms(panicResumeBlock, 128, 1400);
+            if (!(panicResumeRms > 0.005))
+            {
+                std::cerr << "All Notes Off did not clear the held PATTERN trigger and restore MELODY; RMS="
+                          << panicResumeRms << "\\n";
+                result = 1;
+            }
+        }
     }
 
 
