@@ -2,7 +2,7 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 12 ноября 2026  
+Последнее обновление: 13 ноября 2026
 Ветка: `work/signal-forge-theme-tokens`  
 Последний commit перед текущей записью: `71c2d852c1dc1d138e903fb577533a17ca540002`
 
@@ -1651,3 +1651,16 @@ F. Только после этого считать документальны�
 **Проверка:** исходник теста записан в REV.17. Exact-SHA Windows build / CTest / pluginval ещё ожидают CI; до получения результата статус — SOURCE UPDATED / VALIDATION PENDING. FL Studio 20 host acceptance отдельно не подтверждён.
 
 **Следующий приоритет:** после exact-SHA CI результата закрыть или исправить найденные проблемы; затем добавить регрессионные проверки worker stop/drain и failure/recovery, прежде чем менять production lifetime/ownership.
+
+
+## Сессия 13.11.2026 — P0, шаги 1–2: CI compile failure PATTERN integration
+
+- Рабочая ветка: `work/ppgu-completion-integrated-2026-11-13`.
+- Проверен CI run `43387604082` (job `131759688974`) для source SHA `f20968e2892b6bc2bcbbb8bd3fcf415bdad7cfa4`.
+- Configure x64 Release — PASS. Предварительные проверки каталога пресетов, portable examples, APVTS registry/persistence, skin pack и BinaryData order — PASS.
+- Build VST3/test executables — FAILED; CTest, VST3 locate, pluginval strictness 5 и packaging были SKIPPED. Артефакт `POP-PUNK-GUITAR-SOURCE-REVIEW` (ID `14019411109`) является только source-review artifact, не готовым VST3.
+- Корневая причина по MSVC log: в `tests/ProcessorPatternIntegrationTests.cpp` блок Hybrid MELODY + PATTERN trigger acceptance находился до создания временной папки/SFZ fixture и до объявления `result`. Отсюда `result` и `sfz` undeclared (C2065), затем каскадные ошибки инициализации `hybridLoad`.
+- Исправление: блок перемещён после создания WAV/SFZ fixtures и инициализации `result`; тестовая логика не удалялась и не ослаблялась.
+- Fix commit: `8b164f67b4259031561f73e922e38c046d72aaf9`.
+- Статус исправления: IMPLEMENTED / UNVERIFIED. Ожидается новый Windows CI на fix SHA; до результата не считать compile fixed, CTest passed или VST3 packaged.
+- Следующий шаг по P0: проверить новый run для `8b164f67...`; если compile проходит — пройти полный CTest → VST3 locate → pluginval → package. Затем продолжить пункт 3 P0 по diff MELODY/PATTERN trigger и integration coverage.
