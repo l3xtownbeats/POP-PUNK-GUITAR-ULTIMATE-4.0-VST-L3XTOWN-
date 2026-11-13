@@ -1,198 +1,247 @@
 #!/usr/bin/env python3
-"""Unit tests for the REV 10.1 asset-level license/provenance policy gate."""
+"""CLI regression tests for the PPGU asset-level license/provenance policy gate."""
 from __future__ import annotations
 
+import copy
 import hashlib
+import json
+import subprocess
 import sys
 import tempfile
-import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "tools"))
-from validate_sound_asset_registry import validate_registry  # noqa: E402
+VALIDATOR = ROOT / "tools" / "validate_sound_asset_registry.py"
 
 
-class SoundAssetRegistryTests(unittest.TestCase):
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.root = Path(self.temp.name)
-        (self.root / "samples").mkdir()
-        (self.root / "licenses").mkdir()
-        (self.root / "samples" / "guitar.wav").write_bytes(b"test-audio-fixture")
-        (self.root / "licenses" / "CC0.txt").write_text("CC0 evidence fixture", encoding="utf-8")
-        digest = hashlib.sha256((self.root / "samples" / "guitar.wav").read_bytes()).hexdigest()
-        self.asset = {
-            "assetId": "asset-001",
-            "decision": "GREEN",
-            "source": {
-                "name": "Example source", "assetId": "source-item-001",
-                "pageUrl": "https://example.org/item/1",
-                "downloadUrl": "https://example.org/files/guitar.wav",
-                "retrievedAt": "2026-11-11"
-            },
-            "file": {"relativePath": "samples/guitar.wav", "sha256": digest, "directDownload": True},
-            "license": {
-                "spdxId": "CC0-1.0", "clearanceBasis": "CC0_PD_VERIFIED", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
-                "evidencePath": "licenses/CC0.txt", "verifiedAt": "2026-11-11",
-                "commercialUse": True, "redistribution": True, "modificationAllowed": True,
-                "attributionRequired": False, "shareAlike": False,
-                "additionalRestrictions": [], "legalReview": "APPROVED"
-            },
-            "screening": {
-                "status": "PASS", "snrDb": 45.0, "clipping": False,
-                "dcOffsetAbs": 0.00001, "integrity": "PASS"
-            },
-            "classification": {
-                "guitarStatus": "GUITAR_CONFIRMED", "profiles": ["PP-ROOT"],
-                "reviewRequired": False
-            },
-            "curator": {
-                "status": "UNREVIEWED", "copyrightSuspect": False,
-                "manualReviewRequired": False, "humanListeningApproved": False
-            }
-        }
+def CHECK(condition: bool, message: str) -> None:
+    """Fail immediately with a non-zero process exit; independent of Python assert."""
+    if not condition:
+        print(f"FAIL: {message}", file=sys.stderr)
+        sys.exit(1)
 
-    def tearDown(self):
-        self.temp.cleanup()
 
-    def registry(self, asset=None):
-        return {"schemaVersion": "1.0.0", "policy": "PPGU-REV-10.1",
-                "assets": [self.asset if asset is None else asset]}
+def make_base_asset(root: Path) -> dict:
+    (root / "samples").mkdir(exist_ok=True)
+    (root / "licenses").mkdir(exist_ok=True)
+    sample = root / "samples" / "guitar.wav"
+    sample.write_bytes(b"test-audio-fixture")
+    (root / "licenses" / "CC0.txt").write_text(
+        "CC0 evidence fixture", encoding="utf-8"
+    )
+    digest = hashlib.sha256(sample.read_bytes()).hexdigest()
+    return {
+        "assetId": "asset-001",
+        "decision": "GREEN",
+        "source": {
+            "name": "Example source",
+            "assetId": "source-item-001",
+            "pageUrl": "https://example.org/item/1",
+            "downloadUrl": "https://example.org/files/guitar.wav",
+            "retrievedAt": "2026-11-11",
+        },
+        "file": {
+            "relativePath": "samples/guitar.wav",
+            "sha256": digest,
+            "directDownload": True,
+        },
+        "license": {
+            "spdxId": "CC0-1.0",
+            "clearanceBasis": "CC0_PD_VERIFIED",
+            "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "evidencePath": "licenses/CC0.txt",
+            "verifiedAt": "2026-11-11",
+            "commercialUse": True,
+            "redistribution": True,
+            "modificationAllowed": True,
+            "attributionRequired": False,
+            "shareAlike": False,
+            "additionalRestrictions": [],
+            "legalReview": "APPROVED",
+        },
+        "screening": {
+            "status": "PASS",
+            "snrDb": 45.0,
+            "clipping": False,
+            "dcOffsetAbs": 0.00001,
+            "integrity": "PASS",
+        },
+        "classification": {
+            "guitarStatus": "GUITAR_CONFIRMED",
+            "profiles": ["PP-ROOT"],
+            "reviewRequired": False,
+        },
+        "curator": {
+            "status": "UNREVIEWED",
+            "copyrightSuspect": False,
+            "manualReviewRequired": False,
+            "humanListeningApproved": False,
+        },
+    }
 
-    def errors(self, asset=None):
-        return validate_registry(self.registry(asset), self.root)[0]
 
-    def test_green_with_complete_provenance_and_clearance_passes(self):
-        errors, count = validate_registry(self.registry(), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 1)
+def run_validator(root: Path, assets: list[dict]) -> subprocess.CompletedProcess[str]:
+    registry_path = root / "registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {"schemaVersion": "1.0.0", "policy": "PPGU-REV-10.1", "assets": assets},
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    return subprocess.run(
+        [
+            sys.executable,
+            str(VALIDATOR),
+            "--registry",
+            str(registry_path),
+            "--root",
+            str(root),
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
 
-    def test_yellow_never_enters_auto_add(self):
-        yellow = {**self.asset, "decision": "YELLOW"}
-        errors, count = validate_registry(self.registry(yellow), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 0)
 
-    def test_red_cannot_be_overridden_by_curator(self):
-        red = {**self.asset, "decision": "RED",
-               "curator": {**self.asset["curator"], "status": "GOLD", "humanListeningApproved": True}}
-        self.assertTrue(any("non-overridable" in e for e in self.errors(red)))
+def expect_pass(root: Path, assets: list[dict], label: str, output: str) -> None:
+    result = run_validator(root, assets)
+    CHECK(result.returncode == 0, f"{label}: expected CLI exit 0; stdout={result.stdout!r}; stderr={result.stderr!r}")
+    CHECK(output in result.stdout, f"{label}: expected output {output!r}; got {result.stdout!r}")
+    print(f"PASS: {label}")
 
-    def test_html_or_non_direct_download_blocks_green(self):
-        asset = {**self.asset, "file": {**self.asset["file"], "directDownload": False}}
-        self.assertTrue(any("direct file" in e for e in self.errors(asset)))
 
-    def test_hash_mismatch_blocks_green(self):
-        asset = {**self.asset, "file": {**self.asset["file"], "sha256": "0" * 64}}
-        self.assertTrue(any("does not match" in e for e in self.errors(asset)))
+def expect_fail(root: Path, assets: list[dict], label: str, diagnostic: str) -> None:
+    result = run_validator(root, assets)
+    combined = result.stdout + result.stderr
+    CHECK(result.returncode == 1, f"{label}: expected CLI exit 1; code={result.returncode}; output={combined!r}")
+    CHECK(diagnostic in combined, f"{label}: expected diagnostic {diagnostic!r}; got {combined!r}")
+    print(f"PASS: {label}")
 
-    def test_non_cc0_spdx_cannot_claim_cc0_clearance(self):
-        asset = {**self.asset, "license": {**self.asset["license"], "spdxId": "CC-BY-4.0"}}
-        self.assertTrue(any("CC0_PD_VERIFIED requires CC0/Public-Domain SPDX" in e
-                            for e in self.errors(asset)))
 
-    def test_unapproved_explicit_permission_blocks_green(self):
-        (self.root / "licenses" / "permission.txt").write_text(
-            "Permission evidence fixture", encoding="utf-8")
-        asset = {**self.asset, "license": {
-            **self.asset["license"],
-            "spdxId": "LicenseRef-Explicit-Permission",
-            "clearanceBasis": "EXPLICIT_PERMISSION",
-            "legalReview": "PENDING",
-            "permissionScope": ["commercial_use", "embedding", "redistribution",
-                                "sample_library_redistribution"],
-            "permissionEvidencePath": "licenses/permission.txt",
-            "attributionRequired": False
-        }}
-        self.assertTrue(any("explicit permission requires APPROVED evidence review" in e
-                            for e in self.errors(asset)))
+def run_tests() -> None:
+    with tempfile.TemporaryDirectory(prefix="ppgu-sound-registry-") as temp:
+        root = Path(temp)
+        base = make_base_asset(root)
 
-    def test_copyright_suspect_blocks_green(self):
-        asset = {**self.asset, "curator": {**self.asset["curator"], "copyrightSuspect": True}}
-        self.assertTrue(any("copyright-suspect" in e for e in self.errors(asset)))
+        expect_pass(root, [copy.deepcopy(base)], "complete GREEN provenance", "1 GREEN AUTO ADD eligible")
 
-    def test_guitar_review_and_failed_quality_block_green(self):
-        asset = {**self.asset,
-                 "classification": {**self.asset["classification"], "guitarStatus": "GUITAR_REVIEW"},
-                 "screening": {**self.asset["screening"], "snrDb": 32.0}}
-        errors = self.errors(asset)
-        self.assertTrue(any("guitar content is not confirmed" in e for e in errors))
-        self.assertTrue(any("below 40 dB" in e for e in errors))
+        yellow = copy.deepcopy(base)
+        yellow["decision"] = "YELLOW"
+        expect_pass(root, [yellow], "YELLOW never enters AUTO ADD", "0 GREEN AUTO ADD eligible")
 
-    def test_gold_requires_human_listening(self):
-        asset = {**self.asset,
-                 "curator": {**self.asset["curator"], "status": "GOLD", "humanListeningApproved": False}}
-        self.assertTrue(any("humanListeningApproved" in e for e in self.errors(asset)))
+        red_override = copy.deepcopy(base)
+        red_override["decision"] = "RED"
+        red_override["curator"].update(status="GOLD", humanListeningApproved=True)
+        expect_fail(root, [red_override], "RED cannot be overridden", "non-overridable")
 
-    def test_duplicate_asset_ids_are_rejected(self):
-        registry = self.registry()
-        registry["assets"].append({**self.asset, "decision": "YELLOW"})
-        errors, _ = validate_registry(registry, self.root)
-        self.assertTrue(any("duplicate assetId" in e for e in errors))
+        non_direct = copy.deepcopy(base)
+        non_direct["file"]["directDownload"] = False
+        expect_fail(root, [non_direct], "non-direct download blocks GREEN", "direct file")
 
-    def test_cc_by_with_exact_attribution_is_factory_green(self):
-        asset = {**self.asset, "license": {
-            **self.asset["license"], "spdxId": "CC-BY-4.0",
-            "clearanceBasis": "CC_BY_ATTRIBUTION",
-            "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-            "attributionRequired": True,
-            "attributionText": "Author — Guitar Sample, CC BY 4.0"
-        }}
-        errors, count = validate_registry(self.registry(asset), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 1)
+        bad_hash = copy.deepcopy(base)
+        bad_hash["file"]["sha256"] = "0" * 64
+        expect_fail(root, [bad_hash], "SHA-256 mismatch blocks GREEN", "does not match")
 
-    def test_looperman_explicit_permission_can_be_green(self):
-        (self.root / "licenses" / "permission.txt").write_text(
-            "Permission to embed and redistribute in commercial sample library.", encoding="utf-8")
-        asset = {**self.asset, "license": {
-            **self.asset["license"], "spdxId": "LicenseRef-Explicit-Permission",
-            "clearanceBasis": "EXPLICIT_PERMISSION", "legalReview": "APPROVED",
-            "permissionScope": ["commercial_use", "embedding", "redistribution",
-                                "sample_library_redistribution"],
-            "permissionEvidencePath": "licenses/permission.txt",
-            "attributionRequired": False
-        }}
-        errors, count = validate_registry(self.registry(asset), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 1)
+        false_cc0 = copy.deepcopy(base)
+        false_cc0["license"]["spdxId"] = "CC-BY-4.0"
+        expect_fail(root, [false_cc0], "CC-BY cannot claim CC0 clearance", "CC0_PD_VERIFIED requires CC0/Public-Domain SPDX")
 
-    def test_own_dsp_requires_generator_provenance(self):
-        asset = {**self.asset, "license": {
-            **self.asset["license"], "spdxId": "LicenseRef-PPGU-Own-DSP",
-            "clearanceBasis": "OWN_DSP", "ownershipConfirmed": True,
-            "generator": "PPGU IR Synth", "generatorVersion": "1.0",
-            "parameterSummary": "seed=42; room=small",
-            "permissionScope": ["commercial_use", "embedding", "redistribution",
-                                "sample_library_redistribution"],
-            "attributionRequired": False
-        }}
-        errors, count = validate_registry(self.registry(asset), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 1)
+        (root / "licenses" / "permission.txt").write_text(
+            "Permission evidence fixture", encoding="utf-8"
+        )
+        explicit_pending = copy.deepcopy(base)
+        explicit_pending["license"].update(
+            spdxId="LicenseRef-Explicit-Permission",
+            clearanceBasis="EXPLICIT_PERMISSION",
+            legalReview="PENDING",
+            permissionScope=["commercial_use", "embedding", "redistribution", "sample_library_redistribution"],
+            permissionEvidencePath="licenses/permission.txt",
+            attributionRequired=False,
+        )
+        expect_fail(root, [explicit_pending], "EXPLICIT_PERMISSION PENDING blocks GREEN", "explicit permission requires APPROVED evidence review")
 
-    def test_copyright_suspect_can_be_committed_as_red_candidate(self):
-        red = {**self.asset, "decision": "RED",
-               "curator": {**self.asset["curator"], "copyrightSuspect": True}}
-        errors, count = validate_registry(self.registry(red), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 0)
+        copyright_suspect = copy.deepcopy(base)
+        copyright_suspect["curator"]["copyrightSuspect"] = True
+        expect_fail(root, [copyright_suspect], "copyright-suspect asset blocks GREEN", "copyright-suspect")
 
-    def test_cc_by_sa_is_not_auto_add(self):
-        yellow = {**self.asset, "decision": "YELLOW",
-                  "license": {**self.asset["license"], "spdxId": "CC-BY-SA-4.0",
-                              "clearanceBasis": "CC_BY_SA_REVIEW"}}
-        errors, count = validate_registry(self.registry(yellow), self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 0)
+        weak_guitar = copy.deepcopy(base)
+        weak_guitar["classification"]["guitarStatus"] = "GUITAR_REVIEW"
+        weak_guitar["screening"]["snrDb"] = 32.0
+        weak_result = run_validator(root, [weak_guitar])
+        weak_output = weak_result.stdout + weak_result.stderr
+        CHECK(weak_result.returncode == 1, "unconfirmed guitar / weak SNR must fail CLI")
+        CHECK("guitar content is not confirmed" in weak_output, "guitar classification diagnostic missing")
+        CHECK("below 40 dB" in weak_output, "SNR diagnostic missing")
+        print("PASS: guitar classification and quality gates")
 
-    def test_empty_registry_is_valid_and_approves_nothing(self):
-        errors, count = validate_registry(
-            {"schemaVersion": "1.0.0", "policy": "PPGU-REV-10.1", "assets": []}, self.root)
-        self.assertEqual(errors, [])
-        self.assertEqual(count, 0)
+        unapproved_gold = copy.deepcopy(base)
+        unapproved_gold["curator"].update(status="GOLD", humanListeningApproved=False)
+        expect_fail(root, [unapproved_gold], "GOLD requires human listening approval", "humanListeningApproved")
+
+        duplicate = copy.deepcopy(base)
+        duplicate_yellow = copy.deepcopy(base)
+        duplicate_yellow["decision"] = "YELLOW"
+        expect_fail(root, [duplicate, duplicate_yellow], "duplicate asset IDs are rejected", "duplicate assetId")
+
+        cc_by = copy.deepcopy(base)
+        cc_by["license"].update(
+            spdxId="CC-BY-4.0",
+            clearanceBasis="CC_BY_ATTRIBUTION",
+            licenseUrl="https://creativecommons.org/licenses/by/4.0/",
+            attributionRequired=True,
+            attributionText="Author — Guitar Sample, CC BY 4.0",
+            legalReview="PENDING",
+        )
+        expect_pass(root, [cc_by], "CC-BY with exact asset-level attribution and PENDING review", "1 GREEN AUTO ADD eligible")
+
+        cc0_pending = copy.deepcopy(base)
+        cc0_pending["license"]["legalReview"] = "PENDING"
+        expect_pass(root, [cc0_pending], "CC0 PENDING does not require explicit-permission review", "1 GREEN AUTO ADD eligible")
+
+        explicit_approved = copy.deepcopy(base)
+        explicit_approved["license"].update(
+            spdxId="LicenseRef-Explicit-Permission",
+            clearanceBasis="EXPLICIT_PERMISSION",
+            legalReview="APPROVED",
+            permissionScope=["commercial_use", "embedding", "redistribution", "sample_library_redistribution"],
+            permissionEvidencePath="licenses/permission.txt",
+            attributionRequired=False,
+        )
+        expect_pass(root, [explicit_approved], "approved explicit permission", "1 GREEN AUTO ADD eligible")
+
+        own_dsp = copy.deepcopy(base)
+        own_dsp["license"].update(
+            spdxId="LicenseRef-PPGU-Own-DSP",
+            clearanceBasis="OWN_DSP",
+            ownershipConfirmed=True,
+            generator="PPGU IR Synth",
+            generatorVersion="1.0",
+            parameterSummary="seed=42; room=small",
+            permissionScope=["commercial_use", "embedding", "redistribution", "sample_library_redistribution"],
+            attributionRequired=False,
+        )
+        expect_pass(root, [own_dsp], "own DSP generator provenance", "1 GREEN AUTO ADD eligible")
+
+        red_candidate = copy.deepcopy(base)
+        red_candidate["decision"] = "RED"
+        red_candidate["curator"]["copyrightSuspect"] = True
+        expect_pass(root, [red_candidate], "RED candidate can be recorded without AUTO ADD", "0 GREEN AUTO ADD eligible")
+
+        cc_by_sa_yellow = copy.deepcopy(base)
+        cc_by_sa_yellow["decision"] = "YELLOW"
+        cc_by_sa_yellow["license"].update(
+            spdxId="CC-BY-SA-4.0",
+            clearanceBasis="CC_BY_SA_REVIEW",
+        )
+        expect_pass(root, [cc_by_sa_yellow], "CC-BY-SA remains manual review", "0 GREEN AUTO ADD eligible")
+
+        expect_pass(root, [], "empty registry approves no assets", "0 asset(s), 0 GREEN AUTO ADD eligible")
+
+    print("Sound asset registry CLI tests: 17/17 PASS")
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    run_tests()
