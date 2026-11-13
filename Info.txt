@@ -1929,3 +1929,5 @@ Source audit found a second double-escaped newline in the multichannel SFZ fixtu
 
 
 **11.6. Assertion hardening:** commit `26f29471af6fda09e31fa26f63e544de65b08ecd` changes the multichannel regression from a generic load-failure check to a required `mono/stereo only` warning match. This verifies the intended channel gate specifically and blocks false positives from unrelated SFZ/parser errors. Exact-SHA CI remains pending.
+
+Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct `<algorithm>` and `<string>` includes for the hardened test assertion. Exact-SHA CI pending.
