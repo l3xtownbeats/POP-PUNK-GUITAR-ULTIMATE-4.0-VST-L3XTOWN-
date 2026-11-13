@@ -1,0 +1,31 @@
+{
+  "version": 3,
+  "ids": [
+    "ampGain",
+    "eqLow",
+    "eqMid",
+    "eqHigh",
+    "velocity",
+    "dynamics",
+    "swing",
+    "humanize",
+    "accent",
+    "fxDistortion",
+    "fxChorus",
+    "fxDelay",
+    "fxReverb",
+    "fxCompressor",
+    "fxLimiter",
+    "fxCabSim",
+    "fxFlangerPower",
+    "playMode",
+    "patternSpeed",
+    "masterVolume"
+  ],
+  "playModes": [
+    "MELODY",
+    "PATTERN",
+    "PUNK GROUP"
+  ],
+  "skinControlParity": 28
+}

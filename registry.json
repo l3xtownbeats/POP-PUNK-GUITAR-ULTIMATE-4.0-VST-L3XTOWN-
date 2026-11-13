@@ -1,0 +1,5 @@
+{
+  "version": "REV-17.0",
+  "policy": "GREEN AUTO ADD only for confirmed CC0/PD with provenance+SHA-256+SNR>=40dB+guitar gate; YELLOW manual-only; RED never overridable; GOLD requires human listening",
+  "assets": []
+}

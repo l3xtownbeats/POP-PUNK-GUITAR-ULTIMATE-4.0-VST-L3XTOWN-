@@ -1,0 +1,7 @@
+{
+  "sampleSourcePolicy": "NATURAL_SAMPLES_ONLY",
+  "synthesizedSamplesAllowed": false,
+  "populationPath": "Import Guitar: single files or whole libraries (WAV/FLAC/OGG/AIFF/MP3); engine distributes into MELODY and PATTERN",
+  "engineBehaviour": "loads samples on demand one-by-one; preset switch unloads previous preset bank; no resident library accumulation",
+  "correction": "2026-11-13: synthesized Karplus-Strong factory bank removed per user requirement; only natural recordings."
+}

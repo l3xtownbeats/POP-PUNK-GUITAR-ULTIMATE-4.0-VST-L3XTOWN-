@@ -1,0 +1,28 @@
+{
+  "id": "ppgu-preset-001",
+  "name": "Clean 01",
+  "category": "Clean",
+  "description": "Clean factory voice 1",
+  "params": {
+    "ampGain": 5.88,
+    "eqLow": -3.7,
+    "eqMid": -12.0,
+    "eqHigh": -3.7,
+    "velocity": 1.32,
+    "dynamics": 1.0,
+    "swing": 0.15,
+    "humanize": 0.23,
+    "accent": 1.0,
+    "fxDistortion": false,
+    "fxChorus": true,
+    "fxDelay": false,
+    "fxReverb": false,
+    "fxCompressor": true,
+    "fxLimiter": false,
+    "fxCabSim": false,
+    "fxFlangerPower": false,
+    "playMode": "MELODY",
+    "patternSpeed": 1.0,
+    "masterVolume": 0.8
+  }
+}
