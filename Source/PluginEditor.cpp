@@ -602,6 +602,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
     const auto registry = registryFile.existsAsFile()
         ? juce::JSON::parse(registryFile.loadFileAsString()) : juce::var();
     const auto* entries = registry.getProperty("themes", juce::var()).getArray();
+    const int skinCount = getSkinCount();
     int validCount = 0;
 
     if (entries != nullptr)
@@ -609,7 +610,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
         for (const auto& entry : *entries)
         {
             const int index = static_cast<int>(entry.getProperty("index", 0));
-            if (index < 1 || index > getSkinCount())
+            if (index < 1 || index > skinCount)
                 continue;
 
             PPGUThemeManager candidate;
