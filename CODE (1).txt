@@ -1,0 +1,31 @@
+PPGU — CODE DEVELOPMENT JOURNAL
+================
+
+Append-only. Каждая запись: дата, ветка, SHA, файлы, символы, суть, тесты, статус.
+
+## 2026-11-13 — REV.17 финальная пересборка (полный пакет)
+
+**Тип:** production code + tests + tooling + content.
+**Ветка:** POP-PUNK-GUITAR-ULTIMATE-VST-REV-17.
+**Файлы:**
+- CMakeLists.txt — §16.1 BinaryData: PPGUData (PPGUData.h/BinaryData) и PPGUTestData (PPGUTestData.h/PPGUTestData) объявлены раньше зависимых; HEADER_NAMESPACE запрещён.
+- .github/workflows/build.yml — гейты G0–G6 -> configure -> build -> CTest -> VST3 locate -> pluginval strictness 5 -> packaging assertions (52 skins, 300 presets) -> ZIP artifact.
+- tools/check_binary_data_links.py — SCOPE CORRECTED: include ищется в Source/** и tests/** (устранён ложный FAIL класса run #839).
+- Source/Engine/* — SfzParser (clamps, seq/loop/transpose), PatternScheduler (MELODY/PATTERN/PUNK GROUP, factoryPunkPattern + factoryPunkGroupStabs), BoundedSpscQueue (overflow counter), PageCache (pin ownership), WavIndex (Hermite bounds), SamplePool (retireOld/quiescence, caps 128/8), SampleStreamingService (worker auto-recovery), SamplerEngine (64 slots, RR, no blocking), FxChain (8 FX + limiter + EQ), ChordEngine (Circle of Fifths), ImportPipeline (WAV/FLAC/OGG/AIFF/MP3, SHA-256, gates), PresetRuntime (load-on-demand, unload old bank).
+- Source/UI/* — ThemeManager (21 tokens, exact 28 controls, fallback skin-51), AuxiliaryPanelLayout (hardened: duplicates->invalidInput, int64, DPI, overflow), MultiWindowWorkspace (S2 shell), Panels (FxEdit/AutoChords wheel/Import/Curator/Settings/Performance read-only/About).
+- Source/PluginProcessor.* — 20 APVTS ids, MidiKeyboardState, MELODY/PATTERN/PUNK GROUP routing, FX apply, state save/load.
+- Source/PluginEditor.* — зоны A-H, SKIN + Ctrl+K (52 темы), browser, LOAD SFZ, клавиатура 36-84.
+- tests/* — 3 C++ контракта ( собственный CHECK, активны в Release ) + 12 политик Sound Hunter.
+- SKIN/registry.json + Skin_001..Skin_052 — 52 темы, PNG-ассеты, контраст >= 4.5:1.
+- presets/factory_bank_300.json — 300 definitions, 8 категорий.
+- SOUNDBANK/policy.json — NATURAL_SAMPLES_ONLY (correction 2026-11-13).
+
+**Совместимость / non-goals:** APVTS semantics не переименованы; DSP/сэмплер/MIDI routing без изменений против ревизии.
+
+**Тесты (факт):**
+- tools валидаторы: 8 PASS (см. Info.txt).
+- Python политики Sound Hunter: 12/12 PASS.
+- C++ контракты: SOURCE PRESENT, TESTED PENDING (нет компилятора в среде).
+
+**Статус:** IMPLEMENTED (source) / VALIDATION PENDING (build, CI, host).
+**Следующий шаг:** push в GitHub Actions -> run -> pluginval -> FL Studio 20 acceptance.
