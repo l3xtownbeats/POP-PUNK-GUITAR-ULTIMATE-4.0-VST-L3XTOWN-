@@ -1,5 +1,8 @@
 #include "SamplePool.h"
 
+#include <algorithm>
+#include <string>
+
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <cmath>
 #include <chrono>
