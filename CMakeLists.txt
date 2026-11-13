@@ -133,6 +133,20 @@ if(BUILD_TESTING)
     add_test(NAME ppgu_auxiliary_panel_layout_contract COMMAND ppgu_auxiliary_panel_layout_tests)
 endif()
 
+
+# Reserved low-register MIDI pattern-trigger layout contract.
+if(BUILD_TESTING)
+    add_executable(ppgu_pattern_trigger_map_tests
+        tests/PatternTriggerMapTests.cpp
+    )
+    target_include_directories(ppgu_pattern_trigger_map_tests PRIVATE Source/Performance)
+    target_link_libraries(ppgu_pattern_trigger_map_tests PRIVATE
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_pattern_trigger_map_contract COMMAND ppgu_pattern_trigger_map_tests)
+endif()
+
 # Dependency-free SFZ parser regression tests.
 if(BUILD_TESTING)
     add_executable(ppgu_sfz_parser_tests
