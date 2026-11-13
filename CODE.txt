@@ -516,3 +516,11 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **CI:** REV.17 skin workflow run `43198014508` SUCCESS. Windows VST3 workflow `43198145160` was IN_PROGRESS on source SHA `0dc6cde...`; final C++ build/CTest/pluginval/package pending.
 
 **Status:** artwork generator and skin CI source committed; exact-SHA Windows validation pending.
+
+## 2026-11-13 — Восстановление дерева из FULL WORK TEXT + финальная упаковка REV.17
+
+**Тип:** recovery + packaging. Production source не переписывался; вычищены артефакты текстового экспорта.
+**Ветка:** POP-PUNK-GUITAR-ULTIMATE-VST-REV-17.
+**Файлы:** все 171 файл дерева (вычистка разделителей/отступов), SKIN/Skin_001..052/assets/bg.png (перегенерированы реальные PNG), Resources/TestData/TestProbe.wav (реальный PCM WAV), Info.txt, CODE.txt, README.md.
+**Тесты:** 7 валидаторов G0-G6 — прогон на восстановленном дереве (результаты в Info.txt 6.9).
+**Статус:** IMPLEMENTED / VALIDATION PENDING.
