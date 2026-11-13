@@ -1697,3 +1697,14 @@ F. Только после этого считать документальны�
 - Предварительные gates этого run также прошли: 300-preset catalog validation, portable preset examples, APVTS registry/state persistence, skin pack validation, JUCE BinaryData order, restored sample library/license validation.
 - Статус P0: **Windows x64 Release build + CTest + VST3 locate + pluginval strictness 5 + package/upload подтверждены на SHA `e88127e...`**. Это не подтверждает звук/качество всех пресетов, runtime PATTERN end-to-end в DAW, CPU/RAM цели или FL Studio host acceptance.
 - Следующий шаг по очереди: начать следующий пункт P0 по MASTER PROMPT REV 17.1 — проверить точную реализацию и integration coverage связки MELODY/PATTERN (trigger acceptance, transport/section/rhythm handoff), не переходя к skin/UI до закрытия этого этапа.
+
+
+## Сессия 13.11.2026 — P0 PATTERN/MELODY: устранение сбоя нового интеграционного теста
+
+- Проверен Windows CI run `43393571517`, source SHA `b375aad6dd883a203b71822e6b3b13445f2c8e40`.
+- Configure x64 Release — PASS; Build VST3 and test executables — PASS.
+- CTest — 15/16 PASS; упал только `ppgu_processor_pattern_integration` с Windows exception code `0xc0000409`. Остальные 15 тестов, включая `ppgu_pattern_trigger_state_contract`, прошли.
+- Анализ исходника выявил ошибочную размерность нового тестового буфера: `AudioBuffer(1024, 1)` трактовался JUCE как 1024 канала × 1 sample, тогда как тесту требовалось 2 канала × 1024 samples. Это ошибка тестового harness, не доказательство дефекта audio engine.
+- Исправлено на `AudioBuffer(2, 1024)`; commit: `0d68c898775d8c3849de583ef215eda7eb73a89b`.
+- Исправление пока UNVERIFIED до повторного Windows CI. VST3 locate, pluginval и packaging в run `43393571517` были пропущены из-за CTest failure.
+- Следующий шаг: дождаться exact-SHA CI на `0d68c898...`, проверить полный лог CTest; не ослаблять интеграционную проверку MELODY resume.
