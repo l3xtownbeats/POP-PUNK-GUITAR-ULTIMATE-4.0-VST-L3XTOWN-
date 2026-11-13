@@ -583,3 +583,6 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Correction:** normalize double-escaped newline sequences in this test source to actual C++ newline escapes, including the fixture writer and diagnostic strings. The SFZ fixture now terminates its region line correctly, allowing the test to exercise the intended channel-count rejection path.
 **Validation:** source diff/readback inspected after commit. Windows Release build, CTest, pluginval and package have NOT yet been rerun on this SHA; no pass is claimed.
 **Status:** TEST FIX COMMITTED / EXACT-SHA CI PENDING.
+
+
+**Follow-up assertion hardening:** commit `26f29471af6fda09e31fa26f63e544de65b08ecd` strengthens the same regression test: it now requires the explicit `mono/stereo only` metadata warning, rather than accepting any generic SFZ/load error as proof of multichannel rejection. This prevents malformed fixtures or unrelated failures from passing the test. Exact-SHA CI remains pending.
