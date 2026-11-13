@@ -1538,3 +1538,36 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 
 **СТАТУС:** TEST SOURCE PRESENT / VALIDATION PENDING.  
 **СЛЕДУЮЩИЙ ШАГ:** дождаться exact-SHA Windows x64 Release, CTest, pluginval strictness 5 и package gates; при любом FAIL исправлять первопричину и повторять полный pipeline.
+
+
+## 2026-11-13 — REV.17 Stage 2A / IMPORT GUITAR audit checkpoint
+
+**Тип:** read-only source audit + журналирование; production code не изменялся.
+**Каноническая ветка:** `work/rev17-sampler-root-cap-regression`.
+**Проверенный HEAD:** `b8de553b3a61bad847a6e6b04f1d1c5169d1af21` (branch API readback).
+**INFO blob до записи:** `925b8bfb0773e54f1e92cb043ce9d4d9521e8196`.
+
+### ПРОВЕРКА
+- Повторно подтверждены branch и HEAD. Заголовок этого INFO-файла содержит устаревшую метаинформацию (`work/signal-forge-theme-tokens`, SHA `71c2d...`); это историческая запись, не текущая база. Для этой сессии источником истины являются branch API и HEAD выше.
+- Проверены `docs/PPGU_GUITAR_IMPORT_AND_LIBRARY_WORKBENCH_STAGE2_RU.md`, `docs/IMPORT_GUITAR_PANEL_INTEGRATION_REV17_RU.md`, `docs/BANK_LIBRARY_SYSTEM_RU.md`, дерево `Source/`, `Source/Sampler/*`, `Source/Performance/*`, `Source/UI/*`, `Source/PluginEditor.cpp`, тесты SamplePool/MetadataIndex, Meta installer и workflow.
+- Текущая архитектура Sampler содержит `SamplePool`, `SampleMetadataIndex`, `WavPageReader`, `SampleStreamingService`, `PageCacheSlots`, `StreamingVoiceReader`, `SfzParser`; отдельного Source Import/Library Workbench модуля в дереве HEAD не обнаружено.
+- `SampleMetadataIndex` рекурсивно индексирует WAV metadata (формат/длительность/каналы/размер); это не inventory/import registry и не SHA-256 dedup index.
+- `SfzParser` валидирует SFZ region/key/velocity/root/path constraints. `SamplePool` уже умеет публиковать region snapshots, velocity/key/channel selection и round-robin selection. Эти runtime механизмы нельзя считать пользовательским Mapping Editor.
+- `tests/SampleMetadataIndexTests.cpp` проверяет WAV scan/metadata/page-reader validation; `tests/SamplePoolTests.cpp` проверяет SFZ load/streaming/RR/velocity metadata и admission limit восьми roots. Stage 2A import/inventory/dedup/ZIP/atomic-publish тестов в текущем дереве не найдено.
+- `IMPORT GUITAR` уже существует как overlay panel в `Source/PluginEditor.cpp`: кнопка открывает workspace, действие `LOAD SFZ` вызывает существующий asynchronous SFZ loader, выводит фактический load status и защищает callback через SafePointer. Панель — реальная первая интеграция, но пока только SFZ load entry point.
+- `docs/IMPORT_GUITAR_PANEL_INTEGRATION_REV17_RU.md` прямо оставляет WAV import, preview/waveform, key/velocity editor, articulation/RR authoring, license review и SHA-256 verification в pending.
+- `tools/Download_Meta_CC0_Guitar_Libraries.ps1` проверяет upstream LICENSE/SHA256SUMS и хэши, но его install path всё ещё удаляет прежний `.backup` и перемещает существующий destination в backup перед заменой. Это нарушает новый APPEND ONLY контракт Stage 2 и создаёт риск потери пользовательской копии. Скрипт не запускался.
+- `docs/PPGU_GUITAR_IMPORT_AND_LIBRARY_WORKBENCH_STAGE2_RU.md` задаёт APPEND ONLY, staging/cancel, duplicate vs collision, безопасный ZIP/SFZ path handling и atomic publish; документ является спецификацией, не реализацией.
+- GitHub Actions: единственный доступный run для ветки — run `43411732636`, SUCCESS на SHA `66534d557167b34c79d5d5d270c6f50d6815f469`. Текущий HEAD на 4 коммита впереди; compare показывает только документы/журналы/manifest/package/download-файлы, без Source/ или tests/ изменений. Это не exact-HEAD validation. FL Studio 20 host acceptance для текущего HEAD не подтверждён.
+
+### АНАЛИЗ / GAP ANALYSIS
+1. **IMPLEMENTED (ограниченно):** существующий SFZ/WAV playback path; WAV metadata scan; SFZ parsing; region velocity/key/channel selection; RR runtime; async SFZ loading через Import Guitar panel.
+2. **NOT IMPLEMENTED / PENDING:** standalone WAV/folder/ZIP import workflow; library inventory/registry; SHA-256 content index and dedup; same-name/different-content collision resolver; ZIP traversal/size/symlink quarantine for import pipeline; staging + cancellation + atomic append-only publish; import history/report; user-facing mapping editor; preview/waveform UI; license review in import flow; automated Stage 2A acceptance tests.
+3. **POLICY DEFECT:** Meta installer replacement/backup cleanup conflicts with APPEND ONLY. Do not run it again against an existing user library until redesigned and reviewed.
+4. **SCOPE GUARD:** не создавать второй sampler/ingest pipeline. Stage 2A должен использовать существующие Sampler APIs, но хранить отдельный import inventory/registry слой вне processBlock. File I/O, hashing, archive extraction, metadata scan и preview — только background/worker context.
+5. Не установлено по одному только GitHub tree, что ZIP-архивы содержат лицензированные WAV; бинарное содержимое архивов не инспектировалось. Не делать утверждений о полном составе локальной пользовательской библиотеки.
+
+### РЕЗУЛЬТАТ
+**AUDIT CHECKPOINT COMPLETE / SOURCE UNCHANGED / STAGE 2A IMPLEMENTATION PENDING.**
+Следующий технический шаг: спроектировать минимальный Stage 2A inventory/import core contract поверх существующих SampleMetadataIndex и SamplePool без изменения playback/DSP; перед кодом определить registry schema, SHA-256 index, path/collision policy, ZIP safety limits, staging/publish transaction и тестовые fixtures. Затем отдельная реализация и regression tests — только в этой ветке и с append-only журналом.
+`CODE.txt` не изменялся: в этом checkpoint нет source-code изменения, которое требовало бы code-change index entry.
