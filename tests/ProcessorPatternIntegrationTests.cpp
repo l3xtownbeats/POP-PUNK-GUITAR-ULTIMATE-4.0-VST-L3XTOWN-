@@ -219,7 +219,7 @@ int main()
             // Releasing the final trigger must return the hybrid route to
             // ordinary MELODY playback. Warm note 62 before this assertion so
             // the result measures routing, not an asynchronous first-page miss.
-            juce::AudioBuffer<float> warmSecondChordBlock(1024, 1);
+            juce::AudioBuffer<float> warmSecondChordBlock(2, 1024);
             juce::MidiBuffer warmSecondChordMidi;
             warmSecondChordMidi.addEvent(juce::MidiMessage::noteOn(1, 62, static_cast<juce::uint8>(100)), 16);
             warmSecondChordMidi.addEvent(juce::MidiMessage::noteOff(1, 62), 800);
