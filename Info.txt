@@ -1440,3 +1440,263 @@ Status: accepted product requirements; implementation status must be verified se
 **Non-goals:** этим документным этапом не менялись C++/JUCE source, APVTS, DSP/audio callback, sampler, MIDI routing, presets, SoundBank, theme registry/assets, CMake или packaging. Ни одна панель не объявляется визуально завершённой только на основании спецификации.
 
 **Следующий этап:** по этому документу провести source-to-control audit и по одной панели устранять подтверждённые визуальные gaps, начиная с AutoChords layout; не дублировать уже существующие компоненты и attachments. После каждого source change — Windows Release, полный CTest, pluginval strictness 5, package на exact SHA и отдельно FL Studio 20 visual acceptance. CI PASS не переносится на новые SHA.
+
+
+# 2026-11-13 — ЕДИНЫЙ РЕЕСТР НЕЗАВЕРШЁННЫХ РАБОТ И ОБЯЗАТЕЛЬНОЙ ПРИЁМКИ
+
+**Назначение записи:** собрать в одном месте все оставшиеся функции, технические пробелы, визуальные задачи, проверки и релизные блокеры. Это append-only сводка к истории выше: она не отменяет ранее утверждённые требования, не заменяет MASTER_PRODUCT_SPEC и не объявляет описанные функции реализованными.
+
+**Единый журнал:** `Info.txt` остаётся единственным журналом разработки. Подробные спецификации и технические отчёты остаются в `docs/`; новые параллельные журналы BUILD/BUG/RELEASE/WORK не создавать.
+
+## A. Неизменяемые правила и согласованные решения
+
+1. Целевой продукт — VST3-инструмент POP PUNK GUITAR ULTIMATE для Windows 10 x64 / FL Studio 20. Не переключаться самовольно на VST2 или другой формат.
+2. Сохранять актуальный принятый master-пакет спецификаций проекта и все совместимые решения предыдущих ревизий. Приоритеты: безопасность → realtime-гарантии → звук → ресурсы → UX.
+3. Визуальный baseline — SIGNAL FORGE / NEON. Не возвращать старый дизайн, не упрощать и не менять утверждённую компоновку, материалы, палитру, изображения и стиль контролов без прямого согласования.
+4. Все дополнительные окна открываются поверх главного окна, не перестраивают его и не меняют звуковой движок. Все панели и контролы должны быть проверены по утверждённой карте управления.
+5. Не создавать второй sampler, второй звуковой движок, второй SoundBank pipeline или параллельную систему тем/пресетов, если задача может быть решена расширением существующей.
+6. Нельзя считать наличие класса, параметра, макета, документа или тестового исходника доказательством готовой функции. DONE только после source review + теста + результата CI/host acceptance, если применимо.
+7. Audio callback не выполняет файловый I/O, ожидание диска/worker, блокирующие mutex, heap allocation/deallocation, сканирование, хэширование или конвертацию.
+8. Все factory assets должны иметь проверенную лицензию именно на распространение/встраивание исходных аудиофайлов внутри VST3. Отсутствие запрета не является разрешением.
+9. Не удалять, не переписывать и не сокращать утверждённые функции ради ускорения разработки без согласования. Сначала сверять текущий код и журнал, чтобы не дублировать уже сделанное.
+
+## B. MELODY + PATTERN — основной незакрытый функциональный блок
+
+### B1. Утверждённое поведение
+- MELODY — полноценная обычная MIDI-игра: одна клавиша звучит как отдельная нота; несколько одновременно нажатых клавиш звучат как ноты/аккорд. Обычные MIDI-ноты не должны требовать наличия PATTERN.
+- PATTERN — дополнительный способ исполнения внутри MELODY, а не замена обычной игры и не арпеджиатор по умолчанию.
+- В Piano Roll основная нота/аккорд задаёт гармонию, а отдельное событие в дополнительной/третьей графе PATTERN служит управляющим триггером выбранного ритмического рисунка.
+- Триггер не должен звучать как гитарная нота и не должен трактоваться как ступень аккорда.
+- Если PATTERN-триггера нет, MELODY работает обычно. Если триггер есть, рисунок исполняется на текущей гармонии.
+- При смене аккорда активный рисунок подхватывает новую гармонию без сброса ритмической фазы.
+- Смена/отсутствие триггера не должна ломать MIDI note-on/off, полифонию, release, sustain и обычное исполнение.
+- Требуются чёткие правила trigger note-on/note-off, latch/hold, retrigger, переключения рисунка, остановки транспорта, seek/loop, panic, смены пресета и одновременных триггеров.
+
+### B2. Текущая рабочая ветка — не считать уже принятой в main
+- Ветка `work/ppgu-completion-integrated-2026-11-13` содержит отдельный `PatternTriggerMap`, контрактный тест и интеграцию триггеров C0–C1 (MIDI 12–24) в processor. В этом mapping 13 клавиш назначены на 13 слотов.
+- В просмотренном исходнике триггерные события исключаются из обычного Melody note playback; удерживаемые ноты отдельно используются как гармонический снимок для PATTERN; состояние триггера управляет выбором слота.
+- Это текущая реализационная схема ветки, а не окончательная приёмка поведения. Нужно подтвердить MIDI octave naming и удобство диапазона в FL Studio 20, проверить соответствие фактической раскладке Piano Roll и согласовать UX-индикацию.
+- Ветка содержит CI run `43387604082`, commit `f20968e2892b6bc2bcbbb8bd3fcf415bdad7cfa4`; на момент записи workflow был `in_progress`, выполнялся шаг Build VST3 and test executables. Успешная сборка, CTest, pluginval и package пока НЕ подтверждены.
+- Не объединять рабочую ветку в main до завершения CI, проверки diff и regression tests.
+
+### B3. Что ещё нужно реализовать/проверить
+- Проверить полноценный lifecycle триггера: одиночный trigger, удержание, release, повторный trigger, смена слота, несколько триггеров, chord-before-trigger, trigger-before-chord, chord change during playback.
+- Доказать, что PATTERN не перехватывает/не теряет обычные ноты выше trigger range, а C0–C1 не попадают в звук при активном или неактивном режиме.
+- Проверить каналы MIDI, velocity trigger, note overlap, polyphony, note-off ordering, panic и отсутствие зависших нот.
+- Проверить непрерывность PPQ/phase при смене аккорда, паттерна и loop/seek, а также sync с Host tempo/transport.
+- Добавить processor integration tests на реальные выходные аудиособытия/аудио, а не только на чистую таблицу соответствия MIDI-note → slot.
+- Сверить выбранный диапазон триггеров с пользовательской схемой «третьей графы» в Piano Roll. Если в DAW графа не является отдельным MIDI-каналом, документировать и проверить фактический способ записи/назначения нот.
+- Уточнить, что происходит при выборе Off, при отсутствии гармонии, при отпускании триггера и при переключении на обычный режим.
+
+## C. Секции песни и библиотека рисунков — обязательный workflow
+
+- Сначала выбирается музыкальная секция/фрагмент: Verse, Chorus, Bridge либо общий/нейтральный раздел.
+- После выбора секции пользователь открывает Pattern Browser и выбирает конкретный рисунок исполнения. Секция и рисунок — разные сущности и не должны сливаться в один selector.
+- Pattern Browser должен иметь категории, поиск, фильтры, избранное, описание/метаданные, длительность, размер, feel, артикуляции, tempo range и ясное назначение рисунка.
+- Нужны понятные варианты ритмики: downstroke, upstroke, alternate, palm-muted eighths/sixteenths, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio/picking и другие утверждённые стили — только когда соответствующая performance map реально поддерживает технику.
+- Verse/Chorus/Bridge должны поддерживать осмысленные переходы, например более приглушённый куплет → открытый припев, без искусственного изменения звука, которого нет в исходных performance assets.
+- Preview должен проигрывать реальный доступный рисунок/one-shot через существующий playback path. Не имитировать отсутствующие performance samples синтезированными MIDI-паттернами, если это противоречит утверждённой модели.
+- Проверить длительности, rests, accents, onset positions, note-off, loop boundaries, swing/humanize, timing offset, half/double time и смену гармонии.
+- Текущие восемь hard-coded rhythm masks не являются полноценной расширяемой библиотекой Pattern/Section и не закрывают этот блок.
+
+## D. Звуковой движок / Guitar performance
+
+- Проверить единый SamplerEngine для обычного MELODY и запланированных PATTERN/RHYTHM событий; не создавать отдельный sampler для паттернов.
+- Довести распределение нот/аккордов по струнам: string voicing, диапазоны, строй, капо, аппликатуры, Down/Up strokes, strum spread/timing и переходы.
+- Обеспечить корректное исполнение одиночных нот, аккордов, power chords, octave hooks, riffs, leads, arpeggios и доступных performance phrases.
+- Реализовать/проверить palm mute: отдельная артикуляция и утверждённое velocity-dependent поведение; низкая velocity должна вызывать palm mute согласно заданному threshold/curve, а не просто тихую открытую ноту.
+- Проверить open/muted/staccato/ghost notes, flageolet/harmonics, tremolo, slides, hammer-on/pull-off, legato, vibrato, pick/finger и fret/string noises — показывать только те, что реально поддержаны данными и движком.
+- Довести электрический и акустический варианты для всех поддерживаемых структур. Не показывать Acoustic/Hybrid для инструмента, у которого нет подходящих samples/capability metadata.
+- Проверить Voice limit/Voices control, voice stealing, release tails, mono/poly mode, sustain, pitch bend, mod wheel, tuning, pan и velocity response.
+- Проверить многопоточность как ограниченные фоновые операции; не распределять обработку одного audio callback по потокам ценой синхронизации/нестабильности.
+- Проверить общую динамику, gain staging, отсутствие clicks/pops/DC/clipping, корректный reset и хвосты эффектов.
+
+## E. Streaming Sample Engine / Page Cache
+
+Принято гибридное решение: bounded Streaming Sample Engine + Page Cache. Не заменять его загрузкой всех библиотек в RAM.
+
+- Prefetch небольших стартовых участков; остальное читать асинхронно worker-потоками.
+- Audio thread делает только неблокирующее чтение готовых страниц; cache miss не ждёт диск.
+- Кэш ограничен и имеет понятную eviction/pinning политику; параметры памяти настраиваются под доступную RAM без потери стабильности.
+- Проверить lifetime snapshots, page handles, readers, voices, bank reload/unload и destruction processor; исключить use-after-free, data race и stale pointer.
+- Проверить queue full/overflow, duplicate requests, worker stop/drain, worker exception/recovery, диск с задержками, отсутствующий/повреждённый файл, loop prefetch и underrun counters.
+- Проверить одновременно 64 voices под cache pressure и максимальное число streaming roots; зафиксировать peak RAM и поведение при лимите.
+- Проверить, что worker не перезапускается бесконечно и что failure state виден/восстанавливается контролируемо.
+- Добавить stress/soak tests, ThreadSanitizer/AddressSanitizer где возможно, повторную загрузку банков во время звучания и закрытие processor во время длительной загрузки.
+- Текущая базовая конфигурация из предыдущего аудита: 64 заранее выделенных voice slots; до 8 streaming roots; 256 cache slots/root; 4096 frames/page; ориентировочно до 8 MiB/page cache на root и до 64 MiB на восемь roots (не полный RAM footprint).
+- Эти числа — текущие ограничения, не доказательство корректной работы на всех конфигурациях. Не увеличивать без benchmark.
+
+## F. IMPORT GUITAR / SoundBank / SOUND FORGE
+
+### F1. IMPORT GUITAR UX и workflow
+- Ясная drag-and-drop зона с прямым текстом, куда перетаскивать WAV/SFZ; отдельная кнопка Browse/Choose Files. Пользователь не должен гадать, нужно ли нажимать кнопку или бросать файл.
+- Предпрослушивание до импорта, отмена, статус сканирования, ошибки/предупреждения и отображение результата.
+- Импорт добавляет звук в библиотеку PPGU, чтобы он был доступен и в MELODY, и в RHYTHM/PATTERN через один Guitar Instrument Package и один sampler/cache.
+- Отдельный явный toggle для конвертации WAV в библиотечный формат PPGU. Пользователь сам решает, включать ли конвертацию и сохранять ли оригинал; оригинал не перезаписывать.
+- Назначение root key/key range, velocity layers, RR, articulations, loops, gain/tune/pan, group/off_by и preview по клавишам.
+- Редактирование, адаптация, создание loop points, обработка и сохранение новой версии банка без разрушения оригинала.
+- Поддержать layering и разные структуры для Melody/Pattern; отображать только реально поддерживаемые возможности.
+- Все операции сканирования/хэширования/конвертации выполняются вне realtime.
+
+### F2. SOUND FORGE
+- Довести уже созданный offline CLI first slice: надёжный scan/manifest, проверки путей, метаданные, SHA-256, duplicate detection, staging, validate и atomic publish.
+- Следующий порядок: baseline profiling → scan+manifest → verify/hash/dedup → 2–3 безопасные offline operations с A/B → SFZ/build validation → atomic package → только потом тонкий GUI.
+- Сохранять originals immutable, версионировать derived files, поддерживать cancel/pause/resume, один worker по умолчанию, bounded RAM/temp storage и low-power mode.
+- Не вводить обязательный AI/GPU/daemon, не создавать отдельную БД или второй sampler pipeline. Denoise/source separation/auto-mastering не включать в первую версию без отдельного согласования и A/B-доказательств.
+- Измерять wall time, CPU, peak RAM, bytes read/written, threads и размер результата; не заявлять экономию ресурсов без измерений.
+
+## G. SOUND HUNTER / BankScanner / библиотеки
+
+- Проверить, что текущий S6/S6.5 intake pipeline действительно существует в production-коде и CMake; не считать registry policy validator полноценным discovery engine.
+- Реализовать/доделать DeepSearchWorker, source adapters, BankScanner, guitar-only gate, StyleClassifier, CuratorPanel и registry integration в существующем pipeline.
+- GREEN/YELLOW/RED определяется для каждого конкретного файла/asset, а не по названию сайта/банка. GREEN auto-add только при подтверждённой лицензии и provenance; YELLOW — ручной импорт/clearance; RED — исключить.
+- Для каждого файла сохранять источник, лицензию/evidence, attribution, коммерческое использование, право на изменение и redistribution/embedding, URL/дата получения, SHA-256, формат/метаданные, technical screening и duplicate status.
+- GOLD требует технической проверки и человеческого прослушивания; COPYRIGHT SUSPECT блокирует публикацию.
+- Расширять поиск на electric/acoustic/steel/nylon, DI, amp/cab/mic, clean/crunch/distorted, jazz/funk/blues/surf/indie/alternative/rock/punk/metal/ambient, one-shots, multisamples, chords, riffs, loops и performance phrases.
+- Продолжать искать и бесплатные CC0/PD/CC BY, и коммерческие/royalty-free варианты, но включать коммерческий банк только при явном праве встраивать/распространять исходные WAV внутри VST3.
+- Проверить Meta Open Sound Steel Guitar и Nylon Guitar, FreePats, Karoryfer и новые кандидаты архивно: license, mapping, sample count, velocity layers, checksums, качество и права на redistribution. Не считать кандидатов скачанными/интегрированными без архива и подтверждения.
+- Проверить cabinet IR intake отдельно: license, source hashes, audio format, duplicates, audition и фактическое подключение Cabinet IR DSP.
+
+## H. Presets / Factory Bank
+
+- Каталог 300 preset definitions существует, но 300 playable/валидных заводских пресетов не подтверждены автоматически.
+- Проверить каждый preset end-to-end: JSON/schema, уникальный ID, bank/sample references, parameter ranges, FX routing, articulation/capability compatibility, state restore и отсутствие missing assets.
+- Обеспечить быстрый Preset Browser: категории, теги, поиск, избранное, описание, preview где применимо, previous/next, пользовательские пресеты, сохранение/загрузка/удаление и безопасное восстановление состояния.
+- Проверить, что смена preset не оставляет зависших нот, не обрывает активные voices некорректно, не ломает streaming snapshots и не сбрасывает транспорт неожиданно.
+- Проверить обратную совместимость APVTS IDs и миграцию старых state/preset файлов.
+- Ориентиры поп-панк характера сохраняются: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest «Photographs» (2005), Angels & Airwaves, The All-American Rejects, MGK и поздний Avril Lavigne. Не копировать защищённые записи/семплы/пресеты.
+
+## I. FX / DSP / AMP & TONE
+
+- Проверить все утверждённые блоки: Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR, AMP & TONE, Master/output и согласованный FX routing.
+- Проверить реальный DSP путь каждого параметра и каждого bypass; не считать наличие APVTS parameter доказательством звуковой функции.
+- Сверить FX EDIT с утверждённой картой: восемь страниц параметров при семи утверждённых bypass switches; Flanger не получает восьмой switch.
+- Проверить перестановку FX slots, сохранение состояния, automation, wet/dry, stereo/mono, latency, tail, reset, bypass clicks, clipping, CPU и корректное взаимодействие с palm mute/акустикой.
+- Cabinet IR должен использовать реально проверенные IR assets и работающий convolution path; нельзя показывать активный IR, если он не загружен.
+
+## J. GUI / SIGNAL FORGE NEON / Skin Studio
+
+- Сохранить approved main SIGNAL FORGE / NEON как default и визуальную основу; не менять основной layout и не возвращаться к старому дизайну.
+- Проверить все панели и элементы по `docs/PPGU_SIGNAL_FORGE_CONTROL_SURFACES_RU.md`, control inventory, control schema и skin gap audit.
+- Все дополнительные окна открываются поверх главного окна, имеют независимое положение/размер и не ломают main editor или keyboard.
+- Довести каждую поверхность: Main Editor, FX EDIT, AUTOCHORDS, IMPORT GUITAR, AUTO DISCOVER/SOUND HUNTER, CURATOR, SETTINGS, PERFORMANCE, SKIN GALLERY, ABOUT и другие уже утверждённые окна.
+- Каждый control: точная подпись, диапазон/единицы, tooltip, текущее значение, keyboard/drag, double-click reset, automation/state restore, disabled/loading/error states и фактическое подключение к backend.
+- Performance остаётся read-only до подключения достоверных host transport/BPM/CPU/RAM data; не показывать фальшивые показатели.
+- Не активировать AutoChords selectors/preview, Auto Discover, Curator или About actions, если соответствующий backend ещё не реализован.
+- Import Guitar обязан визуально ясно показывать drop-zone и Browse.
+- Проверить DPI scaling, resize, min size, clipping, keyboard focus, accessibility, z-order, multi-window lifetime, reopen/close и отсутствие dangling callbacks.
+- Галерея тем: сохранить все утверждённые требования — карточки с визуальными превью, большая область Preview, поиск, фильтры, избранное, Apply и Back; Preview не меняет/не сохраняет активную тему.
+- 16 тем, ранее утверждённых пользователем как галерея, не потерять. В репозитории также есть более крупный набор theme manifests (50); нужно сверить соответствие и происхождение, не удалять темы и не путать число manifests с количеством визуально принятых тем.
+- Все темы используют общую систему интерфейса; меняются палитра/материалы/изображения/обработка контролов, но не функциональная компоновка. Canonical 21-token palette и утверждённый NEON language обязательны.
+- Skin runtime discovery/apply/preview/persistence/rollback должны быть протестированы; наличие artwork/manifest/validator не доказывает live theme switching.
+- Сверить все изображения и ресурсы: корректные размеры, PNG integrity, SVG safety, manifest, fallback и отсутствие broken assets.
+
+## K. AUTOCHORDS / HARMONY / CIRCLE OF FIFTHS / GENERATION MANAGER
+
+- Circle of Fifths: интерактивные 12 major keys + relative minor, clockwise fifths/counter-clockwise fourths, selection/highlighting и синхронизация с Harmony Manager.
+- Harmony Manager: major/natural minor, Roman numeral degrees, chord quality, progression builder, reorder, templates (включая pop-punk four-chord) и audition.
+- Generation Manager: генерация прогрессий, альтернативных voicings/variants, constraints, deterministic seed, preview и explicit commit; не перезаписывать материал пользователя.
+- Harmony, Playing Style/Articulation, Pattern, Playback Mode и Rhythm Mode — независимые selectors.
+- AutoChords layout: верхняя harmonic strip с реальными chord names/degrees; слева Playing Styles/Articulation; справа Playback Mode и Rhythm Mode; внизу на всю ширину Pattern Browser. Экранная MIDI-клавиатура не перекрывается.
+- Audition должен использовать существующий ANGELA/shared sampler/audio path; не создавать отдельный синтезатор/банк.
+- Всё работает по запросу пользователя, не переключает самовольно активный режим, preset или проект.
+- Добавить deterministic tests на circle relations, relative minor, diatonic chord qualities, progression constraints, seed repeatability, state isolation, preview/commit и MIDI routing.
+- Визуальный layout AutoChords уже получил отдельные UI изменения, но selector/preview backend и полная visual/host acceptance остаются отдельными задачами.
+
+## L. Skin Gallery / 16 approved skins и 50 manifests
+
+- Уточнить inventory: какие 16 визуальных тем были явно утверждены пользователем, какие дополнительные manifests входят в расширенный технический набор.
+- Для каждой утверждённой темы: полноценная визуальная карточка/превью, крупный preview, уникальный, но согласованный визуальный язык, одинаковые controls/layout, рабочие Apply/Back/Favorite/Search/Filter.
+- Preview обязан быть временным и не менять активную тему; Back восстанавливает прежнее состояние; Apply сохраняет выбранную тему.
+- Проверить тему при холодном старте, смене, закрытии/повторном открытии окна, перезагрузке проекта, неизвестном manifest и повреждённом artwork.
+- Не считать генератор 50 тем или наличие 50 manifests завершённой галереей без визуальной проверки каждого skin и runtime acceptance.
+
+## M. Settings / Performance / Preset / State / MIDI / Host
+
+- Settings: показывать шесть согласованных существующих APVTS controls; не добавлять декоративные/неподключённые настройки.
+- Performance: реальные read-only показатели только после подключения корректных источников данных; CPU/RAM/host BPM/position не выдумывать.
+- Проверить все APVTS parameters: уникальные IDs, диапазоны, smoothing, automation, serialization, restore и backward compatibility.
+- Проверить MIDI: channels 1–16, note-on/off, velocity, sustain, pitch bend, mod wheel, panic, overlapping notes, duplicate note-ons и note-off ordering.
+- Проверить host transport: tempo, PPQ, start/stop, loop, seek, tempo change и отсутствие drift.
+- Проверить FL Studio 20: scan, insert, reopen project, MIDI keyboard, Piano Roll, automation, preset save/load, plugin state, UI resize, windows and long playback. Пользователь ранее подтвердил, что VST3 запускается и MIDI keyboard звучит; это не заменяет полную приёмку новых изменений.
+- Проверить также clean install/uninstall и VST3 package layout.
+
+## N. Bass Edition / shared engine roadmap
+
+- Общий низкоуровневый PPGU Audio Engine для Guitar Edition и будущего Bass Edition остаётся архитектурным решением, а не готовым отдельным production target.
+- Bass Edition пока PLANNED. Не смешивать Guitar и Bass presets, SoundBanks, articulations, product identity и UI профили.
+- Общими могут быть streaming, WAV/SFZ reader, cache, queues, state/preset infrastructure, MIDI primitives и FX infrastructure.
+- Не начинать отдельный Bass product release, пока Guitar VST3 не прошёл полный quality gate и архитектура не выделена безопасно.
+
+## O. Тесты / сборка / упаковка / release gate
+
+Для каждого source change:
+1. Проверить diff и влияние на существующие функции.
+2. Собрать Windows x64 Release VST3 на закреплённом JUCE/toolchain.
+3. Собрать все test executables.
+4. Запустить полный CTest и сохранить полный лог/количество тестов.
+5. Запустить pluginval strictness 5 на собранном точном SHA.
+6. Проверить package layout: VST3 bundle, SOUNDBANK, PRESETS, SKINS, Resources, Assets, лицензии, source manifest, checksums.
+7. Проверить архив и ссылки/размеры файлов.
+8. Вручную проверить FL Studio 20 на соответствующем компьютере; CI не заменяет host test.
+9. Фиксировать commit SHA, run ID, job results, artifact ID и известные ограничения.
+10. Не переносить CI PASS с предыдущего SHA на новый.
+
+### Обязательные regression suites
+- PatternScheduler, trigger map и processor pattern integration.
+- Chord transition/phase continuity.
+- SamplePool, SampleMetadataIndex, PageCacheSlots, SampleStreamingService, StreamingVoiceReader, bounded SPSC queue.
+- Voice allocation/stealing, 64 voices, velocity/palm mute, articulations.
+- SFZ parser/mapping, loops, RR, channel/choke, missing/corrupt sample.
+- FX DSP and automation/state.
+- Preset bank 300 validation and actual playable load.
+- Skin registry/ThemeManager/runtime preview/apply/rollback.
+- AuxiliaryPanelLayout, DPI/resize/multi-window lifecycle.
+- Sound Asset Registry policy and Sound Forge package validation.
+- MIDI/host transport, state restore and FL Studio manual scenarios.
+
+## P. Порядок выполнения — не пропускать блоки
+
+**P0 — ближайший блокирующий проход**
+1. Дождаться завершения CI run `43387604082` на `f20968e2892b6bc2bcbbb8bd3fcf415bdad7cfa4`; зафиксировать build, CTest, pluginval и artifact по отдельности.
+2. Если CI fail — устранить первичную причину, повторить весь pipeline на новом SHA.
+3. Провести diff review текущей ветки MELODY/PATTERN trigger, добавить недостающие integration tests, проверить mapping и host Piano Roll.
+4. Только после этого рассматривать безопасное включение изменений в main; не делать blind merge divergent branches.
+
+**P1 — Pattern engine / music workflow**
+5. Реализовать разделение Song Section → Pattern Browser → selected performance map.
+6. Перевести временные hard-coded rhythm masks в расширяемый catalog/registry с метаданными и тестами.
+7. Довести chord change without phase reset, transport/loop/seek, humanize/swing/half/double time, accents/rests и preview.
+8. Реализовать реальные string voicings/down-up/palm mute/technique mappings на поддерживаемых assets.
+
+**P2 — sampler / sound library**
+9. Streaming lifetime/race/worker failure/queue overflow/8 roots/64 voices stress.
+10. Import Guitar full UX + transactional library import + optional conversion + edit/versioning.
+11. SOUND FORGE complete offline pipeline + benchmark.
+12. SOUND HUNTER integration + license/provenance + source acquisition and technical QA.
+13. Validate 300 presets end-to-end and expand quality factory content.
+14. Cabinet IR asset acquisition and DSP verification.
+
+**P3 — GUI / tools**
+15. Complete NEON control-surface source-to-control audit and runtime connections panel by panel.
+16. Complete Skin Gallery: reconcile 16 approved designs and 50 manifests, verify preview/apply/back/persistence.
+17. Complete AutoChords/Harmony/Circle of Fifths/Generation Manager and their tests.
+18. Complete auxiliary windows, Settings/Performance accuracy, DPI/resize/focus/lifecycle checks.
+
+**P4 — release quality**
+19. Full Windows Release + CTest + pluginval strictness 5 + package verification.
+20. FL Studio 20 host acceptance, long stress, CPU/RAM profiling and install/reopen regression.
+21. Только после всех gates помечать VST3 package как release-ready.
+
+## Q. Формат статуса для будущих записей
+
+Для каждого пункта использовать один из статусов:
+- **DONE / VERIFIED** — реализация, тесты и результат подтверждены на конкретном SHA.
+- **IMPLEMENTED / UNVERIFIED** — код есть, но сборка/тест/host acceptance ещё не пройдены.
+- **PARTIAL** — часть функции существует, перечислить точные пробелы.
+- **DESIGNED / APPROVED** — утверждена спецификация, кода может не быть.
+- **PLANNED** — в очереди, реализация не подтверждена.
+- **BLOCKED** — указан конкретный blocker.
+- **NOT ACQUIRED / NOT LICENSE-CLEARED** — аудиоматериал не включать в package.
+
+Не закрывать пункт по обещанию, макету, названию класса или успешному тесту другой подсистемы. В каждом новом отчёте указывать дату, branch, exact SHA, test/run ID, фактический результат и оставшиеся риски.
