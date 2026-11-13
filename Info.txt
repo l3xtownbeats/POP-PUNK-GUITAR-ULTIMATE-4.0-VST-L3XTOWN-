@@ -1921,3 +1921,8 @@ CI run `43444865889` завершился на шаге BinaryData preflight. Л
 2. `ppgu_theme_contracts`: тест искал `SKIN/` относительно build directory. Добавлен CTest `WORKING_DIRECTORY` на корень исходного репозитория. Проверено наличие registry и manifest-файлов в source tree.
 
 Статус: **WINDOWS RELEASE COMPILE PASS / CTEST RERUN PENDING**. Pluginval и packaging ещё не выполнялись на этом SHA.
+
+
+## 11.5. Multichannel WAV regression fixture correction (2026-11-13)
+
+Source audit found a second double-escaped newline in the multichannel SFZ fixture. This could make the test reject malformed SFZ text before exercising the intended unsupported-four-channel-WAV path. Commit `e68a63109a19d3b4bd3359c61b6da435ac6e4edd` corrects the fixture and its diagnostic newline escapes. Source readback inspected; exact-SHA Windows build, CTest, pluginval and package remain pending.
