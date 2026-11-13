@@ -2,9 +2,9 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 12 ноября 2026  
-Ветка: `work/signal-forge-theme-tokens`  
-Последний commit перед текущей записью: `71c2d852c1dc1d138e903fb577533a17ca540002`
+Последнее обновление: 13 ноября 2026
+Ветка: `work/ppgu-completion-integrated-2026-11-13`  
+Последний подтверждённый source commit перед записью CI: `e88127ec656b1da24fa5e5de30a29625d5c87a0a`
 
 ## 1. Назначение и продукт
 
@@ -1651,3 +1651,197 @@ F. Только после этого считать документальны�
 **Проверка:** исходник теста записан в REV.17. Exact-SHA Windows build / CTest / pluginval ещё ожидают CI; до получения результата статус — SOURCE UPDATED / VALIDATION PENDING. FL Studio 20 host acceptance отдельно не подтверждён.
 
 **Следующий приоритет:** после exact-SHA CI результата закрыть или исправить найденные проблемы; затем добавить регрессионные проверки worker stop/drain и failure/recovery, прежде чем менять production lifetime/ownership.
+
+
+## Сессия 13.11.2026 — P0, шаги 1–2: CI compile failure PATTERN integration
+
+- Рабочая ветка: `work/ppgu-completion-integrated-2026-11-13`.
+- Проверен CI run `43387604082` (job `131759688974`) для source SHA `f20968e2892b6bc2bcbbb8bd3fcf415bdad7cfa4`.
+- Configure x64 Release — PASS. Предварительные проверки каталога пресетов, portable examples, APVTS registry/persistence, skin pack и BinaryData order — PASS.
+- Build VST3/test executables — FAILED; CTest, VST3 locate, pluginval strictness 5 и packaging были SKIPPED. Артефакт `POP-PUNK-GUITAR-SOURCE-REVIEW` (ID `14019411109`) является только source-review artifact, не готовым VST3.
+- Корневая причина по MSVC log: в `tests/ProcessorPatternIntegrationTests.cpp` блок Hybrid MELODY + PATTERN trigger acceptance находился до создания временной папки/SFZ fixture и до объявления `result`. Отсюда `result` и `sfz` undeclared (C2065), затем каскадные ошибки инициализации `hybridLoad`.
+- Исправление: блок перемещён после создания WAV/SFZ fixtures и инициализации `result`; тестовая логика не удалялась и не ослаблялась.
+- Fix commit: `8b164f67b4259031561f73e922e38c046d72aaf9`.
+- Статус исправления: IMPLEMENTED / UNVERIFIED. Ожидается новый Windows CI на fix SHA; до результата не считать compile fixed, CTest passed или VST3 packaged.
+- Следующий шаг по P0: проверить новый run для `8b164f67...`; если compile проходит — пройти полный CTest → VST3 locate → pluginval → package. Затем продолжить пункт 3 P0 по diff MELODY/PATTERN trigger и integration coverage.
+
+
+## Сессия 13.11.2026 — P0, шаг 3: compile PASS, SamplePool CTest failure
+
+- Проверен Windows VST3 workflow run `43388822033` на fix SHA `8b164f67b4259031561f73e922e38c046d72aaf9`.
+- Configure x64 Release — PASS; Build VST3 and test executables — PASS. Ошибка C++ компиляции из предыдущего run устранена подтверждённым CI.
+- CTest: 15/16 PASS; единственный FAIL — `ppgu_sample_pool_tests`. PATTERN integration test — PASS.
+- Диагностика SamplePool: в новом тесте лимита 8 streaming roots три SFZ fixture-строки записывали буквальные символы `\\n` вместо перевода строки. Парсер получал значение `key=80\\n` и закономерно сообщал `Invalid value for key: 80`. Это дефект тестовых fixtures, не доказательство дефекта production SFZ parser.
+- Исправлены три окончания строк в `tests/SamplePoolTests.cpp`: восемь root fixtures, same-root bank и ninth-root fixture теперь используют настоящий LF escape. Логика лимита/переиспользования/отклонения не ослаблялась.
+- Fix commit: `e88127ec656b1da24fa5e5de30a29625d5c87a0a`.
+- Статус: предыдущая компиляция BUILD VERIFIED для SHA `8b164f...`; CTest NOT PASS из-за SFZ test fixture; исправление IMPLEMENTED, новый exact-SHA Windows CI ожидается. VST3 locate, pluginval и packaging для нового SHA ещё не подтверждены.
+- Следующий шаг: проверить CI run на `e88127e...`; при CTest PASS продолжить оставшиеся P0 release gates по порядку.
+
+
+## Сессия 13.11.2026 — P0, шаг 4: полный Windows Release pipeline PASS
+
+- Проверен exact-SHA GitHub Actions run `43392481655` (workflow run #1295), ветка `work/ppgu-completion-integrated-2026-11-13`, source SHA `e88127ec656b1da24fa5e5de30a29625d5c87a0a`.
+- Итог run: `completed / success`; job `build` — SUCCESS.
+- Configure x64 Release — PASS.
+- Build VST3 and test executables — PASS; VST3 bundle найден после сборки.
+- CTest regression suite — **16/16 PASS**, 0 failed; total test time 3.36 s.
+- pluginval v1.0.4 strictness level 5 — PASS; все этапы в логе завершены, процесс завершился с кодом 0 и workflow продолжил packaging.
+- Отдельный шаг фиксации host validation limitation — PASS. Это НЕ означает FL Studio 20 host acceptance: ручная проверка в FL Studio 20 / Windows 10 остаётся отдельным незакрытым gate.
+- Packaging полного Windows x64 комплекта — PASS; ZIP успешно загружен как artifact:
+  - Artifact: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`
+  - Artifact ID: `14022170712`
+  - Размер: `1,665,972,084` bytes
+  - SHA-256: `48fe18e760966e237c4d51dc226080044ede7ed2c86a444e427c41e6a45f5a65`
+  - Run: `https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43392481655`
+- Source-review artifact также опубликован отдельно: ID `14021546398`; он не является основным VST3 пакетом.
+- Предварительные gates этого run также прошли: 300-preset catalog validation, portable preset examples, APVTS registry/state persistence, skin pack validation, JUCE BinaryData order, restored sample library/license validation.
+- Статус P0: **Windows x64 Release build + CTest + VST3 locate + pluginval strictness 5 + package/upload подтверждены на SHA `e88127e...`**. Это не подтверждает звук/качество всех пресетов, runtime PATTERN end-to-end в DAW, CPU/RAM цели или FL Studio host acceptance.
+- Следующий шаг по очереди: начать следующий пункт P0 по MASTER PROMPT REV 17.1 — проверить точную реализацию и integration coverage связки MELODY/PATTERN (trigger acceptance, transport/section/rhythm handoff), не переходя к skin/UI до закрытия этого этапа.
+
+
+## Сессия 13.11.2026 — P0 PATTERN/MELODY: устранение сбоя нового интеграционного теста
+
+- Проверен Windows CI run `43393571517`, source SHA `b375aad6dd883a203b71822e6b3b13445f2c8e40`.
+- Configure x64 Release — PASS; Build VST3 and test executables — PASS.
+- CTest — 15/16 PASS; упал только `ppgu_processor_pattern_integration` с Windows exception code `0xc0000409`. Остальные 15 тестов, включая `ppgu_pattern_trigger_state_contract`, прошли.
+- Анализ исходника выявил ошибочную размерность нового тестового буфера: `AudioBuffer(1024, 1)` трактовался JUCE как 1024 канала × 1 sample, тогда как тесту требовалось 2 канала × 1024 samples. Это ошибка тестового harness, не доказательство дефекта audio engine.
+- Исправлено на `AudioBuffer(2, 1024)`; commit: `0d68c898775d8c3849de583ef215eda7eb73a89b`.
+- Исправление пока UNVERIFIED до повторного Windows CI. VST3 locate, pluginval и packaging в run `43393571517` были пропущены из-за CTest failure.
+- Следующий шаг: дождаться exact-SHA CI на `0d68c898...`, проверить полный лог CTest; не ослаблять интеграционную проверку MELODY resume.
+
+
+## 2026-11-13 — P0 MIDI panic must clear hybrid PATTERN trigger state
+
+**ПРОВЕРКА:** повторный аудит `processBlock` выявил конкретный дефект: при `patternPathActive` (в том числе гибридный MELODY + удерживаемый C0–C1) ветка `All Notes Off / All Sound Off` очищала chord snapshot и pending NoteOff, но не очищала `PatternTriggerState`. Это могло оставить гибридный маршрут в PATTERN после panic-команды, блокируя обычный MELODY playback до ручного отпускания/перезапуска trigger.
+
+**ИСПРАВЛЕНИЕ:** добавлен `patternTriggerState.clear()` в panic-ветку sample-accurate MIDI timeline. Production commit: `87ec06e3149b011900a275f709900f8d13335178`.
+
+**РЕГРЕССИОННЫЙ ТЕСТ:** расширен `ProcessorPatternIntegrationTests.cpp`: повторно удерживается C0, затем в следующем блоке приходит All Notes Off и новая обычная MIDI-нота; тест требует слышимый MELODY output. Test commit: `e3b080e7bcf82a9b4baa04a7ff2cdd8e03fd32`.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** кодовый путь и проверка добавлены; Windows build/CTest для этих двух новых commits ещё не получены. Это не объявляется PASS. Текущий предыдущий run `43394678567` относится к source SHA `0d68c898775d8c3849de583ef215eda7eb73a89b` и на момент аудита оставался IN_PROGRESS; он не покрывает panic fix. Следующий release gate — exact-SHA CI на обновлённом branch HEAD, затем продолжить проверку section/transport/rhythm handoff.
+
+
+## Сессия 13.11.2026 — Exact-SHA CI PASS и поэтапный аудит отделов (начат)
+
+### Windows VST3 release gate
+- Run: `43394937232`, workflow #1300, branch `work/ppgu-completion-integrated-2026-11-13`.
+- Source SHA: `e3b080e7bcf82a9b4baa04a7ff2cdd8e03fd32`.
+- Result: `completed / success`, job `build` — SUCCESS.
+- Catalog / preset examples / APVTS / skin pack / sample license / BinaryData preflight — PASS.
+- Configure x64 Release — PASS.
+- Build VST3 + test executables — PASS.
+- CTest: **16/16 PASS**, 0 failed; total 2.44 s. Включая `ppgu_pattern_trigger_state_contract` и `ppgu_processor_pattern_integration`.
+- VST3 bundle locate — PASS.
+- pluginval v1.0.4 strictness 5 — PASS; scan/open cold+warm/editor/audio processing/state/automation/VST3 validator/bus checks completed.
+- Package full Windows x64 — PASS; artifact uploaded:
+  - `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`
+  - Artifact ID `14022113457`
+  - Size `1,665,971,890` bytes
+  - SHA-256 `9c248c23e0de88ad8b90c4426d30d4881a8aa9d0f89cd7b9426211369a42e6d7`
+- Restored redistributable sample-library cache was used; fresh download step was SKIPPED. License validation step itself — PASS.
+- FL Studio 20 manual host acceptance remains a separate gate. CI/pluginval do not prove host playback or full musical behavior.
+- Этот PASS покрывает production panic-trigger reset и regression test для возврата MELODY после All Notes Off; более ранние cancelled runs не являются evidence, этот run — точная проверка test/source SHA.
+
+### Поэтапный аудит отделов — 1. PRESETS (исходники проверены, функциональная готовность НЕ подтверждена)
+- `presets/factory_bank_300.json`: ровно 150 MELODY + 150 PATTERN, 21 reference artist; все 300 записей имеют статусы ожидания sample/engine integration. Это подтверждает каталог/metadata, но не 300 полноценных звучащих пресетов.
+- `PluginEditor.cpp` действительно загружает JSON из JUCE BinaryData и наполняет browser; есть фильтр All/MELODY/PATTERN и текстовый поиск. Все элементы списка могут быть перечислены.
+- `applyFactoryPreset()` на текущем source SHA применяет только четыре значения: `distortionDrive`, `tone`, `reverbMix`, `output`, плюс переключает режим. Оно НЕ загружает `sampleProfile`, note mapping, velocity layers, round-robin, артикуляции, Pattern event/voicing/performance data и не подтверждает реальное звучание выбранной записи.
+- Browser присваивает всем preset category значение `Original`; импортированные referenceArtist/artist categories не становятся полноценной навигацией. В видимом коде этого участка не обнаружены wired Save/Save As/Rename/Delete/User bank/import-export/rescan/favorites flows.
+- `tools/validate_factory_bank.py` и `tools/validate_preset_files.py` проверяют структуру/metadata/examples, а не runtime load/playback каждого factory preset.
+- `docs/PRESET_FILE_SYSTEM.md` и `docs/PRESET_BANK_4_0_READINESS_RU.md` прямо обозначают file browser/loader и полную интеграцию как спецификацию/незакрытую работу.
+- **Итог PRESETS:** CATALOG VALIDATED; BASIC BROWSER ENUMERATION + PARTIAL PARAMETER APPLY SOURCE IMPLEMENTED; FULL PRESET RUNTIME / USER PRESET FILE SYSTEM / 300 PRESET PLAYABILITY NOT COMPLETE. Не ставить 300/300 playable.
+- **Следующий шаг аудита по пользовательскому порядку:** отдел EFFECTS — сверить каждый DSP path, APVTS mapping, параметры, bypass/state, realtime safety и regression coverage. До окончания аудита всех отделов не объявлять финальную сборку продукта.
+
+
+
+### Поэтапный аудит отделов — 2. EFFECTS (исходники проверены, функциональная готовность НЕ подтверждена)
+- APVTS содержит FX-параметры Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR и дополнительные Double Track / FX slot controls.
+- В `processBlock` реально присутствуют DSP-пути: amp gain + 3-band split EQ (фиксированные 250/2500 Hz), feed-forward compressor, flanger, cabinet FIR/convolution с фиксированным встроенным 64-tap original IR, soft-clip distortion, chorus, feedback delay и JUCE Schroeder reverb. Для основных DSP-циклов используются заранее выделенные buffers; код не показывает явных heap allocations/locks в этих циклах.
+- Реально считываются и влияют на DSP: compressorOn/Threshold/Ratio/Attack/Release; eqOn/Low/Mid/High; ampGain; distortionOn/Drive/Mix; chorusOn/Rate/Depth/Mix; flangerOn/Rate/Depth/Feedback/Mix; delayOn/Time/Feedback/Mix; reverbOn/Room/Damping/Mix; cabinetOn/Mix.
+- Обнаружены объявленные APVTS/UI controls, которые в текущем `processBlock` не подключены к DSP: `tone`, `compressorAmount`, `distortionTone`, `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`, `cabinetLowCut`, `cabinetHighCut`, `doubleTrackOn`, `doubleTrackMix`. Их присутствие в FX EDIT не является доказательством влияния на звук.
+- `fxSlot1..7` объявлены для перестановки семи эффектов, но порядок DSP в `processBlock` фиксирован и чтения этих slot parameters в processor не найдено. Значит drag/reorder FX chain пока не интегрирован в audio routing.
+- FX EDIT показывает восемь групп (включая Flanger) и APVTS attachments; часть ручек подключена к параметрам, которые пока не влияют на DSP. Caption graph явно обозначен как `VISUAL GUIDE`, а не измеренный анализатор. FX unit/regression tests в текущем списке CTest отсутствуют; pluginval проверяет корректность плагина, но не sonic behavior каждого эффекта.
+- **Итог EFFECTS:** CORE DSP PATHS SOURCE IMPLEMENTED; APVTS CONTROL COVERAGE PARTIAL; FX ORDERING / UNUSED CONTROLS / SONIC REGRESSION COVERAGE NOT COMPLETE. Не объявлять весь FX rack полностью реализованным.
+- **Следующий отдел по пользовательскому порядку:** PATTERN — аудит trigger map, scheduler, section/rhythm handoff, host transport, chord changes, articulation/performance assets и тестов.
+
+
+
+### Поэтапный аудит отделов — 3. PATTERN (scheduler/trigger integration есть; музыкальная система не завершена)
+- `PatternTriggerMap` резервирует C0–C1 (MIDI 12–24) под 13 trigger slots; `PatternTriggerState` поддерживает каналы, одновременные удержания, last-pressed-wins и возврат к предыдущему удерживаемому trigger. C0–C1 исключены из chord/sample note routing.
+- `PatternScheduler` использует host BPM/PPQ, sample-rate/block-size mapping, внутренние часы, stop/discontinuity handling, bounded fixed storage, pending NoteOff и sample-accurate event offsets. Host stop/seek очищает ожидающие события; процессор обрабатывает MIDI sample-accurate и chord transitions.
+- Processor integration покрывает реальный путь MIDI → chord snapshot → scheduler → sampler → WAV, C0 trigger silence, hybrid MELODY+PATTERN, смену аккорда, возврат к MELODY и All Notes Off reset. Exact-SHA run `43394937232` подтвердил все 16/16 CTest PASS.
+- Текущее музыкальное наполнение — 13 фиксированных 16-step `rhythmMasks` (13-й slot — простая ното-последовательная arpeggio ветка). На каждом активном шаге processor формирует события из удерживаемых MIDI chord notes; используется down/up-like порядок перебора нот, небольшой strum offset, фиксированный gate и velocity accent. Это алгоритмическая генерация, не полноценные записанные guitar strum/chord performance samples.
+- В обычном PATTERN parameter `patternSlot` доступны только 8 значений, тогда как C0–C1 trigger lane и rhythmMasks имеют 13 слотов. Это несогласованность интерфейсного выбора и trigger mapping, требующая решения в рамках PATTERN этапа.
+- Нет реализованной музыкальной секционной модели Verse / Chorus / Bridge / Pre-Chorus / Intro / Outro, переходов между секциями и выбора фрагмента песни перед выбором ритмического рисунка. Это подтверждается ограничениями в `docs/PPGU_PATTERN_TRIGGER_LANE_C0_C1_RU.md`.
+- Из Pattern/Style DNA APVTS в processor не считываются: `humanize`, `swingBase`, `globalPpqOffset`, `chordSlashBass`, `singleMidiNoteAsChordRoot`, `preserveHumanTiming`, `dnaChugDensity`, `dnaHammerPullProbability`, `dnaStringSpread`, `dnaBeatAccent`, `dnaFxTaste`, `fretNoiseOnChordChange`, `palmHitOnEnding`, `stringSlapOnEnding`. Сейчас реально используются BPM, swing, accent, startOnFirstChord, patternLength, syncMode, patternQuantize и slot. Host и Host Start выбирают один и тот же host-transport путь; отдельное поведение двух режимов не прослеживается.
+- `patternQuantize` участвует в выборе точки перезапуска цикла; scheduler-вызов в текущем pattern interval передаёт quantize argument 0.0, поэтому отдельное квантование каждого события не подтверждено.
+- Pattern preset definitions содержат groove/playingStyle metadata, но текущий runtime не выбирает индивидуальный event sequence из каждой записи каталога. Acoustic/electric recorded performance profile mapping также не реализован.
+- **Итог PATTERN:** TRIGGER ROUTING + HOST/INTERNAL SCHEDULER + SAMPLE-ACCURATE CHORD/HYBRID INTEGRATION SOURCE IMPLEMENTED AND CTEST VERIFIED; 13 BASIC RHYTHM MASKS IMPLEMENTED; FULL SONG SECTION WORKFLOW / UNIQUE MUSICAL PATTERN LIBRARY / RECORDED STRUM ASSETS / ALL DNA CONTROLS / DAW ACCEPTANCE NOT COMPLETE.
+- **Следующий отдел по пользовательскому порядку:** MELODY — аудит SFZ/WAV mapping, pitch/range, velocity layers, round robin, articulations, note-off/release, pitch bend/mod wheel, polyphony/voice stealing, acoustic/electric profiles и sample license/playback coverage.
+
+
+
+### Поэтапный аудит отделов — 4. MELODY (sample engine основа реализована; музыкальные артикуляции и MIDI-expression не завершены)
+- `SfzParser` разбирает key/root/velocity/channel ranges, tune, gain, pan, sample offsets/end, loop modes, release, groups/off_by, seq_length/seq_position и velocity crossfade opcodes; валидирует SFZ/sample paths.
+- `SamplePool` публикует immutable region snapshots; production SFZ loads используют background streaming service, page cache и per-voice readers. Audio callback не выполняет disk I/O/wait/lock для sample reads; cache miss даёт временную тишину без продвижения sample cursor. Library roots/cache/snapshots ограничены.
+- Pitch tracking через rootKey + sample rate conversion + tune cents + global tuning реализован; velocity выбирает region по low/high velocity и влияет на gain; round-robin sequence selection ведётся отдельно по set/channel/note.
+- Реализованы note-on/off, SFZ release envelope, continuous/sustain/ping-pong/one-shot loops, off_by choking, mono/stereo playback, hermite interpolation, configurable 1–64 voices и oldest-voice stealing. SamplePool tests содержат RR, velocity-region, loop, voice-limit, streaming-page и off_by coverage.
+- **Не подключено к playback:** `palmMuteThreshold` (в processor только объявлен, usage в audio path отсутствует); APVTS `articulation`, `pickStyle`, `vibrato`, `slideTime`, `legato`, `hammerPull`, `monoMode`, `fretNoiseOnChordChange`, `slideModifier`, `slideVelocitySensitivity`, `modWheelVibrato` и ending controls в processor не считываются. Следовательно, выбор Palm Mute/Flageolet/Tremolo в параметре пока не переключает реальные SFZ articulations.
+- В processBlock не обнаружена обработка pitch-wheel, CC64 sustain или mod-wheel MIDI messages; `pitchBendTarget` есть как APVTS choice, но не реализует выбор голосов для pitch bend. Требования pitch bend/modulation/sustain не закрыты.
+- SFZ velocity crossfade opcodes сохраняются в RegionView и тестируются как metadata, но текущий `findRegion()` выбирает один подходящий region; crossfade blending в sampler render не реализован/не подтверждён.
+- Round-robin реализован на уровне выбора SFZ region, но это не доказывает, что factory Melody profiles имеют реальные multi-velocity/multi-RR takes. Каталог factory presets пока не привязан к индивидуальным sample maps. Acoustic/electric profile selection не переключает отдельные sample banks из preset loader.
+- Melody processor integration test подтверждает обычную note playback и возврат к MELODY после PATTERN/panic на синтетических WAV fixtures. Это функциональная regression-проверка маршрута, не прослушивание музыкального качества реальной гитары.
+- **Итог MELODY:** STREAMING SFZ/WAV SAMPLER / PITCH MAPPING / VELOCITY REGION SELECTION / RR / NOTE RELEASE / LOOP MODES / POLYPHONY SOURCE IMPLEMENTED; PALM-MUTE VELOCITY SWITCH / ARTICULATION DISPATCH / PITCH BEND / SUSTAIN / MOD-WHEEL / LEGATO-SLIDE-HAMMER-PULL / CROSSFADE MIXING / FACTORY SAMPLE PROFILE INTEGRATION NOT COMPLETE.
+- **Следующий отдел по пользовательскому порядку:** ADDITIONAL FUNCTIONS — аудит AutoChords, library import/preview/mapping, state persistence, panic, meters/performance, worker/multiprocessing, settings and auxiliary windows. После этого будет сводная ведомость всех отделов; только затем — согласованная последовательная реализация и финальная сборка.
+
+
+
+### Поэтапный аудит отделов — 5. ADDITIONAL FUNCTIONS (часть инфраструктуры есть; продуктовые функции неполные)
+- **Plugin state:** `getStateInformation/setStateInformation` сохраняют APVTS ValueTree и текущий SFZ file path; при восстановлении существующий SFZ загружается асинхронно, отсутствующий путь сохраняется для диагностики. Это DAW state recall, но не замена пользовательскому preset/bank file system. Абсолютный путь SFZ не обеспечивает переносимость между компьютерами.
+- **SFZ import:** Import Guitar panel открывает file chooser `*.sfz` и вызывает background loader; статус сообщает regions/WAV count или ошибку. В просмотренном UI нет drag-and-drop target, папочного/ZIP library import, waveform/sample audition, auto-mapping editor, library manifest manager или полноценного BANK import/export. Поэтому зона перетаскивания, о которой спрашивал пользователь, пока не реализована.
+- **AutoChords:** панель существует как setup UI и подключена к scaleRoot/scaleMode/patternSlot APVTS, но сама помечает себя `SETUP ONLY`; AutoChords button disabled, tooltip прямо сообщает, что MIDI-generation engine не реализован. Реальной генерации аккордов/preview/custom mode нет.
+- **Settings / workspace:** независимый multi-window workspace реализует open/close, move, resize, maximize/restore, tiling/viewport, theme propagation и настройку масштаба/расстояния панелей. Settings panel заявлен UI-only и меняет геометрию auxiliary panels/визуальные предпочтения, а не audio engine.
+- **Performance Display / CPU-RAM:** в текущем PluginEditor/Processor не найдено реального CPU/RAM meter или performance display; hard-coded показателей также не найдено. Не добавлять фиктивные проценты — измерители должны быть реальными либо скрыты до реализации.
+- **Worker / multiprocessing:** SFZ load использует отдельный asynchronous ThreadPool с одним worker; streaming services используют собственные фоновые worker threads и bounded page cache (лимит до 8 library roots). Это background I/O concurrency, но отдельного пользовательского multiprocessing control и parallel DSP/voice processing нет. `voices` 1–64 уже управляет sampler polyphony, это не multiprocessing.
+- **Panic:** All Notes Off / All Sound Off обрабатываются в sample-accurate MIDI path, очищают held notes/trigger/pending events и вызывают fade panic; новая hybrid trigger regression включена в прошедшие CTest 16/16.
+- **Дополнительные MIDI/perform controls:** AutoChords, pitch bend/mod-wheel/sustain, user library management и performance meters остаются незакрытыми (см. соответствующие аудиты PATTERN/MELODY).
+- **Итог ADDITIONAL FUNCTIONS:** APVTS+SFZ DAW state recall, asynchronous SFZ loading, bounded streaming workers, panic, auxiliary workspace/settings source implemented; AutoChords engine, DnD import, preview/mapping/library manager, CPU/RAM display, parallel DSP controls and user preset/bank workflows not complete.
+
+### Сводный результат полного поэтапного аудита (перед реализацией финального продукта)
+1. PRESETS — каталог 300 валиден; runtime apply частичный; user preset system и 300 playable presets не готовы.
+2. EFFECTS — основные DSP эффекты присутствуют; ряд APVTS/UI параметров не влияет на звук; reorder FX chain не подключён; sonic tests отсутствуют.
+3. PATTERN — trigger/scheduler/sample-accurate integration проверены; 13 базовых masks есть; секции песни и полноценная performance library отсутствуют.
+4. MELODY — streaming SFZ sampler и базовая polyphony есть; артикуляции, palm mute velocity switch, pitch bend/sustain/mod wheel и factory mapping не готовы.
+5. ADDITIONAL FUNCTIONS — state recall/import worker/workspace/panic частично готовы; AutoChords, DnD/preview/library manager, meters и parallel DSP отсутствуют.
+- **Порядок дальнейшей реализации:** закрывать найденные gaps последовательно в тех же пяти отделах, сохраняя существующие реализации и APVTS IDs. Сначала сделать полную матрицу зависимостей/acceptance tests, затем внедрять и проверять каждый отдел отдельными коммитами и exact-SHA CI. Финальную сборку/пакет объявлять только после закрытия всех блоков и отдельной host-проверки FL Studio 20 / Windows 10.
+
+
+
+## 2026-11-13 — PPGU window and panel inventory v1 (user-approved status baseline)
+
+**Source:** user-supplied inventory `PPGU — ИНВЕНТАРЬ ОКОН И ПАНЕЛЕЙ (v1, 2026-11-13)`.  
+**Branch checkpoint:** `work/ppgu-completion-integrated-2026-11-13` @ `0308895240a540e4de71886fd98d5fd65ed434b2`.  
+**Change class:** requirements/status baseline only; no production source or tests changed.
+
+**Status model (mandatory):** `IMPLEMENTED+VALIDATED` / `SOURCE PRESENT` / `DESIGNED` / `NOT IMPLEMENTED` / `DISABLED BY DESIGN`. A status transition requires its own scoped INFO entry and exact-SHA evidence. A design or visual mockup alone never proves implementation or visual completion. Disabled-by-design controls must not be rendered as active before their runtime function exists and passes tests.
+
+| # | Window / panel | Purpose | User-supplied status | Open blocker |
+|---|---|---|---|---|
+| 1 | PluginEditor (main window) | Main UI | SOURCE PRESENT | 21-token parity partial; exact-SHA CI |
+| 2 | PPGUMultiWindowWorkspace | Auxiliary panel host | SOURCE PRESENT | OverlayManager not integrated |
+| 3 | Auxiliary panels (mixed sizes) | Parallel panels | SOURCE PRESENT | Geometry CI pending |
+| 4 | Settings panel (ID 6) | Scale/gap/restore/gallery | SOURCE IMPLEMENTED | Validation pending |
+| 5 | Skin Gallery | Theme selection | PARTIAL | Runtime hot-swap, DPI/ECO gates |
+| 6 | FX EDIT | Eight parameter pages | DESIGNED | Source-to-control audit |
+| 7 | Performance | Read-only telemetry | DESIGNED | Never display unconnected data |
+| 8 | AutoChords | Selectors/preview | DISABLED BY DESIGN | Backend/MIDI routing |
+| 9 | Auto Discover | Discovery UI | NOT IMPLEMENTED | Pipeline S6.5 |
+| 10 | Curator | GREEN/YELLOW/RED review | NOT IMPLEMENTED | Production policy integration |
+| 11 | About | Product information | NOT IMPLEMENTED | — |
+| 12 | Overlay windows (popup, z-order, focus, persistence, tiling) | — | NOT IMPLEMENTED | Order: OverlayManager → workspace → windows |
+
+**Reconciliation rule:** this table is the user's current status baseline, not independent proof that every listed source component exists on the checkpoint branch. Before changing any panel, inspect the exact branch tree/source/tests and reconcile the user status with INFO/CODE and prior implementation commits. Do not overwrite stronger exact-SHA evidence or silently inherit statuses from another branch.
+
+**Implementation guardrails:** no panel is declared visually complete from specification alone; disabled-by-design elements remain visibly disabled; each scoped status transition is appended here with source paths, exact commit SHA, tests/CI and remaining host/DPI acceptance. This entry does not claim OverlayManager, FX EDIT, Performance, Auto Discover, Curator, About or complete Skin Gallery functionality is implemented.
+
+**Result:** INVENTORY RECORDED / SOURCE UNCHANGED / VALIDATION OF EACH ROW PENDING.

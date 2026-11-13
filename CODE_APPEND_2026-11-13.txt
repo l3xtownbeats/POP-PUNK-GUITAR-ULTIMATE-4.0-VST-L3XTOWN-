@@ -1,0 +1,45 @@
+==============================================================================
+CODE.txt — APPEND FRAGMENT (2026-11-13, вечер, пакет продолжения v2)
+Добавлять в конец CODE.txt как есть. Не перезаписывать существующие записи.
+==============================================================================
+
+## 2026-11-13 — O1/O2/S1: production source и контракты
+
+**Файлы (8):**
+- Source/UI/OverlayManager.h — публичный контракт: Entry{id,modal,visible,
+  closable}, kCapacity=8, push/close/setVisible/setModal/topId/topModalId/
+  blockedForNew; Listener (overlayAdded/overlayClosed/overlayRaised).
+- Source/UI/OverlayManager.cpp — стек на vector, duplicate id reject,
+  capacity 8 reject, blocked по верхнему видимому modal (O2), closeTop
+  отказывается закрывать non-closable (детерминированный refusal), listener
+  вызывается вне лока (id копируется под локом).
+- Source/Security/SecureSkinImport.h — контракт: isPathAllowed,
+  isExtensionAllowed, isSvgContentAllowed, isEntrySizeOk, лимиты
+  64 MiB / 8 MiB / 512 / 512, SHA-256 API.
+- Source/Security/SecureSkinImport.cpp — политика путей (fail-closed: пустые
+  сегменты, "..", скрытые, backslash, drive letter, absolute, >512),
+  SVG-политика (script/ENTITY/foreignObject/javascript:/on<token>=/внешние
+  href — обе кавычки и bare), SHA-256 FIPS 180-4 (верифицировано зеркалом
+  против независимого эталона: 4 FIPS-вектора + длины 0-259 = 264/264 MATCH).
+- Tests/OverlayManagerTests.cpp — ровно 12 assertions (dup, capacity, blocked,
+  not-blocked, non-closable refusal, close+fallthrough, hidden skip, modal
+  re-eval).
+- Tests/SecureSkinImportTests.cpp — ровно 34 assertions: 8 SHA (4 вектора
+  FIPS x2: size + digest), 16 path, 10 SVG.
+- tools/validate_skin_usage.py — G3.5: только 21 канонический токен,
+  hex/rgb() в usage запрещены; fixtures: tests/fixtures/usage_ok.json /
+  usage_bad.json (позитив rc=0, негатив rc=1 — реально запущено).
+- tools/validate_soundbank.py — G5-валидатор (закрыта дыра: build.yml ссылался
+  на отсутствующий файл). Реализован по SOUNDBANK/policy.json; G5 PASS.
+
+**CMakeLists.txt:** добавлены ppgu_overlay_contracts (STATIC),
+ppgu_skin_import_contracts (STATIC, линкует overlay), два executable-теста
+с PPGU_STANDALONE_TEST и два add_test.
+
+**Инварианты соблюдены:** DSP/audio callback/sampler/MIDI/APVTS/presets/
+SoundBank не изменялись. Политики — fail-closed.
+
+**Статус:** IMPLEMENTED / VALIDATION PENDING. CI (Windows Release, CTest,
+pluginval strictness 5) — единственный источник статуса BUILD VERIFIED.
+
+==============================================================================
