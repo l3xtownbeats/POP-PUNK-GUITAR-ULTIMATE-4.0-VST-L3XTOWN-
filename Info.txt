@@ -1845,3 +1845,53 @@ F. Только после этого считать документальны�
 **Implementation guardrails:** no panel is declared visually complete from specification alone; disabled-by-design elements remain visibly disabled; each scoped status transition is appended here with source paths, exact commit SHA, tests/CI and remaining host/DPI acceptance. This entry does not claim OverlayManager, FX EDIT, Performance, Auto Discover, Curator, About or complete Skin Gallery functionality is implemented.
 
 **Result:** INVENTORY RECORDED / SOURCE UNCHANGED / VALIDATION OF EACH ROW PENDING.
+
+
+## 2026-11-13 — Сверка документов и пакета O1/O2/S1 (рабочая ветка)
+
+**Документальная интеграция:** добавлены и приведены к evidence-based статусам:
+- `docs/PPGU_APPROVED_PARAMETERS.md` — v2, commit
+  `724b3c98abe07c6d34a7e553a9d3c53f08488e4c`;
+- `docs/PPGU_TASK_REGISTRY.md` — v2, commit
+  `77507c46f4c7a6ce712fea4337faa5eea1545ac9`;
+- `docs/PPGU_WINDOWS_PANELS_INVENTORY.md` — v2, commit
+  `a96fa12af8e5ec872266b872c3fcba52c73e408c`.
+
+Документы из ветки `work/rev17-sampler-root-cap-regression` не копировались
+слепо: в них были устаревшие/противоречивые статусы (102 темы вместо 52,
+OverlayManager/SecureSkinImport Implemented при отсутствии проверяемого
+source в интегрированной ветке, прежний SH-01). Реестр согласован с текущим
+Info и реальным состоянием рабочей ветки.
+
+**O1/O2 package — source verification discrepancy:**
+Пользователь передал append-fragment с заявлением IMPLEMENTED / VALIDATION
+PENDING для OverlayManager, SecureSkinImport, G3.5 и validate_soundbank.py.
+Однако файлы
+`Source/UI/OverlayManager.h/.cpp`,
+`Source/Security/SecureSkinImport.h/.cpp`,
+`Tests/OverlayManagerTests.cpp`,
+`Tests/SecureSkinImportTests.cpp`,
+`tools/validate_skin_usage.py`,
+`tools/validate_soundbank.py`
+не обнаружены в проверенной интегрированной рабочей ветке; GitHub code/commit
+search также не вернул соответствующих результатов. Поэтому заявленный
+фрагмент O1/O2 не добавлен как подтверждённый факт. Требуется выборочно
+перенести исходники/тесты из фактической ветки-источника и проверить diff,
+CMake wiring, workflow wiring, exact-SHA Windows CI. До этого статус:
+SOURCE NOT VERIFIED IN INTEGRATED BRANCH / VALIDATION PENDING.
+Числа из отчёта (12 Overlay assertions, 34 SecureSkinImport assertions,
+264/264 SHA vectors, path/SVG mirror checks) сохранены как user-reported
+evidence, но не как подтверждённый CI.
+
+**S1 Registry CLI tests:**
+- commit `13ceeec0d39289a05e5e8ead018f71c8dd143bc1` — exact-SHA Windows
+  workflow run `43420154103` SUCCESS.
+- Сценариев в тесте 18; прежний summary был ошибочно 17/17. Исправлен на
+  18/18 в commit `9c40c6ae58f8d38287753eb0cc85f52633ef559b`.
+- Workflow run `43439206786` был отменён новым push до завершения build;
+  следовательно corrected-count SHA пока не имеет завершённого exact-SHA CI.
+  Не заявлять corrected run PASS.
+
+**Граница:** документальные реестры не доказывают реализацию source-кода.
+Не заявлять O1/O2 BUILT/TESTED, Windows Release PASS, pluginval 5 PASS или
+FL Studio 20 HOST VERIFIED без соответствующих exact-SHA результатов.
