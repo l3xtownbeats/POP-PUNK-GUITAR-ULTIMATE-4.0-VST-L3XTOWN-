@@ -586,3 +586,5 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 
 **Follow-up assertion hardening:** commit `26f29471af6fda09e31fa26f63e544de65b08ecd` strengthens the same regression test: it now requires the explicit `mono/stereo only` metadata warning, rather than accepting any generic SFZ/load error as proof of multichannel rejection. This prevents malformed fixtures or unrelated failures from passing the test. Exact-SHA CI remains pending.
+
+**Header hygiene:** commit `8c75820cab1b909ff43c55736f25150338e384d0` adds direct standard-library includes (`<algorithm>`, `<string>`) required by the hardened assertion; no reliance on transitive JUCE includes. Exact-SHA CI pending.
