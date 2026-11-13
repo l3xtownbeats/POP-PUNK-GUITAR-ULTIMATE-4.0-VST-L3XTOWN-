@@ -734,6 +734,92 @@ int main()
         return 1;
     }
 
+
+    // The pool must reuse a worker/cache for banks in the same canonical
+    // library root, accept eight distinct roots, and reject a ninth without
+    // replacing the last successfully published snapshot.
+    {
+        ppgu::sampler::SamplePool rootLimitPool;
+        std::array<const ppgu::sampler::SamplePool::RegionView*, 8> acceptedRegions {};
+        for (int libraryIndex = 0; libraryIndex < 8; ++libraryIndex)
+        {
+            const auto libraryDirectory = directory.getChildFile(
+                "root-limit-library-" + juce::String(libraryIndex));
+            if (!libraryDirectory.createDirectory()
+                && !libraryDirectory.isDirectory())
+            {
+                std::cerr << "Could not create streaming-root limit fixture directory.\\n";
+                return 1;
+            }
+
+            const auto libraryWav = libraryDirectory.getChildFile("root.wav");
+            const auto librarySfz = libraryDirectory.getChildFile("root.sfz");
+            if (!wavFile.copyFileTo(libraryWav)
+                || !librarySfz.replaceWithText(
+                    "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\\n"))
+            {
+                std::cerr << "Could not create streaming-root limit fixture.\\n";
+                return 1;
+            }
+
+            const auto report = rootLimitPool.loadSfz(librarySfz);
+            acceptedRegions[static_cast<std::size_t>(libraryIndex)] =
+                rootLimitPool.findRegion(80 + libraryIndex, 100, 1);
+            if (!report.success || acceptedRegions[static_cast<std::size_t>(libraryIndex)] == nullptr
+                || acceptedRegions[static_cast<std::size_t>(libraryIndex)]->streaming == nullptr)
+            {
+                std::cerr << "Sampler rejected one of the first eight distinct streaming roots.\\n";
+                for (const auto& error : report.errors) std::cerr << error << "\\n";
+                return 1;
+            }
+        }
+
+        // A second SFZ bank from an already indexed root must reuse the
+        // original streaming service rather than consuming another root slot.
+        const auto sameRootSfz = directory.getChildFile("root-limit-library-0")
+            .getChildFile("same-root-bank.sfz");
+        if (!sameRootSfz.replaceWithText("<region> sample=root.wav key=90\\n"))
+        {
+            std::cerr << "Could not create same-root bank fixture.\\n";
+            return 1;
+        }
+        const auto sameRootReport = rootLimitPool.loadSfz(sameRootSfz);
+        const auto* sameRootRegion = rootLimitPool.findRegion(90, 100, 1);
+        if (!sameRootReport.success || sameRootRegion == nullptr
+            || sameRootRegion->streaming != acceptedRegions[0]->streaming)
+        {
+            std::cerr << "A second bank in the same root did not reuse its streaming service.\\n";
+            return 1;
+        }
+
+        const auto ninthDirectory = directory.getChildFile("root-limit-library-8");
+        if (!ninthDirectory.createDirectory() && !ninthDirectory.isDirectory())
+        {
+            std::cerr << "Could not create ninth streaming-root fixture directory.\\n";
+            return 1;
+        }
+        const auto ninthWav = ninthDirectory.getChildFile("root.wav");
+        const auto ninthSfz = ninthDirectory.getChildFile("root.sfz");
+        if (!wavFile.copyFileTo(ninthWav)
+            || !ninthSfz.replaceWithText("<region> sample=root.wav key=99\\n"))
+        {
+            std::cerr << "Could not create ninth streaming-root fixture.\\n";
+            return 1;
+        }
+
+        const auto ninthReport = rootLimitPool.loadSfz(ninthSfz);
+        const auto* previousActiveRegion = rootLimitPool.findRegion(90, 100, 1);
+        if (ninthReport.success || ninthReport.errors.empty()
+            || ninthReport.errors.front().find("8 library roots") == std::string::npos
+            || previousActiveRegion == nullptr
+            || previousActiveRegion->streaming != acceptedRegions[0]->streaming)
+        {
+            std::cerr << "Ninth streaming root was not rejected transactionally.\\n";
+            for (const auto& error : ninthReport.errors) std::cerr << error << "\\n";
+            return 1;
+        }
+    }
+
     std::cout << "SamplePool tests passed: WAV decode, SFZ load, MIDI playback, and polyphony cap.\n";
     return 0;
 }
