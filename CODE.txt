@@ -573,3 +573,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Failure 1 — `ppgu_sample_pool_contracts`:** root-limit SFZ fixture in `tests/SamplePoolTests.cpp` wrote a literal backslash+n after `key=80` because the C++ string contained a double-escaped newline. Parser correctly rejected the malformed token. Fixture now writes a real newline.
 **Failure 2 — `ppgu_theme_contracts`:** test resolved `SKIN/` relative to CTest's default build-directory working directory. CMake now sets this test's working directory to the repository root; required registry and manifests are present there.
 **Status:** test-only corrections committed; exact-SHA CTest rerun pending. Build success is confirmed on the preceding source SHA; CTest remains pending.
+
+
+## 2026-11-13 — Multichannel WAV regression fixture newline correction
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+**Commit:** `e68a63109a19d3b4bd3359c61b6da435ac6e4edd` — `tests/SamplePoolTests.cpp`.
+**Finding:** a source audit found the multichannel SFZ fixture used a double-escaped newline. The generated file therefore contained literal backslash+n after `key=60`, so the test could fail at SFZ parsing before it reached the intended unsupported-four-channel-WAV assertion. This was a false-positive risk in the regression test, not evidence that the sampler accepted multichannel audio.
+**Correction:** normalize double-escaped newline sequences in this test source to actual C++ newline escapes, including the fixture writer and diagnostic strings. The SFZ fixture now terminates its region line correctly, allowing the test to exercise the intended channel-count rejection path.
+**Validation:** source diff/readback inspected after commit. Windows Release build, CTest, pluginval and package have NOT yet been rerun on this SHA; no pass is claimed.
+**Status:** TEST FIX COMMITTED / EXACT-SHA CI PENDING.
