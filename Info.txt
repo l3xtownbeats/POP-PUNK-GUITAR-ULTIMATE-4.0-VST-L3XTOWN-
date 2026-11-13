@@ -1518,3 +1518,23 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** Stage 2 разбит на 2A inventory/import core, 2B classification/organization, 2C Mapping Editor/Preview, 2D Conversion Workbench, 2E verification. Подробные критерии приёмки добавлены в отдельный документ.
 
 **РЕЗУЛЬТАТ:** REQUIREMENT AND TECHNICAL SPECIFICATION COMMITTED. В этой документационной операции WAV не скачивались и не изменялись; импортёр, редактор и конвертер ещё не реализованы и не протестированы. Следующий production шаг — Stage 2A: аудит существующих Sampler API и реализация append-only inventory/import core.
+
+## 2026-11-13 — REV.17 eight-root sampler admission regression
+
+**Тип:** test-only regression coverage; production sampler code не менялся.  
+**Ветка:** `work/rev17-sampler-root-cap-regression`.  
+**Base HEAD:** `27a7a1946a9ff883867a8da8b5b480a9bc3b4687`.  
+**Source/test commit:** `66534d557167b34c79d5d5d270c6f50d6815f469`.  
+**Parent:** `27a7a1946a9ff883867a8da8b5b480a9bc3b4687`.  
+**Файл:** `tests/SamplePoolTests.cpp`.
+
+**ПРОВЕРКА:** существующий SamplePool ограничивает число уникальных streaming library roots восемью; в прежнем тестовом наборе не было отдельного regression case, который последовательно открывает восемь разных roots и проверяет отказ девятого.
+
+**ИЗМЕНЕНИЕ:** добавлен изолированный тест: восемь уникальных временных библиотек должны загрузиться; девятая должна быть отклонена, при этом последний опубликованный region map остаётся доступным. Тест использует локальные WAV fixtures и не меняет production ownership, worker lifecycle, audio callback или DSP.
+
+**СОВМЕСТИМОСТЬ:** production source, APVTS IDs/semantics, MIDI, sampler runtime, SoundBank, presets, UI и skin assets не изменялись.
+
+**ПРОВЕРКА/CI:** GitHub Actions run `43411732636` запущен на точном source/test SHA `66534d557167b34c79d5d5d270c6f50d6815f469`; на момент записи выполняется. BUILD/CTest/pluginval результат пока не присваивается.
+
+**СТАТУС:** TEST SOURCE PRESENT / VALIDATION PENDING.  
+**СЛЕДУЮЩИЙ ШАГ:** дождаться exact-SHA Windows x64 Release, CTest, pluginval strictness 5 и package gates; при любом FAIL исправлять первопричину и повторять полный pipeline.
