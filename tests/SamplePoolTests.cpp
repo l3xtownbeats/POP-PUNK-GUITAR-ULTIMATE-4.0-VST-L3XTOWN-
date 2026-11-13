@@ -756,7 +756,7 @@ int main()
             const auto librarySfz = libraryDirectory.getChildFile("root.sfz");
             if (!wavFile.copyFileTo(libraryWav)
                 || !librarySfz.replaceWithText(
-                    "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\\n"))
+                    "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\n"))
             {
                 std::cerr << "Could not create streaming-root limit fixture.\\n";
                 return 1;

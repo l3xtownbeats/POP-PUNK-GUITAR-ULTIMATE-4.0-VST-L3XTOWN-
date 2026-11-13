@@ -1910,3 +1910,14 @@ CI run `43444865889` завершился на шаге BinaryData preflight. Л
 Исправлено: metadata test использует общий `ppgu_sampler`; ThemeManager test линкует JUCE Graphics; `PluginProcessor.h` имеет guarded fallback имени только для standalone targets; конфликтующее compile definition удалено.
 
 Статус: **SOURCE CORRECTION COMMITTED / BUILD RERUN PENDING**. Компиляция ещё не подтверждена.
+
+
+## 11.4. CTest fixture/path corrections (2026-11-13)
+
+На commit `2c3179a0b5df670b7449306fe5ca7786dba64a81` Windows x64 Release compilation завершилась успешно: собраны plugin и test executables. CTest: **10/12 passed**.
+
+Оставшиеся два дефекта:
+1. `ppgu_sample_pool_contracts`: тестовый SFZ fixture содержал double-escaped `\\n`, поэтому файл записывал буквальные символы backslash+n, и parser правильно отклонял `key=80\n`. Исправлено на реальный newline.
+2. `ppgu_theme_contracts`: тест искал `SKIN/` относительно build directory. Добавлен CTest `WORKING_DIRECTORY` на корень исходного репозитория. Проверено наличие registry и manifest-файлов в source tree.
+
+Статус: **WINDOWS RELEASE COMPILE PASS / CTEST RERUN PENDING**. Pluginval и packaging ещё не выполнялись на этом SHA.

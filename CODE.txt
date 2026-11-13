@@ -565,3 +565,11 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Build diagnostics:** metadata-index contract target did not inherit JUCE AudioFormats include paths; ThemeManager test linked JUCE Core only although its public palette uses `juce::Colour` from Graphics; standalone processor test passed a fragile custom `JucePlugin_Name` macro value, causing a malformed string token in MSVC.
 **Correction:** metadata test now links the shared `ppgu_sampler` target; ThemeManager test links JUCE Graphics; PluginProcessor.h defines a guarded fallback product name only when JUCE has not supplied the plugin macro; remove the standalone target's duplicate macro override.
 **Status:** source correction committed; next exact-SHA CI build pending.
+
+
+## 2026-11-13 — CTest regression fixture and theme test working directory
+
+**CI:** run `43453087475`, source SHA `2c3179a0b5df670b7449306fe5ca7786dba64a81`. Windows x64 Release build succeeded, including VST3 target and Processor Pattern integration executable. CTest ran 12 tests: 10 passed, 2 failed.
+**Failure 1 — `ppgu_sample_pool_contracts`:** root-limit SFZ fixture in `tests/SamplePoolTests.cpp` wrote a literal backslash+n after `key=80` because the C++ string contained a double-escaped newline. Parser correctly rejected the malformed token. Fixture now writes a real newline.
+**Failure 2 — `ppgu_theme_contracts`:** test resolved `SKIN/` relative to CTest's default build-directory working directory. CMake now sets this test's working directory to the repository root; required registry and manifests are present there.
+**Status:** test-only corrections committed; exact-SHA CTest rerun pending. Build success is confirmed on the preceding source SHA; CTest remains pending.
