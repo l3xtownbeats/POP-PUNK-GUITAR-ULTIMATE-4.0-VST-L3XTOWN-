@@ -19,7 +19,7 @@ private:
 
 class PPGUPerformanceDisplay;
 
-class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor
+class PopPunkGuitarUltimateAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
     explicit PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor&);
@@ -27,6 +27,7 @@ public:
     bool keyPressed(const juce::KeyPress&) override;
     void paint(juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
 private:
     void chooseSfzFile(juce::Label* panelStatus = nullptr, juce::Button* panelLoadButton = nullptr);
@@ -52,6 +53,7 @@ private:
     std::unique_ptr<PPGUPerformanceDisplay> performanceDisplay;
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
+    bool uiSettingsReady = false;
     juce::File runtimeSkinRoot;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     juce::ComboBox presetBox, categoryBox;
