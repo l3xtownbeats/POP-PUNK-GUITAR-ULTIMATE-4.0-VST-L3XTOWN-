@@ -1889,3 +1889,12 @@ CI run `43444865889` завершился на шаге BinaryData preflight. Л
 Исправление: ThemeManager и Processor Pattern test executables переведены на `juce_add_console_app`, поскольку оба используют `JuceHeader.h`; pure C++ contract executables остаются обычными CMake targets. Добавлен корректный `BUNDLE_ID` `com.l3xtown.audio.ppgu`.
 
 Статус: **SOURCE CORRECTION COMMITTED / CONFIGURE RERUN PENDING**. Предыдущий configure failure не является build/test failure: compilation ещё не запускалась.
+
+
+## 11.2. Factory catalog embedding correction (2026-11-13)
+
+Сборка на commit `b2224a4571e64d0111cc5ae6bffb44c7effdeebc` прошла CMake configure и остановилась при компиляции `Source/PluginEditor.cpp`: отсутствовал символ `BinaryData::factory_bank_300_json`. Причина — CMake встраивал legacy `FactoryCatalog.json` и `FactorySfz.sfz`, а editor использует каталог `presets/factory_bank_300.json`.
+
+Исправлено: production BinaryData source переключён на `presets/factory_bank_300.json` — тот же каталог, который проходит отдельный 300-preset validator в CI. Дублирующий root legacy bank не выбран как runtime source.
+
+Статус: **SOURCE CORRECTION COMMITTED / BUILD RERUN PENDING**. Успешная компиляция пока не заявляется.

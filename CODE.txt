@@ -549,3 +549,11 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Failure:** CMake configure stopped because `juce_generate_juce_header` was called on `ppgu_theme_contracts` created with plain `add_executable`; JUCE requires its own `juce_add_*` target to provide the generated-sources directory.
 **Correction:** convert JUCE-header-dependent ThemeManager and processor integration test executables to `juce_add_console_app`; keep standard executables for pure C++ tests. Add a valid reverse-DNS `BUNDLE_ID` to remove JUCE's fallback-ID warning.
 **Status:** follow-up source correction committed; exact-SHA CI rerun pending. No compile, CTest, pluginval or package success claimed.
+
+
+## 2026-11-13 — Factory preset BinaryData source alignment
+
+**CI:** run `43451294817`, source SHA `b2224a4571e64d0111cc5ae6bffb44c7effdeebc`. JUCE configure passed; VST3/test compilation reached `Source/PluginEditor.cpp` and failed because BinaryData did not contain `factory_bank_300_json`.
+**Root cause:** CMake embedded legacy root files `FactoryCatalog.json` / `FactorySfz.sfz`, while the production editor requests the canonical validated `presets/factory_bank_300.json` symbol.
+**Correction:** PPGUData now embeds `presets/factory_bank_300.json`, the same 300-entry catalog validated earlier in the workflow. This preserves the editor's expected generated symbol name without adding a duplicate loader or changing UI/runtime logic.
+**Status:** source correction committed; next exact-SHA build pending.
