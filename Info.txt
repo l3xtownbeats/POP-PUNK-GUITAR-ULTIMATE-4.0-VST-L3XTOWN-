@@ -1883,3 +1883,13 @@ Official discovery and license references reviewed: Meta Open Sound README/relea
 **Download attempt:** The current environment refused direct binary release assets even though their release metadata and official links are visible. No archive landed in the working filesystem in this pass; therefore no extraction, audio conversion, checksum verification, SFZ runtime test, or SoundBank insertion is claimed. The existing registry remains empty and no asset is GREEN/AUTO ADD as a result of this research. Do not fabricate sample files or hashes.
 
 **Next action:** retry binary transfer through an enabled file/browser transfer route; start with FreePats small WAV package or Emilyguitar, then Meta Steel, FreePats full Clean/Direct, Black And Green, Shinyguitar and Meta Nylon after SFZ semantics are covered. Preserve original lossless files, source SFZ, license evidence and upstream checksums. Convert only when needed by the existing sampler; conversion never changes license obligations.
+
+## 2026-11-13 — ОБЯЗАТЕЛЬНОЕ УТОЧНЕНИЕ РОЛЕЙ ТЕМ (подтверждено пользователем)
+
+**SIGNAL FORGE / NEON — ЕДИНСТВЕННАЯ ОСНОВНАЯ ТЕМА ПРОДУКТА.** Это главный визуальный стандарт, целевая тема DEFAULT, startup и fallback.
+
+**BLACKOUT VOLTAGE (`skin-51`) — ТОЛЬКО ДОПОЛНИТЕЛЬНАЯ ТЕМА.** Она не является основной темой, не является DEFAULT, не должна выбираться при первом запуске и не должна использоваться как fallback. В галерее она остаётся самостоятельной дополнительной темой. Это правило действует во всех разделах проекта: код, ThemeManager, manifest, реестр, меню/галерея, документация, тесты, сборка и release notes.
+
+Сохранить `skin-51`, имя Blackout Voltage, папку `Skin_51` и все связанные ресурсы как есть: не удалять, не переименовывать и не перенумеровывать. Исправление текущего конфликтующего default/fallback отложено до окончания аудита Фазы 0 и проверки готовых NEON runtime-ресурсов. До окончания аудита код и манифесты не менять.
+
+**Зафиксированное текущее расхождение:** `SKIN/theme_manifest.json`, `ThemeManager` и тесты пока указывают `skin-51` как default/fallback. Это ошибка относительно утверждённого продуктового решения и должна быть исправлена после аудита. Blackout Voltage остаётся дополнительной темой.
