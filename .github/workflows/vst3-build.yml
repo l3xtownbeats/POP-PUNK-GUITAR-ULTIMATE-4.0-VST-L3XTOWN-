@@ -52,6 +52,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'G3.5 valid fixture must exit 0.' }
           python tools/validate_skin_usage.py tests/fixtures/usage_bad.json
           if ($LASTEXITCODE -ne 1) { throw 'G3.5 invalid fixture must exit 1.' }
+          # The negative fixture is expected to return 1; normalize the step result.
+          exit 0
 
       - name: Validate SoundBank natural-only policy (G5)
         shell: pwsh
