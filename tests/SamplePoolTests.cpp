@@ -392,6 +392,33 @@ int main()
         return 1;
     }
 
+    // Velocity layers must select the intended region at the lower,
+    // upper, and boundary velocities; values outside both layers must not
+    // silently fall back to an unrelated sample.
+    const auto velocityLayersSfz = directory.getChildFile("velocity-layers.sfz");
+    if (!velocityLayersSfz.replaceWithText(
+        "<region> sample=test.wav key=69 lovel=1 hivel=63\n"
+        "<region> sample=test.wav key=69 lovel=64 hivel=127\n"))
+    {
+        std::cerr << "Could not write velocity-layer SFZ fixture.\\n";
+        return 1;
+    }
+    ppgu::sampler::SamplePool velocityLayersPool;
+    const auto velocityLayersLoad = velocityLayersPool.loadSfz(velocityLayersSfz);
+    const auto* softLayer = velocityLayersPool.findRegion(69, 1, 1);
+    const auto* softBoundary = velocityLayersPool.findRegion(69, 63, 1);
+    const auto* hardBoundary = velocityLayersPool.findRegion(69, 64, 1);
+    const auto* hardLayer = velocityLayersPool.findRegion(69, 127, 1);
+    const auto* belowRange = velocityLayersPool.findRegion(69, 0, 1);
+    if (!velocityLayersLoad.success || softLayer == nullptr || softBoundary == nullptr
+        || hardBoundary == nullptr || hardLayer == nullptr || belowRange != nullptr
+        || softLayer->lowVelocity != 1 || softBoundary->highVelocity != 63
+        || hardBoundary->lowVelocity != 64 || hardLayer->highVelocity != 127)
+    {
+        std::cerr << "Velocity layers did not select their exact inclusive velocity ranges.\\n";
+        return 1;
+    }
+
     const auto invalidRoundRobin = ppgu::sfz::parseText(
         "<region> sample=test.wav key=64 seq_length=2 seq_position=3\n", root);
     if (!invalidRoundRobin.errors.size())
