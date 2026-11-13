@@ -111,3 +111,5 @@
 | `assets/texture.png` | 1024×1024 | PNG | Seamless brushed-charcoal microtexture, очень низкий контраст |
 
 Все rotary, slider, tabs, icons, labels, readouts, focus/hover/pressed states — JUCE-drawn; герой не размещается под плотными подписями.
+
+> **ОБЯЗАТЕЛЬНОЕ ПРАВИЛО РОЛЕЙ ТЕМ (13.11.2026):** SIGNAL FORGE / NEON — единственная основная тема продукта, DEFAULT/startup/fallback. **BLACKOUT VOLTAGE (`skin-51`) — только дополнительная тема**: не DEFAULT, не startup и не fallback. Сохранить её ID, имя, папку и ресурсы без переименования/перенумерации. Это правило действует для всех разделов проекта, включая реестр, ThemeManager, галерею, тесты, документацию и сборку. Текущий `skin-51` default/fallback в исходниках/манифесте — зафиксированное несоответствие, исправлять после завершения аудита Фазы 0; до этого код и манифесты не менять.
