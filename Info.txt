@@ -1632,3 +1632,187 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **СТАТУС:** SECURITY PREFLIGHT COMPLETE / JUCE PIN UPDATED / STAGE 2A PRODUCTION IMPLEMENTATION NOT YET STARTED / BUILD AND TEST PENDING. No CI or Windows compatibility pass is claimed for `022edb2...`.
 
 **Следующий шаг:** verify the exact JUCE 7.0.14-security configure/build on this SHA, then add the isolated append-only inventory/hash/duplicate/collision/registry service and tests; ZIP extraction follows only with preflight and staging tests.
+
+==============================================================================
+INFO.txt — APPEND FRAGMENT (2026-11-13, вечер)
+Добавлять в конец Info.txt как есть. Не перезаписывать существующие записи.
+==============================================================================
+
+## 2026-11-13 — Этап O1/O2/S1: OverlayManager + SecureSkinImport (.ppguskin)
+
+**Статус: IMPLEMENTED / VALIDATION PENDING.**
+Production source-файлы пакета переданы в дерево проекта, но Windows Release
+build, CTest, pluginval strictness 5 и FL Studio 20 host acceptance на
+результирующем SHA НЕ подтверждены. Никаких BUILD PASS / TESTED /
+HOST VERIFIED не заявляется.
+
+**Состав пакета (11 файлов):**
+- Source/UI/OverlayManager.h / OverlayManager.cpp — стек оверлеев (ёмкость 8),
+  z-order монотонным счётчиком, focus, modal-blocking по верхнему видимому
+  modal, closeTop с учётом closable, listener вызывается вне лока.
+- Source/Security/SecureSkinImport.h / SecureSkinImport.cpp — secure import
+  .ppguskin: allowlist путей и расширений (theme_manifest.json, PNG, SVG),
+  запрет path traversal и drive letter, запрет скрытых сегментов
+  (сегменты, начинающиеся с точки), дубликаты записей, лимиты 64 MiB архив /
+  8 MiB запись, SVG-политика (script, ENTITY, инлайн-обработчики,
+  javascript:, foreignObject, внешние href), SHA-256 provenance (FIPS 180-4).
+- Tests/OverlayManagerTests.cpp — 12 assertions по контрактам O1/O2.
+- Tests/SecureSkinImportTests.cpp — 33 assertions: официальные векторы
+  SHA-256 + 10 сценариев атак/ошибок.
+- tools/validate_skin_usage.py — G3.5-валидатор usage.json: значения — только
+  ссылки на 21 канонический токен, hex внутри usage запрещён.
+- CMakeLists snippet — targets ppgu_overlay_contracts, ppgu_skin_import_contracts.
+- CODE_APPEND / INFO_APPEND — append-only записи журналов.
+
+**Подтверждение корректности вне CI (не является заменой CI):**
+- SHA-256: зеркальная Python-реализация логики сверена с независимым эталоном
+  на 4 официальных векторах FIPS + 260 граничных длин (0–259) — MATCH.
+  Найденная в прогоне ошибка была в зеркале теста (кортеж компрессии),
+  а не в C++-коде; это проверено отдельно.
+- Path-политика: 18 кейсов. В процессе закрыты две реальные дыры:
+  (1) `C:/theme_manifest.json` проходил политику — добавлена проверка
+  drive letter; (2) скрытые сегменты `assets/.hidden.svg` — добавлен запрет
+  сегментов, начинающихся с точки. Обе закрыты в коде и покрыты тестами.
+- Валидатор G3.5: запущен реально — негативный скин FAIL (3 errors, rc=1),
+  валидный скин PASS (rc=0).
+- OverlayManager: 8 сценариев семантики пройдены зеркальной симуляцией
+  (dup id, capacity, blocked, closeTop, focus raise).
+
+**Исправление по журналу:** digest 56-байтного вектора FIPS из прежнего
+запуска заменён на корректный `2ff100b3...c25301b` (старое значение было
+ошибочным и не должно копироваться).
+
+**Non-goals / границы:** DSP, audio callback, sampler, MIDI, APVTS
+IDs/semantics, presets, SoundBank, skin inventory и schema не менялись.
+OverlayManager в этой записи НЕ интегрирован в PPGUMultiWindowWorkspace —
+интеграция является следующим отдельным scoped-этапом.
+
+**Следующий шаг:** интеграция OverlayManager в PPGUMultiWindowWorkspace
+(Source/UI/), затем production-обвязка juce::ZipFile -> SecureSkinImport::Entry.
+Каждый этап — отдельный commit с полным exact-SHA гейтом.
+
+## 2026-11-13 — Реестр утверждённых параметров (consolidated, v1)
+
+Единая точка сверки утверждённых числовых/канонических значений. Источник
+каждого пункта — существующие записи INFO/CODE; новых утверждений этот
+реестр не вводит. При конфликте реестра и INFO приоритет у INFO.
+
+**Theme/Skin (Skin Studio):**
+- Канонический набор палитры: 21 токен — window_bg, panel, panel_elevated,
+  control_bg, control_face, control_border, text_primary, text_secondary,
+  text_disabled, accent, accent_glow, danger, warning, success, lcd_bg,
+  lcd_text, led_on, led_off, shadow, highlight, lowlight.
+- Контрольный набор Skin Studio манифеста: 27 canonical required IDs плюс
+  sync_selector — ровно 28 properties; missing/unknown rejected
+  (validateSkinStudioManifest).
+- Реестр тем: 102 записи; defaultSkin = skin-052 (SIGNAL FORGE);
+  legacy Skin_001..051 — schema version 21 (двузначные ID), Skin_052+ —
+  control_schema (ID из 3+ цифр).
+- Package gate: SKINS в COMPLETE ZIP >= 52 директорий; PRESETS = ровно 300.
+- Legacy skins 1–51: совместимость через mapping цветов и детерминированные
+  fallback для отсутствующих semantic-цветов.
+
+**Workspace / auxiliary panels (утверждённые диапазоны):**
+- workspacePanelScale: 0.50–1.50 (Settings panel ID 6).
+- workspacePanelGap: 0–32 px.
+- Персистентные ключи: workspacePanelScale, workspacePanelGap.
+- Restore canonical: SIGNAL FORGE (Skin_052) из Settings.
+- OverlayManager: ёмкость стека оверлеев = 8 (контракт Master Spec).
+
+**Sampler/Engine (аудит SamplePool/SamplerEngine):**
+- Лимит snapshots: до 128 на экземпляр.
+- Лимит streaming library roots: до 8 на экземпляр.
+- SamplerEngine: 64 заранее выделенных voice slots.
+- Cache miss не блокирует audio thread; voice удерживает cursor до страницы.
+
+**Sound Hunter policy (утверждённые пороги GREEN AUTO ADD):**
+- SNR >= 40 dB; clipping отсутствует; DC offset <= 0.0001;
+  integrity PASS; GUITAR_CONFIRMED; подтверждённая лицензия с provenance
+  и SHA-256; для GREEN AUTO ADD — только CC0/PD.
+- YELLOW — ручной импорт; RED — не переопределяется curator'ом;
+  GOLD — техническая проверка + human listening approval.
+- Цели (не достигнутые показатели): MELODY 30 / PATTERN 50 / PUNK GROUP 40.
+
+**FX EDIT / панели:**
+- FX EDIT: 8 страниц параметров, но ровно 7 утверждённых bypass switches;
+  Flanger НЕ получает восьмой switch (утверждено, не расширять без записи).
+- Settings: отображает 6 существующих APVTS controls.
+- Performance: read-only; НЕ рисует неподключённые host BPM/position,
+  CPU/RAM не отображаются без реального измерения.
+- AutoChords selectors/preview: disabled до backend/MIDI routing.
+- Auto Discover, Curator, About, полная Skin Gallery: не изображаются
+  активными, пока runtime-функции не реализованы.
+
+## 2026-11-13 — Инвентарь окон и панелей плагина (consolidated, v1)
+
+Статусная модель: IMPLEMENTED+VALIDATED / SOURCE PRESENT / DESIGNED /
+NOT IMPLEMENTED / DISABLED BY DESIGN. Инвентарь описывает состояние на дату
+записи и не объявляет ничего завершённым без exact-SHA CI и host-проверки.
+
+- Главное окно редактора (PluginEditor): существует; section chrome
+  (drawPanel/paint/resized) — SOURCE PRESENT; полная token-parity с 21
+  палитрой — PARTIAL.
+- Multi-window workspace (PPGUMultiWindowWorkspace): существует; хостит
+  auxiliary panels; OverlayManager НЕ интегрирован — NOT IMPLEMENTED (этап
+  следующий).
+- Auxiliary panels (смешанные размеры): geometry module + fallback alias
+  parity — SOURCE PRESENT, exact-SHA CI PENDING.
+- Settings panel (ID 6): scale/gap controls + restore Skin_052 + открытие
+  галереи — SOURCE IMPLEMENTED; VALIDATION PENDING.
+- Skin Gallery: searchable premium gallery + Skin_053–102 pack — registry
+  102 сгенерирован и влит; runtime галерея — PARTIAL; hot-swap не подтверждён.
+- FX EDIT: 8 страниц / 7 bypass switches — DESIGNED per spec; визуальный
+  source-to-control audit — PENDING.
+- Performance: read-only — DESIGNED.
+- AutoChords: layout-правка первая в очереди visual-gap работ — PENDING;
+  selectors/preview disabled by design.
+- Auto Discover / Curator / About: NOT IMPLEMENTED (не изображать активными).
+- Popup windows, independent close/maximize, z-order/focus, bounds
+  persistence, compact tiling: NOT IMPLEMENTED (порядок: OverlayManager ->
+  интеграция в workspace -> окна).
+
+## 2026-11-13 — Сводный реестр незавершённых работ (обновление статусов)
+
+Append-only сводка к «ЕДИНОМУ РЕЕСТРУ НЕЗАВЕРШЁННЫХ РАБОТ». Статусы строго:
+Implemented / Partial / Unverified / Not implemented / Blocked.
+
+1. Skin Engine (приоритет №1):
+   - OverlayManager контракт — Implemented (VALIDATION PENDING).
+   - SecureSkinImport контракт — Implemented (VALIDATION PENDING).
+   - usage.json + G3.5-валидатор — Implemented (реально запущен).
+   - Интеграция OverlayManager в workspace — Not implemented (следующий этап).
+   - juce::ZipFile -> SecureSkinImport production-обвязка — Not implemented.
+   - Runtime skin hot-swap, DPI/ECO gates — Unverified.
+2. ResourceRootResolver + EXPLICIT-PERMISSION ingest — Not implemented
+   (спецификация MERGED, IMPLEMENTATION PENDING).
+3. Sound registry CTest fix: два падающих assertion
+   (test_non_cc0_license_blocks_green, test_unapproved_or_missing_license_
+   evidence_blocks_green) — Not fixed на момент записи; отдельный scoped fix
+   обязателен перед следующим зелёным гейтом.
+4. Sound Hunter production (DeepSearchWorker, StyleClassifier, CuratorPanel,
+   GREEN registry, guitar-only gate в S6.5) — Not implemented; policy
+   validator в tooling — Implemented.
+5. SoundBank (natural-only, Rhythm+Melody единый package) — частично;
+   guitar_ingest.py, LICENSES.txt generation, B1–B4 — Not implemented.
+6. Общий PPGU Audio Engine (Guitar/Bass) — DESIGNED, production target
+   не выделен.
+7. Bass Edition — Not implemented.
+8. FL Studio 20 host acceptance — Unverified (пользовательская host evidence
+   на старом SHA учитывается, но не переносится).
+9. CPU/RAM цели — Unverified (измерения не проводились).
+10. Branch rollout (R33) — все недавние этапы main-only/branch-only;
+    синхронизация остальных веток NOT YET VERIFIED.
+
+**Правило продолжения:** каждый следующий этап — один scoped change,
+пре-флайт ветки/HEAD, полный exact-SHA гейт (Windows Release + CTest +
+pluginval strictness 5 + package), запись в INFO и CODE до и после.
+
+## 2026-11-13 — Очередь этапов (следующие шаги)
+
+1. Интеграция OverlayManager в PPGUMultiWindowWorkspace (scoped, UI-only).
+2. Production-обвязка juce::ZipFile -> SecureSkinImport::Entry (.ppguskin
+   импорт в реальном UI-потоке с quarantine).
+3. Fix двух sound registry CTest assertions (scoped test fix).
+4. Rebuild exact-SHA: Windows Release, CTest 15+ targets, pluginval,
+   package — только затем записи BUILD VERIFIED.
+5. FL Studio 20 host acceptance свежего SHA (ручная проверка, отдельная запись).
