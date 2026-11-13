@@ -756,7 +756,7 @@ int main()
             const auto librarySfz = libraryDirectory.getChildFile("root.sfz");
             if (!wavFile.copyFileTo(libraryWav)
                 || !librarySfz.replaceWithText(
-                    "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\\n"))
+                    "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\n"))
             {
                 std::cerr << "Could not create streaming-root limit fixture.\\n";
                 return 1;
@@ -778,7 +778,7 @@ int main()
         // original streaming service rather than consuming another root slot.
         const auto sameRootSfz = directory.getChildFile("root-limit-library-0")
             .getChildFile("same-root-bank.sfz");
-        if (!sameRootSfz.replaceWithText("<region> sample=root.wav key=90\\n"))
+        if (!sameRootSfz.replaceWithText("<region> sample=root.wav key=90\n"))
         {
             std::cerr << "Could not create same-root bank fixture.\\n";
             return 1;
@@ -801,7 +801,7 @@ int main()
         const auto ninthWav = ninthDirectory.getChildFile("root.wav");
         const auto ninthSfz = ninthDirectory.getChildFile("root.sfz");
         if (!wavFile.copyFileTo(ninthWav)
-            || !ninthSfz.replaceWithText("<region> sample=root.wav key=99\\n"))
+            || !ninthSfz.replaceWithText("<region> sample=root.wav key=99\n"))
         {
             std::cerr << "Could not create ninth streaming-root fixture.\\n";
             return 1;
