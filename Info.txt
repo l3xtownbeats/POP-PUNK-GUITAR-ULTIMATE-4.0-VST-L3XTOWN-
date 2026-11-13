@@ -1708,3 +1708,14 @@ F. Только после этого считать документальны�
 - Исправлено на `AudioBuffer(2, 1024)`; commit: `0d68c898775d8c3849de583ef215eda7eb73a89b`.
 - Исправление пока UNVERIFIED до повторного Windows CI. VST3 locate, pluginval и packaging в run `43393571517` были пропущены из-за CTest failure.
 - Следующий шаг: дождаться exact-SHA CI на `0d68c898...`, проверить полный лог CTest; не ослаблять интеграционную проверку MELODY resume.
+
+
+## 2026-11-13 — P0 MIDI panic must clear hybrid PATTERN trigger state
+
+**ПРОВЕРКА:** повторный аудит `processBlock` выявил конкретный дефект: при `patternPathActive` (в том числе гибридный MELODY + удерживаемый C0–C1) ветка `All Notes Off / All Sound Off` очищала chord snapshot и pending NoteOff, но не очищала `PatternTriggerState`. Это могло оставить гибридный маршрут в PATTERN после panic-команды, блокируя обычный MELODY playback до ручного отпускания/перезапуска trigger.
+
+**ИСПРАВЛЕНИЕ:** добавлен `patternTriggerState.clear()` в panic-ветку sample-accurate MIDI timeline. Production commit: `87ec06e3149b011900a275f709900f8d13335178`.
+
+**РЕГРЕССИОННЫЙ ТЕСТ:** расширен `ProcessorPatternIntegrationTests.cpp`: повторно удерживается C0, затем в следующем блоке приходит All Notes Off и новая обычная MIDI-нота; тест требует слышимый MELODY output. Test commit: `e3b080e7bcf82a9b4baa04a7ff2cdd8e03fd32`.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** кодовый путь и проверка добавлены; Windows build/CTest для этих двух новых commits ещё не получены. Это не объявляется PASS. Текущий предыдущий run `43394678567` относится к source SHA `0d68c898775d8c3849de583ef215eda7eb73a89b` и на момент аудита оставался IN_PROGRESS; он не покрывает panic fix. Следующий release gate — exact-SHA CI на обновлённом branch HEAD, затем продолжить проверку section/transport/rhythm handoff.
