@@ -1719,3 +1719,36 @@ F. Только после этого считать документальны�
 **РЕГРЕССИОННЫЙ ТЕСТ:** расширен `ProcessorPatternIntegrationTests.cpp`: повторно удерживается C0, затем в следующем блоке приходит All Notes Off и новая обычная MIDI-нота; тест требует слышимый MELODY output. Test commit: `e3b080e7bcf82a9b4baa04a7ff2cdd8e03fd32`.
 
 **ПОВТОРНЫЙ АНАЛИЗ:** кодовый путь и проверка добавлены; Windows build/CTest для этих двух новых commits ещё не получены. Это не объявляется PASS. Текущий предыдущий run `43394678567` относится к source SHA `0d68c898775d8c3849de583ef215eda7eb73a89b` и на момент аудита оставался IN_PROGRESS; он не покрывает panic fix. Следующий release gate — exact-SHA CI на обновлённом branch HEAD, затем продолжить проверку section/transport/rhythm handoff.
+
+
+## Сессия 13.11.2026 — Exact-SHA CI PASS и поэтапный аудит отделов (начат)
+
+### Windows VST3 release gate
+- Run: `43394937232`, workflow #1300, branch `work/ppgu-completion-integrated-2026-11-13`.
+- Source SHA: `e3b080e7bcf82a9b4baa04a7ff2cdd8e03fd32`.
+- Result: `completed / success`, job `build` — SUCCESS.
+- Catalog / preset examples / APVTS / skin pack / sample license / BinaryData preflight — PASS.
+- Configure x64 Release — PASS.
+- Build VST3 + test executables — PASS.
+- CTest: **16/16 PASS**, 0 failed; total 2.44 s. Включая `ppgu_pattern_trigger_state_contract` и `ppgu_processor_pattern_integration`.
+- VST3 bundle locate — PASS.
+- pluginval v1.0.4 strictness 5 — PASS; scan/open cold+warm/editor/audio processing/state/automation/VST3 validator/bus checks completed.
+- Package full Windows x64 — PASS; artifact uploaded:
+  - `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`
+  - Artifact ID `14022113457`
+  - Size `1,665,971,890` bytes
+  - SHA-256 `9c248c23e0de88ad8b90c4426d30d4881a8aa9d0f89cd7b9426211369a42e6d7`
+- Restored redistributable sample-library cache was used; fresh download step was SKIPPED. License validation step itself — PASS.
+- FL Studio 20 manual host acceptance remains a separate gate. CI/pluginval do not prove host playback or full musical behavior.
+- Этот PASS покрывает production panic-trigger reset и regression test для возврата MELODY после All Notes Off; более ранние cancelled runs не являются evidence, этот run — точная проверка test/source SHA.
+
+### Поэтапный аудит отделов — 1. PRESETS (исходники проверены, функциональная готовность НЕ подтверждена)
+- `presets/factory_bank_300.json`: ровно 150 MELODY + 150 PATTERN, 21 reference artist; все 300 записей имеют статусы ожидания sample/engine integration. Это подтверждает каталог/metadata, но не 300 полноценных звучащих пресетов.
+- `PluginEditor.cpp` действительно загружает JSON из JUCE BinaryData и наполняет browser; есть фильтр All/MELODY/PATTERN и текстовый поиск. Все элементы списка могут быть перечислены.
+- `applyFactoryPreset()` на текущем source SHA применяет только четыре значения: `distortionDrive`, `tone`, `reverbMix`, `output`, плюс переключает режим. Оно НЕ загружает `sampleProfile`, note mapping, velocity layers, round-robin, артикуляции, Pattern event/voicing/performance data и не подтверждает реальное звучание выбранной записи.
+- Browser присваивает всем preset category значение `Original`; импортированные referenceArtist/artist categories не становятся полноценной навигацией. В видимом коде этого участка не обнаружены wired Save/Save As/Rename/Delete/User bank/import-export/rescan/favorites flows.
+- `tools/validate_factory_bank.py` и `tools/validate_preset_files.py` проверяют структуру/metadata/examples, а не runtime load/playback каждого factory preset.
+- `docs/PRESET_FILE_SYSTEM.md` и `docs/PRESET_BANK_4_0_READINESS_RU.md` прямо обозначают file browser/loader и полную интеграцию как спецификацию/незакрытую работу.
+- **Итог PRESETS:** CATALOG VALIDATED; BASIC BROWSER ENUMERATION + PARTIAL PARAMETER APPLY SOURCE IMPLEMENTED; FULL PRESET RUNTIME / USER PRESET FILE SYSTEM / 300 PRESET PLAYABILITY NOT COMPLETE. Не ставить 300/300 playable.
+- **Следующий шаг аудита по пользовательскому порядку:** отдел EFFECTS — сверить каждый DSP path, APVTS mapping, параметры, bypass/state, realtime safety и regression coverage. До окончания аудита всех отделов не объявлять финальную сборку продукта.
+
