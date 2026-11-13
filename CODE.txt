@@ -540,3 +540,12 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 **Проверка до commit:** все literal CMake source/BinaryData paths сверены с recursive tree REV.17; отсутствующих путей не найдено. Это статическая проверка, не CMake configure/build.
 **Статус:** SOURCE PATCH COMMITTED; Windows configure/build, CTest, pluginval и package — PENDING exact-SHA CI.
+
+
+## 2026-11-13 — JUCE configure follow-up
+
+**CI:** run `43450726188`, source SHA `71747fd609e17808d33179fe81be4db814ea79de`.
+**Passed:** artwork/catalog/preset/APVTS/skin/license checks; BinaryData contract now PASS; JUCE 7.0.12 checkout PASS; MSVC x64 compiler detection and JUCE `juceaide` configure/build/export PASS.
+**Failure:** CMake configure stopped because `juce_generate_juce_header` was called on `ppgu_theme_contracts` created with plain `add_executable`; JUCE requires its own `juce_add_*` target to provide the generated-sources directory.
+**Correction:** convert JUCE-header-dependent ThemeManager and processor integration test executables to `juce_add_console_app`; keep standard executables for pure C++ tests. Add a valid reverse-DNS `BUNDLE_ID` to remove JUCE's fallback-ID warning.
+**Status:** follow-up source correction committed; exact-SHA CI rerun pending. No compile, CTest, pluginval or package success claimed.

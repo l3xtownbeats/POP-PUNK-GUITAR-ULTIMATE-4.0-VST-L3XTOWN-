@@ -1880,3 +1880,12 @@ CI run `43444865889` завершился на шаге BinaryData preflight. Л
 Не реализованные OverlayManager/SecureSkinImport production modules не маскируются пустыми targets и не считаются протестированными. Они остаются отдельными блокерами реализации.
 
 Статус: **SOURCE PATCH COMMITTED / EXACT-SHA CI PENDING**. Успешная конфигурация, компиляция VST3, CTest, pluginval strictness 5, package и FL Studio 20 acceptance пока не подтверждены.
+
+
+## 11.1. Configure follow-up — JUCE console test targets (2026-11-13)
+
+На commit `71747fd609e17808d33179fe81be4db814ea79de` BinaryData preflight прошёл, JUCE 7.0.12 был успешно checkout/build/export, MSVC x64 compiler detection прошёл. Configure остановился на `juce_generate_juce_header(ppgu_theme_contracts)`: target был создан через plain `add_executable` и не имел JUCE generated-sources directory.
+
+Исправление: ThemeManager и Processor Pattern test executables переведены на `juce_add_console_app`, поскольку оба используют `JuceHeader.h`; pure C++ contract executables остаются обычными CMake targets. Добавлен корректный `BUNDLE_ID` `com.l3xtown.audio.ppgu`.
+
+Статус: **SOURCE CORRECTION COMMITTED / CONFIGURE RERUN PENDING**. Предыдущий configure failure не является build/test failure: compilation ещё не запускалась.

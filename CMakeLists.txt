@@ -57,6 +57,7 @@ target_link_libraries(ppgu_sampler PUBLIC
 
 juce_add_plugin(PPGU
     COMPANY_NAME "L3XTOWN AUDIO LAB"
+    BUNDLE_ID "com.l3xtown.audio.ppgu"
     PLUGIN_MANUFACTURER_CODE L3xa
     PLUGIN_CODE Ppgu
     FORMATS VST3
@@ -132,8 +133,14 @@ target_include_directories(ppgu_streaming_contracts PRIVATE Source Source/Sample
 target_compile_definitions(ppgu_streaming_contracts PRIVATE ${PPGU_JUCE_DEFINITIONS})
 target_link_libraries(ppgu_streaming_contracts PRIVATE ppgu_sampler)
 
-ppgu_add_test(ppgu_theme_contracts tests/ThemeManagerTests.cpp)
-target_sources(ppgu_theme_contracts PRIVATE Source/UI/ThemeManager.cpp)
+juce_add_console_app(ppgu_theme_contracts
+    PRODUCT_NAME "PPGU Theme Contract Tests"
+    NEEDS_WEB_BROWSER FALSE
+    NEEDS_CURL FALSE)
+target_sources(ppgu_theme_contracts PRIVATE
+    tests/ThemeManagerTests.cpp
+    Source/UI/ThemeManager.cpp)
+add_test(NAME ppgu_theme_contracts COMMAND ppgu_theme_contracts)
 target_include_directories(ppgu_theme_contracts PRIVATE Source Source/UI)
 target_compile_definitions(ppgu_theme_contracts PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
 target_link_libraries(ppgu_theme_contracts PRIVATE juce::juce_core)
@@ -141,7 +148,10 @@ juce_generate_juce_header(ppgu_theme_contracts)
 
 # End-to-end MIDI -> PatternScheduler -> SamplerEngine -> rendered audio test.
 # It compiles the same processor/editor/UI/sampler sources used by the VST3.
-add_executable(ppgu_processor_pattern_tests)
+juce_add_console_app(ppgu_processor_pattern_tests
+    PRODUCT_NAME "PPGU Processor Pattern Tests"
+    NEEDS_WEB_BROWSER FALSE
+    NEEDS_CURL FALSE)
 target_sources(ppgu_processor_pattern_tests PRIVATE
     tests/ProcessorPatternIntegrationTests.cpp
     Source/PluginProcessor.cpp
