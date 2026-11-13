@@ -31,10 +31,16 @@ bool SampleStreamingService::start()
 {
     if (!isValid())
         return false;
+
+    std::lock_guard<std::mutex> controlGuard(workerControlMutex);
     if (running.load(std::memory_order_acquire))
         return true;
+
+    // A stopped or failed std::thread remains joinable until joined. Reap it
+    // here so a later bank/stream activation can recover instead of becoming
+    // permanently unavailable after the first stop or decoder exception.
     if (worker.joinable())
-        return false;
+        worker.join();
 
     running.store(true, std::memory_order_release);
     try
@@ -51,6 +57,7 @@ bool SampleStreamingService::start()
 
 void SampleStreamingService::stop() noexcept
 {
+    std::lock_guard<std::mutex> controlGuard(workerControlMutex);
     running.store(false, std::memory_order_release);
     if (worker.joinable())
         worker.join();
