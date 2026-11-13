@@ -1422,3 +1422,21 @@ Status: accepted product requirements; implementation status must be verified se
 - Added source folder `Samples/FreePats-Direct` to the existing download/validation/SHA-256/audit/package pipeline. No new sampler or engine was introduced.
 - Cache key bumped to force retrieval of the expanded bank. Download, file count, payload size and audit are NOT yet confirmed; verify the next GitHub Actions run and packaged artifact before marking imported.
 - Audit-script license-candidate handling was fixed in commit `49f841f60cf3cc8a527603d9cf3d49bb25e3ecc7`; this commit extends intake on top of that fix.
+
+
+## 2026-11-13 — SIGNAL FORGE control-surface design contract
+
+**Статус: DESIGN CONTRACT COMMITTED / RUNTIME IMPLEMENTATION AND VISUAL ACCEPTANCE PENDING.**  
+**Ветка:** main. **Документ:** docs/PPGU_SIGNAL_FORGE_CONTROL_SURFACES_RU.md. **Commit документа:** 64be79d8611b2dc4b23c77f6d712f82d9925b2ab.
+
+**Preflight:** перед составлением карты сверены актуальные на main INFO, MASTER_PRODUCT_SPEC_4_0_RU.md, SKIN/CONTROL_INVENTORY_MATRIX_RU.md, SKIN/control_schema.json, SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md и исходники Source/PluginEditor.cpp/.h, Source/UI/AutoChordsPanel.cpp/.h, FXEditPanel, ImportGuitarPanel, SettingsPanel, PerformanceDisplay и AuxiliaryPanelWindowManager. Работа ограничена main; старые/неактуальные ветки не объединялись.
+
+**Зафиксирована единая карта SIGNAL FORGE для всех поверхностей:** главное окно, FX EDIT, AUTOCHORDS, IMPORT GUITAR, AUTO DISCOVER/SOUND HUNTER, CURATOR, SETTINGS, PERFORMANCE, SKIN GALLERY и ABOUT. Для каждой панели определены визуальная иерархия, структура, элементы управления, данные/параметры, состояния доступности и честные ограничения. Все панели должны использовать canonical 21-token palette и один premium dark-carbon / metallic / cyan-neon язык, с violet/magenta как вторичным акцентом.
+
+**AutoChords уточнён по последним пользовательским правкам и INFO §§15.9–15.11:** верхняя гармоническая полоса с реальными именами аккордов и степенями; слева отдельный список Playing Styles/Articulation; справа Playback Mode и Rhythm Mode; в нижней зоне на всю ширину — Pattern Browser с поиском, фильтрами, избранным, метаданными паттерна и честным Preview. Harmony, style, pattern и playback mode независимы. Экранная MIDI-клавиатура главного окна не перекрывается. Требования к one-shot fallback, реальным performance maps и запрету синтетической подмены сохранены.
+
+**Обязательные ограничения из актуального журнала:** FX EDIT показывает восемь страниц параметров, но только семь утверждённых bypass switches; Flanger не получает восьмой switch. Settings отображает шесть существующих APVTS controls. Performance остаётся read-only и не рисует неподключённые host BPM/position или CPU/RAM. AutoChords selectors/preview остаются disabled до backend/MIDI routing. Auto Discover, Curator, About и полноценная Skin Gallery не изображаются активными, пока их runtime-функции не реализованы.
+
+**Non-goals:** этим документным этапом не менялись C++/JUCE source, APVTS, DSP/audio callback, sampler, MIDI routing, presets, SoundBank, theme registry/assets, CMake или packaging. Ни одна панель не объявляется визуально завершённой только на основании спецификации.
+
+**Следующий этап:** по этому документу провести source-to-control audit и по одной панели устранять подтверждённые визуальные gaps, начиная с AutoChords layout; не дублировать уже существующие компоненты и attachments. После каждого source change — Windows Release, полный CTest, pluginval strictness 5, package на exact SHA и отдельно FL Studio 20 visual acceptance. CI PASS не переносится на новые SHA.
