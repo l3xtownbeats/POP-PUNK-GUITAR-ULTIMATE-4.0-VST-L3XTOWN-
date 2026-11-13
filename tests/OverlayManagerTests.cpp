@@ -86,7 +86,7 @@ int main()
     CHECK(!manager.close("H"));
 
     CHECK(manager.setVisible("H", false) && manager.closeTop()
-          && manager.topId(top) && top == "F");
+          && listener.closed == 1 && manager.topId(top) && top == "F");
 
     CHECK(manager.setModal("H", false) && manager.setVisible("H", true)
           && !manager.blockedForNew() && !manager.topModalId(top));
@@ -94,7 +94,7 @@ int main()
     CHECK(manager.raise("A") && manager.topId(top) && top == "A"
           && listener.raised == 1 && listener.reentrantQuery);
 
-    CHECK(manager.close("A") && listener.closed == 1
+    CHECK(manager.close("A") && listener.closed == 2
           && listener.lastByUser && listener.reentrantQuery);
 
     if (failures != 0)
