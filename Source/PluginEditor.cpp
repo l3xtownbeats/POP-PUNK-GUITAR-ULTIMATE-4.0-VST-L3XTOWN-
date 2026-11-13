@@ -592,22 +592,52 @@ bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool 
 
 void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
 {
+    // Keep the selector lightweight, but make a large catalogue navigable:
+    // legacy collections are grouped by their authored cluster and Skin Studio
+    // themes live in their own section. Only manifests accepted by ThemeManager
+    // are exposed as selectable entries.
     juce::PopupMenu menu;
-    menu.addSectionHeader("SELECT VISUAL SHELL");
-    const auto skinCount = getSkinCount();
-    for (int index = 1; index <= skinCount; ++index)
+    juce::PopupMenu studioThemes, clusterA, clusterB, clusterC;
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    const auto registry = registryFile.existsAsFile()
+        ? juce::JSON::parse(registryFile.loadFileAsString()) : juce::var();
+    const auto* entries = registry.getProperty("themes", juce::var()).getArray();
+    int validCount = 0;
+
+    if (entries != nullptr)
     {
-        PPGUThemeManager candidate;
-        const auto manifest = getSkinManifest(index);
-        if (manifest.existsAsFile() && candidate.loadFromFile(manifest))
+        for (const auto& entry : *entries)
         {
+            const int index = static_cast<int>(entry.getProperty("index", 0));
+            if (index < 1 || index > getSkinCount())
+                continue;
+
+            PPGUThemeManager candidate;
+            const auto manifest = getSkinManifest(index);
+            if (!manifest.existsAsFile() || !candidate.loadFromFile(manifest))
+                continue;
+
             const auto palette = candidate.getPalette();
-            menu.addItem(index, palette.name, true, palette.id == themeManager.getPalette().id);
+            const bool selected = palette.id == themeManager.getPalette().id;
+            if (index >= 52)
+                studioThemes.addItem(index, palette.name, true, selected);
+            else
+            {
+                const auto cluster = entry.getProperty("cluster", "").toString();
+                if (cluster == "A") clusterA.addItem(index, palette.name, true, selected);
+                else if (cluster == "B") clusterB.addItem(index, palette.name, true, selected);
+                else if (cluster == "C") clusterC.addItem(index, palette.name, true, selected);
+            }
+            ++validCount;
         }
     }
 
-    if (menu.getNumItems() == 0)
-        menu.addSectionHeader("NO VALID THEMES FOUND");
+    menu.addSectionHeader("SELECT VISUAL SHELL  /  " + juce::String(validCount) + " VALID THEMES");
+    if (clusterA.getNumItems() > 0) menu.addSubMenu("SIGNATURE STUDIO  /  A", clusterA);
+    if (clusterB.getNumItems() > 0) menu.addSubMenu("STAGE & NEON  /  B", clusterB);
+    if (clusterC.getNumItems() > 0) menu.addSubMenu("MATERIALS & CLASSICS  /  C", clusterC);
+    if (studioThemes.getNumItems() > 0) menu.addSubMenu("SKIN STUDIO  /  52+", studioThemes);
+    if (validCount == 0) menu.addSectionHeader("NO VALID THEMES FOUND");
 
     juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
     menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&skinButton),
