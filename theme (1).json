@@ -1,0 +1,49 @@
+{
+  "id": "skin-053",
+  "name": "Violet Overdrive",
+  "index": 53,
+  "family": "forge_neon_kin",
+  "layoutVariant": "PERFORMANCE_STAGE",
+  "schemaVersion": "rev14-21token",
+  "reduceInEco": true,
+  "hotSwapFadeMs": 150,
+  "compatibility": {
+    "apvts": false,
+    "layout": false,
+    "audio": false
+  },
+  "status": "SPEC / NOT MERGED / NOT RUNTIME-INTEGRATED",
+  "description": "Наследник NEON в фиолетовом спектре",
+  "referenceStyle": "Signal Forge / NEON",
+  "palette": {
+    "windowBg": "#0A0612",
+    "panelBg": "#140B24",
+    "panelElevated": "#1D1233",
+    "panelBorder": "#3A2A55",
+    "textPrimary": "#F2EAFE",
+    "textSecondary": "#B9A6E0",
+    "textDisabled": "#8373A8",
+    "accent": "#B44CFF",
+    "accentGlow": "#D08CFF",
+    "accentSecondary": "#FF4CD8",
+    "focusRing": "#C77DFF",
+    "lcdBg": "#0B0812",
+    "lcdText": "#C9A6FF",
+    "meterLow": "#22C55E",
+    "meterMid": "#FACC15",
+    "meterHigh": "#EF4444",
+    "keyWhite": "#E8EAF0",
+    "keyBlack": "#10131A",
+    "keyActive": "#B44CFF",
+    "heroTintA": "#2A0A44",
+    "heroTintB": "#C8329E"
+  },
+  "artwork": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.png",
+    "texture": "assets/texture.svg",
+    "bezel": "assets/bezel.svg",
+    "crest": "assets/crest.svg"
+  },
+  "assetsStatus": "GENERATED PLACEHOLDER ARTWORK — заменить продакшн-графикой при merge"
+}

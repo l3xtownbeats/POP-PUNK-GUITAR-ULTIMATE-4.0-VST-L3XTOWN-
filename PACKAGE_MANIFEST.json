@@ -1,0 +1,690 @@
+{
+ "package": "PPGU_REV17",
+ "created": "2026-11-13 09:57:21",
+ "files": [
+  {
+   "path": ".github/workflows/build.yml",
+   "sha256": "b9107d668fdeeddd141112159af366f3c95d5d5a22b97d4a0cabb715e649a72c"
+  },
+  {
+   "path": "CMakeLists.txt",
+   "sha256": "087a05f312f05bd20bb36fc4b96c4032ec1bd7cbaaf849301b241cea3cba0790"
+  },
+  {
+   "path": "CODE.txt",
+   "sha256": "8beb56e83d78266f9d2e6d73b670a45373cc02d6f3a5617442f6d20e41f0fdea"
+  },
+  {
+   "path": "DOWNLOAD.md",
+   "sha256": "43193b2489f419509f5d2abd77344832e381316edc168148b70f335df6241799"
+  },
+  {
+   "path": "Info (1).txt",
+   "sha256": "6349e5ae42e450bd83c415e089ef89e719089c2b1fa5e2e20cdda26f84b60ed8"
+  },
+  {
+   "path": "Info (3).txt",
+   "sha256": "9a693a33daea8ff4b87baf1dfb868980f829786d7e7f428a8611367a5353f5b4"
+  },
+  {
+   "path": "Info.txt",
+   "sha256": "63eff49ebdbd7764a73bc7516cbbb64f34a14913d5a53bf42a75b85eb33e4459"
+  },
+  {
+   "path": "README (1).md",
+   "sha256": "02ff3e5366ede61fcb1fbee0f2e35d684e1b5691f6e36bb114c476332f0accc4"
+  },
+  {
+   "path": "README.md",
+   "sha256": "9dfeb3f748834a29566cbf86ccea81a46a8c83e8e38dc9c894aca350cc8dc4d1"
+  },
+  {
+   "path": "Resources/Embedded/FactoryCatalog.json",
+   "sha256": "d730463142b111560bfd73b5213d1d4f61fb149f0b8a84b1f1578dd7ae7ca604"
+  },
+  {
+   "path": "Resources/Embedded/FactorySfz.sfz",
+   "sha256": "0ceacf50b18b47a9223f40b72834654fdfccfd293de36200280c165db2e28f89"
+  },
+  {
+   "path": "Resources/TestData/TestProbe.wav",
+   "sha256": "3f8f351511ba2dd4074648da1954024f4efe1dcd0b2f0d06a174e8e197d399d2"
+  },
+  {
+   "path": "SKIN/Skin_001/assets/bg.png",
+   "sha256": "32e506a1c42efc373fcf6d2558352c1b4ff7d82b4fe3877eef1952a9c8095e41"
+  },
+  {
+   "path": "SKIN/Skin_001/theme_manifest.json",
+   "sha256": "79e1c01857a8781c6e1a58f824fe8f3e586bd7b7b4cfcff4408b1799e66cbb22"
+  },
+  {
+   "path": "SKIN/Skin_002/assets/bg.png",
+   "sha256": "c5deac954c44df277d9382742870920f8ec32ede9af44f7cb5274726852c254b"
+  },
+  {
+   "path": "SKIN/Skin_002/theme_manifest.json",
+   "sha256": "0a91efe512fc642209d39ef9eabda6a217a9151f9761fc20caedb20053831b2d"
+  },
+  {
+   "path": "SKIN/Skin_003/assets/bg.png",
+   "sha256": "71d0f4a6461cd518470972014eefd0acbbdbc8ef36eb88135dd1da8ce9144fa0"
+  },
+  {
+   "path": "SKIN/Skin_003/theme_manifest.json",
+   "sha256": "a181f45ddd7a5a8945b85da382bfa776be180184ea7fa02b0434ad7792aa6206"
+  },
+  {
+   "path": "SKIN/Skin_004/assets/bg.png",
+   "sha256": "3f8658cf42f6cc803abbf27c56067651dd239f2a29a4021ce745ebb82fa5b6c8"
+  },
+  {
+   "path": "SKIN/Skin_004/theme_manifest.json",
+   "sha256": "b4b5dd9f4eeecd9e86fbe79e465ff8c92b3d53de35216b2ccff37351bd221aa9"
+  },
+  {
+   "path": "SKIN/Skin_005/assets/bg.png",
+   "sha256": "1e791a6b328428e9a701a6936e25a84980be767c705b24f211547eed368cb411"
+  },
+  {
+   "path": "SKIN/Skin_005/theme_manifest.json",
+   "sha256": "ef4e7245057565a96b77402f6369c09267d7c356b43f3df082f5e96bd1aedc82"
+  },
+  {
+   "path": "SKIN/Skin_006/assets/bg.png",
+   "sha256": "d5b8ee023b2b2f4b2f901ea9a41f490b5b374efbae15d0fedaa20ed81ee2e258"
+  },
+  {
+   "path": "SKIN/Skin_006/theme_manifest.json",
+   "sha256": "e4bcb3567f2bd94f3591d3fb9791eb263ae9296654bcecb39810b094137b7e90"
+  },
+  {
+   "path": "SKIN/Skin_007/assets/bg.png",
+   "sha256": "a2ec11580c8b449815eb10f79ff765e640b23a3691338d891c2141d4978281de"
+  },
+  {
+   "path": "SKIN/Skin_007/theme_manifest.json",
+   "sha256": "185e6812ec2a8dfbe988d09cfcd892cf76a886054fab359dc5274ece659ef05c"
+  },
+  {
+   "path": "SKIN/Skin_008/assets/bg.png",
+   "sha256": "86095e7601e641c1a421c6cb07daa440cdd4e6be219bf877bef305640849bf67"
+  },
+  {
+   "path": "SKIN/Skin_008/theme_manifest.json",
+   "sha256": "5f8ac15ed7bc463d627ff9237e98d59a6a4ee8f623120f7177956e4934d2f6d6"
+  },
+  {
+   "path": "SKIN/Skin_009/assets/bg.png",
+   "sha256": "4b978ef206676831a5d516825074dc9810f12a96425818f2ea225a57def474ed"
+  },
+  {
+   "path": "SKIN/Skin_009/theme_manifest.json",
+   "sha256": "55878453f41aa83ad0d2900ae49a111204aa580087410699a8e91d05a9cd8896"
+  },
+  {
+   "path": "SKIN/Skin_010/assets/bg.png",
+   "sha256": "8af286c50a97f6974b12dec6ee0e7ceff2e29629778e402e6a07053fa332836f"
+  },
+  {
+   "path": "SKIN/Skin_010/theme_manifest.json",
+   "sha256": "e5abbcdd2086e68992f1058892e324058608909f1aa0e599deff85de3f2f2714"
+  },
+  {
+   "path": "SKIN/Skin_011/assets/bg.png",
+   "sha256": "a90a9e1cf9a70e85d69c76bcd3687a8e716977fff021f69b22e487b81c7b1ad2"
+  },
+  {
+   "path": "SKIN/Skin_011/theme_manifest.json",
+   "sha256": "eb82ddd808e563ce07c647cf2f54609d0cfca4b6a70b46187af2d18ac6924224"
+  },
+  {
+   "path": "SKIN/Skin_012/assets/bg.png",
+   "sha256": "c0a9de19a7c99b79c184450752616d43e9e56f42af745a80448d0df9cb3994ee"
+  },
+  {
+   "path": "SKIN/Skin_012/theme_manifest.json",
+   "sha256": "452b4f35563050213e14b8b215915ba04fa44aee903f5fc1ea77d61a1c89cc3f"
+  },
+  {
+   "path": "SKIN/Skin_013/assets/bg.png",
+   "sha256": "f246c990d5dbe9a9fbf540321ed3101bf055da452f88cf364caf3cd50efc8603"
+  },
+  {
+   "path": "SKIN/Skin_013/theme_manifest.json",
+   "sha256": "2f256ba9c136988a452f3f17c376865efa2dbf4fb433aed92e3066ca633e973e"
+  },
+  {
+   "path": "SKIN/Skin_014/assets/bg.png",
+   "sha256": "d06cbadd9cb9f8c03e18032dd1c6c93acee31da9a3bb51d42487bc11e58ac177"
+  },
+  {
+   "path": "SKIN/Skin_014/theme_manifest.json",
+   "sha256": "1c8ad6793c0e2a62f0d2a4f69981e64bcde28a26ba2bfb6a82f40018e0c07b9a"
+  },
+  {
+   "path": "SKIN/Skin_015/assets/bg.png",
+   "sha256": "4887a58e3bc4f465fc21e1440ac56f354af74a2ee433da6c71b963c651545ca1"
+  },
+  {
+   "path": "SKIN/Skin_015/theme_manifest.json",
+   "sha256": "39edde01b555731489c0472fe72bbdba18fe6e1cd565434e58de093837e52586"
+  },
+  {
+   "path": "SKIN/Skin_016/assets/bg.png",
+   "sha256": "caa22dcb8c8092f77c67ea1cbdb1c2e318b1c0c266b7365bddf95639ceb17fe2"
+  },
+  {
+   "path": "SKIN/Skin_016/theme_manifest.json",
+   "sha256": "3e0f08a537a516d4fd7af8e778be8261f8dc9f4d9fba8f5158e2468d1392eee5"
+  },
+  {
+   "path": "SKIN/Skin_017/assets/bg.png",
+   "sha256": "612d04889f62c0627fe51a7a5dac9280d8a08a3788d145ff54f9a1f059e6302c"
+  },
+  {
+   "path": "SKIN/Skin_017/theme_manifest.json",
+   "sha256": "4f766c78aadfac42f93a4afa33786a6b67b2a9ba2d792693da93db042b70ea38"
+  },
+  {
+   "path": "SKIN/Skin_018/assets/bg.png",
+   "sha256": "7600b719a34cb14560181a04ec23ccb53be91e89eaf4539500e1ba5b60fa6bbf"
+  },
+  {
+   "path": "SKIN/Skin_018/theme_manifest.json",
+   "sha256": "69729bfab4b8bcbaabd99e5f9fa313f6e636badae9e427b10a6fe4cefecac538"
+  },
+  {
+   "path": "SKIN/Skin_019/assets/bg.png",
+   "sha256": "1125d993c52a80bcd468eafc28d4e0cca715fce36c532442de119159a3151af0"
+  },
+  {
+   "path": "SKIN/Skin_019/theme_manifest.json",
+   "sha256": "b4b8aafc0fb842b1f148a73642a77ef0d6a3ffd0b66accd4ca3821027b5c5f0c"
+  },
+  {
+   "path": "SKIN/Skin_020/assets/bg.png",
+   "sha256": "ed4502789c6cce01d9cda387b30221c5e9af7aaa5adefdb3adbbfa38dbc5c162"
+  },
+  {
+   "path": "SKIN/Skin_020/theme_manifest.json",
+   "sha256": "f88cc3021f1104164dc4ce7f470a92888b1100259e23a7e98ded4adf87f08e22"
+  },
+  {
+   "path": "SKIN/Skin_021/assets/bg.png",
+   "sha256": "3016a544f2f6255870910df817303783f9f93277fd07f36849d9df208bef3923"
+  },
+  {
+   "path": "SKIN/Skin_021/theme_manifest.json",
+   "sha256": "1f2f15fe1ec0c92dcabf95c40b9be3610a65593d35d3f01b6a42375404f1eade"
+  },
+  {
+   "path": "SKIN/Skin_022/assets/bg.png",
+   "sha256": "19bb8ef3ff9697d929f450f58cc03c89b5b6bfb9f00be8c0f28bfb1e448f5a45"
+  },
+  {
+   "path": "SKIN/Skin_022/theme_manifest.json",
+   "sha256": "433e3be9a9145b784e9a880d9f22f6b39b2297e1f866c9ca487ae1faf5e0f049"
+  },
+  {
+   "path": "SKIN/Skin_023/assets/bg.png",
+   "sha256": "3a7311bcaec940bd18b23d72cfc8f085bef59830175b6e080469696b43d14c2f"
+  },
+  {
+   "path": "SKIN/Skin_023/theme_manifest.json",
+   "sha256": "ff077461bbd3202cde2694d535fb9d238a4f582ff060ae17236c263781bb6560"
+  },
+  {
+   "path": "SKIN/Skin_024/assets/bg.png",
+   "sha256": "8076c22cf50a4d36d737aebbf4d525c3aac3792f24f5e59d23c53e40ebf750cb"
+  },
+  {
+   "path": "SKIN/Skin_024/theme_manifest.json",
+   "sha256": "b670dda526b2a74f964739a6cf32a18fbe2dc0fb5623adae906a3d7e4079c2a3"
+  },
+  {
+   "path": "SKIN/Skin_025/assets/bg.png",
+   "sha256": "64cdd0c0e84ad648234ed0c2a51c83cf708f4e81b0c1c34e9bbe8164f7a257de"
+  },
+  {
+   "path": "SKIN/Skin_025/theme_manifest.json",
+   "sha256": "072e85eedf275273a1bb0dc5c6c9d3a278edf8de9f7fddc95ed5f2001540192f"
+  },
+  {
+   "path": "SKIN/Skin_026/assets/bg.png",
+   "sha256": "fdf09eff891b551f1667c94378505e151a4213970feff7d0918484b7484003b2"
+  },
+  {
+   "path": "SKIN/Skin_026/theme_manifest.json",
+   "sha256": "dd22399d397c47fd8b30f6d698c2b3f833cd174436ef334cfacccf5cf904496c"
+  },
+  {
+   "path": "SKIN/Skin_027/assets/bg.png",
+   "sha256": "9a533498185808097b8b22375c87dbc15d5122cd9f49bcf75eb2ed447553e508"
+  },
+  {
+   "path": "SKIN/Skin_027/theme_manifest.json",
+   "sha256": "f0ebffce3c4ca85b0e055f4ac23e4031ad36ccb946a9dffbbc9cb13025784407"
+  },
+  {
+   "path": "SKIN/Skin_028/assets/bg.png",
+   "sha256": "5634cc723b1e7e939cb67c0b8442390225d1d9708e8cb2a72081b79e36a59c0b"
+  },
+  {
+   "path": "SKIN/Skin_028/theme_manifest.json",
+   "sha256": "36a08597e1c533b877b94b65e01ba4fe4ef5c0f5012f9805214b0e3f3ddb0900"
+  },
+  {
+   "path": "SKIN/Skin_029/assets/bg.png",
+   "sha256": "18d6896b4f5466e5b8d5ca8d12bd58e7d07dabce750458d5c6bdadd3a7cb9579"
+  },
+  {
+   "path": "SKIN/Skin_029/theme_manifest.json",
+   "sha256": "bfae34d9dc8bd189e07eb7eada57ddfb409c0bff08bed8ec4816f29b29ed6fa8"
+  },
+  {
+   "path": "SKIN/Skin_030/assets/bg.png",
+   "sha256": "b182ccf9a91263f9adf0a1e07eb4dde56e7b384bcfacfabaf409e50b91bd92e1"
+  },
+  {
+   "path": "SKIN/Skin_030/theme_manifest.json",
+   "sha256": "186832c67f74083a59909b06a8af845bcab10ab614b021ac6d7b728232b791ee"
+  },
+  {
+   "path": "SKIN/Skin_031/assets/bg.png",
+   "sha256": "64a2e834f6d34c6d8eb177c473450d4cf942f4ef7efed0109a304fc144d495fc"
+  },
+  {
+   "path": "SKIN/Skin_031/theme_manifest.json",
+   "sha256": "8110cbef4ead9731f00d067ea4393fda18e0d4eedf69147a25073bf7a4ccdadf"
+  },
+  {
+   "path": "SKIN/Skin_032/assets/bg.png",
+   "sha256": "738bd743070ba86f17bf4826c5960dfdbb833012f4eaa2ee45a1fec95c39d16b"
+  },
+  {
+   "path": "SKIN/Skin_032/theme_manifest.json",
+   "sha256": "57dd475e60b6abe7ff78fdf02822cc7fb0ecf326d3c010e6aec2e19630826362"
+  },
+  {
+   "path": "SKIN/Skin_033/assets/bg.png",
+   "sha256": "0d0d8f0c67c6d583ecacc92e008390a35df1197213c92240d53d26d4385c5672"
+  },
+  {
+   "path": "SKIN/Skin_033/theme_manifest.json",
+   "sha256": "a303d843be795ac48feec55ac5a5cfe9746bd8aa99fd2590432297332e078451"
+  },
+  {
+   "path": "SKIN/Skin_034/assets/bg.png",
+   "sha256": "c480293f30e856a861e7678ecd291f9f8c168747aa2f507fe21dfe891cff6819"
+  },
+  {
+   "path": "SKIN/Skin_034/theme_manifest.json",
+   "sha256": "1bee326d1e6529cd041896fc995d0fddf965a8e6f1b00c86687834d87ca6c174"
+  },
+  {
+   "path": "SKIN/Skin_035/assets/bg.png",
+   "sha256": "f9e6bf2fdc9deca91fd526daf1730f3d0e0d3162bbaa3ea415c88755954ca686"
+  },
+  {
+   "path": "SKIN/Skin_035/theme_manifest.json",
+   "sha256": "0b1a26dae604ded58e4fdaebde5fdbaa15971fa9a76b35ca34d44e5da8e60b88"
+  },
+  {
+   "path": "SKIN/Skin_036/assets/bg.png",
+   "sha256": "b7b41082709331b2df60e211affdce85de8f8cf68600f246c6b467c1efa888be"
+  },
+  {
+   "path": "SKIN/Skin_036/theme_manifest.json",
+   "sha256": "5a6ffff5e3ee67438ca991f7c02592761620968ce893f1271c96e0cc64c12551"
+  },
+  {
+   "path": "SKIN/Skin_037/assets/bg.png",
+   "sha256": "5bb6ceb2d6b62faa9abb83c4511a84d1f9f478faba853cecb9d4011dee774fdd"
+  },
+  {
+   "path": "SKIN/Skin_037/theme_manifest.json",
+   "sha256": "be7a8381d00516dc617141f01dd147268653a68a9ffa18550d2a6f2cf43998fe"
+  },
+  {
+   "path": "SKIN/Skin_038/assets/bg.png",
+   "sha256": "2e43eb919749c6643d3c2c2814fd16b650b32c3ad512863559228df7a4f52f86"
+  },
+  {
+   "path": "SKIN/Skin_038/theme_manifest.json",
+   "sha256": "97d25863f373efb861f30cdfb363507f95d9fe34679155105fc2b6f4a314c286"
+  },
+  {
+   "path": "SKIN/Skin_039/assets/bg.png",
+   "sha256": "f365adbb04a5c0823d17e4ab31a64f1262b3e1cef2f9444028d406d8fe359cee"
+  },
+  {
+   "path": "SKIN/Skin_039/theme_manifest.json",
+   "sha256": "cf241bd54876aa39b4bf0df596a5102c15a6a59dfdaaa280047821c9fc43bb98"
+  },
+  {
+   "path": "SKIN/Skin_040/assets/bg.png",
+   "sha256": "0075d3a57ab296c2d48e6863e40d46a489be611eb82227195ace7779ede5942d"
+  },
+  {
+   "path": "SKIN/Skin_040/theme_manifest.json",
+   "sha256": "c569d084680f665df1ea1dea5b6b63f1252a306b6ffdf54ce500d7136dd2547b"
+  },
+  {
+   "path": "SKIN/Skin_041/assets/bg.png",
+   "sha256": "e76aea8f323561657230df2fc0b90ceacc3465daf69cb4ea1a13e76be6631dec"
+  },
+  {
+   "path": "SKIN/Skin_041/theme_manifest.json",
+   "sha256": "cc71d63065a1ebb07a8375f940986c6bd5af092a5e3bfb11706d7734de3fa0e6"
+  },
+  {
+   "path": "SKIN/Skin_042/assets/bg.png",
+   "sha256": "6ac43290866bda029d193dd5c8e5a2065080a30918f7bdc1c8c20c4bc0a961d5"
+  },
+  {
+   "path": "SKIN/Skin_042/theme_manifest.json",
+   "sha256": "c9a44fa238a6c6ee3557ab9d4d3c955b1280be409f987ab187b1fa903279e175"
+  },
+  {
+   "path": "SKIN/Skin_043/assets/bg.png",
+   "sha256": "7f5d29f8574098595512856843a6f4669dad4c66852573b42222ac42edf19be8"
+  },
+  {
+   "path": "SKIN/Skin_043/theme_manifest.json",
+   "sha256": "efa7b577ef3997145b278f81448d80d9de0b607d26928687472f53f35faa803d"
+  },
+  {
+   "path": "SKIN/Skin_044/assets/bg.png",
+   "sha256": "5c39540bbdb698f6da43034cbf3a809781242a4c120afbee451e615dd23e968b"
+  },
+  {
+   "path": "SKIN/Skin_044/theme_manifest.json",
+   "sha256": "ec2b0b57129bfd557e350c01592faa349b58da0d24dc6c98f411663c99cc5efe"
+  },
+  {
+   "path": "SKIN/Skin_045/assets/bg.png",
+   "sha256": "53357f791e63d5a02ed2c1571ffc1d4e41e3f80a8873d7b6d7faa4099976fc20"
+  },
+  {
+   "path": "SKIN/Skin_045/theme_manifest.json",
+   "sha256": "ccc4de64e69ad70efccb80ee8ad8558b36a44514ecbe07d145ca28ffde22edad"
+  },
+  {
+   "path": "SKIN/Skin_046/assets/bg.png",
+   "sha256": "bf9cbdf3906be254afe863f6235bba43c6030cb68844fb4225a48eacf393a063"
+  },
+  {
+   "path": "SKIN/Skin_046/theme_manifest.json",
+   "sha256": "1351432e025343b39c2af96202bc407763c9cc8d91745ef89bcd4ce11a7ea8be"
+  },
+  {
+   "path": "SKIN/Skin_047/assets/bg.png",
+   "sha256": "d33dfa6c4355624dea7585cb7bf0da89bb718498a3597bf6d9f9ab14d17a1ffb"
+  },
+  {
+   "path": "SKIN/Skin_047/theme_manifest.json",
+   "sha256": "5648b3b5ed8f4dd90649cba0036d095a7a01a52f5908aadf4bf0a2c0016228b2"
+  },
+  {
+   "path": "SKIN/Skin_048/assets/bg.png",
+   "sha256": "0fbf680955b0dfc58d322fb1c34a3ca87b766b5d7e01232eb1ece9d8504235f0"
+  },
+  {
+   "path": "SKIN/Skin_048/theme_manifest.json",
+   "sha256": "87cbf9b577f7f8464580089846efbca2923866fa20191dfa44bf86f6ea67d083"
+  },
+  {
+   "path": "SKIN/Skin_049/assets/bg.png",
+   "sha256": "ec875ad373f9f9ff9295fc8bb22eebf130a5cad5d496e6cb2733f826779f39d3"
+  },
+  {
+   "path": "SKIN/Skin_049/theme_manifest.json",
+   "sha256": "c8abf0af353c0ed138e7df4da4215a0e0a7f0d98fcc2d87dda728b6d879a310b"
+  },
+  {
+   "path": "SKIN/Skin_050/assets/bg.png",
+   "sha256": "a62e6cc23f7f6fda9d597765921a7750900a23406b70ff0e5edb574739c8c1bb"
+  },
+  {
+   "path": "SKIN/Skin_050/theme_manifest.json",
+   "sha256": "d20a864864c1eb5e466170e34a2370081126fac5ae1e3567efb0893654e40a68"
+  },
+  {
+   "path": "SKIN/Skin_051/assets/bg.png",
+   "sha256": "7f40d91a2cb7cb3efae0d4f899991294e6b49016460f9e946f439856d54e2710"
+  },
+  {
+   "path": "SKIN/Skin_051/theme_manifest.json",
+   "sha256": "7275139491ad78e6102489c641d4dd89d5f98544e737313cd6c9d69c2a87c390"
+  },
+  {
+   "path": "SKIN/Skin_052/assets/bg.png",
+   "sha256": "79a7b94f2309a7c6b6e56f446d0df8607dcdc5c807ace3b95b7786faa29e1ca5"
+  },
+  {
+   "path": "SKIN/Skin_052/theme_manifest.json",
+   "sha256": "b85b80c968b92b109c23e792e0919244b16789cc96641f1fe2085f545e7476ba"
+  },
+  {
+   "path": "SKIN/registry.json",
+   "sha256": "43d140426e7ac65d2e20e9d37f1830aaea471e59d91650e7df0cafe7f9da54fc"
+  },
+  {
+   "path": "SOUNDBANK/policy.json",
+   "sha256": "382090534994fb11727d456859902dd3c4e3b571178c4ad568f80d5aa1399daa"
+  },
+  {
+   "path": "Source/Engine/BoundedSpscQueue.h",
+   "sha256": "35799d739d1e21b50cf46767aa2b8682c3d9ed5d277a2e75b9a0ed54cdb1ecd7"
+  },
+  {
+   "path": "Source/Engine/ChordEngine.cpp",
+   "sha256": "6967cdefd414dcd2b7a12334cb2d435902c535a338daa6fe6ba4d52571d3b7fc"
+  },
+  {
+   "path": "Source/Engine/ChordEngine.h",
+   "sha256": "8194f13387867ec58f16e31cbf418699cfa6749531e46edbcdd98a24bb63a118"
+  },
+  {
+   "path": "Source/Engine/FxChain.cpp",
+   "sha256": "aedbe8624e32eaba28b4b2caa3555b32a371816df4facb8b670292344de5869e"
+  },
+  {
+   "path": "Source/Engine/FxChain.h",
+   "sha256": "2923be8cf8a2c9dff0a846508c0301b84934284b7afbb506b10472aa9db8a44c"
+  },
+  {
+   "path": "Source/Engine/ImportPipeline.cpp",
+   "sha256": "c24eccdc36a8861822fc0771f9bbe192db4783ed5ba7543adca25d5c7de6235e"
+  },
+  {
+   "path": "Source/Engine/ImportPipeline.h",
+   "sha256": "bd84e1ea91200926394c47f78490f970dbdd602793427358da6588633daff1e4"
+  },
+  {
+   "path": "Source/Engine/PageCache.cpp",
+   "sha256": "df084f4fb329bc57c679e6a608986153d37e8fc5bd7b3ebf1697829ac6aae062"
+  },
+  {
+   "path": "Source/Engine/PageCache.h",
+   "sha256": "b098b10fe9c896a3ac887d4a020b82f1a4ee5cfb02fdd37711ce25e6ced40430"
+  },
+  {
+   "path": "Source/Engine/PatternScheduler.cpp",
+   "sha256": "ba6cd0eb26563a7784148c754e759c1892c19a46785cb23c277d869e87ba5b13"
+  },
+  {
+   "path": "Source/Engine/PatternScheduler.h",
+   "sha256": "4c76dc5e4b5da18120ef4de867d9039e8849b0d652e8b724c42cee85712e77e0"
+  },
+  {
+   "path": "Source/Engine/PresetRuntime.cpp",
+   "sha256": "a8b61e6f281bee111b867e1c0c3bcca50606f392643aeae05a5a8fb6bb23b741"
+  },
+  {
+   "path": "Source/Engine/PresetRuntime.h",
+   "sha256": "c525793f32fcfe5d7c76b30038fc766d9e4f2c78eb57c531c69cc16b5a25bfa4"
+  },
+  {
+   "path": "Source/Engine/SamplePool.cpp",
+   "sha256": "1c0df866d7ae93a09937a8420c9dd051dc41af33099c6555a901912048b7f270"
+  },
+  {
+   "path": "Source/Engine/SamplePool.h",
+   "sha256": "f3293813f194e2d2b9d3618e7ac79b5c8ef42b7cb9207427b250bbf5f3fcb8d7"
+  },
+  {
+   "path": "Source/Engine/SampleStreamingService.cpp",
+   "sha256": "e2c0565e8d22fe1aca362be4714b6219746416202e8f611318d9406780879f1f"
+  },
+  {
+   "path": "Source/Engine/SampleStreamingService.h",
+   "sha256": "3e331f54560ce6e7f725c64db6a22dcc1f3293d62ad5f56afacb7d2b67b0cf63"
+  },
+  {
+   "path": "Source/Engine/SamplerEngine.cpp",
+   "sha256": "d81c0096f353bb6e2806ca3f921f1ac581d6b0728016f46931bac885e7c3aa2e"
+  },
+  {
+   "path": "Source/Engine/SamplerEngine.h",
+   "sha256": "d7a2a01336f5b3edc2e8fb4a89fd4273f70c278fa5464ccce7d2901a70ffddb0"
+  },
+  {
+   "path": "Source/Engine/SfzParser.cpp",
+   "sha256": "b4ba9d37fae99fe1884bafcb18847addeefe6ee7b3128b344ca05a9e38b58c71"
+  },
+  {
+   "path": "Source/Engine/SfzParser.h",
+   "sha256": "d41e2b323638a69b355afd91a84608af4ff292a5aef38b8b1acbc6fb35133188"
+  },
+  {
+   "path": "Source/Engine/WavIndex.cpp",
+   "sha256": "71292c0d7a1c2d1a19660f278ef6437ad3dffc36637e996a139496dc96970419"
+  },
+  {
+   "path": "Source/Engine/WavIndex.h",
+   "sha256": "0a39c4dbc7cb365196f147c1135e11657b331d1f39640b0c0369be28e88511ed"
+  },
+  {
+   "path": "Source/PluginEditor.cpp",
+   "sha256": "50a18a657e21cdd959115192001b24fd02d3b027bf562818711be1f479390bd0"
+  },
+  {
+   "path": "Source/PluginEditor.h",
+   "sha256": "698308090d8cc361fea8b6ab0d0fa99455371fbba5fc0c39caa9104d91879bba"
+  },
+  {
+   "path": "Source/PluginProcessor.cpp",
+   "sha256": "060fa229443eca1fa1f6b49bf96c3348130676f1b9bdd6d964c30e67a71d25a2"
+  },
+  {
+   "path": "Source/PluginProcessor.h",
+   "sha256": "17a46e737ab34f2ca93407c656f8f102daebad599770fab77cdc27648e530f0b"
+  },
+  {
+   "path": "Source/UI/AuxiliaryPanelLayout.cpp",
+   "sha256": "569a3dc865860e5959b840a90a5c67a791d3afc41019f6c9b0bb8324926e79cd"
+  },
+  {
+   "path": "Source/UI/AuxiliaryPanelLayout.h",
+   "sha256": "9c69fc8a581a19515e5a11f9f2c0b9c68d5bb4cc4d17da1e94dc6217a62f2c8a"
+  },
+  {
+   "path": "Source/UI/MultiWindowWorkspace.cpp",
+   "sha256": "e58077752572b5d7c8d43c7dcb04fa5eb26c1beef81b8805274eae4ab2ef4544"
+  },
+  {
+   "path": "Source/UI/MultiWindowWorkspace.h",
+   "sha256": "c76a628f11a2869241c41c137b80d6d8779bfe0c3c467c471cdcfa73816fff31"
+  },
+  {
+   "path": "Source/UI/Panels.cpp",
+   "sha256": "3dffbf6b34e6f0120356891b541aed054ff8ab71b676689e04e1dd791c4a40bf"
+  },
+  {
+   "path": "Source/UI/Panels.h",
+   "sha256": "80923f800fe438b4d5f801efcf58032143fa88972e7bb6d0ee6284ae9cd2e6eb"
+  },
+  {
+   "path": "Source/UI/ThemeManager.cpp",
+   "sha256": "73c530cd0487b334bd4c1e47fa4e5bdf10780329628d011866094fe44182acc0"
+  },
+  {
+   "path": "Source/UI/ThemeManager.h",
+   "sha256": "454381a36e046dc201fcd8471e42397bd6f52519ed497f15e1ca3f45dd6c7ded"
+  },
+  {
+   "path": "assets/apvts_registry.json",
+   "sha256": "6411349f262c55b491ef254e03aca34b9c007f153f6e3ed6c7d9c636fd3f0b23"
+  },
+  {
+   "path": "assets/sound_hunter/registry.json",
+   "sha256": "4660343a76286f6ccfa6de4cb529636741743230d3a2d5ecffc7d25d612377f9"
+  },
+  {
+   "path": "docs/PPGU_GUITAR_SOUND_SOURCES_INDEX.md",
+   "sha256": "3e5239555ecafc6a40b253352f36f2d04414f3bf72867871935a15cbb8a30879"
+  },
+  {
+   "path": "licenses/NOTICES.txt",
+   "sha256": "db8c5c01dcf80612f8e1ae29ee70bf078ddda091e7e58d7e2c2108c4c838428e"
+  },
+  {
+   "path": "presets/factory_bank_300.json",
+   "sha256": "470c62bbfcedd27a8cb19533f390d13a676e5508785ce91841d639445aafaf98"
+  },
+  {
+   "path": "presets/ppgu-preset-001.json",
+   "sha256": "d7963875fa967ac68f7a7ae07162a50ec7e2882404f5a4bf187dceebead2a63b"
+  },
+  {
+   "path": "presets/ppgu-preset-002.json",
+   "sha256": "5386dd8892f4685f42e53b840303e611a559ed0befa256b5652d1c17bf96e4c7"
+  },
+  {
+   "path": "tests/AuxiliaryPanelTests.cpp",
+   "sha256": "837eceef661a647316863295ee6e5f56c34aea6bb711febf481d1d0727592363"
+  },
+  {
+   "path": "tests/EngineContractTests.cpp",
+   "sha256": "de41ba6ce9869ce7938458b094e76062ac535ddfddba993e8d4dc5256b87ab21"
+  },
+  {
+   "path": "tests/ThemeManagerTests.cpp",
+   "sha256": "23231a550d0530818e2e9c315b3877549514b0c8264f175857629de1603a87ee"
+  },
+  {
+   "path": "tools/TestSoundAssetRegistry.py",
+   "sha256": "805b7f20652101e725eec360d81baa197e739876f6755585704d60620f6a89d0"
+  },
+  {
+   "path": "tools/check_binary_data_links.py",
+   "sha256": "b514bf4b6c50df895c0be880861250e330174d2fadfb2f6b476698df9190fa76"
+  },
+  {
+   "path": "tools/validate_apvts_registry.py",
+   "sha256": "3b86d5b5f7dd32eb57362d4bd8dc5073077c94548bb456345157b94500dffd69"
+  },
+  {
+   "path": "tools/validate_guitar_sources_index.py",
+   "sha256": "4ac7dfec9b6653d02ffcda46583a3de159359fa510e854232eff42949d4d2854"
+  },
+  {
+   "path": "tools/validate_preset_catalog.py",
+   "sha256": "eca273d81ad5b5857a5ab8ac5559687a37143758fb1aaf0a56427f2900588c5d"
+  },
+  {
+   "path": "tools/validate_skin_manifests.py",
+   "sha256": "724abfdc56abaedf8f51bdf37faa5895c698671d27fca0824960a7381f031973"
+  },
+  {
+   "path": "tools/validate_sound_asset_registry.py",
+   "sha256": "463923aa847212d984a776c9c02c37adc23471b0cf7da93528b88985e6bd21dd"
+  },
+  {
+   "path": "tools/validate_soundbank.py",
+   "sha256": "096b63edf9716921ab9b0e5fbbbf0c52e3fc4d17c3df9854dee4ab474a129831"
+  }
+ ]
+}
