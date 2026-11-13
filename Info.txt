@@ -1664,3 +1664,15 @@ F. Только после этого считать документальны�
 - Fix commit: `8b164f67b4259031561f73e922e38c046d72aaf9`.
 - Статус исправления: IMPLEMENTED / UNVERIFIED. Ожидается новый Windows CI на fix SHA; до результата не считать compile fixed, CTest passed или VST3 packaged.
 - Следующий шаг по P0: проверить новый run для `8b164f67...`; если compile проходит — пройти полный CTest → VST3 locate → pluginval → package. Затем продолжить пункт 3 P0 по diff MELODY/PATTERN trigger и integration coverage.
+
+
+## Сессия 13.11.2026 — P0, шаг 3: compile PASS, SamplePool CTest failure
+
+- Проверен Windows VST3 workflow run `43388822033` на fix SHA `8b164f67b4259031561f73e922e38c046d72aaf9`.
+- Configure x64 Release — PASS; Build VST3 and test executables — PASS. Ошибка C++ компиляции из предыдущего run устранена подтверждённым CI.
+- CTest: 15/16 PASS; единственный FAIL — `ppgu_sample_pool_tests`. PATTERN integration test — PASS.
+- Диагностика SamplePool: в новом тесте лимита 8 streaming roots три SFZ fixture-строки записывали буквальные символы `\\n` вместо перевода строки. Парсер получал значение `key=80\\n` и закономерно сообщал `Invalid value for key: 80`. Это дефект тестовых fixtures, не доказательство дефекта production SFZ parser.
+- Исправлены три окончания строк в `tests/SamplePoolTests.cpp`: восемь root fixtures, same-root bank и ninth-root fixture теперь используют настоящий LF escape. Логика лимита/переиспользования/отклонения не ослаблялась.
+- Fix commit: `e88127ec656b1da24fa5e5de30a29625d5c87a0a`.
+- Статус: предыдущая компиляция BUILD VERIFIED для SHA `8b164f...`; CTest NOT PASS из-за SFZ test fixture; исправление IMPLEMENTED, новый exact-SHA Windows CI ожидается. VST3 locate, pluginval и packaging для нового SHA ещё не подтверждены.
+- Следующий шаг: проверить CI run на `e88127e...`; при CTest PASS продолжить оставшиеся P0 release gates по порядку.
