@@ -1816,3 +1816,81 @@ pluginval strictness 5 + package), запись в INFO и CODE до и посл
 4. Rebuild exact-SHA: Windows Release, CTest 15+ targets, pluginval,
    package — только затем записи BUILD VERIFIED.
 5. FL Studio 20 host acceptance свежего SHA (ручная проверка, отдельная запись).
+
+==============================================================================
+INFO.txt — APPEND FRAGMENT (2026-11-13, вечер, пакет продолжения v2)
+Добавлять в конец Info.txt как есть. Не перезаписывать существующие записи.
+==============================================================================
+
+## 2026-11-13 — Этап O1/O2/S1: OverlayManager + SecureSkinImport (.ppguskin)
+
+**Статус: IMPLEMENTED / VALIDATION PENDING.**
+Production source-файлы переданы в дерево проекта; вне-CI верификация
+зафиксирована ниже как evidence. Windows Release build, CTest, pluginval
+strictness 5 и FL Studio 20 host acceptance на результирующем SHA НЕ
+подтверждены. Никаких BUILD PASS / TESTED / HOST VERIFIED не заявляется.
+
+**Состав пакета:**
+- Source/UI/OverlayManager.h / .cpp — стек оверлеев (ёмкость 8), duplicate id
+  отвергается, blocked по верхнему видимому modal, closeTop отказывается
+  закрывать non-closable детерминированно, listener вызывается вне лока.
+- Source/Security/SecureSkinImport.h / .cpp — secure import .ppguskin:
+  allowlist путей/расширений (theme_manifest.json, theme.json, PNG, SVG),
+  запрет traversal, backslash, drive letter, абсолютных путей, пустых и
+  скрытых сегментов (fail-closed), лимиты 64 MiB архив / 8 MiB запись /
+  512 записей / 512 символов пути, SVG-политика (script, ENTITY,
+  foreignObject, javascript:, on<token>= обработчики, внешние href в обеих
+  кавычках и без кавычек), SHA-256 provenance (FIPS 180-4).
+- Tests/OverlayManagerTests.cpp — ровно 12 assertions.
+- Tests/SecureSkinImportTests.cpp — ровно 34 assertions (8 SHA + 16 path + 10 SVG).
+- tools/validate_skin_usage.py — G3.5-валидатор usage.json (21 канонический
+  токен, hex/rgb в usage запрещены) + fixtures позитив/негатив.
+- tools/validate_soundbank.py — закрыта дыра CI-контракта: build.yml вызывает
+  этот валидатор, ранее он отсутствовал в дереве. Реализован по политике
+  SOUNDBANK/policy.json; гейт G5 на пересобранном дереве PASS.
+- CMakeLists.txt — добавлены таргеты ppgu_overlay_contracts,
+  ppgu_skin_import_contracts и два add_test.
+
+**Вне-CI верификация (evidence, не замена CI):**
+- SHA-256: block_ref-арифметика сверена с независимым эталоном (hashlib):
+  4 вектора FIPS 180-4 + свип длин 0-259 — 264/264 MATCH. Найденный в
+  процессе дефект касался кортежного стиля зеркала, а не C++-кода; в
+  production пошёл только верифицированный последовательный стиль.
+- Path-политика зеркало: 16/16. SVG-политика зеркало: 16/16 (включая
+  onclick=, onload=, одинарные кавычки, href=https://, bare href).
+- Валидатор G3.5 запущен реально: позитив PASS (rc=0), негатив FAIL (rc=1,
+  hex-литерал + неизвестный токен).
+
+**Исправление по журналу (обязательное):** digest 56-байтного FIPS-вектора:
+корректное значение —
+`248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1`.
+Значения `2ff100b3...c25301b` и `...5ce9467e10a37fa...` из прежних записей
+ОШИБОЧНЫ и не должны копироваться. Аналогично: SecureSkinImportTests —
+ровно 34 assertions (не 33); реестр тем — 52 темы с default skin-052
+(значение «102 темы» — дефект прежней документации, закрыт).
+
+**Non-goals / границы:** DSP, audio callback, sampler, MIDI, APVTS
+IDs/semantics, presets, SoundBank, skin inventory и schema не менялись.
+OverlayManager в этой записи НЕ интегрирован в PPGUMultiWindowWorkspace —
+интеграция — следующий отдельный scoped-этап.
+
+**Следующий шаг:** интеграция OverlayManager в PPGUMultiWindowWorkspace
+(Source/UI/), затем production-обвязка juce::ZipFile ->
+SecureSkinImport::Entry. Каждый этап — отдельный commit с полным exact-SHA
+гейтом.
+
+## 2026-11-13 — Сводный реестр незавершённых работ (обновление)
+
+| Область | Статус | Блокер |
+|---|---|---|
+| O1/O2 OverlayManager core | IMPLEMENTED / VALIDATION PENDING | CI (Windows Release, CTest) |
+| S1 SecureSkinImport core | IMPLEMENTED / VALIDATION PENDING | CI + juce::ZipFile обвязка |
+| OverlayManager интеграция в workspace | NOT STARTED | после CI этого этапа |
+| Skin Gallery runtime hot-swap | PARTIAL | DPI/ECO gates |
+| FX EDIT source-to-control audit | DESIGNED | аудит 8 страниц |
+| AutoChords | DISABLED BY DESIGN | backend/MIDI routing |
+| Auto Discover / Curator / About | NOT IMPLEMENTED | pipeline S6.5 / policy in production |
+| SoundBank payload 7-10 GB | PENDING | production registry |
+| CPU/RAM цели | NOT MEASURED | актуальные измерения |
+
+==============================================================================
