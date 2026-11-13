@@ -45,6 +45,18 @@ jobs:
         shell: pwsh
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
+      - name: Validate Skin usage semantic tokens (G3.5)
+        shell: pwsh
+        run: |
+          python tools/validate_skin_usage.py tests/fixtures/usage_ok.json
+          if ($LASTEXITCODE -ne 0) { throw 'G3.5 valid fixture must exit 0.' }
+          python tools/validate_skin_usage.py tests/fixtures/usage_bad.json
+          if ($LASTEXITCODE -ne 1) { throw 'G3.5 invalid fixture must exit 1.' }
+
+      - name: Validate SoundBank natural-only policy (G5)
+        shell: pwsh
+        run: python tools/validate_soundbank.py SOUNDBANK
+
       - name: Select checked-out project source
         shell: pwsh
         run: |
@@ -249,6 +261,9 @@ jobs:
 
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SOUNDBANK/policy.json') -Destination (Join-Path $release 'SOUNDBANK/policy.json') -Force
+          python (Join-Path $env:PROJECT_DIR 'tools/validate_soundbank.py') (Join-Path $release 'SOUNDBANK')
+          if ($LASTEXITCODE -ne 0) { throw 'G5 natural-only policy failed on the packaged SoundBank.' }
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.

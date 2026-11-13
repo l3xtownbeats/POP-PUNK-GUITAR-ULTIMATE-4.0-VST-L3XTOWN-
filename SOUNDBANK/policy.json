@@ -1,0 +1,7 @@
+{
+  "sampleSourcePolicy": "NATURAL_SAMPLES_ONLY",
+  "synthesizedSamplesAllowed": false,
+  "populationPath": "Import Guitar: single files or whole libraries (WAV/FLAC/OGG/AIFF/MP3); engine distributes results into MELODY and PATTERN",
+  "engineBehaviour": "loads samples on demand; preset switch releases the previous preset bank; no resident library accumulation",
+  "correction": "2026-11-13: factory SoundBank contains only natural recordings. Synthesized guitar WAV payloads are not shipped."
+}

@@ -346,3 +346,81 @@ if(BUILD_TESTING)
     juce_generate_juce_header(ppgu_processor_pattern_tests)
     add_test(NAME ppgu_processor_pattern_integration COMMAND ppgu_processor_pattern_tests)
 endif()
+
+
+# O1/O2 — JUCE-free overlay and secure skin-import contracts.
+add_library(ppgu_overlay_contracts STATIC
+    Source/UI/OverlayManager.cpp
+    Source/UI/OverlayManager.h
+)
+target_include_directories(ppgu_overlay_contracts PUBLIC Source/UI)
+target_link_libraries(ppgu_overlay_contracts PRIVATE
+    juce::juce_recommended_config_flags
+    juce::juce_recommended_warning_flags
+)
+
+add_library(ppgu_skin_import_contracts STATIC
+    Source/Security/SecureSkinImport.cpp
+    Source/Security/SecureSkinImport.h
+)
+target_include_directories(ppgu_skin_import_contracts PUBLIC Source/Security)
+target_link_libraries(ppgu_skin_import_contracts PRIVATE
+    juce::juce_recommended_config_flags
+    juce::juce_recommended_warning_flags
+)
+
+# Keep both isolated contracts in the production link graph; workspace/ZIP
+# integration is a later scoped step and does not alter the audio path.
+target_link_libraries(PopPunkGuitarUltimate PRIVATE
+    ppgu_overlay_contracts
+    ppgu_skin_import_contracts
+)
+
+if(BUILD_TESTING)
+    add_executable(ppgu_overlay_contract_tests tests/OverlayManagerTests.cpp)
+    target_compile_definitions(ppgu_overlay_contract_tests PRIVATE PPGU_STANDALONE_TEST=1)
+    target_link_libraries(ppgu_overlay_contract_tests PRIVATE
+        ppgu_overlay_contracts
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_overlay_manager_contract COMMAND ppgu_overlay_contract_tests)
+
+    add_executable(ppgu_skin_import_contract_tests tests/SecureSkinImportTests.cpp)
+    target_compile_definitions(ppgu_skin_import_contract_tests PRIVATE PPGU_STANDALONE_TEST=1)
+    target_link_libraries(ppgu_skin_import_contract_tests PRIVATE
+        ppgu_skin_import_contracts
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_warning_flags
+    )
+    add_test(NAME ppgu_secure_skin_import_contract COMMAND ppgu_skin_import_contract_tests)
+
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(Python3_Interpreter_FOUND)
+        add_test(
+            NAME ppgu_skin_usage_positive_fixture
+            COMMAND ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/tools/validate_skin_usage.py
+                ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/usage_ok.json
+        )
+        add_test(
+            NAME ppgu_skin_usage_negative_fixture
+            COMMAND ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/tools/validate_skin_usage.py
+                ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/usage_bad.json
+        )
+        set_tests_properties(ppgu_skin_usage_negative_fixture PROPERTIES WILL_FAIL TRUE)
+        add_test(
+            NAME ppgu_soundbank_natural_only_policy
+            COMMAND ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/tools/validate_soundbank.py
+                ${CMAKE_CURRENT_SOURCE_DIR}/SOUNDBANK
+        )
+        set_tests_properties(
+            ppgu_skin_usage_positive_fixture
+            ppgu_skin_usage_negative_fixture
+            ppgu_soundbank_natural_only_policy
+            PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endif()
+endif()
