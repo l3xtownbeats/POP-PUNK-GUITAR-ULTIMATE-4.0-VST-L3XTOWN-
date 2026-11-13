@@ -1571,3 +1571,41 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **AUDIT CHECKPOINT COMPLETE / SOURCE UNCHANGED / STAGE 2A IMPLEMENTATION PENDING.**
 Следующий технический шаг: спроектировать минимальный Stage 2A inventory/import core contract поверх существующих SampleMetadataIndex и SamplePool без изменения playback/DSP; перед кодом определить registry schema, SHA-256 index, path/collision policy, ZIP safety limits, staging/publish transaction и тестовые fixtures. Затем отдельная реализация и regression tests — только в этой ветке и с append-only журналом.
 `CODE.txt` не изменялся: в этом checkpoint нет source-code изменения, которое требовало бы code-change index entry.
+
+
+## 2026-11-13 — Stage 2A technical decomposition (design checkpoint)
+
+**Тип:** архитектурная декомпозиция по результатам аудита; design only, production code не изменялся.
+**Branch / HEAD before this journal commit:** `work/rev17-sampler-root-cap-regression` / `2ba510e347d6a0a7c1ef20ccf2dc0d87595b6f5e`.
+**Основа:** `SampleMetadataIndex.h/.cpp`, `SfzParser.h/.cpp`, `SamplePool.h/.cpp`, `WavPageReader.h/.cpp`, `CMakeLists.txt`, Stage 2 specification.
+
+### Предлагаемая граница компонентов
+1. Отдельный management/import слой (предлагаемый каталог `Source/Library/`), не второй Sampler: orchestration, inventory records, transaction state, archive preflight и registry persistence. В аудиопоток этот слой не подключается.
+2. Существующий `SampleMetadataIndex` оставить metadata-only WAV scanner. Не добавлять туда SHA-256, ZIP extraction, user registry или UI state: это разделит ответственность и сохранит его текущий контракт.
+3. Существующий `SfzParser` использовать для проверки SFZ и построения normalized mapping proposal; `SamplePool` остаётся runtime playback owner и получает только готовый, проверенный SFZ/library path после publish.
+4. `IMPORT GUITAR` UI остаётся front-end: текущий LOAD SFZ путь сохраняется; Stage 2A добавляет отдельный Import Folder / Import ZIP / Import WAV job workflow только после готовности background service. Никаких фиктивных кнопок до runtime binding.
+
+### Inventory record / identity
+- Каждому source library присваивается стабильный libraryId; исходное имя/источник/лицензия хранятся отдельно от локального display name.
+- Для каждого файла inventory хранит normalized relative path, file kind, byte size, modification timestamp, SHA-256, import source/batch ID и verification status.
+- SHA-256 вычисляется потоково фиксированными блоками на worker thread; не читать весь WAV/ZIP в RAM. Metadata (sample rate, frames, channels, bit depth) получать через существующий `SampleMetadataIndex` после безопасного размещения/проверки файла.
+- Duplicate = совпадающий SHA-256 независимо от имени. Collision = совпадающий normalized relative path или filename при отличающемся SHA-256. Collision не перезаписывает существующий файл; импорт получает отдельный стабильный путь и отчёт.
+
+### Append-only transaction / safety
+- Сначала dry-run inventory и отчёт (new / duplicate / collision / unsupported / missing reference); до подтверждения пользователя ни один source asset не записывается в активную библиотеку.
+- ZIP preflight до extraction: reject absolute/UNC/drive-qualified paths, `..` traversal, symlink entries, duplicate normalized paths, unsupported entry types, path-length overflow, excessive file count, total expanded bytes and compression ratio. Лимиты должны быть явными константами/настройками и проверяться до записи каждого entry.
+- Extraction/copy/hash/metadata scan выполняются в уникальном staging directory под контролируемым root. Проверять canonical destination containment после нормализации; не доверять только строковой проверке имени.
+- Source assets immutable: никогда не overwrite/move/rename/delete existing files. Новые collision files получают отдельный namespace; original SFZ/source tree сохраняются byte-for-byte.
+- Publish: после успешной полной проверки сначала фиксируются новые файлы в уникальных, ранее отсутствующих путях, затем создаётся новая версия registry/manifest и атомарно переключается только metadata pointer. Старые manifest generations сохраняются. При cancel/failure активная версия registry остаётся прежней; orphaned transaction-owned staging можно убирать только после проверки, что путь создан этой транзакцией и не существовал до неё.
+- Registry update должен быть crash-safe: temp file в том же filesystem, flush/close, atomic rename/replace pointer; если atomic replacement semantics не подтверждены на Windows, использовать versioned registry snapshots + pointer protocol и отдельные tests.
+
+### Обязательные Stage 2A tests
+- Inventory: recursive WAV discovery, unsupported/empty/malformed files, unreadable paths, symlink/junction escape, stable normalized paths, metadata overflow.
+- Hash: same content/different name dedup; same name/different content collision; file changes between scan and copy (TOCTOU) rejected by re-hash.
+- ZIP: `../`, absolute/UNC/drive paths, symlink, duplicate entry names after normalization/case folding, nested archives policy, file-count/expanded-size/ratio limits, truncated/corrupt archive.
+- Transaction: dry-run no writes; cancel at each phase; failure before/after staging; publish success; repeated import adds zero files; partial re-import adds only missing files; old registry generation remains readable.
+- Realtime boundary: tests/static review ensure no import API is called from `processBlock`; all filesystem/hash/archive work remains off audio thread.
+- License: provenance/clearance is required metadata, but unknown/absent license is never promoted to redistributable/GREEN. Importing a user file into User library does not imply permission to redistribute it in Factory/package.
+
+### Статус и следующий шаг
+**DESIGN PROPOSAL RECORDED / NOT IMPLEMENTED / NOT TESTED.** Это техническая декомпозиция для Stage 2A, а не разрешение менять production code. Перед кодированием проверить доступные JUCE archive/hash APIs и Windows atomic-file semantics на целевом JUCE/C++ toolchain, затем зафиксировать конкретные limits/schema и реализовать service + isolated tests. Existing Sampler playback, processBlock, DSP, APVTS/MIDI, presets and SoundBank остаются вне области изменения.
