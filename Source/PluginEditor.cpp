@@ -1003,11 +1003,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setWantsKeyboardFocus(true);
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
-    setSize(1120, 840);
+    // Medium first-launch footprint for FL Studio; the JUCE resize corner remains enabled.
+    // The responsive layout below keeps the main controls visible down to the minimum size.
+    setSize(1024, 700);
     setResizable(true, true);
-    // The current fixed-height control stack needs ~788 px including outer margins.
-    // Do not allow a window size that clips the keyboard or lower controls.
-    setResizeLimits(980, 800, 1600, 1100);
+    setResizeLimits(900, 640, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
@@ -1175,18 +1175,40 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     options.filenameSuffix = "settings";
     options.folderName = "L3XTOWN";
     uiProperties.setStorageParameters(options);
+    int restoredWidth = 1024;
+    int restoredHeight = 700;
     if (auto* settings = uiProperties.getUserSettings())
     {
         auxiliaryWorkspace->setPanelScale(static_cast<float>(settings->getDoubleValue("workspacePanelScale", 1.0)));
         auxiliaryWorkspace->setPanelGap(settings->getIntValue("workspacePanelGap", 12));
+        restoredWidth = settings->getIntValue("editorWidth", restoredWidth);
+        restoredHeight = settings->getIntValue("editorHeight", restoredHeight);
     }
     loadSavedSkin();
     applyPalette();
+    uiSettingsReady = true;
+    setSize(juce::jlimit(900, 1600, restoredWidth),
+            juce::jlimit(640, 1100, restoredHeight));
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    stopTimer();
+    timerCallback();
     setLookAndFeel(nullptr);
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::timerCallback()
+{
+    stopTimer();
+    if (!uiSettingsReady)
+        return;
+    if (auto* settings = uiProperties.getUserSettings())
+    {
+        settings->setValue("editorWidth", getWidth());
+        settings->setValue("editorHeight", getHeight());
+        settings->saveIfNeeded();
+    }
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
@@ -1265,6 +1287,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
+    // Debounce disk persistence while the user drags the resize corner.
+    if (uiSettingsReady)
+        startTimer(450);
+
     auto bounds = getLocalBounds().reduced(14);
     if (auxiliaryWorkspace != nullptr)
         auxiliaryWorkspace->setBounds(bounds);
