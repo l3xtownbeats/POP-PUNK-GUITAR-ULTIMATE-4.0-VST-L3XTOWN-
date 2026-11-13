@@ -449,7 +449,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             0x5555, 0x1111, 0x3333, 0xffff, 0x9999, 0x1111, 0x4444,
             0x0f0f, 0x8888, 0xaaaa, 0xcccc, 0x6666, 0xffff
         }};
-        const bool arpeggio = patternSlot == 12;
         const int quantizeChoice = juce::jlimit(0, 1, static_cast<int>(parameters.getRawParameterValue("patternQuantize")->load(std::memory_order_relaxed)));
         const double quantizeGridBeats = quantizeChoice == 0 ? 0.25 : 0.125;
         const bool startOnFirstChord = parameters.getRawParameterValue("startOnFirstChord")->load(std::memory_order_relaxed) > 0.5f;
@@ -535,6 +534,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             }
             const int activePatternSlot = patternTriggerState.isActive()
                 ? patternTriggerState.selectedPatternIndex() : uiPatternSlot;
+            const bool arpeggio = activePatternSlot == 12;
             const auto [notes, count, channel] = readChord();
             if (count == 0)
             {
@@ -645,6 +645,27 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     else
                     {
                         patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(note)] = message.isNoteOn();
+                        // When this is the hybrid MELODY route, notes outside
+                        // the reserved trigger octave remain ordinary guitar
+                        // notes until a PATTERN trigger is actually held.
+                        if (playMode == 0 && !patternTriggerState.isActive())
+                        {
+                            if (message.isNoteOn() && velocityScale > 0.0f)
+                            {
+                                const float normalizedVelocity = juce::jlimit<float>(
+                                    0.0f, 1.0f, static_cast<float>(message.getVelocity()) / 127.0f);
+                                const float dynamics = juce::jlimit(0.0f, 1.0f,
+                                    parameters.getRawParameterValue("dynamics")->load(std::memory_order_relaxed));
+                                const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
+                                const int scaledVelocity = juce::jlimit(1, 127,
+                                    juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
+                                const bool triggered = sampler.noteOn(note, scaledVelocity, maximumVoices,
+                                    message.getChannel(), globalTuningSemitones);
+                                juce::ignoreUnused(triggered);
+                            }
+                            else if (message.isNoteOff())
+                                sampler.noteOff(note, message.getChannel());
+                        }
                     }
                 }
             },
