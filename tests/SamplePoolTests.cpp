@@ -820,6 +820,77 @@ int main()
         }
     }
 
+    // Full 64-voice acceptance: warm the shared streaming page, allocate
+    // every fixed voice slot, render under simultaneous read-lease pressure,
+    // then verify deterministic voice stealing at the configured hard cap.
+    {
+        ppgu::sampler::SamplerEngine polyphonyStressEngine;
+        polyphonyStressEngine.prepare(44100.0);
+        if (!polyphonyStressEngine.loadSfz(sfzFile).success)
+        {
+            std::cerr << "Could not load 64-voice stress bank.\\n";
+            return 1;
+        }
+        if (!polyphonyStressEngine.noteOn(60, 100))
+            return 1;
+        juce::AudioBuffer<float> prime(2, 128);
+        bool primed = false;
+        for (int attempt = 0; attempt < 100 && !primed; ++attempt)
+        {
+            prime.clear();
+            polyphonyStressEngine.render(prime, 0, prime.getNumSamples());
+            primed = prime.getMagnitude(0, 0, prime.getNumSamples()) > 0.001f;
+            if (!primed) std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+        if (!primed)
+        {
+            std::cerr << "64-voice stress bank did not prime its streaming cache.\\n";
+            return 1;
+        }
+        polyphonyStressEngine.reset();
+        for (int voice = 0; voice < ppgu::sampler::SamplerEngine::maximumVoices; ++voice)
+            if (!polyphonyStressEngine.noteOn(60, 40 + (voice % 88)))
+            {
+                std::cerr << "Sampler failed to allocate voice slot " << voice << ".\\n";
+                return 1;
+            }
+        if (polyphonyStressEngine.getActiveVoiceCount() != 64)
+        {
+            std::cerr << "Sampler did not reach the configured 64-voice polyphony limit.\\n";
+            return 1;
+        }
+
+        juce::AudioBuffer<float> denseRender(2, 1024);
+        denseRender.clear();
+        polyphonyStressEngine.render(denseRender, 0, denseRender.getNumSamples());
+        bool finiteOutput = false;
+        for (int sample = 0; sample < denseRender.getNumSamples(); ++sample)
+            for (int channel = 0; channel < denseRender.getNumChannels(); ++channel)
+            {
+                const float value = denseRender.getSample(channel, sample);
+                if (!std::isfinite(value))
+                {
+                    std::cerr << "64-voice render produced a non-finite output sample.\\n";
+                    return 1;
+                }
+                finiteOutput = finiteOutput || std::abs(value) > 0.0001f;
+            }
+        if (!finiteOutput || polyphonyStressEngine.getActiveVoiceCount() != 64)
+        {
+            std::cerr << "64-voice streaming render was silent or lost active voices.\\n";
+            return 1;
+        }
+        if (!polyphonyStressEngine.noteOn(60, 110)
+            || polyphonyStressEngine.getActiveVoiceCount() != 64)
+        {
+            std::cerr << "Voice stealing exceeded or failed to preserve the 64-voice cap.\\n";
+            return 1;
+        }
+        polyphonyStressEngine.reset();
+        if (polyphonyStressEngine.getActiveVoiceCount() != 0)
+            return 1;
+    }
+
     std::cout << "SamplePool tests passed: WAV decode, SFZ load, MIDI playback, and polyphony cap.\n";
     return 0;
 }
