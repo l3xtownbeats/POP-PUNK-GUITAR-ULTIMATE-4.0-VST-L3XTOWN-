@@ -1619,3 +1619,18 @@ F. Только после этого считать документальны�
 **CI:** skin workflow run `43198014508` on REV.17 SUCCESS (preflight recognized merged pack; full validation and final registry assertions passed). Windows VST3 run `43198145160` on SHA `0dc6cde...` was IN_PROGRESS at journal time; exact build/CTest/pluginval result pending.
 
 **РЕЗУЛЬТАТ:** fast legacy artwork generator SOURCE UPDATED; skin workflow is REV.17-safe and idempotent; full Windows VST3 validation pending.
+
+
+## 2026-11-13 — Main editor resize + persistent dimensions
+
+**Тип:** GUI usability / responsive editor geometry. **Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`. **Базовый HEAD:** `cbc5a9a90f2dd90b8067a6515aaedeaf1bd16463`.
+
+**[ПОДТВЕРЖДЕНО] Требование:** главный интерфейс открывается в среднем размере, не fullscreen; размер меняется перетягиванием правого нижнего уголка; все элементы остаются JUCE-компонентами и перестраиваются через `resized()`; последний размер сохраняется между открытиями. Дополнительные окна остаются внутри workspace и повторно раскладываются при изменении размеров редактора. SIGNAL FORGE / NEON и утверждённая компоновка не меняются.
+
+**[АУДИТ] До правки:** `setResizable(true, true)` уже был включён, поэтому drag-resize как базовая возможность существовал. Но начальный размер был 1120×840, ограничения — 980×800…1600×1100; отдельного сохранения ширины/высоты в пользовательских настройках не было. Основной `resized()` уже рассчитывал зоны и размеры контролов от доступной геометрии; workspace получал новые bounds и выполнял повторную раскладку панелей.
+
+**[ПРАВКА]** `Source/PluginEditor.cpp`: стартовый размер изменён на 1024×700; допустимый диапазон — 900×640…1600×1100. Добавлено восстановление `editorWidth/editorHeight` из существующего PPGU settings store. При перетаскивании уголка сохранение размеров выполняется с debounce 450 мс, а не записью на диск на каждом resize-событии. Размер сохраняется также при закрытии редактора. `Source/PluginEditor.h`: добавлен JUCE Timer callback и флаг готовности settings.
+
+**[НЕ ИЗМЕНЯЛОСЬ]** DSP, processBlock, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, skin artwork и визуальные токены. FX EDIT, Gallery и остальные утверждённые макеты не перерисовывались.
+
+**[НЕ ПРОВЕРЕНО]** Windows Release build, CTest, pluginval, FL Studio 20 на 17-дюймовом дисплее и DPI 100/125/150%. Проверка min/max geometry и сохранения размера должна быть включена в следующий exact-SHA CI/host pass. Эта запись фиксирует source change, а не успешную сборку или host acceptance.
