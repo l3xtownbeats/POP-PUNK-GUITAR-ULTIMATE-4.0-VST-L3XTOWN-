@@ -1700,3 +1700,143 @@ Status: accepted product requirements; implementation status must be verified se
 - **NOT ACQUIRED / NOT LICENSE-CLEARED** — аудиоматериал не включать в package.
 
 Не закрывать пункт по обещанию, макету, названию класса или успешному тесту другой подсистемы. В каждом новом отчёте указывать дату, branch, exact SHA, test/run ID, фактический результат и оставшиеся риски.
+
+## 9. Полный технический паспорт проекта
+
+**Назначение раздела:** единая техническая карта PPGU — из чего состоит продукт, на каких технологиях работает, как проходит MIDI/audio signal, как устроены sampler, streaming, DSP, PATTERN/MELODY, интерфейс, пресеты, SoundBank, сборка и проверка. Здесь фиксируется подтверждённая реализация отдельно от целевой архитектуры.
+
+### 9.1. Платформа, язык и сборочная система
+- Продукт: виртуальный гитарный инструмент VST3, Windows x64; целевой хост — FL Studio 20.
+- Основной язык: C++20. GUI, plugin processor/editor и DSP-инфраструктура построены на JUCE; текущая закреплённая версия — JUCE 7.0.12.
+- Система сборки: CMake; целевой компилятор — MSVC / Visual Studio 2022 x64.
+- Текущие профили аудио-проверки в документации: 48 kHz / 64 samples. Это тестовый профиль, а не единственно допустимый режим работы.
+- Целевой формат поставки — VST3 bundle с необходимыми легально распространяемыми SOUNDBANK, PRESETS, SKINS, Resources и Assets.
+- Сборка текущего HEAD, CTest, pluginval, установка и работа в FL Studio 20 должны подтверждаться отдельно. Наличие CMake/JUCE исходников само по себе не является доказательством готового бинарного продукта.
+
+### 9.2. Общая структура аудиотракта
+Логическая цепочка инструмента:
+1. MIDI/host events поступают в plugin processor.
+2. Processor передаёт события выбранному инструментальному режиму и voice/scheduler подсистемам.
+3. MELODY запускает ноты непосредственно по MIDI-клавиатуре.
+4. PATTERN использует chord-oriented workflow, транспорт и scheduler-компоненты для формирования ритмических событий.
+5. Sampler/voice layer выбирает SFZ region с учётом доступных key/velocity/channel/RR mapping данных.
+6. Голоса читают аудиостраницы через streaming reader; cache miss не должен заставлять audio thread ждать диск.
+7. Суммированный сигнал проходит через доступные DSP-узлы и формирует выходные аудиоканалы плагина.
+
+Это схема архитектурного потока. Полная сквозная runtime-приёмка PATTERN → sampler → FX → host на текущем HEAD ещё не подтверждена.
+
+### 9.3. MELODY и PATTERN
+- MELODY — хроматическая MIDI-игра: отдельная нота на клавишу, риффы, октавы, хуки и lead-партии.
+- PATTERN — аккордовый ритм-режим для downstrokes, palm-muted куплетов, открытых припевов, offbeat и арпеджированных рисунков.
+- В проекте присутствуют транспортные и scheduler-компоненты PATTERN. Их наличие не приравнивается к завершённой работе всех сценариев.
+- Для PATTERN требуется отдельная end-to-end проверка: выбор/смена аккорда, секция/фрагмент песни (например verse/chorus/bridge), выбор рисунка и ритмики, tempo/transport sync, MIDI timing, артикуляция, остановка/перезапуск, смена пресета и сохранение состояния.
+- Изменения PATTERN не должны ломать прямой MELODY workflow или общий audio callback.
+
+### 9.4. Sampler и формат сэмплов
+Подтверждённая базовая реализация — SFZ/WAV sample playback path:
+- SFZ parser формирует region mapping; отдельные механизмы учитывают key range, velocity, MIDI channel и round-robin.
+- WAV metadata index выполняет metadata-only scan: frames, sample rate, channels, bit depth, floating-point flag, file size и modification time. Сам scan не декодирует весь аудиофайл.
+- SamplePool связывает SFZ parsing, metadata index, streaming service и RegionView; активный snapshot публикуется атомарно после подготовки.
+- SamplePool ограничен 128 snapshots и 8 уникальными streaming library roots на экземпляр.
+- SamplerEngine содержит 64 заранее выделенных voice slots; музыкальная целевая полифония по профилю проекта — 32, но нагрузочная приёмка 64 voices остаётся отдельной задачей.
+- Полнота стандарта SFZ не заявляется. WAV — подтверждённый путь; прямой универсальный импорт FLAC/OGG/AIFF/SF2 не подтверждён. Наличие fallback для OGG reference к одноимённому WAV не означает прямое OGG streaming.
+
+### 9.5. Streaming и page cache
+Подтверждённые исходные компоненты:
+- Source/Sampler/SampleMetadataIndex.{h,cpp} — индекс WAV metadata.
+- Source/Sampler/SampleStreamingService.{h,cpp} — bounded SPSC request queue, worker thread, page decoding и статистика запросов/cache hit/miss/decode errors/cache full.
+- Source/Sampler/PageCacheSlots.{h,cpp} — фиксированные cache slots, атомарный pin/release и eviction только незакреплённых готовых страниц.
+- Source/Sampler/StreamingVoiceReader.{h,cpp} — page-backed reads, prefetch соседних страниц и Hermite interpolation через границы страниц.
+- Source/Sampler/SamplePool.{h,cpp} — подготовка SFZ snapshot и публикация RegionView для аудиопотока.
+
+Текущие параметры/ограничения, подтверждённые аудитом:
+- 4096 frames на страницу; до 2 каналов; 256 cache slots.
+- Лимит cache — 256 MiB на один streaming service/root; до 8 roots означает потенциально до 64 MiB page buffers при текущем размере слота/страницы по расчёту аудита.
+- Один streaming service использует один SPSC producer/consumer contract; подключать несколько audio producers без пересмотра очереди нельзя.
+- Worker idle loop использует sleep_for(1ms); оптимизация wake-up должна сохранять корректный shutdown.
+- Cache page lease/pin защищает чтение от eviction во время использования.
+- При cache miss audio thread не ждёт disk/worker; недостающий участок может быть пропущен/заглушён согласно underrun policy, запрос ограниченно ставится в очередь.
+- Старые snapshots и streaming services удерживаются до уничтожения SamplePool, чтобы не освободить память под активными raw pointers. Это защитная, но потенциально растущая по памяти стратегия.
+- Нельзя удалять старые snapshots через простой reset unique_ptr. До reclamation нужен доказанный reader-quiescence/epoch/refcount handoff.
+- Worker shutdown требует producer quiescence; автоматическое восстановление worker после исключения не подтверждено.
+
+### 9.6. Realtime safety — обязательный контракт
+В audio callback/processBlock запрещены:
+- файловый и сетевой I/O;
+- WAV decode и SFZ parsing;
+- ожидание mutex/condition variable/worker;
+- неограниченные операции и ожидание свободного cache slot;
+- GUI операции;
+- непредсказуемые выделения/освобождения памяти после начала воспроизведения.
+
+Разрешённый принцип: заранее выделенные структуры, bounded queues, атомарная публикация готовых данных, неблокирующий lookup и чтение уже закреплённых страниц. Любое изменение ownership, voice stealing, panic/release, snapshot reclamation или queue topology требует regression/stress tests. Приоритеты проекта: безопасность → realtime → звук → ресурсы → UX.
+
+### 9.7. Voice management и MIDI
+- 64 заранее выделенных sampler voice slots.
+- MIDI mapping включает note, velocity и channel; SFZ region selection имеет отдельные механизмы key/velocity/channel и round-robin.
+- Voice lifecycle включает start/release/steal/panic и удержание page leases; все эти пути должны быть проверены на отсутствие утечек и use-after-free.
+- 64-voice stress под cache pressure, queue overflow, одновременными note hits и длительным sustain остаётся незакрытым QA пунктом.
+- UI MIDI keyboard и host MIDI должны быть проверены совместно; отображение клавиатуры не заменяет тест входящих MIDI events из DAW.
+
+### 9.8. DSP и эффекты
+В проекте заявлены/присутствуют DSP-компоненты и контролы:
+- Compressor;
+- EQ;
+- Distortion;
+- Chorus;
+- Delay;
+- Reverb;
+- Cabinet.
+
+Это список DSP областей проекта, а не подтверждение законченной звуковой приёмки каждой цепочки. Требуется проверить параметры, bypass, reset/defaults, автоматизацию host, корректность stereo/mono routing, отсутствие denormal/noise/NaN, поведение при смене пресета и нагрузку на CPU. Точная топология, oversampling, фильтры, коэффициенты и latency должны фиксироваться после чтения актуального исходного кода соответствующих DSP классов; предположения не записывать как факты.
+
+### 9.9. Пресеты и состояние
+- Каталог содержит 300 authored preset definitions: 150 MELODY + 150 PATTERN. Это число определений, а не подтверждённое число полностью playable пресетов.
+- Playable count публикуется только как фактически прослушанное и проверенное N/300.
+- В репозитории есть JSON factory catalog/bank и portable examples .ppgm/.ppgp.
+- Канонический формат user-bank conversion — .pgp; .ppg не принимается.
+- User imports/discovered content должны храниться вне бинарного файла плагина.
+- Пресеты должны ссылаться на BANK ID и sample IDs, а не дублировать WAV внутри preset.
+- Проверить save/restore, DAW project reopen, missing-bank fallback, migration/versioning, automation compatibility и смену пресета во время воспроизведения.
+
+### 9.10. SoundBank, лицензии и происхождение
+- В распространяемый комплект допускаются только sample assets, лицензия которых явно разрешает соответствующее распространение внутри стороннего инструмента, включая коммерческое использование, если оно планируется.
+- Для каждого asset необходимы source/provenance, точное license evidence, SHA-256, техническая проверка и статус legal review.
+- SOUND HUNTER policy contract: GREEN — только при подтверждённых правах и полном наборе проверок; YELLOW — ручной импорт/проверка; RED — исключён. GOLD требует технического контроля и человеческого прослушивания.
+- На момент последней записи registry пуст, approved assets = 0; production discovery/download/auto-add pipeline не подтверждён.
+- Нельзя включать коммерческие библиотеки, stems или записи третьих лиц только потому, что они используются как звуковые референсы.
+
+### 9.11. GUI и связь с аудиодвижком
+- Интерфейс реализован на JUCE; актуальная визуальная линия репозитория — Blackout Voltage: матовый чёрный/графит, металлические регуляторы, acid-lime акценты и electric-teal signal highlights.
+- В editor зафиксированы factory preset catalog selector, category filter/search, MELODY/PATTERN controls, SFZ loader/library status, девять rotary controls, семь effect switches, MIDI keyboard и playback sync selection.
+- SKIN menu подключён к ThemeManager; заявлены 52 зарегистрированные skin entries и palette loading из Skins рядом с VST3 bundle. Runtime switching/persistence/fallback/contrast/audio invariance для актуального HEAD требуют проверки.
+- Темы являются визуальным слоем: не должны менять APVTS IDs, DSP, sampler, MIDI или поведение аудио.
+- В текущей продуктовой спецификации пользователя дополнительно закреплена основная визуальная система SIGNAL FORGE / NEON. При расхождении названий/макетов это решение необходимо сверять с последним утверждённым MASTER PROMPT и фактической веткой UI; не выполнять самовольный визуальный откат. Данный пункт фиксирует требование, но не подменяет аудит текущих исходников.
+
+### 9.12. Build, tests и release gates
+Релизный pipeline должен подтверждать на одном и том же source SHA:
+1. Windows x64 Release configure/build через CMake/MSVC/JUCE.
+2. Все зарегистрированные CTest targets.
+3. Наличие и корректную структуру .vst3 bundle.
+4. pluginval strictness 5.
+5. Содержимое пакета: VST3, SoundBank, presets, skins, resources/assets, licenses, manifests и checksums.
+6. Чистую установку на Windows без ранее установленных sample libraries.
+7. Ручную проверку FL Studio 20: scan/load, MIDI/Piano Roll, MELODY/PATTERN, аккорды/рисунки, transport sync, automation, preset switching, save/reopen, аудиоустройство и длительная работа.
+8. CPU/RAM, cold-start, preset-switch latency, underrun/glitch и streaming stress measurements на обозначенной тестовой системе.
+
+Исторический успешный CI или artifact от старого commit не подтверждает текущий HEAD. Последний зафиксированный в README source correction — commit 8bd10b20cc9303452d19a46fcf4edea3e11488f1; подтверждённого успешного rerun после этого исправления в имеющейся записи нет. Поэтому актуальная Release build, CTest, pluginval, package и FL Studio 20 acceptance остаются UNVERIFIED/PENDING до получения свежих результатов.
+
+### 9.13. Открытые технические риски и запрет на ложный статус
+1. Snapshot lifetime/reclamation и безопасное освобождение памяти.
+2. Рост памяти при многократной загрузке банков и нескольких streaming roots.
+3. Worker failure/recovery и полное дренирование очереди при остановке.
+4. 64 voices при cache pressure, queue overflow и prefetch.
+5. Cancellation/lifetime race между загрузкой и уничтожением processor.
+6. PATTERN end-to-end runtime и корректность музыкальной логики.
+7. Реальная playable готовность 300 preset definitions.
+8. Полнота DSP routing/automation и измеренное качество звука.
+9. SoundBank licensing/provenance и production scanner.
+10. Текущая Windows сборка, тесты, pluginval, package и DAW acceptance.
+
+Статусы всегда маркировать строго: Implemented (код + релевантный тест), Partial, Unverified, Not implemented, Blocked. Не называть designed реализованным, исходники собранными без build result, тесты пройденными без отчёта, а плагин host-verified без ручной проверки в FL Studio 20.
+
