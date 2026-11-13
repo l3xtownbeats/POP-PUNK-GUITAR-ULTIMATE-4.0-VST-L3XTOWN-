@@ -351,3 +351,20 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Applied:** default 1600×900; resizable minimum 1200×700; maximum 2400×1500.
 - **Reason:** align the real editor constructor with the accepted visual-shell specification and reserve enough central area for Zone F.
 - **Pending:** visual overlap/clipping check at min/default/max; scale presets 50/60/75/80/90/100/110/125/150% and persistence; compile/CTest/pluginval/exact-SHA CI/FL Studio 20.
+
+
+## 2026-11-13 — Stage 2A JUCE security prerequisite
+
+**Type:** build dependency security update; no production source changed.  
+**Branch:** `work/rev17-sampler-root-cap-regression`.  
+**Parent:** `153eeac306093ead15cfd91b0c73402c33c75f6b`.  
+**Commit:** `022edb2274a8bf59a30e41279aeaa9e3c92639d6`.  
+**File:** `CMakeLists.txt` — JUCE FetchContent tag changed from `7.0.12` to `7.0.14-security`.
+
+**Reason:** Stage 2A accepts untrusted ZIP archives. JUCE 7.0.14-security includes ZIP symlink confinement and oversized-entry hardening; the older pin was not an acceptable base for archive extraction.
+
+**Compatibility boundary:** no sampler, processBlock, DSP, MIDI, APVTS IDs/semantics, presets, SoundBank, UI or sample assets changed. No ZIP importer or SHA-256 registry service is claimed implemented.
+
+**Verification:** commit and CMake diff fetched back. Exact-SHA workflow run was not yet visible at journal time; configure/build/CTest/pluginval and FL Studio 20 remain pending.
+
+**Next:** exact-SHA CI for the dependency pin; then implement Stage 2A inventory/import service and isolated tests. ZIP extraction must use validated entry streams into staging, not JUCE's bulk uncompress helper.
