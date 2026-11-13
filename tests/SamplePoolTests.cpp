@@ -81,9 +81,17 @@ int main()
     }
     ppgu::sampler::SamplePool surroundPool;
     const auto surroundLoad = surroundPool.loadSfz(surroundSfz);
-    if (surroundLoad.success || surroundLoad.errors.empty())
+    const bool rejectedForChannelCount = std::any_of(
+        surroundLoad.warnings.begin(), surroundLoad.warnings.end(),
+        [](const std::string& warning)
+        {
+            return warning.find("mono/stereo only") != std::string::npos;
+        });
+    if (surroundLoad.success || !rejectedForChannelCount)
     {
-        std::cerr << "Sampler silently accepted/truncated unsupported multichannel WAV data.\n";
+        std::cerr << "Multichannel WAV was not rejected by the explicit mono/stereo channel gate.\n";
+        for (const auto& error : surroundLoad.errors) std::cerr << error << "\n";
+        for (const auto& warning : surroundLoad.warnings) std::cerr << warning << "\n";
         return 1;
     }
 
