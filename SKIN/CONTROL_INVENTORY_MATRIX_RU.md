@@ -106,3 +106,5 @@ Current reference design: Skin_052 / Carbon Relay / carbon_studio / STUDIO_CONSO
 - Runtime parity assertion against actual JUCE component tree: NOT IMPLEMENTED.
 - Full skin gallery / rescan / 150 ms hot-swap / ECO: NOT IMPLEMENTED.
 - FL Studio 20 host acceptance: NOT TESTED.
+
+> **ОБЯЗАТЕЛЬНОЕ ПРАВИЛО РОЛЕЙ ТЕМ (13.11.2026):** SIGNAL FORGE / NEON — единственная основная тема продукта, DEFAULT/startup/fallback. **BLACKOUT VOLTAGE (`skin-51`) — только дополнительная тема**: не DEFAULT, не startup и не fallback. Сохранить её ID, имя, папку и ресурсы без переименования/перенумерации. Это правило действует для всех разделов проекта, включая реестр, ThemeManager, галерею, тесты, документацию и сборку. Текущий `skin-51` default/fallback в исходниках/манифесте — зафиксированное несоответствие, исправлять после завершения аудита Фазы 0; до этого код и манифесты не менять.
