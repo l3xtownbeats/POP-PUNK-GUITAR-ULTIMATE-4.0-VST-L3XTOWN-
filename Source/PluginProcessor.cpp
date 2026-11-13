@@ -412,6 +412,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const int patternLengthChoice = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
         const double patternLengthBeats = patternLengthChoice == 0 ? 4.0 : (patternLengthChoice == 1 ? 8.0 : 16.0);
         const float swing = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
+        const float humanize = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("humanize")->load(std::memory_order_relaxed));
         const float accent = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
         const std::array<std::uint16_t, 8> rhythmMasks {{ 0x5555, 0x1111, 0x3333, 0xffff, 0x9999, 0x1111, 0x4444, 0xffff }};
         const bool arpeggio = patternSlot == 7;
@@ -513,8 +514,17 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     {
                         const int chordIndex = arpeggio ? ((bar * 16 + step) % count)
                             : ((step % 2 == 0) ? strum : count - 1 - strum);
-                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
-                        patternEvents[patternEventCount++] = { beat + static_cast<double>(strum) * 0.012, 0.20,
+                        // Deterministic per-step humanisation: no random-device access,
+                        // heap work, or mutable RNG state on the audio thread.
+                        const float humanSeed = std::sin(static_cast<float>((bar * 16 + step + 1) * 12.9898
+                            + chordIndex * 78.233 + patternSlot * 37.719));
+                        const float timingJitter = humanSeed * 0.012f * humanize;
+                        const int velocityJitter = juce::roundToInt(humanSeed * 8.0f * humanize);
+                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(
+                            78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f + velocityJitter));
+                        const double eventBeat = juce::jmax(0.0, beat + static_cast<double>(strum) * 0.012
+                            + static_cast<double>(timingJitter));
+                        patternEvents[patternEventCount++] = { eventBeat, 0.20,
                             static_cast<std::uint8_t>(notes[static_cast<size_t>(chordIndex)]),
                             static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel) };
                     }
