@@ -1752,3 +1752,15 @@ F. Только после этого считать документальны�
 - **Итог PRESETS:** CATALOG VALIDATED; BASIC BROWSER ENUMERATION + PARTIAL PARAMETER APPLY SOURCE IMPLEMENTED; FULL PRESET RUNTIME / USER PRESET FILE SYSTEM / 300 PRESET PLAYABILITY NOT COMPLETE. Не ставить 300/300 playable.
 - **Следующий шаг аудита по пользовательскому порядку:** отдел EFFECTS — сверить каждый DSP path, APVTS mapping, параметры, bypass/state, realtime safety и regression coverage. До окончания аудита всех отделов не объявлять финальную сборку продукта.
 
+
+
+### Поэтапный аудит отделов — 2. EFFECTS (исходники проверены, функциональная готовность НЕ подтверждена)
+- APVTS содержит FX-параметры Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR и дополнительные Double Track / FX slot controls.
+- В `processBlock` реально присутствуют DSP-пути: amp gain + 3-band split EQ (фиксированные 250/2500 Hz), feed-forward compressor, flanger, cabinet FIR/convolution с фиксированным встроенным 64-tap original IR, soft-clip distortion, chorus, feedback delay и JUCE Schroeder reverb. Для основных DSP-циклов используются заранее выделенные buffers; код не показывает явных heap allocations/locks в этих циклах.
+- Реально считываются и влияют на DSP: compressorOn/Threshold/Ratio/Attack/Release; eqOn/Low/Mid/High; ampGain; distortionOn/Drive/Mix; chorusOn/Rate/Depth/Mix; flangerOn/Rate/Depth/Feedback/Mix; delayOn/Time/Feedback/Mix; reverbOn/Room/Damping/Mix; cabinetOn/Mix.
+- Обнаружены объявленные APVTS/UI controls, которые в текущем `processBlock` не подключены к DSP: `tone`, `compressorAmount`, `distortionTone`, `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`, `cabinetLowCut`, `cabinetHighCut`, `doubleTrackOn`, `doubleTrackMix`. Их присутствие в FX EDIT не является доказательством влияния на звук.
+- `fxSlot1..7` объявлены для перестановки семи эффектов, но порядок DSP в `processBlock` фиксирован и чтения этих slot parameters в processor не найдено. Значит drag/reorder FX chain пока не интегрирован в audio routing.
+- FX EDIT показывает восемь групп (включая Flanger) и APVTS attachments; часть ручек подключена к параметрам, которые пока не влияют на DSP. Caption graph явно обозначен как `VISUAL GUIDE`, а не измеренный анализатор. FX unit/regression tests в текущем списке CTest отсутствуют; pluginval проверяет корректность плагина, но не sonic behavior каждого эффекта.
+- **Итог EFFECTS:** CORE DSP PATHS SOURCE IMPLEMENTED; APVTS CONTROL COVERAGE PARTIAL; FX ORDERING / UNUSED CONTROLS / SONIC REGRESSION COVERAGE NOT COMPLETE. Не объявлять весь FX rack полностью реализованным.
+- **Следующий отдел по пользовательскому порядку:** PATTERN — аудит trigger map, scheduler, section/rhythm handoff, host transport, chord changes, articulation/performance assets и тестов.
+
