@@ -3,8 +3,8 @@
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
 Последнее обновление: 13 ноября 2026
-Ветка: `work/signal-forge-theme-tokens`  
-Последний commit перед текущей записью: `71c2d852c1dc1d138e903fb577533a17ca540002`
+Ветка: `work/ppgu-completion-integrated-2026-11-13`  
+Последний подтверждённый source commit перед записью CI: `e88127ec656b1da24fa5e5de30a29625d5c87a0a`
 
 ## 1. Назначение и продукт
 
@@ -1676,3 +1676,24 @@ F. Только после этого считать документальны�
 - Fix commit: `e88127ec656b1da24fa5e5de30a29625d5c87a0a`.
 - Статус: предыдущая компиляция BUILD VERIFIED для SHA `8b164f...`; CTest NOT PASS из-за SFZ test fixture; исправление IMPLEMENTED, новый exact-SHA Windows CI ожидается. VST3 locate, pluginval и packaging для нового SHA ещё не подтверждены.
 - Следующий шаг: проверить CI run на `e88127e...`; при CTest PASS продолжить оставшиеся P0 release gates по порядку.
+
+
+## Сессия 13.11.2026 — P0, шаг 4: полный Windows Release pipeline PASS
+
+- Проверен exact-SHA GitHub Actions run `43392481655` (workflow run #1295), ветка `work/ppgu-completion-integrated-2026-11-13`, source SHA `e88127ec656b1da24fa5e5de30a29625d5c87a0a`.
+- Итог run: `completed / success`; job `build` — SUCCESS.
+- Configure x64 Release — PASS.
+- Build VST3 and test executables — PASS; VST3 bundle найден после сборки.
+- CTest regression suite — **16/16 PASS**, 0 failed; total test time 3.36 s.
+- pluginval v1.0.4 strictness level 5 — PASS; все этапы в логе завершены, процесс завершился с кодом 0 и workflow продолжил packaging.
+- Отдельный шаг фиксации host validation limitation — PASS. Это НЕ означает FL Studio 20 host acceptance: ручная проверка в FL Studio 20 / Windows 10 остаётся отдельным незакрытым gate.
+- Packaging полного Windows x64 комплекта — PASS; ZIP успешно загружен как artifact:
+  - Artifact: `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`
+  - Artifact ID: `14022170712`
+  - Размер: `1,665,972,084` bytes
+  - SHA-256: `48fe18e760966e237c4d51dc226080044ede7ed2c86a444e427c41e6a45f5a65`
+  - Run: `https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43392481655`
+- Source-review artifact также опубликован отдельно: ID `14021546398`; он не является основным VST3 пакетом.
+- Предварительные gates этого run также прошли: 300-preset catalog validation, portable preset examples, APVTS registry/state persistence, skin pack validation, JUCE BinaryData order, restored sample library/license validation.
+- Статус P0: **Windows x64 Release build + CTest + VST3 locate + pluginval strictness 5 + package/upload подтверждены на SHA `e88127e...`**. Это не подтверждает звук/качество всех пресетов, runtime PATTERN end-to-end в DAW, CPU/RAM цели или FL Studio host acceptance.
+- Следующий шаг по очереди: начать следующий пункт P0 по MASTER PROMPT REV 17.1 — проверить точную реализацию и integration coverage связки MELODY/PATTERN (trigger acceptance, transport/section/rhythm handoff), не переходя к skin/UI до закрытия этого этапа.
