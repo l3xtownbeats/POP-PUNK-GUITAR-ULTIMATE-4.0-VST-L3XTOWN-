@@ -1609,3 +1609,26 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 
 ### Статус и следующий шаг
 **DESIGN PROPOSAL RECORDED / NOT IMPLEMENTED / NOT TESTED.** Это техническая декомпозиция для Stage 2A, а не разрешение менять production code. Перед кодированием проверить доступные JUCE archive/hash APIs и Windows atomic-file semantics на целевом JUCE/C++ toolchain, затем зафиксировать конкретные limits/schema и реализовать service + isolated tests. Existing Sampler playback, processBlock, DSP, APVTS/MIDI, presets and SoundBank остаются вне области изменения.
+
+## 2026-11-13 — Stage 2A preflight: JUCE archive security and dependency pin
+
+**Branch:** `work/rev17-sampler-root-cap-regression`  
+**Parent/source baseline:** `153eeac306093ead15cfd91b0c73402c33c75f6b`.  
+**Build configuration commit:** `022edb2274a8bf59a30e41279aeaa9e3c92639d6`.  
+**File:** `CMakeLists.txt`.
+
+**ПРОВЕРКА:** Stage 2A remains the next implementation stage. Existing production sampler infrastructure is under `Source/Sampler/`; `SampleMetadataIndex` is metadata-only and remains unchanged. No production ImportPipeline or Library Import service exists on this branch. The separately supplied `PPGU_FULL_WORK_TEXT_FINAL.txt` is a 168-file text snapshot whose embedded `Source/Engine/*` tree does not match the current branch's real `Source/Sampler/*` tree; it is reference material, not a safe replacement source tree. The review branch is diverged (127 ahead / 105 behind) and must not be merged wholesale.
+
+**API/security finding:** JUCE `ZipFile` provides entry enumeration and per-entry streams; `ZipEntry` exposes filename, uncompressed size, symbolic-link flag and external attributes. JUCE `SHA256` supports hashing an `InputStream` without loading the whole sample into memory. JUCE 7.0.14-security specifically hardens ZIP symbolic-link confinement and oversized-entry handling. The previous 7.0.12 pin predates that security patch.
+
+**ИЗМЕНЕНИЕ:** `CMakeLists.txt` now pins JUCE `7.0.14-security` instead of `7.0.12` before enabling untrusted ZIP import. No sampler, audio callback, DSP, MIDI, APVTS, presets, SoundBank or UI source was changed.
+
+**Stage 2A limits proposed for implementation:** archive <= 2 GiB; <= 10,000 file entries; <= 512 MiB per entry; <= 4 GiB total expanded bytes; compression ratio <= 200:1; normalized path <= 240 UTF-8 bytes; depth <= 32; reject ZIP64, encrypted entries, symlinks, special files, absolute/UNC/drive-qualified paths, traversal and duplicate normalized paths. These are implementation limits, not yet enforced.
+
+**Atomic publish decision:** write immutable versioned registry snapshots; update only a small CURRENT pointer using same-volume atomic replacement. Do not overwrite source assets or prior registry generations. Windows durability/replace behavior still requires exact-toolchain tests.
+
+**ПОВТОРНЫЙ АНАЛИЗ:** do not call JUCE `uncompressTo` on untrusted archives; preflight the central directory and manually stream validated entries into transaction-owned staging. SHA-256 and file copies remain worker-thread operations. `SampleMetadataIndex` remains metadata-only; no duplicate sampler is introduced.
+
+**СТАТУС:** SECURITY PREFLIGHT COMPLETE / JUCE PIN UPDATED / STAGE 2A PRODUCTION IMPLEMENTATION NOT YET STARTED / BUILD AND TEST PENDING. No CI or Windows compatibility pass is claimed for `022edb2...`.
+
+**Следующий шаг:** verify the exact JUCE 7.0.14-security configure/build on this SHA, then add the isolated append-only inventory/hash/duplicate/collision/registry service and tests; ZIP extraction follows only with preflight and staging tests.
