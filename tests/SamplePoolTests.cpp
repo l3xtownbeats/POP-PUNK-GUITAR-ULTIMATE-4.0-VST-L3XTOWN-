@@ -57,33 +57,33 @@ int main()
     std::unique_ptr<juce::OutputStream> surroundOutput(surroundWav.createOutputStream());
     if (surroundOutput == nullptr)
     {
-        std::cerr << "Could not create multichannel test WAV file.\\n";
+        std::cerr << "Could not create multichannel test WAV file.\n";
         return 1;
     }
     std::unique_ptr<juce::AudioFormatWriter> surroundWriter(
         wavFormat.createWriterFor(surroundOutput.get(), 44100.0, 4, 16, {}, 0));
     if (surroundWriter == nullptr)
     {
-        std::cerr << "Could not create multichannel WAV writer.\\n";
+        std::cerr << "Could not create multichannel WAV writer.\n";
         return 1;
     }
     surroundOutput.release();
     if (!surroundWriter->writeFromAudioSampleBuffer(surroundSource, 0, surroundSource.getNumSamples()))
     {
-        std::cerr << "Could not write multichannel WAV data.\\n";
+        std::cerr << "Could not write multichannel WAV data.\n";
         return 1;
     }
     surroundWriter.reset();
-    if (!surroundSfz.replaceWithText("<region> sample=surround.wav key=60\\n"))
+    if (!surroundSfz.replaceWithText("<region> sample=surround.wav key=60\n"))
     {
-        std::cerr << "Could not write multichannel SFZ fixture.\\n";
+        std::cerr << "Could not write multichannel SFZ fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool surroundPool;
     const auto surroundLoad = surroundPool.loadSfz(surroundSfz);
     if (surroundLoad.success || surroundLoad.errors.empty())
     {
-        std::cerr << "Sampler silently accepted/truncated unsupported multichannel WAV data.\\n";
+        std::cerr << "Sampler silently accepted/truncated unsupported multichannel WAV data.\n";
         return 1;
     }
 
@@ -94,7 +94,7 @@ int main()
     const auto cancelledLoad = cancelledLoadEngine.loadSfz(sfzFile, &currentLoadGeneration, 1);
     if (cancelledLoad.success || cancelledLoadEngine.getRegionCount() != 0)
     {
-        std::cerr << "Sampler published a bank whose asynchronous request was superseded.\\n";
+        std::cerr << "Sampler published a bank whose asynchronous request was superseded.\n";
         return 1;
     }
 
@@ -154,7 +154,7 @@ int main()
     const auto longDurationDirectory = directory.getChildFile("long-duration-library");
     if (!longDurationDirectory.createDirectory())
     {
-        std::cerr << "Could not create long-duration streaming library root.\\n";
+        std::cerr << "Could not create long-duration streaming library root.\n";
         return 1;
     }
     const auto longDurationWav = longDurationDirectory.getChildFile("long-duration.wav");
@@ -165,26 +165,26 @@ int main()
     std::unique_ptr<juce::OutputStream> longDurationOutput(longDurationWav.createOutputStream());
     if (longDurationOutput == nullptr)
     {
-        std::cerr << "Could not create long-duration WAV fixture.\\n";
+        std::cerr << "Could not create long-duration WAV fixture.\n";
         return 1;
     }
     std::unique_ptr<juce::AudioFormatWriter> longDurationWriter(
         wavFormat.createWriterFor(longDurationOutput.get(), 8000.0, 1, 16, {}, 0));
     if (longDurationWriter == nullptr)
     {
-        std::cerr << "Could not create long-duration WAV writer.\\n";
+        std::cerr << "Could not create long-duration WAV writer.\n";
         return 1;
     }
     longDurationOutput.release();
     if (!longDurationWriter->writeFromAudioSampleBuffer(longDurationSource, 0, longDurationFrames))
     {
-        std::cerr << "Could not write long-duration WAV fixture.\\n";
+        std::cerr << "Could not write long-duration WAV fixture.\n";
         return 1;
     }
     longDurationWriter.reset();
     if (!longDurationSfz.replaceWithText("<region> sample=long-duration.wav key=73\n"))
     {
-        std::cerr << "Could not write long-duration SFZ fixture.\\n";
+        std::cerr << "Could not write long-duration SFZ fixture.\n";
         return 1;
     }
     ppgu::sampler::SamplePool longDurationPool;
@@ -193,8 +193,8 @@ int main()
     if (!longDurationLoad.success || longDurationRegion == nullptr
         || longDurationRegion->endFrame != static_cast<std::uint64_t>(longDurationFrames))
     {
-        std::cerr << "Streaming sampler rejected or truncated a 121-second WAV.\\n";
-        for (const auto& error : longDurationLoad.errors) std::cerr << error << "\\n";
+        std::cerr << "Streaming sampler rejected or truncated a 121-second WAV.\n";
+        for (const auto& error : longDurationLoad.errors) std::cerr << error << "\n";
         return 1;
     }
 
@@ -204,7 +204,7 @@ int main()
     const auto longLibraryDirectory = directory.getChildFile("long-stream-library");
     if (!longLibraryDirectory.createDirectory())
     {
-        std::cerr << "Could not create isolated multi-page streaming library root.\\n";
+        std::cerr << "Could not create isolated multi-page streaming library root.\n";
         return 1;
     }
     const auto longStreamWav = longLibraryDirectory.getChildFile("long-stream.wav");
@@ -274,7 +274,7 @@ int main()
     {
         std::cerr << "Streaming voice did not eventually traverse and finish across multiple WAV pages. Active voices: "
                   << multiPageEngine.getActiveVoiceCount() << ", audible: "
-                  << (multiPageBecameAudible ? "yes" : "no") << "\\n";
+                  << (multiPageBecameAudible ? "yes" : "no") << "\n";
         return 1;
     }
 
@@ -680,7 +680,7 @@ int main()
     // retriggers; separate tests cover asynchronous cache misses and paging.
     if (!repeatedHitEngine.noteOn(60, 100, 64, 1))
     {
-        std::cerr << "Could not trigger repeated-hit cache warm-up note.\\n";
+        std::cerr << "Could not trigger repeated-hit cache warm-up note.\n";
         return 1;
     }
     juce::AudioBuffer<float> warmupBlock(2, 128);
@@ -695,7 +695,7 @@ int main()
     }
     if (!warmupAudible)
     {
-        std::cerr << "Repeated-hit streaming cache warm-up never became audible.\\n";
+        std::cerr << "Repeated-hit streaming cache warm-up never became audible.\n";
         return 1;
     }
     repeatedHitEngine.reset();
@@ -748,7 +748,7 @@ int main()
             if (!libraryDirectory.createDirectory()
                 && !libraryDirectory.isDirectory())
             {
-                std::cerr << "Could not create streaming-root limit fixture directory.\\n";
+                std::cerr << "Could not create streaming-root limit fixture directory.\n";
                 return 1;
             }
 
@@ -758,7 +758,7 @@ int main()
                 || !librarySfz.replaceWithText(
                     "<region> sample=root.wav key=" + juce::String(80 + libraryIndex) + "\n"))
             {
-                std::cerr << "Could not create streaming-root limit fixture.\\n";
+                std::cerr << "Could not create streaming-root limit fixture.\n";
                 return 1;
             }
 
@@ -768,8 +768,8 @@ int main()
             if (!report.success || acceptedRegions[static_cast<std::size_t>(libraryIndex)] == nullptr
                 || acceptedRegions[static_cast<std::size_t>(libraryIndex)]->streaming == nullptr)
             {
-                std::cerr << "Sampler rejected one of the first eight distinct streaming roots.\\n";
-                for (const auto& error : report.errors) std::cerr << error << "\\n";
+                std::cerr << "Sampler rejected one of the first eight distinct streaming roots.\n";
+                for (const auto& error : report.errors) std::cerr << error << "\n";
                 return 1;
             }
         }
@@ -778,9 +778,9 @@ int main()
         // original streaming service rather than consuming another root slot.
         const auto sameRootSfz = directory.getChildFile("root-limit-library-0")
             .getChildFile("same-root-bank.sfz");
-        if (!sameRootSfz.replaceWithText("<region> sample=root.wav key=90\\n"))
+        if (!sameRootSfz.replaceWithText("<region> sample=root.wav key=90\n"))
         {
-            std::cerr << "Could not create same-root bank fixture.\\n";
+            std::cerr << "Could not create same-root bank fixture.\n";
             return 1;
         }
         const auto sameRootReport = rootLimitPool.loadSfz(sameRootSfz);
@@ -788,22 +788,22 @@ int main()
         if (!sameRootReport.success || sameRootRegion == nullptr
             || sameRootRegion->streaming != acceptedRegions[0]->streaming)
         {
-            std::cerr << "A second bank in the same root did not reuse its streaming service.\\n";
+            std::cerr << "A second bank in the same root did not reuse its streaming service.\n";
             return 1;
         }
 
         const auto ninthDirectory = directory.getChildFile("root-limit-library-8");
         if (!ninthDirectory.createDirectory() && !ninthDirectory.isDirectory())
         {
-            std::cerr << "Could not create ninth streaming-root fixture directory.\\n";
+            std::cerr << "Could not create ninth streaming-root fixture directory.\n";
             return 1;
         }
         const auto ninthWav = ninthDirectory.getChildFile("root.wav");
         const auto ninthSfz = ninthDirectory.getChildFile("root.sfz");
         if (!wavFile.copyFileTo(ninthWav)
-            || !ninthSfz.replaceWithText("<region> sample=root.wav key=99\\n"))
+            || !ninthSfz.replaceWithText("<region> sample=root.wav key=99\n"))
         {
-            std::cerr << "Could not create ninth streaming-root fixture.\\n";
+            std::cerr << "Could not create ninth streaming-root fixture.\n";
             return 1;
         }
 
@@ -814,8 +814,8 @@ int main()
             || previousActiveRegion == nullptr
             || previousActiveRegion->streaming != acceptedRegions[0]->streaming)
         {
-            std::cerr << "Ninth streaming root was not rejected transactionally.\\n";
-            for (const auto& error : ninthReport.errors) std::cerr << error << "\\n";
+            std::cerr << "Ninth streaming root was not rejected transactionally.\n";
+            for (const auto& error : ninthReport.errors) std::cerr << error << "\n";
             return 1;
         }
     }
