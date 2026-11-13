@@ -104,6 +104,65 @@ int main()
     juce::ScopedJuceInitialiser_GUI juceInitialiser;
     const auto root = std::filesystem::temp_directory_path() / "ppgu-processor-pattern-integration";
     std::error_code cleanupError;
+    // Hybrid MELODY + PATTERN trigger acceptance: C0-C1 commands are
+    // silent control events; ordinary chord notes remain the harmony source.
+    if (result == 0)
+    {
+        PopPunkGuitarUltimateAudioProcessor hybridProcessor;
+        hybridProcessor.prepareToPlay(48000.0, 13000);
+        const auto hybridLoad = hybridProcessor.loadSfzFile(sfz);
+        if (!hybridLoad.success)
+        {
+            std::cerr << "Hybrid processor failed to load SFZ fixture.\\n";
+            result = 1;
+        }
+
+        const std::array<std::pair<const char*, float>, 18> hybridSettings {{
+            { "playMode", 0.0f }, { "syncMode", 2.0f }, { "patternSlot", 0.0f },
+            { "patternLength", 0.0f }, { "patternQuantize", 0.0f }, { "bpm", 120.0f },
+            { "startOnFirstChord", 1.0f }, { "voices", 64.0f }, { "master", 1.0f },
+            { "ampGain", 5.0f }, { "eqOn", 0.0f }, { "compressorOn", 0.0f },
+            { "distortionOn", 0.0f }, { "chorusOn", 0.0f }, { "flangerOn", 0.0f },
+            { "delayOn", 0.0f }, { "reverbOn", 0.0f }, { "cabinetOn", 0.0f }
+        }};
+        for (const auto& setting : hybridSettings)
+            if (!setParameter(hybridProcessor, setting.first, setting.second))
+                result = 1;
+
+        if (result == 0)
+        {
+            // Trigger alone must never reach the sampler, even though the SFZ
+            // fixture deliberately maps MIDI note 12 to an audible WAV region.
+            juce::AudioBuffer<float> triggerOnlyBlock(2, 512);
+            juce::MidiBuffer triggerOnlyMidi;
+            triggerOnlyMidi.addEvent(juce::MidiMessage::noteOn(1, 12, static_cast<juce::uint8>(110)), 16);
+            hybridProcessor.processBlock(triggerOnlyBlock, triggerOnlyMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            const double triggerOnlyRms = rms(triggerOnlyBlock, 0, 512);
+            if (triggerOnlyRms > 1.0e-6)
+            {
+                std::cerr << "Reserved C0 PATTERN trigger leaked into guitar audio; RMS="
+                          << triggerOnlyRms << "\\n";
+                result = 1;
+            }
+
+            // A held chord in the ordinary MELODY mode becomes the harmony
+            // for the selected pattern once the C0 trigger is held.
+            juce::AudioBuffer<float> hybridBlock(2, 13000);
+            juce::MidiBuffer hybridMidi;
+            addChordOn(hybridMidi, 16, { 60, 64, 67 });
+            hybridProcessor.processBlock(hybridBlock, hybridMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            const double hybridPatternRms = rms(hybridBlock, 5500, 6500);
+            if (!(hybridPatternRms > 0.005))
+            {
+                std::cerr << "C0 trigger did not launch PATTERN over the held MELODY chord; RMS="
+                          << hybridPatternRms << "\\n";
+                result = 1;
+            }
+        }
+    }
+
     std::filesystem::remove_all(root, cleanupError);
     std::filesystem::create_directories(root);
 
@@ -132,7 +191,10 @@ int main()
         "<region> sample=second-chord.wav key=69 ampeg_release=0.01\n"
         "<region> sample=third-chord.wav key=55 ampeg_release=0.01\n"
         "<region> sample=third-chord.wav key=59 ampeg_release=0.01\n"
-        "<region> sample=third-chord.wav key=62 ampeg_release=0.01\n";
+        "<region> sample=third-chord.wav key=62 ampeg_release=0.01\n"
+        // C0 is a reserved PATTERN command. Mapping it to audio here makes
+        // accidental trigger-note leakage observable in the integration test.
+        "<region> sample=third-chord.wav key=12 ampeg_release=0.01\n";
     if (!sfz.replaceWithText(sfzText))
     {
         std::cerr << "Could not create SFZ fixture.\n";
