@@ -186,12 +186,46 @@ int main()
         }
     }
 
+    // stop() must drain every request already submitted by the audio-side
+    // producer before joining the worker. Use several distinct pages and
+    // verify submitted == processed after shutdown.
+    const auto beforeDrain = service.statistics();
+    for (std::uint64_t page = 0; page < 4; ++page)
+        if (!service.requestPage({ 0, page }))
+        {
+            std::cerr << "Could not queue shutdown-drain fixture page.\\n";
+            return 1;
+        }
     service.stop();
-    if (service.requestPage({ 0, 1 }))
+    const auto afterDrain = service.statistics();
+    if (service.requestPage({ 0, 1 })
+        || afterDrain.requestsSubmitted != beforeDrain.requestsSubmitted + 4
+        || afterDrain.requestsProcessed != afterDrain.requestsSubmitted)
     {
-        std::cerr << "Streaming service accepted requests after worker shutdown.\\n";
+        std::cerr << "Streaming worker did not drain its accepted queue before stop returned.\\n";
         return 1;
     }
+
+    // A normal stop followed by start must create a fresh worker. This also
+    // exercises the same join/restart path used after workerLoop catches an
+    // exception and marks itself stopped.
+    if (!service.start() || !service.requestPage({ 0, 15 }))
+    {
+        std::cerr << "Streaming service could not restart after a clean stop.\\n";
+        return 1;
+    }
+    ppgu::sampler::PageCacheSlots::ReadLease restartedLease;
+    const auto restartDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    while (std::chrono::steady_clock::now() < restartDeadline
+           && !service.tryAcquire({ 0, 15 }, restartedLease))
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    if (!restartedLease || restartedLease.frames == 0)
+    {
+        std::cerr << "Restarted streaming worker did not publish a requested page.\\n";
+        return 1;
+    }
+    service.release(restartedLease);
+    service.stop();
 
     std::filesystem::remove_all(root);
     std::cout << "Streaming service tests passed: bounded cache, worker decode, audio-side acquire, duplicate suppression and shutdown.\\n";
