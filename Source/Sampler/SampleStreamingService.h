@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <thread>
+#include <mutex>
 #include <vector>
 
 namespace ppgu::sampler
@@ -71,6 +72,8 @@ private:
     PageCacheSlots pages;
     BoundedSpscQueue<Request, requestQueueCapacity> requests;
     std::atomic<bool> running { false };
+    // Serializes control-thread start/stop and permits worker restart after failure.
+    std::mutex workerControlMutex;
     std::thread worker;
 
     std::atomic<std::uint64_t> requestsSubmitted { 0 };
