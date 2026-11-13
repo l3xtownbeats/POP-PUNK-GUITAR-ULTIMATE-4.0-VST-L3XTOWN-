@@ -315,6 +315,15 @@ if(BUILD_TESTING)
     )
 endif()
 
+# Fixed-storage C0-C1 PATTERN trigger routing contract.
+if(BUILD_TESTING)
+    add_executable(ppgu_pattern_trigger_state_tests
+        tests/PatternTriggerStateTests.cpp
+    )
+    target_include_directories(ppgu_pattern_trigger_state_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_pattern_trigger_state_contract COMMAND ppgu_pattern_trigger_state_tests)
+endif()
+
 # Real AudioProcessor integration regression for the PATTERN MIDI path.
 # Conflict-check: links the production processor target rather than duplicating
 # a mock scheduler; fixture WAV/SFZ files are generated in the system temp dir.
