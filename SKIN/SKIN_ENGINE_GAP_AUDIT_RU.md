@@ -72,3 +72,5 @@ PUNK GROUP, dedicated LED, Auto Discover, Curator, Settings и About пока н
 8. G5/G6/G7 automated/manual acceptance; Windows Release, CTest, pluginval strictness 5; separate FL Studio 20 host check.
 
 **Честный вывод:** в main теперь есть начальная palette switch implementation и reference pack Skin_052. Полноценная Theme Gallery и REV 14 runtime engine пока не закрыты.
+
+> **ОБЯЗАТЕЛЬНОЕ ПРАВИЛО РОЛЕЙ ТЕМ (13.11.2026):** SIGNAL FORGE / NEON — единственная основная тема продукта, DEFAULT/startup/fallback. **BLACKOUT VOLTAGE (`skin-51`) — только дополнительная тема**: не DEFAULT, не startup и не fallback. Сохранить её ID, имя, папку и ресурсы без переименования/перенумерации. Это правило действует для всех разделов проекта, включая реестр, ThemeManager, галерею, тесты, документацию и сборку. Текущий `skin-51` default/fallback в исходниках/манифесте — зафиксированное несоответствие, исправлять после завершения аудита Фазы 0; до этого код и манифесты не менять.
