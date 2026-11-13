@@ -104,6 +104,46 @@ int main()
     juce::ScopedJuceInitialiser_GUI juceInitialiser;
     const auto root = std::filesystem::temp_directory_path() / "ppgu-processor-pattern-integration";
     std::error_code cleanupError;
+    std::filesystem::remove_all(root, cleanupError);
+    std::filesystem::create_directories(root);
+
+    const juce::File directory(root.string());
+    const auto firstTone = directory.getChildFile("first-chord.wav");
+    const auto secondTone = directory.getChildFile("second-chord.wav");
+    const auto thirdTone = directory.getChildFile("third-chord.wav");
+    const auto sfz = directory.getChildFile("pattern-test.sfz");
+
+    // Different source levels make the chord identity observable in rendered
+    // audio: chord A is deliberately 3x louder than chord B.
+    if (!writeTone(firstTone, 0.60f, 220.0)
+        || !writeTone(secondTone, 0.40f, 330.0)
+        || !writeTone(thirdTone, 0.20f, 440.0))
+    {
+        std::cerr << "Could not create deterministic WAV fixtures.\n";
+        return 1;
+    }
+
+    const auto sfzText =
+        "<region> sample=first-chord.wav key=60 ampeg_release=0.01\n"
+        "<region> sample=first-chord.wav key=64 ampeg_release=0.01\n"
+        "<region> sample=first-chord.wav key=67 ampeg_release=0.01\n"
+        "<region> sample=second-chord.wav key=62 ampeg_release=0.01\n"
+        "<region> sample=second-chord.wav key=66 ampeg_release=0.01\n"
+        "<region> sample=second-chord.wav key=69 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=55 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=59 ampeg_release=0.01\n"
+        "<region> sample=third-chord.wav key=62 ampeg_release=0.01\n"
+        // C0 is a reserved PATTERN command. Mapping it to audio here makes
+        // accidental trigger-note leakage observable in the integration test.
+        "<region> sample=third-chord.wav key=12 ampeg_release=0.01\n";
+    if (!sfz.replaceWithText(sfzText))
+    {
+        std::cerr << "Could not create SFZ fixture.\n";
+        return 1;
+    }
+
+    int result = 0;
+
     // Hybrid MELODY + PATTERN trigger acceptance: C0-C1 commands are
     // silent control events; ordinary chord notes remain the harmony source.
     if (result == 0)
@@ -178,45 +218,7 @@ int main()
         }
     }
 
-    std::filesystem::remove_all(root, cleanupError);
-    std::filesystem::create_directories(root);
 
-    const juce::File directory(root.string());
-    const auto firstTone = directory.getChildFile("first-chord.wav");
-    const auto secondTone = directory.getChildFile("second-chord.wav");
-    const auto thirdTone = directory.getChildFile("third-chord.wav");
-    const auto sfz = directory.getChildFile("pattern-test.sfz");
-
-    // Different source levels make the chord identity observable in rendered
-    // audio: chord A is deliberately 3x louder than chord B.
-    if (!writeTone(firstTone, 0.60f, 220.0)
-        || !writeTone(secondTone, 0.40f, 330.0)
-        || !writeTone(thirdTone, 0.20f, 440.0))
-    {
-        std::cerr << "Could not create deterministic WAV fixtures.\n";
-        return 1;
-    }
-
-    const auto sfzText =
-        "<region> sample=first-chord.wav key=60 ampeg_release=0.01\n"
-        "<region> sample=first-chord.wav key=64 ampeg_release=0.01\n"
-        "<region> sample=first-chord.wav key=67 ampeg_release=0.01\n"
-        "<region> sample=second-chord.wav key=62 ampeg_release=0.01\n"
-        "<region> sample=second-chord.wav key=66 ampeg_release=0.01\n"
-        "<region> sample=second-chord.wav key=69 ampeg_release=0.01\n"
-        "<region> sample=third-chord.wav key=55 ampeg_release=0.01\n"
-        "<region> sample=third-chord.wav key=59 ampeg_release=0.01\n"
-        "<region> sample=third-chord.wav key=62 ampeg_release=0.01\n"
-        // C0 is a reserved PATTERN command. Mapping it to audio here makes
-        // accidental trigger-note leakage observable in the integration test.
-        "<region> sample=third-chord.wav key=12 ampeg_release=0.01\n";
-    if (!sfz.replaceWithText(sfzText))
-    {
-        std::cerr << "Could not create SFZ fixture.\n";
-        return 1;
-    }
-
-    int result = 0;
     {
         PopPunkGuitarUltimateAudioProcessor processor;
         processor.prepareToPlay(48000.0, 13000);
