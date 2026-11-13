@@ -146,10 +146,25 @@ int main()
                 result = 1;
             }
 
-            // A held chord in the ordinary MELODY mode becomes the harmony
-            // for the selected pattern once the C0 trigger is held.
+            // Release the command, warm the mapped guitar page through
+            // ordinary MELODY playback, then launch a chord and trigger together.
+            juce::AudioBuffer<float> triggerReleaseBlock(2, 128);
+            juce::MidiBuffer triggerReleaseMidi;
+            triggerReleaseMidi.addEvent(juce::MidiMessage::noteOff(1, 12), 16);
+            hybridProcessor.processBlock(triggerReleaseBlock, triggerReleaseMidi);
+
+            juce::AudioBuffer<float> warmMelodyBlock(2, 1024);
+            juce::MidiBuffer warmMelodyMidi;
+            warmMelodyMidi.addEvent(juce::MidiMessage::noteOn(1, 60, static_cast<juce::uint8>(100)), 16);
+            warmMelodyMidi.addEvent(juce::MidiMessage::noteOff(1, 60), 800);
+            hybridProcessor.processBlock(warmMelodyBlock, warmMelodyMidi);
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
+            // A held chord in ordinary MELODY becomes the harmony for the
+            // selected pattern once the C0 trigger is held.
             juce::AudioBuffer<float> hybridBlock(2, 13000);
             juce::MidiBuffer hybridMidi;
+            hybridMidi.addEvent(juce::MidiMessage::noteOn(1, 12, static_cast<juce::uint8>(110)), 16);
             addChordOn(hybridMidi, 16, { 60, 64, 67 });
             hybridProcessor.processBlock(hybridBlock, hybridMidi);
             std::this_thread::sleep_for(std::chrono::milliseconds(30));
