@@ -1634,3 +1634,20 @@ F. Только после этого считать документальны�
 **[НЕ ИЗМЕНЯЛОСЬ]** DSP, processBlock, sampler, MIDI, APVTS IDs/semantics, presets, SoundBank, skin artwork и визуальные токены. FX EDIT, Gallery и остальные утверждённые макеты не перерисовывались.
 
 **[НЕ ПРОВЕРЕНО]** Windows Release build, CTest, pluginval, FL Studio 20 на 17-дюймовом дисплее и DPI 100/125/150%. Проверка min/max geometry и сохранения размера должна быть включена в следующий exact-SHA CI/host pass. Эта запись фиксирует source change, а не успешную сборку или host acceptance.
+
+## 2026-11-13 — Streaming library-root cap regression coverage
+
+**Тип:** sampler regression test. **Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.  
+**Source commit:** `f61a103e788889034e39827a703444c8eb4ac62c`.
+
+**Добавлено:** в `tests/SamplePoolTests.cpp` добавлен end-to-end regression case для ограничения восьми streaming library roots:
+- первые восемь разных корней должны успешно загружаться;
+- повторная SFZ-библиотека из уже индексированного корня должна переиспользовать тот же `SampleStreamingService`, не расходуя новый root slot;
+- девятый отдельный корень должен быть отклонён с ожидаемой диагностикой;
+- неуспешная девятая загрузка не должна заменять последнюю успешно опубликованную карту регионов.
+
+**Границы:** production ownership, snapshot lifetime, streaming worker и audio callback не менялись. Это добавление тестового покрытия, а не доказательство прохождения теста.
+
+**Проверка:** исходник теста записан в REV.17. Exact-SHA Windows build / CTest / pluginval ещё ожидают CI; до получения результата статус — SOURCE UPDATED / VALIDATION PENDING. FL Studio 20 host acceptance отдельно не подтверждён.
+
+**Следующий приоритет:** после exact-SHA CI результата закрыть или исправить найденные проблемы; затем добавить регрессионные проверки worker stop/drain и failure/recovery, прежде чем менять production lifetime/ownership.
