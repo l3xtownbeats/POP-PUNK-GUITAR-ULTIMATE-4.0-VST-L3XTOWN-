@@ -330,8 +330,8 @@
     }
   },
   "assets": {
-    "preview": "assets/preview/preview.png",
-    "hero": "assets/hero/hero.png",
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.png",
     "texture": "svg/texture.svg",
     "bezel": "svg/bezel.svg",
     "crest": "svg/crest.svg"
@@ -364,6 +364,8 @@
       "controls": "assets/control_manifest.json"
     },
     "optionalFont": "fonts/Inter[opsz,wght].ttf",
-    "fontManifest": "fonts/font_manifest.json"
+    "fontManifest": "fonts/font_manifest.json",
+    "hero": "assets/hero/hero.png",
+    "preview": "assets/preview/preview.png"
   }
 }

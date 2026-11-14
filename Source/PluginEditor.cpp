@@ -1780,7 +1780,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
             juce::File preview;
             const auto assets = root.getProperty("assets", juce::var());
-            auto previewRelative = assets.getProperty("preview", juce::var()).toString();
+            const auto rev18Assets = root.getProperty("rev18Assets", juce::var());
+            auto previewRelative = rev18Assets.getProperty("preview", juce::var()).toString();
+            if (previewRelative.isEmpty())
+                previewRelative = assets.getProperty("preview", juce::var()).toString();
             if (previewRelative.isEmpty())
                 previewRelative = "assets/preview.png";
             if (!previewRelative.startsWith("/") && !previewRelative.contains(".."))

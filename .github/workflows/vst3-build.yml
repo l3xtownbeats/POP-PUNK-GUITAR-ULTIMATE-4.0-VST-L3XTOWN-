@@ -423,24 +423,24 @@ jobs:
           POP PUNK GUITAR ULTIMATE — INTERIM WINDOWS x64 CI BUILD (NOT FINAL RELEASE)
           =============================================================================
           STATUS: CI VALIDATION ARTIFACT ONLY. NOT A FINAL REV.18 PRODUCT RELEASE.
-          VST3/       The compiled Windows x64 VST3 plugin bundle.
+          VST3/       The compiled Windows x64 .vst3 bundle plus its sibling runtime Skins/ folder.
           SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
                       Sound Hunter asset-level registry is empty; final factory admission is pending.
           PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
                       Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
-          Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
+          VST3/Skins/ Registry-driven visual themes and runtime exports only; master PNGs stay in source review.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
           INSTALL (DEVELOPMENT / QA ONLY):
-          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
+          1. Copy the CONTENTS of VST3/ (the .vst3 bundle and sibling Skins/ folder) into:
              C:\Program Files\Common Files\VST3\
              Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
           2. In the plugin, use its SFZ load control and select an instrument SFZ
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
-          4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
+          4. VST3/Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 

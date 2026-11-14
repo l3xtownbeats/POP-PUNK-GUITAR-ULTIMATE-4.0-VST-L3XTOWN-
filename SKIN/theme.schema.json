@@ -794,6 +794,100 @@
           "type": "string"
         }
       }
+    },
+    "rev18Assets": {
+      "type": "object",
+      "required": [
+        "hero",
+        "preview",
+        "background",
+        "texture",
+        "fxLayers",
+        "icons",
+        "controls",
+        "atlas",
+        "manifests"
+      ],
+      "properties": {
+        "hero": {
+          "type": "string",
+          "const": "assets/hero/hero.png"
+        },
+        "preview": {
+          "type": "string",
+          "const": "assets/preview/preview.png"
+        },
+        "background": {
+          "type": "string",
+          "const": "assets/background/main.png"
+        },
+        "texture": {
+          "type": "string",
+          "const": "assets/textures/carbon_weave.png"
+        },
+        "fxLayers": {
+          "type": "object",
+          "required": [
+            "stageGlow",
+            "edgeHighlight"
+          ],
+          "properties": {
+            "stageGlow": {
+              "type": "string",
+              "const": "assets/fx_layers/stage_glow.png"
+            },
+            "edgeHighlight": {
+              "type": "string",
+              "const": "assets/fx_layers/edge_highlight.png"
+            }
+          },
+          "additionalProperties": false
+        },
+        "icons": {
+          "type": "string",
+          "const": "assets/icons/"
+        },
+        "controls": {
+          "type": "string",
+          "const": "assets/controls/"
+        },
+        "atlas": {
+          "type": "string",
+          "const": "atlas/atlas.png"
+        },
+        "manifests": {
+          "type": "object",
+          "required": [
+            "icons",
+            "artwork",
+            "controls"
+          ],
+          "properties": {
+            "icons": {
+              "type": "string",
+              "const": "assets/asset_manifest.json"
+            },
+            "artwork": {
+              "type": "string",
+              "const": "assets/artwork_manifest.json"
+            },
+            "controls": {
+              "type": "string",
+              "const": "assets/control_manifest.json"
+            }
+          },
+          "additionalProperties": false
+        },
+        "optionalFont": {
+          "type": "string",
+          "const": "fonts/Inter[opsz,wght].ttf"
+        },
+        "fontManifest": {
+          "type": "string",
+          "const": "fonts/font_manifest.json"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

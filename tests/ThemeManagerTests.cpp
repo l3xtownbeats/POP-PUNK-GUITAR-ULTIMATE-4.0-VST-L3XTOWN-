@@ -101,11 +101,15 @@ int main()
     expect(!manager.getPalette().usedFallback, "NEON STAGE loads without fallback");
     const auto neonStageJson = juce::JSON::parse(neonStageManifest.loadFileAsString());
     const auto neonStageAssets = neonStageJson.getProperty("assets", juce::var());
-    expect(neonStageAssets.getProperty("hero", "").toString() == "assets/hero/hero.png",
-           "NEON STAGE resolves the REV18 runtime hero export");
-    expect(neonStageAssets.getProperty("preview", "").toString() == "assets/preview/preview.png",
-           "NEON STAGE resolves the REV18 runtime gallery preview");
+    expect(neonStageAssets.getProperty("hero", "").toString() == "assets/hero.png",
+           "NEON STAGE retains the legacy hero path for the G1-G4 validator");
+    expect(neonStageAssets.getProperty("preview", "").toString() == "assets/preview.png",
+           "NEON STAGE retains the legacy preview path for the G1-G4 validator");
     const auto neonRev18Assets = neonStageJson.getProperty("rev18Assets", juce::var());
+    expect(neonRev18Assets.getProperty("hero", "").toString() == "assets/hero/hero.png",
+           "NEON STAGE registers the REV18 runtime hero export");
+    expect(neonRev18Assets.getProperty("preview", "").toString() == "assets/preview/preview.png",
+           "NEON STAGE registers the REV18 runtime gallery preview");
     expect(neonRev18Assets.getProperty("background", "").toString() == "assets/background/main.png",
            "NEON STAGE registers the REV18 runtime background");
     manager.resetToDefault();
