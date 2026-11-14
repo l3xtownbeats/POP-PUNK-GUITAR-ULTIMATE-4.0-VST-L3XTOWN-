@@ -42,6 +42,7 @@ GROUP_KEYS = {
 }
 BUTTON_KEYS = ("background", "foreground", "hover", "pressed", "disabled")
 HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
+HEX_RGBA = re.compile(r"^#[0-9A-Fa-f]{8}$")
 COLOR_KEYS = {
     "base", "inset", "primary", "secondary", "raised", "overlay", "subtle",
     "strong", "focus", "disabled", "onAccent", "body", "ring", "track",
@@ -191,16 +192,17 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
         fail(errors, where, "palette must contain exactly the 21 control_schema tokens")
     for token in palette_tokens:
         value = palette.get(token)
-        if not isinstance(value, str) or not HEX.fullmatch(value):
-            fail(errors, where, f"palette.{token} must be #RRGGBB")
+        valid = HEX_RGBA.fullmatch(value) if token == "overlay_scrim" and isinstance(value, str) else HEX.fullmatch(value) if isinstance(value, str) else None
+        if not valid:
+            fail(errors, where, f"palette.{token} must be #RRGGBB (or #RRGGBBAA for overlay_scrim)")
 
     if isinstance(palette, dict):
         for fg, bg, minimum in (
-            ("text_primary", "window_bg", 4.0),
-            ("text_secondary", "window_bg", 4.0),
-            ("text_disabled", "window_bg", 4.0),
-            ("lcd_text", "lcd_bg", 4.0),
-            ("accent", "panel", 2.2),
+            ("text_primary", "bg_deep", 7.0),
+            ("text_secondary", "bg_deep", 4.5),
+            ("text_disabled", "bg_deep", 3.0),
+            ("lcd_text", "lcd_bg", 7.0),
+            ("accent_primary", "bg_panel", 3.0),
         ):
             if HEX.fullmatch(str(palette.get(fg, ""))) and HEX.fullmatch(str(palette.get(bg, ""))):
                 ratio = contrast(palette[fg], palette[bg])
