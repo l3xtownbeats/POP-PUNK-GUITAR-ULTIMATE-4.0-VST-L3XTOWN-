@@ -143,8 +143,8 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        const auto area = getLocalBounds().toFloat();
-        const auto header = area.removeFromTop(42.0f);
+        auto area = getLocalBounds().toFloat();
+        auto header = area.removeFromTop(42.0f);
 
         // One NEON STAGE chassis treatment for every auxiliary window.
         g.setGradientFill(juce::ColourGradient(panelColour.brighter(0.055f),
@@ -153,11 +153,11 @@ public:
         g.fillRoundedRectangle(getLocalBounds().toFloat(), 8.0f);
 
         // Recessed title strip with a restrained accent rail.
-        g.setGradientFill(juce::ColourGradient(headingColour.withAlpha(0.11f),
+        g.setGradientFill(juce::ColourGradient(owner.headingColour.withAlpha(0.11f),
             header.getX(), header.getY(), panelColour.withAlpha(0.0f),
             header.getX(), header.getBottom(), false));
         g.fillRoundedRectangle(header.reduced(1.0f, 1.0f), 7.0f);
-        g.setColour(headingColour.withAlpha(0.82f));
+        g.setColour(owner.headingColour.withAlpha(0.82f));
         g.fillRoundedRectangle(header.getX() + 10.0f, header.getBottom() - 2.0f,
                                42.0f, 1.5f, 0.75f);
 
