@@ -2707,3 +2707,27 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 Следующий шаг: открыть draft PR для запуска целевых GitHub Actions, устранить найденные ошибки и получить exact-SHA evidence; после этого — asset pack G1–G4/PNG CRC и визуальная проверка NEON STAGE макетов/ассетов.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 MERGED PACK IDENTITY VALIDATOR FIX
+==============================================================================
+
+CI exact failure from run 43648235231 was reproduced from its job log:
+`validate_skin_pack.py` rejected the canonical display-name change because
+the merged historical pack manifest still called index 53 "Carbon Studio 01".
+No source/runtime defect was indicated by that check.
+
+Corrective change:
+- `SKIN/theme_pack_manifest.json` entry index 53 / stable ID `skin-053`
+  now uses the canonical display name `NEON STAGE DEFAULT`.
+- Historical ID, index, family, layout, path, preview, hero and all other
+  pack entries remain unchanged.
+- This keeps the merged pack manifest and live registry consistent without
+  changing the historical resource identity.
+
+The failing CI run predates this correction. A fresh exact-head run is
+required; build, CTest, pluginval, PNG CRC, G1–G4 and host validation remain
+unverified until their steps complete successfully.
+
+==============================================================================
