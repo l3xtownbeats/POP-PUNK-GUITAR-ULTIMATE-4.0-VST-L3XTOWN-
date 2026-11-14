@@ -12,6 +12,7 @@ from pathlib import Path
 import sys
 
 DEFAULT_PART_SIZE = 1800 * 1024 * 1024
+COPY_CHUNK_BYTES = 8 * 1024 * 1024
 
 
 def digest_file(path: Path) -> str:
@@ -27,7 +28,15 @@ def split_archive(source: Path, output_dir: Path, prefix: str, part_size: int) -
         raise FileNotFoundError(f"Input archive not found: {source}")
     if part_size <= 0:
         raise ValueError("Part size must be positive.")
+    if not prefix or Path(prefix).name != prefix or "/" in prefix or chr(92) in prefix:
+        raise ValueError("Prefix must be a simple filename prefix.")
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Remove only stale generated parts for this exact prefix in the selected
+    # output directory. Never touch the source archive or unrelated files.
+    for stale in output_dir.glob(f"{prefix}.part-*"):
+        if stale.is_file():
+            stale.unlink()
 
     parts: list[dict[str, object]] = []
     archive_hash = hashlib.sha256()
@@ -35,20 +44,28 @@ def split_archive(source: Path, output_dir: Path, prefix: str, part_size: int) -
     index = 1
     with source.open("rb") as src:
         while True:
-            chunk = src.read(part_size)
-            if not chunk:
-                break
             name = f"{prefix}.part-{index:04d}"
             destination = output_dir / name
+            part_hash = hashlib.sha256()
+            part_bytes = 0
             with destination.open("wb") as dst:
-                dst.write(chunk)
-            archive_hash.update(chunk)
-            total += len(chunk)
+                while part_bytes < part_size:
+                    chunk = src.read(min(COPY_CHUNK_BYTES, part_size - part_bytes))
+                    if not chunk:
+                        break
+                    dst.write(chunk)
+                    part_hash.update(chunk)
+                    archive_hash.update(chunk)
+                    part_bytes += len(chunk)
+            if part_bytes == 0:
+                destination.unlink(missing_ok=True)
+                break
+            total += part_bytes
             parts.append({
                 "index": index,
                 "name": name,
-                "size_bytes": len(chunk),
-                "sha256": hashlib.sha256(chunk).hexdigest(),
+                "size_bytes": part_bytes,
+                "sha256": part_hash.hexdigest(),
             })
             index += 1
 
@@ -88,7 +105,10 @@ def verify_manifest(manifest_path: Path, parts_dir: Path) -> None:
     for part in parts:
         if part.get("index") != expected_index:
             raise ValueError("Part order/index is not contiguous.")
-        path = parts_dir / str(part["name"])
+        name = str(part["name"])
+        if Path(name).name != name or "/" in name or chr(92) in name:
+            raise ValueError("Unsafe part filename in manifest.")
+        path = parts_dir / name
         if not path.is_file():
             raise FileNotFoundError(f"Missing part: {path.name}")
         size = path.stat().st_size
@@ -116,7 +136,7 @@ def main() -> int:
     split_parser.add_argument("--input", type=Path, required=True)
     split_parser.add_argument("--output-dir", type=Path, required=True)
     split_parser.add_argument("--prefix", required=True)
-    split_parser.add_argument("--part-size-mb", type=int, default=1800)
+    split_parser.add_argument("--part-size-mb", type=int, default=DEFAULT_PART_SIZE // (1024 * 1024))
     verify_parser = sub.add_parser("verify", help="verify ordered parts and whole-archive hash")
     verify_parser.add_argument("--manifest", type=Path, required=True)
     verify_parser.add_argument("--parts-dir", type=Path, default=None)
