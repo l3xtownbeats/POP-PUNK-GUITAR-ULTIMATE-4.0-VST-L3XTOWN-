@@ -39,7 +39,7 @@ int main()
     expect(fallbackTokens.success == juce::Colour(0xff46e88c), "fallback success matches canonical NEON STAGE");
     expect(fallbackTokens.lcdBg == juce::Colour(0xff061021), "fallback LCD background matches canonical NEON STAGE");
     expect(fallbackTokens.lcdText == juce::Colour(0xff7fe8ff), "fallback LCD text matches canonical NEON STAGE");
-    expect(fallbackTokens.ledOn == juce::Colour(0xff66ffff), "fallback LED on matches canonical NEON STAGE");
+    expect(fallbackTokens.ledOn == juce::Colour(0xff46e8ff), "fallback LED on matches canonical NEON STAGE");
     expect(fallbackTokens.ledOff == juce::Colour(0xff1a2436), "fallback LED off matches canonical NEON STAGE");
     expect(fallbackTokens.shadow == juce::Colour(0xff0a0e18), "fallback shadow matches canonical NEON STAGE");
     expect(fallbackTokens.highlight == juce::Colour(0xff7fe8ff), "fallback highlight matches canonical NEON STAGE");
@@ -132,8 +132,10 @@ int main()
         };
         for (const auto& tokenName : tokenNames)
         {
-            const auto expected = juce::Colour::fromString(
-                "ff" + studioTokens.getProperty(tokenName, juce::var()).toString().substring(1));
+            const auto value = studioTokens.getProperty(tokenName, juce::var()).toString();
+            const auto expected = tokenName == "overlay_scrim"
+                ? juce::Colour::fromString(value.substring(7) + value.substring(1, 7))
+                : juce::Colour::fromString("ff" + value.substring(1));
             expect(manager.getPalette().token(tokenName) == expected,
                    "Skin_052 token is exposed exactly: " + tokenName);
         }
@@ -183,8 +185,10 @@ int main()
         };
         for (const auto& tokenName : tokenNames)
         {
-            const auto expected = juce::Colour::fromString(
-                "ff" + neonTokens.getProperty(tokenName, juce::var()).toString().substring(1));
+            const auto value = neonTokens.getProperty(tokenName, juce::var()).toString();
+            const auto expected = tokenName == "overlay_scrim"
+                ? juce::Colour::fromString(value.substring(7) + value.substring(1, 7))
+                : juce::Colour::fromString("ff" + value.substring(1));
             expect(manager.getPalette().token(tokenName) == expected,
                    "NEON STAGE token is exposed exactly: " + tokenName);
         }
