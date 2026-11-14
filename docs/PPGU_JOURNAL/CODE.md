@@ -721,3 +721,12 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - Commit: `71f23a334dd1b169e85d786e984eb97e7b094e1e`.
 - `SoundHunter/README.md`: corrected remaining aggregate-capacity phrase to decimal GB. Commit: `0ce7a2401e18894b5b448a78640eaf1a9d777b3f`.
 - Re-read source after change; automated tests and workflow still not executed. This is a reporting/unit correction, not a test pass.
+
+
+## 2026-11-14 — Delegated source acquisition mandate and source audit findings
+
+**Тип:** documentation / source audit note; no production code change in this entry.
+**Решение:** автономная работа по поиску/оценке гитарных банков и безопасной модернизации одобрена пользователем. Третьесторонние лицензии обязательны; пользовательское делегирование не заменяет правообладательское разрешение.
+**Проверенные первичные источники:** Meta Open Sound `catalog.json`, instrument READMEs and release metadata; FreePats official Clean Electric Guitar page and GitHub repositories. CC0-1.0 declarations found for Meta Steel/Nylon and FreePats FSBS Clean/Jazz/Direct/Distorted. WAV Meta releases are listed as 24-bit/48 kHz. FreePats includes SFZ mapping and FLAC/WAV/SF2 banks.
+**Открытые дефекты/риски:** importer release archive checksum manifest not yet verified; collection-specific license and mapping preservation require explicit audit; preview OGG duplication must be prevented where lossless WAV is imported; release-file counts must be represented correctly. No download/import or runtime validation is claimed.
+**Следующий шаг:** correct importer/accounting and archive-manifest checks, run regression tests on exact SHA, then execute an authorized CI acquisition workflow and inspect its artifact before integrating any samples.
