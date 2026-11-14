@@ -2629,3 +2629,42 @@ CTest, pluginval strictness 5 и FL Studio 20 в рамках этого ком�
 
 **Статус:** SAFETY FIX IMPLEMENTED / TESTS NOT RUN / VISUAL PARITY NOT APPROVED.
 ==============================================================================
+
+============================================================================== 
+2026-11-14 — NEON-STAGE-REV-ULTRA-ASSET-CONTRACT-002
+==============================================================================
+
+**Branch:** `work/neon-stage-reference-preview-fix`
+**Commits:**
+- `fd666e4fce6477ecbf4752cf9ce6161866b327ef` — REV ULTRA G2 / asset layout implementation
+- `1e468937c10c90395bd8266eb95f2430d80289c5` — control map JSON newline correction
+- `801480df6aee85a92f10fc7257a6681f3ff419aa` — separate PNG-8 promo validation from RGBA sprite atlas validation
+- `459f944edfb89f13f147856b54107f7867b41316` — build batch output clarified as staging-only
+
+**Implemented in staging generator:**
+- Preview target changed to 360x240; Hero target changed to 800x450.
+- Preview/Hero are quantized to indexed 8-bit PNG. Sprite atlases remain RGBA and are validated separately.
+- Canonical SVG paths moved to `Skin_053/assets/{texture,bezel,crest}.svg`.
+- Generator now emits `Skin_053/control_map.json` with 28 unique controls, grid dimensions 12x16 and col/row/span fields.
+- G2 required-control list includes `sync_selector`; exact count is 28.
+- Structural report checks G2 count and grid bounds, expected PNG dimensions/modes, SVG paths and PNG decoding/CRC via Pillow verification.
+- Batch script describes the output accurately: staging ZIP only; no JUCE runtime resource tree is copied or replaced.
+
+**Static source audit (not generator execution):**
+- Current authoritative `SKIN/theme_manifest.json` contains 102 themes, range 1..102. This is the repository fact; no IDs were renumbered.
+- Skin_052: 28 controls; Skin_053: 28 controls; all control IDs and grid rectangles match exactly.
+- G1 current palette ratios: primary 20.01:1, secondary 16.05:1, disabled 10.22:1, LCD 18.23:1, accent/panel 15.37:1 — all above REV ULTRA thresholds.
+- DSP, APVTS IDs, MIDI, sampler ownership, registry and default skin were not modified.
+
+**Review objections:**
+- Design/Skin: dimensions and asset formats now match the stated REV ULTRA staging contract; exact visual parity with seven mockups remains unverified.
+- JUCE/UI: control map is metadata only; no live UI layout or bindings were changed.
+- Build/QA: generator has not yet been executed on Windows in this record; CI result for the new commits is not confirmed.
+- Audio/Reatime: no audio or realtime code touched.
+- Legal/Assets: source mockup provenance/license review remains open; these UI assets are not declared cleared for redistribution.
+- Release: staging ZIP is not COMPLETE ZIP and must not be published as a release.
+
+**Verification status:** STATIC CONTRACT AUDIT PASS for 28-control parity and G1 palette arithmetic. Generator execution, PNG/SVG output validation, Windows Release Build, CTest, pluginval strictness 5 and FL Studio 20 acceptance remain NOT RUN / NOT VERIFIED.
+
+**Status:** REV ULTRA STAGING GENERATOR UPDATED / OUTPUT NOT YET GENERATED OR APPROVED.
+==============================================================================
