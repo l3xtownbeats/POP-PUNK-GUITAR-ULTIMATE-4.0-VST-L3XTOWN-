@@ -721,3 +721,8 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 Это уточнение расширяет предыдущее правило «без верхнего лимита» на все перечисленные сущности и категории обоих режимов. Оно не отменяет и не ослабляет ранее утверждённые правила структуры браузеров, MELODY/PATTERN, MIDI/APVTS/DSP/audio-thread contracts, лицензий, визуальной системы и качества. При обнаружении конфликта остановить затронутую часть и запросить личное решение пользователя.
 
 **Статусы:** APPROVED / DOCUMENTED после внесения; VERIFIED только после повторного fetch. IMPLEMENTED / TESTED не присваиваются этим документированием.
+
+
+## ENGINE SOURCE-OF-TRUTH AND INVENTORY RULE — 2026-11-14
+
+Use Info.txt as the single authoritative development/decision/status journal and CODE.txt as the append-only source-change index. The full plugin/engine implementation remains in Git-tracked source files; never paste duplicate copies of .cpp/.h into the journal. Before continuing, read the current INFO engine inventory and inspect the actual source tree. The latest static audit found root-vs-Source parallel implementations and CMake paths that do not match the audited tree, including missing Source/Engine references and JUCE provisioning. Do not move or rewrite code blindly; compare APIs, APVTS IDs, MIDI, sampler lifecycle, tests and history, then reconcile one scoped change at a time. No build/test/host pass may be inferred from documentation.
