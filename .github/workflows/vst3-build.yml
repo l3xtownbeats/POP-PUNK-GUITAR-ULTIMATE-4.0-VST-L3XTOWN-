@@ -79,6 +79,9 @@ jobs:
           if ($auditExit -gt 1) { throw 'REV.18 asset auditor could not read the skin contract or registry.' }
           if ($auditExit -eq 1) { Write-Warning 'REV.18 SKIN-1 asset gaps recorded; this baseline step is intentionally non-blocking until the asset migration is complete.' }
           if ($auditExit -eq 0) { Write-Host 'REV.18 SKIN-1 asset audit PASS.' }
+          # Explicitly neutralize Python's expected exit code 1 so the
+          # GitHub Actions PowerShell runner does not mark this step failed.
+          exit 0
 
       - name: Upload REV.18 SKIN-1 asset audit report
         uses: actions/upload-artifact@v4
