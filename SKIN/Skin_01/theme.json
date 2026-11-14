@@ -2,135 +2,135 @@
   "schemaVersion": "1.0.0",
   "id": "skin-01",
   "index": 1,
-  "name": "Neon Riot",
-  "description": "Default graphite hardware shell with electric magenta, cyan and restrained acid-yellow accents.",
-  "cluster": "B",
+  "name": "SIGNAL FORGE / NEON",
+  "description": "Approved flagship NEON STAGE identity: deep black carbon stage, precision metallic hardware, electric cyan/blue signal lighting, restrained violet-magenta stage accents and high-contrast studio controls. Shared layout and control behavior remain unchanged.",
+  "cluster": "A",
   "identity": {
-    "material": "brushed charcoal metal and anodized aluminium",
-    "lighting": "controlled magenta/cyan edge lighting with soft ambient shadows",
-    "mood": "premium, energetic, precise pop-punk flagship"
+    "material": "deep black brushed carbon, dark anodized metal and precision machined aluminium",
+    "lighting": "electric cyan and ice-blue neon edge lighting, blue signal glow, restrained violet-magenta stage reflections",
+    "mood": "premium live-stage guitar workstation; bold, precise, high-contrast and immediately readable"
   },
   "tokens": {
     "canvas": {
-      "base": "#111116",
-      "inset": "#17171D"
+      "base": "#080D16",
+      "inset": "#0D1624"
     },
     "surfaces": {
-      "primary": "#202027",
-      "secondary": "#17171D",
-      "raised": "#292932",
-      "overlay": "#111116"
+      "primary": "#101B2B",
+      "secondary": "#0B1421",
+      "raised": "#17263A",
+      "overlay": "#070C14"
     },
     "borders": {
-      "subtle": "#49434F",
-      "strong": "#6A5B6C",
-      "focus": "#ED238B"
+      "subtle": "#28415D",
+      "strong": "#47749B",
+      "focus": "#00BFFF"
     },
     "typography": {
-      "primary": "#F4F0F4",
-      "secondary": "#AAA8B2",
-      "disabled": "#77747D",
-      "onAccent": "#111116"
+      "primary": "#F2F8FF",
+      "secondary": "#A9C1D8",
+      "disabled": "#60758A",
+      "onAccent": "#06101B"
     },
     "rotary": {
-      "body": "#292932",
-      "ring": "#49434F",
-      "track": "#49434F",
-      "value": "#ED238B",
-      "pointer": "#F4F0F4",
-      "disabled": "#55515A"
+      "body": "#15263A",
+      "ring": "#315474",
+      "track": "#29445E",
+      "value": "#00BFFF",
+      "pointer": "#F2F8FF",
+      "disabled": "#34485D"
     },
     "sliders": {
-      "track": "#49434F",
-      "fill": "#ED238B",
-      "thumb": "#F4F0F4",
-      "disabled": "#55515A"
+      "track": "#29445E",
+      "fill": "#00BFFF",
+      "thumb": "#F2F8FF",
+      "disabled": "#34485D"
     },
     "buttons": {
       "primary": {
-        "background": "#ED238B",
-        "foreground": "#111116",
-        "hover": "#FF58AB",
-        "pressed": "#B81868",
-        "disabled": "#49434F"
+        "background": "#00BFFF",
+        "foreground": "#06101B",
+        "hover": "#54D6FF",
+        "pressed": "#087EAE",
+        "disabled": "#29445E"
       },
       "secondary": {
-        "background": "#202027",
-        "foreground": "#F4F0F4",
-        "hover": "#292932",
-        "pressed": "#49434F",
-        "disabled": "#49434F"
+        "background": "#142338",
+        "foreground": "#F2F8FF",
+        "hover": "#1B304A",
+        "pressed": "#28415D",
+        "disabled": "#29445E"
       }
     },
     "tabs": {
-      "activeBackground": "#ED238B",
-      "activeText": "#111116",
-      "inactiveBackground": "#17171D",
-      "inactiveText": "#AAA8B2",
-      "indicator": "#39D8E8"
+      "activeBackground": "#00BFFF",
+      "activeText": "#06101B",
+      "inactiveBackground": "#0B1421",
+      "inactiveText": "#A9C1D8",
+      "indicator": "#8A5CFF"
     },
     "comboBoxes": {
-      "background": "#17171D",
-      "foreground": "#F4F0F4",
-      "border": "#49434F",
-      "hover": "#292932",
-      "menuBackground": "#202027",
-      "selection": "#ED238B"
+      "background": "#0B1421",
+      "foreground": "#F2F8FF",
+      "border": "#28415D",
+      "hover": "#17263A",
+      "menuBackground": "#101B2B",
+      "selection": "#00BFFF"
     },
     "keyboard": {
-      "whiteKey": "#E8E7EB",
-      "blackKey": "#17171D",
-      "whitePressed": "#ED238B",
-      "blackPressed": "#39D8E8",
-      "keyBorder": "#34343D",
-      "octaveLabel": "#AAA8B2"
+      "whiteKey": "#E9F3FC",
+      "blackKey": "#101B2B",
+      "whitePressed": "#00BFFF",
+      "blackPressed": "#8A5CFF",
+      "keyBorder": "#28415D",
+      "octaveLabel": "#A9C1D8"
     },
     "meters": {
-      "low": "#58C98A",
-      "medium": "#E8E34A",
-      "high": "#F06A58",
-      "background": "#17171D"
+      "low": "#39D98A",
+      "medium": "#FFD166",
+      "high": "#FF5D73",
+      "background": "#0B1421"
     },
     "icons": {
-      "primary": "#F4F0F4",
-      "secondary": "#AAA8B2",
-      "accent": "#ED238B",
-      "disabled": "#77747D"
+      "primary": "#F2F8FF",
+      "secondary": "#A9C1D8",
+      "accent": "#00BFFF",
+      "disabled": "#60758A"
     },
     "thumbnails": {
-      "background": "#17171D",
-      "border": "#49434F",
-      "selected": "#ED238B",
-      "caption": "#F4F0F4"
+      "background": "#0B1421",
+      "border": "#28415D",
+      "selected": "#00BFFF",
+      "caption": "#F2F8FF"
     },
     "windowChrome": {
-      "background": "#111116",
-      "title": "#F4F0F4",
-      "border": "#49434F",
-      "close": "#ED238B"
+      "background": "#080D16",
+      "title": "#F2F8FF",
+      "border": "#315474",
+      "close": "#FF5D73"
     },
     "hero": {
-      "background": "#111116",
-      "accent": "#ED238B",
-      "secondaryAccent": "#39D8E8",
-      "highlight": "#E8E34A"
+      "background": "#080D16",
+      "accent": "#00BFFF",
+      "secondaryAccent": "#8A5CFF",
+      "highlight": "#F2F8FF"
     },
     "accents": {
-      "primary": "#ED238B",
-      "secondary": "#39D8E8",
-      "tertiary": "#E8E34A"
+      "primary": "#00BFFF",
+      "secondary": "#8A5CFF",
+      "tertiary": "#FF4FA3"
     },
     "texture": {
-      "material": "brushed charcoal metal",
+      "material": "fine brushed black carbon with subtle stage-grain",
       "enabled": true,
-      "intensity": 0.08,
+      "intensity": 0.12,
       "asset": "assets/texture.png"
     },
     "lighting": {
-      "profile": "controlled magenta/cyan edge lighting",
-      "glow": "#ED238B",
-      "glowIntensity": 0.12,
-      "edgeHighlight": "#39D8E8"
+      "profile": "electric cyan/ice-blue signal edges with restrained violet-magenta stage reflections",
+      "glow": "#00BFFF",
+      "glowIntensity": 0.22,
+      "edgeHighlight": "#8A5CFF"
     }
   },
   "assets": {
@@ -143,13 +143,13 @@
       "width": 480,
       "height": 300,
       "format": "png",
-      "content": "Default Neon Riot full-shell preview, including all functional areas and readable controls."
+      "content": "SIGNAL FORGE / NEON full-shell reference: dark carbon workstation, cyan-blue neon controls, metallic hardware and violet-magenta stage accents; all approved functional zones remain readable."
     },
     "hero": {
       "width": 1200,
       "height": 420,
       "format": "webp",
-      "content": "Original abstract guitar-hardware hero composition, graphite and brushed metal with restrained magenta/cyan light; no trademarks."
+      "content": "Wide abstract black-carbon live-stage hero with precision guitar hardware, electric cyan-blue signal beams and restrained violet-magenta reflections; no third-party trademarks."
     },
     "texture": {
       "width": 1024,
@@ -166,8 +166,8 @@
     "audioChanges": false
   },
   "validation": {
-    "json": "authored",
-    "assets": "pending",
+    "json": "pending-review",
+    "assets": "pending-replacement-and-checksum",
     "runtime": "pending",
     "flStudio20": "pending",
     "matrix": "pending"

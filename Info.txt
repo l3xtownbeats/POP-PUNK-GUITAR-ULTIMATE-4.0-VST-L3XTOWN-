@@ -1941,3 +1941,17 @@ Official discovery and license references reviewed: Meta Open Sound README/relea
 Аудит дополнительных окон продолжать по текущей ветке, сверяя макеты, существующую реализацию и функциональность; не создавать повторно уже имеющиеся компоненты. До завершения Фазы 0 не переписывать исходники и не объявлять дизайн/план реализованным. Для каждого следующего этапа фиксировать фактический SHA, статус, результаты сборки/тестов и незакрытые риски. PASS не переносить между commit SHA.
 
 **Изменения исходников в рамках этой журнальной записи:** нет. **Сборка/CTest/pluginval/FL Studio host verification:** не выполнялись этой записью; PASS не заявляется.
+
+
+## 2026-11-14 — SIGNAL FORGE / NEON flagship theme foundation
+
+**Статус: SOURCE CHANGE PREPARED / EXACT VISUAL PARITY, ASSET REPLACEMENT AND CI PENDING.**
+**Branch:** `work/signal-forge-panel-shell`. **Pre-change HEAD:** `bc8a3a1513e710744191af575d45094dff21142b`.
+
+**Основание:** пользовательское решение и Theme Gallery & Visual System Contract от 2026-11-13; единый INFO §A/J; SIGNAL FORGE control-surface design contract (13.11.2026). Основная визуальная идентичность — SIGNAL FORGE / NEON (NEON STAGE), не Blackout Voltage. Утверждённый язык: premium dark-carbon/metallic, electric cyan/blue neon, violet/magenta как вторичный stage accent; единая геометрия и функциональность контролов.
+
+**Изменения в этом source commit:** существующая запись `skin-01` переименована в `SIGNAL FORGE / NEON` без смены ID/index; `skin-01` назначена default/startup fallback в registry; `skin-51` Blackout Voltage сохранена как отдельная тема; остальные ID и theme entries сохранены. Обновлены legacy palette tokens Skin_01 под NEON STAGE language. Editor saved-skin fallback изменён с `skin-51` на `skin-01`. Аудиодвижок, APVTS, MIDI, DSP, layout geometry и control bindings не менялись.
+
+**Важные ограничения:** это foundation/theme-token pass, не завершённая копия семи макетов. Существующие preview/hero/texture binary assets пока не заменены и не прошли checksum/visual validation. Главный editor и все auxiliary panels ещё требуют pixel/layout comparison с семью оригиналами, а gallery order/runtime preview/apply/back требуют отдельной проверки. Не присваивать DONE или visual acceptance.
+
+**Проверки:** JSON parse/source diff — pending post-commit; Windows Release, полный CTest, pluginval strictness 5, package и FL Studio 20 — pending на новом exact SHA.

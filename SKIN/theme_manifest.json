@@ -2,18 +2,19 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 52,
-  "defaultSkin": "skin-51",
+  "defaultSkin": "skin-01",
   "selector": "SKIN",
   "status": "runtime-palette-switching-implemented-pending-validation",
   "themes": [
     {
       "id": "skin-01",
       "index": 1,
-      "name": "Neon Riot",
-      "cluster": "B",
+      "name": "SIGNAL FORGE / NEON",
+      "cluster": "A",
       "path": "Skin_01/theme.json",
       "preview": "Skin_01/assets/preview.png",
-      "hero": "Skin_01/assets/hero.webp"
+      "hero": "Skin_01/assets/hero.webp",
+      "displayOrder": 1
     },
     {
       "id": "skin-02",
@@ -22,7 +23,8 @@
       "cluster": "C",
       "path": "Skin_02/theme.json",
       "preview": "Skin_02/assets/preview.png",
-      "hero": "Skin_02/assets/hero.webp"
+      "hero": "Skin_02/assets/hero.webp",
+      "displayOrder": 3
     },
     {
       "id": "skin-03",
@@ -31,7 +33,8 @@
       "cluster": "A",
       "path": "Skin_03/theme.json",
       "preview": "Skin_03/assets/preview.png",
-      "hero": "Skin_03/assets/hero.webp"
+      "hero": "Skin_03/assets/hero.webp",
+      "displayOrder": 4
     },
     {
       "id": "skin-04",
@@ -40,7 +43,8 @@
       "cluster": "B",
       "path": "Skin_04/theme.json",
       "preview": "Skin_04/assets/preview.png",
-      "hero": "Skin_04/assets/hero.webp"
+      "hero": "Skin_04/assets/hero.webp",
+      "displayOrder": 5
     },
     {
       "id": "skin-05",
@@ -49,7 +53,8 @@
       "cluster": "C",
       "path": "Skin_05/theme.json",
       "preview": "Skin_05/assets/preview.png",
-      "hero": "Skin_05/assets/hero.webp"
+      "hero": "Skin_05/assets/hero.webp",
+      "displayOrder": 6
     },
     {
       "id": "skin-06",
@@ -58,7 +63,8 @@
       "cluster": "C",
       "path": "Skin_06/theme.json",
       "preview": "Skin_06/assets/preview.png",
-      "hero": "Skin_06/assets/hero.webp"
+      "hero": "Skin_06/assets/hero.webp",
+      "displayOrder": 7
     },
     {
       "id": "skin-07",
@@ -67,7 +73,8 @@
       "cluster": "B",
       "path": "Skin_07/theme.json",
       "preview": "Skin_07/assets/preview.png",
-      "hero": "Skin_07/assets/hero.webp"
+      "hero": "Skin_07/assets/hero.webp",
+      "displayOrder": 8
     },
     {
       "id": "skin-08",
@@ -76,7 +83,8 @@
       "cluster": "C",
       "path": "Skin_08/theme.json",
       "preview": "Skin_08/assets/preview.png",
-      "hero": "Skin_08/assets/hero.webp"
+      "hero": "Skin_08/assets/hero.webp",
+      "displayOrder": 9
     },
     {
       "id": "skin-09",
@@ -85,7 +93,8 @@
       "cluster": "A",
       "path": "Skin_09/theme.json",
       "preview": "Skin_09/assets/preview.png",
-      "hero": "Skin_09/assets/hero.webp"
+      "hero": "Skin_09/assets/hero.webp",
+      "displayOrder": 10
     },
     {
       "id": "skin-10",
@@ -94,7 +103,8 @@
       "cluster": "C",
       "path": "Skin_10/theme.json",
       "preview": "Skin_10/assets/preview.png",
-      "hero": "Skin_10/assets/hero.webp"
+      "hero": "Skin_10/assets/hero.webp",
+      "displayOrder": 11
     },
     {
       "id": "skin-11",
@@ -103,7 +113,8 @@
       "cluster": "B",
       "path": "Skin_11/theme.json",
       "preview": "Skin_11/assets/preview.png",
-      "hero": "Skin_11/assets/hero.webp"
+      "hero": "Skin_11/assets/hero.webp",
+      "displayOrder": 12
     },
     {
       "id": "skin-12",
@@ -112,7 +123,8 @@
       "cluster": "C",
       "path": "Skin_12/theme.json",
       "preview": "Skin_12/assets/preview.png",
-      "hero": "Skin_12/assets/hero.webp"
+      "hero": "Skin_12/assets/hero.webp",
+      "displayOrder": 13
     },
     {
       "id": "skin-13",
@@ -121,7 +133,8 @@
       "cluster": "B",
       "path": "Skin_13/theme.json",
       "preview": "Skin_13/assets/preview.png",
-      "hero": "Skin_13/assets/hero.webp"
+      "hero": "Skin_13/assets/hero.webp",
+      "displayOrder": 14
     },
     {
       "id": "skin-14",
@@ -130,7 +143,8 @@
       "cluster": "B",
       "path": "Skin_14/theme.json",
       "preview": "Skin_14/assets/preview.png",
-      "hero": "Skin_14/assets/hero.webp"
+      "hero": "Skin_14/assets/hero.webp",
+      "displayOrder": 15
     },
     {
       "id": "skin-15",
@@ -139,7 +153,8 @@
       "cluster": "B",
       "path": "Skin_15/theme.json",
       "preview": "Skin_15/assets/preview.png",
-      "hero": "Skin_15/assets/hero.webp"
+      "hero": "Skin_15/assets/hero.webp",
+      "displayOrder": 16
     },
     {
       "id": "skin-16",
@@ -148,7 +163,8 @@
       "cluster": "C",
       "path": "Skin_16/theme.json",
       "preview": "Skin_16/assets/preview.png",
-      "hero": "Skin_16/assets/hero.webp"
+      "hero": "Skin_16/assets/hero.webp",
+      "displayOrder": 17
     },
     {
       "id": "skin-17",
@@ -157,7 +173,8 @@
       "cluster": "C",
       "path": "Skin_17/theme.json",
       "preview": "Skin_17/assets/preview.png",
-      "hero": "Skin_17/assets/hero.webp"
+      "hero": "Skin_17/assets/hero.webp",
+      "displayOrder": 18
     },
     {
       "id": "skin-18",
@@ -166,7 +183,8 @@
       "cluster": "C",
       "path": "Skin_18/theme.json",
       "preview": "Skin_18/assets/preview.png",
-      "hero": "Skin_18/assets/hero.webp"
+      "hero": "Skin_18/assets/hero.webp",
+      "displayOrder": 19
     },
     {
       "id": "skin-19",
@@ -175,7 +193,8 @@
       "cluster": "B",
       "path": "Skin_19/theme.json",
       "preview": "Skin_19/assets/preview.png",
-      "hero": "Skin_19/assets/hero.webp"
+      "hero": "Skin_19/assets/hero.webp",
+      "displayOrder": 20
     },
     {
       "id": "skin-20",
@@ -184,7 +203,8 @@
       "cluster": "C",
       "path": "Skin_20/theme.json",
       "preview": "Skin_20/assets/preview.png",
-      "hero": "Skin_20/assets/hero.webp"
+      "hero": "Skin_20/assets/hero.webp",
+      "displayOrder": 21
     },
     {
       "id": "skin-21",
@@ -193,7 +213,8 @@
       "cluster": "A",
       "path": "Skin_21/theme.json",
       "preview": "Skin_21/assets/preview.png",
-      "hero": "Skin_21/assets/hero.webp"
+      "hero": "Skin_21/assets/hero.webp",
+      "displayOrder": 22
     },
     {
       "id": "skin-22",
@@ -202,7 +223,8 @@
       "cluster": "A",
       "path": "Skin_22/theme.json",
       "preview": "Skin_22/assets/preview.png",
-      "hero": "Skin_22/assets/hero.webp"
+      "hero": "Skin_22/assets/hero.webp",
+      "displayOrder": 23
     },
     {
       "id": "skin-23",
@@ -211,7 +233,8 @@
       "cluster": "A",
       "path": "Skin_23/theme.json",
       "preview": "Skin_23/assets/preview.png",
-      "hero": "Skin_23/assets/hero.webp"
+      "hero": "Skin_23/assets/hero.webp",
+      "displayOrder": 24
     },
     {
       "id": "skin-24",
@@ -220,7 +243,8 @@
       "cluster": "A",
       "path": "Skin_24/theme.json",
       "preview": "Skin_24/assets/preview.png",
-      "hero": "Skin_24/assets/hero.webp"
+      "hero": "Skin_24/assets/hero.webp",
+      "displayOrder": 25
     },
     {
       "id": "skin-25",
@@ -229,7 +253,8 @@
       "cluster": "A",
       "path": "Skin_25/theme.json",
       "preview": "Skin_25/assets/preview.png",
-      "hero": "Skin_25/assets/hero.webp"
+      "hero": "Skin_25/assets/hero.webp",
+      "displayOrder": 26
     },
     {
       "id": "skin-26",
@@ -238,7 +263,8 @@
       "cluster": "A",
       "path": "Skin_26/theme.json",
       "preview": "Skin_26/assets/preview.png",
-      "hero": "Skin_26/assets/hero.webp"
+      "hero": "Skin_26/assets/hero.webp",
+      "displayOrder": 27
     },
     {
       "id": "skin-27",
@@ -247,7 +273,8 @@
       "cluster": "A",
       "path": "Skin_27/theme.json",
       "preview": "Skin_27/assets/preview.png",
-      "hero": "Skin_27/assets/hero.webp"
+      "hero": "Skin_27/assets/hero.webp",
+      "displayOrder": 28
     },
     {
       "id": "skin-28",
@@ -256,7 +283,8 @@
       "cluster": "A",
       "path": "Skin_28/theme.json",
       "preview": "Skin_28/assets/preview.png",
-      "hero": "Skin_28/assets/hero.webp"
+      "hero": "Skin_28/assets/hero.webp",
+      "displayOrder": 29
     },
     {
       "id": "skin-29",
@@ -265,7 +293,8 @@
       "cluster": "A",
       "path": "Skin_29/theme.json",
       "preview": "Skin_29/assets/preview.png",
-      "hero": "Skin_29/assets/hero.webp"
+      "hero": "Skin_29/assets/hero.webp",
+      "displayOrder": 30
     },
     {
       "id": "skin-30",
@@ -274,7 +303,8 @@
       "cluster": "A",
       "path": "Skin_30/theme.json",
       "preview": "Skin_30/assets/preview.png",
-      "hero": "Skin_30/assets/hero.webp"
+      "hero": "Skin_30/assets/hero.webp",
+      "displayOrder": 31
     },
     {
       "id": "skin-31",
@@ -283,7 +313,8 @@
       "cluster": "B",
       "path": "Skin_31/theme.json",
       "preview": "Skin_31/assets/preview.png",
-      "hero": "Skin_31/assets/hero.webp"
+      "hero": "Skin_31/assets/hero.webp",
+      "displayOrder": 32
     },
     {
       "id": "skin-32",
@@ -292,7 +323,8 @@
       "cluster": "B",
       "path": "Skin_32/theme.json",
       "preview": "Skin_32/assets/preview.png",
-      "hero": "Skin_32/assets/hero.webp"
+      "hero": "Skin_32/assets/hero.webp",
+      "displayOrder": 33
     },
     {
       "id": "skin-33",
@@ -301,7 +333,8 @@
       "cluster": "B",
       "path": "Skin_33/theme.json",
       "preview": "Skin_33/assets/preview.png",
-      "hero": "Skin_33/assets/hero.webp"
+      "hero": "Skin_33/assets/hero.webp",
+      "displayOrder": 34
     },
     {
       "id": "skin-34",
@@ -310,7 +343,8 @@
       "cluster": "B",
       "path": "Skin_34/theme.json",
       "preview": "Skin_34/assets/preview.png",
-      "hero": "Skin_34/assets/hero.webp"
+      "hero": "Skin_34/assets/hero.webp",
+      "displayOrder": 35
     },
     {
       "id": "skin-35",
@@ -319,7 +353,8 @@
       "cluster": "B",
       "path": "Skin_35/theme.json",
       "preview": "Skin_35/assets/preview.png",
-      "hero": "Skin_35/assets/hero.webp"
+      "hero": "Skin_35/assets/hero.webp",
+      "displayOrder": 36
     },
     {
       "id": "skin-36",
@@ -328,7 +363,8 @@
       "cluster": "B",
       "path": "Skin_36/theme.json",
       "preview": "Skin_36/assets/preview.png",
-      "hero": "Skin_36/assets/hero.webp"
+      "hero": "Skin_36/assets/hero.webp",
+      "displayOrder": 37
     },
     {
       "id": "skin-37",
@@ -337,7 +373,8 @@
       "cluster": "B",
       "path": "Skin_37/theme.json",
       "preview": "Skin_37/assets/preview.png",
-      "hero": "Skin_37/assets/hero.webp"
+      "hero": "Skin_37/assets/hero.webp",
+      "displayOrder": 38
     },
     {
       "id": "skin-38",
@@ -346,7 +383,8 @@
       "cluster": "B",
       "path": "Skin_38/theme.json",
       "preview": "Skin_38/assets/preview.png",
-      "hero": "Skin_38/assets/hero.webp"
+      "hero": "Skin_38/assets/hero.webp",
+      "displayOrder": 39
     },
     {
       "id": "skin-39",
@@ -355,7 +393,8 @@
       "cluster": "B",
       "path": "Skin_39/theme.json",
       "preview": "Skin_39/assets/preview.png",
-      "hero": "Skin_39/assets/hero.webp"
+      "hero": "Skin_39/assets/hero.webp",
+      "displayOrder": 40
     },
     {
       "id": "skin-40",
@@ -364,7 +403,8 @@
       "cluster": "B",
       "path": "Skin_40/theme.json",
       "preview": "Skin_40/assets/preview.png",
-      "hero": "Skin_40/assets/hero.webp"
+      "hero": "Skin_40/assets/hero.webp",
+      "displayOrder": 41
     },
     {
       "id": "skin-41",
@@ -373,7 +413,8 @@
       "cluster": "C",
       "path": "Skin_41/theme.json",
       "preview": "Skin_41/assets/preview.png",
-      "hero": "Skin_41/assets/hero.webp"
+      "hero": "Skin_41/assets/hero.webp",
+      "displayOrder": 42
     },
     {
       "id": "skin-42",
@@ -382,7 +423,8 @@
       "cluster": "C",
       "path": "Skin_42/theme.json",
       "preview": "Skin_42/assets/preview.png",
-      "hero": "Skin_42/assets/hero.webp"
+      "hero": "Skin_42/assets/hero.webp",
+      "displayOrder": 43
     },
     {
       "id": "skin-43",
@@ -391,7 +433,8 @@
       "cluster": "C",
       "path": "Skin_43/theme.json",
       "preview": "Skin_43/assets/preview.png",
-      "hero": "Skin_43/assets/hero.webp"
+      "hero": "Skin_43/assets/hero.webp",
+      "displayOrder": 44
     },
     {
       "id": "skin-44",
@@ -400,7 +443,8 @@
       "cluster": "C",
       "path": "Skin_44/theme.json",
       "preview": "Skin_44/assets/preview.png",
-      "hero": "Skin_44/assets/hero.webp"
+      "hero": "Skin_44/assets/hero.webp",
+      "displayOrder": 45
     },
     {
       "id": "skin-45",
@@ -409,7 +453,8 @@
       "cluster": "C",
       "path": "Skin_45/theme.json",
       "preview": "Skin_45/assets/preview.png",
-      "hero": "Skin_45/assets/hero.webp"
+      "hero": "Skin_45/assets/hero.webp",
+      "displayOrder": 46
     },
     {
       "id": "skin-46",
@@ -418,7 +463,8 @@
       "cluster": "C",
       "path": "Skin_46/theme.json",
       "preview": "Skin_46/assets/preview.png",
-      "hero": "Skin_46/assets/hero.webp"
+      "hero": "Skin_46/assets/hero.webp",
+      "displayOrder": 47
     },
     {
       "id": "skin-47",
@@ -427,7 +473,8 @@
       "cluster": "C",
       "path": "Skin_47/theme.json",
       "preview": "Skin_47/assets/preview.png",
-      "hero": "Skin_47/assets/hero.webp"
+      "hero": "Skin_47/assets/hero.webp",
+      "displayOrder": 48
     },
     {
       "id": "skin-48",
@@ -436,7 +483,8 @@
       "cluster": "C",
       "path": "Skin_48/theme.json",
       "preview": "Skin_48/assets/preview.png",
-      "hero": "Skin_48/assets/hero.webp"
+      "hero": "Skin_48/assets/hero.webp",
+      "displayOrder": 49
     },
     {
       "id": "skin-49",
@@ -445,7 +493,8 @@
       "cluster": "B",
       "path": "Skin_49/theme.json",
       "preview": "Skin_49/assets/preview.png",
-      "hero": "Skin_49/assets/hero.webp"
+      "hero": "Skin_49/assets/hero.webp",
+      "displayOrder": 50
     },
     {
       "id": "skin-50",
@@ -454,7 +503,8 @@
       "cluster": "C",
       "path": "Skin_50/theme.json",
       "preview": "Skin_50/assets/preview.png",
-      "hero": "Skin_50/assets/hero.webp"
+      "hero": "Skin_50/assets/hero.webp",
+      "displayOrder": 51
     },
     {
       "id": "skin-51",
@@ -463,7 +513,8 @@
       "cluster": "B",
       "path": "Skin_51/theme.json",
       "preview": "Skin_51/assets/preview.png",
-      "hero": "Skin_51/assets/hero.webp"
+      "hero": "Skin_51/assets/hero.webp",
+      "displayOrder": 2
     },
     {
       "id": "skin-052",
@@ -473,7 +524,8 @@
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_052/theme.json",
       "preview": "Skin_052/assets/preview.png",
-      "hero": "Skin_052/assets/hero.png"
+      "hero": "Skin_052/assets/hero.png",
+      "displayOrder": 53
     }
   ],
   "skinRange": {

@@ -26,7 +26,7 @@ juce::String fromWidePath(const wchar_t* value, int length)
 }
 #endif
 
-// Premium Blackout Voltage shell. Visual theme code never touches processor/audio state.
+// SIGNAL FORGE / NEON flagship shell. Theme code is visual-only and never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -566,7 +566,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-51") : juce::String("skin-51");
+    const auto id = settings ? settings->getValue("skinId", "skin-01") : juce::String("skin-01");
     const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
     if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
     {
