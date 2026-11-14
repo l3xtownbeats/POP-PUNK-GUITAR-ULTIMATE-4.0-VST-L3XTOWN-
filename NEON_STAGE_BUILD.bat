@@ -70,11 +70,11 @@ echo BUILD COMPLETE - STAGING PACKAGE CREATED
 echo Check dist\ and juce_resources\
 echo This is a staging build; it is NOT merged into theme_manifest.json.
 echo ========================================
-pause
+if not defined CI pause
 exit /b 0
 
 :fail
 echo.
 echo BUILD FAILED. Review the first error above.
-pause
+if not defined CI pause
 exit /b 1
