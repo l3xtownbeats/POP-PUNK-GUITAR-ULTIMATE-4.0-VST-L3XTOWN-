@@ -887,3 +887,20 @@ Implementation obligations:
 - ask the user only when a decision genuinely falls outside delegated authority, involves a new irreversible/paid operation, rights/licensing, data safety, or a material ambiguity that cannot be resolved from the approved specification.
 
 This delegation covers the full approved PPGU scope, including all controls and visual/functional modules, but does not override licensing, quality, security, source-preservation or verification requirements. Delegation does not imply background work between messages: progress is recorded only for actions actually performed and commits actually verified.
+
+
+## 2026-11-14 — FINAL PRODUCT AND DELIVERY ACCEPTANCE CRITERIA
+
+The user confirms the required end result under the approved master plan and all amendments: a complete, optimized, tested POP PUNK GUITAR ULTIMATE VST3 with its own legally redistributable sample library and every previously approved feature, followed by creation of one complete downloadable product archive and delivery of a working download link.
+
+Delivery acceptance criteria:
+- full Windows 10 x64 VST3 compatible with FL Studio 20;
+- all approved modules, controls, MIDI/automation, audio engine, effects, AMP/CAB, sample engine, AUTO SOUND HUNTER, import, presets, skins, settings and all other master-plan additions implemented and functional;
+- integrated original project sample library plus performance/MIDI/pattern/articulation data, with exact license clearance for commercial embedding and redistribution inside a third-party VST; exclude unclear or incompatible rights;
+- every shipped preset actually produces its promised sound and passes audition and technical QA; no empty/fake controls or placeholder presets;
+- optimization demonstrated by measured CPU/RAM, latency, startup/load time, voice/polyphony, streaming/cache and stability on target environment without sacrificing sound quality or preset identity;
+- successful build, CTest, pluginval and real host validation in FL Studio 20 on Windows 10 x64; fix discovered defects or disclose them, with critical defects blocking release;
+- final archive contains VST3, owned Samples library, Factory/User Presets support, skins/resources, licenses/attributions, RU/EN documentation, SHA-256 manifest and required runtime/support files; if technical size limits require split volumes, provide checksummed recoverable parts;
+- after packaging, verify archive integrity, manifest, contents, extraction and a clean install/load smoke test; provide a working link to the archive that was actually created.
+
+These are approved COMPLETE/DELIVERY acceptance criteria, not a claim that the product is currently complete. Do not promise a fabricated link or deadline; obtain and verify source assets, licenses, integration, build, tests and archive first. Paid acquisitions still require separate user approval. All previously approved requirements and amendments remain in force.
