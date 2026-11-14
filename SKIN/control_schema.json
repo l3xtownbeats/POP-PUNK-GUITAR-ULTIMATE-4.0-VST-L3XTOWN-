@@ -60,117 +60,235 @@
       "minLength": 1
     },
     "palette": {
-      "type": "object",
-      "required": [
-        "window_bg",
-        "panel",
-        "panel_elevated",
-        "control_bg",
-        "control_face",
-        "control_border",
-        "text_primary",
-        "text_secondary",
-        "text_disabled",
-        "accent",
-        "accent_glow",
-        "danger",
-        "warning",
-        "success",
-        "lcd_bg",
-        "lcd_text",
-        "led_on",
-        "led_off",
-        "shadow",
-        "highlight",
-        "lowlight"
-      ],
-      "properties": {
-        "window_bg": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
+      "description": "Legacy REV14 skins retain the original palette keys. NEON STAGE schema ppgu-theme/1.2 uses the canonical REV ULTRA 3.0 palette.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "window_bg",
+            "panel",
+            "panel_elevated",
+            "control_bg",
+            "control_face",
+            "control_border",
+            "text_primary",
+            "text_secondary",
+            "text_disabled",
+            "accent",
+            "accent_glow",
+            "danger",
+            "warning",
+            "success",
+            "lcd_bg",
+            "lcd_text",
+            "led_on",
+            "led_off",
+            "shadow",
+            "highlight",
+            "lowlight"
+          ],
+          "properties": {
+            "window_bg": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "panel": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "panel_elevated": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "control_bg": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "control_face": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "control_border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_glow": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "danger": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "warning": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "success": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "lcd_bg": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "lcd_text": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "led_on": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "led_off": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "shadow": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "highlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "lowlight": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         },
-        "panel": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "panel_elevated": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "control_bg": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "control_face": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "control_border": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "text_primary": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "text_secondary": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "text_disabled": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "accent": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "accent_glow": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "danger": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "warning": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "success": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "lcd_bg": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "lcd_text": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "led_on": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "led_off": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "shadow": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "highlight": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "lowlight": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
+        {
+          "type": "object",
+          "required": [
+            "bg_deep",
+            "bg_panel",
+            "bg_panel_hi",
+            "border",
+            "border_glow",
+            "text_primary",
+            "text_secondary",
+            "text_disabled",
+            "accent_primary",
+            "accent_secondary",
+            "accent_warning",
+            "accent_danger",
+            "accent_success",
+            "lcd_bg",
+            "lcd_text",
+            "knob_body",
+            "knob_ring",
+            "led_on",
+            "led_off",
+            "overlay_scrim",
+            "focus_ring"
+          ],
+          "properties": {
+            "bg_deep": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "bg_panel": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "bg_panel_hi": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border_glow": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "text_disabled": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_warning": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_danger": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent_success": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "lcd_bg": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "lcd_text": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "knob_body": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "knob_ring": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "led_on": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "led_off": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "overlay_scrim": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{8}$"
+            },
+            "focus_ring": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
     "typography": {
       "type": "object",
@@ -1567,6 +1685,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "schema": {
+      "type": "string",
+      "const": "ppgu-theme/1.2"
     }
   },
   "additionalProperties": false,
@@ -2249,6 +2371,29 @@
       "processorParameters": "Source/PluginProcessor.cpp:createParameterLayout",
       "auditDate": "2026-11-12",
       "note": "UI control ranges are copied from APVTS parameter declarations; reserved controls are explicitly marked unavailable and are not represented as implemented."
-    }
+    },
+    "legacyPaletteTokens": [
+      "window_bg",
+      "panel",
+      "panel_elevated",
+      "control_bg",
+      "control_face",
+      "control_border",
+      "text_primary",
+      "text_secondary",
+      "text_disabled",
+      "accent",
+      "accent_glow",
+      "danger",
+      "warning",
+      "success",
+      "lcd_bg",
+      "lcd_text",
+      "led_on",
+      "led_off",
+      "shadow",
+      "highlight",
+      "lowlight"
+    ]
   }
 }
