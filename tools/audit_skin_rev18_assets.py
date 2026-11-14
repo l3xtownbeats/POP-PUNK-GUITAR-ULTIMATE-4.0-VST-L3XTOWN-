@@ -38,7 +38,7 @@ REQUIRED_PALETTE_TOKENS = (
 
 def png_info(path: Path) -> tuple[int, int]:
     raw = path.read_bytes()
-    if len(raw) < 33 or raw[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+    if len(raw) < 33 or raw[:8] != b"\x89PNG\r\n\x1a\n":
         raise ValueError(f"{path}: invalid PNG signature")
     offset = 8
     width = height = bit_depth = colour_type = None
