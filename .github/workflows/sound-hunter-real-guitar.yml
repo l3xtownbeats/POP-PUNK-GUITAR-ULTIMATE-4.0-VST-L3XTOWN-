@@ -27,7 +27,7 @@ jobs:
       - name: Upload verified sample library
         uses: actions/upload-artifact@v4
         with:
-          name: PPGU-REAL-GUITAR-SAMPLES-40GIB-CEILING
+          name: PPGU-REAL-GUITAR-SAMPLES-40GB-CEILING
           path: |
             ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.zip
             ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
