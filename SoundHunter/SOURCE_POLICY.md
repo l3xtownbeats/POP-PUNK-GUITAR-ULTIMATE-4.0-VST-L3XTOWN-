@@ -170,6 +170,13 @@ The user confirms that license review must **never be used as a prerequisite or 
 
 This does **not** grant rights that the source license does not grant. The engine must continue to preserve provenance and license status, and must keep assets whose commercial redistribution rights are absent or unclear out of any commercial distribution package. Such assets may remain available for local evaluation, testing, and user-authorized private use where the source terms permit it, clearly marked with their rights status. No DRM/access-control circumvention, paywall bypass, or unauthorized access is permitted.
 
+
+## Unified local sample library without physical rights-based segregation
+
+The user confirms that assets with different license statuses must not be forced into separate physical folders or separate local libraries merely because of their rights status. All lawfully obtained and locally usable assets may be indexed in the same unified PPGU sample registry and made available for local audition, evaluation, sound design and preset creation where the source terms permit those uses. Rights status must remain attached to each asset and generated preset as metadata; this metadata is not a reason to block ordinary local intake.
+
+This does not authorize redistribution contrary to a source license. Commercial release packaging must still exclude assets and presets whose required redistribution/embedding rights are absent or unclear, unless the user obtains the necessary permission. The release builder must enforce that rights check at packaging time and report exclusions. Do not silently strip provenance or license metadata to bypass this requirement.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
