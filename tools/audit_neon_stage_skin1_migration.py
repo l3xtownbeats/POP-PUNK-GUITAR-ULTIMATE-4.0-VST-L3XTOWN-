@@ -32,7 +32,9 @@ def sha256(path: Path) -> str:
 def safe_relative_path(value: str) -> bool:
     candidate = PurePosixPath(value)
     return (bool(value) and not candidate.is_absolute()
-            and ".." not in candidate.parts and "\\" not in value)
+            and not re.match(r"^[A-Za-z]:", value)
+            and "\x00" not in value and "\\" not in value
+            and ".." not in candidate.parts)
 
 
 def read_json(path: Path, label: str, issues: list[dict]) -> dict | None:
@@ -106,6 +108,12 @@ def audit(skin_root: Path) -> dict:
                            "object": str(skin_id), "detail": repr(path_value)})
             continue
         manifest_path = skin_root / Path(*PurePosixPath(path_value).parts)
+        try:
+            manifest_path.resolve().relative_to(skin_root.resolve())
+        except ValueError:
+            issues.append({"severity": "BLOCKER", "code": "PATH_ESCAPES_SKIN_ROOT",
+                           "object": str(skin_id), "detail": path_value})
+            continue
         exists = manifest_path.is_file()
         resolved.append({"id": skin_id, "index": index, "path": path_value,
                          "exists": exists,
