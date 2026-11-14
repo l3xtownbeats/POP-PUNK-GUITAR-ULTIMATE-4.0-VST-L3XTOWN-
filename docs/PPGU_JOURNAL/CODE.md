@@ -740,3 +740,15 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - Never free space by deleting old samples. If the aggregate 40,000,000,000-byte decimal ceiling would be exceeded, refuse new additions and report capacity.
 - Applies to Sound Hunter, manual import, future PSC converter and every future write path into `Samples`.
 - This is an approved invariant; full technical enforcement across every path remains OPEN until audited and covered by regression tests. No claim of complete enforcement or fresh download is made by this documentation update.
+
+
+## 2026-11-14 — Sound Hunter source integrity, metadata and no-duplicate acquisition hardening
+
+- Added release archive SHA256SUMS verification and independent release LICENSE verification before admitting any release audio.
+- Skip Meta Open Sound OGG previews when full-quality WAV release archives are the selected production source.
+- Preserve SFZ/JSON/text mapping and collection metadata outside the audio-capacity accounting; `.sfz` and `.dspreset` are not audio payloads and no longer inflate the 40 GB audio ceiling.
+- Separate repository audio and release audio counts in the per-run registry.
+- Fix catalog JSON trailing comma and stale GiB field; catalog uses decimal 40,000,000,000 bytes.
+- Fix Meta release asset matching: GitHub release API exposes exact WAV archive names, so catalog now selects the exact `meta-open-sound-meta-steel-guitar-wav.zip` and `meta-open-sound-meta-nylon-guitar-wav.zip` assets, excluding the OGG bundles and alternate ZIPs.
+- GitHub Actions CI confirmed the source-discovery stage and all six regression tests PASS on commit `fbd9e00794c290e375419f81b94ca5edc52a5cc5`. Acquisition stage on that run failed safely before sample import due to overly broad release asset matching; the exact selector correction is now in commit `13b69bc3e85714136abf5ba37f5319985f9f2425`, with a new acquisition run pending/in progress.
+- No successful sample artifact or completed import is claimed until the active workflow completes and its registry/artifact is inspected.
