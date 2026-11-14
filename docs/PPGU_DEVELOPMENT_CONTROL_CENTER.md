@@ -274,3 +274,12 @@ The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU
 - Reference images: `/PPGU/REFERENCE_ASSETS/` in Library; repository index: `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.
 - Preserve originals; status-tag after visual comparison; no silent deletion or promotion of mockups.
 - Source tree currently inherited from REV.17. Keep all active source, tests, build config, workflows, runtime SKIN assets and required specifications. Remove archival duplicates only after path/dependency review.
+
+## 2026-11-14 — TX-REV18-CLEAN-001 — active branch scope cleanup
+**Status:** completed; documentation/source scope only; no production source code changed.  
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`; parent before cleanup `6b7f847976464404d636b94d963540303a8ad4d3`.  
+**Removed from current REV.18 tree:** duplicate ZIP/build snapshots and append fragments already consolidated into Info/CODE; see `docs/REV18_BRANCH_SCOPE.md`. Historical Git objects remain in history; REV.17 untouched.  
+**Retained:** production source, tests, CMake/workflows, current SKIN assets/manifests, product/subsystem specs, journals, preset definitions/examples, sound registry/policy, visual resources.  
+**Reason:** keep the active branch focused on files needed to build, test, design, audit and document the current product; do not carry unverified bundled sample archives or redundant snapshots into the active tree.  
+**Reference assets:** 38 original user visual references remain preserved in Library `/PPGU/REFERENCE_ASSETS/`; index at `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.  
+**Verification:** pending commit readback.
