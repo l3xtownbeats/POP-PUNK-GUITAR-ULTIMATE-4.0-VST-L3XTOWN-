@@ -2668,3 +2668,19 @@ CTest, pluginval strictness 5 и FL Studio 20 в рамках этого ком�
 
 **Status:** REV ULTRA STAGING GENERATOR UPDATED / OUTPUT NOT YET GENERATED OR APPROVED.
 ==============================================================================
+
+## 2026-11-14 — NEON-STAGE-G4-REGISTRY-GATE-003
+**Commit:** `5f62a127a94ab2061f482250868ea8f26dbad470`
+
+В `neon_stage_engine.py::step_report` добавлен G4 gate:
+- проверяется имя каталога Skin_053;
+- читается authoritative `SKIN/theme_manifest.json`;
+- проверяется непрерывность индексов от 1 до последнего зарегистрированного;
+- проверяются уникальность skin IDs и единственная запись `skin-053`;
+- проверяется соответствие registry entry: index 53 и path `Skin_053/theme.json`;
+- проверяется id/index сгенерированного theme.json.
+
+Статический аудит исходного registry ранее подтвердил 102 записи, диапазон 1..102 и корректную запись skin-053. Сам G4 runtime gate ещё не запускался; результат не объявляется PASS до исполнения Windows staging pipeline.
+
+**Возражения:** registry/default pointer не изменялись; audio/APVTS/MIDI/DSP не затронуты. Генератор по-прежнему создаёт staging ZIP, не COMPLETE ZIP.
+**Статус:** G4 CHECK IMPLEMENTED / EXECUTION NOT VERIFIED.
