@@ -19,8 +19,9 @@ def load_source_palette():
     palette = source.get("palette")
     if not isinstance(palette, dict) or len(palette) != 21:
         raise RuntimeError("Canonical source theme must provide exactly 21 palette tokens.")
-    if any(not isinstance(value, str) or len(value) != 7 or not value.startswith("#")
-           for value in palette.values()):
+    if any(not isinstance(value, str) or not value.startswith("#")
+           or len(value) != (9 if key == "overlay_scrim" else 7)
+           for key, value in palette.items()):
         raise RuntimeError("Canonical source theme contains an invalid palette colour.")
     return palette
 
