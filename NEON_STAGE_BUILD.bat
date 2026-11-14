@@ -64,14 +64,14 @@ echo [8/9] Final structural report
 python 08_report.py
 if errorlevel 1 goto :fail
 
-echo [9/9] ZIP and JUCE resource staging
+echo [9/9] Safe staging ZIP packaging
 python 07_package.py
 if errorlevel 1 goto :fail
 
 echo.
 echo ========================================
 echo BUILD COMPLETE - STAGING PACKAGE CREATED
-echo Check dist\ and juce_resources\
+echo Check dist\ for the staging ZIP and validation report
 echo This is a staging build; it is NOT merged into theme_manifest.json.
 echo ========================================
 if not defined CI pause
