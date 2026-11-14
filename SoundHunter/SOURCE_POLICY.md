@@ -131,6 +131,23 @@ Audio-thread safety and performance are mandatory: file scanning, decoding, hash
 
 This is an approved product requirement, not a claim that the current engine already implements it. Verify the existing AUTO DISCOVER/import pipeline, then implement and test each stage before describing it as operational.
 
+
+## Automatic preset creation from imported samples
+
+The PPGU engine must also be able to **create new usable presets from suitable imported sounds**, not merely classify and assign samples to existing factory presets.
+
+Required behavior:
+- Detect coherent playable instruments/sample sets and determine whether they contain enough note range, velocity layers and articulations to form a playable instrument. Do not create a full-range preset from an isolated one-shot or loop; those may instead become phrase, riff, texture or one-shot presets where appropriate.
+- Generate candidate presets using compatible sample groups and mappings. Configure key/velocity zones, root notes, tuning, round-robin/random variation where supported, sustain/release behavior, palm mute and other articulations only when the source actually contains the required data.
+- Build a sensible instrument layer and sound-design chain for the detected source (for example clean/DI, crunch, high-gain, acoustic, ambient or processed), using the plugin's supported amp, cabinet and effects modules. Do not invent unavailable processing modules or claim unsupported articulations.
+- Give each generated preset a stable unique preset ID, descriptive name, genre/style and tone tags, source asset references, mapping summary, license/shipment status, and provenance. Keep generated presets separate from curated factory presets until they pass validation.
+- Automatically audition/render test notes and relevant velocity/articulation ranges where the test harness supports it; check for silence, clipping, abrupt key-zone gaps, tuning errors, clicks, missing files and excessive CPU/memory use. Require listening/QA review for musical quality before promoting a candidate to the factory library.
+- Preserve the source assets and previous preset versions. Generated presets must be reproducible from registry IDs and versioned settings, and must support rollback.
+- Only assets cleared for commercial redistribution may contribute audio to presets shipped in the commercial plugin. Presets derived from evaluation-only or rights-review assets must remain isolated and marked NOT FOR SHIPMENT.
+- Report generated, rejected, incomplete and review-needed presets with reasons. Allow the user to audition, edit, approve or exclude generated presets.
+
+Preset generation must run outside the real-time audio thread. It is an approved engine requirement; do not claim it exists until implemented and tested.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
