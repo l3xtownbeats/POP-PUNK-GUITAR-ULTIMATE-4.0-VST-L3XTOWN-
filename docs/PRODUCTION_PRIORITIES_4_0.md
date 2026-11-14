@@ -82,3 +82,8 @@ The Pattern UI must expose the mode switch and, when Key/Scale mode is enabled, 
 ## Consolidated specification
 
 The complete Russian-language product requirements, including all previously agreed features and the clarified Melody/Pattern keyboard behavior, are maintained in [MASTER_PRODUCT_SPEC_4_0_RU.md](./MASTER_PRODUCT_SPEC_4_0_RU.md). Treat that document as the comprehensive user-facing scope; this file remains the concise production-priority and acceptance-gate summary.
+
+
+## Canonical execution roadmap
+
+The consolidated approved execution order, all user-approved additions, cross-module dependencies, current verified CI status and release gates are maintained in [`PPGU_MASTER_DEVELOPMENT_PLAN_RU.md`](./PPGU_MASTER_DEVELOPMENT_PLAN_RU.md). Use it together with the detailed product specification; it does not convert documented scope into implemented status.
