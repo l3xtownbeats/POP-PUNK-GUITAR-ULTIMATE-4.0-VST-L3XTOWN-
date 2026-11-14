@@ -261,3 +261,19 @@ MAIN EDITOR → MELODY → PATTERN → AUTOCHORDS → FX EDIT → AMP & TONE →
 Каждый пункт проходит цепочку APPROVED → DOCUMENTED → IMPLEMENTED → TESTED → VERIFIED → COMPLETE. Наличие записи, UI-макета, каталога имён или JSON не означает, что функция реализована. FX требуют DSP tests; skins — UI/state tests; settings/locks — persistence/host tests; presets — runtime playback/audition/asset coverage; SAMPLES — license/integrity/import/playback tests; manuals — сверка со скриншотами фактической сборки; release ZIP — install/manifest/checksum verification. Целевой acceptance: Windows 10 x64, VST3, FL Studio 20.
 
 **Conflict resolution:** эта запись является более поздним прямым утверждением пользователя и supersedes прежние conflicting size caps/targets and the 250+250 bank minimum. Остальные ранее утверждённые требования продолжают действовать. Точный список эффектов и названия 16 тем брать из исходных утверждённых спецификаций, не изобретать новые списки при отсутствии первичного источника.
+
+
+## 2026-11-14 — ПОВТОРНОЕ ПОДТВЕРЖДЕНИЕ: ТАБЛИЦА REV.18 ЯВЛЯЕТСЯ ДОПОЛНЕНИЕМ К БОЛЬШОМУ УТВЕРЖДЁННОМУ ПЛАНУ
+
+**Статус:** USER RECONFIRMED / APPROVED / MUST IMPLEMENT. Пользователь повторно подтвердил всю таблицу требований REV.18 (FX EDIT; 16 SKIN GALLERY themes; SETTINGS GOOD/NORMAL/NIGHT/ECO; 2x/4x/8x/16x; VOICES 2/4/8+ with Lock; ABOUT L3XTOWN/REV.18/2026/actual engine metadata; illustrated RU/EN manuals; unbounded SAMPLES; at least 500 MELODY and 500 PATTERN presets; 82 Travis Barker-style presets; complete VST3 release package with user preset support, resources, licenses, documents, SHA-256 and ZIP).
+
+**Ключевое толкование:** это именно ДОПОЛНЕНИЕ к ранее утверждённому большому генеральному плану POP PUNK GUITAR ULTIMATE, а не новый самостоятельный план, не замена генерального плана и не отмена его требований. Все ранее принятые функции, модули, ограничения совместимости, UI-контракты, MIDI/APVTS/state contracts, звуковые требования, профили/референсы, права и тестовые критерии продолжают действовать.
+
+**Правило согласования:**
+1. Сохранять весь ранее утверждённый scope и каноническую последовательность модулей.
+2. Новые пункты интегрировать в соответствующие существующие разделы и объединять дублирующие описания одного окна/механизма, не создавать параллельные конфликтующие реализации.
+3. Если формулировка таблицы допускает несколько трактовок, выбирать совместимую с большим планом и уже утверждёнными техническими контрактами.
+4. Если обнаружится реальное неустранимое противоречие или изменение публичного API/MIDI/state behavior, не делать молчаливую замену: зафиксировать конфликт и запросить решение только по затронутому пункту.
+5. Более позднее подтверждение уточняет только прямо названные параметры (например, no artificial SAMPLES size cap и минимум 500 пресетов на каждый режим); оно не отменяет никакие несвязанные требования генерального плана.
+
+**Acceptance:** APPROVED → DOCUMENTED → IMPLEMENTED → TESTED → VERIFIED → COMPLETE. Данное повторное подтверждение относится к согласованию требований и само по себе не доказывает реализацию или прохождение тестов.
