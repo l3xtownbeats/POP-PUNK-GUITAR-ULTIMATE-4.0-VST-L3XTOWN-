@@ -615,3 +615,15 @@ All ten copied content files were re-fetched from main and their content lengths
 Future journal edits go to this canonical folder. INFO.md and CODE.md must be updated together with matching operation/commit evidence. Source implementation remains exclusively in .cpp/.h.
 On exact user request ALL, create a fresh ZIP from current main contents of docs/PPGU_JOURNAL/ and attach it.
 Legacy original paths were intentionally retained; no deletion/move was performed because repository-wide references and workflow consumers have not yet been exhaustively audited. No build/CTest/pluginval/host test was run; no production source changed.
+
+
+
+## 2026-11-14 — JOURNAL ARCHITECTURE: SINGLE NON-CODE JOURNAL
+
+**Type:** documentation governance update; production source unchanged.
+**Canonical non-code journal:** `docs/PPGU_JOURNAL/PPGU_JOURNAL.md`.
+**Separate code journal:** `docs/PPGU_JOURNAL/CODE.md` (this file).
+**Migration:** INFO history and the complete PRESET_BANK_4_0_READINESS history were consolidated into PPGU_JOURNAL.md. Legacy INFO and preset-readiness paths are retained as archival pointers for link compatibility.
+**Rule:** append all non-code project events to PPGU_JOURNAL.md as work is performed; record source changes here with exact SHA, paths/symbols and test evidence. No additional active journals.
+**Initial consolidation commit:** 2dcbbc49acc112abdb184a72ac505b6608e9db55.
+**Build/tests:** NOT RUN; documentation-only change.
