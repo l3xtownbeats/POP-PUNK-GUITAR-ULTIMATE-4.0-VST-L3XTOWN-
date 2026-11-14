@@ -28,30 +28,24 @@ def load_source_palette():
 
 SOURCE_PALETTE = load_source_palette()
 TOKENS = tuple(SOURCE_PALETTE)
-# Drawing aliases map exclusively to the 21 canonical REV ULTRA 3.0 tokens.
-PALETTE = {
+# Preserve every canonical token and provide read-only aliases for legacy drawing calls.
+PALETTE = dict(SOURCE_PALETTE)
+PALETTE.update({
     "window_bg": SOURCE_PALETTE["bg_deep"],
     "panel": SOURCE_PALETTE["bg_panel"],
     "panel_elevated": SOURCE_PALETTE["bg_panel_hi"],
     "control_bg": SOURCE_PALETTE["knob_body"],
     "control_face": SOURCE_PALETTE["knob_body"],
     "control_border": SOURCE_PALETTE["border"],
-    "text_primary": SOURCE_PALETTE["text_primary"],
-    "text_secondary": SOURCE_PALETTE["text_secondary"],
-    "text_disabled": SOURCE_PALETTE["text_disabled"],
     "accent": SOURCE_PALETTE["accent_primary"],
     "accent_glow": SOURCE_PALETTE["border_glow"],
     "danger": SOURCE_PALETTE["accent_danger"],
     "warning": SOURCE_PALETTE["accent_warning"],
     "success": SOURCE_PALETTE["accent_success"],
-    "lcd_bg": SOURCE_PALETTE["lcd_bg"],
-    "lcd_text": SOURCE_PALETTE["lcd_text"],
-    "led_on": SOURCE_PALETTE["led_on"],
-    "led_off": SOURCE_PALETTE["led_off"],
     "shadow": SOURCE_PALETTE["bg_deep"],
     "highlight": SOURCE_PALETTE["focus_ring"],
     "lowlight": SOURCE_PALETTE["led_off"],
-}
+})
 REQUIRED = (
     "preset_browser","mode_selector",*(f"knob{i:02d}" for i in range(1,10)),
     *(f"fx_switch{i:02d}" for i in range(1,8)),"midi_keyboard","LCD_display",
