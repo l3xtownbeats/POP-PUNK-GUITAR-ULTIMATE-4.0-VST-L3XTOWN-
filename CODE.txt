@@ -742,3 +742,29 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 
 ## 2026-11-14 — TX-LICENSE-DOWNLOAD-CLARIFICATION-001
 User clarified that downloading is allowed. Lawfully accessible samples/libraries may be downloaded for evaluation, listening, classification, license review, and development/testing only within source terms. Downloading does not grant redistribution or embedding rights. Commercial/protected libraries must not be copied, extracted from protected installers/formats, DRM/paywall/access controls bypassed, or bundled without explicit permission. Per-asset provenance/license/NOTICE/SHA-256 remains mandatory; unclear terms => YELLOW/quarantine; bundle only with documented redistribution/embedding rights. Existing strict legal gates remain. Documentation-only; no code/assets changed and no license audit executed in this transaction.
+
+
+## 2026-11-14 — TX-REV18-CI-VERIFIED-001 — exact-SHA build/test evidence
+
+**Type:** build evidence / journal correction; no production source changed.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`.
+**Build commit:** `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`.
+**Workflow:** Windows VST3 run #1345, ID `43553019202`.
+**Evidence URL:** https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43553019202
+
+**Verified on the exact SHA:**
+- Windows Server 2022 x64 Release configure/build: PASS.
+- VST3 bundle located: PASS.
+- CTest: 12/12 passed.
+- pluginval strictness 5: PASS.
+- Package and artifact upload: PASS.
+- Artifact ID `14097147835`, 1,666,315,243 bytes, service digest `sha256:ed93f4d758460f0b0809527bcb3b5e44fee30be0dfa2b7c7336351c3a40d8b1a`.
+
+**Qualification:** the sample download step was skipped on cache hit; the cache check verified >100 WAV files, expected license files and no .git directories, but did not recompute every sample hash in that step. The asset-level Sound Hunter registry is empty. The build validates only the old 300-definition bank, not the approved 500 READY MELODY + 500 READY PATTERN target. FL Studio 20 host acceptance remains unverified. This is a verified Windows CI build artifact, not a final REV.18 release.
+
+**Approved requirement status reaffirmed:** no sample size cap; 500+500 READY definitions with implementation/mapping/legal/audio evidence; Travis Barker 82 under credited artist/band categories with provenance and no standalone top-level category; one FX EDIT window with 10–15 real DSP effects, 8 pages and 7 bypass switches; 16 finished skins with NEON STAGE DEFAULT; GOOD/NORMAL/NIGHT/ECO profiles; 2x/4x/8x/16x quality; persistent voice/profile locks; complete RU/EN manuals and release payload. These remain requirements, not completed features.
+
+**Tests:** no new tests run by this journal-only transaction. CI evidence above belongs to build SHA `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`.
+**Status:** CI BUILD VERIFIED / FINAL PRODUCT ACCEPTANCE PENDING.
+**Next:** implement truthful REV.18 readiness gates, populate legal asset provenance, map samples, validate MELODY/PATTERN playback and audio, then test in FL Studio 20.

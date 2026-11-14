@@ -2286,3 +2286,55 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 
 **Статус:** USER CLARIFICATION RECORDED. Это правило не является разрешением на redistribution любой скачанной библиотеки. Код/ресурсы плагина не менялись; legal audit и проверка каждого asset выполняются отдельно.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-CI-VERIFIED-001 — EXACT-SHA WINDOWS VST3 BUILD EVIDENCE
+==============================================================================
+
+**Product / branch:** POP PUNK GUITAR ULTIMATE 4.0 / `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`
+**Base HEAD / parent:** `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`
+**CI run:** #1345 / ID `43553019202` — `POP PUNK GUITAR ULTIMATE - Windows VST3`
+**Build SHA:** `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`
+**Run result:** COMPLETED / SUCCESS on Windows Server 2022, x64, Release.
+**Evidence:** GitHub Actions run https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43553019202
+
+### Exact checks completed on this SHA
+- JUCE 7.0.12 checkout: PASS.
+- Preset catalogue validator: PASS for the current legacy 300-entry baseline (150 MELODY + 150 PATTERN); this is NOT the REV.18 target of 500 READY + 500 READY.
+- Portable preset examples and APVTS/state validation: PASS.
+- Skin pack validation and BinaryData link/declaration validation: PASS.
+- CMake x64 Release configure and VST3/test-executable build: PASS.
+- CTest: **12/12 passed, 100%, zero failed**.
+- VST3 bundle located successfully.
+- pluginval strictness level 5: PASS; scan, cold/warm open, editor, processing, state, automation, parameters, bus and VST3 validator checks completed.
+- Package step and artifact upload: PASS.
+
+### Artifact evidence
+- `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE`
+- Size: 1,666,315,243 bytes.
+- SHA-256 digest reported by GitHub artifact service: `ed93f4d758460f0b0809527bcb3b5e44fee30be0dfa2b7c7336351c3a40d8b1a`.
+- Artifact ID: `14097147835`.
+- Source review artifact ID: `14096283530` (34,156,893 bytes).
+
+### Evidence boundaries / unresolved items
+- The sample-download step was SKIPPED because the CI cache was hit. The subsequent cache validation confirmed more than 100 WAV files, the expected license files and absence of nested .git directories. That validation step did NOT independently recompute and compare every WAV SHA-256; do not describe it as a full fresh-download/hash audit.
+- `assets/sound_hunter/registry.json` on this branch contains an empty assets array. Therefore no asset is yet approved through the asset-level Sound Hunter registry, despite the cached CI sample library being present.
+- The CI workflow still validates the old 300-definition catalogue, not 500 READY MELODY + 500 READY PATTERN. Catalogue definitions are not playable/READY evidence.
+- FL Studio 20 manual host acceptance is explicitly separate and remains NOT VERIFIED.
+- This CI result proves the Windows x64 Release build, 12 CTest tests, pluginval strictness 5 and package upload for the exact SHA above. It does NOT prove final REV.18 acceptance, complete 1000 READY presets, full sample provenance audit, all FX/UI requirements, CPU/RAM targets or DAW host acceptance.
+
+### REV.18 approved requirements reaffirmed for future work
+- Preserve all unique legal assets; no artificial sample-library size cap. Use checksum-verified split/chunk transfer where needed.
+- Factory target: at least 500 READY MELODY and 500 READY PATTERN, counted separately; READY requires implementation, legal/source mapping, performance validity and audio validation.
+- Travis Barker 82: unique entries derived only from verified production/participation credits, categorized under the relevant band/artist, counted once, provenance-tagged; no top-level Travis Barker category.
+- FX EDIT: one consolidated standalone window; 10–15 actually implemented DSP effects/processors, retaining 8 approved parameter pages and 7 bypass switches.
+- Skin Gallery release target: 16 finished themes; NEON STAGE DEFAULT is first/default, plus 15 premium variants with functional parity; preserve the legacy registry.
+- Settings profiles GOOD/NORMAL/NIGHT/ECO; quality modes 2x/4x/8x/16x; Voices 2/4/8+ within engine capacity; persistent independent locks for voices and profiles.
+- About/manual/release package must carry the approved L3XTOWN / POP PUNK GUITAR ULTIMATE VST3 / REV.18 / 2026 identity, actual engine/build versions, complete illustrated RU/EN manuals, VST3, samples, factory/user preset support, skins, resources, licenses, documents and SHA-256 manifests.
+- These are user-approved acceptance requirements, not claims that the current CI artifact already satisfies them.
+
+**Production source changed:** NO. This is an evidence/status correction and requirements ledger update only.
+**Status:** EXACT-SHA CI BUILD VERIFIED; FINAL REV.18 RELEASE NOT READY.
+**Next:** update CI readiness gates without falsely promoting placeholder definitions; populate and audit the asset registry; integrate verified samples into runtime MELODY/PATTERN paths; run audio QA; then perform FL Studio 20 host acceptance.
+==============================================================================
