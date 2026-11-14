@@ -2173,3 +2173,96 @@ This is not a suggestion list, optional roadmap, or visual inspiration-only note
 - No build, CTest, pluginval, package, host or release verification is claimed.
 
 **Status:** USER DIRECTIVE RECORDED / KNOWN REFERENCES INDEXED / COMPLETE HISTORICAL ATTACHMENT INVENTORY OPEN.
+
+
+
+
+## 2026-11-14 — RECOVERED USER APPROVALS: PRESET BROWSER, PATTERN BROWSER, CONTROL SURFACES AND VISUAL REFERENCES
+
+**Authority:** append-only reconciliation of explicit user approvals/corrections in prior conversations, the accepted SIGNAL FORGE/NEON STAGE baseline, existing Info/CODE records, MASTER_PRODUCT_SPEC, Control Inventory and retrievable Library image references. This section closes documentation gaps; it does not claim runtime completion.
+
+### 1. Visual reference hierarchy — corrected and binding
+- The **first previously approved main-interface mockup** is the canonical source for the product's complete appearance, composition, layout, proportions, block placement and control placement. Preserve it; do not redesign, rearrange, simplify, remove, or arbitrarily replace its approved controls.
+- **`02 INTERFACE NEON STAGE AUTOCHORDS` is a COLOR-PALETTE REFERENCE ONLY.** Its approved role is to supply the palette/colour treatment to the first mockup. It is not the authority for the overall layout or appearance. Any earlier statement that the second image defines the layout is explicitly corrected and superseded.
+- SIGNAL FORGE remains the product/interface identity; NEON STAGE is the approved default visual treatment. This is a naming/presentation clarification, not permission to rename stable IDs or discard previous assets.
+- The three previously approved reference images remain preserved and unchanged. Prior journal/chat references include `Cover Interface.jpg`, `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png`, and `5675b332-eb7a-4dca-85fb-873a9682a349 (1).png` (the `(2)` copy was identified as a duplicate). Their exact mapping to first/second/third visual reference must be taken from the original conversation attachments, not guessed from filenames.
+- Other retrieved Library images (including the full PPGU interface, AutoChords, FX EDIT, Import Guitar, Skin Gallery and multi-panel Signal Forge sheets) are preserved as supporting examples. They are not automatically promoted to canonical layouts; each element must be checked against the explicit approved mockup and functional inventory. Artwork that shows a non-existent control does not authorize a fake implementation.
+- Product shell: dark graphite/black metal, machined-metal edges, restrained electric cyan/neon-blue signal lines, controlled violet/magenta accents, punk texture/paint details, PPGU crown/monogram, high-contrast readable typography, clear instrument/preset/FX/amp/keyboard hierarchy. Avoid excessive glow that harms legibility.
+
+### 2. Main editor and top-level controls
+Preserve the canonical first-mockup layout and all approved controls. The main surface includes:
+- Header/brand and preset navigation: previous/next preset, favourite, current preset name/category/description, search, status/statistics display, and the approved utility entry points (SKINS, Import Guitar, Auto Discover/Sound Hunter, Curator, Settings, About) where their real implementation exists.
+- Preset browser surface with the separate BROWSER / FAVORITES / CATEGORIES views; category counts/list, selected item, artwork/description/information and preview/load actions as applicable.
+- Main playing-mode selector: MELODY, PATTERN and PUNK GROUP. The third mode is part of the approved design/requirements; its presence in a mockup or registry does not mean its runtime is complete.
+- Main instrument/playing controls, AMP & TONE, FX chain, pitch/modulation, on-screen MIDI keyboard and performance/status strip. The on-screen keyboard must remain visible and must not be covered by AutoChords or auxiliary panels.
+- The established nine main rotary/APVTS controls remain: ampGain, eqHigh, eqMid, eqLow, velocity, dynamics, swing, humanize, accent. Keep IDs and semantics stable; no duplicate or decorative knobs.
+- Seven approved FX bypass switches remain exactly seven: Compressor, EQ, Distortion, Chorus, Delay, Reverb, Cabinet. Flanger is an FX EDIT page/effect but does **not** gain an eighth main bypass switch. FX EDIT has eight effect-parameter pages (Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR).
+- Keep the actual parameter/engine mapping. Every visible control requires a real attachment/action, meaningful range/value, tooltip/help, automation/state behavior where applicable, reset behavior, and truthful disabled/loading/error state. A visual mockup alone is never proof of binding.
+
+### 3. Preset Browser — approved behavior and data model
+The Preset Browser is distinct from the Pattern Browser and from the sample/library browser.
+- Views/tabs: **BROWSER**, **FAVORITES**, **CATEGORIES**. Provide factory/user scope where available; do not mix user and factory write permissions.
+- Factory organization: 300 target factory definitions, split 150 MELODY + 150 PATTERN; eight sound categories are Clean, Crunch, Drive, Lead, Ambient, Lo-Fi, Acoustic Textures, Punk Rhythm. Also support artist/style tags, instrument/tone/use-case tags, category/folder filtering, counts and sorting. 300 JSON definitions must not be represented as 300 playable/verified presets until every entry passes end-to-end asset/runtime validation.
+- Search and filters are browse-only operations: typing a query, changing category, tag or sort must filter/reorder the visible results and must **not** load a different sound or change the currently active preset.
+- A selected preset entry should expose its name, category, tags/style, concise description, relevant artwork/thumbnail and available instrument/sample-profile information. Display only metadata actually present and verified.
+- Previous/next controls move through the currently defined browsing scope in a deterministic manner; favourite toggles the user's favourite state and is persisted separately from factory content.
+- **Preview** (where supported) auditions a safe representative sound without silently committing a new active preset. If a preview cannot be produced from real available samples, report unavailable rather than synthesizing a fake preview.
+- **Load** / double-click commits the selected preset. Load applies its valid instrument/sample profile, play mode, articulation/velocity mapping, tone/amp/FX configuration and parameter state as a coherent preset transaction. Missing assets must produce a clear status; do not substitute unrelated samples or fake sound.
+- Factory presets are read-only. User presets support Save, Save As, Rename, Delete; user banks support Import/Export; Rescan refreshes the user/library index. Confirm destructive deletion; protect factory records. User presets must persist across plugin restarts and software updates.
+- Preset changes must restore state safely, preserve APVTS compatibility/migration, avoid stuck notes and invalid voice lifetime, not corrupt streaming snapshots, and not unexpectedly reset host transport. Do not interrupt currently sounding voices abruptly; define and test a safe transition policy.
+- Preset sound-style defaults may load the appropriate FX chain automatically. This is a preset-level initial configuration, not an instruction to overwrite the user's later manual FX edits without an explicit preset reload.
+
+### 4. Pattern Browser — separate section-first playing workflow
+This is a separate browser for performance/rhythm patterns, not a list of guitar-tone presets.
+- Workflow order is mandatory: **choose Song Section first → open/select a Pattern in Pattern Browser second → Preview → Apply or Back**.
+- Song Section choices: **Intro, Verse, Chorus, Bridge, Outro**, plus a neutral/general section when applicable. Selecting a section is not selecting a pattern. Section and pattern are separate data fields/selectors.
+- The chosen section supplies the musical role/arrangement context. The Pattern Browser then presents suitable performance drawings/rhythms for that context. Changing Verse/Chorus/Bridge can choose a different pattern deliberately; never silently conflate section, tone preset, harmony, articulation or rhythm mode.
+- Pattern Browser requires search, categories/filters, favourites, clear selected state, pattern name/description, intended section/use, feel, time signature, duration/bars, tempo range, articulation/technique capabilities, supported playback mode and any real sample/performance-map requirements. Show only metadata supported by the registry.
+- Pattern types/styles include downstroke, upstroke, alternate down/up, palm-muted eighths/sixteenths, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio/picking, acoustic strum/picking and dynamic build, but expose/enable each technique only when its real performance map/assets support it.
+- **Preview** plays the actual selected performance map/recorded one-shot through the shared existing playback/audio path, synchronized appropriately to host tempo where supported. Preview is non-committing and must not alter the active song section, selected production pattern, harmony, preset, transport or project state.
+- **Apply** explicitly commits the chosen pattern/section mapping. **Back/Cancel** exits the selection flow and restores the previous committed state. Preview → Apply → Back semantics must be deterministic and testable; preview must not become an accidental commit.
+- Support real timing details: bar/loop boundaries, onset positions, rests, accents, note-off/gate, chord changes without phase reset, transport start/stop/seek/loop, tempo sync, half/double time, swing and humanize. Avoid stuck notes or timing discontinuities.
+- Do not synthesize or invent guitar performance samples to disguise missing recordings. One-shot fallback is allowed only where the actual corresponding recording exists and its limitations are explicit. The temporary hard-coded rhythm masks are not a complete expandable Pattern/Section library.
+
+### 5. AutoChords / harmony surface
+- AutoChords is an independent auxiliary surface; its design must not cover the main MIDI keyboard.
+- Top harmonic strip displays real chord names and scale degrees. Left side contains Playing Styles/Articulation. Right side contains independent Playback Mode and Rhythm Mode. Bottom full-width area is Pattern Browser with search, filters, favourites, pattern metadata and Preview.
+- Harmony/key/chord progression, Playing Style/Articulation, Pattern, Playback Mode and Rhythm Mode are independent selectors; changing one must not silently overwrite another.
+- Harmony functions include Circle of Fifths (12 major keys plus relative minor; clockwise fifths/counter-clockwise fourths), key/scale/chord quality and progression manager, templates, reorder/variation, Generation Manager with deterministic seed, constraints, preview and explicit commit. User material must not be overwritten by generation.
+- Audition must use the existing shared sampler/audio path; no separate synth/sample bank. Preview/selectors remain disabled or clearly unavailable until their actual backend and MIDI routing exist.
+- Preserve real chord/fretboard/voicing information only when backed by valid maps. Do not display fabricated fingering or performance data.
+
+### 6. FX / AMP & TONE / additional surfaces
+- FX modules retain individual professional identities, appropriate characteristic controls and coherent visual differentiation; presets may load style-appropriate processing chains. Preserve Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb and Cabinet IR; maintain seven bypass switches only, per §2.
+- AMP & TONE remains its own clearly grouped area (amp model/profile and real gain/EQ/presence/master or other approved mapped controls). Do not invent a simulated amp model where no DSP model exists.
+- Additional approved surfaces include FX EDIT, AUTOCHORDS, IMPORT GUITAR, AUTO DISCOVER/SOUND HUNTER, CURATOR, SETTINGS, PERFORMANCE, SKIN GALLERY and ABOUT, plus Preset Manager/Sample Browser where the prior approved workflow calls for them. Every auxiliary panel inherits the active skin and typography, has a title and clear X close, opens as a managed independent window/panel, and must not break focus, keyboard access or the main editor.
+- Multi-window tiling/scale/gap and independent close/restore behavior must preserve main controls and keyboard. Settings and Performance display only real connected data; do not fabricate BPM/position/CPU/RAM or activity indicators. Unimplemented actions remain disabled/deferred rather than falsely active.
+- Import Guitar must clearly expose drag-and-drop and Browse, supported formats, scan/metadata/validation, preview, progress, errors, mapping and commit status. Loading/scanning/indexing runs off the audio thread. Keep imports transactional and preserve original files.
+- Sound Hunter/Auto Discover and Curator must follow provenance, license, checksum, quality and guitar-content gates; discovery is not permission to redistribute. No unlicensed samples, recordings or protected commercial presets are bundled.
+
+### 7. Skin Gallery and all-skin parity
+- All themes share the same approved layout, controls, IDs, attachments, DSP, sampler, MIDI and behavior. Themes may change palette/materials/artwork/control styling only; no theme may remove, move, rename or fake an approved control.
+- Gallery requirements include visual cards/previews, search, family/category filters, favourites, active-theme marker, large Preview area, Apply and Back. Preview must be non-destructive; Apply commits; Back rolls back preview. Persist stable skin ID and recover safely from invalid/missing packages.
+- Keep the accepted theme inventory/history (including the user's earlier 16 approved gallery designs and the repository's larger manifest sets) distinct from the number of runtime-verified themes. Reconcile counts/provenance; do not delete variants or silently rename stable IDs.
+- Main default: SIGNAL FORGE identity with NEON STAGE palette/treatment. The explicit palette/layout distinction in §1 governs any disagreement among reference images.
+
+### 8. Visual reference and attachment inventory — honest archival status
+Known prior reference names recovered from conversation/journals: `Cover Interface.jpg`; `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png`; `5675b332-eb7a-4dca-85fb-873a9682a349 (1).png` and the noted duplicate `(2).png`; `02 INTERFACE NEON STAGE AUTOCHORDS` (palette-only). Additional Library images retrieved and visually inspected include `Неоновый интерфейс PPGU: Поп-панк гитара.png`, `Неоновый интерфейс Pop Punk Guitar с AutoChords.png`, `Неоновая студия PPGU Signal Forge.png`, `Неоновая панель AutoChords PPGU.png`, `Неоновый интерфейс Pop Punk Guitar.png`, and `Неоновая панель PPGU: полный интерфейс студии.png`. These are source/reference artifacts; preserve originals and their metadata. Supporting concepts with contradictory or unapproved widgets are reference-only until reconciled.
+- The current documentation pass indexed and inspected retrievable references but did not copy every historical attachment into the repository, did not create hashes for every binary and did not prove that all attachments from all previous chats are accessible. Complete historical attachment recovery, duplicate/version comparison, SHA-256, source-context mapping and repository archival remain OPEN until each file is physically verified.
+- Never say an image/file has been archived, hashed or committed unless the actual bytes and resulting path/commit are confirmed.
+
+### 9. Cross-cutting acceptance checklist — requirements, not completion claims
+For every browser/control: selection state; keyboard/mouse operation; tooltips/value ranges; focus/accessibility; loading/empty/error/missing-asset states; persistence and restore; no unintended load/commit; safe concurrency/lifetime; no audio-thread I/O/allocations/locks; deterministic tests. Verify browser filtering does not load; Preview does not commit; Apply commits; Back restores; preset loading is transactional; factory is read-only; user preset operations persist. Verify all skins have exact control parity. Separate DESIGN/APPROVED, SOURCE PRESENT, INTEGRATED, TESTED, HOST VERIFIED and RELEASED statuses.
+
+**Change scope:** documentation reconciliation only. No production C++/JUCE source, APVTS IDs/semantics, DSP, sampler, MIDI, presets, SoundBank, assets or runtime behavior changed by this entry. Build/CTest/pluginval/host/package verification NOT RUN for this documentation update.
+
+
+
+## 2026-11-14 — DOCUMENTATION RECONCILIATION COMMIT REFERENCES
+
+Append-only documentation update on `work/rev17-full-reconciliation-2026-11-14`:
+- `CODE.txt`: commit `aec0a80258b79a3e67752f529f235be3da7d6de0`, blob `971160bf31acfcd6d501f381c20766adc1cd85b1`.
+- `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`: commit `990996f721abe7808c454b7e38bcdd0d92c86770`, blob `4aa27c949334097854e31eb0656ef353c20664f9`.
+- `SKIN/CONTROL_INVENTORY_MATRIX_RU.md`: commit `a89b103caeb236b0b62d6d6a8ab61153220bdba6`, blob `b64602d1ea80c1b74b060a0b9e531fd0e15bd0ca`.
+- `Info.txt` contains the full recovered requirements, browser workflows, reference hierarchy, inventory gaps and no-false-completion rules.
+- No production source or runtime behavior changed. No build/CTest/pluginval/host/package tests were run for these documentation commits.
