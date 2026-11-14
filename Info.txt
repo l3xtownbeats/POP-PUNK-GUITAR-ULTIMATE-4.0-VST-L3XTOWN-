@@ -1977,3 +1977,15 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 **Следующий этап:** не копировать ZIP целиком. Отдельно исправить и повторно протестировать O1 defect, проверить S1 security edge cases, затем переносить только проверенные файлы с адаптацией к текущему CMake/source layout. Для Skin Gallery сначала добавить testable selection/preview state, затем UI Preview/Apply/Back/Favorites без изменения APVTS, DSP, sampler и SIGNAL FORGE visual identity.
 
 **Статус:** AUDIT COMPLETE / NO PRODUCTION SOURCE CHANGE / ZIP INTEGRATION BLOCKED PENDING FIX + REBASE.
+
+
+## 2026-11-14 — S1 uploaded-snapshot SVG policy probe
+
+**Тип:** security regression probe against uploaded ZIP only; live REV.17 source unchanged.
+**Исходный live HEAD:** 95789c39b65f9402a2a734487a853986e9d7e567.
+**Результат:** локальный GCC C++17 probe подтвердил два обхода в ZIP-копии `SecureSkinImport::isSvgContentAllowed`:
+- `<svg ONLOAD=alert(1)/>` возвращает allowed=true, поскольку inline-handler scan сравнивает префикс `on` case-sensitively;
+- `<svg><a HREF=//evil.test/x></a></svg>` возвращает allowed=true, поскольку external-href policy блокирует http(s), но не protocol-relative URI.
+- Контрольный lowercase `onload=` возвращает allowed=false.
+
+**Статус:** ZIP S1 MUST NOT BE MERGED до исправления и расширения негативных тестов (mixed-case event attributes, protocol-relative/external URI variants). Это результаты только для загруженного архива, не для текущей REV.17, где S1 отсутствует.
