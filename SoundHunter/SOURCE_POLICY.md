@@ -152,6 +152,17 @@ Preset generation must run outside the real-time audio thread. It is an approved
 ## User-confirmed automatic preset generation
 The user explicitly approves and confirms the requirement that PPGU automatically generate new presets from suitable imported sample assets, in addition to automatically discovering, classifying and assigning sounds to existing presets. Generated presets must follow the documented mapping, metadata, quality-validation, licensing, separation from curated factory presets, user-review and rollback requirements above.
 
+
+## Direct-import license gate clarification
+
+For direct user imports, license verification must **never block loading, scanning, classifying, auditioning, or using a file locally inside the user's own PPGU installation**. Do not reject or quarantine a directly imported sound solely because its license is missing, unknown, non-commercial, or not yet reviewed. Preserve the user's file and make it available for local/private use where technically supported.
+
+The earlier requirement to perform license checks during intake is therefore clarified: license metadata may be recorded and surfaced as informational status, but it is not an import gate and must not prevent direct local use. The user may choose to mark a source as personal-use-only or provide license details later.
+
+This does **not** grant redistribution rights or authorize bundling raw samples in a commercial PPGU installer, factory library, downloadable content pack, or other distributed build. Before any third-party audio is shipped to other users, the project must still verify that the applicable license or written permission allows that exact redistribution/embedding. Assets with unknown or incompatible redistribution rights may remain usable locally but must not be silently included in a commercial distribution. This distinction is about distribution rights, not restricting the user's direct import.
+
+This clarification supersedes any conflicting wording elsewhere in this policy that could be read as requiring license clearance before direct import or local use.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
