@@ -3492,3 +3492,26 @@ REV ULTRA 3.0 задаёт обязательный производственн
 
 **Статус:** HERO ASSET CORRECTED / STAGING G1–G4 + DETERMINISM PASS на SHA `963db4dcfde23b69cfa895d31d9ca0e2517a4783` / USER VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
 ================================================================================
+
+
+## 2026-11-15 — REV 18 NEON STAGE identity migration audit
+
+**Commit:** `1a10b99bb71293f1c226b04a96809350eaaf06e9` (audit document).  
+**Статус:** AUDIT COMPLETE / MIGRATION PATCH NOT YET IMPLEMENTED.
+
+Проведён повторный аудит текущих `SKIN/theme_manifest.json`, `theme_pack_manifest.json`, `control_schema.json`, `Skin_052/theme.json`, `Skin_053/theme.json`, `ThemeManager.h/.cpp`.
+
+Подтверждено:
+- текущий canonical registry содержит 102 entries и назначает default `neon-stage-default-skin-1` (Skin_052, index 52);
+- Skin_053 содержит stable ID `skin-053`, index 53, но ошибочно маркирован как LEGACY ARCHIVE;
+- ThemeManager fallback в header также использует прежний ID `neon-stage-default-skin-1`;
+- schema перечисляет 27 required control IDs, а Skin_052/Skin_053 maps содержат 28 keys из-за дополнительного `sync_selector`;
+- Skin Studio schema требует 21 palette token.
+
+**[IDENTITY-RULE: REV 18 supersedes the repository's REV 14/17 theme identity declarations.]** Каноническая идентичность по REV 18 — SKIN-1 = NEON STAGE = DEFAULT = `skin-053/Skin_053`. Старые IDs/paths/indexes нельзя уничтожать или переиспользовать.
+
+Создан `docs/PPGU_REV18_SKIN_IDENTITY_MIGRATION_AUDIT_RU.md` с no-loss migration matrix и проверками всех runtime consumers. Принято техническое решение: сохранять исторические stable IDs, paths и исходные индексы, а активный ordinal/visibility хранить отдельно. Прямое изменение только `defaultSkin` или `index` запрещено до миграции consumers, gallery, persistence, generator/merger и tests.
+
+Аудио/APVTS/MIDI/presets/SoundBank/DSP не менялись. Registry, manifests, ThemeManager и assets не изменялись. Ранее успешные G1–G4 относятся к прежнему контракту и не подтверждают REV 18. Gallery artwork по-прежнему требует исправления запрещённых A4/A7 элементов. FL Studio 20 host acceptance не подтверждён.
+
+**Следующий шаг:** полный поиск registry consumers и persistence migration tests; затем единый атомарный patch и полный CI gate.
