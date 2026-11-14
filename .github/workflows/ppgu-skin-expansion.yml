@@ -40,7 +40,7 @@ jobs:
           registry = json.loads(Path("SKIN/theme_manifest.json").read_text(encoding="utf-8"))
           pack = json.loads(Path("SKIN/theme_pack_manifest.json").read_text(encoding="utf-8"))
           assert registry["totalSkins"] == len(registry["themes"])
-          assert registry["defaultSkin"] == "skin-052"
+          assert registry["defaultSkin"] == "neon-stage-default-skin-1"
           if registry["totalSkins"] == 102 and pack.get("status") == "MERGED":
               print("PREFLIGHT PASS: Skin_053-102 is already merged; validation-only run.")
               already_merged = "true"
@@ -79,11 +79,11 @@ jobs:
           pack = json.loads(Path("SKIN/theme_pack_manifest.json").read_text(encoding="utf-8"))
           assert registry["totalSkins"] == 102
           assert len(registry["themes"]) == 102
-          assert registry["defaultSkin"] == "skin-052"
+          assert registry["defaultSkin"] == "neon-stage-default-skin-1"
           assert pack["status"] == "MERGED"
           assert pack["startIndex"] == 53 and pack["endIndex"] == 102
           assert pack["mergedRegistryTotal"] == 102
-          print("FINAL PASS: 102 skins registered; default remains SIGNAL FORGE (Skin_052).")
+          print("FINAL PASS: 102 skins registered; default remains NEON STAGE DEFAULT SKIN-1.")
           PY
 
       - name: Commit generated skins and canonical registry
