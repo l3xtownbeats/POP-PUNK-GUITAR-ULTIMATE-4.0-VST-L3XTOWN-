@@ -205,3 +205,40 @@ Tone selector: Clean, Crunch, Drive, Palm Mute, Open Chords, Acoustic, Lead Driv
 ### 15.6 Расширенный список style DNA
 
 Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Found Glory, Avril Lavigne, Yellowcard, The All-American Rejects, My Chemical Romance, Less Than Jake, Fenix TX, Midtown, Bowling for Soup, MGK, Mest, Angels & Airwaves, The Offspring, Sugarcult, All Time Low. MGK / “Bloody Valentine” — особый современный pop-punk reference: яркая насыщенная ритм-гитара, приглушённая verse-пульсация и раскрывающийся открытый припев. Это стилистическое описание, не транскрипция или копирование записи.
+
+
+## 16. Preset Browser и Pattern Browser — утверждённый workflow REV.17 (2026-11-14)
+
+Раздел консолидирует TX-PRESET-BROWSER-003 / TX-UI-PRESET-GUARD-004 / TX-PRESET-AUDIT-005. Это спецификация, не доказательство реализации. Строгие правила SIGNAL FORGE v10 и более свежие решения REV.17 не меняются.
+
+### 16.1 Preset Browser
+
+Режимы: BROWSER / FAVORITES / CATEGORIES. Верхняя панель: PREV / NEXT / FAVORITE / PRESET NAME / CATEGORY / SEARCH. Поддерживаются поиск, фильтрация, сортировка, выбор, временный preview/audition и явная команда SELECT/LOAD. PREV/NEXT работают только внутри текущего результата/контекста. Поиск, категория, фильтр и сортировка не активируют пресет и не меняют звук.
+
+Навигация: GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN. Sections: Intro / Verse / Pre-Chorus / Chorus / Bridge / Outro. STYLE и PATTERN — разные последовательные сущности. MELODY structure не изменяется. Категории: Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere.
+
+Карточки/строки содержат artwork, title, description и полезную информацию. Artwork допустим только при подтверждённых правах. Counts отражают реальные записи и отдельно различают definitions, dependency-resolved, loadable, playable-tested и host-verified. Missing/unresolved dependencies запрещают статус playable.
+
+Highlighted/selected, preview и committed active preset — разные состояния. Preview является временным audition: не меняет active preset, параметры, project state или committed assignment; при завершении/отмене безопасно прекращается и возвращает прежнее рабочее состояние. SELECT/LOAD — явная активация. Ошибка загрузки не повреждает ранее активное состояние.
+
+Factory и User — отдельные data scopes, не новые вкладки. Не добавлять All / Melody / Pattern / Factory / User tabs. Curator — отдельный advanced workflow; он не подменяет обычный browser и не ограничивает/удаляет/изменяет user assets молча.
+
+### 16.2 Pattern Browser
+
+Pattern Browser независим от Preset Browser. Workflow: SECTION → PATTERN → PREVIEW → APPLY / BACK. Сначала выбирается Section, затем Pattern. Для Intro, Verse, Pre-Chorus, Chorus, Bridge и Outro допускаются независимые назначения. Preview не коммитит; APPLY фиксирует; BACK/CANCEL откатывает draft в транзакционном workflow. Выбранный рисунок должен быть связан с реальным engine и корректно работать с MIDI keyboard, мышью/Piano Roll и host MIDI; не заявлять артикуляцию без подходящего sample mapping.
+
+### 16.3 User data и конфликты
+
+Factory presets catalog только расширяется; существующие IDs, назначения, данные и музыкальная структура не удаляются и не заменяются. Форматы: MELODY .ppgm, PATTERN .ppgp, banks .ppgbank. User save/load/import/export сохраняют stable IDs, versioned schema и совместимость. Импорт не перезаписывает молча одноимённый preset или stable ID; конфликт требует явного решения. Factory catalog read-only. Восемь reference/QA профилей не являются автоматически восемью новыми factory presets.
+
+Save As, Rename, Delete и Rescan не считаются утверждёнными browser controls на основании ретроспективного аудита. Любая destructive operation требует отдельного явного решения и подтверждения пользователя и не затрагивает factory catalog.
+
+### 16.4 Реализация и realtime safety
+
+Каждый control обязан иметь stable ID, реальное действие и mapping в существующую модель/manager/engine/APVTS, корректные empty/loading/error/disabled states, persistence при необходимости, keyboard/focus и mouse support, а также тесты. Fake controls, dummy callbacks и фиктивные counters запрещены. Существующие APVTS IDs/semantics, DSP, sampler, MIDI, scheduler, SoundBank и engine capabilities не менять ради макета.
+
+Поиск, индексация, metadata/artwork processing, preview preparation, sample decode и file/network I/O выполняются вне audio callback. Использовать bounded work/cache и безопасную передачу готового состояния. Приоритеты Safety → Realtime → Sound → Resources → UX.
+
+OPEN: sort keys/order, filter taxonomy, ranking, точное дерево Genre/Artist, auto-load semantics, double-click, preview waveform/duration. Исторический left-panel layout подчинён свежему 01 INTERFACE — NEON STAGE DEFAULT. SKINS меняют только оформление и палитру, не layout, controls, bindings или звук.
+
+**Статус:** REQUIREMENTS SPECIFIED / IMPLEMENTATION AND EXACT-SHA VALIDATION SEPARATE / NO IMPLEMENTATION CLAIM.
