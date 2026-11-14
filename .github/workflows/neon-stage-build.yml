@@ -12,12 +12,12 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-skin:
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,8 +40,9 @@ jobs:
 
       # Promote only the two reviewed gallery images on the dedicated review branch.
       # All other generated sprites remain staging artifacts until separately reviewed.
-      - name: Sync reviewed NEON STAGE preview and hero to Skin_052
-        if: github.ref_name == 'work/neon-stage-reference-preview-fix'
+      # Runtime promotion is deliberately disabled until the user approves both contact sheets.
+      - name: Runtime promotion gate (disabled pending visual approval)
+        if: false
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -101,4 +102,8 @@ jobs:
           path: |
             dist/NEON_STAGE_DEFAULT_SKIN_1_STAGING.zip
             dist/NEON_STAGE_BUILD_REPORT.json
+            dist/NEON_STAGE_ATLAS_CONTACT_SHEET.png
+            dist/NEON_STAGE_REFERENCE_CONTACT_SHEET.png
             dist/neon_stage_staging/palette_report.json
+            dist/neon_stage_staging/Skin_052/LICENSE.txt
+            dist/neon_stage_staging/Skin_052/SELF_CHECK.txt
