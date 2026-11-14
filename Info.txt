@@ -2589,3 +2589,30 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 
 **Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — PPGU UI THEME SPEC REV 18 v2.0 / REPOSITORY PREFLIGHT
+==============================================================================
+
+**Статус:** SPEC DOCUMENT RECORDED / IMPLEMENTATION PREFLIGHT COMPLETE / RUNTIME MIGRATION NOT STARTED.
+
+Пользователь утвердил PPGU UI THEME SPEC — REV 18 (v2.0 — FINAL ASSEMBLED EDITION). Полный рабочий документ: `docs/PPGU_UI_THEME_SPEC_REV18_V2.md`. Он является binding-спецификацией визуального слоя и supersedes более ранние UI-theme правила там, где они расходятся. Не разрешает изменения audio engine, DSP, samples, Sound Hunter, MIDI/APVTS или CI.
+
+Работа ведётся из отдельной ветки `work/ui-theme-rev18-v2-spec-sync`, созданной от пользовательской ветки `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`, base SHA `01a60164961f31c9a8c18405515d0ef8d4478f58`. Документ спецификации добавлен commit `1aab513f6da65f0716e21018bb0f95976d6883ec`. Исходная ветка не изменялась.
+
+**Фактические расхождения, обнаруженные на base SHA:**
+- `SKIN/theme_manifest.json`: 102 entries, `defaultSkin=skin-052`; NEON STAGE не является default в этом registry.
+- `SKIN/Skin_053/theme.json`: имя `Carbon Studio 01`, id `skin-053`, index 53; это не NEON STAGE и не соответствует новому binding identity.
+- `Source/UI/ThemeManager.h`: runtime fallback начинается с `id=skin-052`, `name=SIGNAL FORGE`; default/fallback конфликтует с v2.0.
+- `SKIN/control_schema.json`: REV14 Skin Studio contract; 21 palette tokens и 27 requiredControlIds. Это не тот же контракт, что 28-control assertions в `ThemeManagerTests.cpp`; требуется разбор, не механическое увеличение/уменьшение inventory.
+- `Source/PluginEditor.cpp`: уже использует ThemeManager и skin gallery; галерея применяет тему немедленно по клику. Полный Preview/Apply/Back workflow из v2.0 не подтверждён.
+- Ветка REV18 base имеет 7 утверждённых макетов NEON STAGE в корне репозитория (01–07), а также Skin_053 preview/hero/SVG assets. Содержимое макетов и соответствие asset files должны быть визуально проверены перед promotion.
+- Exact-SHA combined status и workflow-run lookup для base SHA `01a60164961f31c9a8c18405515d0ef8d4478f58` вернули пустые результаты; актуальный CI PASS не подтверждён.
+- PR #33 и #34 остаются Draft/open и содержат другую историческую трактовку registry (включая Skin_052 как NEON STAGE и Skin_053 как legacy archive). Они не являются основанием для изменения этой ветки без повторного сравнения и no-loss migration audit.
+
+**Решение по безопасности:** не менять manifest/default pointer, Skin_053 identity, ThemeManager fallback или control inventory до завершения no-loss migration map и проверки всех существующих ID/пользовательских selections. Не сливать PR #33/#34. Следующий изолированный этап — аудит всех 102 registry entries + папок/asset paths + ThemeManager contract tests, затем подготовка атомарной миграции к NEON STAGE SKIN-1 и активной линейке SKIN-2…SKIN-16. Любые новые активные темы создаются только после этого.
+
+[UNVERIFIED] Pixel-level approval макетов, G1–G4 на целевом NEON STAGE pack, PNG CRC полного набора, runtime default/reset behavior, resize/HiDPI/auxiliary windows, CPU/RAM profiling и FL Studio 20 acceptance не подтверждены.
+
+==============================================================================
