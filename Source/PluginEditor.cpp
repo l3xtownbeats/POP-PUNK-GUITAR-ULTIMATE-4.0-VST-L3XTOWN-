@@ -1406,11 +1406,12 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
     const auto total = static_cast<int>(total64);
 
     const auto activeCountValue = registry.getProperty("activeThemeCount", juce::var());
-    if ((!activeCountValue.isInt() && !activeCountValue.isInt64())
-        || static_cast<int>(activeCountValue) < 1
-        || static_cast<int>(activeCountValue) > 16)
+    if (!activeCountValue.isInt() && !activeCountValue.isInt64())
         return 0;
-    const int declaredActiveCount = static_cast<int>(activeCountValue);
+    const auto activeCount64 = activeCountValue.toString().getLargeIntValue();
+    if (activeCount64 < 1 || activeCount64 > 16)
+        return 0;
+    const int declaredActiveCount = static_cast<int>(activeCount64);
 
     std::set<int> indices;
     std::set<std::string> ids;
