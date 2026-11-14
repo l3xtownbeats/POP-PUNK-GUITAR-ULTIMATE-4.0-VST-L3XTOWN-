@@ -10,7 +10,7 @@ The musical experience is inspired by the workflow and playability of Session Gu
 
 ## Required release scope
 
-1. **At least 300 unique, fully implemented and audio-validated factory presets across MELODY + PATTERN (hard release minimum); 500–600 is a stretch goal**, organized by style, artist-inspired category, gain/amp character, and use case. Include the agreed pop-punk reference palette: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, All-American Rejects, MGK, and later Avril Lavigne-era pop-punk. Artist names describe tonal inspiration, not endorsements or copied recordings.
+1. **At least 500 unique, fully implemented and audio-validated MELODY presets AND 500 PATTERN presets (1,000 READY total; REV.18 hard release minimum)**, organized by style, artist-inspired category, gain/amp character, and use case. Include the agreed pop-punk reference palette: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, All-American Rejects, MGK, and later Avril Lavigne-era pop-punk. Artist names describe tonal inspiration, not endorsements or copied recordings.
 2. **Melody mode**: each MIDI key plays the corresponding sampled guitar note; correct pitch mapping, velocity layers, round-robin where available, palm mute/open articulations, release behavior, bounded polyphony, voice stealing, and acoustic/electric instrument profiles.
 3. **Pattern mode**: playable guitar performances following the player's chord changes, with Open Strum, Tight Palm Mute, Dead/Mute Percussion, Power Riff, Arpeggio/Picking, and Alternate Down-Up families. Use real performance-event/sample metadata. Do not fake this with a generic chord pad or blindly transposed MIDI phrase.
 4. **Fast preset and sound loading**: scan/index libraries off the audio thread; lazy-load/prefetch sample data; cache recently used material; show loading/coverage status; keep audio callback allocation-free and free of file I/O/locks; release unused bank memory safely. Preset browsing must remain responsive while audio is playing.
@@ -91,7 +91,7 @@ The consolidated approved execution order, all user-approved additions, cross-mo
 
 ## Latest approved preset scope expansion
 
-The hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets total. The 500–600 range remains a stretch goal. The 82 Travis Barker-produced-album guitar presets are distributed inside the corresponding artist/band categories and counted once in the overall catalogue; they are not a separate category. The legacy 300-entry catalogue remains to be audited; catalog records are not proof of playable, validated presets.
+REV.18 supersedes this earlier count: the hard release minimum is 500 fully implemented and audio-validated MELODY presets plus 500 PATTERN presets (1,000 READY total). The 82 Travis Barker-produced-album guitar presets are distributed inside the corresponding artist/band categories and counted once in the overall catalogue; they are not a separate category. The legacy 300-entry catalogue remains to be audited; catalog records are not proof of playable, validated presets.
 
 Add Angels & Airwaves album-era families for *We Don't Need to Whisper* (2006), *I-Empire* (2007), and *Lifeforms* (2021), plus Tom DeLonge technique presets in both MELODY and PATTERN. Research notes, confirmed facts vs interpretations, tone concepts, legal limits and tests are in [PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md](./PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md).
 
@@ -108,13 +108,13 @@ Research public interviews, gear/tone breakdowns and free preset examples. Inclu
 Любой пластиковый или нереалистичный результат = REJECTED / NOT READY и блокирует включение пресета в релиз до исправления и повторной слуховой проверки. Автотесты, графики и pluginval не подтверждают музыкальную реалистичность сами по себе.
 
 
-## Жёсткий релизный минимум каталога: 300 READY-пресетов
+## Историческая запись: минимум 300 READY-пресетов (SUPERSEDED REV.18)
 
 Пользователь подтвердил: в фабричном релизе должно быть **не менее 300 уникальных полноценных MELODY + PATTERN пресетов суммарно**. Это обязательный нижний предел. Учитываются только работающие, легально обеспеченные реальными источниками, музыкально различимые и прошедшие функциональную и слуховую проверку пресеты; пустые записи, placeholders и простые переименования не засчитываются.
 
 Распределять каталог по всем утверждённым группам/artist-inspired профилям, жанрам и поджанрам, акустическим и электрическим гитарам, а также музыкальным ролям и секциям песни: INTRO, VERSE, PRE-CHORUS, CHORUS, POST-CHORUS, BRIDGE, BREAKDOWN, RIFF, LEAD/HOOK, ARPEGGIO/PICKING, FILLS/TRANSITIONS, OUTRO — с учётом уместности для конкретного стиля. Разные секционные варианты считаются отдельными только при реальном музыкальном различии и самостоятельной проверке, а не за счёт переименования.
 
-Цель расширения 500–600 сохраняется как stretch goal после обеспечения 300 качественных READY-пресетов. 82 пресета по альбомам с подтверждённым участием Travis Barker распределяются по соответствующим группам/артистам и входят в общий счёт один раз. Приоритет: качество и музыкальная полезность; никакое число не оправдывает пластиковый звук.
+Эта цель superseded: REV.18 требует 500 READY MELODY и 500 READY PATTERN. 82 пресета по альбомам с подтверждённым участием Travis Barker распределяются по соответствующим группам/артистам и входят в общий счёт один раз. Приоритет: качество и музыкальная полезность; никакое число не оправдывает пластиковый звук.
 
 
 ## Политика FX: обязательны, когда их требует целевой звук
@@ -143,3 +143,17 @@ Safe and reversible UX/code/documentation improvements may be implemented autono
 ## NEON STAGE DEFAULT visual lock — explicit user confirmation
 
 The user has explicitly confirmed that **NEON STAGE DEFAULT keeps its existing approved appearance and overall visual concept**. The global UX optimization mandate is not permission to redesign or replace the primary skin. Improve clarity and usability within the existing identity: labels, grouping, tooltips, navigation states, feedback, accessibility and subtle interaction refinements. Preserve the established composition, palette, visual character, identity and main-area layout. Any substantial visual alternative must remain a separate proposal and must not replace the default. NEON STAGE DEFAULT remains the default-loaded primary skin.
+
+
+## REV.18 — приоритеты разработки, утверждено пользователем 14.11.2026
+
+1. SAMPLES без искусственного лимита размера; сохранять всё уникальное, проверенное и разрешённое. При ограничениях GitHub — split artifacts с SHA-256, без потери/отсечения контента.
+2. Factory presets: 500 READY MELODY + 500 READY PATTERN минимум; 82 Travis Barker-produced-album references входят в эти количества и размещаются внутри соответствующих artist/band profiles.
+3. FX EDIT: единое окно, 10–15 реальных DSP processors/effects; восемь страниц параметров и семь утверждённых bypass switches сохраняются. Дополнительные названия только после сверки с исходным утверждённым перечнем.
+4. SKIN GALLERY: 16 готовых пользовательских тем; NEON STAGE DEFAULT остаётся визуально прежней и default; остальные 15 — премиальные графические темы с идентичной функциональностью.
+5. SETTINGS: GOOD/NORMAL/NIGHT/ECO; 2x/4x/8x/16x; Voices от 2/4/8 до фактического предела движка; отдельные Serum-style locks для voices и профилей.
+6. ABOUT: Developer L3XTOWN, Product POP PUNK GUITAR ULTIMATE VST3, REV.18, 2026, фактические engine/build versions, RU+EN illustrated manuals со скриншотами реального интерфейса.
+7. Final package: VST3, SAMPLES, FACTORY PRESETS, USER PRESETS SUPPORT, SKIN GALLERY, RESOURCES, LICENSES, DOCUMENTS, RU/EN manuals, SHA-256, COMPLETE ZIP/split parts.
+8. Порядок модулей, Windows 10 x64 и FL Studio 20 x64 остаются без изменений.
+
+Полный нормативный текст: `docs/PPGU_REV18_USER_APPROVED_SUPERSEDING_REQUIREMENTS_2026-11-14_RU.md`. Старые цели 300 total / 500–600 stretch не действуют.
