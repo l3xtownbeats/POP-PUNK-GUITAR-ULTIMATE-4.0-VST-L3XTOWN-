@@ -3087,3 +3087,16 @@ Source commit: `6c82bdd4d80ba1c6860d19b92549c6ffec314d0a`.
 
 **Проверки:** исходники и registry сопоставлены чтением GitHub-файлов. Build, CTest (`ppgu_theme_contracts` и полный набор), G1–G4, pluginval strictness 5, runtime-проверка установленного VST3 и FL Studio 20 acceptance в рамках этой записи не запускались. Исправление не объявляется BUILT/TESTED/HOST-VERIFIED. Pixel-to-grid sign-off по семи макетам остаётся pending.
 
+## 2026-11-15 — NEON STAGE static palette and control-grid audit
+
+**Статус:** STATIC MANIFEST AUDIT PASS FOR G1 / G2; G3 / G4 AND RUNTIME VALIDATION PENDING.
+
+Проверен `SKIN/Skin_053/theme.json` (blob SHA `dee40f23456652dd0538b4780d943b607c19631e`) без изменения manifest:
+- **G1 contrast:** primary/text-secondary/text-disabled/LCD/accent контраст составил соответственно **18.64:1 / 14.94:1 / 9.52:1 / 18.23:1 / 15.37:1**. Все пять значений превышают закреплённые пороги 7:1 / 4.5:1 / 3:1 / 7:1 / 3:1.
+- **G2 control map:** найдено ровно 28 уникальных control IDs; все координаты целочисленные, положительные размеры укладываются в сетку 12×16; пересечений control cells не обнаружено.
+- Registry по-прежнему задаёт `defaultSkin: skin-053`, `totalSkins: 102`; индексы 52–55 проверены и не перенумеровывались.
+
+Это статическая проверка данных manifest, не запуск официальных G1/G2 валидаторов и не runtime/UI-приёмка. **G3** (наличие, формат, размеры и CRC каждого asset) и **G4** (полный registry/folder/path contract) ещё не подтверждены. Pixel-to-grid соответствие семи утверждённым макетам остаётся pending. Build, CTest, pluginval и FL Studio 20 acceptance не запускались.
+
+Аудируемый source fix: `6c82bdd4d80ba1c6860d19b92549c6ffec314d0a`.
+
