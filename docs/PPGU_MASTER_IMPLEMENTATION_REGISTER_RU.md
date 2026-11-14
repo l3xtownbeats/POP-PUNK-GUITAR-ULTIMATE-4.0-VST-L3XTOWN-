@@ -395,3 +395,27 @@ This append-only amendment adds the previously omitted user-ratified browser wor
 - **NOT SPECIFIED / DO NOT INVENT:** exact sort fields/order, filter chip taxonomy, ranking algorithm, genre/artist tree contents, auto-load vs explicit load, double-click behavior, preview duration/waveform. Keep these as open design questions pending explicit approval.
 - **LAYOUT CONFLICT RULE:** a historical left-panel browser layout is subordinate to the newer approved “01 INTERFACE — NEON STAGE DEFAULT” reference; do not alter that reference based on the older layout note.
 - **Status:** REQUIREMENTS CONSOLIDATED / SOURCE IMPLEMENTATION NOT CHANGED / BROWSER COMPONENT AUDIT REQUIRED.
+
+
+## TX-UI-PRESET-GUARD-004 — UI fidelity, visual-only skin switching and non-destructive preset catalog
+
+### User-ratified requirements (2026-11-12..14)
+1. **Mockup fidelity:** the approved UI mockup/reference is the one-to-one appearance/layout target. Every control already approved in the journals/specification must be present and functional. A mockup-only element not specified by the approved control contract may be removed/replaced in the UI only.
+2. **Engine preservation:** removing/replacing an unsupported UI element never authorizes deleting an engine capability. Preserve APVTS IDs and semantics, DSP, MIDI routing/timing, sampler lifecycle, preset/project compatibility and all existing behavior. No fake/decorative controls.
+3. **Five skin/UI variants:** the visual/control contract applies across all five approved variants. Preserve all existing registry IDs, legacy compatibility and resources; no registry cleanup or renumbering is implied.
+4. **Reference separation:** first supplied reference file = appearance/layout/element placement; second supplied file = color palette. Do not treat the palette reference as a new layout.
+5. **Visual-only skin switching:** SKINS changes graphics/palette only. Controls, their functions, sizes, coordinates, layout, bindings, callbacks, preset mapping, DSP, MIDI and sound remain invariant. The approved startup shell loads automatically; do not add a mandatory theme-choice gate.
+6. **Preset catalog preservation:** catalog is expansion-only. Do not delete, replace or silently overwrite existing factory/user presets, IDs or musical structures. Import conflict handling must be explicit and non-destructive.
+7. **Portable preset artifacts:** standalone MELODY preset `.ppgm`; standalone PATTERN preset `.ppgp`; preset bank `.ppgbank`. Validate schema/version/migration and dependency references; do not duplicate sample WAV payload inside every preset.
+8. **Eight profile correction:** the eight supplied profiles are reference/QA material for comparison and possible selective mapping to existing slots, not an automatic addition of eight factory presets and not a replacement or catalog-count increase.
+9. **Play Mode compatibility:** under the current APVTS schema, `playMode` values outside 0..1 are invalid. Do not widen/reinterpret this parameter without an explicit superseding decision and compatibility tests.
+10. **Architecture and process:** extend current REV.17 modules; do not duplicate/rewrite existing systems. Use CHECK → ANALYZE → FIX → RE-ANALYZE → RESULT. A CI/build result counts only for the exact tested source SHA; CTest, pluginval, packaging and manual FL Studio 20 host acceptance are separate evidence gates.
+
+### Audit consequences
+- Build a mockup-to-source control matrix: reference element → stable control ID → APVTS/command mapping → callback → persistence/automation applicability → accessibility/focus → state/error handling → tests.
+- Run the same control/layout/binding invariance checks across every approved skin. Theme changes must be audio/DSP/MIDI invariant.
+- Add non-destructive preset import/export tests for `.ppgm`, `.ppgp`, `.ppgbank`, including collision, malformed file, missing dependency, migration and DAW project reopen.
+- Keep eight profiles outside the counted factory catalog until each is explicitly approved and validated under the current preset acceptance process.
+- Do not infer or invent additional browser tabs/semantics (for example All/Melody/Pattern/Factory/User as tabs) from assistant proposals unless separately user-ratified. The ratified browser modes and controls remain those in TX-PRESET-BROWSER-003; unresolved semantics remain open.
+
+**Status:** REQUIREMENTS CONSOLIDATED / IMPLEMENTATION AUDIT REQUIRED / NO PRODUCTION SOURCE CHANGE.
