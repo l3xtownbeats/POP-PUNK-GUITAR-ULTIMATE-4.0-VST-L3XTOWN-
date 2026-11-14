@@ -596,7 +596,13 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const bool eqEnabled = parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) > 0.5f;
     const float lowGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)));
     const float midGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)));
-    const float highGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed)));
+    const float highGainDb = juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed));
+    // The preset-level Tone control is a neutral-at-5 high-shelf trim. Keep it
+    // active even when the three-band EQ is bypassed so preset tone is audible.
+    const float tone = juce::jlimit(0.0f, 10.0f,
+        parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed));
+    const float toneGain = juce::Decibels::decibelsToGain(tone - 5.0f);
+    const float highGain = juce::Decibels::decibelsToGain(highGainDb) * toneGain;
     const float lowAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 250.0f / static_cast<float>(currentSampleRate));
     const float highAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 2500.0f / static_cast<float>(currentSampleRate));
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -609,14 +615,13 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             const float input = data[sample] * ampGain;
             lowState += lowAlpha * (input - lowState);
             highState += highAlpha * (input - highState);
+            const float low = lowState;
+            const float high = input - highState;
+            const float mid = input - low - high;
             if (eqEnabled)
-            {
-                const float low = lowState;
-                const float high = input - highState;
-                const float mid = input - low - high;
                 data[sample] = low * lowGain + mid * midGain + high * highGain;
-            }
-            else data[sample] = input;
+            else
+                data[sample] = input + high * (toneGain - 1.0f);
         }
     }
 
@@ -628,6 +633,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
         const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
         const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
+        const float amount = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
         const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
         const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -641,8 +648,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 envelope = coefficient * envelope + (1.0f - coefficient) * level;
                 const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
                 const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
-                const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                data[sample] *= gain;
+                const float compressedGain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
+                const float appliedGain = 1.0f + (compressedGain - 1.0f) * amount;
+                data[sample] *= appliedGain;
             }
         }
     }
