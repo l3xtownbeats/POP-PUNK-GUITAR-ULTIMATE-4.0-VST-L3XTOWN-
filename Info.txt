@@ -2440,3 +2440,18 @@ The new tool/tests are committed but have not yet run on the resulting commit SH
 **Validation:** exact-SHA run pending. No PASS claimed.
 **Status:** RESTORED / CI PENDING.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-WORKFLOW-RESTORE-003 — RESTORE FULL WINDOWS CI WORKFLOW (CORRECTED PATCH METHOD)
+==============================================================================
+
+**Type:** CI workflow recovery; production source unchanged.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `b412518676a9f8c95430dffb0ebd3cb8ae537576`.
+**Correction to prior recovery attempt:** JavaScript string replacement interpreted the PowerShell checksum-regex suffix `$'` as a replacement token, duplicating the remainder of the workflow. The prior recovery SHA `b412518676a9f8c95430dffb0ebd3cb8ae537576` is not a valid CI configuration; no PASS is claimed for it.
+**Repair:** rebuilt the workflow from the known successful ancestor `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5` using callback-based literal replacements. Verified the resulting workflow contains one complete Windows job, the READY audit, full per-WAV SHA-256 gate, configure/build, CTest, pluginval and interim package.
+**Production source:** unchanged.
+**Validation:** exact-SHA workflow run pending.
+**Status:** RESTORED / CI PENDING.
+==============================================================================

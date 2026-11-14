@@ -839,3 +839,16 @@ Six unit tests cover legacy definitions, complete evidence, missing mapping, inv
 **Production source:** unchanged.
 **Tests:** exact-SHA Windows workflow pending; no PASS claimed.
 **Status:** RESTORED / VALIDATION PENDING.
+
+
+## 2026-11-14 — TX-REV18-WORKFLOW-RESTORE-003 — workflow literal-replacement repair
+
+**Type:** CI workflow recovery.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `b412518676a9f8c95430dffb0ebd3cb8ae537576`.
+**File:** `.github/workflows/vst3-build.yml`.
+**Correction:** prior replacement treated PowerShell regex suffix `$'` as a JavaScript replacement token, duplicating trailing workflow content. That SHA is invalid and has no passing CI evidence.
+**Change:** rebuilt from known successful ancestor `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5` using callback-based replacements. Confirmed single full Windows job with READY audit, per-WAV hash validation, build, CTest, pluginval and interim packaging.
+**Production source:** unchanged.
+**Tests:** exact-SHA Windows workflow pending.
+**Status:** RESTORED / VALIDATION PENDING.
