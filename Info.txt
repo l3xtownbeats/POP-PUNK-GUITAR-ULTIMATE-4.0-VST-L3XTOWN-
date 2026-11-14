@@ -1998,3 +1998,15 @@ Official discovery and license references reviewed: Meta Open Sound README/relea
 **Validation:** combined commit status and PR-triggered workflow lookup for source test commit `6862de07555d3c4630a4e72c427a0ed0cd4876c3` returned no status entries/runs. Treat Windows Release, full CTest, pluginval, package and FL Studio 20 visual acceptance as PENDING for this branch snapshot.
 
 **Next safe action:** complete the seven-reference visual comparison and reconcile the branch with the approved control-surface map before any geometry/source rewrite. Do not merge main blindly, do not invent missing controls, and do not touch DSP/APVTS/MIDI/audio behavior during the visual pass. Source changes already recorded in the preceding NEON STAGE naming/default entry remain limited to theme identity and contract tests.
+
+## 2026-11-14 — NEON STAGE flagship editor pass 01
+
+**Статус:** SOURCE CHANGES COMMITTED; WINDOWS BUILD / CTEST / FL STUDIO VISUAL CHECK PENDING.
+
+В `Source/PluginEditor.cpp` обновлён главный экран: wordmark редактора и hero-заголовок теперь отображают **NEON STAGE**, название продукта перенесено во вторичную строку. Расширена область wordmark в верхней панели, чтобы название не обрезалось. Подпись hero-зоны приведена к NEON STAGE / SIGNATURE GUITAR INTERFACE.
+
+Векторная иллюстрация электрогитары в hero-зоне больше не использует четыре жёстко заданных серых цвета корпуса/грифа: градиенты, пик-апы и металлические детали теперь используют semantic palette tokens текущей темы. Это сохраняет согласованность внешнего вида при смене темы и не затрагивает аудиосостояние.
+
+В `SKIN/Skin_01/theme.json` описание preview-оболочки приведено к единому названию NEON STAGE. В `Source/UI/ThemeManager.h` обновлён комментарий fallback-контракта. APVTS, MIDI, DSP, sampler, параметры, назначения кнопок и геометрия аудиоконтролов не менялись.
+
+**Следующий блок:** сверка геометрии/иерархии главного окна с семью PNG-макетами, затем доработка панелей FX EDIT, AUTOCHORDS, IMPORT и SETTINGS. Изображения-макеты не изменялись. Pixel-accurate acceptance и компиляция остаются PENDING.
