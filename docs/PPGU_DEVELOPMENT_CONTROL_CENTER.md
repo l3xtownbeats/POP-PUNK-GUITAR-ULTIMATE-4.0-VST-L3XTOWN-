@@ -257,3 +257,20 @@ The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU
 - Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
 - Production source changed: NO.
 - Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
+
+
+## 2026-11-14 — TX-REV18-ASSET-001 — REV.18 branch and reference asset preservation
+**Status:** branch created; 38 visual reference assets preserved in Library and indexed in repository.  
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18` from canonical REV.17 HEAD `9dea73597cfd7b383f1e8bf77d773abea13498b0`.  
+**Purpose:** isolated working line for REV.18; retain source tree and all active build/test/docs/skin resources while making user-supplied design assets retrievable.  
+**Reference folder:** `/PPGU/REFERENCE_ASSETS/` (38 files, original binaries preserved).  
+**Repository index:** `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.  
+**No production source changed.** Reference binaries remain in Library rather than duplicating ~80 MB in Git. This is an inventory of assets visible in the Library at capture time, not a claim that every historical chat attachment is accessible.  
+**Branch hygiene:** source, tests, CMake, active workflows, current specs/journals and complete SKIN packs retained. Obvious archive/backup cleanup is deferred until dependency and historical-evidence checks; no potentially required content deleted in this transaction.  
+**Real-time boundary:** journals synchronized during active repository work; no always-on background observer is running between sessions.
+
+### REV.18 branch governance
+- Active isolated development branch: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`, created from REV.17 at `9dea73597cfd7b383f1e8bf77d773abea13498b0`.
+- Reference images: `/PPGU/REFERENCE_ASSETS/` in Library; repository index: `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.
+- Preserve originals; status-tag after visual comparison; no silent deletion or promotion of mockups.
+- Source tree currently inherited from REV.17. Keep all active source, tests, build config, workflows, runtime SKIN assets and required specifications. Remove archival duplicates only after path/dependency review.
