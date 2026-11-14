@@ -571,8 +571,21 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const float lowGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)));
     const float midGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)));
     const float highGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed)));
-    const float lowAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 250.0f / static_cast<float>(currentSampleRate));
-    const float highAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 2500.0f / static_cast<float>(currentSampleRate));
+    // EQ crossover frequencies are live parameters (not fixed constants).
+    // AMP & TONE's tone control is an independent high-band tilt and remains
+    // active when the three-band EQ switch is bypassed.
+    const float lowCutHz = juce::jlimit(20.0f, 500.0f,
+        parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
+    const float highCutHz = juce::jlimit(2000.0f, 20000.0f,
+        parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
+    const float lowAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * lowCutHz / static_cast<float>(currentSampleRate));
+    const float highAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * highCutHz / static_cast<float>(currentSampleRate));
+    const float eqLowBandGain = eqEnabled ? lowGain : 1.0f;
+    const float eqMidBandGain = eqEnabled ? midGain : 1.0f;
+    const float eqHighBandGain = eqEnabled ? highGain : 1.0f;
+    const float toneValue = juce::jlimit(0.0f, 10.0f,
+        parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed));
+    const float toneHighGain = juce::Decibels::decibelsToGain((toneValue - 5.0f) * 1.2f);
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
         auto* data = buffer.getWritePointer(channel);
@@ -583,14 +596,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             const float input = data[sample] * ampGain;
             lowState += lowAlpha * (input - lowState);
             highState += highAlpha * (input - highState);
-            if (eqEnabled)
-            {
-                const float low = lowState;
-                const float high = input - highState;
-                const float mid = input - low - high;
-                data[sample] = low * lowGain + mid * midGain + high * highGain;
-            }
-            else data[sample] = input;
+            const float low = lowState;
+            const float high = input - highState;
+            const float mid = input - low - high;
+            data[sample] = low * eqLowBandGain
+                         + mid * eqMidBandGain
+                         + high * eqHighBandGain * toneHighGain;
         }
     }
 
@@ -616,7 +627,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
                 const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
                 const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                data[sample] *= gain;
+                const float amount = juce::jlimit(0.0f, 1.0f,
+                    parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
+                data[sample] *= 1.0f + (gain - 1.0f) * amount;
             }
         }
     }
