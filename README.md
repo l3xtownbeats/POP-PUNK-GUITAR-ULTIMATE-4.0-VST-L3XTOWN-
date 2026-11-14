@@ -167,8 +167,8 @@ A release gate must use one exact source SHA and a package manifest tied to that
 
 - [SIGNAL FORGE v10.1 engineering clarification](docs/PPGU_SIGNAL_FORGE_V10_1_ENGINEERING_CLARIFICATION_RU.md)
 - [SIGNAL FORGE v7 skin-system master record](docs/PPGU_SIGNAL_FORGE_V7_MASTER_RU.md)
-- [Single authoritative engineering journal — Info.txt](Info.txt)
-- [Append-only code change index — CODE.txt](CODE.txt)
+- [Single authoritative engineering journal](docs/PPGU_JOURNAL/PPGU_JOURNAL.md)
+- [Append-only code change index](docs/PPGU_JOURNAL/CODE.md)
 - [Download and installation status](DOWNLOAD.md)
 - [Preset bank readiness](docs/PRESET_BANK_4_0_READINESS_RU.md)
 - [SoundBank code audit](docs/SB0_SOUNDBANK_CODE_AUDIT_RU.md)
@@ -176,6 +176,7 @@ A release gate must use one exact source SHA and a package manifest tied to that
 - [Sample-library sourcing and license policy](docs/SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md)
 - [Skin engine gap audit](SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md)
 - [Master product specification](docs/MASTER_PRODUCT_SPEC_4_0_RU.md)
+- [PPGU 4.0 master development plan and release gates](docs/PPGU_MASTER_DEVELOPMENT_PLAN_RU.md)
 - [Production priorities](docs/PRODUCTION_PRIORITIES_4_0.md)
 
 **Authority order:** actual source tree and build configuration establish what is implemented; tests/CI establish what is verified; `Info.txt` records project status and decisions; `CODE.txt` indexes source changes; specifications define intended behaviour. Any disagreement is recorded and investigated, never silently reconciled by editing history.
