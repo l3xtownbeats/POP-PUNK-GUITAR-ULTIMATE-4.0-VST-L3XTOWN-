@@ -26,7 +26,7 @@ juce::String fromWidePath(const wchar_t* value, int length)
 }
 #endif
 
-// SIGNAL FORGE / NEON flagship shell. Theme code is visual-only and never touches processor/audio state.
+// NEON STAGE is the plugin interface. Theme code is visual-only and never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
