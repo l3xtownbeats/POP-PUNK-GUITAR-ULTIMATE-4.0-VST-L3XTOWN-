@@ -11,15 +11,21 @@ SOURCE_THEME = ROOT / "SKIN" / "Skin_052" / "theme.json"
 OUT = ROOT / "dist" / "neon_stage_staging"
 SKIN = OUT / "Skin_052"
 ASSETS = SKIN / "assets"
-PALETTE = {
-    "window_bg":"#050811", "panel":"#091321", "panel_elevated":"#101F32",
-    "control_bg":"#07101C", "control_face":"#14263A", "control_border":"#52718B",
-    "text_primary":"#FFFFFF", "text_secondary":"#D9E8F7", "text_disabled":"#AABBD0",
-    "accent":"#66FFFF", "accent_glow":"#B8FFFF", "danger":"#FF5577",
-    "warning":"#FFD166", "success":"#67F5B5", "lcd_bg":"#020A12",
-    "lcd_text":"#C9FFFF", "led_on":"#66FFFF", "led_off":"#263C50",
-    "shadow":"#02040A", "highlight":"#B8D9F0", "lowlight":"#0A1421"
-}
+def load_source_palette():
+    """Use Skin_052/theme.json as the sole palette source; never fork hex values."""
+    if not SOURCE_THEME.is_file():
+        raise FileNotFoundError(f"Canonical source theme missing: {SOURCE_THEME}")
+    source = json.loads(SOURCE_THEME.read_text(encoding="utf-8"))
+    palette = source.get("palette")
+    if not isinstance(palette, dict) or len(palette) != 21:
+        raise RuntimeError("Canonical source theme must provide exactly 21 palette tokens.")
+    if any(not isinstance(value, str) or len(value) != 7 or not value.startswith("#")
+           for value in palette.values()):
+        raise RuntimeError("Canonical source theme contains an invalid palette colour.")
+    return palette
+
+
+PALETTE = load_source_palette()
 TOKENS = tuple(PALETTE)
 REQUIRED = (
     "preset_browser","mode_selector",*(f"knob{i:02d}" for i in range(1,10)),
@@ -243,7 +249,7 @@ def step_manifest():
     theme["name"]="NEON STAGE"
     theme["family"]="neon_basement"
     theme["description"]="NEON STAGE: electric cyan stage lighting, deep midnight panels and restrained neon accents."
-    theme["palette"]=PALETTE
+    # Preserve the source theme palette; generation must not introduce a second palette authority.
     theme["effects"]={
       "material":"midnight stage console with cyan edge lighting",
       "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
@@ -373,14 +379,31 @@ def step_report():
     else:
         control_data=json.loads(control_map_path.read_text(encoding="utf-8"))
         mapped=control_data.get("controls",{})
-        if control_data.get("grid")!={"columns":12,"rows":16} or len(mapped)!=28 or len(set(mapped))!=28:
-            errors.append("G2 control_map.json must contain exactly 28 unique controls in a 12x16 grid")
+        schema=json.loads((ROOT/"SKIN"/"control_schema.json").read_text(encoding="utf-8"))
+        schema_ids=set(schema.get("x-ppgu-contract",{}).get("requiredControlIds",[]))
+        # sync_selector is a live current control recorded in additionalCurrentControls.
+        expected_ids=schema_ids | {"sync_selector"}
+        if control_data.get("grid")!={"columns":12,"rows":16} or len(mapped)!=28 or set(mapped)!=expected_ids:
+            errors.append(
+                "G2 control_map.json must contain the exact 28-control inventory "
+                f"(missing={sorted(expected_ids-set(mapped))}, extra={sorted(set(mapped)-expected_ids)})"
+            )
+        rectangles=[]
         for cid,box in mapped.items():
             col,row,cs,rs=(box.get(k) for k in ("col","row","colSpan","rowSpan"))
-            if not all(isinstance(v,int) for v in (col,row,cs,rs)) or col<0 or row<0 or cs<1 or rs<1 or col+cs>12 or row+rs>16:
+            if not all(isinstance(v,int) and not isinstance(v,bool) for v in (col,row,cs,rs)) or col<0 or row<0 or cs<1 or rs<1 or col+cs>12 or row+rs>16:
                 errors.append(f"G2 out-of-bounds or invalid control map entry: {cid}")
+                continue
+            for other_id,other in rectangles:
+                overlap=(col < other["col"]+other["colSpan"] and
+                         col+cs > other["col"] and
+                         row < other["row"]+other["rowSpan"] and
+                         row+rs > other["row"])
+                if overlap:
+                    errors.append(f"G2 overlapping grid controls: {other_id} and {cid}")
+            rectangles.append((cid,{"col":col,"row":row,"colSpan":cs,"rowSpan":rs}))
     result={"project":"PPGU NEON STAGE","skin":"NEON STAGE DEFAULT SKIN-1","status":"PASS" if not errors else "FAIL",
-            "checks":{"palette_tokens":len(TOKENS),"required_controls":len(REQUIRED),"png_assets":len(pngs),
+            "checks":{"palette_tokens":len(TOKENS),"required_controls":len(REQUIRED),"control_map_controls":len(control_map.get("controls",{})) if control_map_path.is_file() else 0,"png_assets":len(pngs),
                       "control_map_controls":28,"svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
