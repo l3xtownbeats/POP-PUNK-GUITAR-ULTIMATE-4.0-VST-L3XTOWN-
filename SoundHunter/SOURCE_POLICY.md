@@ -229,3 +229,21 @@ This is a product requirement only. Do not claim the folder watcher, scanner, cl
 - Respect host/source rate limits, terms of service, access controls and bandwidth constraints. There is no arbitrary GB quota, but actual storage, execution time and source availability remain practical limits.
 - Keep an inventory that distinguishes: VERIFIED_SHIP_ALLOWED, COMMERCIAL_PERMISSION_REQUIRED, EVALUATION_ONLY, and QUARANTINED.
 - Validate musical usefulness before assigning material to a factory preset. A preset must produce its promised sound; a source name or marketing description is not validation.
+
+## User-confirmed manual activation policy for scanning and global search
+
+The user confirms that **global internet search must run only when explicitly started by the user in manual mode**. It must never start automatically, periodically, on plugin launch, when a preset is loaded, or merely because the local sample folder contains files.
+
+The local folder workflow and global internet discovery are separate operations:
+
+- **Local import scan:** the engine may scan `Samples/Import Guitar Samples/` only when the user explicitly invokes the local scan / AUTO DISCOVER action. Do not silently enable continuous background auto-scanning or start a scan automatically at application/plugin launch. The user must be able to see and control when this scan runs.
+- **Global search:** a separate, explicitly user-triggered manual action. It must remain OFF by default and must never be implicitly started by local scanning, AUTO DISCOVER, preset generation, startup, timers, or background activity.
+- The UI must clearly distinguish the actions, for example **SCAN LOCAL IMPORT FOLDER** and **START GLOBAL SEARCH**, and show their independent status/progress.
+- Running a local scan must never initiate network requests. Running global search requires a separate deliberate user action and should expose the search scope and progress.
+- The user can cancel either operation. No hidden scheduled scans, recurring searches, startup scans, or automatic network discovery.
+- Keep file scanning, hashing, decoding and analysis off the real-time audio thread even when the user manually starts a local scan.
+
+This manual-activation policy supersedes any earlier wording that could be interpreted as automatically scanning on startup or automatically launching global discovery. AUTO DISCOVER remains a user-invoked feature, not an always-on background process.
+
+This is a confirmed behavior requirement, not a claim that the controls or scanning/search implementation are already complete or tested.
+
