@@ -632,3 +632,10 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 ## ADDENDUM — MASTER ENGINE SOURCE INVENTORY AND BUILD GRAPH AUDIT (2026-11-14)
 
 The complete source inventory and static build-graph discrepancies discovered at main HEAD 1f09611f753702e380d695a5441b6f260f798d3b are recorded in Info.txt under “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”, with a corresponding append-only source index in CODE.txt. This addendum does not claim that all approved features are implemented. It preserves the approved no-upper-limit rule for every MELODY/PATTERN browser category. No source code was changed by the audit. CMake/JUCE/source-path discrepancies must be reconciled before a reproducible build can be claimed.
+
+
+## USER APPROVAL — MAXIMUM GUITAR SOUND LIBRARY + AUTOMATIC NON-BREAKING DEFECT REPAIR (2026-11-14)
+
+Approved as mandatory: build an open-ended maximum-scale guitar library comprising One-Shots, Sample Loops, multisamples/performance sets, SoundBank assets and unlimited related presets/browser entries for MELODY and PATTERN. No maximum for the whole library or any approved category. Keep content types distinct, validate technical quality/mappings/metadata/provenance/SHA-256 and factory redistribution licenses. Local user import is not blanket-blocked by factory redistribution restrictions. Canonical details: `docs/PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md`.
+
+Approved workflow: during each development item automatically find and repair clear, reversible, non-breaking defects, run targeted/regression tests and log evidence in INFO/CODE without repetitive notifications. Stop and ask only when a decision would alter an approved requirement/contract, resolve conflicting approvals, rely on uncertain rights, perform irreversible work or risk user data. Pause only affected scope; continue independent safe work. Never claim unrun tests passed. Current sound asset registry baseline is empty (assetCount=0/sourceCount=0), so library population remains future implementation work.
