@@ -115,7 +115,7 @@ def main():
     ap.add_argument("--samples", type=Path, default=ROOT/"Samples")
     ap.add_argument("--discover-only", action="store_true", help="list approved source links without downloading")
     ap.add_argument("--max-library-gb", type=float, default=40.0,
-                    help="Hard aggregate Samples audio-library ceiling (maximum 40 GiB).")
+                    help="Hard aggregate Samples audio-library ceiling (maximum 40 GB).")
     args=ap.parse_args()
     if args.max_library_gb <= 0 or args.max_library_gb > 40.0:
         raise SystemExit("The approved aggregate Samples audio-library ceiling is 40 GiB maximum.")
@@ -131,15 +131,15 @@ def main():
     samples.mkdir(parents=True, exist_ok=True)
     base=samples/"SoundHunterImports"
     base.mkdir(parents=True, exist_ok=True)
+    library_bytes=existing_audio_bytes(samples)
+    limit=int(args.max_library_gb*1_000_000_000)
+    if library_bytes > limit:
+        raise SystemExit(f"Existing Samples audio library is already {library_bytes/1_000_000_000:.2f} GB; ceiling is {args.max_library_gb:.2f} GB.")
+    seen=existing_hashes(samples)
     run_id=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+"-"+os.urandom(3).hex()
     run_root=base/run_id
     run_root.mkdir()  # unique; fail rather than reuse
     used=0  # Bytes newly imported during this run; retained for transparent reporting.
-    library_bytes=existing_audio_bytes(samples)
-    limit=int(args.max_library_gb*1024**3)
-    if library_bytes > limit:
-        raise SystemExit(f"Existing Samples audio library is already {library_bytes/1024**3:.2f} GiB; ceiling is {args.max_library_gb:.2f} GiB.")
-    seen=existing_hashes(samples)
     registry={"schema_version":"1.0","run_id":run_id,"classification":"REAL_RECORDED","assets":[],"sources":[]}
     tmp=run_root/"_download_tmp"; tmp.mkdir()
     try:
@@ -224,7 +224,7 @@ def main():
                 print(f"  imported {copied} repository audio files")
         out=run_root/"SOUND_HUNTER_REGISTRY.json"
         out.write_text(json.dumps(registry,ensure_ascii=False,indent=2),encoding="utf-8")
-        print(f"Completed. {len(registry['assets'])} audio assets; added this run {used/1024**3:.2f} GiB; aggregate Samples audio library {library_bytes/1024**3:.2f}/{args.max_library_gb:.2f} GiB.")
+        print(f"Completed. {len(registry['assets'])} audio assets; added this run {used/1_000_000_000:.2f} GiB; aggregate Samples audio library {library_bytes/1024**3:.2f}/{args.max_library_gb:.2f} GiB.")
     finally:
         # Only remove this run's temporary download directory, never existing user content.
         if tmp.exists(): shutil.rmtree(tmp)
