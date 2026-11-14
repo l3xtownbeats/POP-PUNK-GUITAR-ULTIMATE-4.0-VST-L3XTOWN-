@@ -40,12 +40,11 @@ def carbon_texture():
 
 def background(size,focal=True):
     scale=2 if focal else 1; w,h=size[0]*scale,size[1]*scale
-    im=Image.new("RGB",(w,h)); px=im.load(); top=P["window_bg"]; bottom=P["panel"]
+    im=Image.new("RGB",(w,h)); gradient=ImageDraw.Draw(im); top=P["window_bg"]; bottom=P["panel"]
+    # Row-wise gradient rendering avoids millions of per-pixel Python operations.
     for y in range(h):
         t=y/max(1,h-1); c=tuple(round(top[i]*(1-t)+bottom[i]*t*.28) for i in range(3))
-        for x in range(w):
-            weave=1 if ((x+y)//9)%2 else 0
-            px[x,y]=tuple(min(255,v+weave) for v in c)
+        gradient.line((0,y,w,y),fill=c)
     glow=Image.new("RGBA",(w,h),(0,0,0,0)); gd=ImageDraw.Draw(glow)
     gd.ellipse((w*.38,-h*.65,w*1.12,h*.78),fill=(*P["accent_glow"],24))
     gd.ellipse((-w*.28,h*.05,w*.5,h*1.05),fill=(60,100,110,18))
