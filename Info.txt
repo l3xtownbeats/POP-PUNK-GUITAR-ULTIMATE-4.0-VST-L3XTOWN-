@@ -2572,3 +2572,25 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 - GitHub About description/topics и Social Preview metadata не менялись: доступные действия интеграции не предоставляют отдельного редактирования About/Social Preview.
 
 **Статус:** REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.
+
+
+---
+
+## 2026-11-14 — NEON STAGE Skin_053 build-engine staging scaffold
+
+**Branch:** `feature/neon-stage-build-engine`  
+**Base:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
+**Scope:** Python asset-generation pipeline and Windows launcher only.
+
+- Added `NEON_STAGE_BUILD.bat`, `requirements.txt`, `neon_stage_engine.py` and step entry points `01_palette.py`–`08_report.py`.
+- The pipeline is designed to generate 121-frame knob strips at 96x96 and 192x192, six button states, seven FX tiles with off/on states, slider and LED atlases, static SVG elements, preview/hero PNGs, a draft Skin_053 theme, ZIP staging package and JUCE resource copy.
+- Palette values were selected against the project’s five stated high-contrast targets; the palette step calculates and checks the ratios at runtime.
+- Output is isolated under `dist/neon_stage_staging/` and `juce_resources/Skins/Skin_053/`. The scripts do not write to `SKIN/theme_manifest.json`, do not change `defaultSkin`, and label the pack `STAGING_NOT_MERGED`.
+- The batch file now stops on the first failing command instead of printing a false success message.
+- The existing Skin_053 control map is reused as metadata; no APVTS IDs, DSP, MIDI, live layout or runtime code is changed.
+- The pipeline has been reviewed for file paths and required asset dimensions, but **has not yet been executed**. Therefore no PNG/SVG output, ZIP package, JUCE build, CTest, pluginval or FL Studio acceptance is claimed.
+- The generated promo art is procedural concept artwork, not a verified pixel-match to the approved NEON STAGE reference mockup. Visual sign-off remains pending.
+
+**Naming instruction:** user requested renaming the second theme name SOUND FORGE to TESLA BOYS. No exact SOUND FORGE entry was found in the inspected Skin_053/registry data. SIGNAL FORGE remains the working-interface name and must not be renamed or treated as a theme. The TESLA BOYS rename is recorded as a pending identity change; no unrelated registry entry was changed.
+
+**Status:** BUILD ENGINE SCAFFOLD COMMITTED TO FEATURE BRANCH; EXECUTION AND VISUAL/CI ACCEPTANCE PENDING.
