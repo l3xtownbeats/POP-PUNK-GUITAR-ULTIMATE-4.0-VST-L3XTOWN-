@@ -403,8 +403,8 @@ def step_report():
                     errors.append(f"G2 overlapping grid controls: {other_id} and {cid}")
             rectangles.append((cid,{"col":col,"row":row,"colSpan":cs,"rowSpan":rs}))
     result={"project":"PPGU NEON STAGE","skin":"NEON STAGE DEFAULT SKIN-1","status":"PASS" if not errors else "FAIL",
-            "checks":{"palette_tokens":len(TOKENS),"required_controls":len(REQUIRED),"control_map_controls":len(control_map.get("controls",{})) if control_map_path.is_file() else 0,"png_assets":len(pngs),
-                      "control_map_controls":28,"svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
+            "checks":{"palette_tokens":len(TOKENS),"required_controls":28,"control_map_controls":len(control_data.get("controls",{})) if control_map_path.is_file() else 0,"png_assets":len(pngs),
+                      "svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
