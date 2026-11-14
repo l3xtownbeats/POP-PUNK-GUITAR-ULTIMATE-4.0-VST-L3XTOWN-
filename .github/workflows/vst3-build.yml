@@ -332,25 +332,34 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          # Runtime skin payload is a sibling of VST3/, so both can be copied
-          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
+          # Runtime skin payload is registry-driven: preserve every registered skin,
+          # but do not ship unregistered historical folders such as Skin_01 beside
+          # its canonical replacement Skin_001. The runtime folder stays beside VST3/.
           $runtimeSkins = Join-Path $release 'Skins'
-          Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
-            Copy-Item -Destination $runtimeSkins -Recurse
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination $runtimeSkins
+          $sourceSkinRoot = Join-Path $env:PROJECT_DIR 'SKIN'
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'theme_manifest.json') -Destination $runtimeSkins
+          $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
+          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
+          $expectedSkinCount = [int]$skinRegistry.totalSkins
+          if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Skin registry totalSkins does not match its themes array.' }
+          $registeredPaths = @($skinRegistry.themes | ForEach-Object { [string]$_.path })
+          if (($registeredPaths | Select-Object -Unique).Count -ne $expectedSkinCount) { throw 'Skin registry contains duplicate runtime theme paths.' }
+          foreach ($themePath in $registeredPaths) {
+            $sourceManifest = Join-Path $sourceSkinRoot $themePath
+            if (-not (Test-Path -LiteralPath $sourceManifest)) { throw "Registered source skin manifest missing: $themePath" }
+            $sourceDirectory = Split-Path -Parent $sourceManifest
+            Copy-Item -LiteralPath $sourceDirectory -Destination $runtimeSkins -Recurse
+          }
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'theme.schema.json') -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination $runtimeSkins
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
-          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
+          Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
           Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
-
-          $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
-          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
           $expectedSkinCount = [int]$skinRegistry.totalSkins
           if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Skin registry totalSkins does not match its themes array.' }
           $skinManifests = Get-ChildItem $runtimeSkins -Recurse -File -Filter 'theme.json'
