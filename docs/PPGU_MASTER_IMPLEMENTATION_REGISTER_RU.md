@@ -401,3 +401,9 @@ Append-only rule: never silently rewrite history. Corrections and superseding de
 **Reason:** keep the active branch focused on files needed to build, test, design, audit and document the current product; do not carry unverified bundled sample archives or redundant snapshots into the active tree.  
 **Reference assets:** 38 original user visual references remain preserved in Library `/PPGU/REFERENCE_ASSETS/`; index at `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.  
 **Verification:** pending commit readback.
+
+## 19. Lawful downloading versus redistribution — user clarification (2026-11-14)
+
+Downloading is permitted when the source makes the material lawfully available and the download complies with its license/terms. Downloaded samples/libraries may be evaluated, auditioned, classified and used in development/testing only to the extent the license permits. This does **not** grant permission to redistribute or embed raw samples in the commercial plugin.
+
+Do not copy protected/commercial libraries, extract content from protected installers/formats, bypass DRM/paywalls/access controls, or bundle assets without explicit rights. For every candidate retain source URL, author, exact title/version, acquisition date, license evidence, allowed download/use/modify/redistribute/embed scope, required notices/attribution and SHA-256. Unknown terms => YELLOW/quarantine; RED => prohibited; GREEN => all required rights documented. Existing licensing and safety gates are unchanged.
