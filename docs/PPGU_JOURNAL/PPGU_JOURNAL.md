@@ -536,3 +536,27 @@ Status: APPROVED / DOCUMENTED / RESEARCH BASELINE. This entry does not claim imp
 - Release package: VST3, SAMPLES, FACTORY PRESETS, USER PRESETS SUPPORT, SKIN GALLERY, RESOURCES, LICENSES, DOCUMENTS, RU/EN manuals, SHA-256, COMPLETE ZIP/split parts. Module order and Windows 10 x64 / FL Studio 20 x64 unchanged.
 
 Документирование не означает реализацию. Текущие 300 JSON entries, 8 FX selector modules, 52-theme legacy registry и SettingsPanel skeleton остаются gap/audit items. Ни один пресет/эффект/скин не объявляется READY без code/runtime/test evidence.
+
+
+## 2026-11-14 — REV.18: remove Windows SAMPLES cap and verify split release artifacts
+
+**Decision applied:** the remaining Windows VST3 workflow and its SAMPLES audit no longer impose the obsolete 25 GiB preferred target or 30 GiB hard ceiling. SAMPLES payload size is now reporting-only. REV.18 content remains unlimited; GitHub transport is handled separately through deterministic archive splitting.
+
+**Implementation commits on main:**
+- `62b2091ba1061b20985f07470c55432e59730163` — added `tools/split_artifact.py`: sequential part names, ordered JSON manifest, per-part SHA-256, total size and whole-archive SHA-256, plus verification before publication.
+- `af21db6eb3dc7e41edddf5ed703e9f5ccfd715ab` — added splitter unit tests for ordering, manifest integrity, corruption and empty archives.
+- `0f5882f656788f78822defa4987ca54628a19138` — removed preferred/hard size-limit arguments and rejection logic from `tools/audit_soundbank.py`; audit now reports unlimited REV.18 policy.
+- `0a593e0754ce68c4720e174f465826954196b06b`, later refined by `f656f3d024c5af3fa80a8c9a07eab892b2ba38a0` — added deterministic regression coverage for the unlimited audit policy.
+- `55f9069c50ae0148b37367bf58bb2d0c8806d84a` — updated `.github/workflows/vst3-build.yml`: removed 25/30 GiB cap, changed final package directory naming to SAMPLES, runs policy/splitter tests, splits the complete release ZIP into 1,800 MiB transport parts and verifies the manifest before upload.
+- `7eb2e81424060c1ddb41907c5ad227bef797daca`, `0ed1fec49430cd8d9cee3b66cb57737ffc586d51`, `26babf584ce439662222c05f5a348a14e258c174` — updated Sound Hunter packaging to use the same ordered splitter, publish both manifest and SHA256 list, and trigger CI when the shared audit/splitter tooling or tests change.
+
+**Safety and integrity:**
+- Part size is a transport parameter only; it is not a cap on the SAMPLES library or complete package.
+- The JSON manifest records original archive name, part order, byte sizes, per-part hashes and the reconstructed whole-archive hash.
+- The verifier reads parts in manifest order and checks part hashes, total size and aggregate archive hash before artifact upload.
+- Existing source samples are not deleted, moved or overwritten by this change.
+- Sound Hunter remains additive; no C++ sampler, DSP, MIDI, APVTS, preset runtime or audio callback code changed.
+
+**Validation status:** code and workflow updates are committed on main. New CI runs must execute the added tests and packaging steps on the resulting exact HEAD before this revision can be marked CI-verified. The earlier successful Sound Hunter run `43589343860` predates the shared splitter changes and does not validate them. FL Studio 20 manual host acceptance remains separate and unverified.
+
+**Current main HEAD after this journal update:** the commit created by this append-only journal entry. No product release or runtime audio acceptance is claimed.
