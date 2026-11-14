@@ -2266,3 +2266,115 @@ Append-only documentation update on `work/rev17-full-reconciliation-2026-11-14`:
 - `SKIN/CONTROL_INVENTORY_MATRIX_RU.md`: commit `a89b103caeb236b0b62d6d6a8ab61153220bdba6`, blob `b64602d1ea80c1b74b060a0b9e531fd0e15bd0ca`.
 - `Info.txt` contains the full recovered requirements, browser workflows, reference hierarchy, inventory gaps and no-false-completion rules.
 - No production source or runtime behavior changed. No build/CTest/pluginval/host/package tests were run for these documentation commits.
+
+
+## 2026-11-14 — ПОВТОРНАЯ СВЕРКА ПЕРЕПИСКИ, ПРИОРИТЕТОВ И ПРОПУЩЕННЫХ ТРЕБОВАНИЙ
+
+**Тип:** append-only reconciliation / requirements governance.  
+**Ветка:** `work/rev17-full-reconciliation-2026-11-14`.  
+**Область:** доступная история обсуждений PPGU, текущие журналы/реестры и уже проведённые source-audit записи. Это не заявление о том, что каждый файл из каждого старого чата физически восстановлен.
+
+### A. Иерархия авторитетности и запрет конфликтного возврата
+
+1. Строгие правила SIGNAL FORGE v10 MASTER и более поздние прямые решения пользователя остаются обязательными. Более свежая явная правка пользователя имеет приоритет над более ранней формулировкой, mockup-подписью, README или старой спецификацией.
+2. Единственный журнал разработки — `Info.txt`. `CODE.txt` — append-only индекс фактических изменений исходного кода, а не второй журнал требований. `README.md` — описание продукта, не журнал решений. Спецификации и матрицы — нормативные reference-документы, но не самостоятельные журналы.
+3. Текущая рабочая база для этой сверки — REV.17 и указанный выше reconciliation branch. Исторические ветки/ZIP не являются основанием для перезаписи актуального дерева.
+4. Источник факта реализации — production source на конкретном SHA; тесты подтверждают только проверенный сценарий и SHA; host verification подтверждает только реально проверенный host/build. Спецификация, mockup, manifest, JSON preset definition и успешная загрузка VST3 сами по себе не подтверждают полную функцию.
+5. Не переносить назад устаревшие формулировки вроде «двух режимов всего», старого описания единственного фиксированного dark/magenta UI, старого числа тем или предположения, что любая показанная на вспомогательном макете кнопка уже утверждена. Такие записи сохраняются как история, но не переопределяют более свежие решения.
+
+### B. Визуальная иерархия — зафиксированная последняя правка
+
+- Первый ранее утверждённый макет главного интерфейса является каноническим источником внешнего вида, компоновки, геометрии, пропорций, блоков и расположения элементов управления.
+- `02 INTERFACE NEON STAGE AUTOCHORDS` является **только источником цветовой палитры**. Его нельзя трактовать как эталон внешнего вида, компоновки или расположения контролов. Палитра переносится на первый утверждённый макет.
+- SIGNAL FORGE — продуктовая идентичность/инженерный стандарт; NEON STAGE — утверждённое цветовое оформление/визуальная обработка, а не альтернативная геометрия.
+- Нельзя менять местами эти роли, выбирать иной макет как главный по догадке, переносить отдельные неподтверждённые виджеты из дополнительных концептов или удалять элементы ради упрощения.
+- Последующие skins меняют только разрешённые визуальные свойства. Layout, control IDs, control count, bindings, audio engine, DSP, sampler, MIDI, scheduler и поведение остаются общими.
+- Последняя зафиксированная skin-архитектура использует канонические SKIN manifests/ThemeManager/validator; сохраняются 21 token names, 27 controls + `sync_selector`, legacy split и preflight/PENDING validation. Не создавать параллельные theme systems и не переименовывать стабильные IDs. Числа из старых галерей/ZIP/manifest нельзя смешивать: 52, 102 и исторические концепт-подборки — разные снимки/реестры, пока не выполнена отдельная сверка происхождения и состава.
+- Сохранять утверждённые визуальные референсы и исходные файлы; не объявлять их архивированными в Git, пока байты, путь, SHA-256 и commit не проверены.
+
+### C. Главная панель и управление — объединённый контракт
+
+- Основные режимы продукта: MELODY / PATTERN / PUNK GROUP. Старое описание двух режимов не отменяет более позднее требование PUNK GROUP. При этом наличие переключателя/режима в спецификации не означает, что runtime-режим реализован.
+- Девять главных rotary остаются в текущем точном порядке и с неизменными APVTS IDs: `ampGain`, `eqHigh`, `eqMid`, `eqLow`, `velocity`, `dynamics`, `swing`, `humanize`, `accent`.
+- Семь главных FX bypass — строго: Compressor, EQ, Distortion, Chorus, Delay, Reverb, Cabinet. Flanger не добавляет восьмой bypass. В FX EDIT остаются восемь страниц: Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR.
+- Сохраняются AMP & TONE, pitch/modulation, on-screen MIDI keyboard, performance/status strip, утверждённые header/browser элементы и доступ к ним. AutoChords и вспомогательные окна не должны перекрывать основную клавиатуру.
+- Каждый реально активный контрол обязан иметь настоящую привязку к параметру/действию, корректный диапазон и значение, tooltip/help, focus/keyboard semantics, state/persistence/automation/reset там, где применимо, и честные loading/empty/error/disabled состояния. Не добавлять декоративные knobs, fake LEDs/meters, фиктивную телеметрию или кнопки без backend.
+- Существующие APVTS IDs и семантика не переименовываются и не меняются ради макета. Не удалять рабочие функции движка и не заменять реализацию визуальной имитацией.
+
+### D. Preset Browser — дополнения к уже записанному контракту
+
+- Preset Browser отвечает за выбор **звука/инструмента/тона**, а не за выбор ритмического рисунка. Он отделён от Pattern Browser и Sample/Library browser.
+- Обязательные представления: BROWSER, FAVORITES, CATEGORIES; factory и user scope разделены. Фабричные записи защищены от изменения/удаления, пользовательские — управляемы пользователем.
+- Категории звука: Clean, Crunch, Drive, Lead, Ambient, Lo-Fi, Acoustic Textures, Punk Rhythm. Artist/style, guitar/profile, tone, articulation и use-case tags могут дополнять классификацию; они не заменяют категории и должны быть основаны на достоверных метаданных.
+- Search, category/tag filters, sort, folder/scope и counts меняют только список/порядок/видимость. Они не должны загружать звук, менять текущий preset, активный Pattern или параметры DSP.
+- Карточка/детали показывают только подтверждённые поля: имя, категория, style/tags, короткое описание, artwork, instrument/sample profile, доступные артикуляции и предупреждение о недостающих ресурсах. Никаких выдуманных сведений о гитаре/сэмплах.
+- Previous/Next работают в текущей области/результатах детерминированно. Favourite меняет только отдельное пользовательское состояние избранного и не редактирует factory preset.
+- Preview — безопасное предварительное прослушивание реального материала, без commit активного пресета. Если валидного preview asset/path нет — явно показать unavailable.
+- Load/double-click — единственное явное подтверждение загрузки выбранного тона; применяется целостная preset transaction: профиль инструмента/сэмплов, режим, key/velocity/articulation mapping, tone/amp/FX и совместимое состояние параметров. Не подменять отсутствующие ресурсы чужими звуками.
+- User actions: Save, Save As, Rename, Delete; bank actions: Import, Export, Rescan. Проверять схему, пути, происхождение и права; подтверждать destructive delete; не перезаписывать factory. Пользовательские данные должны переживать рестарт и обновление.
+- Смена preset должна иметь проверенную безопасную политику для звучащих voice, note-off, snapshots, streaming, host transport и APVTS migration. UI не должен блокировать audio callback.
+- Style-based FX defaults допустимы при явной загрузке пресета; поздние ручные FX edits не должны молча сбрасываться фоновым обновлением списка/preview.
+- Цель 300 factory entries = 150 MELODY + 150 PATTERN. Это целевой объём definitions, не доказательство 300 playable presets. Отдельно учитывать реально загружаемые записи, asset coverage и проверенные playable presets.
+
+### E. Pattern Browser — уточнение независимого workflow
+
+- Pattern Browser — библиотека **исполнений/ритмических рисунков**, не библиотека тембров и не список factory sound presets.
+- Обязательный порядок: выбрать Song Section (Intro / Verse / Chorus / Bridge / Outro; neutral/general — только если предусмотрено) → выбрать Pattern → Preview → Apply либо Back/Cancel.
+- Song Section и Pattern — независимые поля. Смена секции задаёт музыкальный контекст и набор подходящих рисунков, но сама по себе не должна незаметно подменять выбранный тон, гармонию, articulation или playback/rhythm mode.
+- Карточка рисунка должна показывать только реальные данные: назначение/секция, feel, bars/duration, time signature, tempo range, supported articulation/techniques, playback mode и наличие требуемых performance maps/recordings.
+- Семейства рисунков, обсуждавшиеся как продуктовая область: downstroke, upstroke, alternate down/up, palm-muted eighths/sixteenths, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio/picking, acoustic strum/picking, dynamic build. Нельзя показывать/активировать технику, для которой нет соответствующих performance events/записей.
+- Preview использует тот же реальный playback/sampler path и actual performance map/one-shot; он не меняет committed section/pattern, harmony, preset, host transport или проектное состояние.
+- Apply явно фиксирует выбранную пару section/pattern; Back/Cancel откатывает временный выбор к последнему committed state. Preview не является Apply.
+- Временная модель должна учитывать host tempo/transport/seek/loop, bar boundary, rests, accents, gate/note-off, chord transitions без phase reset, half/double time, swing/humanize и отсутствие stuck notes.
+- Синтетические заглушки, случайные MIDI-маски и обычный sustained chord не считаются полноценной библиотекой гитарных Pattern performances.
+
+### F. AutoChords — независимые уровни выбора
+
+- AutoChords — отдельная вспомогательная поверхность, не замена Pattern Browser и не перекрытие основной клавиатуры.
+- Верхняя harmonic strip показывает фактические chord names/scale degrees; слева Playing Styles/Articulation; справа независимые Playback Mode и Rhythm Mode; нижняя широкая зона — Pattern Browser.
+- Harmony/key/progression, style/articulation, Pattern, Playback Mode и Rhythm Mode — независимые параметры. Изменение одного не должно молча сбрасывать остальные.
+- Сохраняются обсуждённые Circle of Fifths (12 major keys + relative minor; clockwise fifths/counter-clockwise fourths), key/scale/chord quality, progression manager/templates/reorder/variation и Generation Manager с deterministic seed, constraints, preview и explicit commit.
+- Генерация не должна перезаписывать исходную пользовательскую последовательность до явного commit. Preview не коммитит.
+- Chord names, degrees, fretboard/fingering/voicing и articulation показывать только при наличии корректных harmony/performance maps. Никаких выдуманных аппликатур.
+- Audition использует общий существующий sampler/audio path; отдельный фальшивый synth/sample bank запрещён.
+
+### G. FX EDIT, AMP & TONE и вспомогательные окна
+
+- У каждого FX — собственный профессиональный характер интерфейса и реальные характерные настройки; визуальное различие не означает разные DSP, если их нет в source.
+- FX EDIT: Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR. Главная панель сохраняет ровно семь bypass-переключателей.
+- Preset может загрузить подходящую style-based FX chain, но пользовательские последующие ручные правки не сбрасываются без явного повторного Load.
+- AMP & TONE должен показывать только реальные модели/профили и параметры. Нельзя выдавать generic EQ за полноценную модель усилителя.
+- Вспомогательные поверхности, подтверждённые как область проекта: FX EDIT, AUTOCHORDS, IMPORT GUITAR, AUTO DISCOVER/SOUND HUNTER, CURATOR, SETTINGS, PERFORMANCE, SKIN GALLERY, ABOUT, а также предусмотренные прежним workflow Preset Manager/Sample Browser. Наличие в списке требований не доказывает production implementation.
+- Каждая реализованная панель наследует активный skin, имеет title/close X, управляемый lifecycle/focus/restore и не ломает main editor. Масштабирование/раскладка/зазоры не должны закрывать доступ к клавиатуре и контролам.
+- SETTINGS/PERFORMANCE показывают только реальные данные; никакой фиктивной CPU/RAM/BPM/transport activity.
+- IMPORT GUITAR: drag-and-drop и Browse, форматы, scan/metadata/validation, preview, progress/error, mapping и explicit commit. Файловый I/O и анализ вне audio callback; исходники не изменять; импорт транзакционный.
+- SOUND HUNTER/AUTO DISCOVER/CURATOR: provenance, exact license evidence, SHA-256, technical quality, guitar-content gate и human review там, где требуется. Discovery не даёт права на redistribution; несовместимый/неясный license не включается в пакет.
+
+### H. Skins / галерея — строгая совместимость с более свежими решениями
+
+- Не создавать альтернативную skin-систему, параллельные manifests или второй ThemeManager. Канонические источники — текущие SKIN manifests, ThemeManager, validator и утверждённая control schema.
+- Сохранять точный контракт 21 token names, 27 controls + `sync_selector`, legacy split, preflight/PENDING и стабильные идентификаторы. Любое расхождение сначала фиксировать как gap, не «чинить» удалением/переименованием.
+- Визуальные skins не меняют layout, количество/порядок контролов, IDs, attachments, DSP, sampler, MIDI, scheduler или state semantics.
+- Gallery preview должен быть non-committing; Apply — explicit commit; Back/Cancel — rollback; favorites/search/filter/navigation/persistence реализуются только в пределах утверждённого контракта. Текущий source audit ранее обнаружил immediate-apply по click и отсутствие полного Preview/Apply/Back/Favorites flow — это gap, не завершённая функция.
+- Количество themes из старых ZIP/веток/manifest snapshots не является единой цифрой. Текущие канонические registry данные и происхождение каждого theme должны быть проверены до любых заявлений о количестве runtime-ready skins.
+
+### I. Статусная дисциплина и уже известные implementation gaps
+
+- В текущем REV.17 source audit записано: Pattern runtime имеет один global `patternSlot` и восемь rhythm masks; полноценный section-first UX и независимый Pattern Browser workflow не реализованы.
+- Gallery click немедленно применяет skin; полноценный draft Preview/Apply/Back/Favorites flow отсутствует.
+- OverlayManager и SecureSkinImport из загруженного старого ZIP отсутствуют в live REV.17; ZIP устарел и не является основанием копировать дерево. В ZIP-копии найдены дефекты OverlayManager close без Listener и обходы SVG policy (mixed-case event attribute, protocol-relative URI); не переносить до исправления и повторных негативных тестов.
+- Sound Hunter validator/tests и пустой registry не означают наличие production discovery/curation pipeline или одобренных assets. Approved sound assets = 0 по последней записанной сверке.
+- FL Studio 20: учитывать только пользовательское подтверждение успешного открытия/работы VST3 как host smoke-test milestone. Не расширять его до подтверждения Pattern, sampler completeness, FX, long-session stability или release package.
+- Исторический CI PASS остаётся привязан к своему exact SHA. Текущий reconciliation branch не получает автоматического статуса PASS.
+- Все функции маркировать отдельно: APPROVED/DESIGNED, SOURCE PRESENT, WIRED, TESTED, HOST VERIFIED, RELEASED. Никаких переходов между статусами по наличию макета/кнопки/manifest.
+- Универсальный цикл остаётся обязательным: ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ.
+- Приоритеты не меняются: безопасность → realtime guarantees → звук → ресурсы → UX. Не делать файловый/сетевой I/O, блокировки, неограниченные allocations или GUI work в audio callback.
+
+### J. Что именно обновлено этой записью
+
+Сведены в одну непротиворечивую запись утверждённые требования к главной панели, preset browser, Pattern Browser, AutoChords, FX, auxiliary windows, skin architecture, визуальным референсам и статусной дисциплине. Более ранние/конфликтующие записи не удалены; эта запись задаёт явную supersession/precedence карту. Неутверждённые детали и implementation gaps оставлены как OPEN/PENDING.
+
+**Изменения production source:** НЕТ.  
+**APVTS IDs / DSP / sampler / MIDI / scheduler / assets:** НЕ ИЗМЕНЯЛИСЬ.  
+**Build / CTest / pluginval / host / package:** НЕ ЗАПУСКАЛИСЬ для этой документационной сверки.  
+**Архивация исторических изображений/файлов:** НЕ ЗАЯВЛЯЕТСЯ завершённой; recovery, source-context mapping, per-file SHA-256 и commit остаются OPEN.
