@@ -1518,3 +1518,161 @@ No Zone F production UI code has yet been changed in this checkpoint. The next a
 **ПОВТОРНЫЙ АНАЛИЗ:** Stage 2 разбит на 2A inventory/import core, 2B classification/organization, 2C Mapping Editor/Preview, 2D Conversion Workbench, 2E verification. Подробные критерии приёмки добавлены в отдельный документ.
 
 **РЕЗУЛЬТАТ:** REQUIREMENT AND TECHNICAL SPECIFICATION COMMITTED. В этой документационной операции WAV не скачивались и не изменялись; импортёр, редактор и конвертер ещё не реализованы и не протестированы. Следующий production шаг — Stage 2A: аудит существующих Sampler API и реализация append-only inventory/import core.
+
+
+==============================================================================
+2026-11-14 — ПОЛНАЯ СВЕРКА ПРЕДЫДУЩИХ ОБСУЖДЕНИЙ: PRODUCT / FEATURES / NEON STAGE
+==============================================================================
+
+Тип записи: документационная консолидация пользовательских решений и требований.
+Ветка канонической разработки: `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`.
+Исходные журнальные blobs перед записью:
+- Info.txt: `0b6501c12eddbfb8ad0919bc4ba62463d01d2047`
+- CODE.txt: `318826a036dce693b444ffd487ea33ffaa8e529f`
+Production source: НЕ ИЗМЕНЯЛСЯ этой записью.
+Build / CTest / pluginval / FL Studio 20: НЕ ЗАПУСКАЛИСЬ этой записью.
+Статус: REQUIREMENTS AND DECISIONS CONSOLIDATED; implementation status remains per source/test evidence.
+
+Основание сверки: доступная история текущих и предыдущих диалогов, сохранённые решения проекта, полный экспорт PPGU_FULL_WORK_TEXT_FINAL.txt, существующий Info/CODE, MASTER PRODUCT SPEC 4.0, PPGU MASTER SPEC PACKAGE REV.17, SIGNAL FORGE / Skin Studio contracts, import/library specification, progress reports и ранее утверждённые визуальные референсы. Эта запись дополняет журнал и не заменяет прежние записи/спецификации.
+
+## 1. Продуктовая идентичность и главная цель
+
+POP PUNK GUITAR ULTIMATE — sample-based VST3-инструмент для Windows x64, целевая DAW для обязательной host-приёмки — FL Studio 20. Основная музыкальная область: pop-punk, skate-punk, melodic punk, emo, alternative rock и близкие гитарные стили. Цель — playable guitar instrument с быстрым стартом, малой измеряемой нагрузкой, немедленной MIDI-реакцией, качественными естественными гитарными записями и понятным управлением.
+
+Приоритеты проекта: безопасность и корректность данных → realtime/audio-thread guarantees → качество звука → память/CPU/ресурсы → UX. Session Guitarist / Electric Sunburst Deluxe и Kontakt используются только как ориентиры удобства, организации инструмента и игровых сценариев. Не копировать их код, UI assets, записи, закрытые библиотеки или коммерческие пресеты.
+
+Характер звучания: плотные palm-mutes, яркие открытые power chords, энергичные rhythm guitars, clean/crunch/drive/high-gain, picked parts, octave hooks, arpeggios, акустические/nylon текстуры и реальные performance articulations. Ориентиры по стилю: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest (в т.ч. Photographs, 2005), Angels & Airwaves, The All-American Rejects, MGK, поздний поп-панк период Avril Lavigne; ранее также обсуждались The Offspring, Green Day, Bowling for Soup, Sugarcult и All Time Low. Это музыкальные ориентиры, не обещание точных копий артистов и не разрешение использовать чужие записи.
+
+## 2. Утверждённая главная визуальная тема — SIGNAL FORGE / NEON STAGE
+
+Каноническое направление главного интерфейса: SIGNAL FORGE / NEON STAGE; визуальная референсная оболочка — DREAMING IN NEON / NEON PUNK. Эти обозначения описывают одну основную фирменную визуальную линию в разных документах/этапах, а не разрешение заменить утверждённые макеты другим skin.
+
+Пользователь подтвердил комплект графических референсов из ветки `ui/modern-neon-stage-shell` («Это оно»). Комплект содержит три уникальных PNG:
+- `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png` — blob `d144dac0314d767c9bd07507675a221b54ad4c38`;
+- `f463fdae-275c-47c2-96fa-e7dddbb3695f.png` — blob `25818b7431c4fc2c7cf9d12ed860d935551fd336`;
+- `5675b332-eb7a-4dca-85fb-873a9682a349 (1).png` — blob `2092de6a631b74e980e53572776c38d51595c7c0` (второй файл с тем же blob — byte-identical duplicate).
+Роли: главное окно, AutoChords overlay, FX EDIT + AutoChords одновременно. Сами оригиналы не переименовывать, не заменять и не перерисовывать. Точное сопоставление имени файла с каждой из трёх ролей фиксировать по визуальной сверке, а не по догадке. `Cover Interface.jpg` не считать автоматически одним из этих трёх эталонов.
+
+Обязательные визуальные свойства:
+- тёмное чёрно-графитовое / dark-metal основание, аккуратные machined-metal поверхности и глубина;
+- электрические neon-blue / cyan контуры, подсветка и signal accents; цветовые акценты дозированные, не превращать всю поверхность в равномерно светящуюся заливку;
+- glass-like overlays, контролируемое свечение, тонкие световые линии/разделители, выразительные панели и читаемая иерархия;
+- punk paint splashes / textured graphic details и фирменный PPGU crown / monogram;
+- чёткая высококонтрастная типографика, профессиональные rotary knobs, переключатели и LED-индикация;
+- композиция, размеры/пропорции зон, отступы, слои, иконки, подписи и общий характер должны следовать трём утверждённым макетам;
+- главный экран должен выглядеть как законченный профессиональный guitar instrument / stage console, а не как набор разрозненных стандартных JUCE widgets.
+
+Правило: NEON — главный default/reference. Не заменять его Blackout Voltage, Carbon Relay, случайным Skin Studio artwork или новым произвольным layout. Не переделывать утверждённый shell ради удобства галереи. Другие темы меняют только visual layer: materials, palette, typography, textures и artwork; структура, control inventory и функции остаются общими.
+
+## 3. Основная продуктовая функциональность и игровые режимы
+
+### 3.1 MELODY
+- Хроматическая playable-карта: каждая MIDI-клавиша запускает соответствующую отдельную ноту гитары, а не заранее записанную фразу.
+- Корректные root key/key range, string/fret zones, транспонирование, velocity response, note-on/off, sustain и перекрывающиеся ноты.
+- Электрические и акустические/nylon профили; velocity layers, round-robin и release/sustain — когда исходный материал их реально содержит.
+- Open/picked, palm mute, dead/muted, chug, harmonic, slide, legato, hammer-on/pull-off — только при наличии подходящих записей и валидной mapping; не подменять отсутствующую артикуляцию фильтром/EQ и не заявлять её активной без материала.
+- Пользовательское требование: снижение velocity должно уметь запускать/усиливать palm-mute articulation по заданному и проверяемому правилу; velocity не должна бездумно ломать акустический MIDI stream.
+- Настраиваемая полифония/Voices, верхняя граница voices, предсказуемый click-safe voice stealing.
+
+### 3.2 PATTERN
+- Клавиши имеют chord-map назначение: клавиша выбирает аккорд/voicing и запускает связанный ритмический guitar performance, а не одиночную ноту.
+- Pattern реагирует на смену аккорда, tempo/transport, note-off/gate, начало/остановку, velocity/accent и humanization без зависших нот и сбоев синхронизации.
+- Исполнительские направления: downstroke/upstroke/alternate picking; open strums; tight palm-muted rhythms; dead/muted/percussive strokes; power-chord rhythms/riffs; chugs; skank/offbeat upstrokes; straight eighths; gallop; stop-time/stop-start; half-time; double-stops; octave hooks; muted-string scratches; arpeggios/picking; акустические strums и переборы; контраст palm-muted verse / open chorus; endings/fills/transitions.
+- Эти названия являются требованиями к реальным articulation/performance maps и записям. Случайная MIDI-фраза, один удерживаемый аккорд, синтетический pad или нерелевантный loop не являются полноценной заменой Pattern guitar performance.
+- Уже согласованная Zone F — центральная логическая полоса PATTERN/STRUMMER/GROOVE, не четвёртая внешняя колонка. Из существующих IDs: `patternSlot` (1–8), `patternLength` (1/2/4 bars), `syncMode` (Host / Host Start / Internal), `bpm`, `startOnFirstChord`. BPM редактируется только в Internal; Host tempo — read-only из transport. Pattern-only controls выключены в MELODY. Swing/Humanize/Accent остаются в основной девяти-knob matrix, не дублируются.
+- Расширенные поля `swingBase`, `patternQuantize`, `preserveHumanTiming`, `articulation`, `pickStyle`, `endingLength`, `palmHitOnEnding`, `stringSlapOnEnding` не объявлять рабочими, пока нет реальной APVTS/runtime binding и scheduler behavior.
+
+### 3.3 PUNK GROUP
+Третий режим обсуждался как часть продуктовой концепции, но по журналу/контрактам его полноценная runtime-функция не подтверждена. До завершения engine, mapping и host tests показывать disabled / In development; не имитировать активный режим.
+
+### 3.4 AUTOCHORDS / HARMONY / GENERATION
+Требования включают AutoChords с Major/Minor/Custom, Key, Pattern, вычислением текущего аккорда и аппликатуры, progression controls, loop state, Chord Info и Reset. Tempo берётся из host transport. ON, Preview, Sync to Tempo, Smart Transpose не включать как рабочие функции до реальной интеграции.
+Отдельно утверждены внутренние инструменты:
+- Circle of Fifths: 12 major keys и relative minors, связи по квинтам/кварта́м, подсветка и синхронизация harmony context;
+- Harmony Manager: major/natural minor diatonic harmony, Roman numerals, chord quality, создание/перестановка/прослушивание прогрессий и pop-punk templates;
+- Generation Manager: создание progression/voicing variants с constraints и воспроизводимым seed, preview до commit.
+Все эти инструменты должны переиспользовать существующие harmony/MIDI/preset/ANGELA ENGINE/shared sampler механизмы, не создавать параллельные движки, не менять активный режим/пресет без явного действия пользователя и работать вне audio callback.
+Обязательное UI-правило пользователя: AutoChords display не должен закрывать или перехватывать экранную MIDI-клавиатуру. Клавиши должны оставаться видимыми и интерактивными при любом размере/режиме окон.
+
+## 4. Управление, панели и контрольная поверхность
+
+В утверждённой системе интерфейса отражать только реальные элементы:
+- header/brand: PPGU logo/crown, previous/next preset, favorites, preset name/genre metadata, search, SKIN, Import Guitar;
+- browser: Browser/Favorites/Categories, поиск, реальные счётчики, metadata cards; заводские пресеты read-only, пользовательские — save/save as/rename/delete/import/export/rescan по мере реальной реализации;
+- центральная рабочая область: Melody/Pattern, chord/pattern workflow и согласованные центральные controls;
+- девять ручек варианта A: ampGain=VOLUME, eqLow=BASS, eqMid=MID, eqHigh=TREBLE, velocity, dynamics, swing, humanize, accent; не создавать дублирующие APVTS IDs;
+- AMP & TONE: Gain/Bass/Treble на существующих параметрах; модель усилителя/кабинета не показывать активной без реального параметра и DSP;
+- FX Chain: LED и bypass должны отражать фактическое состояние соответствующих DSP параметров; FX EDIT открывает реальные страницы параметров;
+- MIDI keyboard: диапазон 36–84 в согласованном shell, подсветка только от настоящего MIDI state; PITCH/MOD — отдельный этап, не декоративная фиктивная активность;
+- status/footer: BPM, MIDI Omni, SYNC, CPU, Licensed и meters только из реальных источников/atomic read-only taps. dBFS meter не рисовать как работающий до post-FX tap.
+- FX EDIT, AutoChords, Import Guitar, Settings, Performance и прочие вспомогательные панели должны использовать утверждённую overlay/workspace/window architecture и единые theme tokens. Не добавлять отдельные окна/кнопки только ради визуального заполнения.
+
+FX/DSP scope, обсуждавшийся в проекте: Distortion, Chorus, Delay, Reverb, Compressor, Limiter, Flanger/Flanger Power, EQ, Cabinet IR, AMP & TONE, Master/output и согласованный routing. Существующие APVTS IDs включают `fxDistortion`, `fxChorus`, `fxDelay`, `fxReverb`, `fxCompressor`, `fxLimiter`, `fxCabSim`, `fxFlangerPower`; наличие ID само по себе не подтверждает DSP completeness. В спецификациях есть различие между семью bypass switches и восемью FX pages; требуется сверить актуальный processor/editor inventory и не добавлять восьмой switch по догадке. Проверить wet/dry, routing, automation, latency/tail, bypass clicks, stereo, clipping, CPU и совместимость с акустическими/palm-muted профилями.
+
+## 5. Sampler, SoundBank, import и библиотеки
+
+- Расширять существующие SamplePool / SampleMetadataIndex / SampleStreamingService / PageCacheSlots / StreamingVoiceReader / WavPageReader / SfzParser. Запрещено создавать второй sampler или дублирующий library pipeline.
+- SFZ/WAV playback: key/root ranges, velocity layers, channel/key mapping, round robin, loop points, relative paths, sample rate/channels и поддерживаемые articulation triggers. Полная SFZ 2.0 совместимость не заявляется без отдельного тестового покрытия.
+- Приоритетные натуральные библиотеки: Meta Open Sound Steel Guitar и Nylon Guitar; FreePats electric clean/distorted/jazz/direct и Spanish Classical; Karoryfer Black And Green, Emilyguitar, Shinyguitar и другие подтверждённые guitar-only banks. Конкретная версия/архив/лицензия/SHA обязательны на уровне asset.
+- Только гитарный материал в Guitar SoundBank: electric/acoustic, clean/crunch/drive/high-gain, riffs, chord performances, rhythm patterns, palm-mute, arpeggios, guitar loops/fills/transitions, one-shots, stems и guitar textures. Drum-only, bass-only, vocals и полные song mixes не добавлять в guitar bank.
+- Natural samples only: не поставлять синтезированное звучание как будто это записанная гитара. Допустимые лицензии проверять для конкретного файла/архива; сохранять LICENSE/NOTICE, attribution, provenance, source version и SHA-256. Отсутствие запрета не означает право redistributing/embedding. GREEN/CC0/PD допускает AUTO ADD только при полном policy gate; YELLOW — ручная проверка; RED — исключить; GOLD — обязательное человеческое прослушивание.
+- Import Guitar / Library Workbench Stage 2: одиночные WAV, папки, ZIP и SFZ; inventory до записи; hash duplicate detection; collisions; safe extraction; Unsorted/Needs Mapping; Auto Map + manual Mapping Editor; preview; key/velocity/articulation/RR metadata; non-destructive WAV PCM16/24/Float32 и FLAC conversion; dry-run, cancellation, undo/history, staging, atomic publish.
+- APPEND ONLY: не перекачивать уже имеющиеся файлы без причины, не перезаписывать/переименовывать/удалять originals, не конвертировать source in place. Derived copies и metadata revisions отдельны.
+- Все I/O, parsing, hashing, decoding, preview, extraction, conversion и indexing — вне processBlock. Bounded queues/cache/RAM; audio callback не делает disk I/O, allocation, blocking locks или waits.
+
+## 6. Presets и музыкальные направления
+
+Требование продукта: 300 factory preset definitions с Melody/Pattern ориентацией (в базовой спецификации цель — 150/150), быстрый preset browser, категории/теги/поиск/favorites, previous/next, metadata, audition там, где применимо. Пользовательские пресеты: Save, Save As, Rename, Delete, Import/Export Bank и rescan с сохранением backward compatibility. Каталог из 300 определений существует в истории проекта, но число полностью playable presets нельзя выводить из количества JSON/CSV строк: каждый preset требует проверки schema, ID, sample profile, mapping, ranges, articulation, FX routing, state restore и фактического звука.
+Зафиксированные категории в 4.0 report: Classic Pop Punk, Modern Pop Punk, Emo Alternative, Acoustic, Ambient Clean, Punk Rock, Melodic Hard Pop Punk, Technical Pop Punk, Hybrid, Lead and Octaves (10×30). Это организация каталога, а не доказательство 300 уникальных записанных библиотек. Artist names не использовать как официальные factory preset categories; sound design presets должны быть оригинальными.
+
+## 7. Производительность и voice management
+
+Обязательные цели: быстрый cold start; быстрый preset/library switching; низкая измеряемая CPU/RAM; предсказуемая полифония и voice stealing; streaming без underruns; bounded memory/cache; понятные Quality/ECO режимы только если они реально влияют на качество/нагрузку.
+Пользователь отдельно просил реальный control количества Voices/Polyphony и поддержку multiprocessing. Эти требования сохраняются, но multiprocessing нельзя изображать фиктивным переключателем: допускается только безопасная измеренная параллельная работа на подготовительных/не realtime задачах или корректно спроектированных DSP stages. Нельзя создавать конкуренцию потоков/locks в processBlock или ухудшать realtime guarantees. Измерять cold/warm startup, preset switch p95, first-note latency, voices stress, cache pressure, worker recovery, CPU/RAM, underruns/glitches на описанной системе.
+
+## 8. Skin Gallery / коллекции тем
+
+Утверждено:
+- NEON / DREAMING IN NEON остаётся главным визуальным эталоном и стартовой темой; Blackout Voltage и остальные существующие темы сохраняются как selectable variants, не удаляются.
+- Общий control/layout contract для тем: темы меняют только оформление, не функциональную геометрию/назначения, APVTS, MIDI, presets, sampler, DSP или processor state.
+- Gallery должна открываться существующей SKIN кнопкой и Ctrl+K.
+- Полноценная галерея: визуальные cards с preview, name/family/selected state, крупный hero preview, metadata, поиск, family filters, favorites, keyboard navigation, scroll/resize, loading/error states.
+- Preview — временный и не сохраняет preference; Apply — явное подтверждение и persistence только после успешной загрузки; Back — возврат к исходной теме без записи.
+- Hot switch без перезапуска; background discovery/rescan с debounce; invalid theme не должна ломать активную тему/звук; path containment и safe asset decoding.
+- Общий набор тем не должен иметь жёсткий лимит, но память decoded assets/cache должна быть bounded.
+- Сохранять все существующие theme IDs/manifests/artwork и объединять, а не генерировать дубликаты.
+
+Исторически обсуждались initial five skins (NEON PUNK, BLACK METAL, CYBER BLUE, DARK INDUSTRIAL, CLASSIC STUDIO), комплект 16 тем (NEON + 15 альтернатив) и расширенный Skin Studio registry (в отдельных ветках/ревизиях 52/102 entries). Это разные этапы/ветки каталога, не взаимозаменяемые количества. Перед merge считать фактический canonical registry и проверять все уникальные IDs/assets. Варианты названий из ранних макетов (Blackout Voltage, Dark Chrome, Cyber Punk, Vintage Amp, Stage Lights, Classic Rock, Punk Riot, Electric Blue, Blood Red, Purple Haze, Arctic Ice, Sunset Drive, Military Grade, Carbon Fiber, White Studio и другие) сохранять как исторические theme directions; не переименовывать существующие IDs без миграции.
+
+Обнаруженное упущение/противоречие: в ветке `work/neon-gallery-16-skins` popup selector, registry и palette runtime существуют, но это не полная Gallery; отсутствуют cards/hero preview/search/family filters/favorites/Preview-Apply-Back. В том branch snapshot manifest/code default указывал `skin-51 / Blackout Voltage`, тогда как REV.17 canonical journal/registry contract фиксировал SIGNAL FORGE `skin-052` default. Не устранять это расхождение вслепую: сравнить branch ancestry, registry, ThemeManager, approved mockups и тесты; сохранить Blackout Voltage как theme, исправить только canonical default после проверки. Также ранее зафиксированный 16-theme design document содержит другой набор имен/базовую схему; reconcile с REV.17 canonical registry, не создавать второй catalog.
+
+## 9. Принятые технические и организационные ограничения
+
+- JUCE/C++20, Windows x64, VST3; pinned JUCE/CMake versions брать из текущего canonical build contract, не повышать их самовольно.
+- APVTS IDs/semantics и state backward compatibility сохранять; UI/skin изменения не должны менять звук или processor state.
+- Audio thread: no file I/O, allocation, blocking locks, waits, GUI calls, logging или decoding.
+- Нереализованные элементы — disabled / honest status, никаких фальшивых кнопок, LED, meters, Auto Discover, Curator, About, Settings actions или декоративных активных контролов.
+- Сохранять существующие решения и код; не создавать параллельные sampler/engine/preset catalog/gallery/control schema.
+- Любая работа: ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ. Перед изменением — аудит всех релевантных веток, commit history, source, resources, docs, tests и artifacts. Готовое/почти готовое не переделывать; объединять, затем закрывать только реальные пробелы.
+- Журнал INFO — единственная append-only chronology/status ledger; CODE — append-only code/change index. Исправлять устаревшие факты только dated Correction/Supersedes записью, не переписывать историю.
+- Статусы DESIGNED / SOURCE PRESENT / INTEGRATED / TESTED / HOST VERIFIED / RELEASED различать. Наличие макета, manifest, parameter ID или документа не равно реализации. Любой PASS относится только к точному SHA.
+- Никакой release/build/host acceptance без exact-SHA Windows Release, full CTest, pluginval strictness 5, package audit/checksum и отдельной ручной проверки FL Studio 20.
+
+## 10. Список выявленных пробелов для дальнейшего закрытия (не считать новыми утверждёнными функциями)
+
+1. Визуальная сверка трёх DREAMING IN NEON assets с точными ролями Main / AutoChords / FX EDIT+AutoChords и сохранение immutable originals.
+2. Единая reconciliation таблица theme IDs/registry/default across REV.17, work/neon-gallery branch и Skin Studio (52/102); default SIGNAL FORGE, Blackout Voltage сохранён.
+3. Полная runtime Skin Gallery поверх существующего ThemeManager: cards, hero, search, filters, favorites, Preview/Apply/Back, persistence, error/fallback, keyboard navigation.
+4. 21-token parity для всех существующих компонентов и auxiliary panels; убрать функциональные hard-coded colors; artwork-only colors отличать от control colors.
+5. Проверить overlay/window policy и AutoChords non-obstruction of keyboard, resize/DPI, focus/tiling.
+6. Pattern end-to-end: scheduler, chord maps, real strum/performance recordings, articulation mapping, note transitions, host sync, gate/ending/fills, velocity/accent/humanize.
+7. AutoChords backend/preview/ON/Sync/Smart Transpose; Circle of Fifths, Harmony Manager, Generation Manager runtime and deterministic tests.
+8. FX: reconcile 7 bypass switches vs 8 parameter IDs/pages; DSP routing, automation, IR loading and quality tests.
+9. Guitar import Stage 2A–2E, append-only inventory, mappings, preview, conversion and safe publishing.
+10. Preset audit: 300 definitions vs actual playable count; validate 150/150 intent against current 10×30 catalog, profiles, articulations and state.
+11. Voices/polyphony control and true multiprocessing strategy; measure CPU/RAM and realtime behavior.
+12. SoundBank legal provenance, asset hashes, sample payload package parity and natural-guitar listening/quality validation.
+13. Final exact-SHA Windows build, CTest, pluginval, package and FL Studio 20 manual acceptance; performance/stress and long-session tests.
+
+**Итог:** этот раздел фиксирует собранные требования и решения из доступной истории/экспорта. Он не объявляет перечисленные функции реализованными. Для дальнейшей разработки сначала проверять текущий код и ветки; не повторять уже выполненное и не подменять отсутствующую функцию макетом.
+
