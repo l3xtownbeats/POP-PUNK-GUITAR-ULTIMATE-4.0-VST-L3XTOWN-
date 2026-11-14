@@ -36,7 +36,7 @@ jobs:
             --prefix PPGU_REAL_GUITAR_SAMPLES \
             --part-size-mb 1800
           python3 tools/split_artifact.py verify \
-            --manifest "$RUNNER_TEMP/PPGU_REAL_GUITAR_PPGU_REAL_GUITAR_SAMPLES_PARTS_MANIFEST.json"
+            --manifest "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES_PARTS_MANIFEST.json"
           cp Samples/SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
           rm -f "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip"
       - name: Upload verified sample library
@@ -46,6 +46,7 @@ jobs:
           path: |
             ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.part-*
             ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES_PARTS_SHA256SUMS.txt
+            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES_PARTS_MANIFEST.json
             ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
           if-no-files-found: error
           retention-days: 30
