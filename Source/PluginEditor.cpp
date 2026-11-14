@@ -1505,7 +1505,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
     if (registryFile.existsAsFile())
     {
         const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
-        const auto* themes = registry.getProperty("themes", juce::var()).getArray();
+        const auto themesValue = registry.getProperty("themes", juce::var());
+        const auto* themes = themesValue.getArray();
         if (themes != nullptr)
         {
             const auto defaultId = registry.getProperty("defaultSkin", "skin-053").toString();
