@@ -3128,3 +3128,11 @@ SVG artwork commits: `1108cbc27764c6465f028dd9543dca619e745ae1`, `ca7e3aba844948
 
 Официальный `tools/validate_skin_pack.py`, `tests/ValidateSkinManifests.py`, Windows `NEON_STAGE_BUILD.bat`, G1–G4 execution, Release Build, CTest, pluginval strictness 5 и FL Studio 20 acceptance пока не запускались. Не объявлять G1–G4 официально PASS до выполнения валидаторов. Pixel-level match к семи макетам остаётся pending.
 
+## 2026-11-15 — Historical NEON STAGE Windows staging CI evidence
+
+Проверены ранее запрошенные GitHub Actions runs:
+- Run `43625203752`, exact checkout SHA `e19202585bfb79692502486293cf63be4ad3229a`: job `build-skin` завершён `success`; staging pipeline завершён, staging ZIP загружен (artifact ID `14125598263`).
+- Run `43625206873`, exact checkout SHA `7b3a26c19100e4716be84be47623fe4dac3dd563`: job `build-skin` завершён `success`; reference audit **PASS** (7/7 PNG references decoded, Skin_052/Skin_053 grid parity, no audio/MIDI/APVTS changes), G1 palette **PASS** (20.01:1 / 16.05:1 / 10.22:1 / 18.23:1 / 15.37:1), staging report **PASS**, staging ZIP uploaded (artifact ID `14124844769`).
+
+Оба run относятся к историческим SHA до последующих изменений этой записи; они не доказывают CI PASS для текущего HEAD `08e1f848eb517455987b97cfb6f5e75797f58311` или более поздних коммитов. Эти workflow выполняли Skin staging pipeline, а не JUCE Release Build / CTest / pluginval / FL Studio acceptance. Оба ZIP — staging artifacts, не release packages.
+
