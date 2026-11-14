@@ -966,3 +966,20 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Branch audit:** `feature/auxiliary-panel-layout` is 51 commits ahead and 88 behind main; it contains useful UI panel files but is divergent and includes stale skin count/layout API. No wholesale merge. `work/integrate-uploaded-theme-manager`, `ui/modern-neon-stage-shell`, `feat/theme-system-20-full-skins`, `feature/m4-autochords-foundation`, and `feature/pattern-melody-fx-spec` are also divergent. Only isolated, audited files are candidates for selective integration.
 **R28 non-goals:** no change to processor/audio engine/MIDI routing/APVTS IDs, SoundBank, skin registry/schema, ThemeManager, VST3 packaging or main branch.
 **CI:** run #973 for token API on SHA `57fe40044532eeab4bc66ccec37bce865904d455` was IN_PROGRESS at time of this stage; this geometry/chord commit receives a separate exact-SHA CI run. Do not claim TESTED until it completes.
+
+
+==============================================================================
+2026-11-15 — BINDING PRODUCT IDENTITY: NEON STAGE DEFAULT / SKIN-1
+==============================================================================
+
+**Пользовательское решение — обязательное для всех веток проекта:**
+- **NEON STAGE = DEFAULT SKIN-1** — главная тема, основной визуальный стиль и фирменная графическая оболочка POP PUNK GUITAR ULTIMATE.
+- NEON STAGE является темой первого запуска, штатным default, reset target и безопасным visual fallback. Она задаёт внешний вид главного окна и согласованную визуальную систему всех окон/панелей плагина.
+- **SIGNAL FORGE** остаётся названием рабочего интерфейса/инженерной оболочки, но не названием главной темы и не заменяет NEON STAGE.
+- **SOUND FORGE = SKIN-2** и **BLACKOUT VINTAGE = SKIN-3** — самостоятельные альтернативные темы; они не заменяют DEFAULT SKIN-1.
+- В текущей канонической skin-линейке NEON STAGE соответствует существующей записи **skin-053 / Skin_053**. Существующие ID, индексы и пользовательские сохранённые skin selections не перенумеровывать и не перезаписывать.
+- Если конкретная ветка отстаёт и ещё не содержит Skin_053, это решение всё равно обязательно: выполнить отдельную согласованную миграцию registry/asset paths, сохранив все существующие ID; не создавать дубликат и не объявлять тему runtime-ready до прохождения её валидаторов.
+- Это утверждение фиксирует продуктовый приоритет и не означает, что пиксельное соответствие макетам или полная runtime-интеграция уже завершены.
+
+**Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
+==============================================================================
