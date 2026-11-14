@@ -154,7 +154,7 @@ def run_gates(stage: Path, validator: Path) -> None:
 
 def apply_transaction(root: Path, registry_path: Path, pack_path: Path,
                       registry: dict, pack: dict, entries: list[dict],
-                      source_root: Path) -> None:
+                      stage: Path) -> None:
     themes = registry["themes"]
     existing_total = registry["totalSkins"]
     new_registry = copy.deepcopy(registry)
@@ -170,18 +170,16 @@ def apply_transaction(root: Path, registry_path: Path, pack_path: Path,
     pack_before = pack_path.read_bytes()
     try:
         for entry in entries:
-            folder_name, source = safe_source_folder(source_root, entry)
+            folder_name = Path(entry["path"]).parent.name
             destination = root / folder_name
+            staged_folder = stage / folder_name
             if destination.exists():
                 raise ValueError(f"target already exists; no overwrite allowed: {destination}")
-            staged = Path(tempfile.mkdtemp(prefix=".ppgu_promote_", dir=root))
-            try:
-                staged_folder = staged / folder_name
-                shutil.copytree(source, staged_folder)
-                os.replace(staged_folder, destination)
-                promoted.append(destination)
-            finally:
-                shutil.rmtree(staged, ignore_errors=True)
+            if not staged_folder.is_dir():
+                raise ValueError(f"validated staging folder disappeared: {staged_folder}")
+            # Promote the exact bytes that passed G1-G4; do not recopy mutable sources.
+            os.replace(staged_folder, destination)
+            promoted.append(destination)
 
         write_json_atomic(registry_path, new_registry)
         write_json_atomic(pack_path, new_pack)
@@ -241,14 +239,12 @@ def main() -> int:
         try:
             run_gates(stage, args.validator.resolve())
         finally:
-            shutil.rmtree(stage, ignore_errors=True)
-
         print(f"PASS: G1-G4 accepted {len(entries)} theme(s), indices "
               f"{entries[0]['index']}..{entries[-1]['index']}.")
         print(f"Registry total after import: {registry['totalSkins'] + len(entries)}")
         print(f"Default skin preserved: {registry['defaultSkin']}")
         if args.apply:
-            apply_transaction(root, registry_path, pack_path, registry, pack, entries, source_root)
+            apply_transaction(root, registry_path, pack_path, registry, pack, entries, stage)
             print("APPLY: registration committed; pack status changed to MERGED.")
         else:
             print("DRY-RUN: no files changed. Re-run with --apply to register.")
