@@ -544,3 +544,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 **Validation status:** DOCUMENTATION CONSOLIDATED ONLY. No source files changed; no build, CTest, pluginval, package or FL Studio 20 acceptance is claimed by this entry. Implementation status remains whatever the exact source/CI evidence establishes.
 
+
+
+## 2026-11-14 — Documentation change index: MAJOR user-approved PPGU requirements amendment
+
+**Type:** documentation-only index entry. **Production source changed:** no.  
+**Canonical requirements:** `docs/PPGU_MAJOR_USER_REQUIREMENTS_AMENDMENT_2026-11-14_RU.md`.  
+**Updated specification:** `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`.  
+**Updated engineering journal:** `Info.txt` (single authoritative status/decision journal).  
+**Scope:** FX EDIT up to 15 implemented processors plus cabinets; DSP minimum 10/target 15; full AUTO DISCOVER; NEON STAGE DEFAULT as default skin with mockup 1 as exact layout reference and mockup 2 as palette reference; graphics-only derivative skins and sliced PNG assets; open-ended 300+ factory presets mapped to the canonical PUNK GROUP list; first preset category Pop Punk Essentials; commercial libraries unrestricted for lawful user-local use, with licensing clearance applying to PPGU redistribution/factory inclusion only.  
+**Compatibility:** existing APVTS IDs/semantics, MIDI, sampler, realtime callback, secure import and release invariants preserved. Earlier I7/R18 default display-name rule explicitly amended only for the default skin name; stable ID `default-ppgu` retained pending reviewed migration.  
+**Validation:** no production source changed; no build, CTest, pluginval, package or FL Studio 20 host test run.  
+**Status:** REQUIREMENTS APPROVED / IMPLEMENTATION NOT IMPLIED.
