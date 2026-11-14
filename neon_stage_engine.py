@@ -326,7 +326,8 @@ def step_report():
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
-    (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")\n    (OUT/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    (OUT/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps(result,indent=2,ensure_ascii=False))
     if errors: raise SystemExit(1)
 
