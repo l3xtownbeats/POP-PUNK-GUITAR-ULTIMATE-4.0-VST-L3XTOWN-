@@ -3262,3 +3262,35 @@ This is visual-only. No DSP/audio/APVTS/MIDI/sampler/preset changes. Fresh Windo
 **Verification:** run `43636447894` (Windows VST3 workflow, same source SHA) was cancelled after the skin-pack validation step failed; source selection, configure, VST3 build, CTest and pluginval were skipped. This is not a build result. The validator/workflow correction is committed, but a fresh exact-head workflow result is still required. Pixel-level mockup comparison, coordinate sign-off and FL Studio 20 acceptance remain pending.
 
 **Safety:** no DSP, audio callback, APVTS IDs/semantics, sampler, presets, MIDI, transport or runtime layout bounds were changed by this pipeline correction. No PR was merged.
+
+================================================================================
+2026-11-15 — NEON-STAGE-REV-ULTRA-3.0 — staging generator source-of-truth and G2 hardening
+================================================================================
+
+**Branch:** `work/neon-stage-reference-preview-fix`
+**Source commits:**
+- `269dd7182a19d82b30086b9f1d47239e9fc93e7c` (parent: `0f424a87735c1e6b06fcf9eb6bea293438d1dfb8`)
+- `be806b0ad64badcb8774a13c94129cf9e82ae8a9` (parent: `269dd7182a19d82b30086b9f1d47239e9fc93e7c`)
+**Changed file:** `neon_stage_engine.py`
+
+**Implemented:**
+- Removed the duplicate hard-coded 21-colour dictionary from the staging generator. `load_source_palette()` now reads the 21-token palette from canonical `SKIN/Skin_052/theme.json`, checks token count and basic hex-string shape, and becomes the single source used by rendering.
+- `step_manifest()` no longer overwrites the source theme palette with a second copy. Theme generation preserves the canonical source palette.
+- G2 staging report now checks the exact 28-control inventory: 27 IDs from `control_schema.json` plus the live `sync_selector` recorded under `additionalCurrentControls`.
+- G2 checks reject booleans masquerading as integer coordinates, enforce 12x16 bounds, and detect overlapping rectangles.
+- Corrected the report inventory expression after the first implementation so the control count is read from the parsed `control_data`; removed the duplicate report key.
+
+**Repository facts / conflict reconciliation:**
+- On this working branch the authoritative `SKIN/theme_manifest.json` contains **102** entries; `neon-stage-default-skin-1` is the default at index 52 / `Skin_052`, and index 53 is the legacy archive. Index 52 is already occupied and must not be generated as a new/free skin.
+- The current `main` branch differs: it contains 52 entries, default `skin-51`, and index 52 is `skin-052 / Carbon Relay`. This is a separate unresolved branch reconciliation; this work did not modify main or merge branches.
+- Therefore the REV ULTRA 3.0 statement “51 registered themes / next free index 52” is not true for the active NEON STAGE work branch. All generation here remains staging-only against the existing canonical Skin_052.
+- The requested REV ULTRA palette names/values do not match the current 21 token names in `SKIN/control_schema.json`, `Skin_052/theme.json` and ThemeManager. This commit deliberately preserves the current runtime-compatible token schema. A token-name/value migration must be a separately planned ThemeManager/schema/skin migration; it must not be smuggled into this staging-generator patch.
+
+**Compatibility / safety:** no runtime registry, theme default, production C++/JUCE source, ThemeManager, DSP, audio callback, APVTS IDs/semantics, sampler, presets or MIDI routing changed.
+
+**Validation:** no local generator execution, Python compile, G1-G4 run, Windows Release build, CTest, pluginval or FL Studio 20 test was performed for these commits. A fresh exact-HEAD CI run is still required. Do not mark this change TESTED or PASS.
+
+**Outstanding REV ULTRA 3.0 gaps:** the current generator still emits only its existing limited knob/button/FX/slider/LED staging assets; it does not yet satisfy the complete atlas/frame/state contract, full auxiliary-window asset coverage, SHA-256 `LICENSE.txt`, or `SELF_CHECK.txt`. Preview/hero remain reference-derived staging art; pixel-level approval remains pending. No staging ZIP is a release package.
+
+**Status:** SOURCE CHANGE COMMITTED / VALIDATION PENDING / FULL ASSET CONTRACT NOT COMPLETE.
+================================================================================
