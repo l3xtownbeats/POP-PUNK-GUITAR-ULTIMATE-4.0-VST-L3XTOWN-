@@ -283,3 +283,6 @@ The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU
 **Reason:** keep the active branch focused on files needed to build, test, design, audit and document the current product; do not carry unverified bundled sample archives or redundant snapshots into the active tree.  
 **Reference assets:** 38 original user visual references remain preserved in Library `/PPGU/REFERENCE_ASSETS/`; index at `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.  
 **Verification:** pending commit readback.
+
+## 2026-11-14 — TX-LICENSE-DOWNLOAD-CLARIFICATION-001 — ASSET/LICENCE LEDGER
+User clarification: downloading is allowed when lawful and compliant with source terms. Distinguish download/evaluation from development use and redistribution/embedding. Download alone never grants redistribution rights. No copying protected/commercial libraries, bypassing DRM/paywalls/access controls, or bundling raw samples without explicit redistribution/embedding permission. Asset ledger must record source, author, version, date, license evidence, permitted actions, notices/attribution and SHA-256. Unknown terms remain YELLOW/quarantine. No source/assets changed; per-asset review still required.
