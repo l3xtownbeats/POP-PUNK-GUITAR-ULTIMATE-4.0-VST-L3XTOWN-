@@ -7,15 +7,18 @@ echo ========================================
 echo PPGU - NEON STAGE DEFAULT SKIN-1 BUILD ENGINE
 echo ========================================
 
-where py >nul 2>nul
-if errorlevel 1 (
-  where python >nul 2>nul
+REM Prefer the Python selected by setup-python / the active PATH. The py launcher
+REM may resolve a newer preview interpreter (for example Python 3.15) without a
+REM compatible pinned Pillow wheel, so it is only a fallback for local machines.
+where python >nul 2>nul
+if not errorlevel 1 (
+  set PYTHON=python
+) else (
+  where py >nul 2>nul
   if errorlevel 1 (
     echo ERROR: Python 3 was not found. Install Python 3.10+ and enable PATH.
     goto :fail
   )
-  set PYTHON=python
-) else (
   set PYTHON=py -3
 )
 
