@@ -221,3 +221,7 @@ Host tempo/transport sync, deterministic note lifecycle and no stuck notes, dupl
 First supplied interface reference = authoritative appearance/layout/dimensions/control placement. 02 INTERFACE NEON STAGE AUTOCHORDS = palette only. Skins may change visual styling only and must not alter control inventory, positions, dimensions, functions, bindings, APVTS semantics or sound. No approved control/window may be merged, removed, hidden, replaced or simplified by an agent or generator.
 
 **Status:** APPROVED REQUIREMENTS / RUNTIME IMPLEMENTATION AND HOST VALIDATION TRACKED SEPARATELY.
+
+
+### 14.8 Same label, different control — Pattern selector separation
+AutoChords.Pattern and PATTERN Browser.Pattern are distinct controls with separate state/ownership. The AutoChords selector remains inside the AutoChords chord/harmony workflow; the Browser selector chooses section/slot rhythm-performance content. No shared binding, implicit synchronization or cross-overwrite is allowed.
