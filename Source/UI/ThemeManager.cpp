@@ -201,24 +201,33 @@ namespace
             return false;
         }
 
-        const juce::StringArray requiredColours {
+        const juce::StringArray neonStageColours {
             "bg_deep", "bg_panel", "bg_panel_hi", "border", "border_glow",
             "text_primary", "text_secondary", "text_disabled", "accent_primary",
             "accent_secondary", "accent_warning", "accent_danger", "accent_success",
             "lcd_bg", "lcd_text", "knob_body", "knob_ring", "led_on", "led_off",
             "overlay_scrim", "focus_ring"
         };
+        const juce::StringArray legacyStudioColours {
+            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
+            "control_border", "text_primary", "text_secondary", "text_disabled",
+            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
+            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
+        };
         const auto* paletteObject = paletteTokens.getDynamicObject();
+        const bool usesNeonStagePalette = paletteObject != nullptr
+            && paletteObject->hasProperty("bg_deep");
+        const auto& requiredColours = usesNeonStagePalette ? neonStageColours : legacyStudioColours;
         if (paletteObject == nullptr || paletteObject->getProperties().size() != requiredColours.size())
         {
-            error = "Skin Studio palette must contain exactly 21 tokens";
+            error = "Skin Studio palette must contain exactly 21 tokens for its schema generation";
             return false;
         }
 
         for (const auto& key : requiredColours)
         {
             const auto value = paletteTokens.getProperty(key, juce::var()).toString();
-            const auto expectedLength = key == "overlay_scrim" ? 9 : 7;
+            const auto expectedLength = usesNeonStagePalette && key == "overlay_scrim" ? 9 : 7;
             if (!isHexColour(value) || value.length() != expectedLength)
             {
                 error = "Invalid Skin Studio HEX token: " + key;
@@ -298,28 +307,58 @@ namespace
         };
 
         auto& t = palette.tokens;
-        t.windowBg = readStudioToken("bg_deep");
-        t.panel = readStudioToken("bg_panel");
-        t.panelElevated = readStudioToken("bg_panel_hi");
-        t.controlBg = readStudioToken("knob_body");
-        t.controlFace = readStudioToken("knob_body");
-        t.controlBorder = readStudioToken("border");
-        t.textPrimary = readStudioToken("text_primary");
-        t.textSecondary = readStudioToken("text_secondary");
-        t.textDisabled = readStudioToken("text_disabled");
-        t.accent = readStudioToken("accent_primary");
-        t.accentGlow = readStudioToken("border_glow");
-        t.danger = readStudioToken("accent_danger");
-        t.warning = readStudioToken("accent_warning");
-        t.success = readStudioToken("accent_success");
-        t.lcdBg = readStudioToken("lcd_bg");
-        t.lcdText = readStudioToken("lcd_text");
-        t.ledOn = readStudioToken("led_on");
-        t.ledOff = readStudioToken("led_off");
-        t.shadow = readStudioToken("bg_deep");
-        t.highlight = readStudioToken("focus_ring");
-        t.lowlight = readStudioToken("led_off");
-        t.overlayScrim = readStudioToken("overlay_scrim");
+        if (usesNeonStagePalette)
+        {
+            t.windowBg = readStudioToken("bg_deep");
+            t.panel = readStudioToken("bg_panel");
+            t.panelElevated = readStudioToken("bg_panel_hi");
+            t.controlBg = readStudioToken("knob_body");
+            t.controlFace = readStudioToken("knob_body");
+            t.controlBorder = readStudioToken("border");
+            t.textPrimary = readStudioToken("text_primary");
+            t.textSecondary = readStudioToken("text_secondary");
+            t.textDisabled = readStudioToken("text_disabled");
+            t.accent = readStudioToken("accent_primary");
+            t.accentGlow = readStudioToken("border_glow");
+            t.danger = readStudioToken("accent_danger");
+            t.warning = readStudioToken("accent_warning");
+            t.success = readStudioToken("accent_success");
+            t.lcdBg = readStudioToken("lcd_bg");
+            t.lcdText = readStudioToken("lcd_text");
+            t.ledOn = readStudioToken("led_on");
+            t.ledOff = readStudioToken("led_off");
+            t.shadow = readStudioToken("bg_deep");
+            t.highlight = readStudioToken("focus_ring");
+            t.lowlight = readStudioToken("led_off");
+            t.overlayScrim = readStudioToken("overlay_scrim");
+            palette.accentSecondary = readStudioToken("accent_secondary");
+        }
+        else
+        {
+            // Skin_054..Skin_102 retain their original flat REV14 palette contract.
+            t.windowBg = readStudioToken("window_bg");
+            t.panel = readStudioToken("panel");
+            t.panelElevated = readStudioToken("panel_elevated");
+            t.controlBg = readStudioToken("control_bg");
+            t.controlFace = readStudioToken("control_face");
+            t.controlBorder = readStudioToken("control_border");
+            t.textPrimary = readStudioToken("text_primary");
+            t.textSecondary = readStudioToken("text_secondary");
+            t.textDisabled = readStudioToken("text_disabled");
+            t.accent = readStudioToken("accent");
+            t.accentGlow = readStudioToken("accent_glow");
+            t.danger = readStudioToken("danger");
+            t.warning = readStudioToken("warning");
+            t.success = readStudioToken("success");
+            t.lcdBg = readStudioToken("lcd_bg");
+            t.lcdText = readStudioToken("lcd_text");
+            t.ledOn = readStudioToken("led_on");
+            t.ledOff = readStudioToken("led_off");
+            t.shadow = readStudioToken("shadow");
+            t.highlight = readStudioToken("highlight");
+            t.lowlight = readStudioToken("lowlight");
+            palette.accentSecondary = t.accentGlow;
+        }
 
         // Keep legacy aliases coherent while the editor migrates to token access.
         palette.canvas = t.windowBg;
@@ -330,7 +369,6 @@ namespace
         palette.text = t.textPrimary;
         palette.textSecondary = t.textSecondary;
         palette.accent = t.accent;
-        palette.accentSecondary = readStudioToken("accent_secondary");
         palette.border = t.controlBorder;
         palette.focus = t.highlight;
         palette.usedFallback = false;
