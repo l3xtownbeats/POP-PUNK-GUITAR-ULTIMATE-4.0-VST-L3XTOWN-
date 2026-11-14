@@ -29,14 +29,23 @@ class SoundHunterRegressionTests(unittest.TestCase):
                 Path("/tmp/run/source"), "../outside/sample.wav"
             )
 
-    def test_size_cap_counts_only_current_run_bytes(self):
-        limit = 25 * 1024**3
-        # Existing Samples libraries are deliberately not an input to this
-        # calculation; only the current run's imported payload is counted.
-        self.assertTrue(sound_hunter.within_run_limit(0, 24 * 1024**3, limit))
-        self.assertFalse(
-            sound_hunter.within_run_limit(24 * 1024**3, 2 * 1024**3, limit)
-        )
+    def test_aggregate_library_ceiling_is_40_gib(self):
+        limit = 40 * 1024**3
+        self.assertTrue(sound_hunter.within_library_limit(0, 39 * 1024**3, limit))
+        self.assertTrue(sound_hunter.within_library_limit(39 * 1024**3, 1 * 1024**3, limit))
+        self.assertFalse(sound_hunter.within_library_limit(39 * 1024**3, 2 * 1024**3, limit))
+        self.assertFalse(sound_hunter.within_library_limit(40 * 1024**3, 1, limit))
+
+    def test_existing_audio_bytes_counts_audio_only(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "guitar.wav").write_bytes(b"x" * 123)
+            (root / "notes.txt").write_text("not audio")
+            nested = root / "nested"
+            nested.mkdir()
+            (nested / "bank.sfz").write_bytes(b"x" * 17)
+            self.assertEqual(sound_hunter.existing_audio_bytes(root), 140)
 
 
 if __name__ == "__main__":
