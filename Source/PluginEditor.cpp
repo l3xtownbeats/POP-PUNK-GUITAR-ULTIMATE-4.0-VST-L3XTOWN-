@@ -1405,6 +1405,13 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         return 0;
     const auto total = static_cast<int>(total64);
 
+    const auto activeCountValue = registry.getProperty("activeThemeCount", juce::var());
+    if ((!activeCountValue.isInt() && !activeCountValue.isInt64())
+        || static_cast<int>(activeCountValue) < 1
+        || static_cast<int>(activeCountValue) > 16)
+        return 0;
+    const int declaredActiveCount = static_cast<int>(activeCountValue);
+
     std::set<int> indices;
     std::set<std::string> ids;
     std::set<int> activeOrdinals;
@@ -1437,7 +1444,7 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             const auto ordinalValue = entry.getProperty("activeOrdinal", juce::var());
             if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
                 || ordinalValue.toString().getLargeIntValue() < 1
-                || ordinalValue.toString().getLargeIntValue() > total
+                || ordinalValue.toString().getLargeIntValue() > declaredActiveCount
                 || !activeOrdinals.insert(static_cast<int>(ordinalValue.toString().getLargeIntValue())).second)
                 return 0;
             ++activeCount;
@@ -1450,11 +1457,13 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         }
     }
 
-    if (static_cast<int>(indices.size()) != total || activeCount < 1
-        || static_cast<int>(activeOrdinals.size()) != activeCount
-        || *activeOrdinals.begin() != 1 || *activeOrdinals.rbegin() != activeCount)
+    if (static_cast<int>(indices.size()) != total
+        || activeCount != declaredActiveCount
+        || static_cast<int>(activeOrdinals.size()) != declaredActiveCount
+        || *activeOrdinals.begin() != 1
+        || *activeOrdinals.rbegin() != declaredActiveCount)
         return 0;
-    for (int ordinal = 1; ordinal <= activeCount; ++ordinal)
+    for (int ordinal = 1; ordinal <= declaredActiveCount; ++ordinal)
         if (activeOrdinals.count(ordinal) == 0)
             return 0;
     return activeCount;
