@@ -1058,7 +1058,7 @@ void PPGUPremiumLookAndFeel::drawLinearSlider(
     const auto& t = palette.tokens;
     const float alpha = slider.isEnabled() ? 1.0f : 0.38f;
     const bool horizontal = style == juce::Slider::LinearHorizontal
-        || style == juce::Slider::LinearBar || style == juce::Slider::LinearBarVertical;
+        || style == juce::Slider::LinearBar;
     auto bounds = juce::Rectangle<float>(static_cast<float>(x), static_cast<float>(y),
         static_cast<float>(width), static_cast<float>(height)).reduced(5.0f);
 
