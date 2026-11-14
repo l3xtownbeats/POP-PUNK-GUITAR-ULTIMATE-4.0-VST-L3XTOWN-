@@ -205,3 +205,21 @@ Tone selector: Clean, Crunch, Drive, Palm Mute, Open Chords, Acoustic, Lead Driv
 ### 15.6 Расширенный список style DNA
 
 Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Found Glory, Avril Lavigne, Yellowcard, The All-American Rejects, My Chemical Romance, Less Than Jake, Fenix TX, Midtown, Bowling for Soup, MGK, Mest, Angels & Airwaves, The Offspring, Sugarcult, All Time Low. MGK / “Bloody Valentine” — особый современный pop-punk reference: яркая насыщенная ритм-гитара, приглушённая verse-пульсация и раскрывающийся открытый припев. Это стилистическое описание, не транскрипция или копирование записи.
+
+
+## 17. PRESET / PATTERN BROWSER NAVIGATION — APPROVED ADDENDUM (2026-11-14)
+
+### 17.1 Разделение браузеров
+- Preset Browser выбирает звуковой профиль/инструмент/тембр; Pattern Browser — performance/rhythm; Sample/Library Browser — исходные инструменты, банки и аудиоассеты. Эти области не взаимозаменяемы.
+- Контекстная навигация Pattern/arrangement: **GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN**. Эти уровни фильтруют подходящий материал, но не выполняют скрытый Load/Apply и не означают разрешение на копирование защищённых песен, транскрипций, stems или записей.
+- SECTION включает **Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro**; Pre-Chorus добавляется к уже зафиксированным секциям, не удаляя ни одну. Neutral/General — только при наличии явного registry entry.
+
+### 17.2 Preset Browser controls
+Views BROWSER/FAVORITES/CATEGORIES; separate FACTORY/USER scope; SEARCH, FILTER, SORT, PREV, NEXT, FAVORITE, PRESET NAME, CATEGORY, PREVIEW, explicit SELECT/LOAD. Восемь категорий: Clean, Crunch, Drive, Lead, Ambient, Lo-Fi, Acoustic Textures, Punk Rhythm. PREV/NEXT обходят текущий активный набор результатов с учётом search/filter/category/scope. Browse actions только фильтруют/сортируют/подсвечивают; Preview audition non-committing; Load/SELECT или double-click явно коммитит полную preset transaction. Factory read-only; User: Save/Save As/Rename/Delete; banks: Import/Export/Rescan.
+
+### 17.3 Pattern Browser controls and commit semantics
+Контекстные selectors GENRE/ARTIST-BAND/SONG/SECTION/STYLE → PATTERN list; SEARCH/FILTER/SORT/FAVORITES; metadata/selected state; PREVIEW/APPLY/BACK-CANCEL. Основной порядок: SECTION → PATTERN → PREVIEW → APPLY либо BACK/CANCEL. Preview использует реальные performance maps/recordings через общий playback path и не меняет committed section/pattern, tone preset, harmony, transport или project state. Apply — explicit commit; Back/Cancel — rollback. Prev/Next, если присутствуют, ограничены текущим отфильтрованным scope.
+
+Показывать только подтверждённые metadata: use/section, feel, bars/duration, time signature, tempo range, articulations/technique capabilities, playback mode и наличие нужной карты/записи. Никаких fake performances; hard-coded masks не считаются полноценной библиотекой. Все controls обязаны иметь реальный backend, accessibility/focus, tooltips, loading/empty/error/missing-asset/disabled states и безопасное сохранение состояния.
+
+**Precedence:** addendum расширяет существующий section-first workflow; не меняет разделение Preset/Pattern/Sample browsers, стабильные APVTS IDs, SIGNAL FORGE v10, strict rules или safety/realtime priorities. Статус — approved specification, не implementation evidence.
