@@ -39,17 +39,17 @@ public:
         juce::String name { "NEON STAGE" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
-        juce::Colour canvas { 0xff050811 };
-        juce::Colour canvasInset { 0xff07101c };
-        juce::Colour surface { 0xff091321 };
-        juce::Colour surfaceSecondary { 0xff07101c };
-        juce::Colour surfaceRaised { 0xff101f32 };
-        juce::Colour text { 0xffffffff };
-        juce::Colour textSecondary { 0xffd9e8f7 };
-        juce::Colour accent { 0xff66ffff };
+        juce::Colour canvas { 0xff0a0e18 };
+        juce::Colour canvasInset { 0xff0c1220 };
+        juce::Colour surface { 0xff141b2a };
+        juce::Colour surfaceSecondary { 0xff1a2436 };
+        juce::Colour surfaceRaised { 0xff1e2a40 };
+        juce::Colour text { 0xffeaf6ff };
+        juce::Colour textSecondary { 0xff9fb6d4 };
+        juce::Colour accent { 0xff22cfff };
         juce::Colour accentSecondary { 0xffff3ea5 };
-        juce::Colour border { 0xff52718b };
-        juce::Colour focus { 0xffb8d9f0 };
+        juce::Colour border { 0xff2a3a55 };
+        juce::Colour focus { 0xff7fe8ff };
         bool usedFallback = true;
 
         juce::Colour token(const juce::String& name) const noexcept;
