@@ -45,6 +45,21 @@ jobs:
         shell: pwsh
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
+      - name: Bootstrap pinned JUCE 7.0.12 dependency
+        shell: pwsh
+        run: |
+          $juceDir = Join-Path $env:PROJECT_DIR 'JUCE'
+          if (Test-Path (Join-Path $juceDir 'CMakeLists.txt')) {
+            Write-Host 'JUCE checkout already present; preserving it.'
+          } else {
+            git clone --depth 1 --branch 7.0.12 https://github.com/juce-framework/JUCE.git $juceDir
+          }
+          if (-not (Test-Path (Join-Path $juceDir 'CMakeLists.txt'))) {
+            throw 'Pinned JUCE 7.0.12 checkout did not produce JUCE/CMakeLists.txt.'
+          }
+          $juceHead = git -C $juceDir rev-parse HEAD
+          Write-Host "JUCE dependency commit: $juceHead"
+
       - name: Select checked-out project source
         shell: pwsh
         run: |
