@@ -106,3 +106,18 @@ Corrective implementation is now committed:
 All three changed files were re-fetched and SHA-verified. Automated regression tests have not yet run; the fixed download workflow has not yet been rerun; no sample artifact is available or claimed. A fresh manual workflow dispatch on main is required to validate the fix and produce the download artifact.
 
 The user instruction to maintain INFO, CODE, and the main journal during work is now being followed: INFO is active again for operational status, CODE records implementation commits and test evidence, and PPGU_JOURNAL records decisions and end-to-end status. Historical journal content is retained.
+
+
+## 2026-11-14 — PRELIMINARY SFZ / SAMPLER COMPONENT COMPARISON
+
+The current PPGU codebase already contains a custom SFZ parser, a 64-voice SamplerEngine, a background WAV page-streaming service, bounded SPSC request queue, fixed-size page cache and per-voice streaming reader. These existing ANGELA components must be protected; the external-engine search is to improve SFZ coverage without regressing bounded streaming, voice lifecycle, CPU/RAM or realtime safety.
+
+| Candidate | Preliminary finding | Current disposition |
+|---|---|---|
+| `sfizioso` | BSD-2-Clause fork of sfizz; adds MPE handling and host-provided sample-reader callbacks. Dependencies include permissive licenses plus LGPL/WTFPL components requiring a full dependency audit. | Highest-priority candidate for an isolated SFZ compatibility/performance prototype; not yet approved/integrated. |
+| `dusk-fizz` | Maintained BSD-2-Clause sfizz fork; static-library use, SFZ/SF2 coverage and regression tests; upstream archive avoided. | Alternative candidate; audit API/dependencies and benchmark against sfizioso. |
+| `sfizz` upstream | BSD-2-Clause but archived 2026-06-21. | Prefer maintained forks unless specific feature/compatibility evidence favors upstream. |
+| `Just a Sample` | MIT licensed complete JUCE VST3 sampler; strong waveform/looping/UX reference. Not a drop-in SFZ engine; Bungee time-stretch is explicitly CPU-heavy. | Reference selected ideas/algorithms only; no full plugin integration. |
+| `AkiFX` | GPLv3 VST3/CLAP effects rack. | Excluded from direct integration under the planned closed-source/commercial distribution model unless licensing is separately resolved. |
+
+**Status:** preliminary source/README/license metadata inspection only. No component is integrated, no benchmark is claimed, and full transitive-license audit remains open for sfizioso/dusk-fizz. Next evaluation must compare SFZ opcode coverage, sample-reader integration with `SampleStreamingService`, allocation/lock behavior, voice limits, memory footprint, build complexity, Windows 10 x64/VST3 compatibility and CPU under 64-voice stress.
