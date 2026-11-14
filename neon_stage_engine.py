@@ -852,6 +852,23 @@ def step_report():
             errors.append(f"{index_path.name}: atlas validation failed: {exc}")
     if atlas_frames<500:
         errors.append(f"sprite frame contract incomplete: expected >=500 frames, found {atlas_frames}")
+    for contact_name, expected_size in (("NEON_STAGE_ATLAS_CONTACT_SHEET.png",None),
+                                         ("NEON_STAGE_REFERENCE_CONTACT_SHEET.png",(1500,640))):
+        contact_path=ROOT/"dist"/contact_name
+        if not contact_path.is_file():
+            errors.append(f"missing review contact sheet: {contact_name}")
+            continue
+        try:
+            with Image.open(contact_path) as contact:
+                if contact.format!="PNG" or contact.mode!="P":
+                    errors.append(f"{contact_name}: expected indexed PNG-8")
+                if expected_size is not None and contact.size!=expected_size:
+                    errors.append(f"{contact_name}: expected {expected_size}, got {contact.size}")
+                if contact.width<1 or contact.height<1:
+                    errors.append(f"{contact_name}: invalid dimensions")
+                contact.verify()
+        except Exception as exc:
+            errors.append(f"{contact_name}: decode failed: {exc}")
 
     # G4 identity and authoritative registry contract.
     if SKIN.name != "Skin_052":
