@@ -2425,3 +2425,18 @@ The new tool/tests are committed but have not yet run on the resulting commit SH
 **Validation:** workflow syntax repair committed; exact-SHA workflow must be checked again. No PASS is claimed for SHA `3cdacfcfd0c4950be94f2a369e7928699c6e02d9`.
 **Status:** REPAIRED / CI PENDING.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-WORKFLOW-RESTORE-002 — RESTORE COMPLETE WINDOWS CI JOB / CORRECT PRIOR REPAIR
+==============================================================================
+
+**Type:** CI workflow recovery and correction of previous journal entry.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `a7ccaf0b9258aafb90c06137152d5185af006804`.
+**Correction:** The prior entry `TX-REV18-WORKFLOW-TAIL-REPAIR-001` stated that the workflow was repaired by removing an orphaned duplicate tail. Subsequent readback showed that the trim anchor matched the earlier SOURCE-REVIEW artifact upload, so it also removed the actual sample validation, Windows build, CTest, pluginval and interim packaging steps. SHA `a7ccaf0b9258aafb90c06137152d5185af006804` was incomplete; no build result is claimed for it.
+**Recovery:** Restored the complete known-good workflow structure from exact successful-build ancestor `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`, then reapplied the REV.18 READY audit, full per-WAV SHA-256 verification, and honest INTERIM-CI-NOT-RELEASE naming. The original source-review upload remains present, and the full sample/build/CTest/pluginval/package steps are retained.
+**Production source:** unchanged.
+**Validation:** exact-SHA run pending. No PASS claimed.
+**Status:** RESTORED / CI PENDING.
+==============================================================================

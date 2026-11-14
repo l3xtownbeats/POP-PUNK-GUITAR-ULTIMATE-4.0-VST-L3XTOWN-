@@ -826,3 +826,16 @@ Six unit tests cover legacy definitions, complete evidence, missing mapping, inv
 **Production source:** unchanged.
 **Tests:** no build/CTest/pluginval ran on failed SHA. Awaiting new exact-SHA workflow.
 **Status:** REPAIRED / VALIDATION PENDING.
+
+
+## 2026-11-14 — TX-REV18-WORKFLOW-RESTORE-002 — restore complete Windows CI workflow
+
+**Type:** CI workflow recovery.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `a7ccaf0b9258aafb90c06137152d5185af006804`.
+**File:** `.github/workflows/vst3-build.yml`.
+**Correction:** the previous trim matched the earlier source-review artifact upload, unintentionally cutting off sample verification, Windows build, CTest, pluginval and interim packaging. This correction supersedes the inaccurate prior repair claim.
+**Change:** restored full workflow from successful-build ancestor `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`, then reapplied the READY audit, per-WAV SHA-256 verification and interim-only artifact labels. Source-review upload and all build/test/package steps are retained.
+**Production source:** unchanged.
+**Tests:** exact-SHA Windows workflow pending; no PASS claimed.
+**Status:** RESTORED / VALIDATION PENDING.
