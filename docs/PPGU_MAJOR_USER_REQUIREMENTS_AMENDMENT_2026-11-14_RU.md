@@ -74,3 +74,39 @@
 ## 8. Unchanged strict rules
 
 Realtime callback remains free of file/network I/O, blocking locks/waits, GUI calls, decoding and unbounded allocation. Existing APVTS IDs/semantics, MIDI contracts, sampler safety, stable preset IDs, factory read-only/append-only behaviour, explicit import conflict handling, secure path/asset validation, exact-SHA release evidence and honest implementation statuses remain mandatory.
+
+
+## 9. MAJOR UI clarification — MELODY and PATTERN browser behaviour (2026-11-14)
+
+This section records the user's explicit clarification of the previously agreed browser design. It supplements section 5 and supersedes only conflicting browser-display restrictions to the extent stated below.
+
+### 9.1 MELODY browser: exactly three coordinated areas
+The MELODY-mode browser is split into three distinct areas, in this order:
+
+1. **PRESET / GUITAR IDENTITY** — pop-punk guitar/genre, PUNK GROUP or band-style identity, and the individual song part/section. This selects **which guitar/source and which section character** is used.
+2. **STYLE / PLAYING ARTICULATION** — how the guitar performs the notes. Examples: **Open Chord, Palm Mute, Muted**, plus other styles/articulations only where supported by actual mapped recordings. STYLE does not select the rhythmic sequence.
+3. **PATTERN / RHYTHM VARIATION** — the rhythmic figure/variation associated with the selected guitar/section/style. It is an optional layer available from within MELODY mode and does not turn ordinary melody notes into chord triggers.
+
+Keep the three areas visually and functionally separate. Preserve independent selection state and compatibility filtering; do not silently conflate guitar identity, articulation and rhythm.
+
+### 9.2 MELODY note semantics and optional pattern activation
+- Ordinary MELODY keys play their corresponding pitched guitar notes. A single ordinary melody note is played once and decays; it does not automatically launch a strumming loop.
+- The optional PATTERN layer is activated by additional pattern-trigger MIDI notes/events drawn or played in the Piano Roll, or by an explicit dedicated PATTERN on-screen button/control.
+- The approved Piano Roll key-zone convention reserves **C0–C1** for pattern-trigger keys; **C1 and above** remain the ordinary melody-note range. Pattern-trigger keys must not also play as ordinary chromatic guitar notes. The exact boundary and mapping must be covered by tests and exposed clearly to users.
+- Holding a valid pattern-trigger note sustains/runs the selected rhythmic pattern according to its gate/host-transport rules; releasing it ends the pattern cleanly.
+- The PATTERN area/button lets the user switch among different rhythm variations. While playing, changes must transition safely at a musical boundary, avoiding stuck notes, duplicate triggers, timing jumps and abrupt invalid cuts.
+- The on-screen activation route must not alter the ordinary melody-note MIDI semantics.
+
+### 9.3 PATTERN mode remains separate
+- MELODY and PATTERN are separate performance modes with distinct MIDI semantics and preset/performance state, while sharing the approved sample library/cache and compatible source assets.
+- In PATTERN mode, mapped keys select chord/voicing and trigger the corresponding recorded or validly assembled rhythmic guitar performance.
+- Guitar/source identity, PLAYING STYLE / ARTICULATION, and RHYTHMIC PATTERN / variation remain separate selection dimensions. Preserve the already approved PATTERN categories and eight Pattern Slots per section.
+- Native Instruments Session Guitarist — Electric Sunburst Deluxe is a behavioural/workflow reference only; no protected code, samples, presets or UI assets may be copied.
+
+### 9.4 Browser invariants and visible PUNK GROUP selection
+- PREVIEW remains non-destructive; APPLY/SELECT commits; CANCEL rolls back. PREV/NEXT, SEARCH, FILTER, SORT and FAVORITES preserve the current result context.
+- Unsupported articulations or patterns must be visibly unavailable/disabled with a truthful reason; no decorative controls or silent substitution.
+- The PRESET/GUITAR IDENTITY area explicitly includes the user's PUNK GROUP/band-style identity and song-section selection. This direct clarification supersedes the earlier visible-name restriction only for this approved selection dimension. Use the canonical user-provided PUNK GROUP list once reconciled; do not invent or substitute group names.
+- All realtime, APVTS, sampler, MIDI, stable-ID, factory/user separation and exact-SHA validation rules remain unchanged.
+
+**Status:** APPROVED / DOCUMENTATION ONLY. No production code or runtime behaviour is claimed implemented or tested by this amendment.
