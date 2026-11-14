@@ -85,6 +85,29 @@ def within_library_limit(library_bytes: int, incoming_bytes: int, limit_bytes: i
     return library_bytes + incoming_bytes <= limit_bytes
 
 
+
+def verify_zip_sha256_manifest(zf: zipfile.ZipFile) -> tuple[int, list[str]]:
+    """Require and verify every entry listed by a release SHA256SUMS file."""
+    candidates=[n for n in zf.namelist() if PurePosixPath(n).name.upper()=="SHA256SUMS"]
+    if len(candidates)!=1:
+        raise RuntimeError(f"Release archive must contain exactly one SHA256SUMS; found {len(candidates)}")
+    raw=zf.read(candidates[0]).decode("utf-8","strict")
+    verified=[]
+    for line in raw.splitlines():
+        line=line.strip()
+        if not line: continue
+        match=re.fullmatch(r"([0-9a-fA-F]{64})\\s+\\*?(.+)",line)
+        if not match: raise RuntimeError(f"Malformed SHA256SUMS entry: {line!r}")
+        expected, member=match.group(1).lower(),match.group(2).strip()
+        if not safe_member(member): raise RuntimeError(f"Unsafe path in SHA256SUMS: {member}")
+        matches=[n for n in zf.namelist() if n==member or n.endswith("/"+member)]
+        if len(matches)!=1: raise RuntimeError(f"SHA256SUMS member missing/ambiguous: {member}")
+        actual=hashlib.sha256(zf.read(matches[0])).hexdigest()
+        if actual!=expected: raise RuntimeError(f"Release SHA-256 mismatch: {member}")
+        verified.append(matches[0])
+    if not verified: raise RuntimeError("Release SHA256SUMS is empty")
+    return len(verified),verified
+
 def fetch_repo_archive(repo: str, dest: Path):
     meta=json_url(f"https://api.github.com/repos/{repo}")
     branch=meta.get("default_branch") or "main"
@@ -170,6 +193,9 @@ def main():
                 for name in names:
                     rel=PurePosixPath(name)
                     if rel.suffix.lower() not in AUDIO: continue
+                    # Meta release ZIPs are the production WAV masters; do not
+                    # import lossy OGG previews as duplicate library variants.
+                    if sid.startswith("meta-open-sound-") and rel.suffix.lower() in {".ogg", ".oga"}: continue
                     if sid.startswith("meta-open-sound-") and sid.removeprefix("meta-open-sound-") not in name.lower(): continue
                     # Skip Git LFS pointer stubs and suspiciously tiny audio placeholders.
                     info=z.getinfo(name)
@@ -206,6 +232,25 @@ def main():
                     relzip=tmp/(sid+"-release.zip")
                     asset_name=fetch_release_zip(repo,s["release_tag"],s["release_asset_contains"],relzip)
                     with zipfile.ZipFile(relzip) as rz:
+                        # Release bundles must self-identify and verify their
+                        # exact contents before any audio is admitted.
+                        checksum_count, checksum_members = verify_zip_sha256_manifest(rz)
+                        release_license_paths=[n for n in rz.namelist() if PurePosixPath(n).name.upper()=="LICENSE"]
+                        if len(release_license_paths)!=1:
+                            raise RuntimeError(f"{sid}: release ZIP must contain exactly one LICENSE file")
+                        release_license=rz.read(release_license_paths[0]).decode("utf-8","replace")
+                        if not license_ok(release_license,s["license"]):
+                            raise RuntimeError(f"{sid}: release ZIP license does not verify {s['license']}")
+                        release_copied=0
+                        # Preserve mapping and collection metadata alongside the WAVs.
+                        metadata_suffixes={".sfz",".json",".md",".txt"}
+                        for metadata_name in rz.namelist():
+                            meta_path=PurePosixPath(metadata_name)
+                            if not safe_member(metadata_name) or meta_path.suffix.lower() not in metadata_suffixes: continue
+                            meta_target=release_asset_target(source_dir,metadata_name)
+                            meta_target.parent.mkdir(parents=True,exist_ok=True)
+                            if not meta_target.exists():
+                                with meta_target.open("xb") as mf: mf.write(rz.read(metadata_name))
                         for name in rz.namelist():
                             if not safe_member(name) or PurePosixPath(name).suffix.lower() not in AUDIO: continue
                             info=rz.getinfo(name)
@@ -221,9 +266,10 @@ def main():
                             if target.exists(): raise RuntimeError(f"Refusing path collision: {target}")
                             with target.open("xb") as f: f.write(data)
                             if sha256(target)!=digest: raise RuntimeError(f"SHA-256 verification failed: {target}")
-                            seen.add(digest); used+=len(data); library_bytes+=len(data)
+                            seen.add(digest); used+=len(data); library_bytes+=len(data); release_copied+=1
                             registry["assets"].append({"source_id":sid,"path":str(target.relative_to(samples)).replace("\\","/"),"format":target.suffix.lower(),"bytes":len(data),"sha256":digest,"classification":"REAL_RECORDED","license":s["license"],"verification":"release-license-and-sha256-verified","release_asset":asset_name})
-                registry["sources"].append({"id":sid,"repository":f"https://github.com/{repo}","license":s["license"],"kind":"REAL_RECORDED","files_added":copied})
+                        print(f"  verified {checksum_count} release checksums; imported {release_copied} release audio files")
+                registry["sources"].append({"id":sid,"repository":f"https://github.com/{repo}","license":s["license"],"kind":"REAL_RECORDED","files_added":copied,"release_files_added":locals().get("release_copied",0)})
                 print(f"  imported {copied} repository audio files")
             if capacity_reached:
                 break
