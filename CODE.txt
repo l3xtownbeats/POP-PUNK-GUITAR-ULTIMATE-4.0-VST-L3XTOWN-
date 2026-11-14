@@ -813,3 +813,16 @@ Six unit tests cover legacy definitions, complete evidence, missing mapping, inv
 
 **Production compatibility:** no C++/DSP/MIDI/APVTS/sampler or asset content changed.
 **Status:** IMPLEMENTED / CI PENDING.
+
+
+## 2026-11-14 — TX-REV18-WORKFLOW-TAIL-REPAIR-001 — CI workflow duplicate-tail repair
+
+**Type:** CI configuration repair.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `3cdacfcfd0c4950be94f2a369e7928699c6e02d9`.
+**File:** `.github/workflows/vst3-build.yml`.
+**Failure evidence:** run #1630 / ID `43592222067` on this SHA ended before job allocation (0 jobs); workflow contained a stray fragment and duplicated legacy job tail after the completed interim artifact upload.
+**Change:** truncated only the orphaned duplicate tail; retained the single intended Windows build job and all preceding gates.
+**Production source:** unchanged.
+**Tests:** no build/CTest/pluginval ran on failed SHA. Awaiting new exact-SHA workflow.
+**Status:** REPAIRED / VALIDATION PENDING.

@@ -2409,3 +2409,19 @@ The new tool/tests are committed but have not yet run on the resulting commit SH
 **Status:** IMPLEMENTED / EXACT-SHA CI PENDING.
 **Next:** verify this commit's Windows workflow; then populate the asset registry from legally cleared assets and build real mappings/audio QA before any preset is marked READY.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-WORKFLOW-TAIL-REPAIR-001 — REMOVE ORPHANED DUPLICATE WORKFLOW TAIL
+==============================================================================
+
+**Type:** CI workflow syntax repair; no production source changed.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `3cdacfcfd0c4950be94f2a369e7928699c6e02d9`.
+**Failed run:** #1630 / ID `43592222067`, exact SHA `3cdacfcfd0c4950be94f2a369e7928699c6e02d9`, conclusion FAILURE.
+**Finding:** the workflow file contained an orphaned fragment after the first complete upload-artifact step: a stray PowerShell closing fragment followed by a duplicated legacy configure/build/test/package block. GitHub Actions created the run record but allocated zero jobs; no readiness audit, build, CTest, pluginval or packaging step ran on that SHA.
+**Repair:** removed only the orphaned duplicate tail after the complete interim artifact upload step. The single intended job retains the REV.18 READY audit, sample checksum gate, Windows build, CTest, pluginval and interim-only package.
+**Compatibility:** no C++, sampler, DSP, MIDI, APVTS, presets, samples, license files or skin assets changed.
+**Validation:** workflow syntax repair committed; exact-SHA workflow must be checked again. No PASS is claimed for SHA `3cdacfcfd0c4950be94f2a369e7928699c6e02d9`.
+**Status:** REPAIRED / CI PENDING.
+==============================================================================
