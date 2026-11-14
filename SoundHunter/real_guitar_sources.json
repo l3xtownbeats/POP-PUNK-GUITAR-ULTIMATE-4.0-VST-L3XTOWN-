@@ -2,7 +2,25 @@
   "schema_version": "1.0",
   "policy": "PPGU-REAL-RECORDED-GUITARS",
   "max_library_bytes": 26843545600,
-  "supported_audio_formats": [".wav", ".wave", ".flac", ".ogg", ".oga", ".mp3", ".aif", ".aiff", ".caf", ".opus", ".m4a", ".aac", ".wma", ".sf2", ".sf3", ".sfz", ".dspreset"],
+  "supported_audio_formats": [
+    ".wav",
+    ".wave",
+    ".flac",
+    ".ogg",
+    ".oga",
+    ".mp3",
+    ".aif",
+    ".aiff",
+    ".caf",
+    ".opus",
+    ".m4a",
+    ".aac",
+    ".wma",
+    ".sf2",
+    ".sf3",
+    ".sfz",
+    ".dspreset"
+  ],
   "sources": [
     {
       "id": "meta-open-sound-steel",
@@ -79,7 +97,7 @@
       "kind": "REAL_RECORDED",
       "repository": "freepats/spanish-classical-guitar",
       "license": "CC0-1.0",
-      "license_file": "LICENSE.txt",
+      "license_file": "LICENSE",
       "notes": "Recorded Spanish classical guitar."
     },
     {
