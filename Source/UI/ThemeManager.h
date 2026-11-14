@@ -11,27 +11,28 @@ public:
     {
         struct Tokens
         {
-            juce::Colour windowBg { 0xff050811 };
-            juce::Colour panel { 0xff091321 };
-            juce::Colour panelElevated { 0xff101f32 };
-            juce::Colour controlBg { 0xff07101c };
-            juce::Colour controlFace { 0xff14263a };
-            juce::Colour controlBorder { 0xff52718b };
-            juce::Colour textPrimary { 0xffffffff };
-            juce::Colour textSecondary { 0xffd9e8f7 };
-            juce::Colour textDisabled { 0xffaabbd0 };
-            juce::Colour accent { 0xff66ffff };
-            juce::Colour accentGlow { 0xffb8ffff };
-            juce::Colour danger { 0xffff5577 };
-            juce::Colour warning { 0xffffd166 };
-            juce::Colour success { 0xff67f5b5 };
-            juce::Colour lcdBg { 0xff020a12 };
-            juce::Colour lcdText { 0xffc9ffff };
-            juce::Colour ledOn { 0xff66ffff };
-            juce::Colour ledOff { 0xff263c50 };
-            juce::Colour shadow { 0xff02040a };
-            juce::Colour highlight { 0xffb8d9f0 };
-            juce::Colour lowlight { 0xff0a1421 };
+            juce::Colour windowBg { 0xff0a0e18 };
+            juce::Colour panel { 0xff141b2a };
+            juce::Colour panelElevated { 0xff1e2a40 };
+            juce::Colour controlBg { 0xff0c1220 };
+            juce::Colour controlFace { 0xff0c1220 };
+            juce::Colour controlBorder { 0xff2a3a55 };
+            juce::Colour textPrimary { 0xffeaf6ff };
+            juce::Colour textSecondary { 0xff9fb6d4 };
+            juce::Colour textDisabled { 0xff5a6b85 };
+            juce::Colour accent { 0xff22cfff };
+            juce::Colour accentGlow { 0xff22cfff };
+            juce::Colour danger { 0xffff5a5a };
+            juce::Colour warning { 0xffffb454 };
+            juce::Colour success { 0xff46e88c };
+            juce::Colour lcdBg { 0xff061021 };
+            juce::Colour lcdText { 0xff7fe8ff };
+            juce::Colour ledOn { 0xff46e8ff };
+            juce::Colour ledOff { 0xff1a2436 };
+            juce::Colour shadow { 0xff0a0e18 };
+            juce::Colour highlight { 0xff7fe8ff };
+            juce::Colour lowlight { 0xff1a2436 };
+            juce::Colour overlayScrim { 0xcc04080f };
         };
 
         juce::String id { "neon-stage-default-skin-1" };
