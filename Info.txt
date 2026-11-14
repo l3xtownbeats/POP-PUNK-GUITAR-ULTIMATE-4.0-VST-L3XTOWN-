@@ -2,7 +2,7 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 13 ноября 2026
+Последнее обновление: 14 ноября 2026
 Ветка: `main`  
 Последний commit перед текущей записью: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`
 
@@ -1970,3 +1970,70 @@ Status: accepted product requirements; implementation status must be verified se
 **Неизменяемые технические приоритеты:** безопасность → realtime guarantees → build/release integrity → sound → resources → UX. В audio callback по-прежнему запрещены I/O, allocation, locks, GUI calls, waits и неограниченная работа. Все release gates привязываются к точному source SHA; CI PASS не переносится на другой SHA. HOST-VERIFIED требует проверки именно собранного PPGU VST3 в FL Studio 20 с MIDI/audio smoke tests.
 
 **Граница этой записи:** только требования/документация. Production C++, APVTS, DSP, MIDI, sampler, preset catalog, SoundBank, skin assets/registry, CMake и workflow не изменялись.
+
+
+---
+
+## 2026-11-14 — TX-UI-PRESET-GUARD-004 + TX-UI-SURFACE-005: консолидация утверждённых browser/UI решений
+
+**Статус:** DOCUMENTATION CONTRACT RECORDED / SOURCE CODE UNCHANGED / IMPLEMENTATION NOT IMPLIED.
+
+**Основание и приоритет:** актуальный MASTER PROMPT REV 17.0 UNIFIED (FINAL), R01–R34, I1–I8; control inventory/schema; более свежие пользовательские решения от 13–14 ноября. Совместимые прежние требования сохранены. Строгие законы, инварианты, APVTS IDs/semantics, control inventory, audio/realtime safety, sampler, MIDI routing, SoundBank licensing policy и правила release gate не переписывались. **INFO остаётся единственным журналом проекта**; новые параллельные журналы не создаются. Подробные UI-контракты добавлены в docs/MASTER_PRODUCT_SPEC_4_0_RU.md.
+
+Документационные commits:
+- TX-UI-PRESET-GUARD-004 (предшествующая запись в product spec): 0e1c7ee76b9d339c4728124287d98115f96ce0e7.
+- TX-UI-SURFACE-005 (этот пакет уточнений): cd76d6b7cb053f61f10c0c47a77a3d62850387d6.
+- Оба изменения документационные; source tree, runtime UI и аудиодвижок ими не изменялись.
+
+### A. PATTERN / PRESET BROWSER — каноническая навигация
+
+Зафиксирован порядок:
+**GENRE → ARTIST/BAND → SONG → SECTION → STYLE/ARTICULATION → PATTERN.**
+
+- Пользователь выбирает жанр и музыкальный контекст, затем конкретный раздел композиции: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE или OUTRO.
+- После выбора секции открывается выбор того, КАК играть (playing style/articulation), и затем конкретного ритмического рисунка/Pattern Slot.
+- В каждой секции — 8 Pattern Slots.
+- Pattern Browser — отдельная нижняя область AutoChords; Playing Style/Articulation и Rhythm Pattern визуально/семантически разделены.
+- Все папки/категории/подпункты открываются, закрываются, прокручиваются и выбираются; обязательны Search, Favorites, Categories, Filter, Sort, Prev/Next, Preview, Select, Apply, Cancel.
+- Prev/Next остаются внутри текущего результата и сохраняют контекст поиска/фильтра/сортировки.
+- Preview не меняет active preset/project/DAW state; Apply фиксирует; Cancel откатывает.
+- Harmony/progression, guitar source, tone preset, articulation и rhythm pattern — независимые оси; не менять одну при выборе другой без явного правила.
+- Переключение Pattern во время playback — host-synchronized, без stuck notes, duplicate triggers, timing jumps и abrupt cuts.
+- Сохраняются форматы .ppgm (MELODY), .ppgp (PATTERN), .ppgbank (bank); stable IDs, factory read-only, user data переживают обновления. Factory catalog расширяется только добавлением, без удаления, silent overwrite или подмены.
+
+**Новые пользовательские уточнения:** в PATTERN сначала выбирается музыкальный раздел (например Chorus/Verse/Bridge), после этого — рисунок/ритмика того, как должна играть гитара. AutoChords сохраняет одобренный макет; нижний браузер разделён на Playing Styles и Techniques/Articulations и Rhythm Patterns.
+
+### B. UI SURFACES — визуальные решения пользователя
+
+- **Главный визуальный язык:** SIGNAL FORGE / NEON; все окна и панели должны выглядеть единым продуктом и соответствовать приложенным макетам. Никакого самовольного редизайна, упрощения, старого дизайна или удаления обязательных элементов.
+- **IMPORT GUITAR:** сохранить макет целиком, включая Load Library и Preview. Drag-and-drop и Browse Files — равноправные пути выбора; статусы загрузки должны быть реальными. Preview показывается только для фактически выбранных/декодированных данных.
+- **AUTO DISCOVER:** ON/OFF переключатель расположен внутри окна. OFF — нет фонового/постоянного поиска. ON лишь разрешает функцию; отдельная кнопка SCAN/SEARCH запускает ограниченную задачу, остановка доступна пользователю. Автоповтор/планировщик не включать без отдельного согласования. Работа вне audio callback, только в существующем S6.5 (R04).
+- **CURATOR:** центр управления и обзора пользовательских библиотек: поиск/фильтры, метаданные, доступность, coverage, source/provenance, checksum, дубликаты, preview/audition, диагностика. Curator **не запрещает и не ограничивает локальную загрузку/использование любых библиотек, добавленных пользователем**. GREEN/YELLOW/RED/GOLD — статусы factory clearance/распространения, а не запрет на локальное использование. Никаких молчаливых отключений, удалений, карантина или подмены пользовательской библиотеки. Известные технические пределы sampler (8 streaming roots / 128 snapshots) остаются отдельным engineering gap и не должны маскироваться под лицензионный запрет; их устранение требует отдельного аудио-ревью R10.
+- **SETTINGS:** добавить хорошо оформленный Resource Profile selector с точными названиями GOOD / NORMAL / NIGHT / ECO. Карточки показывают выбранный профиль и его назначение. Конкретные CPU/RAM budgets, cache/worker policies и поведение каждого режима ещё требуют измерений и отдельной матрицы; не придумывать проценты/лимиты и не менять обязательное звучание/realtime guarantees.
+- **SKINS GALLERY:** оставить визуал по макету; обязательны поиск и категории с сохранением названий RETRO-PUNK, DARK ROCK, VINTAGE, METAL CORE, CLASSIC PUNK, MINIMAL, SIGNAL FORGE, NEON STAGE. Preview → Apply / Cancel; поиск/фильтр не применяет тему автоматически.
+- **FX EDIT:** визуальный дизайн, композицию и расположение модулей оставить без изменений, как одобрено пользователем. Дорабатывать только реальные подключения/исправления; никакого фиктивного active control/telemetry.
+- **AUTOCHORDS:** одобренный визуальный стиль сохранить. Браузер ниже должен быть интерактивным, с открывающимися/закрывающимися папками, прокруткой и выбором. MIDI-клавиатура всегда полностью видима и кликабельна.
+- **DOUBLE TRACK:** пользователь не обнаружил кнопку DOUBLE. Нужен понятный доступ к Double Track в предусмотренной зоне Settings/управления с использованием только существующих doubleTrackOn и doubleTrackMix, без новых APVTS IDs. Предыдущий аудит 06 установил, что параметры объявлены, но не читаются audio path; до отдельного аудио-ревью/реализации/тестов контрол должен быть disabled / BACKEND PENDING, не фиктивно активен.
+
+### C. PRESET TARGET — One More Time…
+
+Запрошены 30 оригинальных guitar tone/performance preset variations, вдохновлённых общими музыкальными характеристиками альбома One More Time…. Это не 30 копий песен. Запрещены master recordings/stems, точные мелодии/рифы/транскрипции/табулатуры и закрытые коммерческие пресеты. Использовать оригинальные имена пресетов и только реально доступные, очищенные по лицензии guitar sources/performance maps. Пока нет подтверждённых source maps — только catalog/design definitions, не playable.
+
+### D. GUI FUNCTION PARITY — закон приёмки
+
+Каждый видимый active button, toggle, folder, selector, search field, list item, tab, navigation arrow и preview control должен иметь реальную функцию, понятное состояние и корректную реакцию. Кнопка открытия окна должна реально открывать нужное окно; повторное открытие не создаёт дубль; X закрывает; toggle действительно включает/выключает и показывает ON/OFF. Неработающее отображается disabled / BACKEND PENDING с причиной. Не считать наличие UI-компонента доказательством backend. Проверять также persistence, focus, keyboard hit-testing, resize/DPI, open/close lifecycle и отсутствие влияния UI на audio output.
+
+### E. НЕРАЗРЕШЁННЫЕ КОНФЛИКТЫ СО СТРОГИМИ ИНВАРИАНТАМИ — НЕ ОБХОДИТЬ
+
+1. **Имена артистов в UI:** MASTER PROMPT REV 17.0 §11/§15 запрещает имена групп/артистов/чужих продуктов в UI. Новый пользовательский маршрут включает ARTIST/BAND и примеры с именованными артистами. Поэтому slot ARTIST/BAND фиксируется как требование к навигационной структуре, но отображение запрещённых имён в UI BLOCKED до формального MAJOR-изменения мастер-промпта/правил. Не обходить запрет скрытым алиасом.
+2. **Default skin:** более поздний product-spec addendum называет NEON STAGE главной темой, но MASTER PROMPT I7 закрепляет каноническое имя/ID default skin: DEFAULT POP PUNK GUITAR ULTIMATE SKIN (default-ppgu). До формального разрешения конфликта I7 не переименовывать и не менять canonical default. SIGNAL FORGE / NEON — общий visual language; NEON STAGE — утверждённое пользователем название/визуальный образ главной темы, но не молчаливая замена I7.
+3. **Curator и технические пределы:** право локального пользовательского использования не ограничивается Curator/license labels; однако текущие 8-root/128-snapshot limits являются реальными техническими ограничениями. Не обещать unlimited simultaneous streaming; масштабирование — отдельный аудио-этап с R10 review.
+4. **GOOD/NORMAL/NIGHT/ECO:** названия утверждены; численные budgets и точные внутренние policies не определены измерениями. Не внедрять вымышленные значения.
+
+### F. Что не менялось / граница статуса
+
+- Не менялись source files, APVTS IDs/semantics, control_schema, control inventory, DSP, MIDI routing, sampler, SoundBank, licenses, preset payload или resource resolver.
+- Не создавались фиктивные панели/кнопки/worker'ы; не заявлялась реализация Curator, production Auto Discover, full AutoChords, Double Track DSP или полноценной Skin Gallery.
+- Не присваивать IMPLEMENTED/TESTED/BUILD VERIFIED/HOST-VERIFIED только на основании документации.
+- Следующие шаги после консолидации: сопоставить каждый макет с действующим control inventory и реальным JUCE component tree; закрыть 04 Auxiliary Windows audit; проверить UI callback/state mapping; отдельно спроектировать Settings resource profiles и Curator; затем по этапам с contract tests, точным SHA, Windows Release, всеми CTest targets, pluginval strictness 5, complete package и FL Studio 20 acceptance.
+
