@@ -16,7 +16,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
-SCHEMA_VERSION = "1.0.0"
+SUPPORTED_SCHEMA_VERSIONS = {"1.0.0", "1.1.0"}
 DECISIONS = {"GREEN", "YELLOW", "RED"}
 PROFILES = {"PP-ROOT", "PP-NEO2000", "PP-MODERN", "PP-EMO", "UNCATEGORIZED"}
 CURATOR_STATES = {"UNREVIEWED", "GOLD", "KEEP", "REJECT"}
@@ -220,7 +220,7 @@ def validate_registry(data: object, root: Path) -> tuple[list[str], int]:
     errors: list[str] = []
     if not isinstance(data, dict):
         return ["registry root must be a JSON object"], 0
-    _check(data.get("schemaVersion") == SCHEMA_VERSION, errors, "registry", f"schemaVersion must be {SCHEMA_VERSION}")
+    _check(data.get("schemaVersion") in SUPPORTED_SCHEMA_VERSIONS, errors, "registry", f"schemaVersion must be one of {sorted(SUPPORTED_SCHEMA_VERSIONS)}")
     _check(data.get("policy") == "PPGU-REV-10.1", errors, "registry", "policy must be PPGU-REV-10.1")
     assets = data.get("assets")
     _check(isinstance(assets, list), errors, "registry", "assets must be an array")

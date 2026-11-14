@@ -213,6 +213,7 @@ target_link_libraries(ppgu_theme_contracts PRIVATE
     juce::juce_recommended_warning_flags
 )
 add_test(NAME ppgu_theme_contracts COMMAND ppgu_theme_contracts)
+set_tests_properties(ppgu_theme_contracts PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 juce_add_console_app(ppgu_panel_contracts PRODUCT_NAME "PPGU Panel Contract Tests")
 juce_generate_juce_header(ppgu_panel_contracts)
