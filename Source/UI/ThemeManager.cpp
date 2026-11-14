@@ -328,7 +328,7 @@ namespace
         palette.text = t.textPrimary;
         palette.textSecondary = t.textSecondary;
         palette.accent = t.accent;
-        palette.accentSecondary = t.accentGlow;
+        palette.accentSecondary = readStudioToken("accent_secondary");
         palette.border = t.controlBorder;
         palette.focus = t.highlight;
         palette.usedFallback = false;
@@ -585,7 +585,7 @@ juce::Colour PPGUThemeManager::Palette::token(const juce::String& key) const noe
     if (key == "text_secondary") return tokens.textSecondary;
     if (key == "text_disabled") return tokens.textDisabled;
     if (key == "accent_primary" || key == "knob_ring") return tokens.accent;
-    if (key == "accent_secondary") return juce::Colour::fromString("ffff3ea5");
+    if (key == "accent_secondary") return accentSecondary;
     if (key == "accent_warning") return tokens.warning;
     if (key == "accent_danger") return tokens.danger;
     if (key == "accent_success") return tokens.success;
