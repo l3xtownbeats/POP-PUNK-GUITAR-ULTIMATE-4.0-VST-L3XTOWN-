@@ -1,6 +1,6 @@
 # POP PUNK GUITAR ULTIMATE — INFO / ЖУРНАЛ РАЗРАБОТКИ
 
-**Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
+**Журналы проекта:** INFO фиксирует требования, решения, статусы и историю работ; CODE отдельно индексирует исходные изменения с точными SHA и проверками. Оба журнала ведутся синхронно. README предназначен только для описания самого плагина.
 
 Последнее обновление: 14 ноября 2026  
 Ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
@@ -1942,3 +1942,29 @@ This entry takes precedence over any earlier broad taxonomy phrasing that could 
 
 **Следующий порядок:** ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ; при реализации сначала повторно проверить существующие browser/backend/schema components. Все действия без backend остаются disabled/unavailable; никаких фиктивных controls или preview/load.
 ==============================================================================
+
+ 
+## 2026-11-14 — JUCE 7.0.12 CI bootstrap and approved library requirements
+
+**Тип:** CI/build reproducibility correction + approved requirements synchronization. Production C++/DSP/audio assets were not changed.
+**Ветка:** `work/rev17-juce-bootstrap`
+**Parent SHA:** `a9a71fae3bb02726402f76b1318b5bece4c555c6`
+**Source/config commit:** `a7d24f33dc6384ebe68cec18acf11087a40735cf`
+**Файл:** `.github/workflows/vst3-build.yml`
+
+**Причина:** REV.17 CMakeLists requires `JUCE/CMakeLists.txt` and fails configuration when the pinned dependency is absent. The Windows workflow had no step to populate `JUCE/` before CMake configure.
+
+**Изменение:** Added an idempotent CI bootstrap step that shallow-clones the official JUCE repository at tag `7.0.12` into `$PROJECT_DIR/JUCE`, verifies `JUCE/CMakeLists.txt`, and prints the resolved JUCE commit. Existing checkout is preserved. No production sources, presets, sample-library files, skins or user assets were changed.
+
+**Обязательные требования библиотеки, подтверждённые пользователем:**
+- Guitar Sound Library must remain maximally expandable; no artificial upper limit on sounds, categories or approved assets.
+- Installed factory Sound Library target: 25–30 GB of actual, cleared guitar audio content; measure real bytes and do not pad with duplicates, placeholders or artificial re-encoding.
+- Keep One-Shots, Sample Loops and Multisamples as separate content classes and browser/library entities.
+- Automatically detect and fix only unambiguous, non-breaking defects; preserve evidence and regression coverage. Stop only the affected work for ambiguous or contract-changing decisions, licensing uncertainty or destructive actions.
+- Maintain INFO and CODE synchronously: INFO records requirements/status and operation context; CODE records exact source/config paths, symbols, commit SHAs and test evidence. Both records must reference the same source change and be re-fetched after updates.
+- This user-approved synchronization rule supersedes older wording in this branch that prohibited a separate CODE journal.
+
+**Проверки:** GitHub file update succeeded. Workflow was not run in this operation; Windows configure/build, CTest, VST3 locate, pluginval and FL Studio 20 host acceptance remain NOT RUN / NOT VERIFIED on this commit. The pinned tag is declared in the workflow; the resolved JUCE SHA will be visible in CI logs when the workflow executes.
+
+**Статус:** CI dependency bootstrap IMPLEMENTED; VALIDATION PENDING. No production build or release is claimed.
+**Следующий шаг:** Trigger/inspect Windows CI on this branch, then repair the first confirmed build/test failure with a focused regression test.
