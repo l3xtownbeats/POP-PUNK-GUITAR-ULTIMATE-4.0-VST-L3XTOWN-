@@ -2,7 +2,7 @@
 Writes staging outputs only; never mutates the runtime registry or JUCE resources.
 """
 from __future__ import annotations
-import json, math, os, zipfile
+import json, math, os, zipfile, hashlib
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
@@ -117,7 +117,7 @@ def render_knob(size, frame):
 def vertical_strip(size,path):
     strip=Image.new("RGBA",(size,size*121),(0,0,0,0))
     for i in range(121): strip.alpha_composite(render_knob(size,i),(0,i*size))
-    strip.save(path,optimize=True)
+    _indexed_png(strip,path)
 
 def step_palette():
     ensure_dirs()
@@ -159,7 +159,7 @@ def step_ui():
                             outline=outline,width=2)
         if state=="on":
             d.line((x+24,h//2,x+36,h//2),fill=PALETTE["window_bg"],width=3)
-    atlas.save(ASSETS/"buttons"/"btn_states.png",optimize=True)
+    _indexed_png(atlas,ASSETS/"buttons"/"btn_states.png")
     tile_w,tile_h=220,72
     fx=Image.new("RGBA",(tile_w*len(FX_NAMES),tile_h*2),(0,0,0,0))
     for row in range(2):
@@ -174,31 +174,30 @@ def step_ui():
                    fill=PALETTE["text_primary"] if on else PALETTE["text_secondary"])
             d.ellipse((x+tile_w-34,y+tile_h//2-6,x+tile_w-22,y+tile_h//2+6),
                       fill=PALETTE["led_on"] if on else PALETTE["led_off"])
-    fx.save(ASSETS/"fx"/"fx_tiles.png",optimize=True)
+    _indexed_png(fx,ASSETS/"fx"/"fx_tiles.png")
     track=Image.new("RGBA",(360,28),(0,0,0,0)); d=ImageDraw.Draw(track)
     d.rounded_rectangle((4,10,356,18),radius=4,fill=PALETTE["control_bg"],outline=PALETTE["control_border"])
     d.rounded_rectangle((4,10,210,18),radius=4,fill=PALETTE["accent"])
-    track.save(ASSETS/"slider"/"slider_track.png",optimize=True)
+    _indexed_png(track,ASSETS/"slider"/"slider_track.png")
     cap=Image.new("RGBA",(32,40),(0,0,0,0)); d=ImageDraw.Draw(cap)
     d.ellipse((4,4,28,28),fill=PALETTE["control_face"],outline=PALETTE["accent"],width=2)
     d.line((16,9,16,23),fill=PALETTE["text_primary"],width=2)
-    cap.save(ASSETS/"slider"/"slider_cap.png",optimize=True)
+    _indexed_png(cap,ASSETS/"slider"/"slider_cap.png")
     led=Image.new("RGBA",(64,32),(0,0,0,0)); d=ImageDraw.Draw(led)
     d.ellipse((3,3,28,28),fill=PALETTE["led_off"],outline=PALETTE["control_border"],width=2)
     d.ellipse((35,3,60,28),fill=PALETTE["led_on"],outline=PALETTE["accent_glow"],width=2)
-    led.save(ASSETS/"led"/"led_states.png",optimize=True)
+    _indexed_png(led,ASSETS/"led"/"led_states.png")
     print("Generated legacy UI elements; creating the complete indexed sprite contract.")
     step_atlases()
 
 
 
 def _indexed_png(image, path):
-    """Save deterministic indexed PNG-8 using the canonical theme palette."""
-    if image.mode != "RGB":
-        image = image.convert("RGB")
-    image.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(
-        path, "PNG", optimize=True
-    )
+    """Save deterministic indexed PNG-8; preserve alpha when a sprite needs transparency."""
+    if image.mode != "P":
+        image = image.quantize(colors=256, method=Image.Quantize.FASTOCTREE,
+                               dither=Image.Dither.NONE)
+    image.save(path, "PNG", optimize=True)
 
 
 def _atlas(name, frames, columns):
@@ -591,21 +590,31 @@ def step_contact_sheets():
 
 
 def step_provenance():
-    """Write deterministic SHA-256 provenance for every staged asset except self-referential reports."""
-    import hashlib
-    files=sorted(p for p in SKIN.rglob("*") if p.is_file() and p.name not in ("LICENSE.txt","SELF_CHECK.txt"))
+    """Hash every file that enters the staging ZIP, excluding only self-referential reports."""
+    files=sorted(p for p in OUT.rglob("*") if p.is_file()
+                 and p.name not in ("LICENSE.txt","SELF_CHECK.txt"))
     lines=[
         "NEON STAGE DEFAULT SKIN-1 — STAGING ASSET PROVENANCE",
         "Source: repository-approved NEON STAGE mockups and canonical Skin_052/theme.json.",
         "Generation: deterministic Python/Pillow pipeline; no external image URLs or third-party brand artwork.",
         "Scope: staging assets only; not a runtime installation or release license for third-party samples.",
-        "SHA-256 entries below cover every staged file except LICENSE.txt and SELF_CHECK.txt.",
+        "SHA-256 entries below cover every file included in the staging ZIP except LICENSE.txt and SELF_CHECK.txt.",
         ""
     ]
     for path in files:
         digest=hashlib.sha256(path.read_bytes()).hexdigest()
-        lines.append(f"{digest}  {path.relative_to(SKIN).as_posix()}")
-    (SKIN/"LICENSE.txt").write_text("\n".join(lines)+"\n",encoding="utf-8")
+        lines.append(f"{digest}  {path.relative_to(OUT).as_posix()}")
+    license_path=SKIN/"LICENSE.txt"
+    license_path.write_text("\n".join(lines)+"\n",encoding="utf-8")
+    declared={}
+    for line in lines:
+        parts=line.split("  ",1)
+        if len(parts)==2 and len(parts[0])==64: declared[parts[1]]=parts[0]
+    actual={p.relative_to(OUT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted(OUT.rglob("*")) if p.is_file()
+            and p.name not in ("LICENSE.txt","SELF_CHECK.txt")}
+    if declared!=actual:
+        raise RuntimeError("SHA-256 provenance ledger does not match all staging ZIP files.")
 
 
 def svg_knob_body():
@@ -732,17 +741,40 @@ def step_manifest():
       "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
       "shadowDepth":0.38,"edgeHighlight":0.34,"glow":"restrained cyan LED halo; reduced in ECO mode"
     }
+    theme["schema"]="ppgu-theme/1.2"
     theme["assets"]={"preview":"assets/preview.png","hero":"assets/hero.png",
                      "heroWebp":"assets/hero.webp","background":"assets/background.png",
                      "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
-                     "panelHeader":"svg/panel_header.svg","atlas":"assets/atlas/"}
-    # Canonical 28-control grid map for the REV ULTRA G2 contract.
+                     "panelHeader":"svg/panel_header.svg","atlas":"assets/atlas/",
+                     "atlasIndexes":"assets/atlas/*.json","windowChrome":"assets/atlas/window_chrome.png",
+                     "license":"LICENSE.txt","selfCheck":"SELF_CHECK.txt"}
+    # G2 inventory comes from the audited runtimeControlInventory, not guessed labels or IDs.
+    schema=json.loads((ROOT/"SKIN"/"control_schema.json").read_text(encoding="utf-8"))
+    contract=schema.get("x-ppgu-contract",{})
+    inventory=contract.get("runtimeControlInventory",{})
+    additional=contract.get("additionalCurrentControls",{})
     control_map={}
     for control_id, spec in theme.get("controls",{}).items():
         grid=spec.get("grid",{})
+        detail=inventory.get(control_id,additional.get(control_id,{}))
+        parameter_ids=detail.get("parameterIds")
+        if parameter_ids is None and isinstance(detail.get("parameterBinding"),str):
+            parameter_ids=[detail["parameterBinding"]]
         control_map[control_id]={
+            "id":control_id,
+            "label":detail.get("label",control_id.replace("_"," ").upper()),
+            "type":detail.get("controlType",detail.get("kind","unclassified")),
+            "runtimeStatus":detail.get("runtimeStatus","unverified"),
+            "component":detail.get("component",detail.get("components")),
+            "function":detail.get("function"),
             "col":grid.get("x"),"row":grid.get("y"),
-            "colSpan":grid.get("w"),"rowSpan":grid.get("h")
+            "colSpan":grid.get("w"),"rowSpan":grid.get("h"),
+            "apvtsBinding":parameter_ids,
+            "parameterDefinitions":detail.get("parameterDefinitions",[]),
+            "actionBinding":detail.get("actionBinding"),
+            "midiBinding":detail.get("midiBinding"),
+            "noteRange":detail.get("noteRange"),
+            "availability":detail.get("availability")
         }
     if len(control_map)!=28 or len(set(control_map))!=28:
         raise RuntimeError(f"G2 requires exactly 28 unique controls; found {len(control_map)}")
@@ -970,6 +1002,7 @@ def step_report():
         f"Control map: {len(control_data.get('controls',{}))} controls\n"
         f"Atlas indexes: {len(atlas_jsons)}\n"
         f"Atlas frames: {atlas_frames}\n"
+        f"LICENSE SHA-256: {hashlib.sha256((SKIN/'LICENSE.txt').read_bytes()).hexdigest()}\n"
         "Registry/runtime unchanged by staging pipeline.\n"
         "No JUCE build, CTest, pluginval or FL Studio 20 host test is performed here.\n",
         encoding="utf-8"
