@@ -1974,8 +1974,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             },
             [safe]
             {
+                // The gallery exposes active skins by activeOrdinal, not registry index.
+                // The default NEON STAGE skin is activeOrdinal 1.
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(52, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {
