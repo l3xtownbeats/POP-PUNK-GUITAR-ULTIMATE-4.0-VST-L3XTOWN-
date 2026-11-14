@@ -2661,3 +2661,22 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Проверки:** source diff/CI exact-SHA, G1–G4, PNG CRC, runtime fallback/reset, gallery selection, resize/HiDPI, Windows Release, CTest, pluginval и FL Studio 20 — PENDING / UNVERIFIED до фактического прогона.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 ACTIVE-ORDINAL GALLERY RUNTIME PATCH
+==============================================================================
+
+**Статус:** SOURCE PATCH COMMITTED / CI AND COMPILE PENDING.
+
+Дополнительно обновлён `Source/PluginEditor.cpp`:
+- registry structural validation по-прежнему проверяет все 102 исторические записи, уникальность resource ID/index и безопасные относительные пути;
+- runtime count теперь считает только `active=true` записи;
+- активная линейка валидируется по непрерывному `activeOrdinal=1..N`; ordinal 1 обязан совпадать с `defaultSkin`;
+- поиск theme manifest выполняется по `activeOrdinal`, а не по историческому resource index;
+- сохранённый stable `skinId` разрешается в activeOrdinal; неизвестный/архивный ID переводится на registry default;
+- gallery строится только по activeOrdinal, поэтому 101 архивная тема не должна отображаться как активная.
+
+В текущем registry ожидается одна активная карточка: `SKIN-1 / NEON STAGE DEFAULT`. SKIN-2…SKIN-16 остаются будущими элементами линейки. Проверка синтаксиса/компиляции C++, CTest, pluginval, G1–G4, PNG CRC и runtime/FL Studio приёмка пока не выполнены.
+
+==============================================================================
