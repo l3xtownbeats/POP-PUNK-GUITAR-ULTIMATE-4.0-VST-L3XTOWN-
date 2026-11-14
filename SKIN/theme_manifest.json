@@ -4,7 +4,7 @@
   "totalSkins": 102,
   "defaultSkin": "skin-052",
   "selector": "SKIN",
-  "status": "102-themes-unified-default-skin-052-user-decision-recorded",
+  "status": "102-themes-neon-stage-single-unified-product-identity",
   "themes": [
     {
       "id": "skin-01",
@@ -468,7 +468,7 @@
     {
       "id": "skin-052",
       "index": 52,
-      "name": "NEON STAGE / SIGNAL FORGE",
+      "name": "NEON STAGE",
       "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_052/theme.json",
@@ -478,7 +478,7 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "NEON STAGE LEGACY ARCHIVE",
+      "name": "LEGACY ARCHIVE 053",
       "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
