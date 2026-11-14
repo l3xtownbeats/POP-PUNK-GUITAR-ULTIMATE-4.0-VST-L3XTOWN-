@@ -699,3 +699,18 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Structural preflight:** PASS (500 total, 250 per mode, unique IDs/names, 21 artist profiles, 16 genre families, 20 melody archetypes, 20 pattern archetypes; all Pattern definitions have tuple-v1 events). This was a deterministic structural check, not execution of the Python validator, Windows build, CTest, pluginval, or host acceptance.
 
 **Important runtime boundary:** the catalog is authored data only. Presets remain runtime-validation-pending until actual loader/APVTS binding, sample mappings, articulation routing and Pattern event integration are implemented and auditioned. No BUILD VERIFIED or 500-playable claim.
+
+
+## 2026-11-14 — Engineering delegation, 500-bank package correction, and CI status
+
+**User authority:** explicit approval for autonomous technical decisions, implementation, optimization, reversible defect repair, use of available tools and reuse of public/compatible technologies, bounded by the approved master plan, legal rights, realtime contracts, data safety and existing public API/MIDI/APVTS compatibility. Full scope and operating guardrails are recorded in docs/PPGU_JOURNAL/PPGU_JOURNAL.md.
+
+**Code/data changes observed on branch soundhunter-unbounded-library:**
+- presets/factory_bank_500.json: normalized performance.patternLengthBeats=4 for all 250 PATTERN records, satisfying the validator's 4/4 pattern-cycle contract.
+- .github/workflows/vst3-build.yml: corrected the active release-package validation path to PRESETS/factory_bank_500.json, while retaining cleanup of the obsolete PRESETS/factory_bank_300.json. This prevents the release check from looking for the retired 300-bank as the active catalog.
+- Commit for package-path correction: 0913642e313aeb2d0fae82e57439c99699dcd682; follow-up correction preserving legacy cleanup while checking the 500 bank: d0c67a7481572debbc2324e162a053af9932d0d8.
+- The 500-bank catalog/build integration commits remain 79d4e2ab0d382b84bb862ee3e03370c0a67129e3 and 99577e84744c1de13bdd8c7dd8db84cf79fc7829.
+
+**CI:** GitHub Actions run 43577554118 was observed in_progress (build job). No successful completion, artifact, Windows/FL Studio host acceptance or release is claimed here. Job-log retrieval returned GitHub BlobNotFound; this is a tooling/log availability issue, not evidence of pass/failure. Re-check run status and artifacts before stating a result.
+
+**Testing boundary:** the JSON structural preflight was previously PASS; the workflow's final build/test outcome is pending. The run is not a substitute for separate exact-SHA Windows 10 x64 build, CTest, pluginval and FL Studio 20 acceptance.
