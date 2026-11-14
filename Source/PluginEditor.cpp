@@ -1114,12 +1114,12 @@ void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,
         fill.darker(0.16f), bounds.getX(), bounds.getBottom(), false));
     g.fillRoundedRectangle(bounds, 7.0f);
     const auto outline = !button.isEnabled() ? palette.border.withAlpha(0.45f)
-        : (button.hasKeyboardFocus(true) ? palette.accentGlow : palette.border);
+        : (button.hasKeyboardFocus(true) ? palette.token("accent_glow") : palette.border);
     g.setColour(outline);
     g.drawRoundedRectangle(bounds, 7.0f, button.hasKeyboardFocus(true) ? 1.7f : 1.0f);
     if (button.getToggleState() && button.isEnabled())
     {
-        g.setColour(palette.accentGlow);
+        g.setColour(palette.token("accent_glow"));
         g.fillRoundedRectangle(bounds.removeFromLeft(3.0f), 1.5f);
     }
 }
@@ -1133,7 +1133,7 @@ void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int width, int heig
     else if (isButtonDown) fill = fill.brighter(0.08f);
     g.setColour(fill);
     g.fillRoundedRectangle(bounds, 7.0f);
-    g.setColour(box.hasKeyboardFocus(true) ? palette.accentGlow : palette.border);
+    g.setColour(box.hasKeyboardFocus(true) ? palette.token("accent_glow") : palette.border);
     g.drawRoundedRectangle(bounds, 7.0f, box.hasKeyboardFocus(true) ? 1.7f : 1.0f);
     const float cx = bounds.getRight() - 17.0f;
     const float cy = bounds.getCentreY();
@@ -1152,7 +1152,7 @@ void PPGUPremiumLookAndFeel::drawTextEditorOutline(juce::Graphics& g,
         static_cast<float>(width) - 1.0f, static_cast<float>(height) - 1.0f);
     const bool focused = editor.hasKeyboardFocus(true);
     const auto outline = !editor.isEnabled() ? palette.border.withAlpha(0.45f)
-        : (focused ? palette.accentGlow : palette.border);
+        : (focused ? palette.token("accent_glow") : palette.border);
     g.setColour(outline);
     g.drawRoundedRectangle(bounds, 5.0f, focused ? 1.7f : 1.0f);
 }
@@ -1872,7 +1872,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
         button.setColour(juce::TextButton::buttonOnColourId, colour("accent"));
         button.setColour(juce::TextButton::textColourOffId, colour(foreground));
         button.setColour(juce::TextButton::textColourOnId, colour("window_bg"));
-        button.setColour(juce::TextButton::outlineColourId, colour("control_border"));
     };
 
     styleButton(loadButton, "accent", "window_bg");
