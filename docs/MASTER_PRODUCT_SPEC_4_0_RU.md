@@ -702,3 +702,18 @@ PATTERN remains a separate performance mode: mapped keys select chord/voicing an
 PREVIEW does not change active preset/project/persistent DAW state or saved slots; APPLY/SELECT commits; CANCEL restores previous state. PREV/NEXT and search/filter/sort/favorites preserve current result context. Do not expose unsupported articulations or patterns as playable; do not invent missing PUNK GROUP names. This direct approval allows the user's PUNK GROUP identities and song sections to be shown in the MELODY PRESET area, superseding any earlier conflicting display restriction only for that area.
 
 **Status:** approved requirement; documentation only, not evidence of source implementation or validation.
+
+
+## 15.17. PATTERN mode — two-window browser layout (2026-11-14)
+
+PATTERN mode uses **two separate browser windows**:
+
+**Window 1 — PRESET / GUITAR IDENTITY**
+Hierarchical selection of pop-punk genre/guitar type → PUNK GROUP/band identity → song-based selection → song section and compatible nested sub-items. Group/band and song/section dimensions are required; do not omit them or replace them with generic labels. Use canonical user-supplied names and actual source mappings only.
+
+**Window 2 — PLAYING STYLE / RHYTHMIC PERFORMANCE**
+Selects the playing style/articulation (how the guitar is played) and, as a distinct dimension, the rhythmic category/pattern/variation (what rhythmic figure is played). Preserve the existing canonical categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS. Preserve P1–P10 only where present in the canonical catalog and eight Pattern Slots per section. No invented IDs or unsupported playable choices.
+
+PATTERN remains separate from MELODY and retains approved AUTO CHORDS ON/OFF behaviour. PRESET window owns guitar/source and song context; performance window owns style and rhythm. Chord/voicing, source identity, tone preset/FX, articulation and rhythm remain separate axes. Filtering may constrain compatible combinations but cannot collapse the windows or merge their state. Preserve non-destructive PREVIEW, explicit APPLY/SELECT, CANCEL rollback, context-aware navigation/search/filter/sort/favorites, keyboard visibility and all realtime/MIDI/APVTS/sampler/stable-ID invariants.
+
+**Status:** approved requirement; documentation only. No runtime implementation or tests are claimed.
