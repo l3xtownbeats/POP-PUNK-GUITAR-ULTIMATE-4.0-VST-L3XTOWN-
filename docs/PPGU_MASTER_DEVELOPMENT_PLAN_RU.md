@@ -149,7 +149,7 @@ SoundBank — гитарный: не маркировать drum-only, bass-only
 
 ### 6.1 Масштабирование и наполнение
 - Нет искусственного потолка по числу пресетов, артистов, групп, жанров, стилей, one-shots, loops, mappings и библиотек.
-- минимум 500 уникальных пресетов MELODY + PATTERN суммарно, целевой объём около 600; Travis Barker 82 ведётся отдельной категорией без дублей.
+- не менее 300 уникальных READY-пресетов MELODY + PATTERN суммарно; 500–600 — расширенная цель (stretch goal); Travis Barker 82 ведётся отдельной категорией без дублей.
 - UI/browser должен показывать фактическое число ресурсов и использовать virtualized lists/lazy loading.
 - Пользовательские библиотеки могут подключаться локально в рамках лицензий, даже если их исходные файлы нельзя включить в factory bundle.
 
@@ -203,7 +203,7 @@ SoundBank — гитарный: не маркировать drum-only, bass-only
 ## 8. FACTORY PRESET SYSTEM
 
 ### 8.1 Общая цель
-- Начальная цель: не менее 500 уникальных MELODY + PATTERN пресетов суммарно, целевой объём около 600; Travis Barker 82 — отдельная категория.
+- Обязательный релизный минимум: не менее 300 уникальных READY-пресетов MELODY + PATTERN; расширенная цель — 500–600; Travis Barker 82 — отдельная категория.
 - Далее каталог может расширяться без искусственного верхнего лимита.
 - Каждый пресет обязан быть реально загружаемым, слышимым, правильно маппированным и звуково отличимым.
 - Название/описание/FX labels не доказывают готовность. Нужны source IDs, sample map, signal chain, articulation behavior и audio evidence.
@@ -430,7 +430,7 @@ PSC пока является проектной спецификацией, а 
 
 **Phase E — Sound design and factory presets**
 20. Complete 10–15 effect DSP modules plus amp/cab/IR routing.
-21. Build at least 500 unique MELODY + PATTERN factory presets total (target about 600); track Travis Barker 82 separately without duplicates or double counting.
+21. Build at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets as a hard release minimum; expand toward 500–600 only as a stretch goal; track Travis Barker 82 separately without duplicates or double counting.
 22. Create the 21 approved group/style families.
 23. Create six album-era families for Blink-182 and Sum 41.
 24. Render/A-B/validate every preset and record exact source/chain/evidence.
@@ -499,7 +499,7 @@ Mandatory album eras: *We Don't Need to Whisper* (2006), *I-Empire* (2007), *Lif
 
 Research public interviews, gear/effect-chain breakdowns, tone recipes and free preset examples. Record confirmed facts separately from tonal interpretation. Public information may inform independently authored DSP recipes. Third-party preset files, IRs and samples may only enter the commercial factory bundle where the specific license expressly permits redistribution; otherwise independently reproduce the general tone concept without copying protected assets, code, riffs or recordings.
 
-**Preset count correction:** the current approved target supersedes the older 300 minimum. Require at least 500 unique MELODY+PATTERN presets total, with approximately 600 as the target. Travis Barker 82 is a separate category of 82 unique complete presets; do not merge, duplicate or double-count it. The old 300-entry catalogue remains a legacy audit baseline. Counts never replace functional and audio validation.
+**Preset count correction:** the approved hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY+PATTERN presets total; 500–600 remains a stretch goal after the minimum is met. Travis Barker 82 is a separate category of 82 unique complete presets; do not merge, duplicate or double-count it. The old 300-entry catalogue remains a legacy audit baseline. Counts never replace functional and audio validation.
 
 Research evidence includes Ernie Ball String Theory (resonant-note approach and echo in A&A), Guitar World interview on *I-Empire* (chiming upper-frequency parts, compression/delay/flanger/stereo echo), and Guitar.com/GRAMMY interviews on *Lifeforms* (broader/rawer guitar palette and gear context). Exact track-specific chains remain subject to further research. No implementation or audio validation is claimed by this scope update.
 
