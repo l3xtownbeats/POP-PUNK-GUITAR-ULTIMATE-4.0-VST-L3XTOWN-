@@ -2752,3 +2752,21 @@ unverified until their steps complete successfully.
 **Ограничение релизного статуса:** SKIN-1 registry identity и runtime ordinal logic подготовлены; NEON STAGE artwork/assets, полные masters, package layout `Skins/skin-053/`, все 15 дополнительных активных тем, G1–G4/PNG CRC, Windows Release, pluginval 5 и FL Studio 20 остаются незавершёнными/UNVERIFIED.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — THEME MANAGER CTEST FALLBACK ALIGNMENT
+==============================================================================
+
+При подготовке exact-SHA validation обнаружен устаревший тестовый контракт в `tests/ThemeManagerTests.cpp`: начальное состояние и error fallback всё ещё ожидали `skin-052 / SIGNAL FORGE`, а также старые значения пяти палитровых токенов. Это несовместимо с новым SKIN-1 default и могло бы дать ложный CI failure после смены fallback.
+
+Исправлено:
+- стартовый fallback test identity теперь ожидает `skin-053 / NEON STAGE DEFAULT`;
+- expected fallback token seeds синхронизированы с `SKIN/Skin_053/theme.json`;
+- добавлен прямой load/reset test для канонической Skin_053;
+- все error-path fallback assertions теперь ожидают NEON STAGE;
+- отдельные проверки загрузки исторической Skin_052 / SIGNAL FORGE сохранены как проверки legacy resource, не как default.
+
+Изменён только UI contract test. APVTS, DSP, audio engine и runtime sample paths не затрагивались. CTest ещё не запускался; компиляция/исполнение этого теста остаются PENDING до Windows CI.
+
+==============================================================================
