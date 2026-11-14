@@ -3563,3 +3563,38 @@ REV ULTRA 3.0 задаёт обязательный производственн
 - CTest registration added: `ppgu_neon_stage_skin1_migration_audit_contract` in `CMakeLists.txt`.
 - Follow-up commits: audit hardening `1ffd2fb223fab6585f03d335dd2ee8c2803aa56d`; test hardening `f62c686df0c7e0262a9c26900a16f1713c5394cc`; CTest registration `d39bb6a2261a9f9886ac82f92257c48fe81570cf`.
 - These commits are source changes only. Unit test execution, CTest, Windows Release, pluginval, package and host acceptance remain PENDING until exact-SHA CI evidence is observed.
+
+
+================================================================================
+2026-11-15 — REV 18 v6.0 registry consumer audit / activeOrdinal design
+================================================================================
+
+**Статус:** STATIC CONSUMER AUDIT IMPLEMENTED / ATOMIC RUNTIME MIGRATION BLOCKED PENDING CONTRACT IMPLEMENTATION.
+**Документ:** `docs/PPGU_REV18_SKIN_IDENTITY_MIGRATION_AUDIT_RU.md`, section 7.
+**Commit:** `de7f5d46dcf347c16585a4a5d2e8371796e0c63f`.
+
+**Проверены consumers:**
+- Registry and merged pack manifest.
+- ThemeManager fallback, manifest parser and tests.
+- PluginEditor getSkinCount/getSkinManifest/loadSavedSkin/loadSkinByIndex/openSkinGalleryPanel/persistSkinPreference.
+- Settings restore action (currently hardcoded index 52).
+- ValidateSkinManifests.py, validate_skin_pack.py, generate_skin_batch.py and merge_skin_pack.py.
+- Skin selection is stored as stable `skinId` in JUCE PropertiesFile, not as a display ordinal/APVTS parameter.
+
+**Критические находки:**
+- `loadSavedSkin()` maps `skin-052` and `skin-053` to the old canonical ID; it does not resolve new `skin-053` default.
+- Settings restore is hardcoded to registry index 52.
+- Gallery enumerates all 102 registry entries by stored index and applies selection immediately.
+- ThemeManager fallback and ThemeManagerTests still identify `neon-stage-default-skin-1` as default.
+- Skin pack validator and generator/merger depend on the contiguous historical index range and pack identity; a registry-only swap would break validation and packaging.
+- Skin_052 and Skin_053 payloads must both be archived before any replacement or move.
+
+**[DECISION] Proposed safe model:** immutable stable `id/index/path` plus a separate active `activeOrdinal` (SKIN-1…SKIN-50) and explicit ACTIVE/ARCHIVED lifecycle. Skin_053/skin-053 becomes activeOrdinal 1; Skin_054…Skin_102 map to 2…50. Skin_01…Skin_052 remain historical archives and are not selectable. Stable IDs/index/path are not renumbered.
+
+**Не выполнено:** activeOrdinal registry schema, archive storage/provenance, pack validator/generator/merger update, ThemeManager fallback/default migration, saved-ID resolver, Gallery active filtering/order, Settings restore correction, old-state regression tests, Windows build/CTest/pluginval/package and host acceptance.
+
+**Non-goals:** no APVTS, DSP/audio callback, MIDI, sampler, presets or SoundBank changes. No registry/theme asset files were changed by this audit.
+
+**Следующий этап:** implement active/archive registry contract + migration resolver tests first; then update pack validation/generation and UI consumers as one coordinated source change. Preserve exact backups/SHA of Skin_052 and Skin_053 before touching their content.
+
+================================================================================
