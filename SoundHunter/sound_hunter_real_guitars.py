@@ -234,6 +234,7 @@ def main():
                         "sha256":actual,"classification":"REAL_RECORDED",
                         "license":s["license"],"verification":"license-and-sha256-verified"
                     })
+                release_copied=0
                 if not capacity_reached and s.get("release_tag") and s.get("release_asset_contains"):
                     relzip=tmp/(sid+"-release.zip")
                     asset_name=fetch_release_zip(repo,s["release_tag"],s["release_asset_contains"],relzip)
@@ -247,7 +248,6 @@ def main():
                         release_license=rz.read(release_license_paths[0]).decode("utf-8","replace")
                         if not license_ok(release_license,s["license"]):
                             raise RuntimeError(f"{sid}: release ZIP license does not verify {s['license']}")
-                        release_copied=0
                         # Preserve mapping and collection metadata alongside the WAVs.
                         metadata_suffixes={".sfz",".json",".md",".txt"}
                         for metadata_name in rz.namelist():
