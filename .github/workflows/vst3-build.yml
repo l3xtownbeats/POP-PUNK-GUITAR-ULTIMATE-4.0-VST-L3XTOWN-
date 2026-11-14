@@ -306,7 +306,7 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          $legacyCatalog = Join-Path $release 'PRESETS/factory_bank_500.json'
+          $legacyCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (Test-Path $legacyCatalog) { Remove-Item -LiteralPath $legacyCatalog -Force }
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
