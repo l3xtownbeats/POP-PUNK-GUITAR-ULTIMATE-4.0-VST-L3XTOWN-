@@ -99,6 +99,10 @@ endfunction()
 ppgu_add_test(ppgu_pattern_contracts tests/PatternSchedulerTests.cpp)
 target_include_directories(ppgu_pattern_contracts PRIVATE Source/Performance)
 
+# Pure C++ contract tests for section-first Pattern selection and legacy migration.
+ppgu_add_test(ppgu_pattern_section_contracts tests/PatternSectionModelTests.cpp)
+target_include_directories(ppgu_pattern_section_contracts PRIVATE Source/Performance)
+
 ppgu_add_test(ppgu_chord_transition_contracts tests/ChordTransitionPolicyTests.cpp)
 target_include_directories(ppgu_chord_transition_contracts PRIVATE Source/Performance)
 
