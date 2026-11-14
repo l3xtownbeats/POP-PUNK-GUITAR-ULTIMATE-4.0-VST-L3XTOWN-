@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 102,
-  "defaultSkin": "skin-053",
+  "defaultSkin": "skin-052",
   "selector": "SKIN",
-  "status": "102-themes-merged-gallery-source-implemented-exact-sha-validation-pending",
+  "status": "102-themes-unified-default-skin-052-user-decision-recorded",
   "themes": [
     {
       "id": "skin-01",
@@ -468,8 +468,8 @@
     {
       "id": "skin-052",
       "index": 52,
-      "name": "SIGNAL FORGE",
-      "family": "carbon_studio",
+      "name": "NEON STAGE / SIGNAL FORGE",
+      "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_052/theme.json",
       "preview": "Skin_052/assets/preview.png",
@@ -478,7 +478,7 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "NEON STAGE",
+      "name": "NEON STAGE LEGACY ARCHIVE",
       "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
