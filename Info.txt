@@ -3515,3 +3515,43 @@ REV ULTRA 3.0 задаёт обязательный производственн
 Аудио/APVTS/MIDI/presets/SoundBank/DSP не менялись. Registry, manifests, ThemeManager и assets не изменялись. Ранее успешные G1–G4 относятся к прежнему контракту и не подтверждают REV 18. Gallery artwork по-прежнему требует исправления запрещённых A4/A7 элементов. FL Studio 20 host acceptance не подтверждён.
 
 **Следующий шаг:** полный поиск registry consumers и persistence migration tests; затем единый атомарный patch и полный CI gate.
+
+
+================================================================================
+2026-11-15 — REV 18 v6.0 NEON STAGE SKIN-1 migration audit tooling
+================================================================================
+
+**Статус:** READ-ONLY AUDIT TOOL + UNIT TESTS COMMITTED / TEST EXECUTION AND RUNTIME MIGRATION PENDING.
+**Ветка:** `work/neon-stage-reference-preview-fix`.
+**Коммиты:**
+- Initial audit tool: `505ac985dba3c0f146a321a517a5dec96ab94325`.
+- Initial unit tests: `3e56fbcd842b676d19cfc34e7bd866de02bd514b`.
+- Manifest identity verification: `a03baa8498c244e2b08ab529f2ab042520f60680`.
+- Test import path and Skin_052 fixture correction: `a59d8364f4494e66da4af922e323ec7aa905dcc7`.
+
+**Основание:** пользовательский binding REV 18 v6.0: SKIN-1 = NEON STAGE DEFAULT = skin-053/Skin_053. Предыдущий аудит `docs/PPGU_REV18_SKIN_IDENTITY_MIGRATION_AUDIT_RU.md` остаётся актуальным источником детальной миграционной карты.
+
+**Реализовано в этом этапе:**
+- Добавлен `tools/audit_neon_stage_skin1_migration.py` — read-only проверка registry, total/count, уникальности ID/index, непрерывности индексов, безопасных manifest paths, наличия theme manifests, соответствия ID/index между registry и каждым theme.json, канонической записи SKIN-1, сохранности Skin_052/Skin_053 и стабильных ID Skin_054…Skin_102.
+- Отчёт включает SHA-256 исходных Skin_052 и Skin_053 manifests, список сохранённых stable IDs и REVIEW-предупреждения по legacy selector policy.
+- Скрипт не копирует, не переименовывает, не удаляет и не изменяет файлы. `mutation_performed=false`.
+- Добавлены unit tests: валидная целевая registry-модель, обнаружение старого default/архивного Skin_053, дубли ID/index и path traversal.
+- Исправлен импорт тестируемого модуля через tools path; тестовый fixture сохраняет прежнюю историческую идентичность Skin_052.
+
+**Техническая граница:**
+- Это безопасный audit/preflight инструмент, а не миграционный writer.
+- Никакие runtime files, registry, theme manifests, artwork, ThemeManager, PluginEditor, APVTS, MIDI, DSP, presets или SoundBank не менялись.
+- Unit tests пока не объявляются PASS: фактическое выполнение и CI на exact SHA не подтверждены.
+- CTest integration, Windows x64 Release, pluginval strictness 5, packaging и FL Studio 20 acceptance не выполнялись этим этапом.
+- Старые CI PASS не переносятся на новые commits.
+
+**Следующий этап:** проверить consumers registry/pack manifest/defaultSkin/saved selection; затем выполнить unit tests и встроить audit test в подходящий CI/CTest gate. Только после этого проектировать единый atomic active-vs-archive migration patch. Не менять stable historical IDs/path/index и не переносить Skin_052/Skin_053 до подтверждения всех consumers.
+
+**Self-check REV 18 v6.0:**
+1. Exact source commits указаны выше; новый CI status — PENDING.
+2. Contract coverage добавлена в `tests/test_neon_stage_skin1_migration_audit.py`; execution not yet verified.
+3. A9 non-goals соблюдены: no audio/APVTS/MIDI/preset/SoundBank modifications.
+4. Статус: audit tooling Implemented (source committed); tests Unverified; runtime migration Not implemented.
+5. Открыто: execute tests, CI/CTest wiring, consumer inventory, active-vs-archive schema, ThemeManager fallback/reset, Gallery order/persistence, G1–G4 and full VST3 gates, host acceptance.
+6. Изменения только в указанной рабочей ветке; распространение в другие branches и main не выполнялось.
+================================================================================
