@@ -2156,3 +2156,39 @@ The three areas must remain visually and functionally distinct. Selection in one
 - This clarification explicitly confirms that the MELODY PRESET area is allowed to present the user's selected PUNK GROUP/band-style identities and song sections as the user-facing selection dimension; do not silently hide that dimension behind a generic category. Any earlier conflicting visible-name restriction is superseded only to this extent by this direct approval. Do not fabricate names; use the canonical user-provided PUNK GROUP list when reconciled from source records.
 
 **Implementation / validation:** documentation requirement only. No production source, UI, MIDI map, DSP, presets or sample data changed in this entry. Build, CTest, pluginval, package and FL Studio 20 host acceptance are not claimed.
+
+
+## 2026-11-14 — PATTERN mode browser: two separate windows (user clarification)
+
+**Тип:** обязательное уточнение ранее согласованного PATTERN workflow.  
+**Статус:** APPROVED REQUIREMENT / DOCUMENTATION ONLY.
+
+PATTERN mode must present **two separate browser windows/areas**, not one flattened browser:
+
+### Window 1 — PRESET / GUITAR IDENTITY
+Hierarchical selection of the guitar sound and musical identity:
+- pop-punk genre / guitar type;
+- PUNK GROUP / band identity;
+- song-based selection;
+- individual song section and nested compatible sub-items.
+
+Use the already approved hierarchy and actual source catalog. The group/band and song/section levels must not be omitted or silently replaced by generic labels. Do not invent missing PUNK GROUP names or claim unsupported source mappings exist.
+
+### Window 2 — PLAYING STYLE / RHYTHMIC PERFORMANCE
+A separate performance browser for the selected guitar identity:
+- playing style / articulation (how the guitar is played);
+- rhythmic category and pattern/variation (what rhythmic figure is played);
+- compatible rhythm choices and variations, filtered by the selected source, section and style.
+
+Keep articulation and rhythm semantically distinct even though they are presented together in this second PATTERN-mode performance window. Preserve the canonical PATTERN categories already recorded in MASTER_PRODUCT_SPEC (DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS), P1–P10 where supported by the canonical pattern catalog, and eight Pattern Slots per section. Do not invent additional pattern IDs or expose unmapped items as playable.
+
+### PATTERN-mode behaviour
+- PATTERN is a separate performance mode from MELODY. It uses rhythmic guitar performance and the approved AUTO CHORDS ON/OFF behaviour; MELODY remains one key = one pitched note.
+- The PRESET window selects guitar/source identity and song context. The second window selects playing manner and rhythmic performance. Neither window silently overwrites the other window's independent selection state.
+- Chord/voicing selection, guitar/source identity, tone preset/FX, playing style/articulation and rhythm pattern remain separate axes.
+- Context filtering may narrow compatible choices but must not merge the two windows or conflate STYLE with PATTERN.
+- Preserve non-destructive PREVIEW, explicit SELECT/APPLY and CANCEL rollback; PREV/NEXT, SEARCH, FILTER, SORT and FAVORITES retain current browser scope.
+- Unsupported source/style/pattern combinations are visibly unavailable with a truthful reason; no fake controls, random substitution or incompatible sample playback.
+- Both windows must respect keyboard visibility/hit-testing, realtime callback restrictions, stable IDs, existing MIDI/APVTS contracts and exact-SHA validation gates.
+
+**Implementation status:** documentation only. No production UI, browser backend, pattern engine or MIDI behaviour is claimed implemented or tested by this entry.
