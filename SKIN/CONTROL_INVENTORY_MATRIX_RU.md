@@ -143,3 +143,52 @@ Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated comm
 - Open Skin Gallery: opens the existing gallery panel alongside Settings.
 
 No audio, APVTS, MIDI or processor parameters are changed. About remains NOT IMPLEMENTED; no fake controls are added.
+
+
+## 11. TX-PRESET-AUDIT-005 — browser control contract (2026-11-14)
+
+Это дополнение описывает обязательные UI-контракты, но не заявляет об их реализации. Приоритет у свежих решений REV.17, SIGNAL FORGE v10 и эталона 01 INTERFACE — NEON STAGE DEFAULT.
+
+### 11.1 Preset Browser: режимы и элементы управления
+
+| Logical ID | Label | Поведение | Требование |
+|---|---|---|---|
+| browser_mode_browser | BROWSER | Обычный каталог | REQUIRED |
+| browser_mode_favorites | FAVORITES | Избранные записи; фильтр не меняет active preset | REQUIRED |
+| browser_mode_categories | CATEGORIES | Каталог по утверждённым категориям | REQUIRED |
+| preset_prev / preset_next | PREV / NEXT | Перемещение только внутри текущего результата/контекста | REQUIRED |
+| preset_favorite | FAVORITE | Добавить/убрать запись из избранного, сохранить состояние | REQUIRED |
+| preset_name | PRESET NAME | Имя выбранного/активного пресета без смешения состояний | REQUIRED |
+| preset_category | CATEGORY | Категориальный контекст без самостоятельной смены звука | REQUIRED |
+| preset_search | SEARCH | Поиск по имени/доступным метаданным без автоактивации | REQUIRED |
+| preset_filter_sort | FILTER / SORT | Навигация по каталогу; точные поля/ranking OPEN | REQUIRED / DETAILS OPEN |
+| preset_preview | PREVIEW | Временное audition без commit/изменения active preset/project state; безопасное завершение | REQUIRED |
+| preset_select_load | SELECT / LOAD | Явная транзакционная загрузка/активация | REQUIRED |
+
+Режимы строго BROWSER / FAVORITES / CATEGORIES. Не добавлять All / Melody / Pattern / Factory / User tabs. Factory и User — data scopes, не дополнительные browser modes.
+
+### 11.2 Навигация, карточки и категории
+
+GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN. Разделы: Intro / Verse / Pre-Chorus / Chorus / Bridge / Outro. STYLE и PATTERN — разные последовательные выборы; MELODY structure не меняется. Карточка/строка показывает artwork, title, description и полезную информацию; artwork требует подтверждённых прав.
+
+Восемь категорий: Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere. Counts должны разделять definitions, dependency-resolved, loadable, playable-tested и host-verified. Missing/unresolved dependencies запрещают статус playable.
+
+### 11.3 Независимый Pattern Browser
+
+Pattern Browser не сливается с Preset Browser. Workflow: SECTION → PATTERN → PREVIEW → APPLY / BACK. Сначала Section, затем Pattern; Preview не коммитит; APPLY фиксирует назначение; BACK/CANCEL откатывает draft в транзакционном workflow. Intro, Verse, Pre-Chorus, Chorus, Bridge и Outro имеют независимые назначения. STYLE и PATTERN browser сохраняют утверждённое разделение и последовательность NEON STAGE.
+
+### 11.4 Данные и операции
+
+Factory catalog expansion-only/read-only; User presets/banks отдельно. Форматы: MELODY .ppgm, PATTERN .ppgp, bank .ppgbank. Save/Load/Import/Export сохраняют stable IDs и совместимость. Импорт не перезаписывает молча одноимённый preset/ID; конфликт требует явного решения. Curator — отдельный advanced workflow, не заменяет обычный browser.
+
+Не считать Save As, Rename, Delete или Rescan утверждёнными browser controls по результатам этого аудита. Destructive actions требуют отдельного явного решения/подтверждения и никогда не затрагивают factory catalog.
+
+### 11.5 Реализационная карточка и realtime
+
+Для каждого control фиксировать stable ID, label, panel/zone, действие, data source, state transitions, callback, preset-manager/engine/APVTS mapping, persistence, keyboard/focus, loading/error/empty/disabled states, MIDI Learn/automation applicability, tests и exact-SHA evidence. Нужны mouse и keyboard/focus navigation. Fake controls и фиктивные counters запрещены.
+
+Indexing, metadata/artwork processing, preview preparation, sample decode и file/network I/O — вне audio callback; bounded work/cache и безопасная передача состояния обязательны. Приоритеты Safety → Realtime → Sound → Resources → UX.
+
+OPEN: точные sort keys/order, filter taxonomy, ranking, дерево Genre/Artist, auto-load, double-click, waveform и длительность preview. Старый left-panel layout подчинён свежему NEON STAGE DEFAULT. Skin меняет только визуальное оформление, не layout/controls/bindings/sound.
+
+**Статус:** REQUIREMENTS INDEXED / SOURCE-TO-CONTROL AUDIT REQUIRED / NO IMPLEMENTATION CLAIM.
