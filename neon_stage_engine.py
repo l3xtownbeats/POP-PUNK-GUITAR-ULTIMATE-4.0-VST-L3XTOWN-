@@ -15,9 +15,9 @@ PALETTE = {
     "window_bg":"#050811", "panel":"#091321", "panel_elevated":"#101F32",
     "control_bg":"#07101C", "control_face":"#14263A", "control_border":"#52718B",
     "text_primary":"#FFFFFF", "text_secondary":"#D9E8F7", "text_disabled":"#AABBD0",
-    "accent":"#49F2FF", "accent_glow":"#A8FBFF", "danger":"#FF5577",
+    "accent":"#66FFFF", "accent_glow":"#B8FFFF", "danger":"#FF5577",
     "warning":"#FFD166", "success":"#67F5B5", "lcd_bg":"#020A12",
-    "lcd_text":"#C9FFFF", "led_on":"#49F2FF", "led_off":"#263C50",
+    "lcd_text":"#C9FFFF", "led_on":"#66FFFF", "led_off":"#263C50",
     "shadow":"#02040A", "highlight":"#B8D9F0", "lowlight":"#0A1421"
 }
 TOKENS = tuple(PALETTE)
@@ -171,7 +171,7 @@ def svg_knob_pointer():
 
 def step_svg():
     ensure_dirs()
-    svg_dir=ASSETS/"svg"
+    svg_dir=SKIN/"svg"
     texture=f'''<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
 <rect width="128" height="128" fill="{PALETTE['window_bg']}"/>
 <path d="M0 16H128 M0 64H128 M0 112H128" stroke="{PALETTE['highlight']}" stroke-opacity=".08"/>
@@ -194,7 +194,7 @@ def step_svg():
     print("Generated safe, static SVG assets.")
 
 def draw_promo(size,title,subtitle,path):
-    im=Image.new("RGB",size,rgb(PALETTE["window_bg"]))
+    im=Image.new("RGBA",size,(*rgb(PALETTE["window_bg"]),255))
     d=ImageDraw.Draw(im)
     w,h=size
     # Subtle technical grid and neon edge lighting.
