@@ -604,3 +604,14 @@ Next: canonical source graph map → CMake/JUCE provisioning reconciliation → 
 - Existing registry baseline is empty (assetCount=0/sourceCount=0); therefore target is APPROVED/DOCUMENTED only and is not yet size-verified.
 - Journal organization: keep all development journals in one canonical repository location after dependency/reference audit. INFO and CODE remain separate synchronized records. INFO tracks requirements/status/decisions/verification; CODE tracks source paths/symbols/change summaries/commit SHAs/test evidence. Full code remains in .cpp/.h; never duplicate source code in logs.
 - Update INFO and CODE during each development operation, with matching commit SHA, affected paths, test commands/results and unresolved risks. Do not mark documentation complete until both records have been re-fetched and verified. Avoid blind moves/deletions; preserve history and references.
+
+
+## 2026-11-14 — JOURNAL ARCHIVE CONSOLIDATION / CODE-OF-RECORD UPDATE
+
+Documentation-only operation; production source and audio assets changed: NO.
+Canonical journal directory: docs/PPGU_JOURNAL/.
+Copied journal/specification set: INFO.md, CODE.md, PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md, PPGU_MASTER_PROMPT_RU.md, PPGU_MAJOR_USER_REQUIREMENTS_AMENDMENT_2026-11-14_RU.md, PPGU_AUDIO_ENGINE_PRODUCT_FAMILY_RU.md, MASTER_PRODUCT_SPEC_4_0_RU.md, PRESET_BANK_4_0_READINESS_RU.md, SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md, PPGU_CANONICAL_PUNK_GROUP_PRESET_SOUND_MAP_RU.md, plus README.md index.
+All ten copied content files were re-fetched from main and their content lengths/blob SHAs recorded during verification; copies preserve exact source blob content at time of consolidation.
+Future journal edits go to this canonical folder. INFO.md and CODE.md must be updated together with matching operation/commit evidence. Source implementation remains exclusively in .cpp/.h.
+On exact user request ALL, create a fresh ZIP from current main contents of docs/PPGU_JOURNAL/ and attach it.
+Legacy original paths were intentionally retained; no deletion/move was performed because repository-wide references and workflow consumers have not yet been exhaustively audited. No build/CTest/pluginval/host test was run; no production source changed.
