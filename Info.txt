@@ -3220,3 +3220,29 @@ default pointer, runtime schema or VST3 code is changed.
 run to pass all registrar tests, merged-pack G1-G4 and complete skin-manifest
 validation. No PASS is claimed until that run completes.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — SKIN-REGISTRATION-REV-ULTRA-1.3 WINDOWS CI PASS
+==============================================================================
+**Corrected commit:** ce67795effb177bcb926502bd59bf57193f1a005  
+**Workflow:** Skin Registration REV ULTRA 1.3 Contract  
+**Run:** 43634657485  
+**Conclusion:** SUCCESS (Windows latest, Python 3.12).
+
+Passed steps:
+1. Registrar guard unit tests — 10 tests, all PASS.
+2. Existing merged skin-pack G1-G4 validation — PASS.
+3. Complete skin registry/theme manifest validation — PASS.
+4. Explicit invariant check — 102 themes and defaultSkin remains skin-053 — PASS.
+
+The previous failure (run 43634499893) was caused by a mismatch between
+the count-mismatch error wording and its test assertion. The diagnostic was
+aligned, and the fresh run passed all steps.
+
+**Scope remains tooling/QA only.** No new skin pack was generated or imported;
+the registry remains at 102 entries. NEON STAGE remains the default.
+No VST3 build, CTest, pluginval or FL Studio 20 host test is implied by this run.
+
+**Status:** REGISTRAR CONTRACT + CURRENT SKIN REGISTRY CI VERIFIED / NEW PACK NOT YET GENERATED.
+==============================================================================
