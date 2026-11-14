@@ -3192,3 +3192,32 @@ Created a UTF-8 plain-text master list consolidating approved product scope: pla
 The file explicitly separates approved requirements from implementation status and records known gaps without claiming completion. It is a requirements inventory, not a replacement development journal.
 
 **Next development action:** begin with the cancelled Windows workflow baseline for commit `8b07c9cf3485f990bc1653b031e3b611ba74de04`. The recorded run `43561929542` was cancelled during legacy skin-artwork generation; all later validation/build/package steps were skipped. Re-run that job before using it as a baseline, then address the first confirmed build/test blocker on the active source branch. No production source was changed by this inventory operation.
+
+
+## 2026-11-14 — WINDOWS BUILD GRAPH VALIDATION AND CMAKE FOLLOW-UP FIXES
+
+**Код/конфигурационные commits:**
+- `bee7f9a07c6fb505780da81097b98fe47a625575` — initial CMake reconciliation: canonical sampler/UI source paths, JUCE 7.0.12 FetchContent, preset data target and real test sources.
+- `8b07c9cf3485f990bc1653b031e3b611ba74de04` — added explicit `PPGUPresetData` / `PPGUTestData` binary-data targets and processor integration test target.
+- `d69fa83ae68a096a5595e738d6af8ce1f0a38d8f` — converted processor integration test to JUCE console app, added generated JUCE header and valid bundle identifier.
+- `428cefd926bbd4a6aaad74e98a38083a6d74de76` — converted ThemeManager and AuxiliaryPanel layout contract tests to JUCE console apps with generated `JuceHeader.h`.
+
+### CI evidence
+1. Run `43561967979` on `ae96569f151c82a60f2864e291cd77f585b72fe8`: artwork/preset/APVTS/skin/soundbank/BinaryData validation passed; CMake configure failed because `juce_generate_juce_header` was called on a plain `add_executable` test target. Also emitted invalid fallback bundle-ID warning due spaces in company name. Fixed by commit `d69fa83...`.
+2. Run `43562370660` on `b7633e5c0547947c7b13402bc92de0d7d905f25a`: x64 Release configure **PASS**. Build reached C++ compilation; `ppgu_processor_pattern_tests`, sampler tests and several standalone test executables compiled. Build then **FAIL** on `tests/ThemeManagerTests.cpp` because `Source/UI/ThemeManager.h` includes `JuceHeader.h` and the plain test target had no generated JUCE header. No CTest/pluginval/host stage ran. Fixed by commit `428cefd...`.
+3. Run `43563213274` on `428cefd926bbd4a6aaad74e98a38083a6d74de76`: x64 Release configure **PASS**; build was **CANCELLED** by a newer push before a final result. This is not a build PASS or FAIL.
+4. Run `43563855541` on `ca1839f2da8f4843097bdc041f195e8c7f8fb0a1`: cancelled during build by subsequent documentation pushes; no final build/CTest evidence.
+5. Run `43564145046` was also cancelled; it supplies no completed build evidence.
+
+### Additional factual findings from the same Windows audit
+- The existing soundbank audit reported **3.306 GiB** across 4,353 audio files from 11 sources and returned PASS against its current `<=25 GiB preferred / 30 GiB hard ceiling` policy. This does **not** satisfy the approved strict installed-library target of **25–30 GB**; the current library remains below the required minimum. Do not pad, duplicate or re-encode assets to inflate size.
+- The runtime build generated a per-file Sound Hunter registry for 4,353 audio assets; the checked-in bootstrap registry being empty is not evidence that the build-time inventory is empty.
+- Source/UI inspection found no AUTO DISCOVER/SOUND HUNTER controls in the current plugin editor; Import Guitar exposes manual SFZ browsing only. Full user-facing AUTO DISCOVER remains NOT IMPLEMENTED / NOT VERIFIED.
+- FX remains below approved scope: the compact processor/UI inventory is seven slots/buttons, while the approved requirement is up to 15 real processors plus a separate cabinet section. The exact additional module inventory must be reconciled from the earlier user-approved design; no filler modules or guessed names may be added.
+- The latest approved master function inventory is `PPGU_APPROVED_FUNCTIONS_MASTER_LIST_RU.txt`; it is a requirements reference, not a development journal and not proof of implementation.
+
+### Current status and next action
+- CMake configure has been verified PASS on the current corrected configuration at SHA `428cefd...`.
+- Full Windows Release build after the ThemeManager/Panel target fix: **NOT VERIFIED** (the next run was cancelled).
+- CTest, pluginval strictness 5 and FL Studio 20 host acceptance: **NOT RUN / NOT VERIFIED** on the corrected configuration.
+- Next: rerun Windows Release + full build + CTest on a stable current HEAD; fix only the next confirmed failure, then continue approved feature implementation. Preserve all approved UI geometry and contracts. AUTO DISCOVER semantics are explicit ON/OFF permission, explicit bounded cancellable SCAN, no automatic scheduler/repeat, real progress/results/errors/dedup/provenance/checksum, and use of the existing import/discovery pipeline outside the audio callback.

@@ -15,6 +15,7 @@
 6. При запросе пользователя `ALL` сформировать свежий ZIP архива документации, включая единый журнал, CODE и все актуальные спецификации.
 
 ## Справочные спецификации (не журналы)
+- `PPGU_APPROVED_FUNCTIONS_MASTER_LIST_RU.txt` — полный сводный перечень утверждённых функций, окон, контролов и QA требований (requirements reference, не журнал).
 - `PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md`
 - `PPGU_MASTER_PROMPT_RU.md`
 - `PPGU_MAJOR_USER_REQUIREMENTS_AMENDMENT_2026-11-14_RU.md`

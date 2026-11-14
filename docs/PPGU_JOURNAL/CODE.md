@@ -642,3 +642,23 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Reason/root cause:** existing root CMake referenced paths not present on main, expected an unvendored JUCE folder without provisioning, and violated the repository's BinaryData target/header/link contract. Prior CI baseline run `43561654587` on SHA `27db171bd62828fccf479982dd402d20a9717830` failed at the BinaryData checker with missing `PPGUPresetData` / `PPGUTestData` and missing HEADER_NAME declarations.
 
 **Verification:** GitHub Contents API confirmed the referenced source/test paths exist. Windows run `43561929542` on SHA `8b07c9cf3485f990bc1653b031e3b611ba74de04` was QUEUED when this entry was prepared. Configure/build/CTest/pluginval/host results are NOT RUN / NOT VERIFIED; no PASS is claimed. Production C++ implementation and audio assets were not changed.
+
+
+## 2026-11-14 — CMAKE FOLLOW-UP AND WINDOWS CI EVIDENCE
+
+**Build/config commits (all in CMakeLists.txt):**
+- `bee7f9a07c6fb505780da81097b98fe47a625575`: replace absent legacy Source/Engine and Resources paths with existing canonical sampler/UI sources; pin JUCE 7.0.12 via FetchContent; establish sampler core and valid source/test paths.
+- `8b07c9cf3485f990bc1653b031e3b611ba74de04`: declare `PPGUPresetData` / `PPGUTestData` with required generated headers and link consumers; add real Processor/Editor integration test.
+- `d69fa83ae68a096a5595e738d6af8ce1f0a38d8f`: use JUCE console app for processor integration target, generate its JUCE header, set valid `BUNDLE_ID`.
+- `428cefd926bbd4a6aaad74e98a38083a6d74de76`: use JUCE console app + generated JUCE header for `ppgu_theme_contracts` and `ppgu_panel_contracts`.
+
+**Verified CI evidence:**
+- Run `43561967979`, SHA `ae96569f151c82a60f2864e291cd77f585b72fe8`: CMake configure FAILED because JUCE header generation was called on a non-JUCE executable. Fixed in `d69fa83...`.
+- Run `43562370660`, SHA `b7633e5c0547947c7b13402bc92de0d7d905f25a`: configure PASS; build FAILED because `ppgu_theme_contracts` lacked generated `JuceHeader.h`. Other sampler/integration targets compiled in the same build log. Fixed in `428cefd...`.
+- Run `43563213274`, SHA `428cefd...`: configure PASS; build CANCELLED by later push. No final build result.
+- Run `43563855541`, SHA `ca1839f...`: cancelled during build by later push. No final build result.
+- CTest, pluginval strictness 5, FL Studio 20 host tests: NOT RUN on the corrected CMake configuration.
+
+**Additional audit results:** SoundBank audit reports 3.306 GiB, 4,353 audio assets / 11 sources; this passes the current validator but fails the user's strict 25–30 GB minimum target. AUTO DISCOVER is not present in the current PluginEditor; Import Guitar only exposes manual SFZ browsing. FX compact inventory remains below the approved 15-processor upper scope plus separate cabinets; exact remaining module names must be recovered from the user's earlier approved list, never invented.
+
+**Next:** obtain one uninterrupted Windows Release configure/build/CTest run on the latest stable HEAD; then continue feature implementation. This entry documents observed outcomes only; it does not claim product readiness.
