@@ -2616,3 +2616,29 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 [UNVERIFIED] Pixel-level approval макетов, G1–G4 на целевом NEON STAGE pack, PNG CRC полного набора, runtime default/reset behavior, resize/HiDPI/auxiliary windows, CPU/RAM profiling и FL Studio 20 acceptance не подтверждены.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 v2.0 REGISTRY NO-LOSS PREFLIGHT
+==============================================================================
+
+**Статус:** REGISTRY STRUCTURAL AUDIT COMPLETE / ACTIVE-LINEUP MIGRATION PLAN REQUIRED.
+
+На base SHA `01a60164961f31c9a8c18405515d0ef8d4478f58` и неизменённом registry snapshot получено:
+- `totalSkins=102`; `themes[]` содержит 102 записи.
+- Найдено 102 папки `Skin_*/theme.json`; нет незарегистрированных папок и записей без папок.
+- Дубликатов registry ID и index не обнаружено.
+- Manifest не содержит active flags; поле default указывает на `skin-052`.
+- NEON STAGE resource target `skin-053` сейчас называется `Carbon Studio 01`, index 53; имеет 21-token palette, STUDIO_CONSOLE, preview/hero и три SVG refs. Это существующий ресурс, но не утверждённый NEON STAGE asset package.
+- 27 requiredControlIds и 21 paletteTokens подтверждены в `control_schema.json`. Тест `ThemeManagerTests.cpp` всё ещё перебирает 28 control slots; inventory mismatch требует отдельного исправления теста/контракта после точного анализа, не изменения APVTS.
+- `PluginEditor.cpp` не содержит найденных literal HEX color strings (0 совпадений по паттерну #RRGGBB/#RRGGBBAA в текущем файле). Это не подтверждает отсутствие hardcoded HEX во всём `Source/UI/*`.
+- Текущий ThemeManager fallback остаётся `skin-052 / SIGNAL FORGE`, что конфликтует с v2.0.
+
+**No-loss design constraint [DECISION — PROPOSAL, NOT APPLIED]:**
+Сохранить исторические `id` и `index` всех 102 существующих записей и все их папки/байты. Для новой активной линейки разделить стабильный resource ID от пользовательского SKIN number / gallery order: `skin-053` отображается как SKIN-1; новые ресурсы для SKIN-2…SKIN-16 получают новые свободные стабильные IDs после существующего диапазона, а legacy entries остаются архивными/inactive с сохранёнными историческими index. Для этого потребуется расширение registry contract полями active/order (либо эквивалентным явным полем) и обновление runtime gallery sorting. Не использовать существующий index как пользовательский SKIN number и не переписывать ID/индексы задним числом.
+
+Никакие registry/theme/runtime files в рамках этого аудита не менялись. Все 102 папки не проверялись на полную комплектность/размеры/CRC/лицензии; structural presence ≠ asset readiness. Макеты 01–07 присутствуют, но pixel-level review не выполнен. G1–G4, runtime fallback/reset, resize, auxiliary windows, CPU/RAM, Windows build, pluginval и FL Studio 20 остаются UNVERIFIED.
+
+Следующий безопасный source этап: расширить registry schema с no-loss active/order semantics и тестами на сохранение 102 historical entries; затем в отдельном commit обновить NEON STAGE Skin_053 manifest/default/fallback и gallery ordering, не затрагивая audio/APVTS/MIDI. После этого создавать SKIN-2…SKIN-16 с новыми IDs и проверять каждый pack G1–G4.
+
+==============================================================================
