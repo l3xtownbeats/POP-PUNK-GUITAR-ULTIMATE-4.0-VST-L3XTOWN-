@@ -43,7 +43,7 @@ class SoundHunterRegressionTests(unittest.TestCase):
         buffer=io.BytesIO()
         with zipfile.ZipFile(buffer,"w") as z:
             z.writestr("bank/sample.wav",payload)
-            z.writestr("bank/SHA256SUMS",f"{digest}  sample.wav\\n")
+            z.writestr("bank/SHA256SUMS",f"{digest}  sample.wav\n")
         with zipfile.ZipFile(io.BytesIO(buffer.getvalue())) as z:
             count,members=sound_hunter.verify_zip_sha256_manifest(z)
         self.assertEqual(count,1)
@@ -54,7 +54,7 @@ class SoundHunterRegressionTests(unittest.TestCase):
         buffer=io.BytesIO()
         with zipfile.ZipFile(buffer,"w") as z:
             z.writestr("sample.wav",b"changed")
-            z.writestr("SHA256SUMS",f"{hashlib.sha256(b'original').hexdigest()}  sample.wav\\n")
+            z.writestr("SHA256SUMS",f"{hashlib.sha256(b'original').hexdigest()}  sample.wav\n")
         with zipfile.ZipFile(io.BytesIO(buffer.getvalue())) as z:
             with self.assertRaises(RuntimeError):
                 sound_hunter.verify_zip_sha256_manifest(z)
