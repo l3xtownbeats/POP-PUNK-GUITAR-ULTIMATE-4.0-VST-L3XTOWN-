@@ -112,6 +112,25 @@ Before any existing sound is superseded, the candidate must be checked and the r
 
 A replacement is approved only when it is demonstrably better or fills a documented missing capability, remains compatible with the preset role, and passes license and playback regression checks. If any critical check fails or rights are unclear, do not promote it; retain the current sound and keep the candidate staged for review. Preserve the old asset and rollback path.
 
+
+## Engine-owned automatic discovery, classification and preset assignment
+
+The intended final behavior is that the **PPGU plugin/engine itself** manages the imported sample intake after files are placed in `Samples/Import Guitar Sample/`. The user should not have to manually sort every file or manually decide which preset uses each sound.
+
+Required engine workflow:
+1. Detect new files in the direct-import folder at a safe scan point (startup, explicit Rescan/Auto Discover action, or a background scan that does not interrupt audio processing).
+2. Validate file safety and readability; identify actual format/codec and technical properties; compute SHA-256; deduplicate without deleting the user's original files.
+3. Read embedded metadata and accompanying SFZ/SF2/SF3/GIG maps or manifests where supported. Analyze audio characteristics where technically feasible (instrument family, clean/DI/processed tone, tempo/rhythm for loops, note range, velocity layers, articulations and recording quality). Do not invent note ranges, velocity layers, genre or articulation when evidence is insufficient; mark unknown and request review or keep the asset unassigned.
+4. Classify assets with multiple tags across format, instrument, genre/style, tone and articulation. Preserve source and license metadata and keep rights-restricted assets isolated from commercial-shipment content.
+5. Decide which compatible assets are suitable for each factory preset based on the preset's actual sound role, required articulation, tuning, note/velocity coverage and validated quality. A file's name or genre label alone is not enough to assign it.
+6. Create/update registry entries and stable asset IDs, then make approved assets available to the preset browser and engine. Presets reference registry IDs, not hard-coded import-folder filenames.
+7. If a better compatible sample is found, stage and compare it against the active asset, run the replacement quality gate and preset regression checks, then switch the registry reference only after passing. Keep the former asset available for rollback.
+8. Provide user-visible scan/import results, including accepted, duplicate, unsupported, unassigned, rights-review and failed assets, plus the preset assignments/replacements made. Allow manual reassignment or exclusion where automatic classification is uncertain.
+
+Audio-thread safety and performance are mandatory: file scanning, decoding, hashing, analysis and registry writes must happen off the real-time audio thread. Cache analysis results and avoid repeated full scans. The engine must never load every file indiscriminately; it should load only the assets needed by the selected preset/voice and required streaming or preloading strategy.
+
+This is an approved product requirement, not a claim that the current engine already implements it. Verify the existing AUTO DISCOVER/import pipeline, then implement and test each stage before describing it as operational.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
