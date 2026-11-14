@@ -253,3 +253,14 @@ Current upstream documentation/catalog identifies:
 7. Windows 10 x64 Release build, CTest, pluginval и FL Studio 20 acceptance.
 
 **Статус:** пользовательское правило утверждено и записано; архитектурный документ создан. Реализация PSC, performance benchmark и полный guard для ручного импорта ещё требуют выполнения/проверки.
+
+
+## 2026-11-14 — Delegated autonomous engineering and guitar-library acquisition mandate
+
+**Тип:** user-approved project governance / scope decision.
+**Решение:** пользователь делегировал самостоятельный выбор технических и творческих решений, поиск источников, модернизацию, исправление дефектов, багов, конфликтов и противоречий по генеральному плану. Продолжать работу без повторного запроса одобрения для обычных безопасных инженерных решений.
+**Границы:** делегирование пользователя не заменяет разрешения правообладателей и не может отменить лицензии/условия сторонних библиотек. В коммерческий плагин включать только источники с подтверждённым разрешением на коммерческое распространение исходных сэмплов внутри ПО. Не скачивать/интегрировать сомнительные материалы. Не удалять, перемещать, переименовывать или перезаписывать оригиналы.
+**Текущий приоритет:** собрать максимально полезную реальную библиотеку электрических и акустических гитар, затем формировать пресеты на реальных мультисэмплах с сохранением SFZ/manifest/velocity/string-zone/articulation provenance. Соблюдать общий лимит Samples ровно 40,000,000,000 bytes, SHA-256 dedup, без per-run cap.
+**Актуальная проверка источников:** Meta Open Sound публикует Steel Guitar (375 multisamples, E2–C6) и Nylon Guitar (348 multisamples, E2–B5), CC0-1.0; официальные release assets доступны как WAV 24-bit/48 kHz. FreePats публикует электрические FSBS Clean, Jazz, Direct DI и Distorted банки под CC0-1.0; SFZ FLAC/WAV/SF2 варианты доступны в репозиториях. Это подтверждение источников/лицензионных деклараций на уровне первичных страниц и репозиториев, не подтверждение фактической загрузки или импорта.
+**Выявленные открытые проблемы Sound Hunter:** release archive per-file SHA256SUMS ещё не проверяется; per-collection license/manifest/SFZ preservation needs audit; registry `files_added` may undercount release assets; Meta OGG previews currently may be ingested alongside WAV release; verify actual importer before download. No audio has been downloaded/imported in this session.
+**Статус:** DECISION ACCEPTED; SOURCE RESEARCH UPDATED; DOWNLOAD/IMPORT PENDING.
