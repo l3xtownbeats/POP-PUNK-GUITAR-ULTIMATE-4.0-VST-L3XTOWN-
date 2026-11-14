@@ -88,3 +88,31 @@
 
 **REV.18 priority override:** follow INFO.txt section K (reference + skin identity → main UI parity → Gallery → PATTERN → AutoChords → subsystem audits → legal/S6 → O1/S1 → exact-SHA gates). This supersedes the older generic queue where it conflicts; no existing task is deleted.
 
+
+
+## 2026-11-14 — TX-ENGINE-OPT-APPROVAL-001 — новые утверждённые инженерные направления
+
+| ID | Задача | Статус | Приоритет | Зависимости |
+|---|---|---|---|---|
+| ENG-01 | AUDIO SIGNAL FLOW: SMART GAIN / PRESET LEVEL / DRY-WET / FX ROUTING / OUTPUT PROTECTION | APPROVED REQUIREMENT | P1 | source DSP audit |
+| ENG-02 | VOICE MANAGEMENT: allocation / priority / stealing / reclamation / transitions | APPROVED REQUIREMENT | P1 | SamplerEngine lifecycle audit |
+| ENG-03 | MIDI ENGINE robustness and articulation processing | APPROVED REQUIREMENT | P1 | MIDI source/API audit |
+| ENG-04 | AUDIO QUALITY consistency and style acceptance | APPROVED REQUIREMENT | P1 | audio QA harness |
+| ENG-05 | SAMPLE PLAYBACK quality and click-free transitions | APPROVED REQUIREMENT | P1 | sampler/streaming audit |
+| ENG-06 | PARAMETER MANAGEMENT and host automation/state | APPROVED REQUIREMENT | P1 | APVTS audit |
+| ENG-07 | PRESET SYSTEM integrity, compatibility and recovery | APPROVED REQUIREMENT | P1 | preset/catalog audit |
+| ENG-08 | ERROR RECOVERY and safe degraded operation | APPROVED REQUIREMENT | P1 | lifecycle/error-path audit |
+| ENG-09 | LATENCY CONTROL across buffer sizes/sample rates | APPROVED REQUIREMENT | P2 | measurement harness |
+| ENG-10 | RELEASE SYSTEM and exact-SHA packaging gates | APPROVED REQUIREMENT | P1 | Windows CI/release audit |
+| ENG-11 | REAL-TIME AUDIO SAFETY | APPROVED REQUIREMENT | P1 | callback/thread audit |
+| ENG-12 | SAMPLE FIDELITY ENGINE | APPROVED REQUIREMENT | P1 | resampling/audio comparison |
+| ENG-13 | INTELLIGENT MEMORY MANAGEMENT | APPROVED REQUIREMENT | P1 | allocation/lifetime profiling |
+| ENG-14 | DSP QUALITY OPTIMIZATION | APPROVED REQUIREMENT | P1 | DSP tests/benchmarks |
+| ENG-15 | SMART RESOURCE SCHEDULING | APPROVED REQUIREMENT | P2 | worker/queue audit |
+| ENG-16 | PRESET INTELLIGENCE | APPROVED REQUIREMENT | P1 | preset/sample dependency audit |
+| ENG-17 | AUDIO DIAGNOSTICS | APPROVED REQUIREMENT | P2 | low-overhead telemetry design |
+| ENG-18 | AUDIO CONSISTENCY CONTROL | APPROVED REQUIREMENT | P1 | loudness/style acceptance |
+| ENG-19 | HOST COMPATIBILITY | APPROVED REQUIREMENT | P1 | VST3/FL Studio host matrix |
+| ENG-20 | AUTOMATED QUALITY TESTING | APPROVED REQUIREMENT | P1 | CTest/CI/host test strategy |
+
+Все записи отражают утверждение требований, не реализацию. Следующий технический рабочий пакет — MIDI ENGINE после завершения согласованной последовательности и проверки актуального source state.

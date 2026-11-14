@@ -316,3 +316,12 @@ User clarification: downloading is allowed when lawful and compliant with source
 
 **Constraints:** no blind skin ID/manifest renumbering. Exact visual parity still depends on canonical reference reconciliation and source audit. These decisions do not promote any source feature to IMPLEMENTED or TESTED.
 **Transaction scope:** documentation only; no production source/assets changed and no build/tests/CI/host validation run.
+
+
+## 2026-11-14 — TX-ENGINE-OPT-APPROVAL-001 — расширение технического плана
+
+Пользователь утвердил полный предложенный объём оптимизации движка: десять основных направлений, детализацию AUDIO SIGNAL FLOW и VOICE MANAGEMENT, а также десять дополнительных направлений REAL-TIME AUDIO SAFETY, SAMPLE FIDELITY ENGINE, INTELLIGENT MEMORY MANAGEMENT, DSP QUALITY OPTIMIZATION, SMART RESOURCE SCHEDULING, PRESET INTELLIGENCE, AUDIO DIAGNOSTICS, AUDIO CONSISTENCY CONTROL, HOST COMPATIBILITY и AUTOMATED QUALITY TESTING.
+
+Технические детали остальных направлений поручено определять ассистенту самостоятельно. Это полномочие действует в пределах существующей архитектуры и не разрешает создавать второй Sample Engine, нарушать realtime/MIDI/APVTS/preset contracts или менять защищённую архитектуру без критической необходимости и отдельного согласования.
+
+**Классификация:** утверждённые требования/направления; реализация не подразумевается. Каждый этап проходит аудит текущего кода, оценку реализуемости, измерения, тесты и проверку на точном SHA. В рамках этой записи production source/assets и runtime не менялись.

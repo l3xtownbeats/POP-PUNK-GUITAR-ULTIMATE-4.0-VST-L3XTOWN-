@@ -886,3 +886,21 @@ Approved requirements:
 
 **Scope:** user-approved product requirements only. No production source, UI, DSP, sampler, presets or assets changed. No tests/build/CI/FL Studio validation run in this transaction. Existing skin IDs/manifests must not be blindly renamed; visual parity still requires reference reconciliation and source audit.
 **Status:** APPROVED / RECORDED AS REQUIREMENTS / IMPLEMENTATION NOT IMPLIED.
+
+
+## 2026-11-14 — TX-ENGINE-OPT-APPROVAL-001 — утверждённый объём оптимизации движка
+
+**Пользовательское решение:** утверждены десять основных направлений (AUDIO SIGNAL FLOW, VOICE MANAGEMENT, MIDI ENGINE, AUDIO QUALITY, SAMPLE PLAYBACK, PARAMETER MANAGEMENT, PRESET SYSTEM, ERROR RECOVERY, LATENCY CONTROL, RELEASE SYSTEM), подробные пять компонентов AUDIO SIGNAL FLOW, пять компонентов VOICE MANAGEMENT и десять дополнительных направлений общей оптимизации.
+
+**AUDIO SIGNAL FLOW:** SMART GAIN; PRESET LEVEL CONSISTENCY; DRY/WET INTEGRITY; FX SIGNAL MANAGEMENT; OUTPUT PROTECTION.
+
+**VOICE MANAGEMENT:** SMART VOICE ALLOCATION; VOICE PRIORITY; VOICE STEALING; VOICE RESOURCE RECLAMATION; VOICE TRANSITION CONTROL.
+
+**Дополнительные направления:** REAL-TIME AUDIO SAFETY; SAMPLE FIDELITY ENGINE; INTELLIGENT MEMORY MANAGEMENT; DSP QUALITY OPTIMIZATION; SMART RESOURCE SCHEDULING; PRESET INTELLIGENCE; AUDIO DIAGNOSTICS; AUDIO CONSISTENCY CONTROL; HOST COMPATIBILITY; AUTOMATED QUALITY TESTING.
+
+Пользователь поручил ассистенту самостоятельно определять технические детали остальных направлений в пределах утверждённой архитектуры. Все пункты являются требованиями/направлениями для проверки и разработки, не статусом реализации.
+
+**Ограничения:** только существующий Sample Engine/DSP; без параллельного движка; сохранять MELODY/PATTERN, MIDI/APVTS/state, preset и sampler contracts; realtime-safe audio callback; измерять CPU/RAM/latency; проверять точный SHA; не добавлять фиктивные функции. Нереализуемые или рискованные функции заменять безопасной альтернативой. Защищённую архитектуру не менять без доказанной критической необходимости и отдельного согласования.
+
+**Объём транзакции:** документационная запись; исходники и assets не менялись. Build/CTest/pluginval/FL Studio 20 не запускались.
+**Статус:** REQUIREMENTS RECORDED; IMPLEMENTATION/TESTS NOT CLAIMED.

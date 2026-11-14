@@ -433,3 +433,22 @@ The user approved the following mandatory cross-product requirements:
 - **Concise communication:** minimum filler, maximum actionable information; truthful evidence/status distinctions.
 
 These are approved requirements, not proof of implementation. No production source, runtime UI, DSP, sampler, presets or assets changed in this decision record. Existing skin IDs/manifests must not be blindly renamed; implementation requires source/reference reconciliation and tests.
+
+
+## 2026-11-14 — TX-ENGINE-OPT-APPROVAL-001 — мастер-реестр утверждённых оптимизаций
+
+### Утверждённые основные направления
+AUDIO SIGNAL FLOW; VOICE MANAGEMENT; MIDI ENGINE; AUDIO QUALITY; SAMPLE PLAYBACK; PARAMETER MANAGEMENT; PRESET SYSTEM; ERROR RECOVERY; LATENCY CONTROL; RELEASE SYSTEM.
+
+### Детализация AUDIO SIGNAL FLOW
+SMART GAIN; PRESET LEVEL CONSISTENCY; DRY/WET INTEGRITY; FX SIGNAL MANAGEMENT; OUTPUT PROTECTION.
+
+### Детализация VOICE MANAGEMENT
+SMART VOICE ALLOCATION; VOICE PRIORITY; VOICE STEALING; VOICE RESOURCE RECLAMATION; VOICE TRANSITION CONTROL.
+
+### Утверждённые дополнительные направления
+REAL-TIME AUDIO SAFETY; SAMPLE FIDELITY ENGINE; INTELLIGENT MEMORY MANAGEMENT; DSP QUALITY OPTIMIZATION; SMART RESOURCE SCHEDULING; PRESET INTELLIGENCE; AUDIO DIAGNOSTICS; AUDIO CONSISTENCY CONTROL; HOST COMPATIBILITY; AUTOMATED QUALITY TESTING.
+
+**Статус всех пунктов:** USER-APPROVED / REQUIREMENTS. Это не означает SOURCE PRESENT, INTEGRATED, TESTED или HOST VERIFIED. Подробные технические решения выбираются ассистентом в рамках утверждённых архитектурных ограничений. Реализация начинается только после проверки текущего source HEAD и feasibility audit.
+
+**Инварианты:** один существующий Sample Engine; realtime-safe callback; без лишнего CPU/RAM; сохранение MIDI/APVTS/preset/state и MELODY/PATTERN contracts; измерения и проверки на точном SHA; не менять защищённую архитектуру без критической причины и отдельного согласования.
