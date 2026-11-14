@@ -2684,3 +2684,24 @@ CTest, pluginval strictness 5 и FL Studio 20 в рамках этого ком�
 
 **Возражения:** registry/default pointer не изменялись; audio/APVTS/MIDI/DSP не затронуты. Генератор по-прежнему создаёт staging ZIP, не COMPLETE ZIP.
 **Статус:** G4 CHECK IMPLEMENTED / EXECUTION NOT VERIFIED.
+
+
+============================================================================== 
+2026-11-14 — NEON-STAGE-CI-FAILURE-FIX-004
+==============================================================================
+**Observed workflow:** NEON STAGE Skin 053 Build
+**Failed run:** 43625048811
+**Exact tested HEAD:** 714c82a168dab4915cc909b85f0b9547bbe62270
+
+**Windows CI evidence:**
+- Approved-reference structural audit: PASS (7/7 references decoded; Skin_052/Skin_053 geometry parity; no audio/MIDI/APVTS changes).
+- G1 palette contrast: PASS (20.01:1 / 16.05:1 / 10.22:1 / 18.23:1 / 15.37:1).
+- Asset generation steps 1–7: completed, including 121-frame knob strips, UI atlases, SVGs, preview/hero, and draft theme.
+- G4/G2 report step failed with `NameError: name 'control_map_path' is not defined` in `step_report()`.
+- Staging ZIP packaging did not run. The uploaded Actions artifact is only 352 bytes and is not a usable Skin_053 package.
+
+**Fix committed:** initialized `control_map_path = SKIN / "control_map.json"` beside `theme_path` before the G2 control-map validation. This is a narrow Python staging-tool fix; no runtime skin registry/default, JUCE resources, DSP, audio callback, APVTS, MIDI or sampler code changed.
+
+**Verification:** the failure is confirmed on the exact HEAD above. The fix is committed separately; a new Windows workflow run is required before claiming G2/G4 PASS, ZIP creation, or pipeline success. Windows VST3 build, CTest, pluginval strictness 5 and FL Studio 20 remain separate unverified gates.
+**Status:** ROOT CAUSE CONFIRMED / FIX COMMITTED / RETEST REQUIRED.
+==============================================================================
