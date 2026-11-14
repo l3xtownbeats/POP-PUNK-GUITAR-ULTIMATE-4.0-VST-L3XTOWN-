@@ -2144,3 +2144,32 @@ This is not a suggestion list, optional roadmap, or visual inspiration-only note
 **Authority:** this user-ratified baseline joins SIGNAL FORGE v10 MASTER/v10.1, approved control inventory and append-only journals as binding project authority. Conflict priority remains safety > realtime guarantees > sound > resources > UX; this priority governs implementation choices and does not authorize deleting requirements.
 
 **Status:** USER RATIFIED / MANDATORY / IMMUTABLE BASELINE / DEVELOPMENT GATE. No production feature is claimed implemented by this journal entry.
+
+## 2026-11-14 — USER DIRECTIVE: PRESERVE AND RECONCILE ALL SUBMITTED PROJECT MATERIALS
+
+**User instruction:** preserve all materials the user has sent for PPGU study and development — files, photographs, UI mockups, sketches, drafts, screenshots, examples, reference packages and related discussion — and carry their decisions and requirements into the project records. This entry records the instruction and the currently identifiable material inventory; it does not falsely certify that every historical attachment has been recovered or committed.
+
+### Recordkeeping rules
+1. Treat user-submitted material as project evidence/reference input. Preserve original filenames, formats, source context, dates and version identity wherever available; do not silently replace or discard earlier variants.
+2. Classify each item as APPROVED / REFERENCE / PROPOSED / SUPERSEDED / REJECTED / UNVERIFIED. A visual example is not automatically an approved implementation, and a mockup is not proof of runtime functionality.
+3. Extract decisions, visual rules, control requirements, corrections and omissions into the canonical project specification/control inventory. Preserve source artifacts separately; link them from the canonical record rather than copying binary data into journal text.
+4. Reconcile conflicting visual drafts against the latest explicit user approval. Current visual authority remains SIGNAL FORGE as the product/interface identity and NEON STAGE as its approved default neon presentation; do not confuse a palette reference with a layout reference. Preserve all approved controls and their real functional contracts across skins.
+5. Append to this sole chronological journal; preserve existing entries and historical decisions. Update CODE.txt only when code-level changes are made, in the same commit as those code changes. Do not create competing journals.
+6. For each asset, verify that the source file is actually available before claiming it has been archived, hashed, committed or incorporated. Missing historical attachments remain an explicit inventory gap until recovered.
+
+### Materials identifiable from the available project context
+- `SIGNAL_FORGE_NEON_THEME_GALLERY_SPEC_RU.md` — mandatory visual/theme gallery contract; SIGNAL FORGE / NEON default identity, shared control geometry, PREVIEW/APPLY/BACK transaction, persistence, fallback, asset and acceptance requirements.
+- `theme_gallery_contract.json` — machine-readable theme gallery behavior and invariants.
+- `Info.txt`, `CODE.txt`, `PPGU_FULL_WORK_TEXT_FINAL.txt` — existing project history/engineering records and reconciled requirement material; preserve as source records, do not overwrite.
+- `PPGU_SIGNAL_FORGE_Skin_052_Install_Package.zip` and `PPGU_Skin_052_Carbon_Studio_Design_Kit.zip` — previously identified skin/design packages; availability and exact contents must be verified before claiming archival or integration.
+- Previously discussed approved SIGNAL FORGE visual mockup and related Skin_052 reference; treat as authoritative design reference only to the extent of the user's explicit approval. The approved shell includes preset browser, guitar/instrument area, MELODY / PATTERN / PUNK GROUP modes, complete control inventory, AMP & TONE, FX, keyboard/performance status and auxiliary panels as specified in the canonical contracts.
+- Other user-uploaded screenshots, photos, sketches, drafts, sample references, ZIP packages and examples from earlier conversations are part of the requested inventory, but their complete binary inventory is not exposed in this current retrieval. Do not claim every such binary has been copied into GitHub or hashed by this entry.
+
+### Current disposition
+- The user directive itself is recorded as mandatory.
+- The known text specifications and project records are discoverable in the user's Library and remain the reference set for reconciliation.
+- Historical binary/image attachments: inventory incomplete; recovery, duplicate/version comparison, checksum generation, license/provenance review where applicable, and repository linking remain OPEN.
+- No UI source, audio engine, APVTS, MIDI, presets, SoundBank or runtime behavior was changed by this documentation entry.
+- No build, CTest, pluginval, package, host or release verification is claimed.
+
+**Status:** USER DIRECTIVE RECORDED / KNOWN REFERENCES INDEXED / COMPLETE HISTORICAL ATTACHMENT INVENTORY OPEN.
