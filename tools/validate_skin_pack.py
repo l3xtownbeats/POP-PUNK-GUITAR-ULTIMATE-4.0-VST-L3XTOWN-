@@ -93,6 +93,7 @@ def png_dimensions(path: Path) -> tuple[int, int]:
 
     if not saw_end or width is None or height is None or not image_data:
         fail(f"{path}: incomplete PNG structure")
+    # PNG color type 3 is 8-bit indexed artwork; accept it only with a valid PLTE chunk.
     channels = {2: 3, 3: 1, 6: 4}.get(colour_type)
     if bit_depth != 8 or channels is None:
         fail(f"{path}: expected 8-bit RGB/RGBA/indexed PNG")
