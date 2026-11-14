@@ -638,3 +638,15 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Next:** fix and retest O1 before any selective transplant; audit S1 security edge cases; implement Gallery selection/preview state and Apply/Back/Favorites as a separately tested UI change. Preserve APVTS IDs/semantics, DSP, sampler, MIDI, scheduler and SIGNAL FORGE visual identity.
 
 **Status:** AUDIT COMPLETE / NO SOURCE CHANGE / ARCHIVE TRANSFER BLOCKED.
+
+
+## 2026-11-14 — S1 uploaded-snapshot SVG policy probe
+
+**Тип:** security regression probe against uploaded ZIP only; live REV.17 source unchanged.
+**Исходный live HEAD:** 95789c39b65f9402a2a734487a853986e9d7e567.
+**Результат:** локальный GCC C++17 probe подтвердил два обхода в ZIP-копии `SecureSkinImport::isSvgContentAllowed`:
+- `<svg ONLOAD=alert(1)/>` возвращает allowed=true, поскольку inline-handler scan сравнивает префикс `on` case-sensitively;
+- `<svg><a HREF=//evil.test/x></a></svg>` возвращает allowed=true, поскольку external-href policy блокирует http(s), но не protocol-relative URI.
+- Контрольный lowercase `onload=` возвращает allowed=false.
+
+**Статус:** ZIP S1 MUST NOT BE MERGED до исправления и расширения негативных тестов (mixed-case event attributes, protocol-relative/external URI variants). Это результаты только для загруженного архива, не для текущей REV.17, где S1 отсутствует.
