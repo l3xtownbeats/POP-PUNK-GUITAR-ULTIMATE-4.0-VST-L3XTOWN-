@@ -14,7 +14,7 @@ namespace
     bool isHexColour(const juce::var& value)
     {
         const auto text = value.toString();
-        if (text.length() != 7 || text[0] != '#')
+        if ((text.length() != 7 && text.length() != 9) || text[0] != '#')
             return false;
 
         for (int i = 1; i < text.length(); ++i)
@@ -202,10 +202,11 @@ namespace
         }
 
         const juce::StringArray requiredColours {
-            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
-            "control_border", "text_primary", "text_secondary", "text_disabled",
-            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
-            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
+            "bg_deep", "bg_panel", "bg_panel_hi", "border", "border_glow",
+            "text_primary", "text_secondary", "text_disabled", "accent_primary",
+            "accent_secondary", "accent_warning", "accent_danger", "accent_success",
+            "lcd_bg", "lcd_text", "knob_body", "knob_ring", "led_on", "led_off",
+            "overlay_scrim", "focus_ring"
         };
         const auto* paletteObject = paletteTokens.getDynamicObject();
         if (paletteObject == nullptr || paletteObject->getProperties().size() != requiredColours.size())
@@ -288,32 +289,35 @@ namespace
 
         const auto readStudioToken = [&paletteTokens](const juce::String& key)
         {
-            return juce::Colour::fromString(
-                "ff" + paletteTokens.getProperty(key, juce::var()).toString().substring(1));
+            const auto value = paletteTokens.getProperty(key, juce::var()).toString();
+            if (value.length() == 9)
+                return juce::Colour::fromString(value.substring(7) + value.substring(1, 7));
+            return juce::Colour::fromString("ff" + value.substring(1));
         };
 
         auto& t = palette.tokens;
-        t.windowBg = readStudioToken("window_bg");
-        t.panel = readStudioToken("panel");
-        t.panelElevated = readStudioToken("panel_elevated");
-        t.controlBg = readStudioToken("control_bg");
-        t.controlFace = readStudioToken("control_face");
-        t.controlBorder = readStudioToken("control_border");
+        t.windowBg = readStudioToken("bg_deep");
+        t.panel = readStudioToken("bg_panel");
+        t.panelElevated = readStudioToken("bg_panel_hi");
+        t.controlBg = readStudioToken("knob_body");
+        t.controlFace = readStudioToken("knob_body");
+        t.controlBorder = readStudioToken("border");
         t.textPrimary = readStudioToken("text_primary");
         t.textSecondary = readStudioToken("text_secondary");
         t.textDisabled = readStudioToken("text_disabled");
-        t.accent = readStudioToken("accent");
-        t.accentGlow = readStudioToken("accent_glow");
-        t.danger = readStudioToken("danger");
-        t.warning = readStudioToken("warning");
-        t.success = readStudioToken("success");
+        t.accent = readStudioToken("accent_primary");
+        t.accentGlow = readStudioToken("border_glow");
+        t.danger = readStudioToken("accent_danger");
+        t.warning = readStudioToken("accent_warning");
+        t.success = readStudioToken("accent_success");
         t.lcdBg = readStudioToken("lcd_bg");
         t.lcdText = readStudioToken("lcd_text");
         t.ledOn = readStudioToken("led_on");
         t.ledOff = readStudioToken("led_off");
-        t.shadow = readStudioToken("shadow");
-        t.highlight = readStudioToken("highlight");
-        t.lowlight = readStudioToken("lowlight");
+        t.shadow = readStudioToken("bg_deep");
+        t.highlight = readStudioToken("focus_ring");
+        t.lowlight = readStudioToken("led_off");
+        t.overlayScrim = readStudioToken("overlay_scrim");
 
         // Keep legacy aliases coherent while the editor migrates to token access.
         palette.canvas = t.windowBg;
@@ -572,24 +576,38 @@ bool PPGUThemeManager::validateManifest(const juce::var& root,
 
 juce::Colour PPGUThemeManager::Palette::token(const juce::String& key) const noexcept
 {
+    if (key == "bg_deep") return tokens.windowBg;
+    if (key == "bg_panel") return tokens.panel;
+    if (key == "bg_panel_hi") return tokens.panelElevated;
+    if (key == "border") return tokens.controlBorder;
+    if (key == "border_glow") return tokens.accentGlow;
+    if (key == "text_primary") return tokens.textPrimary;
+    if (key == "text_secondary") return tokens.textSecondary;
+    if (key == "text_disabled") return tokens.textDisabled;
+    if (key == "accent_primary" || key == "knob_ring") return tokens.accent;
+    if (key == "accent_secondary") return juce::Colour::fromString("ffff3ea5");
+    if (key == "accent_warning") return tokens.warning;
+    if (key == "accent_danger") return tokens.danger;
+    if (key == "accent_success") return tokens.success;
+    if (key == "lcd_bg") return tokens.lcdBg;
+    if (key == "lcd_text") return tokens.lcdText;
+    if (key == "knob_body") return tokens.controlFace;
+    if (key == "led_on") return tokens.ledOn;
+    if (key == "led_off") return tokens.ledOff;
+    if (key == "overlay_scrim") return tokens.overlayScrim;
+    if (key == "focus_ring") return tokens.highlight;
+    // Legacy semantic aliases remain readable for existing LookAndFeel call sites.
     if (key == "window_bg") return tokens.windowBg;
     if (key == "panel") return tokens.panel;
     if (key == "panel_elevated") return tokens.panelElevated;
     if (key == "control_bg") return tokens.controlBg;
     if (key == "control_face") return tokens.controlFace;
     if (key == "control_border") return tokens.controlBorder;
-    if (key == "text_primary") return tokens.textPrimary;
-    if (key == "text_secondary") return tokens.textSecondary;
-    if (key == "text_disabled") return tokens.textDisabled;
     if (key == "accent") return tokens.accent;
     if (key == "accent_glow") return tokens.accentGlow;
     if (key == "danger") return tokens.danger;
     if (key == "warning") return tokens.warning;
     if (key == "success") return tokens.success;
-    if (key == "lcd_bg") return tokens.lcdBg;
-    if (key == "lcd_text") return tokens.lcdText;
-    if (key == "led_on") return tokens.ledOn;
-    if (key == "led_off") return tokens.ledOff;
     if (key == "shadow") return tokens.shadow;
     if (key == "highlight") return tokens.highlight;
     if (key == "lowlight") return tokens.lowlight;
