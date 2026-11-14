@@ -190,6 +190,18 @@ This section consolidates the user's latest confirmations and supersedes any con
 
 Implementation must preserve these distinctions in code, UI and documentation: intake is not release packaging; local library organization is not a license grant; and release eligibility is determined by the actual permissions applicable to the material. This consolidated policy records the user's requested changes and the boundary that cannot be waived by the project.
 
+
+## User reconfirmation of approved Sound Hunter requirements
+
+The user reconfirms and approves the following requirements already documented in this policy:
+- Lawfully accessible downloads and direct local intake are not blocked solely by pending or unknown license review.
+- A unified local sample library is used; assets are not physically segregated solely by license status.
+- The engine automatically discovers, validates, analyzes, classifies, tags and registers imported samples.
+- The engine uses suitable registered sounds in existing presets and can generate new candidate presets from coherent playable sample sets, subject to technical validation and source-term limits.
+- License/provenance metadata is retained. This reconfirmation does not grant rights to redistribute third-party samples beyond permissions granted by their owners.
+
+This entry confirms the user's approval of the above requirements; it does not claim that the features have already been implemented.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
