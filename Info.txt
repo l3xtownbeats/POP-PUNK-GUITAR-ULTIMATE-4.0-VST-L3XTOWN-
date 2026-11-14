@@ -3294,3 +3294,11 @@ This is visual-only. No DSP/audio/APVTS/MIDI/sampler/preset changes. Fresh Windo
 
 **Status:** SOURCE CHANGE COMMITTED / VALIDATION PENDING / FULL ASSET CONTRACT NOT COMPLETE.
 ================================================================================
+
+## 2026-11-15 — NEON STAGE DEFAULT SKIN-1: asset CI and VST3 compile follow-up
+
+**Skin pipeline:** GitHub Actions run 43637007846, exact checkout SHA b0fed1bc1e0580bc3c499bf730d30d44a7b36d63 — SUCCESS. Steps passed: NEON STAGE asset pipeline; merged Skin Studio G1–G4 validation; complete 102-entry registry/manifests validation; reviewed preview/hero sync; staging artifact upload. Staging report: 21 palette tokens, 28 mapped controls, 9 PNG assets, 5 SVG assets, no errors. Palette contrast gates passed (20.01:1, 16.05:1, 10.22:1, 18.23:1, 15.37:1). Artifact ID 14130368454; package is a skin staging artifact, not a VST3 release.
+
+**VST3 follow-up:** initial Windows Release attempt 43636609794 failed during compilation. The compiler identified unsupported Palette::accentGlow / TextButton::outlineColourId references in the new LookAndFeel and const/incorrect owner heading access in auxiliary-window painting. These compile issues were corrected in Source/PluginEditor.cpp and Source/UI/PPGUMultiWindowWorkspace.cpp. A fresh Windows VST3 workflow run 43637007840 is now building exact source SHA b0fed1bc1e0580bc3c499bf730d30d44a7b36d63. CTest, VST3 bundle verification and pluginval strictness 5 have not yet run for this SHA; do not mark them PASS until the workflow reports success.
+
+**Visual scope:** NEON STAGE design system and main/auxiliary control styling are in SKIN/NEON_STAGE_INTERFACE_SYSTEM_RU.md. The procedural sprite/preview pack is staging output; it does not prove the sprite atlases are wired into runtime rendering. The approved preview/hero are reference artwork, not screenshots captured from the compiled JUCE plugin. Pixel-perfect parity and FL Studio 20 host acceptance remain separate gates.
