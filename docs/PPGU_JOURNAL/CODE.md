@@ -759,3 +759,11 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - Added `docs/PPGU_MASTER_DEVELOPMENT_PLAN_RU.md`, consolidating approved product scope, architecture requirements, preset and SoundBank rules, album-era families, ANGELA/PSC direction, release gates, and verified/pending status.
 - Updated README navigation and production-priority cross-reference; recorded the decision and CI status in the authoritative development journal.
 - No production C++/DSP/UI code changed in this documentation-only operation. No new build/test pass is claimed by this commit.
+
+
+## 2026-11-14 — A&A / Tom DeLonge scope expansion and preset-count correction
+
+- Added `docs/PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md` with research and requirements for *We Don't Need to Whisper*, *I-Empire*, *Lifeforms*, and Tom DeLonge technique packs in MELODY/PATTERN.
+- Updated master plan and production priorities: minimum 500 unique MELODY+PATTERN presets total, target approximately 600; Travis Barker 82 remains a separate, independently counted category. Legacy 300-entry catalogue remains an audit baseline.
+- Captured public interview references and separated confirmed statements from tonal interpretation.
+- Documentation-only update. No production code, DSP, UI, sample payload or preset runtime implementation changed; no new build/audio test pass is claimed.
