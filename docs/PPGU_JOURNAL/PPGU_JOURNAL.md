@@ -339,3 +339,23 @@ Required resolver behavior:
 - Validate the actual rendered sound and note coverage for every resolved source/chain combination. A preset is complete only when the chosen source plus its processing and articulation behavior produce the promised sound without missing notes or silence.
 
 This clarification supersedes only the overly strict requirement that every preset be tied to one exact sample file. It does NOT relax license/redistribution checks, integrity checks, mapping validation, no-silent-preset requirements, or the permanent no-delete/no-overwrite Samples policy.
+
+## MULTI-SOURCE TONE ASSEMBLY WITH LOW RESOURCE COST (2026-11-14)
+
+Further user clarification: choose the most accurate available source first; if no single source can deliver the target tone, combine compatible sources, layers, or libraries as needed to construct it. This must be implemented with strict CPU/RAM/disk/startup safeguards.
+
+Required behavior:
+- Resolve the closest suitable source or source combination for the requested preset tone. A single source is preferred when it achieves the target; use multiple sources only when they materially improve realism, articulation, frequency/body character, or coverage.
+- Sources may be combined across compatible libraries and/or instrument layers (for example, a DI performance plus a complementary articulation/layer, or separate compatible sources for distinct note/velocity zones). Preserve each source's identity, provenance, license, tuning, mapping, and processing route.
+- Avoid stacking multiple full-range samples by default. Use note/velocity zones, articulation switching, round-robin, or selective layers so only the required voices/sources are active for a played note.
+- Build the target tone primarily through efficient shared DSP/amp/cab/effect processing where appropriate; avoid duplicating large sample sets or expensive processing chains per preset.
+- Reuse shared decoded sample pages, streaming buffers, caches, and compatible engine resources. Do not load every library or every preset's sample set into RAM at startup. Load/stream only the selected preset's required assets and prefetch bounded nearby pages as needed.
+- Keep audio-thread behavior real-time safe: no file I/O, decoding, blocking locks, waiting, or unpredictable allocations in the callback. Background workers prepare assets; audio thread consumes ready data through bounded nonblocking structures.
+- Apply polyphony-aware voice budgeting, bounded sample/page caches, memory limits, and graceful fallback. Multiprocessing/background work must not increase real-time audio load or cause CPU spikes during playback.
+- Add source-combination quality and resource-cost scoring. Prefer the least expensive source/processing configuration that meets the sound-quality target; only spend additional CPU/RAM when audible improvement justifies it.
+- Measure CPU, peak memory, disk streaming, preset-switch latency, startup time, and audio underruns for representative single-source and multi-source presets. Set practical budgets and regression tests before claiming the design is lightweight.
+- Ensure multiple-source blending does not cause phase cancellation, level jumps, comb filtering, doubled transients, or inconsistent velocity response; validate gain staging, alignment, polarity/phase where relevant, and transitions.
+- Keep a deterministic source-resolution manifest per preset recording selected source IDs, zones/layers, blend weights, processing routes, fallback decisions, license/provenance, and measured resource profile.
+- If a compatible combination cannot meet the tone or resource budget, choose the closest valid lower-cost alternative and report the limitation rather than silently loading an excessive stack.
+
+This extends the compatible-source fallback rule. It does not relax license/redistribution requirements, source-integrity rules, the 40 GB aggregate Samples ceiling, permanent retention/no-delete/no-overwrite policy, or the requirement to validate actual rendered audio. Multi-source capability must remain efficient and must not preload the entire library.
