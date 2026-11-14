@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-053",
   "index": 53,
-  "name": "NEON STAGE LEGACY ARCHIVE",
+  "name": "LEGACY ARCHIVE 053",
   "family": "neon_basement",
   "layout": "STUDIO_CONSOLE",
-  "description": "Archived predecessor record. The user-approved unified NEON STAGE / SIGNAL FORGE identity is canonically Skin_052. This preserved skin-053 record exists only for registry/index compatibility and must not be treated as a separate active identity or default.",
+  "description": "Archived legacy skin record retained only to preserve registry numbering and compatibility. It is not an active theme, default skin, product identity or interface shell.",
   "palette": {
     "window_bg": "#050811",
     "panel": "#091321",
@@ -342,12 +342,12 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "LEGACY_ARCHIVE_SUPERSEDED_BY_SKIN_052",
+  "designStatus": "LEGACY_ARCHIVE_NOT_ACTIVE",
   "notes": [
-    "NEON STAGE is the default visual theme identity for the SIGNAL FORGE working interface.",
     "All seven approved NEON STAGE mockups were visually inspected on 2026-11-14; preview and hero are contain-fit renders of mockup 01.",
     "Skin_052 12x16 grid parity is retained; grid coordinates remain design metadata and are not approved as pixel-level placements.",
     "Visual-only theme: APVTS, live layout, audio and MIDI contracts remain unchanged.",
-    "Superseded by user-approved unified identity in Skin_052; retained without renumbering to preserve registry continuity."
+    "Superseded by user-approved unified identity in Skin_052; retained without renumbering to preserve registry continuity.",
+    "Legacy archive only. The sole active product identity, main theme, skin and interface shell is NEON STAGE."
   ]
 }
