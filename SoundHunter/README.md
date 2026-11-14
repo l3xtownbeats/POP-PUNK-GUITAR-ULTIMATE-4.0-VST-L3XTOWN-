@@ -20,14 +20,14 @@ Python 3.10+; standard library only.
 
 ```bash
 python SoundHunter/sound_hunter_real_guitars.py --discover-only
-python SoundHunter/sound_hunter_real_guitars.py --max-gb 25
+python SoundHunter/sound_hunter_real_guitars.py
 ```
 
-The importer writes only to a new unique directory under `Samples/SoundHunterImports/<run-id>/`. It does not replace or delete existing files. It checks the downloaded repository license text, handles Git LFS pointers with object size/SHA-256 validation, deduplicates by SHA-256, verifies imported bytes, and writes a per-run `SOUND_HUNTER_REGISTRY.json`. The total Samples tree is capped at 25 GB.
+The importer writes only to a new unique directory under `Samples/SoundHunterImports/<run-id>/`. It does not replace or delete existing files. It checks the downloaded repository license text, handles Git LFS pointers with object size/SHA-256 validation, deduplicates by SHA-256, verifies imported bytes, and writes a per-run `SOUND_HUNTER_REGISTRY.json`. There is no hard-coded total-library or per-run GB cap: eligible verified guitar assets may grow beyond 25 GB. Actual available disk space, GitHub Actions runtime/storage limits, and artifact-retention limits still apply.
 
 ## GitHub Actions
 
-Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-25GB-MAX`. This does not commit sample binaries into Git history or change the VST3 build workflow.
+Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-UNCAPPED`. This does not commit sample binaries into Git history or change the VST3 build workflow.
 
 ## Safety and limitations
 
