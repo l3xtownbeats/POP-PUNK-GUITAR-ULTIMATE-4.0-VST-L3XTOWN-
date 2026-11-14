@@ -155,3 +155,12 @@ Current source confirms preset selector/category/search, Import Guitar, SKIN Gal
 
 Critical identity mismatch: approved SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE conflicts with live manifest default skin-052 SIGNAL FORGE and live Skin_01..03 names. No IDs or manifests were changed; a complete 102-entry no-loss mapping is required first.
 
+
+
+## 2026-11-15 — NEON STAGE full-interface design contract supersession
+
+The current design authority is `SKIN/NEON_STAGE_COMPLETE_UI_DESIGN_RU.md`. It defines NEON STAGE as the single visual system across main GUI, all auxiliary windows, menus, dialogs, controls, folders and status surfaces. This addendum supersedes historical theme-identity statements above where they conflict with the user's newer NEON STAGE-only naming decision and the technical default ID `neon-stage-default-skin-1`.
+
+The current live source audit remains evidence-bounded: main preset selector/category/search, MELODY/PATTERN, nine APVTS rotary controls, seven FX bypass attachments, MIDI keyboard 36–84, FX Edit, Import Guitar, Settings, AutoChords setup panel, Skin Gallery and multi-window workspace are present to varying degrees. PUNK GROUP, Auto Discover, Curator, About, pitch/mod wheels, measured CPU/RAM telemetry, full preset browser/favorites, transactional Gallery, and production OverlayManager lifecycle are not accepted as complete. All unimplemented controls must remain disabled/deferred or absent; never paint fake working controls.
+
+This is a design contract and not runtime implementation. Existing 12x16 grid coordinates remain design metadata until consumed by a tested layout engine. All future visual changes must preserve APVTS IDs/semantics, DSP/audio, sampler, MIDI, preset and project state. Exact-SHA build/CTest/pluginval/FL Studio 20 evidence is required after source changes.
