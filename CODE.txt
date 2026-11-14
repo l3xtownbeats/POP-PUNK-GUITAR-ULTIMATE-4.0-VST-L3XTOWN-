@@ -869,3 +869,20 @@ Critical findings: live skin identity/default does not match the latest approved
 **CI:** run `43592701287` at `7a7fb55641f36353fe32873c677e5db64142624c` was IN PROGRESS at preflight; configure PASS, build running, CTest/pluginval/package pending.
 **Status:** PHASE 0 MATRIX COMPLETE / SOURCE UNCHANGED / NEXT = SKIN IDENTITY + REFERENCE RECONCILIATION.
 
+
+
+## 2026-11-14 — TX-UX-ENGINE-001 — USER-APPROVED PRODUCT PRINCIPLES
+
+**Type:** requirements / design and engineering decision record; documentation only.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent before this documentation transaction:** `035d10cfe1ef81118c459f26c8d999ef4bee9f72`.
+
+Approved requirements:
+- ONE-TIME SCAN → PERMANENT REGISTRATION → FAST AUTO-LOAD → NO REPEATED SCANNING. Persist catalog/IDs/relative paths; on startup load saved index and do only lightweight library-root availability checks. No full directory traversal/re-index on launch or preset change. Normal demand-driven sample streaming is not a rescan. Full scan/relink only on explicit user action.
+- Minimal, intuitive UX: few necessary actions, clear labels/status, no duplicate controls or clutter; keep engine complexity behind the interface.
+- High-performance engineering: lean/reused architecture, low CPU/RAM, fast startup/preset switching, realtime-safe audio callback, safe threading/lifetime/memory, measurable optimizations and regression tests.
+- NEON STAGE DEFAULT is the unified premium visual system for every window, panel, menu and module, including Import Guitar, Auto Sound Hunter and FX Edit; shared components, typography, palette, states and layout rules.
+- Concise communication and documentation: minimum filler, maximum actionable information; clearly separate requirements, implementation, build/test evidence and host acceptance.
+
+**Scope:** user-approved product requirements only. No production source, UI, DSP, sampler, presets or assets changed. No tests/build/CI/FL Studio validation run in this transaction. Existing skin IDs/manifests must not be blindly renamed; visual parity still requires reference reconciliation and source audit.
+**Status:** APPROVED / RECORDED AS REQUIREMENTS / IMPLEMENTATION NOT IMPLIED.
