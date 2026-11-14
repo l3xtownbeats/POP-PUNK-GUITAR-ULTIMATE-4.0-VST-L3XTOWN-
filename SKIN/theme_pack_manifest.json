@@ -3,14 +3,24 @@
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU SKIN STUDIO REV 14",
   "status": "MERGED",
-  "startIndex": 53,
+  "startIndex": 52,
   "endIndex": 102,
-  "totalSkins": 50,
+  "totalSkins": 51,
   "themes": [
+    {
+      "id": "neon-stage-default-skin-1",
+      "index": 52,
+      "name": "NEON STAGE",
+      "family": "neon_basement",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_052/theme.json",
+      "preview": "Skin_052/assets/preview.png",
+      "hero": "Skin_052/assets/hero.png"
+    },
     {
       "id": "skin-053",
       "index": 53,
-      "name": "NEON STAGE",
+      "name": "NEON STAGE — LEGACY ARCHIVE",
       "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
