@@ -306,7 +306,7 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          $legacyCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          $legacyCatalog = Join-Path $release 'PRESETS/factory_bank_500.json'
           if (Test-Path $legacyCatalog) { Remove-Item -LiteralPath $legacyCatalog -Force }
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
@@ -343,7 +343,7 @@ jobs:
               throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
             }
           }
-          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_500.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
           if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
@@ -367,7 +367,7 @@ jobs:
           2. In the plugin, use its SFZ load control and select an instrument SFZ
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
-             as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
+             as PRESETS/factory_bank_500.json. Portable preset examples are in PRESETS/examples/.
           4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
