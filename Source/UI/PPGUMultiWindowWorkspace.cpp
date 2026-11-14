@@ -143,12 +143,30 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        auto area = getLocalBounds().toFloat();
-        g.setColour(panelColour);
-        g.fillRoundedRectangle(area, 8.0f);
-        g.setColour(borderColour);
-        g.drawRoundedRectangle(area.reduced(0.5f), 8.0f, 1.0f);
-        g.setColour(borderColour.withAlpha(0.55f));
+        const auto area = getLocalBounds().toFloat();
+        const auto header = area.removeFromTop(42.0f);
+
+        // One NEON STAGE chassis treatment for every auxiliary window.
+        g.setGradientFill(juce::ColourGradient(panelColour.brighter(0.055f),
+            area.getX(), area.getY(), panelColour.darker(0.16f),
+            area.getX(), area.getBottom(), false));
+        g.fillRoundedRectangle(getLocalBounds().toFloat(), 8.0f);
+
+        // Recessed title strip with a restrained accent rail.
+        g.setGradientFill(juce::ColourGradient(headingColour.withAlpha(0.11f),
+            header.getX(), header.getY(), panelColour.withAlpha(0.0f),
+            header.getX(), header.getBottom(), false));
+        g.fillRoundedRectangle(header.reduced(1.0f, 1.0f), 7.0f);
+        g.setColour(headingColour.withAlpha(0.82f));
+        g.fillRoundedRectangle(header.getX() + 10.0f, header.getBottom() - 2.0f,
+                               42.0f, 1.5f, 0.75f);
+
+        // Fine metal perimeter and inner highlight keep the window legible on dark hosts.
+        g.setColour(borderColour.withAlpha(0.92f));
+        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(0.5f), 8.0f, 1.0f);
+        g.setColour(borderColour.brighter(0.35f).withAlpha(0.16f));
+        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(2.0f), 7.0f, 0.7f);
+        g.setColour(borderColour.withAlpha(0.62f));
         g.drawLine(8.0f, 42.0f, static_cast<float>(getWidth() - 8), 42.0f, 1.0f);
     }
 
@@ -347,7 +365,15 @@ void PPGUMultiWindowWorkspace::resized()
 
 void PPGUMultiWindowWorkspace::paint(juce::Graphics& g)
 {
+    auto area = getLocalBounds().toFloat();
+    g.setGradientFill(juce::ColourGradient(backgroundColour.brighter(0.025f),
+        area.getX(), area.getY(), backgroundColour.darker(0.12f),
+        area.getRight(), area.getBottom(), false));
     g.fillAll(backgroundColour);
+    g.fillRect(area);
+    g.setColour(borderColour.withAlpha(0.055f));
+    for (int x = 24; x < getWidth(); x += 48)
+        g.drawVerticalLine(x, 8.0f, static_cast<float>(getHeight() - 8));
 }
 
 juce::String PPGUMultiWindowWorkspace::geometryKey(int id, const juce::String& suffix) const
