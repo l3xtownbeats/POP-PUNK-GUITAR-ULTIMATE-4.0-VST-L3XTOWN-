@@ -1,6 +1,11 @@
 name: Sound Hunter — Real Guitar Samples
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "SoundHunter/**"
+      - "tests/test_sound_hunter_importer.py"
+      - ".github/workflows/sound-hunter-real-guitar.yml"
 permissions:
   contents: read
 concurrency:
@@ -15,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
       - name: List approved real-recorded sources
         run: python3 SoundHunter/sound_hunter_real_guitars.py --discover-only
-      - name: Test Sound Hunter path safety and run-local size cap
+      - name: Test Sound Hunter path safety, release integrity and aggregate size ceiling
         run: python3 tests/test_sound_hunter_importer.py
       - name: Download, verify and import real guitar audio
         run: python3 SoundHunter/sound_hunter_real_guitars.py --max-library-gb 40
