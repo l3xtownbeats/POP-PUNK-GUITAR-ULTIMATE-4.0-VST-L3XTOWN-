@@ -48,3 +48,16 @@ External candidates reviewed:
 - `AkiFX` — GPLv3 full VST3/CLAP effects rack; not eligible for direct inclusion in the planned closed-source/commercial plugin without a separate compatible licensing decision. Treat as research/reference only.
 
 No third-party engine has been integrated into ANGELA. Current decision state: candidates identified and preliminarily screened; exact integration candidate not yet approved or benchmarked.
+
+
+## 2026-11-14 — REV.18 user-approved scope / Sound Hunter cap removal
+
+**Approved requirements:** `docs/PPGU_REV18_USER_APPROVED_SUPERSEDING_REQUIREMENTS_2026-11-14_RU.md`. Master plan, priorities, product spec and sound-library plan updated to supersede conflicting older text.
+
+**Canonical current targets:** SAMPLES unlimited; 500 READY MELODY + 500 READY PATTERN; FX EDIT 10–15 real DSP processors/effects in one window; 16 release skins with unchanged NEON STAGE DEFAULT; GOOD/NORMAL/NIGHT/ECO + 2x/4x/8x/16x + lockable Voices/profiles; ABOUT REV.18/L3XTOWN/2026 + illustrated RU/EN manuals; complete checksum-verified VST3 package. Exact main module order unchanged.
+
+**Repository audit gaps (not marked complete):** factory bank remains 300 catalogue definitions, not 1,000 playable presets; FX EDIT UI currently has eight selector modules; SKIN legacy registry currently has 52 entries while the release gallery target is a curated 16; SettingsPanel is a basic APVTS control skeleton and does not yet implement the approved resource profiles/locks; full RU/EN illustrated manuals are not present at the previously checked path. The FX exact extra-module names and original 10–15 list require reconciliation against the approved early journal before adding DSP modules.
+
+**Sound Hunter:** removed the 40 GB cap from importer/tooling and introduced split artifact transport with SHA-256. This is source implementation only. New CI validation is pending on the resulting HEAD. Previous successful run #14 artifact (2,967,193,335 bytes) predates this change and remains an earlier capped artifact; not runtime-integrated and not audition-validated. No current library size or READY preset count is claimed.
+
+**Next sequence:** check latest CI on exact HEAD; inspect artifact registry, files, license evidence, mappings and hashes; integrate valid SAMPLES into the single runtime sampler path; build/test asset-to-preset links; create and validate factory preset sets to 500 per mode; then complete remaining modules in the approved sequence. Never modify NEON STAGE DEFAULT appearance.
