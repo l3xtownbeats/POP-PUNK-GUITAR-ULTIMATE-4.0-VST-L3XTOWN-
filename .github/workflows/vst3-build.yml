@@ -65,8 +65,17 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path build | Out-Null
-          python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report build/skin-053-rev18-asset-audit.json
-          $auditExit = $LASTEXITCODE
+          # PowerShell 7 can promote a native process' non-zero exit code to a
+          # terminating error before $LASTEXITCODE is inspected. Exit code 1 is
+          # an expected "asset gaps" result during migration, so capture it.
+          $nativePreference = $PSNativeCommandUseErrorActionPreference
+          $PSNativeCommandUseErrorActionPreference = $false
+          try {
+            & python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report build/skin-053-rev18-asset-audit.json
+            $auditExit = $LASTEXITCODE
+          } finally {
+            $PSNativeCommandUseErrorActionPreference = $nativePreference
+          }
           if ($auditExit -gt 1) { throw 'REV.18 asset auditor could not read the skin contract or registry.' }
           if ($auditExit -eq 1) { Write-Warning 'REV.18 SKIN-1 asset gaps recorded; this baseline step is intentionally non-blocking until the asset migration is complete.' }
           if ($auditExit -eq 0) { Write-Host 'REV.18 SKIN-1 asset audit PASS.' }
