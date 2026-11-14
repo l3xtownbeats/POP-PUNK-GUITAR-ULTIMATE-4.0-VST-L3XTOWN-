@@ -1894,3 +1894,14 @@ F. Только после этого считать документальны�
 - Строгие правила SIGNAL FORGE v10, более поздние user-ratified amendments, стабильные APVTS IDs/semantics и приоритет safety → realtime → sound → resources → UX не меняются. При конфликте более новая прямая правка пользователя имеет приоритет; исторические записи не удалять.
 
 **Статус:** USER-APPROVED REQUIREMENTS RECORDED / IMPLEMENTATION NOT IMPLIED. Наличие этих требований в журнале не доказывает наличие соответствующих runtime controls, registry, sample assets или тестов. Для каждой функции отдельно вести APPROVED/DESIGNED, SOURCE PRESENT, WIRED, TESTED, HOST VERIFIED и RELEASED.
+
+
+## 2026-11-14 — DOCUMENTATION UPDATE REFERENCES / READBACK
+
+The browser-navigation addendum was synchronized across the canonical engineering journal, product specification, control inventory and code change index on `work/ppgu-completion-integrated-2026-11-13`:
+- `Info.txt`: `d1feaeadf23bbeeb7e10e11cb632b2c209eb337e`.
+- `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`: `0779e0973647df6b2113c847758a5faecd9a4949`.
+- `SKIN/CONTROL_INVENTORY_MATRIX_RU.md`: `cecb72a6c50fcbdb71086c48bc229b958bb72499`.
+- `CODE.txt`: `5d2d90b8946a0245c23d587386678a9001832967`.
+
+These are documentation commits only. No production source, runtime behavior, tests, build outputs, preset data, sample assets or skin assets were changed. No CI/CTest/pluginval/FL Studio/package PASS is claimed. The next implementation work must begin with branch/HEAD and source preflight, then close only the documented gaps without replacing newer work or weakening the immutable baseline.
