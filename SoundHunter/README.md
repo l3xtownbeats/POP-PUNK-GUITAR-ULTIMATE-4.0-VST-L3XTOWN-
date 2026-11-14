@@ -1,6 +1,6 @@
 # PPGU Sound Hunter — Real Guitar Audio
 
-This first implementation imports only catalogued sources classified as `REAL_RECORDED`. Synthetic and modeled guitar sources are excluded from this acquisition path.
+The acquisition scope is global and genre-independent: collect guitar material relevant to the factory presets and engine, not only punk/pop-punk. Target multisampled instruments and banks, DI/clean/processed recordings, single notes, articulations, palm mutes, harmonics, noises, loops, riffs, phrases, strumming patterns, one-shots and useful mapping/metadata files. See `SOURCE_POLICY.md` for the complete scope and mandatory license tiers. Synthetic/modelled sources may be catalogued separately for evaluation, but must not be mislabeled as real recordings.
 
 ## Current verified source candidates
 
@@ -14,7 +14,7 @@ This first implementation imports only catalogued sources classified as `REAL_RE
 
 Source catalog: `real_guitar_sources.json`.
 
-## Run locally
+## Global acquisition and licensing rules\n\n- Search for suitable material across genres and sources; do not impose an arbitrary library-size quota.\n- A commercial-use license for making songs is not automatically permission to redistribute raw samples inside a commercial VST. Paid libraries enter the shipped product only with explicit rights covering plugin/sample-library redistribution.\n- Non-commercial or evaluation-only assets may be used only where their terms permit, must be marked `NOT FOR SHIPMENT`, and must never enter the commercial installer or public sample artifact.\n- Keep source/license evidence, attribution, hashes and provenance. Unknown or conflicting rights are quarantined. Never bypass DRM, paywalls or access controls.\n- Loops and one-shots are valid source types, but they are not equivalent to chromatic multisampled instruments; map and validate each type appropriately.\n\n## Run locally
 
 Python 3.10+; standard library only.
 
