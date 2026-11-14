@@ -122,7 +122,7 @@ def validate_icon_manifest(theme_dir: Path, icon_names: tuple[str, ...]) -> None
     if not isinstance(records, list):
         raise ValueError(f"{manifest_path}: records must be an array")
     indexed = {record.get("id"): record for record in records if isinstance(record, dict)}
-    if manifest.get("skinId") != "skin-053" or manifest.get("assetGroup") != "topbar-icons":
+    if manifest.get("skinId") != "skin-001" or manifest.get("assetGroup") != "topbar-icons":
         raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
     for icon in icon_names:
         for suffix, rel in (("master_svg", f"assets/master/icons/{icon}.svg"),
@@ -154,7 +154,7 @@ def validate_artwork_manifest(theme_dir: Path) -> None:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"{manifest_path}: missing or invalid artwork manifest: {exc}") from exc
-    if manifest.get("skinId") != "skin-053" or manifest.get("assetGroup") != "hero-preview-background-texture-fx-atlas":
+    if manifest.get("skinId") != "skin-001" or manifest.get("assetGroup") != "hero-preview-background-texture-fx-atlas":
         raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
     records = manifest.get("records")
     if not isinstance(records, list):
@@ -206,7 +206,7 @@ def validate_font_manifest(theme_dir: Path) -> None:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"{manifest_path}: missing or invalid font manifest: {exc}") from exc
-    if manifest.get("skinId") != "skin-053" or manifest.get("fontFamily") != "Inter":
+    if manifest.get("skinId") != "skin-001" or manifest.get("fontFamily") != "Inter":
         raise ValueError(f"{manifest_path}: wrong skinId or fontFamily")
     font_path = theme_dir / "fonts" / str(manifest.get("fontFile", ""))
     license_path = theme_dir / "fonts" / str(manifest.get("licenseFile", ""))
@@ -240,7 +240,7 @@ def contrast(a: str, b: str) -> float:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("SKIN"))
-    parser.add_argument("--skin-id", default="skin-053")
+    parser.add_argument("--skin-id", default="skin-001")
     parser.add_argument("--report", type=Path, help="Optional JSON report path")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -268,10 +268,10 @@ def main() -> int:
         add("FAIL", "PALETTE_SCHEMA", "Palette token inventory differs from REV.18's 21 canonical tokens.")
     if theme.get("id") != args.skin_id or entry.get("id") != args.skin_id:
         add("FAIL", "IDENTITY", "Registry/theme ID mismatch.")
-    if args.skin_id == "skin-053" and (
-        theme.get("name") != "NEON STAGE DEFAULT" or registry.get("defaultSkin") != "skin-053"
+    if args.skin_id == "skin-001" and (
+        theme.get("name") != "NEON STAGE DEFAULT" or registry.get("defaultSkin") != "skin-001"
     ):
-        add("FAIL", "DEFAULT_IDENTITY", "SKIN-1 must remain NEON STAGE DEFAULT / skin-053.")
+        add("FAIL", "DEFAULT_IDENTITY", "SKIN-1 must remain NEON STAGE DEFAULT / skin-001.")
 
     palette = theme.get("palette", {})
     missing_tokens = [token for token in REQUIRED_PALETTE_TOKENS if token not in palette]

@@ -81,7 +81,7 @@ jobs:
           $nativePreference = $PSNativeCommandUseErrorActionPreference
           $PSNativeCommandUseErrorActionPreference = $false
           try {
-            & python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report build/skin-053-rev18-asset-audit.json
+            & python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-001 --report build/skin-001-rev18-asset-audit.json
             $auditExit = $LASTEXITCODE
           } finally {
             $PSNativeCommandUseErrorActionPreference = $nativePreference
@@ -98,7 +98,7 @@ jobs:
         if: always()
         with:
           name: rev18-skin-1-asset-audit
-          path: build/skin-053-rev18-asset-audit.json
+          path: build/skin-001-rev18-asset-audit.json
           if-no-files-found: warn
 
       - name: Select checked-out project source

@@ -69,7 +69,7 @@ def main() -> int:
     ap.add_argument("--root", type=Path, default=Path("SKIN"))
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
-    skin = args.root / "Skin_053"
+    skin = args.root / "Skin_001"
     out = skin / "assets" / "icons"
     out.mkdir(parents=True, exist_ok=True)
     errors = []
@@ -108,7 +108,7 @@ def main() -> int:
             records.append(record)
     manifest_path = skin / "assets" / "asset_manifest.json"
     manifest = {
-        "schemaVersion": "1.0.0", "skinId": "skin-053",
+        "schemaVersion": "1.0.0", "skinId": "skin-001",
         "theme": "NEON STAGE DEFAULT", "assetGroup": "topbar-icons",
         "creationDecision": "[DECISION] Created as original neutral line icons because no approved source icon set existed in the supplied SKIN-1 package.",
         "runtimeBehavior": "Icons do not enable reserved actions. Auto Discover, Curator, Settings and About remain unavailable until their real functions are integrated.",

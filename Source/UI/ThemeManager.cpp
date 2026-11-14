@@ -149,7 +149,7 @@ namespace
         const auto index = indexValue.toString().getLargeIntValue();
         if ((!indexValue.isInt() && !indexValue.isInt64())
             || id.length() < 8 || !id.startsWith("skin-")
-            || index < 52 || index > std::numeric_limits<int>::max()
+            || index < 1 || index > std::numeric_limits<int>::max()
             || id.substring(5).getLargeIntValue() != index)
         {
             error = "Invalid Skin Studio ID/index pair";

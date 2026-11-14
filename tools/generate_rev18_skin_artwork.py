@@ -107,7 +107,7 @@ def atlas(skin):
         if not p.is_file(): raise FileNotFoundError(p)
         image.alpha_composite(Image.open(p).convert("RGBA"),(x,y))
         frames[name]={"x":x,"y":y,"w":256,"h":256}
-    return image,{"schemaVersion":"1.0.0","skinId":"skin-053","image":"atlas.png","width":768,"height":512,"frames":frames}
+    return image,{"schemaVersion":"1.0.0","skinId":"skin-001","image":"atlas.png","width":768,"height":512,"frames":frames}
 
 
 def record(skin,key,rel,role,dims):
@@ -120,7 +120,7 @@ def record(skin,key,rel,role,dims):
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__); ap.add_argument("--root",type=Path,default=Path("SKIN")); ap.add_argument("--check",action="store_true"); a=ap.parse_args()
-    skin=a.root/"Skin_053"; errors=[]; expected={}
+    skin=a.root/"Skin_001"; errors=[]; expected={}
     for key,(rel,size,kind) in SPECS.items():
         im=background(size,True) if kind in ("hero","preview") else background(size,False) if kind=="background" else carbon_texture() if kind=="texture" else fx(size,kind)
         b=io.BytesIO(); im.save(b,format="PNG",optimize=False,compress_level=9); expected[rel]=b.getvalue()
@@ -141,7 +141,7 @@ def main():
         r={"id":f"skin1.{key}","path":rel,"format":fmt,"bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"crc32":f"{zlib.crc32(raw)&0xffffffff:08X}","origin":"[DECISION] generated from approved SKIN-1 top-bar icon assets","role":role}
         if dims: r["dimensions"]=f"{dims[0]}x{dims[1]}"
         records.append(r)
-    manifest={"schemaVersion":"1.0.0","skinId":"skin-053","theme":"NEON STAGE DEFAULT","assetGroup":"hero-preview-background-texture-fx-atlas","creationDecision":"[DECISION] Original carbon-stage electric-guitar artwork created because approved high-resolution masters were absent.","records":records}
+    manifest={"schemaVersion":"1.0.0","skinId":"skin-001","theme":"NEON STAGE DEFAULT","assetGroup":"hero-preview-background-texture-fx-atlas","creationDecision":"[DECISION] Original carbon-stage electric-guitar artwork created because approved high-resolution masters were absent.","records":records}
     manifest_path=skin/"assets/artwork_manifest.json"; manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode()
     if a.check:
         if not manifest_path.is_file() or manifest_path.read_bytes()!=manifest_data: errors.append(str(manifest_path))

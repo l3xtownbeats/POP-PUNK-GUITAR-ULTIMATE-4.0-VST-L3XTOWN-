@@ -22,7 +22,7 @@ class SkinRegistryContractTests(unittest.TestCase):
     def test_current_registry_is_valid_and_keeps_all_historical_records(self) -> None:
         self.assertEqual(validate_registry_contract(copy.deepcopy(self.registry)), 1)
         self.assertEqual(len(self.registry["themes"]), self.registry["totalSkins"])
-        self.assertEqual(self.registry["defaultSkin"], "skin-053")
+        self.assertEqual(self.registry["defaultSkin"], "skin-001")
 
     def test_declared_active_count_must_match_entries(self) -> None:
         candidate = copy.deepcopy(self.registry)
@@ -38,15 +38,15 @@ class SkinRegistryContractTests(unittest.TestCase):
 
     def test_legacy_names_cannot_become_active(self) -> None:
         candidate = copy.deepcopy(self.registry)
-        candidate["themes"][0]["active"] = True
-        candidate["themes"][0]["activeOrdinal"] = 2
+        candidate["themes"][1]["active"] = True
+        candidate["themes"][1]["activeOrdinal"] = 2
         candidate["activeThemeCount"] = 2
         with self.assertRaises(ValueError):
             validate_registry_contract(candidate)
 
     def test_inactive_entry_cannot_keep_an_active_ordinal(self) -> None:
         candidate = copy.deepcopy(self.registry)
-        candidate["themes"][0]["activeOrdinal"] = 2
+        candidate["themes"][1]["activeOrdinal"] = 2
         with self.assertRaises(ValueError):
             validate_registry_contract(candidate)
 

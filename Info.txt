@@ -2,7 +2,7 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 13 ноября 2026
+Последнее обновление: 15 ноября 2026
 Ветка: `main`  
 Последний commit перед текущей записью: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`
 
@@ -2803,3 +2803,13 @@ unverified until their steps complete successfully.
 - Текущий source commit: `3e86560da2830467c607f3dc9db2964fb54108aa`.
 - GitHub Actions run `43652236286` — Windows VST3 workflow, IN_PROGRESS на момент записи. Предыдущий run `43652222305` отменён после нового commit; он не является проверкой результата.
 - Следующий шаг: проверить compile/CTest/pluginval результаты exact-SHA run; затем визуальная проверка в FL Studio 20 и продолжение графического оформления зон A–H.
+
+
+## REV.18 — NEON STAGE DEFAULT / SKIN-1 migration
+
+- Canonical user-approved identity: `skin-001` / `SKIN/Skin_001` / `NEON STAGE DEFAULT`.
+- Default selection and fallback palette now resolve to SKIN-1; previous `skin-053` is retained as inactive `Carbon Studio Archive 01`.
+- Existing 102 registry records and historical folders are retained; record 1 maps to the canonical Skin_001 package.
+- Main editor and theme-aware auxiliary panels receive the same NEON STAGE palette. APVTS, DSP, sampler, MIDI, preset state and audio routing are unchanged.
+- Artwork/icon generation and REV.18 asset audit now target `skin-001` / `Skin_001`.
+- Exact-HEAD Windows VST3 build, CTest, pluginval and host acceptance remain pending.

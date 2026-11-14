@@ -1181,11 +1181,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setSize(1024, 700);
     setResizable(true, true);
     setResizeLimits(900, 640, 1600, 1100);
-    titleLabel.setText("PPGU", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
+    titleLabel.setText("NEON STAGE", juce::dontSendNotification);
+    titleLabel.setFont(juce::Font(18.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(titleLabel);
-    subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
+    subtitleLabel.setText("DEFAULT  /  SKIN-1  /  L3XTOWN AUDIO LAB", juce::dontSendNotification);
     subtitleLabel.setFont(juce::Font(9.5f, juce::Font::bold));
     subtitleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
     addAndMakeVisible(subtitleLabel);
@@ -1481,6 +1481,19 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+
+    // NEON STAGE DEFAULT / SKIN-1 header rail.
+    auto headerRail = getLocalBounds().reduced(14).removeFromTop(48).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"), headerRail.getX(),
+        headerRail.getY(), p.token("panel"), headerRail.getX(), headerRail.getBottom(), false));
+    g.fillRoundedRectangle(headerRail, 9.0f);
+    g.setColour(p.token("control_border").withAlpha(0.8f));
+    g.drawRoundedRectangle(headerRail.reduced(0.5f), 9.0f, 1.0f);
+    g.setColour(p.token("accent"));
+    g.fillRoundedRectangle(headerRail.getX() + 1.0f, headerRail.getY() + 7.0f, 3.0f, headerRail.getHeight() - 14.0f, 1.5f);
+    g.setColour(p.token("accent").withAlpha(0.75f));
+    g.drawHorizontalLine(static_cast<int>(headerRail.getBottom() - 1.0f), headerRail.getX() + 14.0f, headerRail.getRight() - 14.0f);
+
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1559,8 +1572,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     // NEON STAGE DEFAULT three-zone shell: browser / instrument / amp+FX.
     // Lower performance strip remains full width. APVTS attachments are untouched.
     auto header = bounds.removeFromTop(48);
-    titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
-    subtitleLabel.setBounds(18, 47, 150, 14);
+    titleLabel.setBounds(18, 16, 170, 24);
+    subtitleLabel.setBounds(18, 41, 270, 14);
+    header.removeFromLeft(170);
     header.removeFromLeft(8);
     skinButton.setBounds(header.removeFromRight(78).reduced(2, 5));
     settingsButton.setBounds(header.removeFromRight(92).reduced(2, 5));
@@ -1773,7 +1787,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
+    auto id = settings ? settings->getValue("skinId", "skin-001") : juce::String("skin-001");
     const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
     int activeOrdinal = 0;
     if (registryFile.existsAsFile())
@@ -1783,7 +1797,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
         const auto* themes = themesValue.getArray();
         if (themes != nullptr)
         {
-            const auto defaultId = registry.getProperty("defaultSkin", "skin-053").toString();
+            const auto defaultId = registry.getProperty("defaultSkin", "skin-001").toString();
             bool foundSavedId = false;
             for (const auto& entry : *themes)
             {

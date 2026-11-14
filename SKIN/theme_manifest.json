@@ -2,19 +2,21 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 102,
-  "defaultSkin": "skin-053",
+  "defaultSkin": "skin-001",
   "selector": "SKIN",
-  "status": "102-themes-merged-gallery-source-implemented-exact-sha-validation-pending",
+  "status": "skin-001-neon-stage-default-unified-runtime-ui-exact-sha-validation-pending",
   "themes": [
     {
-      "id": "skin-01",
+      "id": "skin-001",
       "index": 1,
-      "name": "Neon Riot",
-      "cluster": "B",
-      "path": "Skin_01/theme.json",
-      "preview": "Skin_01/assets/preview.png",
-      "hero": "Skin_01/assets/hero.webp",
-      "active": false
+      "name": "NEON STAGE DEFAULT",
+      "path": "Skin_001/theme.json",
+      "preview": "Skin_001/assets/preview.png",
+      "hero": "Skin_001/assets/hero.png",
+      "active": true,
+      "family": "carbon_studio",
+      "layout": "STUDIO_CONSOLE",
+      "activeOrdinal": 1
     },
     {
       "id": "skin-02",
@@ -530,14 +532,13 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "NEON STAGE DEFAULT",
+      "name": "Carbon Studio Archive 01",
       "family": "carbon_studio",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
       "preview": "Skin_053/assets/preview.png",
       "hero": "Skin_053/assets/hero.png",
-      "active": true,
-      "activeOrdinal": 1
+      "active": false
     },
     {
       "id": "skin-054",

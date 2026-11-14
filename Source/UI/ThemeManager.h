@@ -34,7 +34,7 @@ public:
             juce::Colour lowlight { 0xff0d1417 };
         };
 
-        juce::String id { "skin-053" };
+        juce::String id { "skin-001" };
         juce::String name { "NEON STAGE DEFAULT" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.

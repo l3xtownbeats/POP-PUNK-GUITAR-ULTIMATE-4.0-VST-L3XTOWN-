@@ -121,8 +121,8 @@ def validate_registry_contract(registry: dict) -> int:
     if not isinstance(themes, list) or len(themes) != total:
         fail("theme registry totalSkins does not match its themes array")
 
-    if registry.get("defaultSkin") != "skin-053":
-        fail("theme registry defaultSkin must be canonical skin-053 / NEON STAGE DEFAULT")
+    if registry.get("defaultSkin") != "skin-001":
+        fail("theme registry defaultSkin must be canonical skin-001 / NEON STAGE DEFAULT")
     target = registry.get("releaseTargetActiveThemeCount")
     if target != 16:
         fail("theme registry releaseTargetActiveThemeCount must be exactly 16")
@@ -170,7 +170,7 @@ def validate_registry_contract(registry: dict) -> int:
                 fail(f"active theme {theme_id} has invalid/duplicate activeOrdinal")
             seen_ordinals.add(ordinal)
             active_count += 1
-            if ordinal == 1 and theme_id == "skin-053":
+            if ordinal == 1 and theme_id == "skin-001":
                 default_is_first = True
             if name.strip().casefold() in legacy_names:
                 fail(f"legacy theme {name!r} cannot be active")
@@ -182,7 +182,7 @@ def validate_registry_contract(registry: dict) -> int:
     if seen_ordinals != set(range(1, declared_active + 1)):
         fail("activeOrdinal values must be sequential from 1 without gaps")
     if not default_is_first:
-        fail("skin-053 must be the first active theme (SKIN-1 / NEON STAGE DEFAULT)")
+        fail("skin-001 must be the first active theme (SKIN-1 / NEON STAGE DEFAULT)")
     return active_count
 
 

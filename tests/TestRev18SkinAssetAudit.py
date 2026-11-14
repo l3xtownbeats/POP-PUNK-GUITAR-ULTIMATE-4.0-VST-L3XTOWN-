@@ -117,7 +117,7 @@ class Rev18IconManifestTests(unittest.TestCase):
                     "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
                     "crc32": f"{zlib.crc32(data) & 0xffffffff:08X}", "origin": "[DECISION] test"})
             (root / "assets/asset_manifest.json").write_text(
-                json.dumps({"skinId": "skin-053", "assetGroup": "topbar-icons", "records": records}),
+                json.dumps({"skinId": "skin-001", "assetGroup": "topbar-icons", "records": records}),
                 encoding="utf-8")
             AUDIT.validate_icon_manifest(root, ("skins",))
             image_path.write_bytes(b"tampered")
@@ -160,7 +160,7 @@ class Rev18ArtworkManifestTests(unittest.TestCase):
                 if rel.endswith(".png"):
                     record["dimensions"] = "2x1"
                 records.append(record)
-            manifest = {"skinId": "skin-053",
+            manifest = {"skinId": "skin-001",
                 "assetGroup": "hero-preview-background-texture-fx-atlas",
                 "records": records}
             (root / "assets/artwork_manifest.json").write_text(
@@ -184,7 +184,7 @@ class Rev18FontManifestTests(unittest.TestCase):
                 "SIL OPEN FONT LICENSE Version 1.1\nThis Font Software is licensed under OFL.",
                 encoding="utf-8")
             manifest = {
-                "skinId": "skin-053", "fontFamily": "Inter",
+                "skinId": "skin-001", "fontFamily": "Inter",
                 "fontFile": "Inter[opsz,wght].ttf", "licenseFile": "OFL.txt",
                 "bytes": len(font), "crc32": f"{zlib.crc32(font)&0xffffffff:08X}",
                 "sourceBlobSha1": "a" * 40, "licenseBlobSha1": "b" * 40,
