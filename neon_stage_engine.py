@@ -786,6 +786,41 @@ def render_reference_art(size, path):
     indexed.save(path, "PNG", optimize=True)
 
 
+def render_hero_banner(path):
+    """Crop only the approved guitar/crown/PPGU banner from mockup 01.
+
+    The 800x450 hero canvas is not a miniature screenshot of the whole plugin:
+    it contains the actual reference banner centered on a token-derived stage
+    backdrop, with the browser, knobs, keyboard and status bar excluded.
+    """
+    reference = ROOT / "01 INTERFACE  NEON STAGE DEFAULT .png"
+    if not reference.is_file():
+        raise FileNotFoundError(f"Approved NEON STAGE reference mockup is missing: {reference.name}")
+    with Image.open(reference) as opened:
+        source = opened.convert("RGBA")
+    width,height=source.size
+    crop=source.crop((int(width*.21),int(height*.195),
+                      int(width*.956),int(height*.427)))
+    target_height=max(1,round(800*crop.height/crop.width))
+    banner=crop.resize((800,target_height),Image.Resampling.LANCZOS)
+    canvas=Image.new("RGBA",(800,450),(*rgb(SOURCE_PALETTE["bg_deep"]),255))
+    draw=ImageDraw.Draw(canvas)
+    # Subtle stage rails and corner glows use only canonical palette tokens.
+    draw.line((18,38,782,38),fill=rgb(SOURCE_PALETTE["border"]),width=2)
+    draw.line((18,412,782,412),fill=rgb(SOURCE_PALETTE["border"]),width=2)
+    glow=Image.new("RGBA",canvas.size,(0,0,0,0))
+    gd=ImageDraw.Draw(glow)
+    gd.arc((-190,-120,260,300),15,110,fill=(*rgb(SOURCE_PALETTE["accent_primary"]),110),width=7)
+    gd.arc((540,180,980,620),195,285,fill=(*rgb(SOURCE_PALETTE["accent_secondary"]),105),width=7)
+    canvas=Image.alpha_composite(canvas,glow)
+    y=(450-target_height)//2
+    canvas.alpha_composite(banner,(0,y))
+    frame=ImageDraw.Draw(canvas)
+    frame.rounded_rectangle((2,2,797,447),radius=9,
+                            outline=rgb(SOURCE_PALETTE["border"]),width=2)
+    _indexed_png(canvas,path)
+
+
 def render_background(size, path):
     """Create a restrained token-only NEON STAGE backdrop, not a fake UI screenshot."""
     width,height=size
@@ -815,11 +850,11 @@ def step_promo():
     ensure_dirs()
     # Dimensions follow the current SKIN asset production specification.
     render_reference_art((360, 240), ASSETS / "preview.png")
-    render_reference_art((800, 450), ASSETS / "hero.png")
+    render_hero_banner(ASSETS / "hero.png")
     render_background((1600, 920), ASSETS / "background.png")
     with Image.open(ASSETS / "hero.png") as hero:
         hero.convert("RGB").save(ASSETS / "hero.webp", "WEBP", quality=92, method=6)
-    print("Rendered preview, hero, background and WebP hero from the approved NEON STAGE reference mockup.")
+    print("Rendered full-UI preview, dedicated guitar/crown hero banner, token-only background and WebP hero.")
     print("No synthetic UI screenshot or invented control layout was generated.")
 
 
