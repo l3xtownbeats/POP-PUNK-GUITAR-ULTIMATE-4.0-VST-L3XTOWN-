@@ -1407,6 +1407,9 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
 
     std::set<int> indices;
     std::set<std::string> ids;
+    std::set<int> activeOrdinals;
+    int activeCount = 0;
+    juce::String defaultSkin = registry.getProperty("defaultSkin", "").toString();
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
@@ -1415,8 +1418,9 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         const auto indexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
+        const auto activeValue = entry.getProperty("active", juce::var());
         if ((!indexValue.isInt() && !indexValue.isInt64())
-            || id.isEmpty() || path.isEmpty()
+            || !activeValue.isBool() || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
@@ -1427,9 +1431,33 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             || !indices.insert(static_cast<int>(index64)).second
             || !ids.insert(id.toStdString()).second)
             return 0;
+
+        if (static_cast<bool>(activeValue))
+        {
+            const auto ordinalValue = entry.getProperty("activeOrdinal", juce::var());
+            if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+                || ordinalValue.toString().getLargeIntValue() < 1
+                || ordinalValue.toString().getLargeIntValue() > total
+                || !activeOrdinals.insert(static_cast<int>(ordinalValue.toString().getLargeIntValue())).second)
+                return 0;
+            ++activeCount;
+            if (ordinalValue.toString().getLargeIntValue() == 1 && id != defaultSkin)
+                return 0;
+        }
+        else if (!entry.getProperty("activeOrdinal", juce::var()).isVoid())
+        {
+            return 0;
+        }
     }
 
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    if (static_cast<int>(indices.size()) != total || activeCount < 1
+        || static_cast<int>(activeOrdinals.size()) != activeCount
+        || *activeOrdinals.begin() != 1 || *activeOrdinals.rbegin() != activeCount)
+        return 0;
+    for (int ordinal = 1; ordinal <= activeCount; ++ordinal)
+        if (activeOrdinals.count(ordinal) == 0)
+            return 0;
+    return activeCount;
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
@@ -1449,11 +1477,11 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 
     for (const auto& entry : *themes)
     {
-        if (!entry.isObject())
+        if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false)))
             continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
+        const auto ordinalValue = entry.getProperty("activeOrdinal", juce::var());
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || ordinalValue.toString().getLargeIntValue() != index)
             continue;
 
         const auto relativePath = entry.getProperty("path", "").toString();
@@ -1471,9 +1499,50 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    int activeOrdinal = 0;
+    if (registryFile.existsAsFile())
+    {
+        const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+        const auto* themes = registry.getProperty("themes", juce::var()).getArray();
+        if (themes != nullptr)
+        {
+            const auto defaultId = registry.getProperty("defaultSkin", "skin-053").toString();
+            bool foundSavedId = false;
+            for (const auto& entry : *themes)
+            {
+                if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false)))
+                    continue;
+                const auto entryId = entry.getProperty("id", "").toString();
+                const auto ordinal = entry.getProperty("activeOrdinal", juce::var());
+                if ((!ordinal.isInt() && !ordinal.isInt64()) || ordinal.toString().getLargeIntValue() < 1)
+                    continue;
+                if (entryId == id)
+                {
+                    activeOrdinal = static_cast<int>(ordinal.toString().getLargeIntValue());
+                    foundSavedId = true;
+                    break;
+                }
+            }
+            if (!foundSavedId)
+            {
+                id = defaultId;
+                for (const auto& entry : *themes)
+                {
+                    if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false))
+                        || entry.getProperty("id", "").toString() != defaultId)
+                        continue;
+                    const auto ordinal = entry.getProperty("activeOrdinal", juce::var());
+                    if ((ordinal.isInt() || ordinal.isInt64()) && ordinal.toString().getLargeIntValue() >= 1)
+                        activeOrdinal = static_cast<int>(ordinal.toString().getLargeIntValue());
+                    break;
+                }
+            }
+        }
+    }
+    if (activeOrdinal < 1 || activeOrdinal > getSkinCount()
+        || !loadSkinByIndex(activeOrdinal, false))
     {
         themeManager.resetToDefault();
         applyPalette();
