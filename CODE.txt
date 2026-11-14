@@ -556,3 +556,25 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Compatibility:** existing APVTS IDs/semantics, MIDI, sampler, realtime callback, secure import and release invariants preserved. Earlier I7/R18 default display-name rule explicitly amended only for the default skin name; stable ID `default-ppgu` retained pending reviewed migration.  
 **Validation:** no production source changed; no build, CTest, pluginval, package or FL Studio 20 host test run.  
 **Status:** REQUIREMENTS APPROVED / IMPLEMENTATION NOT IMPLIED.
+
+
+## 2026-11-14 — MASTER ENGINE SOURCE INVENTORY / BUILD GRAPH AUDIT
+
+Type: documentation-only source inventory and static integration audit.
+Audited main HEAD: 1f09611f753702e380d695a5441b6f260f798d3b.
+Production source changed: NO.
+Matching detailed INFO record: Info.txt, “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”.
+
+Canonical code locations recorded:
+- JUCE processor/editor: Source/PluginProcessor.{h,cpp}, Source/PluginEditor.{h,cpp}; parallel root PluginProcessor.* / PluginEditor.* remain to be compared.
+- Sampler: Source/Sampler/{SamplePool,SampleMetadataIndex,SampleStreamingService,PageCacheSlots,StreamingVoiceReader,WavPageReader,SfzParser}.{h,cpp} plus BoundedSpscQueue.h; parallel root sampler files remain.
+- Performance: Source/Performance/{PatternScheduler,AutoChordEngine,ChordTransitionPolicy,ChordTransitionTimeline,CircleOfFifths}; parallel root PatternScheduler.* / ChordEngine.* remain.
+- UI: Source/UI/{AutoChordsPanel,AuxiliaryPanelLayout,AuxiliaryPanelWindowManager,EditorOverlayPanel,FXEditPanel,ImportGuitarPanel,PerformanceDisplay,SettingsPanel,ThemeManager}.{h,cpp}; parallel root panel/window/theme/security files remain.
+- Other root modules: FxChain.*, ImportPipeline.*, PresetRuntime.*, WavIndex.*, PageCache.*, SecureSkinImport.*, OverlayManager.*, MultiWindowWorkspace.*, AuxiliaryPanelLayout.*.
+- Tests, tools, presets, SoundBank policy, skins/assets and CI paths are inventoried in the matching INFO appendix.
+
+Static integration discrepancies found: CMake references missing Source/Engine/* files, missing Source/UI/MultiWindowWorkspace.cpp and Source/UI/Panels.cpp, and tests/EngineContractTests.cpp while corresponding/parallel files are at other paths. CMake also calls add_subdirectory(JUCE), but the audited tree has no JUCE directory/gitlink and the inspected workflow contains no submodule/JUCE clone step. Source/UI/FXEditPanel.h exposes eight module slots versus approved scope up to 15 fully implemented FX processors plus cabinets. The workflow's legacy factory_bank_300.json validation must accept an open-ended catalog; 300 is not a maximum.
+
+Important: static path audit only; no Windows configure/build/CTest/pluginval was run. No actual build failure is asserted. Do not move/rename duplicate code before API/namespace/APVTS/MIDI/lifecycle/test/history comparison. Production implementation and test status remain unchanged.
+
+Next: canonical source graph map → CMake/JUCE provisioning reconciliation → test path reconciliation → end-to-end processor/sampler/pattern/chord/FX integration tests → exact-SHA Windows Release/CTest/pluginval/FL Studio 20 validation.
