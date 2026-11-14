@@ -52,7 +52,7 @@ def validate_registry(registry: dict) -> list[dict]:
     if not isinstance(themes, list) or not isinstance(total, int) or isinstance(total, bool):
         raise ValueError("canonical registry requires themes[] and integer totalSkins")
     if len(themes) != total:
-        raise ValueError(f"totalSkins={total}, but themes contains {len(themes)} entries")
+        raise ValueError(f"totalSkins={total} does not match themes length {len(themes)}")
 
     indices, ids, paths = set(), set(), set()
     for entry in themes:
