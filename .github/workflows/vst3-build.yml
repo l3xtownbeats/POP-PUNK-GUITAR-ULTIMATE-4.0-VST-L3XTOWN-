@@ -26,6 +26,12 @@ jobs:
       - name: Install artwork generator dependency
         shell: pwsh
         run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Test unlimited SAMPLES policy and split artifact integrity
+        shell: pwsh
+        run: |
+          python tests/test_audit_soundbank_policy.py
+          python tests/test_artifact_splitter.py
       - name: Generate and validate missing legacy skin artwork
         shell: pwsh
         run: |
@@ -185,14 +191,10 @@ jobs:
             "$hash  $relative"
           }
           $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt')
-          # Hard cap for the redistributable guitar SoundBank. 25 GB is the preferred
-          # target; 30 GB is an absolute ceiling, measured before archive creation.
+          # REV.18: SAMPLES content is unlimited. This count is reporting only;
+          # GitHub artifact transport is handled by ordered, checksummed split parts.
           $audioBytes = ($audioFiles | Measure-Object -Property Length -Sum).Sum
-          $maxBytes = 30GB
-          if ($audioBytes -gt $maxBytes) {
-            throw "Guitar SoundBank exceeds the 30 GB hard limit: $([math]::Round($audioBytes / 1GB, 2)) GB."
-          }
-          Write-Host ("Guitar SoundBank audio payload: {0:N2} GB (preferred target: <=25 GB; hard cap: 30 GB)" -f ($audioBytes / 1GB))
+          Write-Host ("SAMPLES audio payload: {0:N2} GiB (REV.18: no content-size cap)" -f ($audioBytes / 1GB))
 
           @'
           Sample library sources included in this package:
@@ -235,7 +237,7 @@ jobs:
 
       - name: Audit guitar SoundBank payload, SHA-256 coverage and source licenses
         shell: pwsh
-        run: python tools/audit_soundbank.py --root Samples --preferred-gb 25 --hard-limit-gb 30
+        run: python tools/audit_soundbank.py
 
       - name: Generate per-file Sound Hunter registry
         shell: pwsh
@@ -289,7 +291,7 @@ jobs:
         run: |
           Write-Host 'Automated pluginval strictness level 5 completed. FL Studio 20 manual host acceptance remains a separate required check.'
 
-      - name: Package VST3, SOUNDBANK, PRESETS, SKINS, Resources and Assets
+      - name: Package VST3, SAMPLES, PRESETS, SKINS, Resources and Assets
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -298,13 +300,13 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          $folders = @('VST3', 'SAMPLES', 'PRESETS', 'Skins', 'Resources', 'Assets')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
 
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
-          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SAMPLES') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
@@ -320,8 +322,8 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SAMPLES/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SAMPLES_SOURCES_AND_LICENSES.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SAMPLES/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SAMPLES_SHA256SUMS.txt')
 
           $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
           $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
@@ -343,8 +345,8 @@ jobs:
           }
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
-          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
-          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
+          $soundFiles = Get-ChildItem (Join-Path $release 'SAMPLES') -Recurse -File -Filter '*.wav'
+          if ($soundFiles.Count -lt 100) { throw "SAMPLES is incomplete: only $($soundFiles.Count) WAV files found." }
           $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
           if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
 
@@ -352,7 +354,7 @@ jobs:
           POP PUNK GUITAR ULTIMATE — WINDOWS x64 VST3 PACKAGE
           ===================================================
           VST3/       The compiled VST3 plugin bundle.
-          SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
+          SAMPLES/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
           PRESETS/    Factory catalog (300 entries) and portable preset examples.
           Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
@@ -363,7 +365,7 @@ jobs:
              C:\Program Files\Common Files\VST3\
              Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
           2. In the plugin, use its SFZ load control and select an instrument SFZ
-             from SOUNDBANK/. Keep SOUNDBANK on disk.
+             from SAMPLES/. Keep SAMPLES on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
           4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
@@ -378,9 +380,17 @@ jobs:
           if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
           Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
 
+          # Split only for artifact transport; the complete SAMPLES payload remains unlimited.
+          $partsDir = Join-Path $PWD 'release-parts'
+          python tools/split_artifact.py split --input $zipPath --output-dir $partsDir --prefix PPGU_COMPLETE --part-size-mb 1800
+          python tools/split_artifact.py verify --manifest (Join-Path $partsDir 'PPGU_COMPLETE_PARTS_MANIFEST.json')
+
       - uses: actions/upload-artifact@v4
         with:
-          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE
-          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_COMPLETE.zip
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE-SPLIT
+          path: |
+            release-parts/PPGU_COMPLETE.part-*
+            release-parts/PPGU_COMPLETE_PARTS_MANIFEST.json
+            release-parts/PPGU_COMPLETE_PARTS_SHA256SUMS.txt
           if-no-files-found: error
 
