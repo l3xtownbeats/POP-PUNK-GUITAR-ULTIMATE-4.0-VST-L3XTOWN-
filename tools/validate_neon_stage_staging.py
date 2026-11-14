@@ -17,14 +17,6 @@ ROOT=Path(__file__).resolve().parents[1]
 SKIN=ROOT/"dist"/"neon_stage_staging"/"Skin_052"
 REGISTRY=ROOT/"SKIN"/"theme_manifest.json"
 SOURCE=ROOT/"SKIN"/"Skin_052"/"theme.json"
-EXPECTED_TOKENS={
-"bg_deep":"#0A0E18","bg_panel":"#141B2A","bg_panel_hi":"#1E2A40",
-"border":"#2A3A55","border_glow":"#22CFFF","text_primary":"#EAF6FF",
-"text_secondary":"#9FB6D4","text_disabled":"#5A6B85","accent_primary":"#22CFFF",
-"accent_secondary":"#FF3EA5","accent_warning":"#FFB454","accent_danger":"#FF5A5A",
-"accent_success":"#46E88C","lcd_bg":"#061021","lcd_text":"#7FE8FF",
-"knob_body":"#0C1220","knob_ring":"#22CFFF","led_on":"#46E8FF","led_off":"#1A2436",
-"overlay_scrim":"#04080FCC","focus_ring":"#7FE8FF"}
 EXPECTED_PNG={
 "assets/preview.png":(360,240),"assets/hero.png":(800,450),
 "assets/background.png":(1600,920),
@@ -90,14 +82,20 @@ def validate(determinism=False):
     errors=[];checks={}
     source=json.loads(SOURCE.read_text(encoding="utf-8"))
     theme=json.loads((SKIN/"theme.json").read_text(encoding="utf-8"))
+    schema=json.loads((ROOT/"SKIN"/"control_schema.json").read_text(encoding="utf-8"))
+    expected_tokens=source.get("palette",{})
+    required_tokens=schema.get("x-ppgu-contract",{}).get("paletteTokens",[])
     if theme.get("id")!="neon-stage-default-skin-1" or theme.get("index")!=52 or theme.get("name")!="NEON STAGE":
         errors.append("G4: staging theme identity/index/name mismatch")
-    if theme.get("palette")!=EXPECTED_TOKENS:errors.append("G1: palette differs from the exact REV ULTRA 3.0 token registry")
+    if set(expected_tokens)!=set(required_tokens) or len(required_tokens)!=21:
+        errors.append("G1: authoritative palette/schema token registry mismatch")
+    if theme.get("palette")!=expected_tokens:
+        errors.append("G1: staging palette differs from canonical Skin_052 token registry")
     ratios={}
     for fg,bg,minimum in (("text_primary","bg_deep",7),("text_secondary","bg_deep",4.5),
                           ("text_disabled","bg_deep",3),("lcd_text","lcd_bg",7),
                           ("accent_primary","bg_panel",3)):
-        ratio=contrast(EXPECTED_TOKENS[fg],EXPECTED_TOKENS[bg]);ratios[f"{fg}/{bg}"]=round(ratio,2)
+        ratio=contrast(expected_tokens[fg],expected_tokens[bg]);ratios[f"{fg}/{bg}"]=round(ratio,2)
         if ratio<minimum:errors.append(f"G1: {fg}/{bg} {ratio:.2f}:1 < {minimum}:1")
     checks["G1_contrast"]=ratios
     # G2: exact control inventory, unique IDs, 12x16 bounds and no overlap.
