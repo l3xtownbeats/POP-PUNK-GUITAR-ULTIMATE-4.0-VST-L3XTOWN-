@@ -143,3 +143,58 @@ Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated comm
 - Open Skin Gallery: opens the existing gallery panel alongside Settings.
 
 No audio, APVTS, MIDI or processor parameters are changed. About remains NOT IMPLEMENTED; no fake controls are added.
+
+
+## 11. RECOVERED APPROVED CONTROL CONTRACT — PRESET / PATTERN / AUTOCHORDS / VISUAL REFERENCES (2026-11-14)
+
+### 11.1 Canonical mockup hierarchy
+- First approved main-interface mockup = exact appearance/layout/proportions/block and control placement.
+- `02 INTERFACE NEON STAGE AUTOCHORDS` = palette reference only; apply its colours to the first mockup. It does not define layout.
+- SIGNAL FORGE identity; NEON STAGE default treatment. No redesign, moving, removing or arbitrary replacing approved controls. Every theme shares the same control map and behavior.
+- Three earlier approved visual references remain immutable. Other retrieved mockups are supporting reference, not blanket approval of every widget they depict.
+
+### 11.2 Preset Browser contract
+| Surface/control | Required behavior | Acceptance invariant |
+|---|---|---|
+| BROWSER / FAVORITES / CATEGORIES | Separate views of preset catalogue | View switch does not change active sound |
+| Factory/User scope | Separate read-only factory from editable user content | Factory cannot be overwritten/deleted |
+| Category/tag/filter/sort/search | Eight categories: Clean, Crunch, Drive, Lead, Ambient, Lo-Fi, Acoustic Textures, Punk Rhythm; artist/style/use-case tags | Filter only; no implicit load |
+| Preset item/details | Name, category, tags, description, artwork, verified instrument/sample profile | No fabricated metadata/assets |
+| Previous/Next | Navigate deterministic current scope | No invalid selection or unexpected load unless explicitly specified by user action |
+| Favourite | Persist user favourite state | Independent from factory preset content |
+| Preview | Audition available representative real sample | Non-committing; unavailable if no real preview asset/path |
+| Load / double-click | Commit selected preset transaction | Valid sample profile, mode, mapping, articulations, tone/FX and state; report missing assets |
+| User preset actions | Save, Save As, Rename, Delete | Persist; confirm destructive delete |
+| Bank actions | Import/Export Bank, Rescan | Validate paths/schema; preserve originals; no audio-thread file work |
+
+Target factory bank = 300 definitions (150 MELODY + 150 PATTERN), not a claim of 300 playable verified presets.
+
+### 11.3 Pattern Browser / Song Section contract
+| Step/surface | Required behavior | Acceptance invariant |
+|---|---|---|
+| Song Section | Choose Intro, Verse, Chorus, Bridge, Outro or neutral/general first | Section is not a pattern |
+| Pattern Browser | Choose the separate performance drawing after section | Independent selection and registry |
+| Search/filter/favourites | Browse suitable patterns with categories and favorites | No implicit apply |
+| Metadata | Name, purpose/section, feel, bars/duration, time signature, tempo range, articulations/capabilities | Show verified metadata only |
+| Preview | Play actual performance map/recorded one-shot via shared path | Non-committing; no synthetic placeholder |
+| Apply | Explicitly commit selected section/pattern | Deterministic and state-safe |
+| Back/Cancel | Roll back to prior committed state | Preview never becomes accidental commit |
+
+Supported pattern families include down/up/alternate strokes, palm-muted eighths/sixteenths, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio/picking, acoustic strum/picking and dynamic build, subject to actual recorded performance-map support.
+
+### 11.4 AutoChords and independent selectors
+Top chord/degree strip; left Playing Styles/Articulation; right Playback Mode and Rhythm Mode; bottom full-width Pattern Browser. Harmony/key/progression, style/articulation, pattern, playback mode and rhythm mode remain independent. Main on-screen keyboard stays visible. Circle of Fifths, progression and Generation Manager are required design scope; preview uses shared sampler path and generation requires deterministic seed/constraints/explicit commit.
+
+### 11.5 Main and auxiliary controls
+- Main modes: MELODY / PATTERN / PUNK GROUP.
+- Nine rotary controls remain mapped to ampGain, eqHigh, eqMid, eqLow, velocity, dynamics, swing, humanize, accent.
+- Exactly seven bypass switches: Compressor, EQ, Distortion, Chorus, Delay, Reverb, Cabinet. Flanger remains an FX EDIT page; no eighth bypass.
+- Eight FX EDIT pages: Compressor, EQ, Distortion, Chorus, Flanger, Delay, Reverb, Cabinet IR.
+- Keep AMP & TONE, pitch/mod, on-screen MIDI keyboard, status/performance strip and approved header/browser controls.
+- Auxiliary surfaces: FX EDIT, AUTOCHORDS, IMPORT GUITAR, AUTO DISCOVER/SOUND HUNTER, CURATOR, SETTINGS, PERFORMANCE, SKIN GALLERY, ABOUT, and prior approved Preset Manager/Sample Browser workflow. Each inherits current skin, has title/X close and managed independent lifecycle. Unimplemented controls must remain disabled/deferred, not fake.
+- Every real control requires a documented binding/action, range, value, tooltip, state/automation, reset, focus and loading/error behavior. Do not change APVTS IDs/semantics or engine functions to make a mockup fit.
+
+### 11.6 Archival note
+Reference files known from prior context include `Cover Interface.jpg`, `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png`, `5675b332-eb7a-4dca-85fb-873a9682a349 (1).png` (with a duplicate `(2)`) and `02 INTERFACE NEON STAGE AUTOCHORDS`. Retrieved Library image references also include the full PPGU interface, AutoChords, FX EDIT/Signal Forge and Import Guitar examples. They are not all confirmed copied to GitHub; per-file recovery, exact source mapping and SHA-256 remain OPEN.
+
+**Status:** requirements reconciled into inventory; runtime parity and browser behavior require source-level audit and tests. Documentation only; no implementation claim.
