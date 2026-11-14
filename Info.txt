@@ -1725,3 +1725,96 @@ Before changing UI source: locate and inspect the exact original reference 02 an
 
 **Статус:** FINAL VISUAL MAPPING CONFIRMED / EXACT SOURCE FILES AND PIXEL-LEVEL IMPLEMENTATION STILL REQUIRE VERIFICATION. Запись фиксирует пользовательское уточнение, а не заявляет о завершённой реализации.
 ==============================================================================
+
+
+
+## 2026-11-14 — PRESET BROWSER / PRESET WORKFLOW: APPROVED REQUIREMENTS RECONCILIATION
+
+**Тип:** append-only product/UI behavior specification; documentation only.  
+**Ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+**Исходный HEAD:** `97de456bf175daa9e2b3f43e5b07e7da45a70446`  
+**Изменённые production symbols/assets:** none.  
+**Статус:** REQUIREMENTS RECORDED / IMPLEMENTATION AND EXACT-SHA VALIDATION NOT CLAIMED.
+
+### 1. Канонический путь музыкального браузера
+
+Иерархия выбора для Pattern-oriented discovery:
+
+`GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN`
+
+Это логическая навигация по музыкальному контексту, а не требование создавать отдельный экран или менять утверждённую компоновку первого макета. Секции: `Intro`, `Verse`, `Pre-Chorus`, `Chorus`, `Bridge`, `Outro`. Переходы между уровнями должны сохранять выбранный контекст; пустой/неподдерживаемый уровень не должен подменяться выдуманным результатом. Artist/Band и Song — поисковые/стилистические метаданные и reference taxonomy, а не заявление о лицензированном копировании чужих песен, риффов или фирменных партий.
+
+### 2. Обязательные области и команды preset browser
+
+Отразить в утверждённой оболочке, сохраняя точную структуру и позиции органов управления первого утверждённого макета:
+
+- `BROWSER` — открыть/показать браузер пресетов;
+- `FAVORITES` — представление избранных;
+- `CATEGORIES` — категории/иерархия;
+- `FACTORY / USER` — явное разделение заводского и пользовательского содержимого;
+- `SEARCH` — текстовый поиск по доступным metadata;
+- `FILTER` — фильтры по реально существующим полям/тегам;
+- `SORT` — сортировка по реально доступным критериям;
+- `PREV / NEXT` — предыдущий/следующий элемент в текущем результирующем наборе;
+- `FAVORITE` — переключение избранного состояния;
+- `PRESET NAME` и `CATEGORY` — отображение имени и категории текущего/выбранного пресета;
+- `PREVIEW` — временное audition/прослушивание;
+- `SELECT / LOAD` — явная загрузка выбранного пресета;
+- пользовательские операции: `SAVE`, `SAVE AS`, `RENAME`, `DELETE`, `IMPORT`, `EXPORT`, `RESCAN`.
+
+Команды должны быть доступны только там, где операция поддерживается. Factory presets — read-only: запретить их перезапись, переименование и удаление. User presets — операции изменения разрешены после проверки реального backend, валидности данных и безопасного подтверждения destructive actions. Import/Export не должны обходить schema, licensing, path-containment или compatibility validation.
+
+### 3. Строгое разделение состояний
+
+- **Selected:** элемент выделен в браузере; активное состояние инструмента ещё не меняется.
+- **Previewed:** временно прослушивается/оценивается; preview не должен незаметно менять текущий активный preset, проектное состояние, сохранённые параметры или пользовательскую настройку.
+- **Loaded/Active:** только после явной команды `SELECT / LOAD` и успешного завершения валидированной загрузки.
+- Ошибка preview/load сохраняет прежний активный preset и сообщает фактическую ошибку; не оставлять частично применённое состояние.
+- Если технически безопасный независимый preview path ещё не реализован, показывать disabled/честный статус; не имитировать audition и не подменять его обычной загрузкой.
+
+### 4. Поведение поиска, фильтрации и навигации
+
+- Search/filter/sort работают по одному актуальному результирующему набору и не сбрасывают контекст без явной команды пользователя.
+- `PREV / NEXT` перемещаются внутри текущего набора с учётом активных category/filter/search/sort; не перескакивают молча в несвязанные категории.
+- Изменение уровня GENRE/ARTIST/BAND/SONG/SECTION/STYLE/PATTERN обновляет нижележащие доступные значения согласованно; не сохранять недействительные дочерние selection.
+- Favorites — отдельный фильтр/представление и устойчивый user preference; factory/user происхождение не теряется.
+- Empty, loading, unavailable, invalid and error states должны быть явными. Счётчики и metadata показывать только из реального каталога, не вычислять фиктивные totals.
+- Поддержать мышь и клавиатуру для навигации и действий; focus/selection должны быть видимыми и доступны без нарушения MIDI keyboard interaction.
+
+### 5. Идентичность, хранение и совместимость
+
+- Preset IDs стабильны и уникальны; display name не является ключом. Переименование не меняет ID.
+- Factory и User — отдельные namespaces/storage domains; user favorites и пользовательские данные не должны портить factory bank.
+- Preset schema, APVTS mapping, state restore, SoundBank/sample-profile dependencies, articulation/FX references и compatibility version валидируются до commit загрузки.
+- Отсутствующие samples/assets, несовместимая версия, неверные ranges/IDs и повреждённый файл дают понятную ошибку; запрещено молча подменять профиль/артикуляцию или считать preset playable по одной записи каталога.
+- Save/Save As сохраняют фактическое состояние инструмента по утверждённой схеме; Rename/Delete/Import/Export/Rescan обновляют индекс атомарно либо оставляют предыдущий валидный индекс.
+- Не нарушать утверждённый каталог: ровно 300 factory preset definitions; историческая цель 150 MELODY + 150 PATTERN сохраняется до отдельного решения. Definitions не приравнивать к числу проверенных playable presets. Не заменять 300-позиционный каталог восемью reference profiles и не менять художественные категории без отдельного согласования.
+
+### 6. Границы изменений и приоритет конфликтов
+
+Эта запись дополняет только не противоречащие более свежим решениям пункты. Приоритет имеют утверждения 13–14 ноября и главные строгие правила; данная запись не отменяет и не переписывает их.
+
+- Первый утверждённый mockup остаётся единственным эталоном layout/geometry/control inventory; второй `02 INTERFACE NEON STAGE AUTOCHORDS` — источник цветовой палитры, не альтернативная компоновка. Третий FX EDIT + AutoChords mockup остаётся отдельным согласованным состоянием.
+- Не добавлять, не удалять, не переставлять и не переименовывать визуальные контролы вопреки первому макету. Эта спецификация описывает поведение существующих предусмотренных элементов.
+- Skins меняют графику/палитру, не функциональную геометрию, назначение контролов, APVTS IDs/semantics, processor state, presets, MIDI, sampler, DSP или аудиоповедение.
+- Не вводить новые APVTS IDs только ради браузера; сначала проверить существующие параметры, state/preset infrastructure и approved schemas.
+- Никакого фиктивного preview/load/save/import/export, декоративных активных контролов или неподтверждённых счётчиков.
+- Audio-thread ограничения остаются безусловными: никакого file I/O, allocation, blocking locks, waits, GUI calls, logging или decoding в audio callback. Поиск, сканирование, preview preparation и file operations — вне audio thread с bounded queues, cancellation/lifetime safety и атомарной публикацией готового состояния.
+- Не копировать коммерческие библиотеки, защищённые песни/риффы, фирменные материалы или проприетарные пресеты. Открытые ресурсы можно использовать/скачивать только после проверки лицензии, attribution, коммерческого использования и права на включение/распространение; SoundBank GREEN/provenance gate остаётся обязательным.
+- Сохраняются общий порядок работ и доказательств: ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ; сначала reuse/audit, затем минимальные изменения. PASS относится только к точному SHA.
+
+### 7. Что считать реализацией и что проверить
+
+Перед реализацией проверить текущие browser components, preset repository/index, schemas, stable IDs, APVTS/state mapping, factory/user separation, metadata/tags, search/filter/sort, preview isolation, transactional load, persistence, import/export/rescan, tests и approved mockup. Не создавать второй browser, второй catalog или параллельную schema, если существующий компонент уже покрывает требование.
+
+Acceptance checklist:
+1. Browser visual parity с первым mockup; palette соответствует второму mockup.
+2. Genre-to-pattern navigation и все шесть section labels работают по фактическим данным.
+3. Search/filter/sort/favorites и Prev/Next согласованы в одном результирующем наборе.
+4. Selected/Previewed/Loaded различаются; preview не меняет active preset/project.
+5. Factory read-only; User CRUD/import/export/rescan безопасны и сохраняют stable IDs.
+6. Schema, state restore, sample/profile/articulation/FX dependencies валидируются; ошибки не повреждают текущий активный preset.
+7. Mouse/keyboard/focus/DPI/resize проверены; MIDI keyboard не перекрывается.
+8. Regression tests, Windows x64 Release, полный CTest, pluginval strictness 5, package audit/checksum и отдельная ручная FL Studio 20 acceptance выполнены на точном SHA.
+
+**Фактический статус на момент записи:** requirements reconciliation only. Source implementation, tests, exact-SHA CI, package and host acceptance не проверялись этой документационной операцией и не объявляются завершёнными.
