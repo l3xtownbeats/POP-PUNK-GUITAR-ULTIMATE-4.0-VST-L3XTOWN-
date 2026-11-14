@@ -121,3 +121,41 @@ The current PPGU codebase already contains a custom SFZ parser, a 64-voice Sampl
 | `AkiFX` | GPLv3 VST3/CLAP effects rack. | Excluded from direct integration under the planned closed-source/commercial distribution model unless licensing is separately resolved. |
 
 **Status:** preliminary source/README/license metadata inspection only. No component is integrated, no benchmark is claimed, and full transitive-license audit remains open for sfizioso/dusk-fizz. Next evaluation must compare SFZ opcode coverage, sample-reader integration with `SampleStreamingService`, allocation/lock behavior, voice limits, memory footprint, build complexity, Windows 10 x64/VST3 compatibility and CPU under 64-voice stress.
+
+
+## 2026-11-14 — SOUND HUNTER DOCUMENTATION CORRECTION AND UPSTREAM GUITAR SOURCE RE-AUDIT
+
+**Scope:** documentation correction and source research only. Production C++/Python importer, source catalog, sample assets and VST3 binaries were not changed by this operation.
+
+### Sound Hunter size-rule correction
+- Updated `SoundHunter/README.md` to correctly state that the 25 GB cap applies only to newly imported bytes in the current Sound Hunter run.
+- Existing/manual content in `Samples` does not consume that run allowance; manual import has no artificial 25 GB cap.
+- Clarified that the current-run cap is distinct from the separately approved 25–30 GB final factory Guitar Sound Library target.
+- README now explicitly requires revalidation of upstream repository layout, release asset names, licenses, manifests, SFZ maps and checksums before a run.
+- README commit: `7b07c887d4094f54f01916b011b59cf3f89ecc3d`; new README blob: `d87f2217cea9ea349bbd02d2ce9f566b6cd4d488`.
+
+### Meta Open Sound upstream findings
+Current upstream documentation/catalog identifies:
+- Meta Nylon Guitar: 348 multisamples, E2–B5, six string zones, three dynamic layers (two picked and one fingerstyle).
+- Meta Steel Guitar: 375 multisamples, E2–C6, six string zones, three velocity layers.
+- Full-quality WAV sources are 24-bit / 48 kHz; the repository includes OGG previews, manifests, SFZ maps and per-collection SHA256SUMS.
+- The guitar collections are CC0-1.0; the repository has per-collection LICENSE files.
+- Nylon documentation explicitly says there are no dedicated muted/palm-muted layers or separate release samples. Palm mute therefore cannot be claimed as natively sampled from this library; it needs another verified source/articulation or a separately designed DSP/envelope technique that is tested and labelled accurately.
+- Current upstream structure is `systems/instruments/meta-nylon-guitar` and `systems/instruments/meta-steel-guitar`, with `catalog.json`, collection manifests and SFZ maps as mapping authorities.
+
+**Critical follow-up:** the PPGU catalog/importer was authored against an earlier Meta repository layout and release-asset naming. The current catalog's `release_asset_contains` values and the importer's assumptions must be checked against the current GitHub Releases API and current manifests before rerunning Sound Hunter. Do not assume the previous asset-name match still succeeds. No download or import is claimed.
+
+### Evidence / references reviewed
+- https://github.com/facebookincubator/Meta-open-sound
+- https://github.com/facebookincubator/Meta-open-sound/blob/main/catalog.json
+- https://github.com/facebookincubator/Meta-open-sound/blob/main/AGENTS.md
+- https://github.com/facebookincubator/Meta-open-sound/blob/main/systems/instruments/meta-nylon-guitar/README.md
+- https://github.com/facebookincubator/Meta-open-sound/blob/main/systems/instruments/meta-steel-guitar/README.md
+- https://sfzinstruments.github.io/guitars/
+
+### Verification status
+- README update committed and its resulting blob SHA returned by GitHub.
+- Upstream facts reviewed from repository documentation/catalog and SFZ Instruments catalog.
+- Sound Hunter regression tests: NOT RUN in this operation.
+- Sound Hunter workflow: NOT DISPATCHED; no fresh artifact was inspected.
+- Meta catalog refresh, release-asset API revalidation, full factory-bank integration, ANGELA playback, preset validation, VST3 build, pluginval and FL Studio 20 host testing: NOT RUN / NOT VERIFIED.
