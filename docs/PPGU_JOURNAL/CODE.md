@@ -921,3 +921,25 @@ Mandatory third-party component intake:
 Initial framework audit: current project CMake fetches JUCE 7.0.12. JUCE upstream states it is dual-licensed AGPLv3/commercial; exact version and full terms must be reviewed before commercial distribution. Do not assume this dependency is automatically cleared. iPlug2 is a candidate for comparative audit: upstream states VST3 support and a permissive zlib-like license, but this does not automatically make it a drop-in replacement for the current JUCE stack. Compare it, and do not migrate frameworks without demonstrated technical/licensing benefit and a complete migration plan. Record framework decisions only after primary license review and a real build prototype.
 
 User authorization permits autonomous selection and integration, but does not waive licenses, attribution, paid-purchase approval (still separately required), security review or quality gates. Do not add external projects merely for quantity: integrate only the best verified option, avoid duplicated functions, keep architecture clean and optimize measured resource usage.
+
+
+## 2026-11-14 — REUSE-FIRST THIRD-PARTY ENGINEERING STRATEGY
+
+The user authorizes a reuse-first approach: search the public Internet for existing implementations, libraries, DSP algorithms, UI components, sample engines, parsers, MIDI/performance engines, build tools and test tools; compare candidates, select the highest-quality suitable components, and adapt/optimize them for PPGU. Write new code where no suitable, maintained and legally integrable analogue exists, or where adaptation is inferior/riskier than a focused native implementation.
+
+Integration rules:
+- reuse suitable existing components rather than unnecessarily rebuilding everything; integrate at source/API/module level with reproducible builds;
+- for each component audit upstream repository, exact version/commit, per-file and transitive dependency licenses, required notices/attribution/source-offer/copyleft obligations, patents where relevant, maintenance, security advisories, build compatibility, ABI/API and platform support;
+- prefer compatible permissive licenses, but never assume compatibility; use GPL/AGPL/copyleft/dual-licensed components only after evaluating consequences for a closed/commercial VST and distribution model; do not combine incompatible licenses;
+- never copy code/assets from closed or commercial products without permission; public Internet availability does not grant redistribution rights; no bypass of login, paywall, DRM, CAPTCHA or access controls;
+- maintain a THIRD-PARTY/SBOM manifest for every accepted component: name, upstream URL, version/commit, exact files/paths, license, notices, local modifications, selection rationale, dependencies, security review and tests; preserve required copyright/license notices and attribution;
+- compare sound quality, stability, latency, CPU/RAM, realtime safety, callback allocations/locks, threading, portability, binary size, startup/load time and maintainability—not feature count alone;
+- adapt without degrading audio or violating rights; avoid importing whole libraries when a focused module is sufficient; minimize dependencies and footprint, pin versions and commit hashes;
+- if no suitable component exists, or it is abandoned, unsafe, incompatible or improperly licensed, implement a focused native solution with tests and record the rationale;
+- third-party integration does not equal feature completion: PPGU integration/regression tests, profiling and host validation remain mandatory.
+
+The current repository baseline already uses JUCE 7.0.12 through CMake FetchContent and C++20. Do not switch frameworks merely because of rankings or novelty. First compare alternatives (including iPlug2/DPF and specialist sample/DSP/UI libraries) against the existing codebase, Win10/FL Studio 20 compatibility, license terms, performance and migration cost. A framework change requires a demonstrated advantage and full regression assessment.
+
+Low resource consumption is mandatory: bounded memory/cache, streaming, selective preload, SIMD/vectorization where appropriate, minimal dependencies, and no blocking/allocations/file I/O/decoding in the audio callback. Measure CPU/RAM/latency/load-time at realistic polyphony before and after changes; never trade away sound quality based on theory alone.
+
+Status: strategy approved and recorded. This entry does not claim any newly discovered third-party component has already been integrated; every component requires its own audit/implementation/test/verification.
