@@ -45,7 +45,7 @@ def contrast(a,b):
 
 def ensure_dirs():
     for p in (ASSETS/"knob",ASSETS/"buttons",ASSETS/"fx",ASSETS/"slider",
-              ASSETS/"led",ASSETS/"texture",ASSETS/"svg"):
+              ASSETS/"led",SKIN/"svg"):
         p.mkdir(parents=True,exist_ok=True)
 
 def font(size=14,bold=False):
@@ -186,9 +186,9 @@ def step_svg():
 <path d="M18 48 L48 12 H208 L238 48 L208 84 H48 Z" fill="{PALETTE['panel']}" stroke="{PALETTE['accent']}" stroke-width="2"/>
 <path d="M58 48 H198" stroke="{PALETTE['accent_glow']}" stroke-width="2" opacity=".7"/>
 </svg>'''
-    (ASSETS/"texture.svg").write_text(texture,encoding="utf-8")
-    (ASSETS/"bezel.svg").write_text(bezel,encoding="utf-8")
-    (ASSETS/"crest.svg").write_text(crest,encoding="utf-8")
+    (SKIN/"svg"/"texture.svg").write_text(texture,encoding="utf-8")
+    (SKIN/"svg"/"bezel.svg").write_text(bezel,encoding="utf-8")
+    (SKIN/"svg"/"crest.svg").write_text(crest,encoding="utf-8")
     print("Generated safe, static SVG assets.")
 
 def render_reference_art(size, path):
@@ -246,11 +246,11 @@ def step_manifest():
     theme["palette"]=PALETTE
     theme["effects"]={
       "material":"midnight stage console with cyan edge lighting",
-      "texture":"assets/texture.svg","bezel":"assets/bezel.svg","crest":"assets/crest.svg",
+      "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
       "shadowDepth":0.38,"edgeHighlight":0.34,"glow":"restrained cyan LED halo; reduced in ECO mode"
     }
     theme["assets"]={"preview":"assets/preview.png","hero":"assets/hero.png",
-                     "texture":"assets/texture.svg","bezel":"assets/bezel.svg","crest":"assets/crest.svg"}
+                     "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg"}
     # Canonical 28-control grid map for the REV ULTRA G2 contract.
     control_map={}
     for control_id, spec in theme.get("controls",{}).items():
@@ -338,7 +338,7 @@ def step_report():
                     errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
         except Exception as exc: errors.append(f"{rel}: decode failed: {exc}")
-    for rel in ("assets/texture.svg","assets/bezel.svg","assets/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
+    for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
         p=SKIN/rel
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         data=p.read_text(encoding="utf-8")
