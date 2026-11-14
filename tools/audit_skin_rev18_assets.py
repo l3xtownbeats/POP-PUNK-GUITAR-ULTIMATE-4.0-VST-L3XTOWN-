@@ -199,6 +199,50 @@ def validate_artwork_manifest(theme_dir: Path) -> None:
         raise ValueError(f"{manifest_path}: atlas frame map must contain six icon frames")
 
 
+def validate_control_manifest(theme_dir: Path, control_ids: tuple[str, ...]) -> None:
+    """Validate every control/state master and runtime sprite against its manifest."""
+    manifest_path = theme_dir / "assets/control_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{manifest_path}: missing or invalid control manifest: {exc}") from exc
+    if manifest.get("skinId") != "skin-053" or manifest.get("assetGroup") != "control-state-sprites":
+        raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
+    if tuple(manifest.get("states", ())) != STATES or tuple(manifest.get("controlIds", ())) != control_ids:
+        raise ValueError(f"{manifest_path}: control ID/state inventory mismatch")
+    records = manifest.get("records")
+    if not isinstance(records, list):
+        raise ValueError(f"{manifest_path}: records must be an array")
+    indexed = {record.get("id"): record for record in records if isinstance(record, dict)}
+    expected_count = len(control_ids) * len(STATES) * 2
+    if len(indexed) != expected_count:
+        raise ValueError(f"{manifest_path}: expected {expected_count} unique control sprite records")
+    for control_id in control_ids:
+        for state in STATES:
+            for tier, rel in (("master", f"assets/master/controls/{control_id}_{state}.png"),
+                              ("runtime", f"assets/controls/{control_id}_{state}.png")):
+                asset_id = f"{control_id}.{state}.{tier}"
+                record = indexed.get(asset_id)
+                if not isinstance(record, dict) or record.get("path") != rel:
+                    raise ValueError(f"{manifest_path}: missing or mismatched record {asset_id}")
+                if "[DECISION]" not in str(record.get("origin", "")):
+                    raise ValueError(f"{manifest_path}: {asset_id} lacks [DECISION] provenance")
+                path = theme_dir / rel
+                raw = path.read_bytes()
+                if record.get("bytes") != len(raw):
+                    raise ValueError(f"{manifest_path}: byte count mismatch for {asset_id}")
+                if record.get("sha256") != hashlib.sha256(raw).hexdigest():
+                    raise ValueError(f"{manifest_path}: SHA-256 mismatch for {asset_id}")
+                if record.get("crc32") != f"{zlib.crc32(raw) & 0xFFFFFFFF:08X}":
+                    raise ValueError(f"{manifest_path}: CRC32 mismatch for {asset_id}")
+                if png_info(path) != (512, 512) or record.get("dimensions") != "512x512":
+                    raise ValueError(f"{manifest_path}: {asset_id} must be 512x512")
+                if control_id == "LED_indicator" and record.get("renderMode") != "transparent_hidden":
+                    raise ValueError(f"{manifest_path}: LED_indicator must remain transparent/hidden")
+                if control_id in {"Auto_Discover", "Curator", "Settings", "About"} and record.get("renderMode") != "disabled_static":
+                    raise ValueError(f"{manifest_path}: reserved action {control_id} must remain disabled")
+
+
 def validate_font_manifest(theme_dir: Path) -> None:
     """Validate bundled font identity, CRC and OFL 1.1 license evidence."""
     manifest_path = theme_dir / "fonts/font_manifest.json"
@@ -317,16 +361,28 @@ def main() -> int:
 
     for control_id in control_ids:
         for state in STATES:
-            path = theme_dir / f"assets/master/controls/{control_id}_{state}.png"
-            if not path.is_file():
-                add("FAIL", "CONTROL_FRAME_MISSING", f"Missing {path.relative_to(root)}")
-            else:
-                try:
-                    w, h = png_info(path)
-                    if w < 512 or h < 512:
-                        add("FAIL", "CONTROL_FRAME_SIZE", f"{path.relative_to(root)} is {w}x{h}; minimum 512x512.")
-                except (OSError, ValueError, zlib.error) as exc:
-                    add("FAIL", "CONTROL_FRAME_PNG", str(exc))
+            for tier, rel in (("master", f"assets/master/controls/{control_id}_{state}.png"),
+                              ("runtime", f"assets/controls/{control_id}_{state}.png")):
+                path = theme_dir / rel
+                if not path.is_file():
+                    add("FAIL", "CONTROL_FRAME_MISSING", f"Missing {path.relative_to(root)}")
+                else:
+                    try:
+                        w, h = png_info(path)
+                        if w < 512 or h < 512:
+                            add("FAIL", "CONTROL_FRAME_SIZE", f"{path.relative_to(root)} is {w}x{h}; minimum 512x512.")
+                    except (OSError, ValueError, zlib.error) as exc:
+                        add("FAIL", "CONTROL_FRAME_PNG", str(exc))
+
+    control_manifest = theme_dir / "assets/control_manifest.json"
+    if not control_manifest.is_file():
+        add("FAIL", "CONTROL_MANIFEST_MISSING", f"Missing {control_manifest.relative_to(root)}")
+    else:
+        try:
+            validate_control_manifest(theme_dir, tuple(control_ids))
+            add("PASS", "CONTROL_MANIFEST_VALID", "All 27 control IDs x 5 states x master/runtime sprite records are valid.")
+        except (OSError, ValueError, zlib.error, json.JSONDecodeError) as exc:
+            add("FAIL", "CONTROL_MANIFEST_INVALID", str(exc))
 
     for folder, label in (
         ("assets/master/textures", "MASTER_TEXTURES"),

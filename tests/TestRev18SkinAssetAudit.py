@@ -167,6 +167,36 @@ class Rev18ArtworkManifestTests(unittest.TestCase):
                 AUDIT.validate_artwork_manifest(root)
 
 
+class Rev18ControlManifestTests(unittest.TestCase):
+    def test_control_manifest_checks_master_runtime_and_reserved_visibility(self) -> None:
+        import hashlib, json
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as temp:
+            theme_dir = Path(temp)
+            records = []
+            for tier, relbase in (("master", "assets/master/controls"),
+                                  ("runtime", "assets/controls")):
+                for state in AUDIT.STATES:
+                    rel = f"{relbase}/knob01_{state}.png"
+                    path = theme_dir / rel
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    Image.new("RGBA", (512, 512), (0, 0, 0, 0)).save(path)
+                    raw = path.read_bytes()
+                    records.append({"id": f"knob01.{state}.{tier}", "path": rel,
+                        "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
+                        "crc32": f"{zlib.crc32(raw) & 0xffffffff:08X}",
+                        "dimensions": "512x512", "origin": "[DECISION] test",
+                        "renderMode": "stateful"})
+            manifest = {"skinId": "skin-053", "assetGroup": "control-state-sprites",
+                "states": list(AUDIT.STATES), "controlIds": ["knob01"], "records": records}
+            (theme_dir / "assets/control_manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8")
+            AUDIT.validate_control_manifest(theme_dir, ("knob01",))
+            (theme_dir / "assets/controls/knob01_default.png").write_bytes(b"tampered")
+            with self.assertRaisesRegex(ValueError, "byte count mismatch|SHA-256 mismatch"):
+                AUDIT.validate_control_manifest(theme_dir, ("knob01",))
+
+
 class Rev18FontManifestTests(unittest.TestCase):
     def test_font_manifest_requires_valid_crc_and_ofl_license(self) -> None:
         import json

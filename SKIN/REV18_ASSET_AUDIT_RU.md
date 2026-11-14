@@ -65,7 +65,8 @@ Top-bar icon basenames: `skins`, `import_guitar`, `auto_discover`,
 содержать script, foreignObject, iframe, object/embed, event handler, external
 href/src, внешние CSS url(), DOCTYPE или ENTITY. TOP BAR icon manifest фиксирует
 SHA-256, CRC32, byte count, path и [DECISION] provenance для master/runtime пар.
-Artwork/atlas отдельно регистрируются в `assets/artwork_manifest.json`.
+Artwork/atlas отдельно регистрируются в `assets/artwork_manifest.json`;
+control/state sprites — в `assets/control_manifest.json`.
 
 ## Read-only аудит
 
@@ -106,6 +107,8 @@ SKIN-1 уже содержит полный REV.18 комплект, и не а�
 NEON STAGE сохраняются. Для TOP BAR icons добавлены SVG masters и deterministic
 Pillow PNG exporter `tools/generate_rev18_skin_icons.py` с режимом `--check`.
 Для hero/preview/background/textures/FX/atlas добавлен `tools/generate_rev18_skin_artwork.py`;
-его `--check` сверяет master/runtime bytes и artwork manifest. Оставшиеся
-135 control/state sprites остаются FAIL до создания настоящих ресурсов. Для font
-проверяются Inter TTF, SIL OFL 1.1 и `fonts/font_manifest.json`.
+для 27×5×2 control sprites — `tools/generate_rev18_skin_controls.py`;
+его `--check` сверяет master/runtime bytes и artwork manifest. 27 control IDs × 5 states × master/runtime спрайты генерируются
+`tools/generate_rev18_skin_controls.py` и сверяются через
+`assets/control_manifest.json`. Inter TTF, SIL OFL 1.1 и
+`fonts/font_manifest.json` также входят в проверяемый пакет.

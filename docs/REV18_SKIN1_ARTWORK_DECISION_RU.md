@@ -40,8 +40,9 @@ SHA-256, CRC32, byte count и `[DECISION]` provenance в artwork manifest.
 
 Это первая оригинальная итерация artwork, а не заявление о полном коммерческом
 финальном дизайне. Перед release нужны визуальная приёмка в реальном JUCE UI,
-проверка сочетания с зонами A–H и проверка качества на 100%/HiDPI. Отсутствующие
-135 control/state sprites и license-clean font остаются отдельными blockers.
+проверка сочетания с зонами A–H и проверка качества на 100%/HiDPI. Control/state sprite package (270 master/runtime
+файлов) и Inter fallback с полным OFL 1.1 notice добавлены отдельными ресурсными
+этапами. Их подключение к runtime UI и загрузка fallback-шрифта пока не включены.
 
 Baked overlays являются ресурсами оформления. Их наличие не включает эффекты
 автоматически и не добавляет новые FX controls или DSP-пути.
