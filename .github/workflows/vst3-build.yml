@@ -21,6 +21,7 @@ on:
 jobs:
   build:
     runs-on: windows-2022
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
 
@@ -272,15 +273,24 @@ jobs:
         run: python tools/check_binary_data_links.py
 
       - name: Configure x64 Release
+        timeout-minutes: 10
         shell: pwsh
         run: cmake -S "$env:PROJECT_DIR" -B build -G "Visual Studio 17 2022" -A x64
 
       - name: Build VST3 and test executables
-        run: cmake --build build --config Release --parallel
+        timeout-minutes: 40
+        shell: pwsh
+        run: |
+          # Keep memory pressure predictable on the 2-core Windows hosted runner.
+          cmake --build build --config Release --parallel 2 --verbose
+          if ($LASTEXITCODE -ne 0) { throw "VST3 build failed with exit code $LASTEXITCODE." }
 
       - name: Run CTest regression suite
+        timeout-minutes: 15
         shell: pwsh
-        run: ctest --test-dir build -C Release --output-on-failure
+        run: |
+          ctest --test-dir build -C Release --output-on-failure --timeout 120
+          if ($LASTEXITCODE -ne 0) { throw "CTest regression suite failed with exit code $LASTEXITCODE." }
 
       - name: Locate VST3 bundle
         id: vst3
@@ -291,6 +301,7 @@ jobs:
           "path=$($plugin.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: Run pluginval strictness level 5
+        timeout-minutes: 12
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
