@@ -739,3 +739,6 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 **Reference assets:** 38 original user visual references remain preserved in Library `/PPGU/REFERENCE_ASSETS/`; index at `docs/PPGU_REFERENCE_DESIGN_ASSET_REGISTER.md`.  
 **Verification:** pending commit readback.
 **Production code diff:** none. No build/tests run; this transaction changes only branch contents and journals.
+
+## 2026-11-14 — TX-LICENSE-DOWNLOAD-CLARIFICATION-001
+User clarified that downloading is allowed. Lawfully accessible samples/libraries may be downloaded for evaluation, listening, classification, license review, and development/testing only within source terms. Downloading does not grant redistribution or embedding rights. Commercial/protected libraries must not be copied, extracted from protected installers/formats, DRM/paywall/access controls bypassed, or bundled without explicit permission. Per-asset provenance/license/NOTICE/SHA-256 remains mandatory; unclear terms => YELLOW/quarantine; bundle only with documented redistribution/embedding rights. Existing strict legal gates remain. Documentation-only; no code/assets changed and no license audit executed in this transaction.
