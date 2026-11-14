@@ -1845,3 +1845,52 @@ F. Только после этого считать документальны�
 **Implementation guardrails:** no panel is declared visually complete from specification alone; disabled-by-design elements remain visibly disabled; each scoped status transition is appended here with source paths, exact commit SHA, tests/CI and remaining host/DPI acceptance. This entry does not claim OverlayManager, FX EDIT, Performance, Auto Discover, Curator, About or complete Skin Gallery functionality is implemented.
 
 **Result:** INVENTORY RECORDED / SOURCE UNCHANGED / VALIDATION OF EACH ROW PENDING.
+
+
+## 2026-11-14 — ADDENDUM: PRESET/PATTERN BROWSER NAVIGATION AND CONTROL CONTRACT
+
+**Тип:** append-only recovery of explicit user-approved browser/navigation decisions; documentation only.  
+**Рабочая ветка:** `work/ppgu-completion-integrated-2026-11-13`.  
+**Production source / APVTS / DSP / sampler / MIDI / scheduler / presets / SoundBank:** НЕ ИЗМЕНЯЛИСЬ этой записью.
+
+### 1. Двухуровневая модель браузеров — не смешивать назначения
+- **Preset Browser** выбирает звуковой профиль/инструмент/тембр и загружает preset только по явной команде Load.
+- **Pattern Browser** выбирает музыкальное исполнение/ритмический рисунок. Он не заменяет Preset Browser и не должен автоматически менять инструмент, тон, гармонию или режим воспроизведения.
+- **Sample/Library Browser** — отдельная область управления исходными инструментами, банками и аудиоассетами; не подменяет ни один из двух музыкальных браузеров.
+
+### 2. Утверждённая последовательность навигации по музыкальному материалу
+Для Pattern/arrangement workflow зафиксирована последовательность:
+**GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN**.
+- GENRE ограничивает музыкальное направление; ARTIST/BAND — выбранный стилистический ориентир; SONG — выбранная композиция/arrangement context; SECTION — конкретная часть; STYLE — характер исполнения; PATTERN — конкретный рисунок.
+- Эта иерархия является последовательностью контекстной навигации/фильтрации, а не разрешением копировать защищённые композиции, MIDI-транскрипции, stems, записи или коммерческие пресеты. Допускаются только оригинальные/легально используемые метаданные и собственные sound/performance assets.
+- SECTION и PATTERN остаются раздельными полями. Выбор секции должен предшествовать выбору рисунка; смена GENRE/ARTIST/SONG/SECTION/STYLE сужает подходящие результаты, но не должна скрытно загружать sound preset или коммитить Pattern.
+- Список секций включает **Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro**. Это расширение существующего набора: ранее зафиксированные Intro/Verse/Chorus/Bridge/Outro сохраняются; Pre-Chorus добавляется, ничего не удаляя. Neutral/General допускается только как явно обозначенный общий контекст, если он есть в registry.
+- Если в конкретном продуктном потоке SONG не выбран/не применим, пользователь может начать с SECTION; это не отменяет общей иерархии и не связывает Pattern с конкретной защищённой песней.
+
+### 3. Обязательные элементы управления Preset Browser
+- Views: **BROWSER**, **FAVORITES**, **CATEGORIES**.
+- Scope: отдельные **FACTORY** и **USER** источники; factory read-only, пользовательские записи управляются отдельно.
+- Controls: **SEARCH**, **FILTER**, **SORT**, **PREV**, **NEXT**, **FAVORITE**, отображение **PRESET NAME** и **CATEGORY**, **PREVIEW**, явный **SELECT/LOAD**.
+- SEARCH/FILTER/SORT/CATEGORY/TAGS и переключение представлений изменяют только результаты и порядок списка. Они не загружают preset и не меняют текущий звук.
+- PREV/NEXT перемещаются детерминированно внутри текущего активного набора результатов с учётом поиска, фильтров, категории и scope; не перескакивают неожиданно в другой scope и не загружают звук без явно определённого действия пользователя.
+- FAVORITE изменяет только пользовательское состояние избранного, сохраняется отдельно и не модифицирует factory preset.
+- PREVIEW — реальное audition доступного звукового материала без изменения active preset/project state. Если валидный preview asset/path отсутствует, показать unavailable; не создавать синтетическую заглушку.
+- SELECT/LOAD — явное действие подтверждения; double-click по preset entry может выполнять Load. Load применяет preset целостной транзакцией: instrument/sample profile, play mode, mappings/articulations, tone/amp/FX и совместимое parameter state. Preview, highlight, фильтрация и навигация не являются Load.
+- Дополнительные user actions сохраняются: **SAVE**, **SAVE AS**, **RENAME**, **DELETE**; bank actions **IMPORT**, **EXPORT**, **RESCAN**. Удаление подтверждается; factory нельзя перезаписать/удалить; user data переживают restart/update.
+
+### 4. Обязательные элементы управления Pattern Browser
+- Контекстные селекторы/фильтры: GENRE, ARTIST/BAND, SONG, SECTION, STYLE; затем список PATTERN. Все значения основаны на реальном registry и capability metadata.
+- Browser controls: **SEARCH**, **FILTER**, **SORT**, **FAVORITES**, selected-state, pattern details/metadata, **PREVIEW**, **APPLY**, **BACK/CANCEL**.
+- PREV/NEXT, если показаны в Pattern Browser, обходят только текущую отфильтрованную область и не меняют committed Pattern.
+- Metadata: section/use, feel, bars/duration, time signature, tempo range, technique/articulation capability, playback mode, actual performance map/recording availability. Не показывать неподтверждённые сведения.
+- Workflow: SECTION → PATTERN → PREVIEW → APPLY либо BACK/CANCEL. PREVIEW исполняет реальный выбранный performance map/recorded one-shot через общий playback path, не меняя committed state, preset, harmony, transport или проект. APPLY явно коммитит; BACK/CANCEL возвращает предыдущее committed состояние.
+- Рисунки/стили (downstroke, upstroke, alternate, palm-muted eighths/sixteenths, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio/picking, acoustic strum/picking, dynamic build) доступны только при наличии реальных performance events/maps/recordings. Восемь/тринадцать hard-coded masks не выдавать за полную библиотеку.
+
+### 5. Инварианты взаимодействия и приёмки
+- Никакое browse-only действие не коммитит звук/Pattern. Preview всегда non-committing; Load/Apply — только explicit commit; Back/Cancel — rollback временного выбора.
+- Применение preset/Pattern — state-safe transaction с корректными voice/note-off/snapshot/streaming/transport semantics; без stuck notes, clicks и phase reset.
+- Все кнопки/поля/карточки имеют реальные action/backend, состояния focus/keyboard/mouse, tooltips, loading/empty/error/missing-asset/disabled состояния и persistence там, где применимо. Нет декоративных кнопок и fake telemetry.
+- Фабричный каталог 300 (150 MELODY + 150 PATTERN) остаётся числом definitions, не playable certification. Реальная доступность/звучание подтверждается end-to-end отдельно.
+- Строгие правила SIGNAL FORGE v10, более поздние user-ratified amendments, стабильные APVTS IDs/semantics и приоритет safety → realtime → sound → resources → UX не меняются. При конфликте более новая прямая правка пользователя имеет приоритет; исторические записи не удалять.
+
+**Статус:** USER-APPROVED REQUIREMENTS RECORDED / IMPLEMENTATION NOT IMPLIED. Наличие этих требований в журнале не доказывает наличие соответствующих runtime controls, registry, sample assets или тестов. Для каждой функции отдельно вести APPROVED/DESIGNED, SOURCE PRESENT, WIRED, TESTED, HOST VERIFIED и RELEASED.
