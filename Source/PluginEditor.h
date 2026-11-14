@@ -38,6 +38,7 @@ private:
     int getSkinCount() const;
     juce::File getSkinManifest(int index) const;
     void loadSavedSkin();
+    void loadThemeArtwork();
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
     void openSettingsPanel();
@@ -55,6 +56,8 @@ private:
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
     juce::File runtimeSkinRoot;
+    juce::Image heroArtwork;
+    juce::Rectangle<int> heroArtworkBounds;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;

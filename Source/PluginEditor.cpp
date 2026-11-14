@@ -1449,13 +1449,49 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
-    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
-    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
-        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    // Decorative NEON STAGE hero artwork only; all live controls remain JUCE/APVTS-backed.
+    if (!heroArtwork.isNull() && !heroArtworkBounds.isEmpty())
+    {
+        const auto hero = heroArtworkBounds.toFloat();
+        g.setColour(p.token("control_bg"));
+        g.fillRoundedRectangle(hero, 9.0f);
+        juce::Graphics::ScopedSaveState savedState(g);
+        juce::Path clip;
+        clip.addRoundedRectangle(hero, 9.0f);
+        g.reduceClipRegion(clip);
+        g.drawImageWithin(heroArtwork, heroArtworkBounds.getX(), heroArtworkBounds.getY(),
+                          heroArtworkBounds.getWidth(), heroArtworkBounds.getHeight(),
+                          juce::RectanglePlacement::centred | juce::RectanglePlacement::fillDestination);
+        g.setGradientFill(juce::ColourGradient(p.token("window_bg").withAlpha(0.02f),
+                                               hero.getCentreX(), hero.getY(),
+                                               p.token("window_bg").withAlpha(0.82f),
+                                               hero.getCentreX(), hero.getBottom(), false));
+        g.fillRect(hero);
+        g.setColour(p.token("control_border").withAlpha(0.9f));
+        g.drawRoundedRectangle(hero, 9.0f, 1.0f);
+        g.setColour(p.token("text_primary"));
+        g.setFont(juce::Font(18.0f, juce::Font::bold));
+        g.drawText("NEON STAGE", heroArtworkBounds.reduced(14, 8).removeFromTop(25),
+                   juce::Justification::centredLeft, true);
+        g.setColour(p.token("accent"));
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("POP-PUNK GUITAR  /  PERFORMANCE CONSOLE",
+                   heroArtworkBounds.reduced(14, 8).removeFromBottom(17),
+                   juce::Justification::centredLeft, true);
+    }
+    else if (!heroArtworkBounds.isEmpty())
+    {
+        const auto hero = heroArtworkBounds.toFloat();
+        g.setColour(p.token("panel_elevated"));
+        g.fillRoundedRectangle(hero, 9.0f);
+        g.setColour(p.token("accent"));
+        g.fillRoundedRectangle(hero.getX() + 12.0f, hero.getY() + 12.0f, 4.0f,
+                               juce::jmax(8.0f, hero.getHeight() - 24.0f), 2.0f);
+        g.setColour(p.token("text_primary"));
+        g.setFont(juce::Font(17.0f, juce::Font::bold));
+        g.drawText("NEON STAGE", hero.toNearestInt().reduced(25, 8),
+                   juce::Justification::centredLeft, true);
+    }
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1512,6 +1548,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(2, 3));
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
+    centre.removeFromTop(6);
+    heroArtworkBounds = centre.removeFromTop(
+        juce::jlimit(76, 112, centre.getHeight() / 5)).reduced(3, 2);
     centre.removeFromTop(6);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
@@ -1730,6 +1769,61 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
     {
         themeManager.resetToDefault();
         applyPalette();
+        loadThemeArtwork();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::loadThemeArtwork()
+{
+    heroArtwork = {};
+    if (runtimeSkinRoot == juce::File{})
+        return;
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return;
+
+    const auto activeId = themeManager.getPalette().id;
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != activeId)
+            continue;
+
+        const auto relativeManifest = entry.getProperty("path", "").toString();
+        if (relativeManifest.isEmpty() || relativeManifest.startsWith("/")
+            || relativeManifest.contains(".."))
+            return;
+
+        const auto manifest = runtimeSkinRoot.getChildFile(relativeManifest);
+        if (!manifest.isAChildOf(runtimeSkinRoot) || !manifest.existsAsFile())
+            return;
+
+        const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+        const auto rev18Assets = theme.getProperty("rev18Assets", juce::var());
+        const auto assets = theme.getProperty("assets", juce::var());
+        auto relativeHero = rev18Assets.getProperty("hero", juce::var()).toString();
+        if (relativeHero.isEmpty())
+            relativeHero = assets.getProperty("hero", "assets/hero.png").toString();
+        if (relativeHero.isEmpty())
+            relativeHero = "assets/hero/hero.png";
+        if (relativeHero.startsWith("/") || relativeHero.contains(".."))
+            return;
+
+        const auto skinDirectory = manifest.getParentDirectory();
+        auto heroFile = skinDirectory.getChildFile(relativeHero);
+        if (!heroFile.isAChildOf(skinDirectory) || !heroFile.existsAsFile())
+            heroFile = skinDirectory.getChildFile("assets/hero/hero.png");
+        if (!heroFile.existsAsFile())
+            heroFile = skinDirectory.getChildFile("assets/hero.png");
+        if (heroFile.isAChildOf(skinDirectory) && heroFile.existsAsFile())
+            heroArtwork = juce::ImageCache::getFromFile(heroFile);
+        return;
     }
 }
 
@@ -1743,6 +1837,7 @@ bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool 
     if (!loaded)
         themeManager.resetToDefault();
     applyPalette();
+    loadThemeArtwork();
     if (save && loaded)
         persistSkinPreference();
     return loaded;

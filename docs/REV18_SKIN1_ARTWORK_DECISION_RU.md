@@ -41,11 +41,12 @@ SHA-256, CRC32, byte count и `[DECISION]` provenance в artwork manifest.
 Это первая оригинальная итерация artwork, а не заявление о полном коммерческом
 финальном дизайне. `theme.json` сохраняет legacy `assets.hero/preview` для G1–G4 и регистрирует
 новые пути в `rev18Assets`; Skin Gallery предпочитает REV18 preview, затем
-использует legacy fallback. CI package
+использует legacy fallback. Центральный performance banner загружает и показывает
+REV18 hero artwork при смене активной темы. CI package
 staging копирует runtime assets в `VST3/Skins` рядом с `.vst3` и исключает
 `assets/master`. Control/state sprite package (270 master/runtime файлов) и Inter
-fallback с полным OFL 1.1 notice также добавлены. Сами control sprites пока не
-подключены к JUCE-компонентам, а загрузка Inter не включается автоматически.
+fallback с полным OFL 1.1 notice также добавлены. Control sprites пока не подключены к JUCE-компонентам, а загрузка Inter не
+включается автоматически.
 Перед release обязательны визуальная приёмка в реальном JUCE UI, проверка зон
 A–H, 100%/HiDPI и ручной тест в FL Studio 20.
 
