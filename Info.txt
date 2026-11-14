@@ -1676,3 +1676,33 @@ FX/DSP scope, обсуждавшийся в проекте: Distortion, Chorus, 
 
 **Итог:** этот раздел фиксирует собранные требования и решения из доступной истории/экспорта. Он не объявляет перечисленные функции реализованными. Для дальнейшей разработки сначала проверять текущий код и ветки; не повторять уже выполненное и не подменять отсутствующую функцию макетом.
 
+
+
+==============================================================================
+2026-11-14 — USER CLARIFICATION: EXACT NEON STAGE AUTOCHORDS REFERENCE / PALETTE 02
+==============================================================================
+
+**Статус:** USER REQUIREMENT CONFIRMED / VISUAL ACCEPTANCE CRITERION.
+**Reference name (literal):** `02 INTERFACE NEON STAGE AUTOCHORDS`.
+**Requirement:** plugin interface must look ONE-TO-ONE like the approved mockup/reference, and the interface color palette must match exactly the neon palette shown in reference 02.
+
+### Binding visual requirements
+1. Reference 02 is the authoritative visual/color target for the AutoChords interface state. Do not approximate it with a generic cyan/blue neon theme, another Skin Studio theme, Blackout Voltage, Carbon Relay or a newly invented palette.
+2. Match the actual composition: panel geometry, proportions, positions, spacing, hierarchy, typography, control sizes/shapes, borders, glow, glass/material treatment, icons, labels, LED states, background texture and overlay placement. Do not redesign/reflow controls for convenience.
+3. Reproduce the colors from reference 02 as sampled design tokens (base/background, panels, elevated panels, control face/border, primary/secondary/disabled text, accent/accent glow, status colors, LCD, LED, highlights/shadows). Exact HEX/RGB values must be extracted from the original reference image at implementation time; do not guess or invent them from the phrase “neon”.
+4. AutoChords overlay must match reference 02 while preserving the already approved main NEON STAGE shell and the previously approved behavior: preset selection on the left, rhythm-pattern mode selection on the right, and MIDI keyboard remains visible/interactive and is not covered or intercepted.
+5. This is a visual-only contract: do not change APVTS IDs/semantics, processor state, presets, sampler/SoundBank, DSP, MIDI routing, or audio behavior to obtain the appearance.
+6. The approved original reference is immutable. Do not overwrite, crop destructively, recolor, redraw, or replace it. Use a derived working copy only for analysis/sampling if needed; preserve original file and checksum.
+7. Do not call the task complete based on a palette token file, generated preview, or a visually similar redesign. Acceptance requires a side-by-side comparison against the exact reference 02 at matching scale/state, plus confirmation that all interactive controls still work.
+
+### Relationship to existing approved references
+- Main shell: approved `01 INTERFACE — NEON STAGE DEFAULT`.
+- AutoChords state/color reference: `02 INTERFACE NEON STAGE AUTOCHORDS` (this clarification).
+- FX EDIT + AutoChords: retain the separately approved third reference and do not conflate its layout with reference 02.
+These are coordinated states of one product interface, not alternative redesign proposals. The user explicitly requires exact visual matching, not merely a common theme direction.
+
+### Implementation rule
+Before changing UI source: locate and inspect the exact original reference 02 and its provenance in the approved asset branch/library; record exact path, dimensions, file hash, and sampled palette values. Compare current AutoChords source/layout and all existing theme tokens against it. Reuse existing components and tokens wherever they already match; change only verified mismatches. Preserve approved mockups and avoid duplicate panels/components.
+
+**Scope boundary:** this entry records a binding visual requirement. It does not claim that current runtime UI already matches reference 02, that the exact palette has been sampled, or that pixel-level acceptance has passed.
+==============================================================================
