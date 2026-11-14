@@ -730,3 +730,10 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 ## 2026-11-14 — MASTER-PLAN COMPATIBILITY CONFIRMATION
 
 The user explicitly reconfirmed the REV.18 requirement table as a **supplement to**, not a replacement for, the previously approved PPGU master plan. Preserve all existing approved scope, module order, UI/MIDI/APVTS/state contracts, sound requirements, artist/style coverage, licensing, realtime constraints and acceptance gates. Integrate additions into existing modules; merge duplicate descriptions of the same window/system; do not create parallel conflicting implementations. Newer approval supersedes only directly conflicting named parameters. Resolve genuine API/behavior conflicts explicitly rather than silently changing contracts. This is an approval/documentation update only; no implementation or test pass is implied.
+
+
+## 2026-11-14 — PRESET COUNT REQUIREMENT CORRECTION
+
+The user clarified the approved factory preset target: **at least 500 fully functional presets total across MELODY + PATTERN**, with a practical rounded planning target of **approximately 600 total**. This is NOT 500 per mode and NOT 1,000 total. The combined bank includes core presets plus additional group/artist/style/genre presets. Both modes must be meaningfully covered; their split is determined by musical needs, not a mandatory 250/250 or equal allocation. The 82 Travis Barker-style presets remain a required curated subset and count toward the combined total only when genuinely implemented, assigned to a mode and QA-validated; do not double-count them.
+
+Historical 250 MELODY + 250 PATTERN JSON remains an interim structural catalog, not proof of 500–600 playable presets. Superseded targets of 500 per mode / 1,000 total are withdrawn. Empty, duplicate, placeholder or nonfunctional entries do not count. This is a requirements correction only; it does not claim implementation, runtime validation, tests or host acceptance.
