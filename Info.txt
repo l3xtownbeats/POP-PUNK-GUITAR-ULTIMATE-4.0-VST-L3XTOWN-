@@ -3146,3 +3146,21 @@ SVG artwork commits: `1108cbc27764c6465f028dd9543dca619e745ae1`, `ca7e3aba844948
 
 Оба шага должны завершиться с кодом 0; ошибки не подавляются и не ослабляют пороги. Это изменение только CI/QA, не runtime. Результат для нового commit ожидается; до успешного Actions run текущий G1–G4 статус остаётся STATIC PREFLIGHT ONLY.
 
+
+
+## 2026-11-15 — Current-head NEON STAGE Windows CI verification
+
+**Workflow run:** [43633811093](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43633811093)  
+**Exact checkout SHA:** `c289b8d48979ed3fe633646a47d936dd45730024`  
+**Branch:** `work/neon-stage-reference-preview-fix`  
+**Event:** `push`  
+**Result:** `build-skin` completed with conclusion `success`.
+
+Verified from the run's job summary and decoded job log:
+- Asset pipeline: **SUCCESS**.
+- Official merged Skin Studio pack validator: **PASS 50 theme(s)**; **G1 contrast PASS**, **G2 control parity PASS**, **G3 PNG/SVG structure and safety PASS**, **G4 identity and continuous numbering PASS**.
+- Full registry validator: **SKIN CONTRACT: PASS**; 102 registry manifests, exact folder parity, legacy and Skin Studio contracts, control maps, assets and contrast pairs verified.
+- Reviewed preview/hero synchronization step: **SUCCESS**.
+- Staging artifact/report upload step: **SUCCESS**.
+
+This is authoritative Windows CI evidence for the exact source SHA above and closes the previous pending status for official G1–G4 plus the complete registry validator on that SHA. It verifies the NEON STAGE skin staging pipeline only. It is **not** a JUCE VST3 Release Build, CTest run, pluginval strictness 5 result, FL Studio 20 host acceptance, or pixel-level sign-off against all seven approved mockups. The staging ZIP remains a staging artifact, not a release package.
