@@ -60,11 +60,13 @@ Implementation rules:
 
 The user approves organizing all acquired sounds by format, instrument, genre/style, tone and articulation as specified above, and approves replacing an existing sound with a demonstrably higher-quality compatible alternative.
 
-Approved import routes:
-- Use the plugin's **Import Guitar** function when it is available and supports the asset type.
-- Alternatively, import through the shared bank folder **Samples/Import Bank Guitar**.
-- Where the importer is not available or does not support a format, use the project's common **Samples** directory through a controlled import/staging process. Preserve the approved taxonomy and registry; do not scatter unmanaged files into the folder.
-- These are approved target routes. Before implementation, inspect the repository and actual plugin code to confirm which paths/functions exist; do not claim an import route is operational until verified.
+Approved import routes (keep these mechanisms distinct):
+- **Import Guitar** is the plugin's separate user-facing import function. It is one import mechanism, but it is NOT the route meant by the direct-folder request below.
+- **Samples/Import Guitar Sample/** is the dedicated subfolder inside the main **Samples/** directory for placing/importing individual sound files or sound assets directly, without using the **Import Guitar** function. This is the user's explicitly confirmed direct-import folder.
+- Do not use or refer to **Samples/Import Bank Guitar** as the direct-import folder; that was an incorrect earlier name and is superseded by **Samples/Import Guitar Sample/**.
+- Files brought in through **Samples/Import Guitar Sample/** must be scanned, validated, hash-deduplicated, assigned metadata/tags, checked for license status, and then registered into the approved Samples taxonomy. The folder is an intake/staging location, not an unmanaged permanent dumping ground.
+- Preserve the approved taxonomy and registry; do not scatter unmanaged files into the folder.
+- This is the required target path and behavior. Before claiming it is operational, inspect and implement the actual plugin/importer code and verify that direct-folder scanning works.
 
 Replacement rules:
 - A new asset may supersede an existing one only after a documented A/B or objective quality review confirms a meaningful improvement in recording quality, noise floor, tuning, dynamics, velocity/articulation coverage, note range, consistency, sample rate/bit depth where relevant, and suitability for its assigned preset.
