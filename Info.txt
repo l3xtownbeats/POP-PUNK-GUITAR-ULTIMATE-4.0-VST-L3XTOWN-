@@ -1818,3 +1818,45 @@ Acceptance checklist:
 8. Regression tests, Windows x64 Release, полный CTest, pluginval strictness 5, package audit/checksum и отдельная ручная FL Studio 20 acceptance выполнены на точном SHA.
 
 **Фактический статус на момент записи:** requirements reconciliation only. Source implementation, tests, exact-SHA CI, package and host acceptance не проверялись этой документационной операцией и не объявляются завершёнными.
+
+
+
+==============================================================================
+2026-11-14 — TX-UI-BROWSER-SEPARATION-006: STYLE / PATTERN BROWSER CONTRACT
+==============================================================================
+
+**Тип:** dated append-only clarification / supersedes only conflicting browser interpretation in earlier entries.
+**Authority:** согласовано с `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.16 (commit `4cefb8a0006d68679b274a3a0863f2fdb68a50f6`).
+**Статус:** APPROVED REQUIREMENTS / RUNTIME IMPLEMENTATION NOT IMPLIED.
+
+### 1. Три разные области выбора — не объединять
+- PRESET BROWSER остаётся отдельным браузером Tone/Factory/User Presets со своим ранее зафиксированным набором команд и транзакцией SELECT/LOAD.
+- STYLE browser — отдельное окно/браузер музыкального контекста и способа исполнения.
+- PATTERN browser — отдельное окно/браузер ритмических рисунков.
+STYLE и PATTERN нельзя объединять, подменять друг другом или превращать в один плоский список. Общий музыкальный контекст может фильтровать результаты второго браузера, но каталоги, selection, preview и состояние транзакции остаются раздельными. Существующий PRESET BROWSER не поглощает STYLE/PATTERN и не заменяет их.
+
+### 2. STYLE browser
+Навигация: `GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE / ARTICULATION`.
+Секции: `INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO`. Использовать progressive disclosure: показывать только совместимые дочерние элементы текущего уровня.
+GROUP/ARTIST — зарезервированный уровень модели/метаданных, но публикация видимого именованного каталога групп, артистов и чужих продуктов BLOCKED действующими MASTER PROMPT REV 17.0 §11/§15. Не обходить запрет псевдонимами, логотипами или замаскированными именами. До разрешённого MAJOR revision этот уровень не наполнять запрещённым видимым контентом.
+
+### 3. PATTERN browser
+Категории: `DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS`.
+PATTERN отвечает за rhythm/timing/gate/velocity/accent; STYLE/ARTICULATION отвечает за способ исполнения. На каждую SONG SECTION предусмотрено ровно 8 Pattern Slots. Секция и выбранный стиль могут фильтровать доступные patterns, но pattern data не смешивать с Tone Preset, Guitar Source или FX.
+Каждая папка, категория и вложенный элемент должны реально открываться/закрываться, прокручиваться и выбирать существующие данные. SEARCH, FAVORITES, FILTER, SORT, PREV/NEXT сохраняют текущий scope; PREV/NEXT перемещаются только внутри текущего результирующего набора. Отсутствующие в фактической карте библиотеки артикуляции/паттерны показывать unavailable/disabled — без синтетической подмены записанной гитары.
+
+### 4. Preview / Apply / Cancel и playback
+PREVIEW — временное audition, не меняющее active preset, сохранённый Pattern Slot, project/DAW persistent state или пользовательские настройки. APPLY/SELECT фиксирует валидированный выбор. CANCEL полностью откатывает незавершённую транзакцию. Ошибка загрузки сохраняет предыдущее валидное состояние.
+Pattern transitions во время playback должны быть host-synchronized и исключать stuck notes, duplicate triggers, timing jumps и abrupt cuts. Если backend не обеспечивает требуемую операцию, соответствующие controls остаются disabled с честным BACKEND PENDING/UNAVAILABLE статусом; имитация действия запрещена.
+
+### 5. Разделение музыкальных осей и UI invariants
+Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation и Rhythm Pattern — независимые оси. Chord key выбирает chord/voicing; PATTERN задаёт ритмическое исполнение; MELODY сохраняет правило «одна клавиша = одна соответствующая нота».
+STYLE, PATTERN и AutoChords сохраняют утверждённые отдельные макеты и progressive disclosure. Ни одно окно/overlay не перекрывает MIDI keyboard и не блокирует её hit-testing. Первый утверждённый mockup остаётся authority для layout/control inventory; `02 INTERFACE NEON STAGE AUTOCHORDS` — palette reference only; третий FX EDIT + AutoChords reference остаётся отдельным состоянием.
+
+### 6. Master rules / compatibility guard
+Не изменять MASTER PROMPT REV 17.0 FINAL, I1–I8, R01–R34. Runtime default skin ID/name остаётся строго `default-ppgu` / `DEFAULT POP PUNK GUITAR ULTIMATE SKIN` по I7/R18; NEON STAGE не подменяет runtime default без формального MAJOR изменения master prompt. Не менять stable IDs, factory catalog (extension-only), factory read-only, user preset/bank separation, явные import conflicts и форматы `.ppgm`, `.ppgp`, `.ppgbank`. Не создавать фиктивные active controls. Никаких APVTS, DSP, MIDI, sampler, SoundBank, licensing или realtime callback изменений в рамках этого UI/spec update. Соблюдать I1/I2, R04 (один S6.5 pipeline), R05/R10 (вне audio callback и audio review), R07/R23 (честные статусы; PASS только exact SHA).
+
+### 7. Supersedes / evidence boundary
+Эта запись уточняет более раннюю общую схему `GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN`: её можно сохранять как логическую taxonomy/metadata relationship, но нельзя трактовать как единый browser UI или разрешение показывать запрещённый именованный ARTIST/BAND каталог. Новая структура STYLE/PATTERN из §15.16 имеет приоритет в вопросах разделения окон, ответственности и доступности контента; ранее утверждённые controls PRESET BROWSER остаются действующими.
+Требования зафиксированы в продуктовой спецификации и журналах; production source/assets/APVTS/DSP/MIDI/sampler/preset data не менялись. Не выполнены runtime acceptance, pattern host-sync validation, UI hit-testing, exact-SHA CI и FL Studio 20 acceptance. Наличие этой записи не означает IMPLEMENTED/TESTED/HOST VERIFIED.
+==============================================================================
