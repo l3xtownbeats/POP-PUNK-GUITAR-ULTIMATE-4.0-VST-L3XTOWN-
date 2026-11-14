@@ -27,17 +27,100 @@ jobs:
         run: python3 tests/test_sound_hunter_importer.py
       - name: Download, verify and import real guitar audio
         run: python3 SoundHunter/sound_hunter_real_guitars.py
-      - name: Package additive Sound Hunter import
-        run: |
-          cd Samples
-          zip -qr "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" SoundHunterImports
-          cp SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
-      - name: Upload verified sample library
+      - name: Copy verified registry
+        run: cp Samples/SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
+      - name: Upload registry and provenance
         uses: actions/upload-artifact@v4
         with:
-          name: PPGU-REAL-GUITAR-SAMPLES-UNCAPPED
-          path: |
-            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.zip
-            ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
+          name: PPGU-SOUND-HUNTER-REGISTRY
+          path: Samples/SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json
           if-no-files-found: error
+          retention-days: 30
+      - name: Upload Meta Steel Guitar samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-meta-open-sound-steel
+          path: Samples/SoundHunterImports/*/meta-open-sound-steel/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload Meta Nylon Guitar samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-meta-open-sound-nylon
+          path: Samples/SoundHunterImports/*/meta-open-sound-nylon/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Clean Electric samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-electric-clean
+          path: Samples/SoundHunterImports/*/freepats-electric-clean/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Direct DI samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-electric-direct
+          path: Samples/SoundHunterImports/*/freepats-electric-direct/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Distorted 1 samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-electric-dist1
+          path: Samples/SoundHunterImports/*/freepats-electric-dist1/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Distorted 2 samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-electric-dist2
+          path: Samples/SoundHunterImports/*/freepats-electric-dist2/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Jazz Guitar samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-electric-jazz
+          path: Samples/SoundHunterImports/*/freepats-electric-jazz/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload FreePats Spanish Classical samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-freepats-spanish-classical
+          path: Samples/SoundHunterImports/*/freepats-spanish-classical/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload Karoryfer Black and Green samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-karoryfer-black-green
+          path: Samples/SoundHunterImports/*/karoryfer-black-green/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload Karoryfer Emilyguitar samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-karoryfer-emilyguitar
+          path: Samples/SoundHunterImports/*/karoryfer-emilyguitar/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload Karoryfer Shinyguitar samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-SAMPLES-karoryfer-shinyguitar
+          path: Samples/SoundHunterImports/*/karoryfer-shinyguitar/
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 30
