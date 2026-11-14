@@ -1422,8 +1422,9 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             return 0;
 
         const auto index64 = indexValue.toString().getLargeIntValue();
-        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
-            || id.substring(5).getLargeIntValue() != index64
+        const bool canonicalNeonStageId = id == "neon-stage-default-skin-1" && index64 == 52;
+        const bool legacyNumericSkinId = id.startsWith("skin-") && id.substring(5).getLargeIntValue() == index64;
+        if (index64 < 1 || index64 > total || (!canonicalNeonStageId && !legacyNumericSkinId)
             || !indices.insert(static_cast<int>(index64)).second
             || !ids.insert(id.toStdString()).second)
             return 0;
@@ -1471,8 +1472,24 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
+    auto id = settings ? settings->getValue("skinId", "neon-stage-default-skin-1")
+                       : juce::String("neon-stage-default-skin-1");
+    // Migrate the previous numeric default ID without changing the user's selected theme.
+    if (id == "skin-052")
+        id = "neon-stage-default-skin-1";
+
+    int index = 0;
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto* themes = registry.getProperty("themes", juce::var()).getArray();
+    if (themes != nullptr)
+        for (const auto& entry : *themes)
+            if (entry.isObject() && entry.getProperty("id", "").toString() == id)
+            {
+                index = static_cast<int>(entry.getProperty("index", 0));
+                break;
+            }
+
     if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
     {
         themeManager.resetToDefault();
