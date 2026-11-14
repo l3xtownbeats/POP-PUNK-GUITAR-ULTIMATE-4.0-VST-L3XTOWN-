@@ -430,3 +430,97 @@ Runtime integration finding: `PopPunkGuitarUltimateAudioProcessor` already owns 
 New source discovery: Boyss-Sound-e-Scapes Guitar DI Lite (96 WAV, 24-bit/44.1 kHz, 2 round robins, 3 velocity layers, dry DI) is a strong candidate for Melody mode and amp/cab processing. Official developer page: https://www.boyss-sound-e-scapes.com/7th-year-free-pack . Current environment could not retrieve binary downloads (DNS/network unavailable); asset is NOT recorded as downloaded or integrated. Existing CI workflow already clones FreePats and Karoryfer CC0 sources and downloads Meta Open Sound releases.
 
 Status: CLI implementation committed; automated CI verification pending. Full denoise/enhancement, audio editing, GUI and automatic velocity/RR authoring remain future work. The first slice validates and packages existing maps; it does not invent unsupported articulations or generate new recorded performances.
+
+---
+
+# Addendum 2026-11-14 — TX-UI-PRESET-GUARD-004: утверждённый browser и PATTERN workflow
+
+**Приоритет:** это более позднее прямое пользовательское решение. При конфликте с более ранними разделами данного документа применяется этот Addendum; совместимые требования сохраняются. Этот Addendum не отменяет MASTER PROMPT REV 13.0 FINAL и не разрешает менять строгие realtime/audio invariants.
+
+## A. Каноническая навигация preset browser
+
+Основной порядок выбора:
+
+**GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN**
+
+- GENRE — жанровая категория.
+- ARTIST/BAND — artist-inspired стилевой ориентир, не источник чужих записей или коммерческих пресетов.
+- SONG/SECTION — музыкальный контекст и раздел композиции.
+- SECTION — Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro.
+- STYLE — тип/манера исполнения.
+- PATTERN — конкретный ритмический рисунок или слот.
+
+Уровни не объединять в один список и не менять порядок без прямого утверждения пользователя.
+
+## B. Browser control inventory
+
+Обязательные реальные операции/контролы:
+- BROWSER;
+- FAVORITES;
+- CATEGORIES;
+- SEARCH;
+- FILTER;
+- SORT;
+- PREV / NEXT;
+- FAVORITE;
+- PRESET NAME;
+- CATEGORY;
+- PREVIEW;
+- SELECT.
+
+PREV/NEXT перемещаются внутри текущего результата поиска/фильтра/сортировки и сохраняют контекст. Избранное, категория, поиск и сортировка должны быть согласованы, а не сбрасывать друг друга. Все визуально активные controls должны иметь рабочий callback и понятное состояние.
+
+Factory/User presets, Pattern entries и banks — разные типы сущностей с собственными метаданными и разрешёнными операциями. Не выдавать preset definition за playable preset без доступного ресурса и runtime playback.
+
+## C. Preview / Apply / Cancel
+
+- PREVIEW — временное audition; не меняет active preset, project state, persistent state или DAW project.
+- APPLY — подтверждает и применяет выбранный элемент.
+- CANCEL — отменяет транзакцию и возвращает состояние до начала выбора.
+- Preview/переключение/закрытие не должны оставлять частичные изменения или зависшие временные голоса.
+- Та же транзакционная модель применяется к Theme Gallery: Preview временный, Apply постоянный, Cancel откатывает.
+  
+## D. PATTERN sections and slots
+
+Каждая секция (Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro) содержит 8 Pattern Slots. После выбора секции пользователь выбирает STYLE, затем конкретный PATTERN/slot. Preview неразрушающий, Apply фиксирует, Cancel возвращает предыдущий рисунок. Сохраняется legacy compatibility field `patternSlot`; любые миграции требуют явного mapping и regression tests.
+
+Переключение рисунка во время воспроизведения должно быть host-synchronized и не создавать stuck notes, duplicate triggers, timing jumps или abrupt cuts. Уже утверждённое разделение сохраняется: guitar/instrument source, tone preset/FX и performance articulation/pattern — независимые параметры.
+
+PATTERN/AUTOCHORDS: chord key выбирает chord/voicing; MIDI pattern задаёт timing, gate, velocity, accent и ритм; совместимые записанные guitar one-shots могут использоваться как fallback только в существующем Pattern/S6.5 pipeline и с корректной картой. MELODY остаётся отдельным режимом: каждая клавиша запускает соответствующую ноту. Отсутствующую реальную артикуляцию нельзя заменять синтетической гитарой и выдавать за запись.
+
+Display AutoChords не должен перекрывать экранные MIDI-клавиши, перехватывать их hit-testing или уменьшать доступную область клавиатуры. При нехватке места использовать перестройку, scroll/collapse или отдельное окно.
+
+## E. Factory catalog, user content and file formats
+
+- Factory catalog расширяется только добавлением. Удаление, замена существующих записей и silent overwrite запрещены.
+- Stable IDs и опубликованные данные сохраняются. Конфликты ID при импорте показываются явно; разрешение требует явного выбора/правила, не скрытой перезаписи.
+- Factory presets read-only; user presets/banks хранятся отдельно и переживают обновления.
+- Последние утверждённые форматы: `.ppgm` = MELODY preset; `.ppgp` = PATTERN preset; `.ppgbank` = bank.
+- Import/export проверяет schema version, IDs, bank/sample dependencies, ресурсы и целостность. Пресет ссылается на BANK/sample IDs, не дублирует WAV и не полагается на абсолютные локальные пути.
+- Восемь QA profiles — покрытие тестов, а не автоматическое требование восьми дополнительных factory presets.
+
+## F. UI/skin immutable guard
+
+- SIGNAL FORGE / NEON — основная визуальная система; default theme — **NEON STAGE**.
+- Первый reference-файл задаёт внешний вид, layout и placement; второй — палитру.
+- TX-UI-PRESET-GUARD-004 требует exact approved layout parity: skin меняет только графику/палитру в разрешённых границах, не координаты/геометрию контролов, hit areas, bindings, функции, параметры или звук.
+- Все обязательные controls остаются представленными. Не удалять engine functions; не менять APVTS IDs/semantics, DSP, MIDI routing или sampler behavior.
+- Никаких декоративных/фиктивных активных controls. Нереализованное обозначать disabled/pending до реальной интеграции.
+- Более раннее разрешение на произвольную перестановку controls между skins не применяется там, где противоречит этому более свежему guard.
+
+## G. Acceptance matrix
+
+Обязательны отдельные проверки:
+1. Browser hierarchy and navigation.
+2. Search/filter/sort/favorites and stable context for PREV/NEXT.
+3. Preview non-destructiveness; Apply commit; Cancel rollback.
+4. Factory catalog immutability and extension-only behavior.
+5. Explicit import conflict handling and stable-ID preservation.
+6. Pattern section → style → pattern/slot selection; all eight slots per section.
+7. Host sync and glitch/stuck-note-free pattern transitions.
+8. AutoChords display never overlaps or blocks MIDI keyboard.
+9. GUI-to-function parity for every active control.
+10. Skin layout/control parity and audio invariance.
+
+**Статус:** APPROVED REQUIREMENTS / IMPLEMENTATION NOT IMPLIED. Source-to-control audit, exact-SHA Windows Release, full CTest, pluginval strictness 5, packaging and FL Studio 20 host acceptance remain separate evidence gates.
+
