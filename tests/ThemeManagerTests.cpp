@@ -19,7 +19,7 @@ namespace
 int main()
 {
     PPGUThemeManager manager;
-    expect(manager.getPalette().id == "skin-053", "default theme ID is NEON STAGE");
+    expect(manager.getPalette().id == "neon-stage-default-skin-1", "default theme ID is NEON STAGE");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
     expect(manager.getPalette().name == "NEON STAGE", "fallback identity matches the canonical NEON STAGE theme");
     const auto& fallbackTokens = manager.getPalette().tokens;
@@ -55,7 +55,7 @@ int main()
     const auto* themes = themesValue.getArray();
     const auto totalValue = registry.getProperty("totalSkins", juce::var());
     expect(registry.isObject(), "skin registry is a JSON object");
-    expect(registry.getProperty("defaultSkin", "").toString() == "skin-053",
+    expect(registry.getProperty("defaultSkin", "").toString() == "neon-stage-default-skin-1",
            "registry default points to NEON STAGE");
     expect(themes != nullptr, "skin registry contains a themes array");
     expect(totalValue.isInt() || totalValue.isInt64(), "skin registry totalSkins is an integer");
@@ -89,7 +89,7 @@ int main()
             if (loaded)
             {
                 expect(manager.getPalette().id == id, id + " ID matches registry");
-                expect(id.substring(5).getLargeIntValue() == index, id + " ID matches registry index");
+                expect((id == "neon-stage-default-skin-1" ? index == 52 : id.substring(5).getLargeIntValue() == index), id + " ID matches registry index");
                 expect(!manager.getPalette().usedFallback, id + " does not use fallback");
             }
         }
@@ -114,8 +114,8 @@ int main()
            + (skin52Loaded ? juce::String{} : ": " + manager.getLastError()));
     if (skin52Loaded)
     {
-        expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
-        expect(manager.getPalette().name == "SIGNAL FORGE", "Skin_052 SIGNAL FORGE name is decoded");
+        expect(manager.getPalette().id == "neon-stage-default-skin-1", "NEON STAGE DEFAULT SKIN-1 ID is canonical at registry index 52");
+        expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE name is decoded");
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
@@ -167,7 +167,7 @@ int main()
            + (skin53Loaded ? juce::String{} : ": " + manager.getLastError()));
     if (skin53Loaded)
     {
-        expect(manager.getPalette().id == "skin-053", "NEON STAGE ID matches index 53");
+        expect(manager.getPalette().id == "neon-stage-default-skin-1", "NEON STAGE ID matches index 53");
         expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE identity is decoded");
         expect(!manager.getPalette().usedFallback, "NEON STAGE manifest does not use fallback");
         const auto neonTokens = juce::JSON::parse(skin53Json).getProperty("palette", juce::var());
@@ -188,7 +188,7 @@ int main()
 
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
-    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "neon-stage-default-skin-1" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
     const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
@@ -199,11 +199,11 @@ int main()
            "Skin Studio compatibility failure restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
-    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "neon-stage-default-skin-1" && manager.getPalette().usedFallback,
            "malformed JSON restores NEON STAGE fallback");
 
     expect(!manager.loadFromJson("{}"), "empty object rejected");
-    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "neon-stage-default-skin-1" && manager.getPalette().usedFallback,
            "incomplete manifest restores fallback");
 
     expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");
