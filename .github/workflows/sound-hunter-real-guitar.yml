@@ -5,6 +5,10 @@ on:
     paths:
       - "SoundHunter/**"
       - "tests/test_sound_hunter_importer.py"
+      - "tests/test_audit_soundbank_policy.py"
+      - "tests/test_artifact_splitter.py"
+      - "tools/audit_soundbank.py"
+      - "tools/split_artifact.py"
       - ".github/workflows/sound-hunter-real-guitar.yml"
 permissions:
   contents: read
