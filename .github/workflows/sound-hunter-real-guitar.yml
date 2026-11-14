@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  actions: write
 concurrency:
   group: ppgu-sound-hunter-import
   cancel-in-progress: false
