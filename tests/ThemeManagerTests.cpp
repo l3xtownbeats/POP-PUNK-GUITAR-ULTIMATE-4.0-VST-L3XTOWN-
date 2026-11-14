@@ -19,7 +19,8 @@ namespace
 int main()
 {
     PPGUThemeManager manager;
-    expect(manager.getPalette().id == "skin-01", "default theme ID");
+    expect(manager.getPalette().id == "skin-01", "NEON STAGE default theme ID");
+    expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE fallback palette name");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
 
     const auto root = juce::File::getCurrentWorkingDirectory();
@@ -68,7 +69,7 @@ int main()
         }
     }
 
-    const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
+    const auto defaultManifest = skinRoot.getChildFile("Skin_01").getChildFile("theme.json");
     const auto validJson = defaultManifest.loadFileAsString();
     expect(validJson.isNotEmpty(), "NEON STAGE default manifest readable");
 
@@ -132,7 +133,7 @@ int main()
     expect(manager.getPalette().token("danger").isOpaque(),
            "legacy semantic token receives a deterministic fallback");
 
-    const auto badColour = validJson.replace("#090C10", "#GG0C10");
+    const auto badColour = validJson.replace("#080D16", "#GG0D16");
     expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
     expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
 
@@ -141,7 +142,7 @@ int main()
     expect(!manager.loadFromJson(badCompatibility), "legacy audio-changing theme rejected");
     expect(manager.getPalette().usedFallback, "legacy compatibility failure restores fallback");
 
-    const auto mismatchedIndex = validJson.replace("\"index\": 51", "\"index\": 50");
+    const auto mismatchedIndex = validJson.replace("\"index\": 1", "\"index\": 0");
     expect(!manager.loadFromJson(mismatchedIndex), "legacy ID/index mismatch rejected");
     expect(manager.getPalette().usedFallback, "legacy ID/index failure restores fallback");
 
