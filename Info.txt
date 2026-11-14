@@ -2722,7 +2722,7 @@ CTest, pluginval strictness 5 и FL Studio 20 в рамках этого ком�
 visually reviewed: (01) default SIGNAL FORGE / NEON STAGE main view; (02) AutoChords
 panel; (03) FX Edit; (04) gallery/import/discovery/curator/settings/about panels;
 (05) combined FX Edit + AutoChords; (06) full AutoChords view; (07) main view with
-AutoChords. The 480x300 Preview and 1200x420 Hero are contain-fit renders of mockup 01,
+AutoChords. The 360x240 Preview and 800x450 Hero are contain-fit renders of mockup 01,
 not fabricated interface screenshots.
 
 **Concrete change:** the previous tracked Skin_053 preview/hero were stale placeholder
@@ -2749,8 +2749,32 @@ the default theme identity. APVTS IDs/bindings, DSP, audio callback, MIDI behavi
 live JUCE bounds and default-skin pointer were not changed. No merge or main-branch
 write was made.
 
-**Next validation:** align both Skin Pack validators with Skin_053's 480x300 / 1200x420
-artwork contract while preserving legacy dimensions for all other skins, then run
-Windows VST3 CI, CTest and pluginval on the updated work-branch head. FL Studio 20
+**VST3 validation finding:** run `43625445350` stopped at the skin-pack validator
+before compilation because it rejected the generator's valid 8-bit indexed PNG.
+The NEON STAGE generator intentionally emits 360x240 / 800x450 indexed PNGs.
+Both validators are being updated to accept indexed PNGs with a valid PLTE palette
+while preserving the established dimensions, then Windows VST3 CI, CTest and
+pluginval will be rerun. FL Studio 20
 manual host acceptance remains separate.
+==============================================================================
+
+
+==============================================================================
+2026-11-14 — NEON-STAGE-PNG-INDEXED-VALIDATION-004
+==============================================================================
+
+**Observed VST3 run:** `43625445350` — FAILURE at `tools/validate_skin_pack.py`.
+**Failure:** `SKIN\\Skin_053\\assets\\preview.png: expected 8-bit RGB/RGBA PNG`.
+**Root cause:** NEON_STAGE_BUILD_ENGINE renders contain-fit assets at 360x240 and
+800x450, then quantizes them to 8-bit indexed PNG (PNG color type 3). The skin-pack
+validator accepted only truecolor RGB/RGBA (color types 2/6). This is a validator
+format-contract mismatch, not a C++ compile or plugin runtime failure.
+
+**Corrective change:** both `tools/validate_skin_pack.py` and
+`tests/ValidateSkinManifests.py` now accept 8-bit indexed PNGs only when a valid
+PLTE palette is present; the established 360x240 Preview and 800x450 Hero dimensions
+remain unchanged. Existing RGB/RGBA PNG support and CRC/decompression checks remain.
+
+**Run 43625445350:** no CMake build, CTest or pluginval was reached because the
+skin-pack validation step failed first. Validation rerun is pending.
 ==============================================================================

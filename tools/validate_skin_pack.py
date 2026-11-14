@@ -56,6 +56,7 @@ def png_dimensions(path: Path) -> tuple[int, int]:
     offset = 8
     width = height = bit_depth = colour_type = None
     image_data = bytearray()
+    saw_palette = False
     saw_end = False
     while offset + 12 <= len(raw):
         length = struct.unpack(">I", raw[offset:offset + 4])[0]
@@ -76,6 +77,10 @@ def png_dimensions(path: Path) -> tuple[int, int]:
             )
             if compression != 0 or filtering != 0 or interlace != 0:
                 fail(f"{path}: unsupported PNG encoding")
+        elif kind == b"PLTE":
+            if length < 3 or length > 768 or length % 3 != 0 or image_data:
+                fail(f"{path}: invalid or misplaced PNG PLTE palette")
+            saw_palette = True
         elif kind == b"IDAT":
             image_data.extend(payload)
         elif kind == b"IEND":
@@ -88,9 +93,11 @@ def png_dimensions(path: Path) -> tuple[int, int]:
 
     if not saw_end or width is None or height is None or not image_data:
         fail(f"{path}: incomplete PNG structure")
-    channels = {2: 3, 6: 4}.get(colour_type)
+    channels = {2: 3, 3: 1, 6: 4}.get(colour_type)
     if bit_depth != 8 or channels is None:
-        fail(f"{path}: expected 8-bit RGB/RGBA PNG")
+        fail(f"{path}: expected 8-bit RGB/RGBA/indexed PNG")
+    if colour_type == 3 and not saw_palette:
+        fail(f"{path}: indexed PNG is missing its PLTE palette")
     decoded = zlib.decompress(bytes(image_data))
     if len(decoded) != height * (1 + width * channels):
         fail(f"{path}: decoded pixel payload has invalid length")
@@ -286,14 +293,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
             if assets.get(key) != expected:
                 fail(f"{theme_path}: assets.{key} must be {expected!r}")
 
-        # NEON STAGE (Skin_053) uses the REV ULTRA artwork sizes.
-        # All pre-existing skins retain the established 360x240 / 800x450 contract.
-        artwork_dimensions = (
-            {"preview": (480, 300), "hero": (1200, 420)}
-            if theme.get("id") == "skin-053"
-            else {"preview": (360, 240), "hero": (800, 450)}
-        )
-        for key, dimensions in artwork_dimensions.items():
+        for key, dimensions in (("preview", (360, 240)), ("hero", (800, 450))):
             asset = folder / expected_assets[key]
             if not asset.is_file() or png_dimensions(asset) != dimensions:
                 fail(f"{theme_path}: {key} must be a valid {dimensions[0]}x{dimensions[1]} PNG")

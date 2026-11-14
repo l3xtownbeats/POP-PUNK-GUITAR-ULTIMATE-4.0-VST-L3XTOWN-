@@ -87,6 +87,7 @@ def png_dimensions(path: Path) -> tuple[int, int]:
     offset = 8
     width = height = bit_depth = colour_type = None
     image_data = bytearray()
+    saw_palette = False
     saw_end = False
     while offset + 12 <= len(raw):
         length = struct.unpack(">I", raw[offset:offset + 4])[0]
@@ -105,6 +106,10 @@ def png_dimensions(path: Path) -> tuple[int, int]:
             width, height, bit_depth, colour_type, compression, filtering, interlace = struct.unpack(">IIBBBBB", chunk_data)
             if compression != 0 or filtering != 0 or interlace != 0:
                 raise ValueError(f"{path}: unsupported PNG encoding")
+        elif chunk_type == b"PLTE":
+            if length < 3 or length > 768 or length % 3 != 0 or image_data:
+                raise ValueError(f"{path}: invalid or misplaced PNG PLTE palette")
+            saw_palette = True
         elif chunk_type == b"IDAT":
             image_data.extend(chunk_data)
         elif chunk_type == b"IEND":
@@ -117,9 +122,11 @@ def png_dimensions(path: Path) -> tuple[int, int]:
 
     if not saw_end or width is None or height is None or not image_data:
         raise ValueError(f"{path}: incomplete PNG structure")
-    channels = {2: 3, 6: 4}.get(colour_type)
+    channels = {2: 3, 3: 1, 6: 4}.get(colour_type)
     if bit_depth != 8 or channels is None:
-        raise ValueError(f"{path}: expected 8-bit RGB/RGBA PNG")
+        raise ValueError(f"{path}: expected 8-bit RGB/RGBA/indexed PNG")
+    if colour_type == 3 and not saw_palette:
+        raise ValueError(f"{path}: indexed PNG is missing its PLTE palette")
     decoded = zlib.decompress(bytes(image_data))
     if len(decoded) != height * (1 + width * channels):
         raise ValueError(f"{path}: decoded PNG pixel payload has an invalid size")
@@ -239,16 +246,9 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
 
     preview = SKIN_ROOT / folder / expected_assets["preview"]
     hero = SKIN_ROOT / folder / expected_assets["hero"]
-    # Skin_053 NEON STAGE follows the REV ULTRA artwork dimensions;
-    # other studio skins keep the legacy asset contract.
-    preview_size, hero_size = (
-        ((480, 300), (1200, 420))
-        if data.get("id") == "skin-053"
-        else ((360, 240), (800, 450))
-    )
     for image_path, expected_size, label in (
-        (preview, preview_size, "preview"),
-        (hero, hero_size, "hero"),
+        (preview, (360, 240), "preview"),
+        (hero, (800, 450), "hero"),
     ):
         try:
             if not image_path.is_file() or png_dimensions(image_path) != expected_size:
