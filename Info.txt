@@ -3383,3 +3383,22 @@ REV ULTRA 3.0 задаёт обязательный производственн
 
 **Status:** GENERATOR SOURCE IMPLEMENTED / CI EXECUTION PENDING / VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
 ================================================================================
+
+================================================================================
+2026-11-15 — NEON STAGE REV ULTRA 3.0 — deterministic pipeline hardening follow-up
+================================================================================
+
+**Additional commits after the initial atlas implementation:**
+- `3a03a41eda08f46dc9208e3270652381ec0e3b30` — corrected the 20-slot icon inventory (distinct `i` and `info` entries) and added WebP dimensions/decode plus SVG external-reference checks.
+- `ce82fb92896cfc380147f3fa16ef9b7db29e4c9f` — exact Pillow pin `11.3.0`.
+- `73a7f87cb717fef3d499535f8b9ed61da5555c88` — report validates both review contact sheets as indexed PNG-8 and checks reference sheet dimensions.
+- `8081f7424cbe980f1477c397d0df573b1751bead` — ZIP members are sorted and receive fixed timestamps/permissions to avoid filesystem-time and traversal-order differences.
+- `1e7f99ba48403941b8ffa37a0588d2d2b13a99f8` — main background is now a dedicated token-only stage backdrop, rather than a scaled screenshot of the complete interface.
+- `9c3ffc79e627b6231e10af3912dac338ce8dfa0a` — added pull_request workflow trigger for PR #33 revisions and relevant source/reference paths.
+
+**Current pipeline sequence:** palette → 121-frame legacy knob filmstrips → legacy UI → 22 indexed sprite atlases and JSON indexes → SVG → preview/hero/background/WebP → atlas and reference contact sheets → staging theme/control map → structural report/G1–G4 → SHA-256 LICENSE + SELF_CHECK → deterministic staging ZIP.
+
+**Review gate:** workflow upload includes the two contact sheets and reports. Runtime promotion is disabled; permissions are read-only. No generated image is copied into `SKIN/Skin_052/assets` before explicit visual approval.
+
+**Status at this entry:** all source changes are committed, but exact-head workflow results have not yet been returned by the available GitHub run/status query. No claim of generated atlases, contact sheets, successful staging package, or G1–G4 PASS is made. Review and release gates remain open.
+================================================================================
