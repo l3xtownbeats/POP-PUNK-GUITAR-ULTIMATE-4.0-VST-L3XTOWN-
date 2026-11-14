@@ -117,7 +117,7 @@ def fetch_repo_archive(repo: str, dest: Path):
 
 def fetch_release_zip(repo: str, tag: str, match: str, dest: Path):
     rel=json_url(f"https://api.github.com/repos/{repo}/releases/tags/{tag}")
-    assets=[a for a in rel.get("assets",[]) if match.lower() in a.get("name","").lower()]
+    assets=[a for a in rel.get("assets",[]) if (a.get("name","").lower().endswith(match.lower()) if match.startswith(".") else match.lower() in a.get("name","").lower())]
     if len(assets)!=1:
         raise RuntimeError(f"Expected exactly one release asset matching {match!r}; found {len(assets)}")
     data=request(assets[0]["browser_download_url"], timeout=300)
