@@ -1,8 +1,10 @@
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from audit_neon_stage_skin1_migration import audit
 
 
@@ -19,6 +21,10 @@ class NeonStageMigrationAuditTests(unittest.TestCase):
             skin_id = f"skin-{index:02d}" if index < 10 else f"skin-{index:02d}"
             name = "NEON STAGE" if index == 53 else f"Legacy {index}"
             rel = f"Skin_{index:02d}/theme.json" if index < 10 else f"Skin_{index:03d}/theme.json"
+            if index == 52:
+                skin_id = "neon-stage-default-skin-1"
+                name = "NEON STAGE (historical)"
+                rel = "Skin_052/theme.json"
             if index == 53:
                 skin_id = "skin-053"
                 rel = "Skin_053/theme.json"
@@ -30,8 +36,6 @@ class NeonStageMigrationAuditTests(unittest.TestCase):
             rel = f"Skin_{index:03d}/theme.json"
             entries.append({"id": skin_id, "index": index, "name": f"Theme {index}", "path": rel})
             write_manifest(root, rel, {"id": skin_id, "index": index, "name": f"Theme {index}"})
-        write_manifest(root, "Skin_052/theme.json",
-                       {"id": "legacy-skin-052", "index": 52, "name": "Carbon Relay"})
         (root / "theme_manifest.json").write_text(json.dumps({
             "totalSkins": len(entries), "defaultSkin": "skin-053", "themes": entries
         }), encoding="utf-8")
