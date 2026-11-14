@@ -96,3 +96,13 @@ The older 300-entry target is superseded as the minimum. Require at least 500 un
 Add Angels & Airwaves album-era families for *We Don't Need to Whisper* (2006), *I-Empire* (2007), and *Lifeforms* (2021), plus Tom DeLonge technique presets in both MELODY and PATTERN. Research notes, confirmed facts vs interpretations, tone concepts, legal limits and tests are in [PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md](./PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md).
 
 Research public interviews, gear/tone breakdowns and free preset examples. Include third-party preset files/IRs/samples only when their actual license permits commercial redistribution inside the plugin. Otherwise build an independent tone recipe. Never copy protected riffs, stems, proprietary presets or samples.
+
+
+
+## Блокирующий quality gate: запрет пластикового / искусственного гитарного звука
+
+**APPROVED / MANDATORY / RELEASE-BLOCKING.** Не допускать в PPGU 4.0 пластмассовые, искусственные, синтетически-негитарные, дешёвые или нереалистичные тембры. Звуковой уровень продукта должен соответствовать дорогому профессиональному виртуальному инструменту. Это требование относится ко всем гитарам, акустическим и электрическим, всем фабричным пресетам, предпрослушиванию и демонстрационным материалам.
+
+Проверять на слух весь диапазон, velocity, атаку, сустейн и release, артикуляции, ноты/аккорды, переходы и выразительность. Источники могут быть DRY, NATIVE TONE MATCH (нативный сэмпл уже совпадает с целью), PROCESSED SOURCE MATCH (качественная обработанная запись уже совпадает) или WET (обработка в плагине). Не добавлять эффекты ради количества; избегать двойной обработки готовых источников и использовать нулевую/минимальную DSP-цепь, если она звучит убедительно и естественно. Но экономия CPU никогда не оправдывает ухудшение звука.
+
+Любой пластиковый или нереалистичный результат = REJECTED / NOT READY и блокирует включение пресета в релиз до исправления и повторной слуховой проверки. Автотесты, графики и pluginval не подтверждают музыкальную реалистичность сами по себе.
