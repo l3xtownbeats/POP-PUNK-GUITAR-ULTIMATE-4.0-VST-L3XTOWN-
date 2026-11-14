@@ -516,3 +516,21 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **CI:** REV.17 skin workflow run `43198014508` SUCCESS. Windows VST3 workflow `43198145160` was IN_PROGRESS on source SHA `0dc6cde...`; final C++ build/CTest/pluginval/package pending.
 
 **Status:** artwork generator and skin CI source committed; exact-SHA Windows validation pending.
+
+
+## 2026-11-14 — Documentation addendum: approved browser navigation and control inventory
+
+**Type:** documentation/specification synchronization only; no production source or tests changed.  
+**Branch:** `work/ppgu-completion-integrated-2026-11-13`.  
+**Files and exact commits:**
+- `Info.txt` — `d1feaeadf23bbeeb7e10e11cb632b2c209eb337e` (blob `a58b05fe583c17a47e4401092e2d8415aaf287dc`).
+- `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` — `0779e0973647df6b2113c847758a5faecd9a4949` (blob `ed85a1546183be94e11507b8718ea1fdc965c6ec`).
+- `SKIN/CONTROL_INVENTORY_MATRIX_RU.md` — `cecb72a6c50fcbdb71086c48bc229b958bb72499` (blob `7072684309ff8a6155269de97cecdd80ece70622`).
+
+**Recovered requirements:** separated Preset / Pattern / Sample-Library browsers; contextual navigation GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN; Intro/Verse/Pre-Chorus/Chorus/Bridge/Outro; complete Preset Browser controls BROWSER/FAVORITES/CATEGORIES, FACTORY/USER, SEARCH/FILTER/SORT, PREV/NEXT, FAVORITE, PRESET NAME/CATEGORY, PREVIEW, explicit SELECT/LOAD, user preset and bank operations; Pattern Browser metadata, filtered navigation, real non-committing Preview, explicit Apply and Back/Cancel rollback.
+
+**Compatibility:** additive clarification only. Existing section-first Pattern workflow is preserved; Pre-Chorus is added without deleting prior sections. No changes to SIGNAL FORGE v10 strict rules, user-ratified baseline, approved visual hierarchy, APVTS IDs/semantics, DSP, sampler, MIDI, scheduler, preset data, SoundBank, skins or runtime behavior. No commercial/protected content is authorized for copying or redistribution.
+
+**Verification:** GitHub content readback and append-only path updates succeeded. No build, CTest, pluginval, host, audio or package tests were run because production source was unchanged.
+
+**Status:** DOCUMENTATION UPDATED / PRODUCTION SOURCE UNCHANGED / RUNTIME IMPLEMENTATION NOT IMPLIED.
