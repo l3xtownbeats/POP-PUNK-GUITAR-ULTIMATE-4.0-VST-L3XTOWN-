@@ -682,3 +682,21 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **CMake:** registered `ppgu_pattern_section_contracts`.  
 **Verification:** GitHub readback PASS; no CI run/status available; compiler/CTest/pluginval/package/host tests NOT RUN.  
 **Status:** SOURCE PRESENT; test target registered; runtime/editor/state integration still pending.
+
+
+## 2026-11-14 — Product and GUI decision reconciliation: NEON STAGE / SIGNAL FORGE
+
+**Type:** append-only product/engineering requirements record; documentation only.  
+**Branch:** work/rev17-full-reconciliation-2026-11-14  
+**Parent SHA:** 211abe654b91c6396471db1905ce0e3ce53b281c  
+**Sources:** accessible prior discussions/user decisions; SIGNAL FORGE v10 MASTER/v10.1; MASTER_PRODUCT_SPEC_4_0_RU.md; PPGU_FULL_WORK_TEXT_FINAL(1).txt; Info/CODE history; current REV.17 reconciliation report and available UI concept.  
+**Production source changed:** NO.
+
+**Canonical visual decision:** SIGNAL FORGE / NEON remains brand identity; NEON STAGE is recorded as the requested primary/default presentation skin (skin-1), SOUND FORGE skin-2, BLACKOUT VINTAGE skin-3. Old NEON PUNK / SIGNAL FORGE card-title variants are historical pending registry/manifest/runtime reconciliation; stable IDs must not be silently renamed. NEON STAGE visual contract: dark graphite/black metal chassis, machined-metal detail, electric neon-blue signal contours, restrained cyan/blue/purple/pink accents, punk paint texture, PPGU crown/monogram, high-contrast typography, legible rotary controls/switches/LEDs/meters and clear Preset/MELODY/PATTERN/Guitar/Amp-Cab/FX/Keyboard hierarchy.
+
+**Requirements recorded:** Windows 10 x64 VST3 / JUCE 7.0.12 / C++20 / FL Studio 20; MELODY chromatic MIDI; PATTERN section-first Intro/Verse/Chorus/Bridge/Outro then rhythm chooser, independent mappings, Preview non-commit, Apply commit, Back/Cancel rollback, host-synced transitions; separation of instrument source, tone/FX and real performance articulation; AUTOCHORDS; SFZ/WAV user import and audition, note ranges/velocity layers/RR, acoustic/nylon profiles, velocity palm mute and real recorded articulations; Compressor/EQ/Distortion/Chorus/Flanger/Delay/Reverb/Cabinet IR; 300 factory definitions (150 MELODY + 150 PATTERN) and separate 30-preset Blink-182 “ONE MORE TIME...” Curator pack; unrestricted user-library import regardless of Curator; Skin Gallery cards/search/families/favorites/large draft Preview/Apply/Back; OverlayManager and secure .ppguskin/SVG import; Auto Discover internal ON/OFF; Settings and auxiliary windows; Sound Hunter provenance/license/SHA-256/guitar-only gate; bounded multiprocessing and Voices/polyphony; realtime-safe callback; portable package and exact-SHA release gates.
+
+**Missed/open integration:** PATTERN Processor/Editor/state/preset/scheduler integration; Gallery transaction; production OverlayManager/SecureSkinImport; SVG security tests; Sound Hunter discovery and non-empty verified registry; Curator runtime; exact NEON STAGE label/default mapping; full visible-control contract; playable validation of 300 presets; real articulation/velocity maps; FX/amp/cab/IR verification; multiprocessing/voice implementation; repeatable CPU/RAM/latency/audio quality benchmarks; package/release evidence. The earlier 769-entry tree inventory was not a full file-by-file content audit.
+
+**Verification:** documentation/source readback only. Build/CTest/pluginval/package/host test NOT RUN for this documentation change.  
+**Status:** REQUIREMENTS RECONCILED / DOCUMENTED; source implementation not claimed; TESTED pending; RELEASED no.

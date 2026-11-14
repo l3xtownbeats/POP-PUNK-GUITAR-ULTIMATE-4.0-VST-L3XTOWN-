@@ -55,3 +55,46 @@ Keep asset-level legal review, provenance, SHA-256, quality screening and guitar
 ## This checkpoint
 
 This branch records reconciliation only. No production source, CMake target, binary asset or runtime behavior was modified. No build, CTest, pluginval, package or host test was run on this checkpoint. Next source change should be a separately scoped PATTERN section model with regression coverage, after the complete APVTS/state/preset migration map is finalized.
+
+
+## 2026-11-14 — Conversation-wide product and NEON STAGE decision register
+
+This addendum consolidates accessible prior discussion, approved user decisions and project specification. It does not replace earlier history and does not imply implementation.
+
+### Primary identity and visual direction
+SIGNAL FORGE / NEON is the immutable brand/system identity. NEON STAGE is the latest requested primary/default theme label; recorded order: NEON STAGE (skin-1), SOUND FORGE (skin-2), BLACKOUT VINTAGE (skin-3). Reconcile label/default with the current registry and Skin_052 mapping through a dedicated tested change; never silently rename stable IDs. Old NEON PUNK and SIGNAL FORGE-as-card names are historical variants. NEON STAGE: dark graphite/black metallic chassis, machined-metal details, electric neon-blue outlines/signal accents, restrained cyan/blue/purple/pink glow, punk paint texture, PPGU crown/monogram, high-contrast typography, professional knobs/switches/LEDs/meters, clean hierarchy across Preset/Library, MELODY/PATTERN, Guitar/Articulation, Amp/Cab, FX, keyboard/status. Categories: RETRO-PUNK, DARK ROCK, VINTAGE, METAL CORE, CLASSIC PUNK, MINIMAL, SIGNAL FORGE, ON STAGE. ON STAGE is a category, NEON STAGE is the theme name.
+
+### Functional decision register
+- Target: Windows 10 x64 VST3 instrument, JUCE 7.0.12/C++20, FL Studio 20.
+- MELODY: chromatic MIDI notes, riffs, hooks, octave lines and lead.
+- PATTERN: section-first Intro/Verse/Chorus/Bridge/Outro, then pattern/rhythm selection; independent assignment per section; non-committing Preview, Apply, Back/Cancel; host sync and clean transitions.
+- Keep instrument source, tone/FX, and real performance articulation as separate axes. Techniques include palm mute, open chords, down/up/alternate strokes, staccato power chords, chugs, skank/offbeat upstrokes, straight eighths, gallop, stop-time/stop-start, half-time, double-stops, octave hooks, muted scratches, arpeggios, tremolo picking, sustain/ambient and dynamic build—only when backed by recordings/maps. Tremolo effect is not tremolo picking. Layering optional advanced, not default.
+- AUTOCHORDS: ON/OFF, Major/Minor/Custom, Key, progression, mode/Strum, chord/fretboard view, current progression, preview/play and speed.
+- SFZ/WAV import, drag/drop/Browse, user libraries, root/key/note ranges, velocity layers, RR, zones, note-off/release/gate, audition/browser and safe preview-before-load. Electric/acoustic/nylon only where actual samples exist. Velocity-sensitive palm mute must select a real muted articulation, not EQ/volume simulation. Meta Open Sound Steel/Nylon are candidates, not cleared assets.
+- Real double takes and performance maps for strums/riffs/arpeggios/chord changes; string/fret/voicing/direction/timing/accent/mute/gate/release metadata; DI/mic, pickup/amp/cab/IR. Slide/hammer-on/pull-off/harmonic/tremolo only if recorded. Verse/chorus differences must be performance-based; presets loudness-matched, headroom-safe, mono/phase checked.
+- FX: Compressor, EQ, Distortion/Drive, Chorus, Flanger, Delay, Reverb, Cabinet/IR. FX EDIT should only expose functional controls, bypass, mix, graph/meters as applicable.
+- Factory contract: 300 definitions = 150 MELODY + 150 PATTERN; playable/validated count tracked separately. Separate request: 30 original presets in the style direction of Blink-182 “ONE MORE TIME...”. Style references include Blink-182, Sum 41, Green Day, Fall Out Boy, Good Charlotte, Simple Plan, New Found Glory, Avril Lavigne, Yellowcard, The All-American Rejects, My Chemical Romance, Less Than Jake, Fenix TX, Midtown, Bowling for Soup, MGK, Mest, Angels & Airwaves, The Offspring, Sugarcult and All Time Low; inspiration only, no copying protected recordings/riffs/assets.
+- Curator can recommend/organize but cannot restrict user-added libraries. Factory distribution remains license-gated.
+- Gallery: image cards, search, family filters, favorites, large Preview; Preview draft-only, Apply commits, Back/Cancel restores active theme. REV.17 inventory 102 themes; REV.14 51-theme audit is historical.
+- Skin/workspace: OverlayManager safe lifecycle, z-order/focus, close/maximize/restore, saved bounds, DPI/work-area; secure .ppguskin archive import, traversal/duplicate/size checks; SVG rejects case-insensitive event handlers, script/foreignObject, external/protocol-relative links and unsafe CSS. Old ZIP OverlayManager prototype had a close defect.
+- Auto Discover: internal ON/OFF, transparent opt-in; no external upload. Do not infer destructive Apply All from mockup.
+- Settings: General/Audio/MIDI/GUI, MIDI Learn, tooltips, preset autosave, graphics quality, UI scale/reset; do not fake host-owned buffer-size control. Auxiliary windows independent close/maximize, safe lifetime, persisted bounds, compact/portrait/overflow/DPI.
+- Sound Hunter: provenance, exact SPDX/redistribution scope, notices, SHA-256, file inventory, technical audition, guitar-only verification; unclear sources quarantined. Audited registry empty; FreePats candidates need archive verification, Nyanshell/fakeguitar YELLOW, Unreal Instruments requires explicit raw-sample rights.
+- Multiprocessing and Voices/polyphony requested; bounded worker model outside callback. No I/O/network/decode/waits/allocations/blocking locks/unbounded work in processBlock. Preserve sampler lifetime, MIDI timing, APVTS IDs and audio contracts.
+- Performance goals (not measured claims): first sound <=50 ms; preset <=300 ms p95; skin swap ~150 ms p95; CPU <=2% at 4 voices / <=15% at 64; RAM <=60 MB idle / <=512 MB full bank; callback peak <=60% buffer time at 128 samples.
+- Portable content root VST3/SOUNDBANK/PRESETS/SKINS/Resources/Assets; safe resolver, relocatable package, manifests/checksums/notices and redistributable assets only. Windows Release, full CTest, pluginval strictness 5, package audit and FL Studio 20 install/scan/load/MIDI/audio/state checks all tied to one exact SHA.
+
+### Conflicts and open gaps
+- SIGNAL FORGE / NEON brand plus NEON STAGE primary theme: registry/default mapping remains to reconcile, no silent ID rename.
+- 300 factory definitions and 30 Curator presets are distinct.
+- Tone/FX and articulation are separate; tremolo effect != picking.
+- User import is unrestricted by Curator; factory redistribution is legally gated.
+- User-reported FL Studio 20 success is not exact-SHA CI evidence. Green build/package at 8c75820... does not certify later HEAD.
+- PATTERN model still needs Processor state, Editor controls, preset migration and scheduler integration.
+- Gallery draft transaction incomplete; OverlayManager/SecureSkinImport absent; SVG adversarial tests pending.
+- Sound Hunter discovery and Curator integration absent; verified registry empty.
+- Full control-to-action/parameter/persistence/automation inventory, 300-preset playability audit, real articulation maps, FX/amp/cab/IR verification, multiprocessing/voice implementation, benchmarks and package/release evidence remain open.
+- 769-entry inventory was not a file-by-file content audit of all text, binaries and sample assets; complete manifest-based audit remains open.
+
+**Authority:** latest explicit user decisions + SIGNAL FORGE v10 MASTER/v10.1 + approved control inventory + append-only journals. Priority: safety > realtime > sound > resources > UX. Every production change updates Info/CODE in the same commit with exact evidence.  
+**Status:** REQUIREMENTS RECONCILED / DOCUMENTED; implementation and full file-by-file audit remain open.
