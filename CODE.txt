@@ -650,3 +650,13 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Контрольный lowercase `onload=` возвращает allowed=false.
 
 **Статус:** ZIP S1 MUST NOT BE MERGED до исправления и расширения негативных тестов (mixed-case event attributes, protocol-relative/external URI variants). Это результаты только для загруженного архива, не для текущей REV.17, где S1 отсутствует.
+
+
+## 2026-11-14 — Requirements reconciliation: NEON STAGE / full UI / musical workflows
+**Type:** documentation baseline / user-approved product requirements index. No production source changed by this record.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+**Scope:** consolidated prior-chat requirements for skin identity and default, NEON STAGE visual system, full A–H interface inventory, MELODY/PATTERN/PUNK GROUP, section-first PATTERN workflow, AUTOCHORDS, sampler/articulations/velocity/palm mute/acoustic variants, DSP/FX, voice/polyphony and multiprocessing request, SoundBank licensing, Skin Gallery lifecycle, additional windows, and source-vs-design status.
+**Authority:** `Info.txt` 2026-11-14 entry “MASTER CONSOLIDATION”.
+**Key approved identities:** SKIN-1 NEON STAGE (default/startup/fallback); SKIN-2 SOUND FORGE; SKIN-3 BLACKOUT VINTAGE; SKIN-4 onward sequential, no renumbering/reuse. SIGNAL FORGE remains the engineering standard and must not be conflated with the NEON STAGE or SOUND FORGE theme identities.
+**Audit gaps retained:** section-first Pattern UX, AutoChords generation, PUNK GROUP completion, O1 OverlayManager, S1 SecureSkinImport, Skin Gallery Preview/Apply/Back/Favorites/enlarged preview/keyboard navigation, full NEON STAGE DEFAULT UI and additional-window parity, Sound Hunter production pipeline, playable preset counts, and measured performance.
+**Status:** DOCUMENTATION CONSOLIDATED / SOURCE IMPLEMENTATION NOT CHANGED / IMPLEMENTATION MATRIX REQUIRED. This entry records requirements; it does not upgrade any feature status.
