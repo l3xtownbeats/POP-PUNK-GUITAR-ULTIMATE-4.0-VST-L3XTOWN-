@@ -147,20 +147,25 @@ namespace
         const auto id = root.getProperty("id", "").toString();
         const auto indexValue = root.getProperty("index", juce::var());
         const auto index = indexValue.toString().getLargeIntValue();
+        const bool canonicalNeonStageId = id == "neon-stage-default-skin-1" && index == 52;
+        const bool legacyNumericSkinId = id.startsWith("skin-") && id.length() >= 8
+            && index >= 52 && id.substring(5).getLargeIntValue() == index;
         if ((!indexValue.isInt() && !indexValue.isInt64())
-            || id.length() < 8 || !id.startsWith("skin-")
             || index < 52 || index > std::numeric_limits<int>::max()
-            || id.substring(5).getLargeIntValue() != index)
+            || (!canonicalNeonStageId && !legacyNumericSkinId))
         {
             error = "Invalid Skin Studio ID/index pair";
             return false;
         }
-        for (int position = 5; position < id.length(); ++position)
+        if (legacyNumericSkinId)
         {
-            if (!juce::CharacterFunctions::isDigit(id[position]))
+            for (int position = 5; position < id.length(); ++position)
             {
-                error = "Skin Studio ID suffix must contain only digits";
-                return false;
+                if (!juce::CharacterFunctions::isDigit(id[position]))
+                {
+                    error = "Skin Studio ID suffix must contain only digits";
+                    return false;
+                }
             }
         }
 
