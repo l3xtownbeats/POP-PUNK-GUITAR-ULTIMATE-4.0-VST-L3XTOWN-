@@ -225,3 +225,7 @@ First supplied interface reference = authoritative appearance/layout/dimensions/
 
 ### 14.8 Same label, different control — Pattern selector separation
 AutoChords.Pattern and PATTERN Browser.Pattern are distinct controls with separate state/ownership. The AutoChords selector remains inside the AutoChords chord/harmony workflow; the Browser selector chooses section/slot rhythm-performance content. No shared binding, implicit synchronization or cross-overwrite is allowed.
+
+
+### 14.9 Preset Browser category taxonomy
+The approved Preset Browser categories are CLEAN, CRUNCH, DRIVE, LEAD, AMBIENT, LO-FI, ACOUSTIC TEXTURES and PUNK RHYTHM. They classify tone/preset content, not rhythm-performance patterns. Category selection/filtering never loads or applies a preset. Keep this taxonomy separate from PATTERN Browser categories DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING and CUSTOM PATTERNS.
