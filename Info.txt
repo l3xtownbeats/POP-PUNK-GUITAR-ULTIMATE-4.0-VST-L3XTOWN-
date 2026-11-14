@@ -3019,3 +3019,37 @@ DSP/audio/MIDI/sampler behavior. Require a new exact-SHA build, CTest and
 pluginval after each source change; retain FL Studio 20 acceptance as a
 separate manual gate.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — REV-ULTRA-NEON-UI-PALETTE-PARITY-008
+==============================================================================
+
+**Source commit:** b6ae75b78f733bc784318a53fcf3e0669f6b2467
+**Scope:** Source/PluginEditor.cpp only. Build/CTest/pluginval for this
+exact SHA are PENDING at the time of this entry.
+
+**UI cleanup performed:**
+- Removed the remaining legacy green/grey hard-coded colors from the
+  theme-aware Import Guitar, FX Edit and AutoChords auxiliary panels.
+- Initial panel colors now resolve from the current 21-token palette,
+  including accent, text, warning, LCD text and control-border roles.
+- MIDI keyboard white/black keys and separators now use theme tokens.
+- Main rotary outline now uses control_border.
+- Skin-gallery fallback accent now uses NEON STAGE cyan.
+- Settings action label now reads RESTORE NEON STAGE DEFAULT, matching the
+  actual reset target. SIGNAL FORGE remains the working interface identity.
+- Source audit after patch: no remaining literal juce::Colour(0x...) calls
+  in PluginEditor.cpp; only the gallery's default accent field remains as
+  the canonical NEON STAGE cyan value.
+
+**Safety:** no APVTS IDs, attachments, DSP/audio callback, MIDI routing,
+sampler, parameter mapping, component bounds or panel ownership changed.
+This is a visual token-consistency patch only.
+
+**Verification boundary:** prior exact SHA 898c20d passed Windows x64 Release,
+CTest 12/12 and pluginval strictness 5. Those results do NOT transfer to
+b6ae75b. A new Windows build, CTest and pluginval result is required for
+this source commit. Pixel-level comparison and FL Studio 20 host acceptance
+remain open.
+==============================================================================
