@@ -3164,3 +3164,22 @@ Verified from the run's job summary and decoded job log:
 - Staging artifact/report upload step: **SUCCESS**.
 
 This is authoritative Windows CI evidence for the exact source SHA above and closes the previous pending status for official G1–G4 plus the complete registry validator on that SHA. It verifies the NEON STAGE skin staging pipeline only. It is **not** a JUCE VST3 Release Build, CTest run, pluginval strictness 5 result, FL Studio 20 host acceptance, or pixel-level sign-off against all seven approved mockups. The staging ZIP remains a staging artifact, not a release package.
+
+
+## 2026-11-15 — User-approved unified NEON STAGE / SIGNAL FORGE identity
+
+**Decision owner:** User (explicit instruction).  
+**Canonical theme:** `Skin_052` / `skin-052` / index `52`.  
+**Skin/theme name:** `NEON STAGE`.  
+**Interface visual identity:** `SIGNAL FORGE`.  
+**Relationship:** One inseparable theme and interface identity. Do not split NEON STAGE and SIGNAL FORGE into separate themes, skins, shells, or competing defaults.
+
+Implementation recorded in this commit:
+- `SKIN/theme_manifest.json`: default changed to `skin-052`; canonical registry label `NEON STAGE / SIGNAL FORGE`; Skin_053 marked legacy archive, with its index retained for registry continuity.
+- `SKIN/Skin_052/theme.json`: Skin_052 now carries the NEON STAGE palette/effects and records the unified identity decision while preserving its canonical ID, index, control map, and path.
+- `SKIN/Skin_053/theme.json`: preserved as a superseded legacy archive only; not the default and not a separate active identity.
+- `Source/UI/ThemeManager.h` and `Source/PluginEditor.cpp`: runtime fallback and reset-to-default now target Skin_052.
+
+**Compatibility rule:** Existing skin IDs and numbering are not renumbered or deleted. Skin_053 is retained only as a legacy compatibility record; all new default selection and identity references must resolve to Skin_052.
+
+**Validation status:** Changes require fresh Windows CI/registry validation and visual review. No new CI, VST3 build, CTest, pluginval, or FL Studio 20 result is claimed by this journal entry.
