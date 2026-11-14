@@ -22,12 +22,17 @@ def chunk(kind: bytes, payload: bytes) -> bytes:
             + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF))
 
 
-def tiny_png() -> bytes:
-    # 2x1, 8-bit RGBA, filter byte + two opaque white pixels.
-    header = struct.pack(">IIBBBBB", 2, 1, 8, 6, 0, 0, 0)
-    pixels = b"\x00" + b"\xff\xff\xff\xff" * 2
+def png_with_size(width: int, height: int) -> bytes:
+    # Valid 8-bit RGBA PNG without third-party imaging dependencies.
+    header = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    row = b"\x00" + b"\xff\xff\xff\xff" * width
+    pixels = row * height
     return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header)
             + chunk(b"IDAT", zlib.compress(pixels)) + chunk(b"IEND", b""))
+
+
+def tiny_png() -> bytes:
+    return png_with_size(2, 1)
 
 
 class Rev18PngAuditTests(unittest.TestCase):
@@ -95,7 +100,6 @@ class Rev18SvgSafetyTests(unittest.TestCase):
 
 class Rev18IconManifestTests(unittest.TestCase):
     def test_manifest_checksums_and_paths_are_verified(self) -> None:
-        from PIL import Image
         import hashlib, json
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -104,7 +108,7 @@ class Rev18IconManifestTests(unittest.TestCase):
             svg = b'<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10"/></svg>'
             (root / "assets/master/icons/skins.svg").write_bytes(svg)
             image_path = root / "assets/icons/skins.png"
-            Image.new("RGBA", (256, 256), (0, 0, 0, 0)).save(image_path)
+            image_path.write_bytes(png_with_size(256, 256))
             records = []
             for suffix, rel in (("master_svg", "assets/master/icons/skins.svg"),
                                 ("runtime_png", "assets/icons/skins.png")):

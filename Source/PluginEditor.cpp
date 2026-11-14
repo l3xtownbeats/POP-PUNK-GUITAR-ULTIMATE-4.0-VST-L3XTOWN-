@@ -531,7 +531,7 @@ public:
         };
         addAndMakeVisible(gapSlider);
 
-        restoreButton.setButtonText("RESTORE SIGNAL FORGE DEFAULT");
+        restoreButton.setButtonText("RESTORE NEON STAGE DEFAULT DEFAULT");
         restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
         restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         restoreButton.onClick = [this] { if (restoreTheme) restoreTheme(); };
@@ -882,7 +882,7 @@ public:
             { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
         };
 
-        title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
+        title.setText("NEON STAGE DEFAULT  /  FX EDIT", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
         title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
         addAndMakeVisible(title);
@@ -1145,7 +1145,7 @@ private:
 };
 }
 
-// Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
+// Premium NEON STAGE DEFAULT shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -1430,6 +1430,53 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
                          bounds.getX() + 15.0f, bounds.getRight() - 15.0f);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::loadThemeArtwork()
+{
+    heroArtwork = {};
+    if (runtimeSkinRoot == juce::File{})
+        return;
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return;
+
+    const auto activeId = themeManager.getPalette().id;
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != activeId)
+            continue;
+
+        const auto relativeManifest = entry.getProperty("path", "").toString();
+        if (relativeManifest.isEmpty() || relativeManifest.startsWith("/")
+            || relativeManifest.contains(".."))
+            return;
+
+        const auto manifest = runtimeSkinRoot.getChildFile(relativeManifest);
+        if (!manifest.isAChildOf(runtimeSkinRoot) || !manifest.existsAsFile())
+            return;
+
+        const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+        const auto assets = theme.getProperty("assets", juce::var());
+        auto relativeHero = assets.getProperty("hero", "assets/hero.png").toString();
+        if (relativeHero.isEmpty() || relativeHero.startsWith("/") || relativeHero.contains(".."))
+            relativeHero = "assets/hero.png";
+
+        const auto skinDirectory = manifest.getParentDirectory();
+        auto heroFile = skinDirectory.getChildFile(relativeHero);
+        if (!heroFile.existsAsFile())
+            heroFile = skinDirectory.getChildFile("assets/hero/hero.png");
+        if (heroFile.existsAsFile())
+            heroArtwork = juce::ImageCache::getFromFile(heroFile);
+        return;
+    }
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
@@ -1446,16 +1493,57 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    drawPanel(g, area, "NEON STAGE  /  GUITAR PERFORMANCE");
+    drawPanel(g, right, "AMP & EFFECTS");
 
-    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
-    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
-        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    // Hero artwork is a real theme asset loaded from the active skin package.
+    // The image is decorative only: no controls, parameters or audio routing are changed.
+    if (!heroArtwork.isNull() && !heroArtworkBounds.isEmpty())
+    {
+        auto hero = heroArtworkBounds.toFloat();
+        g.setColour(p.token("control_bg"));
+        g.fillRoundedRectangle(hero, 9.0f);
+        juce::Graphics::ScopedSaveState savedState(g);
+        juce::Path clip;
+        clip.addRoundedRectangle(hero, 9.0f);
+        g.reduceClipRegion(clip);
+        g.drawImageWithin(heroArtwork, heroArtworkBounds.getX(), heroArtworkBounds.getY(),
+                          heroArtworkBounds.getWidth(), heroArtworkBounds.getHeight(),
+                          juce::RectanglePlacement::centred | juce::RectanglePlacement::onlyReduceInSize);
+        g.setGradientFill(juce::ColourGradient(p.token("window_bg").withAlpha(0.02f),
+                                               hero.getCentreX(), hero.getY(),
+                                               p.token("window_bg").withAlpha(0.88f),
+                                               hero.getCentreX(), hero.getBottom(), false));
+        g.fillRect(hero);
+        g.setColour(p.token("control_border").withAlpha(0.9f));
+        g.drawRoundedRectangle(hero, 9.0f, 1.0f);
+        g.setColour(p.token("text_primary"));
+        g.setFont(juce::Font(18.0f, juce::Font::bold));
+        g.drawText("NEON STAGE", heroArtworkBounds.reduced(14, 8).removeFromTop(25),
+                   juce::Justification::centredLeft, true);
+        g.setColour(p.token("accent"));
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("POP-PUNK GUITAR  /  PERFORMANCE CONSOLE",
+                   heroArtworkBounds.reduced(14, 8).removeFromBottom(17),
+                   juce::Justification::centredLeft, true);
+    }
+    else
+    {
+        // Honest fallback when the optional artwork pack is not installed.
+        auto hero = heroArtworkBounds.toFloat();
+        if (!hero.isEmpty())
+        {
+            g.setColour(p.token("panel_elevated"));
+            g.fillRoundedRectangle(hero, 9.0f);
+            g.setColour(p.token("accent"));
+            g.fillRoundedRectangle(hero.getX() + 12.0f, hero.getY() + 12.0f, 4.0f,
+                                   juce::jmax(8.0f, hero.getHeight() - 24.0f), 2.0f);
+            g.setColour(p.token("text_primary"));
+            g.setFont(juce::Font(17.0f, juce::Font::bold));
+            g.drawText("NEON STAGE", hero.toNearestInt().reduced(25, 8),
+                       juce::Justification::centredLeft, true);
+        }
+    }
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1468,7 +1556,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     if (auxiliaryWorkspace != nullptr)
         auxiliaryWorkspace->setBounds(bounds);
 
-    // SIGNAL FORGE three-zone shell: browser / instrument / amp+FX.
+    // NEON STAGE DEFAULT three-zone shell: browser / instrument / amp+FX.
     // Lower performance strip remains full width. APVTS attachments are untouched.
     auto header = bounds.removeFromTop(48);
     titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
@@ -1513,6 +1601,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+    heroArtworkBounds = centre.removeFromTop(juce::jlimit(76, 112, centre.getHeight() / 5))
+        .reduced(7, 3);
+    centre.removeFromTop(5);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
     const int cols = 3;
@@ -1883,8 +1974,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             },
             [safe]
             {
+                // The gallery exposes active skins by activeOrdinal, not registry index.
+                // The default NEON STAGE skin is activeOrdinal 1.
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(52, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {
@@ -1908,6 +2001,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
+ loadThemeArtwork();
  if (auxiliaryWorkspace != nullptr)
  {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
@@ -1992,7 +2086,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = fxEditPanelId;
-        spec.title = "FX EDIT  /  SIGNAL FORGE";
+        spec.title = "FX EDIT  /  NEON STAGE DEFAULT";
         spec.desired = { 1000, 680 };
         spec.minimum = { 620, 440 };
         spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
