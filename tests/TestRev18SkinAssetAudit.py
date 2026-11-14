@@ -60,6 +60,67 @@ class Rev18PngAuditTests(unittest.TestCase):
             AUDIT.png_info(self.path)
 
 
+class Rev18SvgSafetyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.path = Path(self.temp.name) / "icon.svg"
+
+    def tearDown(self) -> None:
+        self.temp.cleanup()
+
+    def test_valid_static_svg_is_accepted(self) -> None:
+        self.path.write_text('<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10"/></svg>', encoding="utf-8")
+        AUDIT.validate_svg(self.path)
+
+    def test_script_element_is_rejected(self) -> None:
+        self.path.write_text('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "forbidden SVG element"):
+            AUDIT.validate_svg(self.path)
+
+    def test_external_href_is_rejected(self) -> None:
+        self.path.write_text('<svg xmlns="http://www.w3.org/2000/svg"><image href="https://example.invalid/a.png"/></svg>', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "external href/src"):
+            AUDIT.validate_svg(self.path)
+
+    def test_event_handler_is_rejected(self) -> None:
+        self.path.write_text('<svg xmlns="http://www.w3.org/2000/svg"><path onclick="alert(1)"/></svg>', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "event handler"):
+            AUDIT.validate_svg(self.path)
+
+    def test_doctype_is_rejected(self) -> None:
+        self.path.write_text('<!DOCTYPE svg><svg xmlns="http://www.w3.org/2000/svg"/>', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "DOCTYPE/ENTITY"):
+            AUDIT.validate_svg(self.path)
+
+
+class Rev18IconManifestTests(unittest.TestCase):
+    def test_manifest_checksums_and_paths_are_verified(self) -> None:
+        from PIL import Image
+        import hashlib, json
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "assets/master/icons").mkdir(parents=True)
+            (root / "assets/icons").mkdir(parents=True)
+            svg = b'<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10"/></svg>'
+            (root / "assets/master/icons/skins.svg").write_bytes(svg)
+            image_path = root / "assets/icons/skins.png"
+            Image.new("RGBA", (256, 256), (0, 0, 0, 0)).save(image_path)
+            records = []
+            for suffix, rel in (("master_svg", "assets/master/icons/skins.svg"),
+                                ("runtime_png", "assets/icons/skins.png")):
+                data = (root / rel).read_bytes()
+                records.append({"id": f"topbar.skins.{suffix}", "path": rel,
+                    "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                    "crc32": f"{zlib.crc32(data) & 0xffffffff:08X}", "origin": "[DECISION] test"})
+            (root / "assets/asset_manifest.json").write_text(
+                json.dumps({"skinId": "skin-053", "assetGroup": "topbar-icons", "records": records}),
+                encoding="utf-8")
+            AUDIT.validate_icon_manifest(root, ("skins",))
+            image_path.write_bytes(b"tampered")
+            with self.assertRaisesRegex(ValueError, "byte count mismatch|SHA-256 mismatch"):
+                AUDIT.validate_icon_manifest(root, ("skins",))
+
+
 class Rev18ContrastAuditTests(unittest.TestCase):
     def test_primary_text_contrast_exceeds_rev18_minimum(self) -> None:
         self.assertGreaterEqual(AUDIT.contrast("#FFFFFF", "#202020"), 7.0)

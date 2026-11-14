@@ -62,7 +62,9 @@ Top-bar icon basenames: `skins`, `import_guitar`, `auto_discover`,
 
 Текстуры должны быть бесшовными. Все PNG проверяются по CRC каждого chunk
 и декодируемой длине pixel payload. SVG проходят XML-разбор и не должны
-содержать script, event handler, external href/src, DOCTYPE или ENTITY.
+содержать script, foreignObject, iframe, object/embed, event handler, external
+href/src, внешние CSS url(), DOCTYPE или ENTITY. TOP BAR icon manifest фиксирует
+SHA-256, CRC32, byte count, path и [DECISION] provenance для master/runtime пар.
 
 ## Read-only аудит
 
@@ -89,7 +91,8 @@ python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report 
 ## Разделение валидаторов
 
 - `tools/validate_skin_pack.py`: прежняя проверка G1–G4 и registry/pack.
-- `tools/audit_skin_rev18_assets.py`: полнота master/runtime asset package.
+- `tools/audit_skin_rev18_assets.py`: полнота master/runtime asset package, безопасный SVG,
+  PNG integrity и контроль `assets/asset_manifest.json`.
 - Оба результата обязательны перед заявлением о готовности темы.
 - Отсутствующий ресурс считается FAIL; скрипт не создаёт placeholder и
   не выдаёт существующий runtime-файл за master.
@@ -98,5 +101,8 @@ python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report 
 
 Это соглашение и аудитор — первый инженерный шаг. Оно не означает, что
 SKIN-1 уже содержит полный REV.18 комплект, и не активирует новые темы.
-Создание/экспорт графики выполняется отдельным следующим этапом после
-проверки результатов аудита и сохранения исходных NEON STAGE ассетов.
+Создание/экспорт графики выполняется отдельным этапом; оригинальные исходники
+NEON STAGE сохраняются. Для TOP BAR icons добавлены SVG masters и deterministic
+Pillow PNG exporter `tools/generate_rev18_skin_icons.py` с режимом `--check`.
+Отсутствующие control sprites, hero/preview masters, фон, текстуры, FX layers,
+licensed fonts и atlas остаются FAIL до создания настоящих ресурсов.

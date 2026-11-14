@@ -8,11 +8,13 @@ Canonical path conventions are documented in REV18_ASSET_AUDIT_RU.md.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import struct
 import sys
 import zlib
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 STATES = ("default", "hover", "pressed", "disabled", "dragged")
@@ -80,6 +82,69 @@ def png_info(path: Path) -> tuple[int, int]:
     if len(decoded) != height * (1 + width * channels):
         raise ValueError(f"{path}: invalid decoded pixel payload")
     return width, height
+
+
+def validate_svg(path: Path) -> None:
+    """Reject active content and external references in theme SVG assets."""
+    raw = path.read_bytes()
+    upper = raw.upper()
+    if b"<!DOCTYPE" in upper or b"<!ENTITY" in upper:
+        raise ValueError(f"{path}: DOCTYPE/ENTITY is forbidden in SVG assets")
+    try:
+        root = ET.fromstring(raw)
+    except ET.ParseError as exc:
+        raise ValueError(f"{path}: invalid SVG XML: {exc}") from exc
+    if root.tag not in ("svg", "{http://www.w3.org/2000/svg}svg"):
+        raise ValueError(f"{path}: root element must be SVG")
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1].lower()
+        if tag in {"script", "foreignobject", "iframe", "object", "embed"}:
+            raise ValueError(f"{path}: forbidden SVG element <{tag}>")
+        for key, value in element.attrib.items():
+            attr = key.rsplit("}", 1)[-1].lower()
+            value_lower = value.strip().lower()
+            if attr.startswith("on"):
+                raise ValueError(f"{path}: event handler attribute {attr!r} is forbidden")
+            if attr in {"href", "src"} and value_lower and not value_lower.startswith("#"):
+                raise ValueError(f"{path}: external href/src reference is forbidden")
+            if "url(" in value_lower and not re.search(r"url\(\s*#[a-z0-9_.:-]+\s*\)", value_lower):
+                raise ValueError(f"{path}: external CSS url() reference is forbidden")
+
+
+def validate_icon_manifest(theme_dir: Path, icon_names: tuple[str, ...]) -> None:
+    """Validate registered top-bar icon files against their SHA-256 and CRC32."""
+    manifest_path = theme_dir / "assets/asset_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{manifest_path}: missing or invalid asset manifest: {exc}") from exc
+    records = manifest.get("records")
+    if not isinstance(records, list):
+        raise ValueError(f"{manifest_path}: records must be an array")
+    indexed = {record.get("id"): record for record in records if isinstance(record, dict)}
+    if manifest.get("skinId") != "skin-053" or manifest.get("assetGroup") != "topbar-icons":
+        raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
+    for icon in icon_names:
+        for suffix, rel in (("master_svg", f"assets/master/icons/{icon}.svg"),
+                            ("runtime_png", f"assets/icons/{icon}.png")):
+            asset_id = f"topbar.{icon}.{suffix}"
+            record = indexed.get(asset_id)
+            if not isinstance(record, dict) or record.get("path") != rel:
+                raise ValueError(f"{manifest_path}: missing or mismatched record {asset_id}")
+            if "[DECISION]" not in str(record.get("origin", "")):
+                raise ValueError(f"{manifest_path}: {asset_id} lacks [DECISION] provenance")
+            asset_path = theme_dir / rel
+            raw = asset_path.read_bytes()
+            if record.get("bytes") != len(raw):
+                raise ValueError(f"{manifest_path}: byte count mismatch for {asset_id}")
+            if record.get("sha256") != hashlib.sha256(raw).hexdigest():
+                raise ValueError(f"{manifest_path}: SHA-256 mismatch for {asset_id}")
+            if record.get("crc32") != f"{zlib.crc32(raw) & 0xFFFFFFFF:08X}":
+                raise ValueError(f"{manifest_path}: CRC32 mismatch for {asset_id}")
+            if suffix == "master_svg":
+                validate_svg(asset_path)
+            elif png_info(asset_path) != (256, 256):
+                raise ValueError(f"{manifest_path}: runtime icon {asset_id} must be 256x256")
 
 
 def luminance(hex_colour: str) -> float:
@@ -226,8 +291,29 @@ def main() -> int:
         png = theme_dir / f"assets/icons/{icon}.png"
         if not svg.is_file():
             add("FAIL", "TOPBAR_SVG_MISSING", f"Missing {svg.relative_to(root)}")
+        else:
+            try:
+                validate_svg(svg)
+                add("PASS", "TOPBAR_SVG_SAFE", f"{svg.relative_to(root)}: valid, non-active SVG.")
+            except (OSError, ValueError) as exc:
+                add("FAIL", "TOPBAR_SVG_INVALID", str(exc))
         if not png.is_file():
             add("FAIL", "TOPBAR_PNG_MISSING", f"Missing {png.relative_to(root)}")
+        else:
+            try:
+                png_info(png)
+            except (OSError, ValueError, zlib.error) as exc:
+                add("FAIL", "TOPBAR_PNG_INVALID", str(exc))
+
+    icon_manifest = theme_dir / "assets/asset_manifest.json"
+    if not icon_manifest.is_file():
+        add("FAIL", "ASSET_MANIFEST_MISSING", f"Missing {icon_manifest.relative_to(root)}")
+    else:
+        try:
+            validate_icon_manifest(theme_dir, TOPBAR_ICONS)
+            add("PASS", "ASSET_MANIFEST_VALID", "TOP BAR asset manifest SHA-256/CRC32 records are valid.")
+        except (OSError, ValueError, zlib.error) as exc:
+            add("FAIL", "ASSET_MANIFEST_INVALID", str(exc))
 
     atlas_json = theme_dir / "atlas/atlas.json"
     if not atlas_json.is_file():

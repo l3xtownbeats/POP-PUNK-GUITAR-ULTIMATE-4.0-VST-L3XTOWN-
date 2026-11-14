@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none" role="img" aria-label="About icon">
+<style>path,rect,circle{stroke:#F3F7F5;stroke-width:6;stroke-linecap:round;stroke-linejoin:round} .accent{stroke:#D5FF45} .accent-fill{fill:#D5FF45;stroke:none}</style>
+<circle cx="64" cy="64" r="43"/><path class="accent" d="M64 53v31"/><circle class="accent-fill" cx="64" cy="39" r="5"/>
+</svg>
