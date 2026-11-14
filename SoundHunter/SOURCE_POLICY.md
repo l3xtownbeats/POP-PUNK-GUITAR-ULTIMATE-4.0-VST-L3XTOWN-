@@ -308,3 +308,23 @@ The user approves the single-page UI optimization: do not create separate window
 
 This is the user's approved design direction. It is a requirement for implementation and code review, not a claim that the unified page is already implemented or tested.
 
+## Final user-approved product name: AUTO SOUND HUNTER
+
+The user now confirms that the former separate names **AUTO DISCOVER** and **SOUND HUNTER** should be consolidated under one product/feature name:
+
+**AUTO SOUND HUNTER**
+
+This name replaces both former names in the user-facing product UI, navigation, documentation and feature references. Do not present AUTO DISCOVER as a separate command or SOUND HUNTER as a separately branded feature. There is one unified **AUTO SOUND HUNTER** workspace and one discovery workflow.
+
+The existing source selector remains inside this one workspace:
+- **LOCAL** — manually scan the configured `Samples/Import Guitar Samples/` intake folder.
+- **GLOBAL** — manually start internet-wide guitar-source discovery.
+- **URL** — inspect user-provided URLs and, after explicit selection, download accessible files.
+
+Use one clear primary action whose label is appropriate to the selected mode, such as **START LOCAL DISCOVERY**, **START GLOBAL SEARCH**, or **INSPECT URL**; URL downloads remain a separate explicit **DOWNLOAD SELECTED** action. These are contextual actions inside AUTO SOUND HUNTER, not separate products or engines.
+
+All previously approved shared-pipeline, unified-registry, shared-results, compact single-page UI, manual-start, cancellation, provenance, licensing, audio-thread-safety and preset-generation requirements remain in force. In particular, LOCAL must never make network requests; GLOBAL and URL require deliberate user initiation; no mode starts automatically or triggers another mode implicitly.
+
+This naming decision supersedes earlier wording in this document that names the overall feature SOUND HUNTER or describes AUTO DISCOVER as a separately named action. Historical source-code identifiers may remain temporarily for compatibility, but new user-facing labels and new implementation references must use AUTO SOUND HUNTER. Rename internal identifiers only where safe and without breaking existing project/build compatibility.
+
+This is an approved naming and UX requirement, not a claim that the product UI or discovery engine has already been renamed, implemented or tested.
