@@ -627,3 +627,8 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 Это уточнение расширяет предыдущее правило «без верхнего лимита» на все перечисленные сущности и категории обоих режимов. Оно не отменяет и не ослабляет ранее утверждённые правила структуры браузеров, MELODY/PATTERN, MIDI/APVTS/DSP/audio-thread contracts, лицензий, визуальной системы и качества. При обнаружении конфликта остановить затронутую часть и запросить личное решение пользователя.
 
 **Статусы:** APPROVED / DOCUMENTED после внесения; VERIFIED только после повторного fetch. IMPLEMENTED / TESTED не присваиваются этим документированием.
+
+
+## ADDENDUM — MASTER ENGINE SOURCE INVENTORY AND BUILD GRAPH AUDIT (2026-11-14)
+
+The complete source inventory and static build-graph discrepancies discovered at main HEAD 1f09611f753702e380d695a5441b6f260f798d3b are recorded in Info.txt under “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”, with a corresponding append-only source index in CODE.txt. This addendum does not claim that all approved features are implemented. It preserves the approved no-upper-limit rule for every MELODY/PATTERN browser category. No source code was changed by the audit. CMake/JUCE/source-path discrepancies must be reconciled before a reproducible build can be claimed.
