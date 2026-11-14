@@ -1968,3 +1968,7 @@ The following are independent user-selectable dimensions: CHORD/HARMONY, ARTICUL
 
 ### Clarification — AutoChords Pattern selector is not the PATTERN Browser
 The AutoChords panel's own Pattern selector and the PATTERN Browser's rhythm/performance Pattern are separate controls and separate state. They must never be treated as the same selector, share/overwrite one another's selection, or trigger a hidden update in the other workflow. AutoChords Pattern remains within AutoChords' own chord/harmony-generation context; PATTERN Browser Pattern remains the section/slot rhythm-performance choice. Preview, Apply and Reset must respect this separation.
+
+
+### Preset Browser category registry — synchronized from the approved product specification
+The eight existing Preset Browser categories remain: CLEAN, CRUNCH, DRIVE, LEAD, AMBIENT, LO-FI, ACOUSTIC TEXTURES, PUNK RHYTHM. Category browsing/filtering is non-committing and does not load a preset. Do not collapse these categories into the six PATTERN Browser performance categories; they describe different dimensions and remain separate taxonomies.
