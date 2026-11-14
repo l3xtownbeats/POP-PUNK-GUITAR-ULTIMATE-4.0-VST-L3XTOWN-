@@ -678,12 +678,37 @@ def render_reference_art(size, path):
     indexed.save(path, "PNG", optimize=True)
 
 
+def render_background(size, path):
+    """Create a restrained token-only NEON STAGE backdrop, not a fake UI screenshot."""
+    width,height=size
+    im=Image.new("RGB",size,rgb(SOURCE_PALETTE["bg_deep"]))
+    d=ImageDraw.Draw(im)
+    d.polygon([(0,int(height*.76)),(int(width*.34),int(height*.66)),
+               (int(width*.72),int(height*.72)),(width,height*.61),
+               (width,height),(0,height)],fill=rgb(SOURCE_PALETTE["bg_panel"]))
+    d.polygon([(0,0),(int(width*.22),0),(0,int(height*.25))],
+              fill=rgb(SOURCE_PALETTE["bg_panel_hi"]))
+    d.polygon([(width,0),(width,int(height*.28)),(int(width*.78),0)],
+              fill=rgb(SOURCE_PALETTE["bg_panel"]))
+    for i in range(12):
+        y=int(height*.72+i*height*.022)
+        d.line((0,y,width,y-int(height*.08)),fill=rgb(SOURCE_PALETTE["led_off"]),width=1)
+    d.arc((int(width*.70),-int(height*.25),int(width*1.12),int(height*.38)),
+          35,155,fill=rgb(SOURCE_PALETTE["accent_primary"]),width=4)
+    d.arc((-int(width*.12),int(height*.58),int(width*.30),int(height*1.12)),
+          210,330,fill=rgb(SOURCE_PALETTE["accent_secondary"]),width=4)
+    d.line((0,2,width,2),fill=rgb(SOURCE_PALETTE["border"]),width=2)
+    d.line((0,height-3,width,height-3),fill=rgb(SOURCE_PALETTE["border"]),width=2)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    _indexed_png(im,path)
+
+
 def step_promo():
     ensure_dirs()
     # Dimensions follow the current SKIN asset production specification.
     render_reference_art((360, 240), ASSETS / "preview.png")
     render_reference_art((800, 450), ASSETS / "hero.png")
-    render_reference_art((1600, 920), ASSETS / "background.png")
+    render_background((1600, 920), ASSETS / "background.png")
     with Image.open(ASSETS / "hero.png") as hero:
         hero.convert("RGB").save(ASSETS / "hero.webp", "WEBP", quality=92, method=6)
     print("Rendered preview, hero, background and WebP hero from the approved NEON STAGE reference mockup.")
