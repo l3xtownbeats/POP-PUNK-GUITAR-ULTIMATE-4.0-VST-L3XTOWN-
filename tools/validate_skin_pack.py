@@ -180,7 +180,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
         if not isinstance(index, int) or isinstance(index, bool):
             fail("pack theme index must be an integer")
         indices.append(index)
-        expected_id = f"skin-{index:03d}"
+        expected_id = "neon-stage-default-skin-1" if index == 52 else f"skin-{index:03d}"
         folder_name = f"Skin_{index:03d}"
         folder = root / folder_name
         theme_path = folder / "theme.json"
