@@ -20,12 +20,12 @@ if errorlevel 1 (
 )
 
 if not exist "venv\Scripts\python.exe" (
-  echo [0/9] Creating virtual environment
+  echo [0/10] Creating virtual environment
   %PYTHON% -m venv venv
   if errorlevel 1 goto :fail
 )
 
-echo [0/9] Installing dependencies
+echo [0/10] Installing dependencies
 call venv\Scripts\activate.bat
 python -m pip install --upgrade pip
 if errorlevel 1 goto :fail
@@ -52,19 +52,23 @@ echo [5/9] SVG assets
 python 04_svg_assets.py
 if errorlevel 1 goto :fail
 
-echo [6/9] Preview and hero artwork
+echo [6/10] Preview, hero, background and WebP artwork
 python 05_promo.py
 if errorlevel 1 goto :fail
 
-echo [7/9] Draft theme and staging manifest
+echo [7/10] Reference and sprite atlas contact sheets
+python neon_stage_engine.py contact
+if errorlevel 1 goto :fail
+
+echo [8/10] Draft theme and staging manifest
 python 06_manifest.py
 if errorlevel 1 goto :fail
 
-echo [8/9] Final structural report
+echo [9/10] Final structural report
 python 08_report.py
 if errorlevel 1 goto :fail
 
-echo [9/9] Safe staging ZIP packaging
+echo [10/10] Safe staging ZIP packaging
 python 07_package.py
 if errorlevel 1 goto :fail
 
