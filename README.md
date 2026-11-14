@@ -2,8 +2,8 @@
 
 <img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — L3XTOWN AUDIO LAB" width="100%">
 
-# POP PUNK GUITAR ULTIMATE
-### SIGNAL FORGE · REV.17 · WINDOWS 10 x64 · VST3 · JUCE 7.0.12 · C++20
+# POP PUNK GUITAR ULTIMATE REV.18
+### SIGNAL FORGE · REV.18 · WINDOWS 10 x64 · VST3 · JUCE 7.0.12 · C++20
 
 **A focused pop-punk guitar instrument for riffs, power chords, tight rhythm parts and melodic hooks.**
 
