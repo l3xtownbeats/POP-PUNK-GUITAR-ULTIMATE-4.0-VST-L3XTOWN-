@@ -2791,3 +2791,15 @@ unverified until their steps complete successfully.
 коммита ожидают exact-head CI; до успешного завершения этих шагов статус PENDING.
 
 ==============================================================================
+
+## 2026-11-15 — NEON STAGE live hero artwork integration
+
+**Статус:** IMPLEMENTED IN SOURCE; EXACT-SHA BUILD RUNNING; HOST ACCEPTANCE PENDING.
+
+- Добавлена загрузка hero artwork по активному ID из `SKIN/theme_manifest.json` и `assets.hero` текущей темы; предусмотрен fallback на альтернативный путь hero asset и palette-based fallback, если artwork отсутствует.
+- В основном JUCE editor зарезервирована отдельная hero-зона над блоком девяти rotary controls; добавлен NEON STAGE title/descriptor поверх изображения.
+- Изменены только `Source/PluginEditor.cpp` и `Source/PluginEditor.h`; APVTS attachments/IDs, 7 FX toggles, preset browser, MIDI keyboard и audio/DSP paths не менялись.
+- Изолированная ветка: `work/neon-stage-rich-console-ui`; stacked draft PR #41 поверх PR #36.
+- Текущий source commit: `3e86560da2830467c607f3dc9db2964fb54108aa`.
+- GitHub Actions run `43652236286` — Windows VST3 workflow, IN_PROGRESS на момент записи. Предыдущий run `43652222305` отменён после нового commit; он не является проверкой результата.
+- Следующий шаг: проверить compile/CTest/pluginval результаты exact-SHA run; затем визуальная проверка в FL Studio 20 и продолжение графического оформления зон A–H.
