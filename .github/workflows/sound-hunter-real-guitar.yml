@@ -20,21 +20,25 @@ jobs:
         uses: actions/checkout@v4
       - name: List approved real-recorded sources
         run: python3 SoundHunter/sound_hunter_real_guitars.py --discover-only
-      - name: Test Sound Hunter path safety, release integrity and aggregate size ceiling
+      - name: Test Sound Hunter path safety, release integrity and unlimited Samples policy
         run: python3 tests/test_sound_hunter_importer.py
       - name: Download, verify and import real guitar audio
-        run: python3 SoundHunter/sound_hunter_real_guitars.py --max-library-gb 40
+        run: python3 SoundHunter/sound_hunter_real_guitars.py
       - name: Package additive Sound Hunter import
         run: |
           cd Samples
           zip -qr "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" SoundHunterImports
+          split -b 1800m "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.part-"
+          sha256sum "$RUNNER_TEMP"/PPGU_REAL_GUITAR_SAMPLES.part-* > "$RUNNER_TEMP/SAMPLES_PARTS_SHA256SUMS.txt"
           cp SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
+          rm -f "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip"
       - name: Upload verified sample library
         uses: actions/upload-artifact@v4
         with:
-          name: PPGU-REAL-GUITAR-SAMPLES-40GB-CEILING
+          name: PPGU-REAL-GUITAR-SAMPLES-UNLIMITED
           path: |
-            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.zip
+            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.part-*
+            ${{ runner.temp }}/SAMPLES_PARTS_SHA256SUMS.txt
             ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
           if-no-files-found: error
           retention-days: 30
