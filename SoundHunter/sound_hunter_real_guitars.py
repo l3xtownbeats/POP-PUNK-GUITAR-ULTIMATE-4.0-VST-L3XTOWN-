@@ -67,11 +67,6 @@ def release_asset_target(source_dir: Path, member_name: str) -> Path:
     return source_dir / "release_assets" / relative
 
 
-def within_run_limit(run_bytes: int, incoming_bytes: int, limit_bytes: int) -> bool:
-    """The Sound Hunter cap applies only to bytes imported by this run."""
-    return run_bytes + incoming_bytes <= limit_bytes
-
-
 def fetch_repo_archive(repo: str, dest: Path):
     meta=json_url(f"https://api.github.com/repos/{repo}")
     branch=meta.get("default_branch") or "main"
@@ -101,10 +96,7 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--samples", type=Path, default=ROOT/"Samples")
     ap.add_argument("--discover-only", action="store_true", help="list approved source links without downloading")
-    ap.add_argument("--max-gb", type=float, default=25.0)
     args=ap.parse_args()
-    if args.max_gb <= 0 or args.max_gb > 25.0:
-        raise SystemExit("The approved Samples capacity is capped at 25 GB.")
     catalog=json.loads(CATALOG.read_text(encoding="utf-8"))
     sources=catalog["sources"]
     print("SOUND HUNTER — REAL RECORDED GUITARS ONLY")
@@ -120,8 +112,7 @@ def main():
     run_id=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+"-"+os.urandom(3).hex()
     run_root=base/run_id
     run_root.mkdir()  # unique; fail rather than reuse
-    used=0  # Count only bytes added by this Sound Hunter run; existing Samples are not charged to this cap.
-    limit=int(args.max_gb*1024**3)
+    used=0  # Informational accounting only; no arbitrary total-library cap.
     seen=existing_hashes(samples)
     registry={"schema_version":"1.0","run_id":run_id,"classification":"REAL_RECORDED","assets":[],"sources":[]}
     tmp=run_root/"_download_tmp"; tmp.mkdir()
@@ -161,9 +152,6 @@ def main():
                         data=fetch_lfs_object(repo,pointer); source_size=len(data)
                     else:
                         data=None; source_size=info.file_size
-                    if not within_run_limit(used, source_size, limit):
-                        print(f"CAP REACHED at {sid}; remaining source files not imported.")
-                        break
                     if data is None: data=z.read(name)
                     digest=hashlib.sha256(data).hexdigest()
                     if digest in seen: continue
@@ -190,7 +178,7 @@ def main():
                         for name in rz.namelist():
                             if not safe_member(name) or PurePosixPath(name).suffix.lower() not in AUDIO: continue
                             info=rz.getinfo(name)
-                            if info.file_size < 128 or not within_run_limit(used, info.file_size, limit): continue
+                            if info.file_size < 128: continue
                             data=rz.read(name); digest=hashlib.sha256(data).hexdigest()
                             if digest in seen: continue
                             target=release_asset_target(source_dir, name)
@@ -204,7 +192,7 @@ def main():
                 print(f"  imported {copied} repository audio files")
         out=run_root/"SOUND_HUNTER_REGISTRY.json"
         out.write_text(json.dumps(registry,ensure_ascii=False,indent=2),encoding="utf-8")
-        print(f"Completed. {len(registry['assets'])} audio assets; library usage {used/1024**3:.2f}/{args.max_gb:.2f} GB.")
+        print("Completed; no configured total-library cap.")
     finally:
         # Only remove this run's temporary download directory, never existing user content.
         if tmp.exists(): shutil.rmtree(tmp)
