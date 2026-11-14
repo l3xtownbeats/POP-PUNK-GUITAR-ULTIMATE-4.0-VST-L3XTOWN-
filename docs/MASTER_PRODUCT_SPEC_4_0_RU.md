@@ -1203,3 +1203,8 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 Это уточнение расширяет предыдущее правило «без верхнего лимита» на все перечисленные сущности и категории обоих режимов. Оно не отменяет и не ослабляет ранее утверждённые правила структуры браузеров, MELODY/PATTERN, MIDI/APVTS/DSP/audio-thread contracts, лицензий, визуальной системы и качества. При обнаружении конфликта остановить затронутую часть и запросить личное решение пользователя.
 
 **Статусы:** APPROVED / DOCUMENTED после внесения; VERIFIED только после повторного fetch. IMPLEMENTED / TESTED не присваиваются этим документированием.
+
+
+## 2026-11-14 — ENGINE SOURCE INVENTORY REFERENCE
+
+The detailed current repository source inventory, module map, root-vs-Source duplicate review requirement, CMake/JUCE path discrepancies and next engineering sequence are recorded in the authoritative Info.txt section “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”. Full implementation code remains in canonical versioned source files and is indexed by CODE.txt; it is intentionally not duplicated into this specification. The audit is static only and does not claim build/test/host acceptance.
