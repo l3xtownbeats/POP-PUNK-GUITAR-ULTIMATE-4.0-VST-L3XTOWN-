@@ -33,6 +33,7 @@ jobs:
           python tests/test_audit_soundbank_policy.py
           python tests/test_artifact_splitter.py
           python tests/test_preset_sample_binding_plan.py
+          python tests/test_fx_dsp_parameter_wiring.py
       - name: Generate and validate missing legacy skin artwork
         shell: pwsh
         run: |
