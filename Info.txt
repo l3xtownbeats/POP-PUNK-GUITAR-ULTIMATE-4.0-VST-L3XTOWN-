@@ -3100,3 +3100,31 @@ Source commit: `6c82bdd4d80ba1c6860d19b92549c6ffec314d0a`.
 
 Аудируемый source fix: `6c82bdd4d80ba1c6860d19b92549c6ffec314d0a`.
 
+## 2026-11-15 — NEON STAGE G3/G4 asset-path correction and static preflight
+
+**Статус:** STATIC ASSET PREFLIGHT PASS; OFFICIAL G1–G4 VALIDATOR / WINDOWS PIPELINE PENDING.
+
+Обнаружена и исправлена несогласованность путей SVG между Skin Studio contract validator, исходным `Skin_053/theme.json` и `neon_stage_engine.py`. Канонический контракт проекта требует `svg/texture.svg`, `svg/bezel.svg`, `svg/crest.svg`. Приведены к нему:
+- `SKIN/Skin_053/theme.json` — поля `effects` и `assets` снова указывают на `svg/*.svg`;
+- `neon_stage_engine.py` — SVG создаются в `Skin_053/svg/`, а report gate проверяет те же пути;
+- существующие три SVG в `SKIN/Skin_053/svg/` обновлены до палитры NEON STAGE (cyan / midnight); временные дубли в `assets/` удалены.
+
+**Static G3 preflight:**
+- `assets/preview.png`: 360×240, indexed 8-bit PNG, PLTE present, PNG chunk CRCs pass;
+- `assets/hero.png`: 800×450, indexed 8-bit PNG, PLTE present, PNG chunk CRCs pass;
+- `svg/texture.svg`, `svg/bezel.svg`, `svg/crest.svg`: все три файла существуют, SVG root/closing tags присутствуют; сканирование не обнаружило script, foreignObject, external href/src, event handlers, DOCTYPE/ENTITY или javascript URL.
+Это ручной preflight по файлам, не запуск официального Python validator и не полная XML parser acceptance.
+
+**Static G4 preflight:**
+- authoritative registry: 102 записи, индексы 1–102 без пропусков и повторов, IDs уникальны;
+- `defaultSkin = skin-053`;
+- merged pack: `MERGED`, диапазон 53–102, 50 записей, `mergedRegistryTotal = 102`;
+- все 50 pack entries совпадают с registry по `id/index/name/family/layout/path/preview/hero`;
+- запись Skin_053 совпадает с ID `skin-053`, index 53 и `Skin_053/theme.json`.
+
+**Build-engine correction commit:** `cefeac5acd7c411b6d452375dc10c1aa635d61ad`.
+**Theme manifest correction commit:** `0fe59fc074c1f21d021a6e833d33503a8035b886`.
+SVG artwork commits: `1108cbc27764c6465f028dd9543dca619e745ae1`, `ca7e3aba8449489b50ed28f2eb66e111bd3728cf`, `c047d75444228a3ce53a4b94f7abf7d61d9d9a57`.
+
+Официальный `tools/validate_skin_pack.py`, `tests/ValidateSkinManifests.py`, Windows `NEON_STAGE_BUILD.bat`, G1–G4 execution, Release Build, CTest, pluginval strictness 5 и FL Studio 20 acceptance пока не запускались. Не объявлять G1–G4 официально PASS до выполнения валидаторов. Pixel-level match к семи макетам остаётся pending.
+
