@@ -3070,3 +3070,20 @@ remain open.
 
 **Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
 ==============================================================================
+
+## 2026-11-15 — NEON STAGE restore target correction
+
+**Статус:** SOURCE FIX COMMITTED; BUILD / TEST / HOST VERIFICATION PENDING.
+
+Ветка: `work/neon-stage-reference-preview-fix`. Исправлен callback кнопки **RESTORE NEON STAGE DEFAULT** в `Source/PluginEditor.cpp`: ранее он вызывал `loadSkinByIndex(52, true)`, что по фактическому `SKIN/theme_manifest.json` выбирало **SIGNAL FORGE / skin-052**, а не NEON STAGE. Теперь callback выбирает индекс `53`, соответствующий `skin-053` / **NEON STAGE**.
+
+Подтверждённые исходные факты перед исправлением:
+- `SKIN/theme_manifest.json`: `defaultSkin = skin-053`, `totalSkins = 102`; индексы 52–55 сопоставлены с SIGNAL FORGE, NEON STAGE, Carbon Studio 02 и Carbon Studio 03 соответственно.
+- Первый запуск без сохранённого предпочтения использует `skin-053`; при отсутствующем/некорректном сохранённом skin код возвращает ThemeManager к канонической NEON STAGE fallback palette.
+- `PPGUThemeManager::resetToDefault()` восстанавливает `Palette{}`, у которой ID/name и 21 базовый цвет соответствуют NEON STAGE.
+- Исправление затрагивает только UI skin selection; DSP, audio callback, APVTS, sampler ownership и MIDI routing не менялись.
+
+Source commit: `6c82bdd4d80ba1c6860d19b92549c6ffec314d0a`.
+
+**Проверки:** исходники и registry сопоставлены чтением GitHub-файлов. Build, CTest (`ppgu_theme_contracts` и полный набор), G1–G4, pluginval strictness 5, runtime-проверка установленного VST3 и FL Studio 20 acceptance в рамках этой записи не запускались. Исправление не объявляется BUILT/TESTED/HOST-VERIFIED. Pixel-to-grid sign-off по семи макетам остаётся pending.
+
