@@ -2778,3 +2778,57 @@ remain unchanged. Existing RGB/RGBA PNG support and CRC/decompression checks rem
 **Run 43625445350:** no CMake build, CTest or pluginval was reached because the
 skin-pack validation step failed first. Validation rerun is pending.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — REV-ULTRA-NEON-STAGE-CI-RECOVERY-005
+==============================================================================
+
+**Branch:** work/neon-stage-reference-preview-fix
+**Exact tested source HEAD:** 723860012a3d95459cff98560bf18aaf37afb90e
+
+**Verified GitHub Actions evidence (both runs tested the exact HEAD above):**
+- NEON STAGE Skin 053 Build: run 43625738976 — SUCCESS.
+  - Full asset pipeline completed.
+  - Palette ratios: primary/window 20.01:1; secondary/window 16.05:1;
+    disabled/window 10.22:1; LCD 18.23:1; accent/panel 15.37:1.
+  - Generated staging report: PASS; errors=[]; control_map_controls=28.
+  - Staging ZIP artifact: neon-stage-skin-053-staging, 1,412,693 bytes,
+    SHA-256 0d0c339ffbf867d1ba464a4b51c6f56e7fa930ed66b2354c245daf2de47f50f8.
+- POP PUNK GUITAR ULTIMATE - Windows VST3: run 43625738927 — SUCCESS.
+  - Windows x64 Release configure/build: PASS.
+  - REV.14 skin-pack validator: PASS G1/G2/G3/G4 (50 themes).
+  - CTest: 12/12 passed, 0 failed (2.20 sec).
+  - pluginval strictness level 5: completed successfully.
+  - Interim CI artifact uploaded: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-INTERIM-CI-NOT-RELEASE,
+    1,666,493,243 bytes. This is explicitly NOT a COMPLETE ZIP or release artifact.
+- These results apply only to exact tested HEAD
+  723860012a3d95459cff98560bf18aaf37afb90e. They must not be transferred to
+  any subsequent commit SHA.
+
+**Remaining acceptance gates:**
+- FL Studio 20 manual host acceptance has not been performed/verified.
+- No claim of COMPLETE ZIP or release readiness.
+- The workflow's 12 CTest names include ppgu_theme_contracts; the requested
+  ppgu_skin_manifest_contract and ppgu_theme_manager_contract names were not
+  separately observed in this run. Do not claim those named targets passed.
+- Pixel-level match of all controls to the approved mockups remains unverified.
+
+**REV ULTRA registry conflict discovered during master-prompt audit:**
+- Authoritative SKIN/theme_manifest.json currently contains totalSkins=102 and
+  102 entries, with continuous indices 1..102, not 52 entries.
+- Skin_053 is already registered as NEON STAGE.
+- Skin_054 is already registered as Carbon Studio 02.
+- Skin_055 is already registered as Carbon Studio 03.
+- Therefore the REV ULTRA instruction that assumes 52 registered skins and
+  assigns SOUND FORGE / BLACKOUT VINTAGE to 054/055 conflicts with the live
+  authoritative registry. No IDs, names, registry entries, default pointer,
+  or runtime theme resources were changed. Resolve this identity decision
+  explicitly before attempting to repurpose 054/055 or add replacement themes.
+
+**Safety / scope review:** no DSP, audio callback, APVTS IDs, sampler ownership,
+MIDI routing, JUCE runtime layout, registry or default-skin pointer was changed.
+NEON STAGE remains GENERATION PENDING VALIDATION for release purposes; staging
+and CI gates passed on the exact SHA above, but host acceptance and release gates
+remain open.
+==============================================================================
