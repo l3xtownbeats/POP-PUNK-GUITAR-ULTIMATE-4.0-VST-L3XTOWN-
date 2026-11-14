@@ -713,3 +713,21 @@ User explicitly confirmed the complete conversation-wide reconciliation as corre
 **Development gate:** every production change must check this baseline, preserve APVTS/state/preset/MIDI/audio contracts, append Info.txt and CODE.txt in the same commit, and attach exact verification evidence. Priority safety > realtime > sound > resources > UX does not authorize requirement deletion.
 
 **Status:** USER RATIFIED / MANDATORY / IMMUTABLE BASELINE / DEVELOPMENT GATE. Documentation only; no production implementation claimed.
+
+
+## 2026-11-14 — DOCUMENTATION RECONCILIATION: PRESET/PATTERN BROWSERS AND APPROVED UI CONTRACT
+
+**Type:** documentation / requirements recovery only; no production source changed.  
+**Branch:** `work/rev17-full-reconciliation-2026-11-14`  
+**Exact documentation commit SHA:** recorded in the corresponding 2026-11-14 Info.txt entry after this commit.  
+**Paths:** `CODE.txt`, `Info.txt`, `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`, `SKIN/CONTROL_INVENTORY_MATRIX_RU.md`.
+
+Recovered and formalized user-approved behavior that was scattered across prior chats, mockups and older requirements:
+- Corrected reference hierarchy: first approved mockup controls complete layout/appearance/control placement; `02 INTERFACE NEON STAGE AUTOCHORDS` supplies palette only. SIGNAL FORGE identity + NEON STAGE default treatment.
+- Preset Browser: BROWSER/FAVORITES/CATEGORIES; eight categories; tags/search/sort/counts; filtering never loads; previous/next/favourite; non-committing Preview; double-click/Load commits; factory read-only; user Save/Save As/Rename/Delete; Import/Export Bank/Rescan; persistent user presets; transactional state/asset handling.
+- Pattern Browser: section-first Intro/Verse/Chorus/Bridge/Outro, then independent pattern selection; real metadata/search/filter/favorites; actual-path Preview; explicit Apply commit; Back/Cancel rollback; no conflation with preset/tone/harmony/articulation/playback/rhythm selectors; no synthetic substitute for missing guitar performance recordings.
+- AutoChords independent selector architecture and layout; main control inventory (nine rotary, seven bypass switches, eight FX EDIT pages, three play modes); additional panels, skin inheritance, keyboard visibility and truthful disabled states.
+- FX preset chain behavior, AMP & TONE separation, import/discovery/curation safety, skin parity and visual reference inventory.
+- Historical visual attachments have not all been recovered/physically committed; archival/hash status remains OPEN rather than falsely certified.
+
+No production code, test, build, runtime, audio, MIDI, APVTS, preset, SoundBank or skin asset was modified. No tests/build/host verification were run for this documentation-only change. See the complete dated contract in Info.txt and the appended master/control specifications.
