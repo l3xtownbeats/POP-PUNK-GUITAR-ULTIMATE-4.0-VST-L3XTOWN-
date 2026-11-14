@@ -202,6 +202,23 @@ The user reconfirms and approves the following requirements already documented i
 
 This entry confirms the user's approval of the above requirements; it does not claim that the features have already been implemented.
 
+
+## Final user-confirmed direct-import folder name and automatic organization
+
+This section supersedes earlier references in this policy to `Samples/Import Guitar Sample/` (singular) or `Samples/Import Bank Guitar/` as the direct-import folder.
+
+The exact required direct-import folder is:
+
+`Samples/Import Guitar Samples/`
+
+It must be located directly inside the main `Samples/` directory. The user will place or copy incoming guitar sample files into this one intake folder and is not expected to manually sort them into genre, instrument, format, tone or articulation subfolders.
+
+The PPGU system/plugin/engine is responsible for scanning this folder, validating and analyzing its contents, identifying formats and metadata, classifying and tagging assets, deduplicating them, registering them in the unified sample registry, and organizing their logical placement in the library taxonomy. The engine should present scan results and flag uncertain classifications rather than silently guessing. Once processed, assets should be managed through the registry and library organization; the intake folder is not the user's manual filing task.
+
+Scanning, hashing, decoding and analysis must run outside the real-time audio thread. Preserve original files and provenance; do not delete or overwrite intake files during processing. License metadata remains attached to assets, but pending license review must not block lawful local intake.
+
+This is a product requirement only. Do not claim the folder watcher, scanner, classifier or automatic organizer exists until the code is implemented and tested.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
