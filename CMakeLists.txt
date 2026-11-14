@@ -182,6 +182,8 @@ add_test(NAME ppgu_skin_registry_contract
 
 add_test(NAME ppgu_rev18_skin_asset_audit
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/TestRev18SkinAssetAudit.py)
+add_test(NAME ppgu_skin_gallery_interaction_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/TestSkinGalleryInteractionContract.py)
 
 # The orphaned root-level OverlayManager/SecureSkinImport test files are not
 # registered: their corresponding production headers and implementations are
