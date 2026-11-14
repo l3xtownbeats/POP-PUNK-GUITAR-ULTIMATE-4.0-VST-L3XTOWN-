@@ -3302,3 +3302,36 @@ This is visual-only. No DSP/audio/APVTS/MIDI/sampler/preset changes. Fresh Windo
 **VST3 follow-up:** initial Windows Release attempt 43636609794 failed during compilation. The compiler identified unsupported Palette::accentGlow / TextButton::outlineColourId references in the new LookAndFeel and const/incorrect owner heading access in auxiliary-window painting. These compile issues were corrected in Source/PluginEditor.cpp and Source/UI/PPGUMultiWindowWorkspace.cpp. A fresh Windows VST3 workflow run 43637007840 is now building exact source SHA b0fed1bc1e0580bc3c499bf730d30d44a7b36d63. CTest, VST3 bundle verification and pluginval strictness 5 have not yet run for this SHA; do not mark them PASS until the workflow reports success.
 
 **Visual scope:** NEON STAGE design system and main/auxiliary control styling are in SKIN/NEON_STAGE_INTERFACE_SYSTEM_RU.md. The procedural sprite/preview pack is staging output; it does not prove the sprite atlases are wired into runtime rendering. The approved preview/hero are reference artwork, not screenshots captured from the compiled JUCE plugin. Pixel-perfect parity and FL Studio 20 host acceptance remain separate gates.
+
+## 2026-11-15 — MASTER PROMPT REV ULTRA 3.0 принят как контракт производства NEON STAGE
+
+**Источник:** прямое указание пользователя в этой беседе.  
+**Базовая ветка:** `work/neon-stage-reference-preview-fix`.  
+**Проверенный baseline HEAD перед записью:** `766b39e515da216d69b9e4438706e95af0e1fbf0`.  
+**Статус:** SPECIFICATION ACCEPTED / RECONCILIATION AUDIT COMPLETE / FULL ASSET GENERATION NOT YET COMPLETE.
+
+REV ULTRA 3.0 задаёт обязательный производственный контракт для единой темы NEON STAGE: главный экран, все вспомогательные окна, панели, меню, кнопки, ручки, слайдеры, клавиатура, индикаторы, галерея, Import Guitar, FX EDIT, AutoChords и честные SETUP-ONLY поверхности. Визуальные изменения остаются строго отделёнными от DSP, audio callback, APVTS IDs/semantics, sampler ownership, MIDI routing и SoundBank. Массовая генерация других тем запрещена до пользовательского утверждения эталонного NEON STAGE.
+
+### Аудит фактического состояния и расхождений с новым контрактом
+
+1. **Registry / нумерация.** На baseline HEAD authoritative `SKIN/theme_manifest.json` содержит 102 записи с непрерывными индексами 1–102; canonical NEON STAGE имеет ID `neon-stage-default-skin-1`, index 52, path `Skin_052/theme.json`. Это расходится с фразой §2 о 51 зарегистрированной теме. По иерархии источников REV ULTRA 3.0 сам назначает фактический registry источником истины, поэтому текущую нумерацию 1–102 и index 52 не перенумеровывать и не удалять без отдельного решения и миграционного плана.
+
+2. **Reference mockups.** В корне репозитория находятся семь файлов эталонных изображений 01–07; текущий `validate_neon_stage_reference.py` проверяет наличие и декодирование всех семи. В §1 перечислены пять ключевых макетов 01/02/03/04/06, тогда как §12 ссылается на 01–07. До визуального sign-off все семь остаются сохранёнными reference inputs; новые ассеты нельзя объявлять pixel-matched только по факту успешного декодирования.
+
+3. **Palette contract.** Текущий `SKIN/Skin_052/theme.json` содержит 21 старый palette key set (`window_bg`, `panel`, `control_bg`, `accent` и др.) и старые значения. Это не совпадает с новым обязательным набором 21 токена и hex-значениями §4 REV ULTRA 3.0. Новый набор из 21 токена отдельно пересчитан по WCAG: primary 17.56:1; secondary 9.29:1; disabled 3.56:1; LCD 13.49:1; accent 9.38:1 — все пять заданных порогов выполняются. Runtime mapping, theme schema, generator и validators ещё должны быть согласованно мигрированы; до этого старый PASS не засчитывается как G1 нового контракта.
+
+4. **Control map.** В текущем theme manifest найдено 28 control entries. Схема содержит 27 required IDs, а `sync_selector` учитывается текущим validator как 28-й ID. Нужно сопоставить эти ID с актуальными runtime controls/APVTS bindings и требованиями REV ULTRA 3.0 (включая уникальный `fx_reverb`, без переименования APVTS bool `reverb`). Сам факт наличия 28 записей не доказывает parity или корректность всех bindings.
+
+5. **Asset pipeline.** Проверенный staging artifact из run `43637174774` / SHA `57216d09d5c47ac12c16a3e0a7cd6f8701beb3ad` содержит preview/hero, базовые SVG, knob filmstrips, общие button/FX/slider/LED изображения и control_map. В нём отсутствует часть нового обязательного контракта: `LICENSE.txt`, `SELF_CHECK.txt`, `background.png`, `panel_header.svg`, полный набор JSON-индексов атласов, полный набор knobs_amp/toggles/keys/meters/window_chrome/icons и дополнительные панели/окна. Поэтому прежний staging PASS не означает COMPLETE по §3/§6/§7 REV ULTRA 3.0.
+
+6. **CI evidence.** NEON STAGE staging workflow run `43637226550` завершился SUCCESS на точном SHA `766b39e515da216d69b9e4438706e95af0e1fbf0`; его gates: asset pipeline, текущий G1–G4 validator и полный registry/manifests validator. Эти gates пока реализуют прежний более узкий asset/palette contract и не проверяют весь REV ULTRA 3.0. Это не VST3 Release Build, не CTest PASS, не pluginval strictness 5 и не FL Studio 20 acceptance. На момент аудита Windows VST3 workflow run `43637007840` относился к более раннему SHA `b0fed1bc1e0580bc3c499420409e0a46078e46b8` и ещё выполнялся; он не является подтверждением текущего HEAD.
+
+### Зафиксированная последовательность продолжения
+
+- **Phase A:** согласованно обновить canonical Skin_052 palette (21 токен), schema, ThemeManager palette adapter, procedural generator и G1 tests; не вводить свободные hex.
+- **Phase B:** утвердить полный 28-control map на основе реального runtime/APVTS inventory; не менять APVTS IDs и значения.
+- **Phase C:** расширить генератор и G3 validator до полного файлового контракта §3/§6/§7; добавить SHA-256/provenance, deterministic atlas JSON indices, LICENSE и SELF_CHECK.
+- **Phase D:** сгенерировать только эталонный NEON STAGE, прогнать G1–G4, сохранить contact sheets и atlas previews для пользовательского утверждения. До утверждения batch 8–12 тем не запускать.
+- **Phase E:** только после утверждения — применять общую тему к существующим JUCE компонентам/окнам и выполнять отдельные build/CTest/pluginval/FL Studio gates.
+
+Никакой новый COMPLETE, BUILD VERIFIED, pixel-match или HOST-VERIFIED статус этим аудитом не присваивается.
