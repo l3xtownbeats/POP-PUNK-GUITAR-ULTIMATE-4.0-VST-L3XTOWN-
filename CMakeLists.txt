@@ -25,7 +25,7 @@ juce_add_binary_data(PPGUPresetData
     HEADER_NAME "PPGUData.h"
     NAMESPACE BinaryData
     SOURCES
-        presets/factory_bank_300.json
+        presets/factory_bank_500.json
 )
 
 juce_add_binary_data(PPGUTestData
