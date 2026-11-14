@@ -17,7 +17,7 @@
     ".aac",
     ".wma",
     ".sf2",
-    ".sf3",
+    ".sf3"
   ],
   "sources": [
     {
@@ -126,7 +126,6 @@
       "notes": "Recorded archtop guitar multisample; catalogue marks CC0-1.0."
     }
   ],
-  "max_library_gib": 40,
   "policy_notes": "Aggregate Samples audio-library hard ceiling: 40,000,000,000 bytes (decimal 40 GB). No per-run Sound Hunter cap. Existing supported audio assets count toward the ceiling; deduplicated assets do not consume additional capacity.",
   "max_library_gb": 40
 }
