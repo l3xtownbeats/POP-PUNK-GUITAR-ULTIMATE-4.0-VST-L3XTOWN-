@@ -1246,3 +1246,14 @@ NEON STAGE DEFAULT остаётся основным и автоматическ
 ## REV.18 — актуальные утверждённые изменения к генеральной спецификации
 
 Нормативное дополнение: `PPGU_REV18_USER_APPROVED_SUPERSEDING_REQUIREMENTS_2026-11-14_RU.md`. В нём зафиксированы: SAMPLES без искусственного лимита размера; 500 READY MELODY + 500 READY PATTERN; единый FX EDIT с 10–15 реальными DSP effects/processors и сохранением восьми страниц/семи bypass switches; ровно 16 готовых тем SKIN GALLERY при неизменном NEON STAGE DEFAULT; SETTINGS GOOD/NORMAL/NIGHT/ECO, 2x/4x/8x/16x и lock controls; ABOUT REV.18/L3XTOWN/2026 и RU/EN illustrated manuals; полный ZIP release package с SHA-256 и split parts при ограничениях транспорта. Основная последовательность модулей и платформенные требования не меняются.
+
+
+## Binding visual identity decision — 2026-11-15
+
+**NEON STAGE = DEFAULT SKIN-1.** NEON STAGE is the principal product theme, primary visual style, and canonical graphical shell of POP PUNK GUITAR ULTIMATE. It is the required first-launch default, reset target, and safe visual fallback, and it defines the coordinated visual identity of the main editor and its auxiliary windows.
+
+- SIGNAL FORGE remains the working-interface / engineering-shell name; it is not the name of the primary theme and must not replace NEON STAGE.
+- SOUND FORGE is SKIN-2 and BLACKOUT VINTAGE is SKIN-3; both are independent alternative themes.
+- Preserve all existing skin IDs, indices, and persisted user selections. Do not silently renumber or overwrite them.
+- The current NEON STAGE implementation branch identifies the theme as skin-053 / Skin_053. Older branches that do not contain that registered entry require a controlled registry/assets migration before changing their runtime default; never point a registry at a missing theme or bypass G1–G4.
+- This product decision does not claim pixel-perfect mockup acceptance or complete runtime rendering until those gates have actually passed.
