@@ -502,3 +502,14 @@ Research public interviews, gear/effect-chain breakdowns, tone recipes and free 
 **Preset count correction:** the current approved target supersedes the older 300 minimum. Require at least 500 unique MELODY+PATTERN presets total, with approximately 600 as the target. Travis Barker 82 is a separate category of 82 unique complete presets; do not merge, duplicate or double-count it. The old 300-entry catalogue remains a legacy audit baseline. Counts never replace functional and audio validation.
 
 Research evidence includes Ernie Ball String Theory (resonant-note approach and echo in A&A), Guitar World interview on *I-Empire* (chiming upper-frequency parts, compression/delay/flanger/stereo echo), and Guitar.com/GRAMMY interviews on *Lifeforms* (broader/rawer guitar palette and gear context). Exact track-specific chains remain subject to further research. No implementation or audio validation is claimed by this scope update.
+
+
+
+## Обязательное аудиотабу: никакого пластикового и нереалистичного звучания
+
+**Статус: APPROVED / MANDATORY QUALITY GATE.** Для PPGU 4.0 категорически недопустимы пластмассовые, пластиковые, искусственные, дешёвые, стерильные или явно синтетические гитарные тембры, если они воспринимаются как нереалистичная имитация гитары. Это безусловное табу для фабричных пресетов, сэмплов, акустических и электрических режимов, демо, предпрослушивания и финального продукта. Целевое позиционирование — дорогой инструмент по качеству звука; количество пресетов, эффектов и гигабайтов не может оправдывать компромисс по реалистичности.
+
+Каждый источник и каждый пресет должны оцениваться на слух в реальном игровом контексте: ноты по всему заявленному диапазону, разные velocity, атака/затухание, note-off/release, артикуляции, одиночные ноты и аккорды, переходы и динамика. Проверять через DRY/NATIVE TONE MATCH, PROCESSED SOURCE MATCH и WET-пути. Допускается минимальная или нулевая дополнительная DSP-обработка, когда исходная запись уже убедительно соответствует требуемому тону; качественно записанный обработанный источник также допустим, если он реалистичен и не требует бессмысленного дублирования эффектов.
+
+Любой пресет с пластиковым/синтетическим оттенком, неестественной атакой или затуханием, одинаковым «клавишным» тоном на разных нотах, слышимыми артефактами растяжения либо неправдоподобной динамикой получает **REJECTED / NOT READY**. Его нельзя выпускать в фабричной библиотеке до исправления источника, маппинга, артикуляции, velocity-слоёв или DSP и повторного прослушивания. Автоматические тесты и pluginval не заменяют слуховую проверку. Критерий должен быть отражён в acceptance tests и чек-листах релиза; никаких заявлений об аудиопроверке без фактически выполненного теста.
+
