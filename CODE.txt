@@ -904,3 +904,11 @@ Approved requirements:
 
 **Объём транзакции:** документационная запись; исходники и assets не менялись. Build/CTest/pluginval/FL Studio 20 не запускались.
 **Статус:** REQUIREMENTS RECORDED; IMPLEMENTATION/TESTS NOT CLAIMED.
+
+
+## TX-REPO-PRESENTATION-001 — 2026-11-14
+- `README.md` — refreshed product landing page: current two-mode definition, platform, architecture, approved scope, licensing, engineering status and evidence boundaries; stale PUNK GROUP/legacy skin claims removed.
+- `assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` — replaced the old magenta guitar illustration banner with a premium NEON STAGE-inspired product-console hero. Explicitly a design showcase, not a live plugin capture.
+- `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
+- No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
+- Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
