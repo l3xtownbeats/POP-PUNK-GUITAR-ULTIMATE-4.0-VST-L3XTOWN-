@@ -1503,7 +1503,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
         auto hero = heroArtworkBounds.toFloat();
         g.setColour(p.token("control_bg"));
         g.fillRoundedRectangle(hero, 9.0f);
-        g.saveState();
+        juce::Graphics::ScopedSaveState savedState(g);
         juce::Path clip;
         clip.addRoundedRectangle(hero, 9.0f);
         g.reduceClipRegion(clip);
@@ -1515,7 +1515,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
                                                p.token("window_bg").withAlpha(0.88f),
                                                hero.getCentreX(), hero.getBottom(), false));
         g.fillRect(hero);
-        g.restoreState();
         g.setColour(p.token("control_border").withAlpha(0.9f));
         g.drawRoundedRectangle(hero, 9.0f, 1.0f);
         g.setColour(p.token("text_primary"));
