@@ -3555,3 +3555,11 @@ REV ULTRA 3.0 задаёт обязательный производственн
 5. Открыто: execute tests, CI/CTest wiring, consumer inventory, active-vs-archive schema, ThemeManager fallback/reset, Gallery order/persistence, G1–G4 and full VST3 gates, host acceptance.
 6. Изменения только в указанной рабочей ветке; распространение в другие branches и main не выполнялось.
 ================================================================================
+
+### Follow-up hardening — 2026-11-15
+- Audit path validation additionally rejects Windows drive paths, backslash paths and symlink-resolved paths outside SKIN; this prevents a Windows runner from interpreting an apparently relative POSIX path as an absolute drive path.
+- Audit result now distinguishes PASS / REVIEW_REQUIRED / BLOCKED. Any unresolved legacy selector-policy review prevents a PASS result.
+- Added test coverage for Windows drive/path traversal inputs and for the non-passing legacy selector review.
+- CTest registration added: `ppgu_neon_stage_skin1_migration_audit_contract` in `CMakeLists.txt`.
+- Follow-up commits: audit hardening `1ffd2fb223fab6585f03d335dd2ee8c2803aa56d`; test hardening `f62c686df0c7e0262a9c26900a16f1713c5394cc`; CTest registration `d39bb6a2261a9f9886ac82f92257c48fe81570cf`.
+- These commits are source changes only. Unit test execution, CTest, Windows Release, pluginval, package and host acceptance remain PENDING until exact-SHA CI evidence is observed.
