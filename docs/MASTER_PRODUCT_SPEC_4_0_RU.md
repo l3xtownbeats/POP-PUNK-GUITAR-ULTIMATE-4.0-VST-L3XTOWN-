@@ -1208,3 +1208,10 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 ## 2026-11-14 — ENGINE SOURCE INVENTORY REFERENCE
 
 The detailed current repository source inventory, module map, root-vs-Source duplicate review requirement, CMake/JUCE path discrepancies and next engineering sequence are recorded in the authoritative Info.txt section “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”. Full implementation code remains in canonical versioned source files and is indexed by CODE.txt; it is intentionally not duplicated into this specification. The audit is static only and does not claim build/test/host acceptance.
+
+
+## Обязательный релизный объём фабричных пресетов
+
+Фабричная библиотека релиза должна содержать не менее **300 уникальных и полностью готовых MELODY + PATTERN пресетов суммарно**. Каждый засчитываемый пресет должен быть функционально реализован, связан с разрешённым к использованию источником, музыкально различим и проверен на слух. Заглушки, пустые записи, дубли и переименованные копии не засчитываются.
+
+Каталог должен покрывать утверждённые группы/стили/жанры/поджанры, акустические и электрические гитары, а также музыкальные назначения и секции песни: intro, verse, pre-chorus, chorus, post-chorus, bridge, breakdown, riff, lead/hook, arpeggio/picking, fills/transitions и outro, если они подходят стилю. Секционные варианты учитываются как отдельные пресеты только при реальном отличии исполнения, звучания, артикуляции или функции. Расширенная цель 500–600 остаётся желательным направлением после выполнения обязательного минимума. Travis Barker 82 — отдельная категория и отдельный подсчёт.
