@@ -309,6 +309,7 @@ def step_package():
 def step_report():
     errors=[]
     theme_path=SKIN/"theme.json"
+    control_map_path=SKIN/"control_map.json"
     if not theme_path.is_file(): errors.append("theme.json missing")
     else:
         theme=json.loads(theme_path.read_text(encoding="utf-8"))
