@@ -4,7 +4,7 @@
   "totalSkins": 102,
   "defaultSkin": "skin-052",
   "selector": "SKIN",
-  "status": "102-themes-neon-stage-single-unified-product-identity",
+  "status": "NEON-STAGE-is-the-single-unified-interface-skin-theme-shell",
   "themes": [
     {
       "id": "skin-01",
@@ -478,7 +478,7 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "LEGACY ARCHIVE 053",
+      "name": "NEON STAGE — LEGACY ARCHIVE",
       "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
