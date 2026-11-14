@@ -12,7 +12,7 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = Path(__file__).with_name("real_guitar_sources.json")
-AUDIO = {".wav",".wave",".flac",".ogg",".oga",".mp3",".aif",".aiff",".caf",".opus",".m4a",".aac",".wma",".sf2",".sf3",".sfz",".dspreset"}
+AUDIO = {".wav",".wave",".flac",".ogg",".oga",".mp3",".aif",".aiff",".aifc",".caf",".opus",".m4a",".aac",".wma",".au",".snd",".raw",".pcm",".sf2",".sf3",".sfz",".gig",".dspreset"}
 UA = "PPGU-SoundHunter/1.0 (+real-recorded-guitar-only)"
 
 def request(url: str, timeout: int = 90) -> bytes:
