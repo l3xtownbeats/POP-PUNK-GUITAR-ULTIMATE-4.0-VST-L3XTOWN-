@@ -679,3 +679,26 @@ This addendum records the user's explicit MAJOR approval and supersedes earlier 
 - SOUND HUNTER: no restriction on lawful user-local download/import/load/use of commercial libraries. Licensing status governs factory inclusion and redistribution only; never silently block, hide, disable, delete or quarantine a user's library solely because it is commercial or not redistributable by PPGU.
 
 **Status:** APPROVED REQUIREMENTS / DOCUMENTATION ONLY. No production source, DSP, APVTS, preset payload, soundbank, skin assets, runtime UI, tests or build outputs were changed by this addendum.
+
+
+## MAJOR UI clarification (2026-11-14): MELODY / PATTERN preset browser split
+
+This approved clarification supplements the earlier general browser specification.
+
+### MELODY — three-part browser
+The MELODY browser contains exactly three coordinated areas:
+
+1. **PRESET / GUITAR IDENTITY:** pop-punk guitar/genre, the user's PUNK GROUP or band-style identity, and individual song part/section. Selects which guitar/source and section character are active.
+2. **STYLE / PLAYING ARTICULATION:** how notes are performed; examples include Open Chord, Palm Mute and Muted. Other articulations (such as tremolo/picking) are exposed only when supported by mapped recordings. STYLE does not select the rhythm sequence.
+3. **PATTERN / RHYTHM VARIATION:** optional rhythmic figure/variation associated with the current guitar/section/style. It can be activated within MELODY mode without changing ordinary melody-note semantics.
+
+### MELODY MIDI behaviour
+Ordinary MELODY keys play one corresponding pitched guitar note and decay naturally; a single melody note does not start a strumming loop. The optional PATTERN layer is activated by additional pattern-trigger MIDI notes/events in Piano Roll or by a dedicated on-screen PATTERN button/control. The agreed key-zone convention reserves C0–C1 for pattern-trigger keys and C1+ for ordinary melody notes; pattern-trigger keys do not double as chromatic guitar notes. Holding a trigger sustains the selected pattern under its gate/host-sync rules; release ends it cleanly. The user can switch rhythm variations in the PATTERN area/button, with safe host-synchronised transitions and no stuck/duplicate triggers.
+
+### PATTERN mode
+PATTERN remains a separate performance mode: mapped keys select chord/voicing and trigger rhythmic guitar performance. Guitar/source identity, PLAYING STYLE / ARTICULATION and RHYTHMIC PATTERN remain separate dimensions. MELODY and PATTERN have separate performance semantics/state but share the approved sample library/cache. Preserve the already approved PATTERN categories and eight slots per section.
+
+### Common safeguards
+PREVIEW does not change active preset/project/persistent DAW state or saved slots; APPLY/SELECT commits; CANCEL restores previous state. PREV/NEXT and search/filter/sort/favorites preserve current result context. Do not expose unsupported articulations or patterns as playable; do not invent missing PUNK GROUP names. This direct approval allows the user's PUNK GROUP identities and song sections to be shown in the MELODY PRESET area, superseding any earlier conflicting display restriction only for that area.
+
+**Status:** approved requirement; documentation only, not evidence of source implementation or validation.
