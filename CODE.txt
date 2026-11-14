@@ -701,3 +701,19 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 **Files:** `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md`, `Info.txt`, `CODE.txt`, `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md`.
 **Purpose:** establish a complete requirements/implementation/roadmap register with explicit status and evidence boundaries. See the master register for the complete checklist and acceptance gates.
 **Tests/CI/host:** not run; documentation-only transaction.
+
+
+## TX-MASTER-REGISTER-001 — CLOSEOUT / REMOTE READBACK
+- Documentation commit: `ad0a1a9e328e04d8c79e3167889e80d8e352880b`.
+- Parent: `51c68e377ee5905e40684299348a0a4b56acac11`.
+- Canonical branch: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+- Verified remote HEAD equals documentation commit.
+- Verified remote blob SHAs:
+  - `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md`: `1ff17aafb9e0d016b7683096f81c4af14dee7343`
+  - `Info.txt`: `66bd39412ac23aa900cf19a76206c1ce339e3ac8`
+  - `CODE.txt`: `462335838b9a51652afc9a8be610bd37a093515a`
+  - `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md`: `1f67af814cfc6ba33a1b98e693d588264172e4e0`
+- All four remote files were fetched at the resulting commit; content presence and blob identities verified.
+- Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
+- Production source changed: NO.
+- Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
