@@ -113,6 +113,15 @@ def audit(skin_root: Path) -> dict:
         if not exists:
             issues.append({"severity": "BLOCKER", "code": "MISSING_THEME_MANIFEST",
                            "object": str(skin_id), "detail": path_value})
+        else:
+            theme_data = read_json(manifest_path, path_value, issues)
+            if theme_data is not None:
+                actual_identity = (theme_data.get("id"), theme_data.get("index"))
+                expected_identity = (skin_id, index)
+                if actual_identity != expected_identity:
+                    issues.append({"severity": "BLOCKER", "code": "MANIFEST_REGISTRY_IDENTITY_MISMATCH",
+                                   "object": path_value,
+                                   "detail": f"manifest={actual_identity!r}; registry={expected_identity!r}"})
 
     expected_indices = set(range(1, total + 1)) if total >= 0 else set()
     actual_indices = set(indices)
