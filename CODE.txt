@@ -671,3 +671,14 @@ Preflight observed canonical REV.17 HEAD `d5c811233725925ea32f10815c9efae6eda2e0
 **Operating requirement:** T0 preflight before each task; each assistant proposal marked PROPOSED until explicit approval; each user approval/revision logged; each discrete implementation and commit/push recorded; tests tied to exact SHA; readback of remote refs and journals; INFO and CODE updated together for production transactions. No background watcher is claimed.
 
 **Status:** GOVERNANCE PROTOCOL / DOCUMENTATION ONLY. No production source changed. Tests/CI not run for this documentation update.
+
+
+## 2026-11-14 — TX-DEC-002: retrospective assistant proposal approval
+
+User explicitly instructed that assistant proposals made during the preceding two days are to be treated as approved unless they conflict with newer decisions. Reviewed available assistant proposal records and current Info/CODE journals. Detailed decision IDs D-RETRO-001..019 are in `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md`.
+
+Approved compatible directions: preserve approved visual shell/mockups; REV.17 canonical with selective all-branch reconciliation; extend existing SamplePool/SFZ/streaming; Sound Hunter REV 10.1 + Import Workbench Stage 2 under newer S6 licensing pipeline; documentation role separation; isolated historical-text review; performance workstream sequence; immutable Palette Snapshot/lock-free paint/concurrency testing under 21-token/28-property contract; CHECK→ANALYZE→FIX→RE-ANALYZE→RESULT; PATTERN section-first functional contract; safe production OverlayManager/SecureSkinImport; Gallery transaction lifecycle; asset-level Sound Hunter legal gate; complete GUI/control mapping; exact-SHA release gates.
+
+Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL FUNCTIONS order; old main-only source-branch shorthand; old PATTERN-P1 global priority ranking; ambiguous “DREAMING IN NEON” deliverable pending mapping to the newer approved NEON STAGE/SIGNAL FORGE UI register.
+
+**Status:** DECISION REGISTER / DOCUMENTATION ONLY. No source code changed and no implementation/test status promoted.

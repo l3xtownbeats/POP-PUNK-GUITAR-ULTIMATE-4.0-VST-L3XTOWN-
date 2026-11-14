@@ -2204,3 +2204,14 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 **Capability boundary:** real-time logging is performed during active repository work and before/after each discrete step. No background GitHub watcher/daemon is running between conversations; do not claim otherwise.
 
 **Status:** GOVERNANCE PROTOCOL DOCUMENTED; canonical branch update pending commit/readback; no production code changed by this entry.
+
+
+## 2026-11-14 — RETROSPECTIVE APPROVAL OF ASSISTANT PROPOSALS (TX-DEC-002)
+
+По прямому указанию пользователя проведена ретроспективная сверка предложений ассистента за 12–14 ноября 2026 года. Совместимые с более новыми решениями предложения утверждены; противоречащие или неоднозначные части сохранены в истории, но ограничены/заменены более новыми решениями. Полный реестр D-RETRO-001..019, источники, границы и статусы находится в `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md`.
+
+**APPROVED:** сохранение утверждённой графической оболочки и mockups; REV.17 как канонической линии с выборочной сверкой веток; расширение существующего SamplePool/SFZ/streaming без параллельного движка; Sound Hunter REV 10.1 + Import Workbench Stage 2 только в рамках более нового S6 licensing pipeline; роли Info/CODE/docs; изолированная проверка полного исторического текста; performance workstream (ThemeManager/build → benchmark/allocation audit → measured optimization → stress/FL Studio 20); immutable Palette Snapshot/lock-free paint + concurrency tests при сохранении 21 tokens/28 properties; CHECK→ANALYZE→FIX→RE-ANALYZE→RESULT; PATTERN section-first contract; production OverlayManager/SecureSkinImport security/lifecycle implementation; Gallery Preview/Apply/Back/Favorites/enlarged preview; Sound Hunter provenance/license/SHA-256 quarantine gate; full GUI/control-to-action audit; exact-SHA release gates.
+
+**SUPERSEDED / LIMITED:** прежний общий порядок PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL FUNCTIONS заменён более новым порядком из раздела K этого журнала; старое ограничение branch review только веткой main расширено на все релевантные ветки; ранжирование PATTERN P1 как безусловного следующего пункта заменено актуальной очередностью Info.txt K; “DREAMING IN NEON” остаётся исторической меткой до сопоставления с точным утверждённым NEON STAGE/SIGNAL FORGE deliverable.
+
+**Важно:** утверждение предложения означает утверждение направления/контракта, а не реализацию функции. Реальный статус остаётся по доказательствам. Не утверждать, что тесты или функции выполнены этим документальным решением.
