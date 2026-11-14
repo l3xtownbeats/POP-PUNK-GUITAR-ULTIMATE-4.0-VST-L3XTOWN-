@@ -49,6 +49,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 artwork generation failed.' }
           python tools/generate_rev18_skin_artwork.py --root SKIN --check
           if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 artwork export is not deterministic.' }
+          python tools/generate_rev18_control_frames.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 control-state generation failed.' }
+          python tools/generate_rev18_control_frames.py --root SKIN --check
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 control-state export is not deterministic.' }
       - name: Validate 300-preset factory catalog
         shell: pwsh
         run: python tools/validate_factory_bank.py presets/factory_bank_300.json

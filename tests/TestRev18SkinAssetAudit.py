@@ -205,5 +205,40 @@ class Rev18ContrastAuditTests(unittest.TestCase):
             AUDIT.luminance("white")
 
 
+
+class Rev18ControlFrameManifestTests(unittest.TestCase):
+    def test_control_state_manifest_verifies_five_states_and_hashes(self) -> None:
+        import hashlib, json
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            folder = root / "assets/master/controls"
+            folder.mkdir(parents=True)
+            records = []
+            for state in AUDIT.STATES:
+                rel = f"assets/master/controls/test_control_{state}.png"
+                path = root / rel
+                path.write_bytes(png_with_size(512, 512))
+                raw = path.read_bytes()
+                records.append({
+                    "id": f"control.test_control.{state}", "path": rel,
+                    "bytes": len(raw), "dimensions": "512x512",
+                    "sha256": hashlib.sha256(raw).hexdigest(),
+                    "crc32": f"{zlib.crc32(raw) & 0xffffffff:08X}",
+                    "origin": "[DECISION] test control-state frame",
+                })
+            manifest = {
+                "skinId": "skin-001", "assetGroup": "master-control-state-frames",
+                "states": list(AUDIT.STATES), "controlIds": ["test_control"],
+                "records": records,
+            }
+            (folder / "control_states_manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8"
+            )
+            AUDIT.validate_control_state_manifest(root, ["test_control"])
+            (root / records[0]["path"]).write_bytes(b"tampered")
+            with self.assertRaisesRegex(ValueError, "byte count mismatch|SHA-256 mismatch"):
+                AUDIT.validate_control_state_manifest(root, ["test_control"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -237,6 +237,40 @@ def contrast(a: str, b: str) -> float:
     return (hi + .05) / (lo + .05)
 
 
+def validate_control_state_manifest(theme_dir: Path, control_ids: list[str]) -> None:
+    """Verify generated master control frames and their SHA-256/CRC32 evidence."""
+    folder = theme_dir / "assets/master/controls"
+    manifest_path = folder / "control_states_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("skinId") != "skin-001" or manifest.get("assetGroup") != "master-control-state-frames":
+        raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
+    if tuple(manifest.get("states", ())) != STATES:
+        raise ValueError(f"{manifest_path}: control states differ from REV.18")
+    declared = manifest.get("controlIds", [])
+    if not set(control_ids).issubset(set(declared)):
+        raise ValueError(f"{manifest_path}: required control IDs are missing")
+    records = manifest.get("records", [])
+    by_path = {item.get("path"): item for item in records if isinstance(item, dict)}
+    for control_id in control_ids:
+        for state in STATES:
+            rel = f"assets/master/controls/{control_id}_{state}.png"
+            path = theme_dir / rel
+            record = by_path.get(rel)
+            if not path.is_file() or not isinstance(record, dict):
+                raise ValueError(f"{manifest_path}: missing control frame or record: {rel}")
+            raw = path.read_bytes()
+            if record.get("bytes") != len(raw):
+                raise ValueError(f"{path}: byte count mismatch")
+            if record.get("sha256") != hashlib.sha256(raw).hexdigest():
+                raise ValueError(f"{path}: SHA-256 mismatch")
+            if record.get("crc32") != f"{zlib.crc32(raw) & 0xffffffff:08X}":
+                raise ValueError(f"{path}: CRC32 mismatch")
+            if record.get("dimensions") != "512x512" or png_info(path) != (512, 512):
+                raise ValueError(f"{path}: expected 512x512 control-state PNG")
+            if not isinstance(record.get("origin"), str) or not record["origin"].strip():
+                raise ValueError(f"{path}: provenance origin is missing")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("SKIN"))
@@ -327,6 +361,12 @@ def main() -> int:
                         add("FAIL", "CONTROL_FRAME_SIZE", f"{path.relative_to(root)} is {w}x{h}; minimum 512x512.")
                 except (OSError, ValueError, zlib.error) as exc:
                     add("FAIL", "CONTROL_FRAME_PNG", str(exc))
+
+    try:
+        validate_control_state_manifest(theme_dir, control_ids)
+        add("PASS", "CONTROL_STATE_MANIFEST_VALID", "All REV.18 master control frames and checksum records are valid.")
+    except (OSError, ValueError, zlib.error, json.JSONDecodeError) as exc:
+        add("FAIL", "CONTROL_STATE_MANIFEST_INVALID", str(exc))
 
     for folder, label in (
         ("assets/master/textures", "MASTER_TEXTURES"),
