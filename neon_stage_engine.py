@@ -89,6 +89,7 @@ def vertical_strip(size,path):
     strip.save(path,optimize=True)
 
 def step_palette():
+    ensure_dirs()
     checks={
       "text_primary/window_bg":(PALETTE["text_primary"],PALETTE["window_bg"],17.0),
       "text_secondary/window_bg":(PALETTE["text_secondary"],PALETTE["window_bg"],10.0),
@@ -172,6 +173,7 @@ def svg_knob_pointer():
 def step_svg():
     ensure_dirs()
     svg_dir=SKIN/"svg"
+    svg_dir.mkdir(parents=True,exist_ok=True)
     texture=f'''<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
 <rect width="128" height="128" fill="{PALETTE['window_bg']}"/>
 <path d="M0 16H128 M0 64H128 M0 112H128" stroke="{PALETTE['highlight']}" stroke-opacity=".08"/>
