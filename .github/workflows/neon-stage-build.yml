@@ -60,7 +60,8 @@ jobs:
           for ($attempt = 1; $attempt -le 4; $attempt++) {
             # Rebase the asset promotion on the newest branch tip. Reset only tracked
             # files; generated dist/ assets remain available for the next attempt.
-            git fetch origin "+refs/heads/$branch:refs/remotes/origin/$branch"
+            $refspec = "+refs/heads/{0}:refs/remotes/origin/{0}" -f $branch
+            git fetch origin $refspec
             if ($LASTEXITCODE -ne 0) { throw "git fetch failed on attempt $attempt" }
             git reset --hard "origin/$branch"
             if ($LASTEXITCODE -ne 0) { throw "git reset failed on attempt $attempt" }
