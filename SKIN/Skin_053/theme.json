@@ -351,5 +351,6 @@
     "Legacy archive only. The sole active product identity, main theme, skin and interface shell is NEON STAGE.",
     "Legacy archive only; the sole active interface, skin, theme and shell is NEON STAGE.",
     "Palette tokens aligned to the canonical NEON STAGE 21-token contract; archive identity and index 53 remain unchanged."
-  ]
+  ],
+  "schema": "ppgu-theme/1.2"
 }
