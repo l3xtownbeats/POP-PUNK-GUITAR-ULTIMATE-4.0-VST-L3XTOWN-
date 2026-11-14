@@ -1,4 +1,4 @@
-name: NEON STAGE Skin 053 Build
+name: NEON STAGE DEFAULT SKIN-1 Build
 
 on:
   push:
@@ -36,13 +36,13 @@ jobs:
 
       # Promote only the two reviewed gallery images on the dedicated review branch.
       # All other generated sprites remain staging artifacts until separately reviewed.
-      - name: Sync reviewed NEON STAGE preview and hero to Skin_053
+      - name: Sync reviewed NEON STAGE preview and hero to Skin_052
         if: github.ref_name == 'work/neon-stage-reference-preview-fix'
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $sourceRoot = Join-Path $PWD 'dist/neon_stage_staging/Skin_053/assets'
-          $targetRoot = Join-Path $PWD 'SKIN/Skin_053/assets'
+          $sourceRoot = Join-Path $PWD 'dist/neon_stage_staging/Skin_052/assets'
+          $targetRoot = Join-Path $PWD 'SKIN/Skin_052/assets'
           $changed = $false
           foreach ($name in @('preview.png', 'hero.png')) {
             $source = Join-Path $sourceRoot $name
@@ -56,16 +56,16 @@ jobs:
             } else { '' }
             if ($sourceHash -ne $targetHash) {
               Copy-Item -LiteralPath $source -Destination $target -Force
-              Write-Host "Staged canonical Skin_053 asset: $name ($sourceHash)"
+              Write-Host "Staged canonical NEON STAGE asset: $name ($sourceHash)"
               $changed = $true
             } else {
-              Write-Host "Canonical Skin_053 asset already matches staging output: $name"
+              Write-Host "Canonical NEON STAGE asset already matches staging output: $name"
             }
           }
           if ($changed) {
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -- SKIN/Skin_053/assets/preview.png SKIN/Skin_053/assets/hero.png
+            git add -- SKIN/Skin_052/assets/preview.png SKIN/Skin_052/assets/hero.png
             git commit -m "assets: sync reviewed NEON STAGE preview and hero"
             git push origin "HEAD:$env:GITHUB_REF_NAME"
           }
@@ -73,9 +73,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: neon-stage-skin-053-staging
+          name: neon-stage-default-skin-1-staging
           if-no-files-found: warn
           path: |
-            dist/NEON_STAGE_SKIN_053_STAGING.zip
+            dist/NEON_STAGE_DEFAULT_SKIN_1_STAGING.zip
             dist/NEON_STAGE_BUILD_REPORT.json
             dist/neon_stage_staging/palette_report.json
