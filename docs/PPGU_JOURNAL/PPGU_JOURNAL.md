@@ -3057,3 +3057,30 @@ Baseline: `assets/sound_hunter/registry.json` содержит assetCount=0/sour
 **Сохранение истории:** старые файлы не удаляются; после переноса они помечаются как архивные указатели, чтобы не потерять исторические данные и ссылки.
 **Область изменения:** документация; production source, DSP, sampler, MIDI/APVTS и аудио-активы не изменялись.
 **Проверки:** исходные файлы повторно считаны из `main`; содержимое объединено. Build/CTest/pluginval/FL Studio host tests: NOT RUN (документационная операция).
+
+
+## 2026-11-14 — BUILD GRAPH RECONCILIATION / CANONICAL SOURCE TARGETS
+
+**Задача:** продолжить production-разработку с проверки реальной сборочной цепочки, не меняя утверждённые audio/MIDI/APVTS contracts.
+
+### Обнаружено при статическом аудите
+- Root `CMakeLists.txt` ссылался на отсутствующие `Source/Engine/*`, `Source/UI/MultiWindowWorkspace.cpp`, `Source/UI/Panels.cpp`, несуществующие `Resources/Embedded/*` и `Resources/TestData/TestProbe.wav`.
+- JUCE directory/gitlink отсутствует в репозитории, при этом CMake вызывал `add_subdirectory(JUCE)`; Windows workflow не клонировал JUCE отдельно.
+- CMake указывал устаревшие/несуществующие пути тестов; реальные модули sampler находятся в `Source/Sampler/`, performance/scheduler часть в основном header-only в `Source/Performance/`, а актуальные тесты находятся в `tests/`.
+- CI run `43561654587` на SHA `27db171bd62828fccf479982dd402d20a9717830` завершился FAILURE на проверке JUCE BinaryData contract: отсутствовали обязательные targets `PPGUPresetData` и `PPGUTestData`, уникальные `HEADER_NAME` и соответствующие links. Это baseline failure, не результат новой конфигурации.
+
+### Выполнено
+1. Commit `bee7f9a07c6fb505780da81097b98fe47a625575`: CMake переподключён к реально существующим `Source/Sampler` и `Source/UI` файлам, тестовым каталогам и каталогу factory preset JSON; добавлен pinned JUCE 7.0.12 FetchContent provisioning.
+2. Commit `8b07c9cf3485f990bc1653b031e3b611ba74de04`: исправлен контракт BinaryData — `PPGUPresetData` генерирует `PPGUData.h`, `PPGUTestData` генерирует `PPGUTestData.h`; добавлена интеграционная цель `ppgu_processor_pattern_tests`, собирающая настоящий Processor/Editor путь с безопасным текстовым fixture.
+3. Подключены существующие standalone contracts для Pattern Scheduler, AutoChord, Chord Transition, Circle of Fifths, SPSC queue, SFZ parser, Page Cache, SamplePool/streaming, ThemeManager, panel layout, overlay, skin import и sound asset registry.
+4. CMake target names и source/test paths приведены к фактической структуре; отсутствующие исходники и ресурсы больше не перечисляются.
+
+### Проверки и статус
+- Статический path inventory: VERIFIED по GitHub Contents API для использованных путей и директорий.
+- JUCE BinaryData checker: исправления внесены, но текущий результат ещё не получен.
+- Windows GitHub Actions run `43561929542` для SHA `8b07c9cf3485f990bc1653b031e3b611ba74de04`: QUEUED на момент записи.
+- Configure / compile / CTest / pluginval / FL Studio 20 host: NOT RUN / NOT VERIFIED на момент записи. Не объявлять build или продукт готовым до результатов точного SHA.
+- Production DSP, sampler runtime, MIDI/APVTS semantics и sample assets: не менялись в этой операции.
+
+### Следующий шаг
+Получить результат run `43561929542`, исправлять только подтверждённые CI/config/build ошибки; затем пройти runtime contract и утверждённые продуктовые пробелы (FX EDIT до 15 fully implemented effects + cabinets, полноценный AUTO DISCOVER, NEON STAGE DEFAULT и точный parity с mockups). 

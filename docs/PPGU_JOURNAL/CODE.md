@@ -627,3 +627,18 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Rule:** append all non-code project events to PPGU_JOURNAL.md as work is performed; record source changes here with exact SHA, paths/symbols and test evidence. No additional active journals.
 **Initial consolidation commit:** 2dcbbc49acc112abdb184a72ac505b6608e9db55.
 **Build/tests:** NOT RUN; documentation-only change.
+
+
+## 2026-11-14 — CMAKE / BUILD GRAPH RECONCILIATION
+
+**Build/config commits:** 
+- `bee7f9a07c6fb505780da81097b98fe47a625575` — replaced stale `Source/Engine/*` and absent resource paths with canonical `Source/Sampler/*` and `Source/UI/*`; added JUCE 7.0.12 FetchContent pin; established sampler-core library and actual existing test paths.
+- `8b07c9cf3485f990bc1653b031e3b611ba74de04` — satisfied binary-data contract with `PPGUPresetData` / `PPGUTestData`, unique generated headers, renamed plugin target to `PopPunkGuitarUltimate` as required by validator, and added `ppgu_processor_pattern_tests` using the real Processor/Editor source path.
+
+**Paths:** `CMakeLists.txt`; source paths included by the CMake graph: `Source/PluginProcessor.cpp`, `Source/PluginEditor.cpp`, `Source/Sampler/*.cpp`, `Source/UI/*.cpp`, `Source/Performance/*.h`; tests under `tests/`; root standalone security/overlay test sources; embedded data from `presets/factory_bank_300.json` and `tests/assets/ppgu_test_data.txt`.
+
+**Symbols/targets:** `ppgu_sampler_core`, `PopPunkGuitarUltimate`, `PPGUPresetData`, `PPGUTestData`, `ppgu_processor_pattern_tests`, and independent CTest contract executables.
+
+**Reason/root cause:** existing root CMake referenced paths not present on main, expected an unvendored JUCE folder without provisioning, and violated the repository's BinaryData target/header/link contract. Prior CI baseline run `43561654587` on SHA `27db171bd62828fccf479982dd402d20a9717830` failed at the BinaryData checker with missing `PPGUPresetData` / `PPGUTestData` and missing HEADER_NAME declarations.
+
+**Verification:** GitHub Contents API confirmed the referenced source/test paths exist. Windows run `43561929542` on SHA `8b07c9cf3485f990bc1653b031e3b611ba74de04` was QUEUED when this entry was prepared. Configure/build/CTest/pluginval/host results are NOT RUN / NOT VERIFIED; no PASS is claimed. Production C++ implementation and audio assets were not changed.
