@@ -682,3 +682,242 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Tests:** regression tests are committed and wired into the workflow but have NOT YET BEEN EXECUTED on GitHub Actions. A successful download, artifact, sample count, or size is NOT claimed. The user must start a fresh workflow run on the corrected HEAD; the previous failed run cannot validate these changes.
 
 **Safety:** no pre-existing sample library files were overwritten, moved, or deleted; no source samples or VST3 DSP code were modified. This is a focused Sound Hunter bug fix only.
+
+
+## 2026-11-14 — Factory Preset Bank 500: catalog/build gate
+
+**Commits:** catalog `79d4e2ab0d382b84bb862ee3e03370c0a67129e3`; integration `99577e84744c1de13bdd8c7dd8db84cf79fc7829`.
+
+**Changed paths:**
+- `presets/factory_bank_500.json` — 500 definitions, 250 MELODY + 250 PATTERN; compact tuple-v1 16-step pattern events; artist-specific reference-track cleanup; genre/style and articulation metadata.
+- `CMakeLists.txt` — embeds `presets/factory_bank_500.json` in PPGUPresetData.
+- `.github/workflows/vst3-build.yml` — validates/packages the 500 bank; removes legacy `factory_bank_300.json` from release PRESETS folder after copying legacy preset files.
+- `tools/validate_factory_bank.py` — exact 250+250/500 gate; finite parameter ranges; unique IDs/names; artist/reference-track integrity; Melody articulation metadata; Pattern tuple schema/ranges.
+- `PPGU_APPROVED_PARAMETERS.md` — registry advanced to v2 and factory count updated to 500.
+- `docs/PRESET_FACTORY_500_RU.md` — schema, archetypes, coverage and validation limits.
+
+**Structural preflight:** PASS (500 total, 250 per mode, unique IDs/names, 21 artist profiles, 16 genre families, 20 melody archetypes, 20 pattern archetypes; all Pattern definitions have tuple-v1 events). This was a deterministic structural check, not execution of the Python validator, Windows build, CTest, pluginval, or host acceptance.
+
+**Important runtime boundary:** the catalog is authored data only. Presets remain runtime-validation-pending until actual loader/APVTS binding, sample mappings, articulation routing and Pattern event integration are implemented and auditioned. No BUILD VERIFIED or 500-playable claim.
+
+
+## 2026-11-14 — Engineering delegation, 500-bank package correction, and CI status
+
+**User authority:** explicit approval for autonomous technical decisions, implementation, optimization, reversible defect repair, use of available tools and reuse of public/compatible technologies, bounded by the approved master plan, legal rights, realtime contracts, data safety and existing public API/MIDI/APVTS compatibility. Full scope and operating guardrails are recorded in docs/PPGU_JOURNAL/PPGU_JOURNAL.md.
+
+**Code/data changes observed on branch soundhunter-unbounded-library:**
+- presets/factory_bank_500.json: normalized performance.patternLengthBeats=4 for all 250 PATTERN records, satisfying the validator's 4/4 pattern-cycle contract.
+- .github/workflows/vst3-build.yml: corrected the active release-package validation path to PRESETS/factory_bank_500.json, while retaining cleanup of the obsolete PRESETS/factory_bank_300.json. This prevents the release check from looking for the retired 300-bank as the active catalog.
+- Commit for package-path correction: 0913642e313aeb2d0fae82e57439c99699dcd682; follow-up correction preserving legacy cleanup while checking the 500 bank: d0c67a7481572debbc2324e162a053af9932d0d8.
+- The 500-bank catalog/build integration commits remain 79d4e2ab0d382b84bb862ee3e03370c0a67129e3 and 99577e84744c1de13bdd8c7dd8db84cf79fc7829.
+
+**CI:** GitHub Actions run 43577554118 was observed in_progress (build job). No successful completion, artifact, Windows/FL Studio host acceptance or release is claimed here. Job-log retrieval returned GitHub BlobNotFound; this is a tooling/log availability issue, not evidence of pass/failure. Re-check run status and artifacts before stating a result.
+
+**Testing boundary:** the JSON structural preflight was previously PASS; the workflow's final build/test outcome is pending. The run is not a substitute for separate exact-SHA Windows 10 x64 build, CTest, pluginval and FL Studio 20 acceptance.
+
+
+## 2026-11-14 — REV.18 FULL SCOPE CONFIRMATION (DOCUMENTATION ONLY)
+
+**User-approved scope:** FX EDIT consolidated into one window/system with 10–15 previously approved, genuinely implemented DSP effects plus cabinet processing; 16 complete skins with NEON STAGE default and graphics-only variation; SETTINGS resource profiles GOOD/NORMAL/NIGHT/ECO, applicable 2x/4x/8x/16x oversampling modes, selectable 2/4/8 voices minimum and Serum-style persistence locks; ABOUT product/creator/version/engine metadata; full illustrated RU+EN manuals; SAMPLES replaces SOUNDBANK as the user-facing name and has no artificial size/file-count cap; minimum 500 functional MELODY plus 500 functional PATTERN presets; 82 additional Travis Barker-style presets; full Windows 10 x64 VST3/FL Studio 20 release package with licenses, resources, user preset support, SHA-256 manifest and multipart ZIP recovery.
+
+**Canonical order retained:** MAIN EDITOR → MELODY → PATTERN → AUTOCHORDS → FX EDIT → AMP & TONE → DOUBLE → SOUND ENGINE → SAMPLES → PRESETS → IMPORT GUITAR → AUTO DISCOVER → CURATOR → SKIN GALLERY → SETTINGS → PERFORMANCE → ABOUT → TESTING → RELEASE.
+
+**Superseded constraints:** new no-artificial-cap SAMPLES instruction supersedes earlier 25 GB and 25–30 GB size caps/targets; minimum 500 per mode supersedes the interim 250+250 catalog as a final acceptance target. Legal redistribution, provenance, hashes, deduplication, additive-only imports, actual disk/filesystem/platform limits and realtime performance protections remain mandatory.
+
+**Important implementation boundary:** this commit records approved scope only. It does not implement DSP processors, skins, locks, documentation, sample assets, preset playback or packaging. The exact previously approved FX list and 16 skin names must be reconciled from their source specifications rather than guessed. The current 500-entry JSON is an interim structural catalog, not the final 500-per-mode playable bank. No build/test/host PASS is claimed.
+
+
+## 2026-11-14 — MASTER-PLAN COMPATIBILITY CONFIRMATION
+
+The user explicitly reconfirmed the REV.18 requirement table as a **supplement to**, not a replacement for, the previously approved PPGU master plan. Preserve all existing approved scope, module order, UI/MIDI/APVTS/state contracts, sound requirements, artist/style coverage, licensing, realtime constraints and acceptance gates. Integrate additions into existing modules; merge duplicate descriptions of the same window/system; do not create parallel conflicting implementations. Newer approval supersedes only directly conflicting named parameters. Resolve genuine API/behavior conflicts explicitly rather than silently changing contracts. This is an approval/documentation update only; no implementation or test pass is implied.
+
+
+## 2026-11-14 — PRESET COUNT REQUIREMENT CORRECTION
+
+The user clarified the approved factory preset target: **at least 500 fully functional presets total across MELODY + PATTERN**, with a practical rounded planning target of **approximately 600 total**. This is NOT 500 per mode and NOT 1,000 total. The combined bank includes core presets plus additional group/artist/style/genre presets. Both modes must be meaningfully covered; their split is determined by musical needs, not a mandatory 250/250 or equal allocation. The 82 Travis Barker-style presets remain a required curated subset and count toward the combined total only when genuinely implemented, assigned to a mode and QA-validated; do not double-count them.
+
+Historical 250 MELODY + 250 PATTERN JSON remains an interim structural catalog, not proof of 500–600 playable presets. Superseded targets of 500 per mode / 1,000 total are withdrawn. Empty, duplicate, placeholder or nonfunctional entries do not count. This is a requirements correction only; it does not claim implementation, runtime validation, tests or host acceptance.
+
+
+## 2026-11-14 — ENGINEERING QUALITY / CORE PERFORMANCE DIRECTIVE
+
+User-approved global engineering directive: maximize the sound engine/core and complete plugin's sound quality, capability, reliability and functional completeness while minimizing CPU, RAM, disk I/O, latency, startup time, energy use and other host-system costs. Keep architecture explicit, coherent, modular and constructive. Eliminate duplicate modules/data/contracts, contradictory requirements, ambiguous behavior, dead paths and unnecessary complexity; maintain one source of truth for each parameter, state, format, DSP processor and MIDI/APVTS binding. No known defect may be waived or hidden: fix every discovered bug, crash, race, leak, glitch, click, stuck note, corruption, build/test failure or contract conflict before accepting the affected stage. Release requires zero known open blocker/critical/high defects, zero known approved-contract conflicts/duplicates and all required tests passing. Unknown latent defects cannot honestly be guaranteed away; use static analysis, regression, fuzz/stress, profiling and target-host validation to reduce that risk. Keep audio callback realtime-safe; move file/network/decode/analysis and other unbounded work off the audio thread. Use parallelism only when profiling proves benefit without races, deadlocks or jitter. Measure CPU, RAM, latency, startup, polyphony, streaming/cache and deadline misses on target hardware. Preserve the full approved feature scope; optimize implementation rather than silently removing functionality. Never claim zero defects or performance gains without evidence. This is a global requirement, not a claim that implementation or verification is already complete.
+
+
+## 2026-11-14 — TRAVIS BARKER PRESET COLLECTION IS SEPARATE
+
+User clarification: the 82 Travis Barker-style presets must remain a distinct standalone collection/category. Do not merge, intermix, or duplicate them inside the main MELODY preset groups or the main PATTERN preset groups. Do not create separate copies of the 82-pack in both modes. Individual entries may carry the appropriate MELODY/PATTERN engine-mode metadata when their actual structure requires it, but the collection's user-facing organization remains separate. Count unique presets once only. The 82 entries must be genuinely functional and validated, not duplicated placeholders. This clarification supersedes any earlier wording that implied distributing or mixing this pack into the core Melody/Pattern groups. The core bank requirement remains at least 500 total, with approximately 600 as the planning target across MELODY + PATTERN.
+
+
+## 2026-11-14 — GUITAR SAMPLE QUALITY ENHANCEMENT PIPELINE
+
+User-approved requirement: when a guitar sample is not sufficiently good or does not fit its target preset/style, improve its musical quality and suitability using the PPGU sound engine and/or the plugin's implemented FX, AMP & TONE and CAB processing. Analyze source quality first; use appropriate gain staging, EQ/filtering, dynamics, transient shaping, saturation/drive, amp/cab, modulation, delay/reverb and engine-level mapping/interpolation/envelope/loop improvements only where useful. Tune processing to the intended guitar role/style; louder or more processed does not automatically mean better. Preserve original source files unchanged; keep derivatives separately with provenance, source SHA-256 and processing metadata. Do not attempt to conceal irreparably poor source material with excessive processing: reject unsuitable samples and seek better layers/sources. Validate processed samples in real presets and musical context for attack, pitch/range, velocity/articulation coverage, palm mute, sustain/release, noise, clicks, phase, headroom, clipping, CPU and latency. Any offline preparation must run outside the audio callback and be cacheable/reproducible. Every shipped sample must either pass quality gates natively or have a documented, verified processing chain; this directive does not claim that existing assets have already been processed or validated.
+
+
+## 2026-11-14 — MULTI-SAMPLE LAYERING FOR COMPLEX PRESETS
+
+User-approved requirement: a complex preset may combine multiple simultaneous sounds/layers sourced from SAMPLES. Support independently configured layers with per-layer asset/mapping, key and velocity ranges, articulation, gain, pan, tuning, start/offset, envelope, filtering and optional dedicated FX/AMP/CAB routing. Support velocity splits/crossfades, key splits, round-robin/alternates and articulation switching where the source data supports them. Ensure phase/time alignment, polarity/delay correction where needed, smooth transitions, balanced gain/headroom and clipping protection. Support shared and per-layer processing without needless duplicate DSP instances. Do not impose an arbitrary tiny layer-count limit; enforce measured resource budgets using voice budgeting, streaming, preload/cache and sample reuse. Never load the entire SAMPLES library into RAM. Keep all file I/O, decode, analysis and graph preparation off the audio callback. UI and preset audition must expose and play the complete layered sound. Validate each layer and the combined preset for loading, mapping, transitions, clicks, phase, clipping, stuck voices, CPU, RAM and latency. Layering is used only when musically justified; no fake/inactive layers count as functionality.
+
+
+## 2026-11-14 — PRESET QUALITY UNDER STRICT CPU/RAM BUDGETS
+
+Approved engineering contract: use the sound engine, SAMPLES, justified layering, articulations, AMP/TONE, CAB and FX to achieve each preset's promised sound, but never by uncontrolled resource growth. A preset load must not load the entire SAMPLES library or trigger excessive RAM, CPU, or load time. Load only required assets; use streaming, selective preload, bounded caches, shared buffers and release of unused resources. Reuse DSP safely and avoid duplicate processing. Give every preset a measured resource profile (CPU/RAM, active layers/voices, streaming/preload, latency, load time). Use voice/layer budgets and resource-aware GOOD/NORMAL/NIGHT/ECO strategies; preserve the preset's essential musical identity and never silently disable promised functionality. Shed only secondary/optional costly processing when necessary, without clicks, stuck notes, abrupt voice cuts or balance changes. Apply oversampling and costly DSP only where audibly beneficial. Keep analysis, decode, layer-graph construction and derived-asset preparation off the realtime audio callback. Validate every complex/layered preset by listening tests and profiling in solo and mix contexts, across notes, velocity, articulations and polyphony. If the promised sound cannot be achieved within budget, optimize source assets, layers, routing and algorithms; do not brute-force CPU/RAM. A preset is not VERIFIED until both sonic and resource acceptance tests pass.
+
+
+## 2026-11-14 — LAYERING PURPOSE AND DECISION CRITERIA
+
+USER CONFIRMED / APPROVED: Layering exists to achieve the highest-quality, complete, convincing guitar sound when one sample, one sound, or one one-shot is insufficient for the preset's promised result. It is a means to a sonic goal, not a requirement to stack multiple sounds in every preset. First determine whether one suitable sample/one-shot plus correct articulation and processing is sufficient. Add complementary layers only when they provide an audible, justified improvement (e.g. body/tone, attack, alternate timbre/mic, sustain, harmonic component or texture). Align timing, phase, pitch, dynamics and gain; prevent phase cancellation/comb filtering, double attacks, muddiness, clipping and unjustified CPU/RAM cost. Test solo and in mix across notes, velocity and articulations. Use the minimum number of layers needed to achieve the promised guitar sound within CPU/RAM/latency budgets. If one source is already sufficient, do not add layers. If source material cannot meet the quality target after reasonable processing/layering, reject or replace it rather than brute-force processing or resource use.
+
+
+## 2026-11-14 — SOURCE-FIRST SAMPLE QUALITY
+
+USER APPROVED: Prioritize high-quality source assets: clean, well-recorded, musically suitable samples with good attack/sustain and no unacceptable noise, clipping, artifacts, phase or tuning problems. Prefer production-ready or appropriately pre-processed sounds when their tone and dynamics fit the preset, but verify them objectively; "already processed" is not automatically better. Do not design the library around repairing poor sources with heavy DSP. Good source material should reduce unnecessary EQ, compression, saturation, denoise, transient repair and other processing. Add only processing that is genuinely needed and audibly beneficial; avoid automatic effects, double processing and excessive gain/EQ/compression. Preserve original assets; store derived versions separately with provenance, license, source SHA-256 and reproducible processing metadata. Select by musical role, articulation, note/velocity coverage, tone and preset style—not filename alone. Test in the preset and mix; reject a source that is unsuitable rather than forcing it into a role. Source-first selection must improve sound quality and reduce CPU/RAM/latency and signal-chain complexity. Verify redistribution rights independently; sonic quality or pre-processing does not grant sample redistribution rights.
+
+
+## 2026-11-14 — UNIVERSAL GUITAR ASSET QUALITY GATE (ALL SOURCES)
+
+USER EXPLICITLY APPROVED / CONFIRMED. This is a project-wide policy, not limited to SAMPLES: it covers every guitar-related sample, one-shot, loop, multisample, phrase, articulation, recording, sound library, sample pack, supported format (including WAV/SFZ/SF2/SF3/GIG), and any other guitar audio component used, imported, discovered, indexed, bundled, layered or played by PPGU.
+
+Use only the highest reasonably available quality, or assets demonstrably close to the required professional level and suitable for their role. Do not bulk up the library with weak, noisy, poorly recorded or unsuitable content. If an asset arrives processed, its actual processed sound must already be good, clean, musical and fit for purpose; verify artifacts rather than assuming processing guarantees quality. If an asset is unprocessed/DI/clean, PPGU may use FX, AMP & TONE, CAB and engine resources to shape it for the preset, but the chain must remain efficient and resource-bounded. Never compensate for poor source quality with excessive FX, oversampling, layers or duplicate DSP. Choose a better source, a suitable combination, or reject an asset if it needs disproportionate CPU/RAM to approach the target. Apply identical quality gates to loops, phrases, one-shots, multisamples, packs and complete libraries: inspect noise, clipping, artifacts, phase, tuning, timing, transients, sustain/tails, velocity/articulation coverage, musical usefulness and consistency. Preserve original files; identify derived versions separately with provenance, hashes and reproducible processing metadata. Deduplicate without losing meaningful articulations/variants. Check licensing and redistribution rights independently for every source. Verify actual preset playback and measure CPU, RAM, load time, latency and realistic-polyphony behavior; no asset/preset is VERIFIED until both sonic and technical gates pass. Target: consistently high-quality guitar sound with bounded, efficient processing across the entire plugin.
+
+
+## 2026-11-14 — SESSION GUITARIST REFERENCE STUDY / LEGAL CONTENT BOUNDARY
+
+USER APPROVED: Treat SESSION GUITARIST — ELECTRIC SUNBURST DELUXE, ELECTRIC VINTAGE and the wider series as a quality benchmark for source recording, multisampling, articulation, performance realism and finished guitar tone. Study public manuals/product documentation and implement independently reproducible engineering principles; do not copy proprietary assets or implementation.
+
+Publicly documented facts to use as a reference checklist:
+- Electric Sunburst Deluxe uses a carefully selected single-cutaway dual-humbucker guitar; separately available bridge/neck pickup signals; an added condenser mic above the strings for attack detail; high-end cables, vintage tube preamps and high-resolution conversion; professional performances/patterns; product page lists 237 patterns/51 songs and 6.3 GB download / about 13.6 GB uncompressed sample pool.
+- Electric Vintage uses a carefully selected 1958 Fender Telecaster single-coil instrument; separate pickup signals through separate preamps; a small-diaphragm condenser above the strings for pick attack; Universal Audio Solo 610 preamps, SPL Madison conversion, RME MADIface XT and Antelope 10MX clock. Its manual says the source tonal balance did not require source EQ/compression. Professional studio guitarists performed the content, preserving timing/dynamics; documented pattern playback avoids time-stretching in its stated operating range.
+- Electric Vintage documents multisample + pattern architecture, pickup/mic blending, fret-position/articulation controls, real performance timing/dynamics and up to seven FX/amp/cab stages.
+- NI identifies Big Wave Audio as the collaboration partner for Electric Sunburst Deluxe and Electric Vintage. Do not infer undisclosed recording personnel, sessions, full provenance or undocumented gear.
+
+Engineering principles to evaluate/adapt independently: carefully selected instruments/setup; isolated pickup signals; optional mic blend for pick/string detail; low-noise/high-headroom capture; professional conversion; genuine performed articulations/velocity/fret-position coverage; real timing/dynamics; efficient multisample mapping; restrained source processing; selective FX; and host-synced playback.
+
+LEGAL GATE: Public research and independent implementation of general techniques are allowed. Do NOT extract, convert, copy, bundle, redistribute or repackage NI/Kontakt samples, loops, patterns, presets or sound sets into PPGU. Current NI EULA/Sound License Agreement permits use in music/audio productions but prohibits using the content to create another sample library/virtual instrument/sample-based product and prohibits standalone distribution/repackaging. Do not bypass protection or extract protected containers. A user-owned lawful Session Guitarist installation may be used separately in the user's music workflow through supported Kontakt/NI use, subject to its license; this does not grant PPGU access to or redistribution rights for its sample pool. Embedding NI content in PPGU requires a separate written license explicitly allowing embedding/distribution in a third-party VST; until then mark NOT CLEARED / DO NOT SHIP. Seek other production-quality libraries only where the specific license expressly allows commercial embedding and redistribution inside a sample-based VST. Create original PPGU performances/patterns and assets; do not copy protected performances, samples, presets, branding or proprietary code.
+
+Acceptance: independently apply documented public quality principles to PPGU capture, source selection, multisampling, articulation/performance engine and efficient DSP. Every shipped third-party asset must pass documented license/redistribution review. Compare using lawfully accessible reference audio and original test assets, never extracted protected samples.
+
+
+## 2026-11-14 — PRESET-DEPENDENT DSP / FX CHAINS
+
+USER APPROVED: The number, selection and order of DSP/FX processors depend on each preset's target tone, style and mix role. There is no universal mandatory FX chain and no requirement to enable every available effect. Each preset uses only the processors genuinely needed: some may use minimal processing or no FX; others may need several serial/parallel stages, including AMP/CAB and modulation/time-based effects. Store per-preset chain topology, routing, parameters and wet/dry balance in preset state; load and expose them correctly in FX EDIT. Never add effects for count or UI appearance. Avoid redundant instances, double processing and conflicting routes. Reuse/shared DSP when sonically valid. Include chain complexity in the preset CPU/RAM/latency budget; enable expensive algorithms/oversampling only when justified. Validate target tone, routing, clipping/noise/clicks and measured resource use under realistic polyphony. Acceptance: every preset has an individually justified, functional, validated FX chain with only necessary stages active.
+
+
+## 2026-11-14 — BROAD SOURCE RESEARCH AUTHORIZATION + SAMPLE/PRESET COMPLETENESS CONTRACT
+
+The user explicitly approved and delegated broad independent authority to research, compare, select and assemble the PPGU guitar-content library and preset content. Do not restrict research to large complete third-party libraries. Search and evaluate individual guitar recordings, multisamples, one-shots, loops, phrases, riffs, rhythm/performance assets, MIDI patterns, articulations, DI/processed takes and other useful components. A coherent PPGU library may be assembled from multiple lawful sources.
+
+Research must be comparative and evidence-led: inspect actual audio where possible, product/source specifications, note and velocity mapping, articulations, recording/processing quality, musical suitability, independent reviews, user feedback, specialist forums and practical recommendations. Distinguish verified facts from opinions and marketing claims. Prefer auditioning the actual asset over judging its name or promotional description. The user has delegated source and combination decisions; do not ask for approval for every candidate.
+
+This broad authorization does not waive copyright, license, redistribution, commercial embedding, attribution, platform or access restrictions. Verify each asset's exact rights for redistribution inside a third-party sample-based VST before shipping. Do not bypass DRM/paywalls/access controls or extract protected libraries. Unclear or incompatible assets remain quarantined/reference-only and are not included in distributable packages.
+
+**Hard two-sided preset contract:** every functional preset must have BOTH (A) actual, available, license-cleared guitar source asset(s) in SAMPLES, with valid mappings/ranges/velocity/articulation data, AND (B) the required musical/performance content and behavior (notes, MIDI/performance data, pattern/rhythm/phrase or the correct playing mode), in addition to functional instrument/AMP/CAB/FX settings and routing. A preset configured in DSP/AMP/FX but lacking its matching guitar samples is incomplete and does not count. A good guitar sample without the necessary performance/pattern/articulation content is also not a complete preset and does not establish a convincing match to a target band, style or track. Correct guitar model/timbre alone is insufficient.
+
+For each target preset, identify and assemble the complete sound identity: source instrument/pickup character, actual samples and coverage, articulations/fret/mute behavior, performed rhythm/phrase, DI or processed source, AMP/CAB/FX, routing and mix role. Add complementary layers or performance assets only when they improve the target sound. Validate the whole preset in actual PPGU playback, not merely individual files or preset metadata: notes, velocity, articulations, rhythm, transitions, release, solo/mix sound, target-style match, missing files, pitch/tempo, phase, clicks, noise, clipping, rights/provenance, CPU/RAM/latency/load time.
+
+Track per-asset and per-preset stages distinctly: DISCOVERED → REVIEWED → LICENSE-CLEARED → ACQUIRED → INTEGRATED → AUDITIONED → TESTED → VERIFIED. Keep source/license/origin/date/hash/format/mapping/role/target preset/processing lineage/QA records. Preserve originals; derived assets remain separate and reproducible. Deduplicate without losing meaningful velocity, articulation or round-robin variants. Library completeness is judged by musical usefulness and verified preset pairing, not raw file count.
+
+This is an approved authorization and requirements update only. It does not claim that candidates have been downloaded, rights cleared, integrated, auditioned or verified.
+
+
+## 2026-11-14 — EXPLICIT AUTHORIZATION TO ACQUIRE AND USE GUITAR AUDIO ASSETS
+
+The user explicitly reconfirmed prior delegation and authorizes autonomous research, download/acquisition, selection, preparation and use of suitable guitar audio/performance assets for POP PUNK GUITAR ULTIMATE, within available tools, lawful rights and safe technical procedures. No per-item approval is required for suitable free/openly licensed assets or ordinary necessary import/preparation steps.
+
+Scope includes complete libraries and individual recordings, notes/multisamples, one-shots, loops, phrases, riffs, rhythm/performance assets, MIDI/pattern data, articulations, DI/processed guitar audio, SFZ/SF2/SF3/GIG/WAV and other supported guitar materials. A composite library assembled from multiple sources is explicitly allowed, as are derived assets, mappings/layers and linking assets to complete presets.
+
+**Non-waivable legal boundary:** acquire and include/distribute assets in PPGU only where the specific rights permit commercial embedding and redistribution inside a third-party sample-based VST. Personal-use or music-production permission alone is not permission to bundle content in the plugin. Do not bypass DRM, access controls, paywalls, logins or CAPTCHAs; do not extract protected libraries/containers or copy Session Guitarist/other closed-product content. Unclear/incompatible assets are quarantined/reference-only and must not ship. No paid purchase, subscription or other monetary expense is authorized without separate explicit user consent.
+
+Record provenance, source URL, creator/rights holder, license and license copy/link, attribution, acquisition date, format, size, SHA-256, mapping, target role/preset and QA status. Preserve originals; use safe additive imports. Validate archives/paths, integrity, deduplication and audio quality; keep heavy work off the audio callback. Before VERIFIED, validate actual playback, complete preset pairing (SAMPLES + performance/pattern/articulation + DSP chain), target-style fit, resource use and compatibility.
+
+Do not stop merely because no single open library equal to Sunburst Deluxe has been found. Build the best lawful result from multiple sources and original/authorized material. If public sources cannot meet a quality target, document the gap and choose the next lawful route rather than filling the library with unsuitable content.
+
+This authorization is confirmed. It does not claim any new files have already been downloaded, rights-cleared, integrated or tested. Paid acquisition is not authorized.
+
+
+## 2026-11-14 — EXPANDED SOURCE CANDIDATES: SHREDAGG, APPLE SOUND AND OTHER QUALITY INSTRUMENTS
+
+The user approves researching SHREDAGG and comparable guitar instruments/libraries, Apple Sound materials, and other high-quality virtual/physical instruments, libraries and sound collections as potential PPGU sources. Study their sound, documentation, demos, reviews, structure and license terms. Where the specific license and any required additional permissions expressly allow the relevant audio assets to be used inside PPGU, those assets may be selected, lawfully acquired, integrated and used.
+
+This expands the candidate pool; it is NOT blanket permission to copy or extract any product's content. For each exact product, version, library and asset, determine the rights holder and applicable EULA/license, including access/extraction, modification, commercial use, embedding and redistribution inside a third-party sample-based VST. A music-production license, demo availability, product purchase, subscription, user ownership or ability to export audio does not by itself establish rights to bundle and redistribute sounds in PPGU.
+
+Use only lawful materials and acquisition methods expressly compatible with their terms: e.g. separately distributed files/SDK/sample packs whose license clearly permits commercial embedding and redistribution in a third-party virtual instrument; original recordings/renders only where the product terms and applicable rights genuinely permit that use and redistribution; or assets covered by separate written permission from the rights holder. Do not bypass DRM, encryption, protection, login/paywalls, export/access restrictions, or extract closed sample pools/preset banks/containers contrary to license terms.
+
+Evaluate every candidate comparatively for actual audio quality, mapping, articulations, musical fit, independent reviews/pro recommendations, ANGELA Engine compatibility, CPU/RAM/latency and license. Record exact product/version, asset/source, license evidence, permitted use method, provenance, SHA-256 and QA. Unclear terms remain REVIEW/QUARANTINE and must not enter a distributable build until resolved. Paid purchases/subscriptions still require separate user approval.
+
+This approval expands the candidate research scope only. It does not mean SHREDAGG, Apple Sound or any other product's license has already been checked or permits embedding; assess each exact product and asset individually. No new audio has been downloaded or integrated by this documentation commit.
+
+
+## 2026-11-14 — USER-APPROVED INITIAL GUITAR SOURCE ACQUISITION SET
+
+The user explicitly approves downloading/acquiring and using all guitar sources proposed in the preceding comparison, subject to the project's license, quality and technical gates. The initial approved acquisition/assessment set is:
+
+- Meta Open Sound — Steel Guitar;
+- Meta Open Sound — Nylon Guitar;
+- FreePats — FSBS Electric Guitar Clean;
+- FreePats — FSBS Electric Guitar Direct DI;
+- FreePats — FSBS Electric Guitar Distorted 1;
+- FreePats — FSBS Electric Guitar Distorted 2;
+- FreePats — FSBS Electric Guitar Jazz;
+- FreePats — Spanish Classical Guitar;
+- Karoryfer — Black and Green Guitars;
+- Karoryfer — Emilyguitar;
+- Karoryfer — Shinyguitar.
+
+These exact candidates are now in the required acquisition/review set and, where the actual files/version pass the stated terms and quality gates, are to be downloaded, prepared and integrated into SAMPLES/appropriate sound roles. A catalog entry or source name is not proof of successful download, current license clearance or quality acceptance. Verify the exact version, actual license file/terms, embedding/redistribution rights, provenance, integrity and format for every package. If an asset fails license or quality review, quarantine that asset and record why; do not silently substitute another.
+
+For every accepted resource: obtain the official source/release, safely extract, compute SHA-256, record provenance/license, inventory technical metadata, run audio quality and mapping/coverage review, deduplicate without losing meaningful variants, preserve originals and store derivatives separately, integrate into the library, and audition in linked presets. Steel/Nylon/Spanish Classical are candidates for acoustic/classical roles; electric sets are assigned to clean/DI/distorted/jazz/indie/rock roles only according to actual audition and mapping, not filename alone.
+
+Every preset claiming a band/artist/track style must reference actual cleared assets from this or another accepted source AND contain the required musical/performance/pattern/articulation data. Importing files or creating mappings alone does not make a preset complete.
+
+**Operational status:** the user-approved candidate set is documented. This commit does not download binary audio or prove that the Sound Hunter GitHub Actions importer has run successfully. Actual acquisition/integration must be evidenced separately by a successful workflow run/artifact, manifest, SHA-256 records and QA. Do not report acquisition complete before that evidence exists.
+
+
+## 2026-11-14 — FULL DELEGATION OF PPGU IMPLEMENTATION
+
+The user explicitly authorizes and delegates independent programming and development of ALL POP PUNK GUITAR ULTIMATE controls and interface elements without seeking separate approval for each routine implementation decision or step. Execute according to the approved master development plan and all previously approved requirements/specifications covering architecture, functionality, sound, libraries, presets, UI, performance, testing and release.
+
+Implementation obligations:
+- independently design, code and integrate all modules, windows, controls, parameters, bindings, MIDI/automation behavior, DSP/audio engine, sample loading/mapping, preset system, Sound Hunter, skins, settings, performance and testing components within the approved specification;
+- make ordinary engineering decisions without repeatedly asking for permission, provided they do not conflict with approved requirements; preserve exact user constraints and priorities;
+- do not replace approved functionality with placeholders, mockups or fake controls; each control must have a real connected function, correct state, persistence/restore, bindings and tests where applicable;
+- resolve requirement conflicts using the latest/more specific approved clarification and document the decision; do not silently change user requirements;
+- maintain both project journals for material changes, recording plans, architecture decisions, implemented files/modules, commit IDs, tests and actual results, known defects, blockers, status and next steps;
+- distinguish APPROVED, DOCUMENTED, IMPLEMENTED, TESTED, VERIFIED and COMPLETE honestly. Never claim implementation, testing, build, import or release is complete without actual evidence;
+- ask the user only when a decision genuinely falls outside delegated authority, involves a new irreversible/paid operation, rights/licensing, data safety, or a material ambiguity that cannot be resolved from the approved specification.
+
+This delegation covers the full approved PPGU scope, including all controls and visual/functional modules, but does not override licensing, quality, security, source-preservation or verification requirements. Delegation does not imply background work between messages: progress is recorded only for actions actually performed and commits actually verified.
+
+
+## 2026-11-14 — FINAL PRODUCT AND DELIVERY ACCEPTANCE CRITERIA
+
+The user confirms the required end result under the approved master plan and all amendments: a complete, optimized, tested POP PUNK GUITAR ULTIMATE VST3 with its own legally redistributable sample library and every previously approved feature, followed by creation of one complete downloadable product archive and delivery of a working download link.
+
+Delivery acceptance criteria:
+- full Windows 10 x64 VST3 compatible with FL Studio 20;
+- all approved modules, controls, MIDI/automation, audio engine, effects, AMP/CAB, sample engine, AUTO SOUND HUNTER, import, presets, skins, settings and all other master-plan additions implemented and functional;
+- integrated original project sample library plus performance/MIDI/pattern/articulation data, with exact license clearance for commercial embedding and redistribution inside a third-party VST; exclude unclear or incompatible rights;
+- every shipped preset actually produces its promised sound and passes audition and technical QA; no empty/fake controls or placeholder presets;
+- optimization demonstrated by measured CPU/RAM, latency, startup/load time, voice/polyphony, streaming/cache and stability on target environment without sacrificing sound quality or preset identity;
+- successful build, CTest, pluginval and real host validation in FL Studio 20 on Windows 10 x64; fix discovered defects or disclose them, with critical defects blocking release;
+- final archive contains VST3, owned Samples library, Factory/User Presets support, skins/resources, licenses/attributions, RU/EN documentation, SHA-256 manifest and required runtime/support files; if technical size limits require split volumes, provide checksummed recoverable parts;
+- after packaging, verify archive integrity, manifest, contents, extraction and a clean install/load smoke test; provide a working link to the archive that was actually created.
+
+These are approved COMPLETE/DELIVERY acceptance criteria, not a claim that the product is currently complete. Do not promise a fabricated link or deadline; obtain and verify source assets, licenses, integration, build, tests and archive first. Paid acquisitions still require separate user approval. All previously approved requirements and amendments remain in force.
+
+
+## 2026-11-14 — APPROVED REUSE-FIRST ENGINEERING STRATEGY
+
+The user approves a reuse-first development approach: do not build everything from scratch. Research public/open-source internet projects, libraries, algorithms, DSP modules, sample engines, MIDI/performance systems, GUI controls, testing tools and established engineering solutions; compare alternatives, select the best compatible candidates, integrate and adapt them to PPGU/ANGELA Engine, prioritizing low CPU/RAM, low latency, fast startup and stability. Implement a component from scratch only when no suitable and legally usable analogue exists.
+
+Mandatory third-party component intake:
+1. Identify the upstream primary source, exact version, author/rightsholder, maintenance status, known limitations and vulnerabilities.
+2. Review the full license for that exact version and all dependencies/submodules/included files. Confirm rights to modify, statically/dynamically link, include source/binaries, use commercially and redistribute inside PPGU. Public GitHub visibility or a permissive label without reading the actual LICENSE is not permission.
+3. Never import proprietary/closed-source product code, decompiled components, leaked code, protected sample pools or code with unclear rights. Never bypass DRM, paywalls or access controls.
+4. Evaluate API/ABI fit, threading/audio-thread safety, realtime allocations/locks, SIMD, denormals, latency, CPU/RAM, file formats, host compatibility, build/test coverage, security and maintenance.
+5. Isolate/adapt with minimal footprint; preserve copyright notices, license text, attribution, version, source URL, commit/tag, hashes, local patches and dependency manifest/SBOM.
+6. Run component/integration tests, audio render and A/B comparison, sanitizers/static analysis and performance tests. Reject/replace or implement in-house if licensing is incompatible, quality is poor, architecture conflicts or resource cost is unacceptable.
+
+Initial framework audit: current project CMake fetches JUCE 7.0.12. JUCE upstream states it is dual-licensed AGPLv3/commercial; exact version and full terms must be reviewed before commercial distribution. Do not assume this dependency is automatically cleared. iPlug2 is a candidate for comparative audit: upstream states VST3 support and a permissive zlib-like license, but this does not automatically make it a drop-in replacement for the current JUCE stack. Compare it, and do not migrate frameworks without demonstrated technical/licensing benefit and a complete migration plan. Record framework decisions only after primary license review and a real build prototype.
+
+User authorization permits autonomous selection and integration, but does not waive licenses, attribution, paid-purchase approval (still separately required), security review or quality gates. Do not add external projects merely for quantity: integrate only the best verified option, avoid duplicated functions, keep architecture clean and optimize measured resource usage.

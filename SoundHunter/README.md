@@ -1,6 +1,6 @@
 # PPGU Sound Hunter — Real Guitar Audio
 
-This first implementation imports only catalogued sources classified as `REAL_RECORDED`. Synthetic and modeled guitar sources are excluded from this acquisition path.
+The acquisition scope is global and genre-independent: collect guitar material relevant to the factory presets and engine, not only punk/pop-punk. Target multisampled instruments and banks, DI/clean/processed recordings, single notes, articulations, palm mutes, harmonics, noises, loops, riffs, phrases, strumming patterns, one-shots and useful mapping/metadata files. See `SOURCE_POLICY.md` for the complete scope and mandatory license tiers. Synthetic/modelled sources may be catalogued separately for evaluation, but must not be mislabeled as real recordings.
 
 ## Current verified source candidates
 
@@ -14,20 +14,20 @@ This first implementation imports only catalogued sources classified as `REAL_RE
 
 Source catalog: `real_guitar_sources.json`.
 
-## Run locally
+## Global acquisition and licensing rules\n\n- Search for suitable material across genres and sources; do not impose an arbitrary library-size quota.\n- A commercial-use license for making songs is not automatically permission to redistribute raw samples inside a commercial VST. Paid libraries enter the shipped product only with explicit rights covering plugin/sample-library redistribution.\n- Non-commercial or evaluation-only assets may be used only where their terms permit, must be marked `NOT FOR SHIPMENT`, and must never enter the commercial installer or public sample artifact.\n- Keep source/license evidence, attribution, hashes and provenance. Unknown or conflicting rights are quarantined. Never bypass DRM, paywalls or access controls.\n- Loops and one-shots are valid source types, but they are not equivalent to chromatic multisampled instruments; map and validate each type appropriately.\n\n## Run locally
 
 Python 3.10+; standard library only.
 
 ```bash
 python SoundHunter/sound_hunter_real_guitars.py --discover-only
-python SoundHunter/sound_hunter_real_guitars.py --max-gb 25
+python SoundHunter/sound_hunter_real_guitars.py
 ```
 
-The importer writes only to a new unique directory under `Samples/SoundHunterImports/<run-id>/`. It does not replace or delete existing files. It checks the downloaded repository license text, handles Git LFS pointers with object size/SHA-256 validation, deduplicates by SHA-256, verifies imported bytes, and writes a per-run `SOUND_HUNTER_REGISTRY.json`. The total Samples tree is capped at 25 GB.
+The importer writes only to a new unique directory under `Samples/SoundHunterImports/<run-id>/`. It does not replace or delete existing files. It checks the downloaded repository license text, handles Git LFS pointers with object size/SHA-256 validation, deduplicates by SHA-256, verifies imported bytes, and writes a per-run `SOUND_HUNTER_REGISTRY.json`. There is no hard-coded total-library or per-run GB cap: eligible verified guitar assets may grow beyond 25 GB. Actual available disk space, GitHub Actions runtime/storage limits, and artifact-retention limits still apply.
 
 ## GitHub Actions
 
-Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-25GB-MAX`. This does not commit sample binaries into Git history or change the VST3 build workflow.
+Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-UNCAPPED`. This does not commit sample binaries into Git history or change the VST3 build workflow.
 
 ## Safety and limitations
 

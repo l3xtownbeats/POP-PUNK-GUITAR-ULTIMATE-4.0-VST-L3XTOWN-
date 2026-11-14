@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused regression tests for Sound Hunter import path and per-run size cap."""
+"""Regression tests for Sound Hunter path safety and uncapped additive imports."""
 from pathlib import Path
 import importlib.util
 import unittest
@@ -17,26 +17,16 @@ class SoundHunterRegressionTests(unittest.TestCase):
         target = sound_hunter.release_asset_target(
             source, "meta-open-sound-steel/release/steel/sample.wav"
         )
-        self.assertEqual(
-            target,
-            source / "release_assets" / "release" / "steel" / "sample.wav",
-        )
+        self.assertEqual(target, source / "release_assets" / "release" / "steel" / "sample.wav")
         self.assertNotEqual(target, source / "release" / "steel" / "sample.wav")
 
     def test_release_asset_path_rejects_traversal(self):
         with self.assertRaises(ValueError):
-            sound_hunter.release_asset_target(
-                Path("/tmp/run/source"), "../outside/sample.wav"
-            )
+            sound_hunter.release_asset_target(Path("/tmp/run/source"), "../outside/sample.wav")
 
-    def test_size_cap_counts_only_current_run_bytes(self):
-        limit = 25 * 1024**3
-        # Existing Samples libraries are deliberately not an input to this
-        # calculation; only the current run's imported payload is counted.
-        self.assertTrue(sound_hunter.within_run_limit(0, 24 * 1024**3, limit))
-        self.assertFalse(
-            sound_hunter.within_run_limit(24 * 1024**3, 2 * 1024**3, limit)
-        )
+    def test_no_artificial_library_size_cap(self):
+        self.assertFalse(hasattr(sound_hunter, "within_run_limit"))
+        self.assertNotIn("--max-gb", sound_hunter.main.__code__.co_consts)
 
 
 if __name__ == "__main__":

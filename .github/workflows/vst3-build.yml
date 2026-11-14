@@ -13,7 +13,7 @@ on:
       - 'SKIN/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
-      - 'presets/factory_bank_300.json'
+      - 'presets/factory_bank_500.json'
       - 'tools/validate_factory_bank.py'
       - 'tools/validate_preset_files.py'
       - 'presets/examples/**'
@@ -31,9 +31,9 @@ jobs:
         run: |
           python tools/T2_generate_missing_artwork.py --root SKIN
           python tools/T2_generate_missing_artwork.py --root SKIN --check
-      - name: Validate 300-preset factory catalog
+      - name: Validate 500-preset factory catalog
         shell: pwsh
-        run: python tools/validate_factory_bank.py presets/factory_bank_300.json
+        run: python tools/validate_factory_bank.py presets/factory_bank_500.json
       - name: Validate portable preset file examples
         shell: pwsh
         run: python tools/validate_preset_files.py presets/examples
@@ -306,6 +306,8 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
+          $legacyCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          if (Test-Path $legacyCatalog) { Remove-Item -LiteralPath $legacyCatalog -Force }
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
           $runtimeSkins = Join-Path $release 'Skins'
@@ -341,7 +343,7 @@ jobs:
               throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
             }
           }
-          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_500.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
           if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
@@ -353,7 +355,7 @@ jobs:
           ===================================================
           VST3/       The compiled VST3 plugin bundle.
           SOUNDBANK/  Redistributable guitar samples, SFZ maps, licenses and SHA-256 manifest.
-          PRESETS/    Factory catalog (300 entries) and portable preset examples.
+          PRESETS/    Factory catalog (500 entries) and portable preset examples.
           Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
@@ -365,7 +367,7 @@ jobs:
           2. In the plugin, use its SFZ load control and select an instrument SFZ
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
-             as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
+             as PRESETS/factory_bank_500.json. Portable preset examples are in PRESETS/examples/.
           4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.

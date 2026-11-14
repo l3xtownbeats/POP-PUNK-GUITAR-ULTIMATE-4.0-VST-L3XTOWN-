@@ -1,7 +1,6 @@
 {
   "schema_version": "1.0",
   "policy": "PPGU-REAL-RECORDED-GUITARS",
-  "max_library_bytes": 26843545600,
   "supported_audio_formats": [
     ".wav",
     ".wave",
