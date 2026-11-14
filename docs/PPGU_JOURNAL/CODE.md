@@ -767,3 +767,12 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - Updated master plan and production priorities: minimum 500 unique MELODY+PATTERN presets total, target approximately 600; Travis Barker 82 remains a separate, independently counted category. Legacy 300-entry catalogue remains an audit baseline.
 - Captured public interview references and separated confirmed statements from tonal interpretation.
 - Documentation-only update. No production code, DSP, UI, sample payload or preset runtime implementation changed; no new build/audio test pass is claimed.
+
+
+
+## 2026-11-14 — Журнал изменений: обязательный аудиокритерий реалистичности
+
+- Зафиксировано обязательное требование пользователя: пластиковые, искусственные, дешёвые и нереалистичные гитарные тембры запрещены; критерий является блокирующим для фабричного релиза.
+- Зафиксированы допустимые режимы источника: DRY, NATIVE TONE MATCH, PROCESSED SOURCE MATCH и WET; дополнительную DSP-обработку не включать без звуковой необходимости, не дублировать уже качественно записанные эффекты.
+- Введена обязательная слуховая оценка всего диапазона, velocity, атаки/release, артикуляций, нот, аккордов и переходов. Автоматические тесты не заменяют прослушивание.
+- Это запись продуктового решения и документационной синхронизации; production C++/DSP код этим изменением не менялся. Реализация аудио acceptance tests и фактическая проверка существующего каталога остаются задачами разработки.
