@@ -1,7 +1,7 @@
-"""Structural gate for the approved NEON STAGE references and Skin_052 geometry.
+"""Structural gate for the approved NEON STAGE references and canonical default skin.
 
-This validates source-file integrity and metadata parity only. It does NOT
-claim a pixel-perfect visual match; that still requires human review.
+This validates source-file integrity, canonical identity and metadata parity only.
+It does NOT claim a pixel-perfect visual match; human review is still required.
 """
 from __future__ import annotations
 
@@ -11,9 +11,9 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 SCHEMA = ROOT / "SKIN" / "control_schema.json"
-REFERENCE_DIR = ROOT
-SKIN_052 = ROOT / "SKIN" / "Skin_052" / "theme.json"
-SKIN_053 = ROOT / "SKIN" / "Skin_053" / "theme.json"
+REGISTRY = ROOT / "SKIN" / "theme_manifest.json"
+ACTIVE_THEME = ROOT / "SKIN" / "Skin_052" / "theme.json"
+LEGACY_THEME = ROOT / "SKIN" / "Skin_053" / "theme.json"
 OUT = ROOT / "dist" / "NEON_STAGE_REFERENCE_AUDIT.json"
 REFERENCE_FILES = (
     "01 INTERFACE  NEON STAGE DEFAULT .png",
@@ -25,6 +25,7 @@ REFERENCE_FILES = (
     "07 INTERFACE  NEON STAGE DEFAULT .png",
 )
 GRID = (12, 16)
+DEFAULT_ID = "neon-stage-default-skin-1"
 
 
 def read_json(path: Path):
@@ -37,47 +38,19 @@ def grid_map(theme):
     return {key: value.get("grid") for key, value in theme.get("controls", {}).items()}
 
 
-def main():
-    errors = []
-    reference_info = []
-    schema = read_json(SCHEMA)
-    old = read_json(SKIN_052)
-    new = read_json(SKIN_053)
-
-    required = schema.get("properties", {}).get("controls", {}).get("required", [])
-    old_grid = grid_map(old)
-    new_grid = grid_map(new)
-
-    if new.get("id") != "skin-053" or new.get("index") != 53:
-        errors.append("Skin_053 identity must remain skin-053 / index 53.")
-    if new.get("name") != "NEON STAGE":
-        errors.append("Skin_053 source name must be NEON STAGE.")
-    if new.get("family") != "neon_basement":
-        errors.append("Skin_053 source family must be neon_basement.")
-
-    missing = sorted(set(required) - set(new_grid))
-    if missing:
-        errors.append("Missing schema-required controls: " + ", ".join(missing))
-
-    if set(old_grid) != set(new_grid):
-        errors.append("Skin_053 control IDs differ from the Skin_052 reference.")
-    for control_id in sorted(set(old_grid) & set(new_grid)):
-        if old_grid[control_id] != new_grid[control_id]:
-            errors.append(f"Grid differs from Skin_052 for {control_id}: "
-                          f"{new_grid[control_id]} != {old_grid[control_id]}")
-
-    for control_id, box in new_grid.items():
+def validate_grid(errors, controls, label):
+    for control_id, box in controls.items():
         if not isinstance(box, dict) or not all(k in box for k in ("x", "y", "w", "h")):
-            errors.append(f"Invalid grid rectangle for {control_id}.")
+            errors.append(f"{label}: invalid grid rectangle for {control_id}.")
             continue
         x, y, w, h = (box[k] for k in ("x", "y", "w", "h"))
-        if not all(isinstance(v, int) for v in (x, y, w, h)):
-            errors.append(f"Non-integer grid rectangle for {control_id}.")
+        if not all(isinstance(v, int) and not isinstance(v, bool) for v in (x, y, w, h)):
+            errors.append(f"{label}: non-integer grid rectangle for {control_id}.")
             continue
         if x < 0 or y < 0 or w < 1 or h < 1 or x + w > GRID[0] or y + h > GRID[1]:
-            errors.append(f"Out-of-bounds grid rectangle for {control_id}: {box}")
+            errors.append(f"{label}: out-of-bounds grid rectangle for {control_id}: {box}")
 
-    entries = list(new_grid.items())
+    entries = list(controls.items())
     for i, (name_a, a) in enumerate(entries):
         if not isinstance(a, dict) or not all(k in a for k in ("x", "y", "w", "h")):
             continue
@@ -86,15 +59,61 @@ def main():
                 continue
             if (a["x"] < b["x"] + b["w"] and b["x"] < a["x"] + a["w"]
                     and a["y"] < b["y"] + b["h"] and b["y"] < a["y"] + a["h"]):
-                errors.append(f"Grid overlap: {name_a} / {name_b}")
+                errors.append(f"{label}: grid overlap {name_a} / {name_b}")
 
-    compatibility = new.get("compatibility", {})
+
+def main():
+    errors = []
+    reference_info = []
+    schema = read_json(SCHEMA)
+    registry = read_json(REGISTRY)
+    active = read_json(ACTIVE_THEME)
+    legacy = read_json(LEGACY_THEME)
+
+    if registry.get("defaultSkin") != DEFAULT_ID:
+        errors.append(f"Registry defaultSkin must be {DEFAULT_ID}.")
+    if registry.get("totalSkins") != len(registry.get("themes", [])):
+        errors.append("Registry totalSkins does not match themes length.")
+
+    active_entries = [item for item in registry.get("themes", [])
+                      if item.get("id") == DEFAULT_ID]
+    if len(active_entries) != 1:
+        errors.append(f"Registry must contain exactly one {DEFAULT_ID} entry.")
+    elif (active_entries[0].get("index") != 52
+          or active_entries[0].get("path") != "Skin_052/theme.json"):
+        errors.append("Canonical NEON STAGE registry entry must remain index 52 / Skin_052 for compatibility.")
+
+    if (active.get("id") != DEFAULT_ID or active.get("index") != 52
+            or active.get("name") != "NEON STAGE"
+            or active.get("designStatus") != "USER_APPROVED_SINGLE_UNIFIED_IDENTITY_NEON_STAGE"):
+        errors.append("Skin_052 must contain the canonical NEON STAGE DEFAULT SKIN-1 identity.")
+    if (legacy.get("id") != "skin-053" or legacy.get("index") != 53
+            or legacy.get("name") != "NEON STAGE — LEGACY ARCHIVE"
+            or legacy.get("designStatus") != "LEGACY_ARCHIVE_NOT_ACTIVE"):
+        errors.append("Skin_053 must remain the non-default NEON STAGE legacy archive.")
+
+    required = schema.get("properties", {}).get("controls", {}).get("required", [])
+    active_grid = grid_map(active)
+    legacy_grid = grid_map(legacy)
+    missing = sorted(set(required) - set(active_grid))
+    if missing:
+        errors.append("Canonical NEON STAGE is missing schema-required controls: " + ", ".join(missing))
+
+    if set(active_grid) != set(legacy_grid):
+        errors.append("Legacy Skin_053 control IDs differ from canonical Skin_052.")
+    for control_id in sorted(set(active_grid) & set(legacy_grid)):
+        if active_grid[control_id] != legacy_grid[control_id]:
+            errors.append(f"Legacy grid differs from canonical Skin_052 for {control_id}.")
+
+    validate_grid(errors, active_grid, "Canonical Skin_052")
+
+    compatibility = active.get("compatibility", {})
     for key in ("apvtsChanges", "layoutChanges", "audioChanges"):
         if compatibility.get(key) is not False:
             errors.append(f"Visual-only contract violated: compatibility.{key} must be false.")
 
     for filename in REFERENCE_FILES:
-        path = REFERENCE_DIR / filename
+        path = ROOT / filename
         if not path.is_file():
             errors.append(f"Missing approved reference: {filename}")
             continue
@@ -112,16 +131,19 @@ def main():
     report = {
         "project": "POP PUNK GUITAR ULTIMATE 4.0",
         "theme": "NEON STAGE",
-        "skin": "Skin_053",
+        "default_skin_id": DEFAULT_ID,
+        "active_skin_directory": "Skin_052",
+        "legacy_archive_directory": "Skin_053",
         "status": "PASS" if not errors else "FAIL",
         "checks": {
             "approved_reference_files_present_and_decodable": len(reference_info),
             "schema_required_controls": len(required),
-            "skin_052_controls": len(old_grid),
-            "skin_053_controls": len(new_grid),
-            "grid_matches_skin_052": not any("Grid differs" in e for e in errors),
+            "canonical_controls": len(active_grid),
+            "legacy_archive_controls": len(legacy_grid),
+            "legacy_grid_matches_canonical": active_grid == legacy_grid,
             "grid_bounds": "12x16",
             "audio_midi_apvts_changes": False,
+            "registry_default_matches_canonical_id": registry.get("defaultSkin") == DEFAULT_ID,
         },
         "references": reference_info,
         "errors": errors,
