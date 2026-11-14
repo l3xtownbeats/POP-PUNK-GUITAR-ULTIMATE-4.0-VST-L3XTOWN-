@@ -120,3 +120,20 @@ Engine получает профиль через явную конфигура�
 - BLOCKED — есть подтверждённый блокер.
 
 Данный документ имеет статус DESIGNED. Он не переводит ни один модуль в IMPLEMENTED, BUILT, TESTED или HOST-VERIFIED.
+
+
+## 2026-11-14 — SOURCE TREE / BUILD GRAPH RECONCILIATION ADDENDUM
+
+This addendum records actual repository source locations inspected at main HEAD 1f09611f753702e380d695a5441b6f260f798d3b. It does not replace the earlier architecture decision.
+
+- Processor/editor: Source/PluginProcessor.*, Source/PluginEditor.*; parallel root processor/editor files also exist.
+- Streaming sampler: Source/Sampler/ contains SamplePool, SampleMetadataIndex, SampleStreamingService, PageCacheSlots, StreamingVoiceReader, WavPageReader, SfzParser and BoundedSpscQueue.
+- Performance: Source/Performance/ contains PatternScheduler, AutoChordEngine, ChordTransitionPolicy, ChordTransitionTimeline and CircleOfFifths.
+- UI: Source/UI/ contains AutoChordsPanel, AuxiliaryPanelLayout, AuxiliaryPanelWindowManager, EditorOverlayPanel, FXEditPanel, ImportGuitarPanel, PerformanceDisplay, SettingsPanel and ThemeManager.
+- Parallel root-level modules include sampler, PatternScheduler, ChordEngine, FxChain, ImportPipeline, PresetRuntime, ThemeManager, panels, workspace, overlay and security import. They require a deliberate canonical-source decision.
+
+Static comparison found CMake source references that do not exist at the named paths: Source/Engine/*, Source/UI/MultiWindowWorkspace.cpp, Source/UI/Panels.cpp, and tests/EngineContractTests.cpp. CMake also expects a local JUCE/ directory; the audited tree has no JUCE directory/gitlink and the inspected workflow does not provision JUCE via submodule or clone. These are integration blockers to resolve before claiming reproducible build. No source relocation or API migration is authorized by this addendum.
+
+The approved no-upper-limit catalog rule applies to MELODY, PATTERN and every approved browser entity/category. The legacy factory_bank_300.json filename/validator must not impose a maximum of 300. Preset definitions must remain valid, unique, mapped, licensed and loadable; scale through indexing/lazy loading/virtualized UI and bounded audio resources.
+
+See the detailed authoritative inventory and exact audit boundaries in Info.txt, section “MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT”.
