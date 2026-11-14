@@ -2365,3 +2365,19 @@ This workflow change is committed and triggers the Windows x64 CI workflow. No r
 **Status:** IMPLEMENTED / CI VALIDATION PENDING.
 **Next:** inspect the exact-SHA run; if SHA manifest validation passes, retain it as the sample-cache integrity gate. If it fails, diagnose and correct the manifest parser before packaging.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-INTERIM-PACKAGE-002 — REPAIR OF CHECKSUM VALIDATION WORKFLOW
+==============================================================================
+
+**Type:** CI workflow repair; no production C++/DSP/MIDI/APVTS code changed.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `45a8b8fb61fc7ad396a891f80732c3902b05e7b6`.
+**Failed run:** #1628 / ID `43591965560`, exact SHA `45a8b8fb61fc7ad396a891f80732c3902b05e7b6`, conclusion FAILURE.
+**Finding:** the first checksum-gate commit left the PowerShell block incomplete at the manifest-line parser. GitHub Actions allocated no jobs for that run; no build/test/package result exists for that SHA.
+**Repair:** restored the complete PowerShell block. Each manifest line is parsed; malformed and duplicate entries are rejected; manifest entry count must equal the WAV file count; every WAV path must be present and every file's SHA-256 is recomputed and compared.
+**Compatibility:** workflow/package only; no production source, sample, preset, skin or license file changed.
+**Validation:** repaired workflow is committed below; a new exact-SHA Windows workflow run is required. No PASS is claimed yet.
+**Status:** REPAIRED / CI VALIDATION PENDING.
+==============================================================================

@@ -198,7 +198,23 @@ jobs:
           if (-not (Test-Path -LiteralPath $manifestPath)) { throw 'Sample SHA-256 manifest is missing.' }
           $manifestEntries = @{}
           foreach ($line in Get-Content -LiteralPath $manifestPath) {
-            if ($line -notmatch '^(?<hash>[0-9a-fA-F]{64})\s{2}(?<path>.+)
+            if ($line -notmatch '^(?<hash>[0-9a-fA-F]{64})\s{2}(?<path>.+)') {
+              throw "Malformed sample checksum manifest line: $line"
+            }
+            $relative = $Matches.path.Trim().Replace('\','/')
+            if ($manifestEntries.ContainsKey($relative)) { throw "Duplicate sample manifest path: $relative" }
+            $manifestEntries[$relative] = $Matches.hash.ToLowerInvariant()
+          }
+          if ($manifestEntries.Count -ne $wavFiles.Count) {
+            throw "Sample manifest count mismatch: manifest=$($manifestEntries.Count), WAV files=$($wavFiles.Count)."
+          }
+          foreach ($file in $wavFiles) {
+            $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
+            if (-not $manifestEntries.ContainsKey($relative)) { throw "WAV missing from SHA-256 manifest: $relative" }
+            $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
+            if ($actualHash -ne $manifestEntries[$relative]) { throw "SHA-256 mismatch for sample: $relative" }
+          }
+
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh
         run: python tools/check_binary_data_links.py

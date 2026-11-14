@@ -786,3 +786,15 @@ User clarified that downloading is allowed. Lawfully accessible samples/librarie
 **Tests:** not run locally; workflow change triggers Windows x64 CI on this commit. Previous PASS belongs only to parent SHA `5abb9e490cb78ea9d4ecb1d3c61d29d56de87382`.
 **Status:** IMPLEMENTED / VALIDATION PENDING.
 **Next:** verify exact-SHA Windows build, CTest, pluginval strictness 5, SHA manifest validation and interim artifact.
+
+
+## 2026-11-14 — TX-REV18-INTERIM-PACKAGE-002 — checksum workflow syntax repair
+
+**Type:** CI workflow repair.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `45a8b8fb61fc7ad396a891f80732c3902b05e7b6`.
+**Failed validation:** run #1628 / ID `43591965560` on this SHA failed before job allocation; workflow contained an incomplete sample-manifest parser block.
+**Repair:** completed the parser and hash-validation loop: malformed/duplicate entries fail, manifest/WAV counts must match, every WAV must be listed and SHA-256 is recomputed.
+**Production compatibility:** no C++/DSP/MIDI/APVTS or media assets changed.
+**Tests:** no build/CTest/pluginval result on failed SHA. Awaiting new exact-SHA workflow.
+**Status:** REPAIRED / VALIDATION PENDING.
