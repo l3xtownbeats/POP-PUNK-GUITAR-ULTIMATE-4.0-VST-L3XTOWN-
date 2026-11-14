@@ -190,3 +190,6 @@ A release gate must use one exact source SHA and a package manifest tied to that
 **PLAY. CREATE. ROCK.**
 
 </div>
+
+### Additional approved preset research
+- [Angels & Airwaves / Tom DeLonge preset research and implementation requirements](docs/PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md)
