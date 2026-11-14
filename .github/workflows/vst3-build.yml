@@ -324,7 +324,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Resources', 'Assets')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -332,11 +332,21 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          # Runtime skin payload is a sibling of VST3/, so both can be copied
-          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
-          $runtimeSkins = Join-Path $release 'Skins'
+          # Runtime Skins must be a sibling of PPGU.vst3 inside release/VST3.
+          # Copy the contents of release/VST3 into the host Common Files\\VST3 directory.
+          # Do not ship master PNGs or SKIN source docs in the runtime payload.
+          $runtimeSkins = Join-Path (Join-Path $release 'VST3') 'Skins'
+          New-Item -ItemType Directory -Force -Path $runtimeSkins | Out-Null
           Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
-            Copy-Item -Destination $runtimeSkins -Recurse
+            ForEach-Object {
+              $targetTheme = Join-Path $runtimeSkins $_.Name
+              Copy-Item -LiteralPath $_.FullName -Destination $targetTheme -Recurse
+              # Master artwork remains in source control/source-review only.
+              $masterAssets = Join-Path $targetTheme 'assets/master'
+              if (Test-Path -LiteralPath $masterAssets) {
+                Remove-Item -LiteralPath $masterAssets -Recurse -Force
+              }
+            }
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination $runtimeSkins
@@ -367,6 +377,41 @@ jobs:
               throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
             }
           }
+          $neonStageRuntime = Join-Path $runtimeSkins 'Skin_053'
+          $requiredNeonRuntime = @(
+            'assets/hero/hero.png',
+            'assets/preview/preview.png',
+            'assets/background/main.png',
+            'assets/textures/carbon_weave.png',
+            'assets/fx_layers/stage_glow.png',
+            'assets/icons/skins.png',
+            'assets/controls/knob01_default.png',
+            'assets/asset_manifest.json',
+            'assets/artwork_manifest.json',
+            'assets/control_manifest.json',
+            'fonts/Inter[opsz,wght].ttf',
+            'fonts/OFL.txt',
+            'fonts/font_manifest.json',
+            'atlas/atlas.png',
+            'atlas/atlas.json'
+          )
+          foreach ($relativeAsset in $requiredNeonRuntime) {
+            $runtimeAsset = Join-Path $neonStageRuntime ($relativeAsset -replace '/', '\\')
+            if (-not (Test-Path -LiteralPath $runtimeAsset -PathType Leaf)) {
+              throw "REV18 NEON STAGE runtime asset missing from package: $relativeAsset"
+            }
+          }
+          if (Test-Path -LiteralPath (Join-Path $neonStageRuntime 'assets/master')) {
+            throw 'Master assets must not be copied into the runtime Skins package.'
+          }
+
+          $controlSprites = Get-ChildItem (Join-Path $neonStageRuntime 'assets/controls') -File -Filter '*.png'
+          if ($controlSprites.Count -ne 135) { throw "REV18 runtime control sprite count mismatch: $($controlSprites.Count), expected 135." }
+          $topBarIcons = Get-ChildItem (Join-Path $neonStageRuntime 'assets/icons') -File -Filter '*.png'
+          if ($topBarIcons.Count -ne 6) { throw "REV18 runtime top-bar icon count mismatch: $($topBarIcons.Count), expected 6." }
+          $fxLayers = Get-ChildItem (Join-Path $neonStageRuntime 'assets/fx_layers') -File -Filter '*.png'
+          if ($fxLayers.Count -ne 2) { throw "REV18 runtime FX layer count mismatch: $($fxLayers.Count), expected 2." }
+
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'

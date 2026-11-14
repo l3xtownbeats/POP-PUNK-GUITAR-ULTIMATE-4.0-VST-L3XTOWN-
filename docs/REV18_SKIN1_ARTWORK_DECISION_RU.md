@@ -39,10 +39,14 @@ SHA-256, CRC32, byte count и `[DECISION]` provenance в artwork manifest.
 ## Ограничения и статус
 
 Это первая оригинальная итерация artwork, а не заявление о полном коммерческом
-финальном дизайне. Перед release нужны визуальная приёмка в реальном JUCE UI,
-проверка сочетания с зонами A–H и проверка качества на 100%/HiDPI. Control/state sprite package (270 master/runtime
-файлов) и Inter fallback с полным OFL 1.1 notice добавлены отдельными ресурсными
-этапами. Их подключение к runtime UI и загрузка fallback-шрифта пока не включены.
+финальном дизайне. `theme.json` и ThemeManager теперь принимают REV18 runtime paths
+для hero/preview; gallery/hero consumers могут читать новые exports. CI package
+staging копирует runtime assets в `VST3/Skins` рядом с `.vst3` и исключает
+`assets/master`. Control/state sprite package (270 master/runtime файлов) и Inter
+fallback с полным OFL 1.1 notice также добавлены. Сами control sprites пока не
+подключены к JUCE-компонентам, а загрузка Inter не включается автоматически.
+Перед release обязательны визуальная приёмка в реальном JUCE UI, проверка зон
+A–H, 100%/HiDPI и ручной тест в FL Studio 20.
 
 Baked overlays являются ресурсами оформления. Их наличие не включает эффекты
 автоматически и не добавляет новые FX controls или DSP-пути.

@@ -99,6 +99,15 @@ int main()
     expect(manager.getPalette().id == "skin-053", "NEON STAGE keeps stable resource ID skin-053");
     expect(manager.getPalette().name == "NEON STAGE DEFAULT", "NEON STAGE canonical display name");
     expect(!manager.getPalette().usedFallback, "NEON STAGE loads without fallback");
+    const auto neonStageJson = juce::JSON::parse(neonStageManifest.loadFileAsString());
+    const auto neonStageAssets = neonStageJson.getProperty("assets", juce::var());
+    expect(neonStageAssets.getProperty("hero", "").toString() == "assets/hero/hero.png",
+           "NEON STAGE resolves the REV18 runtime hero export");
+    expect(neonStageAssets.getProperty("preview", "").toString() == "assets/preview/preview.png",
+           "NEON STAGE resolves the REV18 runtime gallery preview");
+    const auto neonRev18Assets = neonStageJson.getProperty("rev18Assets", juce::var());
+    expect(neonRev18Assets.getProperty("background", "").toString() == "assets/background/main.png",
+           "NEON STAGE registers the REV18 runtime background");
     manager.resetToDefault();
     expect(manager.getPalette().id == "skin-053", "reset restores SKIN-1 resource identity");
     expect(manager.getPalette().name == "NEON STAGE DEFAULT", "reset restores NEON STAGE identity");
