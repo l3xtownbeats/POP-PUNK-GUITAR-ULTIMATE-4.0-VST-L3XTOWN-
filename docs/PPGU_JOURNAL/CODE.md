@@ -713,3 +713,11 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 
 **Status:** IMPLEMENTED IN SOURCE / VALIDATION PENDING. Manual-import enforcement remains OPEN.
 **Next step:** run the updated workflow; inspect test result, artifact registry, SHA-256 values and actual aggregate size; separately integrate the same 40 GB guard into any manual-copy import path if one exists.
+
+
+## 2026-11-14 — Decimal GB reporting correction
+
+- `SoundHunter/sound_hunter_real_guitars.py`: corrected final usage report and CLI ceiling wording to use decimal GB consistently (40 GB = 40,000,000,000 bytes); removed remaining GiB/1024^3 display conversion that could misreport the aggregate cap.
+- Commit: `71f23a334dd1b169e85d786e984eb97e7b094e1e`.
+- `SoundHunter/README.md`: corrected remaining aggregate-capacity phrase to decimal GB. Commit: `0ce7a2401e18894b5b448a78640eaf1a9d777b3f`.
+- Re-read source after change; automated tests and workflow still not executed. This is a reporting/unit correction, not a test pass.
