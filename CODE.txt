@@ -591,3 +591,16 @@ Next: canonical source graph map → CMake/JUCE provisioning reconciliation → 
 - Autonomy stops only for decisions that alter approved behavior/contracts, conflicting approvals, uncertain rights/provenance, irreversible actions or user-data risk. Pause affected scope, ask one precise decision; continue independent safe work. Never fake PASS; unrun tests are NOT RUN.
 - Baseline registry audit: assets/sound_hunter/registry.json has assetCount=0 and sourceCount=0. This is a bootstrap marker; no populated/FACTORY-READY library is claimed.
 - Documentation only in this commit; no audio assets or production code added. Status: APPROVED / DOCUMENTED / VERIFIED after refetch; not IMPLEMENTED / TESTED / FACTORY-READY.
+
+
+## 2026-11-14 — STRICT 25–30 GB LIBRARY TARGET + REAL-TIME INFO/CODE SYNCHRONIZATION
+
+**Status:** USER-APPROVED / DOCUMENTATION ENTRY. Production source and audio assets changed: NO.
+
+- Required installed factory Guitar Sound Library size: **25–30 GB inclusive** of actual guitar audio assets (One-Shots, Sample Loops, multisamples/performance sets and approved guitar SoundBank content).
+- This is a strict content-size target, not a preset/file-count cap. No padding, empty files, duplicates, artificial re-encoding, placeholders or uncleared assets may be used to reach it.
+- Measure actual bytes at staging, SoundBank assembly and final package stages. Report category totals, factory/user split and package overhead separately. The installed factory library itself must fall within 25–30 GB; compressed installer size may differ.
+- If verified content exceeds 30 GB, stop packaging and report a safe optimization proposal; do not silently discard approved content or reduce quality. If below 25 GB, continue lawful, quality-controlled sourcing; do not fabricate assets.
+- Existing registry baseline is empty (assetCount=0/sourceCount=0); therefore target is APPROVED/DOCUMENTED only and is not yet size-verified.
+- Journal organization: keep all development journals in one canonical repository location after dependency/reference audit. INFO and CODE remain separate synchronized records. INFO tracks requirements/status/decisions/verification; CODE tracks source paths/symbols/change summaries/commit SHAs/test evidence. Full code remains in .cpp/.h; never duplicate source code in logs.
+- Update INFO and CODE during each development operation, with matching commit SHA, affected paths, test commands/results and unresolved risks. Do not mark documentation complete until both records have been re-fetched and verified. Avoid blind moves/deletions; preserve history and references.
