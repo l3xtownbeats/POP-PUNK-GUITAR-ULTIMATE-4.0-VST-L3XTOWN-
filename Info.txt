@@ -1942,3 +1942,16 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 Проверка redistributable sample library прошла на восстановленном CI cache; повторное скачивание было пропущено. Workflow отдельно фиксирует ограничение host validation: автоматический CI и pluginval не заменяют ручной запуск и проверку звука в FL Studio 20.
 
 Статус: **WINDOWS x64 RELEASE BUILD PASS / CTEST PASS / PLUGINVAL STRICTNESS 5 PASS / PACKAGE CREATED / FL STUDIO 20 MANUAL CHECK PENDING**. Полный production release пока не объявлять.
+
+
+## 11.8. PATTERN workflow and O1/S1 implementation gap audit (2026-11-14)
+
+Проверен фактический код после зелёного exact-SHA CI. PATTERN audio path уже принимает удерживаемые MIDI-аккорды, использует host/internal PPQ clock, quantize, swing/accent, восемь фиксированных 16-step rhythm masks, sample-accurate chord transitions и sampler events. Processor Pattern integration test прошёл в CI.
+
+При этом согласованный UX **Section → Rhythm/Pattern** отсутствует: сейчас есть один глобальный APVTS `patternSlot` 0..7, а не отдельный выбор музыкального раздела (Intro/Verse/Chorus/Bridge/Outro) с последующим выбором гитарного рисунка внутри раздела. `PPGUAutoChordsPanel` — setup-only; MIDI generation отключён и не подключён. Восемь rhythm masks нельзя называть song sections или полноценным pattern browser.
+
+Следующий контракт реализации: отдельная модель выбора section и отдельный каталог/выбор rhythm pattern; явная связь section→pattern; сначала section, затем рисунок; preview без скрытого применения; сохранение совместимости старых preset/project states; тесты persistence, association, MIDI и host transport. SIGNAL FORGE/NEON не менять.
+
+Повторно подтверждено: root `OverlayManagerTests.cpp` и `SecureSkinImportTests.cpp` ссылаются на отсутствующие production headers/implementations; CMake намеренно не регистрирует эти orphan tests. O1/S1 не реализованы и не должны считаться пройденными.
+
+Статус: **AUDIT COMPLETE / NO SOURCE CHANGES / SECTION-FIRST PATTERN UX NOT IMPLEMENTED / AUTOCHORDS NOT IMPLEMENTED / O1-S1 BLOCKED**.
