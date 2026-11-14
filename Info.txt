@@ -2731,3 +2731,24 @@ required; build, CTest, pluginval, PNG CRC, G1–G4 and host validation remain
 unverified until their steps complete successfully.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — ACTIVE REGISTRY HARDENING / ASSET PREFLIGHT
+==============================================================================
+
+**Дополнение к предыдущей записи (source head после commit `ff4c914d8a2041219f96060d9e1f14383338a08c`):**
+- Runtime registry guard теперь безопасно читает 64-bit `activeThemeCount`, проверяет диапазон 1…16 и точное совпадение metadata с количеством active entries; `activeOrdinal` обязан быть непрерывным 1…N, а ordinal 1 обязан указывать на `skin-053`.
+- Draft PR #36 открыт: `https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/pull/36`, base `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`, head `work/ui-theme-rev18-v2-spec-sync`. PR не слит. GitHub сообщил mergeable=true, draft=true.
+- Для head SHA `1502eab48ea6a1bcea81897e1919821081985a27` workflow/status query вернул пустые списки; после последнего guard commit `ff4c914d8a2041219f96060d9e1f14383338a08c` CI execution ещё не подтверждён. Нельзя объявлять CTest PASS.
+
+**Визуальный asset preflight Skin_053:**
+- `assets/preview.png` SHA-1 `774c25879f4363b546a9861a70e85d0a07dab36f`; визуально это простая геометрическая заглушка, не коммерческий preview.
+- `assets/hero.png` SHA-1 `41fc7957584632da7c9bd2109f15fa847cee0459`; визуально это простая геометрическая заглушка, не коммерческий hero artwork.
+- Оба файла имеют runtime-ориентированный вид/размеры (preview около 360×240, hero 800×450); master source в папке Skin_053 не обнаружен.
+- Семь файлов макетов 01–07 присутствуют в корне репозитория, но GitHub connector вернул пустое binary content для этих файлов; pixel-level inspection и извлечение master assets остаются UNVERIFIED. Поэтому NEON STAGE не редизайнится и artwork не генерируется вслепую.
+- Палитровый contrast calculation по Skin_053 theme.json: primary/window 17.81:1; secondary/window 10.79:1; disabled/window 6.29:1; LCD/window 17.17:1; accent/panel 15.09:1. Primary требование ≥7:1 выполнено. Это проверка чисел палитры, не G1–G4 asset validation.
+
+**Ограничение релизного статуса:** SKIN-1 registry identity и runtime ordinal logic подготовлены; NEON STAGE artwork/assets, полные masters, package layout `Skins/skin-053/`, все 15 дополнительных активных тем, G1–G4/PNG CRC, Windows Release, pluginval 5 и FL Studio 20 остаются незавершёнными/UNVERIFIED.
+
+==============================================================================
