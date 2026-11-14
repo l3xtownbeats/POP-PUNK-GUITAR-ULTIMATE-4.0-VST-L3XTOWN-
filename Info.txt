@@ -2814,3 +2814,13 @@ unverified until their steps complete successfully.
 **Честное разграничение:** баннер является concept artwork, а не снимком запущенного VST3. Он не меняет runtime ThemeManager, Skin_053 assets/theme.json, UI controls, APVTS, audio engine, DSP, MIDI или presets. Поэтому фактический вид NEON STAGE внутри FL Studio пока не изменён и не принят визуально. Новая шапка не является доказательством реализации всех показанных runtime-компонентов.
 
 Ветка: `work/neon-stage-github-header-refresh`. Banner commit: `0f00daaa03a580d082dddaa6dd9a97d03da84508`. README commit: 2586b742faf505f18ec929575047bbe773d817cf. Требуются SVG/XML validation, PR review, CI и отдельная runtime UI implementation/acceptance.
+
+
+### 2026-11-15 — NEON STAGE runtime editor visual pass
+
+**Статус:** SOURCE VISUAL CHANGE COMMITTED; BUILD / RUNTIME ACCEPTANCE PENDING.  
+В `Source/PluginEditor.cpp` обновлена верхняя оболочка редактора: NEON STAGE brand title, product subtitle, отдельная графитовая top-bar поверхность, акцентная полоса и более ясные названия центральной playing-core панели. Обновлена высота header layout с 48 до 62 px; основные зоны пересчитываются от новой высоты. Существующие компоненты, APVTS attachments, MIDI keyboard, 9 параметров и 7 FX bypass controls сохранены.
+
+**Границы:** изменён только визуальный paint/layout слой редактора. Не менялись ThemeManager palette tokens, Skin_053/theme.json, APVTS IDs/диапазоны, audio/DSP, sampler, MIDI routing, presets или samples. Баннер и runtime UI — разные артефакты; баннер помечен как concept artwork.
+
+Ветка: `work/neon-stage-github-header-refresh`. Runtime source commit: `db05549e29988edab2ede26775abc4259919e56f`. На момент записи C++ compile, Windows Release, CTest, pluginval strictness 5 и FL Studio 20 visual/host acceptance не подтверждены. Не объявлять runtime redesign готовым до этих проверок.
