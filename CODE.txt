@@ -367,3 +367,12 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 **Status:** REQUIREMENTS CONSOLIDATED; IMPLEMENTATION STATUS UNCHANGED; EXACT-SHA VALIDATION NOT RUN.  
 **Next:** use the INFO §2026-11-14 consolidation and the existing canonical specs as audit checklist; reconcile source/branch evidence before implementing any item. Do not duplicate already existing work.
+
+
+## 2026-11-14 — Exact NEON STAGE AutoChords reference 02
+
+- User explicitly requires one-to-one visual matching of `02 INTERFACE NEON STAGE AUTOCHORDS`, including its exact neon palette; generic neon approximation is not acceptable.
+- INFO records immutable-reference handling, exact geometry/material/typography/control match, palette sampling requirement (no guessed HEX), left preset/right rhythm-mode AutoChords layout, visible/interactive MIDI keyboard, and visual-only invariants.
+- Main `01 INTERFACE — NEON STAGE DEFAULT` and third FX EDIT + AutoChords reference remain separate coordinated approved states; do not conflate or redesign them.
+- Before implementation, locate original image, record path/dimensions/SHA-256, sample palette and compare existing UI/tokens; reuse matching work and modify only proven gaps.
+- Documentation-only update. No UI source/assets changed; no visual comparison or runtime test performed. Status: REQUIREMENT LOCKED / EXACT REFERENCE ASSET AND PALETTE SAMPLING STILL TO BE VERIFIED.
