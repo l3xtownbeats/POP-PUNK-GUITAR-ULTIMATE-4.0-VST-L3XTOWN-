@@ -396,3 +396,17 @@ First approved file = authoritative layout/appearance/control inventory (preserv
 **Conflict resolution:** only requirements compatible with 2026-11-13/14 decisions and strict project rules were indexed. The first mockup remains authoritative for layout/control inventory; second AutoChords reference supplies palette only; third FX EDIT + AutoChords state remains distinct. No new APVTS IDs or duplicate browser/catalog/schema are authorized.
 
 **Status:** REQUIREMENTS INDEXED; IMPLEMENTATION/TEST/CI/HOST STATUS UNCHANGED; no PASS claimed.
+
+
+
+## 2026-11-14 — TX-UI-BROWSER-SEPARATION-006 (requirements index)
+
+**Authority:** `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.16, commit `4cefb8a0006d68679b274a3a0863f2fdb68a50f6`; detailed append-only record: `Info.txt` → TX-UI-BROWSER-SEPARATION-006.
+- Three distinct areas: PRESET BROWSER (Tone/Factory/User presets), STYLE browser (playing style/articulation), PATTERN browser (rhythm patterns). STYLE and PATTERN are separate windows/catalogs/selection transactions; no unified flat list.
+- STYLE hierarchy: GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE/ARTICULATION; sections INTRO/VERSE/PRE-CHORUS/CHORUS/BRIDGE/OUTRO. GROUP/ARTIST named public catalog remains BLOCKED by MASTER REV 17.0 §11/§15; no aliases/logos workaround.
+- PATTERN categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS; 8 Pattern Slots per section. Rhythm data remains separate from STYLE/ARTICULATION, Tone Preset, Guitar Source and FX.
+- SEARCH/FAVORITES/FILTER/SORT/PREV/NEXT preserve scope; folders/categories/items must operate on real data; unsupported library entries are unavailable/disabled, never synthetic substitutes.
+- PREVIEW is temporary; APPLY/SELECT commits; CANCEL rolls back. Playback transitions require host sync and no stuck/duplicate notes, timing jumps or abrupt cuts; unsupported backend controls remain honestly disabled.
+- Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation and Rhythm Pattern remain independent. MELODY one-key/one-note; no overlay may obstruct MIDI keyboard or hit-testing.
+- Preserve first mockup layout/control inventory; second AutoChords reference is palette-only; third FX EDIT + AutoChords is distinct. Preserve REV17/I1–I8/R01–R34, I7/R18 default-ppgu, stable IDs, factory read-only/extension-only, user/factory separation, file formats and no fake controls.
+- Documentation-only. No production source/assets/APVTS/DSP/MIDI/sampler/preset data changed; runtime, host-sync, exact-SHA CI and FL Studio 20 acceptance remain unverified. No PASS claimed.
