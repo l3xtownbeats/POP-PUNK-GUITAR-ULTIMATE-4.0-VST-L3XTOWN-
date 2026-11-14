@@ -375,3 +375,23 @@ Append-only rule: never silently rewrite history. Corrections and superseding de
 - Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
 - Production source changed: NO.
 - Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
+
+
+## TX-PRESET-BROWSER-003 — Approved preset navigation and browser behavior (2026-11-14)
+
+This append-only amendment adds the previously omitted user-ratified browser workflow. It supplements, and does not weaken, sections 3.3 and 8 above.
+
+- **RATIFIED navigation:** GENRE → ARTIST / BAND → SONG / SECTION → STYLE → PATTERN.
+- **RATIFIED sections:** Intro / Verse / Pre-Chorus / Chorus / Bridge / Outro. Pre-Chorus is included from the later user clarification and supersedes the older shortened list. MELODY structure remains unchanged.
+- **RATIFIED browser modes:** BROWSER / FAVORITES / CATEGORIES.
+- **RATIFIED controls:** search, filtering, sorting, preset selection, favorites, preview/audition, preset switching; top bar PREV / NEXT, FAVORITE, PRESET NAME, CATEGORY, SEARCH.
+- **RATIFIED categories:** Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere.
+- **RATIFIED card content:** artwork, title, description, additional information; real category counters.
+- **REQUIRED behavior:** selection, preview and committed loaded preset are distinct states; preview must not alter active preset/project state; PREV/NEXT must respect active filtered context; browser must be usable by mouse and keyboard and connect to the preset manager/sound engine rather than act as a decorative selector.
+- **RATIFIED data separation:** factory/user presets; stable IDs; save/load/import/export; backward compatibility and corrupt-state recovery. Validate each preset’s mode, dependencies, note ranges, articulation maps, parameter compatibility, output/clipping, loudness and playability.
+- **COUNT INTEGRITY:** distinguish definitions, dependency-resolved, loadable, playable-tested and host-verified. 300 factory definitions (150 MELODY + 150 PATTERN target split), SOUND HUNTER targets and the separate 30-preset Curator project are not interchangeable or evidence of achieved playable counts.
+- **CURATOR:** separate advanced classification/recommendation workflow; it must not restrict user libraries or silently alter/delete assets.
+- **SOUND/LEGAL:** preset references to bands/songs are navigation/style references, not permission to bundle recordings, protected artwork or third-party presets. Existing S6/S6.5 asset licensing gates remain binding.
+- **NOT SPECIFIED / DO NOT INVENT:** exact sort fields/order, filter chip taxonomy, ranking algorithm, genre/artist tree contents, auto-load vs explicit load, double-click behavior, preview duration/waveform. Keep these as open design questions pending explicit approval.
+- **LAYOUT CONFLICT RULE:** a historical left-panel browser layout is subordinate to the newer approved “01 INTERFACE — NEON STAGE DEFAULT” reference; do not alter that reference based on the older layout note.
+- **Status:** REQUIREMENTS CONSOLIDATED / SOURCE IMPLEMENTATION NOT CHANGED / BROWSER COMPONENT AUDIT REQUIRED.
