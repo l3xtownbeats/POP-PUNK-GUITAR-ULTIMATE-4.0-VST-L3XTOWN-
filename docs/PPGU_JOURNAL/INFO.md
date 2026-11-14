@@ -2837,3 +2837,15 @@ Audit boundary: static comparison of CMake paths, workflow text and repository t
 - При каждом изменении исходников в рамках одной рабочей операции синхронно обновлять CODE и INFO: один и тот же commit SHA, затронутые файлы, что изменено, тесты/результаты и оставшиеся риски. Если одна из записей не обновлена или не прошла повторную проверку, изменение нельзя отмечать как полностью задокументированное.
 - Не удалять и не перемещать существующие журналы/документы вслепую: сначала установить все ссылки и зависимости, затем выполнить контролируемую консолидацию без потери истории и содержания.
 - Обновлять журналы по ходу разработки, а не задним числом в конце большого этапа. Рутинные безопасные исправления фиксировать без отдельных уведомлений; сводный статус сообщать на контрольных точках или по запросу.
+
+
+## 2026-11-14 — CANONICAL JOURNAL ARCHIVE CONSOLIDATION
+
+User requested all INFO, CODE and other development journals in one place and downloadable delivery on the exact request ALL.
+
+Canonical folder: docs/PPGU_JOURNAL/ (README.md index).
+Copied and verified: INFO.md, CODE.md, PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md, PPGU_MASTER_PROMPT_RU.md, PPGU_MAJOR_USER_REQUIREMENTS_AMENDMENT_2026-11-14_RU.md, PPGU_AUDIO_ENGINE_PRODUCT_FAMILY_RU.md, MASTER_PRODUCT_SPEC_4_0_RU.md, PRESET_BANK_4_0_READINESS_RU.md, SAMPLE_LIBRARY_SOURCING_AND_LICENSE_POLICY.md, PPGU_CANONICAL_PUNK_GROUP_PRESET_SOUND_MAP_RU.md.
+
+All future journal maintenance is to be performed in docs/PPGU_JOURNAL/. INFO and CODE remain separate but synchronized. Full source code remains in .cpp/.h files. On the user's exact request ALL, prepare a fresh downloadable ZIP from the current main contents of this folder.
+
+Migration boundary: original root/docs files have not been deleted or moved. This is deliberate: a complete repository-wide link/workflow/script/consumer audit and a safe history-preserving migration have not yet been completed. Do not claim physical deletion/move. The consolidated folder is the canonical working archive; originals are retained as legacy/history until migration audit.
