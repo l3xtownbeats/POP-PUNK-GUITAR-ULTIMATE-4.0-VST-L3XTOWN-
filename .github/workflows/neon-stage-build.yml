@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-skin:
@@ -26,6 +26,42 @@ jobs:
         env:
           CI: "true"
         run: NEON_STAGE_BUILD.bat
+
+      # Promote only the two reviewed gallery images on the dedicated review branch.
+      # All other generated sprites remain staging artifacts until separately reviewed.
+      - name: Sync reviewed NEON STAGE preview and hero to Skin_053
+        if: github.ref_name == 'work/neon-stage-reference-preview-fix'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sourceRoot = Join-Path $PWD 'dist/neon_stage_staging/Skin_053/assets'
+          $targetRoot = Join-Path $PWD 'SKIN/Skin_053/assets'
+          $changed = $false
+          foreach ($name in @('preview.png', 'hero.png')) {
+            $source = Join-Path $sourceRoot $name
+            $target = Join-Path $targetRoot $name
+            if (-not (Test-Path -LiteralPath $source)) {
+              throw "Generated reviewed asset is missing: $source"
+            }
+            $sourceHash = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash
+            $targetHash = if (Test-Path -LiteralPath $target) {
+              (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash
+            } else { '' }
+            if ($sourceHash -ne $targetHash) {
+              Copy-Item -LiteralPath $source -Destination $target -Force
+              Write-Host "Staged canonical Skin_053 asset: $name ($sourceHash)"
+              $changed = $true
+            } else {
+              Write-Host "Canonical Skin_053 asset already matches staging output: $name"
+            }
+          }
+          if ($changed) {
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- SKIN/Skin_053/assets/preview.png SKIN/Skin_053/assets/hero.png
+            git commit -m "assets: sync reviewed NEON STAGE preview and hero"
+            git push origin "HEAD:$env:GITHUB_REF_NAME"
+          }
       - name: Upload staging package and report
         if: always()
         uses: actions/upload-artifact@v4
