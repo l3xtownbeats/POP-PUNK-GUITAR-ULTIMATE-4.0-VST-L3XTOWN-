@@ -3248,3 +3248,17 @@ Exact-HEAD workflow evidence is pending for commit `31826711d369296d2539bddc3dc4
 Applied the same NEON STAGE visual language to all existing auxiliary workspace windows: graphite gradient chassis, recessed title strip, restrained theme-accent rail, fine metallic perimeter/inner highlight, and a subdued workspace background grid. The existing panel title, close/maximize actions, content bounds, drag/resize behavior, window IDs, geometry persistence and ownership are unchanged. Theme colors continue to arrive through the existing setSurfaceColours/setThemePalette path.
 
 This is visual-only. No DSP/audio/APVTS/MIDI/sampler/preset changes. Fresh Windows build, CTest, pluginval and FL Studio 20 visual/host acceptance are still required for the exact source SHA.
+
+
+## 2026-11-15 — Correct canonical NEON STAGE default in reference build pipeline
+
+**Cause found:** exact-SHA skin workflow run `43636447777` failed on commit `31826711d369296d2539bddc3dc4b66b445c540e`. The reference audit incorrectly treated `Skin_053` as the active NEON STAGE theme and required its name to equal `NEON STAGE`, even though the canonical registry now correctly points to `neon-stage-default-skin-1` at `Skin_052/theme.json`; `Skin_053` is explicitly the legacy archive. All seven approved reference PNGs decoded, all 27 schema-required controls were present, and the Skin_052/Skin_053 grid metadata matched. The only reported audit error was the stale Skin_053 identity assertion.
+
+**Corrected files on this branch:**
+- `validate_neon_stage_reference.py`: validates the registry default ID, canonical Skin_052 identity/index/design status, Skin_053 legacy-archive identity, required control IDs, 12x16 bounds, grid parity, visual-only compatibility flags and all seven reference PNGs.
+- `NEON_STAGE_BUILD.bat`: build banner now identifies NEON STAGE DEFAULT SKIN-1.
+- `.github/workflows/neon-stage-build.yml`: reviewed preview/hero sync target is now the canonical `SKIN/Skin_052/assets`; staging artifact labels use NEON STAGE DEFAULT SKIN-1. Skin_053 remains untouched as a legacy archive.
+
+**Verification:** run `43636447894` (Windows VST3 workflow, same source SHA) was cancelled after the skin-pack validation step failed; source selection, configure, VST3 build, CTest and pluginval were skipped. This is not a build result. The validator/workflow correction is committed, but a fresh exact-head workflow result is still required. Pixel-level mockup comparison, coordinate sign-off and FL Studio 20 acceptance remain pending.
+
+**Safety:** no DSP, audio callback, APVTS IDs/semantics, sampler, presets, MIDI, transport or runtime layout bounds were changed by this pipeline correction. No PR was merged.
