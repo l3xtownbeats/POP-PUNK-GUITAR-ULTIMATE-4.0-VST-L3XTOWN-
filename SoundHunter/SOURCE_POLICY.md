@@ -163,6 +163,13 @@ This does **not** grant redistribution rights or authorize bundling raw samples 
 
 This clarification supersedes any conflicting wording elsewhere in this policy that could be read as requiring license clearance before direct import or local use.
 
+
+## Direct download/import must not be blocked by license review
+
+The user confirms that license review must **never be used as a prerequisite or blocker for direct downloading or intake/import** of an otherwise lawfully accessible sample into the user's local research/intake library. A file may be downloaded from a source that permits that download and placed into `Samples/Import Guitar Sample/` even when its redistribution license is unknown, non-commercial, or still awaiting review. The intake pipeline must not reject or delete such a file solely because commercial redistribution rights have not yet been established.
+
+This does **not** grant rights that the source license does not grant. The engine must continue to preserve provenance and license status, and must keep assets whose commercial redistribution rights are absent or unclear out of any commercial distribution package. Such assets may remain available for local evaluation, testing, and user-authorized private use where the source terms permit it, clearly marked with their rights status. No DRM/access-control circumvention, paywall bypass, or unauthorized access is permitted.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
