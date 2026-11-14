@@ -45,7 +45,9 @@ class NeonStageMigrationAuditTests(unittest.TestCase):
             root = Path(tmp)
             self.make_registry(root)
             result = audit(root)
-            self.assertEqual("PASS", result["status"])
+            self.assertEqual("REVIEW_REQUIRED", result["status"])
+            self.assertTrue(any(item["code"] == "LEGACY_SELECTOR_POLICY"
+                                for item in result["issues"]))
             self.assertFalse(result["mutation_performed"])
             self.assertEqual(49, len(result["preservation"]["stable_ids_54_102"]))
 
