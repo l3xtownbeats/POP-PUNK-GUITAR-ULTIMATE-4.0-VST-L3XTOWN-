@@ -94,9 +94,12 @@ Pattern-specific data:
 - Tabs/filters: All, Melody, Pattern, Factory, User, Favorites.
 - Search matches preset name, artist/style tags and description.
 - Artist/category folders are navigable; sorting supports name and recently used.
-- Double-click loads; single-click previews metadata; star toggles favorite.
+- Single-click selects/highlights only; it must not change the active sound.
+- Preview is a separate, isolated audition and must not alter the active preset or DAW project state.
+- Explicit SELECT / LOAD commits a validated preset atomically; failed loads preserve the previous active preset.
+- Double-click is not an implicit load command under the newer approved workflow.
 - Save, Save As, Rename, Delete, Import Bank, Export Bank, Rescan.
-- Current mode filters incompatible preset types; loading a Pattern preset switches to Pattern mode and vice versa.
+- Current mode may filter incompatible preset types; a selected/previewed item never switches active mode. Only successful explicit LOAD may switch MELODY/PATTERN mode atomically with the preset.
 
 ## Acceptance tests before calling this feature complete
 
@@ -110,3 +113,51 @@ Pattern-specific data:
 8. Test browser search, favorites, sorting and folder rescan with 300+ entries.
 
 Important: the existing 300-entry JSON catalog is a source catalog, not yet proof that 300 presets are loadable in the plugin. The browser and file extensions become a shipped feature only after the plugin loader, UI and acceptance tests are implemented.
+
+
+## Approved browser workflow reconciliation — 2026-11-14 (supersedes older interaction wording)
+
+This file's earlier double-click-load interaction is superseded by the newer approved contract recorded in Info.txt. Keep this document as the preset file/storage specification; Info.txt is the sole development journal.
+
+### Navigation models
+- Pattern discovery: GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN.
+- Section values: Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro.
+- Melody discovery remains PRESET → STYLE → PATTERN. Do not force the Pattern hierarchy onto Melody.
+- The hierarchy is logical metadata navigation, not permission to add new screens or visible controls outside the first approved mockup.
+
+### Browser controls and actions
+BROWSER; FAVORITES; CATEGORIES; FACTORY/USER; SEARCH; FILTER; SORT; PREV/NEXT; FAVORITE; PRESET NAME; CATEGORY; PREVIEW; SELECT/LOAD; SAVE; SAVE AS; RENAME; DELETE; IMPORT; EXPORT; RESCAN.
+
+Map these functions to the first approved mockup's control inventory and positions. Do not create duplicate browser/catalog/schema implementations or decorative controls. If an action has no real backend yet, show it as unavailable/disabled rather than simulating success.
+
+### Result-set behavior
+- Search, filters and sort operate on one current deterministic result set.
+- PREV/NEXT traverse only that result set and respect the active hierarchy and filters.
+- Changing a parent hierarchy value refreshes dependent child values and clears only invalid descendants.
+- Favorites are persistent user preferences; retain whether an item belongs to Factory or User.
+- Empty/loading/unavailable/invalid/error states and counts must reflect actual catalog/index data only.
+
+### Selection, preview and load are separate
+- Selected: browser focus/highlight only; no audio, parameter, mode, or project-state change.
+- Previewed: isolated audition only; must not replace active preset, change persistent parameters, or dirty/alter DAW project state.
+- Loaded/Active: only after explicit SELECT/LOAD and successful validation plus atomic commit.
+- If safe independent audition is not implemented, PREVIEW is disabled with an honest reason. Never implement preview by loading the preset.
+- On any preview/load failure, retain the previous active state and report the actual error.
+
+### Storage, validation and safety
+- Stable unique ID is authoritative; display name is not. Rename preserves ID.
+- Factory presets are immutable/read-only. SAVE AS always creates a User copy. User destructive operations require confirmation.
+- Factory and User namespaces remain separate; updates must never overwrite user presets/favorites/banks.
+- Validate schema, format version, ranges, mode, APVTS mapping, state restore, sample profile/library, articulation and FX dependencies before commit.
+- Missing/invalid assets, unsupported version, malformed data or incompatible parameters must fail safely without partial state or silent substitute samples.
+- Import/export/rescan must enforce path containment, size/schema validation, compatibility and licensing/provenance checks. Index publication is atomic; failed operations retain the prior valid index.
+- Keep the 300 factory definitions and 150 MELODY + 150 PATTERN target unchanged unless separately approved. Definitions are not proof of playable/loadable presets.
+- File I/O, parsing, indexing, hashing, scanning and preview preparation stay off the audio thread. No audio callback file I/O, allocations, blocking locks/waits, decoding, logging or GUI calls.
+
+### Visual and product invariants
+- First approved mockup is the sole layout/control-inventory authority.
+- Second reference “02 INTERFACE NEON STAGE AUTOCHORDS” provides palette only, not an alternate layout.
+- Third FX EDIT + AutoChords reference remains a distinct coordinated UI state.
+- Skins may change visual appearance/palette only; they do not change geometry/function, APVTS IDs/semantics, processor state, presets, MIDI, sampler, DSP or scheduler behavior.
+- Artist/Band/Song names are metadata/reference taxonomy only; they do not authorize copying protected songs, riffs, stems, recordings, commercial libraries or proprietary presets.
+- Apply the approved SoundBank GREEN/provenance and license-clearance gate to every included sample/asset.
