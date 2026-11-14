@@ -198,3 +198,33 @@ Top chord/degree strip; left Playing Styles/Articulation; right Playback Mode an
 Reference files known from prior context include `Cover Interface.jpg`, `9132a8e5-5c89-45ee-8412-bea39bc4d04c.png`, `5675b332-eb7a-4dca-85fb-873a9682a349 (1).png` (with a duplicate `(2)`) and `02 INTERFACE NEON STAGE AUTOCHORDS`. Retrieved Library image references also include the full PPGU interface, AutoChords, FX EDIT/Signal Forge and Import Guitar examples. They are not all confirmed copied to GitHub; per-file recovery, exact source mapping and SHA-256 remain OPEN.
 
 **Status:** requirements reconciled into inventory; runtime parity and browser behavior require source-level audit and tests. Documentation only; no implementation claim.
+
+
+## 12. PRECEDENCE / LATEST APPROVED CONTROL RULES (2026-11-14)
+
+This inventory is subordinate to the binding SIGNAL FORGE v10 rules and later direct user corrections. It is a control registry, not a second development journal.
+
+### 12.1 Reference and skin-system precedence
+- First approved main-interface mockup defines layout, appearance, proportions and control placement.
+- `02 INTERFACE NEON STAGE AUTOCHORDS` defines palette only. Do not use it as a layout/appearance template.
+- SIGNAL FORGE = product identity/engineering standard; NEON STAGE = visual treatment/palette.
+- Use only the canonical SKIN manifests, ThemeManager and validator. Preserve 21 token names, 27 controls + `sync_selector`, legacy split, stable IDs, preflight/PENDING checks. Do not introduce parallel theme systems or silently reconcile old theme counts (52/102/other snapshots).
+- Every skin preserves identical layout, control count/order/IDs/attachments and engine behavior.
+
+### 12.2 Browser behavior invariants
+- Preset Browser selects sound/instrument/tone. Pattern Browser selects performance/rhythm. Sample/Library browser is a separate asset-management workflow.
+- Preset views: BROWSER / FAVORITES / CATEGORIES; factory and user scopes remain separate. Eight categories: Clean, Crunch, Drive, Lead, Ambient, Lo-Fi, Acoustic Textures, Punk Rhythm.
+- Search/category/tag/filter/sort/count operations are browse-only; no implicit preset load. Preview is real and non-committing. Load/double-click explicitly commits a safe, complete preset transaction. Factory is read-only; user Save/Save As/Rename/Delete and bank Import/Export/Rescan require validation/persistence and safe failure behavior.
+- Pattern sequence is Section first → Pattern → Preview → Apply or Back/Cancel. Section and Pattern are independent. Preview never commits; Apply commits; Back restores previous committed state.
+- AutoChords harmony, Playing Style/Articulation, Pattern, Playback Mode and Rhythm Mode are independent selectors. Generation requires deterministic seed/constraints, preview and explicit commit. Main keyboard remains unobstructed.
+- All browser cards/metadata and technique indicators must be backed by real registry entries, maps, recordings or processor capability; no fabricated artwork metadata, voicings, techniques or previews.
+
+### 12.3 Control invariants
+- Main modes: MELODY / PATTERN / PUNK GROUP.
+- Nine rotary IDs/order and seven FX bypass IDs/order in §§2–5 remain unchanged. Flanger is FX EDIT only, not an eighth main bypass. FX EDIT has eight pages including Flanger and Cabinet IR.
+- Every active control must have a real binding/action, value/range, tooltip, focus, state/reset/automation where applicable, and loading/empty/error semantics. Never rename APVTS IDs, change semantics, remove existing engine functions or add decorative/fake controls.
+- Preset style defaults can set FX chain at explicit load; subsequent manual edits must not be silently overwritten.
+
+### 12.4 Status / known gaps
+- A registry entry or mockup is not runtime proof. Mark APPROVED, SOURCE PRESENT, WIRED, TESTED, HOST VERIFIED and RELEASED separately.
+- The latest source audit in `Info.txt` is authoritative for actual implementation gaps and SHA-scoped test evidence. This matrix does not claim section-first Pattern UX, complete AutoChords generation, or full Gallery Preview/Apply/Back/Favorites unless the relevant source and tests prove them.
