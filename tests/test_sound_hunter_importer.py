@@ -36,6 +36,29 @@ class SoundHunterRegressionTests(unittest.TestCase):
         self.assertFalse(sound_hunter.within_library_limit(39_000_000_000, 2_000_000_000, limit))
         self.assertFalse(sound_hunter.within_library_limit(40_000_000_000, 1, limit))
 
+    def test_release_checksum_manifest_verifies_all_members(self):
+        import hashlib, io, zipfile
+        payload=b"real guitar sample"
+        digest=hashlib.sha256(payload).hexdigest()
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(buffer,"w") as z:
+            z.writestr("bank/sample.wav",payload)
+            z.writestr("bank/SHA256SUMS",f"{digest}  sample.wav\\n")
+        with zipfile.ZipFile(io.BytesIO(buffer.getvalue())) as z:
+            count,members=sound_hunter.verify_zip_sha256_manifest(z)
+        self.assertEqual(count,1)
+        self.assertEqual(members,["bank/sample.wav"])
+
+    def test_release_checksum_manifest_rejects_modified_member(self):
+        import hashlib, io, zipfile
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(buffer,"w") as z:
+            z.writestr("sample.wav",b"changed")
+            z.writestr("SHA256SUMS",f"{hashlib.sha256(b'original').hexdigest()}  sample.wav\\n")
+        with zipfile.ZipFile(io.BytesIO(buffer.getvalue())) as z:
+            with self.assertRaises(RuntimeError):
+                sound_hunter.verify_zip_sha256_manifest(z)
+
     def test_existing_audio_bytes_counts_audio_only(self):
         import tempfile
         with tempfile.TemporaryDirectory() as tmp:
