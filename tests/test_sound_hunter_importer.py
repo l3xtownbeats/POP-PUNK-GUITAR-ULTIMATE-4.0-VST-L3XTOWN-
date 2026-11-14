@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Focused regression tests for Sound Hunter import path and aggregate 40 GB library ceiling."""
+"""Focused regression tests for Sound Hunter import safety and unlimited Samples growth."""
 from pathlib import Path
 import importlib.util
+import subprocess
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,6 +14,10 @@ SPEC.loader.exec_module(sound_hunter)
 
 
 class SoundHunterRegressionTests(unittest.TestCase):
+    def test_importer_has_no_artificial_samples_size_cap(self):
+        result = subprocess.run([sys.executable, str(MODULE_PATH), "--help"], capture_output=True, text=True, check=True)
+        self.assertNotIn("--max-library-gb", result.stdout)
+
     def test_release_assets_use_separate_directory(self):
         source = Path("/tmp/run/meta-open-sound-steel")
         target = sound_hunter.release_asset_target(
@@ -28,13 +34,6 @@ class SoundHunterRegressionTests(unittest.TestCase):
             sound_hunter.release_asset_target(
                 Path("/tmp/run/source"), "../outside/sample.wav"
             )
-
-    def test_aggregate_library_ceiling_is_40_gb(self):
-        limit = 40_000_000_000
-        self.assertTrue(sound_hunter.within_library_limit(0, 39_000_000_000, limit))
-        self.assertTrue(sound_hunter.within_library_limit(39_000_000_000, 1_000_000_000, limit))
-        self.assertFalse(sound_hunter.within_library_limit(39_000_000_000, 2_000_000_000, limit))
-        self.assertFalse(sound_hunter.within_library_limit(40_000_000_000, 1, limit))
 
     def test_release_checksum_manifest_verifies_all_members(self):
         import hashlib, io, zipfile
