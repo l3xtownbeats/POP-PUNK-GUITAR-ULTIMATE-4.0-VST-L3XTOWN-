@@ -717,3 +717,15 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 - Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
 - Production source changed: NO.
 - Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
+
+
+## 2026-11-14 — TX-PRESET-BROWSER-003: PRESET BROWSER contract index
+**Type:** append-only requirements index; no production source changed.
+**Authority:** Info.txt TX-PRESET-BROWSER-003 and docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md.
+**Ratified navigation:** GENRE → ARTIST/BAND → SONG/SECTION (Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro) → STYLE → PATTERN. MELODY structure unchanged.
+**Browser controls:** BROWSER/FAVORITES/CATEGORIES; search, filtering, sorting, preset selection, favorites, preview/audition, preset switching; PREV/NEXT, FAVORITE, PRESET NAME, CATEGORY, SEARCH in top bar.
+**Categories:** Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere.
+**Data contract:** artwork/title/description/info; honest counts and playable state; separate definitions/dependency-resolved/loadable/playable-tested/host-verified; factory/user separation; save/load/import/export; stable IDs and backward-compatible state.
+**Behavior:** preview must not commit or mutate active preset/project; PREV/NEXT respects active browser context; real browser actions connect to preset manager and sound engine; mouse and keyboard support; Curator remains separate.
+**Open questions deliberately not invented:** sort fields/ranking, exact filter set, genre/artist taxonomy, auto-load and double-click semantics, preview duration/waveform.
+**Status:** REQUIREMENTS RECORDED / IMPLEMENTATION AUDIT REQUIRED / NO PRODUCTION SOURCE CHANGE.
