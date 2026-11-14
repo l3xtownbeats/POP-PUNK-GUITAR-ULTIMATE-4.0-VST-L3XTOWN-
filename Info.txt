@@ -3237,3 +3237,14 @@ Implemented the shared NEON STAGE hardware-control rendering layer:
 - no component bounds, APVTS attachments/IDs, parameter ranges, processor, DSP, sampler, MIDI, preset state or window ownership were changed.
 
 Exact-HEAD workflow evidence is pending for commit `31826711d369296d2539bddc3dc4b66b445c540e`: NEON STAGE skin workflow run `43636447777` and Windows VST3 workflow run `43636447894`. The earlier skin workflow run `43636437432` belongs to the immediately preceding source commit `f2edb4439c01b2e8cf62d600216d815e62641de1` and is not evidence for the final corrected commit. No build, CTest, pluginval, FL Studio 20 or visual pixel-parity PASS is claimed until the exact-HEAD results are read.
+
+
+## 2026-11-15 — NEON STAGE auxiliary-window chassis styling
+
+**File:** `Source/UI/PPGUMultiWindowWorkspace.cpp`  
+**Commit:** `16cf09dcea6e6b9ad40307bbcdb0c364284bbec5`  
+**Status:** SOURCE CHANGE COMMITTED / EXACT-HEAD VALIDATION PENDING.
+
+Applied the same NEON STAGE visual language to all existing auxiliary workspace windows: graphite gradient chassis, recessed title strip, restrained theme-accent rail, fine metallic perimeter/inner highlight, and a subdued workspace background grid. The existing panel title, close/maximize actions, content bounds, drag/resize behavior, window IDs, geometry persistence and ownership are unchanged. Theme colors continue to arrive through the existing setSurfaceColours/setThemePalette path.
+
+This is visual-only. No DSP/audio/APVTS/MIDI/sampler/preset changes. Fresh Windows build, CTest, pluginval and FL Studio 20 visual/host acceptance are still required for the exact source SHA.
