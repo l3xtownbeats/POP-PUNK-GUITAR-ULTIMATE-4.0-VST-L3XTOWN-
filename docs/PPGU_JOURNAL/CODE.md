@@ -871,3 +871,19 @@ For every accepted resource: obtain the official source/release, safely extract,
 Every preset claiming a band/artist/track style must reference actual cleared assets from this or another accepted source AND contain the required musical/performance/pattern/articulation data. Importing files or creating mappings alone does not make a preset complete.
 
 **Operational status:** the user-approved candidate set is documented. This commit does not download binary audio or prove that the Sound Hunter GitHub Actions importer has run successfully. Actual acquisition/integration must be evidenced separately by a successful workflow run/artifact, manifest, SHA-256 records and QA. Do not report acquisition complete before that evidence exists.
+
+
+## 2026-11-14 — FULL DELEGATION OF PPGU IMPLEMENTATION
+
+The user explicitly authorizes and delegates independent programming and development of ALL POP PUNK GUITAR ULTIMATE controls and interface elements without seeking separate approval for each routine implementation decision or step. Execute according to the approved master development plan and all previously approved requirements/specifications covering architecture, functionality, sound, libraries, presets, UI, performance, testing and release.
+
+Implementation obligations:
+- independently design, code and integrate all modules, windows, controls, parameters, bindings, MIDI/automation behavior, DSP/audio engine, sample loading/mapping, preset system, Sound Hunter, skins, settings, performance and testing components within the approved specification;
+- make ordinary engineering decisions without repeatedly asking for permission, provided they do not conflict with approved requirements; preserve exact user constraints and priorities;
+- do not replace approved functionality with placeholders, mockups or fake controls; each control must have a real connected function, correct state, persistence/restore, bindings and tests where applicable;
+- resolve requirement conflicts using the latest/more specific approved clarification and document the decision; do not silently change user requirements;
+- maintain both project journals for material changes, recording plans, architecture decisions, implemented files/modules, commit IDs, tests and actual results, known defects, blockers, status and next steps;
+- distinguish APPROVED, DOCUMENTED, IMPLEMENTED, TESTED, VERIFIED and COMPLETE honestly. Never claim implementation, testing, build, import or release is complete without actual evidence;
+- ask the user only when a decision genuinely falls outside delegated authority, involves a new irreversible/paid operation, rights/licensing, data safety, or a material ambiguity that cannot be resolved from the approved specification.
+
+This delegation covers the full approved PPGU scope, including all controls and visual/functional modules, but does not override licensing, quality, security, source-preservation or verification requirements. Delegation does not imply background work between messages: progress is recorded only for actions actually performed and commits actually verified.
