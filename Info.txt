@@ -1964,3 +1964,7 @@ The following are independent user-selectable dimensions: CHORD/HARMONY, ARTICUL
 - The preceding 2026-11-14 Preset/Pattern Browser addendum remains valid. Its combined context sequence is interpreted logically; this entry clarifies that STYLE and PATTERN are separate windows with independent navigation and state.
 - Historical entries are append-only and must not be deleted or rewritten. This addendum does not authorize APVTS ID/semantic changes, new controls outside the approved inventory, weakening of safety/realtime/license rules, or claims of implementation.
 - **Status:** USER-APPROVED REQUIREMENTS RECORDED / SOURCE IMPLEMENTATION AND END-TO-END VALIDATION NOT IMPLIED.
+
+
+### Clarification — AutoChords Pattern selector is not the PATTERN Browser
+The AutoChords panel's own Pattern selector and the PATTERN Browser's rhythm/performance Pattern are separate controls and separate state. They must never be treated as the same selector, share/overwrite one another's selection, or trigger a hidden update in the other workflow. AutoChords Pattern remains within AutoChords' own chord/harmony-generation context; PATTERN Browser Pattern remains the section/slot rhythm-performance choice. Preview, Apply and Reset must respect this separation.
