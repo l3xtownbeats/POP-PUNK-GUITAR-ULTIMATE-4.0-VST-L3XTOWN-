@@ -1,5 +1,9 @@
 name: NEON STAGE DEFAULT SKIN-1 Build
 
+concurrency:
+  group: neon-stage-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -67,6 +71,8 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -- SKIN/Skin_052/assets/preview.png SKIN/Skin_052/assets/hero.png
             git commit -m "assets: sync reviewed NEON STAGE preview and hero"
+            git fetch origin "$env:GITHUB_REF_NAME"
+            git rebase "origin/$env:GITHUB_REF_NAME"
             git push origin "HEAD:$env:GITHUB_REF_NAME"
           }
       - name: Upload staging package and report
