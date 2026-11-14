@@ -605,3 +605,18 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Regression test result:** exact-SHA CTest step succeeded after the SFZ newline fixture corrections, explicit `mono/stereo only` warning assertion, and direct standard-library includes. This resolves the previously pending 10/12 regression checkpoint for this source SHA.
 
 **Status:** WINDOWS x64 RELEASE BUILD PASS / CTEST PASS / PLUGINVAL STRICTNESS 5 PASS / PACKAGE ARTIFACT CREATED. FL STUDIO 20 MANUAL HOST CHECK PENDING. Do not label the product fully production-released until the host check and final user-facing install verification are complete.
+
+
+## 2026-11-14 — PATTERN UX / O1-S1 source audit after CI green
+
+**Audit base:** branch `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`, CI source SHA `8c75820cab1b909ff43c55736f25150338e384d0`; journal head before this entry `cbd77215e745784ed1e14f737ed6b81dbd07a821`.
+
+**Confirmed implemented:** PATTERN processor path consumes held MIDI chords; uses host/internal PPQ clock, quantization, swing/accent, eight fixed 16-step rhythm masks, sample-accurate chord transitions, and sampler note events. The end-to-end processor integration test is part of the successful CI run.
+
+**User-approved workflow gap:** current UI does not implement the agreed two-stage selection flow: (1) choose musical song section (e.g. Intro / Verse / Chorus / Bridge / Outro), then (2) choose the guitar playing/rhythm pattern for that section. The current processor reads one global `patternSlot` (0..7), while `PPGUAutoChordsPanel` exposes key/scale/pattern slot and explicitly labels itself “SETUP ONLY”; AutoChords generation is disabled/not connected. The PATTERN tab itself does not provide the section-first workflow. Do not mislabel the existing eight rhythm masks as song sections or as a complete pattern browser.
+
+**Next implementation contract:** preserve current MIDI/PPQ scheduler and audio-thread guarantees; add a distinct song-section selection model and a separate rhythm-pattern catalog/selection stage, with explicit section-to-pattern association. UI sequence must be section selection first, rhythm/pattern selection second. Preview must not silently commit the active selection. Before implementation, map existing APVTS/state serialization and presets so old projects retain their current pattern behavior; add tests for section persistence, section/pattern association, MIDI playback and host transport. Do not alter SIGNAL FORGE/NEON styling.
+
+**O1/S1 blockers reconfirmed:** root `OverlayManagerTests.cpp` and `SecureSkinImportTests.cpp` include missing `OverlayManager.h` / `SecureSkinImport.h`; CMake explicitly excludes them because production headers/implementations are absent. These are not passing tests and must not be reported as implemented. Secure SVG/path import needs a robust security implementation, not a regex-only placeholder.
+
+**Status:** AUDIT COMPLETE / NO SOURCE CODE CHANGED IN THIS CHECKPOINT. PATTERN SECTION-FIRST UX = NOT IMPLEMENTED; AUTOCHORDS GENERATION = NOT IMPLEMENTED; O1/S1 = BLOCKED BY MISSING PRODUCTION MODULES.
