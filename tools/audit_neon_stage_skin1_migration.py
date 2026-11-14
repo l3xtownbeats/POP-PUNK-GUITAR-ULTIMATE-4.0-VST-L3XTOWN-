@@ -207,8 +207,10 @@ def audit(skin_root: Path) -> dict:
                                  "verify they are archival/non-selectable before promotion"})
 
     blockers = sum(item["severity"] == "BLOCKER" for item in issues)
+    reviews = sum(item["severity"] == "REVIEW" for item in issues)
+    status = "BLOCKED" if blockers else ("REVIEW_REQUIRED" if reviews else "PASS")
     return {
-        "status": "PASS" if blockers == 0 else "BLOCKED",
+        "status": status,
         "registry": {"defaultSkin": default_id, "totalSkins": total,
                      "entryCount": len(entries)},
         "canonical_target": {"id": CANONICAL_ID, "index": CANONICAL_INDEX,
