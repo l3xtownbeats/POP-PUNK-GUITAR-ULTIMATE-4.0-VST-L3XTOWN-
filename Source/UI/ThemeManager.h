@@ -11,44 +11,44 @@ public:
     {
         struct Tokens
         {
-            juce::Colour windowBg { 0xff090c10 };
-            juce::Colour panel { 0xff17232b };
-            juce::Colour panelElevated { 0xff22313b };
-            juce::Colour controlBg { 0xff101820 };
-            juce::Colour controlFace { 0xff22313b };
-            juce::Colour controlBorder { 0xff526875 };
-            juce::Colour textPrimary { 0xfff4fafc };
-            juce::Colour textSecondary { 0xffb5c4cb };
-            juce::Colour textDisabled { 0xff7c8b93 };
-            juce::Colour accent { 0xffb7f34a };
-            juce::Colour accentGlow { 0xff35d7c5 };
-            juce::Colour danger { 0xffff5a66 };
-            juce::Colour warning { 0xffffc857 };
-            juce::Colour success { 0xff6ee7a8 };
-            juce::Colour lcdBg { 0xff08110e };
-            juce::Colour lcdText { 0xffd7ffb2 };
-            juce::Colour ledOn { 0xffa8ff42 };
-            juce::Colour ledOff { 0xff33443b };
-            juce::Colour shadow { 0xff050708 };
-            juce::Colour highlight { 0xff90a7a0 };
-            juce::Colour lowlight { 0xff0d1417 };
+            juce::Colour windowBg { 0xff080d16 };
+            juce::Colour panel { 0xff101b2b };
+            juce::Colour panelElevated { 0xff17263a };
+            juce::Colour controlBg { 0xff0b1421 };
+            juce::Colour controlFace { 0xff17263a };
+            juce::Colour controlBorder { 0xff28415d };
+            juce::Colour textPrimary { 0xfff2f8ff };
+            juce::Colour textSecondary { 0xffa9c1d8 };
+            juce::Colour textDisabled { 0xff60758a };
+            juce::Colour accent { 0xff00bfff };
+            juce::Colour accentGlow { 0xff8a5cff };
+            juce::Colour danger { 0xffff5d73 };
+            juce::Colour warning { 0xffffd166 };
+            juce::Colour success { 0xff39d98a };
+            juce::Colour lcdBg { 0xff070c14 };
+            juce::Colour lcdText { 0xfff2f8ff };
+            juce::Colour ledOn { 0xff00bfff };
+            juce::Colour ledOff { 0xff29445e };
+            juce::Colour shadow { 0xff050810 };
+            juce::Colour highlight { 0xff8a5cff };
+            juce::Colour lowlight { 0xff0d1624 };
         };
 
-        juce::String id { "skin-51" };
-        juce::String name { "Blackout Voltage" };
+        juce::String id { "skin-01" };
+        juce::String name { "SIGNAL FORGE / NEON" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
-        juce::Colour canvas { 0xff090c10 };
-        juce::Colour canvasInset { 0xff101820 };
-        juce::Colour surface { 0xff17232b };
-        juce::Colour surfaceSecondary { 0xff101820 };
-        juce::Colour surfaceRaised { 0xff22313b };
-        juce::Colour text { 0xfff4fafc };
-        juce::Colour textSecondary { 0xffb5c4cb };
-        juce::Colour accent { 0xffb7f34a };
-        juce::Colour accentSecondary { 0xff35d7c5 };
-        juce::Colour border { 0xff526875 };
-        juce::Colour focus { 0xffb7f34a };
+        juce::Colour canvas { 0xff080d16 };
+        juce::Colour canvasInset { 0xff0b1421 };
+        juce::Colour surface { 0xff101b2b };
+        juce::Colour surfaceSecondary { 0xff0b1421 };
+        juce::Colour surfaceRaised { 0xff17263a };
+        juce::Colour text { 0xfff2f8ff };
+        juce::Colour textSecondary { 0xffa9c1d8 };
+        juce::Colour accent { 0xff00bfff };
+        juce::Colour accentSecondary { 0xff8a5cff };
+        juce::Colour border { 0xff28415d };
+        juce::Colour focus { 0xff00bfff };
         bool usedFallback = true;
 
         juce::Colour token(const juce::String& name) const noexcept;
@@ -57,7 +57,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the safe Blackout Voltage palette.
+    // A failed load always restores the approved SIGNAL FORGE / NEON fallback.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;

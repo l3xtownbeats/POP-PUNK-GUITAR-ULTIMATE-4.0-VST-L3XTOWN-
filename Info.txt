@@ -1955,3 +1955,12 @@ Official discovery and license references reviewed: Meta Open Sound README/relea
 **Важные ограничения:** это foundation/theme-token pass, не завершённая копия семи макетов. Существующие preview/hero/texture binary assets пока не заменены и не прошли checksum/visual validation. Главный editor и все auxiliary panels ещё требуют pixel/layout comparison с семью оригиналами, а gallery order/runtime preview/apply/back требуют отдельной проверки. Не присваивать DONE или visual acceptance.
 
 **Проверки:** JSON parse/source diff — pending post-commit; Windows Release, полный CTest, pluginval strictness 5, package и FL Studio 20 — pending на новом exact SHA.
+
+
+### 2026-11-14 — NEON default fallback and selector ordering
+
+**Статус:** SOURCE CHANGE COMMITTED; exact-SHA CI and runtime acceptance PENDING.
+
+**Изменения:** ThemeManager safe/default Palette теперь использует SIGNAL FORGE / NEON, включая идентификатор `skin-01`; ошибка загрузки темы возвращает NEON, а не Blackout Voltage. В SKIN selector первый пункт — SIGNAL FORGE / NEON с маркером DEFAULT, второй — сохранённый Blackout Voltage (`skin-51`); все остальные темы доступны далее по исходным ID. Меню использует реальные registry entries и существующие index IDs.
+
+**Ограничения:** визуальная оболочка/компоновка главного окна и графические binary assets ещё не приведены к семи макетам. Эта запись фиксирует только default/fallback/selector consistency. No DSP/APVTS/MIDI/audio changes. Windows Release, CTest, pluginval, package и FL Studio 20 acceptance — PENDING для нового SHA.

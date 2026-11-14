@@ -595,16 +595,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::showSkinMenu()
     juce::PopupMenu menu;
     menu.addSectionHeader("SELECT VISUAL SHELL");
     const auto skinCount = getSkinCount();
-    for (int index = 1; index <= skinCount; ++index)
+    const auto addSkin = [this, &menu](int index, bool isDefault)
     {
         PPGUThemeManager candidate;
         const auto manifest = getSkinManifest(index);
         if (manifest.existsAsFile() && candidate.loadFromFile(manifest))
         {
-            const auto palette = candidate.getPalette();
-            menu.addItem(index, palette.name, true, palette.id == themeManager.getPalette().id);
+            const auto& palette = candidate.getPalette();
+            const auto label = isDefault ? palette.name + "  —  DEFAULT" : palette.name;
+            menu.addItem(index, label, true, palette.id == themeManager.getPalette().id);
         }
-    }
+    };
+
+    // Preserve IDs/indices while presenting the approved flagship first and
+    // Blackout Voltage immediately second in the theme selector.
+    if (skinCount >= 1) addSkin(1, true);
+    if (skinCount >= 51) addSkin(51, false);
+    for (int index = 2; index <= skinCount; ++index)
+        if (index != 51) addSkin(index, false);
 
     if (menu.getNumItems() == 0)
         menu.addSectionHeader("NO VALID THEMES FOUND");
