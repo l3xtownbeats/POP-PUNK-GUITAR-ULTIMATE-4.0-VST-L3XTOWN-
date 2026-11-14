@@ -37,6 +37,7 @@ juce_add_binary_data(PPGUTestData
 
 juce_add_plugin(PopPunkGuitarUltimate
     COMPANY_NAME "L3XTOWN AUDIO LAB"
+    BUNDLE_ID "com.l3xtown.audio.ppgu"
     PLUGIN_MANUFACTURER_CODE L3xa
     PLUGIN_CODE Ppgu
     FORMATS VST3
@@ -49,6 +50,8 @@ juce_add_plugin(PopPunkGuitarUltimate
     VST3_CATEGORIES Instrument Synth
 )
 juce_generate_juce_header(PopPunkGuitarUltimate)
+
+enable_testing()
 
 # Canonical sample engine. SamplerEngine is implemented in SamplePool.cpp;
 # transport/pattern and chord transition components are header-only.
@@ -121,7 +124,9 @@ target_compile_definitions(PopPunkGuitarUltimate PUBLIC
 
 # Integration test compiles the real processor/editor path and embeds only a
 # tiny text fixture. No production or licensed sample assets are copied.
-add_executable(ppgu_processor_pattern_tests)
+juce_add_console_app(ppgu_processor_pattern_tests
+    PRODUCT_NAME "PPGU Processor Pattern Tests"
+)
 target_sources(ppgu_processor_pattern_tests PRIVATE
     tests/ProcessorPatternIntegrationTests.cpp
     ${PPGU_PLUGIN_SOURCES}
@@ -163,7 +168,6 @@ function(ppgu_add_header_test target source)
     add_test(NAME ${target} COMMAND ${target})
 endfunction()
 
-enable_testing()
 ppgu_add_header_test(ppgu_pattern_scheduler_tests tests/PatternSchedulerTests.cpp)
 ppgu_add_header_test(ppgu_auto_chord_engine_tests tests/AutoChordEngineTests.cpp)
 ppgu_add_header_test(ppgu_chord_transition_policy_tests tests/ChordTransitionPolicyTests.cpp)
