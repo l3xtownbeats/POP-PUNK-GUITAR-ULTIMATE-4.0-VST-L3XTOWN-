@@ -2960,3 +2960,62 @@ against existing control IDs and APVTS bindings. Replace the procedural staging
 sprites with mockup-derived assets and integrate only after visual review.
 Manual FL Studio 20 host acceptance remains required.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — REV-ULTRA-NEON-DEFAULT-CI-VERIFICATION-007
+==============================================================================
+
+**Exact tested source SHA:** 898c20ddbe835752c7a8f146708acb9acd6de02b
+**Branch:** work/neon-stage-reference-preview-fix
+**PR:** #33
+**Windows workflow:** 43627032332 — SUCCESS
+**NEON STAGE asset workflow:** 43627032306 — SUCCESS
+
+**Windows x64 Release evidence:**
+- REV.14 skin pack validation — PASS (workflow step 10).
+- APVTS registry and state persistence validation — PASS (step 9).
+- Redistributable sample library/license validation — PASS (step 16; cache restore used).
+- JUCE BinaryData include/link/declaration validation — PASS (step 17).
+- Configure x64 Release — PASS (step 18).
+- Build VST3 and test executables — PASS (step 19).
+- CTest regression suite — PASS, 12/12, 0 failed (step 20).
+- pluginval strictness level 5 — PASS (step 22). Log confirms cold/warm open,
+  editor, editor while processing, audio processing, plugin state, automation,
+  parameter, VST3 validator and bus checks completed.
+- Interim CI validation bundle uploaded — PASS (step 25).
+
+**Artifacts (not final release):**
+- POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-INTERIM-CI-NOT-RELEASE
+  1,666,493,096 bytes; SHA256
+  994d0350774fbdf8d69d3e351d60f3ae5e1e821fe9a8f07c4ce5b4b615ee47a4.
+- POP-PUNK-GUITAR-SOURCE-REVIEW 49,465,098 bytes; SHA256
+  6fb6bf63b888c63f6688ac430c09d3288a491234daa5f07f9e2e05617e6c7298.
+- NEON STAGE staging ZIP from run 43627032306:
+  1,412,688 bytes; SHA256
+  f368f6e93157557afb7da52a39c38f079382a4386b00b4a2e345116db0cb6c68.
+
+**Correction to earlier pending-default notes:** on this exact tested SHA,
+SKIN/theme_manifest.json defaultSkin is skin-053; the ThemeManager fallback
+identity/palette, first-install default, tests and REV14 validator were
+updated together. Earlier statements that registry default remained skin-052
+refer to the pre-migration source and are superseded by this entry.
+
+**Limitations remain:** this is an INTERIM CI bundle, not a COMPLETE ZIP or
+REV.18 release. FL Studio 20 manual host acceptance is not performed by CI.
+The seven approved mockups were inspected and preview/hero are mockup-derived
+contain-fit renders, but control atlases are procedural staging assets and
+are not yet fully pixel-matched or consumed by a complete JUCE theme/layout
+engine. NEON STAGE therefore passes build/contract gates but is not yet
+accepted as a pixel-perfect live runtime skin.
+
+**Warnings:** build succeeded with non-fatal MSVC warnings including
+C4324 alignment padding, C4100 unused parameter, C4458 shadowed names and
+C4244 numeric conversions. No warning failed the build.
+
+**Next:** continue the theme-aware JUCE rendering/layout integration using
+the seven approved references and existing APVTS/control IDs. Do not modify
+DSP/audio/MIDI/sampler behavior. Require a new exact-SHA build, CTest and
+pluginval after each source change; retain FL Studio 20 acceptance as a
+separate manual gate.
+==============================================================================
