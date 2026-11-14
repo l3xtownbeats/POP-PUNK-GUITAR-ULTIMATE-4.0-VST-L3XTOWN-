@@ -3197,3 +3197,26 @@ default skin pointer, JUCE resources, DSP, APVTS, MIDI or audio callback changed
 
 **Status:** REV ULTRA 1.3 IMPLEMENTED / CI PENDING / NO REGISTRY MUTATION.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — SKIN-REGISTRATION-REV-ULTRA-1.3 CI FAILURE TRIAGE
+==============================================================================
+**Run:** 43634499893  
+**PR merge commit tested:** 4b4ee4526c73291c92cb6728515e7bf884a734e2  
+**Result:** FAILED in the registrar unit-test step; subsequent validation steps were skipped.
+
+**Exact failure:** 9 of 10 registrar tests passed. The count-mismatch test expected
+the phrase "does not match", while the validator emitted
+"totalSkins=3, but themes contains 2 entries". The guard itself correctly
+rejected the invalid registry; the failure was a test/diagnostic wording mismatch,
+not a registry mutation or a failed runtime skin validation.
+
+**Correction:** Align the diagnostic with the test's stable contract:
+"totalSkins=<n> does not match themes length <n>". No registry, theme asset,
+default pointer, runtime schema or VST3 code is changed.
+
+**Next verification:** Push this correction and require a fresh Windows Actions
+run to pass all registrar tests, merged-pack G1-G4 and complete skin-manifest
+validation. No PASS is claimed until that run completes.
+==============================================================================
