@@ -1,88 +1,74 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="720" viewBox="0 0 1800 720" role="img" aria-labelledby="title desc">
-<title id="title">POP PUNK GUITAR ULTIMATE 4.0 — NEON STAGE</title>
-<desc id="desc">Premium dark-stage product cover with a polished neon-lit guitar instrument control surface, representing the NEON STAGE visual direction.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="920" viewBox="0 0 1800 920" role="img" aria-labelledby="title desc">
+<title id="title">POP PUNK GUITAR ULTIMATE — NEON STAGE</title>
+<desc id="desc">Graphite studio-console concept with lime accents, preset browser, Melody and Pattern modes, nine parameter controls, seven effect bypasses and MIDI keyboard. Concept artwork, not a runtime screenshot.</desc>
 <defs>
- <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#05070D"/><stop offset=".48" stop-color="#0C1220"/><stop offset="1" stop-color="#10091B"/></linearGradient>
- <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1A2636"/><stop offset=".45" stop-color="#0B111C"/><stop offset="1" stop-color="#070B13"/></linearGradient>
- <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#37F2FF"/><stop offset=".5" stop-color="#168CFF"/><stop offset="1" stop-color="#8D5CFF"/></linearGradient>
- <linearGradient id="pink" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#9B4DFF"/><stop offset=".55" stop-color="#F14BCB"/><stop offset="1" stop-color="#FF6A9B"/></linearGradient>
- <radialGradient id="glowA"><stop stop-color="#087DFF" stop-opacity=".5"/><stop offset="1" stop-color="#087DFF" stop-opacity="0"/></radialGradient>
- <radialGradient id="glowB"><stop stop-color="#C026D3" stop-opacity=".38"/><stop offset="1" stop-color="#C026D3" stop-opacity="0"/></radialGradient>
- <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
- <filter id="soft"><feGaussianBlur stdDeviation="7"/></filter>
- <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="16"/><feOffset dy="12"/><feComponentTransfer><feFuncA type="linear" slope=".7"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
- <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#B8D8FF" stroke-opacity=".045" stroke-width="1"/></pattern>
- <pattern id="micro" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#B7D5F5" opacity=".18"/></pattern>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#070A0C"/><stop offset=".55" stop-color="#10171A"/><stop offset="1" stop-color="#080D0F"/></linearGradient>
+<linearGradient id="panel" x2="0" y2="1"><stop stop-color="#202C31"/><stop offset="1" stop-color="#121A1E"/></linearGradient>
+<linearGradient id="lime" x2="1"><stop stop-color="#B9E83C"/><stop offset="1" stop-color="#E2FF70"/></linearGradient>
+<pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#B7C5C2" stroke-opacity=".035"/></pattern>
 </defs>
-<rect width="1800" height="720" fill="url(#bg)"/>
-<rect width="1800" height="720" fill="url(#grid)"/>
-<ellipse cx="410" cy="340" rx="500" ry="390" fill="url(#glowA)" filter="url(#blur)"/>
-<ellipse cx="1470" cy="350" rx="480" ry="360" fill="url(#glowB)" filter="url(#blur)"/>
-<path d="M80 0L450 720M1720 0L1350 720" stroke="#28DFFF" stroke-opacity=".09" stroke-width="2"/>
-<path d="M0 635H1800" stroke="url(#cyan)" stroke-width="2" opacity=".75"/>
-<path d="M0 641H1800" stroke="#7C3AED" stroke-opacity=".22" stroke-width="14" filter="url(#soft)"/>
-<!-- Left brand stage -->
-<g transform="translate(92 104)">
- <path d="M0 34L20 0L40 34L60 0L80 34" fill="none" stroke="url(#cyan)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M10 45H70" stroke="#D7E9FF" stroke-opacity=".5" stroke-width="2"/>
- <text x="0" y="112" fill="#F4F8FF" font-family="Arial,Helvetica,sans-serif" font-size="66" font-weight="800" letter-spacing="1">PPGU</text>
- <text x="2" y="151" fill="#9FB6D4" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" letter-spacing="5">L3XTOWN AUDIO LAB</text>
- <rect x="0" y="188" width="440" height="2" fill="url(#cyan)"/>
- <text x="0" y="260" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="800" letter-spacing="1">NEON STAGE</text>
- <text x="2" y="303" fill="#9ADFFF" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" letter-spacing="3">POP PUNK GUITAR ULTIMATE 4.0</text>
- <text x="2" y="355" fill="#B8C7DC" font-family="Arial,Helvetica,sans-serif" font-size="20" letter-spacing="1">A focused guitar instrument for modern</text>
- <text x="2" y="386" fill="#B8C7DC" font-family="Arial,Helvetica,sans-serif" font-size="20" letter-spacing="1">pop-punk riffs, rhythm and melodic hooks.</text>
- <g transform="translate(0 444)">
-  <rect width="174" height="42" rx="21" fill="#0B1B2B" stroke="#25DFFF" stroke-opacity=".8"/>
-  <text x="87" y="27" text-anchor="middle" fill="#DDFBFF" font-family="Arial" font-size="14" font-weight="700" letter-spacing="2">VST3 INSTRUMENT</text>
-  <rect x="188" width="142" height="42" rx="21" fill="#17112A" stroke="#B76AFF" stroke-opacity=".8"/>
-  <text x="259" y="27" text-anchor="middle" fill="#F2DFFF" font-family="Arial" font-size="14" font-weight="700" letter-spacing="2">WINDOWS x64</text>
- </g>
- <text x="2" y="558" fill="#8296B2" font-family="Arial" font-size="13" letter-spacing="2">VISUAL DESIGN SHOWCASE · NOT A HOST CAPTURE</text>
+<rect width="1800" height="920" fill="url(#bg)"/><rect width="1800" height="920" fill="url(#grid)"/>
+<circle cx="1500" cy="160" r="360" fill="#D5FF45" opacity=".035"/>
+<g transform="translate(70 52)" font-family="Arial,sans-serif">
+<path d="M0 20L13 0L26 20L39 0L52 20" fill="none" stroke="url(#lime)" stroke-width="4" stroke-linecap="round"/>
+<text x="70" y="23" fill="#F3F7F5" font-size="27" font-weight="800" letter-spacing="2">POP PUNK GUITAR ULTIMATE</text>
+<text x="72" y="49" fill="#879791" font-size="12" letter-spacing="3">L3XTOWN AUDIO LAB · NEON STAGE DEFAULT</text>
+<g transform="translate(1110 0)" font-size="13" font-weight="700" letter-spacing="1">
+<rect width="116" height="42" rx="9" fill="#26332C" stroke="#D5FF45"/><text x="58" y="26" fill="#E9FFD0" text-anchor="middle">SKINS</text>
+<rect x="128" width="174" height="42" rx="9" fill="#192329" stroke="#53656B"/><text x="215" y="26" fill="#F3F7F5" text-anchor="middle">IMPORT GUITAR</text>
+<rect x="314" width="140" height="42" rx="9" fill="#12191C" stroke="#39464A"/><text x="384" y="26" fill="#879791" text-anchor="middle">SETTINGS</text>
+<rect x="466" width="112" height="42" rx="9" fill="#12191C" stroke="#39464A"/><text x="522" y="26" fill="#879791" text-anchor="middle">ABOUT</text>
+</g></g>
+<path d="M70 124H1730" stroke="#53656B" stroke-opacity=".6"/>
+<rect x="70" y="150" width="1660" height="700" rx="22" fill="#080D0F" stroke="#53656B" stroke-width="2"/>
+<rect x="80" y="160" width="1640" height="680" rx="17" fill="url(#panel)"/>
+<g transform="translate(98 180)" font-family="Arial,sans-serif">
+<rect width="300" height="626" rx="13" fill="#0D1417" stroke="#39494D"/>
+<text x="22" y="34" fill="#F3F7F5" font-size="16" font-weight="800" letter-spacing="2">PRESET BROWSER</text>
+<rect x="18" y="52" width="264" height="42" rx="8" fill="#08110E" stroke="#53656B"/><text x="34" y="78" fill="#879791" font-size="13">Search presets…</text>
+<rect x="18" y="108" width="264" height="38" rx="8" fill="#192329" stroke="#39494D"/><text x="32" y="132" fill="#B7C5C2" font-size="13">ALL GUITARS</text>
+<text x="20" y="180" fill="#879791" font-size="11" letter-spacing="2">FACTORY COLLECTION</text>
+<rect x="16" y="194" width="268" height="64" rx="9" fill="#26332C" stroke="#D5FF45"/><rect x="27" y="205" width="4" height="42" rx="2" fill="#D5FF45"/>
+<text x="44" y="220" fill="#F3F7F5" font-size="15" font-weight="700">NEON DRIVE</text><text x="44" y="240" fill="#B7C5C2" font-size="11">MELODY · RHYTHM GUITAR</text>
+<g fill="#DCE6E2" font-size="14"><text x="34" y="291">Skate Punk Crunch</text><text x="34" y="337">Bright Open Chorus</text><text x="34" y="383">Palm Mute Tight</text><text x="34" y="429">Octave Lead Clean</text><text x="34" y="475">Modern Pop Punk</text></g>
+<g stroke="#39494D"><path d="M20 307H280M20 353H280M20 399H280M20 445H280M20 491H280"/></g>
+<rect x="18" y="532" width="264" height="70" rx="9" fill="#08110E" stroke="#39494D"/><text x="32" y="557" fill="#879791" font-size="10" letter-spacing="2">STATUS</text><text x="32" y="580" fill="#D5FF45" font-size="13" font-weight="700">READY · VISUAL CONCEPT</text>
 </g>
-<!-- Premium instrument interface showcase -->
-<g transform="translate(660 64)" filter="url(#shadow)">
- <rect width="1050" height="560" rx="28" fill="#03060B" stroke="#55718E" stroke-opacity=".7" stroke-width="2"/>
- <rect x="8" y="8" width="1034" height="544" rx="22" fill="url(#panel)" stroke="#1D3B5B" stroke-width="2"/>
- <rect x="8" y="8" width="1034" height="544" rx="22" fill="url(#micro)" opacity=".38"/>
- <path d="M28 84H1022" stroke="url(#cyan)" stroke-width="2" opacity=".8"/>
- <g transform="translate(34 27)">
-  <circle cx="18" cy="18" r="14" fill="#0D2942" stroke="#2DDFFF" stroke-width="2"/>
-  <path d="M8 18H14L18 9L22 27L26 18H30" fill="none" stroke="#B8F8FF" stroke-width="2"/>
-  <text x="52" y="25" fill="#F2F8FF" font-family="Arial" font-size="23" font-weight="700" letter-spacing="2">POP PUNK GUITAR ULTIMATE</text>
-  <text x="790" y="23" fill="#8FB2D4" font-family="Arial" font-size="13" letter-spacing="3">NEON STAGE CONCEPT</text>
- </g>
- <g transform="translate(34 110)">
-  <rect width="474" height="54" rx="12" fill="#0A1523" stroke="#284866"/>
-  <rect x="8" y="7" width="222" height="40" rx="8" fill="#0D3A5A" stroke="#24DFFF"/>
-  <text x="119" y="33" text-anchor="middle" fill="#E4FBFF" font-family="Arial" font-size="17" font-weight="700" letter-spacing="2">MELODY</text>
-  <rect x="238" y="7" width="228" height="40" rx="8" fill="#151329" stroke="#7650B5"/>
-  <text x="352" y="33" text-anchor="middle" fill="#D9C8FF" font-family="Arial" font-size="17" font-weight="700" letter-spacing="2">PATTERN</text>
-  <rect x="496" width="486" height="54" rx="12" fill="#0A1523" stroke="#284866"/>
-  <text x="520" y="22" fill="#8DAAC6" font-family="Arial" font-size="12" letter-spacing="2">CURRENT PRESET</text>
-  <text x="520" y="42" fill="#F4F8FF" font-family="Arial" font-size="18" font-weight="700">NEON DRIVE · RHYTHM GUITAR</text>
-  <circle cx="946" cy="27" r="8" fill="#42E9FF" filter="url(#soft)"/>
-  <circle cx="946" cy="27" r="4" fill="#B9FBFF"/>
- </g>
- <g transform="translate(34 184)">
-  <rect width="982" height="182" rx="14" fill="#07101B" stroke="#294663"/>
-  <text x="24" y="31" fill="#9FBAD7" font-family="Arial" font-size="13" letter-spacing="2">SIGNAL / PERFORMANCE VIEW</text>
-  <path d="M24 128H958" stroke="#28415C" stroke-width="1"/>
-  <path d="M24 91H958M24 54H958" stroke="#20364E" stroke-width="1" stroke-dasharray="5 8"/>
-  <polyline points="24,112 75,112 100,99 124,120 152,64 176,118 205,107 230,112 255,42 279,116 308,106 334,112 359,74 384,112 414,112 438,92 463,120 490,48 515,116 546,107 570,112 596,69 621,116 650,112 675,89 701,119 726,52 752,114 780,103 808,112 835,78 860,114 887,106 915,112 958,112" fill="none" stroke="url(#cyan)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <polyline points="24,138 110,138 160,134 210,138 260,132 310,138 360,135 410,138 460,131 510,138 560,135 610,138 660,132 710,138 760,135 810,138 860,132 910,138 958,138" fill="none" stroke="#D94DEB" stroke-opacity=".72" stroke-width="2"/>
-  <text x="24" y="163" fill="#708BA8" font-family="Arial" font-size="11" letter-spacing="2">DYNAMIC RESPONSE</text>
-  <text x="850" y="163" fill="#7CCFEA" font-family="Arial" font-size="11" letter-spacing="2">LIVE SIGNAL CONCEPT</text>
- </g>
- <g transform="translate(34 389)">
-  <text x="0" y="0" fill="#9FBAD7" font-family="Arial" font-size="12" letter-spacing="2">TONE / DYNAMICS / EFFECTS</text>
-  <g transform="translate(0 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#24DFFF" stroke-width="2"/><path d="M40 38L27.272077938642145 25.27207793864214" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">GAIN</text></g><g transform="translate(158 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#AE65F4" stroke-width="2"/><path d="M40 38L40.94204721237299 20.024668374417672" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">TONE</text></g><g transform="translate(316 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#24DFFF" stroke-width="2"/><path d="M40 38L53.988627306225474 26.672232961102928" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">DYNAMICS</text></g><g transform="translate(474 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#AE65F4" stroke-width="2"/><path d="M40 38L57.77839013071248 40.815820370724154" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">DRIVE</text></g><g transform="translate(632 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#24DFFF" stroke-width="2"/><path d="M40 38L49.803502630270486 53.096070223017634" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">FX MIX</text></g><g transform="translate(790 28)"><circle cx="40" cy="38" r="30" fill="#0B1420" stroke="#35536E" stroke-width="5"/><circle cx="40" cy="38" r="23" fill="#111E2C" stroke="#AE65F4" stroke-width="2"/><path d="M40 38L35.34125718815463 55.38666487320323" stroke="#EAFBFF" stroke-width="3" stroke-linecap="round"/><text x="40" y="86" text-anchor="middle" fill="#AFC5DC" font-family="Arial" font-size="11" letter-spacing="1">OUTPUT</text></g>
- </g>
- <g transform="translate(34 507)">
-  <rect width="982" height="25" rx="5" fill="#050A12" stroke="#24415D"/>
-  <rect x="8" y="3" width="17" height="19" rx="2" fill="#1D91D2" opacity=".9"/><rect x="31" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="54" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="77" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="100" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="123" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="146" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="169" y="3" width="17" height="19" rx="2" fill="#4B347D" opacity=".55"/><rect x="192" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="215" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="238" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="261" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="284" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="307" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="330" y="3" width="17" height="19" rx="2" fill="#1D91D2" opacity=".9"/><rect x="353" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="376" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="399" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="422" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="445" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="468" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="491" y="3" width="17" height="19" rx="2" fill="#4B347D" opacity=".55"/><rect x="514" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="537" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="560" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="583" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="606" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="629" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="652" y="3" width="17" height="19" rx="2" fill="#1D91D2" opacity=".9"/><rect x="675" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="698" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="721" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="744" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="767" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".55"/><rect x="790" y="7" width="17" height="15" rx="2" fill="#4B347D" opacity=".9"/><rect x="813" y="3" width="17" height="19" rx="2" fill="#4B347D" opacity=".55"/><rect x="836" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="859" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="882" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="905" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/><rect x="928" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".9"/><rect x="951" y="7" width="17" height="15" rx="2" fill="#1D91D2" opacity=".55"/>
- </g>
+<g transform="translate(424 180)" font-family="Arial,sans-serif">
+<rect width="1278" height="626" rx="13" fill="#0D1417" stroke="#39494D"/>
+<rect x="22" y="20" width="1234" height="54" rx="10" fill="#08110E" stroke="#39494D"/>
+<rect x="32" y="28" width="170" height="38" rx="7" fill="#26332C" stroke="#D5FF45"/><text x="117" y="53" fill="#E9FFD0" font-size="14" font-weight="800" text-anchor="middle" letter-spacing="2">MELODY</text>
+<rect x="210" y="28" width="170" height="38" rx="7" fill="#192329" stroke="#53656B"/><text x="295" y="53" fill="#B7C5C2" font-size="14" font-weight="700" text-anchor="middle" letter-spacing="2">PATTERN</text>
+<text x="414" y="42" fill="#879791" font-size="10" letter-spacing="2">CURRENT PRESET</text><text x="414" y="60" fill="#F3F7F5" font-size="16" font-weight="700">NEON DRIVE — RHYTHM GUITAR</text>
+<rect x="22" y="92" width="1234" height="310" rx="11" fill="#0A110E" stroke="#39494D"/>
+<text x="44" y="120" fill="#879791" font-size="11" letter-spacing="2">PLAYING CORE · TONE &amp; PERFORMANCE</text>
+<text x="44" y="151" fill="#D5FF45" font-size="13" font-weight="700">NEON STAGE</text>
+<text x="44" y="174" fill="#B7C5C2" font-size="12">Focused controls · clean signal path · low-visual-noise workspace</text>
+<g transform="translate(92 260)" text-anchor="middle">
+<g><circle cx="0" cy="0" r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">AMP GAIN</text></g>
+<g transform="translate(230 0)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">EQ HIGH</text></g>
+<g transform="translate(460 0)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">EQ MID</text></g>
+<g transform="translate(690 0)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">EQ LOW</text></g>
+<g transform="translate(920 0)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">VELOCITY</text></g>
+<g transform="translate(0 115)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">DYNAMICS</text></g>
+<g transform="translate(230 115)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">SWING</text></g>
+<g transform="translate(460 115)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">HUMANIZE</text></g>
+<g transform="translate(690 115)"><circle r="31" fill="#0B1012" stroke="#53656B" stroke-width="6"/><circle r="24" fill="#192329" stroke="#D5FF45" stroke-width="2"/><path d="M0 -20V-11" stroke="#F3F7F5" stroke-width="3"/><text y="54" fill="#B7C5C2" font-size="11">ACCENT</text></g>
 </g>
-<text x="92" y="684" fill="#7890AC" font-family="Arial,Helvetica,sans-serif" font-size="13" letter-spacing="3">L3XTOWN AUDIO LAB</text>
-<text x="1708" y="684" text-anchor="end" fill="#7890AC" font-family="Arial,Helvetica,sans-serif" font-size="13" letter-spacing="3">ENGINEERED FOR THE NEXT RIFF</text>
+<rect x="22" y="420" width="1234" height="78" rx="10" fill="#11191D" stroke="#39494D"/><text x="42" y="444" fill="#879791" font-size="10" letter-spacing="2">FX CHAIN · REAL BYPASS CONTROLS</text>
+<g font-size="11" font-weight="700" text-anchor="middle">
+<g transform="translate(40 455)"><rect width="148" height="30" rx="7" fill="#26332C" stroke="#D5FF45"/><circle cx="15" cy="15" r="4" fill="#D5FF45"/><text x="82" y="20" fill="#F3F7F5">COMPRESSOR</text></g>
+<g transform="translate(210 455)"><rect width="148" height="30" rx="7" fill="#192329" stroke="#53656B"/><circle cx="15" cy="15" r="4" fill="#53656B"/><text x="82" y="20" fill="#F3F7F5">EQ</text></g>
+<g transform="translate(380 455)"><rect width="148" height="30" rx="7" fill="#26332C" stroke="#D5FF45"/><circle cx="15" cy="15" r="4" fill="#D5FF45"/><text x="82" y="20" fill="#F3F7F5">DISTORTION</text></g>
+<g transform="translate(550 455)"><rect width="148" height="30" rx="7" fill="#192329" stroke="#53656B"/><circle cx="15" cy="15" r="4" fill="#53656B"/><text x="82" y="20" fill="#F3F7F5">CHORUS</text></g>
+<g transform="translate(720 455)"><rect width="148" height="30" rx="7" fill="#192329" stroke="#53656B"/><circle cx="15" cy="15" r="4" fill="#53656B"/><text x="82" y="20" fill="#F3F7F5">DELAY</text></g>
+<g transform="translate(890 455)"><rect width="148" height="30" rx="7" fill="#26332C" stroke="#D5FF45"/><circle cx="15" cy="15" r="4" fill="#D5FF45"/><text x="82" y="20" fill="#F3F7F5">REVERB</text></g>
+<g transform="translate(1060 455)"><rect width="148" height="30" rx="7" fill="#192329" stroke="#53656B"/><circle cx="15" cy="15" r="4" fill="#53656B"/><text x="82" y="20" fill="#F3F7F5">CABINET</text></g>
+</g>
+<rect x="22" y="516" width="1234" height="90" rx="10" fill="#0A1012" stroke="#39494D"/><text x="42" y="540" fill="#879791" font-size="10" letter-spacing="2">MIDI KEYBOARD · VISUAL REFERENCE</text>
+<g transform="translate(42 550)"><rect width="1152" height="45" rx="3" fill="#DCE6E2" stroke="#53656B"/>
+<rect x="32" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="64" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="96" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="128" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="160" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="192" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="224" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="256" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="288" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="320" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="352" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="384" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="416" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="448" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="480" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="512" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="544" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="576" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="608" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="640" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="672" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="704" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="736" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="768" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="800" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="832" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="864" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="896" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="928" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="960" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="992" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="1024" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="1056" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="1088" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/><rect x="1120" y="0" width="18" height="28" rx="2" fill="#11191D" stroke="#53656B"/>
+</g>
+</g>
+<text x="900" y="891" text-anchor="middle" fill="#879791" font-family="Arial,sans-serif" font-size="12" letter-spacing="2">NEON STAGE DEFAULT · SKIN-001 VISUAL DIRECTION · CONCEPT ARTWORK — NOT A RUNTIME SCREENSHOT</text>
 </svg>
