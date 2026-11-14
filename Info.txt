@@ -2752,9 +2752,9 @@ write was made.
 **VST3 validation finding:** run `43625445350` stopped at the skin-pack validator
 before compilation because it rejected the generator's valid 8-bit indexed PNG.
 The NEON STAGE generator intentionally emits 360x240 / 800x450 indexed PNGs.
-Both validators are being updated to accept indexed PNGs with a valid PLTE palette
-while preserving the established dimensions, then Windows VST3 CI, CTest and
-pluginval will be rerun. FL Studio 20
+Both validators now accept indexed PNGs with a valid PLTE palette while preserving
+the established dimensions. The rerun is green: Windows VST3 build, CTest and
+pluginval all passed in run 43625738927. FL Studio 20
 manual host acceptance remains separate.
 ==============================================================================
 
@@ -2776,7 +2776,7 @@ PLTE palette is present; the established 360x240 Preview and 800x450 Hero dimens
 remain unchanged. Existing RGB/RGBA PNG support and CRC/decompression checks remain.
 
 **Run 43625445350:** no CMake build, CTest or pluginval was reached because the
-skin-pack validation step failed first. Validation rerun is pending.
+skin-pack validation step failed first. Validation rerun completed successfully in run 43625738927.
 ==============================================================================
 
 
@@ -2897,4 +2897,66 @@ approved product decision.
 5. Record actual results and exact SHA after CI completes.
 
 **Status:** PREFLIGHT REVIEW COMPLETE / IMPLEMENTATION PENDING.
+==============================================================================
+
+
+==============================================================================
+2026-11-14 — NEON-STAGE-VST3-CI-005 — current branch validation green
+==============================================================================
+
+**Branch head tested:** `723860012a3d95459cff98560bf18aaf37afb90e`
+**Windows VST3 workflow:** `43625738927` — SUCCESS
+**NEON STAGE asset workflow:** `43625738976` — SUCCESS
+**Source review artifact:** `14125594435` (49,461,385 bytes)
+**Interim VST3 artifact:** `14126166273` (1,666,493,243 bytes; explicitly
+`INTERIM-CI-NOT-RELEASE`, not a final release package)
+
+**Validation results:**
+- Factory catalog: 150 MELODY + 150 PATTERN = 300 entries; 21 reference artists.
+  REV.18 readiness audit remains 0/500 MELODY and 0/500 PATTERN, so release
+  readiness is not established.
+- APVTS: 97 declared IDs, 48 audio-thread parameter lookups, 96 stable IDs
+  preserved; state round-trip present.
+- Skin pack: PASS 50 themes; G1 contrast, G2 control parity, G3 PNG/SVG structure
+  and safety, G4 identity/continuous numbering all PASS.
+- BinaryData contract: PASS.
+- CMake x64 Release: configured and built successfully; VST3 bundle found.
+- CTest: 12/12 passed, 0 failed.
+- pluginval strictness level 5: PASS, including cold/warm open, editor, audio
+  processing, state, automation, VST3 validation and bus-layout checks.
+- Redistributable sample-library cache restored and license validation passed;
+  network download step was skipped because the cache was available.
+
+The interim VST3 artifact is published by the workflow but was not downloaded
+because it is approximately 1.67 GB. The 49 MB source-review artifact and 1.4 MB
+NEON STAGE staging artifact were downloaded and inspected. The staging report
+explicitly says runtime_tests_run=false and that its procedural sprites are not
+a verified pixel-match. The source-review artifact contains all seven approved
+mockups and the canonical Skin_053 preview/hero assets.
+
+**Build warnings:** non-fatal MSVC warnings remain, including C4324 alignment
+padding in BoundedSpscQueue, C4100 unused eventSample, C4458 shadowed names and
+C4244 numeric conversions. No warning caused the build or tests to fail.
+
+**Visual/runtime boundary:** the preview and hero are contain-fit renders of
+approved mockup 01. The knob/button/FX/slider/LED atlases remain procedural
+staging assets; they are not pixel-matched to all seven mockups and are not yet
+consumed by a JUCE theme/layout engine. Skin_053 controls still declare
+presentation=native-control. control_schema.json states that grid coordinates
+are design metadata until a layout engine consumes them; existing JUCE bounds
+remain authoritative. Therefore the seven references have been inspected, but
+the 12x16 pixel placement is NOT signed off and NEON STAGE is NOT yet the live
+runtime interface.
+
+**Identity and safety:** SIGNAL FORGE remains the working interface name;
+NEON STAGE remains the Skin_053 theme identity. Registry defaultSkin remains
+skin-052 pending explicit approval. PR #33 remains open and unmerged; no main
+branch write or merge occurred. No Source/APVTS/DSP/audio/MIDI behavior was
+changed by this skin work.
+
+**Next implementation step:** create a visual control-to-mockup mapping for all
+seven references, then implement the JUCE theme-aware renderer/layout layer
+against existing control IDs and APVTS bindings. Replace the procedural staging
+sprites with mockup-derived assets and integrate only after visual review.
+Manual FL Studio 20 host acceptance remains required.
 ==============================================================================
