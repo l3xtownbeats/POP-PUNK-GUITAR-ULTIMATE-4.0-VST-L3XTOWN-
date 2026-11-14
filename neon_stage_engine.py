@@ -4,7 +4,7 @@ Writes only to dist/neon_stage_staging and juce_resources; never mutates SKIN/.
 from __future__ import annotations
 import json, math, os, shutil, zipfile
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 SOURCE_THEME = ROOT / "SKIN" / "Skin_053" / "theme.json"
@@ -195,31 +195,44 @@ def step_svg():
     (ASSETS/"texture"/"texture.svg").write_text(texture,encoding="utf-8")
     print("Generated safe, static SVG assets.")
 
-def draw_promo(size,title,subtitle,path):
-    im=Image.new("RGBA",size,(*rgb(PALETTE["window_bg"]),255))
-    d=ImageDraw.Draw(im)
-    w,h=size
-    # Subtle technical grid and neon edge lighting.
-    for x in range(0,w,40): d.line((x,0,x,h),fill=rgb(PALETTE["lowlight"]),width=1)
-    for y in range(0,h,40): d.line((0,y,w,y),fill=rgb(PALETTE["lowlight"]),width=1)
-    d.rounded_rectangle((int(w*.035),int(h*.07),int(w*.965),int(h*.93)),
-                        radius=max(12,int(h*.04)),outline=rgb(PALETTE["control_border"]),width=max(2,w//500))
-    d.text((int(w*.08),int(h*.19)),title,font=font(max(22,h//8),True),fill=rgb(PALETTE["text_primary"]))
-    d.text((int(w*.08),int(h*.38)),subtitle,font=font(max(12,h//22)),fill=rgb(PALETTE["accent"]))
-    # Abstract 9-control console: visual-only promo, not a runtime screenshot.
-    for i in range(9):
-        col=i%5; row=i//5
-        cx=int(w*(.15+col*.17)); cy=int(h*(.67+row*.16)); r=max(10,int(h*.055))
-        d.ellipse((cx-r,cy-r,cx+r,cy+r),fill=rgb(PALETTE["control_face"]),outline=rgb(PALETTE["accent"]),width=max(2,w//600))
-        a=math.radians(-135+(i%9)*30)
-        d.line((cx,cy,cx+math.cos(a)*r*.68,cy+math.sin(a)*r*.68),fill=rgb(PALETTE["accent_glow"]),width=max(2,w//500))
-    im.save(path,"PNG",optimize=True)
+def render_reference_art(size, path):
+    """Render a faithful contain-fit of the approved primary UI mockup.
+
+    Do not synthesize a fake plugin screenshot: the uploaded NEON STAGE
+    reference is the source of truth for preview and hero artwork.
+    """
+    reference = ROOT / "01 INTERFACE  NEON STAGE DEFAULT .png"
+    if not reference.is_file():
+        raise FileNotFoundError(
+            f"Approved NEON STAGE reference mockup is missing: {reference.name}"
+        )
+    with Image.open(reference) as opened:
+        source = opened.convert("RGBA")
+    fitted = ImageOps.contain(source, size, method=Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", size, (*rgb(PALETTE["window_bg"]), 255))
+    x = (size[0] - fitted.width) // 2
+    y = (size[1] - fitted.height) // 2
+    canvas.alpha_composite(fitted, (x, y))
+    draw = ImageDraw.Draw(canvas)
+    inset = max(2, min(size) // 100)
+    draw.rounded_rectangle(
+        (inset, inset, size[0] - inset - 1, size[1] - inset - 1),
+        radius=max(4, min(size) // 45),
+        outline=rgb(PALETTE["control_border"]),
+        width=max(1, min(size) // 240),
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(path, "PNG", optimize=True)
+
 
 def step_promo():
     ensure_dirs()
-    draw_promo((360,240),"NEON STAGE","PPGU  /  SKIN 053",ASSETS/"preview.png")
-    draw_promo((800,450),"NEON STAGE","POP PUNK GUITAR ULTIMATE  /  VISUAL THEME",ASSETS/"hero.png")
-    print("Generated 360x240 preview and 800x450 hero.")
+    # Dimensions follow the current SKIN asset production specification.
+    render_reference_art((480, 300), ASSETS / "preview.png")
+    render_reference_art((1200, 420), ASSETS / "hero.png")
+    print("Rendered preview and hero from the approved NEON STAGE reference mockup.")
+    print("No synthetic UI screenshot or invented control layout was generated.")
+
 
 def step_manifest():
     ensure_dirs()
@@ -285,7 +298,7 @@ def step_report():
                               ("text_disabled","window_bg",5),("lcd_text","lcd_bg",17),("accent","panel",15)):
             ratio=contrast(theme["palette"][fg],theme["palette"][bg])
             if ratio<minimum: errors.append(f"contrast {fg}/{bg}: {ratio:.2f} < {minimum}")
-    pngs={"assets/preview.png":(360,240),"assets/hero.png":(800,450),
+    pngs={"assets/preview.png":(480,300),"assets/hero.png":(1200,420),
           "assets/knob/knob_filmstrip.png":(96,96*121),
           "assets/knob/knob_filmstrip_2x.png":(192,192*121),
           "assets/buttons/btn_states.png":(180*6,58),
@@ -313,7 +326,7 @@ def step_report():
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
-    (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")\n    (OUT/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps(result,indent=2,ensure_ascii=False))
     if errors: raise SystemExit(1)
 
