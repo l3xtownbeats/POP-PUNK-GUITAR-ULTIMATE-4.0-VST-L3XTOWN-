@@ -2094,3 +2094,27 @@ Status: accepted product requirements; implementation status must be verified se
 **Приёмка:** отдельно проверить STYLE browser, PATTERN browser и AutoChords; независимость состояний; progressive navigation; все шесть PATTERN categories; восемь slots на секцию; search/filter/sort/favorites/PREV/NEXT; Preview/Apply/Cancel; host-sync transitions; keyboard non-overlap; отсутствие запрещённых artist/product names; сохранность I7/R18; exact-SHA CI и отдельную FL Studio 20 host acceptance.
 
 **Статус:** APPROVED UI REQUIREMENTS / DOCUMENTATION ONLY. Source implementation, build, CTest, pluginval, package и FL Studio 20 acceptance этим дополнением не подтверждаются.
+
+
+---
+
+## 2026-11-14 — MAJOR USER APPROVAL: FX/DSP, NEON STAGE DEFAULT, AUTO DISCOVER, open-ended presets and commercial-library use
+
+**Тип:** append-only product requirements amendment; documentation only.  
+**Authority:** explicit user approval dated 2026-11-14.  
+**Normative addendum:** `docs/PPGU_MAJOR_USER_REQUIREMENTS_AMENDMENT_2026-11-14_RU.md`.  
+**Specification updated:** `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`.  
+**Production source changes:** none. **Tests/build/host verification:** not run by this documentation change.
+
+### Approved mandatory changes
+1. **FX EDIT / DSP:** FX EDIT scope is up to 15 fully implemented effect/processors plus cabinets. DSP requirement is at least 10, target 15. Exact module inventory must be reconciled with the user's earlier FX specification; do not invent module names. Preserve the approved FX EDIT mockup. Real backend/DSP, parameter mapping, truthful state, persistence, automation where supported and tests are required. Existing APVTS IDs/semantics remain unchanged unless separately reviewed.
+2. **AUTO DISCOVER:** full implementation is mandatory. Explicit ON/OFF; OFF performs no discovery; ON permits but does not start scanning; explicit SCAN/SEARCH starts bounded cancellable work; user can stop it. No automatic scheduler/repeat. Use the existing pipeline outside the audio callback. No fake progress/results.
+3. **SKIN SYSTEM:** primary default display name is **NEON STAGE DEFAULT**. First supplied mockup is exact layout/appearance reference; second is palette reference. Additional themes derive from this master and change graphics only—not controls, coordinates, functions, bindings or sound. Convert mockups into real sliced PNG asset sets mapped to components/states. Auto-load default on first launch/fallback. Retain stable ID `default-ppgu` unless reviewed migration proves otherwise. This explicitly amends earlier I7/R18 default-name requirement; unrelated I1–I8/R01–R34 rules remain.
+4. **Factory presets:** 300 is the minimum, not a cap. Catalog is open-ended and append-only. Every preset must match the canonical user-provided PUNK GROUP list and real guitar source/performance maps. Internet research/work may be reused only when rights allow intended use; no proprietary samples, closed commercial presets, protected riffs/transcriptions or unauthorized assets.
+5. **Preset Browser:** first category is **Pop Punk Essentials**. Preserve GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN, sections INTRO/VERSE/PRE-CHORUS/CHORUS/BRIDGE/OUTRO, separate STYLE and PATTERN browsers, approved controls, non-destructive PREVIEW and context-aware PREV/NEXT. The existing visible artist/band-name restriction remains until separately amended; internal PUNK GROUP sound mapping is allowed.
+6. **SOUND HUNTER / commercial libraries:** must not prohibit/restrict lawful user-local download, import, loading or use of commercial libraries. Licensing checks govern PPGU factory inclusion and redistribution only. Never silently block, hide, disable, delete or quarantine user-local content solely because it is commercial or not redistributable by PPGU. Preserve security and path validation.
+
+### Strict rules preserved
+Realtime callback restrictions, APVTS IDs/semantics, MIDI/sampler contracts, stable IDs, factory read-only/append-only behaviour, secure import/path validation, exact-SHA evidence and honest status vocabulary remain in force. No documentation entry is implementation evidence.
+
+**Next:** reconcile exact earlier FX module list and exact PUNK GROUP source list with canonical records; locate and bind the two approved NEON STAGE mockup files; then implement each domain in scoped commits with regression tests and exact-SHA release gates.
