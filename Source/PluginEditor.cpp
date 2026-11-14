@@ -976,14 +976,130 @@ private:
 
 namespace { void getPluginModuleAnchor() {} }
 
-void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
+void PPGUPremiumLookAndFeel::drawRotarySlider(
+    juce::Graphics& g, int x, int y, int width, int height,
+    float position, float startAngle, float endAngle, juce::Slider& slider)
 {
- const float d=juce::jmin((float)w,(float)h)*.76f,r=d*.5f,cx=x+w*.5f,cy=y+h*.5f-2,angle=start+pos*(end-start);
- g.setColour(juce::Colours::black.withAlpha(.34f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
- juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.border);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- juce::Path value;value.addCentredArc(cx,cy,r+5,r+5,0,start,angle,true);g.setColour(slider.isEnabled()?palette.accent:palette.textSecondary.withAlpha(.4f));g.strokePath(value,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- g.setGradientFill(juce::ColourGradient(palette.surfaceRaised.brighter(.12f),cx,cy-r,palette.canvasInset.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
- juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.text);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.accentSecondary);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
+    const float diameter = juce::jmin(static_cast<float>(width), static_cast<float>(height)) * 0.74f;
+    const float radius = diameter * 0.5f;
+    const float cx = static_cast<float>(x) + static_cast<float>(width) * 0.5f;
+    const float cy = static_cast<float>(y) + static_cast<float>(height) * 0.5f - 2.0f;
+    const float angle = startAngle + position * (endAngle - startAngle);
+    const auto& t = palette.tokens;
+    const auto enabledAlpha = slider.isEnabled() ? 1.0f : 0.38f;
+
+    // Machined outer bezel and recessed shadow.
+    g.setColour(t.shadow.withAlpha(0.78f));
+    g.fillEllipse(cx - radius - 3.0f, cy - radius + 4.0f, diameter + 6.0f, diameter + 6.0f);
+    g.setGradientFill(juce::ColourGradient(t.highlight.withAlpha(0.26f),
+        cx, cy - radius - 5.0f, t.lowlight, cx, cy + radius + 5.0f, false));
+    g.fillEllipse(cx - radius - 2.0f, cy - radius - 2.0f, diameter + 4.0f, diameter + 4.0f);
+    g.setColour(t.controlBorder.withAlpha(0.95f));
+    g.drawEllipse(cx - radius - 2.0f, cy - radius - 2.0f, diameter + 4.0f, diameter + 4.0f, 1.2f);
+
+    // Graduated scale: quiet ticks, with the active range rendered as a signal arc.
+    constexpr int tickCount = 9;
+    for (int i = 0; i <= tickCount; ++i)
+    {
+        const float tickAngle = startAngle + (endAngle - startAngle)
+            * static_cast<float>(i) / static_cast<float>(tickCount);
+        const float inner = radius + 7.0f;
+        const float outer = inner + (i % 3 == 0 ? 5.0f : 3.0f);
+        juce::Path tick;
+        tick.startNewSubPath(cx + std::sin(tickAngle) * inner,
+                             cy - std::cos(tickAngle) * inner);
+        tick.lineTo(cx + std::sin(tickAngle) * outer,
+                    cy - std::cos(tickAngle) * outer);
+        g.setColour(t.controlBorder.withAlpha(slider.isEnabled() ? 0.92f : 0.35f));
+        g.strokePath(tick, juce::PathStrokeType(i % 3 == 0 ? 1.5f : 1.0f));
+    }
+
+    juce::Path track;
+    track.addCentredArc(cx, cy, radius + 5.0f, radius + 5.0f, 0.0f,
+                        startAngle, endAngle, true);
+    g.setColour(t.controlBorder.withAlpha(0.62f));
+    g.strokePath(track, juce::PathStrokeType(4.0f,
+        juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+    juce::Path valueArc;
+    valueArc.addCentredArc(cx, cy, radius + 5.0f, radius + 5.0f, 0.0f,
+                           startAngle, angle, true);
+    g.setColour(t.accent.withAlpha(enabledAlpha));
+    g.strokePath(valueArc, juce::PathStrokeType(4.0f,
+        juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+    // Brushed-metal control face.
+    g.setGradientFill(juce::ColourGradient(t.highlight.withAlpha(0.22f),
+        cx - radius * 0.35f, cy - radius, t.controlFace,
+        cx + radius * 0.22f, cy + radius, false));
+    g.fillEllipse(cx - radius + 4.0f, cy - radius + 4.0f, diameter - 8.0f, diameter - 8.0f);
+    g.setColour(t.controlBorder.withAlpha(0.95f));
+    g.drawEllipse(cx - radius + 4.0f, cy - radius + 4.0f,
+                  diameter - 8.0f, diameter - 8.0f, 1.0f);
+
+    // Pointer and center cap remain readable at compact sizes.
+    juce::Path pointer;
+    pointer.startNewSubPath(cx, cy);
+    pointer.lineTo(cx + std::sin(angle) * radius * 0.57f,
+                   cy - std::cos(angle) * radius * 0.57f);
+    g.setColour(t.textPrimary.withAlpha(enabledAlpha));
+    g.strokePath(pointer, juce::PathStrokeType(2.5f,
+        juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+    g.setColour(t.accentGlow.withAlpha(enabledAlpha));
+    g.fillEllipse(cx - 3.0f, cy - 3.0f, 6.0f, 6.0f);
+    g.setColour(t.lowlight);
+    g.drawEllipse(cx - 4.5f, cy - 4.5f, 9.0f, 9.0f, 0.8f);
+}
+
+void PPGUPremiumLookAndFeel::drawLinearSlider(
+    juce::Graphics& g, int x, int y, int width, int height,
+    float sliderPos, float, float, juce::Slider::SliderStyle style, juce::Slider& slider)
+{
+    const auto& t = palette.tokens;
+    const float alpha = slider.isEnabled() ? 1.0f : 0.38f;
+    const bool horizontal = style == juce::Slider::LinearHorizontal
+        || style == juce::Slider::LinearBar || style == juce::Slider::LinearBarVertical;
+    auto bounds = juce::Rectangle<float>(static_cast<float>(x), static_cast<float>(y),
+        static_cast<float>(width), static_cast<float>(height)).reduced(5.0f);
+
+    if (horizontal)
+    {
+        const float cy = bounds.getCentreY();
+        auto rail = juce::Rectangle<float>(bounds.getX(), cy - 2.0f, bounds.getWidth(), 4.0f);
+        g.setColour(t.controlBg);
+        g.fillRoundedRectangle(rail, 2.0f);
+        const float fillWidth = juce::jlimit(0.0f, rail.getWidth(), sliderPos - rail.getX());
+        g.setColour(t.accent.withAlpha(alpha));
+        g.fillRoundedRectangle(rail.withWidth(fillWidth), 2.0f);
+        g.setColour(t.controlBorder);
+        g.drawRoundedRectangle(rail, 2.0f, 0.8f);
+        g.setColour(t.shadow.withAlpha(0.8f));
+        g.fillEllipse(sliderPos - 7.0f, cy - 7.0f + 1.5f, 14.0f, 14.0f);
+        g.setGradientFill(juce::ColourGradient(t.highlight, sliderPos - 4.0f, cy - 6.0f,
+            t.controlFace, sliderPos + 4.0f, cy + 6.0f, false));
+        g.fillEllipse(sliderPos - 6.0f, cy - 6.0f, 12.0f, 12.0f);
+        g.setColour(t.accentGlow.withAlpha(alpha));
+        g.drawEllipse(sliderPos - 6.0f, cy - 6.0f, 12.0f, 12.0f, 1.0f);
+    }
+    else
+    {
+        const float cx = bounds.getCentreX();
+        auto rail = juce::Rectangle<float>(cx - 2.0f, bounds.getY(), 4.0f, bounds.getHeight());
+        g.setColour(t.controlBg);
+        g.fillRoundedRectangle(rail, 2.0f);
+        const float fillHeight = juce::jlimit(0.0f, rail.getHeight(), rail.getBottom() - sliderPos);
+        g.setColour(t.accent.withAlpha(alpha));
+        g.fillRoundedRectangle(rail.withY(sliderPos).withHeight(fillHeight), 2.0f);
+        g.setColour(t.controlBorder);
+        g.drawRoundedRectangle(rail, 2.0f, 0.8f);
+        g.setColour(t.shadow.withAlpha(0.8f));
+        g.fillEllipse(cx - 7.0f, sliderPos - 5.5f, 14.0f, 14.0f);
+        g.setGradientFill(juce::ColourGradient(t.highlight, cx - 5.0f, sliderPos - 5.0f,
+            t.controlFace, cx + 5.0f, sliderPos + 5.0f, false));
+        g.fillEllipse(cx - 6.0f, sliderPos - 6.0f, 12.0f, 12.0f);
+        g.setColour(t.accentGlow.withAlpha(alpha));
+        g.drawEllipse(cx - 6.0f, sliderPos - 6.0f, 12.0f, 12.0f, 1.0f);
+    }
 }
 void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,
     juce::Button& button, const juce::Colour& base, bool hovered, bool pressed)
