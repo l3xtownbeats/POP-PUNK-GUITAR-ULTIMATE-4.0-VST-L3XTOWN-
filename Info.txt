@@ -1989,3 +1989,40 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 - Контрольный lowercase `onload=` возвращает allowed=false.
 
 **Статус:** ZIP S1 MUST NOT BE MERGED до исправления и расширения негативных тестов (mixed-case event attributes, protocol-relative/external URI variants). Это результаты только для загруженного архива, не для текущей REV.17, где S1 отсутствует.
+
+
+## 2026-11-14 — REV.17 full-tree reconciliation preflight
+
+**Тип:** source/documentation reconciliation; production source unchanged.  
+**Исходная ветка:** POP-PUNK-GUITAR-ULTIMATE-VST-REV.17. **Исходный HEAD / parent:** f135b0f5c9609286086772450f69d287d8ff71c5.  
+**Рабочая ветка:** work/rev17-full-reconciliation-2026-11-14.
+
+Проведена инвентаризация полного Git tree текущего HEAD: **769 tracked entries**, включая 102 каталога тем и текущие source/build/test/doc paths. Это tree-wide inventory; бинарные изображения, ZIP-архивы и WAV/sample payload не считаются текстуально прочитанными исходниками.
+
+**Подтверждено по live source/build:**
+- JUCE 7.0.12 / C++20 / Windows x64 VST3; canonical sampler implementation находится в Source/Sampler.
+- PATTERN processor использует один глобальный APVTS patternSlot (0..7), восемь 16-step masks, host/internal PPQ scheduler, quantize/swing/accent и chord transition handling.
+- В source tree нет production OverlayManager и SecureSkinImport; root test files не зарегистрированы в CMake. Архивные реализации из PPGU_TREE_2026-11-13.zip не переносить вслепую.
+- Live Skin Gallery уже имеет карточки/preview images, поиск и family filter; выбор карточки сразу применяет тему. Non-committing Preview / Apply-Back rollback / Favorites не подтверждены.
+- Sound Hunter policy validator и unit tests присутствуют, но registry пуст; это не production DeepSearch/Curator pipeline и не доказательство наличия новых approved assets.
+- Каталог 300 preset definitions не считать 300 playable presets без проверки каждого playback reference.
+- PatternScheduler.cpp находится в корне репозитория; Source/Performance/PatternScheduler.cpp отсутствует. Не создавать дубликат модуля по устаревшему пути.
+
+**Документальные конфликты/устаревшие утверждения:**
+- PPGU_TASK_REGISTRY.md всё ещё называет SH-01 (два sound-registry CTest assertions) не исправленным, тогда как Info.txt фиксирует correction и успешный CTest на exact SHA 8c75820.... Требуется dated correction, не silent overwrite.
+- Skin gap audit содержит старые выводы REV.14 (фиксированный каталог 1..51), тогда как live REV.17 имеет 102-theme registry и более новую Gallery. Сохранять старый аудит как исторический; создать актуальную сверку перед Skin Engine implementation.
+- README/старые журналы фиксируют FL Studio host check как pending на прежних SHA. Пользователь 2026-11-14 подтвердил запуск VST3 в FL Studio 20 / Windows 10 x64, но точный installed binary SHA не сопоставлен с текущим HEAD. Это user-reported host evidence, не exact-SHA host acceptance для f135b0f....
+- Exact-SHA Windows Release + CTest + pluginval strictness 5 + package PASS относится к 8c75820... / run 43463167899, не к более позднему HEAD f135b0f....
+
+**Безопасные приоритеты внедрения (без переноса устаревшего ZIP целиком):**
+1. PATTERN: отдельная модель Section → Rhythm/Pattern с persistence/migration tests; сохранить старый patternSlot как legacy compatibility input и не менять scheduler timing guarantees.
+2. Skin Engine: сначала исправленная/tested OverlayManager и secure .ppguskin importer, затем workspace integration; SVG policy должна закрывать mixed-case event attributes и protocol-relative/external href.
+3. Gallery: отдельный draft selection/Preview state, Apply/Back и Favorites; skin selection не меняет APVTS/DSP/MIDI.
+4. Sound Hunter: разрешать только проверенные asset-level provenance/license/hash/quality gates; не добавлять YELLOW/RED или неподтверждённые библиотеки в distributable SoundBank.
+5. Перепроверить полный Windows Release/CTest/pluginval/package и затем host test на resulting SHA.
+
+**Compatibility invariants:** SIGNAL FORGE / NEON неизменен; не менять существующие APVTS IDs/semantics, MIDI, DSP, sampler, presets, SoundBank и audio callback без отдельного тестируемого контракта. No speculative merge from stale archives.
+
+**Проверки этого preflight:** Git tree inventory and targeted source/doc fetch/readback; no build, CTest, pluginval, package or source modification performed.
+
+**Статус:** TREE INVENTORY COMPLETE / TARGETED SOURCE-DOC AUDIT COMPLETE / PRODUCTION CODE UNCHANGED / IMPLEMENTATION NOT YET CLAIMED.

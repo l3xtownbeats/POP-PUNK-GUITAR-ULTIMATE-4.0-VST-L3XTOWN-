@@ -650,3 +650,22 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Контрольный lowercase `onload=` возвращает allowed=false.
 
 **Статус:** ZIP S1 MUST NOT BE MERGED до исправления и расширения негативных тестов (mixed-case event attributes, protocol-relative/external URI variants). Это результаты только для загруженного архива, не для текущей REV.17, где S1 отсутствует.
+
+
+## 2026-11-14 — REV.17 full-tree reconciliation preflight (documentation index)
+
+**Branch:** work/rev17-full-reconciliation-2026-11-14  
+**Base / parent SHA:** f135b0f5c9609286086772450f69d287d8ff71c5  
+**Change class:** documentation-only audit record; no production source symbols changed.
+
+**Repository inventory:** 769 tracked tree entries. Targeted inspection covered CMake/workflow, processor/editor, sampler and performance interfaces, PatternScheduler, regression tests, theme/gallery contracts, Sound Hunter validator/tests, licensing/source index, INFO/CODE and task/panel registries. Binary artwork, ZIP archives and sample payloads were inventoried but not decoded or individually listened to in this pass.
+
+**Key exact paths:** CMakeLists.txt; Source/PluginProcessor.cpp/.h; Source/PluginEditor.cpp/.h; Source/Performance/PatternScheduler.h; root PatternScheduler.cpp/.h; Source/Sampler/*; tests/ProcessorPatternIntegrationTests.cpp; tests/PatternSchedulerTests.cpp; tests/TestSoundAssetRegistry.py; tools/validate_sound_asset_registry.py; Info.txt; PPGU_TASK_REGISTRY.md; PPGU_WINDOWS_PANELS_INVENTORY.md; PPGU_APPROVED_PARAMETERS.md; docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md; SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md.
+
+**Findings:** current PATTERN runtime has one global patternSlot and eight rhythm masks; Section-first UX is not implemented. Live Gallery commits on card click; draft Preview/Apply/Back/Favorites are incomplete. OverlayManager/SecureSkinImport production files are absent from this tree. Sound Hunter validator/tests exist but registry has no approved assets and no production discovery/curation pipeline. Historical SH-01 status in task registry conflicts with later INFO exact-SHA CTest record; correction required. Earlier FL Studio pending status is superseded only by user-reported successful launch, not by exact binary SHA evidence.
+
+**Invariants:** keep SIGNAL FORGE/NEON, current APVTS IDs/semantics, DSP, sampler, MIDI and realtime guarantees unchanged during the audit. Do not transplant stale ZIP tree or claim unrun checks.
+
+**Tests/CI:** no code changed; no build/CTest/pluginval/package run on this audit branch. Prior CI PASS at 8c75820... remains scoped to that SHA.
+
+**Status:** AUDIT RECORD ONLY / SOURCE UNCHANGED / IMPLEMENTATION PENDING.
