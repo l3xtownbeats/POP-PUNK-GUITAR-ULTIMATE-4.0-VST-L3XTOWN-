@@ -421,3 +421,15 @@ Do not copy protected/commercial libraries, extract content from protected insta
 
 **Next:** canonical reference/skin ID reconciliation → main-window control parity → transactional Gallery → PATTERN and remaining K-order tasks. No blind ID renumbering, asset deletion or fake UI controls.
 
+
+
+## 2026-11-14 — TX-UX-ENGINE-001 — approved UX / visual / engineering principles
+
+The user approved the following mandatory cross-product requirements:
+- **One-time scan, permanent registration, fast auto-load, no repeated full scans.** Persistent catalog and stable sample IDs; lightweight startup root availability check; no full tree traversal or re-index on launch/preset selection. Normal sample streaming remains allowed. Full scan/relink only by explicit user action.
+- **Minimalist, clear UX:** few necessary actions, clear labels/statuses, no duplicate controls, clutter or user-facing technical complexity.
+- **Efficient engineering:** lean/reused architecture, low CPU/RAM, fast startup and preset switching, realtime-safe audio path, safe threading/memory, measurable optimizations and tests.
+- **NEON STAGE DEFAULT unified design system:** every window, panel, menu and module must share the same premium visual language and component rules. No visually unrelated auxiliary windows.
+- **Concise communication:** minimum filler, maximum actionable information; truthful evidence/status distinctions.
+
+These are approved requirements, not proof of implementation. No production source, runtime UI, DSP, sampler, presets or assets changed in this decision record. Existing skin IDs/manifests must not be blindly renamed; implementation requires source/reference reconciliation and tests.
