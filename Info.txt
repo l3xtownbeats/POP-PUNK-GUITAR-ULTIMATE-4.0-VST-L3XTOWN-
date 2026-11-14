@@ -2791,3 +2791,27 @@ Audit boundary: static comparison of CMake paths, workflow text and repository t
 9. Update INFO and CODE with exact paths, symbols, SHA, results and remaining blockers after every scoped code change.
 
 Статус: архитектурная карта и source inventory DOCUMENTED; static integration audit RECORDED; build graph NOT YET RECONCILED; source code was not changed by this entry; no new BUILD PASS / TESTED / HOST VERIFIED / COMPLETE claim.
+
+
+## 2026-11-14 — APPROVED: MAXIMUM-SCALE GUITAR SOUND LIBRARY + AUTOMATIC DEFECT REMEDIATION
+
+Пользователь явно утвердил создание максимально большой гитарной библиотеки PPGU, включая One-Shots, Sample Loops, multisamples/performance sets, SoundBank и все соответствующие factory presets для MELODY и PATTERN. Верхнего количественного предела нет ни для библиотеки в целом, ни для отдельных типов и категорий. Подробная обязательная спецификация записана в `docs/PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md`.
+
+### Содержание обязательной цели
+- Guitar One-Shots: отдельные ноты, струны/позиции, аккордовые/одиночные атаки, clean/crunch/drive, palm mute, articulations, velocity layers, round robins, release/tails — только если есть реальные записи и mappings.
+- Guitar Sample Loops: electric/acoustic, ритмические groove families, BPM/time signature/bar length, downstroke/down-up/gallop/syncopation/stop-start/half-time/double-time/ska и другие реальные варианты; seamless loops и достоверные метаданные.
+- Multisamples/performance sets: mapped note ranges, strings/positions, velocity, RR, articulation/release.
+- Presets: MELODY, PATTERN и все browser entities (GENRE, ARTIST/BAND/PUNK GROUP, SONG/SECTION, STYLE, articulations, techniques, rhythm categories, patterns, variations, sound/source/performance/chord options). Ни общего, ни категориального верхнего лимита.
+- SoundBank только гитарный; one-shot, loop, multisample, MIDI pattern и preset — разные сущности, не подменять друг другом.
+- Factory/user assets разделены; локальный user import коммерческих библиотек не запрещается; factory redistribution требует явных прав.
+- Никаких неподтверждённых playable claims и фиктивных placeholders.
+
+### Обязательный автоматический defect-fix workflow
+Пользователь утвердил: на этапе разработки каждого пункта автоматически обнаруживать и исправлять локальные однозначные non-breaking bugs, недочёты, compile/config/test failures, warnings, metadata/schema/asset/reference errors, duplicate IDs, license/provenance omissions, UI binding problems, audio-thread violations, regressions и documentation drift. После исправления автоматически запускать релевантные тесты и regression checks, проверять diff/evidence, фиксировать root cause, repair, paths, commit SHA и test results в INFO/CODE. Не слать пользователю отдельное уведомление по каждой рутинной проблеме/починке; сводить отчёт на контрольных точках или по запросу.
+
+**Граница автономии:** без повторного разрешения исправлять только однозначные, обратимые, non-breaking проблемы, не меняющие ни одного утверждённого поведения или контракта. При конфликте пользовательских требований, необходимости менять approved behavior/API/APVTS/MIDI/DSP/sampler/preset contracts, сомнительной лицензии/происхождении, необратимом действии или риске пользовательским данным — приостановить только затронутую часть и запросить конкретное решение. Независимые безопасные работы продолжать. Никаких фиктивных PASS; не запущенные тесты отмечать NOT RUN с причиной.
+
+### Базовый inventory status
+На проверенной ревизии bootstrap registry `assets/sound_hunter/registry.json` имеет `assetCount: 0`, `sourceCount: 0`; он не подтверждает наличие аудиобиблиотеки. Фактический runtime registry должен генерироваться из реально staged files под `Samples/`. Поэтому цель APPROVED, но библиотека пока не объявляется наполненной/готовой. Подробности, критерии и следующий pipeline — в master plan.
+
+Статусы этой записи: APPROVED / DOCUMENTED; VERIFIED после повторного fetch. Это не утверждение IMPLEMENTED/TESTED/FACTORY-READY/COMPLETE.
