@@ -3406,3 +3406,8 @@ REV ULTRA 3.0 задаёт обязательный производственн
 **Final CI wiring follow-up — 2026-11-15**
 - Commit `948dbc00763fe5df30758ddb493bba13b0d8c458` adds `python -m py_compile` for the asset engine and all pipeline wrapper scripts before any asset generation.
 - Exact-head workflow lookup is required before reporting results. No CI result is inferred from the presence of the workflow definition.
+
+**Exact-head CI lookup — 2026-11-15**
+- Current source head at time of lookup: `ef6d611c87d2f01268b120c4fb422816fc09bd85`.
+- GitHub Actions workflow-run lookup and combined commit-status lookup returned empty results for that exact SHA after the PR trigger and Python syntax gate were committed.
+- This means no syntax check, generator run, contact-sheet output, staging report, or ZIP has been verified. The workflow configuration exists, but the run is not confirmed. Continue to keep runtime promotion disabled and PR #33 Draft.
