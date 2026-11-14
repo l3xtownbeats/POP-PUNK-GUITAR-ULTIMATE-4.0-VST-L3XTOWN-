@@ -110,3 +110,34 @@ Keep the three areas visually and functionally separate. Preserve independent se
 - All realtime, APVTS, sampler, MIDI, stable-ID, factory/user separation and exact-SHA validation rules remain unchanged.
 
 **Status:** APPROVED / DOCUMENTATION ONLY. No production code or runtime behaviour is claimed implemented or tested by this amendment.
+
+
+## 10. PATTERN mode — two-window preset and performance browser (2026-11-14)
+
+This records the user's explicit clarification of the previously agreed PATTERN-mode browser layout. PATTERN mode has **two separate windows**:
+
+### 10.1 Window 1 — PRESET / GUITAR IDENTITY
+A hierarchical browser for:
+- pop-punk genre / guitar type;
+- PUNK GROUP / band identity;
+- song-based selection;
+- individual song section and compatible nested sub-items.
+
+The group/band and song/section levels are required dimensions and must not be omitted or collapsed into generic categories. Use the canonical user-provided group list and real source mappings; do not fabricate names or claim unsupported recordings exist.
+
+### 10.2 Window 2 — PLAYING STYLE / RHYTHMIC PERFORMANCE
+A separate browser/window for the performance choices associated with the selected guitar identity:
+- **PLAYING STYLE / ARTICULATION** — how the guitar is played;
+- **RHYTHMIC CATEGORY / PATTERN / VARIATION** — which rhythmic figure is performed and which variation is selected.
+
+STYLE and PATTERN remain distinct dimensions inside this second window. The approved PATTERN categories remain DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING and CUSTOM PATTERNS. Preserve P1–P10 only where these IDs exist in the canonical pattern catalog, and preserve eight Pattern Slots per section. Do not manufacture missing IDs or present unsupported mappings as playable.
+
+### 10.3 Mode semantics and state
+- PATTERN is a separate performance mode from MELODY. PATTERN plays rhythmic guitar performances and retains the approved AUTO CHORDS ON/OFF behaviour; MELODY remains one ordinary key = one pitched note.
+- Window 1 selects guitar/source identity and song context; Window 2 selects playing manner and rhythmic figure. They must not be merged into a single flattened list.
+- Guitar/source identity, chord/voicing, tone preset/FX, playing style/articulation and rhythm pattern remain separate semantic axes. Context filtering may narrow available choices without merging their state.
+- Keep PREVIEW non-destructive; SELECT/APPLY commits; CANCEL restores prior state. PREV/NEXT, SEARCH, FILTER, SORT and FAVORITES preserve the active browser scope.
+- Unsupported combinations must be unavailable with a truthful reason. No fake controls, random/incompatible sample substitution or silent fallback.
+- Keep the MIDI keyboard visible and interactive; preserve all realtime, APVTS, sampler, MIDI, stable-ID, factory/user and exact-SHA rules.
+
+**Status:** APPROVED REQUIREMENT / DOCUMENTATION ONLY. No production UI, browser backend, pattern engine, MIDI implementation or validation is implied.
