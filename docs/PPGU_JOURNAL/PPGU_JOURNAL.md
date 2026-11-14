@@ -521,3 +521,18 @@ Status: APPROVED / DOCUMENTED / RESEARCH BASELINE. This entry does not claim imp
 ## 2026-11-14 — NEON STAGE DEFAULT подтверждён без редизайна
 
 Пользователь отдельно уточнил и утвердил: NEON STAGE DEFAULT — основной внешний вид — остаётся прежним, сохраняет утверждённую общую концепцию, фирменную композицию, палитру, визуальный характер и расположение основных областей. Глобальная UX-оптимизация касается удобства и ясности внутри этой визуальной системы, а не её замены. Допустимы подписи, подсказки, группировка, навигация, состояния и микроулучшения; крупный редизайн не подменяет default skin и может рассматриваться только как отдельный вариант. NEON STAGE DEFAULT остаётся skin по умолчанию.
+
+
+## 2026-11-14 — REV.18: consolidated user approval and supersession of earlier targets
+
+Пользователь повторно утвердил REV.18 и потребовал сверять все дальнейшие действия с генеральным планом. Каноническое дополнение: `docs/PPGU_REV18_USER_APPROVED_SUPERSEDING_REQUIREMENTS_2026-11-14_RU.md`; генеральный план, production priorities, product spec и sound library master plan синхронизированы.
+
+- SAMPLES: искусственного лимита размера нет; 25–30 GB target и 40 GB cap superseded. При GitHub/artifact/transfer ограничениях — split parts + SHA-256, без ограничения содержимого и без удаления/перезаписи исходных samples.
+- PRESETS: 500 READY MELODY + 500 READY PATTERN минимум. Старое требование 300 total / 500–600 stretch superseded. Travis Barker 82 — внутри artist/band categories, counted once.
+- FX EDIT: одно объединённое самостоятельное окно; EFFECT SELECT 10–15 реальных DSP effects/processors. Сохраняются восемь страниц параметров и семь утверждённых bypass switches. Дополнительные имена сверить с ранним журналом, не выдумывать.
+- SKIN GALLERY: ровно 16 тем в утверждённом release gallery; NEON STAGE DEFAULT остаётся прежней, главной и загружается по умолчанию; 15 остальных — премиальные темы с одинаковой функциональностью. Старые registry entries не удалять.
+- SETTINGS: GOOD/NORMAL/NIGHT/ECO; 2x/4x/8x/16x; Voices от 2/4/8 в пределах реального движка; lock для Voices и каждого resource profile.
+- ABOUT: L3XTOWN, POP PUNK GUITAR ULTIMATE VST3, REV.18, 2026, фактическая engine/build version, полные иллюстрированные RU/EN manuals со скриншотами реального UI.
+- Release package: VST3, SAMPLES, FACTORY PRESETS, USER PRESETS SUPPORT, SKIN GALLERY, RESOURCES, LICENSES, DOCUMENTS, RU/EN manuals, SHA-256, COMPLETE ZIP/split parts. Module order and Windows 10 x64 / FL Studio 20 x64 unchanged.
+
+Документирование не означает реализацию. Текущие 300 JSON entries, 8 FX selector modules, 52-theme legacy registry и SettingsPanel skeleton остаются gap/audit items. Ни один пресет/эффект/скин не объявляется READY без code/runtime/test evidence.
