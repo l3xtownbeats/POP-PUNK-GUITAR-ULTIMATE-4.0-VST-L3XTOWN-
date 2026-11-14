@@ -32,35 +32,39 @@ if errorlevel 1 goto :fail
 python -m pip install -r requirements.txt
 if errorlevel 1 goto :fail
 
-echo [1/8] Palette and contrast
+echo [1/8] Approved references and Skin_052 geometry audit
+python validate_neon_stage_reference.py
+if errorlevel 1 goto :fail
+
+echo [2/8] Palette and contrast
 python 01_palette.py
 if errorlevel 1 goto :fail
 
-echo [2/8] Knob filmstrips - 121 frames at 1x and 2x
+echo [3/8] Knob filmstrips - 121 frames at 1x and 2x
 python 02_knobs.py
 if errorlevel 1 goto :fail
 
-echo [3/8] Buttons, FX tiles, slider and LED
+echo [4/8] Buttons, FX tiles, slider and LED
 python 03_ui_elements.py
 if errorlevel 1 goto :fail
 
-echo [4/8] SVG assets
+echo [5/8] SVG assets
 python 04_svg_assets.py
 if errorlevel 1 goto :fail
 
-echo [5/8] Preview and hero artwork
+echo [6/8] Preview and hero artwork
 python 05_promo.py
 if errorlevel 1 goto :fail
 
-echo [6/8] Draft theme and staging manifest
+echo [7/8] Draft theme and staging manifest
 python 06_manifest.py
 if errorlevel 1 goto :fail
 
-echo [7/8] Final structural report
+echo [8/8] Final structural report
 python 08_report.py
 if errorlevel 1 goto :fail
 
-echo [8/8] ZIP and JUCE resource staging
+echo [9/9] ZIP and JUCE resource staging
 python 07_package.py
 if errorlevel 1 goto :fail
 
