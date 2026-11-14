@@ -904,3 +904,20 @@ Delivery acceptance criteria:
 - after packaging, verify archive integrity, manifest, contents, extraction and a clean install/load smoke test; provide a working link to the archive that was actually created.
 
 These are approved COMPLETE/DELIVERY acceptance criteria, not a claim that the product is currently complete. Do not promise a fabricated link or deadline; obtain and verify source assets, licenses, integration, build, tests and archive first. Paid acquisitions still require separate user approval. All previously approved requirements and amendments remain in force.
+
+
+## 2026-11-14 — APPROVED REUSE-FIRST ENGINEERING STRATEGY
+
+The user approves a reuse-first development approach: do not build everything from scratch. Research public/open-source internet projects, libraries, algorithms, DSP modules, sample engines, MIDI/performance systems, GUI controls, testing tools and established engineering solutions; compare alternatives, select the best compatible candidates, integrate and adapt them to PPGU/ANGELA Engine, prioritizing low CPU/RAM, low latency, fast startup and stability. Implement a component from scratch only when no suitable and legally usable analogue exists.
+
+Mandatory third-party component intake:
+1. Identify the upstream primary source, exact version, author/rightsholder, maintenance status, known limitations and vulnerabilities.
+2. Review the full license for that exact version and all dependencies/submodules/included files. Confirm rights to modify, statically/dynamically link, include source/binaries, use commercially and redistribute inside PPGU. Public GitHub visibility or a permissive label without reading the actual LICENSE is not permission.
+3. Never import proprietary/closed-source product code, decompiled components, leaked code, protected sample pools or code with unclear rights. Never bypass DRM, paywalls or access controls.
+4. Evaluate API/ABI fit, threading/audio-thread safety, realtime allocations/locks, SIMD, denormals, latency, CPU/RAM, file formats, host compatibility, build/test coverage, security and maintenance.
+5. Isolate/adapt with minimal footprint; preserve copyright notices, license text, attribution, version, source URL, commit/tag, hashes, local patches and dependency manifest/SBOM.
+6. Run component/integration tests, audio render and A/B comparison, sanitizers/static analysis and performance tests. Reject/replace or implement in-house if licensing is incompatible, quality is poor, architecture conflicts or resource cost is unacceptable.
+
+Initial framework audit: current project CMake fetches JUCE 7.0.12. JUCE upstream states it is dual-licensed AGPLv3/commercial; exact version and full terms must be reviewed before commercial distribution. Do not assume this dependency is automatically cleared. iPlug2 is a candidate for comparative audit: upstream states VST3 support and a permissive zlib-like license, but this does not automatically make it a drop-in replacement for the current JUCE stack. Compare it, and do not migrate frameworks without demonstrated technical/licensing benefit and a complete migration plan. Record framework decisions only after primary license review and a real build prototype.
+
+User authorization permits autonomous selection and integration, but does not waive licenses, attribution, paid-purchase approval (still separately required), security review or quality gates. Do not add external projects merely for quantity: integrate only the best verified option, avoid duplicated functions, keep architecture clean and optimize measured resource usage.
