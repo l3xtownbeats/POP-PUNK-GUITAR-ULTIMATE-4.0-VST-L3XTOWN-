@@ -118,7 +118,7 @@ def main():
                     help="Hard aggregate Samples audio-library ceiling (maximum 40 GB).")
     args=ap.parse_args()
     if args.max_library_gb <= 0 or args.max_library_gb > 40.0:
-        raise SystemExit("The approved aggregate Samples audio-library ceiling is 40 GiB maximum.")
+        raise SystemExit("The approved aggregate Samples audio-library ceiling is 40 GB maximum.")
     catalog=json.loads(CATALOG.read_text(encoding="utf-8"))
     sources=catalog["sources"]
     print("SOUND HUNTER — REAL RECORDED GUITARS ONLY")
@@ -229,7 +229,7 @@ def main():
                 break
         out=run_root/"SOUND_HUNTER_REGISTRY.json"
         out.write_text(json.dumps(registry,ensure_ascii=False,indent=2),encoding="utf-8")
-        print(f"Completed. {len(registry['assets'])} audio assets; added this run {used/1_000_000_000:.2f} GiB; aggregate Samples audio library {library_bytes/1024**3:.2f}/{args.max_library_gb:.2f} GiB.")
+        print(f"Completed. {len(registry['assets'])} audio assets; added this run {used/1_000_000_000:.2f} GB; aggregate Samples audio library {library_bytes/1_000_000_000:.2f}/{args.max_library_gb:.2f} GB.")
     finally:
         # Only remove this run's temporary download directory, never existing user content.
         if tmp.exists(): shutil.rmtree(tmp)
