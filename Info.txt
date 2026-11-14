@@ -3411,3 +3411,58 @@ REV ULTRA 3.0 задаёт обязательный производственн
 - Current source head at time of lookup: `ef6d611c87d2f01268b120c4fb422816fc09bd85`.
 - GitHub Actions workflow-run lookup and combined commit-status lookup returned empty results for that exact SHA after the PR trigger and Python syntax gate were committed.
 - This means no syntax check, generator run, contact-sheet output, staging report, or ZIP has been verified. The workflow configuration exists, but the run is not confirmed. Continue to keep runtime promotion disabled and PR #33 Draft.
+
+================================================================================
+2026-11-15 — NEON STAGE REV ULTRA 3.0 — canonical palette, audited controls and staging CI result
+================================================================================
+
+**Рабочая ветка:** `work/neon-stage-reference-preview-fix`
+
+**Проверенный исходный SHA:** `586f174ae64098cfd61f9fa9e1bda756f19718f7`
+**GitHub Actions:** run `43638656872` — **SUCCESS** на точном SHA выше.
+**Staging artifact:** `neon-stage-default-skin-1-staging`, artifact ID `14131550674`.
+**Artifact SHA-256:** `435940b39defc3c158c5e18168a1997254025f689ea49172320d2898fc7fec2f`.
+**Внутренний staging ZIP SHA-256:** `510d7b3b66709ee066e66b313f0fa512e4d3fedd66d3fc7f8297d38b21a07ceb`.
+**Состав внутреннего ZIP:** 78 файлов. Срок хранения GitHub artifact до 2027-02-12.
+
+### Выполнено
+
+1. **G1 — canonical palette**
+   - Skin_052 и архив Skin_053 используют ровно 21 токен REV ULTRA 3.0.
+   - Контрасты на проверенном запуске: primary 17.56:1; secondary 9.29:1; disabled 3.56:1; LCD 13.49:1; accent 9.38:1.
+   - `control_schema.json` описывает оба контракта: новый NEON STAGE palette и неизменённый legacy palette для Skin_054..Skin_102. Массовая миграция старых тем не выполнялась.
+   - `ThemeManager` получил адаптер новых токенов, включая безопасное преобразование `overlay_scrim #RRGGBBAA` в JUCE ARGB. Старые семантические alias сохранены для совместимости.
+
+2. **G2 — control parity**
+   - Ровно 28 уникальных контролов в сетке 12×16; пересечений нет.
+   - `control_map.json` теперь содержит ID, label, type, runtime status, component/function, grid и APVTS/action/MIDI binding metadata из `runtimeControlInventory` / `additionalCurrentControls`.
+   - Идентификаторы параметров не переименовывались. Важное расхождение с иллюстративными именами в MASTER PROMPT зафиксировано: текущий runtime использует, например, `knob02 TREBLE → eqHigh`, `fx_switch06 → reverbOn`, `fx_switch07 → cabinetOn`; новые фиктивные ID `fx_reverb`, `reverb` или `cabinetIR` не вводились.
+
+3. **G3 — generated assets**
+   - 23 atlas PNG + 23 JSON index; всего 1,044 indexed frames.
+   - Полный набор: main/AMP knobs, FX tiles, toggles, sliders, wheels, keyboard keys, LED/GR/output meters, window chrome, panel/LCD/gallery/tabs/transport/icons и auxiliary-window atlas.
+   - 14 безопасных SVG, включая отдельные shell assets для AutoChords, FX EDIT, Skins Gallery, Import Guitar, Settings и SETUP-ONLY Auto Discover/Curator/About.
+   - PNG-8 CRC/dimensions, frame bounds/counts, WebP 800×450, SVG safety и SHA-256 provenance прошли staging validator.
+   - `LICENSE.txt` хеширует все файлы внутреннего ZIP, кроме самоссылочных LICENSE/SELF_CHECK; `SELF_CHECK.txt` включает SHA-256 LICENSE.
+
+4. **Детерминизм**
+   - Повторная генерация pipeline дала byte-identical outputs и contact sheets.
+   - Повторная упаковка ZIP дала идентичный SHA-256.
+   - `SELF_CHECK.txt`: G1–G4 PASS; DETERMINISM PASS.
+
+5. **G4 — registry**
+   - Реальный registry содержит 102 непрерывных индекса. NEON STAGE остаётся canonical Skin_052/index 52; Skin_053 — архивная запись.
+   - Skin_054..Skin_102 и их legacy palette не перенумеровывались и массово не переписывались.
+   - Runtime registry/default не менялся этим staging pipeline.
+
+### Границы результата
+
+- Полный пакет создан в staging и загружен как GitHub artifact; runtime promotion остаётся **DISABLED** до визуального утверждения пользователем.
+- Контакт-листы доступны для review; процедурный staging render не заявляется как pixel-perfect совпадение с утверждёнными макетами.
+- Auto Discover, Curator и About остаются статичными SETUP-ONLY placeholder assets; ложная активность/поиск не имитируются.
+- Не менялись DSP, audio callback, APVTS IDs, MIDI routing, sampler ownership или SoundBank.
+- Успешный skin pipeline не означает JUCE Release Build, CTest, pluginval strictness 5 или FL Studio 20 host acceptance.
+- Отдельный VST3 workflow run `43638467897` на SHA `c854b801d6d206cb1f550893298cfc2e41e34b99` прошёл skin-pack preflight и CMake configure; на момент этой записи шаг Build VST3 ещё выполнялся. Итог build/CTest/pluginval не присваивается до завершения run.
+
+**Статус:** STAGING PACKAGE GENERATED / G1–G4 PASS / DETERMINISM PASS на SHA `586f174ae64098cfd61f9fa9e1bda756f19718f7` / USER VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
+================================================================================
