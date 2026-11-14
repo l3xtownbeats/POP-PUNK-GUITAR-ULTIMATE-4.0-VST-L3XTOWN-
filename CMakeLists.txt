@@ -177,6 +177,10 @@ add_test(NAME ppgu_processor_pattern_tests COMMAND ppgu_processor_pattern_tests)
 add_test(NAME ppgu_sound_asset_registry_contract
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/TestSoundAssetRegistry.py)
 
+# Read-only REV 18 SKIN-1 migration audit contract (Python stdlib only).
+add_test(NAME ppgu_neon_stage_skin1_migration_audit_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/test_neon_stage_skin1_migration_audit.py)
+
 # The orphaned root-level OverlayManager/SecureSkinImport test files are not
 # registered: their corresponding production headers and implementations are
 # absent from this REV.17 tree. They remain explicit implementation blockers,
