@@ -1955,3 +1955,25 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 Повторно подтверждено: root `OverlayManagerTests.cpp` и `SecureSkinImportTests.cpp` ссылаются на отсутствующие production headers/implementations; CMake намеренно не регистрирует эти orphan tests. O1/S1 не реализованы и не должны считаться пройденными.
 
 Статус: **AUDIT COMPLETE / NO SOURCE CHANGES / SECTION-FIRST PATTERN UX NOT IMPLEMENTED / AUTOCHORDS NOT IMPLEMENTED / O1-S1 BLOCKED**.
+
+
+## 2026-11-14 — Audit of uploaded PPGU_TREE snapshot and live Skin Gallery
+
+**Тип:** source reconciliation / regression audit; production source on REV.17 не изменялся.
+**Ветка:** POP-PUNK-GUITAR-ULTIMATE-VST-REV.17. **Исходный HEAD:** 0a3f9997b9d7e1d06eaf39ef0b7625c7dca05deb.
+**Внешний входной пакет:** `PPGU_TREE_2026-11-13.zip`, SHA-256 `f9c47d21ed57b8ecec96f2228b9d084ec909057b5f880d9f55cfdccd288d24bd`.
+
+**Обнаружено при сверке:**
+- ZIP — не снимок текущего REV.17 HEAD: в нём 52 каталога SKIN/Skin_001..052 и старая структура Source/Engine; live REV.17 registry содержит 102 темы, а production sampler расположен в Source/Sampler. Полная замена дерева ZIP-версией запрещена: это откатит актуальную ветку и затрёт более поздние изменения.
+- ZIP содержит исходники O1/O2 `Source/UI/OverlayManager.*` и S1 `Source/Security/SecureSkinImport.*`, отсутствующие в live REV.17 на исходном HEAD. Они не переносились.
+- Локальная standalone-проверка OverlayManager из ZIP (GCC C++17, warnings-as-errors) воспроизводимо падает: `OverlayManager::close()` удаляет элемент, но возвращает `false`, когда listener не задан; assertion `m.close("panel-b") == true` в `Tests/OverlayManagerTests.cpp` падает. Это реальный дефект поставленного snapshot, а не дефект текущего live REV.17.
+- Локальная standalone-проверка SecureSkinImportTests из ZIP прошла. Это ограниченная локальная проверка, не CI и не подтверждение интеграции ZIP в продукт.
+
+**Аудит live Skin Gallery:**
+- На live REV.17 `PPGUSkinGalleryPanel` уже имеет карточки с preview-изображениями, строку поиска, family filter, счётчик и active marker.
+- Card click напрямую вызывает `loadSkinByIndex(index, true)`, затем закрывает gallery. Следовательно, отдельный некоммитящий Preview, увеличенное окно предпросмотра, Favorites и явные Apply/Back с отменой выбора отсутствуют в текущем сценарии.
+- Код галереи не менялся; этот аудит не является UI acceptance.
+
+**Следующий этап:** не копировать ZIP целиком. Отдельно исправить и повторно протестировать O1 defect, проверить S1 security edge cases, затем переносить только проверенные файлы с адаптацией к текущему CMake/source layout. Для Skin Gallery сначала добавить testable selection/preview state, затем UI Preview/Apply/Back/Favorites без изменения APVTS, DSP, sampler и SIGNAL FORGE visual identity.
+
+**Статус:** AUDIT COMPLETE / NO PRODUCTION SOURCE CHANGE / ZIP INTEGRATION BLOCKED PENDING FIX + REBASE.
