@@ -2377,3 +2377,19 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 - The historical left-panel browser layout remains subordinate to the newer **01 INTERFACE — NEON STAGE DEFAULT** reference. Skin changes remain visual-only and cannot alter layout, controls, bindings or sound.
 
 **Evidence boundary / status:** REQUIREMENTS CROSS-CHECKED AND INDEXED / IMPLEMENTATION AUDIT STILL REQUIRED / NO SOURCE CHANGE / NO BUILD, CTEST, PLUGINVAL OR HOST STATUS PROMOTED. Source implementation and exact-SHA evidence must be audited separately.
+
+
+## 2026-11-14 — TX-PRESET-AUDIT-005 implementation-index synchronization
+
+**Type:** documentation-only synchronization on canonical REV.17; no production source, UI runtime, APVTS, DSP, sampler, MIDI, scheduler, preset data, SoundBank or build workflow changed.
+**Branch:** POP-PUNK-GUITAR-ULTIMATE-VST-REV.17.
+**Files updated:**
+- SKIN/CONTROL_INVENTORY_MATRIX_RU.md — commit fc259937bf1b62e78db82432a23ce7420e333463. Added logical browser control inventory, required behavior, Pattern Browser transaction, data-operation boundaries, acceptance metadata and realtime constraints.
+- docs/MASTER_PRODUCT_SPEC_4_0_RU.md — commit 90d95dfa6efd6a56063cf92fae74c525ab3b8619. Added section 16 with the approved Preset Browser / Pattern Browser contract and explicit unresolved items.
+
+**Existing records cross-checked:** TX-PRESET-BROWSER-003, TX-UI-PRESET-GUARD-004 and TX-PRESET-AUDIT-005 already exist in Info.txt, CODE.txt, docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md and docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md. These remain authoritative; no duplicate journal was created. INFO remains the single project journal.
+
+**Non-regression:** no new tabs, unapproved controls, layout changes, skin changes, APVTS IDs/semantics, engine changes or preset mutations. Save As/Rename/Delete/Rescan remain unapproved; unresolved browser design details remain OPEN. Factory catalog remains expansion-only. No implementation status was promoted.
+
+**Verification:** both modified files were written to REV.17 using fetched blob SHAs and read/write API success. Documentation-only; build, CTest, pluginval, packaging and FL Studio 20 were not run.
+**Status:** DOCUMENTATION INDEX SYNCED / SOURCE UNCHANGED / RUNTIME IMPLEMENTATION STILL REQUIRES SEPARATE AUDIT.
