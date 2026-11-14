@@ -1905,3 +1905,62 @@ The browser-navigation addendum was synchronized across the canonical engineerin
 - `CODE.txt`: `5d2d90b8946a0245c23d587386678a9001832967`.
 
 These are documentation commits only. No production source, runtime behavior, tests, build outputs, preset data, sample assets or skin assets were changed. No CI/CTest/pluginval/FL Studio/package PASS is claimed. The next implementation work must begin with branch/HEAD and source preflight, then close only the documented gaps without replacing newer work or weakening the immutable baseline.
+
+
+## 2026-11-14 — ADDENDUM: STYLE/PATTERN WINDOWS, SECTION SLOTS, AUTOCHORDS INDEPENDENCE AND VISUAL BASELINE LOCK
+
+**Тип:** append-only reconciliation of explicit user-approved decisions from 2026-11-13/14. This addendum extends the 2026-11-14 browser contract; it does not replace or simplify it.  
+**Рабочая ветка:** work/ppgu-completion-integrated-2026-11-13.  
+**Ограничение области:** документация/инвентаризация требований. Production source, APVTS, DSP, sampler, MIDI, scheduler, preset data, SoundBank and skin assets are not changed by this record.
+
+### 1. STYLE Browser and PATTERN Browser are separate windows
+- STYLE Browser and PATTERN Browser are two distinct, independently openable windows/workspaces. They must not be merged into one window, collapsed into a single selector, replaced by a simple menu, or have one browser removed in favor of the other.
+- Each browser has its own navigation, selection, preview and committed state. Switching between them must preserve the current selections and must not reset playback, tone, harmony, source, or the other browser's state.
+- The overall musical context can be expressed as GENRE → ARTIST/GROUP → SONG SELECTION → SONG SECTION → PLAYING STYLE/ARTICULATION → PATTERN, but this is a logical relationship, not permission to physically merge the two browser windows.
+- STYLE Browser navigation: GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE/ARTICULATION. It chooses playing style/articulation context; it does not silently choose a rhythm pattern, guitar source, chord progression or Tone Preset.
+- PATTERN Browser independently selects rhythm/performance patterns. Its approved categories include DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING and CUSTOM PATTERNS. Availability must come from real registry/performance capability, not labels or hard-coded masks.
+
+### 2. Sections and Pattern Slots
+- The six approved song sections are exactly INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO. PRE-CHORUS is additive; none of the other five may be removed, renamed or substituted.
+- Each of the six sections exposes 8 Pattern Slots: 48 logical section-slot positions in total. This is slot capacity, not a claim that 48 distinct patterns/assets are already populated, playable or validated.
+- A slot belongs to its section context. Choosing or editing a slot in one section must not silently overwrite another section's slot assignment. The committed section/pattern mapping must persist and round-trip with the project state.
+- Section selection and Pattern selection remain separate operations. A section change filters/changes the relevant slot context; it must not silently alter source, tone, chord/harmony or articulation.
+
+### 3. Independent musical dimensions — strict invariant
+The following are independent user-selectable dimensions: CHORD/HARMONY, ARTICULATION/PLAYING STYLE, RHYTHM PATTERN, GUITAR SOURCE/INSTRUMENT, and TONE PRESET.
+- Changing one dimension must not silently replace, reset or mutate another dimension.
+- A Pattern change changes rhythm/performance events only; it does not change the active tone preset, guitar source, chord/harmony or playing-style selection.
+- A STYLE/articulation change changes the selected playing technique/context only; it does not silently load a different Pattern, source or tone.
+- A chord/harmony change must not reset Pattern, STYLE, source or tone. Source and Tone Preset are also separate: selecting a source does not imply a preset load, and selecting a tone preset must not silently substitute a missing source.
+- If a selected combination is unsupported by actual performance maps, source mapping or runtime capability, report the exact unavailable capability and leave the other committed selections intact. No silent substitution, fake performance or hidden fallback.
+
+### 4. Browser controls and commit semantics — apply to both independent windows
+- Preserve the approved browser controls: SEARCH, FAVORITES, CATEGORIES, FILTER, SORT, PREVIOUS/NEXT, PREVIEW, APPLY, CANCEL, SELECT. Keep Preset Browser's separate BROWSER/FAVORITES/CATEGORIES, FACTORY/USER, PRESET NAME/CATEGORY, FAVORITE, PREVIEW, explicit SELECT/LOAD, and user/bank operations as already recorded in the preceding addendum.
+- PREVIOUS/NEXT navigate only within the current category and active search/filter/sort result scope; they must not unexpectedly cross scope or commit a selection.
+- PREVIEW is audition-only and non-committing. It must use the actual available performance/source playback path; it must not change the committed preset, section, slot, pattern, style, chord/harmony, transport or project state. Missing preview material is explicitly unavailable; no synthetic placeholder.
+- SELECT is an explicit selection action. APPLY commits only the relevant selection for that browser: STYLE selection commits style/articulation context; PATTERN APPLY commits the selected section/slot/pattern mapping. Neither browser may implicitly load or replace the Tone Preset or Guitar Source.
+- CANCEL/BACK restores the last committed state and discards the temporary selection/preview. Browser switching or closing a browser must not discard already committed state.
+
+### 5. AutoChords independence and layout
+- AutoChords selectors remain independent controls; selecting/changing chord mode, key, pattern or current/progression chord must not silently overwrite STYLE, PATTERN Browser selection, guitar source or Tone Preset.
+- Preserve the approved AutoChords controls and behavior already listed in the master specification: ON/OFF, Major/Minor/Custom, Key, Pattern, Current Chord, progression editor, chord inversions/voicings, duration, rhythm, performance method, Sync to Tempo, Smart Transpose, Preview and Reset, to the extent each is backed by a real implementation. A control without backend remains honestly DISABLED/PENDING.
+- AutoChords is an overlay/panel and must never cover or obstruct the MIDI keyboard or its playable/hit-test area. It must respect the approved layout, panel geometry and multi-window workspace rules. If space is insufficient, use the approved compact/overflow/scroll arrangement; do not hide or relocate the keyboard as a workaround.
+- Preview must use the real audio/MIDI route and must not commit progression/project state. Reset restores the defined AutoChords defaults without changing unrelated browser, source or tone state.
+
+### 6. DAW/transport and MIDI safety acceptance
+- Pattern playback remains synchronized to host tempo and transport. Start/stop/seek/loop/tempo changes, section changes, pattern changes, chord changes, preset/source changes and plugin state recall must preserve deterministic timing and correct note-on/note-off lifecycle.
+- Explicit acceptance invariants: no stuck notes, no duplicate triggers, no timing jumps, no orphaned note-offs, no unintended retrigger on browser focus/preview/cancel, and no interruption or reset caused merely by switching STYLE/PATTERN windows.
+- Preview events must be isolated from committed playback and reliably release all generated notes on preview stop/cancel, host stop, transport discontinuity and plugin deactivation.
+- Verify under host transport, rapid section/pattern switching, repeated preview/cancel, chord changes while notes are held, MIDI panic, save/reopen and long playback. These are requirements, not evidence that tests have already passed.
+
+### 7. Immutable visual reference and skin boundary (user-approved 2026-11-14)
+- The first supplied interface reference file is authoritative for appearance, layout, dimensions, placement and the full set of UI elements/controls.
+- 02 INTERFACE NEON STAGE AUTOCHORDS is the authoritative color-palette reference only; it does not replace the first file's appearance, layout, geometry or control placement.
+- Skins/themes may change graphics, palette, materials and typography only within the approved visual contract. They must not remove, add, relocate, resize, replace, hide or rebind approved controls; must not change control functions, parameter meanings, APVTS IDs/semantics, MIDI behavior, preset/source relationships or sound.
+- No agent, generator, skin, mockup or implementation pass may silently simplify, replace, merge or omit an approved browser/window/control. Any proposed conflict must be recorded and resolved against the newest direct user-approved decision before implementation; until then preserve the stricter approved baseline.
+
+### 8. Precedence and status
+- This entry applies only to explicit approvals from 2026-11-13 and 2026-11-14, and only where they do not conflict with later direct user changes or the immutable SIGNAL FORGE v10 / REV 17 strict baseline.
+- The preceding 2026-11-14 Preset/Pattern Browser addendum remains valid. Its combined context sequence is interpreted logically; this entry clarifies that STYLE and PATTERN are separate windows with independent navigation and state.
+- Historical entries are append-only and must not be deleted or rewritten. This addendum does not authorize APVTS ID/semantic changes, new controls outside the approved inventory, weakening of safety/realtime/license rules, or claims of implementation.
+- **Status:** USER-APPROVED REQUIREMENTS RECORDED / SOURCE IMPLEMENTATION AND END-TO-END VALIDATION NOT IMPLIED.
