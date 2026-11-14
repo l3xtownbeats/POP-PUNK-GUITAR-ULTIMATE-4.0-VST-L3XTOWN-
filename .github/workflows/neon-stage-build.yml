@@ -27,6 +27,13 @@ jobs:
           CI: "true"
         run: NEON_STAGE_BUILD.bat
 
+      - name: Validate merged Skin Studio pack (G1-G4)
+        shell: pwsh
+        run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+      - name: Validate complete skin registry and manifests
+        shell: pwsh
+        run: python tests/ValidateSkinManifests.py
+
       # Promote only the two reviewed gallery images on the dedicated review branch.
       # All other generated sprites remain staging artifacts until separately reviewed.
       - name: Sync reviewed NEON STAGE preview and hero to Skin_053
