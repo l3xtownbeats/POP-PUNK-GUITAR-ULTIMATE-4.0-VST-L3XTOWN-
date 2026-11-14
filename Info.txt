@@ -3183,3 +3183,8 @@ Implementation recorded in this commit:
 **Compatibility rule:** Existing skin IDs and numbering are not renumbered or deleted. Skin_053 is retained only as a legacy compatibility record; all new default selection and identity references must resolve to Skin_052.
 
 **Validation status:** Changes require fresh Windows CI/registry validation and visual review. No new CI, VST3 build, CTest, pluginval, or FL Studio 20 result is claimed by this journal entry.
+
+
+## 2026-11-15 — Canonical naming confirmation: NEON STAGE everywhere
+
+The user's final instruction is unambiguous: **NEON STAGE** is the only name. It names the main theme, skin, graphic user interface (GUI), visual design, plugin shell, windows, panels and the complete interface as one unified whole. There is no second interface name, alternate shell name or separate identity. Active product-facing records and documentation must say **NEON STAGE**. The active registry entry remains technically keyed by `skin-052` / `Skin_052` for compatibility; these are internal file/registry identifiers, not alternative product names. The old `skin-053` record is retained only as a legacy archive entry, labelled `NEON STAGE — LEGACY ARCHIVE`, and is not an active theme or default.
