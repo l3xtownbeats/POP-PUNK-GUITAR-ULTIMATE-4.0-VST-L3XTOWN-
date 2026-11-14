@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+"""Focused unit tests for the REV.18 skin PNG and contrast audit primitives."""
+from __future__ import annotations
+
+import importlib.util
+import struct
+import tempfile
+import unittest
+import zlib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULE_PATH = ROOT / "tools" / "audit_skin_rev18_assets.py"
+SPEC = importlib.util.spec_from_file_location("audit_skin_rev18_assets", MODULE_PATH)
+AUDIT = importlib.util.module_from_spec(SPEC)
+assert SPEC and SPEC.loader
+SPEC.loader.exec_module(AUDIT)
+
+
+def chunk(kind: bytes, payload: bytes) -> bytes:
+    return (struct.pack(">I", len(payload)) + kind + payload
+            + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF))
+
+
+def tiny_png() -> bytes:
+    # 2x1, 8-bit RGBA, filter byte + two opaque white pixels.
+    header = struct.pack(">IIBBBBB", 2, 1, 8, 6, 0, 0, 0)
+    pixels = b"\x00" + b"\xff\xff\xff\xff" * 2
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header)
+            + chunk(b"IDAT", zlib.compress(pixels)) + chunk(b"IEND", b""))
+
+
+class Rev18PngAuditTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.path = Path(self.temp.name) / "sample.png"
+
+    def tearDown(self) -> None:
+        self.temp.cleanup()
+
+    def test_valid_png_returns_dimensions_after_crc_and_decode(self) -> None:
+        self.path.write_bytes(tiny_png())
+        self.assertEqual(AUDIT.png_info(self.path), (2, 1))
+
+    def test_invalid_signature_is_rejected(self) -> None:
+        self.path.write_bytes(b"not a png" + b"\x00" * 40)
+        with self.assertRaisesRegex(ValueError, "invalid PNG signature"):
+            AUDIT.png_info(self.path)
+
+    def test_chunk_crc_corruption_is_rejected(self) -> None:
+        data = bytearray(tiny_png())
+        data[29] ^= 0x01
+        self.path.write_bytes(data)
+        with self.assertRaisesRegex(ValueError, "CRC mismatch"):
+            AUDIT.png_info(self.path)
+
+    def test_truncated_chunk_is_rejected(self) -> None:
+        self.path.write_bytes(tiny_png()[:-5])
+        with self.assertRaisesRegex(ValueError, "truncated chunk|incomplete PNG"):
+            AUDIT.png_info(self.path)
+
+
+class Rev18ContrastAuditTests(unittest.TestCase):
+    def test_primary_text_contrast_exceeds_rev18_minimum(self) -> None:
+        self.assertGreaterEqual(AUDIT.contrast("#FFFFFF", "#202020"), 7.0)
+
+    def test_invalid_palette_hex_is_rejected(self) -> None:
+        with self.assertRaisesRegex(ValueError, "invalid HEX token"):
+            AUDIT.luminance("white")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
