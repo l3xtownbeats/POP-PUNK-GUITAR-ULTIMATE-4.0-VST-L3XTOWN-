@@ -30,10 +30,10 @@ class SoundHunterRegressionTests(unittest.TestCase):
             )
 
     def test_aggregate_library_ceiling_is_40_gib(self):
-        limit = 40 * 1024**3
-        self.assertTrue(sound_hunter.within_library_limit(0, 39 * 1024**3, limit))
-        self.assertTrue(sound_hunter.within_library_limit(39 * 1024**3, 1 * 1024**3, limit))
-        self.assertFalse(sound_hunter.within_library_limit(39 * 1024**3, 2 * 1024**3, limit))
+        limit = 40_000_000_000
+        self.assertTrue(sound_hunter.within_library_limit(0, 39_000_000_000, limit))
+        self.assertTrue(sound_hunter.within_library_limit(39 * 1024**3, 1_000_000_000, limit))
+        self.assertFalse(sound_hunter.within_library_limit(39 * 1024**3, 2_000_000_000, limit))
         self.assertFalse(sound_hunter.within_library_limit(40 * 1024**3, 1, limit))
 
     def test_existing_audio_bytes_counts_audio_only(self):
