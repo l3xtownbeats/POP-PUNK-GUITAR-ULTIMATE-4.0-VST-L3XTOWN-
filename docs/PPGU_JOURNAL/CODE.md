@@ -962,3 +962,10 @@ Target architecture:
 Self-containment does not prohibit audited third-party source components: legally compatible libraries may be internally integrated and optimized. PPGU must remain a standalone VST3 instrument and must not require Kontakt 6/7/8 at runtime.
 
 The user's statement that this is a new kind of development with no prior equivalent is recorded as an ambitious product goal/positioning, not as a proven claim of worldwide novelty. Do not claim superiority over all competitors before comparative benchmarks and independent validation. Status: architecture principle and target requirement APPROVED/DOCUMENTED; implementation and proof require further engineering, profiling and comparative tests.
+
+
+## User confirmation — self-contained, resource-efficient engine
+
+- Date: 2026-11-14.
+- User explicitly approved, confirmed, and fixed the previously recorded architectural principle and acceptance target for PPGU: a self-contained, purpose-built guitar instrument engine that does not require Kontakt 6/7/8 or another external sampler host for factory operation; efficient and bounded CPU/RAM/resource use; adaptive discovery and recommendations under controlled, testable rules; no unsupported claims of superiority until comparative benchmarks exist.
+- This entry confirms approval/documentation only. It does not mark implementation, audio-library acquisition, benchmark results, Windows build, pluginval, or FL Studio validation as complete.
