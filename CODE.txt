@@ -351,3 +351,19 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - **Applied:** default 1600×900; resizable minimum 1200×700; maximum 2400×1500.
 - **Reason:** align the real editor constructor with the accepted visual-shell specification and reserve enough central area for Zone F.
 - **Pending:** visual overlap/clipping check at min/default/max; scale presets 50/60/75/80/90/100/110/125/150% and persistence; compile/CTest/pluginval/exact-SHA CI/FL Studio 20.
+
+
+## 2026-11-14 — Requirements and NEON STAGE decision consolidation
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+**INFO update commit:** `a28977f73f7023042afcb2b4ef7cf72422e951e3`  
+**INFO prior blob:** `0b6501c12eddbfb8ad0919bc4ba62463d01d2047`  
+**CODE prior blob:** `318826a036dce693b444ffd487ea33ffaa8e529f`  
+**Change class:** documentation/index only; production source unchanged.
+
+**Scope indexed in INFO:** product identity and platform; MELODY/PATTERN/PUNK GROUP; Pattern Zone F and deferred articulation controls; AutoChords, Circle of Fifths, Harmony Manager and Generation Manager; real guitar articulations; FX/DSP scope and seven-switch/eight-ID discrepancy; sampler/SFZ/WAV/streaming; guitar-only SoundBank and licensing; Import Guitar Stage 2; 300 preset definitions and playable-count distinction; Voices/polyphony and real multiprocessing constraints; SIGNAL FORGE / NEON STAGE / DREAMING IN NEON visual contract; approved three reference assets; Skin Gallery behavior; cross-branch default/theme-registry discrepancy; omitted implementation/QA gates.
+
+**Evidence boundary:** consolidated from accessible prior conversation context, PPGU_FULL_WORK_TEXT_FINAL.txt, prior INFO/CODE, master/product specifications and approved mockup provenance. No production code or assets changed. No build, CTest, pluginval, package or FL Studio 20 test was run by this documentation transaction.
+
+**Status:** REQUIREMENTS CONSOLIDATED; IMPLEMENTATION STATUS UNCHANGED; EXACT-SHA VALIDATION NOT RUN.  
+**Next:** use the INFO §2026-11-14 consolidation and the existing canonical specs as audit checklist; reconcile source/branch evidence before implementing any item. Do not duplicate already existing work.
