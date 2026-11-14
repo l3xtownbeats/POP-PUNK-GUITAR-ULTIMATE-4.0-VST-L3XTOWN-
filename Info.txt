@@ -2594,3 +2594,5 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Naming instruction:** user requested renaming the second theme name SOUND FORGE to TESLA BOYS. No exact SOUND FORGE entry was found in the inspected Skin_053/registry data. SIGNAL FORGE remains the working-interface name and must not be renamed or treated as a theme. The TESLA BOYS rename is recorded as a pending identity change; no unrelated registry entry was changed.
 
 **Status:** BUILD ENGINE SCAFFOLD COMMITTED TO FEATURE BRANCH; EXECUTION AND VISUAL/CI ACCEPTANCE PENDING.
+
+- Follow-up: added `.github/workflows/neon-stage-build.yml` for a Windows GitHub Actions staging build and made the batch runner non-interactive when `CI=true`. The workflow-run lookup for commit `8978998993606834e7984fb8d06150b813b8cd16` returned no runs at inspection time; CI execution is therefore still unconfirmed.
