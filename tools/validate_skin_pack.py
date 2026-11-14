@@ -36,9 +36,9 @@ def channel(hex_value: str) -> float:
 
 
 def luminance(colour: str) -> float:
-    if not isinstance(colour, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", colour):
+    if not isinstance(colour, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}(?:[0-9A-Fa-f]{2})?", colour):
         fail(f"invalid colour {colour!r}")
-    value = colour[1:]
+    value = colour[1:7]
     r, g, b = (channel(value[i:i + 2]) for i in (0, 2, 4))
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
@@ -217,11 +217,11 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
         for token in tokens:
             luminance(palette[token])
         for foreground, background, minimum in (
-            ("text_primary", "window_bg", 4.0),
-            ("text_secondary", "window_bg", 4.0),
-            ("text_disabled", "window_bg", 4.0),
-            ("lcd_text", "lcd_bg", 4.0),
-            ("accent", "panel", 2.2),
+            ("text_primary", "bg_deep", 7.0),
+            ("text_secondary", "bg_deep", 4.5),
+            ("text_disabled", "bg_deep", 3.0),
+            ("lcd_text", "lcd_bg", 7.0),
+            ("accent_primary", "bg_panel", 3.0),
         ):
             ratio = contrast(palette[foreground], palette[background])
             if ratio < minimum:
