@@ -2,9 +2,9 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 12 ноября 2026  
-Ветка: `work/signal-forge-theme-tokens`  
-Последний commit перед текущей записью: `71c2d852c1dc1d138e903fb577533a17ca540002`
+Последнее обновление: 14 ноября 2026  
+Ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+Последний commit перед текущей записью: `fa49b8fce31bd27b6dca04b7bc124d95a4c0b715`
 
 ## 1. Назначение и продукт
 
@@ -1921,4 +1921,24 @@ Do not alter MASTER PROMPT REV 17.0 FINAL, I1–I8 or R01–R34. Runtime default
 ### Supersession and evidence boundary
 This entry takes precedence over any earlier broad taxonomy phrasing that could be read as merging PRESET, STYLE and PATTERN browsers or permitting a visible artist catalog. It does not remove any previously approved PRESET BROWSER commands. This is a requirements clarification only: no runtime implementation, host sync, hit-testing, exact-SHA CI or FL Studio 20 acceptance is implied.
 
+==============================================================================
+
+
+==============================================================================
+## 2026-11-14 — PRESET FILE SYSTEM legacy wording cleanup
+==============================================================================
+
+**Статус:** DOCUMENTATION RECONCILIATION ONLY. **Branch:** POP-PUNK-GUITAR-ULTIMATE-VST-REV-17.
+**Preflight:** учтены более свежие записи 2026-11-14: PRESET BROWSER reconciliation, TX-UI-BROWSER-SEPARATION-006, master spec §15.16, MASTER PROMPT REV 17.0 / I1–I8 / R01–R34 и предыдущий контрольный индекс CODE.txt. Ничего из более свежих решений не переопределяется.
+
+**Устранены остаточные неоднозначности в** `docs/PRESET_FILE_SYSTEM.md` (**documentation commit:** `fa49b8fce31bd27b6dca04b7bc124d95a4c0b715`):
+- Убрана устаревшая трактовка Melody/Pattern как двух объединённых UI-режимов PRESET BROWSER: это классификации preset/data; PRESET, STYLE и PATTERN browser responsibilities остаются раздельными.
+- Убрана устаревшая формулировка double-click load; click = select, а загрузка только явным SELECT/LOAD после validation + atomic commit.
+- Удалены примеры именованных artist folders из storage tree, которые могли быть ошибочно истолкованы как разрешение на видимый каталог артистов/групп. Папки Melody/Pattern — storage layout; blocked GROUP/ARTIST/SONG publication не обходить.
+- Поиск ограничен именем пресета, разрешёнными descriptive tags и описанием; не публиковать blocked named artist/band/song catalog.
+- Сохранены stable IDs, 300 factory definitions / 150 MELODY + 150 PATTERN target, Factory read-only, User namespace, explicit LOAD, isolated PREVIEW, transactional failure safety, path containment, off-audio-thread file work, licensing/provenance и exact-SHA acceptance gates.
+
+**Cross-check:** INFO уже содержал полную запись PRESET BROWSER reconciliation и TX-UI-BROWSER-SEPARATION-006; CODE.txt уже индексировал эти решения. Master Prompt, I1–I8, R01–R34, master spec, control schema, approved mockups, APVTS, DSP, MIDI, sampler, scheduler и preset data не изменялись. Не создавались дополнительные журналы. Runtime implementation, tests, CI, pluginval, packaging и FL Studio 20 acceptance не выполнялись этой документационной правкой; статусы не повышаются и PASS не заявляется.
+
+**Следующий порядок:** ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ; при реализации сначала повторно проверить существующие browser/backend/schema components. Все действия без backend остаются disabled/unavailable; никаких фиктивных controls или preview/load.
 ==============================================================================
