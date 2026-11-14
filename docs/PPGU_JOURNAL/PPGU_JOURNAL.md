@@ -648,3 +648,10 @@ This policy applies universally to every guitar-related audio asset used, import
 Принцип самодостаточности не означает запрет на использование проверенных сторонних исходных компонентов: разрешённые библиотеки можно статически/внутренне интегрировать и оптимизировать, если лицензия позволяет. Но PPGU должен оставаться самостоятельным VST3-инструментом, не требующим Kontakt 6/7/8 как runtime.
 
 Заявление пользователя о «новой разработке, которой ещё не было» трактуется как амбициозная цель и позиционирование проекта, а не как уже доказанный факт мирового первенства. Не заявлять превосходство над всеми конкурентами до сравнительных измерений и независимой проверки. Статус: архитектурный принцип и целевое требование APPROVED/DOCUMENTED; реализация и доказательство эффективности требуют дальнейшей работы, профилирования и сравнительных тестов.
+
+
+## User confirmation — self-contained, resource-efficient engine
+
+- Date: 2026-11-14.
+- User explicitly approved, confirmed, and fixed the previously recorded architectural principle and acceptance target for PPGU: a self-contained, purpose-built guitar instrument engine that does not require Kontakt 6/7/8 or another external sampler host for factory operation; efficient and bounded CPU/RAM/resource use; adaptive discovery and recommendations under controlled, testable rules; no unsupported claims of superiority until comparative benchmarks exist.
+- This entry confirms approval/documentation only. It does not mark implementation, audio-library acquisition, benchmark results, Windows build, pluginval, or FL Studio validation as complete.
