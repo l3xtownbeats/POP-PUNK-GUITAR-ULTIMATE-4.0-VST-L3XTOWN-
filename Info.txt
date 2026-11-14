@@ -3335,3 +3335,51 @@ REV ULTRA 3.0 задаёт обязательный производственн
 - **Phase E:** только после утверждения — применять общую тему к существующим JUCE компонентам/окнам и выполнять отдельные build/CTest/pluginval/FL Studio gates.
 
 Никакой новый COMPLETE, BUILD VERIFIED, pixel-match или HOST-VERIFIED статус этим аудитом не присваивается.
+
+================================================================================
+2026-11-15 — NEON STAGE REV ULTRA 3.0 — deterministic sprite-contract staging pipeline
+================================================================================
+
+**Branch:** `work/neon-stage-reference-preview-fix`
+**Implementation commits:**
+- `f6f7b3b20c3803d2075a33ce87f616a81c2d86bc` — deterministic atlas/frame generator and review contact-sheet functions.
+- `3eb9750f03b14f38fa38d691c99c5531dd51d6b3` — integrated atlas generation, theme asset map, WebP/background output, atlas validation and provenance/self-check generation.
+- `66b538e22fbaee3dedf3cf4e8bb13695419f3157` — safer RGB atlas canvas initialization.
+- `4144f50d6db8bded27e72070eb7ab379d0143fcf`, `70ad392ffeab8fd7455d9a7dce425174f6165763` — build script now generates both contact sheets before theme manifest/report/package.
+- `2e191c5a9382e12016c7a7fa571bc734fe8d88ef` — CI artifact upload includes contact sheets, LICENSE and SELF_CHECK; automatic preview/hero promotion to runtime Skin_052 disabled pending explicit user approval; workflow permissions reduced to contents:read and timeout raised.
+- `3a03a41eda08f46dc9208e3270652381ec0e3b30` — completed 20-icon inventory and added WebP/SVG safety checks.
+- `ce82fb92896cfc380147f3fa16ef9b7db29e4c9f` — pinned Pillow 11.3.0 for repeatable rendering.
+- `73a7f87cb717fef3d499535f8b9ed61da5555c88` — contact-sheet format/dimension checks.
+- `8081f7424cbe980f1477c397d0df573b1751bead` — deterministic sorted ZIP entries and fixed ZIP timestamps.
+- `1e7f99ba48403941b8ffa37a0588d2d2b13a99f8` — added token-only 1600x920 background artwork, distinct from the full UI reference screenshot.
+
+**New staging atlas inventory (22 atlas PNGs + 22 JSON frame indexes):**
+- Main knobs: 9 IDs × 13 angles × 3 states, 128px and 256px.
+- AMP knobs: 3 IDs × 13 angles × 3 states, 96px and 192px.
+- FX tiles: 7 modules × off/on/bypass/disabled.
+- Toggles: 3 styles × on/off/bypass.
+- Slider tracks, vertical track, thumb states, PITCH/MOD wheels.
+- White/black keyboard keys × normal/pressed/glow.
+- Five-colour LED segments × on/off, GR and output meter columns.
+- Window close/maximize/restore × normal/hover.
+- Panel header, preset LCD, SETUP-ONLY badge, gallery tiles, tabs, transport and 20 named icon slots.
+
+**Additional staging outputs:**
+- `assets/background.png` (1600×920 indexed PNG-8), generated from canonical palette tokens.
+- `assets/hero.webp` (800×450 WebP) alongside preview.png and hero.png.
+- `LICENSE.txt` with SHA-256 for every staged package file except the self-referential LICENSE and SELF_CHECK reports.
+- `SELF_CHECK.txt` generated only after staging structural validation succeeds.
+- `dist/NEON_STAGE_ATLAS_CONTACT_SHEET.png` and `dist/NEON_STAGE_REFERENCE_CONTACT_SHEET.png` for visual review.
+- ZIP packaging sorts entries and fixes timestamps; Pillow is pinned to 11.3.0.
+
+**Safety / promotion gate:**
+- All generated content remains in `dist/neon_stage_staging/Skin_052`; no runtime asset, ThemeManager, registry, C++ source or JUCE resource is modified.
+- Workflow no longer pushes generated preview/hero images into runtime Skin_052. The promotion step is disabled until the user has reviewed both contact sheets.
+- No mass creation of additional themes is authorized by this stage. This is the single NEON STAGE canonical theme staging pack only.
+
+**Validation logic added:** atlas JSON/image parity, indexed PNG-8 mode, frame count and bounds, 20 icon slots, WebP 800×450 decode, review contact-sheet PNG checks, SVG external-reference/script/animation checks, G1 palette contrast, exact 28-control G2 inventory and non-overlap, G4 canonical registry identity. The staging report also records that no JUCE/runtime tests are performed.
+
+**Important validation boundary:** code has been committed, but no local execution or CI result is yet available for these latest changes. Do not claim generator execution, deterministic byte-for-byte comparison, G1–G4 PASS, successful ZIP creation, VST3 build, CTest, pluginval or FL Studio 20 acceptance until a run on the exact final commit SHA confirms them. The contact sheets are generated outputs awaiting visual approval, not yet reviewed.
+
+**Status:** GENERATOR SOURCE IMPLEMENTED / CI EXECUTION PENDING / VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
+================================================================================
