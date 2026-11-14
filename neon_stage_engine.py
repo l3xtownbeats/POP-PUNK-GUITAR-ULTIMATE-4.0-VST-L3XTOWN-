@@ -187,7 +187,8 @@ def step_ui():
     d.ellipse((3,3,28,28),fill=PALETTE["led_off"],outline=PALETTE["control_border"],width=2)
     d.ellipse((35,3,60,28),fill=PALETTE["led_on"],outline=PALETTE["accent_glow"],width=2)
     led.save(ASSETS/"led"/"led_states.png",optimize=True)
-    print("Generated six button states, seven FX x two states, slider and LED atlas.")
+    print("Generated legacy UI elements; creating the complete indexed sprite contract.")
+    step_atlases()
 
 
 
@@ -351,8 +352,8 @@ def _make_icon(name):
         d.polygon([(23,4),(25,9),(30,9),(26,12),(28,17),(23,14),(19,17),(20,12),(16,9),(21,9)],outline=c)
     elif name=="settings":
         d.ellipse((8,8,24,24),outline=c,width=3); d.ellipse((13,13,19,19),outline=c,width=2)
-        for a,b in ((16,2,16,8),(16,24,16,30),(2,16,8,16),(24,16,30,16)):
-            d.line((a,b),fill=c,width=2)
+        for coords in ((16,2,16,8),(16,24,16,30),(2,16,8,16),(24,16,30,16)):
+            d.line(coords,fill=c,width=2)
     elif name=="info":
         d.ellipse((4,4,28,28),outline=c,width=w); d.text((12,5),"i",font=font(19,True),fill=c)
     elif name=="note":
@@ -458,7 +459,8 @@ def step_atlases():
     white=[]; black=[]
     for state in ("normal","pressed","glow"):
         wi=Image.new("RGB",(46,160),rgb(PALETTE["panel"])); d=ImageDraw.Draw(wi)
-        fill={"normal":"#EAF6FF","pressed":"#9FB6D4","glow":"#7FE8FF"}[state]
+        fill={"normal":SOURCE_PALETTE["text_primary"],"pressed":SOURCE_PALETTE["text_secondary"],
+              "glow":SOURCE_PALETTE["lcd_text"]}[state]
         d.rounded_rectangle((1,1,44,158),radius=3,fill=rgb(fill),outline=rgb(PALETTE["border"]),width=1)
         if state=="glow": d.rectangle((2,145,43,157),fill=rgb(SOURCE_PALETTE["accent_primary"]))
         white.append((f"white_{state}",state,wi))
@@ -636,6 +638,11 @@ def step_svg():
     (SKIN/"svg"/"texture.svg").write_text(texture,encoding="utf-8")
     (SKIN/"svg"/"bezel.svg").write_text(bezel,encoding="utf-8")
     (SKIN/"svg"/"crest.svg").write_text(crest,encoding="utf-8")
+    panel_header = f"""<svg xmlns="http://www.w3.org/2000/svg" width="480" height="44" viewBox="0 0 480 44">
+<rect x="1" y="1" width="478" height="42" rx="6" fill="{PALETTE['panel']}" stroke="{PALETTE['control_border']}" stroke-width="2"/>
+<path d="M8 40H472" stroke="{SOURCE_PALETTE['accent_primary']}" stroke-width="3"/>
+</svg>"""
+    (SKIN/"svg"/"panel_header.svg").write_text(panel_header,encoding="utf-8")
     print("Generated safe, static SVG assets.")
 
 def render_reference_art(size, path):
@@ -675,7 +682,10 @@ def step_promo():
     # Dimensions follow the current SKIN asset production specification.
     render_reference_art((360, 240), ASSETS / "preview.png")
     render_reference_art((800, 450), ASSETS / "hero.png")
-    print("Rendered preview and hero from the approved NEON STAGE reference mockup.")
+    render_reference_art((1600, 920), ASSETS / "background.png")
+    with Image.open(ASSETS / "hero.png") as hero:
+        hero.convert("RGB").save(ASSETS / "hero.webp", "WEBP", quality=92, method=6)
+    print("Rendered preview, hero, background and WebP hero from the approved NEON STAGE reference mockup.")
     print("No synthetic UI screenshot or invented control layout was generated.")
 
 
@@ -697,7 +707,9 @@ def step_manifest():
       "shadowDepth":0.38,"edgeHighlight":0.34,"glow":"restrained cyan LED halo; reduced in ECO mode"
     }
     theme["assets"]={"preview":"assets/preview.png","hero":"assets/hero.png",
-                     "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg"}
+                     "heroWebp":"assets/hero.webp","background":"assets/background.png",
+                     "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
+                     "panelHeader":"svg/panel_header.svg","atlas":"assets/atlas/"}
     # Canonical 28-control grid map for the REV ULTRA G2 contract.
     control_map={}
     for control_id, spec in theme.get("controls",{}).items():
@@ -769,6 +781,7 @@ def step_report():
             ratio=contrast(theme["palette"][fg],theme["palette"][bg])
             if ratio<minimum: errors.append(f"contrast {fg}/{bg}: {ratio:.2f} < {minimum}")
     pngs={"assets/preview.png":(360,240),"assets/hero.png":(800,450),
+          "assets/background.png":(1600,920),
           "assets/knob/knob_filmstrip.png":(96,96*121),
           "assets/knob/knob_filmstrip_2x.png":(192,192*121),
           "assets/buttons/btn_states.png":(180*6,58),
@@ -780,17 +793,51 @@ def step_report():
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         try:
             with Image.open(p) as im:
-                expected_mode="P" if rel in ("assets/preview.png","assets/hero.png") else "RGBA"
+                expected_mode="P" if rel in ("assets/preview.png","assets/hero.png","assets/background.png") else "RGBA"
                 if im.format!="PNG" or im.mode!=expected_mode or im.size!=expected:
                     errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
         except Exception as exc: errors.append(f"{rel}: decode failed: {exc}")
-    for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
+    for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","svg/panel_header.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
         p=SKIN/rel
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         data=p.read_text(encoding="utf-8")
         if "<script" in data.lower() or "javascript:" in data.lower() or "<animate" in data.lower() or "xlink:href" in data.lower():
             errors.append(f"unsafe SVG content in {rel}")
+
+    atlas_dir=ASSETS/"atlas"
+    atlas_jsons=sorted(atlas_dir.glob("*.json")) if atlas_dir.is_dir() else []
+    if len(atlas_jsons)<15:
+        errors.append(f"sprite atlas index coverage incomplete: expected at least 15, found {len(atlas_jsons)}")
+    atlas_frames=0
+    for index_path in atlas_jsons:
+        try:
+            idx=json.loads(index_path.read_text(encoding="utf-8"))
+            image_path=atlas_dir/(index_path.stem+".png")
+            if not image_path.is_file():
+                errors.append(f"atlas PNG missing for {index_path.name}")
+                continue
+            with Image.open(image_path) as atlas_image:
+                atlas_image.verify()
+            with Image.open(image_path) as atlas_image:
+                if atlas_image.format!="PNG" or atlas_image.mode!="P":
+                    errors.append(f"{image_path.name}: expected indexed PNG-8, got {atlas_image.format}/{atlas_image.mode}")
+                if idx.get("frameCount")!=len(idx.get("frames",[])):
+                    errors.append(f"{index_path.name}: frameCount mismatch")
+                for frame in idx.get("frames",[]):
+                    x,y,w,h=(frame.get(k) for k in ("x","y","w","h"))
+                    if not all(isinstance(v,int) and not isinstance(v,bool) for v in (x,y,w,h)):
+                        errors.append(f"{index_path.name}: invalid frame coordinates")
+                        break
+                    if x<0 or y<0 or w<1 or h<1 or x+w>atlas_image.width or y+h>atlas_image.height:
+                        errors.append(f"{index_path.name}: frame out of atlas bounds")
+                        break
+                atlas_frames+=idx.get("frameCount",0)
+        except Exception as exc:
+            errors.append(f"{index_path.name}: atlas validation failed: {exc}")
+    if atlas_frames<500:
+        errors.append(f"sprite frame contract incomplete: expected >=500 frames, found {atlas_frames}")
+
     # G4 identity and authoritative registry contract.
     if SKIN.name != "Skin_052":
         errors.append(f"G4 folder identity mismatch: expected Skin_052, got {SKIN.name}")
@@ -815,6 +862,7 @@ def step_report():
         generated_theme=json.loads(theme_path.read_text(encoding="utf-8"))
         if generated_theme.get("id")!="neon-stage-default-skin-1" or generated_theme.get("index")!=52:
             errors.append("G4 generated theme id/index mismatch")
+    control_data={}
     if not control_map_path.is_file():
         errors.append("missing control_map.json")
     else:
@@ -845,17 +893,31 @@ def step_report():
             rectangles.append((cid,{"col":col,"row":row,"colSpan":cs,"rowSpan":rs}))
     result={"project":"PPGU NEON STAGE","skin":"NEON STAGE DEFAULT SKIN-1","status":"PASS" if not errors else "FAIL",
             "checks":{"palette_tokens":len(TOKENS),"required_controls":28,"control_map_controls":len(control_data.get("controls",{})) if control_map_path.is_file() else 0,"png_assets":len(pngs),
-                      "svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
+                      "atlas_indexes":len(atlas_jsons),"atlas_frames":atlas_frames,
+                      "svg_assets":6,"skin_registry_modified":False,"runtime_tests_run":False},
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
     (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     (OUT/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    print(json.dumps(result,indent=2,ensure_ascii=False))
     if errors: raise SystemExit(1)
+    step_provenance()
+    (SKIN/"SELF_CHECK.txt").write_text(
+        "NEON STAGE G1-G4 STAGING SELF-CHECK\n"
+        "Result: PASS (staging asset contract only)\n"
+        f"Palette tokens: {len(TOKENS)}\n"
+        f"Control map: {len(control_data.get('controls',{}))} controls\n"
+        f"Atlas indexes: {len(atlas_jsons)}\n"
+        f"Atlas frames: {atlas_frames}\n"
+        "Registry/runtime unchanged by staging pipeline.\n"
+        "No JUCE build, CTest, pluginval or FL Studio 20 host test is performed here.\n",
+        encoding="utf-8"
+    )
+    print(json.dumps(result,indent=2,ensure_ascii=False))
 
-STEPS={"palette":step_palette,"knobs":step_knobs,"ui":step_ui,"svg":step_svg,
-       "promo":step_promo,"manifest":step_manifest,"package":step_package,"report":step_report}
+STEPS={"palette":step_palette,"knobs":step_knobs,"ui":step_ui,"atlases":step_atlases,
+       "svg":step_svg,"promo":step_promo,"contact":step_contact_sheets,
+       "provenance":step_provenance,"manifest":step_manifest,"package":step_package,"report":step_report}
 if __name__=="__main__":
     import argparse
     p=argparse.ArgumentParser(); p.add_argument("step",choices=STEPS); a=p.parse_args(); STEPS[a.step]()
