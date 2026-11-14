@@ -615,6 +615,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
         const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
         const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
+        const float amount = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
             auto* data = buffer.getWritePointer(channel);
@@ -627,8 +629,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
                 const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
                 const float gain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                const float amount = juce::jlimit(0.0f, 1.0f,
-                    parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
                 data[sample] *= 1.0f + (gain - 1.0f) * amount;
             }
         }
