@@ -103,16 +103,16 @@ bool parseKey(const std::string& text, int& value)
         if (!parseInteger(text.substr(noteName.size()), octave))
             return false;
 
-        const auto noteIndex = [&]() -> int
-        {
-            static const std::string chromatic[] = {
-                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-            };
-            for (int i = 0; i < 12; ++i)
-                if (noteName == chromatic[i])
-                    return i;
-            return -1;
-        }();
+        static const std::string chromatic[] = {
+            "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        };
+        int noteIndex = -1;
+        for (int i = 0; i < 12; ++i)
+            if (noteName == chromatic[i])
+            {
+                noteIndex = i;
+                break;
+            }
 
         const long long midi = (static_cast<long long>(octave) + 1LL) * 12LL + noteIndex;
         if (noteIndex < 0 || midi < 0 || midi > 127)
