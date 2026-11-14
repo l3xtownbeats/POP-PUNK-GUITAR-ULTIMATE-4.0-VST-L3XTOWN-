@@ -61,6 +61,24 @@ jobs:
         shell: pwsh
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
+      - name: Run REV.18 SKIN-1 asset baseline audit (non-blocking while assets are migrated)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build | Out-Null
+          python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report build/skin-053-rev18-asset-audit.json
+          $auditExit = $LASTEXITCODE
+          if ($auditExit -gt 1) { throw 'REV.18 asset auditor could not read the skin contract or registry.' }
+          if ($auditExit -eq 1) { Write-Warning 'REV.18 SKIN-1 asset gaps recorded; this baseline step is intentionally non-blocking until the asset migration is complete.' }
+          if ($auditExit -eq 0) { Write-Host 'REV.18 SKIN-1 asset audit PASS.' }
+
+      - name: Upload REV.18 SKIN-1 asset audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rev18-skin-1-asset-audit
+          path: build/skin-053-rev18-asset-audit.json
+          if-no-files-found: warn
+
       - name: Select checked-out project source
         shell: pwsh
         run: |
