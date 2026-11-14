@@ -558,3 +558,6 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 
 **Clarification:** AutoChords.Pattern is not PATTERN Browser.Pattern. They are distinct controls/state domains; no shared binding, implicit synchronization or cross-overwrite. AutoChords remains in its chord/harmony workflow; PATTERN Browser remains in section/slot rhythm-performance workflow.
+
+
+**Preset taxonomy sync:** Preset Browser categories remain CLEAN, CRUNCH, DRIVE, LEAD, AMBIENT, LO-FI, ACOUSTIC TEXTURES, PUNK RHYTHM. These tone categories are not the PATTERN Browser performance categories and browsing them does not load a preset.
