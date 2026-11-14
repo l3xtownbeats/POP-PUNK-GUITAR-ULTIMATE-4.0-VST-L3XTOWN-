@@ -242,3 +242,43 @@ Save As, Rename, Delete и Rescan не считаются утверждённы
 OPEN: sort keys/order, filter taxonomy, ranking, точное дерево Genre/Artist, auto-load semantics, double-click, preview waveform/duration. Исторический left-panel layout подчинён свежему 01 INTERFACE — NEON STAGE DEFAULT. SKINS меняют только оформление и палитру, не layout, controls, bindings или звук.
 
 **Статус:** REQUIREMENTS SPECIFIED / IMPLEMENTATION AND EXACT-SHA VALIDATION SEPARATE / NO IMPLEMENTATION CLAIM.
+
+
+---
+
+## 17. TX-UI-PERFORMANCE-WORKSPACE-007 — Main Performance / Edit Workspace / Performance Display / AutoChords / FX EDIT (2026-11-14)
+
+Этот раздел фиксирует прямые пользовательские решения о двухуровневом интерфейсе. Он подчиняется MASTER PROMPT REV.17 FINAL, I1–I8, R01–R34 и единственному журналу Info.txt. Это UX-спецификация, не подтверждение реализации.
+
+### 17.1 Main Performance и Edit Workspace
+- MAIN PERFORMANCE — компактный основной экран для игры, быстрого управления, MIDI-клавиатуры и оперативного мониторинга.
+- EDIT WORKSPACE — единая внутренняя область детальной настройки.
+- FX EDIT, AUTOCHORDS, IMPORT GUITAR и SETTINGS открываются внутри основного редактора поверх рабочей области, занимая почти всю её площадь. Верхняя панель плагина и X/CLOSE остаются видимыми.
+- Для этих четырёх поверхностей целевой UX — одна внутренняя рабочая область, а не набор отдельных плавающих окон. Существующую оконную реализацию сначала аудировать; переход выполнять отдельным scoped UI change с сохранением компонентов, callbacks, state, persistence, focus, resize/DPI и безопасного teardown.
+- STYLE и PATTERN остаются двумя самостоятельными браузерами со своими состояниями и утверждёнными макетами; не объединять их.
+
+### 17.2 Performance Display
+Компактное read-only табло располагается над MIDI-клавиатурой и не перекрывает клавиши/их hit-testing. Оно может показывать:
+- аккорд (C, Dm, Em, F, G, Am и другие распознанные типы);
+- отдельную MIDI-ноту (например C3);
+- тональность и тип аккорда, если они реально определены;
+- progression (например I–VI–III–VII), только из действительного AutoChords/progression state;
+- такт/долю/позицию и BPM, только из валидного host transport/playhead snapshot;
+- MIDI IN/activity и velocity из фактических входящих событий.
+
+Performance Display не генерирует MIDI. Не показывать фиктивные BPM/PPQ/bar/beat/key/progression/activity/velocity. Chord labels ограничены реально реализованным и протестированным chord detector; неизвестный аккорд не угадывать.
+
+### 17.3 AutoChords
+Компактный уровень: ON/OFF, MAJOR/MINOR/CUSTOM, KEY, PATTERN, текущий аккорд, PREVIEW. Расширенный уровень: progression sequences, inversions/voicings, chord/event duration, rhythm/accentuation и execution mode. Гармония, chord voicing, guitar source, tone/FX, playing style/articulation и rhythm pattern остаются независимыми осями. Пока MIDI generator/routing, host sync и stop/note-off semantics не реализованы и не протестированы, соответствующие controls/Preview disabled / BACKEND PENDING. Никакой фиктивной генерации или MIDI activity.
+
+### 17.4 FX EDIT
+Сохранить утверждённую композицию: список модулей слева, настройки выбранного модуля по центру, крупные регуляторы, график только на реальных данных DSP и область effect presets. Каждый доступный параметр должен иметь реальный mapping и точное отображение значения.
+
+Восемь страниц/модулей не означают восемь bypass toggles: текущий утверждённый inventory содержит ровно семь — Compressor, EQ, Distortion, Chorus, Delay, Reverb, Cabinet IR. Не добавлять Flanger enable/bypass control без формального изменения inventory/master contract. Effect preset data/save/load mapping требует отдельной сверки; не добавлять фиктивные presets, новые APVTS IDs или DSP изменения в UI-only этапе.
+
+### 17.5 Invariants and acceptance
+Сохраняются точные mockup/layout contracts, визуально-only skin behavior, APVTS IDs/semantics, control inventory, DSP, MIDI, sampler, SoundBank, preset semantics и realtime safety. Все активные controls имеют реальный callback/action и тест; иначе disabled / BACKEND PENDING с причиной. Preview non-destructive; Apply/Select commits; Cancel/Back rolls back. Все поиски, decode, I/O и preview preparation выполняются вне audio callback.
+
+Отдельно проверить overlay lifecycle, focus, resize/DPI, persistence, keyboard non-overlap, Performance Display data provenance/read-only behavior, AutoChords MIDI/transport behavior, FX mappings and seven-switch parity, затем exact-SHA Windows Release, CTest, pluginval strictness 5, packaging и FL Studio 20 host acceptance.
+
+**Status:** USER-APPROVED DESIGN DIRECTION / DOCUMENTATION ONLY / IMPLEMENTATION NOT IMPLIED.
