@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-053",
   "index": 53,
-  "name": "LEGACY ARCHIVE 053",
+  "name": "NEON STAGE — LEGACY ARCHIVE",
   "family": "neon_basement",
   "layout": "STUDIO_CONSOLE",
-  "description": "Archived legacy skin record retained only to preserve registry numbering and compatibility. It is not an active theme, default skin, product identity or interface shell.",
+  "description": "Legacy archive record retained only for registry/index compatibility. It is not an active theme or selectable default. The sole active theme, skin, graphic user interface and plugin shell is NEON STAGE.",
   "palette": {
     "window_bg": "#050811",
     "panel": "#091321",
@@ -348,6 +348,7 @@
     "Skin_052 12x16 grid parity is retained; grid coordinates remain design metadata and are not approved as pixel-level placements.",
     "Visual-only theme: APVTS, live layout, audio and MIDI contracts remain unchanged.",
     "Superseded by user-approved unified identity in Skin_052; retained without renumbering to preserve registry continuity.",
-    "Legacy archive only. The sole active product identity, main theme, skin and interface shell is NEON STAGE."
+    "Legacy archive only. The sole active product identity, main theme, skin and interface shell is NEON STAGE.",
+    "Legacy archive only; the sole active interface, skin, theme and shell is NEON STAGE."
   ]
 }
