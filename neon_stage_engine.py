@@ -354,8 +354,9 @@ def _make_icon(name):
         d.ellipse((8,8,24,24),outline=c,width=3); d.ellipse((13,13,19,19),outline=c,width=2)
         for coords in ((16,2,16,8),(16,24,16,30),(2,16,8,16),(24,16,30,16)):
             d.line(coords,fill=c,width=2)
-    elif name=="info":
-        d.ellipse((4,4,28,28),outline=c,width=w); d.text((12,5),"i",font=font(19,True),fill=c)
+    elif name in ("i","info"):
+        d.ellipse((4,4,28,28),outline=c,width=w)
+        d.text((12,5),"i" if name=="i" else "?",font=font(19,True),fill=c)
     elif name=="note":
         d.line((20,5,20,23),fill=c,width=3); d.line((20,5,28,3),fill=c,width=3)
         d.ellipse((8,20,19,28),outline=c,width=2)
@@ -544,8 +545,8 @@ def step_atlases():
         transport.append((name,"normal",im))
     _atlas("transport",transport,3)
     icons=[(name,"normal",_make_icon(name)) for name in
-           ("folder","star","search","close","palette","guitar","radar","curator","settings","info",
-            "note","grid","group","play","pause","stop","loop","dice","crown","info")]
+           ("folder","star","search","close","palette","guitar","radar","curator","settings","i",
+            "note","grid","group","play","pause","stop","loop","dice","info","crown")]
     # Keep the two information glyph slots uniquely addressable in the index.
     icons=[(f"{name}_{i:02d}" if i==19 else name,state,im) for i,(name,state,im) in enumerate(icons)]
     _atlas("icons",icons,5)
@@ -798,11 +799,25 @@ def step_report():
                     errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
         except Exception as exc: errors.append(f"{rel}: decode failed: {exc}")
+    webp_path=ASSETS/"hero.webp"
+    if not webp_path.is_file():
+        errors.append("missing assets/hero.webp")
+    else:
+        try:
+            with Image.open(webp_path) as webp:
+                if webp.format!="WEBP" or webp.size!=(800,450):
+                    errors.append(f"hero.webp: expected WEBP 800x450, got {webp.format}/{webp.size}")
+                webp.verify()
+        except Exception as exc:
+            errors.append(f"hero.webp: decode failed: {exc}")
     for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","svg/panel_header.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
         p=SKIN/rel
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         data=p.read_text(encoding="utf-8")
-        if "<script" in data.lower() or "javascript:" in data.lower() or "<animate" in data.lower() or "xlink:href" in data.lower():
+        lower=data.lower()
+        if ("<script" in lower or "javascript:" in lower or "<animate" in lower or
+            "xlink:href" in lower or 'href="http' in lower or "href='http" in lower or
+            "url(http" in lower):
             errors.append(f"unsafe SVG content in {rel}")
 
     atlas_dir=ASSETS/"atlas"
