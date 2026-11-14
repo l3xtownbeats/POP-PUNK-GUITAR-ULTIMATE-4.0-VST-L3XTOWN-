@@ -175,7 +175,7 @@ jobs:
           SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
           '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
 
-      - name: Validate restored sample library and licenses
+      - name: Validate restored sample library, licenses and SHA-256 manifest
         shell: pwsh
         run: |
           $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
@@ -191,7 +191,178 @@ jobs:
             if (-not (Test-Path (Join-Path $sampleRoot $license))) { throw "Required sample license missing: $license" }
           }
           $gitDirs = Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git'
-          if ($gitDirs.Count -gt 0) { throw 'Git metadata must not be included in the redistributable sample package.' }
+          if ($gitDirs.Count -gt 0) { throw 'Git metadata must not be included in the sample package.' }
+
+          # Validate every WAV after either a fresh download or cache restore.
+          $manifestPath = Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt'
+          if (-not (Test-Path -LiteralPath $manifestPath)) { throw 'Sample SHA-256 manifest is missing.' }
+          $manifestEntries = @{}
+          foreach ($line in Get-Content -LiteralPath $manifestPath) {
+            if ($line -notmatch '^(?<hash>[0-9a-fA-F]{64})\s{2}(?<path>.+)
+      - name: Validate JUCE BinaryData include, link and declaration order
+        shell: pwsh
+        run: python tools/check_binary_data_links.py
+
+      - name: Configure x64 Release
+        shell: pwsh
+        run: cmake -S "$env:PROJECT_DIR" -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build VST3 and test executables
+        run: cmake --build build --config Release --parallel
+
+      - name: Run CTest regression suite
+        shell: pwsh
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Locate VST3 bundle
+        id: vst3
+        shell: pwsh
+        run: |
+          $plugin = Get-ChildItem build -Directory -Recurse -Filter '*.vst3' | Select-Object -First 1
+          if (-not $plugin) { throw 'VST3 bundle not found after successful build.' }
+          "path=$($plugin.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Run pluginval strictness level 5
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'pluginval_Windows.zip'
+          $toolDir = Join-Path $env:RUNNER_TEMP 'pluginval'
+          Invoke-WebRequest -Uri 'https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip' -OutFile $archive -TimeoutSec 180
+          Expand-Archive -LiteralPath $archive -DestinationPath $toolDir -Force
+          $validator = Get-ChildItem -LiteralPath $toolDir -Recurse -File -Filter 'pluginval.exe' | Select-Object -First 1
+          if (-not $validator) { throw 'pluginval.exe was not found in the official Windows release archive.' }
+          # Start-Process exposes the real native process exit code reliably on
+          # Windows PowerShell, including GUI-subsystem executables. The pluginval
+          # log must end in SUCCESS and the process must return zero.
+          $pluginPath = "${{ steps.vst3.outputs.path }}"
+          $arguments = @('--strictness-level', '5', ('"{0}"' -f $pluginPath))
+          $validationProcess = Start-Process -FilePath $validator.FullName -ArgumentList $arguments -NoNewWindow -Wait -PassThru
+          if ($validationProcess.ExitCode -ne 0) {
+            throw "pluginval strictness level 5 failed with exit code $($validationProcess.ExitCode)."
+          }
+
+      - name: Record host validation limitation
+        shell: pwsh
+        run: |
+          Write-Host 'Automated pluginval strictness level 5 completed. FL Studio 20 manual host acceptance remains a separate required check.'
+
+      - name: Package interim CI validation bundle (not final REV.18 release)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $release = Join-Path $PWD 'release'
+          New-Item -ItemType Directory -Force -Path $release | Out-Null
+
+          # Final user-facing package layout. Keep the VST3 bundle in its own
+          # folder so it can be copied directly into the system VST3 directory.
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          foreach ($folder in $folders) {
+            New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
+          }
+
+          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
+          # Runtime skin payload is a sibling of VST3/, so both can be copied
+          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
+          $runtimeSkins = Join-Path $release 'Skins'
+          Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
+            Copy-Item -Destination $runtimeSkins -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination $runtimeSkins
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
+
+          # Keep human-readable install notes and provenance in Resources.
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
+
+          $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
+          $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
+          $expectedSkinCount = [int]$skinRegistry.totalSkins
+          if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Skin registry totalSkins does not match its themes array.' }
+          $skinManifests = Get-ChildItem $runtimeSkins -Recurse -File -Filter 'theme.json'
+          if ($skinManifests.Count -ne $expectedSkinCount) { throw "Runtime Skins manifest count mismatch: registry=$expectedSkinCount, files=$($skinManifests.Count)." }
+          foreach ($theme in $skinRegistry.themes) {
+            $manifestPath = Join-Path $runtimeSkins $theme.path
+            if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Registered runtime skin manifest missing: $($theme.path)" }
+            $themeData = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+            if ($themeData.id -ne $theme.id -or $themeData.index -ne $theme.index) {
+              throw "Runtime skin identity mismatch for $($theme.path)."
+            }
+            $compatibility = $themeData.compatibility
+            if ($compatibility.apvtsChanges -or $compatibility.layoutChanges -or $compatibility.audioChanges) {
+              throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
+            }
+          }
+          $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
+          if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
+          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
+          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
+          $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
+          if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
+
+          @'
+          POP PUNK GUITAR ULTIMATE — INTERIM WINDOWS x64 CI BUILD (NOT FINAL RELEASE)
+          =============================================================================
+          STATUS: CI VALIDATION ARTIFACT ONLY. NOT A FINAL REV.18 PRODUCT RELEASE.
+          VST3/       The compiled Windows x64 VST3 plugin bundle.
+          SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
+                      Sound Hunter asset-level registry is empty; final factory admission is pending.
+          PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
+                      Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
+          Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
+          Resources/  Install notes, source/license summary, checksums and skin documentation.
+          Assets/     Product artwork and visual assets.
+
+          INSTALL (DEVELOPMENT / QA ONLY):
+          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
+             C:\Program Files\Common Files\VST3\
+             Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
+          2. In the plugin, use its SFZ load control and select an instrument SFZ
+             from SOUNDBANK/. Keep SOUNDBANK on disk.
+          3. The factory preset catalog is embedded in the plugin and also shipped
+             as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
+          4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
+             Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
+          5. See Resources/ for source attribution, licenses, checksums and documentation.
+
+          Automated CMake build, CTest and pluginval results are reported by this workflow.
+          FL Studio 20 manual host acceptance remains a separate step and is not implied.
+          This interim artifact does not certify 1000 READY presets, full Sound Hunter clearance,
+          final FX EDIT / Skin Gallery / Settings acceptance, CPU/RAM targets or release readiness.
+          '@ | Set-Content -Encoding utf8 (Join-Path $release 'INSTALL_AND_CONTENTS.txt')
+
+          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip'
+          if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
+          Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-INTERIM-CI-NOT-RELEASE
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip
+          if-no-files-found: error
+
+) {
+              throw "Malformed sample checksum manifest line: $line"
+            }
+            $relative = $Matches.path.Trim().Replace('\','/')
+            if ($manifestEntries.ContainsKey($relative)) { throw "Duplicate sample manifest path: $relative" }
+            $manifestEntries[$relative] = $Matches.hash.ToLowerInvariant()
+          }
+          if ($manifestEntries.Count -ne $wavFiles.Count) {
+            throw "Sample manifest count mismatch: manifest=$($manifestEntries.Count), WAV files=$($wavFiles.Count)."
+          }
+          foreach ($file in $wavFiles) {
+            $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
+            if (-not $manifestEntries.ContainsKey($relative)) { throw "WAV missing from SHA-256 manifest: $relative" }
+            $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
+            if ($actualHash -ne $manifestEntries[$relative]) { throw "SHA-256 mismatch for sample: $relative" }
+          }
 
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh

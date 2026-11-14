@@ -768,3 +768,21 @@ User clarified that downloading is allowed. Lawfully accessible samples/librarie
 **Tests:** no new tests run by this journal-only transaction. CI evidence above belongs to build SHA `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`.
 **Status:** CI BUILD VERIFIED / FINAL PRODUCT ACCEPTANCE PENDING.
 **Next:** implement truthful REV.18 readiness gates, populate legal asset provenance, map samples, validate MELODY/PATTERN playback and audio, then test in FL Studio 20.
+
+
+## 2026-11-14 — TX-REV18-INTERIM-PACKAGE-001 — CI/package integrity hardening
+
+**Type:** CI workflow / packaging configuration.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `5abb9e490cb78ea9d4ecb1d3c61d29d56de87382`.
+**Changed file:** `.github/workflows/vst3-build.yml`.
+
+**Changes:**
+- Sample cache validation requires `SHA256SUMS-POP-PUNK.txt`, rejects malformed/duplicate entries, checks manifest/WAV count parity, and recomputes every WAV SHA-256 after cache restore or fresh download.
+- Renamed ZIP and uploaded artifact to `INTERIM-CI-NOT-RELEASE`; package notes disclose the legacy 300-definition catalogue, empty Sound Hunter registry, unmet 500+500 READY target and pending FL Studio 20 host acceptance.
+- Install notes now say DEVELOPMENT / QA ONLY.
+
+**Compatibility / non-goals:** no C++ production source, audio callback, DSP, MIDI, APVTS, preset data, sample data, skin assets or licenses changed.
+**Tests:** not run locally; workflow change triggers Windows x64 CI on this commit. Previous PASS belongs only to parent SHA `5abb9e490cb78ea9d4ecb1d3c61d29d56de87382`.
+**Status:** IMPLEMENTED / VALIDATION PENDING.
+**Next:** verify exact-SHA Windows build, CTest, pluginval strictness 5, SHA manifest validation and interim artifact.

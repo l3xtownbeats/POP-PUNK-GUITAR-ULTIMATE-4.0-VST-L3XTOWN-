@@ -2338,3 +2338,30 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 **Status:** EXACT-SHA CI BUILD VERIFIED; FINAL REV.18 RELEASE NOT READY.
 **Next:** update CI readiness gates without falsely promoting placeholder definitions; populate and audit the asset registry; integrate verified samples into runtime MELODY/PATTERN paths; run audio QA; then perform FL Studio 20 host acceptance.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-INTERIM-PACKAGE-001 — TRUTHFUL INTERIM CI PACKAGE + SAMPLE HASH GATE
+==============================================================================
+
+**Type:** CI/package safety hardening; no production C++/DSP/MIDI/APVTS code changed.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `5abb9e490cb78ea9d4ecb1d3c61d29d56de87382`.
+**Changed file:** `.github/workflows/vst3-build.yml`.
+
+### Changes
+1. Sample validation now reads `Samples/SHA256SUMS-POP-PUNK.txt` after cache restore or fresh download, rejects malformed/duplicate manifest entries, requires exact manifest-to-WAV count parity, and recomputes SHA-256 for every WAV.
+2. The uploaded artifact and ZIP are renamed from misleading `COMPLETE` to `INTERIM-CI-NOT-RELEASE`.
+3. Package notes explicitly state that the 300-entry factory catalogue is a legacy authored-definition baseline, not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
+4. Package notes identify the sample payload as a CI sample payload, state that the Sound Hunter asset-level registry is empty, and disclaim final REV.18/release acceptance.
+5. Install instructions are labeled DEVELOPMENT / QA ONLY.
+
+### Compatibility
+No production source, audio callback, sampler, DSP, MIDI, APVTS identifiers/state, preset content, sample assets, skin assets or license files were modified. This changes CI validation and artifact labeling only.
+
+### Validation
+This workflow change is committed and triggers the Windows x64 CI workflow. No result on the new commit is claimed yet. Prior exact-SHA evidence remains run #1345 on `aa815bc89487b311eec6f2a22bbb41c5c80fa0f5`; it is not inherited by this new workflow SHA.
+
+**Status:** IMPLEMENTED / CI VALIDATION PENDING.
+**Next:** inspect the exact-SHA run; if SHA manifest validation passes, retain it as the sample-cache integrity gate. If it fails, diagnose and correct the manifest parser before packaging.
+==============================================================================
