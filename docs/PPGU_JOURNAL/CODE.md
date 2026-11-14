@@ -682,3 +682,20 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Tests:** regression tests are committed and wired into the workflow but have NOT YET BEEN EXECUTED on GitHub Actions. A successful download, artifact, sample count, or size is NOT claimed. The user must start a fresh workflow run on the corrected HEAD; the previous failed run cannot validate these changes.
 
 **Safety:** no pre-existing sample library files were overwritten, moved, or deleted; no source samples or VST3 DSP code were modified. This is a focused Sound Hunter bug fix only.
+
+
+## 2026-11-14 — Factory Preset Bank 500: catalog/build gate
+
+**Commits:** catalog `79d4e2ab0d382b84bb862ee3e03370c0a67129e3`; integration `99577e84744c1de13bdd8c7dd8db84cf79fc7829`.
+
+**Changed paths:**
+- `presets/factory_bank_500.json` — 500 definitions, 250 MELODY + 250 PATTERN; compact tuple-v1 16-step pattern events; artist-specific reference-track cleanup; genre/style and articulation metadata.
+- `CMakeLists.txt` — embeds `presets/factory_bank_500.json` in PPGUPresetData.
+- `.github/workflows/vst3-build.yml` — validates/packages the 500 bank; removes legacy `factory_bank_300.json` from release PRESETS folder after copying legacy preset files.
+- `tools/validate_factory_bank.py` — exact 250+250/500 gate; finite parameter ranges; unique IDs/names; artist/reference-track integrity; Melody articulation metadata; Pattern tuple schema/ranges.
+- `PPGU_APPROVED_PARAMETERS.md` — registry advanced to v2 and factory count updated to 500.
+- `docs/PRESET_FACTORY_500_RU.md` — schema, archetypes, coverage and validation limits.
+
+**Structural preflight:** PASS (500 total, 250 per mode, unique IDs/names, 21 artist profiles, 16 genre families, 20 melody archetypes, 20 pattern archetypes; all Pattern definitions have tuple-v1 events). This was a deterministic structural check, not execution of the Python validator, Windows build, CTest, pluginval, or host acceptance.
+
+**Important runtime boundary:** the catalog is authored data only. Presets remain runtime-validation-pending until actual loader/APVTS binding, sample mappings, articulation routing and Pattern event integration are implemented and auditioned. No BUILD VERIFIED or 500-playable claim.

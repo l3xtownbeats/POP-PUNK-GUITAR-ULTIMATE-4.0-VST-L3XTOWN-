@@ -121,3 +121,25 @@ The current PPGU codebase already contains a custom SFZ parser, a 64-voice Sampl
 | `AkiFX` | GPLv3 VST3/CLAP effects rack. | Excluded from direct integration under the planned closed-source/commercial distribution model unless licensing is separately resolved. |
 
 **Status:** preliminary source/README/license metadata inspection only. No component is integrated, no benchmark is claimed, and full transitive-license audit remains open for sfizioso/dusk-fizz. Next evaluation must compare SFZ opcode coverage, sample-reader integration with `SampleStreamingService`, allocation/lock behavior, voice limits, memory footprint, build complexity, Windows 10 x64/VST3 compatibility and CPU under 64-voice stress.
+
+
+## 2026-11-14 — Расширение Factory Preset Bank до 500 (утверждено пользователем)
+
+**Решение:** расширить каталог с прежних 300 до 500 авторских определений; цель пользователя — не менее 300, предпочтительно 500. Зафиксировано 250 MELODY + 250 PATTERN.
+
+**Охват каталога:**
+- 21 артистический style profile и 16 семейств жанров/стилей (pop-punk, skate-punk, punk rock, melodic punk, emo pop-punk, ska-punk, alternative/pop-rock, ambient alternative, acoustic rock и родственные направления).
+- 20 Melody archetypes: clean/crunch/high-gain/DI, palm mute, octave hooks, tremolo, harmonics, slides/legato, hammer-on/pull-off, sustain, ambient delay, acoustic steel/nylon, arpeggios и др.
+- 20 Pattern archetypes в шести утверждённых категориях: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS.
+- Все 250 Melody definitions содержат articulation/performance targets; все 250 Pattern definitions — компактную 16-step последовательность tuple-v1.
+- Ссылки на reference tracks нормализованы по artist profile: чужие треки больше не приписываются другим артистам.
+
+**Архитектурное уточнение:** активный APVTS предоставляет host modes Melody/Rhythm. PUNK GROUP оформляется как подтип PATTERN, а не как выдуманный третий host mode.
+
+**Файлы:** `presets/factory_bank_500.json`, `tools/validate_factory_bank.py`, `CMakeLists.txt`, `.github/workflows/vst3-build.yml`, `PPGU_APPROVED_PARAMETERS.md`, `docs/PRESET_FACTORY_500_RU.md`.
+
+**Статус:** 500 preset definitions созданы и прошли структурную проверку в подготовительном прогоне. Runtime loader, реальные sample-zone mappings, артикуляционная маршрутизация, Pattern event integration, слуховая проверка каждого preset и exact-SHA Windows/CTest/pluginval CI остаются PENDING. Наличие записи в каталоге не объявляется доказательством воспроизведения.
+
+**Коммиты:** каталог/metadata — `79d4e2ab0d382b84bb862ee3e03370c0a67129e3`; build/validator/docs integration — `99577e84744c1de13bdd8c7dd8db84cf79fc7829`.
+
+**Проверка до CI:** 500 записей; 250+250; уникальные ID и имена; 21 artist profile; reference tracks сверены с соответствующим artist profile; все Pattern entries содержат 16-step tuple-v1 events; диапазоны drive/tone/reverb и поля performance проверены. Результат структурного preflight: PASS. GitHub Actions result: ожидает проверки отдельно.
