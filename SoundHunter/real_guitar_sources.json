@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "policy": "PPGU-REAL-RECORDED-GUITARS",
-  "max_library_bytes": 26843545600,
+  "max_library_bytes": 42949672960,
   "supported_audio_formats": [
     ".wav",
     ".wave",
@@ -127,5 +127,7 @@
       "license_file": "LICENSE",
       "notes": "Recorded archtop guitar multisample; catalogue marks CC0-1.0."
     }
-  ]
+  ],
+  "max_library_gib": 40,
+  "policy_notes": "Aggregate Samples audio-library hard ceiling: 40 GiB. No per-run Sound Hunter cap. Existing audio assets count toward the ceiling; deduplicated assets do not consume additional capacity."
 }
