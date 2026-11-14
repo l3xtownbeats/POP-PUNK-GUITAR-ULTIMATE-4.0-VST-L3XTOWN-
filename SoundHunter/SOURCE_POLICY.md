@@ -148,6 +148,10 @@ Required behavior:
 
 Preset generation must run outside the real-time audio thread. It is an approved engine requirement; do not claim it exists until implemented and tested.
 
+
+## User-confirmed automatic preset generation
+The user explicitly approves and confirms the requirement that PPGU automatically generate new presets from suitable imported sample assets, in addition to automatically discovering, classifying and assigning sounds to existing presets. Generated presets must follow the documented mapping, metadata, quality-validation, licensing, separation from curated factory presets, user-review and rollback requirements above.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
