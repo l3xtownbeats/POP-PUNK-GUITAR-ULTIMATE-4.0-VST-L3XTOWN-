@@ -1,0 +1,34 @@
+name: Sound Hunter — Real Guitar Samples
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: ppgu-sound-hunter-import
+  cancel-in-progress: false
+jobs:
+  discover-and-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout approved source catalog and importer
+        uses: actions/checkout@v4
+      - name: List approved real-recorded sources
+        run: python3 SoundHunter/sound_hunter_real_guitars.py --discover-only
+      - name: Download, verify and import real guitar audio
+        run: python3 SoundHunter/sound_hunter_real_guitars.py --max-gb 25
+      - name: Package additive Sound Hunter import
+        run: |
+          cd Samples
+          zip -qr "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" SoundHunterImports
+          cp SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
+      - name: Upload verified sample library
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-REAL-GUITAR-SAMPLES-25GB-MAX
+          path: |
+            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.zip
+            ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
+          if-no-files-found: error
+          retention-days: 30
