@@ -58,3 +58,10 @@ Pattern:
 ## Important distinction
 
 A library may permit royalty-free use in finished songs while prohibiting redistribution of its raw samples, multisamples, loops, or instrument content in another VST. For example, Native Instruments' Electric Sunburst Deluxe is a product and workflow reference; its recordings are not cleared for extraction or bundling by default. Obtain a separate written license if its actual sample content is desired.
+
+
+## PPGU MASTER SOUND LIBRARY EXPANSION — USER APPROVED 2026-11-14
+
+The approved target is an open-ended, maximum-scale guitar-only sound library: One-Shots, Sample Loops, multisample/performance sets, SoundBank metadata and corresponding unlimited MELODY/PATTERN presets and browser categories. These are distinct content types and must not be conflated. Every asset requires source provenance, SHA-256, technical/audio validation, accurate mapping and license review. Factory redistribution requires explicit rights to bundle raw samples; royalty-free use in finished music is not sufficient. Local user import remains governed by the user's own license and must not be blanket-blocked by factory redistribution rules.
+
+Automated validators should check physical files, hashes, duplicates, format/integrity, clipping/silence/DC/noise, loop seams/tempo/bars, note/velocity/RR/articulation mappings, metadata/reference integrity and redistribution rights. Quality thresholds must be versioned and calibrated; don't reject expressive content using blind universal thresholds. See `docs/PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md` for the complete approved scope and autonomous defect-fix workflow.
