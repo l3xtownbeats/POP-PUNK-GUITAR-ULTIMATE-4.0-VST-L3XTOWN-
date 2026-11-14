@@ -376,3 +376,8 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 - Main `01 INTERFACE — NEON STAGE DEFAULT` and third FX EDIT + AutoChords reference remain separate coordinated approved states; do not conflate or redesign them.
 - Before implementation, locate original image, record path/dimensions/SHA-256, sample palette and compare existing UI/tokens; reuse matching work and modify only proven gaps.
 - Documentation-only update. No UI source/assets changed; no visual comparison or runtime test performed. Status: REQUIREMENT LOCKED / EXACT REFERENCE ASSET AND PALETTE SAMPLING STILL TO BE VERIFIED.
+
+
+## 2026-11-14 — Final mockup role clarification
+
+First approved file = authoritative layout/appearance/control inventory (preserve one-to-one). Second file, `02 INTERFACE NEON STAGE AUTOCHORDS` = authoritative unified color palette only. Do not substitute second-file layout for first or redesign/remove controls. Sample palette from exact original second file and apply it to first-file design; preserve both originals. Acceptance requires side-by-side structure/control parity plus palette match and functional controls. Requirement clarification only; exact asset verification and implementation remain open.
