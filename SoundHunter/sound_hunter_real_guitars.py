@@ -37,6 +37,23 @@ def license_ok(text: str, expected: str) -> bool:
         return "permission is hereby granted" in t and "the software" in t
     return False
 
+def fetch_lfs_object(repo: str, pointer: bytes) -> bytes:
+    oid_match=re.search(rb"oid sha256:([0-9a-f]{64})",pointer)
+    size_match=re.search(rb"size ([0-9]+)",pointer)
+    if not oid_match or not size_match: raise RuntimeError("Malformed Git LFS pointer")
+    oid=oid_match.group(1).decode("ascii"); size=int(size_match.group(1))
+    payload=json.dumps({"operation":"download","transfers":["basic"],"objects":[{"oid":oid,"size":size}]}).encode()
+    req=urllib.request.Request(f"https://github.com/{repo}.git/info/lfs/objects/batch",data=payload,headers={"User-Agent":UA,"Accept":"application/vnd.git-lfs+json","Content-Type":"application/vnd.git-lfs+json"})
+    with urllib.request.urlopen(req,timeout=90) as response: batch=json.loads(response.read().decode())
+    obj=batch.get("objects",[{}])[0]
+    if obj.get("error"): raise RuntimeError(f"Git LFS object unavailable: {obj['error']}")
+    action=obj.get("actions",{}).get("download")
+    if not action or not action.get("href"): raise RuntimeError("Git LFS download action missing")
+    req=urllib.request.Request(action["href"],headers={"User-Agent":UA,**action.get("header",{})})
+    with urllib.request.urlopen(req,timeout=300) as response: data=response.read()
+    if len(data)!=size or hashlib.sha256(data).hexdigest()!=oid: raise RuntimeError("Git LFS object failed size/SHA-256 verification")
+    return data
+
 def safe_member(name: str) -> bool:
     p=PurePosixPath(name)
     return not p.is_absolute() and ".." not in p.parts and not re.match(r"^[A-Za-z]:", name)
@@ -124,22 +141,27 @@ def main():
                     # Skip Git LFS pointer stubs and suspiciously tiny audio placeholders.
                     info=z.getinfo(name)
                     if info.file_size < 128: continue
-                    if used+info.file_size > limit:
+                    pointer=z.read(name) if info.file_size <= 1024 else b""
+                    if pointer.startswith(b"version https://git-lfs.github.com/spec/v1"):
+                        data=fetch_lfs_object(repo,pointer); source_size=len(data)
+                    else:
+                        data=None; source_size=info.file_size
+                    if used+source_size > limit:
                         print(f"CAP REACHED at {sid}; remaining source files not imported.")
                         break
-                    digest=hashlib.sha256(z.read(name)).hexdigest()
+                    if data is None: data=z.read(name)
+                    digest=hashlib.sha256(data).hexdigest()
                     if digest in seen: continue
                     target=source_dir.joinpath(*rel.parts[1:])
                     target.parent.mkdir(parents=True,exist_ok=True)
                     if target.exists():
                         raise RuntimeError(f"Refusing path collision: {target}")
-                    with z.open(name) as src, target.open("xb") as dst:
-                        shutil.copyfileobj(src,dst)
-                    if target.stat().st_size != info.file_size:
+                    with target.open("xb") as dst: dst.write(data)
+                    if target.stat().st_size != source_size:
                         raise RuntimeError(f"Size verification failed: {target}")
                     actual=sha256(target)
                     if actual != digest: raise RuntimeError(f"SHA-256 verification failed: {target}")
-                    seen.add(digest); used+=info.file_size; copied+=1
+                    seen.add(digest); used+=source_size; copied+=1
                     registry["assets"].append({
                         "source_id":sid,"path":str(target.relative_to(samples)).replace("\\","/"),
                         "format":target.suffix.lower(),"bytes":target.stat().st_size,
