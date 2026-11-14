@@ -725,3 +725,8 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Superseded constraints:** new no-artificial-cap SAMPLES instruction supersedes earlier 25 GB and 25–30 GB size caps/targets; minimum 500 per mode supersedes the interim 250+250 catalog as a final acceptance target. Legal redistribution, provenance, hashes, deduplication, additive-only imports, actual disk/filesystem/platform limits and realtime performance protections remain mandatory.
 
 **Important implementation boundary:** this commit records approved scope only. It does not implement DSP processors, skins, locks, documentation, sample assets, preset playback or packaging. The exact previously approved FX list and 16 skin names must be reconciled from their source specifications rather than guessed. The current 500-entry JSON is an interim structural catalog, not the final 500-per-mode playable bank. No build/test/host PASS is claimed.
+
+
+## 2026-11-14 — MASTER-PLAN COMPATIBILITY CONFIRMATION
+
+The user explicitly reconfirmed the REV.18 requirement table as a **supplement to**, not a replacement for, the previously approved PPGU master plan. Preserve all existing approved scope, module order, UI/MIDI/APVTS/state contracts, sound requirements, artist/style coverage, licensing, realtime constraints and acceptance gates. Integrate additions into existing modules; merge duplicate descriptions of the same window/system; do not create parallel conflicting implementations. Newer approval supersedes only directly conflicting named parameters. Resolve genuine API/behavior conflicts explicitly rather than silently changing contracts. This is an approval/documentation update only; no implementation or test pass is implied.
