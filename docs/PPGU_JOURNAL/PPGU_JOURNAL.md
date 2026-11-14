@@ -454,3 +454,18 @@ The plan also records the approved NEON STAGE DEFAULT direction and flags the ol
 Current CI evidence was checked: Windows VST3 workflow run #1546 / run ID `43584870207`, source SHA `7681c945959afa9da437a35eec3dc3e5cfc20d66`. Configure, build, CTest, VST3 locate, pluginval strictness 5, cache restore, SoundBank/license audit and registry generation steps succeeded. The overall workflow was **cancelled** at package stage; package upload was skipped. This is not a release package and does not establish FL Studio 20 host validation. PSC remains design-only. Existing preset-readiness documentation distinguishes the 300 catalogue entries from verified playable runtime presets.
 
 This is a documentation/plan consolidation. It does not claim that outstanding functions, preset audio, sample-bank integration, package delivery or host testing are complete. The plan's next gates are source and registry inspection, per-preset source/mapping audit, full-range MIDI pitch verification, complete package/upload, and manual FL Studio 20 acceptance.
+
+
+## APPROVED ADDENDUM — ANGELS & AIRWAVES / TOM DeLONGE AND UPDATED PRESET COUNTS (2026-11-14)
+
+User approved autonomous research, sound design, variation, implementation and build decisions under the master plan and explicitly requested that all additions be recorded in the canonical journal.
+
+- Add three distinct Angels & Airwaves album families: *We Don't Need to Whisper* (2006), *I-Empire* (2007), and *Lifeforms* (2021).
+- Add dedicated Tom DeLonge technique families in both MELODY and PATTERN: resonant-note lines and supporting movement behind riffs, melodic hooks, octave/upper-register phrases, chiming/arpeggiated parts, open power-chord chorus, palm-muted drive, sustained/echoing phrases and sparse-to-full builds.
+- MELODY remains chromatic and pitch-correct per MIDI key. PATTERN must adapt voicing/performance to chord input and tempo; it must not be a fixed loop that ignores chord changes.
+- Research public interviews, gear/amp/cab/effect chains, tone recipes and free preset examples. Distinguish confirmed facts from tonal interpretation. Public settings may inform independently authored PPGU DSP recipes. Third-party files may be bundled only when the specific license explicitly allows commercial redistribution. Do not copy protected album riffs, stems, proprietary presets or samples.
+- Latest approved count supersedes the older 300 minimum: at least 500 unique MELODY+PATTERN presets total, target approximately 600. Travis Barker 82 is a separate category of 82 unique complete presets, with no duplication across modes or double counting. Existing 300-entry catalogue remains an audit baseline. No placeholders; each READY preset requires real source mapping, legal provenance, correct behavior and audio validation.
+- Research document: `docs/PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md`.
+- Interview evidence captured: Ernie Ball String Theory (resonant notes and echo); Guitar World I-Empire interview (chiming upper-frequency parts, compression/delay/flanger/stereo echo); Guitar.com and GRAMMY Lifeforms interviews (broader/rawer guitar palette and gear context).
+
+Status: APPROVED / DOCUMENTED / RESEARCH BASELINE. This entry does not claim implementation, integration or audio validation.
