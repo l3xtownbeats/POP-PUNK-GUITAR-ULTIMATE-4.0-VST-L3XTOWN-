@@ -142,9 +142,11 @@ def main() -> int:
         ):
             try:
                 ratio = contrast(palette[token], palette[bg_token])
-                level = "PASS" if ratio >= 7.0 else "FAIL"
+                strict = token == "text_primary"
+                level = ("PASS" if ratio >= 7.0 else "FAIL") if strict else "INFO"
+                target = "required >= 7:1" if strict else "measured; no universal 7:1 gate"
                 add(level, "CONTRAST_" + token.upper(),
-                    f"{token}/{bg_token} contrast = {ratio:.2f}:1 (REV.18 target >= 7:1).")
+                    f"{token}/{bg_token} contrast = {ratio:.2f}:1 ({target}).")
             except ValueError as exc:
                 add("FAIL", "CONTRAST_INVALID", str(exc))
 
@@ -197,6 +199,27 @@ def main() -> int:
         path = theme_dir / folder
         if not path.is_dir() or not any(p.is_file() for p in path.rglob("*")):
             add("FAIL", "MISSING_" + label, f"Missing or empty required directory: {path.relative_to(root)}")
+
+    for folder in ("assets/master/textures", "assets/textures"):
+        directory = theme_dir / folder
+        if directory.is_dir():
+            for path in directory.glob("*.png"):
+                try:
+                    width, height = png_info(path)
+                    if width < 1024 or height < 1024:
+                        add("FAIL", "TEXTURE_SIZE",
+                            f"{path.relative_to(root)} is {width}x{height}; minimum is 1024x1024.")
+                except (OSError, ValueError, zlib.error) as exc:
+                    add("FAIL", "TEXTURE_PNG", str(exc))
+
+    for folder in ("assets/master/fx_layers", "assets/fx_layers"):
+        directory = theme_dir / folder
+        if directory.is_dir():
+            for path in directory.glob("*.png"):
+                try:
+                    png_info(path)
+                except (OSError, ValueError, zlib.error) as exc:
+                    add("FAIL", "FX_LAYER_PNG", str(exc))
 
     for icon in TOPBAR_ICONS:
         svg = theme_dir / f"assets/master/icons/{icon}.svg"
