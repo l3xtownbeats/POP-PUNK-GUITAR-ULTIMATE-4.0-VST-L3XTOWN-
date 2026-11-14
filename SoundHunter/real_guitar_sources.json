@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "policy": "PPGU-REAL-RECORDED-GUITARS",
-  "max_library_bytes": 42949672960,
+  "max_library_bytes": 40000000000,
   "supported_audio_formats": [
     ".wav",
     ".wave",
@@ -129,5 +129,6 @@
     }
   ],
   "max_library_gib": 40,
-  "policy_notes": "Aggregate Samples audio-library hard ceiling: 40 GiB. No per-run Sound Hunter cap. Existing audio assets count toward the ceiling; deduplicated assets do not consume additional capacity."
+  "policy_notes": "Aggregate Samples audio-library hard ceiling: 40,000,000,000 bytes (decimal 40 GB). No per-run Sound Hunter cap. Existing supported audio assets count toward the ceiling; deduplicated assets do not consume additional capacity.",
+  "max_library_gb": 40
 }
