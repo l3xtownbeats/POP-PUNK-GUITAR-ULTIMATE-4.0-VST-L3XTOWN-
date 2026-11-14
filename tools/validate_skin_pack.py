@@ -112,6 +112,80 @@ def safe_svg(path: Path) -> None:
         fail(f"{path}: root element is not SVG")
 
 
+def validate_registry_contract(registry: dict) -> int:
+    """Validate no-loss historical registry plus the active SKIN-1..16 ordering."""
+    total = registry.get("totalSkins")
+    themes = registry.get("themes")
+    if not isinstance(total, int) or isinstance(total, bool) or total < 1:
+        fail("theme_manifest.json totalSkins is not a positive integer")
+    if not isinstance(themes, list) or len(themes) != total:
+        fail("theme registry totalSkins does not match its themes array")
+
+    if registry.get("defaultSkin") != "skin-053":
+        fail("theme registry defaultSkin must be canonical skin-053 / NEON STAGE DEFAULT")
+    target = registry.get("releaseTargetActiveThemeCount")
+    if target != 16:
+        fail("theme registry releaseTargetActiveThemeCount must be exactly 16")
+
+    declared_active = registry.get("activeThemeCount")
+    if (not isinstance(declared_active, int) or isinstance(declared_active, bool)
+            or declared_active < 1 or declared_active > 16):
+        fail("theme registry activeThemeCount must be an integer from 1 to 16")
+
+    seen_ids: set[str] = set()
+    seen_indices: set[int] = set()
+    seen_ordinals: set[int] = set()
+    default_is_first = False
+    legacy_names = {
+        "neon riot", "dark metal", "modern studio", "carbon relay",
+        "blackout voltage", "signal forge", "sound forge",
+    }
+    active_count = 0
+
+    for entry in themes:
+        if not isinstance(entry, dict):
+            fail("theme registry contains a malformed entry")
+        theme_id = entry.get("id")
+        index = entry.get("index")
+        name = entry.get("name")
+        path = entry.get("path")
+        active = entry.get("active")
+        if (not isinstance(theme_id, str) or not theme_id.startswith("skin-")
+                or not isinstance(index, int) or isinstance(index, bool)
+                or index < 1 or theme_id != f"skin-{index:02d}" and theme_id != f"skin-{index:03d}"
+                or not isinstance(name, str) or not name.strip()
+                or not isinstance(path, str) or not path.startswith("Skin_")
+                or not path.endswith("/theme.json") or path.startswith("/")
+                or ".." in Path(path).parts or not isinstance(active, bool)):
+            fail("theme registry entry has invalid ID/index/name/path/active fields")
+        if theme_id in seen_ids or index in seen_indices:
+            fail(f"theme registry has duplicate ID or index: {theme_id}")
+        seen_ids.add(theme_id)
+        seen_indices.add(index)
+
+        if active:
+            ordinal = entry.get("activeOrdinal")
+            if (not isinstance(ordinal, int) or isinstance(ordinal, bool)
+                    or ordinal < 1 or ordinal > declared_active or ordinal in seen_ordinals):
+                fail(f"active theme {theme_id} has invalid/duplicate activeOrdinal")
+            seen_ordinals.add(ordinal)
+            active_count += 1
+            if ordinal == 1 and theme_id == "skin-053":
+                default_is_first = True
+            if name.strip().casefold() in legacy_names:
+                fail(f"legacy theme {name!r} cannot be active")
+        elif "activeOrdinal" in entry:
+            fail(f"inactive historical theme {theme_id} must not have activeOrdinal")
+
+    if active_count != declared_active:
+        fail("activeThemeCount does not match the number of active registry entries")
+    if seen_ordinals != set(range(1, declared_active + 1)):
+        fail("activeOrdinal values must be sequential from 1 without gaps")
+    if not default_is_first:
+        fail("skin-053 must be the first active theme (SKIN-1 / NEON STAGE DEFAULT)")
+    return active_count
+
+
 def validate(root: Path, pack_manifest_path: Path) -> list[str]:
     schema = load_json(root / "control_schema.json")
     registry = load_json(root / "theme_manifest.json")
@@ -129,6 +203,7 @@ def validate(root: Path, pack_manifest_path: Path) -> list[str]:
         fail("theme_manifest.json totalSkins is not an integer")
     if not isinstance(registry.get("themes"), list) or len(registry["themes"]) != existing_total:
         fail("theme registry totalSkins does not match its themes array")
+    validate_registry_contract(registry)
 
     entries = pack.get("themes")
     if not isinstance(entries, list) or not entries:
