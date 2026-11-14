@@ -12,7 +12,7 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = Path(__file__).with_name("real_guitar_sources.json")
-AUDIO = {".wav",".wave",".flac",".ogg",".oga",".mp3",".aif",".aiff",".aifc",".caf",".opus",".m4a",".aac",".wma",".au",".snd",".raw",".pcm",".sf2",".sf3",".sfz",".gig",".dspreset"}
+AUDIO = {".wav",".wave",".flac",".ogg",".oga",".mp3",".aif",".aiff",".aifc",".caf",".opus",".m4a",".aac",".wma",".au",".snd",".raw",".pcm",".sf2",".sf3",".gig"}
 UA = "PPGU-SoundHunter/1.0 (+real-recorded-guitar-only)"
 
 def request(url: str, timeout: int = 90) -> bytes:
@@ -192,6 +192,12 @@ def main():
                 copied=0
                 for name in names:
                     rel=PurePosixPath(name)
+                    if rel.suffix.lower() in {".sfz", ".json", ".md", ".txt"}:
+                        metadata_target=source_dir/"repository_metadata"/Path(*rel.parts[1:])
+                        metadata_target.parent.mkdir(parents=True,exist_ok=True)
+                        if not metadata_target.exists():
+                            with metadata_target.open("xb") as mf: mf.write(z.read(name))
+                        continue
                     if rel.suffix.lower() not in AUDIO: continue
                     # Meta release ZIPs are the production WAV masters; do not
                     # import lossy OGG previews as duplicate library variants.
