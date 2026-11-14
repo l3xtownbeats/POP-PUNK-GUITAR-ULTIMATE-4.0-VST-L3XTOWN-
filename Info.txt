@@ -2596,3 +2596,36 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Status:** BUILD ENGINE SCAFFOLD COMMITTED TO FEATURE BRANCH; EXECUTION AND VISUAL/CI ACCEPTANCE PENDING.
 
 - Follow-up: added `.github/workflows/neon-stage-build.yml` for a Windows GitHub Actions staging build and made the batch runner non-interactive when `CI=true`. The workflow-run lookup for commit `8978998993606834e7984fb8d06150b813b8cd16` returned no runs at inspection time; CI execution is therefore still unconfirmed.
+
+============================================================================== 
+2026-11-14 — NEON-STAGE-STAGING-SAFETY-001 — безопасная упаковка и G1 palette gates
+==============================================================================
+
+**Branch:** `work/neon-stage-reference-preview-fix`
+**Commit:** `ccf65ec32fe6111c3fe75f9375c548b6f34b77a0`
+**Scope:** только Python staging asset engine; DSP, Audio callback, MIDI, APVTS IDs,
+sampler ownership, runtime skin registry и default skin не изменялись.
+
+**Изменения:**
+- Удалена опасная операция рекурсивного удаления `juce_resources/Skins/Skin_053`
+  перед копированием staging-ресурсов. Staging pipeline теперь не записывает и не
+  удаляет файлы в runtime/JUCE resource tree.
+- ZIP сначала создаётся во временный файл, проверяется через `ZipFile.testzip()`,
+  затем атомарно заменяет только собственный staging ZIP.
+- Пороговые значения palette gate приведены к G1 из REV ULTRA: primary 7:1,
+  secondary 4.5:1, disabled 3:1, LCD 7:1, accent/panel 3:1.
+- Сохранение кнопочного atlas вынесено из цикла кадров; содержимое результата не меняется.
+
+**Инженерные возражения / review checklist:**
+- Audio DSP / Realtime: UI-only tooling; callback и realtime ownership не затронуты.
+- JUCE/UI: runtime skin files не перезаписываются staging pipeline.
+- Build/QA: ZIP проверяется на целостность; полный pipeline/Windows build ещё требуют CI.
+- Legal/Assets: provenance и права на исходные mockup assets этим изменением не подтверждаются.
+- Release/PM: staging ZIP не является COMPLETE ZIP; default skin не переключён.
+
+**Проверки:** код изменён и закоммичен. Генератор, G1 validator, Windows Release Build,
+CTest, pluginval strictness 5 и FL Studio 20 в рамках этого коммита НЕ запускались.
+Результат CI для нового SHA ожидает выполнения.
+
+**Статус:** SAFETY FIX IMPLEMENTED / TESTS NOT RUN / VISUAL PARITY NOT APPROVED.
+==============================================================================
