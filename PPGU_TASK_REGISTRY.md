@@ -61,3 +61,13 @@
 - Implemented без exact-SHA CI не продвигается дальше VALIDATION PENDING.
 - Заблокированные задачи помечать Blocked с причиной, не удалять.
 - Очередь следующего прогона: SE-04 -> SE-05 -> SH-01 -> QA-01/QA-02.
+
+
+## REV.18 Factory readiness audit
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| FR-01 | Separate 500+500 READY evidence audit | Implemented (VALIDATION PENDING) | P1 | CI exact SHA |
+| FR-02 | Populate legally cleared Sound Hunter asset registry | Not implemented | P1 | source/legal/audio review |
+| FR-03 | Runtime-map factory MELODY sources | Not implemented | P1 | FR-02, sampler |
+| FR-04 | Build PATTERN performance asset mappings | Not implemented | P1 | FR-02, performance engine |
+| FR-05 | Human audio QA for each READY preset | Not implemented | P1 | FR-03/FR-04 |

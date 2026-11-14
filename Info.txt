@@ -2381,3 +2381,31 @@ This workflow change is committed and triggers the Windows x64 CI workflow. No r
 **Validation:** repaired workflow is committed below; a new exact-SHA Windows workflow run is required. No PASS is claimed yet.
 **Status:** REPAIRED / CI VALIDATION PENDING.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — TX-REV18-READY-AUDIT-001 — REV.18 FACTORY READINESS EVIDENCE GATE
+==============================================================================
+
+**Type:** CI audit tooling + unit tests; production audio/plugin source unchanged.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Base HEAD / parent:** `b9b7a86c2bb995e26c8e6c4a1612824b86ea546c`.
+**Changed paths:** `tools/validate_rev18_factory_readiness.py`, `tests/test_rev18_factory_readiness.py`, `.github/workflows/vst3-build.yml`.
+
+### Audit finding
+The checked-in factory bank is a legacy 300-definition catalog (150 MELODY + 150 PATTERN). Its entries carry catalog-awaiting-integration statuses, not verified READY evidence. The existing `validate_factory_bank.py` checks the old minimum and does not enforce the REV.18 READY criteria. The Sound Hunter asset registry remains empty (0 approved assets).
+
+### Implemented
+- Added a separate REV.18 readiness audit. A preset counts only when it explicitly records runtime implementation and plugin loading, verified source mappings with SHA-256 and commercial redistribution approval, passing performance validation, and passing audio validation with human listening approval.
+- Invalid or incomplete READY claims are reported and never counted.
+- Added `--strict` for a future release gate requiring 500 READY MELODY and 500 READY PATTERN. Current CI uses non-strict audit mode so the incomplete product roadmap is visible without falsely failing the basic Windows build.
+- Added six unit tests covering legacy non-READY entries, valid READY evidence, missing mappings, malformed hash, missing human audio approval and duplicate IDs.
+- Wired the audit and unit tests into the Windows workflow.
+
+### Validation boundaries
+The new tool/tests are committed but have not yet run on the resulting commit SHA. The earlier Windows CI PASS remains valid only for its exact historical SHA. No current build/CTest/pluginval/host acceptance is claimed.
+
+**Compatibility:** no production C++, DSP, sampler, MIDI, APVTS IDs/state, presets, samples, licenses or skin assets were modified.
+**Status:** IMPLEMENTED / EXACT-SHA CI PENDING.
+**Next:** verify this commit's Windows workflow; then populate the asset registry from legally cleared assets and build real mappings/audio QA before any preset is marked READY.
+==============================================================================

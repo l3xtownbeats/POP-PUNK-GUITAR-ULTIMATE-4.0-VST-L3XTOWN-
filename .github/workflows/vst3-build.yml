@@ -42,6 +42,14 @@ jobs:
       - name: Validate 300-preset factory catalog
         shell: pwsh
         run: python tools/validate_factory_bank.py presets/factory_bank_300.json
+      - name: Audit REV.18 READY evidence (non-strict until factory targets are met)
+        shell: pwsh
+        run: |
+          python tools/validate_rev18_factory_readiness.py presets/factory_bank_300.json
+          if ($LASTEXITCODE -ne 0) { throw 'REV.18 READY evidence audit found invalid catalog claims.' }
+          python tests/test_rev18_factory_readiness.py
+          if ($LASTEXITCODE -ne 0) { throw 'REV.18 READY evidence unit tests failed.' }
+
       - name: Validate portable preset file examples
         shell: pwsh
         run: python tools/validate_preset_files.py presets/examples

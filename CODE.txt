@@ -798,3 +798,18 @@ User clarified that downloading is allowed. Lawfully accessible samples/librarie
 **Production compatibility:** no C++/DSP/MIDI/APVTS or media assets changed.
 **Tests:** no build/CTest/pluginval result on failed SHA. Awaiting new exact-SHA workflow.
 **Status:** REPAIRED / VALIDATION PENDING.
+
+
+## 2026-11-14 — TX-REV18-READY-AUDIT-001 — REV.18 READY evidence audit
+
+**Type:** CI audit tooling + tests; no production plugin code changed.
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Parent SHA:** `b9b7a86c2bb995e26c8e6c4a1612824b86ea546c`.
+**Files:** `tools/validate_rev18_factory_readiness.py`, `tests/test_rev18_factory_readiness.py`, `.github/workflows/vst3-build.yml`.
+
+The new audit counts a preset as READY only with explicit runtime implementation/plugin load, verified mapped source records with SHA-256 and commercial redistribution clearance, passing performance validation, and passing audio validation with human listening approval. Incomplete or malformed READY records are reported and not counted. `--strict` enforces 500 READY per mode for future release gating; CI currently runs non-strict so it reports the honest shortfall without blocking basic compilation.
+
+Six unit tests cover legacy definitions, complete evidence, missing mapping, invalid hash, absent human audio approval and duplicate IDs. The tests and workflow are committed but not yet executed on this resulting SHA.
+
+**Production compatibility:** no C++/DSP/MIDI/APVTS/sampler or asset content changed.
+**Status:** IMPLEMENTED / CI PENDING.
