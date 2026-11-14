@@ -359,3 +359,20 @@ Required behavior:
 - If a compatible combination cannot meet the tone or resource budget, choose the closest valid lower-cost alternative and report the limitation rather than silently loading an excessive stack.
 
 This extends the compatible-source fallback rule. It does not relax license/redistribution requirements, source-integrity rules, the 40 GB aggregate Samples ceiling, permanent retention/no-delete/no-overwrite policy, or the requirement to validate actual rendered audio. Multi-source capability must remain efficient and must not preload the entire library.
+
+## STANDARD VSTI PRESET-LOAD AND FULL KEYBOARD PLAYABILITY (2026-11-14)
+
+User clarification: PPGU must behave like a normal playable VST instrument. Selecting a preset loads/resolves its guitar source bank and mapping so that the keyboard immediately plays the instrument. Every supported MIDI key must trigger its corresponding musical note; this is not a one-shot preview or a collection of isolated riffs.
+
+Required behavior:
+- On preset selection, resolve and prepare the preset's selected guitar source(s), note maps, velocity layers, articulations, and processing route. The preset becomes playable as soon as required assets are ready; show clear loading/ready state if background preparation is needed.
+- Once ready, pressing any key in the preset's supported MIDI range produces the corresponding pitch, with correct pitch/root-key mapping and no dependence on pressing a special preview key.
+- The same playable instrument responds to MIDI from the DAW keyboard, piano roll, and connected MIDI keyboard/controller. Each MIDI note-on triggers the mapped note; note-off releases it correctly.
+- Provide complete intended keyboard coverage for each instrument/preset. Where the source library has gaps, use valid mapped alternatives or a documented pitch-compatible fallback; never leave silent holes or map an unrelated note/sample arbitrarily. Clearly report any genuinely unsupported range.
+- Correctly handle pitch mapping, root keys, note ranges, velocity zones/layers, sustain/release, voice allocation, polyphony, retriggering, overlapping notes, and note-off. Preserve the existing 64-voice SamplerEngine contract unless verified code/tests justify a safe change.
+- The preset's selected source set is loaded/resolved as one playable instrument map. Multiple source libraries may contribute different note zones, velocity layers, or articulations, but the combined result must feel like one coherent guitar instrument across the keyboard.
+- Do not load the entire Samples bank on every preset change. Prepare only the chosen preset's needed mappings/assets; share caches and stream sample pages as designed. Keep preset switching responsive and playback free of blocking disk I/O, decoding, locks, or allocations in the audio callback.
+- Include a clear sample/preset readiness state and robust handling for missing or corrupt assets. Never silently show a preset as ready if its note map cannot play.
+- Validation must include automated full-range MIDI note sweeps, velocity sweeps, note-on/note-off and overlapping-note tests, plus rendered audio checks for silence, wrong pitch, mapping gaps, stuck notes, and abrupt source changes. Test actual DAW/VST3 runtime when available.
+
+This is a core instrument behavior, not an optional feature. It complements compatible-source fallback and efficient multi-source tone assembly; it does not permit arbitrary sample substitution or relax licensing, source integrity, or resource-budget requirements.
