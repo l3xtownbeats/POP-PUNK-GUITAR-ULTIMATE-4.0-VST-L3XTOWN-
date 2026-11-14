@@ -3209,3 +3209,17 @@ The design contract reconciles the approved 1402x1122 main-layout requirement wi
 **Next implementation sequence:** (1) verify approved mockups 01–07 against the current repository reference assets; (2) component-by-component JUCE style/binding audit for main editor; (3) apply shared NEON STAGE styling to Gallery, Import Guitar, FX Edit, AutoChords, Settings and workspace chrome; (4) implement only missing visual states for real components; (5) close runtime control parity, DPI/resize/focus and audio-invariance tests; (6) run exact-SHA Windows build, CTest, pluginval and separate FL Studio 20 acceptance.
 
 This commit is a design specification only. It does not claim that the live editor has been redesigned, that all controls/windows are implemented, or that CI/host acceptance has passed.
+
+## 2026-11-15 — NEON STAGE interface skin application / main + auxiliary surfaces
+
+**User instruction:** оформить одну тему/skin/GUI NEON STAGE для всех существующих элементов управления, функций и окон согласно генеральному журналу разработки.
+
+**Source reviewed:** current branch work/neon-stage-reference-preview-fix; SKIN/CONTROL_INVENTORY_MATRIX_RU.md; docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md; SKIN/Skin_052/theme.json; Source/PluginEditor.h/.cpp; Source/UI/ThemeManager.h/.cpp; Source/UI/PPGUMultiWindowWorkspace.h/.cpp.
+
+**Implemented in this step:** expanded NEON STAGE LookAndFeel states for buttons, combo boxes and text-editor focus; applied all 21-token semantic palette consistently to main editor title, browser/category/search, mode/sync controls, all nine rotary/value boxes, seven FX toggles, LCD-style status output, MIDI keyboard, performance display, and shared auxiliary window chrome/panel palette. Existing theme-aware child windows continue to receive live palette propagation. Product-facing name remains NEON STAGE only. Stable technical skin ID remains neon-stage-default-skin-1.
+
+**No fake features:** LED activity, Auto Discover, Curator, About, Favorites, transactional Gallery Preview/Apply/Back, full Gallery keyboard navigation and production rescan remain deferred/not implemented. Existing category/search controls remain the actual preset navigation; no pretend filesystem folders are added.
+
+**Safety boundary:** no APVTS IDs/attachments, parameter meanings, DSP, sampler, audio callback or MIDI routing were changed. controls.*.grid is still metadata and does not yet drive JUCE bounds. Pixel-level match against seven references, DPI visual acceptance and FL Studio 20 host acceptance remain pending.
+
+**Validation:** source edits committed; compile/CTest/skin G1–G4/pluginval/FL Studio acceptance must be read from fresh CI results for the resulting commit SHA. No test is declared PASS by this journal entry alone.
