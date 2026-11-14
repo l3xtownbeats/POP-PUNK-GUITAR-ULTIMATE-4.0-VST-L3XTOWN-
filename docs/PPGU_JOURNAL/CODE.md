@@ -662,3 +662,23 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Additional audit results:** SoundBank audit reports 3.306 GiB, 4,353 audio assets / 11 sources; this passes the current validator but fails the user's strict 25–30 GB minimum target. AUTO DISCOVER is not present in the current PluginEditor; Import Guitar only exposes manual SFZ browsing. FX compact inventory remains below the approved 15-processor upper scope plus separate cabinets; exact remaining module names must be recovered from the user's earlier approved list, never invented.
 
 **Next:** obtain one uninterrupted Windows Release configure/build/CTest run on the latest stable HEAD; then continue feature implementation. This entry documents observed outcomes only; it does not claim product readiness.
+
+
+## 2026-11-14 — SOUND HUNTER DOWNLOAD FAILURE FIX / REGRESSION COVERAGE
+
+**Source change:** `SoundHunter/sound_hunter_real_guitars.py`.
+**Source commit:** `6adca0b36cf394bb76dd45906158f2e8c3fbedd8`.
+**Test commit:** `54f4aeeff68ae68e892ea89265f4427fb551560f`.
+**Workflow commit:** `50202631ff427bcaef356f3b164c2155b2de5c61`.
+
+**Exact changes:**
+- Added `release_asset_target()`; files from Meta release ZIPs now go under a distinct `release_assets/` subtree, separate from the source repository's own `release/` directory. The helper rejects unsafe archive paths.
+- Added `within_run_limit()` and changed the Sound Hunter byte counter to start at zero for each run. Only bytes newly imported by that run consume the 25 GB Sound Hunter cap. Existing/manual files in `Samples` remain eligible for SHA-256 deduplication but no longer consume the current run's cap.
+- Added `tests/test_sound_hunter_importer.py` with regression tests for the release path collision, path traversal rejection, and run-local size-cap accounting.
+- Added a GitHub Actions step to execute these tests before any network downloads.
+
+**Post-change verification:** GitHub Contents API re-fetched all three changed files from `main`; source blob SHA `636763590f2964088eea1897c1a69f7f982892f5`, test blob SHA `12c8fa138417907fe3f975037682607dee42e090`, workflow blob SHA `cf7b11fecdf7fbaabfe8df031fc91d71a18e7940`. HEAD at verification: `50202631ff427bcaef356f3b164c2155b2de5c61`.
+
+**Tests:** regression tests are committed and wired into the workflow but have NOT YET BEEN EXECUTED on GitHub Actions. A successful download, artifact, sample count, or size is NOT claimed. The user must start a fresh workflow run on the corrected HEAD; the previous failed run cannot validate these changes.
+
+**Safety:** no pre-existing sample library files were overwritten, moved, or deleted; no source samples or VST3 DSP code were modified. This is a focused Sound Hunter bug fix only.
