@@ -2,9 +2,9 @@
 
 **Единственный журнал проекта — INFO.** Здесь фиксируются этапы разработки, решения, прогресс, баги, исправления, проверки, сборки и релизы. Других журналов не создавать. README предназначен только для описания самого плагина.
 
-Последнее обновление: 13 ноября 2026
-Ветка: `main`  
-Последний commit перед текущей записью: `de4cce04b91bfd09c79bebf36b1a465c5f38815e`
+Последнее обновление: 14 ноября 2026
+Ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`  
+Последний commit перед текущей записью: `01fa7ddc0a9fa688528d2a078ccf6447c99fdfb7`
 
 ## 1. Назначение и продукт
 
@@ -2393,3 +2393,91 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 
 **Verification:** both modified files were written to REV.17 using fetched blob SHAs and read/write API success. Documentation-only; build, CTest, pluginval, packaging and FL Studio 20 were not run.
 **Status:** DOCUMENTATION INDEX SYNCED / SOURCE UNCHANGED / RUNTIME IMPLEMENTATION STILL REQUIRES SEPARATE AUDIT.
+
+
+## 2026-11-14 — TX-UI-PERFORMANCE-WORKSPACE-007: Main Performance, in-editor Edit Workspace, Performance Display, AutoChords и FX EDIT
+
+**Тип:** append-only фиксация прямых пользовательских UI-решений; документационное изменение.  
+**Ветка:** POP-PUNK-GUITAR-ULTIMATE-VST-REV.17.  
+**Основание:** пользовательский фрагмент с прямым выбором варианта «окно внутри окна» и разрешением на оформление всех элементов управления.  
+**Статус:** APPROVED UI DIRECTION / DOCUMENTATION ONLY / SOURCE IMPLEMENTATION NOT IMPLIED.
+
+### 1. Двухуровневая организация интерфейса
+- **MAIN PERFORMANCE** — основной компактный экран для игры, быстрого управления, MIDI-клавиатуры и оперативной информации.
+- **EDIT WORKSPACE** — общая внутренняя рабочая область для детальной настройки.
+- При нажатии **FX EDIT**, **AUTOCHORDS**, **IMPORT GUITAR** или **SETTINGS** соответствующая панель открывается внутри основного редактора, поверх рабочей области и занимает почти всю её площадь.
+- Верхняя панель/шапка плагина и постоянная кнопка **X / CLOSE** остаются видимыми. Пользователь не должен управлять несколькими отдельными плавающими окнами для этих четырёх действий.
+- Это более позднее UX-решение уточняет способ представления перечисленных edit-панелей. Оно не удаляет их компоненты, функции, состояние или backend. Существующую реализацию окон/контейнеров сначала проверить; переход к общему in-editor workspace выполнять отдельным scoped UI-изменением с сохранением lifecycle, callbacks, persistence, focus, z-order, resize/DPI и teardown safety.
+- Два браузера **STYLE** и **PATTERN** сохраняют самостоятельность и отдельные состояния согласно TX-UI-BROWSER-SEPARATION-006; это решение не объединяет их и не меняет их утверждённую навигацию.
+
+### 2. PERFORMANCE DISPLAY — реальные музыкальные данные
+Компактное табло располагается непосредственно над MIDI-клавиатурой и никогда не перекрывает клавиши, не перехватывает hit-testing и не уменьшает рабочую область клавиатуры.
+
+Целевые информационные поля:
+- текущий аккорд с музыкальным написанием, например **C**, **Dm**, **Em**, **F**, **G**, **Am**;
+- отдельная последняя/активная нота, например **C3**;
+- тональность (например **A Minor**) — только когда она действительно известна из активного музыкального состояния;
+- тип распознанного аккорда (Major / Minor и другие типы только при подтверждённой поддержке detector);
+- последовательность аккордов (например **I – VI – III – VII**) — только из действительного состояния progression/AutoChords;
+- такт/доля/позиция (например **1:1:000**) и **BPM** — только из валидного host playhead/transport snapshot;
+- **MIDI IN / Activity** и **Velocity 0–127** — из фактических входящих MIDI-событий.
+
+Правила достоверности:
+- PERFORMANCE остаётся read-only монитором и не генерирует/не отправляет MIDI.
+- Не выводить фиктивные BPM, PPQ, такт/долю, тональность, progression, активность или velocity. Если источник данных отсутствует, поле скрывается либо честно показывает недоступность; нулевые/примерные значения не подставлять.
+- Chord detector ограничен только реально реализованными и протестированными типами аккордов; неоднозначные или неполные наборы нот не маркировать уверенным названием.
+- Все обновления UI получать безопасным способом из MIDI/engine/host telemetry; никакой GUI-вызов, блокировка или выделение памяти в audio callback.
+
+### 3. AUTOCHORDS — компактный и расширенный уровни
+**Компактный рабочий уровень** сохраняет быстрый доступ к:
+- ON / OFF;
+- режиму **MAJOR / MINOR / CUSTOM**;
+- **KEY**;
+- **PATTERN**;
+- текущему аккорду;
+- **PREVIEW**.
+
+**Расширенный EDIT WORKSPACE** предназначен для детальной настройки:
+- chord/progression sequences;
+- chord inversions / voicings;
+- длительности аккордов и событий;
+- ритма и акцентирования;
+- способа/режима исполнения.
+
+Гармония, chord/voicing, playing style/articulation и rhythm pattern остаются независимыми осями согласно REV.17. Выбор Pattern не должен самопроизвольно менять progression, а выбор progression — подменять ритмику или guitar source.
+
+**Backend gate:** наличие этих элементов в спецификации не означает готовность генератора. Пока MIDI generation/routing, transport sync, note-off/stop и regression tests не завершены, соответствующие selectors, ON/OFF и PREVIEW остаются disabled / BACKEND PENDING с причиной. Не имитировать звучание, MIDI activity или применение выбора.
+
+### 4. FX EDIT — утверждённая функциональная композиция
+Сохранить дорогую, ясную иерархию FX EDIT:
+- список эффектов/модулей слева;
+- параметры выбранного эффекта в центральной области;
+- график обработки только при наличии реального DSP telemetry/response data;
+- крупные регуляторы с точными значениями и единицами;
+- область выбора effect presets как утверждённое направление интерфейса;
+- реальные состояния включения/отключения модулей.
+
+**Строгая инвентарная граница:** сохраняются восемь страниц/модулей, но только семь утверждённых runtime bypass controls: Compressor, EQ, Distortion, Chorus, Delay, Reverb и Cabinet IR. Для Flanger не добавлять восьмой enable/bypass toggle: его наличие в processor parameter layout не расширяет утверждённый GUI control inventory. Это ограничение имеет приоритет над общей формулировкой «включение/отключение каждого модуля» до отдельного формального изменения inventory/master contract.
+
+Effect preset browser не должен создавать фиктивные пресеты или менять звук при простом просмотре. Его точная схема данных, операции сохранения/загрузки и mapping должны быть отдельно сверены с существующим FX/APVTS/state contract. До готового backend соответствующие элементы disabled / BACKEND PENDING; новые APVTS IDs и изменения DSP не добавлять в рамках UI-only этапа.
+
+### 5. Сохранение строгих правил и уже утверждённых browser contracts
+- MASTER PROMPT REV.17 FINAL, I1–I8 и R01–R34 имеют высший приоритет; эта запись не изменяет и не ослабляет их.
+- Соблюдать точное соответствие утверждённым макетам. Первый reference задаёт layout/placement, второй — palette. SKINS меняют только разрешённое оформление, не координаты, геометрию, hit areas, bindings, функции или звук.
+- Не удалять engine capabilities; не менять APVTS IDs/semantics, control inventory, DSP, MIDI routing, sampler, SoundBank, preset semantics или realtime callback ради интерфейса.
+- Никаких декоративных, фиктивных или «для красоты» активных controls/графиков/счётчиков. Каждый active control обязан иметь stable ID, реальный callback/action, корректное состояние и тесты; иначе disabled / BACKEND PENDING с причиной.
+- Preset Browser сохраняет только режимы **BROWSER / FAVORITES / CATEGORIES** и ранее утверждённый набор controls. Factory/User остаются разными data scopes, не новыми вкладками. **Save As / Rename / Delete / Rescan** не объявляются утверждёнными browser controls: TX-PRESET-AUDIT-005 прямо оставляет их неутверждёнными.
+- STYLE и PATTERN — два самостоятельных браузера; PATTERN categories, section-first flow и восемь slots на секцию сохраняются. Видимые имена артистов/групп и чужих продуктов остаются BLOCKED по MASTER REV.17 §11/§15 до формального MAJOR-изменения; не обходить псевдонимами или логотипами.
+- Не менять canonical default skin ID/name и I7/R18. NEON STAGE остаётся утверждённым visual reference/direction, но не основанием обходить master invariant.
+- Preview остаётся неразрушающим; Apply/Select — явное подтверждение; Cancel/Back — rollback. PREV/NEXT сохраняют текущий browser scope.
+- Все поиски, индексация, preview preparation, decode и файловые операции — вне audio callback. Приоритеты: Safety → Realtime → Sound → Resources → UX.
+
+### 6. Обязательная проверка перед реализацией
+1. Сверить каждый элемент с актуальным REV.17 source tree, SKIN/control_schema.json, SKIN/CONTROL_INVENTORY_MATRIX_RU.md, APVTS registry и утверждёнными макетами.
+2. Отдельно проверить UX перехода MAIN PERFORMANCE ↔ EDIT WORKSPACE, X/CLOSE, повторное открытие, focus, resize/DPI, persistence и editor teardown.
+3. Проверить Performance Display на реальные MIDI notes/chords/velocity и host transport snapshot; подтвердить read-only поведение и keyboard non-overlap.
+4. Проверить AutoChords backend, note generation/routing, inversions, duration, rhythm, stop/note-off, host sync и отсутствие stuck/duplicate notes.
+5. Проверить FX pages, семь bypass mappings, graph data source и effect preset state mapping; Flanger не получает дополнительный bypass toggle.
+6. Провести GUI-to-function parity и regression tests; затем Windows x64 Release, полный CTest, pluginval strictness 5, package и отдельную FL Studio 20 host acceptance на точном SHA.
+
+**Граница записи:** в рамках этого addendum изменяется только документация. Ни один production source, APVTS ID/semantics, control inventory, DSP, MIDI routing, sampler, SoundBank, preset payload, CMake или workflow не изменён. Наличие требования не означает IMPLEMENTED / TESTED / BUILD VERIFIED / HOST-VERIFIED.
