@@ -182,3 +182,42 @@ Context order: **GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTER
 - Preset Browser, Pattern Browser and Sample/Library Browser remain separate workflows.
 - Existing nine rotary/APVTS IDs, seven main FX bypasses, eight FX EDIT pages, 21 theme tokens, 27 controls + sync_selector and all stable IDs/semantics remain unchanged.
 - This inventory records approved requirements only; runtime implementation and test evidence remain separately tracked.
+
+
+## 14. STYLE / PATTERN / AUTOCHORDS — ADDITIONAL CONTROL AND WINDOW INVENTORY (2026-11-14)
+
+### 14.1 Separate windows and ownership
+| Window | Owns | Must remain separate from | State invariant |
+|---|---|---|---|
+| STYLE Browser | Genre/group/artist/song/section/playing-style/articulation navigation | PATTERN Browser and Preset Browser | Independent navigation/selection; no hidden tone or pattern load |
+| PATTERN Browser | Rhythm/performance pattern categories, section slots, preview/apply | STYLE Browser and Preset Browser | Independent navigation; commits rhythm mapping only |
+| AutoChords overlay | Chord/harmony selectors and progression controls | STYLE/PATTERN selection state | Changes harmony only; never covers MIDI keyboard |
+| Preset Browser | Instrument/source/tone preset selection and explicit Load | STYLE/PATTERN browser state | Load is explicit and transactional |
+
+### 14.2 STYLE Browser inventory
+Navigation: GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE/ARTICULATION. Controls: SEARCH, FAVORITES, CATEGORIES, FILTER, SORT, PREVIOUS/NEXT (within current category/filter scope), PREVIEW, APPLY, CANCEL, SELECT. PREVIEW is non-committing; APPLY/SELECT commits style/articulation context only. It must not change Pattern, chord/harmony, guitar source or Tone Preset.
+
+### 14.3 PATTERN Browser inventory
+Approved pattern categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS. Controls: SEARCH, FAVORITES, CATEGORIES, FILTER, SORT, PREVIOUS/NEXT, PREVIEW, APPLY, CANCEL, SELECT. Six sections: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO. Each section has eight Pattern Slots (48 logical slots total); this is capacity, not a populated/playable asset count. Each slot mapping is section-scoped and independently persisted. PREVIEW never commits; APPLY commits only the selected section/slot/pattern mapping.
+
+### 14.4 Independent state dimensions
+| Dimension | Owns | Must not silently modify |
+|---|---|---|
+| CHORD / HARMONY | Chord/key/progression state | STYLE, PATTERN, source, Tone Preset |
+| ARTICULATION / PLAYING STYLE | Performance technique context | Chord, Pattern, source, Tone Preset |
+| RHYTHM PATTERN | Rhythm/performance events | Chord, STYLE, source, Tone Preset |
+| GUITAR SOURCE / INSTRUMENT | Sample/source instrument | Chord, STYLE, Pattern, Tone Preset |
+| TONE PRESET | Tone/amp/FX profile | Chord, STYLE, Pattern, source identity |
+
+Unsupported combinations must be shown as unavailable/degraded; no silent substitute or destructive cross-selector update.
+
+### 14.5 AutoChords and MIDI keyboard geometry
+Preserve ON/OFF, Major/Minor/Custom, Key, Pattern, Current Chord, progression editor, inversions/voicings, duration, rhythm, performance method, Sync to Tempo, Smart Transpose, Preview and Reset as specified in the product spec. Selectors remain independent from STYLE/PATTERN/source/tone. The AutoChords overlay must never cover the MIDI keyboard or hit-test area. Preview uses the real audio/MIDI path and is non-committing; Reset changes only AutoChords state. Controls without runtime backend remain DISABLED/PENDING.
+
+### 14.6 DAW/MIDI acceptance
+Host tempo/transport sync, deterministic note lifecycle and no stuck notes, duplicate triggers, orphan note-offs or timing jumps are required through start/stop/seek/loop/tempo changes, section/pattern/chord changes, browser switching, preview/cancel, source/preset change, state recall and plugin deactivation. These rows are requirements; do not mark TESTED without exact-SHA host/automated evidence.
+
+### 14.7 Visual baseline lock
+First supplied interface reference = authoritative appearance/layout/dimensions/control placement. 02 INTERFACE NEON STAGE AUTOCHORDS = palette only. Skins may change visual styling only and must not alter control inventory, positions, dimensions, functions, bindings, APVTS semantics or sound. No approved control/window may be merged, removed, hidden, replaced or simplified by an agent or generator.
+
+**Status:** APPROVED REQUIREMENTS / RUNTIME IMPLEMENTATION AND HOST VALIDATION TRACKED SEPARATELY.
