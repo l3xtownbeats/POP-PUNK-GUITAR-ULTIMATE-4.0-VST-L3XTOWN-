@@ -47,7 +47,7 @@ public:
         juce::Colour text { 0xffffffff };
         juce::Colour textSecondary { 0xffd9e8f7 };
         juce::Colour accent { 0xff66ffff };
-        juce::Colour accentSecondary { 0xffb8ffff };
+        juce::Colour accentSecondary { 0xffff3ea5 };
         juce::Colour border { 0xff52718b };
         juce::Colour focus { 0xffb8d9f0 };
         bool usedFallback = true;
