@@ -3223,3 +3223,17 @@ This commit is a design specification only. It does not claim that the live edit
 **Safety boundary:** no APVTS IDs/attachments, parameter meanings, DSP, sampler, audio callback or MIDI routing were changed. controls.*.grid is still metadata and does not yet drive JUCE bounds. Pixel-level match against seven references, DPI visual acceptance and FL Studio 20 host acceptance remain pending.
 
 **Validation:** source edits committed; compile/CTest/skin G1–G4/pluginval/FL Studio acceptance must be read from fresh CI results for the resulting commit SHA. No test is declared PASS by this journal entry alone.
+
+## 2026-11-15 — NEON STAGE shared hardware-control rendering
+
+**Files:** `Source/PluginEditor.h`, `Source/PluginEditor.cpp`  
+**Implementation commits:** `44bebcf02fc11c9a8b8b456955a17dacce744145`, `f2edb4439c01b2e8cf62d600216d815e62641de1`, `31826711d369296d2539bddc3dc4b66b445c540e`.  
+**Status:** SOURCE CHANGE COMMITTED / EXACT-SHA CI IN PROGRESS.
+
+Implemented the shared NEON STAGE hardware-control rendering layer:
+- rotary controls now use the 21-token palette for machined bezel, shadow, graduated tick marks, inactive/active arc, brushed-metal face, pointer and center cap;
+- linear sliders now use a matching graphite rail, cyan value rail, metallic thumb and focus/readability treatment, for horizontal and vertical orientations;
+- no hard-coded product color was introduced; rendering reads ThemeManager semantic tokens;
+- no component bounds, APVTS attachments/IDs, parameter ranges, processor, DSP, sampler, MIDI, preset state or window ownership were changed.
+
+Exact-HEAD workflow evidence is pending for commit `31826711d369296d2539bddc3dc4b66b445c540e`: NEON STAGE skin workflow run `43636447777` and Windows VST3 workflow run `43636447894`. The earlier skin workflow run `43636437432` belongs to the immediately preceding source commit `f2edb4439c01b2e8cf62d600216d815e62641de1` and is not evidence for the final corrected commit. No build, CTest, pluginval, FL Studio 20 or visual pixel-parity PASS is claimed until the exact-HEAD results are read.
