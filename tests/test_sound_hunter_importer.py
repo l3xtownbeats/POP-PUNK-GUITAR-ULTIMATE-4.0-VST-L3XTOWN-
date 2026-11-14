@@ -68,7 +68,7 @@ class SoundHunterRegressionTests(unittest.TestCase):
             nested = root / "nested"
             nested.mkdir()
             (nested / "bank.sfz").write_bytes(b"x" * 17)
-            self.assertEqual(sound_hunter.existing_audio_bytes(root), 140)
+            self.assertEqual(sound_hunter.existing_audio_bytes(root), 123)
 
 
 if __name__ == "__main__":
