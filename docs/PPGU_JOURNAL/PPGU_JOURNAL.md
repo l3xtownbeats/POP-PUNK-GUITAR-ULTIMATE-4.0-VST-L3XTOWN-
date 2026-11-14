@@ -306,3 +306,18 @@ Current upstream documentation/catalog identifies:
 - Run 43584725787: all six tests PASS again; acquisition again stopped before any sample writes because the substring selector still matched two wav.zip assets (archive plus checksum sidecar). No assets were accepted, and no existing Samples content was modified.
 - Hardened release asset matching to support exact filename suffix matching (e.g. .wav.zip) so checksum sidecars are excluded. Updated Meta catalog selectors accordingly.
 - Next run will verify actual archive manifests/licenses and hashes before admitting samples. No successful download/import/artifact is claimed yet.
+
+
+## 2026-11-14 — Mandatory preset-to-Samples binding and audible-output validation (user-approved)
+
+Every existing and future factory preset must be bound to real, available guitar sample assets in the managed PPGU Samples bank or to an explicitly verified built-in synthesis source. A preset must never be shipped as apparently selectable/playable if its required guitar sample is missing, its asset path is broken, its mapping is empty, or the selected asset is the wrong kind of source for the promised sound.
+
+Required preset validation before acceptance:
+- Resolve every preset's instrument/sample references to actual indexed assets; verify path/ID and SHA-256/integrity, file readability, and supported format.
+- Validate SFZ/WAV mapping coverage for playable MIDI notes, root keys, key ranges, velocity layers, channels, loops and articulations as applicable. Detect gaps that would cause silence, missing notes, or unexpected sample switching.
+- Verify that the intended guitar sound is genuinely present: DI stays DI and routes through its intended amp/cab/effects chain; clean/processed/acoustic sources are not silently substituted for one another; one-shot material is not used as a sustained multisample instrument unless the preset explicitly declares and implements one-shot behavior.
+- Confirm a note-on on the expected keyboard range produces audible output, note-off/release behaves correctly, velocity layers/articulations resolve, and no silent/missing-sample state occurs. Include automated asset-resolution/mapping checks plus audio render or runtime playback validation where possible.
+- Compare the actual resulting sound with the preset's declared style/artist/role and its intended signal chain. If a sample source does not match, do not force it into that preset: select a better matching bank asset or keep the preset disabled/unreleased until its sound source is corrected.
+- A preset cannot be marked complete merely because its name, UI controls, or FX chain exists. Record asset IDs, source/provenance, mapping and validation evidence in the preset registry/test report.
+
+This requirement applies retroactively to every already-created/adjusted preset and prospectively to all new presets. Preserve original Samples assets; never delete or overwrite them to repair a preset. This journal entry records the approved requirement; the complete preset-by-preset audit and runtime/audio validation remain work to perform, not a claim that they have already passed.
