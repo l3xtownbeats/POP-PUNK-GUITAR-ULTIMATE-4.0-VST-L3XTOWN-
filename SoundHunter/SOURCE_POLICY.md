@@ -269,3 +269,20 @@ For a supplied URL, the engine/tooling should, where technically and legally sup
 
 The UI should provide a clearly separate URL input/action (for example, **INSPECT URL** and then **DOWNLOAD SELECTED**) and show progress and cancellation. URL inspection/download, local folder scanning and global search are three independent manually initiated operations. All remain OFF until the user deliberately starts the corresponding action. This feature is a product requirement, not a claim that URL inspection, download, or scanning is already implemented or tested.
 
+## User-approved unified Sound Hunter feature and single naming
+
+The user wants all sound acquisition and discovery capabilities presented as one unified feature named **SOUND HUNTER**, rather than as several separately branded engines or top-level features.
+
+Implement one Sound Hunter interface, one shared discovery/analysis pipeline, one unified asset registry and one consistent results view. Within Sound Hunter, the user manually chooses the source/mode:
+- **LOCAL** — inspect the local `Samples/Import Guitar Samples/` intake folder.
+- **GLOBAL** — search the internet for guitar sounds and libraries.
+- **URL** — inspect user-provided URLs and optionally download user-selected accessible files.
+
+These are source modes of the same Sound Hunter feature, not separate engines. All modes feed the same validation, metadata extraction, audio analysis, classification, deduplication, registry and preset-suitability pipeline wherever applicable. A URL inspection/download can stage files for the local pipeline; it must not silently trigger another mode.
+
+Keep **AUTO DISCOVER** as the name of the user-invoked discovery/analyze action or command within Sound Hunter, not as a separate competing product/engine. The interface may present one main **SOUND HUNTER** panel with a source selector and a clearly visible manual **START / AUTO DISCOVER** action. The selected source determines what is inspected. For URL mode, provide URL entry and explicit inspect/download-selected steps.
+
+All source modes remain manually initiated and independently cancellable. Default state is idle/off. No startup scan, scheduled task, background global search, implicit network access from LOCAL mode, or automatic mode switching. Display selected source, progress, results and cancellation in the same unified interface.
+
+This naming and UX consolidation is approved product direction. It does not claim that the unified UI or engine pipeline is implemented or tested.
+
