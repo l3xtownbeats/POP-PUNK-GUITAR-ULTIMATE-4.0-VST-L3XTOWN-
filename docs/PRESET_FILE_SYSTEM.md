@@ -2,13 +2,11 @@
 
 Status: approved product specification; implementation must be wired into the VST3 before these files are advertised as loadable.
 
-## User-facing design
+## User-facing design — reconciled 2026-11-14
 
-The plugin has a Serum/Nexus-style preset browser with two main modes:
-- Melody
-- Pattern
+The PRESET BROWSER is the separate Tone / Factory / User preset browser. MELODY and PATTERN remain preset/data classifications and the approved 150 + 150 factory-definition target; they do not merge the separate STYLE and PATTERN discovery browsers into one preset-browser screen.
 
-Browser features: folder/category navigation, artist/style tags, text search, favorites, previous/next preset, double-click load, save-as, rename, delete user presets, import/export banks, and rescan folders. Factory content is read-only; user content is writable.
+The browser supports the approved logical actions: category navigation, search, favorites, previous/next within the current result set, isolated preview where implemented, explicit SELECT/LOAD, Save As, rename, delete user presets, import/export banks and rescan. A click selects only; double-click is not an implicit load. Factory content is read-only; user content is writable. These actions must map to the first approved mockup's exact control inventory and positions; no additional visible controls or screens are authorized by this file.
 
 ## File and folder layout
 
@@ -19,23 +17,7 @@ Default Windows user-data root:
 Presets/
   Factory/
     Melody/
-      Blink-182/
-      Sum 41/
-      Simple Plan/
-      New Found Glory/
-      Good Charlotte/
-      Mest/
-      Angels & Airwaves/
-      The All-American Rejects/
-      MGK/
-      Avril Lavigne/
-      The Offspring/
-      Green Day/
-      Bowling for Soup/
-      Sugarcult/
-      All Time Low/
     Pattern/
-      (same artist/style folders)
   User/
     Melody/
     Pattern/
@@ -43,6 +25,8 @@ Presets/
 Samples/
   (separately installed/licensed sample libraries)
 ```
+
+Factory preset files may carry descriptive genre/style and compatibility metadata. The tree above is a storage layout only, not a visible named artist/band catalog or authorization to expose protected artist/song identities. GROUP/ARTIST/SONG levels remain subject to the current MASTER PROMPT restrictions; do not publish or populate a named public catalog while that gate is BLOCKED. STYLE and PATTERN browsers remain separate from PRESET BROWSER.
 
 Factory presets ship with the plugin package or a separately installable factory content pack. User presets and banks live under AppData and must never be overwritten by plugin updates.
 
@@ -92,7 +76,7 @@ Pattern-specific data:
 ## Browser behavior
 
 - Tabs/filters: All, Melody, Pattern, Factory, User, Favorites.
-- Search matches preset name, artist/style tags and description.
+- Search matches preset name, approved non-protected descriptive tags and description; do not expose a blocked named artist/band/song catalog.
 - Artist/category folders are navigable; sorting supports name and recently used.
 - Single-click selects/highlights only; it must not change the active sound.
 - Preview is a separate, isolated audition and must not alter the active preset or DAW project state.
