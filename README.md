@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — NEON STAGE visual cover" width="100%">
+<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — refreshed NEON STAGE interface concept" width="100%">
 
 # POP PUNK GUITAR ULTIMATE 4.0
 ### L3XTOWN AUDIO LAB · WINDOWS x64 · VST3 · JUCE · C++20
@@ -15,6 +15,8 @@
 ![Status](https://img.shields.io/badge/STATUS-IN%20ACTIVE%20DEVELOPMENT-d97706?style=for-the-badge)
 
 **PLAY. CREATE. ROCK.**
+
+> **NEON STAGE visual refresh:** the repository hero now shows the graphite studio-console direction with acid-lime accents, preset browser, MELODY/PATTERN modes, nine parameter controls, seven FX bypasses and MIDI keyboard. This is concept artwork, not a runtime screenshot or proof of host acceptance.
 
 </div>
 
