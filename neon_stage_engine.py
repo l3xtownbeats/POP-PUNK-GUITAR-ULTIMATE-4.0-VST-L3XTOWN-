@@ -332,8 +332,9 @@ def step_report():
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         try:
             with Image.open(p) as im:
-                if im.format!="PNG" or im.mode!="P" or im.size!=expected:
-                    errors.append(f"{rel}: expected indexed PNG-8 {expected}, got {im.format}/{im.mode}/{im.size}")
+                expected_mode="P" if rel in ("assets/preview.png","assets/hero.png") else "RGBA"
+                if im.format!="PNG" or im.mode!=expected_mode or im.size!=expected:
+                    errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
         except Exception as exc: errors.append(f"{rel}: decode failed: {exc}")
     for rel in ("assets/texture.svg","assets/bezel.svg","assets/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
