@@ -2191,3 +2191,16 @@ PUNK GROUP нельзя объявлять реализованным тольк
 10. После каждого этапа — exact-SHA Windows Release, полный CTest, pluginval, package audit; ручной FL Studio 20 check и CPU/RAM/audio profiling вести отдельными результатами.
 
 **Итог:** эта запись — единый consolidated requirements + omissions register, который должен использоваться как checklist при каждой дальнейшей работе. Ничего из перечисленных требований нельзя молча считать необязательным, выполненным или отменённым. Новые решения добавлять ниже отдельными датированными append-only записями.
+
+
+## 2026-11-14 — GOVERNANCE CONTROL CENTER ADOPTED (TX-GOV-001)
+
+User requires continuous project-wide tracking, not only CODE/Info journal entries: branches, task items, proposals, variants, approvals, corrections, commits/pushes, tests and every discrete work step. Adopted `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md` as the permanent operating protocol and cross-branch index.
+
+Canonical line preflight: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17` @ `d5c811233725925ea32f10815c9efae6eda2e017`. Active reconciliation work branch observed @ `ff5c8da1ac6f9dd3d6fb0467a2a037b284294a29`; compare against canonical has merge-base `f135b0f5c9609286086772450f69d287d8ff71c5`, 5 commits ahead / 2 behind. Do not merge wholesale. Selectively reconcile user-ratified baseline and PATTERN model only after path-level review. Branch inventory snapshot and all workflow gates are in the Control Center.
+
+Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant proposals as PROPOSED until explicit approval; record user decisions as RATIFIED; log each discrete implementation/commit/push; exact-SHA verification; append Info/CODE in the same production transaction; read back remote refs/files; update task/branch/decision/test ledgers and handoff state. Missing evidence means BLOCKED/JOURNAL INCOMPLETE, not assumed success.
+
+**Capability boundary:** real-time logging is performed during active repository work and before/after each discrete step. No background GitHub watcher/daemon is running between conversations; do not claim otherwise.
+
+**Status:** GOVERNANCE PROTOCOL DOCUMENTED; canonical branch update pending commit/readback; no production code changed by this entry.

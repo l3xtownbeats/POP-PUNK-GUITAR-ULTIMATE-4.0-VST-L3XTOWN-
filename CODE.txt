@@ -660,3 +660,14 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Key approved identities:** SKIN-1 NEON STAGE (default/startup/fallback); SKIN-2 SOUND FORGE; SKIN-3 BLACKOUT VINTAGE; SKIN-4 onward sequential, no renumbering/reuse. SIGNAL FORGE remains the engineering standard and must not be conflated with the NEON STAGE or SOUND FORGE theme identities.
 **Audit gaps retained:** section-first Pattern UX, AutoChords generation, PUNK GROUP completion, O1 OverlayManager, S1 SecureSkinImport, Skin Gallery Preview/Apply/Back/Favorites/enlarged preview/keyboard navigation, full NEON STAGE DEFAULT UI and additional-window parity, Sound Hunter production pipeline, playable preset counts, and measured performance.
 **Status:** DOCUMENTATION CONSOLIDATED / SOURCE IMPLEMENTATION NOT CHANGED / IMPLEMENTATION MATRIX REQUIRED. This entry records requirements; it does not upgrade any feature status.
+
+
+## 2026-11-14 — TX-GOV-001: permanent development transaction protocol
+
+Added `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md` as mandatory process authority for all future PPGU work. It defines preflight, proposal/approval, implementation, exact-SHA verification, closeout, append-only ledgers, branch preservation and handoff.
+
+Preflight observed canonical REV.17 HEAD `d5c811233725925ea32f10815c9efae6eda2e017` and work branch HEAD `ff5c8da1ac6f9dd3d6fb0467a2a037b284294a29`. They diverge from merge-base `f135b0f5c9609286086772450f69d287d8ff71c5`: work branch +5 / -2 relative to canonical. Do not merge wholesale; selective path-level reconciliation is required. Repository branch inventory snapshot recorded in Control Center.
+
+**Operating requirement:** T0 preflight before each task; each assistant proposal marked PROPOSED until explicit approval; each user approval/revision logged; each discrete implementation and commit/push recorded; tests tied to exact SHA; readback of remote refs and journals; INFO and CODE updated together for production transactions. No background watcher is claimed.
+
+**Status:** GOVERNANCE PROTOCOL / DOCUMENTATION ONLY. No production source changed. Tests/CI not run for this documentation update.
