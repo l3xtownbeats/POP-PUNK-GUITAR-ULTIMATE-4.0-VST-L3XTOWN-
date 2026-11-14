@@ -79,3 +79,16 @@
 **Критерий приёмки:** все интегрированные и собственные компоненты должны сохранять утверждённую функциональность и совместимость, не нарушать ANGELA Engine NON-REGRESSION и демонстрировать приемлемую измеренную нагрузку в целевых и стресс-сценариях. Конкретные численные бюджеты CPU/RAM/latency следует установить после измерения целевой системы, не придумывая неподтверждённые показатели.
 
 **Статус:** требование утверждено и зафиксировано. Запись не подтверждает, что оптимизация, интеграция или измерения уже выполнены.
+
+
+## 2026-11-14 — SOUND HUNTER DOWNLOAD RUN #2 FAILED: ROOT CAUSE VERIFIED
+
+**Run:** GitHub Actions run #2, ID `43573746837`.
+**Workflow:** `.github/workflows/sound-hunter-real-guitar.yml`.
+**Source commit:** `ebbe772d53fc076dbaa4fe1413a56f13c5f4bcb9`.
+**Result:** FAILED; no artifact was produced. Steps 1–3 succeeded; the download/import step failed; packaging and artifact upload were skipped.
+**Exact error:** `Refusing path collision: .../Samples/SoundHunterImports/<run-id>/meta-open-sound-steel/release`.
+**Verified cause:** repository audio import already created a `release/` directory, then the separate Meta release-asset extraction attempted to use the same destination path. The importer's collision guard correctly stopped rather than overwrite data.
+**Second confirmed policy defect:** the importer initializes its 25 GB counter by summing every file in the whole `Samples` tree. This incorrectly allows pre-existing/manual sample libraries to consume the Sound Hunter process limit, contrary to the approved rule that 25 GB applies only to the current Sound Hunter run. Manual imports remain without an artificial size cap.
+**Data safety:** this failed run produced no artifact and did not alter the repository's sample assets. Its runner workspace was ephemeral. No successful download is claimed.
+**Planned corrective scope:** (1) place release archive content in a distinct `release_assets/` subdirectory to avoid collision with repository content; (2) count only bytes imported during the current Sound Hunter run while retaining SHA-256 deduplication against existing samples; (3) add/execute focused tests and re-run workflow. No approved function or source library is to be removed or overwritten.
