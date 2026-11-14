@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 102,
-  "defaultSkin": "skin-052",
+  "defaultSkin": "neon-stage-default-skin-1",
   "selector": "SKIN",
-  "status": "NEON-STAGE-is-the-single-unified-interface-skin-theme-shell",
+  "status": "NEON-STAGE-DEFAULT-SKIN-1-is-canonical-default-id",
   "themes": [
     {
       "id": "skin-01",
@@ -466,7 +466,7 @@
       "hero": "Skin_51/assets/hero.webp"
     },
     {
-      "id": "skin-052",
+      "id": "neon-stage-default-skin-1",
       "index": 52,
       "name": "NEON STAGE",
       "family": "neon_basement",
