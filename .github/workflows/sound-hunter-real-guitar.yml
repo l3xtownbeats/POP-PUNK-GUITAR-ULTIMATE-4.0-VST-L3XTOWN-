@@ -1,6 +1,14 @@
 name: Sound Hunter — Real Guitar Samples
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - soundhunter-unbounded-library
+    paths:
+      - '.github/workflows/sound-hunter-real-guitar.yml'
+      - 'SoundHunter/real_guitar_sources.json'
+      - 'SoundHunter/sound_hunter_real_guitars.py'
+      - 'tests/test_sound_hunter_importer.py'
 permissions:
   contents: read
 concurrency:
