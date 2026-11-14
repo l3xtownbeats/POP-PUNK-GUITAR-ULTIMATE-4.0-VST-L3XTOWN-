@@ -2642,3 +2642,22 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 Следующий безопасный source этап: расширить registry schema с no-loss active/order semantics и тестами на сохранение 102 historical entries; затем в отдельном commit обновить NEON STAGE Skin_053 manifest/default/fallback и gallery ordering, не затрагивая audio/APVTS/MIDI. После этого создавать SKIN-2…SKIN-16 с новыми IDs и проверять каждый pack G1–G4.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 v2.0 SKIN-1 DEFAULT IDENTITY PATCH
+==============================================================================
+
+**Статус:** SOURCE PATCH COMMITTED / VALIDATION PENDING.
+
+На ветке `work/ui-theme-rev18-v2-spec-sync` выполнен ограниченный визуальный патч:
+- `Source/UI/ThemeManager.h`: fallback Palette теперь имеет `id=skin-053`, `name=NEON STAGE DEFAULT`; 21 встроенный token seed синхронизирован с палитрой существующего `SKIN/Skin_053/theme.json`.
+- `SKIN/Skin_053/theme.json`: display name приведён к `NEON STAGE DEFAULT`; resource ID `skin-053` и historical index `53` сохранены.
+- `SKIN/theme_manifest.json`: default pointer установлен на `skin-053`; добавлены active flags для всех 102 записей без удаления/перенумерации: `skin-053` активен с `activeOrdinal=1`, остальные 101 исторические записи inactive; добавлены `activeThemeCount=1`, `releaseTargetActiveThemeCount=16`, `migrationStatus=REV18_TRANSITIONAL_NO_LOSS`.
+- `validate_skin_manifests.py`: ожидаемый default pointer изменён на `skin-053`.
+
+Все 102 registry entries сохранены; все historical IDs, indices, paths и папки оставлены без перенумерации. Это переходный этап: SKIN-2…SKIN-16 ещё не созданы и не активированы. Полная runtime gallery sorting / selection persistence migration не заявляется как выполненная. Ветвь не трогает APVTS IDs, processor, DSP, sampler, MIDI или audio path.
+
+**Проверки:** source diff/CI exact-SHA, G1–G4, PNG CRC, runtime fallback/reset, gallery selection, resize/HiDPI, Windows Release, CTest, pluginval и FL Studio 20 — PENDING / UNVERIFIED до фактического прогона.
+
+==============================================================================
