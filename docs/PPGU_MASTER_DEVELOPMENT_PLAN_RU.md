@@ -149,7 +149,7 @@ SoundBank — гитарный: не маркировать drum-only, bass-only
 
 ### 6.1 Масштабирование и наполнение
 - Нет искусственного потолка по числу пресетов, артистов, групп, жанров, стилей, one-shots, loops, mappings и библиотек.
-- не менее 300 уникальных READY-пресетов MELODY + PATTERN суммарно; 500–600 — расширенная цель (stretch goal); Travis Barker 82 ведётся отдельной категорией без дублей.
+- не менее 300 уникальных READY-пресетов MELODY + PATTERN суммарно; 500–600 — расширенная цель (stretch goal); Travis Barker 82 распределяются по соответствующим артистическим/групповым категориям и входят в общий счёт без повторного подсчёта.
 - UI/browser должен показывать фактическое число ресурсов и использовать virtualized lists/lazy loading.
 - Пользовательские библиотеки могут подключаться локально в рамках лицензий, даже если их исходные файлы нельзя включить в factory bundle.
 
@@ -203,7 +203,7 @@ SoundBank — гитарный: не маркировать drum-only, bass-only
 ## 8. FACTORY PRESET SYSTEM
 
 ### 8.1 Общая цель
-- Обязательный релизный минимум: не менее 300 уникальных READY-пресетов MELODY + PATTERN; расширенная цель — 500–600; Travis Barker 82 — отдельная категория.
+- Обязательный релизный минимум: не менее 300 уникальных READY-пресетов MELODY + PATTERN; расширенная цель — 500–600; Travis Barker 82 — распределённый по соответствующим артистам/альбомам набор guitar-пресетов внутри общих категорий.
 - Далее каталог может расширяться без искусственного верхнего лимита.
 - Каждый пресет обязан быть реально загружаемым, слышимым, правильно маппированным и звуково отличимым.
 - Название/описание/FX labels не доказывают готовность. Нужны source IDs, sample map, signal chain, articulation behavior и audio evidence.
@@ -430,7 +430,7 @@ PSC пока является проектной спецификацией, а 
 
 **Phase E — Sound design and factory presets**
 20. Complete 10–15 effect DSP modules plus amp/cab/IR routing.
-21. Build at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets as a hard release minimum; expand toward 500–600 only as a stretch goal; track Travis Barker 82 separately without duplicates or double counting.
+21. Build at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets as a hard release minimum; expand toward 500–600 only as a stretch goal; include the 82 Travis Barker-produced-album guitar presets within the corresponding artist/band categories and count each only once.
 22. Create the 21 approved group/style families.
 23. Create six album-era families for Blink-182 and Sum 41.
 24. Render/A-B/validate every preset and record exact source/chain/evidence.
@@ -499,7 +499,7 @@ Mandatory album eras: *We Don't Need to Whisper* (2006), *I-Empire* (2007), *Lif
 
 Research public interviews, gear/effect-chain breakdowns, tone recipes and free preset examples. Record confirmed facts separately from tonal interpretation. Public information may inform independently authored DSP recipes. Third-party preset files, IRs and samples may only enter the commercial factory bundle where the specific license expressly permits redistribution; otherwise independently reproduce the general tone concept without copying protected assets, code, riffs or recordings.
 
-**Preset count correction:** the approved hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY+PATTERN presets total; 500–600 remains a stretch goal after the minimum is met. Travis Barker 82 is a separate category of 82 unique complete presets; do not merge, duplicate or double-count it. The old 300-entry catalogue remains a legacy audit baseline. Counts never replace functional and audio validation.
+**Preset count correction:** the approved hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY+PATTERN presets total; 500–600 remains a stretch goal after the minimum is met. The 82 Travis Barker-produced-album guitar presets are distributed within the corresponding artist/band categories and counted once in the overall catalogue; they are not a standalone Travis Barker category. The old 300-entry catalogue remains a legacy audit baseline. Counts never replace functional and audio validation.
 
 Research evidence includes Ernie Ball String Theory (resonant-note approach and echo in A&A), Guitar World interview on *I-Empire* (chiming upper-frequency parts, compression/delay/flanger/stereo echo), and Guitar.com/GRAMMY interviews on *Lifeforms* (broader/rawer guitar palette and gear context). Exact track-specific chains remain subject to further research. No implementation or audio validation is claimed by this scope update.
 
@@ -521,7 +521,7 @@ Research evidence includes Ernie Ball String Theory (resonant-note approach and 
 
 Каталог строится с учётом всех утверждённых групп и artist-inspired профилей, жанров и поджанров, акустических/электрических вариантов, чистых/перегруженных характеров, а также музыкальных ролей и частей песни. Отдельно планировать пригодные для INTRO, VERSE, PRE-CHORUS, CHORUS, POST-CHORUS, BRIDGE, BREAKDOWN, MAIN RIFF, LEAD/HOOK, ARPEGGIO/PICKING, FILLS/TRANSITIONS и OUTRO исполнения/тембры, где это музыкально уместно. Это не означает механически размножать один пресет по названиям секций: варианты засчитываются отдельно только при реальном различии звучания, партии/исполнения, артикуляции или назначения и самостоятельной проверке.
 
-Предыдущий расширенный ориентир 500–600 сохраняется как **stretch goal / цель расширения**, но не заменяет и не повышает обязательный релизный минимум: сначала обеспечить минимум 300 качественных READY-пресетов; далее расширять каталог до 500–600 только при сохранении всех аудиокритериев. Travis Barker 82 остаётся отдельной категорией из 82 уникальных полных пресетов и ведётся отдельно от основного счёта, без дублей и двойного подсчёта. Для каждого пресета вести учёт: профиль/группа, жанр/поджанр, MELODY или PATTERN, акустика/электро, характер/усиление, музыкальная роль/секция песни, sample/source ID, лицензия, артикуляции, эффекты, статус реализации и аудиотеста.
+Предыдущий расширенный ориентир 500–600 сохраняется как **stretch goal / цель расширения**, но не заменяет и не повышает обязательный релизный минимум: сначала обеспечить минимум 300 качественных READY-пресетов; далее расширять каталог до 500–600 только при сохранении всех аудиокритериев. 82 пресета по альбомам с подтверждённым участием Travis Barker распределяются по соответствующим артистическим/групповым категориям и входят в общий счёт один раз; отдельный раздел Travis Barker не создаётся. Для каждого пресета вести учёт: профиль/группа, жанр/поджанр, MELODY или PATTERN, акустика/электро, характер/усиление, музыкальная роль/секция песни, sample/source ID, лицензия, артикуляции, эффекты, статус реализации и аудиотеста.
 
 
 
@@ -535,3 +535,12 @@ Research evidence includes Ernie Ball String Theory (resonant-note approach and 
 3. **FX REFINEMENT:** исходная гитара уже звучит хорошо и близко к цели, но дополнительная обработка позволяет ещё точнее приблизить её к задуманному тону — такая обработка разрешена и приветствуется, если результат становится музыкально убедительнее.
 
 Для уже обработанного/усиленного источника оценивать его реальное звучание и не дублировать автоматически встроенный distortion, ambience или modulation. Но не запрещать дополнительную обработку, если она обоснованно нужна для целевого тона. Сохранять понятные настройки и возможность отключения/редактирования FX, если это предусмотрено архитектурой пресета. Оптимизация CPU выполняется после достижения требуемого качества: выбирать наиболее эффективную реализацию без слышимого ухудшения, а не отказываться от необходимой обработки. Критерий приёмки — реалистичное, дорогое и музыкально верное звучание без пластикового оттенка.
+
+
+## Уточнение Travis Barker 82: это альбомные/артистические guitar-пресеты внутри соответствующих групп
+
+**Новое прямое уточнение пользователя: APPROVED; заменяет прежнюю трактовку отдельной категории Travis Barker.** Число **82** обозначает набор уникальных пресетов, вдохновлённых гитарным звучанием и гитарными партиями на альбомах других исполнителей/групп, которые Travis Barker продюсировал или в производстве которых он участвовал в подтверждённой роли. Это НЕ отдельный standalone-раздел «гитара Travis Barker» и НЕ только пресеты его личного артистического звучания. Эти 82 пресета распределяются по соответствующим профилям групп/исполнителей и находятся в обычной структуре Pop Punk / связанных жанров рядом с остальными пресетами этих артистов.
+
+Для каждого подходящего альбома/артиста создавать уместные guitar presets и song-part вариации: лидирующая гитара/lead hook в припеве, основная ритм-гитара, palm-muted verse rhythm, открытые припевные power chords, pre-chorus build, bridge/breakdown, арпеджио/пикинг, fills/transitions и другие партии, если они действительно присутствуют в музыкальном языке соответствующего релиза. Разделять MELODY и PATTERN по их фактическому назначению. Не приписывать Travis Barker конкретные гитарные решения без источников: подтверждать его продюсерский/со-продюсерский кредит для альбома и отдельно исследовать гитарное звучание/аранжировки; ясно маркировать подтверждённые факты и тональную интерпретацию. Не копировать конкретные риффы, песни, stems, master recordings или защищённые пресеты.
+
+**Учёт:** 82 — целевой объём уникальных пресетов, распределённых по соответствующим артистам/группам и их жанровым профилям; они входят в общий каталог и засчитываются в обязательный минимум 300 только один раз каждый. Не создавать для них отдельную верхнеуровневую категорию Travis Barker и не считать их повторно сверх общего количества. При этом сохранять внутренний тег/метаданные происхождения «Travis Barker-produced album reference» для поиска, аудита и проверки источников. Альбомы с неподтверждённым участием не включать в эту подборку до проверки достоверных production credits.
