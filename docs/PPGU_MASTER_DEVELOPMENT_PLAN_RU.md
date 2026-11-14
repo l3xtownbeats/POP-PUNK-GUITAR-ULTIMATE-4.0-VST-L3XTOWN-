@@ -149,16 +149,16 @@ Samples — гитарный: не маркировать drum-only, bass-only, 
 
 ### 6.1 Масштабирование и наполнение
 - Нет искусственного потолка по числу пресетов, артистов, групп, жанров, стилей, one-shots, loops, mappings и библиотек.
-- не менее 300 уникальных READY-пресетов MELODY + PATTERN суммарно; 500–600 — расширенная цель (stretch goal); Travis Barker 82 распределяются по соответствующим артистическим/групповым категориям и входят в общий счёт без повторного подсчёта.
+- не менее 500 уникальных READY-пресетов MELODY и отдельно 500 READY-пресетов PATTERN (1,000 total); 82 Travis Barker-produced-album references распределяются по соответствующим artist/band категориям и учитываются один раз.
 - UI/browser должен показывать фактическое число ресурсов и использовать virtualized lists/lazy loading.
 - Пользовательские библиотеки могут подключаться локально в рамках лицензий, даже если их исходные файлы нельзя включить в factory bundle.
 
 ### 6.2 Ёмкость и сохранность — обязательные правила
-- Managed `Samples` имеет общий жёсткий предел **40,000,000,000 bytes (40 GB decimal)**.
-- Старое ограничение 25 GB на один запуск Sound Hunter снято; нового per-run cap нет.
+- Managed `Samples` не имеет искусственного ограничения размера; реальные ограничения диска/CI/передачи сообщаются отдельно и не превращаются в лимит библиотеки.
+- Sound Hunter не имеет per-run cap; все уникальные разрешённые и проверенные активы могут добавляться без искусственного потолка.
 - Manual Import не получает отдельного искусственного 25 GB per-run cap; реальная нехватка дискового пространства сообщается фактически.
-- Утверждённая цель установленной factory guitar library — **25–30 GB фактических аудиоактивов**; это целевой размер factory package, а не отдельный лимит managed Samples. Package overhead, metadata и user content учитываются отдельно.
-- 40 GB ceiling managed Samples всегда имеет приоритет как физический предел размещения; если добавление/конверсия превысит его — остановиться до записи и сообщить о ёмкости, никогда не освобождать место удалением старых ресурсов.
+- Целевой размер SAMPLES не ограничен. GitHub/artifact/transfer ограничения обходятся разделением package на части с SHA-256 и проверкой восстановления; это не ограничивает объём библиотеки.
+- Никогда не удалять/перезаписывать старые ресурсы ради освобождения места. При фактическом исчерпании диска/квоты остановить текущую операцию безопасно и продолжить в другом пакете/запуске.
 - Всё успешно помещённое в managed Samples сохраняется постоянно: не удалять, не перемещать, не переименовывать, не перезаписывать, не чистить и не заменять. Новые версии/конверсии — только в новые уникальные пути.
 - Перед скачиванием/импортом/конверсией инвентаризировать текущие файлы и SHA-256; exact duplicates повторно не загружать.
 - Не использовать пустые файлы, padding, дубли или искусственное перекодирование для достижения target size.
@@ -203,7 +203,7 @@ Samples — гитарный: не маркировать drum-only, bass-only, 
 ## 8. FACTORY PRESET SYSTEM
 
 ### 8.1 Общая цель
-- Обязательный релизный минимум: не менее 300 уникальных READY-пресетов MELODY + PATTERN; расширенная цель — 500–600; Travis Barker 82 — распределённый по соответствующим артистам/альбомам набор guitar-пресетов внутри общих категорий.
+- Обязательный релизный минимум REV.18: не менее 500 READY MELODY и 500 READY PATTERN (1,000 total). Travis Barker 82 входит в эти числа и учитывается один раз.
 - Далее каталог может расширяться без искусственного верхнего лимита.
 - Каждый пресет обязан быть реально загружаемым, слышимым, правильно маппированным и звуково отличимым.
 - Название/описание/FX labels не доказывают готовность. Нужны source IDs, sample map, signal chain, articulation behavior и audio evidence.
@@ -347,10 +347,10 @@ PSC пока является проектной спецификацией, а 
 - Sampler/streaming lifecycle, 64-voice baseline, RT callback audit.
 - Baseline CPU/RAM/load/underruns.
 
-### G2 — SoundBank and import
+### G2 — SAMPLES and import
 - Inventory, hash, metadata, license and source manifest.
 - Importer/Sound Hunter/Auto Discover tests.
-- Capacity guard and permanent no-delete/no-overwrite regression tests.
+- Unlimited Samples growth, permanent no-delete/no-overwrite, duplicate-hash and checksummed split-package regression tests.
 - Preset-to-source resolver tests and broken-reference diagnostics.
 
 ### G3 — playable MELODY instrument
@@ -415,7 +415,7 @@ PSC пока является проектной спецификацией, а 
 9. Add full-range chromatic/velocity/note-off/chord/pitch regression suite.
 10. Validate in DAW Piano Roll, MIDI controller and on-screen keyboard.
 
-**Phase C — SoundBank production**
+**Phase C — SAMPLES production**
 11. Finish non-destructive Sound Hunter and Import Guitar audit.
 12. Implement/complete AUTO DISCOVER, Curator, sample browser and validation.
 13. Populate licensed electric/acoustic one-shots, multisamples, performance sets and loops.
@@ -445,7 +445,7 @@ PSC пока является проектной спецификацией, а 
 29. Benchmark ANGELA Engine and optimize only measured bottlenecks.
 30. Prototype and validate PSC as an optional backend; no forced migration.
 31. Run full release matrix and package audit.
-32. Perform actual FL Studio 20 acceptance and publish final verified VST3 + lawful soundbank + install/readme.
+32. Perform actual FL Studio 20 acceptance and publish final verified VST3 + lawful SAMPLES + install/readme.
 
 ---
 
@@ -521,7 +521,7 @@ Research evidence includes Ernie Ball String Theory (resonant-note approach and 
 
 Каталог строится с учётом всех утверждённых групп и artist-inspired профилей, жанров и поджанров, акустических/электрических вариантов, чистых/перегруженных характеров, а также музыкальных ролей и частей песни. Отдельно планировать пригодные для INTRO, VERSE, PRE-CHORUS, CHORUS, POST-CHORUS, BRIDGE, BREAKDOWN, MAIN RIFF, LEAD/HOOK, ARPEGGIO/PICKING, FILLS/TRANSITIONS и OUTRO исполнения/тембры, где это музыкально уместно. Это не означает механически размножать один пресет по названиям секций: варианты засчитываются отдельно только при реальном различии звучания, партии/исполнения, артикуляции или назначения и самостоятельной проверке.
 
-Предыдущий расширенный ориентир 500–600 сохраняется как **stretch goal / цель расширения**, но не заменяет и не повышает обязательный релизный минимум: сначала обеспечить минимум 300 качественных READY-пресетов; далее расширять каталог до 500–600 только при сохранении всех аудиокритериев. 82 пресета по альбомам с подтверждённым участием Travis Barker распределяются по соответствующим артистическим/групповым категориям и входят в общий счёт один раз; отдельный раздел Travis Barker не создаётся. Для каждого пресета вести учёт: профиль/группа, жанр/поджанр, MELODY или PATTERN, акустика/электро, характер/усиление, музыкальная роль/секция песни, sample/source ID, лицензия, артикуляции, эффекты, статус реализации и аудиотеста.
+Эта историческая формулировка о 300 total и 500–600 stretch superseded REV.18: обязательны 500 READY MELODY и 500 READY PATTERN. 82 Travis Barker references входят в общий счёт один раз. 82 пресета по альбомам с подтверждённым участием Travis Barker распределяются по соответствующим артистическим/групповым категориям и входят в общий счёт один раз; отдельный раздел Travis Barker не создаётся. Для каждого пресета вести учёт: профиль/группа, жанр/поджанр, MELODY или PATTERN, акустика/электро, характер/усиление, музыкальная роль/секция песни, sample/source ID, лицензия, артикуляции, эффекты, статус реализации и аудиотеста.
 
 
 
