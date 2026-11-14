@@ -636,3 +636,30 @@ Display AutoChords не должен перекрывать экранные MID
 12. exact-SHA Windows Release, все CTest targets, pluginval strictness 5, complete package и отдельную FL Studio 20 host acceptance.
 
 **Статус:** APPROVED USER DESIGN DIRECTIONS / IMPLEMENTATION AND SOME POLICY CONFLICTS PENDING. Этот документ не отменяет MASTER PROMPT REV 17.0, I1–I8 или R01–R34.
+
+---
+## 15.16. TX-UI-BROWSER-SEPARATION-006 — два самостоятельных браузера и master-conflict guard (2026-11-14)
+
+Эта секция уточняет TX-UI-PRESET-GUARD-004 и TX-UI-SURFACE-005. Она не меняет MASTER PROMPT REV 17.0 FINAL, I1–I8, R01–R34 и не является подтверждением runtime реализации.
+
+### STYLE и PATTERN — самостоятельные окна
+STYLE и PATTERN — два независимых окна/браузера. Их нельзя объединять, заменять друг другом или превращать в единый плоский список. Сохранять утверждённые макеты STYLE, PATTERN и AutoChords, а также progressive disclosure. Общий контекст может фильтровать результаты второго браузера, но данные и состояния выбора остаются раздельными.
+
+**STYLE navigation:** GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE / ARTICULATION. Секции: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO. Последовательно раскрывать совместимые дочерние элементы. GROUP/ARTIST остаётся зарезервированным уровнем, но видимые имена групп/артистов/чужих продуктов запрещены MASTER REV 17.0 §11/§15; до MAJOR изменения prompt этот уровень BLOCKED для публикации именованного каталога. Не обходить запрет псевдонимами/логотипами.
+
+**PATTERN categories:** DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS. PATTERN browser отвечает только за ритмический рисунок; STYLE/ARTICULATION — за способ исполнения. На каждую секцию — 8 Pattern Slots. Секция/стиль могут фильтровать паттерны, но не смешиваются с Tone Preset, Guitar Source или FX.
+
+Каждая папка/категория/вложенный элемент должен открываться, закрываться, прокручиваться и выбирать реальные данные. SEARCH, FAVORITES, FILTER, SORT, PREV/NEXT сохраняют текущий scope. Предыдущий/следующий работают внутри текущего результата. Недоступные в карте библиотеки артикуляции/паттерны показываются unavailable/disabled, без синтетической подмены записанной гитары.
+
+### Transaction and playback
+PREVIEW — временное audition без изменения active preset, project/DAW persistent state или сохранённого Pattern Slot. APPLY/SELECT фиксирует выбор; CANCEL полностью откатывает незавершённую транзакцию. Pattern transitions во время playback должны быть host-synchronized и исключать stuck notes, duplicate triggers, timing jumps и abrupt cuts. Пока backend не обеспечивает это, соответствующие controls disabled/BACKEND PENDING.
+
+Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation и Rhythm Pattern — отдельные оси. Chord key выбирает chord/voicing; pattern управляет timing/gate/velocity/accent/rhythm. MELODY сохраняет одну ноту на клавишу. Ни одно окно/overlay не перекрывает MIDI keyboard и не блокирует hit-testing.
+
+### NEON STAGE / I7 conflict
+NEON STAGE — утверждённый visual reference/direction, SIGNAL FORGE / NEON — общий visual language. Но runtime default skin ID/name строго определяется MASTER REV 17.0 I7/R18: 'DEFAULT POP PUNK GUITAR ULTIMATE SKIN' ('default-ppgu'). Поэтому NEON STAGE нельзя назначить runtime default вместо 'default-ppgu' без MAJOR-изменения master prompt и явного изменения I7. До такого изменения I7/R18 имеют приоритет; никакого молчаливого переименования, смены fallback или обхода registry.
+
+### Invariants
+Сохраняются factory catalog extension-only, stable IDs, read-only factory presets, отдельное хранение user presets/banks, явные import conflicts, форматы '.ppgm' / '.ppgp' / '.ppgbank', отсутствие фиктивных активных controls, I1/I2, R04 (один S6.5 pipeline), R05/R10 (вне audio callback и аудио-review), R07/R23 (честные статусы и PASS только exact SHA). Никаких изменений APVTS, DSP, MIDI, sampler, SoundBank policy или realtime callback в рамках UI-only этапа.
+
+**Статус:** APPROVED REQUIREMENTS / IMPLEMENTATION NOT IMPLIED. Отдельная приёмка STYLE, PATTERN и AutoChords, browser behavior, 8 slots/section, transaction rollback, host sync, keyboard hit-testing, I7/R18 preservation, exact-SHA CI и FL Studio 20 остаётся обязательной.
