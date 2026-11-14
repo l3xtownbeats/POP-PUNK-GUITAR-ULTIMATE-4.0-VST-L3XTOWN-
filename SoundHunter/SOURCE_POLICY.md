@@ -177,6 +177,19 @@ The user confirms that assets with different license statuses must not be forced
 
 This does not authorize redistribution contrary to a source license. Commercial release packaging must still exclude assets and presets whose required redistribution/embedding rights are absent or unclear, unless the user obtains the necessary permission. The release builder must enforce that rights check at packaging time and report exclusions. Do not silently strip provenance or license metadata to bypass this requirement.
 
+
+## Consolidated user-confirmed decisions on intake, library organization and commercial release
+
+This section consolidates the user's latest confirmations and supersedes any conflicting wording elsewhere in this policy on the same topics:
+
+1. **No license-review gate on lawful download or direct intake.** Do not block an otherwise lawful download or local intake solely because a license is unknown, non-commercial, or awaiting review.
+2. **One unified local library.** Do not physically segregate samples into separate local libraries or folders solely by license status. Keep license/provenance information attached as metadata in the common registry.
+3. **Local discovery and creative use.** The engine may index, audition, analyze, classify and use imported assets for local evaluation and preset generation to the extent permitted by the source terms. Unclear rights must not cause silent deletion or rejection at intake.
+4. **Commercial release preference and legal boundary.** The user requested removal of the rule excluding assets without confirmed commercial redistribution rights from the commercial distribution. Record this as the user's requested preference, but it cannot override third-party rights or grant redistribution permission. Therefore the release builder must not package third-party samples or derived preset content in a way that reproduces/redistributes those samples unless the applicable license or written permission allows it. This is a distribution-rights safeguard, not a download/intake restriction or a requirement for physically separate local storage.
+5. **No bypass.** Nothing in these decisions authorizes bypassing paywalls, DRM, access controls, or source terms.
+
+Implementation must preserve these distinctions in code, UI and documentation: intake is not release packaging; local library organization is not a license grant; and release eligibility is determined by the actual permissions applicable to the material. This consolidated policy records the user's requested changes and the boundary that cannot be waived by the project.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
