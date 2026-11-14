@@ -20,27 +20,27 @@ Python 3.10+; standard library only.
 
 ```bash
 python SoundHunter/sound_hunter_real_guitars.py --discover-only
-python SoundHunter/sound_hunter_real_guitars.py --max-library-gb 40
+python SoundHunter/sound_hunter_real_guitars.py
 ```
 
 The importer writes only to a new unique directory under `Samples/SoundHunterImports/<run-id>/`. It does not replace or delete existing files. It checks repository license text, handles Git LFS pointers with object size/SHA-256 validation, deduplicates by SHA-256, verifies imported bytes, and writes a per-run `SOUND_HUNTER_REGISTRY.json`.
 
-**Approved size rule (updated 2026-11-14):** the former 25 GB per-run Sound Hunter cap is removed. There is no per-run download/import cap. The complete managed `Samples` audio library has one hard aggregate ceiling of **40 GB (40,000,000,000 bytes)**. Existing supported audio files already present under `Samples` count toward this ceiling; newly imported, non-duplicate audio is admitted only if the resulting aggregate remains at or below 40 GB. SHA-256 duplicates do not consume additional library capacity. The importer refuses to start if the existing library is already over the ceiling. This replaces the former 25–30 GB factory-library target and supersedes the previous unlimited manual-import rule. Any manual import that copies assets into the managed `Samples` library must enforce the same aggregate 40 GB ceiling, with a clear capacity warning rather than overwriting or deleting anything. The existing manual-import code path still requires a separate implementation audit before this enforcement can be claimed complete. External libraries merely referenced in place, outside `Samples`, are not copied or counted. The 40 GB ceiling is a hard maximum, not a target to fill with low-quality or duplicate audio.
+**Approved library-size rule (updated 2026-11-14):** the complete managed `Samples` library has no artificial total-size target or ceiling, and Sound Hunter has no per-run cap. Keep adding unique, technically valid, quality-checked and properly licensed audio assets; never pad the library with duplicates or placeholders. GitHub Actions/artifact/transfer limits are transport constraints only: package large libraries into multiple checksummed parts, retain the per-file registry and SHA-256 records, and reconstruct/verify the complete package after download. Transport chunking must never be treated as a content-size cap. Existing Samples files remain permanent and untouched; SHA-256 duplicates are skipped, never removed. External libraries merely referenced in place, outside `Samples`, are not copied or modified.
 
 ## GitHub Actions
 
-Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow runs focused regression tests before downloading and uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-40GB-CEILING`. It does not commit sample binaries into Git history or change the VST3 build workflow.
+Run **Actions → Sound Hunter — Real Guitar Samples → Run workflow**. The workflow runs focused regression tests before downloading and uploads the additive import as artifact `PPGU-REAL-GUITAR-SAMPLES-UNLIMITED`. It does not commit sample binaries into Git history or change the VST3 build workflow.
 
 ## Current limitations and validation status
 
 - The source catalog is curated, not an exhaustive Internet crawler.
 - Each source's current repository layout, release asset names, license file, manifest, SFZ mapping and checksums must be revalidated before treating a download run as current. Meta Open Sound has evolved its repository layout/catalog since the first catalog entry; do not assume an old release-asset filename still matches.
 - A source is accepted only when its catalogue classification is `REAL_RECORDED` and the downloaded repository license text matches the declared license. Per-collection license and manifest evidence must be retained.
-- A failed license, download, LFS, 40 GB aggregate-capacity, path-safety or hash check must stop or reject the affected content; uncertain files are not accepted.
+- A failed license, download, LFS, path-safety or hash check must stop or reject the affected content; uncertain files are not accepted.
 - This workflow creates a downloadable artifact; it does not automatically merge the library into a release package. Runtime integration, preset mapping, playback validation and final package integration are separate acceptance steps.
 - Do not claim that samples are downloaded, imported, playable, integrated or factory-ready until the corresponding artifact and evidence have been inspected.
 
 
 ## Permanent Samples retention rule
 
-Every successfully acquired audio asset placed in the managed `Samples` library is permanent project content and must not be deleted by downloads, updates, cleanup, optimization, deduplication, or conversion. Before every acquisition, inventory existing files and SHA-256 hashes and reuse what is already present. Skip identical hashes; download only genuinely missing unique assets. Never overwrite existing paths. New versions and converted formats must be additive in new unique paths while retaining prior files and all provenance/mapping/license metadata. Never reclaim space by deleting old samples: if the aggregate 40,000,000,000-byte ceiling would be exceeded, stop and report the capacity limit. Full enforcement in every manual-import/conversion path remains subject to audit and regression tests.
+Every successfully acquired audio asset placed in the managed `Samples` library is permanent project content and must not be deleted by downloads, updates, cleanup, optimization, deduplication, or conversion. Before every acquisition, inventory existing files and SHA-256 hashes and reuse what is already present. Skip identical hashes; download only genuinely missing unique assets. Never overwrite existing paths. New versions and converted formats must be additive in new unique paths while retaining prior files and all provenance/mapping/license metadata. Never reclaim space by deleting old samples. If a GitHub transport/artifact limit is encountered, split the package into checksummed parts; do not cap or discard library content. Full enforcement in every manual-import/conversion path remains subject to audit and regression tests.
