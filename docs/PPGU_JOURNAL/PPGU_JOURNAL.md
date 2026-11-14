@@ -159,3 +159,42 @@ Current upstream documentation/catalog identifies:
 - Sound Hunter regression tests: NOT RUN in this operation.
 - Sound Hunter workflow: NOT DISPATCHED; no fresh artifact was inspected.
 - Meta catalog refresh, release-asset API revalidation, full factory-bank integration, ANGELA playback, preset validation, VST3 build, pluginval and FL Studio 20 host testing: NOT RUN / NOT VERIFIED.
+
+
+## 2026-11-14 — USER-APPROVED GLOBAL 40 GB SAMPLES CEILING; REMOVE SOUND HUNTER PER-RUN CAP
+
+Пользователь прямо утвердил, подтвердил и поручил зафиксировать:
+- Полностью снять прежнее ограничение Sound Hunter в 25 GB на один запуск.
+- Не вводить вместо него другой per-run download/import cap.
+- Установить единый жёсткий максимальный объём управляемой библиотеки Samples: **40 GB decimal = 40,000,000,000 bytes**.
+- Считать в этот объём уже имеющиеся поддерживаемые аудиоактивы внутри `Samples` и новые уникальные аудиоактивы; дубликаты по SHA-256 не увеличивают объём.
+- Никакое новое добавление не должно приводить к превышению 40,000,000,000 bytes. При достижении потолка прекратить дальнейшее добавление; существующие файлы не удалять, не перемещать и не перезаписывать.
+- Это решение заменяет прежнюю цель 25–30 GB для factory Guitar Sound Library и отменяет прежнее правило об отсутствии общего ограничения для ручного импорта, если ручной импорт копирует файлы внутрь управляемой `Samples` библиотеки. Ручной импорт внешней библиотеки по ссылке без копирования файлов в `Samples` не расходует место в этой папке и не изменяет оригиналы.
+
+### Реализация, выполненная в этом этапе
+- `SoundHunter/sound_hunter_real_guitars.py`: удалён per-run 25 GB аргумент/счётчик; добавлен агрегатный учёт поддерживаемых аудиофайлов в `Samples`; предел 40 GB decimal; проверка существующего объёма до создания run directory; SHA-256 dedup выполняется до решения о добавлении; после достижения потолка Sound Hunter прекращает обход новых источников.
+- `SoundHunter/real_guitar_sources.json`: `max_library_bytes = 40000000000`, `max_library_gb = 40`.
+- `.github/workflows/sound-hunter-real-guitar.yml`: передаёт `--max-library-gb 40`; имя артефакта `PPGU-REAL-GUITAR-SAMPLES-40GB-CEILING`.
+- `tests/test_sound_hunter_importer.py`: добавлены проверки граничных значений 39 GB + 1 GB, 39 GB + 2 GB, 40 GB + 1 byte, а также подсчёта аудиофайлов.
+- `SoundHunter/README.md`: обновлены правила объёма и описано, что ручной импорт, копирующий файлы в `Samples`, также обязан соблюдать общий потолок.
+
+### Важное ограничение / открытая работа
+Текущий C++ `ImportPipeline` в изученном файле является screening/gate skeleton, а `ImportGuitarPanel` — UI оболочкой; фактический production path копирования ручных библиотек не был найден/подтверждён в данном этапе. Поэтому **не утверждать, что ручной импорт уже технически ограничен 40 GB**. Если/когда путь копирования обнаружится или будет реализован, в него необходимо встроить общий capacity guard до записи файлов. Внешние библиотеки, которые SamplePool только читает/стримит с исходного расположения, не копируются в `Samples` и не должны модифицироваться.
+
+### Кодовые коммиты
+- `76e13b935582f5e01c0854db34a2af3a7f01965e`
+- `33305dee44981d768217fc0685e1675883247bca`
+- `f03361e0d3dd9b4870b06fa84563539b2c489b84`
+- `53f8179a3e50d51b694c9139571835d1844ccf67`
+- `be79683a83ea5d9e223838288793fedba6ec8f3a`
+- `e8b97849892438f2ae921dbe6325bfcff1a6524d`
+- `42b702ba7e94740c500057a04647aaf3cfdf663a`
+- `21e439d9fb200eb3db13d8ff47709e6bb697265f`
+- `8ab71c5267c911631f15d9811fec66dbadeb357c`
+- `4d171bf48d8bca03600b2148c9b49fc4fb5c4cdd`
+- `611e49de9b7651d8fa2ddd3899ddf2ad92faddf6`
+- `eecc6cdaa2b6d85e61e07d9d28d15bd929f7f08c`
+- `a7d3765cda972efb3af5902f803883a55ce23bef`
+- `a1317756daa688dfdc29a2d1dd73cbb46e0fda2e` — CODE journal.
+
+**Проверка статуса:** файлы повторно прочитаны из GitHub после изменений. Python regression tests не запускались; GitHub Actions workflow не запускался; реальный аудиоартефакт не создан/не проверен; manual import guard остаётся не реализованным/не подтверждённым. Не заявлять download/import/QA PASS.
