@@ -238,17 +238,18 @@ def main() -> int:
         stage = prepare_staging(root, source_root, registry, entries, pack_path)
         try:
             run_gates(stage, args.validator.resolve())
+            print(f"PASS: G1-G4 accepted {len(entries)} theme(s), indices "
+                  f"{entries[0]['index']}..{entries[-1]['index']}.")
+            print(f"Registry total after import: {registry['totalSkins'] + len(entries)}")
+            print(f"Default skin preserved: {registry['defaultSkin']}")
+            if args.apply:
+                apply_transaction(root, registry_path, pack_path, registry, pack, entries, stage)
+                print("APPLY: registration committed; pack status changed to MERGED.")
+            else:
+                print("DRY-RUN: no files changed. Re-run with --apply to register.")
+            return 0
         finally:
-        print(f"PASS: G1-G4 accepted {len(entries)} theme(s), indices "
-              f"{entries[0]['index']}..{entries[-1]['index']}.")
-        print(f"Registry total after import: {registry['totalSkins'] + len(entries)}")
-        print(f"Default skin preserved: {registry['defaultSkin']}")
-        if args.apply:
-            apply_transaction(root, registry_path, pack_path, registry, pack, entries, stage)
-            print("APPLY: registration committed; pack status changed to MERGED.")
-        else:
-            print("DRY-RUN: no files changed. Re-run with --apply to register.")
-        return 0
+            shutil.rmtree(stage, ignore_errors=True)
     except Exception as exc:
         print(f"ABORT: {exc}", file=sys.stderr)
         return 1
