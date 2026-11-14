@@ -81,15 +81,16 @@ class NeonStageMigrationAuditTests(unittest.TestCase):
             self.assertIn("DUPLICATE_ID", codes)
             self.assertIn("DUPLICATE_INDEX", codes)
 
-    def test_path_traversal_is_rejected(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            self.make_registry(root)
-            registry = json.loads((root / "theme_manifest.json").read_text())
-            registry["themes"][52]["path"] = "../outside/theme.json"
-            (root / "theme_manifest.json").write_text(json.dumps(registry))
-            result = audit(root)
-            self.assertIn("UNSAFE_MANIFEST_PATH", {item["code"] for item in result["issues"]})
+    def test_path_traversal_and_windows_drive_paths_are_rejected(self):
+        for unsafe in ("../outside/theme.json", "C:/outside/theme.json", "C:\\\\outside\\\\theme.json"):
+            with self.subTest(path=unsafe), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                self.make_registry(root)
+                registry = json.loads((root / "theme_manifest.json").read_text())
+                registry["themes"][52]["path"] = unsafe
+                (root / "theme_manifest.json").write_text(json.dumps(registry))
+                result = audit(root)
+                self.assertIn("UNSAFE_MANIFEST_PATH", {item["code"] for item in result["issues"]})
 
 
 if __name__ == "__main__":
