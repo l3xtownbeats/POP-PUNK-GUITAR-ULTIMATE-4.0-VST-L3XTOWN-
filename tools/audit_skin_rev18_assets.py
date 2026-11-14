@@ -199,6 +199,31 @@ def validate_artwork_manifest(theme_dir: Path) -> None:
         raise ValueError(f"{manifest_path}: atlas frame map must contain six icon frames")
 
 
+def validate_font_manifest(theme_dir: Path) -> None:
+    """Validate bundled font identity, CRC and OFL 1.1 license evidence."""
+    manifest_path = theme_dir / "fonts/font_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{manifest_path}: missing or invalid font manifest: {exc}") from exc
+    if manifest.get("skinId") != "skin-053" or manifest.get("fontFamily") != "Inter":
+        raise ValueError(f"{manifest_path}: wrong skinId or fontFamily")
+    font_path = theme_dir / "fonts" / str(manifest.get("fontFile", ""))
+    license_path = theme_dir / "fonts" / str(manifest.get("licenseFile", ""))
+    raw = font_path.read_bytes()
+    if manifest.get("bytes") != len(raw):
+        raise ValueError(f"{manifest_path}: font byte count mismatch")
+    if manifest.get("crc32") != f"{zlib.crc32(raw) & 0xFFFFFFFF:08X}":
+        raise ValueError(f"{manifest_path}: font CRC32 mismatch")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(manifest.get("sourceBlobSha1", ""))):
+        raise ValueError(f"{manifest_path}: invalid source Git blob SHA-1")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(manifest.get("licenseBlobSha1", ""))):
+        raise ValueError(f"{manifest_path}: invalid license Git blob SHA-1")
+    license_text = license_path.read_text(encoding="utf-8")
+    if "SIL OPEN FONT LICENSE Version 1.1" not in license_text or "This Font Software is licensed" not in license_text:
+        raise ValueError(f"{license_path}: SIL OFL 1.1 license text is missing or incomplete")
+
+
 def luminance(hex_colour: str) -> float:
     if not isinstance(hex_colour, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", hex_colour):
         raise ValueError(f"invalid HEX token: {hex_colour!r}")
@@ -356,6 +381,16 @@ def main() -> int:
                 png_info(png)
             except (OSError, ValueError, zlib.error) as exc:
                 add("FAIL", "TOPBAR_PNG_INVALID", str(exc))
+
+    font_manifest = theme_dir / "fonts/font_manifest.json"
+    if not font_manifest.is_file():
+        add("FAIL", "FONT_MANIFEST_MISSING", f"Missing {font_manifest.relative_to(root)}")
+    else:
+        try:
+            validate_font_manifest(theme_dir)
+            add("PASS", "FONT_LICENSE_VALID", "Inter font file and SIL OFL 1.1 license evidence are valid.")
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            add("FAIL", "FONT_LICENSE_INVALID", str(exc))
 
     artwork_manifest = theme_dir / "assets/artwork_manifest.json"
     if not artwork_manifest.is_file():

@@ -107,4 +107,5 @@ NEON STAGE сохраняются. Для TOP BAR icons добавлены SVG m
 Pillow PNG exporter `tools/generate_rev18_skin_icons.py` с режимом `--check`.
 Для hero/preview/background/textures/FX/atlas добавлен `tools/generate_rev18_skin_artwork.py`;
 его `--check` сверяет master/runtime bytes и artwork manifest. Оставшиеся
-control sprites и licensed font остаются FAIL до создания настоящих ресурсов.
+135 control/state sprites остаются FAIL до создания настоящих ресурсов. Для font
+проверяются Inter TTF, SIL OFL 1.1 и `fonts/font_manifest.json`.

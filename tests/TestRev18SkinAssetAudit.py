@@ -167,6 +167,31 @@ class Rev18ArtworkManifestTests(unittest.TestCase):
                 AUDIT.validate_artwork_manifest(root)
 
 
+class Rev18FontManifestTests(unittest.TestCase):
+    def test_font_manifest_requires_valid_crc_and_ofl_license(self) -> None:
+        import json
+        with tempfile.TemporaryDirectory() as temp:
+            theme_dir = Path(temp)
+            root = theme_dir / "fonts"
+            root.mkdir()
+            font = b"font-bytes"
+            (root / "Inter[opsz,wght].ttf").write_bytes(font)
+            (root / "OFL.txt").write_text(
+                "SIL OPEN FONT LICENSE Version 1.1\nThis Font Software is licensed under OFL.",
+                encoding="utf-8")
+            manifest = {
+                "skinId": "skin-053", "fontFamily": "Inter",
+                "fontFile": "Inter[opsz,wght].ttf", "licenseFile": "OFL.txt",
+                "bytes": len(font), "crc32": f"{zlib.crc32(font)&0xffffffff:08X}",
+                "sourceBlobSha1": "a" * 40, "licenseBlobSha1": "b" * 40,
+            }
+            (root / "font_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            AUDIT.validate_font_manifest(theme_dir)
+            (root / "Inter[opsz,wght].ttf").write_bytes(b"changed")
+            with self.assertRaisesRegex(ValueError, "byte count mismatch|CRC32 mismatch"):
+                AUDIT.validate_font_manifest(root)
+
+
 class Rev18ContrastAuditTests(unittest.TestCase):
     def test_primary_text_contrast_exceeds_rev18_minimum(self) -> None:
         self.assertGreaterEqual(AUDIT.contrast("#FFFFFF", "#202020"), 7.0)
