@@ -349,5 +349,6 @@
     "Control coordinates are design metadata. Existing JUCE bounds remain authoritative until a dedicated layout engine consumes this map.",
     "ThemeManager and registry-driven editor support are committed; CI validation is pending. Control coordinates remain metadata and do not reflow the live JUCE editor.",
     "User decision (2026-11-15): NEON STAGE is the one and only name for the main theme, skin, graphic user interface and complete plugin shell."
-  ]
+  ],
+  "schema": "ppgu-theme/1.2"
 }
