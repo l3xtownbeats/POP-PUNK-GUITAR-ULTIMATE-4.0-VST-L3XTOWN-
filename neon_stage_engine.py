@@ -653,7 +653,11 @@ def step_contact_sheets():
         sheet.paste(thumb,(x,y))
         d.text((x,y+thumb_h),path.stem,font=font(11,True),fill=rgb(PALETTE["text_primary"]))
     _indexed_png(sheet,ROOT/"dist"/"NEON_STAGE_ATLAS_CONTACT_SHEET.png")
-    refs=[ROOT/f"{i:02d} INTERFACE  NEON STAGE DEFAULT .png" for i in (1,2,3,4,6)]
+    refs=[ROOT/"01 INTERFACE  NEON STAGE DEFAULT .png",
+          ROOT/"02 INTERFACE  NEON STAGE DEFAULT AUTOCHORDS .png",
+          ROOT/"03 INTERFACE  NEON STAGE DEFAULT .png",
+          ROOT/"04 INTERFACE  NEON STAGE DEFAULT .png",
+          ROOT/"06 INTERFACE  NEON STAGE DEFAULT .png"]
     thumbs=[]
     for ref in refs:
         if not ref.is_file():
