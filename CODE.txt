@@ -669,3 +669,16 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Tests/CI:** no code changed; no build/CTest/pluginval/package run on this audit branch. Prior CI PASS at 8c75820... remains scoped to that SHA.
 
 **Status:** AUDIT RECORD ONLY / SOURCE UNCHANGED / IMPLEMENTATION PENDING.
+
+
+## 2026-11-14 — PATTERN Section Model foundation
+
+**Implementation commit:** 7366fca02a5ee92d8729411b04176e066c94baf6  
+**Parent:** a37e6695c6a177669ec46eb579863fd5d4e2ddc8  
+**Paths:** `Source/Performance/PatternSectionModel.h`; `tests/PatternSectionModelTests.cpp`; `CMakeLists.txt`.  
+**Symbols:** `ppgu::performance::SongSection`; `PatternSectionModel::selectSection`; `beginPreview`; `applyPreview`; `cancelPreview`; `assignPattern`; `effectivePatternSlot`; `save`; `restore`.  
+**Behavior:** five musical sections, per-section 0..7 assignments, non-committing preview, explicit apply/cancel, schema-versioned fixed-size snapshot, legacy global-slot fallback for unassigned sections. Existing APVTS IDs and scheduler untouched.  
+**Tests added:** section isolation; invalid section/slot rejection; preview non-commit; Apply; Cancel/section switch; independent section mapping; snapshot round-trip; schema-0 migration fallback; corrupt assignment sanitization.  
+**CMake:** registered `ppgu_pattern_section_contracts`.  
+**Verification:** GitHub readback PASS; no CI run/status available; compiler/CTest/pluginval/package/host tests NOT RUN.  
+**Status:** SOURCE PRESENT; test target registered; runtime/editor/state integration still pending.

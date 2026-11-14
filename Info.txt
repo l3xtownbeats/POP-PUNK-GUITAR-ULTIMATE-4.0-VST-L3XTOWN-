@@ -2026,3 +2026,22 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 **Проверки этого preflight:** Git tree inventory and targeted source/doc fetch/readback; no build, CTest, pluginval, package or source modification performed.
 
 **Статус:** TREE INVENTORY COMPLETE / TARGETED SOURCE-DOC AUDIT COMPLETE / PRODUCTION CODE UNCHANGED / IMPLEMENTATION NOT YET CLAIMED.
+
+
+## 2026-11-14 — PATTERN Section Model foundation (source implementation)
+
+**Branch:** work/rev17-full-reconciliation-2026-11-14  
+**Implementation commit:** 7366fca02a5ee92d8729411b04176e066c94baf6  
+**Implementation parent:** a37e6695c6a177669ec46eb579863fd5d4e2ddc8  
+**Scope:** first isolated production-code foundation; no existing APVTS parameter ID or scheduler behavior changed.
+
+**Files added/changed:**
+- `Source/Performance/PatternSectionModel.h` — fixed-size, allocation-free model for Intro / Verse / Chorus / Bridge / Outro; independent 0..7 pattern assignments; explicit legacy-inherit state; draft Preview / Apply / Cancel; snapshot save/restore; invalid enum/slot rejection and corrupt-state sanitization.
+- `tests/PatternSectionModelTests.cpp` — contract coverage for section isolation, preview non-commit, apply/cancel, independent assignments, snapshot round-trip, schema-0 legacy fallback and invalid data.
+- `CMakeLists.txt` — registers `ppgu_pattern_section_contracts` with CTest.
+
+**Compatibility contract:** old sessions continue to resolve each unassigned section through the existing global `patternSlot` value (validated 0..7, fallback 0). The model does not own, rename, replace, or write the legacy APVTS parameter. It is not yet connected to processor state serialization, preset loading, editor controls, or the scheduler; those integrations remain REQUIRED.
+
+**Verification:** GitHub readback confirmed all three paths at the implementation commit. Combined status was empty and workflow-runs query returned no runs at the time of inspection. No local compiler, CMake configure/build, CTest, pluginval, package, or FL Studio run was executed for this commit.
+
+**Status:** SOURCE PRESENT / CTEST TARGET REGISTERED / TEST EXECUTION PENDING / PROCESSOR-EDITOR INTEGRATION PENDING.
