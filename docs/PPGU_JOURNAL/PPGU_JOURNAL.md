@@ -290,3 +290,11 @@ Current upstream documentation/catalog identifies:
 - Added regression tests for valid and tampered release checksum manifests.
 - User-approved no-delete/no-overwrite/permanent-retention rule remains in force; these changes are additive and do not clean existing Samples content.
 - GitHub file updates are committed separately. Tests have NOT been executed; no source archive has yet been downloaded/imported by this action. Manual-import capacity enforcement and full cross-path retention guards remain open.
+
+
+## 2026-11-14 — CI regression cycle: catalog JSON and checksum parser
+
+- GitHub Actions run 43584593764 exposed invalid JSON in the source catalog (trailing comma); corrected the catalog and removed the stale GiB alias.
+- Run 43584613952 successfully parsed and listed the 11 approved sources, then caught a fixture/parser mismatch in the new SHA256SUMS tests before any downloads. Corrected the checksum regex escaping and newline fixtures; reset release-file counters per source.
+- The workflow is configured to run on Sound Hunter/catalog/test updates. Current source acquisition has not yet run to completion; no sample payload/artifact is claimed.
+- Preserve no-delete/no-overwrite policy and 40 GB aggregate ceiling. Continue only after the corrected CI run is green.
