@@ -11,44 +11,44 @@ public:
     {
         struct Tokens
         {
-            juce::Colour windowBg { 0xff0b0f12 };
-            juce::Colour panel { 0xff141b20 };
-            juce::Colour panelElevated { 0xff1d2930 };
-            juce::Colour controlBg { 0xff10171b };
-            juce::Colour controlFace { 0xff26343a };
-            juce::Colour controlBorder { 0xff53656b };
-            juce::Colour textPrimary { 0xfff3f7f5 };
-            juce::Colour textSecondary { 0xffb7c5c2 };
-            juce::Colour textDisabled { 0xff788984 };
-            juce::Colour accent { 0xffd5ff45 };
-            juce::Colour accentGlow { 0xffb7ff3c };
-            juce::Colour danger { 0xffff5a66 };
-            juce::Colour warning { 0xffffc857 };
-            juce::Colour success { 0xff6ee7a8 };
-            juce::Colour lcdBg { 0xff08110e };
-            juce::Colour lcdText { 0xffd7ffb2 };
-            juce::Colour ledOn { 0xffa8ff42 };
-            juce::Colour ledOff { 0xff33443b };
-            juce::Colour shadow { 0xff050708 };
-            juce::Colour highlight { 0xff90a7a0 };
-            juce::Colour lowlight { 0xff0d1417 };
+            juce::Colour windowBg { 0xff050811 };
+            juce::Colour panel { 0xff091321 };
+            juce::Colour panelElevated { 0xff101f32 };
+            juce::Colour controlBg { 0xff07101c };
+            juce::Colour controlFace { 0xff14263a };
+            juce::Colour controlBorder { 0xff52718b };
+            juce::Colour textPrimary { 0xffffffff };
+            juce::Colour textSecondary { 0xffd9e8f7 };
+            juce::Colour textDisabled { 0xffaabbd0 };
+            juce::Colour accent { 0xff66ffff };
+            juce::Colour accentGlow { 0xffb8ffff };
+            juce::Colour danger { 0xffff5577 };
+            juce::Colour warning { 0xffffd166 };
+            juce::Colour success { 0xff67f5b5 };
+            juce::Colour lcdBg { 0xff020a12 };
+            juce::Colour lcdText { 0xffc9ffff };
+            juce::Colour ledOn { 0xff66ffff };
+            juce::Colour ledOff { 0xff263c50 };
+            juce::Colour shadow { 0xff02040a };
+            juce::Colour highlight { 0xffb8d9f0 };
+            juce::Colour lowlight { 0xff0a1421 };
         };
 
-        juce::String id { "skin-052" };
-        juce::String name { "SIGNAL FORGE" };
+        juce::String id { "skin-053" };
+        juce::String name { "NEON STAGE" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
-        juce::Colour canvas { 0xff0b0f12 };
-        juce::Colour canvasInset { 0xff10171b };
-        juce::Colour surface { 0xff141b20 };
-        juce::Colour surfaceSecondary { 0xff10171b };
-        juce::Colour surfaceRaised { 0xff1d2930 };
-        juce::Colour text { 0xfff3f7f5 };
-        juce::Colour textSecondary { 0xffb7c5c2 };
-        juce::Colour accent { 0xffd5ff45 };
-        juce::Colour accentSecondary { 0xffb7ff3c };
-        juce::Colour border { 0xff53656b };
-        juce::Colour focus { 0xff90a7a0 };
+        juce::Colour canvas { 0xff050811 };
+        juce::Colour canvasInset { 0xff07101c };
+        juce::Colour surface { 0xff091321 };
+        juce::Colour surfaceSecondary { 0xff07101c };
+        juce::Colour surfaceRaised { 0xff101f32 };
+        juce::Colour text { 0xffffffff };
+        juce::Colour textSecondary { 0xffd9e8f7 };
+        juce::Colour accent { 0xff66ffff };
+        juce::Colour accentSecondary { 0xffb8ffff };
+        juce::Colour border { 0xff52718b };
+        juce::Colour focus { 0xffb8d9f0 };
         bool usedFallback = true;
 
         juce::Colour token(const juce::String& name) const noexcept;
@@ -57,7 +57,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the canonical SIGNAL FORGE palette.
+    // A failed load always restores the canonical NEON STAGE palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;
