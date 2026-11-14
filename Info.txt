@@ -1881,3 +1881,44 @@ STYLE, PATTERN и AutoChords сохраняют утверждённые отд�
 - Governance: ПРОВЕРКА → АНАЛИЗ → ИСПРАВЛЕНИЕ → ПОВТОРНЫЙ АНАЛИЗ → РЕЗУЛЬТАТ. Reuse existing components/schema/backend before adding anything. A PASS is valid only for the exact tested SHA.
 
 **Cross-document consistency:** CODE index updated; PRESET_FILE_SYSTEM wording reconciled; master prompt, master spec, control schema and approved mockups remain higher-level constraints and are not overridden. No production implementation or test result is inferred from this documentation update.
+
+
+==============================================================================
+2026-11-14 — TX-UI-BROWSER-SEPARATION-006: HIGHER-PRIORITY STYLE / PATTERN CLARIFICATION
+==============================================================================
+
+**Priority:** this entry is newer than the general PRESET BROWSER reconciliation above and supersedes only conflicting interpretations. Authority: MASTER_PRODUCT_SPEC_4_0_RU §15.16 and the approved TX-UI-BROWSER-SEPARATION-006 record (commit 272435ea583dbff90b2b3079878d895c8582e216).
+
+### Binding separation — three distinct browsers
+1. PRESET BROWSER: Tone/Factory/User Presets only. It retains its own BROWSER/FAVORITES/CATEGORIES/FACTORY-USER/SEARCH/FILTER/SORT/PREV-NEXT/FAVORITE/PRESET NAME/CATEGORY/PREVIEW/SELECT-LOAD and user CRUD/import/export/rescan contract.
+2. STYLE browser: separate browser/window for playing style and articulation. Its model path is GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE / ARTICULATION.
+3. PATTERN browser: separate browser/window for rhythm patterns. Categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS. Exactly 8 Pattern Slots per Song Section.
+
+Never merge these three browsers into one flat list, one window or one transaction. Shared music context may filter results, but catalogs, selection, preview and transaction state remain independent. The earlier GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN chain is only a conceptual taxonomy relationship, not a single UI browser. PRESET BROWSER does not absorb STYLE/PATTERN.
+
+### Content visibility and artist restriction
+GROUP/ARTIST is a reserved metadata/model level. Visible named catalog of groups, artists or third-party products is BLOCKED by MASTER PROMPT REV 17.0 §11/§15 until a formally approved MAJOR revision. Do not bypass this using aliases, logos or disguised names. Keep the taxonomy level reserved without populating prohibited visible content.
+
+### Independent responsibilities
+- STYLE / ARTICULATION defines how the guitar is played.
+- PATTERN defines rhythm, timing, gate, velocity and accent.
+- Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation and Rhythm Pattern are independent axes.
+- A chord key selects chord/voicing; PATTERN supplies rhythmic performance; MELODY remains one MIDI key = one corresponding note.
+- Do not mix pattern data with Tone Preset, Guitar Source or FX.
+- For each Song Section expose exactly eight Pattern Slots. Do not silently add more slots or remap them.
+
+### STYLE/PATTERN interaction contract
+- Progressive disclosure: show only valid child choices for the current context. Every folder/category/child must really open, close, scroll and select actual data.
+- SEARCH/FAVORITES/FILTER/SORT/PREV/NEXT preserve the current browser scope; PREV/NEXT traverse only the current result set.
+- PREVIEW is isolated audition and changes no active preset, saved Pattern Slot, DAW/project persistent state or user settings. APPLY/SELECT commits a validated choice; CANCEL fully rolls back the uncommitted transaction.
+- Pattern transitions during playback must be host-synchronized and prevent stuck notes, duplicate triggers, timing jumps and abrupt cuts.
+- If the backend cannot perform an action, show BACKEND PENDING/UNAVAILABLE and disable it. No fake active controls or synthetic replacement for missing recorded guitar articulation/pattern assets.
+- No overlay may cover the MIDI keyboard or intercept its hit-testing.
+
+### Master-rule guard
+Do not alter MASTER PROMPT REV 17.0 FINAL, I1–I8 or R01–R34. Runtime default skin remains exactly default-ppgu / DEFAULT POP PUNK GUITAR ULTIMATE SKIN; NEON STAGE is not the runtime default unless a formal MAJOR master revision authorizes it. Preserve stable IDs, extension-only factory catalog, Factory read-only, User preset/bank separation, explicit import conflicts and .ppgm/.ppgp/.ppgbank formats. Respect the single S6.5 pipeline, all audio-thread restrictions, truthful status rules and exact-SHA PASS evidence.
+
+### Supersession and evidence boundary
+This entry takes precedence over any earlier broad taxonomy phrasing that could be read as merging PRESET, STYLE and PATTERN browsers or permitting a visible artist catalog. It does not remove any previously approved PRESET BROWSER commands. This is a requirements clarification only: no runtime implementation, host sync, hit-testing, exact-SHA CI or FL Studio 20 acceptance is implied.
+
+==============================================================================
