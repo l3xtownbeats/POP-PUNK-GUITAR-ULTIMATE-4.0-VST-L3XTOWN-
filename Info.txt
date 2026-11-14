@@ -1964,3 +1964,16 @@ Official discovery and license references reviewed: Meta Open Sound README/relea
 **Изменения:** ThemeManager safe/default Palette теперь использует SIGNAL FORGE / NEON, включая идентификатор `skin-01`; ошибка загрузки темы возвращает NEON, а не Blackout Voltage. В SKIN selector первый пункт — SIGNAL FORGE / NEON с маркером DEFAULT, второй — сохранённый Blackout Voltage (`skin-51`); все остальные темы доступны далее по исходным ID. Меню использует реальные registry entries и существующие index IDs.
 
 **Ограничения:** визуальная оболочка/компоновка главного окна и графические binary assets ещё не приведены к семи макетам. Эта запись фиксирует только default/fallback/selector consistency. No DSP/APVTS/MIDI/audio changes. Windows Release, CTest, pluginval, package и FL Studio 20 acceptance — PENDING для нового SHA.
+
+
+## 2026-11-14 — NEON STAGE naming/default contract alignment
+
+**Статус:** SOURCE + CONTRACT TEST UPDATE COMMITTED; BUILD/TEST NOT YET VERIFIED.
+
+Пользователь уточнил единое название графического интерфейса плагина: **NEON STAGE**. Обновлены отображаемое имя основной темы skin-01 в SKIN/Skin_01/theme.json и SKIN/theme_manifest.json, имя fallback Palette в Source/UI/ThemeManager.h, а также комментарий интерфейсной оболочки в Source/PluginEditor.cpp. ID skin-01, цветовые токены, геометрия редактора, APVTS, DSP, MIDI и sampler не менялись. BLACKOUT VOLTAGE (skin-51) сохранена как отдельная дополнительная тема.
+
+Исправлен tests/ThemeManagerTests.cpp: проверки fallback теперь ожидают skin-01 / NEON STAGE, валидный default manifest берётся из Skin_01, а негативные HEX и ID/index cases проверяют реальные значения default manifest.
+
+Последний commit этого этапа: 6862de07555d3c4630a4e72c427a0ed0cd4876c3.
+
+**Ограничения:** это согласование canonical theme identity и regression contract, не завершённая pixel-accurate реконструкция семи пользовательских макетов. Binary artwork из семи PNG не изменялся. Windows Release, CTest, pluginval, package и FL Studio 20 visual acceptance для нового SHA остаются PENDING.
