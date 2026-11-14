@@ -534,3 +534,24 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Verification:** GitHub content readback and append-only path updates succeeded. No build, CTest, pluginval, host, audio or package tests were run because production source was unchanged.
 
 **Status:** DOCUMENTATION UPDATED / PRODUCTION SOURCE UNCHANGED / RUNTIME IMPLEMENTATION NOT IMPLIED.
+
+
+## 2026-11-14 — STYLE/PATTERN separation, 48 section slots and AutoChords invariants
+
+**Approved scope:** user decisions from 2026-11-13/14, additive to the prior browser navigation contract.
+
+**Requirements recovered and indexed:**
+- STYLE Browser and PATTERN Browser are separate windows with independent navigation and committed state; switching windows must not reset or interrupt the other.
+- STYLE navigation: GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE/ARTICULATION.
+- PATTERN categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS.
+- Six sections: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO; eight section-scoped Pattern Slots each (48 logical slots, not a claim of 48 populated/playable patterns).
+- CHORD/HARMONY, ARTICULATION/PLAYING STYLE, RHYTHM PATTERN, GUITAR SOURCE and TONE PRESET remain independent state dimensions. A change in one cannot silently mutate another.
+- AutoChords selectors are independent; overlay must never cover the MIDI keyboard. Preview is non-committing and uses real audio/MIDI routing.
+- Host tempo/transport and note lifecycle must avoid stuck notes, duplicate triggers, orphan note-offs and timing jumps through browser changes, preview/cancel, section/pattern/chord/source/preset changes and transport events.
+- First supplied UI reference governs layout/geometry/control inventory; 02 INTERFACE NEON STAGE AUTOCHORDS governs palette only. Skins are visual-only and cannot remove, move, resize, replace, hide or rebind approved controls or change sound.
+
+**Synchronized documents:** Info.txt (canonical append-only journal), docs/MASTER_PRODUCT_SPEC_4_0_RU.md (§18 addendum), SKIN/CONTROL_INVENTORY_MATRIX_RU.md (§14 addendum), and this code/change index.
+
+**Compatibility:** no source code, APVTS IDs/semantics, DSP, sampler, MIDI implementation, scheduler, preset definitions, SoundBank, theme assets or runtime behavior changed by these documentation updates. Strict SIGNAL FORGE v10 / REV 17 rules and newer direct user approvals remain higher priority. No implementation, build, CTest, pluginval or host PASS is implied.
+
+**Status:** REQUIREMENTS DOCUMENTED / IMPLEMENTATION AND EXACT-SHA VALIDATION PENDING.
