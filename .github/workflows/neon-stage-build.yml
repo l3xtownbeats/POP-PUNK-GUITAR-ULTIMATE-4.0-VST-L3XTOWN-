@@ -1,0 +1,37 @@
+name: NEON STAGE Skin 053 Build
+
+on:
+  push:
+    branches:
+      - feature/neon-stage-build-engine
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-skin:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run asset pipeline
+        shell: cmd
+        env:
+          CI: "true"
+        run: NEON_STAGE_BUILD.bat
+      - name: Upload staging package and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-stage-skin-053-staging
+          if-no-files-found: warn
+          path: |
+            dist/NEON_STAGE_SKIN_053_STAGING.zip
+            dist/NEON_STAGE_BUILD_REPORT.json
+            dist/neon_stage_staging/palette_report.json
