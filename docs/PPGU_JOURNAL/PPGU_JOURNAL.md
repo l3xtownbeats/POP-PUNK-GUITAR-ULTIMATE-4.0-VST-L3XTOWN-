@@ -280,3 +280,13 @@ Current upstream documentation/catalog identifies:
 **Практическое следствие:** повторная загрузка уже имеющейся библиотеки запрещена как штатное поведение. Сначала проверка инвентаря/хэшей и повторное использование существующего содержимого; загрузка только отсутствующих уникальных данных. Это правило действует для Sound Hunter, ручного импорта, конвертера PSC и любых будущих путей записи в `Samples`.
 
 **Статус на момент записи:** это обязательное пользовательское правило разработки и документации. Техническое обеспечение immutability/no-overwrite/no-delete и общей дедупликации во всех import/conversion paths ещё требует аудита и реализации; не заявлять, что все пути уже защищены, пока это не подтверждено тестами.
+
+
+## 2026-11-14 — Sound Hunter release integrity and preview de-duplication hardening
+
+- Updated `SoundHunter/sound_hunter_real_guitars.py` to require a release archive SHA256SUMS manifest, validate every listed member before admitting release audio, and independently verify the release ZIP's LICENSE text against the catalogued license.
+- Meta Open Sound OGG previews are skipped when the production WAV release is the intended source, avoiding parallel lossy preview copies alongside full-quality masters.
+- Preserve SFZ/JSON/text metadata from the release archive and report release audio counts separately from repository preview/source counts.
+- Added regression tests for valid and tampered release checksum manifests.
+- User-approved no-delete/no-overwrite/permanent-retention rule remains in force; these changes are additive and do not clean existing Samples content.
+- GitHub file updates are committed separately. Tests have NOT been executed; no source archive has yet been downloaded/imported by this action. Manual-import capacity enforcement and full cross-path retention guards remain open.
