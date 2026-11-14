@@ -142,6 +142,7 @@ def main():
     used=0  # Bytes newly imported during this run; retained for transparent reporting.
     registry={"schema_version":"1.0","run_id":run_id,"classification":"REAL_RECORDED","assets":[],"sources":[]}
     tmp=run_root/"_download_tmp"; tmp.mkdir()
+    capacity_reached=False
     try:
         for s in sources:
             sid=s["id"]; repo=s["repository"]
@@ -200,7 +201,7 @@ def main():
                         "sha256":actual,"classification":"REAL_RECORDED",
                         "license":s["license"],"verification":"license-and-sha256-verified"
                     })
-                if s.get("release_tag") and s.get("release_asset_contains"):
+                if not capacity_reached and s.get("release_tag") and s.get("release_asset_contains"):
                     relzip=tmp/(sid+"-release.zip")
                     asset_name=fetch_release_zip(repo,s["release_tag"],s["release_asset_contains"],relzip)
                     with zipfile.ZipFile(relzip) as rz:
@@ -222,6 +223,8 @@ def main():
                             registry["assets"].append({"source_id":sid,"path":str(target.relative_to(samples)).replace("\\","/"),"format":target.suffix.lower(),"bytes":len(data),"sha256":digest,"classification":"REAL_RECORDED","license":s["license"],"verification":"release-license-and-sha256-verified","release_asset":asset_name})
                 registry["sources"].append({"id":sid,"repository":f"https://github.com/{repo}","license":s["license"],"kind":"REAL_RECORDED","files_added":copied})
                 print(f"  imported {copied} repository audio files")
+            if capacity_reached:
+                break
         out=run_root/"SOUND_HUNTER_REGISTRY.json"
         out.write_text(json.dumps(registry,ensure_ascii=False,indent=2),encoding="utf-8")
         print(f"Completed. {len(registry['assets'])} audio assets; added this run {used/1_000_000_000:.2f} GiB; aggregate Samples audio library {library_bytes/1024**3:.2f}/{args.max_library_gb:.2f} GiB.")
