@@ -3136,3 +3136,13 @@ SVG artwork commits: `1108cbc27764c6465f028dd9543dca619e745ae1`, `ca7e3aba844948
 
 Оба run относятся к историческим SHA до последующих изменений этой записи; они не доказывают CI PASS для текущего HEAD `08e1f848eb517455987b97cfb6f5e75797f58311` или более поздних коммитов. Эти workflow выполняли Skin staging pipeline, а не JUCE Release Build / CTest / pluginval / FL Studio acceptance. Оба ZIP — staging artifacts, не release packages.
 
+## 2026-11-15 — Add official Skin Studio validators to Windows CI
+
+**Commit:** `fc1da06c8eebaf1a654e21cdc4984adafe152d1b`
+
+В `.github/workflows/neon-stage-build.yml` после staging asset pipeline добавлены обязательные Windows CI steps:
+1. `python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json` — официальный G1–G4 merged-pack validator;
+2. `python tests/ValidateSkinManifests.py` — полный registry/manifest contract validator для всех зарегистрированных тем.
+
+Оба шага должны завершиться с кодом 0; ошибки не подавляются и не ослабляют пороги. Это изменение только CI/QA, не runtime. Результат для нового commit ожидается; до успешного Actions run текущий G1–G4 статус остаётся STATIC PREFLIGHT ONLY.
+
