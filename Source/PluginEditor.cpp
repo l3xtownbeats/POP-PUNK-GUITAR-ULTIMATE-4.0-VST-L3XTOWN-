@@ -985,16 +985,60 @@ void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int 
  g.setGradientFill(juce::ColourGradient(palette.surfaceRaised.brighter(.12f),cx,cy-r,palette.canvasInset.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
  juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.text);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.accentSecondary);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
 }
-void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool hi,bool down)
+void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,
+    juce::Button& button, const juce::Colour& base, bool hovered, bool pressed)
 {
- auto r=b.getLocalBounds().toFloat().reduced(.5f);auto c=b.getToggleState()?palette.accent:base;if(!b.isEnabled())c=palette.surfaceSecondary;else if(down)c=c.darker(.18f);else if(hi)c=c.brighter(.12f);
- g.setGradientFill(juce::ColourGradient(c.brighter(.08f),r.getX(),r.getY(),c.darker(.16f),r.getX(),r.getBottom(),false));g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
- if(b.getToggleState()&&b.isEnabled()){g.setColour(palette.accentSecondary);g.fillRoundedRectangle(r.removeFromLeft(3),1.5f);}
+    auto bounds = button.getLocalBounds().toFloat().reduced(0.5f);
+    auto fill = button.getToggleState() ? palette.accent : base;
+    if (!button.isEnabled()) fill = palette.surfaceSecondary;
+    else if (pressed) fill = fill.darker(0.18f);
+    else if (hovered) fill = fill.brighter(0.12f);
+
+    g.setGradientFill(juce::ColourGradient(fill.brighter(0.08f), bounds.getX(), bounds.getY(),
+        fill.darker(0.16f), bounds.getX(), bounds.getBottom(), false));
+    g.fillRoundedRectangle(bounds, 7.0f);
+    const auto outline = !button.isEnabled() ? palette.border.withAlpha(0.45f)
+        : (button.hasKeyboardFocus(true) ? palette.accentGlow : palette.border);
+    g.setColour(outline);
+    g.drawRoundedRectangle(bounds, 7.0f, button.hasKeyboardFocus(true) ? 1.7f : 1.0f);
+    if (button.getToggleState() && button.isEnabled())
+    {
+        g.setColour(palette.accentGlow);
+        g.fillRoundedRectangle(bounds.removeFromLeft(3.0f), 1.5f);
+    }
 }
-void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g,int w,int h,bool down,int,int,int,int,juce::ComboBox& box)
+void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int width, int height,
+    bool isButtonDown, int, int, int, int, juce::ComboBox& box)
 {
- auto r=juce::Rectangle<float>(.5f,.5f,(float)w-1,(float)h-1);auto c=box.findColour(juce::ComboBox::backgroundColourId);g.setColour(down?c.brighter(.08f):c);g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
- float cx=r.getRight()-17,cy=r.getCentreY();juce::Path p;p.startNewSubPath(cx-4,cy-2);p.lineTo(cx,cy+2);p.lineTo(cx+4,cy-2);g.setColour(palette.accent);g.strokePath(p,juce::PathStrokeType(1.8f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+    auto bounds = juce::Rectangle<float>(0.5f, 0.5f,
+        static_cast<float>(width) - 1.0f, static_cast<float>(height) - 1.0f);
+    auto fill = box.findColour(juce::ComboBox::backgroundColourId);
+    if (!box.isEnabled()) fill = palette.surfaceSecondary;
+    else if (isButtonDown) fill = fill.brighter(0.08f);
+    g.setColour(fill);
+    g.fillRoundedRectangle(bounds, 7.0f);
+    g.setColour(box.hasKeyboardFocus(true) ? palette.accentGlow : palette.border);
+    g.drawRoundedRectangle(bounds, 7.0f, box.hasKeyboardFocus(true) ? 1.7f : 1.0f);
+    const float cx = bounds.getRight() - 17.0f;
+    const float cy = bounds.getCentreY();
+    juce::Path arrow;
+    arrow.startNewSubPath(cx - 4.0f, cy - 2.0f);
+    arrow.lineTo(cx, cy + 2.0f);
+    arrow.lineTo(cx + 4.0f, cy - 2.0f);
+    g.setColour(box.isEnabled() ? palette.accent : palette.textSecondary.withAlpha(0.45f));
+    g.strokePath(arrow, juce::PathStrokeType(1.8f,
+        juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+}
+void PPGUPremiumLookAndFeel::drawTextEditorOutline(juce::Graphics& g,
+    int width, int height, juce::TextEditor& editor)
+{
+    const auto bounds = juce::Rectangle<float>(0.5f, 0.5f,
+        static_cast<float>(width) - 1.0f, static_cast<float>(height) - 1.0f);
+    const bool focused = editor.hasKeyboardFocus(true);
+    const auto outline = !editor.isEnabled() ? palette.border.withAlpha(0.45f)
+        : (focused ? palette.accentGlow : palette.border);
+    g.setColour(outline);
+    g.drawRoundedRectangle(bounds, 5.0f, focused ? 1.7f : 1.0f);
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
@@ -1663,25 +1707,93 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
- if (auxiliaryWorkspace != nullptr)
- {
-     auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
-         p.token("control_border"), p.token("accent"), p.token("text_primary"));
-     auxiliaryWorkspace->setThemePalette(p);
- }
- titleLabel.setColour(juce::Label::textColourId,p.token("text_primary"));subtitleLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));statusLabel.setColour(juce::Label::textColourId,p.token("text_secondary"));
- ampTitle.setColour(juce::Label::textColourId,p.token("accent"));fxTitle.setColour(juce::Label::textColourId,p.token("accent"));playbackTitle.setColour(juce::Label::textColourId,p.token("accent"));
- for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
- presetSearch.setColour(juce::TextEditor::backgroundColourId,p.token("control_bg"));presetSearch.setColour(juce::TextEditor::textColourId,p.token("text_primary"));presetSearch.setColour(juce::TextEditor::outlineColourId,p.token("control_border"));presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.token("highlight"));presetSearch.setColour(juce::TextEditor::highlightColourId,p.token("accent").withAlpha(.3f));
- loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));settingsButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));settingsButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
- for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b->setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b->setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b->setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
- for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.token("accent"));s.setColour(juce::Slider::rotarySliderOutlineColourId,p.token("control_border"));s.setColour(juce::Slider::thumbColourId,p.token("text_primary"));s.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));}
- for(auto& l:knobLabels)l.setColour(juce::Label::textColourId,p.token("text_secondary"));
- for(auto& b:fxButtons){b.setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b.setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b.setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
- if(keyboard){keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId,p.token("text_primary"));keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId,p.token("control_bg"));keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId,p.token("control_border"));keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId,p.token("accent_glow").withAlpha(.3f));keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId,p.token("accent").withAlpha(.88f));}
- repaint();
+    const auto& palette = themeManager.getPalette();
+    const auto colour = [&palette](const juce::String& token) { return palette.token(token); };
+
+    premiumLookAndFeel.setPalette(palette);
+    if (performanceDisplay != nullptr)
+        performanceDisplay->setPalette(palette);
+
+    if (auxiliaryWorkspace != nullptr)
+    {
+        auxiliaryWorkspace->setSurfaceColours(colour("window_bg"), colour("panel"),
+            colour("control_border"), colour("accent"), colour("text_primary"));
+        auxiliaryWorkspace->setThemePalette(palette);
+    }
+
+    titleLabel.setColour(juce::Label::textColourId, colour("text_primary"));
+    subtitleLabel.setColour(juce::Label::textColourId, colour("accent"));
+    statusLabel.setColour(juce::Label::textColourId, colour("lcd_text"));
+    statusLabel.setColour(juce::Label::backgroundColourId, colour("lcd_bg"));
+    statusLabel.setColour(juce::Label::outlineColourId, colour("control_border"));
+    statusLabel.setFont(juce::Font("Consolas", 10.0f, juce::Font::bold));
+    statusLabel.setJustificationType(juce::Justification::centredLeft);
+    ampTitle.setColour(juce::Label::textColourId, colour("accent"));
+    fxTitle.setColour(juce::Label::textColourId, colour("accent"));
+    playbackTitle.setColour(juce::Label::textColourId, colour("accent"));
+
+    for (auto* combo : { &presetBox, &categoryBox, &modeBox, &startModeBox })
+    {
+        combo->setColour(juce::ComboBox::backgroundColourId, colour("control_bg"));
+        combo->setColour(juce::ComboBox::textColourId, colour("text_primary"));
+        combo->setColour(juce::ComboBox::outlineColourId, colour("control_border"));
+        combo->setColour(juce::ComboBox::arrowColourId, colour("accent"));
+        combo->setColour(juce::ComboBox::focusedOutlineColourId, colour("accent_glow"));
+    }
+
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, colour("control_bg"));
+    presetSearch.setColour(juce::TextEditor::textColourId, colour("text_primary"));
+    presetSearch.setColour(juce::TextEditor::outlineColourId, colour("control_border"));
+    presetSearch.setColour(juce::TextEditor::focusedOutlineColourId, colour("accent_glow"));
+    presetSearch.setColour(juce::TextEditor::highlightColourId, colour("accent").withAlpha(0.30f));
+    presetSearch.setColour(juce::TextEditor::highlightedTextColourId, colour("text_primary"));
+    presetSearch.setColour(juce::TextEditor::shadowColourId, colour("shadow"));
+
+    const auto styleButton = [&colour](juce::TextButton& button,
+        const juce::String& background, const juce::String& foreground)
+    {
+        button.setColour(juce::TextButton::buttonColourId, colour(background));
+        button.setColour(juce::TextButton::buttonOnColourId, colour("accent"));
+        button.setColour(juce::TextButton::textColourOffId, colour(foreground));
+        button.setColour(juce::TextButton::textColourOnId, colour("window_bg"));
+        button.setColour(juce::TextButton::outlineColourId, colour("control_border"));
+    };
+
+    styleButton(loadButton, "accent", "window_bg");
+    styleButton(settingsButton, "panel_elevated", "text_primary");
+    styleButton(skinButton, "panel_elevated", "text_primary");
+    styleButton(autoChordsButton, "control_bg", "text_primary");
+    styleButton(melodyTab, "control_bg", "text_primary");
+    styleButton(patternTab, "control_bg", "text_primary");
+    skinButton.setTooltip("NEON STAGE active skin: " + palette.name + "  /  Ctrl+K");
+
+    for (auto& slider : knobs)
+    {
+        slider.setColour(juce::Slider::rotarySliderFillColourId, colour("accent"));
+        slider.setColour(juce::Slider::rotarySliderOutlineColourId, colour("control_border"));
+        slider.setColour(juce::Slider::thumbColourId, colour("text_primary"));
+        slider.setColour(juce::Slider::textBoxTextColourId, colour("text_primary"));
+        slider.setColour(juce::Slider::textBoxBackgroundColourId, colour("control_bg"));
+        slider.setColour(juce::Slider::textBoxOutlineColourId, colour("control_border"));
+    }
+    for (auto& label : knobLabels)
+        label.setColour(juce::Label::textColourId, colour("text_secondary"));
+    for (auto& button : fxButtons)
+        styleButton(button, "control_bg", "text_primary");
+
+    if (keyboard != nullptr)
+    {
+        keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, colour("text_primary"));
+        keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, colour("control_bg"));
+        keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, colour("control_border"));
+        keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId,
+            colour("accent_glow").withAlpha(0.30f));
+        keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId,
+            colour("accent").withAlpha(0.88f));
+    }
+    repaint();
 }
+
 void PopPunkGuitarUltimateAudioProcessorEditor::persistSkinPreference(){if(auto* s=uiProperties.getUserSettings()){s->setValue("skinId",themeManager.getPalette().id);s->saveIfNeeded();}}
 bool PopPunkGuitarUltimateAudioProcessorEditor::keyPressed(const juce::KeyPress& k){if(k.getKeyCode()=='K'&&k.getModifiers().isCtrlDown()){openSkinGalleryPanel();return true;}return juce::AudioProcessorEditor::keyPressed(k);}
 
