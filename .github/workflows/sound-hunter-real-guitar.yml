@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v4
       - name: List approved real-recorded sources
         run: python3 SoundHunter/sound_hunter_real_guitars.py --discover-only
-      - name: Test Sound Hunter path safety and run-local size cap
+      - name: Test Sound Hunter path safety and uncapped import behavior
         run: python3 tests/test_sound_hunter_importer.py
       - name: Download, verify and import real guitar audio
-        run: python3 SoundHunter/sound_hunter_real_guitars.py --max-gb 25
+        run: python3 SoundHunter/sound_hunter_real_guitars.py
       - name: Package additive Sound Hunter import
         run: |
           cd Samples
@@ -27,7 +27,7 @@ jobs:
       - name: Upload verified sample library
         uses: actions/upload-artifact@v4
         with:
-          name: PPGU-REAL-GUITAR-SAMPLES-25GB-MAX
+          name: PPGU-REAL-GUITAR-SAMPLES-UNCAPPED
           path: |
             ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.zip
             ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
