@@ -410,3 +410,17 @@ First approved file = authoritative layout/appearance/control inventory (preserv
 - Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation and Rhythm Pattern remain independent. MELODY one-key/one-note; no overlay may obstruct MIDI keyboard or hit-testing.
 - Preserve first mockup layout/control inventory; second AutoChords reference is palette-only; third FX EDIT + AutoChords is distinct. Preserve REV17/I1–I8/R01–R34, I7/R18 default-ppgu, stable IDs, factory read-only/extension-only, user/factory separation, file formats and no fake controls.
 - Documentation-only. No production source/assets/APVTS/DSP/MIDI/sampler/preset data changed; runtime, host-sync, exact-SHA CI and FL Studio 20 acceptance remain unverified. No PASS claimed.
+
+
+## 2026-11-14 — Preset Browser reconciliation index
+
+- Canonical journal: INFO / Info.txt only. This file remains a code/implementation index.
+- Approved behavior and conflict boundaries are recorded in INFO, section “2026-11-14 — PRESET BROWSER reconciliation indexed across canonical records”; detailed approved requirements are also in the earlier PRESET BROWSER / PRESET WORKFLOW reconciliation entry.
+- Canonical navigation: Pattern discovery GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN; sections Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro. Melody remains PRESET → STYLE → PATTERN.
+- Browser inventory: BROWSER, FAVORITES, CATEGORIES, FACTORY/USER, SEARCH, FILTER, SORT, PREV/NEXT, FAVORITE, PRESET NAME, CATEGORY, PREVIEW, SELECT/LOAD, SAVE, SAVE AS, RENAME, DELETE, IMPORT, EXPORT, RESCAN.
+- State contract: Selected ≠ Previewed ≠ Loaded/Active. Preview must be isolated; LOAD is explicit and transactional. Failed operations preserve the prior active preset.
+- Factory is read-only; user operations require real backend and safe validation. Stable IDs, schema/version, APVTS/state, sample/profile/articulation/FX dependencies, path containment, licensing and atomic index updates are mandatory.
+- Preserve the 300 factory definitions / 150 MELODY + 150 PATTERN target; catalog definitions are not proof of playable presets. No duplicate catalog/schema/browser and no invented visible controls outside the first mockup.
+- Visual authority: first mockup controls layout and inventory; second AutoChords reference supplies palette only; third FX EDIT + AutoChords reference remains separate. Skins are visual-only.
+- No audio-thread I/O/allocation/blocking/decoding/logging/GUI calls. No APVTS/DSP/MIDI/sampler/scheduler/preset-data changes to implement browser UI.
+- Documentation-only indexing. No production source/tests/assets changed; no build, CTest, pluginval or FL Studio 20 pass claimed.
