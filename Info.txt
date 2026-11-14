@@ -2705,3 +2705,52 @@ CTest, pluginval strictness 5 и FL Studio 20 в рамках этого ком�
 **Verification:** the failure is confirmed on the exact HEAD above. The fix is committed separately; a new Windows workflow run is required before claiming G2/G4 PASS, ZIP creation, or pipeline success. Windows VST3 build, CTest, pluginval strictness 5 and FL Studio 20 remain separate unverified gates.
 **Status:** ROOT CAUSE CONFIRMED / FIX COMMITTED / RETEST REQUIRED.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — NEON-STAGE-VISUAL-REVIEW-003 — seven references and gallery asset sync
+==============================================================================
+
+**Branch:** `work/neon-stage-reference-preview-fix`
+**Workflow change:** `07a6168883bbcca1d304101fe5fadc2e32325c5b`
+**Asset sync commit:** `7d691a90f487d8021a3ed77a42044e1dec4d7f5f`
+**NEON STAGE CI run:** `43625314342` — SUCCESS
+**Artifact:** `neon-stage-skin-053-staging` (1,412,687 bytes; SHA-256
+`a11e67f6387baa6d82893f5bdd2c71bcd2c2722a124c39bb8b2946b17395ffa6`)
+
+**Visual reference inspection:** all seven approved 1672x941 mockups were opened and
+visually reviewed: (01) default SIGNAL FORGE / NEON STAGE main view; (02) AutoChords
+panel; (03) FX Edit; (04) gallery/import/discovery/curator/settings/about panels;
+(05) combined FX Edit + AutoChords; (06) full AutoChords view; (07) main view with
+AutoChords. The 480x300 Preview and 1200x420 Hero are contain-fit renders of mockup 01,
+not fabricated interface screenshots.
+
+**Concrete change:** the previous tracked Skin_053 preview/hero were stale placeholder
+artwork. The successful staging pipeline now syncs only the reviewed Preview/Hero
+into `SKIN/Skin_053/assets/` on this work branch. SHA-256:
+- preview.png: `82381BF26418C0E93E741DC21F533D3155209D015E892B2646BDDCED815E0518`
+- hero.png: `3C4DA883BD9D2FDD9A0EB0252195BEC0D3EE732755AB009C72F4560786F0D963`
+
+**Reference audit / staging CI:** seven reference files present and decodable; 27
+schema-required control IDs; 28 controls in Skin_052 and Skin_053; exact Skin_052
+grid metadata parity; 12x16 bounds; no APVTS/audio/MIDI changes. G1 contrast passed:
+primary 20.01:1, secondary 16.05:1, disabled 10.22:1, LCD 18.23:1, accent/panel
+15.37:1. Staging report passed; ZIP integrity passed. This workflow does not build
+the JUCE VST3 or run CTest/pluginval/FL Studio.
+
+**Coordinate status:** the seven mockups have now been visually inspected, but the
+12x16 control map is NOT approved as pixel-level geometry. control_schema.json says
+coordinates are design metadata until a layout engine consumes them; existing JUCE
+bounds remain authoritative. Skin_052 grid parity is preserved without claiming
+pixel placement approval.
+
+**Compatibility:** SIGNAL FORGE remains the working interface name; NEON STAGE remains
+the default theme identity. APVTS IDs/bindings, DSP, audio callback, MIDI behavior,
+live JUCE bounds and default-skin pointer were not changed. No merge or main-branch
+write was made.
+
+**Next validation:** align both Skin Pack validators with Skin_053's 480x300 / 1200x420
+artwork contract while preserving legacy dimensions for all other skins, then run
+Windows VST3 CI, CTest and pluginval on the updated work-branch head. FL Studio 20
+manual host acceptance remains separate.
+==============================================================================

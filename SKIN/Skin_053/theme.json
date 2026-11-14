@@ -5,7 +5,7 @@
   "name": "NEON STAGE",
   "family": "neon_basement",
   "layout": "STUDIO_CONSOLE",
-  "description": "NEON STAGE: default visual theme for the SIGNAL FORGE working interface. Staging metadata; visual approval remains pending comparison with all seven approved mockups.",
+  "description": "NEON STAGE: default visual theme for the SIGNAL FORGE working interface. Seven approved mockups inspected; pixel-to-grid coordinate sign-off remains pending.",
   "palette": {
     "window_bg": "#050811",
     "panel": "#091321",
@@ -345,8 +345,8 @@
   "designStatus": "STAGING_NOT_MERGED",
   "notes": [
     "NEON STAGE is the default visual theme identity for the SIGNAL FORGE working interface.",
-    "Staging metadata only; visual approval remains pending pixel-level comparison with all seven approved reference mockups.",
-    "Visual-only theme: APVTS, live layout, audio and MIDI contracts remain unchanged.",
-    "Control positions are expected to match Skin_052 exactly; the reference audit enforces this metadata parity."
+    "All seven approved NEON STAGE mockups were visually inspected on 2026-11-14; preview and hero are contain-fit renders of mockup 01.",
+    "Skin_052 12x16 grid parity is retained; grid coordinates remain design metadata and are not approved as pixel-level placements.",
+    "Visual-only theme: APVTS, live layout, audio and MIDI contracts remain unchanged."
   ]
 }

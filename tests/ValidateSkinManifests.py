@@ -239,9 +239,16 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
 
     preview = SKIN_ROOT / folder / expected_assets["preview"]
     hero = SKIN_ROOT / folder / expected_assets["hero"]
+    # Skin_053 NEON STAGE follows the REV ULTRA artwork dimensions;
+    # other studio skins keep the legacy asset contract.
+    preview_size, hero_size = (
+        ((480, 300), (1200, 420))
+        if data.get("id") == "skin-053"
+        else ((360, 240), (800, 450))
+    )
     for image_path, expected_size, label in (
-        (preview, (360, 240), "preview"),
-        (hero, (800, 450), "hero"),
+        (preview, preview_size, "preview"),
+        (hero, hero_size, "hero"),
     ):
         try:
             if not image_path.is_file() or png_dimensions(image_path) != expected_size:
