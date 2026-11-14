@@ -247,3 +247,25 @@ This manual-activation policy supersedes any earlier wording that could be inter
 
 This is a confirmed behavior requirement, not a claim that the controls or scanning/search implementation are already complete or tested.
 
+## User-directed URL source inspection and download mode
+
+Add a third, separate user-controlled Sound Hunter workflow: **SCAN / DOWNLOAD FROM URL**.
+
+The user may paste one or more direct links or source-page URLs pointing to guitar sounds, sample libraries, sound banks, archives, or other potentially relevant audio resources. This mode is distinct from both local-folder scanning and global internet search:
+
+- **Local folder scan:** manually scans the user's `Samples/Import Guitar Samples/` folder; no network access.
+- **Global search:** broad internet discovery, started only by the user with the dedicated manual action.
+- **User-provided URL mode:** inspects only the URL(s) explicitly supplied by the user. It must not expand into broad web searches or crawl unrelated sites.
+
+For a supplied URL, the engine/tooling should, where technically and legally supported:
+1. Inspect the page or direct resource and identify whether it points to downloadable guitar audio, sample banks, archives, metadata or license information.
+2. Show the detected source name, candidate files/formats, approximate sizes when available, source/license information and any access requirements.
+3. Distinguish a direct file URL from a web page that merely describes or links to a library.
+4. Let the user choose which candidate files to download; do not silently download every linked file.
+5. Download only through the source's normal authorized route. Never bypass logins, subscriptions, payment, DRM, access controls, CAPTCHAs or rate limits; do not use leaked or unauthorized copies.
+6. Allow a user-directed scan/inspection without downloading where possible. Clearly report when a page cannot be inspected or a file is not directly accessible.
+7. Preserve source URL, original filename, acquisition date, license/attribution evidence and SHA-256. Do not overwrite or delete existing files; use safe staging and deduplication.
+8. After an approved download, place the files into the same local intake pipeline as other direct imports, then let the user explicitly start the local scan/classification workflow. URL inspection or download must not silently trigger local scanning, global search or preset generation.
+
+The UI should provide a clearly separate URL input/action (for example, **INSPECT URL** and then **DOWNLOAD SELECTED**) and show progress and cancellation. URL inspection/download, local folder scanning and global search are three independent manually initiated operations. All remain OFF until the user deliberately starts the corresponding action. This feature is a product requirement, not a claim that URL inspection, download, or scanning is already implemented or tested.
+
