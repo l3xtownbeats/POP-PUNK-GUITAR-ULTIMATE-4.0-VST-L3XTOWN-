@@ -588,3 +588,20 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Follow-up assertion hardening:** commit `26f29471af6fda09e31fa26f63e544de65b08ecd` strengthens the same regression test: it now requires the explicit `mono/stereo only` metadata warning, rather than accepting any generic SFZ/load error as proof of multichannel rejection. This prevents malformed fixtures or unrelated failures from passing the test. Exact-SHA CI remains pending.
 
 **Header hygiene:** commit `8c75820cab1b909ff43c55736f25150338e384d0` adds direct standard-library includes (`<algorithm>`, `<string>`) required by the hardened assertion; no reliance on transitive JUCE includes. Exact-SHA CI pending.
+
+
+## 2026-11-14 — REV.17 exact-SHA Windows VST3 CI acceptance checkpoint
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`  
+**Exact source SHA:** `8c75820cab1b909ff43c55736f25150338e384d0`  
+**GitHub Actions run:** `43463167899` — completed / success.
+
+**Verified workflow stages:** JUCE 7.0.12 checkout; artwork and factory-catalog validation; portable preset examples; APVTS registry/state persistence; REV.14 skin-pack validation; redistributable sample-library restoration and license validation; BinaryData preflight; x64 Release configure; VST3 and test-executable build; CTest regression suite; VST3 bundle discovery; pluginval strictness level 5; package creation and artifact upload. Every listed job step completed successfully; the CTest step itself reports success.
+
+**Artifacts:** `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE` (1,666,314,714 bytes; artifact ID `14058390907`; SHA-256 `0742df5ba217a330ffe2617444c2267af64da9e34aa07e1cf0913d8f41bc1162`; expires 2027-02-11) and `POP-PUNK-GUITAR-SOURCE-REVIEW` (artifact ID `14056843611`).
+
+**Important limitation:** workflow explicitly records a host-validation limitation. CI success and pluginval strictness 5 do not prove manual loading/playback in FL Studio 20 on the user's machine. The produced VST3 package is a CI artifact, not yet a manually verified installation. Sample-library validation passed using the restored redistributable library cache; the download step was skipped because the cache was restored.
+
+**Regression test result:** exact-SHA CTest step succeeded after the SFZ newline fixture corrections, explicit `mono/stereo only` warning assertion, and direct standard-library includes. This resolves the previously pending 10/12 regression checkpoint for this source SHA.
+
+**Status:** WINDOWS x64 RELEASE BUILD PASS / CTEST PASS / PLUGINVAL STRICTNESS 5 PASS / PACKAGE ARTIFACT CREATED. FL STUDIO 20 MANUAL HOST CHECK PENDING. Do not label the product fully production-released until the host check and final user-facing install verification are complete.
