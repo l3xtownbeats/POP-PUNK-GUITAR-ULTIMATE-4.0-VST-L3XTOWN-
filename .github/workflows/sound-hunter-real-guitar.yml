@@ -20,17 +20,24 @@ jobs:
         uses: actions/checkout@v4
       - name: List approved real-recorded sources
         run: python3 SoundHunter/sound_hunter_real_guitars.py --discover-only
-      - name: Test Sound Hunter path safety, release integrity and unlimited Samples policy
-        run: python3 tests/test_sound_hunter_importer.py
+      - name: Test Sound Hunter, unlimited SAMPLES and split artifact integrity
+        run: |
+          python3 tests/test_sound_hunter_importer.py
+          python3 tests/test_audit_soundbank_policy.py
+          python3 tests/test_artifact_splitter.py
       - name: Download, verify and import real guitar audio
         run: python3 SoundHunter/sound_hunter_real_guitars.py
       - name: Package additive Sound Hunter import
         run: |
-          cd Samples
-          zip -qr "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" SoundHunterImports
-          split -b 1800m "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.part-"
-          sha256sum "$RUNNER_TEMP"/PPGU_REAL_GUITAR_SAMPLES.part-* > "$RUNNER_TEMP/SAMPLES_PARTS_SHA256SUMS.txt"
-          cp SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
+          zip -qr "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" Samples/SoundHunterImports
+          python3 tools/split_artifact.py split \
+            --input "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip" \
+            --output-dir "$RUNNER_TEMP" \
+            --prefix PPGU_REAL_GUITAR_SAMPLES \
+            --part-size-mb 1800
+          python3 tools/split_artifact.py verify \
+            --manifest "$RUNNER_TEMP/PPGU_REAL_GUITAR_PPGU_REAL_GUITAR_SAMPLES_PARTS_MANIFEST.json"
+          cp Samples/SoundHunterImports/*/SOUND_HUNTER_REGISTRY.json "$RUNNER_TEMP/SOUND_HUNTER_REGISTRY.json"
           rm -f "$RUNNER_TEMP/PPGU_REAL_GUITAR_SAMPLES.zip"
       - name: Upload verified sample library
         uses: actions/upload-artifact@v4
@@ -38,7 +45,7 @@ jobs:
           name: PPGU-REAL-GUITAR-SAMPLES-UNLIMITED
           path: |
             ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES.part-*
-            ${{ runner.temp }}/SAMPLES_PARTS_SHA256SUMS.txt
+            ${{ runner.temp }}/PPGU_REAL_GUITAR_SAMPLES_PARTS_SHA256SUMS.txt
             ${{ runner.temp }}/SOUND_HUNTER_REGISTRY.json
           if-no-files-found: error
           retention-days: 30
