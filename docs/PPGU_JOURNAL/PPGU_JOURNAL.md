@@ -442,3 +442,15 @@ Implementation requirements for all six album families:
 - Do not copy commercial samples, isolated tracks, proprietary presets, or protected recordings from the named albums. Create original sound-alike tonal interpretations using legally usable source material and independently designed processing.
 
 These album families extend the approved general band/style preset scope and the professional guitar VSTi workflow requirements. A named preset family is not considered complete until its sound is implemented and audio-validated; names alone do not count.
+
+## MASTER DEVELOPMENT PLAN 4.0 — CONSOLIDATED APPROVED SCOPE AND EXECUTION ORDER (2026-11-14)
+
+Created the canonical execution roadmap: `docs/PPGU_MASTER_DEVELOPMENT_PLAN_RU.md`.
+
+The plan consolidates the approved product target and all current additions: Windows 10 x64 VST3 / FL Studio 20; standard playable guitar VSTi behavior; distinct MIDI pitch per key in MELODY; chord-triggered rhythmic performance in PATTERN; AutoChords ON/OFF and LOCK semantics; intelligent compatible sample fallback and efficient multi-source tone assembly; professional guitar VSTi workflow references; 64-voice SamplerEngine and ANGELA realtime-safe optimization; licensed SoundBank, permanent Samples retention and 40 GB managed Samples ceiling; 25–30 GB factory-library size target; 300 initial presets (150 MELODY + 150 PATTERN) with no artificial future count ceiling; all 21 approved group/style profiles; six album-era families (Blink-182 1999/2001/2003; Sum 41 2001/2002/2007); 10–15 real FX plus amp/cab/IR; AUTO DISCOVER, CURATOR, Import Guitar, browser, skins and remaining modules; PSC design path; and release gates.
+
+The plan also records the approved NEON STAGE DEFAULT direction and flags the older charcoal/magenta editor statement in the legacy master specification for an explicit UI reconciliation audit rather than silently rewriting history.
+
+Current CI evidence was checked: Windows VST3 workflow run #1546 / run ID `43584870207`, source SHA `7681c945959afa9da437a35eec3dc3e5cfc20d66`. Configure, build, CTest, VST3 locate, pluginval strictness 5, cache restore, SoundBank/license audit and registry generation steps succeeded. The overall workflow was **cancelled** at package stage; package upload was skipped. This is not a release package and does not establish FL Studio 20 host validation. PSC remains design-only. Existing preset-readiness documentation distinguishes the 300 catalogue entries from verified playable runtime presets.
+
+This is a documentation/plan consolidation. It does not claim that outstanding functions, preset audio, sample-bank integration, package delivery or host testing are complete. The plan's next gates are source and registry inspection, per-preset source/mapping audit, full-range MIDI pitch verification, complete package/upload, and manual FL Studio 20 acceptance.
