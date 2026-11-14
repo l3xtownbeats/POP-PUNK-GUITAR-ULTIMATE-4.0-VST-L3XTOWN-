@@ -189,6 +189,422 @@ def step_ui():
     led.save(ASSETS/"led"/"led_states.png",optimize=True)
     print("Generated six button states, seven FX x two states, slider and LED atlas.")
 
+
+
+def _indexed_png(image, path):
+    """Save deterministic indexed PNG-8 using the canonical theme palette."""
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+    image.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(
+        path, "PNG", optimize=True
+    )
+
+
+def _atlas(name, frames, columns):
+    """Write a deterministic sprite atlas and its frame-coordinate JSON index."""
+    if not frames:
+        raise ValueError(f"Atlas {name} has no frames")
+    cell_w, cell_h = frames[0][2].size
+    if any(frame[2].size != (cell_w, cell_h) for frame in frames):
+        raise ValueError(f"Atlas {name} contains mixed frame dimensions")
+    rows = (len(frames) + columns - 1) // columns
+    sheet = Image.new("RGB", (columns * cell_w, rows * cell_h), PALETTE["panel"])
+    index = {"schemaVersion":"1.0.0", "atlas":name, "cellWidth":cell_w,
+             "cellHeight":cell_h, "columns":columns, "rows":rows, "frameCount":len(frames),
+             "frames":[]}
+    for i, (frame_name, state, frame) in enumerate(frames):
+        x, y = (i % columns) * cell_w, (i // columns) * cell_h
+        sheet.paste(frame.convert("RGB"), (x, y))
+        index["frames"].append({"name":frame_name,"state":state,"x":x,"y":y,
+                                "w":cell_w,"h":cell_h})
+    atlas_dir = ASSETS / "atlas"
+    atlas_dir.mkdir(parents=True, exist_ok=True)
+    _indexed_png(sheet, atlas_dir / f"{name}.png")
+    (atlas_dir / f"{name}.json").write_text(
+        json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    return atlas_dir / f"{name}.png"
+
+
+def _state_knob(size, angle_index, state):
+    frame = render_knob(size, angle_index * 10).convert("RGBA")
+    overlay = Image.new("RGBA", frame.size, (0,0,0,0))
+    d = ImageDraw.Draw(overlay)
+    if state == "highlight":
+        d.ellipse((2,2,size-3,size-3), outline=(*rgb(SOURCE_PALETTE["focus_ring"]),210),
+                  width=max(2,size//32))
+    elif state == "disabled":
+        d.rectangle((0,0,size,size), fill=(*rgb(SOURCE_PALETTE["bg_deep"]),135))
+    return Image.alpha_composite(frame, overlay).convert("RGB")
+
+
+def _fx_glyph(draw, box, module, color):
+    x0,y0,x1,y1=box
+    cx,cy=(x0+x1)//2,(y0+y1)//2
+    w=max(2,(x1-x0)//14)
+    if module=="compressor":
+        pts=[(x0+4,cy),(x0+14,cy),(x0+21,y0+5),(x0+29,y1-5),(x1-4,cy)]
+        draw.line(pts,fill=color,width=w)
+    elif module=="eq":
+        for i,h in enumerate((8,18,12,25,15)):
+            x=x0+5+i*7
+            draw.line((x,cy-h,x,cy+h),fill=color,width=w)
+    elif module=="distortion":
+        draw.line([(x0+3,y1-4),(x0+12,y0+5),(x0+20,y1-4),(x0+28,y0+5),(x1-3,y1-4)],
+                  fill=color,width=w)
+    elif module=="chorus":
+        draw.arc((x0+2,y0+5,x1-2,y1-5),190,350,fill=color,width=w)
+        draw.arc((x0+2,y0+5,x1-2,y1-5),10,170,fill=color,width=w)
+    elif module=="delay":
+        draw.ellipse((cx-11,cy-11,cx+11,cy+11),outline=color,width=w)
+        draw.line((cx,cy,cx,cy-7),fill=color,width=w)
+        draw.line((cx,cy,cx+7,cy+4),fill=color,width=w)
+    elif module=="reverb":
+        for r in (5,11,17):
+            draw.ellipse((cx-r,cy-r,cx+r,cy+r),outline=color,width=max(1,w-1))
+    else:
+        draw.ellipse((cx-13,cy-13,cx+13,cy+13),outline=color,width=w)
+        draw.line((cx-17,cy,cx+17,cy),fill=color,width=w)
+        draw.line((cx,cy-17,cx,cy+17),fill=color,width=w)
+
+
+def _make_fx_frame(module, state, size=(140,84)):
+    accents={
+        "compressor":SOURCE_PALETTE["accent_primary"], "eq":SOURCE_PALETTE["border_glow"],
+        "distortion":SOURCE_PALETTE["accent_warning"], "chorus":SOURCE_PALETTE["focus_ring"],
+        "delay":SOURCE_PALETTE["accent_secondary"], "reverb":SOURCE_PALETTE["accent_success"],
+        "cabinet_ir":SOURCE_PALETTE["accent_warning"]
+    }
+    accent=accents[module]
+    im=Image.new("RGB",size,rgb(PALETTE["panel"]))
+    d=ImageDraw.Draw(im)
+    enabled=state=="on"
+    edge=accent if enabled else rgb(PALETTE["border"])
+    if state=="bypass": edge=rgb(SOURCE_PALETTE["accent_warning"])
+    if state=="disabled": edge=rgb(SOURCE_PALETTE["text_disabled"])
+    d.rounded_rectangle((2,2,size[0]-3,size[1]-3),radius=9,
+                        fill=rgb(PALETTE["panel_elevated"] if enabled else PALETTE["control_bg"]),
+                        outline=edge,width=2)
+    d.rounded_rectangle((8,6,size[0]-9,11),radius=2,
+                        fill=rgb(accent if enabled else PALETTE["led_off"]))
+    _fx_glyph(d,(12,19,48,59),module,rgb(accent if state!="disabled" else PALETTE["text_disabled"]))
+    d.text((55,32),module.replace("_"," ").upper(),font=font(11,True),
+           fill=rgb(PALETTE["text_primary"] if state!="disabled" else PALETTE["text_disabled"]))
+    if state=="bypass":
+        d.rounded_rectangle((size[0]-49,17,size[0]-7,31),radius=4,
+                            fill=rgb(SOURCE_PALETTE["accent_warning"]))
+        d.text((size[0]-45,18),"BYP",font=font(8,True),fill=rgb(PALETTE["window_bg"]))
+    return im
+
+
+def _make_toggle(style, state):
+    im=Image.new("RGB",(72,32),rgb(PALETTE["panel"]))
+    d=ImageDraw.Draw(im)
+    on=state=="on"
+    bypass=state=="bypass"
+    accent=SOURCE_PALETTE["accent_warning"] if bypass else (
+        SOURCE_PALETTE["accent_primary"] if on else SOURCE_PALETTE["text_disabled"])
+    if style=="neon_pill":
+        d.rounded_rectangle((2,2,69,29),radius=13,fill=rgb(PALETTE["control_bg"]),
+                            outline=rgb(accent),width=2)
+        x=51 if on else 20
+        d.ellipse((x-9,7,x+9,25),fill=rgb(accent))
+    elif style=="flat":
+        d.rounded_rectangle((2,2,69,29),radius=4,fill=rgb(PALETTE["panel_elevated"]),
+                            outline=rgb(PALETTE["border"]),width=1)
+        d.rectangle((5,6,35 if on else 17,25),fill=rgb(accent))
+    else:
+        d.rounded_rectangle((2,2,69,29),radius=7,fill=rgb(PALETTE["control_face"]),
+                            outline=rgb(accent),width=2)
+        d.line((10,16,62,16),fill=rgb(accent),width=2)
+    label={"on":"ON","off":"OFF","bypass":"BYP"}[state]
+    d.text((25,10),label,font=font(8,True),fill=rgb(PALETTE["text_primary"]))
+    return im
+
+
+def _make_icon(name):
+    im=Image.new("RGB",(32,32),rgb(PALETTE["panel"]))
+    d=ImageDraw.Draw(im)
+    c=rgb(SOURCE_PALETTE["focus_ring"])
+    w=2
+    if name=="folder":
+        d.rounded_rectangle((4,10,28,25),radius=3,outline=c,width=w)
+        d.line((4,11,12,11,15,7,23,7),fill=c,width=w)
+    elif name=="star":
+        pts=[(16,3),(19,12),(29,12),(21,18),(24,28),(16,22),(8,28),(11,18),(3,12),(13,12)]
+        d.polygon(pts,outline=c)
+    elif name=="search":
+        d.ellipse((4,4,21,21),outline=c,width=w); d.line((19,19,28,28),fill=c,width=3)
+    elif name=="close":
+        d.line((7,7,25,25),fill=c,width=3); d.line((25,7,7,25),fill=c,width=3)
+    elif name=="palette":
+        d.ellipse((3,3,29,29),outline=c,width=w)
+        for x,y in ((10,10),(20,9),(12,20),(22,20)): d.ellipse((x-2,y-2,x+2,y+2),fill=c)
+    elif name=="guitar":
+        d.ellipse((6,15,22,29),outline=c,width=w); d.ellipse((12,10,23,21),outline=c,width=w)
+        d.line((18,13,27,4),fill=c,width=3); d.line((17,17,26,8),fill=c,width=1)
+    elif name=="radar":
+        d.ellipse((3,3,29,29),outline=c,width=w); d.arc((8,8,24,24),200,330,fill=c,width=w)
+        d.line((16,16,26,7),fill=c,width=2)
+    elif name=="curator":
+        d.ellipse((11,4,21,14),outline=c,width=w); d.arc((5,12,27,30),180,360,fill=c,width=w)
+        d.polygon([(23,4),(25,9),(30,9),(26,12),(28,17),(23,14),(19,17),(20,12),(16,9),(21,9)],outline=c)
+    elif name=="settings":
+        d.ellipse((8,8,24,24),outline=c,width=3); d.ellipse((13,13,19,19),outline=c,width=2)
+        for a,b in ((16,2,16,8),(16,24,16,30),(2,16,8,16),(24,16,30,16)):
+            d.line((a,b),fill=c,width=2)
+    elif name=="info":
+        d.ellipse((4,4,28,28),outline=c,width=w); d.text((12,5),"i",font=font(19,True),fill=c)
+    elif name=="note":
+        d.line((20,5,20,23),fill=c,width=3); d.line((20,5,28,3),fill=c,width=3)
+        d.ellipse((8,20,19,28),outline=c,width=2)
+    elif name=="grid":
+        for y in (5,14,23):
+            for x in (5,14,23): d.rectangle((x,y,x+5,y+5),outline=c,width=1)
+    elif name=="group":
+        for x in (7,16,25): d.ellipse((x-3,5,x+3,11),outline=c,width=1)
+        d.arc((2,10,13,27),180,360,fill=c,width=2); d.arc((10,10,22,27),180,360,fill=c,width=2)
+        d.arc((19,10,30,27),180,360,fill=c,width=2)
+    elif name=="play":
+        d.polygon([(9,5),(26,16),(9,27)],fill=c)
+    elif name=="pause":
+        d.rectangle((8,6,13,26),fill=c); d.rectangle((19,6,24,26),fill=c)
+    elif name=="stop":
+        d.rounded_rectangle((7,7,25,25),radius=2,fill=c)
+    elif name=="loop":
+        d.arc((5,5,27,27),35,300,fill=c,width=3); d.polygon([(23,3),(29,8),(21,10)],fill=c)
+    elif name=="dice":
+        d.rounded_rectangle((5,5,27,27),radius=4,outline=c,width=2)
+        for x,y in ((10,10),(22,10),(16,16),(10,22),(22,22)): d.ellipse((x-1,y-1,x+1,y+1),fill=c)
+    elif name=="crown":
+        d.polygon([(4,23),(3,9),(10,15),(16,5),(22,15),(29,9),(28,23)],outline=c)
+        d.line((4,27,28,27),fill=c,width=2)
+    return im
+
+
+def step_atlases():
+    """Build the full deterministic NEON STAGE sprite contract in staging only."""
+    ensure_dirs()
+    main=[]
+    for control in [f"knob{i:02d}" for i in range(1,10)]:
+        for state in ("base","highlight","disabled"):
+            for angle in range(13):
+                main.append((f"{control}_angle{angle:02d}_{state}",state,
+                             _state_knob(128,angle,state)))
+    _atlas("knobs_main",main,13)
+    main2=[]
+    for control in [f"knob{i:02d}" for i in range(1,10)]:
+        for state in ("base","highlight","disabled"):
+            for angle in range(13):
+                main2.append((f"{control}_angle{angle:02d}_{state}",state,
+                              _state_knob(256,angle,state)))
+    _atlas("knobs_main_2x",main2,13)
+    amp=[]
+    for control in ("amp_gain","amp_bass","amp_treble"):
+        for state in ("base","highlight","disabled"):
+            for angle in range(13):
+                amp.append((f"{control}_angle{angle:02d}_{state}",state,
+                            _state_knob(96,angle,state)))
+    _atlas("knobs_amp",amp,13)
+    amp2=[]
+    for control in ("amp_gain","amp_bass","amp_treble"):
+        for state in ("base","highlight","disabled"):
+            for angle in range(13):
+                amp2.append((f"{control}_angle{angle:02d}_{state}",state,
+                             _state_knob(192,angle,state)))
+    _atlas("knobs_amp_2x",amp2,13)
+
+    modules=("compressor","eq","distortion","chorus","delay","reverb","cabinet_ir")
+    fx=[(f"{module}_{state}",state,_make_fx_frame(module,state))
+        for module in modules for state in ("off","on","bypass","disabled")]
+    _atlas("fx_tiles",fx,4)
+    toggles=[(f"{style}_{state}",state,_make_toggle(style,state))
+             for style in ("neon_pill","flat","metallic") for state in ("on","off","bypass")]
+    _atlas("toggles",toggles,3)
+
+    tracks=[]
+    for name,accent in (("horizontal",SOURCE_PALETTE["accent_primary"]),
+                        ("sync",SOURCE_PALETTE["accent_secondary"])):
+        im=Image.new("RGB",(360,28),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        d.rounded_rectangle((4,9,356,19),radius=5,fill=rgb(PALETTE["control_bg"]),
+                            outline=rgb(PALETTE["border"]),width=1)
+        d.rounded_rectangle((4,9,210,19),radius=5,fill=rgb(accent))
+        tracks.append((name,"normal",im))
+    _atlas("slider_tracks",tracks,2)
+    vtrack=Image.new("RGB",(28,180),rgb(PALETTE["panel"])); d=ImageDraw.Draw(vtrack)
+    d.rounded_rectangle((9,4,19,176),radius=5,fill=rgb(PALETTE["control_bg"]),
+                        outline=rgb(PALETTE["border"]),width=1)
+    d.rounded_rectangle((9,65,19,176),radius=5,fill=rgb(SOURCE_PALETTE["accent_primary"]))
+    _atlas("slider_vertical", [("vertical_track","normal",vtrack)],1)
+    thumbs=[]
+    for state in ("normal","hover","dragged"):
+        im=Image.new("RGB",(32,40),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        accent=SOURCE_PALETTE["accent_primary"] if state!="normal" else SOURCE_PALETTE["border"]
+        d.ellipse((4,4,28,28),fill=rgb(PALETTE["control_face"]),outline=rgb(accent),width=3)
+        d.line((16,9,16,23),fill=rgb(PALETTE["text_primary"]),width=2)
+        if state=="dragged": d.ellipse((12,12,20,20),outline=rgb(SOURCE_PALETTE["accent_secondary"]),width=2)
+        thumbs.append((f"thumb_{state}",state,im))
+    _atlas("slider_thumbs",thumbs,3)
+    wheels=[]
+    for name in ("pitch","mod"):
+        im=Image.new("RGB",(40,180),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        accent=SOURCE_PALETTE["accent_primary"] if name=="pitch" else SOURCE_PALETTE["accent_secondary"]
+        d.rounded_rectangle((12,3,28,177),radius=7,fill=rgb(PALETTE["control_bg"]),outline=rgb(PALETTE["border"]))
+        d.rounded_rectangle((5,72,35,104),radius=7,fill=rgb(PALETTE["control_face"]),outline=rgb(accent),width=2)
+        d.text((14,82),name[0].upper(),font=font(12,True),fill=rgb(PALETTE["text_primary"]))
+        wheels.append((f"{name}_wheel","normal",im))
+    _atlas("pitch_mod_wheels",wheels,2)
+
+    white=[]; black=[]
+    for state in ("normal","pressed","glow"):
+        wi=Image.new("RGB",(46,160),rgb(PALETTE["panel"])); d=ImageDraw.Draw(wi)
+        fill={"normal":"#EAF6FF","pressed":"#9FB6D4","glow":"#7FE8FF"}[state]
+        d.rounded_rectangle((1,1,44,158),radius=3,fill=rgb(fill),outline=rgb(PALETTE["border"]),width=1)
+        if state=="glow": d.rectangle((2,145,43,157),fill=rgb(SOURCE_PALETTE["accent_primary"]))
+        white.append((f"white_{state}",state,wi))
+        bi=Image.new("RGB",(28,96),rgb(PALETTE["panel"])); d=ImageDraw.Draw(bi)
+        bfill=PALETTE["control_bg"] if state!="pressed" else PALETTE["panel_elevated"]
+        d.rounded_rectangle((1,1,26,94),radius=3,fill=rgb(bfill),outline=rgb(SOURCE_PALETTE["border_glow"] if state=="glow" else PALETTE["border"]),width=1)
+        if state=="glow": d.line((3,90,24,90),fill=rgb(SOURCE_PALETTE["accent_primary"]),width=3)
+        black.append((f"black_{state}",state,bi))
+    _atlas("keys_white",white,3); _atlas("keys_black",black,3)
+
+    meter_frames=[]
+    meter_colors=(("cyan",SOURCE_PALETTE["accent_primary"]),("magenta",SOURCE_PALETTE["accent_secondary"]),
+                  ("orange",SOURCE_PALETTE["accent_warning"]),("green",SOURCE_PALETTE["accent_success"]),
+                  ("red",SOURCE_PALETTE["accent_danger"]))
+    for name,color in meter_colors:
+        for state in ("on","off"):
+            im=Image.new("RGB",(24,12),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+            d.rounded_rectangle((1,1,22,10),radius=4,
+                                fill=rgb(color if state=="on" else PALETTE["led_off"]))
+            meter_frames.append((f"{name}_{state}",state,im))
+    _atlas("meters_led",meter_frames,2)
+    columns=[]
+    for name,color in (("gain_reduction",SOURCE_PALETTE["accent_primary"]),
+                       ("output_level",SOURCE_PALETTE["accent_success"])):
+        im=Image.new("RGB",(28,180),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        for i in range(12):
+            y=174-i*14
+            d.rounded_rectangle((3,y-10,24,y),radius=2,
+                                fill=rgb(color if i<8 else PALETTE["led_off"]))
+        columns.append((name,"normal",im))
+    _atlas("meters_columns",columns,2)
+
+    chrome=[]
+    for name in ("close","maximize","restore"):
+        for state in ("normal","hover"):
+            im=Image.new("RGB",(40,40),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+            color=SOURCE_PALETTE["accent_primary"] if state=="hover" else SOURCE_PALETTE["text_secondary"]
+            if name=="close":
+                d.line((12,12,28,28),fill=rgb(color),width=3); d.line((28,12,12,28),fill=rgb(color),width=3)
+            elif name=="maximize":
+                d.rectangle((10,10,30,30),outline=rgb(color),width=2)
+            else:
+                d.rectangle((13,10,29,26),outline=rgb(color),width=2)
+                d.rectangle((9,14,25,30),outline=rgb(color),width=2)
+            chrome.append((f"{name}_{state}",state,im))
+    _atlas("window_chrome",chrome,3)
+
+    header=Image.new("RGB",(480,44),rgb(PALETTE["panel"])); d=ImageDraw.Draw(header)
+    d.rectangle((0,0,479,43),outline=rgb(PALETTE["border"]),width=2)
+    d.rectangle((0,40,479,43),fill=rgb(SOURCE_PALETTE["accent_primary"]))
+    d.text((16,12),"NEON STAGE",font=font(15,True),fill=rgb(PALETTE["text_primary"]))
+    _atlas("panel_header",[("panel_header","normal",header)],1)
+    lcd=Image.new("RGB",(440,64),rgb(SOURCE_PALETTE["lcd_bg"])); d=ImageDraw.Draw(lcd)
+    d.rounded_rectangle((1,1,438,62),radius=5,outline=rgb(PALETTE["border"]),width=2)
+    d.text((14,10),"Dreaming in Neon",font=font(16,True),fill=rgb(SOURCE_PALETTE["lcd_text"]))
+    d.text((14,37),"Pop Punk  |  Bright & Energetic",font=font(10),fill=rgb(PALETTE["text_secondary"]))
+    _atlas("preset_lcd",[("preset_lcd","normal",lcd)],1)
+    badge=Image.new("RGB",(160,32),rgb(PALETTE["panel"])); d=ImageDraw.Draw(badge)
+    d.rounded_rectangle((1,1,158,30),radius=5,outline=rgb(PALETTE["text_secondary"]),width=1)
+    d.text((13,9),"SETUP-ONLY",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+    _atlas("setup_badge",[("setup_only","normal",badge)],1)
+    gallery=[]
+    for state in ("normal","selected"):
+        im=Image.new("RGB",(220,120),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        edge=SOURCE_PALETTE["accent_primary"] if state=="selected" else PALETTE["border"]
+        d.rounded_rectangle((2,2,217,117),radius=8,fill=rgb(PALETTE["panel_elevated"]),outline=rgb(edge),width=3)
+        d.text((14,82),"NEON STAGE",font=font(13,True),fill=rgb(PALETTE["text_primary"]))
+        gallery.append((f"gallery_{state}",state,im))
+    _atlas("gallery_tiles",gallery,2)
+    tabs=[]
+    for state in ("active","inactive","hover"):
+        im=Image.new("RGB",(140,36),rgb(PALETTE["panel"])); d=ImageDraw.Draw(im)
+        edge=SOURCE_PALETTE["accent_primary"] if state!="inactive" else PALETTE["border"]
+        d.rounded_rectangle((1,1,138,34),radius=5,fill=rgb(PALETTE["panel_elevated"]),outline=rgb(edge),width=2)
+        d.text((16,11),state.upper(),font=font(10,True),fill=rgb(PALETTE["text_primary"] if state!="inactive" else PALETTE["text_secondary"]))
+        tabs.append((f"tab_{state}",state,im))
+    _atlas("tabs",tabs,3)
+    transport=[]
+    for name in ("play","pause","stop"):
+        im=_make_icon(name).resize((48,48),Image.Resampling.LANCZOS)
+        transport.append((name,"normal",im))
+    _atlas("transport",transport,3)
+    icons=[(name,"normal",_make_icon(name)) for name in
+           ("folder","star","search","close","palette","guitar","radar","curator","settings","info",
+            "note","grid","group","play","pause","stop","loop","dice","crown","info")]
+    # Keep the two information glyph slots uniquely addressable in the index.
+    icons=[(f"{name}_{i:02d}" if i==19 else name,state,im) for i,(name,state,im) in enumerate(icons)]
+    _atlas("icons",icons,5)
+    print("Generated deterministic NEON STAGE sprite atlases and JSON frame indices.")
+
+
+def step_contact_sheets():
+    """Create review-only contact sheets; no runtime assets are promoted."""
+    atlas_dir=ASSETS/"atlas"
+    files=sorted(atlas_dir.glob("*.png"))
+    if not files:
+        raise FileNotFoundError("Sprite atlases missing; run step_ui / step_atlases first.")
+    thumb_w,thumb_h=320,150
+    cols=3; rows=(len(files)+cols-1)//cols
+    sheet=Image.new("RGB",(cols*thumb_w,rows*(thumb_h+30)),rgb(PALETTE["window_bg"]))
+    d=ImageDraw.Draw(sheet)
+    for i,path in enumerate(files):
+        with Image.open(path) as opened:
+            thumb=opened.convert("RGB")
+            thumb.thumbnail((thumb_w-12,thumb_h-12),Image.Resampling.LANCZOS)
+        x=(i%cols)*thumb_w+6; y=(i//cols)*(thumb_h+30)+6
+        sheet.paste(thumb,(x,y))
+        d.text((x,y+thumb_h),path.stem,font=font(11,True),fill=rgb(PALETTE["text_primary"]))
+    _indexed_png(sheet,ROOT/"dist"/"NEON_STAGE_ATLAS_CONTACT_SHEET.png")
+    refs=[ROOT/f"{i:02d} INTERFACE  NEON STAGE DEFAULT .png" for i in (1,2,3,4,6)]
+    thumbs=[]
+    for ref in refs:
+        if not ref.is_file():
+            raise FileNotFoundError(f"Approved reference missing: {ref.name}")
+        with Image.open(ref) as opened:
+            im=opened.convert("RGB")
+            im.thumbnail((480,276),Image.Resampling.LANCZOS)
+        thumbs.append((ref.stem,im))
+    ref_sheet=Image.new("RGB",(3*500,2*320),rgb(PALETTE["window_bg"]))
+    d=ImageDraw.Draw(ref_sheet)
+    for i,(label,im) in enumerate(thumbs):
+        x=(i%3)*500+10; y=(i//3)*320+8
+        ref_sheet.paste(im,(x,y))
+        d.text((x,y+280),label,font=font(10,True),fill=rgb(PALETTE["text_primary"]))
+    _indexed_png(ref_sheet,ROOT/"dist"/"NEON_STAGE_REFERENCE_CONTACT_SHEET.png")
+    print("Created atlas and approved-reference contact sheets for visual sign-off.")
+
+
+def step_provenance():
+    """Write deterministic SHA-256 provenance for every staged asset except self-referential reports."""
+    import hashlib
+    files=sorted(p for p in SKIN.rglob("*") if p.is_file() and p.name not in ("LICENSE.txt","SELF_CHECK.txt"))
+    lines=[
+        "NEON STAGE DEFAULT SKIN-1 — STAGING ASSET PROVENANCE",
+        "Source: repository-approved NEON STAGE mockups and canonical Skin_052/theme.json.",
+        "Generation: deterministic Python/Pillow pipeline; no external image URLs or third-party brand artwork.",
+        "Scope: staging assets only; not a runtime installation or release license for third-party samples.",
+        "SHA-256 entries below cover every staged file except LICENSE.txt and SELF_CHECK.txt.",
+        ""
+    ]
+    for path in files:
+        digest=hashlib.sha256(path.read_bytes()).hexdigest()
+        lines.append(f"{digest}  {path.relative_to(SKIN).as_posix()}")
+    (SKIN/"LICENSE.txt").write_text("\n".join(lines)+"\n",encoding="utf-8")
+
+
 def svg_knob_body():
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
 <defs><radialGradient id="g"><stop stop-color="{PALETTE['control_face']}"/><stop offset="1" stop-color="{PALETTE['shadow']}"/></radialGradient></defs>
