@@ -286,3 +286,25 @@ All source modes remain manually initiated and independently cancellable. Defaul
 
 This naming and UX consolidation is approved product direction. It does not claim that the unified UI or engine pipeline is implemented or tested.
 
+## User-approved compact unified Sound Hunter UI layout
+
+The user approves the single-page UI optimization: do not create separate windows or duplicate panels for LOCAL, GLOBAL and URL. Present all source modes inside one dedicated **SOUND HUNTER** page/panel in the main plugin interface.
+
+### Layout and interaction
+- One persistent Sound Hunter workspace; no separate LOCAL/GLOBAL/URL pop-up windows.
+- A compact source selector switches between **LOCAL**, **GLOBAL**, and **URL**.
+- One shared central work area changes only the source-specific controls:
+  - LOCAL: display the configured `Samples/Import Guitar Samples/` path and local scan options.
+  - GLOBAL: display search query/scope controls.
+  - URL: display URL entry, **INSPECT URL**, and explicit **DOWNLOAD SELECTED** controls.
+- One shared results area displays discovered assets, technical metadata, tags/classification, source/provenance/license status, preview availability, duplicate status, and import/preset suitability.
+- One shared progress/status area shows the selected mode, current operation, progress, result counts, and cancellation.
+- Shared actions are context-sensitive and not duplicated across source-specific windows. Keep preset generation/review actions in this shared workflow where appropriate.
+- Preserve clear separation between inspection, downloading, local scanning, adding to library, and preset generation; one action must not silently trigger another.
+- LOCAL mode must not make network requests. GLOBAL and URL modes require explicit user initiation. All modes are idle/off by default and cancellable.
+- Reuse existing plugin navigation, theme, layout and controls where possible. Avoid redundant navigation items, repeated result browsers, duplicate status panels, and multiple competing Sound Hunter entry points.
+- Keep all filesystem scanning, network operations, hashing, decoding, analysis and registry writes off the real-time audio thread.
+- UI must remain responsive, compact, accessible and consistent with the NEON STAGE DEFAULT skin; other skins may change graphics only, not layout geometry, controls, bindings or behavior.
+
+This is the user's approved design direction. It is a requirement for implementation and code review, not a claim that the unified page is already implemented or tested.
+
