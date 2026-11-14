@@ -34,3 +34,17 @@
 - Test execution and sample download: PENDING. Artifact: NOT CREATED. Do not mark Sound Hunter complete until a fresh run passes and its artifact is inspected.
 
 Next user action: open the Sound Hunter workflow and select **Run workflow** on branch `main` to start a fresh run using the fix.
+
+
+## 2026-11-14 — SFZ / SAMPLER REUSE-FIRST RESEARCH STATUS
+
+Current PPGU sampler code has its own SFZ parser, 64-voice SamplerEngine, background WAV streaming service, bounded SPSC request queue, fixed-size page cache, and per-voice three-page reader. These are real existing source components, not a complete SFZ implementation claim.
+
+External candidates reviewed:
+- `sfizioso` — BSD-2-Clause SFZ engine fork with MPE and host-provided sample-reader callbacks; promising candidate for an isolated compatibility/performance prototype. Its dependency inventory includes Apache-2.0, MIT, BSD, Boost, LGPL components and WTFPL; complete dependency/SBOM review and Windows build/performance tests remain required.
+- `dusk-fizz` — actively maintained BSD-2-Clause hard fork of sfizz; static library, SFZ/SF2 paths and regression tests. Candidate alternative; integration API and current dependency graph still require audit.
+- `sfizz` — original BSD-2-Clause engine, but upstream archived 2026-06-21; do not choose the archived upstream over maintained forks without a specific reason.
+- `Just a Sample` — MIT sampler plugin with sample-accurate editing, crossfade loops and FX examples; full project is a standalone JUCE VST3 plugin rather than a clean drop-in SFZ engine. Bungee time-stretch is documented as CPU-heavy; reference/selected algorithms only, no full-plugin integration planned.
+- `AkiFX` — GPLv3 full VST3/CLAP effects rack; not eligible for direct inclusion in the planned closed-source/commercial plugin without a separate compatible licensing decision. Treat as research/reference only.
+
+No third-party engine has been integrated into ANGELA. Current decision state: candidates identified and preliminarily screened; exact integration candidate not yet approved or benchmarked.
