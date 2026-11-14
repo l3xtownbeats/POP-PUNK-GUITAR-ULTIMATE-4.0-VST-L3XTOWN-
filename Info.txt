@@ -2678,3 +2678,116 @@ Blink-182; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; Angels & 
 Это уточнение расширяет предыдущее правило «без верхнего лимита» на все перечисленные сущности и категории обоих режимов. Оно не отменяет и не ослабляет ранее утверждённые правила структуры браузеров, MELODY/PATTERN, MIDI/APVTS/DSP/audio-thread contracts, лицензий, визуальной системы и качества. При обнаружении конфликта остановить затронутую часть и запросить личное решение пользователя.
 
 **Статусы:** APPROVED / DOCUMENTED после внесения; VERIFIED только после повторного fetch. IMPLEMENTED / TESTED не присваиваются этим документированием.
+
+
+## 2026-11-14 — MASTER ENGINE / PLUGIN SOURCE INVENTORY, CODE-OF-RECORD AND REPOSITORY INTEGRATION AUDIT
+
+Тип: документальная консолидация архитектуры и source inventory + статический аудит согласованности build graph.
+Исходная ревизия аудита: main HEAD 1f09611f753702e380d695a5441b6f260f798d3b.
+Исходное дерево: GitHub recursive tree, 280 файловых blob entries; tree не был truncated.
+Production source изменён этим документальным этапом: НЕТ.
+Статусы: source inventory DOCUMENTED; integration discrepancies IDENTIFIED; BUILD/CTest/pluginval/FL Studio 20 acceptance НЕ подтверждены.
+
+### 1. Каноническое хранение полного кода
+
+Полный код PPGU — реальные versioned source files репозитория, а не текстовая копия в INFO. INFO — главный журнал решений/состояния; CODE.txt — append-only индекс изменений исходников и точных ревизий. Копирование всех .cpp/.h внутрь INFO запрещено как источник рассинхронизации: это не заменяет Git и не является сборочным исходником.
+
+Для восстановления любого состояния используется полный Git tree конкретного commit SHA. В каждой записи INFO/CODE указываются точные source paths, области/классы, ревизия и статус. Изменение production-кода должно быть отражено одновременно в INFO и CODE. Документирование не означает IMPLEMENTED или TESTED.
+
+### 2. Архитектура плагина — подтверждённая карта исходников
+
+**Plugin / JUCE entry points**
+- Source/PluginProcessor.h и Source/PluginProcessor.cpp — именованная пара processor-класса PopPunkGuitarUltimateAudioProcessor; JUCE AudioProcessor lifecycle, parameter layout/APVTS, MIDI/audio processing, state, sample-load job lifecycle.
+- Source/PluginEditor.h и Source/PluginEditor.cpp — редактор плагина и связь с UI-компонентами.
+- Параллельно в корне присутствуют PluginProcessor.h/.cpp и PluginEditor.h/.cpp с другим API/структурой namespace ppgu; это отдельный legacy/parallel source set, не считать автоматически идентичным Source-варианту. Требуется определить один canonical build source set без потери поведения и истории.
+
+**Sampler / SoundBank runtime**
+- Source/Sampler/SamplePool.h/.cpp — SFZ region pool, metadata-driven sample loading, published snapshots, RegionView, связи со streaming services.
+- Source/Sampler/SampleMetadataIndex.h/.cpp — metadata-only WAV indexing.
+- Source/Sampler/SampleStreamingService.h/.cpp — worker-based page decoding/request service и diagnostics.
+- Source/Sampler/PageCacheSlots.h/.cpp — bounded page slots/cache и pin/release lifecycle.
+- Source/Sampler/StreamingVoiceReader.h/.cpp — чтение страниц для активного голоса, соседний prefetch и boundary interpolation.
+- Source/Sampler/WavPageReader.h/.cpp — WAV page reader.
+- Source/Sampler/SfzParser.h/.cpp — SFZ parsing/mapping.
+- Source/Sampler/BoundedSpscQueue.h — bounded SPSC request/event queue.
+- Parallel root files also present: SamplePool.h/.cpp, SampleStreamingService.h/.cpp, SamplerEngine.h/.cpp, SfzParser.h/.cpp, WavIndex.h/.cpp, PageCache.h/.cpp, BoundedSpscQueue.h. Не смешивать две реализации без diff/API/ownership audit.
+
+**Performance / MIDI / chords / Pattern**
+- Source/Performance/PatternScheduler.h — host transport snapshot, PPQ/block clock, scheduled note events, bounded event capacity and timing contract.
+- Source/Performance/AutoChordEngine.h — pitch-class chord detection and chord quality descriptors.
+- Source/Performance/ChordTransitionPolicy.h и ChordTransitionTimeline.h — chord transition policy/timeline.
+- Source/Performance/CircleOfFifths.h — circle-of-fifths helper.
+- tests/PatternSchedulerTests.cpp, ProcessorPatternIntegrationTests.cpp, AutoChordEngineTests.cpp, ChordTransitionPolicyTests.cpp, CircleOfFifthsTests.cpp — test sources; execution on current SHA not confirmed.
+- Parallel root files PatternScheduler.h/.cpp and ChordEngine.h/.cpp also exist. Root PatternScheduler/ChordEngine must not be assumed equivalent to Source/Performance versions.
+
+**DSP / FX**
+- Root FxChain.h/.cpp — currently visible legacy FX chain implementation. It declares distortion, chorus, delay, reverb, compressor, limiter, cabinet simulation, flanger toggles and EQ fields; inspection of this file alone does not prove every named effect is implemented as a distinct production DSP module or wired to the approved FX EDIT inventory.
+- Source/UI/FXEditPanel.h/.cpp — UI-side FX EDIT panel source; currently declares std::array<Module, 8>, which is not proof of the approved up-to-15 fully implemented FX processors. Full FX/DSP requirement remains mandatory and not accepted by this inventory.
+- DSP/FX architecture must be reconciled against approved 10 minimum / 15 target plus cabinet requirements, APVTS IDs, actual DSP, automation/state and tests.
+
+**Import / preset runtime**
+- Root ImportPipeline.h/.cpp and PresetRuntime.h/.cpp — legacy/parallel import and preset runtime source files.
+- presets/factory_bank_300.json, root factory_bank_300.json, presets/factory_preset_bank_v1.json, presets/examples/Example-Melody.ppgm, Example-Pattern.ppgp, ppgu-preset-001.json, ppgu-preset-002.json — catalog/data examples. Definitions do not automatically equal playable presets.
+- tools/validate_factory_bank.py, validate_preset_catalog.py, tools/validate_preset_files.py — validators present in repository tree.
+- Unlimited growth applies to MELODY, PATTERN and every approved browser category (PRESET, STYLE, articulation, techniques, rhythmic categories, patterns, variations, groups, songs, sections, tone/source/performance/chord options). No artificial per-category quotas. Quality, license, mapping, stable-ID and performance safeguards remain mandatory.
+
+**UI / windows / skins**
+- Source/UI/AutoChordsPanel.h/.cpp
+- Source/UI/AuxiliaryPanelLayout.h/.cpp
+- Source/UI/AuxiliaryPanelWindowManager.h/.cpp
+- Source/UI/EditorOverlayPanel.h/.cpp
+- Source/UI/FXEditPanel.h/.cpp
+- Source/UI/ImportGuitarPanel.h/.cpp
+- Source/UI/PerformanceDisplay.h/.cpp
+- Source/UI/SettingsPanel.h/.cpp
+- Source/UI/ThemeManager.h/.cpp
+- SKIN/ manifests, schemas, gallery assets, assets/ artwork and theme validation tools.
+- Parallel root files include Panels.h/.cpp, MultiWindowWorkspace.h/.cpp, OverlayManager.h/.cpp, AuxiliaryPanelLayout.h/.cpp, ThemeManager.h/.cpp, SecureSkinImport.h/.cpp. Their relationship to Source/UI and Source/Security needs explicit consolidation; do not assume duplicate files are linked into the same target.
+
+**Sound Hunter / security / tools**
+- ImportPipeline.h/.cpp and Source/UI/ImportGuitarPanel.* are present, but complete production discovery pipeline status must be determined from actual integration.
+- assets/sound_hunter/registry.json, tools/validate_sound_asset_registry.py, validate_sound_asset_registry.py, TestSoundAssetRegistry.py, tests/TestSoundAssetRegistry.py — policy/registry validators and fixtures.
+- Source/Security/SecureSkinImport.h/.cpp and root SecureSkinImportTests.cpp — secure skin import contract sources.
+- tools/ includes preset, APVTS, skin, SoundBank, license/source and artwork validators/generators. .github/workflows/vst3-build.yml is the Windows CI build/package workflow.
+- licenses/, sample-library policy docs and PPGU_REV_10_1_SOUND_HUNTER_RU.md govern content provenance and redistribution.
+
+### 3. Подтверждённые архитектурные контракты и границы
+
+- Product target: JUCE/C++20, VST3 instrument, Windows x64, FL Studio 20 target.
+- Plugin processor owns host-facing audio lifecycle, parameter/state model and routing; UI must not own or mutate DSP internals outside approved parameter/control contracts.
+- Sample loading, SFZ parsing, metadata scanning, WAV page decoding and import/discovery belong off the audio callback.
+- Sampler uses bounded page/cache/queue concepts and background workers; page/region/service lifetime and audio-reader quiescence must remain safe.
+- Pattern engine must use host transport/PPQ timing, bounded event handling, correct note-off/gate and safe stop/discontinuity behaviour; approved MIDI trigger contract remains C0–C1 for PATTERN triggers and C1+ for MELODY subject to documented host octave convention and source contract audit.
+- AUTO CHORDS must detect incoming chord input, preserve selected pattern/style where compatible, transition musically and use real supported source/performance mappings.
+- Existing APVTS IDs/semantics, MIDI contracts, sampler lifecycle, SoundBank, preset schema and DSP contracts are compatibility boundaries. No silent rename/repurpose.
+- Audio callback: no file/network I/O, SFZ parsing, blocking locks/waits, GUI calls or unbounded allocations.
+- Factory and user content remain separate; stable IDs and backward compatibility; no fake controls/playable states; only legally redistributable factory assets may ship.
+- Shared future Guitar/Bass platform is an ARCHITECTURE DECISION/DESIGNED scope, not a second finished product: shared low-level engine services, separate product profiles, content, mappings, presets and UI identities.
+
+### 4. Static repository/build integration audit — blockers to resolve
+
+At audited HEAD 1f09611f753702e380d695a5441b6f260f798d3b, recursive tree inspection found:
+
+1. CMakeLists.txt calls add_subdirectory(JUCE EXCLUDE_FROM_ALL), but no JUCE/ directory or JUCE gitlink/submodule entry exists in the audited tree. The inspected workflow has checkout@v4 but no submodule checkout or JUCE clone step. This is a configure blocker unless another explicit provisioning step is added.
+2. CMakeLists.txt references Source/Engine/*.cpp files (SfzParser, PatternScheduler, SamplePool, SampleStreamingService, SamplerEngine, FxChain, ChordEngine, ImportPipeline, PresetRuntime), but Source/Engine/ is absent from the audited tree. Related files exist at repository root and/or under Source/Sampler and Source/Performance; their intended canonical mapping is unresolved.
+3. CMake references Source/UI/MultiWindowWorkspace.cpp and Source/UI/Panels.cpp, absent at those paths; similarly named files exist at repository root.
+4. CMake references tests/EngineContractTests.cpp, but the audited tree contains EngineContractTests.cpp at repository root, not at the referenced path.
+5. The tree contains root-level and Source/ parallel implementations and both tests/ and root-level test files. Build target source lists and test source paths need reconciliation before declaring a valid canonical source graph.
+6. Source/UI/FXEditPanel.h currently declares eight module slots, while approved product scope requires up to 15 fully implemented processors plus cabinets. This is a source/UI gap requiring scoped implementation and tests, not a reason to change the approved requirement.
+7. The workflow validates presets/factory_bank_300.json; this must be reconciled with the open-ended catalog rule so 300 remains a checkpoint/legacy filename, never a cap. Validators and UI must accept additional valid records and report actual counts.
+
+Audit boundary: static comparison of CMake paths, workflow text and repository tree; no Windows configure/build/CTest/pluginval was run here. Therefore the items above are confirmed path/configuration discrepancies, while actual build failure is NOT claimed without a run. Do not change source paths or move files blindly: first compare duplicate implementations, includes, namespaces, APVTS IDs, ownership, tests and Git history; then propose a migration map and execute one scoped, testable change at a time.
+
+### 5. Required next engineering sequence
+
+1. Establish canonical production source set: compare root legacy/parallel files with Source/ modules, identify exact classes, methods, APIs, parameter IDs, dependencies and test coverage.
+2. Reconcile CMake target paths with the canonical source set; establish reproducible JUCE acquisition/pinning and license notices.
+3. Reconcile tests paths and ensure every registered CTest target points to a real file and actually tests production code.
+4. Validate processor → sampler → streaming/cache → voice rendering → FX signal path end-to-end.
+5. Validate processor → MIDI → transport/scheduler → chord detection/transition → sample articulation path end-to-end.
+6. Audit preset data model/browser against unlimited category growth and all approved browser tools; preserve stable IDs and compatibility.
+7. Audit FX DSP/UI inventory against approved minimum 10 / target 15 plus cabinet requirement.
+8. Run Windows x64 Release configure/build, full CTest, pluginval strictness 5, package integrity and then manual FL Studio 20 host acceptance on the exact same candidate SHA.
+9. Update INFO and CODE with exact paths, symbols, SHA, results and remaining blockers after every scoped code change.
+
+Статус: архитектурная карта и source inventory DOCUMENTED; static integration audit RECORDED; build graph NOT YET RECONCILED; source code was not changed by this entry; no new BUILD PASS / TESTED / HOST VERIFIED / COMPLETE claim.
