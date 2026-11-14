@@ -96,7 +96,7 @@ def verify_zip_sha256_manifest(zf: zipfile.ZipFile) -> tuple[int, list[str]]:
     for line in raw.splitlines():
         line=line.strip()
         if not line: continue
-        match=re.fullmatch(r"([0-9a-fA-F]{64})\\s+\\*?(.+)",line)
+        match=re.fullmatch(r"([0-9a-fA-F]{64})\s+\*?(.+)",line)
         if not match: raise RuntimeError(f"Malformed SHA256SUMS entry: {line!r}")
         expected, member=match.group(1).lower(),match.group(2).strip()
         if not safe_member(member): raise RuntimeError(f"Unsafe path in SHA256SUMS: {member}")
