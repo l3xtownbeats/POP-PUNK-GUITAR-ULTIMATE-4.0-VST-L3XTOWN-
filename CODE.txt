@@ -766,3 +766,12 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 - The historical left-panel browser layout remains subordinate to the newer **01 INTERFACE — NEON STAGE DEFAULT** reference. Skin changes remain visual-only and cannot alter layout, controls, bindings or sound.
 
 **Evidence boundary / status:** REQUIREMENTS CROSS-CHECKED AND INDEXED / IMPLEMENTATION AUDIT STILL REQUIRED / NO SOURCE CHANGE / NO BUILD, CTEST, PLUGINVAL OR HOST STATUS PROMOTED. Source implementation and exact-SHA evidence must be audited separately.
+
+
+## 2026-11-14 — TX-PRESET-AUDIT-005 documentation synchronization
+
+Documentation-only update on canonical REV.17. CONTROL_INVENTORY_MATRIX_RU.md updated at commit fc259937bf1b62e78db82432a23ce7420e333463; MASTER_PRODUCT_SPEC_4_0_RU.md updated at commit 90d95dfa6efd6a56063cf92fae74c525ab3b8619; INFO journal synchronization recorded at commit 0c4b1aaeaf9f496e5c63b07b853c1231b4cf7da3.
+
+The updates index approved Preset Browser controls/modes, filtered PREV/NEXT, non-committing Preview vs explicit SELECT/LOAD, navigation hierarchy, eight categories, separate Pattern Browser SECTION → PATTERN → PREVIEW → APPLY/BACK, user/factory data boundaries, portable file formats, control acceptance metadata and realtime safety. Existing TX-PRESET-BROWSER-003 / TX-UI-PRESET-GUARD-004 / TX-PRESET-AUDIT-005 records in INFO, master register and control center remain authoritative.
+
+No production source, APVTS, DSP, sampler, MIDI, scheduler, presets, SoundBank or build workflow changed. No unapproved tabs/controls were introduced; Save As/Rename/Delete/Rescan remain unapproved; unresolved design details remain OPEN. Build/CTest/pluginval/package/FL Studio 20 were not run. Status: DOCUMENTATION ONLY; runtime implementation audit remains required.
