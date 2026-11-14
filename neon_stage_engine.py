@@ -343,7 +343,30 @@ def step_report():
         data=p.read_text(encoding="utf-8")
         if "<script" in data.lower() or "javascript:" in data.lower() or "<animate" in data.lower() or "xlink:href" in data.lower():
             errors.append(f"unsafe SVG content in {rel}")
-    control_map_path=SKIN/"control_map.json"
+    # G4 identity and authoritative registry contract.
+    if SKIN.name != "Skin_053":
+        errors.append(f"G4 folder identity mismatch: expected Skin_053, got {SKIN.name}")
+    registry_path=ROOT/"SKIN"/"theme_manifest.json"
+    if not registry_path.is_file():
+        errors.append("G4 authoritative SKIN/theme_manifest.json is missing")
+    else:
+        registry=json.loads(registry_path.read_text(encoding="utf-8"))
+        entries=registry.get("themes",[])
+        indices=[entry.get("index") for entry in entries]
+        ids=[entry.get("id") for entry in entries]
+        if indices != list(range(1,len(entries)+1)):
+            errors.append("G4 registry indices are not continuous from 1 through the final registered skin")
+        if len(ids)!=len(set(ids)):
+            errors.append("G4 duplicate skin IDs found in authoritative registry")
+        matches=[entry for entry in entries if entry.get("id")=="skin-053"]
+        if len(matches)!=1:
+            errors.append(f"G4 expected one registry entry for skin-053, found {len(matches)}")
+        elif matches[0].get("index")!=53 or matches[0].get("path")!="Skin_053/theme.json":
+            errors.append("G4 registry identity/path mismatch for Skin_053")
+    if theme_path.is_file():
+        generated_theme=json.loads(theme_path.read_text(encoding="utf-8"))
+        if generated_theme.get("id")!="skin-053" or generated_theme.get("index")!=53:
+            errors.append("G4 generated theme id/index mismatch")
     if not control_map_path.is_file():
         errors.append("missing control_map.json")
     else:
