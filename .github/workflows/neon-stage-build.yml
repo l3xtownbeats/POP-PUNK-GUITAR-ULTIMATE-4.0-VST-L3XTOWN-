@@ -9,6 +9,23 @@ on:
     branches:
       - feature/neon-stage-build-engine
       - work/neon-stage-reference-preview-fix
+  pull_request:
+    branches:
+      - feature/neon-stage-build-engine
+    paths:
+      - 'neon_stage_engine.py'
+      - 'NEON_STAGE_BUILD.bat'
+      - 'requirements.txt'
+      - 'validate_neon_stage_reference.py'
+      - '01 INTERFACE  NEON STAGE DEFAULT .png'
+      - '02 INTERFACE  NEON STAGE DEFAULT AUTOCHORDS .png'
+      - '03 INTERFACE  NEON STAGE DEFAULT .png'
+      - '04 INTERFACE  NEON STAGE DEFAULT .png'
+      - '06 INTERFACE  NEON STAGE DEFAULT .png'
+      - 'SKIN/Skin_052/theme.json'
+      - 'SKIN/control_schema.json'
+      - 'Info.txt'
+      - '.github/workflows/neon-stage-build.yml'
   workflow_dispatch:
 
 permissions:
