@@ -730,3 +730,13 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Проверенные первичные источники:** Meta Open Sound `catalog.json`, instrument READMEs and release metadata; FreePats official Clean Electric Guitar page and GitHub repositories. CC0-1.0 declarations found for Meta Steel/Nylon and FreePats FSBS Clean/Jazz/Direct/Distorted. WAV Meta releases are listed as 24-bit/48 kHz. FreePats includes SFZ mapping and FLAC/WAV/SF2 banks.
 **Открытые дефекты/риски:** importer release archive checksum manifest not yet verified; collection-specific license and mapping preservation require explicit audit; preview OGG duplication must be prevented where lossless WAV is imported; release-file counts must be represented correctly. No download/import or runtime validation is claimed.
 **Следующий шаг:** correct importer/accounting and archive-manifest checks, run regression tests on exact SHA, then execute an authorized CI acquisition workflow and inspect its artifact before integrating any samples.
+
+
+## 2026-11-14 — Samples retention / no-redownload invariant (approved)
+
+- User approved a permanent rule: every successfully acquired asset stored in managed `Samples` must never be deleted by project automation, cleanup, deduplication, optimization, or updates.
+- Before any acquisition/import/conversion, inventory existing files and SHA-256 hashes; reuse existing assets and skip identical content. Fetch only genuinely missing unique assets; never overwrite an existing path.
+- New versions and converted formats must be additive in unique paths. Preserve earlier versions, source originals, manifests, mappings, provenance and license evidence.
+- Never free space by deleting old samples. If the aggregate 40,000,000,000-byte decimal ceiling would be exceeded, refuse new additions and report capacity.
+- Applies to Sound Hunter, manual import, future PSC converter and every future write path into `Samples`.
+- This is an approved invariant; full technical enforcement across every path remains OPEN until audited and covered by regression tests. No claim of complete enforcement or fresh download is made by this documentation update.
