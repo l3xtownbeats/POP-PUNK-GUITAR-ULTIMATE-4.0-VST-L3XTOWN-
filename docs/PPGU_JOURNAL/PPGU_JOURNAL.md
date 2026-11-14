@@ -21,3 +21,8 @@
 Защиты: только каталогизированные реальные записи; ожидаемая лицензия CC0-1.0 сверяется с фактическим LICENSE внутри загруженного репозитория; максимум 25 GB; существующие файлы не удаляются/не заменяются; каждый импорт в уникальный run-id; хеши проверяются; сомнительные/непрошедшие проверку ресурсы останавливают импорт.
 
 **Ограничения статуса:** добавлен initial curated source set, не exhaustive Internet crawler. Сам workflow ещё не запускался; скачивание/импорт аудио не подтверждены. Плейбек через ANGELA Engine, runtime scan roots и интеграция в VST3 package не подтверждены. Синтаксическая проверка/CTest/pluginval/FL Studio host validation не выполнялись. Артефакт требует ручного запуска через GitHub Actions → Sound Hunter — Real Guitar Samples → Run workflow.
+
+
+#### Дополнительная проверка реализации
+
+Перед фиксацией проверены GitHub repository metadata и фактические LICENSE-файлы для всех девяти репозиториев FreePats/Karoryfer из каталога: в каждом выбранном файле обнаружен текст CC0 1.0 Universal. Для FreePats Spanish Classical Guitar исправлено имя license-файла на `LICENSE`. Проверены названия Meta Steel/Nylon release assets; каталог указывает на WAV assets. Добавлена обработка Git LFS pointer downloads с проверкой размера и SHA-256, а Meta OGG-предпрослушивания фильтруются по конкретной гитарной коллекции, чтобы не ошибочно атрибутировать их другому источнику. GitHub workflow ограничен read-only permission для contents.
