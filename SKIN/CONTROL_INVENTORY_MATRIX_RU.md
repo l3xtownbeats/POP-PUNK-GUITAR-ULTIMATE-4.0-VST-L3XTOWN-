@@ -143,3 +143,42 @@ Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated comm
 - Open Skin Gallery: opens the existing gallery panel alongside Settings.
 
 No audio, APVTS, MIDI or processor parameters are changed. About remains NOT IMPLEMENTED; no fake controls are added.
+
+
+## 13. PRESET / PATTERN BROWSER — ADDITIONAL APPROVED CONTROL INVENTORY (2026-11-14)
+
+### 13.1 Preset Browser
+| Control | Required behavior | Must not do |
+|---|---|---|
+| BROWSER / FAVORITES / CATEGORIES | Switch catalogue views | Load or modify active preset |
+| FACTORY / USER scope | Separate read-only factory and editable user content | Permit factory overwrite/delete |
+| SEARCH / FILTER / SORT | Filter/order by category, artist/style/use-case tags and metadata | Commit sound or change active Pattern |
+| PRESET NAME / CATEGORY | Show selected record's verified identity | Fabricate metadata |
+| PREV / NEXT | Navigate deterministic current result set | Escape active search/filter/scope unexpectedly |
+| FAVORITE | Persist user favorite state | Modify factory preset definition |
+| PREVIEW | Audition real preview asset via safe shared path | Commit active preset/project state |
+| SELECT / LOAD | Explicit transactional preset load; double-click may invoke it | Load on highlight/filter/preview |
+| SAVE / SAVE AS / RENAME / DELETE | Manage USER presets; confirm destructive delete | Mutate FACTORY records |
+| IMPORT / EXPORT / RESCAN | Validate and manage user banks/library index | Do filesystem work in audio callback |
+
+### 13.2 Pattern Browser hierarchy and controls
+Context order: **GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN**. These are independent context fields/filters; selecting them does not silently load a tone preset or commit a Pattern. Section list is **Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro**; Pre-Chorus is additive to the previously approved set. Neutral/General only if explicitly present in registry.
+
+| Control | Required behavior | Acceptance invariant |
+|---|---|---|
+| GENRE / ARTIST-BAND / SONG / SECTION / STYLE | Narrow relevant pattern results | No hidden Load/Apply; fields remain distinct |
+| SEARCH / FILTER / SORT / FAVORITES | Browse current pattern registry | No committed-state change |
+| PATTERN item/details | Show real section/use, feel, bars, meter, tempo, capabilities and asset availability | No fabricated metadata/maps |
+| PREV / NEXT (if present) | Traverse current filtered scope | Do not change committed pattern |
+| PREVIEW | Play actual performance map/recording through shared path | Non-committing; no transport/project mutation |
+| APPLY | Commit selected section + pattern | Explicit, deterministic, state-safe |
+| BACK / CANCEL | Restore last committed selection | Roll back preview/draft only |
+
+**Required workflow:** SECTION → PATTERN → PREVIEW → APPLY or BACK/CANCEL. Pattern types/techniques (down/up/alternate, palm mute, open chorus, stop-start, backbeat, chugs, octave hooks, ska/offbeat, arpeggio, acoustic strum/picking, dynamic build) are enabled only where real performance maps/events/recordings support them. Temporary hard-coded masks do not certify a complete pattern library.
+
+### 13.3 Global control invariants
+- Browse-only operations never commit; Preview is non-committing; Load/Apply is explicit commit; Back/Cancel rolls back.
+- Controls must be functional, keyboard/mouse accessible, focusable, have tooltips/ranges and truthful loading/empty/error/missing-asset/disabled states. No dummy buttons/meters/cards.
+- Preset Browser, Pattern Browser and Sample/Library Browser remain separate workflows.
+- Existing nine rotary/APVTS IDs, seven main FX bypasses, eight FX EDIT pages, 21 theme tokens, 27 controls + sync_selector and all stable IDs/semantics remain unchanged.
+- This inventory records approved requirements only; runtime implementation and test evidence remain separately tracked.
