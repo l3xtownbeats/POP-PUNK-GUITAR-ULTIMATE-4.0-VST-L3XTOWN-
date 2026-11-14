@@ -143,3 +143,15 @@ Skin data generation/merge/publish: CI run `43195205929` SUCCESS; generated comm
 - Open Skin Gallery: opens the existing gallery panel alongside Settings.
 
 No audio, APVTS, MIDI or processor parameters are changed. About remains NOT IMPLEMENTED; no fake controls are added.
+
+
+
+
+## REV.18 Phase 0 audit — 2026-11-14 (source SHA `7a7fb55641f36353fe32873c677e5db64142624c`)
+
+The detailed A–H reconciliation is now maintained in `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`. This addendum supersedes the older REV.14/REV.17 snapshot above for current REV.18 source facts only; historical entries remain unchanged.
+
+Current source confirms preset selector/category/search, Import Guitar, SKIN Gallery, UI-only Settings, MELODY/PATTERN, nine APVTS knob attachments, seven FX bypass attachments, MIDI keyboard 36–84, FX Edit/AutoChords panels and multi-window workspace. Missing/unverified items include PUNK GROUP, Auto Discover, Curator, About, pitch/mod wheels, production OverlayManager, SecureSkinImport, transactional Gallery flow and full CPU/RAM telemetry. Seven FX controls do not satisfy the approved 10–15 DSP-effect FX EDIT target.
+
+Critical identity mismatch: approved SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE conflicts with live manifest default skin-052 SIGNAL FORGE and live Skin_01..03 names. No IDs or manifests were changed; a complete 102-entry no-loss mapping is required first.
+

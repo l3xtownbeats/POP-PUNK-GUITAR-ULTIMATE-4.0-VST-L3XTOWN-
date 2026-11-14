@@ -2455,3 +2455,29 @@ The new tool/tests are committed but have not yet run on the resulting commit SH
 **Validation:** exact-SHA workflow run pending.
 **Status:** RESTORED / CI PENDING.
 ==============================================================================
+
+
+
+
+==============================================================================
+2026-11-14 — TX-REV18-UI-PREFLIGHT-001 — NEON STAGE COMPONENT MATRIX / PHASE 0
+==============================================================================
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Preflight source SHA:** `7a7fb55641f36353fe32873c677e5db64142624c`.
+**Status:** AUDIT COMPLETE / DOCUMENTATION ONLY / NO PRODUCTION SOURCE CHANGED.
+**Detailed matrix:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`.
+
+Выполнена сверка требований INFO section K и master register с live REV.18 source: PluginEditor, PluginProcessor/APVTS, PPGUMultiWindowWorkspace, ThemeManager, skin manifests, текущей control inventory и оконным inventory. Для каждой зоны A–H зафиксированы source presence, реальные callbacks/APVTS bindings, persistence, tested/unverified status и gaps.
+
+Ключевые факты:
+- Есть preset selector/category/search, Import Guitar async SFZ path, SKIN gallery, Settings UI-only panel, MELODY/PATTERN, девять APVTS-attached knobs, семь FX bypass buttons, MIDI keyboard 36–84, FX Edit/AutoChords auxiliary panels и multi-window workspace.
+- Не найдены: полноценные PREV/NEXT/FAVORITE/SAVE controls, PUNK GROUP, Auto Discover, Curator, About, pitch/mod wheels, production OverlayManager, SecureSkinImport и подтверждённые CPU/RAM meters. AutoChords MIDI generation не подтверждён.
+- Текущий FX UI содержит 7 slots; это не удовлетворяет утверждённому FX EDIT требованию 10–15 реально реализованных DSP effects.
+- Критическое расхождение skin identity: утверждённые SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE против live manifest default skin-052 SIGNAL FORGE, Skin_01 Neon Riot, Skin_02 Dark Metal, Skin_03 Modern Studio. Запрещено делать слепое переименование/перенумерацию; следующий шаг — полная no-loss mapping/migration audit.
+- Точная каноническая картинка “01 INTERFACE — NEON STAGE DEFAULT” не сопоставлена однозначно с одним из 38 файлов reference register (все требуют отдельной проверки/approval). Pixel-parity пока BLOCKED; письменная спецификация и source matrix остаются рабочими.
+
+CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142624c`; configure PASS, VST3/test executable build IN PROGRESS, CTest/pluginval/package NOT YET RUN. Результаты не распространяются на иной SHA.
+
+**Следующий этап по INFO K:** resolve canonical reference + skin identity map; затем reconcile manifests/ThemeManager/Gallery without losing IDs; после этого main/auxiliary UI parity and Gallery transaction flow. Подробный порядок в matrix.
+==============================================================================

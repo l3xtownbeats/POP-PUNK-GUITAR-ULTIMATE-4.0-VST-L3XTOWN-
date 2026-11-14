@@ -71,3 +71,20 @@
 | FR-03 | Runtime-map factory MELODY sources | Not implemented | P1 | FR-02, sampler |
 | FR-04 | Build PATTERN performance asset mappings | Not implemented | P1 | FR-02, performance engine |
 | FR-05 | Human audio QA for each READY preset | Not implemented | P1 | FR-03/FR-04 |
+
+
+
+
+## REV.18 UI / NEON STAGE Phase 0 — 2026-11-14
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| UI-00 | Requirements-to-live-source component matrix A–H | Implemented (AUDIT COMPLETE; docs only) | P1 | INFO K |
+| UI-01 | Resolve exact canonical NEON STAGE reference and approved visual asset | Blocked (38 reference assets indexed; canonical image/approval mapping unresolved) | P1 | reference decision/asset evidence |
+| UI-02 | Reconcile SKIN-1/2/3 identity, default/fallback, manifests and Gallery without ID loss | Blocked (live manifest/ThemeManager mismatch) | P1 | UI-01; 102-entry no-loss map |
+| UI-03 | Complete main-window control parity and real callbacks/APVTS/state | Partial | P1 | UI-01/UI-02 |
+| UI-04 | Gallery Preview/Apply/Back/Favorites/keyboard navigation | Partial | P1 | UI-02; testable selection state |
+| UI-05 | Auxiliary OverlayManager lifecycle/focus/z-order integration | Not implemented | P1 | workspace API audit; lifecycle tests |
+
+**REV.18 priority override:** follow INFO.txt section K (reference + skin identity → main UI parity → Gallery → PATTERN → AutoChords → subsystem audits → legal/S6 → O1/S1 → exact-SHA gates). This supersedes the older generic queue where it conflicts; no existing task is deleted.
+

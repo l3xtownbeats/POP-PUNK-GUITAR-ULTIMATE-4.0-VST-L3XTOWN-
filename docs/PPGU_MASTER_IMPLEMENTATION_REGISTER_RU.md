@@ -407,3 +407,17 @@ Append-only rule: never silently rewrite history. Corrections and superseding de
 Downloading is permitted when the source makes the material lawfully available and the download complies with its license/terms. Downloaded samples/libraries may be evaluated, auditioned, classified and used in development/testing only to the extent the license permits. This does **not** grant permission to redistribute or embed raw samples in the commercial plugin.
 
 Do not copy protected/commercial libraries, extract content from protected installers/formats, bypass DRM/paywalls/access controls, or bundle assets without explicit rights. For every candidate retain source URL, author, exact title/version, acquisition date, license evidence, allowed download/use/modify/redistribute/embed scope, required notices/attribution and SHA-256. Unknown terms => YELLOW/quarantine; RED => prohibited; GREEN => all required rights documented. Existing licensing and safety gates are unchanged.
+
+
+
+
+## REV.18 — Phase 0 UI / NEON STAGE preflight (2026-11-14)
+
+**Audited branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18` @ source SHA `7a7fb55641f36353fe32873c677e5db64142624c`.
+**Detailed component matrix:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`.
+**Result:** requirements-to-source audit complete for zones A–H; no production source changed. Existing UI bindings and missing controls are explicitly classified. The current manifest/ThemeManager skin default conflicts with the latest approved SKIN-1/2/3 identity; the exact canonical NEON STAGE reference image is not uniquely identified in the 38-item Library reference index. Both are blockers before visual/layout changes.
+
+**Current CI:** run `43592701287` on the audited SHA was IN PROGRESS at preflight (configure passed; build still running; CTest/pluginval/package pending). This is not UI acceptance or release evidence.
+
+**Next:** canonical reference/skin ID reconciliation → main-window control parity → transactional Gallery → PATTERN and remaining K-order tasks. No blind ID renumbering, asset deletion or fake UI controls.
+

@@ -286,3 +286,20 @@ The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU
 
 ## 2026-11-14 — TX-LICENSE-DOWNLOAD-CLARIFICATION-001 — ASSET/LICENCE LEDGER
 User clarification: downloading is allowed when lawful and compliant with source terms. Distinguish download/evaluation from development use and redistribution/embedding. Download alone never grants redistribution rights. No copying protected/commercial libraries, bypassing DRM/paywalls/access controls, or bundling raw samples without explicit redistribution/embedding permission. Asset ledger must record source, author, version, date, license evidence, permitted actions, notices/attribution and SHA-256. Unknown terms remain YELLOW/quarantine. No source/assets changed; per-asset review still required.
+
+
+
+
+## TX-REV18-UI-PREFLIGHT-001 — 2026-11-14 — PHASE 0 COMPLETE
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+**Preflight HEAD:** `7a7fb55641f36353fe32873c677e5db64142624c`.
+**Scope:** compare current REV.18 UI source against the ratified NEON STAGE / SIGNAL FORGE requirements and INFO section K; record component-by-component matrix A–H.
+**Files added/updated in this documentation transaction:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`, `Info.txt`, `CODE.txt`, `PPGU_TASK_REGISTRY.md`, `SKIN/CONTROL_INVENTORY_MATRIX_RU.md`, master register and this Control Center.
+
+**Findings:** source presence/bindings and missing UI functions recorded; current 7 FX slots do not meet 10–15 DSP effect requirement; production OverlayManager and SecureSkinImport absent; Gallery transaction flow incomplete; approved SKIN-1/2/3 identity conflicts with live manifest/ThemeManager; exact canonical 1402×1122 NEON STAGE reference not uniquely mapped among 38 indexed assets.
+
+**Non-goals:** no C++/DSP/MIDI/APVTS/preset/sample/skin asset changes; no skin IDs or manifests modified; no visual candidate promoted to approved.
+**CI snapshot:** run `43592701287` at preflight SHA was IN PROGRESS (configure PASS, build IN PROGRESS, downstream gates pending).
+**Status:** PHASE 0 AUDIT COMPLETE / DOCUMENTATION ONLY. Next operation is reference + skin identity reconciliation under INFO section K.
+

@@ -852,3 +852,20 @@ Six unit tests cover legacy definitions, complete evidence, missing mapping, inv
 **Production source:** unchanged.
 **Tests:** exact-SHA Windows workflow pending.
 **Status:** RESTORED / VALIDATION PENDING.
+
+
+
+
+## 2026-11-14 — TX-REV18-UI-PREFLIGHT-001 — UI / NEON STAGE component reconciliation
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`; preflight source SHA `7a7fb55641f36353fe32873c677e5db64142624c`.
+**Type:** source/spec audit + matrix documentation; no production C++ changed.
+**Detailed result:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`.
+
+Audited `Source/PluginEditor.h/.cpp`, `Source/PluginProcessor.cpp`, `Source/UI/PPGUMultiWindowWorkspace.*`, `Source/UI/ThemeManager.*`, skin manifest and current inventory docs. Recorded actual source components, APVTS attachments, callback/persistence evidence, missing controls and unverified behavior across zones A–H.
+
+Critical findings: live skin identity/default does not match the latest approved SKIN-1/2/3 names; gallery lacks transactional Preview/Apply/Back and Favorites; PUNK GROUP/Auto Discover/Curator/About/pitch-mod wheels/OverlayManager/SecureSkinImport are absent; current visible FX chain has seven bypass slots while approved FX EDIT target is 10–15 real effects. Exact canonical NEON STAGE screenshot not uniquely resolved from the 38-item Library reference register, so pixel parity is blocked.
+
+**CI:** run `43592701287` at `7a7fb55641f36353fe32873c677e5db64142624c` was IN PROGRESS at preflight; configure PASS, build running, CTest/pluginval/package pending.
+**Status:** PHASE 0 MATRIX COMPLETE / SOURCE UNCHANGED / NEXT = SKIN IDENTITY + REFERENCE RECONCILIATION.
+
