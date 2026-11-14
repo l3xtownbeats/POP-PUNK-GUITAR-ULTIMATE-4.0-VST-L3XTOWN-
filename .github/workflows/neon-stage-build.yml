@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/neon-stage-build-engine
+      - work/neon-stage-reference-preview-fix
   workflow_dispatch:
 
 permissions:
