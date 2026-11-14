@@ -2832,3 +2832,69 @@ NEON STAGE remains GENERATION PENDING VALIDATION for release purposes; staging
 and CI gates passed on the exact SHA above, but host acceptance and release gates
 remain open.
 ==============================================================================
+
+
+==============================================================================
+2026-11-14 — REV-ULTRA-NEON-DEFAULT-MIGRATION-PREFLIGHT-006
+==============================================================================
+
+**Preflight source HEAD:** 47f3ab7f41dafd05608539a0bc18935bd320ea48
+**Scope:** UI/theme default and fallback identity only. No production changes
+are included in this preflight record.
+
+**Observed contradiction (live source, not inferred):**
+- SKIN/theme_manifest.json currently has defaultSkin=skin-052.
+- Source/UI/ThemeManager.h initializes the fallback Palette as skin-052 /
+  SIGNAL FORGE with the Skin_052 21-token values.
+- Source/PluginEditor.cpp loadSavedSkin() uses skin-052 when no persisted
+  skinId exists.
+- tests/ThemeManagerTests.cpp and tests/ValidateSkinManifests.py enforce
+  skin-052 as default.
+- Skin_053 is already registered as NEON STAGE (index 53); Skin_052 remains a
+  valid registered theme. No ID reuse or registry count change is needed.
+
+**User-authorized target:** REV ULTRA master prompt §6 and §9 identify NEON
+STAGE as the default first-launch and fallback theme. The existing user
+decision in the master implementation register also names NEON STAGE as
+default. The current source default is therefore stale relative to the
+approved product decision.
+
+**Council objections / resolution checklist before implementation:**
+- Audio DSP (25): no DSP, processor, routing, sampler, scheduler or callback
+  files may change. RESOLVED — scope excludes them.
+- Realtime/Safety (25): no new work, allocation, I/O, locks or waits on the
+  audio thread. RESOLVED — ThemeManager remains UI/control-thread only.
+- JUCE/UI (25): do not change editor geometry, control IDs, APVTS attachments,
+  MIDI keyboard behavior or panel ownership. Preserve a previously persisted
+  skinId as an explicit user choice; change only the no-saved-preference
+  default and invalid/missing-theme fallback to skin-053. RESOLVED.
+- Build/CI (25): update the C++ fallback palette, editor's fresh-install
+  default, authoritative registry defaultSkin, ThemeManager contract tests
+  and the REV14 registry validator as one atomic source commit. Require a
+  new exact-HEAD Windows build and all CTest targets. RESOLVED.
+- QA/Tests (25): retain Skin_052 loadability; add/adjust exact assertions for
+  all 21 NEON tokens and default identity; ensure every registry manifest
+  still loads. Pending implementation and CI.
+- Design/Skin (25): this change selects the already registered Skin_053
+  palette; it does not claim pixel-perfect UI or layout completion. Seven
+  reference-file integrity/control-grid checks are structural only. Human
+  comparison of the approved 1402x1122 main mockup and auxiliary windows
+  remains open.
+- Legal/Assets (25): no sample/audio artwork sources, licences or SoundBank
+  files are changed. RESOLVED.
+- Release/PM (25): no COMPLETE ZIP, release-ready, host-verified or
+  pixel-perfect claim. FL Studio 20 acceptance remains a separate gate.
+  RESOLVED.
+
+**Implementation policy:**
+1. Change the registry default pointer to existing skin-053; keep all 102
+   entries and all IDs unchanged.
+2. Change only the no-preference default to skin-053. A persisted skin-052
+   value remains a user selection and must not be silently overwritten.
+3. Make ThemeManager's safe fallback palette exactly match Skin_053's 21
+   canonical tokens and semantic aliases.
+4. Update tests and validators; do not weaken any assertion or validator.
+5. Record actual results and exact SHA after CI completes.
+
+**Status:** PREFLIGHT REVIEW COMPLETE / IMPLEMENTATION PENDING.
+==============================================================================
