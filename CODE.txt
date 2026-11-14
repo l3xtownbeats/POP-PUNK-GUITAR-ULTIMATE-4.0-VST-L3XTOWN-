@@ -445,3 +445,26 @@ First approved file = authoritative layout/appearance/control inventory (preserv
 - Corrected `docs/PRESET_FILE_SYSTEM.md` in commit `fa49b8fce31bd27b6dca04b7bc124d95a4c0b715`: PRESET BROWSER is distinct from STYLE and PATTERN browsers; Melody/Pattern are preset/data classifications, not a merged browser UI; explicit SELECT/LOAD only; double-click does not load; named artist folders are not an authorized visible catalog; blocked GROUP/ARTIST/SONG publication remains blocked.
 - Preserved the approved browser command inventory, first-mockup layout/control authority, second-reference palette-only rule, third coordinated FX EDIT + AutoChords state, stable IDs, Factory read-only/User separation, 300 definitions / 150+150 target, transaction safety, realtime/off-audio-thread boundaries and license/provenance gate.
 - Documentation-only. No master prompt, I1–I8, R01–R34, control schema, approved mockups, source, tests, assets, APVTS, DSP, MIDI, sampler, scheduler or preset data changed. No implementation, test, CI, pluginval, package or host PASS claimed.
+
+
+## 2026-11-14 — CI: bootstrap pinned JUCE 7.0.12
+
+**Тип:** CI/build configuration correction; production C++ unchanged.
+**Ветка:** `work/rev17-juce-bootstrap`
+**Source/config commit:** `a7d24f33dc6384ebe68cec18acf11087a40735cf`
+**Parent:** `a9a71fae3bb02726402f76b1318b5bece4c555c6`
+**INFO synchronization commit:** `5d83961fd85e79f26c5b7374ef045e5ec6a96a58`
+**Файлы и область:**
+- `.github/workflows/vst3-build.yml` — added the PowerShell step “Bootstrap pinned JUCE 7.0.12 dependency”. It preserves an existing checkout, otherwise shallow-clones official JUCE tag `7.0.12` into the project-root `JUCE/`, validates `JUCE/CMakeLists.txt`, and logs the resolved dependency SHA.
+- `Info.txt` — synchronized the build correction and the user's mandatory library/automation/INFO-CODE requirements.
+
+**Причина:** REV.17 `CMakeLists.txt` explicitly requires `JUCE/CMakeLists.txt`, but the Windows workflow did not provision that directory before configure.
+
+**Затронутые symbols/targets:** GitHub Actions workflow step only; no C++ symbols, JUCE targets, APVTS parameters, DSP, sampler, MIDI, presets, skins or SoundBank assets changed.
+
+**Совместимость / non-goals:** No branch merge; no sample-library overwrite/delete/move/rename; no change to JUCE version (remains pinned to 7.0.12); no claim that this makes the build pass.
+
+**Тесты / CI:** GitHub file update succeeded. Workflow execution, Windows configure/build, CTest, VST3 bundle discovery, pluginval and FL Studio 20 host validation were NOT RUN on this SHA.
+
+**Статус:** IMPLEMENTED / VALIDATION PENDING.
+**Следующий шаг:** Run the Windows VST3 workflow on this branch; inspect the exact job logs and fix only confirmed failures with regression coverage.
