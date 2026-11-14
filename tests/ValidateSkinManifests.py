@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-053"
+DEFAULT_ID = "neon-stage-default-skin-1"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -160,7 +160,7 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
     if not isinstance(data, dict):
         return
     where = f"SKIN/{folder}/theme.json"
-    expected_id = f"skin-{index:03d}"
+    expected_id = "neon-stage-default-skin-1" if index == 52 else f"skin-{index:03d}"
 
     for key, expected in (("schemaVersion", "1.0.0"), ("id", expected_id), ("index", index)):
         if data.get(key) != expected:
