@@ -217,7 +217,9 @@ namespace
 
         for (const auto& key : requiredColours)
         {
-            if (!isHexColour(paletteTokens.getProperty(key, juce::var())))
+            const auto value = paletteTokens.getProperty(key, juce::var()).toString();
+            const auto expectedLength = key == "overlay_scrim" ? 9 : 7;
+            if (!isHexColour(value) || value.length() != expectedLength)
             {
                 error = "Invalid Skin Studio HEX token: " + key;
                 return false;
