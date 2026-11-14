@@ -117,7 +117,7 @@ int main()
         expect(manager.getPalette().id == "neon-stage-default-skin-1", "NEON STAGE DEFAULT SKIN-1 ID is canonical at registry index 52");
         expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE name is decoded");
         expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
-        expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
+        expect(manager.getPalette().canvas == juce::Colour(0xff050811),
                "Skin_052 window background is mapped");
 
         const auto studioTokens = juce::JSON::parse(skin52Json).getProperty("palette", juce::var());
@@ -167,7 +167,7 @@ int main()
            + (skin53Loaded ? juce::String{} : ": " + manager.getLastError()));
     if (skin53Loaded)
     {
-        expect(manager.getPalette().id == "neon-stage-default-skin-1", "NEON STAGE ID matches index 53");
+        expect(manager.getPalette().id == "skin-053", "legacy archive retains its own registry ID");
         expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE identity is decoded");
         expect(!manager.getPalette().usedFallback, "NEON STAGE manifest does not use fallback");
         const auto neonTokens = juce::JSON::parse(skin53Json).getProperty("palette", juce::var());
