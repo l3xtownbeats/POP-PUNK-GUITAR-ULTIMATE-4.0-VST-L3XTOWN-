@@ -29,6 +29,33 @@ Keep discovery/acquisition separate from distribution rights:
 - A freely accessible download, “royalty-free” label, or permission to use samples in finished music does not automatically grant the right to redistribute raw or extractable samples inside a plugin.
 - Unclear or conflicting terms remain catalogued as RIGHTS_REVIEW_REQUIRED; do not silently discard the source or assume permission.
 
+## In-plugin Samples directory layout and organization
+
+The plugin's final sample library must be organized and browsable by **format, instrument, genre/style, sound character and articulation**. Keep this taxonomy consistent across imported assets, the registry, preset browser and runtime sample lookup.
+
+Recommended top-level layout:
+
+    Samples/
+      _Registry/ (sample_registry.json, source_manifest.json, license_manifest.json, duplicate_index_sha256.json)
+      ByFormat/ (WAV/, AIFF/, FLAC/, OGG/, SFZ/, SF2/, SF3/, GIG/, Other_Supported/)
+      ByInstrument/ (Electric_Guitar/, Acoustic_Guitar/, Nylon_Classical/, Steel_Guitar/, Bass_Guitar/, Guitar_Percussion_Noises/)
+      ByGenre/ (Pop_Punk/, Punk/, Pop_Rock/, Emo/, Alternative_Rock/, Indie_Rock/, Metal/, Hard_Rock/, Post_Hardcore/, Shoegaze/, Ambient_Cinematic/, Funk/, Jazz/, Surf/, Country/, Classical/, Other/)
+      BySound/ (DI_Clean/, Edge_Of_Breakup/, Crunch/, High_Gain/, Distorted/, Acoustic_Natural/, Amp_Cab_Processed/, Stereo_MultiMic/)
+      ByArticulation/ (Sustain/, Palm_Mute/, Mute/, Harmonics/, Slide/, Bend/, Release/, Pick_Fret_Noise/, Scrape/, Strum/, Riff_Loop/, One_Shot/)
+      Sources/<source-id>/ (original_files/, license/, provenance/)
+
+Implementation rules:
+- Store each original audio payload **once** in its canonical source/format location. Do not create redundant copies just to make one sample appear under several genres or sound categories.
+- Populate the ByFormat, ByInstrument, ByGenre, BySound and ByArticulation views using registry entries and portable relative-path manifests (or platform-supported links where appropriate). These views must remain usable on Windows and must not rely on symlinks being available.
+- Every asset registry entry must include a stable asset ID, relative file path, actual format/codec, sample rate, bit depth where applicable, channel count, duration, instrument, genre/style tags (multiple allowed), sound/tone tags, articulation, playable note/key range and velocity layer where known, source ID, SHA-256, license status, attribution and provenance.
+- Preserve original archive/source filenames and source metadata in Sources/<source-id>/; normalized plugin-ready files must be traceable back to their original asset and hash.
+- Use normalized, predictable folder and filename conventions; sanitize unsafe path characters and prevent path traversal. Do not silently overwrite files with matching names—use stable IDs or collision-safe names and hash-based deduplication.
+- Unsupported formats may remain in the source archive/quarantine inventory, but must not be presented as playable until a tested decoder/conversion path exists. Keep original files and converted runtime files distinguishable.
+- Presets should reference stable asset IDs or registry paths, not fragile absolute machine paths. The plugin's browser should filter the same registry by format, genre, tone and articulation.
+- Genre tags are descriptive and may overlap. Do not force a sound into only one genre; e.g. a clean DI guitar can be tagged Pop_Punk, Emo, Alternative_Rock and Indie_Rock when musically appropriate.
+- Keep evaluation-only and rights-review assets physically separated from distributable plugin content. Only assets marked as approved for commercial shipment may be copied into the release sample package.
+- This layout is a required target for implementation; adding this policy does not by itself mean the folders, registry browser or runtime integration have already been built.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
