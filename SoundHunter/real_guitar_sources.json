@@ -28,7 +28,7 @@
       "license": "CC0-1.0",
       "license_file": "LICENSE",
       "release_tag": "meta-steel-guitar-v1.0.0",
-      "release_asset_contains": "wav.zip",
+      "release_asset_contains": ".wav.zip",
       "include_repo_audio": true,
       "notes": "Meta states the steel guitar collection is recorded multisample audio; WAV release is 24-bit/48 kHz."
     },
@@ -40,7 +40,7 @@
       "license": "CC0-1.0",
       "license_file": "LICENSE",
       "release_tag": "meta-nylon-guitar-v1.0.0",
-      "release_asset_contains": "wav.zip",
+      "release_asset_contains": ".wav.zip",
       "include_repo_audio": true,
       "notes": "Meta states the nylon guitar collection is recorded multisample audio; WAV release is 24-bit/48 kHz."
     },
