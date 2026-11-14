@@ -321,3 +321,21 @@ Required preset validation before acceptance:
 - A preset cannot be marked complete merely because its name, UI controls, or FX chain exists. Record asset IDs, source/provenance, mapping and validation evidence in the preset registry/test report.
 
 This requirement applies retroactively to every already-created/adjusted preset and prospectively to all new presets. Preserve original Samples assets; never delete or overwrite them to repair a preset. This journal entry records the approved requirement; the complete preset-by-preset audit and runtime/audio validation remain work to perform, not a claim that they have already passed.
+
+## PRESET SOURCE FALLBACK — COMPATIBLE SAMPLE RESOLUTION (2026-11-14)
+
+The strict preset-to-single-file binding rule is clarified: a preset must not depend on one exact audio file or one exact sample-library recording. The preset defines its intended musical role, target tone, articulation, playing behavior, and processing chain. At load/play time, the instrument may resolve the best compatible available guitar source from the managed Samples bank.
+
+Required resolver behavior:
+- Prefer the preset's designated primary source and exact mapping when available.
+- If it is unavailable or incomplete, search compatible alternatives by instrument family, electric/acoustic type, pickup/playing character where known, DI vs already-processed status, tuning/range, articulation, velocity layers, and sample-map completeness.
+- Rank candidates by suitability to the preset's intended tone and role; use the best compatible source, not an arbitrary file. For example, a Blink-182-inspired high-gain rhythm preset may use a suitable clean/raw electric-guitar DI multisample and create the target tone through its amp, cabinet, EQ, dynamics, and effects chain, even if no library contains a recording explicitly labelled "Blink-182".
+- Do not require samples to be labelled with an artist/band name. Artist/style identity is primarily the target sound and playable behavior produced by the complete instrument + source + signal chain, not the filename.
+- Preserve source integrity: do not treat a pre-processed/amped recording as DI; do not re-amp processed sources unless the source metadata and routing explicitly allow it. Do not substitute acoustic for electric, one-shot for a sustained multisample instrument, or an incompatible range/articulation merely to make a preset produce sound.
+- If the best source is only partially compatible, use explicit zone/layer fallback only where valid and report/mark unsupported notes or articulations; never silently map unrelated samples across the keyboard.
+- A preset must never open silently because its preferred file is absent. If no suitable guitar source exists, show a clear missing-compatible-source state and offer the nearest valid alternative or disable that preset from playable factory selection until resolved.
+- Keep dry/original source presets separate from processed artist/style presets. A raw clean recording may be used as an input source for an amp-processed preset when appropriate, but must not be presented as the finished artist tone without the intended processing.
+- Store source-resolution provenance per preset: preferred source IDs, selected fallback IDs, matching rationale, sample-map coverage, license status, and validation results. Resolution must be deterministic and reproducible.
+- Validate the actual rendered sound and note coverage for every resolved source/chain combination. A preset is complete only when the chosen source plus its processing and articulation behavior produce the promised sound without missing notes or silence.
+
+This clarification supersedes only the overly strict requirement that every preset be tied to one exact sample file. It does NOT relax license/redistribution checks, integrity checks, mapping validation, no-silent-preset requirements, or the permanent no-delete/no-overwrite Samples policy.
