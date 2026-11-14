@@ -147,6 +147,58 @@ def validate_icon_manifest(theme_dir: Path, icon_names: tuple[str, ...]) -> None
                 raise ValueError(f"{manifest_path}: runtime icon {asset_id} must be 256x256")
 
 
+def validate_artwork_manifest(theme_dir: Path) -> None:
+    """Validate checksums for the native-resolution artwork and atlas package."""
+    manifest_path = theme_dir / "assets/artwork_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{manifest_path}: missing or invalid artwork manifest: {exc}") from exc
+    if manifest.get("skinId") != "skin-053" or manifest.get("assetGroup") != "hero-preview-background-texture-fx-atlas":
+        raise ValueError(f"{manifest_path}: wrong skinId or assetGroup")
+    records = manifest.get("records")
+    if not isinstance(records, list):
+        raise ValueError(f"{manifest_path}: records must be an array")
+    indexed = {record.get("id"): record for record in records if isinstance(record, dict)}
+    expected = {
+        "skin1.hero_master": "assets/master/hero/hero.png",
+        "skin1.hero_runtime": "assets/hero/hero.png",
+        "skin1.preview_master": "assets/master/preview/preview.png",
+        "skin1.preview_runtime": "assets/preview/preview.png",
+        "skin1.background_master": "assets/master/background/main.png",
+        "skin1.background_runtime": "assets/background/main.png",
+        "skin1.texture_master": "assets/master/textures/carbon_weave.png",
+        "skin1.texture_runtime": "assets/textures/carbon_weave.png",
+        "skin1.glow_master": "assets/master/fx_layers/stage_glow.png",
+        "skin1.glow_runtime": "assets/fx_layers/stage_glow.png",
+        "skin1.edge_master": "assets/master/fx_layers/edge_highlight.png",
+        "skin1.edge_runtime": "assets/fx_layers/edge_highlight.png",
+        "skin1.atlas_png": "atlas/atlas.png",
+        "skin1.atlas_json": "atlas/atlas.json",
+    }
+    for asset_id, rel in expected.items():
+        record = indexed.get(asset_id)
+        if not isinstance(record, dict) or record.get("path") != rel:
+            raise ValueError(f"{manifest_path}: missing or mismatched record {asset_id}")
+        if "[DECISION]" not in str(record.get("origin", "")):
+            raise ValueError(f"{manifest_path}: {asset_id} lacks [DECISION] provenance")
+        path = theme_dir / rel
+        raw = path.read_bytes()
+        if record.get("bytes") != len(raw):
+            raise ValueError(f"{manifest_path}: byte count mismatch for {asset_id}")
+        if record.get("sha256") != hashlib.sha256(raw).hexdigest():
+            raise ValueError(f"{manifest_path}: SHA-256 mismatch for {asset_id}")
+        if record.get("crc32") != f"{zlib.crc32(raw) & 0xFFFFFFFF:08X}":
+            raise ValueError(f"{manifest_path}: CRC32 mismatch for {asset_id}")
+        if path.suffix.lower() == ".png":
+            width, height = png_info(path)
+            if record.get("dimensions") != f"{width}x{height}":
+                raise ValueError(f"{manifest_path}: dimension mismatch for {asset_id}")
+    atlas = json.loads((theme_dir / "atlas/atlas.json").read_text(encoding="utf-8"))
+    if not isinstance(atlas.get("frames"), dict) or len(atlas["frames"]) != 6:
+        raise ValueError(f"{manifest_path}: atlas frame map must contain six icon frames")
+
+
 def luminance(hex_colour: str) -> float:
     if not isinstance(hex_colour, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", hex_colour):
         raise ValueError(f"invalid HEX token: {hex_colour!r}")
@@ -304,6 +356,16 @@ def main() -> int:
                 png_info(png)
             except (OSError, ValueError, zlib.error) as exc:
                 add("FAIL", "TOPBAR_PNG_INVALID", str(exc))
+
+    artwork_manifest = theme_dir / "assets/artwork_manifest.json"
+    if not artwork_manifest.is_file():
+        add("FAIL", "ARTWORK_MANIFEST_MISSING", f"Missing {artwork_manifest.relative_to(root)}")
+    else:
+        try:
+            validate_artwork_manifest(theme_dir)
+            add("PASS", "ARTWORK_MANIFEST_VALID", "Artwork/atlas manifest SHA-256/CRC32 records are valid.")
+        except (OSError, ValueError, zlib.error, json.JSONDecodeError) as exc:
+            add("FAIL", "ARTWORK_MANIFEST_INVALID", str(exc))
 
     icon_manifest = theme_dir / "assets/asset_manifest.json"
     if not icon_manifest.is_file():

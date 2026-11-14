@@ -121,6 +121,52 @@ class Rev18IconManifestTests(unittest.TestCase):
                 AUDIT.validate_icon_manifest(root, ("skins",))
 
 
+class Rev18ArtworkManifestTests(unittest.TestCase):
+    def test_artwork_manifest_validates_all_registered_checksums(self) -> None:
+        import hashlib, json
+        expected = {
+            "skin1.hero_master": "assets/master/hero/hero.png",
+            "skin1.hero_runtime": "assets/hero/hero.png",
+            "skin1.preview_master": "assets/master/preview/preview.png",
+            "skin1.preview_runtime": "assets/preview/preview.png",
+            "skin1.background_master": "assets/master/background/main.png",
+            "skin1.background_runtime": "assets/background/main.png",
+            "skin1.texture_master": "assets/master/textures/carbon_weave.png",
+            "skin1.texture_runtime": "assets/textures/carbon_weave.png",
+            "skin1.glow_master": "assets/master/fx_layers/stage_glow.png",
+            "skin1.glow_runtime": "assets/fx_layers/stage_glow.png",
+            "skin1.edge_master": "assets/master/fx_layers/edge_highlight.png",
+            "skin1.edge_runtime": "assets/fx_layers/edge_highlight.png",
+            "skin1.atlas_png": "atlas/atlas.png",
+            "skin1.atlas_json": "atlas/atlas.json",
+        }
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            records = []
+            for asset_id, rel in expected.items():
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                raw = (json.dumps({"frames": {str(i): {} for i in range(6)}}).encode()
+                       if rel.endswith(".json") else tiny_png())
+                path.write_bytes(raw)
+                record = {"id": asset_id, "path": rel, "bytes": len(raw),
+                    "sha256": hashlib.sha256(raw).hexdigest(),
+                    "crc32": f"{zlib.crc32(raw) & 0xffffffff:08X}",
+                    "origin": "[DECISION] test"}
+                if rel.endswith(".png"):
+                    record["dimensions"] = "2x1"
+                records.append(record)
+            manifest = {"skinId": "skin-053",
+                "assetGroup": "hero-preview-background-texture-fx-atlas",
+                "records": records}
+            (root / "assets/artwork_manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8")
+            AUDIT.validate_artwork_manifest(root)
+            (root / expected["skin1.hero_master"]).write_bytes(b"tampered")
+            with self.assertRaisesRegex(ValueError, "byte count mismatch|SHA-256 mismatch"):
+                AUDIT.validate_artwork_manifest(root)
+
+
 class Rev18ContrastAuditTests(unittest.TestCase):
     def test_primary_text_contrast_exceeds_rev18_minimum(self) -> None:
         self.assertGreaterEqual(AUDIT.contrast("#FFFFFF", "#202020"), 7.0)
