@@ -2118,3 +2118,41 @@ Status: accepted product requirements; implementation status must be verified se
 Realtime callback restrictions, APVTS IDs/semantics, MIDI/sampler contracts, stable IDs, factory read-only/append-only behaviour, secure import/path validation, exact-SHA evidence and honest status vocabulary remain in force. No documentation entry is implementation evidence.
 
 **Next:** reconcile exact earlier FX module list and exact PUNK GROUP source list with canonical records; locate and bind the two approved NEON STAGE mockup files; then implement each domain in scoped commits with regression tests and exact-SHA release gates.
+
+
+## 2026-11-14 — MAJOR UI clarification: separate MELODY / PATTERN preset browsers and three-part MELODY browser
+
+**Тип:** user-approved functional specification clarification; append-only.  
+**Статус:** APPROVED / DOCUMENTATION UPDATE. Production implementation is not implied.
+
+### A. MELODY mode — three-part browser, fixed order
+The MELODY browser is divided into exactly three coordinated areas:
+
+1. **PRESET / GUITAR IDENTITY** — choose the pop-punk guitar/genre and the relevant PUNK GROUP / band-style sound identity, then the individual song part/section. This area answers **WHICH guitar/source and which song-section character** is selected. It must follow the approved hierarchy and available source mappings; do not invent unavailable group/song mappings.
+2. **STYLE / PLAYING ARTICULATION** — choose how the selected guitar performs the notes. Examples include **Open Chord, Palm Mute, Muted**, and other articulations/styles supported by the actual source maps (e.g. tremolo/picking where recorded and mapped). STYLE is not a rhythmic pattern selector. Only expose an articulation as playable when a compatible source/performance map exists.
+3. **PATTERN / RHYTHM VARIATION** — choose/switch the rhythmic figure or variation associated with the selected guitar/section/style. This area is available as an optional performance layer while remaining in MELODY mode; it does not convert ordinary melody-note mapping into chord mode.
+
+The three areas must remain visually and functionally distinct. Selection in one area must not silently overwrite the meaning/state of the other two. Compatibility filtering may limit choices to combinations supported by the selected source.
+
+### B. MELODY note behaviour and Pattern activation
+- In ordinary MELODY playing, each MIDI key plays its corresponding pitched guitar note; a single melody note plays once and naturally decays. It must not unexpectedly launch a strumming loop.
+- The optional PATTERN layer activates when the user supplies the additional pattern-trigger MIDI in the Piano Roll / MIDI performance, or explicitly enables/selects the pattern using the dedicated on-screen PATTERN control/button.
+- The approved Piano Roll convention reserves the lowest register **C0–C1** for pattern-trigger keys; **C1 and above** remain the ordinary melody-note register. Pattern-trigger keys must not also sound as ordinary chromatic guitar notes. Preserve the exact boundary/mapping in implementation tests and make it discoverable in the UI/help.
+- Holding a valid pattern-trigger note sustains/runs the selected pattern according to its gate/transport contract; releasing it ends the pattern cleanly. A lone ordinary melody note remains a one-shot pitched note.
+- The PATTERN area/button allows the user to switch between different rhythmic figures/variations. Variation changes must respect the current selection/filter context and transition safely on a musical boundary while playing; no stuck notes, duplicate triggers, timing jumps or abrupt invalid cuts.
+- The on-screen control is an explicit alternate activation/selection route; it must not change the MIDI meaning of ordinary melody keys.
+
+### C. PATTERN mode remains a separate performance mode
+- MELODY and PATTERN remain distinct modes with separate note semantics and preset/performance state, while sharing the approved sample library/cache and compatible source assets.
+- In PATTERN mode, mapped keys select chord/voicing and trigger the selected rhythmic guitar performance; rhythm selection is separate from PLAYING STYLE / ARTICULATION.
+- PATTERN mode browser continues to select the guitar/source identity, playing style/articulation and rhythmic pattern/variation as separate dimensions. Preserve the approved PATTERN categories and eight Pattern Slots per section already recorded in the canonical requirements.
+- The reference for the full playing workflow is Native Instruments Session Guitarist — Electric Sunburst Deluxe as a behavioural benchmark only; do not copy its protected code, samples, presets or UI assets.
+
+### D. Browser/state invariants
+- Keep Preview non-destructive: it auditions the candidate without changing the active preset, project, persistent DAW state or saved Pattern Slot. Apply/Select commits; Cancel restores the prior state.
+- PREV/NEXT, SEARCH, FILTER, SORT and FAVORITES operate within the current result context.
+- No fake controls or unsupported articulations/patterns. A missing backend/source map must be visibly unavailable/disabled with an honest reason.
+- Preserve audio-thread restrictions, APVTS IDs/semantics, MIDI contracts outside the explicitly reserved pattern-trigger range, sampler ownership/lifecycle, stable preset IDs and factory/user separation.
+- This clarification explicitly confirms that the MELODY PRESET area is allowed to present the user's selected PUNK GROUP/band-style identities and song sections as the user-facing selection dimension; do not silently hide that dimension behind a generic category. Any earlier conflicting visible-name restriction is superseded only to this extent by this direct approval. Do not fabricate names; use the canonical user-provided PUNK GROUP list when reconciled from source records.
+
+**Implementation / validation:** documentation requirement only. No production source, UI, MIDI map, DSP, presets or sample data changed in this entry. Build, CTest, pluginval, package and FL Studio 20 host acceptance are not claimed.
