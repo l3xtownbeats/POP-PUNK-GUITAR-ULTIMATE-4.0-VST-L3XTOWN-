@@ -818,3 +818,18 @@ For each target preset, identify and assemble the complete sound identity: sourc
 Track per-asset and per-preset stages distinctly: DISCOVERED → REVIEWED → LICENSE-CLEARED → ACQUIRED → INTEGRATED → AUDITIONED → TESTED → VERIFIED. Keep source/license/origin/date/hash/format/mapping/role/target preset/processing lineage/QA records. Preserve originals; derived assets remain separate and reproducible. Deduplicate without losing meaningful velocity, articulation or round-robin variants. Library completeness is judged by musical usefulness and verified preset pairing, not raw file count.
 
 This is an approved authorization and requirements update only. It does not claim that candidates have been downloaded, rights cleared, integrated, auditioned or verified.
+
+
+## 2026-11-14 — EXPLICIT AUTHORIZATION TO ACQUIRE AND USE GUITAR AUDIO ASSETS
+
+The user explicitly reconfirmed prior delegation and authorizes autonomous research, download/acquisition, selection, preparation and use of suitable guitar audio/performance assets for POP PUNK GUITAR ULTIMATE, within available tools, lawful rights and safe technical procedures. No per-item approval is required for suitable free/openly licensed assets or ordinary necessary import/preparation steps.
+
+Scope includes complete libraries and individual recordings, notes/multisamples, one-shots, loops, phrases, riffs, rhythm/performance assets, MIDI/pattern data, articulations, DI/processed guitar audio, SFZ/SF2/SF3/GIG/WAV and other supported guitar materials. A composite library assembled from multiple sources is explicitly allowed, as are derived assets, mappings/layers and linking assets to complete presets.
+
+**Non-waivable legal boundary:** acquire and include/distribute assets in PPGU only where the specific rights permit commercial embedding and redistribution inside a third-party sample-based VST. Personal-use or music-production permission alone is not permission to bundle content in the plugin. Do not bypass DRM, access controls, paywalls, logins or CAPTCHAs; do not extract protected libraries/containers or copy Session Guitarist/other closed-product content. Unclear/incompatible assets are quarantined/reference-only and must not ship. No paid purchase, subscription or other monetary expense is authorized without separate explicit user consent.
+
+Record provenance, source URL, creator/rights holder, license and license copy/link, attribution, acquisition date, format, size, SHA-256, mapping, target role/preset and QA status. Preserve originals; use safe additive imports. Validate archives/paths, integrity, deduplication and audio quality; keep heavy work off the audio callback. Before VERIFIED, validate actual playback, complete preset pairing (SAMPLES + performance/pattern/articulation + DSP chain), target-style fit, resource use and compatibility.
+
+Do not stop merely because no single open library equal to Sunburst Deluxe has been found. Build the best lawful result from multiple sources and original/authorized material. If public sources cannot meet a quality target, document the gap and choose the next lawful route rather than filling the library with unsuitable content.
+
+This authorization is confirmed. It does not claim any new files have already been downloaded, rights-cleared, integrated or tested. Paid acquisition is not authorized.
