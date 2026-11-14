@@ -257,3 +257,29 @@ The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU
 - Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
 - Production source changed: NO.
 - Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
+
+
+## 2026-11-14 — TX-PRESET-BROWSER-003 — browser decision and omission register
+
+**Source:** retrospective review of prior user conversations and current ratified master register.
+**Decision:** record the complete browser navigation and behavior below as USER-RATIFIED; no production source change in this transaction.
+
+### Ratified
+- Navigation order: GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN.
+- Song sections: Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro. The later Pre-Chorus addition supersedes the earlier abbreviated list. MELODY structure is unchanged.
+- Browser tabs: BROWSER, FAVORITES, CATEGORIES.
+- Controls: search, filtering, sorting, preset selection, favorites, preview/audition, preset switching; top-bar PREV/NEXT, FAVORITE, PRESET NAME, CATEGORY, SEARCH.
+- Eight categories: Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere.
+- Cards show artwork, title, description and additional info. Counts reflect real catalog state.
+- Browser supports mouse and keyboard; preview is non-committing and must not change active preset/project state. PREV/NEXT honors the active browser context.
+- Factory/user separation; stable preset IDs; save/load/import/export; backwards compatibility and corrupt-state recovery.
+- Separate counts for definitions, dependency-resolved, loadable, playable-tested and host-verified.
+- Curator is separate from normal browsing and cannot silently restrict/delete/change user assets.
+
+### Boundaries / open design questions
+Exact sort keys/order, filter taxonomy, ranking, Genre/Artist taxonomy, automatic loading semantics, double-click semantics, preview duration/waveform remain unspecified; do not invent them. Old left-panel layout is subordinate to the newer “01 INTERFACE — NEON STAGE DEFAULT” reference. Artist/song references do not grant rights to use protected recordings, art or presets. Existing Safety → Realtime → Sound → Resources → UX and S6/S6.5 license gates remain absolute.
+
+### Required next audit
+Create a control-by-control source matrix for every browser element: ID, panel, action, data source, state, callback, preset manager/sound engine link, persistence, keyboard/focus, empty/loading/error/disabled behavior, tests and exact-SHA evidence. Specifically inspect search, category counts, BROWSER/FAVORITES/CATEGORIES, filter/sort, PREV/NEXT, favorite toggle, selection vs load, preview isolation, factory/user bank, import/export, corrupt/missing dependency handling, and Genre→Artist/Band→Song/Section→Style→Pattern navigation.
+
+**Status:** DOCUMENTATION ONLY / REQUIREMENTS CONSOLIDATED / IMPLEMENTATION NOT PROMOTED.
