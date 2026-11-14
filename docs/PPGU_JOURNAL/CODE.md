@@ -943,3 +943,22 @@ The current repository baseline already uses JUCE 7.0.12 through CMake FetchCont
 Low resource consumption is mandatory: bounded memory/cache, streaming, selective preload, SIMD/vectorization where appropriate, minimal dependencies, and no blocking/allocations/file I/O/decoding in the audio callback. Measure CPU/RAM/latency/load-time at realistic polyphony before and after changes; never trade away sound quality based on theory alone.
 
 Status: strategy approved and recorded. This entry does not claim any newly discovered third-party component has already been integrated; every component requires its own audit/implementation/test/verification.
+
+
+## 2026-11-14 — SELF-CONTAINED, ENERGY-EFFICIENT AND ADAPTIVE PPGU ENGINE
+
+The user approves a central mandatory architecture principle: POP PUNK GUITAR ULTIMATE must have its own self-contained audio engine, purpose-built and optimized for PPGU, targeting minimal CPU, RAM and overall system resource consumption. The plugin must not require Kontakt 6/7/8 or another external sampler-host shell/platform to play its factory sounds, presets, patterns and effects. All runtime components required for normal operation must be included in the PPGU plugin/package, legally redistributable, and controlled by PPGU itself.
+
+Target architecture:
+- integrated native PPGU sampler/audio/performance/preset/FX/control/runtime subsystems; third-party libraries may be used as audited build-time/source components, but must not require a separate user-facing shell or host;
+- minimal background processes and dependencies; no mandatory external applications/plugins for normal playback;
+- sample streaming, selective preload, bounded cache, efficient voice allocation/stealing, bounded queues, buffer reuse, careful polyphony management, SIMD/vectorization where beneficial, and no blocking/file/network/decode/analysis work in the realtime audio callback;
+- strict separation of realtime audio and background workers; predictable memory/thread behavior; avoid unnecessary audio-data copies, unbounded caches and duplicate DSP chains;
+- adaptive engine behavior: safely discover/index new user sample assets and presets only in authorized modes; use analysis/QA outcomes to improve recommendations, classification, mapping/preset-setting suggestions and cache/preload policies; never silently modify factory presets, source files, user data or audible parameters without an explicit user action;
+- adaptive behavior does not mean autonomous executable-code mutation or uncontrolled network activity. Algorithm/model/code updates must be versioned, tested, regression-checked and delivered as controlled updates;
+- GOOD/NORMAL/NIGHT/ECO and Voices/quality settings must change real resource policies while preserving essential sound identity; oversampling is enabled only for DSP where justified;
+- target minimum resource consumption versus comparable full-featured sample-based guitar VSTi competitors while preserving sound quality, responsiveness and realism. Benchmark fairly under matching host/sample rate/buffer/polyphony/voices/preset workload and equivalent enabled features; publish measured CPU/RAM/startup/load/latency and methodology.
+
+Self-containment does not prohibit audited third-party source components: legally compatible libraries may be internally integrated and optimized. PPGU must remain a standalone VST3 instrument and must not require Kontakt 6/7/8 at runtime.
+
+The user's statement that this is a new kind of development with no prior equivalent is recorded as an ambitious product goal/positioning, not as a proven claim of worldwide novelty. Do not claim superiority over all competitors before comparative benchmarks and independent validation. Status: architecture principle and target requirement APPROVED/DOCUMENTED; implementation and proof require further engineering, profiling and comparative tests.
