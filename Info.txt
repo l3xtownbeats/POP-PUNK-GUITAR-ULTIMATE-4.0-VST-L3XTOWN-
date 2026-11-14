@@ -1601,3 +1601,20 @@ HEAD на момент записи: `2a0f15b007e222ae5cbcfb05377b957d1d91ad04`
 SOUND BANK EXPANSION — 2026-11-11
 User requested a broader library using all suitable quality sources, not only the previously used libraries. Updated .github/workflows/vst3-build.yml to retain the existing Meta Steel/Nylon + FreePats Clean/Distortion banks and additionally package five CC0 collections: Karoryfer Emilyguitar (323 WAV), Shinyguitar (846 WAV), Black And Green Guitars (1,776 WAV), FreePats FSBS Direct DI (122 WAV), and FreePats FSBS Jazz (135 FLAC). Upstream repository trees and CC0-1.0 license identifiers were inspected. Workflow now changes the sample cache key, clones each source as a separate folder, checks license/SFZ presence and minimum audio counts, strips .git, and hashes WAV + FLAC. Exact final count, package size, and checksum remain CI-dependent.
 Important: source redistribution clearance is not the same as runtime SFZ compatibility. Current parser does not yet support all advanced include/default_path/random-region/articulation opcodes; SamplePool streaming is WAV-centric. User import can convert FLAC and create a simple root-key map, but does not preserve every original velocity layer/RR/articulation. Do not claim all added banks are fully playable factory presets until parser and per-bank tests pass. No audio audition was performed in this work cycle.
+
+
+==============================================================================
+2026-11-15 — BINDING PRODUCT IDENTITY: NEON STAGE DEFAULT / SKIN-1
+==============================================================================
+
+**Пользовательское решение — обязательное для всех веток проекта:**
+- **NEON STAGE = DEFAULT SKIN-1** — главная тема, основной визуальный стиль и фирменная графическая оболочка POP PUNK GUITAR ULTIMATE.
+- NEON STAGE является темой первого запуска, штатным default, reset target и безопасным visual fallback. Она задаёт внешний вид главного окна и согласованную визуальную систему всех окон/панелей плагина.
+- **SIGNAL FORGE** остаётся названием рабочего интерфейса/инженерной оболочки, но не названием главной темы и не заменяет NEON STAGE.
+- **SOUND FORGE = SKIN-2** и **BLACKOUT VINTAGE = SKIN-3** — самостоятельные альтернативные темы; они не заменяют DEFAULT SKIN-1.
+- В текущей канонической skin-линейке NEON STAGE соответствует существующей записи **skin-053 / Skin_053**. Существующие ID, индексы и пользовательские сохранённые skin selections не перенумеровывать и не перезаписывать.
+- Если конкретная ветка отстаёт и ещё не содержит Skin_053, это решение всё равно обязательно: выполнить отдельную согласованную миграцию registry/asset paths, сохранив все существующие ID; не создавать дубликат и не объявлять тему runtime-ready до прохождения её валидаторов.
+- Это утверждение фиксирует продуктовый приоритет и не означает, что пиксельное соответствие макетам или полная runtime-интеграция уже завершены.
+
+**Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
+==============================================================================
