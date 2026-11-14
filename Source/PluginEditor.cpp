@@ -1181,11 +1181,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setSize(1024, 700);
     setResizable(true, true);
     setResizeLimits(900, 640, 1600, 1100);
-    titleLabel.setText("PPGU", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
+    titleLabel.setText("NEON STAGE", juce::dontSendNotification);
+    titleLabel.setFont(juce::Font(21.0f, juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(titleLabel);
-    subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
+    subtitleLabel.setText("POP PUNK GUITAR ULTIMATE  /  L3XTOWN AUDIO LAB", juce::dontSendNotification);
     subtitleLabel.setFont(juce::Font(9.5f, juce::Font::bold));
     subtitleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
     addAndMakeVisible(subtitleLabel);
@@ -1434,8 +1434,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+
+    // NEON STAGE top bar: a quiet, high-contrast studio-console identity.
+    auto header = getLocalBounds().reduced(14).removeFromTop(62).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
+        header.getX(), header.getY(), p.token("panel"), header.getX(),
+        header.getBottom(), false));
+    g.fillRoundedRectangle(header, 10.0f);
+    g.setColour(p.token("control_border").withAlpha(0.72f));
+    g.drawRoundedRectangle(header.reduced(0.5f), 10.0f, 1.0f);
+    g.setColour(p.token("accent"));
+    g.fillRoundedRectangle(header.getX() + 14.0f, header.getY() + 10.0f,
+                           3.0f, header.getHeight() - 20.0f, 1.5f);
+    g.setColour(p.token("accent").withAlpha(0.85f));
+    g.fillRoundedRectangle(header.getX() + 25.0f, header.getBottom() - 2.0f,
+                           64.0f, 2.0f, 1.0f);
+
     auto area = getLocalBounds().reduced(14);
-    area.removeFromTop(48);
+    area.removeFromTop(62);
     area.removeFromBottom(132);
     area.removeFromTop(8);
     const int gap = 10;
@@ -1446,16 +1462,16 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    drawPanel(g, area, "NEON STAGE  /  PLAYING CORE");
+    drawPanel(g, right, "AMP & FX CHAIN");
 
-    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
+    // Low-contrast center texture; all active controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
     g.setColour(p.token("accent"));
     g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
-    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
-        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    g.setColour(p.token("text_secondary").withAlpha(0.075f));
+    for (int x = area.getX() + 18; x < area.getRight(); x += 40)
+        g.drawVerticalLine(x, (float)area.getY() + 10.0f, (float)area.getBottom() - 10.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1468,11 +1484,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     if (auxiliaryWorkspace != nullptr)
         auxiliaryWorkspace->setBounds(bounds);
 
-    // SIGNAL FORGE three-zone shell: browser / instrument / amp+FX.
+    // NEON STAGE three-zone shell: preset browser / playing core / amp+FX.
     // Lower performance strip remains full width. APVTS attachments are untouched.
-    auto header = bounds.removeFromTop(48);
-    titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
-    subtitleLabel.setBounds(18, 47, 150, 14);
+    auto header = bounds.removeFromTop(62);
+    titleLabel.setBounds(header.removeFromLeft(190).reduced(4, 6));
+    subtitleLabel.setBounds(34, 45, 300, 12);
     header.removeFromLeft(8);
     skinButton.setBounds(header.removeFromRight(78).reduced(2, 5));
     settingsButton.setBounds(header.removeFromRight(92).reduced(2, 5));
@@ -1541,7 +1557,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
         fxButtons[i].setBounds(row.reduced(5, 2));
     }
 
-    // Legacy title is no longer part of the visible main shell.
+    // Legacy playback heading is no longer part of the visible main shell.
     playbackTitle.setVisible(false);
 }
 
