@@ -59,3 +59,57 @@
 [DECISION: preserve stable historical IDs, paths, and original indices; add a separate active ordinal/visibility field rather than renumbering historical records.] Это единственная безопасная модель, которая одновременно соблюдает no-loss и позволяет SKIN-1 указывать на `skin-053/Skin_053`. Конкретное поле и формат миграции выбираются только после полного аудита всех consumers.
 
 **Итог:** аудит завершён; destructive/partial manifest edit не выполнялся. Следующий безопасный шаг — инвентаризация всех registry consumers и migration tests, затем единый атомарный patch.
+
+
+## 7. Consumer audit — registry, runtime, saved selection and validators
+
+Проверены фактические consumers в рабочей ветке. Это статический source audit; поведение после миграции пока не запускалось.
+
+| Consumer | Текущая зависимость | Последствие для REV 18 |
+|---|---|---|
+| `SKIN/theme_manifest.json` | `totalSkins=102`, `defaultSkin=neon-stage-default-skin-1`, индексы 1…102 считаются единым списком | Нельзя заменить только default ID; нужно отделить active ordinal от исторического index. |
+| `SKIN/theme_pack_manifest.json` | MERGED pack 52…102; Skin_052 — прежний NEON STAGE, Skin_053 — архив | Исторический pack нельзя молча переписать: validator сверяет поля pack и registry. Нужна явная archive/provenance модель. |
+| `Source/UI/ThemeManager.h/.cpp` | Fallback ID = `neon-stage-default-skin-1`; parser допускает этот ID на index 52 и numeric Skin Studio IDs на index ≥52 | Fallback identity и contract tests должны перейти на `skin-053`; legacy manifest parsing нужно сохранить. |
+| `Source/PluginEditor.cpp::getSkinCount` | Возвращает total registry entries и требует индексы 1…total | После архивирования старых записей это не может быть active gallery count. |
+| `Source/PluginEditor.cpp::getSkinManifest` | Ищет запись по исходному `index` | Должен искать по отдельному `activeOrdinal`, затем возвращать неизменённый stable path/index. |
+| `Source/PluginEditor.cpp::loadSavedSkin` | Читает `skinId` из JUCE PropertiesFile; старые `skin-052`/`skin-053` сейчас переводит в прежний ID | Требуется миграция old default ID `neon-stage-default-skin-1` → `skin-053`; сохранённые архивные ID должны иметь явный fallback policy. |
+| `Source/PluginEditor.cpp::persistSkinPreference` | Сохраняет stable palette ID в `skinId` | Продолжать хранить stable ID, не active ordinal. Не переносить skin preference в APVTS. |
+| `Source/PluginEditor.cpp::openSkinGalleryPanel` | Перебирает 1…getSkinCount(), создаёт карточки и применяет выбранный числовой index | Перебор должен идти по активному порядку; archived entries не должны попадать в gallery. |
+| `Source/PluginEditor.cpp::openSettingsPanel` | Restore action вызывает `loadSkinByIndex(52, true)` | После введения active ordinal restore target должен стать SKIN-1 / ordinal 1. |
+| `tests/ThemeManagerTests.cpp` | Ожидает старый default ID; проверяет Skin_052 как canonical и Skin_053 как archive | Требуются новые assertions на fallback, default registry, legacy saved ID migration и сохранение Skin_052 archive. |
+| `tests/ValidateSkinManifests.py` | `DEFAULT_ID` старый; проверяет все 102 индекса как одну непрерывную selector sequence | Валидировать stable registry index отдельно от active ordinal/status. |
+| `tools/validate_skin_pack.py` | Для index 52 ожидает старый canonical ID; сравнивает merged pack с registry | Pack validator должен понимать immutable historical pack vs active runtime registry. |
+| `tools/generate_skin_batch.py` / `tools/merge_skin_pack.py` | Следующие темы получают индекс после totalSkins; merge требует непрерывность 1…N | Генератор/merge должны назначать следующий activeOrdinal, не переиспользуя historical index. |
+
+### 7.1 Предлагаемая модель без перенумерации
+
+[DECISION: сохранять `index`, `id` и `path` как immutable historical identity; отдельное поле `activeOrdinal` определяет пользовательский SKIN номер.]
+
+| Stable registry record | Active ordinal | UI label | Lifecycle |
+|---|---:|---|---|
+| Skin_01…Skin_051 | отсутствует | не показывать | ARCHIVED |
+| Skin_052 / `neon-stage-default-skin-1` | отсутствует | не показывать | ARCHIVED |
+| Skin_053 / `skin-053` | 1 | SKIN-1 / NEON STAGE | ACTIVE / DEFAULT |
+| Skin_054 / `skin-054` | 2 | SKIN-2 | ACTIVE |
+| Skin_055 / `skin-055` | 3 | SKIN-3 | ACTIVE |
+| … | … | … | … |
+| Skin_102 / `skin-102` | 50 | SKIN-50 | ACTIVE |
+
+- `index` остаётся исходным registry index 1…102 и не используется как display number.
+- `activeOrdinal` уникален и непрерывен 1…50; archived entries не имеют activeOrdinal.
+- `defaultSkin=skin-053`; `activeSkinCount=50`; `totalSkins=102` остаётся количеством всех сохранённых записей.
+- Stable IDs Skin_054…Skin_102 не переименовываются в skin-002…skin-050.
+- Старый Skin_052 и прежний Skin_053 payload должны быть сохранены byte-for-byte в архиве до любой замены/перемещения; pack manifest/provenance должен явно описывать архивную копию.
+- Галерея, Settings restore, saved preference resolver и validators должны использовать один и тот же resolver activeOrdinal ↔ stable registry record.
+- Нельзя считать этот mapping реализованным, пока registry schema, pack validator, generator/merger, runtime gallery, saved-state migration и tests не обновлены согласованно.
+
+### 7.2 Новые конкретные blockers
+
+1. `loadSavedSkin()` не знает нового canonical ID и имеет устаревшую миграцию двух numeric IDs к старому default.
+2. Settings restore жёстко привязан к index 52.
+3. Gallery немедленно применяет тему и показывает все registry entries; archive visibility/Preview→Apply→Back не реализованы.
+4. ThemeManager fallback ID и тестовые assertions указывают на прежний canonical ID.
+5. Pack manifest и pack validator считают Skin_052…Skin_102 единым активным pack, поэтому простая перестановка registry полей нарушит G4.
+6. В REV 18 inventory есть 27 required control IDs, а Skin_052/053 theme maps имеют 28 ключей с `sync_selector`; consumer/schema parity требует отдельного решения на основе binding inventory, без удаления ключа вслепую.
+
+**Результат consumer audit:** IMPLEMENTED (статический аудит исходников). Runtime migration remains BLOCKED until the activeOrdinal/archive contract is implemented atomically across the listed consumers and tests. Audio/APVTS/MIDI/DSP remain out of scope.
