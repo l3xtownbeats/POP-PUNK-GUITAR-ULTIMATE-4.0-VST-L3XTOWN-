@@ -91,7 +91,7 @@ The consolidated approved execution order, all user-approved additions, cross-mo
 
 ## Latest approved preset scope expansion
 
-The hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets total. The 500–600 range remains a stretch goal. Travis Barker 82 is a separate category of 82 unique complete presets, separately counted and never duplicated/double-counted. The legacy 300-entry catalogue remains to be audited; catalog records are not proof of playable, validated presets.
+The hard release minimum is at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets total. The 500–600 range remains a stretch goal. The 82 Travis Barker-produced-album guitar presets are distributed inside the corresponding artist/band categories and counted once in the overall catalogue; they are not a separate category. The legacy 300-entry catalogue remains to be audited; catalog records are not proof of playable, validated presets.
 
 Add Angels & Airwaves album-era families for *We Don't Need to Whisper* (2006), *I-Empire* (2007), and *Lifeforms* (2021), plus Tom DeLonge technique presets in both MELODY and PATTERN. Research notes, confirmed facts vs interpretations, tone concepts, legal limits and tests are in [PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md](./PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md).
 
