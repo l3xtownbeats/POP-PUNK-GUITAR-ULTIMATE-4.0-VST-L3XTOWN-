@@ -298,3 +298,11 @@ Current upstream documentation/catalog identifies:
 - Run 43584613952 successfully parsed and listed the 11 approved sources, then caught a fixture/parser mismatch in the new SHA256SUMS tests before any downloads. Corrected the checksum regex escaping and newline fixtures; reset release-file counters per source.
 - The workflow is configured to run on Sound Hunter/catalog/test updates. Current source acquisition has not yet run to completion; no sample payload/artifact is claimed.
 - Preserve no-delete/no-overwrite policy and 40 GB aggregate ceiling. Continue only after the corrected CI run is green.
+
+
+## 2026-11-14 — Sound Hunter live CI: verified tests, release selector correction
+
+- Sound Hunter run 43584678862: all six tests PASS after checksum regex/fixture correction; acquisition then stopped safely before importing anything because the Meta release asset selector matched two sidecar/archive names.
+- Run 43584725787: all six tests PASS again; acquisition again stopped before any sample writes because the substring selector still matched two wav.zip assets (archive plus checksum sidecar). No assets were accepted, and no existing Samples content was modified.
+- Hardened release asset matching to support exact filename suffix matching (e.g. .wav.zip) so checksum sidecars are excluded. Updated Meta catalog selectors accordingly.
+- Next run will verify actual archive manifests/licenses and hashes before admitting samples. No successful download/import/artifact is claimed yet.
