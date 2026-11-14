@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 jobs:
   build-skin:
@@ -63,25 +62,6 @@ jobs:
             git commit -m "assets: sync reviewed NEON STAGE preview and hero"
             git push origin "HEAD:$env:GITHUB_REF_NAME"
           }
-      # GITHUB_TOKEN pushes do not start other workflows; explicitly dispatch the
-      # VST3 validation against the now-synced work-branch head.
-      - name: Dispatch Windows VST3 validation for reviewed NEON STAGE branch
-        if: github.ref_name == 'work/neon-stage-reference-preview-fix'
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $headers = @{
-            Authorization = "Bearer $env:GH_TOKEN"
-            Accept = "application/vnd.github+json"
-            "X-GitHub-Api-Version" = "2022-11-28"
-          }
-          $body = @{ ref = $env:GITHUB_REF_NAME } | ConvertTo-Json
-          $uri = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/workflows/vst3-build.yml/dispatches"
-          Invoke-RestMethod -Method Post -Uri $uri -Headers $headers -Body $body -ContentType "application/json"
-          Write-Host "Dispatched vst3-build.yml for $env:GITHUB_REF_NAME."
-
       - name: Upload staging package and report
         if: always()
         uses: actions/upload-artifact@v4
