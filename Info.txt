@@ -3402,3 +3402,7 @@ REV ULTRA 3.0 задаёт обязательный производственн
 
 **Status at this entry:** all source changes are committed, but exact-head workflow results have not yet been returned by the available GitHub run/status query. No claim of generated atlases, contact sheets, successful staging package, or G1–G4 PASS is made. Review and release gates remain open.
 ================================================================================
+
+**Final CI wiring follow-up — 2026-11-15**
+- Commit `948dbc00763fe5df30758ddb493bba13b0d8c458` adds `python -m py_compile` for the asset engine and all pipeline wrapper scripts before any asset generation.
+- Exact-head workflow lookup is required before reporting results. No CI result is inferred from the presence of the workflow definition.
