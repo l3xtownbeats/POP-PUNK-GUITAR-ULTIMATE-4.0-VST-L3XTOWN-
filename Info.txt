@@ -2123,3 +2123,24 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 
 **Authority:** latest explicit user decisions + SIGNAL FORGE v10 MASTER/v10.1 + approved parameter/control inventory + append-only journals. Priority: safety > realtime > sound > resources > UX. One cause per change; INFO/CODE same commit; exact evidence only.
 **Status:** REQUIREMENTS RECONCILED / DOCUMENTED; implementation and full file-by-file audit remain open.
+
+
+## 2026-11-14 — USER RATIFICATION: IMMUTABLE / MANDATORY DEVELOPMENT BASELINE
+
+**Explicit user confirmation:** the complete conversation-wide reconciliation immediately above is approved as correct and is hereby made a **mandatory, binding and immutable part of PPGU development**.
+
+This is not a suggestion list, optional roadmap, or visual inspiration-only note. All enumerated product requirements, functions, workflows, visual rules, control expectations, library/legal constraints, performance/realtime rules, and identified omissions are part of the development contract and must be carried into implementation, review, testing, presets, packaging and future handoffs.
+
+### Non-negotiable change-control rules
+1. Do not silently delete, weaken, simplify, omit, reinterpret, replace, or revert any ratified requirement or approved design decision.
+2. Do not substitute a mockup-only/fake control for the required real function; where a function is not implemented, mark it explicitly REQUIRED / DESIGNED / PARTIAL / BLOCKED / DEFERRED / SOURCE PRESENT / INTEGRATED / TESTED / HOST VERIFIED / RELEASED as evidence warrants.
+3. Do not treat documentation as implementation, registered tests as passed tests, a preset definition as a validated playable preset, a named library as a licensed distributable asset, or a user-reported host result as exact-SHA release evidence.
+4. All new proposals and variants must be recorded separately as PROPOSED until the user approves them. An approved variant may add detail but may not override this baseline by implication.
+5. A change to this immutable baseline is permitted only after the user explicitly authorizes that specific change. Record it as a dated, append-only, versioned **SUPERSEDING AMENDMENT** stating the exact old clause, new clause, reason, affected paths/IDs, migration and tests. Preserve the previous entry unchanged. No silent edits, retroactive rewriting or inferred approval.
+6. Every production transaction must check this baseline, preserve APVTS IDs/state/preset/MIDI/audio compatibility, update Info.txt and CODE.txt in the same commit, and provide exact commit/test/CI/host evidence. Any conflict or missing evidence is a blocker, not permission to guess.
+7. The approved visual direction is binding: SIGNAL FORGE remains the main theme/brand identity; NEON STAGE is its approved neon visual treatment and the requested primary/default launch presentation. The latest journal label “NEON STAGE primary/default skin” means the default presentation within SIGNAL FORGE, not permission to erase or rename SIGNAL FORGE. Preserve SOUND FORGE and BLACKOUT VINTAGE variants and stable IDs; resolve registry naming only by an explicit tested migration.
+8. All previously enumerated requirements and gaps in the conversation-wide decision register remain in scope. An item may be closed only with implementation and the appropriate verification evidence, or changed only through the explicit amendment process above.
+
+**Authority:** this user-ratified baseline joins SIGNAL FORGE v10 MASTER/v10.1, approved control inventory and append-only journals as binding project authority. Conflict priority remains safety > realtime guarantees > sound > resources > UX; this priority governs implementation choices and does not authorize deleting requirements.
+
+**Status:** USER RATIFIED / MANDATORY / IMMUTABLE BASELINE / DEVELOPMENT GATE. No production feature is claimed implemented by this journal entry.

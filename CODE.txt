@@ -700,3 +700,16 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 
 **Verification:** documentation/source readback only. Build/CTest/pluginval/package/host test NOT RUN for this documentation change.  
 **Status:** REQUIREMENTS RECONCILED / DOCUMENTED; source implementation not claimed; TESTED pending; RELEASED no.
+
+
+## 2026-11-14 — USER RATIFICATION: immutable mandatory development baseline
+
+User explicitly confirmed the complete conversation-wide reconciliation as correct and required it to be recorded as an immutable mandatory part of development. This baseline is binding, not an optional roadmap. No requirement, function, workflow, control, visual decision, legal constraint, performance rule or recorded omission may be silently removed, simplified, weakened, reinterpreted or reverted.
+
+**Change control:** only a specific explicit user authorization can alter it. Any alteration must be a dated append-only versioned SUPERSEDING AMENDMENT quoting the exact old/new clauses, reason, affected paths/IDs, migration and tests; preserve prior history. Proposals remain PROPOSED until approved. Fake controls and undocumented scope changes are prohibited. Distinguish specification from source, source from integration, registered tests from passing tests, preset definitions from playable validation, candidate libraries from redistributable assets, and user host feedback from exact-SHA release evidence.
+
+**Visual naming clarification:** SIGNAL FORGE remains the main theme/brand identity; NEON STAGE is its approved neon visual treatment and requested primary/default launch presentation within SIGNAL FORGE. The “NEON STAGE primary/default skin” wording is a presentation label, not authorization to erase/rename SIGNAL FORGE or stable IDs. SOUND FORGE and BLACKOUT VINTAGE remain preserved variants.
+
+**Development gate:** every production change must check this baseline, preserve APVTS/state/preset/MIDI/audio contracts, append Info.txt and CODE.txt in the same commit, and attach exact verification evidence. Priority safety > realtime > sound > resources > UX does not authorize requirement deletion.
+
+**Status:** USER RATIFIED / MANDATORY / IMMUTABLE BASELINE / DEVELOPMENT GATE. Documentation only; no production implementation claimed.
