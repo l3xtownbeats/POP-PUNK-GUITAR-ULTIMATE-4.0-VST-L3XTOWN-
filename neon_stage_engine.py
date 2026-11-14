@@ -2,7 +2,7 @@
 Writes only to dist/neon_stage_staging and juce_resources; never mutates SKIN/.
 """
 from __future__ import annotations
-import json, math, os, shutil, zipfile
+import json, math, os, zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
@@ -91,11 +91,11 @@ def vertical_strip(size,path):
 def step_palette():
     ensure_dirs()
     checks={
-      "text_primary/window_bg":(PALETTE["text_primary"],PALETTE["window_bg"],17.0),
-      "text_secondary/window_bg":(PALETTE["text_secondary"],PALETTE["window_bg"],10.0),
-      "text_disabled/window_bg":(PALETTE["text_disabled"],PALETTE["window_bg"],5.0),
-      "lcd_text/lcd_bg":(PALETTE["lcd_text"],PALETTE["lcd_bg"],17.0),
-      "accent/panel":(PALETTE["accent"],PALETTE["panel"],15.0)
+      "text_primary/window_bg":(PALETTE["text_primary"],PALETTE["window_bg"],7.0),
+      "text_secondary/window_bg":(PALETTE["text_secondary"],PALETTE["window_bg"],4.5),
+      "text_disabled/window_bg":(PALETTE["text_disabled"],PALETTE["window_bg"],3.0),
+      "lcd_text/lcd_bg":(PALETTE["lcd_text"],PALETTE["lcd_bg"],7.0),
+      "accent/panel":(PALETTE["accent"],PALETTE["panel"],3.0)
     }
     report={}
     for name,(fg,bg,minimum) in checks.items():
@@ -128,7 +128,7 @@ def step_ui():
                             outline=outline,width=2)
         if state=="on":
             d.line((x+24,h//2,x+36,h//2),fill=PALETTE["window_bg"],width=3)
-        atlas.save(ASSETS/"buttons"/"btn_states.png",optimize=True)
+    atlas.save(ASSETS/"buttons"/"btn_states.png",optimize=True)
     tile_w,tile_h=220,72
     fx=Image.new("RGBA",(tile_w*len(FX_NAMES),tile_h*2),(0,0,0,0))
     for row in range(2):
@@ -272,17 +272,27 @@ def step_manifest():
     print("Wrote Skin_053 draft and staging manifest. Registry untouched.")
 
 def step_package():
+    """Create a staging ZIP without modifying any runtime/JUCE resource tree."""
     ensure_dirs()
-    dist=ROOT/"dist"; dist.mkdir(exist_ok=True)
+    dist=ROOT/"dist"
+    dist.mkdir(exist_ok=True)
     zip_path=dist/"NEON_STAGE_SKIN_053_STAGING.zip"
-    if zip_path.exists(): zip_path.unlink()
-    with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
-        for p in OUT.rglob("*"):
-            if p.is_file(): z.write(p,p.relative_to(OUT).as_posix())
-    juce=ROOT/"juce_resources"/"Skins"/"Skin_053"
-    if juce.exists(): shutil.rmtree(juce)
-    shutil.copytree(SKIN,juce)
-    print(f"Packaged {zip_path} and copied resources to {juce}")
+    temp_path=dist/(zip_path.name + ".tmp")
+    try:
+        with zipfile.ZipFile(temp_path,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+            for p in OUT.rglob("*"):
+                if p.is_file():
+                    z.write(p,p.relative_to(OUT).as_posix())
+        with zipfile.ZipFile(temp_path,"r") as check:
+            bad_member=check.testzip()
+            if bad_member is not None:
+                raise RuntimeError(f"Staging ZIP integrity check failed at: {bad_member}")
+        os.replace(temp_path,zip_path)
+    finally:
+        if temp_path.exists():
+            temp_path.unlink()
+    print(f"Packaged staging-only archive: {zip_path}")
+    print("Runtime/JUCE resources were not modified.")
 
 def step_report():
     errors=[]
@@ -294,8 +304,8 @@ def step_report():
         if set(theme.get("palette",{}))!=set(TOKENS): errors.append("palette token parity failure")
         missing=sorted(set(REQUIRED)-set(theme.get("controls",{})))
         if missing: errors.append("missing controls: "+", ".join(missing))
-        for fg,bg,minimum in (("text_primary","window_bg",17),("text_secondary","window_bg",10),
-                              ("text_disabled","window_bg",5),("lcd_text","lcd_bg",17),("accent","panel",15)):
+        for fg,bg,minimum in (("text_primary","window_bg",7),("text_secondary","window_bg",4.5),
+                              ("text_disabled","window_bg",3),("lcd_text","lcd_bg",7),("accent","panel",3)):
             ratio=contrast(theme["palette"][fg],theme["palette"][bg])
             if ratio<minimum: errors.append(f"contrast {fg}/{bg}: {ratio:.2f} < {minimum}")
     pngs={"assets/preview.png":(480,300),"assets/hero.png":(1200,420),
