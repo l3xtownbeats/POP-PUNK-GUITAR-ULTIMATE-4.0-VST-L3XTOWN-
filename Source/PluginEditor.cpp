@@ -1635,7 +1635,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
     auto id = settings ? settings->getValue("skinId", "neon-stage-default-skin-1")
                        : juce::String("neon-stage-default-skin-1");
     // Migrate the previous numeric default ID without changing the user's selected theme.
-    if (id == "skin-052")
+    if (id == "skin-052" || id == "skin-053")
         id = "neon-stage-default-skin-1";
 
     int index = 0;
