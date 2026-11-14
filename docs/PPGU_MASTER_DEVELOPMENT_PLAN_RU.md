@@ -145,7 +145,7 @@ Pattern — отдельный режим, а не ошибка Melody:
 5. PATTERN factory/user presets.
 6. Metadata, mappings, licenses, manifests, checksums.
 
-SoundBank — гитарный: не маркировать drum-only, bass-only, vocal-only или full-mix assets как guitar samples. Acoustic/Electric и Factory/User должны иметь ясное разделение.
+Samples — гитарный: не маркировать drum-only, bass-only, vocal-only или full-mix assets как guitar samples. Acoustic/Electric и Factory/User должны иметь ясное разделение.
 
 ### 6.1 Масштабирование и наполнение
 - Нет искусственного потолка по числу пресетов, артистов, групп, жанров, стилей, one-shots, loops, mappings и библиотек.
@@ -405,7 +405,7 @@ PSC пока является проектной спецификацией, а 
 1. Reconcile all current docs and conflicting legacy wording.
 2. Inventory repository branches/source tree/build config and exact latest main SHA.
 3. Map production paths for plugin, sampler, presets, UI, FX, import, SoundBank and workflows.
-4. Audit all existing legacy catalogue definitions (including the 300-entry set) against the updated 500-minimum/~600-target scope and real preset integration status.
+4. Audit all existing legacy catalogue definitions (including the 300-entry set) against the updated 500 MELODY + 500 PATTERN READY preset scope and real preset integration status.
 5. Audit current Samples cache/artifact/registry and exact license/checksum/mapping coverage.
 
 **Phase B — Core playable instrument**
@@ -430,7 +430,7 @@ PSC пока является проектной спецификацией, а 
 
 **Phase E — Sound design and factory presets**
 20. Complete 10–15 effect DSP modules plus amp/cab/IR routing.
-21. Build at least 300 unique, fully implemented and audio-validated MELODY + PATTERN factory presets as a hard release minimum; expand toward 500–600 only as a stretch goal; include the 82 Travis Barker-produced-album guitar presets within the corresponding artist/band categories and count each only once.
+21. Build at least 500 unique, fully implemented and audio-validated MELODY factory presets AND at least 500 PATTERN factory presets (1,000 READY total) as hard release minimum; include the 82 Travis Barker-produced-album guitar presets within the corresponding artist/band categories and count each only once.
 22. Create the 21 approved group/style families.
 23. Create six album-era families for Blink-182 and Sum 41.
 24. Render/A-B/validate every preset and record exact source/chain/evidence.
@@ -579,3 +579,19 @@ Research evidence includes Ernie Ball String Theory (resonant-note approach and 
 Пользователь отдельно подтвердил: **NEON STAGE DEFAULT сохраняет прежний утверждённый внешний вид и общую визуальную концепцию.** Глобальное разрешение на UX-оптимизацию НЕ является разрешением на редизайн, замену темы, перестройку фирменной композиции или отход от исходного утверждённого mockup.
 
 Оптимизировать нужно ясность и удобство ВНУТРИ существующей концепции: подписи, группировку, подсказки, навигационные состояния, обратную связь, доступность, аккуратные микроулучшения и поведение. Не менять узнаваемую композицию, базовую палитру, характер оформления, визуальную идентичность и утверждённое расположение основных областей. Любое предлагаемое существенное изменение внешнего вида — только отдельный вариант для оценки, не замена NEON STAGE DEFAULT. Остальные skins могут отличаться графикой по уже утверждённым правилам, но NEON STAGE DEFAULT остаётся основным и загружается по умолчанию.
+
+
+## 18. REV.18 — более поздние прямые утверждения пользователя (2026-11-14)
+
+Нормативное дополнение: `docs/PPGU_REV18_USER_APPROVED_SUPERSEDING_REQUIREMENTS_2026-11-14_RU.md`. Оно имеет приоритет над прежними конфликтующими формулировками только в явно перечисленных областях.
+
+- **SAMPLES:** искусственного лимита размера нет; сохранять все уникальные, легальные и проверенные assets. GitHub/transport limits решать checksum-частями, а не ограничением библиотеки.
+- **PRESETS:** минимум 500 READY MELODY + 500 READY PATTERN отдельно (1,000 total). Старые 300 total и 500–600 stretch superseded. 82 Travis Barker-produced-album references входят в соответствующие artist/band categories и общий счёт один раз.
+- **FX EDIT:** одно самостоятельное объединённое окно; EFFECT SELECT — 10–15 реальных DSP processors/effects. Сохранять 8 страниц параметров и 7 утверждённых bypass switches; точные дополнительные названия сверять с ранним утверждённым перечнем, не придумывать.
+- **SKIN GALLERY:** release gallery — 16 готовых тем; NEON STAGE DEFAULT первая, основная и default. Остальные 15 — премиальные графические варианты с идентичной функциональностью. Существующий legacy registry не удалять ради числа 16.
+- **SETTINGS:** GOOD/NORMAL/NIGHT/ECO resource profiles, 2x/4x/8x/16x quality modes, Voices 2/4/8+ в пределах движка, отдельные сохраняемые lock controls для voices и профилей.
+- **ABOUT:** L3XTOWN, POP PUNK GUITAR ULTIMATE VST3, REV.18, 2026, фактические engine/build versions, RU/EN illustrated full manuals со скриншотами реального runtime UI.
+- **Release payload:** VST3, SAMPLES, FACTORY PRESETS, USER PRESETS SUPPORT, SKIN GALLERY, RESOURCES, LICENSES, DOCUMENTS, RU/EN manuals, SHA-256 checksums, complete ZIP (при необходимости — split parts).
+- Основной порядок модулей остаётся строго тем, что перечислен в REV.18 addendum; Windows 10 x64 / FL Studio 20 x64 остаются платформой приёмки.
+
+Текущие 300-entry JSON bank, восемь selector modules FX EDIT, 52-theme legacy registry, SettingsPanel skeleton и отсутствие полных manuals — это исходные состояния/аудиторские gap items, не доказательство выполнения новых требований.
