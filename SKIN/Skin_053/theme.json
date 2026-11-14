@@ -38,9 +38,9 @@
   },
   "effects": {
     "material": "midnight stage console with cyan edge lighting",
-    "texture": "assets/texture.svg",
-    "bezel": "assets/bezel.svg",
-    "crest": "assets/crest.svg",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg",
     "shadowDepth": 0.38,
     "edgeHighlight": 0.34,
     "glow": "restrained cyan LED halo; reduced in ECO mode"
@@ -332,9 +332,9 @@
   "assets": {
     "preview": "assets/preview.png",
     "hero": "assets/hero.png",
-    "texture": "assets/texture.svg",
-    "bezel": "assets/bezel.svg",
-    "crest": "assets/crest.svg"
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg"
   },
   "compatibility": {
     "minimumPluginVersion": "4.0.0",
