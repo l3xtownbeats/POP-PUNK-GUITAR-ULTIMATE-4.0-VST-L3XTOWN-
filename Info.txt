@@ -2680,3 +2680,30 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 В текущем registry ожидается одна активная карточка: `SKIN-1 / NEON STAGE DEFAULT`. SKIN-2…SKIN-16 остаются будущими элементами линейки. Проверка синтаксиса/компиляции C++, CTest, pluginval, G1–G4, PNG CRC и runtime/FL Studio приёмка пока не выполнены.
 
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 ACTIVE SKIN ORDINAL RUNTIME + REGISTRY TESTS
+==============================================================================
+
+**Статус:** SOURCE PATCH COMMITTED / TESTS ADDED / EXECUTION PENDING.
+
+Подтверждён и доведён до явного контракта no-loss active registry workflow:
+- `SKIN/theme_manifest.json` сохраняет 102 исторические записи, их ID/index/path и папки; `skin-053` — единственная active theme, `activeOrdinal=1`, `defaultSkin=skin-053`; все остальные записи inactive. Релизная цель — 16 active themes.
+- Runtime `getSkinCount()` считает только active themes, при этом валидирует полную историческую таблицу, уникальность IDs/indices, булевы active flags, непрерывные activeOrdinal и canonical default. Дополнительно сверяет declared `activeThemeCount` и ограничивает активную линейку 1…16.
+- Runtime `getSkinManifest()` разрешает ordinal SKIN-1…SKIN-16 в конкретный resource path по `activeOrdinal`, а не трактует исторический resource index как номер темы.
+- `loadSavedSkin()` сопоставляет сохранённый стабильный resource ID с активным ordinal; удалённый из active lineup/невалидный ID безопасно возвращается к SKIN-1.
+- Gallery перечисляет только active themes в последовательном ordinal-порядке. Legacy-записи остаются в registry без отображения как активные.
+- `tools/validate_skin_pack.py` теперь валидирует no-loss registry contract: default skin-053, target=16, active count, уникальные historical IDs/indices, contiguous activeOrdinal и запрет активации известных legacy names.
+- Добавлен `tests/TestSkinRegistryContract.py` с проверками текущего registry, count mismatch, ordinal gaps, legacy activation, stale ordinal, wrong default и release target.
+- Тест зарегистрирован в CTest как `ppgu_skin_registry_contract`.
+
+Изменения выполнены только в UI/registry tooling и CMake test wiring. Audio Engine, DSP, APVTS IDs/values, MIDI, sampler и presets не менялись. Существующие 102 resource IDs/indices не перенумерованы.
+
+**Коммиты этапа:** runtime validation `50833af1230b26d5b0f57900d12fc2e450e57220`; validator `7ffea266eec0dff2a1d525bb28062eefd46083fc`; test `707c93ef844d388250d31d4492aa2668dcb59e72`; CTest registration `1f2afd8afe7aaf91eaee5c2bf9f6ed81db1ccbe0`.
+
+**Проверки:** статическая сверка source/manifest выполнена; combined status и workflow-runs для commit `1f2afd8afe7aaf91eaee5c2bf9f6ed81db1ccbe0` пока пусты. Python unit test, CTest, Windows Release, pluginval 5 и FL Studio 20 не заявляются как пройденные до фактического запуска.
+
+Следующий шаг: открыть draft PR для запуска целевых GitHub Actions, устранить найденные ошибки и получить exact-SHA evidence; после этого — asset pack G1–G4/PNG CRC и визуальная проверка NEON STAGE макетов/ассетов.
+
+==============================================================================
