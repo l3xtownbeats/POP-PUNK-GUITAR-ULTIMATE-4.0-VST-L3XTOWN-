@@ -13,14 +13,18 @@ Acquire and evaluate more than playable multisamples. Relevant material includes
 
 A file is not automatically useful just because its extension is recognized. Every asset must be inspected, fingerprinted, categorized and tested for relevance, quality, completeness and technical compatibility. Loops/phrases are not to be misrepresented as chromatic playable multisamples.
 
-## License tiers — mandatory
+## User-approved unrestricted discovery scope; shipment rights remain separate
 
-1. **Redistributable in the shipped plugin (preferred):** CC0/public-domain, or a license that clearly permits commercial use, modification and redistribution of the actual audio samples as part of a commercial instrument/plugin. Preserve the exact license, attribution text, source URL, version, date and proof.
-2. **Commercially licensed for plugin/sample-library redistribution:** include only after obtaining and archiving explicit written rights that cover embedding/redistributing the source audio inside a commercial VST instrument and its downloadable sound library. A normal producer/sample-pack license is not assumed to grant this right.
-3. **Evaluation-only / non-commercial / research-only:** may be catalogued and, where the terms permit, used in isolated internal evaluation. Mark as NOT FOR SHIPMENT. Never package these samples in the commercial VST, installer, preset bank or public artifact. Do not circumvent paywalls, DRM, access controls or license restrictions.
-4. **Unknown, conflicting or prohibited terms:** quarantine metadata only; do not download or integrate the audio until clarified. Do not infer rights from words such as “free”, “royalty-free”, “free for commercial use”, or a marketplace subscription.
+The user explicitly approves searching for, cataloguing and considering **all commercial and non-commercial guitar libraries and sound resources**, without excluding a candidate merely because it is paid, free, commercial, non-commercial, royalty-free, subscription-based or carries another license label. Do not use license category as a genre/source-discovery filter. Include paid products, free packs, sample banks, loops, one-shots and other relevant sound formats in the research inventory.
 
-A purchase or subscription does not by itself establish redistribution rights. For example, a marketplace may allow samples in finished music while prohibiting redistribution as raw or extractable samples. Ask the rights holder for explicit permission when the license is ambiguous.
+This approval does **not** create rights that the source owner has not granted. Keep the following distinction:
+
+- **Discovery/cataloguing:** broad and unrestricted by license category. Record source, price/access model, license text/link, attribution, version and acquisition date whenever available.
+- **Private evaluation:** may be performed only to the extent allowed by the applicable terms and access rules. If the terms prohibit downloading or local use, do not bypass them; record the source as metadata-only.
+- **Commercial PPGU distribution:** include actual audio assets only when the rights clearly permit redistribution/embedding in a commercial VST and its sound library, or after explicit written permission is obtained. Otherwise keep them out of shipped builds, installers, preset banks and public sample artifacts.
+- **Unclear or conflicting terms:** do not discard the candidate from discovery. Keep it in the catalogue marked RIGHTS_REVIEW_REQUIRED until clarified.
+
+License labels must not prevent research or candidate discovery, but they must never be falsified, stripped, or treated as permission to redistribute. A purchase or subscription does not automatically grant raw-sample redistribution rights. Do not circumvent paywalls, DRM, access controls or source restrictions.
 
 ## Technical and safety requirements
 
