@@ -2245,3 +2245,73 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 - Tests/build/CI/host validation: NOT RUN (documentation-only transaction).
 - Production source changed: NO.
 - Status: DOCUMENTATION TRANSACTION VERIFIED / CLOSED.
+
+
+## 2026-11-14 — TX-PRESET-BROWSER-003: ретроспективная фиксация утверждённой навигации и поведения PRESET BROWSER
+
+**Основание:** дополнительная сверка предыдущих чатов по PRESET BROWSER; в том числе пользовательское решение 2026-11-13 05:21:39 UTC. Это уточнение дополняет MASTER CONSOLIDATION и не отменяет более новые строгие правила SIGNAL FORGE v10/v10.1, NEON STAGE и realtime/safety.
+
+### 1. Утверждённая иерархия музыкального поиска (не менять порядок)
+**GENRE → ARTIST / BAND → SONG / SECTION → STYLE → PATTERN**
+
+- GENRE — первый уровень выбора музыкального направления.
+- ARTIST / BAND — второй уровень, фильтрующий каталог по выбранному исполнителю/группе.
+- SONG / SECTION — третий уровень: пользователь выбирает песню/контекст и конкретный раздел композиции.
+- Для SONG / SECTION зафиксированы варианты: **Intro / Verse / Pre-Chorus / Chorus / Bridge / Outro**. Pre-Chorus включён в более позднее пользовательское уточнение; он не должен теряться в более раннем сокращённом перечне.
+- После выбора Song/Section пользователь переходит к **STYLE**, затем к **PATTERN**. STYLE и PATTERN — отдельные последовательные сущности; не объединять их в один селектор.
+- Выбор STYLE определяет музыкальную манеру/характер исполнения; PATTERN определяет конкретный ритмический рисунок/способ игры внутри выбранного контекста. Точные поля и правила STYLE catalog должны сверяться с утверждённым Style Engine; не придумывать новые стили/параметры вместо отсутствующих данных.
+- **MELODY structure unchanged** — пользователь прямо потребовал не менять существующую структуру MELODY при утверждении этой навигации. Эта иерархия относится к browser/preset workflow и section-driven pattern workflow, а не к перестройке MELODY.
+- Не подменять SONG/SECTION восемью техническими 16-step rhythm masks или глобальным `patternSlot 0..7`: это разные уровни модели.
+
+### 2. Подтверждённые элементы PRESET BROWSER
+- Вкладки/режимы: **BROWSER / FAVORITES / CATEGORIES**.
+- Поддержать поиск, фильтрацию, сортировку, выбор пресета, избранное, preview/audition и переключение пресетов. Сортировка/фильтры — подтверждённые элементы управления; точный перечень полей сортировки, фильтров и их default order не зафиксирован в доступной переписке и не должен выдумываться.
+- Восемь утверждённых категорий:
+  1. Pop Punk Essentials
+  2. Modern Pop Punk
+  3. Retro Punk
+  4. Emo Vibes
+  5. Energetic Rock
+  6. Clean & Bright
+  7. Crunchy Power
+  8. Dreamy Atmosphere
+- Карточка/строка пресета должна показывать artwork, title, description и дополнительную информацию; категории и счётчики должны соответствовать реальным данным.
+- Верхняя панель браузера/плагина включает: **PREV / NEXT**, **FAVORITE**, **PRESET NAME**, **CATEGORY**, **SEARCH**. PREV/NEXT переключают пресеты в текущем активном контексте браузера; не должны неожиданно сбрасывать выбранный жанр/исполнителя/раздел/стиль или обходить текущую фильтрацию.
+- Должно быть очевидно, какой пресет выбран, какой загружен/активен, какой только прослушивается; не смешивать highlight selection, preview и committed loaded preset.
+- Preset selection/load должны быть быстрыми и понятными, с немедленной доступностью playable factory preset как продуктовой целью. Реальный статус зависимостей и playable должен отображаться честно.
+- Каталоги и счётчики не должны выдавать definition как loadable/playable/host-verified. Разделять counts: definitions / dependency-resolved / loadable / playable-tested / host-verified.
+- Поиск/фильтры/категории не должны менять активный звук до явного выбора/загрузки; preview — отдельная audition операция и не меняет активный preset/project state. Выход из preview должен корректно завершать временное audition-состояние.
+- Browser должен работать мышью и клавиатурой; общий GUI contract требует focus/keyboard behavior и доступных состояний. Пользователь также утвердил MIDI keyboard или mouse/Piano Roll для функциональных музыкальных workflows; browser controls не должны перехватывать MIDI performance input.
+- UI должен быть интуитивным и полностью функциональным: все controls подключены к browser model/preset manager/sound engine там, где требуется. Никаких декоративных кнопок, фиктивных карточек, фальшивых счётчиков или preview, который не звучит.
+- PRESET BROWSER является обычным пользовательским инструментом. **Curator — отдельный advanced workflow**, не подменяет браузер, не ограничивает пользовательскую библиотеку и не удаляет/изменяет пользовательские assets молча.
+
+### 3. Пресетные данные, типы банков и совместимость
+- Разделять factory presets и user presets; user save/load, import/export, стабильные ID, миграция и восстановление после повреждённого state обязательны согласно master register.
+- Сохранять совместимость preset/project state и APVTS IDs/semantics; не переименовывать параметры и не менять звук при косметической перестройке browser.
+- Для каждого factory preset необходимы: стабильный ID, mode, категории/метаданные, soundbank dependencies, root/key ranges, articulation maps, parameter compatibility, проверка output/no clipping, loudness match и MIDI playable test; host test маркируется отдельно.
+- Пресеты с отсутствующими/неразрешёнными зависимостями не должны выглядеть как готовые playable presets; показывать понятное состояние/причину и безопасный путь исправления/импорта.
+- Preset artwork/описания должны быть оригинальными или иметь подтверждённые права; artist/song references — это навигационные/стилевые метки, а не разрешение использовать чужие записи, логотипы, изображения или защищённые названия в качестве собственного контента.
+- Цели 150 MELODY + 150 PATTERN definitions (300 total), цели SOUND HUNTER MELODY 30 / PATTERN 50 / PUNK GROUP 40 и отдельный Curator set из 30 оригинальных пресетов по мотивам Blink-182 “ONE MORE TIME...” остаются разными scope/целями. Не суммировать их как достигнутые playable counts и не смешивать с browser category counts.
+- Не добавлять непроверенные сторонние банки или библиотеки в bundled factory presets; действуют S6/S6.5 legal gates, provenance, SHA-256 и GREEN/YELLOW/RED rules.
+
+### 4. Связь с PATTERN workflow и аудиодвижком
+- Browser hierarchy Genre → Artist/Band → Song/Section → Style → Pattern должна вести к реальному музыкальному поведению, а не только менять надписи.
+- Song/Section и его Pattern assignment должны оставаться раздельными; Intro, Verse, Pre-Chorus, Chorus, Bridge и Outro могут иметь собственные назначения.
+- Пользователь выбирает сначала раздел, потом стиль, затем конкретный pattern; preview не коммитит, Apply фиксирует, Back/Cancel откатывает draft там, где это предусмотрено транзакционным workflow.
+- Выбранный рисунок/артикуляция должны быть связаны с реальным sound engine и воспроизводиться корректно при управлении MIDI keyboard, мышью/Piano Roll и host MIDI. Не обещать поддержку артикуляции, если нет подходящего sample mapping.
+- Существующие host/internal PPQ, quantization, swing/accent, sample-accurate transitions, MIDI safety, sampler lifecycle и realtime guarantees обязательны к сохранению.
+- Не выполнять file/network I/O, sample decode, тяжёлый поиск или блокирующие операции в audio callback. Browser indexing, metadata scan, artwork decode, preview preparation и soundbank discovery — вне audio thread, с bounded work/cache и безопасной передачей готового состояния.
+
+### 5. Конфликты, границы и то, что намеренно НЕ додумывается
+- Это уточнение конкретизирует ранее общий browser inventory; не меняет приоритеты Safety → Realtime → Sound → Resources → UX.
+- Не меняет NEON STAGE как default skin и не смешивает NEON STAGE / SOUND FORGE / SIGNAL FORGE.
+- Не меняет MELODY structure.
+- Не меняет общие правила PATTERN Section → Pattern и не объявляет эту функциональность уже интегрированной.
+- Не фиксирует не подтверждённые перепиской поля сортировки, алгоритм ranking, точные filter chips, способ случайного выбора, структуру подкатегорий Genre/Artist, правила auto-load при навигации, double-click semantics, waveform preview или конкретную длительность preview. Эти детали остаются OPEN DESIGN QUESTIONS до явного решения/подтверждения.
+- Ранее отмеченная раскладка браузера в левой панели — историческое layout решение; применять её только если оно не противоречит более свежему утверждённому макету “01 INTERFACE — NEON STAGE DEFAULT”. Не использовать старый layout как основание менять главный утверждённый дизайн.
+- Все требования являются спецификацией. Статус реализации определяется только текущим REV.17 source, тестами и exact-SHA evidence.
+
+### 6. Acceptance checklist для каждого browser control
+Для каждого видимого элемента вести отдельную запись: stable control ID; label; panel/zone; user action; data source; state transitions; callback; preset-manager/sound-engine mapping; persistence; keyboard/focus; loading/error/empty/disabled states; automation/MIDI Learn applicability; tests; exact-SHA status.
+Минимальные сценарии: поиск по имени/метаданным; категория; favorites add/remove/filter; сортировка/фильтрация без потери контекста; PREV/NEXT в рамках результата; preview без изменения active preset; load/apply; отсутствующая библиотека; corrupt preset; user import/export; смена режима MELODY/PATTERN; сохранение/восстановление project state; клавиатурная навигация; мышь; FL Studio 20 host check.
+**Status:** REQUIREMENTS RETROSPECTIVELY CONSOLIDATED / IMPLEMENTATION AUDIT REQUIRED / NO SOURCE CODE CHANGE.
