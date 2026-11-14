@@ -3180,3 +3180,15 @@ Baseline: `assets/sound_hunter/registry.json` содержит assetCount=0/sour
 **Текущий канонический файл:** `docs/PPGU_JOURNAL/PPGU_JOURNAL.md`. Файл Markdown является обычным текстовым файлом; его содержимое читаемо и редактируемо как текст. Продолжать вести единый основной журнал в этом текстовом файле, не создавать параллельные дублирующие журналы без отдельного указания пользователя. Журнал кода `docs/PPGU_JOURNAL/CODE.md` также остаётся текстовым файлом для технических записей об изменениях исходного кода.
 
 **Область изменения:** только документация журнала; исходный код и runtime не изменялись. Build/CTest/pluginval/FL Studio host tests: NOT RUN.
+
+
+## 2026-11-14 — CONSOLIDATED APPROVED FUNCTION INVENTORY
+
+**Artifact:** `docs/PPGU_JOURNAL/PPGU_APPROVED_FUNCTIONS_MASTER_LIST_RU.txt`  
+**Commit:** `77d622cfe25f653f2509a3ffd82b83430611b8ab`
+
+Created a UTF-8 plain-text master list consolidating approved product scope: platform, main UI/skins/windows, MELODY, PATTERN, AUTOCHORDS, Harmony/Circle of Fifths/Generation managers, preset library/browser, SoundBank/sampler, Voice/MIDI/articulations, FX/AMP/Cabinet, Import Guitar, AUTO DISCOVER/SOUND HUNTER, SOUND FORGE, CURATOR, PERFORMANCE/SETTINGS, techniques/styles, every approved control, resource targets, QA/acceptance and architecture invariants.
+
+The file explicitly separates approved requirements from implementation status and records known gaps without claiming completion. It is a requirements inventory, not a replacement development journal.
+
+**Next development action:** begin with the cancelled Windows workflow baseline for commit `8b07c9cf3485f990bc1653b031e3b611ba74de04`. The recorded run `43561929542` was cancelled during legacy skin-artwork generation; all later validation/build/package steps were skipped. Re-run that job before using it as a baseline, then address the first confirmed build/test blocker on the active source branch. No production source was changed by this inventory operation.
