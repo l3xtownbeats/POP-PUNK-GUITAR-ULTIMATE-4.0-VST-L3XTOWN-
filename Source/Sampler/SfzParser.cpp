@@ -83,20 +83,45 @@ bool parseFloat(const std::string& text, float& value)
 
 bool parseKey(const std::string& text, int& value)
 {
-    if (parseInteger(text, value)) return value >= 0 && value <= 127;
-    if (text.size() < 2) return false;
-    static const std::string names[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-    std::string note = text.substr(0, text.size() - 1);
-    int octave = 0;
-    if (!parseInteger(text.substr(text.size() - 1), octave)) return false;
-    for (int i = 0; i < 12; ++i)
-        if (note == names[i])
+    if (parseInteger(text, value))
+        return value >= 0 && value <= 127;
+
+    // SFZ note names may use signed, multi-digit octave suffixes (for example
+    // C-1 and G9). Splitting off only the final character rejects valid
+    // negative-octave notes and can misread multi-digit octaves.
+    static const std::string names[] = {
+        "C#", "D#", "F#", "G#", "A#", "C", "D", "E", "F", "G", "A", "B"
+    };
+
+    for (const auto& noteName : names)
+    {
+        if (text.size() <= noteName.size()
+            || text.compare(0, noteName.size(), noteName) != 0)
+            continue;
+
+        int octave = 0;
+        if (!parseInteger(text.substr(noteName.size()), octave))
+            return false;
+
+        const auto noteIndex = [&]() -> int
         {
-            const int midi = (octave + 1) * 12 + i;
-            if (midi < 0 || midi > 127) return false;
-            value = midi;
-            return true;
-        }
+            static const std::string chromatic[] = {
+                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+            };
+            for (int i = 0; i < 12; ++i)
+                if (noteName == chromatic[i])
+                    return i;
+            return -1;
+        }();
+
+        const long long midi = (static_cast<long long>(octave) + 1LL) * 12LL + noteIndex;
+        if (noteIndex < 0 || midi < 0 || midi > 127)
+            return false;
+
+        value = static_cast<int>(midi);
+        return true;
+    }
+
     return false;
 }
 
