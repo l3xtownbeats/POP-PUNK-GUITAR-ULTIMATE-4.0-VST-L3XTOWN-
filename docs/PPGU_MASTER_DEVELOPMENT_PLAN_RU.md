@@ -156,7 +156,7 @@ Samples — гитарный: не маркировать drum-only, bass-only, 
 ### 6.2 Ёмкость и сохранность — обязательные правила
 - Managed `Samples` не имеет искусственного ограничения размера; реальные ограничения диска/CI/передачи сообщаются отдельно и не превращаются в лимит библиотеки.
 - Sound Hunter не имеет per-run cap; все уникальные разрешённые и проверенные активы могут добавляться без искусственного потолка.
-- Manual Import не получает отдельного искусственного 25 GB per-run cap; реальная нехватка дискового пространства сообщается фактически.
+- Manual Import не имеет искусственного size cap; фактическая нехватка диска сообщается честно.
 - Целевой размер SAMPLES не ограничен. GitHub/artifact/transfer ограничения обходятся разделением package на части с SHA-256 и проверкой восстановления; это не ограничивает объём библиотеки.
 - Никогда не удалять/перезаписывать старые ресурсы ради освобождения места. При фактическом исчерпании диска/квоты остановить текущую операцию безопасно и продолжить в другом пакете/запуске.
 - Всё успешно помещённое в managed Samples сохраняется постоянно: не удалять, не перемещать, не переименовывать, не перезаписывать, не чистить и не заменять. Новые версии/конверсии — только в новые уникальные пути.
@@ -293,7 +293,7 @@ PSC пока является проектной спецификацией, а 
 6. Background page requests + bounded cache; audio callback только получает ready pages.
 7. Протестировать corruption/truncation/fuzzing, maps, loops, RR, velocity, articulations, source integrity, audio A/B и resource budgets.
 8. Только после полного regression pass решать, какие factory assets переводить в PSC. WAV/SFZ остаются поддерживаемым fallback.
-9. PSC bytes внутри managed Samples учитываются в 40 GB; никакого автоматического удаления WAV/оригиналов ради освобождения места.
+9. PSC outputs сохраняются в новых уникальных путях; оригинальные WAV/исходники не удаляются и не перезаписываются.
 
 ---
 
@@ -404,7 +404,7 @@ PSC пока является проектной спецификацией, а 
 **Phase A — Consolidation & audit**
 1. Reconcile all current docs and conflicting legacy wording.
 2. Inventory repository branches/source tree/build config and exact latest main SHA.
-3. Map production paths for plugin, sampler, presets, UI, FX, import, SoundBank and workflows.
+3. Map production paths for plugin, sampler, presets, UI, FX, import, SAMPLES and workflows.
 4. Audit all existing legacy catalogue definitions (including the 300-entry set) against the updated 500 MELODY + 500 PATTERN READY preset scope and real preset integration status.
 5. Audit current Samples cache/artifact/registry and exact license/checksum/mapping coverage.
 
@@ -420,7 +420,7 @@ PSC пока является проектной спецификацией, а 
 12. Implement/complete AUTO DISCOVER, Curator, sample browser and validation.
 13. Populate licensed electric/acoustic one-shots, multisamples, performance sets and loops.
 14. Preserve dry/original source banks and provenance; validate all sources.
-15. Complete factory/user separation and capacity enforcement.
+15. Complete factory/user separation and unlimited Samples handling with safe disk/quota reporting.
 
 **Phase D — Guitar performance and patterns**
 16. Finish guitar articulation and transition engine.
