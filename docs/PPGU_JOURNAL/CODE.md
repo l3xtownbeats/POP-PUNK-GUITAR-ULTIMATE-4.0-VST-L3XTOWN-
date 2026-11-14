@@ -714,3 +714,14 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **CI:** GitHub Actions run 43577554118 was observed in_progress (build job). No successful completion, artifact, Windows/FL Studio host acceptance or release is claimed here. Job-log retrieval returned GitHub BlobNotFound; this is a tooling/log availability issue, not evidence of pass/failure. Re-check run status and artifacts before stating a result.
 
 **Testing boundary:** the JSON structural preflight was previously PASS; the workflow's final build/test outcome is pending. The run is not a substitute for separate exact-SHA Windows 10 x64 build, CTest, pluginval and FL Studio 20 acceptance.
+
+
+## 2026-11-14 — REV.18 FULL SCOPE CONFIRMATION (DOCUMENTATION ONLY)
+
+**User-approved scope:** FX EDIT consolidated into one window/system with 10–15 previously approved, genuinely implemented DSP effects plus cabinet processing; 16 complete skins with NEON STAGE default and graphics-only variation; SETTINGS resource profiles GOOD/NORMAL/NIGHT/ECO, applicable 2x/4x/8x/16x oversampling modes, selectable 2/4/8 voices minimum and Serum-style persistence locks; ABOUT product/creator/version/engine metadata; full illustrated RU+EN manuals; SAMPLES replaces SOUNDBANK as the user-facing name and has no artificial size/file-count cap; minimum 500 functional MELODY plus 500 functional PATTERN presets; 82 additional Travis Barker-style presets; full Windows 10 x64 VST3/FL Studio 20 release package with licenses, resources, user preset support, SHA-256 manifest and multipart ZIP recovery.
+
+**Canonical order retained:** MAIN EDITOR → MELODY → PATTERN → AUTOCHORDS → FX EDIT → AMP & TONE → DOUBLE → SOUND ENGINE → SAMPLES → PRESETS → IMPORT GUITAR → AUTO DISCOVER → CURATOR → SKIN GALLERY → SETTINGS → PERFORMANCE → ABOUT → TESTING → RELEASE.
+
+**Superseded constraints:** new no-artificial-cap SAMPLES instruction supersedes earlier 25 GB and 25–30 GB size caps/targets; minimum 500 per mode supersedes the interim 250+250 catalog as a final acceptance target. Legal redistribution, provenance, hashes, deduplication, additive-only imports, actual disk/filesystem/platform limits and realtime performance protections remain mandatory.
+
+**Important implementation boundary:** this commit records approved scope only. It does not implement DSP processors, skins, locks, documentation, sample assets, preset playback or packaging. The exact previously approved FX list and 16 skin names must be reconciled from their source specifications rather than guessed. The current 500-entry JSON is an interim structural catalog, not the final 500-per-mode playable bank. No build/test/host PASS is claimed.
