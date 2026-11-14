@@ -15,16 +15,19 @@ A file is not automatically useful just because its extension is recognized. Eve
 
 ## User-approved unrestricted discovery scope; shipment rights remain separate
 
-The user explicitly approves searching for, cataloguing and considering **all commercial and non-commercial guitar libraries and sound resources**, without excluding a candidate merely because it is paid, free, commercial, non-commercial, royalty-free, subscription-based or carries another license label. Do not use license category as a genre/source-discovery filter. Include paid products, free packs, sample banks, loops, one-shots and other relevant sound formats in the research inventory.
+The user approves broad discovery of commercial and non-commercial guitar libraries and sound resources, with this acquisition preference:
 
-This approval does **not** create rights that the source owner has not granted. Keep the following distinction:
+- **Paid / purchase-required libraries:** do not purchase them and do not make them a required dependency. They may be listed as optional metadata leads, but skip downloading where payment, a paid subscription, or a purchase is required.
+- **Commercial libraries freely downloadable without purchase:** download them when the files are genuinely publicly accessible through the source's normal, authorized download route and the applicable terms permit that download. A library being commercial does not by itself mean it is paid or prohibited.
+- **Non-commercial libraries:** they may be downloaded/evaluated only where the license and access terms permit. If a license expressly restricts use to non-commercial projects, mark it NOT FOR COMMERCIAL PPGU SHIPMENT.
+- **No circumvention:** never bypass payment, subscription gates, DRM, access controls, rate limits or other source restrictions. Do not use leaked or unauthorized copies.
 
-- **Discovery/cataloguing:** broad and unrestricted by license category. Record source, price/access model, license text/link, attribution, version and acquisition date whenever available.
-- **Private evaluation:** may be performed only to the extent allowed by the applicable terms and access rules. If the terms prohibit downloading or local use, do not bypass them; record the source as metadata-only.
-- **Commercial PPGU distribution:** include actual audio assets only when the rights clearly permit redistribution/embedding in a commercial VST and its sound library, or after explicit written permission is obtained. Otherwise keep them out of shipped builds, installers, preset banks and public sample artifacts.
-- **Unclear or conflicting terms:** do not discard the candidate from discovery. Keep it in the catalogue marked RIGHTS_REVIEW_REQUIRED until clarified.
+Keep discovery/acquisition separate from distribution rights:
 
-License labels must not prevent research or candidate discovery, but they must never be falsified, stripped, or treated as permission to redistribute. A purchase or subscription does not automatically grant raw-sample redistribution rights. Do not circumvent paywalls, DRM, access controls or source restrictions.
+- Record source URL, access/price model, exact license text/link, attribution, version, acquisition date and SHA256.
+- Include audio in commercial PPGU builds only when the license clearly permits redistribution/embedding in a commercial VST and its sound library, or explicit written permission has been obtained. Otherwise mark it NOT FOR SHIPMENT / RIGHTS_REVIEW_REQUIRED and keep it out of installers, preset banks and public sample artifacts.
+- A freely accessible download, “royalty-free” label, or permission to use samples in finished music does not automatically grant the right to redistribute raw or extractable samples inside a plugin.
+- Unclear or conflicting terms remain catalogued as RIGHTS_REVIEW_REQUIRED; do not silently discard the source or assume permission.
 
 ## Technical and safety requirements
 
