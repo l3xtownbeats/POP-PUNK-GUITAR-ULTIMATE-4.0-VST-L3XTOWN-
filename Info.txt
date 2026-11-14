@@ -2791,3 +2791,16 @@ unverified until their steps complete successfully.
 коммита ожидают exact-head CI; до успешного завершения этих шагов статус PENDING.
 
 ==============================================================================
+
+
+## 2026-11-15 — Canonical SKIN-001…SKIN-016 identity approval
+
+**Статус:** APPROVED IDENTITIES REGISTERED; VISUAL IMPLEMENTATION PENDING.  
+Пользователь утвердил 16 уникальных названий тем и последовательную каноническую нумерацию:
+001 NEON STAGE DEFAULT; 002 SIGNAL FORGE; 003 RETRO PUNK; 004 DARK ROCK; 005 VINTAGE; 006 METAL CORE; 007 CLASSIC PUNK; 008 MINIMAL; 009 NEON PUNK; 010 RETRO ROCK; 011 DARK STAGE; 012 METAL EDGE; 013 POP PUNK; 014 CHROME RIOT; 015 AMBER AMP; 016 MIDNIGHT CLUB.
+
+Добавлен `SKIN/canonical_theme_registry.json`: отдельный реестр канонических ID `skin-001`…`skin-016`, ordinal, целевых папок `Skin_001`…`Skin_016`, путей theme/preview/hero и состояний готовности. Канонический default identity зафиксирован как `skin-001 / NEON STAGE DEFAULT`. Исторические resource IDs, индексы и каталоги остаются отдельным неизменяемым слоем.
+
+**Безопасность и ограничения:** запись реестра не активирует темы в Theme Gallery. На момент этой записи `galleryReadyCount=0`: SKIN-001 ожидает проверенной копии визуальных данных из исторического `Skin_053`; SKIN-002…016 ожидают полноценного дизайна, theme manifests и настоящих preview/hero assets. Исторический `Skin_053` не перемещён, не переименован и не перезаписан. Runtime ThemeManager, старый manifest, UI controls, audio engine, DSP, APVTS, sampler, MIDI и presets не менялись.
+
+Ветка: `work/canonical-skin-001-016-registry`. Реестр добавлен commit `384048c0a27f084298273f5e32ae06609145b1e1`. CI/CTest/runtime gallery/Windows VST3/pluginval/FL Studio 20 acceptance ещё не выполнены для этого commit.
