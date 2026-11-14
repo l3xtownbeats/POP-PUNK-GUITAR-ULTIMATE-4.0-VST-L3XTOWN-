@@ -2037,3 +2037,60 @@ Status: accepted product requirements; implementation status must be verified se
 - Не присваивать IMPLEMENTED/TESTED/BUILD VERIFIED/HOST-VERIFIED только на основании документации.
 - Следующие шаги после консолидации: сопоставить каждый макет с действующим control inventory и реальным JUCE component tree; закрыть 04 Auxiliary Windows audit; проверить UI callback/state mapping; отдельно спроектировать Settings resource profiles и Curator; затем по этапам с contract tests, точным SHA, Windows Release, всеми CTest targets, pluginval strictness 5, complete package и FL Studio 20 acceptance.
 
+
+---
+## 2026-11-14 — TX-UI-BROWSER-SEPARATION-006: уточнение двух самостоятельных браузеров и разрешение конфликтов с MASTER REV 17.0
+
+**Тип:** append-only clarification of user-approved UI requirements; documentation only.
+**Основание:** прямое пользовательское утверждение от 2026-11-13: два самостоятельных окна STYLE и PATTERN, утверждённый макет PATTERN BROWSER, внешний вид AutoChords, последовательная навигация в стиле Nexus и реальные действия всех controls.
+**Приоритет:** действует только в границах MASTER PROMPT REV 17.0 FINAL, I1–I8, R01–R34. При конфликте с master-инвариантом исполняется master; конфликт явно остаётся BLOCKED, без молчаливого обхода.
+
+### 1. Два самостоятельных браузера — не объединять
+- STYLE и PATTERN — два отдельных окна/браузера с разными задачами, собственными списками и состояниями выбора. Не сливать их в один плоский список, не заменять один другим и не удалять ни один из них.
+- Сохранять утверждённые пользователем визуальные макеты STYLE, PATTERN и AutoChords; для PATTERN использовать последовательное раскрытие уровней (progressive disclosure), без самовольного редизайна или упрощения.
+- Общий музыкальный контекст (выбранная секция/стиль) может фильтровать предложения второго браузера, но это не объединяет их сущности и не должно сбрасывать независимые настройки/состояния.
+- Открытие/закрытие каждого окна должно быть реальным, повторное открытие не создаёт дубликат; обязательны X close, прокрутка, возврат на предыдущий уровень и ясная индикация текущего выбора.
+
+### 2. STYLE browser — последовательный выбор музыкального контекста
+Утверждённая последовательность:
+**GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE / ARTICULATION**
+- Раскрывать следующий уровень на основании предыдущего выбора; показывать только подходящие дочерние элементы.
+- SONG SECTION: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO.
+- PLAYING STYLE описывает КАК исполняется гитара; это не Tone Preset, не Guitar Source и не Rhythm Pattern.
+- При изменении верхнего уровня нижние несовместимые выборы очищаются/пересчитываются явно; независимые пользовательские параметры не сбрасываются без необходимости.
+- **BLOCKED BY MASTER REV 17.0:** отображение имён групп/артистов и чужих продуктов в UI запрещено §11/§15. Поэтому шаг GROUP/ARTIST сохраняется как зарезервированный уровень навигационной модели, но публикация имён и активного artist-name каталога запрещена до формального MAJOR-изменения master prompt. Не обходить запрет псевдонимами, логотипами или скрытым отображением.
+
+### 3. PATTERN browser — только ритмические рисунки
+Утверждённые категории верхнего уровня:
+- DOWNSTROKES
+- DOWN/UP
+- PALM MUTE
+- POWER CHORDS
+- ALTERNATE PICKING
+- CUSTOM PATTERNS
+- PATTERN отвечает за КАКОЙ ритмический рисунок играет; PLAYING STYLE / ARTICULATION отвечает за КАК исполняется гитара. Эти оси различать.
+- После выбора секции и совместимого playing style PATTERN browser показывает подходящие ритмические рисунки/слоты. На каждую секцию сохраняются 8 Pattern Slots; слот — вариант рисунка, не отдельная секция и не автоматический factory preset.
+- Категории, папки и вложенные элементы должны открываться/закрываться, прокручиваться и реально выбирать записи; SEARCH/FAVORITES/FILTER/SORT и PREV/NEXT работают внутри текущего набора и сохраняют его контекст.
+- Нельзя обещать или показывать как доступную технику, которой нет в активной библиотеке/карте. Недоступность отображать явно; не подменять записанную гитарную артикуляцию синтезаторной имитацией.
+
+### 4. Поведение выбора и воспроизведения
+- PREVIEW — временное audition; не меняет активный preset, проект, постоянное состояние DAW или сохранённый Pattern Slot.
+- APPLY/SELECT — явное подтверждение выбранного элемента; CANCEL — полный rollback к состоянию до начала preview/выбора.
+- Переключение pattern во время playback синхронизировать с host/transport и безопасной границей музыкального события/такта; исключить stuck notes, duplicate triggers, timing jumps и abrupt cuts. Если безопасный переход ещё не реализован, контрол не должен выглядеть активным.
+- Chord/voicing, Guitar Source, Tone Preset/FX, Playing Style/Articulation и Rhythm Pattern остаются разными параметрами. PATTERN задаёт timing/gate/velocity/accent/rhythm; chord key задаёт chord/voicing. MELODY сохраняет отдельную ноту на каждую клавишу.
+- AutoChords и оба браузера не перекрывают MIDI-клавиатуру и не перехватывают её hit-testing.
+
+### 5. Жёсткое разрешение визуального конфликта NEON STAGE / I7
+- NEON STAGE остаётся утверждённым пользователем визуальным reference/design direction для соответствующего макета и SIGNAL FORGE / NEON — общим визуальным языком.
+- **NEON STAGE НЕ может быть назначен runtime default skin ID/name вместо I7.** MASTER PROMPT REV 17.0 I7 требует ровно 'DEFAULT POP PUNK GUITAR ULTIMATE SKIN' ('default-ppgu'); R18 подтверждает этот контракт. Любое изменение требует MAJOR-версии master prompt и явного изменения инварианта I7.
+- До такого формального изменения сохранять I7/R18 без исключений. Не менять default skin ID/name, fallback, resource paths или registry ради соответствия подписи/макету NEON STAGE. Не маскировать конфликт переименованием.
+
+### 6. Защита каталога и строгих правил
+- Сохранить browser controls, factory/user separation, extension-only factory catalog, stable IDs, read-only factory presets, явное разрешение import conflicts и форматы '.ppgm', '.ppgp', '.ppgbank', уже зафиксированные в TX-UI-PRESET-GUARD-004.
+- Ни один визуально активный control не может быть фиктивным. Реальная операция + callback + понятное состояние обязательны; backend отсутствует — disabled / BACKEND PENDING с причиной.
+- UI-only работа не меняет APVTS IDs/semantics, control inventory, DSP, MIDI routing, sampler, preset semantics, SoundBank policy или audio callback. Аудио-изменения только через R10 review и regression tests.
+- Никаких вторых discovery/import pipelines (R04), фонового сканирования без явной команды, I/O/locks/allocations/waits в audio callback, silent substitutions или переноса PASS между SHA (R07/R23).
+
+**Приёмка:** отдельно проверить STYLE browser, PATTERN browser и AutoChords; независимость состояний; progressive navigation; все шесть PATTERN categories; восемь slots на секцию; search/filter/sort/favorites/PREV/NEXT; Preview/Apply/Cancel; host-sync transitions; keyboard non-overlap; отсутствие запрещённых artist/product names; сохранность I7/R18; exact-SHA CI и отдельную FL Studio 20 host acceptance.
+
+**Статус:** APPROVED UI REQUIREMENTS / DOCUMENTATION ONLY. Source implementation, build, CTest, pluginval, package и FL Studio 20 acceptance этим дополнением не подтверждаются.
