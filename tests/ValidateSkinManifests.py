@@ -181,29 +181,38 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
     contract = schema.get("x-ppgu-contract", {}) if isinstance(schema, dict) else {}
     required = contract.get("requiredControlIds", [])
     palette_tokens = contract.get("paletteTokens", [])
+    legacy_palette_tokens = contract.get("legacyPaletteTokens", [])
     if len(palette_tokens) != 21 or len(set(palette_tokens)) != 21:
-        fail(errors, "SKIN/control_schema.json", "paletteTokens must contain 21 unique tokens")
-
+        fail(errors, "SKIN/control_schema.json", "paletteTokens must contain 21 unique NEON STAGE tokens")
+    is_neon_stage_contract = index in (52, 53)
+    active_tokens = palette_tokens if is_neon_stage_contract else legacy_palette_tokens
     palette = data.get("palette")
     if not isinstance(palette, dict):
         fail(errors, where, "palette must be an object")
         palette = {}
-    if set(palette) != set(palette_tokens):
-        fail(errors, where, "palette must contain exactly the 21 control_schema tokens")
-    for token in palette_tokens:
+    if set(palette) != set(active_tokens):
+        fail(errors, where, "palette does not match the legacy/NEON STAGE token contract")
+    for token in active_tokens:
         value = palette.get(token)
-        valid = HEX_RGBA.fullmatch(value) if token == "overlay_scrim" and isinstance(value, str) else HEX.fullmatch(value) if isinstance(value, str) else None
+        valid = HEX_RGBA.fullmatch(value) if is_neon_stage_contract and token == "overlay_scrim" and isinstance(value, str) else HEX.fullmatch(value) if isinstance(value, str) else None
         if not valid:
-            fail(errors, where, f"palette.{token} must be #RRGGBB (or #RRGGBBAA for overlay_scrim)")
+            fail(errors, where, f"palette.{token} has an invalid HEX value")
 
     if isinstance(palette, dict):
-        for fg, bg, minimum in (
-            ("text_primary", "bg_deep", 7.0),
-            ("text_secondary", "bg_deep", 4.5),
-            ("text_disabled", "bg_deep", 3.0),
-            ("lcd_text", "lcd_bg", 7.0),
-            ("accent_primary", "bg_panel", 3.0),
-        ):
+        contrast_checks = (
+            (("text_primary", "bg_deep", 7.0),
+             ("text_secondary", "bg_deep", 4.5),
+             ("text_disabled", "bg_deep", 3.0),
+             ("lcd_text", "lcd_bg", 7.0),
+             ("accent_primary", "bg_panel", 3.0))
+            if is_neon_stage_contract else
+            (("text_primary", "window_bg", 4.0),
+             ("text_secondary", "window_bg", 4.0),
+             ("text_disabled", "window_bg", 4.0),
+             ("lcd_text", "lcd_bg", 4.0),
+             ("accent", "panel", 2.2))
+        )
+        for fg, bg, minimum in contrast_checks:
             if HEX.fullmatch(str(palette.get(fg, ""))) and HEX.fullmatch(str(palette.get(bg, ""))):
                 ratio = contrast(palette[fg], palette[bg])
                 if ratio < minimum:
