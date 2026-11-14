@@ -437,3 +437,11 @@ First approved file = authoritative layout/appearance/control inventory (preserv
 - Preserve MIDI keyboard visibility/hit-testing; progressive disclosure and scoped search/filter/favorites/sort/prev/next.
 - Preserve MASTER PROMPT REV 17.0 FINAL, I1–I8, R01–R34; runtime default skin ID/name remains default-ppgu / DEFAULT POP PUNK GUITAR ULTIMATE SKIN. NEON STAGE is not default without formal MAJOR revision. Keep one S6.5 pipeline, stable IDs, factory extension-only/read-only, user data separation, approved file extensions and realtime/licensing gates.
 - Requirements/index only. No production implementation or host/CI PASS claimed.
+
+
+## 2026-11-14 — Preset file-system legacy wording cleanup indexed
+
+- Canonical detailed journal: `Info.txt` → “2026-11-14 — PRESET FILE SYSTEM legacy wording cleanup”. INFO commit: `1bf706ecd7392d0cf895fd0329b1c42e8c63587b`.
+- Corrected `docs/PRESET_FILE_SYSTEM.md` in commit `fa49b8fce31bd27b6dca04b7bc124d95a4c0b715`: PRESET BROWSER is distinct from STYLE and PATTERN browsers; Melody/Pattern are preset/data classifications, not a merged browser UI; explicit SELECT/LOAD only; double-click does not load; named artist folders are not an authorized visible catalog; blocked GROUP/ARTIST/SONG publication remains blocked.
+- Preserved the approved browser command inventory, first-mockup layout/control authority, second-reference palette-only rule, third coordinated FX EDIT + AutoChords state, stable IDs, Factory read-only/User separation, 300 definitions / 150+150 target, transaction safety, realtime/off-audio-thread boundaries and license/provenance gate.
+- Documentation-only. No master prompt, I1–I8, R01–R34, control schema, approved mockups, source, tests, assets, APVTS, DSP, MIDI, sampler, scheduler or preset data changed. No implementation, test, CI, pluginval, package or host PASS claimed.
