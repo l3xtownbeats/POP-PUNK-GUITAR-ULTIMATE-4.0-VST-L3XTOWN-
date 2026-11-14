@@ -383,6 +383,90 @@ def _make_icon(name):
     return im
 
 
+def _make_aux_window(name):
+    """Render a static auxiliary-window reference shell without simulating live activity."""
+    w,h=720,480
+    im=Image.new("RGB",(w,h),rgb(PALETTE["panel"]))
+    d=ImageDraw.Draw(im)
+    d.rounded_rectangle((2,2,w-3,h-3),radius=12,fill=rgb(PALETTE["panel"]),
+                        outline=rgb(PALETTE["border"]),width=3)
+    d.rounded_rectangle((9,9,w-10,52),radius=6,fill=rgb(PALETTE["panel_elevated"]),
+                        outline=rgb(PALETTE["border"]),width=1)
+    d.line((12,50,w-12,50),fill=rgb(SOURCE_PALETTE["border_glow"]),width=2)
+    title=name.replace("_"," ").upper()
+    d.text((22,24),title,font=font(15,True),fill=rgb(PALETTE["text_primary"]))
+    d.rectangle((w-68,20,w-52,36),outline=rgb(PALETTE["text_secondary"]),width=2)
+    d.line((w-36,20,w-20,36),fill=rgb(PALETTE["text_secondary"]),width=2)
+    d.line((w-20,20,w-36,36),fill=rgb(PALETTE["text_secondary"]),width=2)
+    d.rounded_rectangle((12,62,w-13,h-13),radius=6,fill=rgb(PALETTE["window_bg"]),
+                        outline=rgb(PALETTE["border"]),width=1)
+    if name.endswith("_setup_only"):
+        d.rounded_rectangle((24,76,156,104),radius=6,fill=rgb(PALETTE["panel_elevated"]),
+                            outline=rgb(PALETTE["text_secondary"]),width=1)
+        d.text((36,85),"SETUP-ONLY",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        d.text((24,126),"Setup only — not connected",font=font(12),
+               fill=rgb(PALETTE["text_secondary"]))
+        return im
+    if name=="autochords":
+        d.text((26,76),"CHORD STYLES",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        d.text((204,76),"CHORD PROGRESSION",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        d.text((510,76),"PATTERN INFO",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        for y in (104,142,180,218,256,294):
+            d.rounded_rectangle((24,y,164,y+28),radius=4,fill=rgb(PALETTE["panel"]),
+                                outline=rgb(PALETTE["border"]),width=1)
+        for i,label in enumerate(("Am","F","C","G","Am","F","C","G")):
+            x=194+(i%4)*76;y=108+(i//4)*68
+            d.rounded_rectangle((x,y,x+66,y+48),radius=5,fill=rgb(PALETTE["panel_elevated"]),
+                                outline=rgb(PALETTE["border"]),width=1)
+            d.text((x+23,y+18),label,font=font(12,True),fill=rgb(PALETTE["text_primary"]))
+        d.rounded_rectangle((510,104,684,332),radius=5,fill=rgb(PALETTE["panel"]),
+                            outline=rgb(PALETTE["border"]),width=1)
+        d.text((526,124),"PATTERN BROWSER",font=font(10,True),fill=rgb(PALETTE["text_secondary"]))
+    elif name=="fx_edit":
+        d.text((26,76),"FX MODULES",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        for i in range(7):
+            y=102+i*43
+            d.rounded_rectangle((24,y,170,y+32),radius=4,fill=rgb(PALETTE["panel"]),
+                                outline=rgb(PALETTE["border"]),width=1)
+        d.rounded_rectangle((188,82,684,272),radius=5,fill=rgb(PALETTE["panel"]),
+                            outline=rgb(PALETTE["border"]),width=1)
+        d.line((206,230,260,210,316,222,374,160,430,176,488,128,548,142,662,104),
+               fill=rgb(SOURCE_PALETTE["accent_primary"]),width=2)
+        for i in range(6):
+            x=202+i*78
+            d.ellipse((x,304,x+48,352),fill=rgb(PALETTE["knob_body"]),
+                      outline=rgb(PALETTE["border_glow"]),width=2)
+    elif name=="skins_gallery":
+        d.text((26,76),"SEARCH SKINS...",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+        for i in range(6):
+            x=24+(i%3)*218;y=112+(i//3)*150
+            d.rounded_rectangle((x,y,x+198,y+126),radius=6,fill=rgb(PALETTE["panel"]),
+                                outline=rgb(PALETTE["border"]),width=1)
+            if i==0:
+                d.rectangle((x+8,y+8,x+190,y+86),fill=rgb(PALETTE["window_bg"]),
+                            outline=rgb(PALETTE["border_glow"]),width=1)
+                d.text((x+16,y+98),"NEON STAGE",font=font(11,True),fill=rgb(PALETTE["text_primary"]))
+    elif name=="import_guitar":
+        d.rounded_rectangle((24,88,432,332),radius=8,fill=rgb(PALETTE["panel"]),
+                            outline=rgb(PALETTE["border_glow"]),width=2)
+        d.text((80,178),"SFZ / WAV Files or Click to Browse",font=font(13,True),
+               fill=rgb(PALETTE["text_primary"]))
+        d.rounded_rectangle((450,88,684,332),radius=6,fill=rgb(PALETTE["panel"]),
+                            outline=rgb(PALETTE["border"]),width=1)
+        d.text((468,108),"LIBRARY INFO",font=font(11,True),fill=rgb(PALETTE["text_secondary"]))
+    elif name=="settings":
+        for i,label in enumerate(("GENERAL","AUDIO","MIDI","GUI")):
+            x=24+i*164
+            d.rounded_rectangle((x,84,x+150,118),radius=5,fill=rgb(PALETTE["panel_elevated"]),
+                                outline=rgb(PALETTE["border"]),width=1)
+            d.text((x+24,96),label,font=font(10,True),fill=rgb(PALETTE["text_primary"]))
+        for i in range(4):
+            y=144+i*54
+            d.rectangle((32,y,48,y+16),outline=rgb(PALETTE["text_secondary"]),width=1)
+            d.line((66,y+8,300,y+8),fill=rgb(PALETTE["border"]),width=2)
+    return im
+
+
 def step_atlases():
     """Build the full deterministic NEON STAGE sprite contract in staging only."""
     ensure_dirs()
@@ -549,6 +633,11 @@ def step_atlases():
     # Keep the two information glyph slots uniquely addressable in the index.
     icons=[(f"{name}_{i:02d}" if i==19 else name,state,im) for i,(name,state,im) in enumerate(icons)]
     _atlas("icons",icons,5)
+    window_names=("autochords","fx_edit","skins_gallery","import_guitar","settings",
+                  "auto_discover_setup_only","curator_setup_only","about_setup_only")
+    aux_windows=[(name,"setup_only" if name.endswith("_setup_only") else "window",
+                  _make_aux_window(name)) for name in window_names]
+    _atlas("aux_windows",aux_windows,2)
     print("Generated deterministic NEON STAGE sprite atlases and JSON frame indices.")
 
 
@@ -653,7 +742,24 @@ def step_svg():
 <path d="M8 40H472" stroke="{SOURCE_PALETTE['accent_primary']}" stroke-width="3"/>
 </svg>"""
     (SKIN/"svg"/"panel_header.svg").write_text(panel_header,encoding="utf-8")
-    print("Generated safe, static SVG assets.")
+    window_dir=SKIN/"svg"/"windows"
+    window_dir.mkdir(parents=True,exist_ok=True)
+    for name in ("autochords","fx_edit","skins_gallery","import_guitar","settings",
+                 "auto_discover_setup_only","curator_setup_only","about_setup_only"):
+        badge="SETUP-ONLY" if name.endswith("_setup_only") else "NEON STAGE"
+        title=name.replace("_"," ").upper()
+        window_svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<rect x="2" y="2" width="716" height="476" rx="12" fill="{PALETTE['panel']}" stroke="{PALETTE['control_border']}" stroke-width="3"/>
+<rect x="9" y="9" width="702" height="42" rx="6" fill="{PALETTE['panel_elevated']}" stroke="{PALETTE['control_border']}"/>
+<path d="M12 50H708" stroke="{SOURCE_PALETTE['border_glow']}" stroke-width="2"/>
+<text x="22" y="35" fill="{PALETTE['text_primary']}" font-family="sans-serif" font-size="16">{title}</text>
+<rect x="650" y="20" width="16" height="16" fill="none" stroke="{PALETTE['text_secondary']}" stroke-width="2"/>
+<path d="M680 20L696 36M696 20L680 36" stroke="{PALETTE['text_secondary']}" stroke-width="2"/>
+<rect x="12" y="62" width="696" height="405" rx="6" fill="{PALETTE['window_bg']}" stroke="{PALETTE['control_border']}"/>
+<text x="560" y="35" fill="{PALETTE['text_secondary']}" font-family="sans-serif" font-size="10">{badge}</text>
+</svg>'''
+        (window_dir/f"window_{name}.svg").write_text(window_svg,encoding="utf-8")
+    print("Generated safe static SVG assets and independent auxiliary-window shells.")
 
 def render_reference_art(size, path):
     """Render a faithful contain-fit of the approved primary UI mockup.
@@ -747,6 +853,7 @@ def step_manifest():
                      "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
                      "panelHeader":"svg/panel_header.svg","atlas":"assets/atlas/",
                      "atlasIndexes":"assets/atlas/*.json","windowChrome":"assets/atlas/window_chrome.png",
+                     "auxWindows":"assets/atlas/aux_windows.png","windowSVGs":"svg/windows/",
                      "license":"LICENSE.txt","selfCheck":"SELF_CHECK.txt"}
     # G2 inventory comes from the audited runtimeControlInventory, not guessed labels or IDs.
     schema=json.loads((ROOT/"SKIN"/"control_schema.json").read_text(encoding="utf-8"))
