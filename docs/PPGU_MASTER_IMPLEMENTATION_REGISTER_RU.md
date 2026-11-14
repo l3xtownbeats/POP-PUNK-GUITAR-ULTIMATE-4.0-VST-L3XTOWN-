@@ -419,3 +419,30 @@ This append-only amendment adds the previously omitted user-ratified browser wor
 - Do not infer or invent additional browser tabs/semantics (for example All/Melody/Pattern/Factory/User as tabs) from assistant proposals unless separately user-ratified. The ratified browser modes and controls remain those in TX-PRESET-BROWSER-003; unresolved semantics remain open.
 
 **Status:** REQUIREMENTS CONSOLIDATED / IMPLEMENTATION AUDIT REQUIRED / NO PRODUCTION SOURCE CHANGE.
+
+
+## TX-PRESET-AUDIT-005 — 2026-11-14 — cross-journal browser/preset completeness and non-regression audit
+
+**Type:** documentation-only retrospective audit; no production source, UI, APVTS, preset data, sampler, DSP, MIDI or build files changed.
+**Canonical branch / preflight HEAD:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17` / `509f7d4d3f2b151c391056eda9da6d649059b2e8`.
+**Scope:** cross-check of recent approved conversations against TX-PRESET-BROWSER-003, TX-UI-PRESET-GUARD-004, TX-MASTER-REGISTER-001 and the current master implementation register. This entry supplements those records; it does not replace or weaken them.
+
+**Consolidated controls and workflow (requirements, not implementation claims):**
+- Browser modes remain exactly **BROWSER / FAVORITES / CATEGORIES**. Top-bar controls remain **PREV / NEXT / FAVORITE / PRESET NAME / CATEGORY / SEARCH**.
+- Browser navigation remains **GENRE → ARTIST / BAND → SONG / SECTION → STYLE → PATTERN**. Sections: **Intro / Verse / Pre-Chorus / Chorus / Bridge / Outro**. STYLE and PATTERN are distinct sequential choices. Existing MELODY structure is unchanged.
+- The eight categories remain: **Pop Punk Essentials; Modern Pop Punk; Retro Punk; Emo Vibes; Energetic Rock; Clean & Bright; Crunchy Power; Dreamy Atmosphere**.
+- Preset cards/rows expose artwork, title, description and relevant information. Counts and availability must reflect real records and distinguish definitions, dependency-resolved, loadable, playable-tested and host-verified states.
+- Search, categories, filters and sorting only navigate the catalog; they do not alter the active sound. PREV/NEXT stay inside the current browser result/context. Selection, temporary preview and committed active preset are distinct states. Preview must not commit or mutate active preset/project state and must end its temporary audition state safely.
+- Factory and User are separate data scopes, not permission to invent additional tabs. Preserve factory catalog and user data; catalog is expansion-only. User preset/bank save/load/import/export, stable IDs, compatible state migration and no silent overwrite are required. Portable formats remain MELODY `.ppgm`, PATTERN `.ppgp`, bank `.ppgbank`.
+- Curator remains a separate advanced workflow; it must not replace ordinary browsing or silently restrict, delete or mutate user assets.
+- Mouse and keyboard/focus navigation are required. Every visible control needs a stable ID, meaningful action, real model/manager/engine mapping, persistence where applicable, honest empty/loading/error/disabled states and tests. No decorative/fake controls or false counters.
+- Preset definitions with unresolved/missing dependencies must not be represented as playable. Per-preset dependency, mapping, parameter compatibility, output/no-clipping, loudness and MIDI playability checks remain required; DAW host verification is separately labelled. Licensing/provenance/SHA-256 and S6/S6.5 GREEN/YELLOW/RED gates remain mandatory.
+- Browser indexing, metadata/artwork work, preview preparation, sample decode and file/network access remain off the audio callback; bounded work/cache and safe state handoff preserve Safety → Realtime → Sound → Resources → UX.
+
+**Explicit non-inference / unresolved items:**
+- Do not add All / Melody / Pattern / Factory / User tabs from assistant-only suggestions. Factory/User are data separation, not new browser modes.
+- Exact sort keys/order, filter taxonomy, ranking, genre/artist tree contents, auto-load semantics, double-click behavior, preview waveform and duration remain OPEN until explicitly ratified.
+- Save As, Rename, Delete and Rescan are not added as approved browser controls by this retrospective audit; do not infer them from assistant proposals. Existing user save/load/import/export requirements remain in force. Any destructive user-data action requires explicit user intent and must never affect factory catalog.
+- The historical left-panel browser layout remains subordinate to the newer **01 INTERFACE — NEON STAGE DEFAULT** reference. Skin changes remain visual-only and cannot alter layout, controls, bindings or sound.
+
+**Evidence boundary / status:** REQUIREMENTS CROSS-CHECKED AND INDEXED / IMPLEMENTATION AUDIT STILL REQUIRED / NO SOURCE CHANGE / NO BUILD, CTEST, PLUGINVAL OR HOST STATUS PROMOTED. Source implementation and exact-SHA evidence must be audited separately.
