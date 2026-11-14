@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Audit the redistributable guitar SoundBank after download or cache restore.
+"""Audit SAMPLES inventory, source evidence and SHA-256 integrity.
 
-Checks SHA256 coverage and contents, required source folders/licenses/SFZ maps,
-guitar-audio file count, and the preferred/hard payload size limits.
+REV.18 intentionally imposes no content-size target or hard cap. Transport
+constraints are handled by splitting completed archives into verified parts.
 """
 from __future__ import annotations
 
-import argparse
 import hashlib
 from pathlib import Path
 import sys
@@ -36,15 +35,9 @@ def sha256(path: Path) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=Path("Samples"))
-    parser.add_argument("--preferred-gb", type=float, default=25.0)
-    parser.add_argument("--hard-limit-gb", type=float, default=30.0)
-    args = parser.parse_args()
-
-    root = args.root.resolve()
+    root = Path("Samples").resolve()
     if not root.is_dir():
-        print(f"SoundBank root missing: {root}", file=sys.stderr)
+        print(f"SAMPLES root missing: {root}", file=sys.stderr)
         return 2
 
     errors: list[str] = []
@@ -63,18 +56,17 @@ def main() -> int:
         license_candidates = (license_names,) if isinstance(license_names, str) else license_names
         if not any((source_root / candidate).is_file() for candidate in license_candidates):
             errors.append(f"license evidence missing in source root: {folder}")
-        sfz = list(source_root.rglob("*.sfz"))
-        if not sfz:
+        if not any(source_root.rglob("*.sfz")):
             errors.append(f"SFZ mapping missing: {folder}")
         if not any(p.is_file() and p.suffix.lower() in AUDIO_EXTENSIONS
                    for p in source_root.rglob("*")):
             errors.append(f"recorded audio missing: {folder}")
 
     manifest = root / "SHA256SUMS-POP-PUNK.txt"
+    expected: dict[str, str] = {}
     if not manifest.is_file():
         errors.append("SHA256SUMS-POP-PUNK.txt is missing")
     else:
-        expected: dict[str, str] = {}
         for number, line in enumerate(manifest.read_text(encoding="utf-8-sig").splitlines(), 1):
             if not line.strip():
                 continue
@@ -101,16 +93,11 @@ def main() -> int:
 
     total_bytes = sum(p.stat().st_size for p in audio_files)
     gib = 1024 ** 3
-    size_gb = total_bytes / gib
-    if size_gb > args.hard_limit_gb:
-        errors.append(f"audio payload {size_gb:.2f} GiB exceeds hard limit {args.hard_limit_gb:.2f} GiB")
-
     lines = [
-        "POP PUNK GUITAR ULTIMATE — SOUNDBANK AUDIT",
+        "POP PUNK GUITAR ULTIMATE — SAMPLES AUDIT",
         f"Audio files: {len(audio_files)}",
-        f"Audio payload: {size_gb:.3f} GiB",
-        f"Preferred target: <= {args.preferred_gb:.2f} GiB",
-        f"Hard ceiling: {args.hard_limit_gb:.2f} GiB",
+        f"Audio payload: {total_bytes / gib:.3f} GiB",
+        "Content-size policy: UNLIMITED (REV.18); no preferred target or hard cap.",
         f"Checksum manifest entries: {len(expected) if manifest.is_file() else 0}",
         "Source libraries:",
     ]
@@ -120,10 +107,10 @@ def main() -> int:
                     if p.is_file() and p.suffix.lower() in AUDIO_EXTENSIONS) if source_root.is_dir() else 0
         lines.append(f"- {label}: {count} audio files")
     lines.append("Result: FAIL" if errors else "Result: PASS")
-    (root / "SOUNDBANK_AUDIT.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (root / "SAMPLES_AUDIT.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     if errors:
-        print("SoundBank audit FAILED:")
+        print("SAMPLES audit FAILED:")
         for error in errors:
             print(f" - {error}")
         return 1
