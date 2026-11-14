@@ -44,7 +44,7 @@ jobs:
           python-version: "3.12"
       - name: Python syntax validation
         shell: pwsh
-        run: python -m py_compile neon_stage_engine.py 01_palette.py 02_knobs.py 03_ui_elements.py 04_svg_assets.py 05_promo.py 06_manifest.py 07_package.py 08_report.py
+        run: python -m py_compile neon_stage_engine.py 01_palette.py 02_knobs.py 03_ui_elements.py 04_svg_assets.py 05_promo.py 06_manifest.py 07_package.py 08_report.py tools/check_neon_stage_determinism.py
 
       - name: Run asset pipeline
         shell: cmd
