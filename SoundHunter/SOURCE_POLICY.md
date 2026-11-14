@@ -86,6 +86,20 @@ The user explicitly confirms and approves these mandatory rules:
 
 These invariants apply to all import routes, including Import Guitar, Samples/Import Bank Guitar and controlled direct imports into Samples.
 
+
+## Explicitly confirmed replacement quality gate
+
+Before any existing sound is superseded, the candidate must be checked and the results recorded for every applicable item:
+- recording cleanliness and overall audio quality;
+- audible noise, clicks, clipping, artifacts or other defects;
+- dynamics and velocity-layer coverage/consistency;
+- playable note range and mapping accuracy;
+- articulation coverage, including palm mute where relevant;
+- musical fit for the target genre, style and factory preset;
+- license terms and verified permission for commercial redistribution in the PPGU plugin/library.
+
+A replacement is approved only when it is demonstrably better or fills a documented missing capability, remains compatible with the preset role, and passes license and playback regression checks. If any critical check fails or rights are unclear, do not promote it; retain the current sound and keep the candidate staged for review. Preserve the old asset and rollback path.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
