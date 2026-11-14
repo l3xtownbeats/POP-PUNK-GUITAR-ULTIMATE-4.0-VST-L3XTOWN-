@@ -409,3 +409,36 @@ Approved design principles to implement in PPGU:
 - Keep a clear distinction between PPGU's own implementation and the capabilities of any particular reference product. Do not claim feature parity with a named commercial instrument until implemented and tested.
 
 This approved reference direction extends the existing source-compatibility, multi-source assembly, standard VSTi, and distinct-pitch-per-key requirements. It does not relax sample licensing, provenance, integrity, the currently approved Samples capacity/retention rules, or permanent no-delete/no-overwrite rules.
+
+## ALBUM-ERA FACTORY PRESET FAMILIES: BLINK-182 AND SUM 41 (2026-11-14)
+
+User approves adding distinct guitar preset families inspired by the guitar sounds and playing styles of the following specific album eras. Treat each album/era as its own tonal target; do not collapse all albums by a band into one generic preset. Create multiple useful presets per era where justified (rhythm, palm-muted rhythm, open chords, lead/single-note, clean/breakdown/ambient variants), with names and descriptions that clearly identify the inspiration and intended use. These are original recreations/inspired-by presets, not claims of official affiliation or exact isolated-stem reproduction.
+
+BLINK-182:
+- 1999 — Enema of the State (user referred to this as the 1999 album; correct album title).
+- 2001 — Take Off Your Pants and Jacket.
+- 2003 — blink-182 (self-titled/untitled album).
+
+SUM 41:
+- 2001 — All Killer No Filler.
+- 2002 — Does This Look Infected?
+- 2007 — Underclass Hero.
+
+Tonal research and implementation notes:
+- For Blink-182 Enema of the State (1999), use the late-90s polished, aggressive pop-punk target: thick high-gain electric rhythm, tight palm-muted parts, bright open power chords, articulate single-note lines, and restrained clean/dynamic contrast. Publicly documented references associate Tom DeLonge's album guitar with a Fender Stratocaster and Mesa/Boogie Triple Rectifier; treat that as a useful starting point, not an absolute preset recipe or proof that every track used the same chain.
+- For Blink-182 Take Off Your Pants and Jacket (2001), preserve the core punchy pop-punk rhythm character but create a distinct album-era set with tighter fast downstroke/palm-muted playing and subtle modulation/delay/flanger options where musically appropriate; do not simply duplicate the 1999 presets.
+- For blink-182 (2003), create a clearly separate, broader and more exploratory palette than the earlier pop-punk records: alternate clean/ambient textures, modulation/delay, layered or contrasting rhythm/lead tones, and heavier/darker textures as appropriate to individual preset roles. Research actual track/era sources before final parameter claims; don't invent a single universal chain for the whole album.
+- For Sum 41 All Killer No Filler (2001), create a pop-punk rhythm family plus a separate heavier/hard-rock/metal-tinged lead and solo family. Keep rhythm and lead roles distinct; use tight power-chord attack, palm muting, and articulate harmonized/single-note lead behavior where appropriate.
+- For Sum 41 Does This Look Infected? (2002), build a heavier, darker, more aggressive set than the 2001 family, with strong rhythm punch, palm-muted riffing, and separate lead/solo textures. Check actual album/era gear and recordings before locking source/amp/cab choices.
+- For Sum 41 Underclass Hero (2007), create its own more melodic, polished pop-punk family, with tight rhythmic drive, bright chord definition, and distinct clean/lead variants; do not reuse the 2002 heavy presets unchanged.
+
+Implementation requirements for all six album families:
+- Research album-specific guitar recordings, gear/production interviews, reliable rig sources, and listening references. Record source citations/notes and distinguish confirmed facts from informed tonal interpretation.
+- Select the closest legal, redistributable real-recorded guitar sources from the Samples bank. Use compatible fallback sources or carefully designed multi-source layers only when needed; keep each source's DI/clean/processed identity honest.
+- Build a playable full-range VSTi map for each preset: every supported MIDI key yields its corresponding pitch, with note/velocity zones, articulation, release, and correct note-off. These are instruments, not prerecorded song riffs.
+- Ensure the six album families have audible, validated differences in actual rendered audio, not just different preset names or parameter labels. Preserve original dry source presets separately.
+- Keep CPU/RAM and load time low: reuse common sample mappings/caches, load only selected preset assets, use shared DSP where suitable, and activate extra layers only when they provide measurable audible value.
+- Validate each preset with chromatic pitch sweeps, velocity sweeps, chord/rhythm tests, palm-mute and articulation tests, note-off/release checks, rendered audio comparison, and VST3 host tests where available. Record exact source IDs, mappings, signal chain, license/provenance, and test evidence.
+- Do not copy commercial samples, isolated tracks, proprietary presets, or protected recordings from the named albums. Create original sound-alike tonal interpretations using legally usable source material and independently designed processing.
+
+These album families extend the approved general band/style preset scope and the professional guitar VSTi workflow requirements. A named preset family is not considered complete until its sound is implemented and audio-validated; names alone do not count.
