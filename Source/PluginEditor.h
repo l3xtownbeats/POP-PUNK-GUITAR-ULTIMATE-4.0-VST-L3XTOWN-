@@ -45,6 +45,7 @@ private:
     void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>, const juce::String& sectionTitle);
+    void loadThemeArtwork();
     void loadFactoryPresetCatalog();
     void applyFactoryPreset(int index);
     PopPunkGuitarUltimateAudioProcessor& processor;
@@ -55,6 +56,8 @@ private:
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
     juce::File runtimeSkinRoot;
+    juce::Image heroArtwork;
+    juce::Rectangle<int> heroArtworkBounds;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     juce::ComboBox presetBox, categoryBox;
     juce::TextEditor presetSearch;
