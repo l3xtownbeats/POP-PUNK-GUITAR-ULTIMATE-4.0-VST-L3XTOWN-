@@ -420,3 +420,23 @@ Layering — это средство достижения нужного тем�
 9. Лицензии и права на распространение проверять отдельно: качество и готовая обработка не дают права включать source samples в дистрибутив. Не включать материалы с несовместимыми или неизвестными правами.
 
 **Acceptance:** библиотека и пресеты строятся прежде всего на высококачественных подходящих исходниках; звуковой движок выполняет только необходимую обработку, не тратит ресурсы на исправление заведомо слабых материалов и не использует избыточные DSP-цепи. Проверка качества и resource profiling обязательны.
+
+
+## 2026-11-14 — UNIVERSAL SOURCE-QUALITY POLICY FOR ALL GUITAR AUDIO ASSETS
+
+**Статус:** USER EXPLICITLY APPROVED / CONFIRMED / MUST IMPLEMENT ACROSS THE ENTIRE PROJECT.
+
+This policy applies universally to every guitar-related audio asset used, imported, discovered, indexed, bundled, referenced, layered or played by PPGU: individual samples, one-shots, loops, multisamples, phrases, articulations, recordings, sound libraries, sample packs, SFZ/SF2/SF3/GIG/WAV and other supported formats, plus all other guitar sound components. It is not limited to the SAMPLES browser or a particular library.
+
+**Quality selection policy**
+1. Use only sources at the highest reasonably available quality, or at minimum sources that are demonstrably close to the required professional quality level and suitable for the intended musical role/preset. Do not fill the library with weak, noisy, poorly recorded or unsuitable assets merely to increase its size.
+2. If an asset is supplied already processed, its processed sound must itself be good, clean, musical and suitable for the intended use. Evaluate the actual audible result and artifacts; do not assume processed means high quality.
+3. If an asset is supplied unprocessed/DI/clean, it may use PPGU's FX, AMP & TONE, CAB and other engine resources to shape it for the target preset, but the processing chain must be efficient and resource-bounded. Do not compensate for a poor source by stacking excessive effects, oversampling, layers or duplicate DSP.
+4. Choose the best source for each role first. Use only the processing actually required to achieve the preset's promised tone. Prefer efficient routing, shared processing where sonically valid, bounded voice/layer budgets, selective sample streaming/preload and reusable cached preparation.
+5. If a source requires unusually heavy processing or excessive CPU/RAM to approach the target, search for a better source, use a more suitable asset/layer combination, or reject the source. Do not let one preset create disproportionate system load.
+6. Apply the same quality gate to loops, phrases, one-shots, multisamples, packs and complete libraries. Check recording quality, noise, clipping, artifacts, phase, tuning, timing, transient, sustain/tails, velocity/articulation coverage, musical usefulness and consistency.
+7. Keep source files unchanged; derived/prepared assets must be separately identified and reproducible with provenance, source hashes and processing metadata. Deduplicate safely without losing distinct articulations or useful variants.
+8. License, attribution and redistribution permissions must be checked independently for every source/library/pack. High audio quality does not grant permission to redistribute raw or processed source assets.
+9. Verify the complete preset in context, not merely by inspecting filenames or metadata: audition the real sound, then measure CPU, RAM, load time, latency and behavior under realistic polyphony. No asset or preset is VERIFIED until both sonic and technical gates pass.
+
+**Acceptance:** every guitar-related asset category follows one consistent source-quality standard. Pre-processed assets must already sound good; unprocessed assets may be shaped with PPGU processing only within reasonable, measured resource budgets. No weak asset is rescued through uncontrolled CPU/RAM consumption. The goal is consistently high-quality guitar sound with efficient playback and processing across the entire plugin.
