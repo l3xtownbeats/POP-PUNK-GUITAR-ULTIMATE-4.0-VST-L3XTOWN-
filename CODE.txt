@@ -620,3 +620,21 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **O1/S1 blockers reconfirmed:** root `OverlayManagerTests.cpp` and `SecureSkinImportTests.cpp` include missing `OverlayManager.h` / `SecureSkinImport.h`; CMake explicitly excludes them because production headers/implementations are absent. These are not passing tests and must not be reported as implemented. Secure SVG/path import needs a robust security implementation, not a regex-only placeholder.
 
 **Status:** AUDIT COMPLETE / NO SOURCE CODE CHANGED IN THIS CHECKPOINT. PATTERN SECTION-FIRST UX = NOT IMPLEMENTED; AUTOCHORDS GENERATION = NOT IMPLEMENTED; O1/S1 = BLOCKED BY MISSING PRODUCTION MODULES.
+
+
+## 2026-11-14 — Uploaded tree reconciliation + live Skin Gallery audit
+
+**Type:** source reconciliation / regression audit; no production source changed.
+**Branch:** POP-PUNK-GUITAR-ULTIMATE-VST-REV.17.
+**Input REV.17 HEAD:** 0a3f9997b9d7e1d06eaf39ef0b7625c7dca05deb.
+**Uploaded snapshot:** `PPGU_TREE_2026-11-13.zip`, SHA-256 `f9c47d21ed57b8ecec96f2228b9d084ec909057b5f880d9f55cfdccd288d24bd`.
+
+- The uploaded archive is stale relative to live REV.17: it contains 52 SKIN/Skin_001..052 directories and an older Source/Engine layout; live REV.17 has a 102-theme registry and the current sampler under Source/Sampler. Do not replace the branch tree with this archive.
+- The archive contains O1/O2 OverlayManager and S1 SecureSkinImport sources that are absent from live REV.17. They were not copied.
+- Standalone GCC C++17 test of the archive's OverlayManager fails reproducibly: `close()` returns false after successfully erasing an entry when no Listener is installed; `OverlayManagerTests.cpp` assertion for closing `panel-b` fails.
+- Standalone GCC C++17 SecureSkinImport contract test passes locally; this is not CI evidence and does not prove archive integration.
+- Live `PPGUSkinGalleryPanel` has image cards, search, family filter, count and active marker. Card click immediately commits the theme and closes the panel. A non-committing Preview, enlarged preview, Favorites and explicit Apply/Back cancel flow are not present in the audited class/callback.
+
+**Next:** fix and retest O1 before any selective transplant; audit S1 security edge cases; implement Gallery selection/preview state and Apply/Back/Favorites as a separately tested UI change. Preserve APVTS IDs/semantics, DSP, sampler, MIDI, scheduler and SIGNAL FORGE visual identity.
+
+**Status:** AUDIT COMPLETE / NO SOURCE CHANGE / ARCHIVE TRANSFER BLOCKED.
