@@ -682,3 +682,34 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Tests:** regression tests are committed and wired into the workflow but have NOT YET BEEN EXECUTED on GitHub Actions. A successful download, artifact, sample count, or size is NOT claimed. The user must start a fresh workflow run on the corrected HEAD; the previous failed run cannot validate these changes.
 
 **Safety:** no pre-existing sample library files were overwritten, moved, or deleted; no source samples or VST3 DSP code were modified. This is a focused Sound Hunter bug fix only.
+
+
+## 2026-11-14 — Sound Hunter aggregate 40 GB ceiling; removal of per-run cap
+
+**Type:** production Python importer / regression tests / CI workflow / source catalog / documentation.
+**Branch:** `main`.
+**Commits (chronological):**
+- Importer aggregate-cap implementation: `76e13b935582f5e01c0854db34a2af3a7f01965e`.
+- Regression tests: `53f8179a3e50d51b694c9139571835d1844ccf67`.
+- Workflow argument/artifact update: `21e439d9fb200eb3db13d8ff47709e6bb697265f`.
+- Catalog limit update: `4d171bf48d8bca03600b2148c9b49fc4fb5c4cdd`.
+- README rule update: `eecc6cdaa2b6d85e61e07d9d28d15bd929f7f08c`.
+- Decimal-GB correction and run-folder ordering: `33305dee44981d768217fc0685e1675883247bca`.
+- Test unit correction: `be79683a83ea5d9e223838288793fedba6ec8f3a`.
+- Workflow artifact label: `8ab71c5267c911631f15d9811fec66dbadeb357c`.
+- Stop source traversal at ceiling: `f03361e0d3dd9b4870b06fa84563539b2c489b84`.
+- Test cleanup: `e8b97849892438f2ae921dbe6325bfcff1a6524d`, `42b702ba7e94740c500057a04647aaf3cfdf663a`.
+
+**Files:**
+- `SoundHunter/sound_hunter_real_guitars.py` — removed `--max-gb` / per-run limit; added aggregate existing-audio measurement and `--max-library-gb` (hard maximum 40 decimal GB); capacity check before creating run directory; deduplication before capacity admission; stop further source traversal when ceiling is reached; existing files remain untouched.
+- `tests/test_sound_hunter_importer.py` — added aggregate boundary tests (39 GB + 1 GB accepted; 39 GB + 2 GB rejected; 40 GB + 1 byte rejected) and audio-only size measurement test; retained path collision/traversal tests.
+- `.github/workflows/sound-hunter-real-guitar.yml` — passes `--max-library-gb 40`; artifact renamed `PPGU-REAL-GUITAR-SAMPLES-40GB-CEILING`.
+- `SoundHunter/real_guitar_sources.json` — catalog ceiling set to exactly 40,000,000,000 bytes.
+- `SoundHunter/README.md` — documents removed per-run cap and aggregate 40 GB rule.
+
+**Compatibility / non-goals:** no C++/ANGELA audio callback, MIDI, preset, APVTS, DSP or VST3 source was changed. The Sound Hunter cap counts supported audio assets already inside the managed `Samples` tree. It does not count external libraries merely referenced in place. Any manual import that copies files into `Samples` must be wired to the same capacity policy; that code path is not yet implemented/verified in this change.
+
+**Tests:** regression tests were updated but NOT executed in this operation. GitHub Actions workflow was updated but NOT dispatched. No sample archive/artifact was downloaded or inspected. No build, pluginval or FL Studio test is claimed.
+
+**Status:** IMPLEMENTED IN SOURCE / VALIDATION PENDING. Manual-import enforcement remains OPEN.
+**Next step:** run the updated workflow; inspect test result, artifact registry, SHA-256 values and actual aggregate size; separately integrate the same 40 GB guard into any manual-copy import path if one exists.
