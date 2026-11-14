@@ -92,3 +92,17 @@
 **Second confirmed policy defect:** the importer initializes its 25 GB counter by summing every file in the whole `Samples` tree. This incorrectly allows pre-existing/manual sample libraries to consume the Sound Hunter process limit, contrary to the approved rule that 25 GB applies only to the current Sound Hunter run. Manual imports remain without an artificial size cap.
 **Data safety:** this failed run produced no artifact and did not alter the repository's sample assets. Its runner workspace was ephemeral. No successful download is claimed.
 **Planned corrective scope:** (1) place release archive content in a distinct `release_assets/` subdirectory to avoid collision with repository content; (2) count only bytes imported during the current Sound Hunter run while retaining SHA-256 deduplication against existing samples; (3) add/execute focused tests and re-run workflow. No approved function or source library is to be removed or overwritten.
+
+
+## 2026-11-14 — SOUND HUNTER RUN #2 ROOT CAUSE FIXED; RETEST PENDING
+
+Run #2 (`43573746837`) failed in download/import with a verified destination collision between source-repository `release/` content and the separately downloaded Meta release ZIP. No artifact was produced. The same audit identified that the prior importer counted the entire existing `Samples` tree toward the Sound Hunter 25 GB limit, contrary to the approved rule that the cap applies only to the current Sound Hunter run.
+
+Corrective implementation is now committed:
+- `6adca0b36cf394bb76dd45906158f2e8c3fbedd8`: isolated release asset destination and current-run-only byte accounting.
+- `54f4aeeff68ae68e892ea89265f4427fb551560f`: regression tests for path separation, traversal rejection, and current-run cap accounting.
+- `50202631ff427bcaef356f3b164c2155b2de5c61`: workflow executes regression tests before download; current main HEAD at time of logging.
+
+All three changed files were re-fetched and SHA-verified. Automated regression tests have not yet run; the fixed download workflow has not yet been rerun; no sample artifact is available or claimed. A fresh manual workflow dispatch on main is required to validate the fix and produce the download artifact.
+
+The user instruction to maintain INFO, CODE, and the main journal during work is now being followed: INFO is active again for operational status, CODE records implementation commits and test evidence, and PPGU_JOURNAL records decisions and end-to-end status. Historical journal content is retained.
