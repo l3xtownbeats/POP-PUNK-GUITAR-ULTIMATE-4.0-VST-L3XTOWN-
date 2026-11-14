@@ -189,7 +189,7 @@ class Rev18FontManifestTests(unittest.TestCase):
             AUDIT.validate_font_manifest(theme_dir)
             (root / "Inter[opsz,wght].ttf").write_bytes(b"changed")
             with self.assertRaisesRegex(ValueError, "byte count mismatch|CRC32 mismatch"):
-                AUDIT.validate_font_manifest(root)
+                AUDIT.validate_font_manifest(theme_dir)
 
 
 class Rev18ContrastAuditTests(unittest.TestCase):
