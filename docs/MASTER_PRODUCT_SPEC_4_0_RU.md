@@ -251,3 +251,7 @@ Pattern/AutoChords playback must follow host tempo and transport with determinis
 The first supplied interface reference defines the approved appearance, layout, dimensions, placement and full control inventory. 02 INTERFACE NEON STAGE AUTOCHORDS defines the color palette only. Themes/skins may change graphics, palette, materials and typography, but may not remove, add, move, resize, replace, hide or rebind approved controls, alter their functions, change APVTS IDs/semantics, or affect MIDI/preset/source/audio behavior. No automated agent or design pass may silently simplify or merge the approved windows/controls.
 
 **Precedence:** this addendum is limited to user-approved changes dated 2026-11-13/14. It extends §17 and preserves the SIGNAL FORGE v10 / REV 17 strict baseline and any newer direct user decisions. It is an approved requirement, not implementation evidence.
+
+
+### 18.8 Selector name disambiguation
+The AutoChords panel's Pattern selector is distinct from the PATTERN Browser's rhythm/performance Pattern selector. They have separate state and ownership; neither may update or overwrite the other. AutoChords Pattern stays within AutoChords' chord/harmony-generation context; PATTERN Browser Pattern stays within section/slot rhythm-performance selection. Preview, Apply and Reset must preserve this separation.
