@@ -24,16 +24,22 @@ WINDOWS = ASSETS / "windows"
 SHEETS = OUT_ROOT / "contact_sheets"
 REF = ROOT / "01 INTERFACE  NEON STAGE DEFAULT .png"
 
-TOKENS = {
-    "bg_deep": "#0A0E18", "bg_panel": "#141B2A", "bg_panel_hi": "#1E2A40",
-    "border": "#2A3A55", "border_glow": "#22CFFF", "text_primary": "#EAF6FF",
-    "text_secondary": "#9FB6D4", "text_disabled": "#5A6B85",
-    "accent_primary": "#22CFFF", "accent_secondary": "#FF3EA5",
-    "accent_warning": "#FFB454", "accent_danger": "#FF5A5A",
-    "accent_success": "#46E88C", "lcd_bg": "#061021", "lcd_text": "#7FE8FF",
-    "knob_body": "#0C1220", "knob_ring": "#22CFFF", "led_on": "#46E8FF",
-    "led_off": "#1A2436", "overlay_scrim": "#04080FCC", "focus_ring": "#7FE8FF",
-}
+def load_palette():
+    source = json.loads((SOURCE / "theme.json").read_text(encoding="utf-8"))
+    palette = source.get("palette")
+    if not isinstance(palette, dict) or len(palette) != 21:
+        raise RuntimeError("Canonical Skin_052 theme must define exactly 21 palette tokens.")
+    for key, value in palette.items():
+        expected = 9 if key == "overlay_scrim" else 7
+        if not isinstance(value, str) or not value.startswith("#") or len(value) != expected:
+            raise RuntimeError(f"Invalid canonical palette token {key}: {value!r}")
+    schema = json.loads((ROOT / "SKIN" / "control_schema.json").read_text(encoding="utf-8"))
+    required = schema.get("x-ppgu-contract", {}).get("paletteTokens", [])
+    if len(required) != 21 or set(required) != set(palette):
+        raise RuntimeError("Canonical palette keys differ from control_schema.json.")
+    return palette
+
+TOKENS = load_palette()
 P = TOKENS
 def rgba(name):
     value = P[name].lstrip("#")
