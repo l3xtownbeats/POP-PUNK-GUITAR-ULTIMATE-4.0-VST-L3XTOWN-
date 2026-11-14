@@ -303,3 +303,16 @@ User clarification: downloading is allowed when lawful and compliant with source
 **CI snapshot:** run `43592701287` at preflight SHA was IN PROGRESS (configure PASS, build IN PROGRESS, downstream gates pending).
 **Status:** PHASE 0 AUDIT COMPLETE / DOCUMENTATION ONLY. Next operation is reference + skin identity reconciliation under INFO section K.
 
+
+
+## 2026-11-14 — TX-UX-ENGINE-001 — user-approved UX / NEON STAGE / engineering principles
+
+**Decision:** user explicitly approved the following mandatory principles for all PPGU work:
+1. ONE-TIME SCAN → PERMANENT REGISTRATION → FAST AUTO-LOAD → NO REPEATED SCANNING. Persistent index and stable IDs; lightweight root availability check on startup; no full directory scan/re-index on startup or preset change. Demand-driven sample streaming is not a rescan. Full scan/relink only by explicit user action.
+2. Minimal, intuitive UX: minimum necessary actions and controls, clear labels/statuses, no duplicated functions or clutter; internal complexity stays inside the engine.
+3. Efficient engineering: lean/reused architecture, low CPU/RAM, fast load/switch, realtime-safe callback, safe threading/memory and measurable/tested optimization.
+4. NEON STAGE DEFAULT is the unified premium design system across every window, panel, menu and module. Shared palette, typography, components, layout and interaction states; no visually foreign auxiliary windows.
+5. Minimum filler, maximum useful information; never blur planned/design-only work with implementation or test evidence.
+
+**Constraints:** no blind skin ID/manifest renumbering. Exact visual parity still depends on canonical reference reconciliation and source audit. These decisions do not promote any source feature to IMPLEMENTED or TESTED.
+**Transaction scope:** documentation only; no production source/assets changed and no build/tests/CI/host validation run.
