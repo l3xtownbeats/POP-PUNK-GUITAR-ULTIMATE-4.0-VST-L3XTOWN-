@@ -2,7 +2,15 @@
 """Unit tests for the REV.18 READY evidence audit."""
 from __future__ import annotations
 
+import sys
 import unittest
+from pathlib import Path
+
+# The validator lives in tools/, while this test is executed by path from the
+# repository root. Add that directory explicitly so Windows and local runs
+# resolve the same module without relying on PYTHONPATH side effects.
+TOOLS_DIR = Path(__file__).resolve().parents[1] / "tools"
+sys.path.insert(0, str(TOOLS_DIR))
 
 from validate_rev18_factory_readiness import audit, ready_evidence_errors
 
