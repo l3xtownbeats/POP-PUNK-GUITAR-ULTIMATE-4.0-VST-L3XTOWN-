@@ -164,3 +164,21 @@ The current design authority is `SKIN/NEON_STAGE_COMPLETE_UI_DESIGN_RU.md`. It d
 The current live source audit remains evidence-bounded: main preset selector/category/search, MELODY/PATTERN, nine APVTS rotary controls, seven FX bypass attachments, MIDI keyboard 36–84, FX Edit, Import Guitar, Settings, AutoChords setup panel, Skin Gallery and multi-window workspace are present to varying degrees. PUNK GROUP, Auto Discover, Curator, About, pitch/mod wheels, measured CPU/RAM telemetry, full preset browser/favorites, transactional Gallery, and production OverlayManager lifecycle are not accepted as complete. All unimplemented controls must remain disabled/deferred or absent; never paint fake working controls.
 
 This is a design contract and not runtime implementation. Existing 12x16 grid coordinates remain design metadata until consumed by a tested layout engine. All future visual changes must preserve APVTS IDs/semantics, DSP/audio, sampler, MIDI, preset and project state. Exact-SHA build/CTest/pluginval/FL Studio 20 evidence is required after source changes.
+
+## REV.18 / NEON STAGE DEFAULT SKIN-1 — интерфейсная синхронизация (15.11.2026)
+
+Этот addendum supersedes conflicting older naming snapshots in this matrix. Каноническая тема и вся графическая оболочка называются только NEON STAGE; технический ID — neon-stage-default-skin-1. Это одна дизайн-система для главного окна, Skin Gallery, Preset Browser, FX EDIT, AutoChords, Import Guitar, Settings и всех окон Multi-Window Workspace. Старые SIGNAL FORGE строки в исторических записях не являются действующими product/UI labels.
+
+### Реально присутствующие элементы и стиль
+- Main shell: header, preset library, search/category selectors, MELODY/PATTERN, mode selector, nine APVTS rotary controls, seven APVTS FX bypass controls, AMP & TONE / FX CHAIN zones, sync selector, live harmony/performance readout, MIDI keyboard 36–84, import/skin/settings/AutoChords actions.
+- NEON STAGE LookAndFeel: themed rotary body/arc/pointer, toggle/normal/disabled/hover/focus button states, combo-box shell/arrow/focus, text-editor focus outline; all use active palette tokens.
+- Main editor: semantic palette applied to title/subtitle, LCD-style status surface, preset/search controls, all buttons, knob labels/value boxes, FX controls, MIDI keyboard and performance display.
+- Auxiliary workspace: shared window background, panel surface, border, title chrome, close/maximize/resize affordances; existing theme-aware panel contents receive the same palette on open and on theme change.
+- Preset categories/search are represented by the existing real browser controls. No fictitious filesystem folders or unbound controls are introduced.
+
+### Ограничения по журналу
+- LED_indicator, Auto_Discover, Curator, About, Favorites, Gallery Preview/Apply/Back rollback, full keyboard navigation, production rescan, 150 ms fade/ECO cache policy remain NOT IMPLEMENTED unless separate code and tests prove otherwise. Do not draw active fake controls.
+- Nine main rotary and seven FX toggles retain their exact APVTS IDs and meanings. No skin/layout work changes DSP, sampler, MIDI, APVTS or processor state.
+- controls.*.grid remains design metadata; actual JUCE bounds remain authoritative until a separately tested layout engine consumes the grid. Pixel parity against all seven supplied reference images and FL Studio 20 visual acceptance are still pending.
+
+**Изменения текущего шага:** унифицирована тема кнопок, комбобоксов, полей поиска, rotary value boxes, status/LCD, MIDI keyboard и всех auxiliary surfaces через NEON STAGE tokens. Реальный статус каждого компонента сохраняется; никакие отсутствующие функции не выданы за готовые.
