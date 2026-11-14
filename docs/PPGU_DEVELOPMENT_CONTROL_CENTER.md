@@ -283,3 +283,30 @@ Exact sort keys/order, filter taxonomy, ranking, Genre/Artist taxonomy, automati
 Create a control-by-control source matrix for every browser element: ID, panel, action, data source, state, callback, preset manager/sound engine link, persistence, keyboard/focus, empty/loading/error/disabled behavior, tests and exact-SHA evidence. Specifically inspect search, category counts, BROWSER/FAVORITES/CATEGORIES, filter/sort, PREV/NEXT, favorite toggle, selection vs load, preview isolation, factory/user bank, import/export, corrupt/missing dependency handling, and Genre→Artist/Band→Song/Section→Style→Pattern navigation.
 
 **Status:** DOCUMENTATION ONLY / REQUIREMENTS CONSOLIDATED / IMPLEMENTATION NOT PROMOTED.
+
+
+### TX-UI-PRESET-GUARD-004 — 2026-11-14 — RETROSPECTIVE UI AND PRESET PRESERVATION DECISIONS
+**Authority:** user-approved requirements and corrections from 2026-11-12..14. This entry supplements TX-DEC-002 and TX-PRESET-BROWSER-003; it does not override newer master decisions or immutable safety/realtime rules.
+
+**Ratified**
+- Approved mockup is a one-to-one appearance/layout reference; all journal-approved controls must be visible and functional.
+- Unspecified mockup-only UI functions may be removed/replaced, but no engine capability may be removed. Preserve APVTS IDs/semantics, DSP, MIDI, sampler, preset/project compatibility and existing behavior. No fake controls.
+- Applies to all five approved skin/UI variants while preserving existing registry IDs and legacy compatibility.
+- First reference file defines appearance/layout; second defines color palette.
+- SKINS is visual-only: palette/graphics may change, but controls, size, coordinates, layout, bindings, callbacks, preset mapping, DSP, MIDI and sound do not. Approved shell starts automatically; no mandatory skin-selection gate.
+- Preset catalog is expansion-only; no deletion/replacement/silent overwrite of existing presets. Portable artifacts: `.ppgm` MELODY, `.ppgp` PATTERN, `.ppgbank` banks.
+- Eight profiles are reference/QA material for comparison and selective mapping, not eight new factory presets.
+- Current `playMode` range remains 0..1.
+- Extend existing REV.17 modules; do not duplicate/rewrite architecture. CHECK → ANALYZE → FIX → RE-ANALYZE → RESULT. Exact-SHA CI only; build, CTest, pluginval, packaging and FL Studio 20 acceptance are separate gates.
+
+**Supersession / conflict handling**
+- This addendum does not change default/fallback skin identity, skin registry/schema, control inventory, or layout reference. Any discrepancy between historical registry defaults and the latest user-approved NEON STAGE reference remains subject to explicit latest-authority reconciliation; no silent rollback.
+- The eight-profile note supersedes any older/ambiguous interpretation that those eight files should automatically be inserted as eight new factory presets.
+- Proposed browser tabs not explicitly user-approved remain proposals; do not promote them to ratified requirements.
+
+**Required follow-up**
+- Create mockup-to-source control matrix and per-skin invariance audit.
+- Test `.ppgm` / `.ppgp` / `.ppgbank` round trips and collision/malformed/missing-dependency cases.
+- Keep implementation status separate from requirements status.
+
+**Status:** DECISION REGISTER UPDATED / DOCUMENTATION ONLY / NO PRODUCTION SOURCE CHANGE.
