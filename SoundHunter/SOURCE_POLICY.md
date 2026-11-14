@@ -56,6 +56,24 @@ Implementation rules:
 - Keep evaluation-only and rights-review assets physically separated from distributable plugin content. Only assets marked as approved for commercial shipment may be copied into the release sample package.
 - This layout is a required target for implementation; adding this policy does not by itself mean the folders, registry browser or runtime integration have already been built.
 
+## Import destinations and quality-based sound replacement
+
+The user approves organizing all acquired sounds by format, instrument, genre/style, tone and articulation as specified above, and approves replacing an existing sound with a demonstrably higher-quality compatible alternative.
+
+Approved import routes:
+- Use the plugin's **Import Guitar** function when it is available and supports the asset type.
+- Alternatively, import through the shared bank folder **Samples/Import Bank Guitar**.
+- Where the importer is not available or does not support a format, use the project's common **Samples** directory through a controlled import/staging process. Preserve the approved taxonomy and registry; do not scatter unmanaged files into the folder.
+- These are approved target routes. Before implementation, inspect the repository and actual plugin code to confirm which paths/functions exist; do not claim an import route is operational until verified.
+
+Replacement rules:
+- A new asset may supersede an existing one only after a documented A/B or objective quality review confirms a meaningful improvement in recording quality, noise floor, tuning, dynamics, velocity/articulation coverage, note range, consistency, sample rate/bit depth where relevant, and suitability for its assigned preset.
+- Compare like with like: preserve the intended instrument, articulation, tuning, note/velocity mapping and preset role. A higher sample rate or larger file alone is not proof of better sound.
+- Verify license and commercial redistribution eligibility before promoting a replacement into the shipped library. A freely downloadable but non-commercial-only asset must never replace a distributable commercial asset in the release build.
+- Never overwrite or delete the previous sound. Import the candidate into a unique staging/source location, validate it, then update the registry/preset reference to the new stable asset ID. Mark the former asset as SUPERSEDED/ROLLBACK_AVAILABLE and retain its source, hash, license evidence and mapping for rollback.
+- Run preset regression checks after a replacement: playback across the mapped key and velocity ranges, articulation switching, loops/one-shots behavior where applicable, and no missing-file references. If validation fails, keep the previous asset active.
+- Record replacement provenance: old and new asset IDs, reason, comparison/validation results, source URL, license status, SHA-256 and date.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
