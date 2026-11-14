@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "policy": "PPGU-REAL-RECORDED-GUITARS",
+  "max_library_bytes": 26843545600,
+  "supported_audio_formats": [".wav", ".wave", ".flac", ".ogg", ".oga", ".mp3", ".aif", ".aiff", ".caf", ".opus", ".m4a", ".aac", ".wma", ".sf2", ".sf3", ".sfz", ".dspreset"],
+  "sources": [
+    {
+      "id": "meta-open-sound-steel",
+      "name": "Meta Open Sound — Steel Guitar",
+      "kind": "REAL_RECORDED",
+      "repository": "facebookincubator/Meta-open-sound",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE",
+      "release_tag": "meta-steel-guitar-v1.0.0",
+      "release_asset_contains": "meta-open-sound-meta-steel-guitar-wav.zip",
+      "include_repo_audio": true,
+      "notes": "Meta states the steel guitar collection is recorded multisample audio; WAV release is 24-bit/48 kHz."
+    },
+    {
+      "id": "meta-open-sound-nylon",
+      "name": "Meta Open Sound — Nylon Guitar",
+      "kind": "REAL_RECORDED",
+      "repository": "facebookincubator/Meta-open-sound",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE",
+      "release_tag": "meta-nylon-guitar-v1.0.0",
+      "release_asset_contains": "meta-open-sound-meta-nylon-guitar-wav.zip",
+      "include_repo_audio": true,
+      "notes": "Meta states the nylon guitar collection is recorded multisample audio; WAV release is 24-bit/48 kHz."
+    },
+    {
+      "id": "freepats-electric-clean",
+      "name": "FreePats FSBS Electric Guitar Clean",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/electric-guitar-FSBS-clean",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Directly sampled Fender electric guitar; clean amp/effects processing."
+    },
+    {
+      "id": "freepats-electric-direct",
+      "name": "FreePats FSBS Electric Guitar Direct DI",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/electric-guitar-FSBS-direct",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Direct raw recordings of an electric guitar."
+    },
+    {
+      "id": "freepats-electric-dist1",
+      "name": "FreePats FSBS Electric Guitar Distorted 1",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/electric-guitar-FSBS-dist1",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Directly sampled Fender electric guitar, amp/effects processed."
+    },
+    {
+      "id": "freepats-electric-dist2",
+      "name": "FreePats FSBS Electric Guitar Distorted 2",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/electric-guitar-FSBS-dist2",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Directly sampled Fender electric guitar, amp/effects processed."
+    },
+    {
+      "id": "freepats-electric-jazz",
+      "name": "FreePats FSBS Electric Guitar Jazz",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/electric-guitar-FSBS-jazz",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Recorded electric guitar bank; exact recording and license details are checked from the repository."
+    },
+    {
+      "id": "freepats-spanish-classical",
+      "name": "FreePats Spanish Classical Guitar",
+      "kind": "REAL_RECORDED",
+      "repository": "freepats/spanish-classical-guitar",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE.txt",
+      "notes": "Recorded Spanish classical guitar."
+    },
+    {
+      "id": "karoryfer-black-green",
+      "name": "Karoryfer Black and Green Guitars",
+      "kind": "REAL_RECORDED",
+      "repository": "sfzinstruments/karoryfer.black-and-green-guitars",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE",
+      "notes": "Two recorded hollowbody electric guitars; catalogue marks CC0-1.0."
+    },
+    {
+      "id": "karoryfer-emilyguitar",
+      "name": "Karoryfer Emilyguitar",
+      "kind": "REAL_RECORDED",
+      "repository": "sfzinstruments/karoryfer.emilyguitar",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE",
+      "notes": "Recorded guitar multisample; catalogue marks CC0-1.0."
+    },
+    {
+      "id": "karoryfer-shinyguitar",
+      "name": "Karoryfer Shinyguitar",
+      "kind": "REAL_RECORDED",
+      "repository": "sfzinstruments/karoryfer.shinyguitar",
+      "license": "CC0-1.0",
+      "license_file": "LICENSE",
+      "notes": "Recorded archtop guitar multisample; catalogue marks CC0-1.0."
+    }
+  ]
+}
