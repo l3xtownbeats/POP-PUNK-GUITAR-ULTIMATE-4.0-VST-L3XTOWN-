@@ -133,6 +133,13 @@ def main():
             index=entry.get("index")
             if not isinstance(index,int) or isinstance(index,bool) or index>=52:
                 continue
+            # A legacy folder is eligible only while the registry still points
+            # to its two-digit resource path. SKIN-1 now intentionally resolves
+            # to the separate canonical Skin_001 package; leave orphaned Skin_01
+            # history untouched rather than validating it against the new ID.
+            legacy_path=f"Skin_{index:02d}/theme.json"
+            if entry.get("path") != legacy_path:
+                continue
             folder=args.root/f"Skin_{index:02d}"
             manifest=folder/"theme.json"
             if not manifest.is_file():
