@@ -200,7 +200,9 @@ foreach(test_name IN ITEMS SampleMetadataIndex SamplePool SampleStreamingService
     add_test(NAME ppgu_${test_suffix}_tests COMMAND ppgu_${test_suffix}_tests)
 endforeach()
 
-add_executable(ppgu_theme_contracts
+juce_add_console_app(ppgu_theme_contracts PRODUCT_NAME "PPGU Theme Contract Tests")
+juce_generate_juce_header(ppgu_theme_contracts)
+target_sources(ppgu_theme_contracts PRIVATE
     tests/ThemeManagerTests.cpp
     Source/UI/ThemeManager.cpp
 )
@@ -212,7 +214,9 @@ target_link_libraries(ppgu_theme_contracts PRIVATE
 )
 add_test(NAME ppgu_theme_contracts COMMAND ppgu_theme_contracts)
 
-add_executable(ppgu_panel_contracts
+juce_add_console_app(ppgu_panel_contracts PRODUCT_NAME "PPGU Panel Contract Tests")
+juce_generate_juce_header(ppgu_panel_contracts)
+target_sources(ppgu_panel_contracts PRIVATE
     tests/AuxiliaryPanelLayoutTests.cpp
     Source/UI/AuxiliaryPanelLayout.cpp
 )
