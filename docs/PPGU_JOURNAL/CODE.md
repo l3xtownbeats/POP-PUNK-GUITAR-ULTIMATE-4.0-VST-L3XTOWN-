@@ -836,3 +836,21 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 **Validation:** source changes are committed; a fresh CI run on the resulting exact HEAD is required. Do not claim the modified workflow passed until it completes. Existing successful Sound Hunter run #14 / artifact ID `14110929182` is from the earlier 40 GB workflow and is not evidence for the new unlimited policy. Its artifact was 2,967,193,335 bytes; runtime integration and audio audition remain unverified.
 
 **Unchanged:** existing samples are not deleted/moved/overwritten; source acquisition still verifies repository/release license evidence, archive checksums, path safety and per-file SHA-256. No C++ sampler, DSP, MIDI, APVTS, preset runtime or audio callback was changed in this tooling operation.
+
+
+## 2026-11-14 — REV.18 SAMPLES audit and release-artifact transport hardening
+
+**Code/tooling commits:**
+- `tools/split_artifact.py` — commit `62b2091ba1061b20985f07470c55432e59730163`.
+  Added split/verify commands. Split output uses stable 4-digit sequential part names, JSON manifest, per-part SHA-256 and whole-archive SHA-256. Verification checks order, presence, byte size, each part digest and aggregate digest.
+- `tests/test_artifact_splitter.py` — commit `af21db6eb3dc7e41edddf5ed703e9f5ccfd715ab`.
+  Tests sequential naming/manifest, integrity verification, corruption rejection and empty archive rejection.
+- `tools/audit_soundbank.py` — commit `0f5882f656788f78822defa4987ca54628a19138`.
+  Removed preferred-size and hard-limit command-line options and all size-based rejection. Audit still verifies source folders, licenses, SFZ mappings, audio presence and full SHA-256 manifest coverage; reports payload size only.
+- `tests/test_audit_soundbank_policy.py` — initial commit `0a593e0754ce68c4720e174f465826954196b06b`, deterministic static regression refinement `f656f3d024c5af3fa80a8c9a07eab892b2ba38a0`.
+- `.github/workflows/vst3-build.yml` — commit `55f9069c50ae0148b37367bf58bb2d0c8806d84a`.
+  Removed old 25/30 GiB cap; final user package directory is SAMPLES; executes the new tests; splits the complete ZIP at 1,800 MiB per transport part and verifies the ordered manifest before upload.
+- `.github/workflows/sound-hunter-real-guitar.yml` — commits `7eb2e81424060c1ddb41907c5ad227bef797daca`, `0ed1fec49430cd8d9cee3b66cb57737ffc586d51`, `26babf584ce439662222c05f5a348a14e258c174`.
+  Uses shared splitter instead of GNU split, verifies before upload, includes JSON manifest and SHA256 list in artifact, and triggers on shared tooling/test changes.
+
+**Validation boundary:** no C++ production source, DSP, MIDI behavior, sampler callback, APVTS state, preset runtime or sample payload was changed. New Python regression tests are committed but CI execution for these changes is pending. Do not mark as TESTED until current workflow jobs complete successfully. Do not infer FL Studio host acceptance from CI.
