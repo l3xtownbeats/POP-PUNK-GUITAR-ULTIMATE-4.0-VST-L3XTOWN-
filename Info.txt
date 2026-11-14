@@ -3193,3 +3193,19 @@ The user's final instruction is unambiguous: **NEON STAGE** is the only name. It
 ## 2026-11-15 — Canonical technical identifier: NEON STAGE DEFAULT SKIN-1
 
 The user explicitly replaces the former technical identifiers `Skin_052` / `skin-052` as the canonical identity with **NEON STAGE DEFAULT SKIN-1**. The canonical machine-readable ID is `neon-stage-default-skin-1`; the product-facing name remains **NEON STAGE**. The registry position `index: 52` and on-disk directory `SKIN/Skin_052/` are retained as storage/layout compatibility details only; they are not the skin's identity or product name. The manifest, runtime fallback, registry lookup, persisted preference handling, ThemeManager validation, editor registry validation, unit tests and workflow assertions are updated to use the canonical ID. Existing saved preference `skin-052` is migrated to the new ID on load. The separate Skin_053 entry remains a non-default legacy archive. No folder move or index renumbering is performed in this change; no DSP/audio/MIDI/APVTS behavior is changed.
+
+
+## 2026-11-15 — NEON STAGE complete interface design contract
+
+**Design document:** `SKIN/NEON_STAGE_COMPLETE_UI_DESIGN_RU.md`  
+**Design commit:** `f52dac45e82049b1d30869f2644bfc924cb7daa9`  
+**Branch:** `work/neon-stage-reference-preview-fix`  
+**Status:** DESIGN CONTRACT COMMITTED / SOURCE UI IMPLEMENTATION AND VISUAL ACCEPTANCE PENDING.
+
+The entire PPGU interface is now specified as one visual system named **NEON STAGE**: main editor, all auxiliary windows, panels, menus, dialogs, buttons, rotary controls, selectors, lists, folders, indicators, keyboard and status surfaces. The contract defines the graphite/metal stage chassis, restrained cyan/blue primary lighting with violet/magenta secondary accents, semantic 21-token palette, typography, component states, A–H main-screen zones, auxiliary-window styling, folder/library presentation, responsive behavior and acceptance gates.
+
+The design contract reconciles the approved 1402x1122 main-layout requirement with the current source inventory. It preserves all existing APVTS IDs, DSP/audio, sampler, MIDI, transport, preset and project-state behavior. It explicitly prohibits fake active controls, fake CPU/RAM values, fake LED activity and unimplemented AutoChords MIDI generation. Missing Auto Discover, Curator, About, PUNK GROUP, pitch/mod wheels, complete browser workflows and production overlay lifecycle remain visible as missing/deferred implementation work, not as completed UI features.
+
+**Next implementation sequence:** (1) verify approved mockups 01–07 against the current repository reference assets; (2) component-by-component JUCE style/binding audit for main editor; (3) apply shared NEON STAGE styling to Gallery, Import Guitar, FX Edit, AutoChords, Settings and workspace chrome; (4) implement only missing visual states for real components; (5) close runtime control parity, DPI/resize/focus and audio-invariance tests; (6) run exact-SHA Windows build, CTest, pluginval and separate FL Studio 20 acceptance.
+
+This commit is a design specification only. It does not claim that the live editor has been redesigned, that all controls/windows are implemented, or that CI/host acceptance has passed.
