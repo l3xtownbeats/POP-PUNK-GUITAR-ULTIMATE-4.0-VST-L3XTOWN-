@@ -138,6 +138,7 @@ def main():
                 for name in names:
                     rel=PurePosixPath(name)
                     if rel.suffix.lower() not in AUDIO: continue
+                    if sid.startswith("meta-open-sound-") and sid.removeprefix("meta-open-sound-") not in name.lower(): continue
                     # Skip Git LFS pointer stubs and suspiciously tiny audio placeholders.
                     info=z.getinfo(name)
                     if info.file_size < 128: continue
