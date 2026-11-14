@@ -833,3 +833,16 @@ Record provenance, source URL, creator/rights holder, license and license copy/l
 Do not stop merely because no single open library equal to Sunburst Deluxe has been found. Build the best lawful result from multiple sources and original/authorized material. If public sources cannot meet a quality target, document the gap and choose the next lawful route rather than filling the library with unsuitable content.
 
 This authorization is confirmed. It does not claim any new files have already been downloaded, rights-cleared, integrated or tested. Paid acquisition is not authorized.
+
+
+## 2026-11-14 — EXPANDED SOURCE CANDIDATES: SHREDAGG, APPLE SOUND AND OTHER QUALITY INSTRUMENTS
+
+The user approves researching SHREDAGG and comparable guitar instruments/libraries, Apple Sound materials, and other high-quality virtual/physical instruments, libraries and sound collections as potential PPGU sources. Study their sound, documentation, demos, reviews, structure and license terms. Where the specific license and any required additional permissions expressly allow the relevant audio assets to be used inside PPGU, those assets may be selected, lawfully acquired, integrated and used.
+
+This expands the candidate pool; it is NOT blanket permission to copy or extract any product's content. For each exact product, version, library and asset, determine the rights holder and applicable EULA/license, including access/extraction, modification, commercial use, embedding and redistribution inside a third-party sample-based VST. A music-production license, demo availability, product purchase, subscription, user ownership or ability to export audio does not by itself establish rights to bundle and redistribute sounds in PPGU.
+
+Use only lawful materials and acquisition methods expressly compatible with their terms: e.g. separately distributed files/SDK/sample packs whose license clearly permits commercial embedding and redistribution in a third-party virtual instrument; original recordings/renders only where the product terms and applicable rights genuinely permit that use and redistribution; or assets covered by separate written permission from the rights holder. Do not bypass DRM, encryption, protection, login/paywalls, export/access restrictions, or extract closed sample pools/preset banks/containers contrary to license terms.
+
+Evaluate every candidate comparatively for actual audio quality, mapping, articulations, musical fit, independent reviews/pro recommendations, ANGELA Engine compatibility, CPU/RAM/latency and license. Record exact product/version, asset/source, license evidence, permitted use method, provenance, SHA-256 and QA. Unclear terms remain REVIEW/QUARANTINE and must not enter a distributable build until resolved. Paid purchases/subscriptions still require separate user approval.
+
+This approval expands the candidate research scope only. It does not mean SHREDAGG, Apple Sound or any other product's license has already been checked or permits embedding; assess each exact product and asset individually. No new audio has been downloaded or integrated by this documentation commit.
