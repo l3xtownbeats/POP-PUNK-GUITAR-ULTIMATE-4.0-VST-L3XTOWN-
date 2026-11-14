@@ -33,7 +33,7 @@ class SoundHunterRegressionTests(unittest.TestCase):
         limit = 40_000_000_000
         self.assertTrue(sound_hunter.within_library_limit(0, 39_000_000_000, limit))
         self.assertTrue(sound_hunter.within_library_limit(39_000_000_000, 1_000_000_000, limit))
-        self.assertFalse(sound_hunter.within_library_limit(39 * 1024**3, 2_000_000_000, limit))
+        self.assertFalse(sound_hunter.within_library_limit(39_000_000_000, 2_000_000_000, limit))
         self.assertFalse(sound_hunter.within_library_limit(40_000_000_000, 1, limit))
 
     def test_existing_audio_bytes_counts_audio_only(self):
