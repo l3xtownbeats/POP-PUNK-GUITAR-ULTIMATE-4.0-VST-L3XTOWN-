@@ -560,3 +560,17 @@ Status: APPROVED / DOCUMENTED / RESEARCH BASELINE. This entry does not claim imp
 **Validation status:** code and workflow updates are committed on main. New CI runs must execute the added tests and packaging steps on the resulting exact HEAD before this revision can be marked CI-verified. The earlier successful Sound Hunter run `43589343860` predates the shared splitter changes and does not validate them. FL Studio 20 manual host acceptance remains separate and unverified.
 
 **Current main HEAD after this journal update:** the commit created by this append-only journal entry. No product release or runtime audio acceptance is claimed.
+
+
+## 2026-11-14 — TX-REPO-PRESENTATION-001 — коммерческое оформление главной страницы
+
+- Обновлена публичная README-страница продукта: позиционирование, краткая спецификация, два режима MELODY/PATTERN, архитектурные ограничения, библиотека/лицензирование, утверждённые инженерные направления, документация и границы статусов.
+- Удалены из актуального описания устаревшие/противоречивые заявления о PUNK GROUP, прежних названиях скинов и неподтверждённых функциях.
+- Обновлён SVG hero/banner в визуальном направлении NEON STAGE (премиальная тёмная консоль, cyan/blue/violet/magenta stage lighting, панель инструмента).
+- Баннер прямо помечен как визуальная презентация/концепт, не как скриншот работающего VST3 и не как подтверждение runtime default skin. Канонический skin registry остаётся источником runtime skin identity; его default не изменён.
+- Указан фактический результат workflow 43592701287: CANCELLED на SHA 7a7fb55641f36353fe32873c677e5db64142624c. Текущая сборка/тесты/FL Studio host acceptance не заявлены.
+- Старый `Cover Interface.jpg` оставлен в репозитории как исторический файл, но снят с главной страницы и больше не используется в hero/banner.
+- Только README/векторный баннер/журналы; production C++/DSP/MIDI/sampler/APVTS/presets/assets runtime не менялись. Build, CTest, pluginval и FL Studio 20 в этой транзакции не запускались.
+- GitHub About description/topics и Social Preview metadata не менялись: доступные GitHub actions в этой интеграции предоставляют чтение репозитория и запись файлов, но не отдельное редактирование About/Social Preview.
+
+**Статус:** REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.

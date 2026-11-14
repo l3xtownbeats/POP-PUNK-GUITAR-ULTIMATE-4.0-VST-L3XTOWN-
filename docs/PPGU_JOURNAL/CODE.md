@@ -854,3 +854,11 @@ Legacy original paths were intentionally retained; no deletion/move was performe
   Uses shared splitter instead of GNU split, verifies before upload, includes JSON manifest and SHA256 list in artifact, and triggers on shared tooling/test changes.
 
 **Validation boundary:** no C++ production source, DSP, MIDI behavior, sampler callback, APVTS state, preset runtime or sample payload was changed. New Python regression tests are committed but CI execution for these changes is pending. Do not mark as TESTED until current workflow jobs complete successfully. Do not infer FL Studio host acceptance from CI.
+
+
+## TX-REPO-PRESENTATION-001 — 2026-11-14
+- `README.md` — fully refreshed product landing page: current two-mode product definition, platform, architecture, approved scope, licensing, engineering status and evidence boundaries; stale PUNK GROUP/legacy skin claims removed from the active page.
+- `assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` — replaced the old magenta guitar illustration banner with a premium NEON STAGE-inspired product-console hero. It is explicitly a design showcase, not a live plugin capture.
+- `Cover Interface.jpg` — retained as a legacy repository asset but no longer referenced by the landing page.
+- No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
+- Validation: README/banner/journal content read-back is required; build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
