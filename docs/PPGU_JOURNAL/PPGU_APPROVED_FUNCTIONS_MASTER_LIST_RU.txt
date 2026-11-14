@@ -1,0 +1,231 @@
+POP PUNK GUITAR ULTIMATE 4.0
+ПОЛНЫЙ СВОДНЫЙ ПЕРЕЧЕНЬ УТВЕРЖДЁННЫХ ФУНКЦИЙ, СИСТЕМ, ОКОН И ЭЛЕМЕНТОВ УПРАВЛЕНИЯ
+Дата: 14.11.2026
+Формат: обычный UTF-8 текстовый файл
+
+НАЗНАЧЕНИЕ
+Перечень сводит утверждённые требования из MASTER PRODUCT SPEC, MAJOR USER REQUIREMENTS AMENDMENT, пользовательских дополнений и канонического журнала PPGU. Это обязательный объём продукта, а не заявление о готовности. Каждый пункт должен быть сопоставлен с исходным кодом, тестами и проверкой в DAW. Более поздние прямые утверждения пользователя имеют приоритет над ранними противоречиями. Каждый утверждённый элемент управления должен реально работать; декоративный или неподключённый control не считается реализацией. PLANNED/DESIGNED/DOCUMENTED/NOT VERIFIED нельзя выдавать за IMPLEMENTED/TESTED/HOST-VERIFIED.
+
+1. ПЛАТФОРМА И ОСНОВНОЙ ИНСТРУМЕНТ
+1.1 VST3 instrument, Windows x64, Windows 10 x64 от версии 1809 (17763).
+1.2 Основная обязательная DAW: FL Studio 20 x64.
+1.3 MIDI input; режимы MELODY и PATTERN.
+1.4 Быстрый запуск, загрузка пресетов и библиотек, немедленная реакция на MIDI.
+1.5 Низкая нагрузка CPU/RAM, подтверждённая измерениями.
+1.6 Безопасный realtime audio callback: без disk I/O, блокирующих mutex/ожиданий и динамических выделений.
+1.7 Сохранение/восстановление состояния, параметров, пресетов, библиотек и настроек.
+1.8 Проверка аудиоустройства, транспорта, длительного воспроизведения, MIDI и DAW automation.
+
+2. ГЛАВНЫЙ UI, ОКНА И СКИНЫ
+2.1 SIGNAL FORGE — главное рабочее пространство.
+2.2 NEON STAGE DEFAULT — тема по умолчанию.
+2.3 Первый утверждённый макет — точный эталон геометрии, расположения и внешнего вида; второй — эталон палитры.
+2.4 SKIN GALLERY, SKIN ENGINE, SKIN STUDIO.
+2.5 Preview скина без изменения активной темы; Apply, сохранение, восстановление и безопасный rollback.
+2.6 Производные скины меняют только графику, не controls, координаты, bindings, функции, MIDI или звук.
+2.7 AUXILIARY PANEL / MULTI-WINDOW MANAGER: открытие, закрытие, фокус, z-order, перемещение, изменение размеров, независимый lifecycle.
+2.8 Несколько одновременно открытых панелей, DPI scaling, безопасные callbacks.
+2.9 ABOUT — версия, сведения о продукте, лицензии и сборке.
+2.10 Все ранее утверждённые элементы управления всех окон обязательны к реализации.
+
+3. MELODY
+3.1 Самостоятельный нотный режим: одна MIDI-клавиша = соответствующая отдельная нота гитары.
+3.2 Хроматическая карта нот, root key, key range и логические диапазоны грифа.
+3.3 Утверждённый трёхчастный браузер MELODY: согласованные области выбора инструмента/гитарной идентичности, тембра/пресета и исполнения/артикуляции согласно последней спецификации.
+3.4 Электрические и акустические профили.
+3.5 Velocity layers, velocity response, round robin при наличии дублей.
+3.6 Palm mute, включая утверждённое управление palm mute через уменьшение velocity/порог.
+3.7 Open/picked, sustain/release, muted articulations при наличии записей.
+3.8 Legato, slide, hammer-on, pull-off и другие техники — только при наличии реальных записей и mappings.
+3.9 MIDI note-on/off, sustain, overlapping notes, pitch bend, modulation.
+3.10 Настраиваемые voices/polyphony, ограничение голосов и click-free voice stealing.
+3.11 Дополнительный PATTERN trigger workflow внутри MELODY — только в утверждённой MIDI-зоне, не нарушая обычное поведение «одна клавиша = одна нота».
+3.12 MELODY остаётся самостоятельным режимом.
+
+4. PATTERN
+4.1 Самостоятельный ритмический режим; MIDI-клавиша выбирает аккорд/voicing по утверждённой карте триггеров.
+4.2 Клавиша запускает записанное аккордовое ритмическое исполнение.
+4.3 Два самостоятельных окна: PRESET/GUITAR IDENTITY и PLAYING STYLE/RHYTHMIC PERFORMANCE.
+4.4 Независимый выбор гитары, tone preset, playing style, pattern, articulation и variation.
+4.5 Управление ритмической сеткой, gate, velocity, акцентами, humanization и вариациями.
+4.6 Host tempo/transport sync, start/stop, смена аккордов/паттернов без зависших нот и обрывов.
+4.7 INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO; восемь Pattern Slots на каждый раздел.
+4.8 Сохранение совместимости старого patternSlot state.
+4.9 Реальные guitar loops/performance sets — основной источник.
+4.10 Fallback из совместимых записанных one-shots, если loop не найден.
+4.11 Запрет произвольного транспонирования одиночной ноты для имитации полного аккорда.
+4.12 При отсутствии нужной записи — сообщить о недоступности или выбрать совместимую записанную альтернативу; не подменять гитару синтезатором.
+4.13 Электрические и акустические исполнения используют соответствующие записи, а не только разные EQ.
+
+5. AUTOCHORDS И ГАРМОНИЧЕСКИЕ МЕНЕДЖЕРЫ
+5.1 AUTOCHORDS — полноценная функция PATTERN и отдельное окно/рабочая область.
+5.2 Верхняя гармоническая полоса аккордов/ступеней; слева Playing Styles/Articulation; справа Playback Mode/Rhythm Mode.
+5.3 Внизу полноширинный Pattern Browser: поиск, фильтры, избранное, метаданные, preview.
+5.4 Независимость управления гармонией, стилем, паттерном и режимом воспроизведения.
+5.5 Клавиатура плагина не перекрывается.
+5.6 HARMONY MANAGER: major/natural minor, диатонические аккорды, Roman numerals, chord quality, создание/редактирование/перестановка/preview progressions, pop-punk templates.
+5.7 CIRCLE OF FIFTHS: 12 мажорных тональностей и относительных миноров; движение по квинтам по часовой и по квартам против часовой; подсветка ключа, аккорды, ступени, объяснения, альтернативы, preview, ручное редактирование и handoff в AutoChords/Melody/Pattern.
+5.8 GENERATION MANAGER: генерация гармонии/музыкального материала по key/mode/constraints; voicing variations; reproducible seed; preview до применения; передача в MELODY/PATTERN без перезаписи пользовательского материала.
+5.9 Генерация вне realtime callback.
+
+6. PRESET LIBRARY / PRESET BROWSER
+6.1 Factory и user presets для MELODY и PATTERN.
+6.2 Не менее 300 definitions с неограниченным дальнейшим расширением; definitions не равны playable/verified presets.
+6.3 Иерархия GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN.
+6.4 Неограниченное расширение PUNK GROUP, artist, style, technique, rhythm, articulation и preset categories без искусственных квот.
+6.5 Канонические PUNK GROUP / ARTIST PROFILE и утверждённые sound-DNA профили; первая категория — Pop Punk Essentials.
+6.6 Search, Filter, Sort, Categories, Favorites, Previous/Next; Previous/Next сохраняет search/filter context.
+6.7 Preview не меняет active preset/project/DAW state; Apply подтверждает выбор, Cancel откатывает.
+6.8 Select, preset name/category, favorite и все утверждённые browser controls.
+6.9 Factory entries extension-only/read-only; stable IDs; без молчаливой перезаписи.
+6.10 Обработка конфликтов импорта; user presets сохраняются при обновлениях.
+6.11 Save, Save As, Rename, Delete user preset, Import/Export Bank, Rescan.
+6.12 Форматы .ppgm (MELODY), .ppgp (PATTERN), .ppgbank (bank).
+
+7. SOUND BANK / SAMPLER / GUITAR AUDIO ENGINE
+7.1 Единая низкоуровневая sampler/audio infrastructure; не создавать дублирующие engines.
+7.2 WAV и SFZ loader/playback.
+7.3 SFZ key ranges, root key, velocity layers, round robin, articulations, loop points, sample rate, channels, relative paths.
+7.4 Multisample playback и корректное распределение по нотам/диапазонам.
+7.5 Sample Browser, audition/preview до загрузки.
+7.6 Background metadata indexing, lazy loading, page streaming, prefetch, bounded cache.
+7.7 Безопасная публикация/освобождение snapshots, библиотек и streaming workers.
+7.8 Контроль очередей, cache pressure, streaming roots и voices.
+7.9 Раздельные типы активов: One-Shots, Sample Loops, Multisamples/Performance Sets, MIDI Patterns, Presets.
+7.10 Разделение electric/acoustic и factory/user assets.
+7.11 Stable asset IDs, manifests, hashes, source/license evidence.
+7.12 Проверить Meta Open Sound Steel Guitar и Nylon Guitar, FreePats clean/distorted при соблюдении лицензий.
+7.13 Отсутствующий банк должен давать понятное предупреждение; запрещена фальшивая синтезаторная замена записанной гитары.
+
+8. VOICE MANAGER / MIDI / ARTICULATION
+8.1 VOICE MANAGER: voices/polyphony, allocation, release, voice stealing.
+8.2 MIDI ENGINE: note-on/off, channel, velocity, sustain, pitch bend, modulation.
+8.3 MIDI articulation system и корректные карты артикуляций/trigger maps.
+8.4 Параметры доступны DAW automation, где предусмотрено.
+8.5 State save/restore; существующие APVTS IDs/semantics сохраняются; миграции versioned и протестированы.
+8.6 Multiprocessing только при реальной безопасной параллельной обработке и измеримом выигрыше; фиктивный переключатель запрещён.
+
+9. FX CHAIN / FX EDIT / AMP / CABINET
+9.1 FX CHAIN — управляемая цепочка аудиообработки.
+9.2 FX EDIT — полноценный редактор, до 15 полностью реализованных эффектов/процессоров плюс кабинеты.
+9.3 Каждый видимый модуль имеет реальную DSP-реализацию, параметры, state, automation и тесты.
+9.4 Module selection, parameter editing, enable/bypass и утверждённые control states.
+9.5 Compressor; EQ; Distortion/Overdrive; Chorus; Flanger; Delay; Reverb; Cabinet IR; AMP & TONE; Master/Output.
+9.6 Остальные позиции до 15 сверяются с полной утверждённой спецификацией; нельзя придумывать пустые слоты.
+9.7 Соблюдать утверждённый bypass inventory: наличие параметров не означает отдельный bypass; не добавлять Flanger bypass сверх согласованного количества.
+9.8 Palm mute корректно работает вместе с FX, включая reverb, если предусмотрено.
+9.9 AMP & TONE: Clean/Crunch/Drive и tone controls.
+9.10 CABINET: cabinet selection, Cabinet IR, обработка и сохранение.
+9.11 DSP экономен и не выполняет блокирующих операций в audio callback.
+
+10. IMPORT GUITAR
+10.1 Отдельное окно IMPORT GUITAR.
+10.2 Drag-and-drop и Browse.
+10.3 Импорт WAV/SFZ и поддерживаемых библиотечных структур.
+10.4 Проверка формата, путей, note/velocity maps.
+10.5 Preview до применения, отмена, безопасное завершение.
+10.6 Реальные loading/progress/success/error states.
+10.7 Source metadata, provenance, hashes, license evidence.
+10.8 Разделение локального пользовательского использования и допуска в factory SoundBank.
+
+11. AUTO DISCOVER / SOUND HUNTER
+11.1 Полностью реализованная AUTO DISCOVER и SOUND HUNTER.
+11.2 ON/OFF разрешение: OFF запрещает фоновое обнаружение; ON только разрешает discovery, не запускает его без явной SCAN/SEARCH.
+11.3 Поиск в утверждённых источниках/каталогах; Deep Search расширяет существующий pipeline, второй importer запрещён.
+11.4 Guitar-only filter для соответствующих factory banks.
+11.5 Реальный progress, pause/cancel, результаты и статусы.
+11.6 Поиск One-Shots, Loops, Multisamples/Performance Sets.
+11.7 Duplicate detection, SHA-256, technical quality, mapping и integrity checks.
+11.8 GREEN/YELLOW/RED на уровне каждого asset.
+11.9 AUTO ADD только для доказанных CC0/PD или иных явно разрешённых активов с provenance и legal review.
+11.10 YELLOW — manual-only; RED исключён; COPYRIGHT SUSPECT блокирует commit; GOLD требует человеческого прослушивания.
+11.11 Никакого скрытого периодического сканирования или незаметного добавления.
+11.12 Сеть и анализ файлов только вне audio callback.
+
+12. SOUND FORGE
+12.1 Офлайн подготовка/обработка аудио.
+12.2 Ограниченная очередь, default concurrency=1, pause/cancel/resume.
+12.3 Chunk processing, bounded RAM, LOW POWER на батарее, без GPU dependency.
+12.4 Disk quota/free-space preflight; originals immutable; lossless default.
+12.5 Preview, A/B quality.
+12.6 Измерения wall time, RAM, CPU, I/O, threads, output size.
+12.7 Понятные ошибки и восстановление состояния задач.
+
+13. CURATOR / LICENSE / QUALITY
+13.1 CURATOR — классификация, проверка и допуск аудиоактивов.
+13.2 Лицензия проверяется на уровне каждого файла/актива.
+13.3 Сохраняются URL/source, license text/evidence, SHA-256.
+13.4 Проверка commercial use, modification, redistribution rights.
+13.5 Technical quality screening: clipping, SNR, DC offset, integrity.
+13.6 Guitar-only gate, правильная классификация, duplicate detection, quarantine.
+13.7 GREEN/YELLOW/RED policy; GOLD требует human listening approval.
+13.8 Factory package включает только материалы с явным разрешением на распространение.
+13.9 Локальный импорт законно приобретённых коммерческих библиотек не блокируется лишь из-за отсутствия factory redistribution rights.
+13.10 Пустой registry не считается готовой библиотекой или завершённым SOUND HUNTER.
+
+14. PERFORMANCE / SETTINGS / RESOURCE MANAGEMENT
+14.1 PERFORMANCE — только реальные метрики CPU/RAM/voices/streaming/cache/underruns; никаких фиктивных значений.
+14.2 SETTINGS — настройки плагина и ресурсов, утверждённые Resource Profile/quality controls.
+14.3 RAM/cache/streaming/background workload limits.
+14.4 Save/restore настроек; loading/progress/error/empty states.
+14.5 Performance panel остаётся read-only там, где управление не предусмотрено.
+
+15. УТВЕРЖДЁННЫЕ ТЕХНИКИ И СТИЛИ ИСПОЛНЕНИЯ
+15.1 Open Strum; Downstroke; Alternate Down-Up; Skank/Offbeat Upstrokes.
+15.2 Palm Mute/Tight; Chugs; Muted Bridge; Dead/Muted/Percussive Strokes; Muted Scratches.
+15.3 Lead/Octave Hook; Double-Stops; Arpeggio/Picking; Sustain/Ambient; Tremolo Picking.
+15.4 Straight Eighths; Gallop; Stop-Start/Syncopated; Stop-Time; Half-Time.
+15.5 Power-chord rhythms/riffs; acoustic strums/picking.
+15.6 Доступность артикуляции показывается только при наличии реальных записей и mappings.
+15.7 Artist/style sound DNA — оригинальные стилистические профили, без копирования защищённых записей, риффов, коммерческих пресетов или библиотек.
+15.8 Обязательные направления: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, The All-American Rejects, MGK, Avril Lavigne и все остальные профили канонического PUNK GROUP каталога.
+
+16. ПОЛНЫЙ КОНТРАКТ ЭЛЕМЕНТОВ УПРАВЛЕНИЯ
+16.1 Все ранее утверждённые кнопки, переключатели, селекторы, регуляторы, поля, списки, вкладки, browser commands, MIDI/host controls, preview/import/discovery controls обязательны.
+16.2 Каждый control подключён к реальной функции, параметру, backend, state или workflow.
+16.3 Корректные labels, ranges, units, defaults, tooltips и enabled state.
+16.4 Мышь, клавиатура, drag, double-click reset и прочие утверждённые способы управления.
+16.5 Enabled/disabled/loading/progress/success/error/empty states.
+16.6 Save/restore, automation, backward compatibility.
+16.7 Controls не перекрывают клавиатуру, не ломают геометрию и не скрывают рабочие области.
+16.8 Никаких decorative/inert/fake/unbound controls.
+16.9 Для каждого control: traceability «требование → UI → backend/state → test».
+16.10 Все утверждённые дополнения и исправления controls обязательны вместе с исходными элементами.
+
+17. РЕСУРСЫ И РАЗМЕР БИБЛИОТЕКИ
+17.1 Factory Guitar Sound Library: строго 25–30 GB фактического установленного аудиоконтента.
+17.2 Считать уникальные разрешённые аудиофайлы; без пустых файлов, дубликатов, padding и искусственного re-encoding.
+17.3 Отдельно учитывать One-Shots, Loops, Multisamples/Performance Sets, factory/user split и package overhead.
+17.4 Свыше 30 GB — остановить упаковку и предложить безопасную оптимизацию; не удалять молча утверждённые материалы.
+17.5 Ниже 25 GB — продолжать законный поиск и quality-controlled acquisition; не фабриковать данные.
+17.6 Multiprocessing только при измеренном выигрыше и безопасной реализации.
+17.7 Приоритет: безопасность → realtime → качество звука → ресурсы → UX.
+
+18. QA / ACCEPTANCE
+18.1 Windows x64 Release configure/build; полный CTest; pluginval strictness 5.
+18.2 FL Studio 20: install, scan, open/close, MIDI keyboard, Piano Roll, automation, save/restore, audio device change, long playback.
+18.3 Stress: voices, cache pressure, queue overflow, streaming roots, cancellation, worker failure/recovery, processor destruction.
+18.4 Измерения cold start, preset switching, CPU, RAM и audio glitches.
+18.5 Проверка всех функций/controls на точном commit SHA.
+18.6 Интеграционные тесты sampler + MIDI + Pattern + Harmony + FX + state.
+18.7 PASS не объявлять без фактического результата; отдельно фиксировать NOT RUN, NOT VERIFIED, BLOCKED, IMPLEMENTED, TESTED, HOST-VERIFIED.
+
+19. ДОПОЛНИТЕЛЬНЫЕ АРХИТЕКТУРНЫЕ ПРАВИЛА
+19.1 Общая низкоуровневая Audio Engine infrastructure для Guitar/Bass допустима; Guitar/Bass product identity, SoundBank, presets, articulations и UI profiles раздельны. Bass Edition — отдельный будущий продукт.
+19.2 Не создавать дублирующие engines, import pipelines, SoundBanks или state systems.
+19.3 Не менять существующие APVTS IDs/semantics, MIDI behavior, sampler lifecycle или user content без безопасной миграции и тестов.
+19.4 Ясные, обратимые, неразрушающие дефекты исправлять автоматически с targeted/regression tests.
+19.5 При конфликте утверждений, неизвестных правах, необратимом действии или риске пользовательских данных — остановить только затронутую часть и задать один точный вопрос; независимую безопасную работу продолжать.
+19.6 Все утверждённые функции, controls, дополнения и исправления обязательны к полной реализации. Запись в журнале не является реализацией.
+
+ИЗВЕСТНЫЕ ПРОБЕЛЫ ПО ПРОВЕРЕННЫМ ЗАПИСЯМ/ФАЙЛАМ НА МОМЕНТ СВОДКИ
+- FX Editor в исходнике содержит восемь модулей, processor layout — семь FX slots; утверждённый объём — до 15 полноценных эффектов плюс кабинеты. Требуется инвентаризация DSP/параметров и согласованное расширение, а не пустые слоты.
+- Flanger имеет параметры/DSP path, но отдельный bypass switch не должен добавляться сверх утверждённого inventory семи bypass.
+- AUTO DISCOVER policy tooling/registry существует, но полноценный production discovery/download/curation pipeline не подтверждён; registry ранее зафиксирован пустым (assetCount=0/sourceCount=0).
+- Цель 25–30 GB не подтверждена фактическим содержимым.
+- 300 preset definitions не равны 300 playable/verified presets.
+- Pattern/SoundBank end-to-end runtime и полная host acceptance требуют проверки.
+- Для актуального HEAD нет подтверждённого полного Windows Release/CTest/pluginval/FL Studio 20 acceptance в доступных записях; старые результаты относятся только к своим SHA.
+- NEON STAGE DEFAULT и утверждённое разделение браузеров MELODY/PATTERN должны быть сверены с runtime, а не считаться готовыми только по документации.
+
+КОНЕЦ ДОКУМЕНТА
