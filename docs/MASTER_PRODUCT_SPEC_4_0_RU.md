@@ -717,3 +717,18 @@ Selects the playing style/articulation (how the guitar is played) and, as a dist
 PATTERN remains separate from MELODY and retains approved AUTO CHORDS ON/OFF behaviour. PRESET window owns guitar/source and song context; performance window owns style and rhythm. Chord/voicing, source identity, tone preset/FX, articulation and rhythm remain separate axes. Filtering may constrain compatible combinations but cannot collapse the windows or merge their state. Preserve non-destructive PREVIEW, explicit APPLY/SELECT, CANCEL rollback, context-aware navigation/search/filter/sort/favorites, keyboard visibility and all realtime/MIDI/APVTS/sampler/stable-ID invariants.
 
 **Status:** approved requirement; documentation only. No runtime implementation or tests are claimed.
+
+
+## PATTERN — ЗАФИКСИРОВАННАЯ СТРУКТУРА ДВУХ ОКОН
+
+**СТАТУС: УТВЕРЖДЕНО ПОЛЬЗОВАТЕЛЕМ. ТЕКСТ И СТРУКТУРА ЗАФИКСИРОВАНЫ БЕЗ ИЗМЕНЕНИЙ.**
+
+Два самостоятельных окна.
+Первое — выбор PRESET и музыкальной идентичности: жанр, группа, композиция, секция и соответствующие подпункты.
+Второе — стиль исполнения, артикуляция, ритмическая категория, PATTERN и вариации.
+AUTO CHORDS сохраняется как отдельная функция режима.
+Не объединять выбор источника звучания, артикуляцию и ритмический рисунок в одну категорию.
+
+**Правило приоритета:** эта формулировка является прямой утверждённой фиксацией пользователя. При реализации и дальнейшей редакции журналов сохранять её смысл и состав без переименования, упрощения, объединения окон или подмены назначений. Более поздние явно утверждённые пользователем изменения могут дополнять её, но не считаются разрешением на молчаливое изменение.
+
+**Граница статуса:** зафиксировано и утверждено как требование. Само по себе это не подтверждает реализацию интерфейса, браузеров, AUTO CHORDS или backend и не является результатом сборки/тестирования.
