@@ -1111,12 +1111,22 @@ def step_report():
             expected_binding=detail.get("parameterIds")
             if expected_binding is None and isinstance(detail.get("parameterBinding"),str):
                 expected_binding=[detail["parameterBinding"]]
+            expected_label=detail.get("label",cid.replace("_"," ").upper())
+            expected_type=detail.get("controlType",detail.get("kind","unclassified"))
+            expected_component=detail.get("component",detail.get("components"))
             if item.get("apvtsBinding")!=expected_binding:
                 errors.append(f"G2 APVTS binding mismatch for {cid}: {item.get('apvtsBinding')} != {expected_binding}")
             if item.get("runtimeStatus")!=detail.get("runtimeStatus","unverified"):
                 errors.append(f"G2 runtimeStatus mismatch for {cid}")
+            if item.get("label")!=expected_label or item.get("type")!=expected_type:
+                errors.append(f"G2 label/type metadata mismatch for {cid}")
+            if item.get("component")!=expected_component or item.get("function")!=detail.get("function"):
+                errors.append(f"G2 runtime component/function metadata mismatch for {cid}")
             if item.get("parameterDefinitions",[])!=detail.get("parameterDefinitions",[]):
                 errors.append(f"G2 parameter definition mismatch for {cid}")
+            for key in ("actionBinding","midiBinding","noteRange","availability"):
+                if item.get(key)!=detail.get(key):
+                    errors.append(f"G2 {key} metadata mismatch for {cid}")
         rectangles=[]
         for cid,box in mapped.items():
             col,row,cs,rs=(box.get(k) for k in ("col","row","colSpan","rowSpan"))
