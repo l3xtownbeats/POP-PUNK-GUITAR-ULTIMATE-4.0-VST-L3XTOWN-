@@ -2,7 +2,7 @@
 Writes staging outputs only; never mutates the runtime registry or JUCE resources.
 """
 from __future__ import annotations
-import json, math, os, zipfile, hashlib
+import json, math, os, zipfile, hashlib, re, xml.etree.ElementTree as ET
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
@@ -962,7 +962,7 @@ def step_report():
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         try:
             with Image.open(p) as im:
-                expected_mode="P" if rel in ("assets/preview.png","assets/hero.png","assets/background.png") else "RGBA"
+                expected_mode="P"
                 if im.format!="PNG" or im.mode!=expected_mode or im.size!=expected:
                     errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
@@ -978,20 +978,36 @@ def step_report():
                 webp.verify()
         except Exception as exc:
             errors.append(f"hero.webp: decode failed: {exc}")
-    for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","svg/panel_header.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
+    svg_files=["svg/texture.svg","svg/bezel.svg","svg/crest.svg","svg/panel_header.svg",
+               "assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"]
+    svg_files += [f"svg/windows/window_{name}.svg" for name in
+                  ("autochords","fx_edit","skins_gallery","import_guitar","settings",
+                   "auto_discover_setup_only","curator_setup_only","about_setup_only")]
+    for rel in svg_files:
         p=SKIN/rel
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         data=p.read_text(encoding="utf-8")
-        lower=data.lower()
-        if ("<script" in lower or "javascript:" in lower or "<animate" in lower or
-            "xlink:href" in lower or 'href="http' in lower or "href='http" in lower or
-            "url(http" in lower):
+        if re.search(r"<\s*(script|foreignObject)\b|<!DOCTYPE|<!ENTITY|\bon[a-z]+\s*=|\b(?:href|src)\s*=",data,re.I):
             errors.append(f"unsafe SVG content in {rel}")
+        try:
+            root=ET.fromstring(data)
+            if not root.tag.endswith("svg"): errors.append(f"invalid SVG root in {rel}")
+        except ET.ParseError as exc:
+            errors.append(f"invalid SVG XML in {rel}: {exc}")
 
     atlas_dir=ASSETS/"atlas"
     atlas_jsons=sorted(atlas_dir.glob("*.json")) if atlas_dir.is_dir() else []
-    if len(atlas_jsons)<15:
-        errors.append(f"sprite atlas index coverage incomplete: expected at least 15, found {len(atlas_jsons)}")
+    expected_atlases={
+        "knobs_main":351,"knobs_main_2x":351,"knobs_amp":117,"knobs_amp_2x":117,
+        "fx_tiles":28,"toggles":9,"slider_tracks":2,"slider_vertical":1,
+        "slider_thumbs":3,"pitch_mod_wheels":2,"keys_white":3,"keys_black":3,
+        "meters_led":10,"meters_columns":2,"window_chrome":6,"panel_header":1,
+        "preset_lcd":1,"setup_badge":1,"gallery_tiles":2,"tabs":3,"transport":3,
+        "icons":20,"aux_windows":8
+    }
+    actual_atlases={p.stem for p in atlas_jsons}
+    if actual_atlases!=set(expected_atlases):
+        errors.append(f"sprite atlas index set mismatch: missing={sorted(set(expected_atlases)-actual_atlases)}, extra={sorted(actual_atlases-set(expected_atlases))}")
     atlas_frames=0
     for index_path in atlas_jsons:
         try:
@@ -1005,8 +1021,16 @@ def step_report():
             with Image.open(image_path) as atlas_image:
                 if atlas_image.format!="PNG" or atlas_image.mode!="P":
                     errors.append(f"{image_path.name}: expected indexed PNG-8, got {atlas_image.format}/{atlas_image.mode}")
+                expected_count=expected_atlases.get(index_path.stem)
                 if idx.get("frameCount")!=len(idx.get("frames",[])):
                     errors.append(f"{index_path.name}: frameCount mismatch")
+                if expected_count is not None and idx.get("frameCount")!=expected_count:
+                    errors.append(f"{index_path.name}: expected {expected_count} frames, got {idx.get('frameCount')}")
+                names=[frame.get("name") for frame in idx.get("frames",[])]
+                if len(names)!=len(set(names)):
+                    errors.append(f"{index_path.name}: duplicate frame names")
+                if idx.get("cellWidth") is None or idx.get("cellHeight") is None:
+                    errors.append(f"{index_path.name}: missing frame size metadata")
                 for frame in idx.get("frames",[]):
                     x,y,w,h=(frame.get(k) for k in ("x","y","w","h"))
                     if not all(isinstance(v,int) and not isinstance(v,bool) for v in (x,y,w,h)):
@@ -1015,11 +1039,14 @@ def step_report():
                     if x<0 or y<0 or w<1 or h<1 or x+w>atlas_image.width or y+h>atlas_image.height:
                         errors.append(f"{index_path.name}: frame out of atlas bounds")
                         break
+                    if w!=idx.get("cellWidth") or h!=idx.get("cellHeight"):
+                        errors.append(f"{index_path.name}: frame dimensions differ from indexed cell size")
+                        break
                 atlas_frames+=idx.get("frameCount",0)
         except Exception as exc:
             errors.append(f"{index_path.name}: atlas validation failed: {exc}")
-    if atlas_frames<500:
-        errors.append(f"sprite frame contract incomplete: expected >=500 frames, found {atlas_frames}")
+    if atlas_frames!=1044:
+        errors.append(f"sprite frame contract mismatch: expected 1044 frames, found {atlas_frames}")
     for contact_name, expected_size in (("NEON_STAGE_ATLAS_CONTACT_SHEET.png",None),
                                          ("NEON_STAGE_REFERENCE_CONTACT_SHEET.png",(1500,640))):
         contact_path=ROOT/"dist"/contact_name
@@ -1077,6 +1104,19 @@ def step_report():
                 "G2 control_map.json must contain the exact 28-control inventory "
                 f"(missing={sorted(expected_ids-set(mapped))}, extra={sorted(set(mapped)-expected_ids)})"
             )
+        inventory=schema.get("x-ppgu-contract",{}).get("runtimeControlInventory",{})
+        additional=schema.get("x-ppgu-contract",{}).get("additionalCurrentControls",{})
+        for cid,item in mapped.items():
+            detail=inventory.get(cid,additional.get(cid,{}))
+            expected_binding=detail.get("parameterIds")
+            if expected_binding is None and isinstance(detail.get("parameterBinding"),str):
+                expected_binding=[detail["parameterBinding"]]
+            if item.get("apvtsBinding")!=expected_binding:
+                errors.append(f"G2 APVTS binding mismatch for {cid}: {item.get('apvtsBinding')} != {expected_binding}")
+            if item.get("runtimeStatus")!=detail.get("runtimeStatus","unverified"):
+                errors.append(f"G2 runtimeStatus mismatch for {cid}")
+            if item.get("parameterDefinitions",[])!=detail.get("parameterDefinitions",[]):
+                errors.append(f"G2 parameter definition mismatch for {cid}")
         rectangles=[]
         for cid,box in mapped.items():
             col,row,cs,rs=(box.get(k) for k in ("col","row","colSpan","rowSpan"))
@@ -1094,7 +1134,7 @@ def step_report():
     result={"project":"PPGU NEON STAGE","skin":"NEON STAGE DEFAULT SKIN-1","status":"PASS" if not errors else "FAIL",
             "checks":{"palette_tokens":len(TOKENS),"required_controls":28,"control_map_controls":len(control_data.get("controls",{})) if control_map_path.is_file() else 0,"png_assets":len(pngs),
                       "atlas_indexes":len(atlas_jsons),"atlas_frames":atlas_frames,
-                      "svg_assets":6,"skin_registry_modified":False,"runtime_tests_run":False},
+                      "svg_assets":len(svg_files),"skin_registry_modified":False,"runtime_tests_run":False},
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
