@@ -1,0 +1,42 @@
+name: Skin Registration REV ULTRA 1.3 Contract
+
+on:
+  push:
+    branches:
+      - work/skin-registration-rev-ultra-1-3
+  pull_request:
+    branches:
+      - feature/neon-stage-build-engine
+      - work/neon-stage-reference-preview-fix
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  registrar-contract:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit-test registrar guards
+        shell: pwsh
+        run: python -m unittest discover -s tests -p "test_register_skin_pack.py" -v
+      - name: Validate canonical merged skin pack (G1-G4)
+        shell: pwsh
+        run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+      - name: Validate complete skin registry and manifests
+        shell: pwsh
+        run: python tests/ValidateSkinManifests.py
+      - name: Confirm default skin and current registration count
+        shell: pwsh
+        run: |
+          $registry = Get-Content SKIN/theme_manifest.json -Raw | ConvertFrom-Json
+          if ($registry.totalSkins -ne 102) { throw "Expected current registry total 102; found $($registry.totalSkins)" }
+          if ($registry.defaultSkin -ne "skin-053") { throw "NEON STAGE default pointer changed unexpectedly" }
+          Write-Host "PASS: 102 registered themes; defaultSkin remains skin-053."

@@ -3146,3 +3146,103 @@ SVG artwork commits: `1108cbc27764c6465f028dd9543dca619e745ae1`, `ca7e3aba844948
 
 Оба шага должны завершиться с кодом 0; ошибки не подавляются и не ослабляют пороги. Это изменение только CI/QA, не runtime. Результат для нового commit ожидается; до успешного Actions run текущий G1–G4 статус остаётся STATIC PREFLIGHT ONLY.
 
+============================================================================== 
+2026-11-15 — SKIN-REGISTRATION-REV-ULTRA-1.3
+==============================================================================
+**Branch:** `work/skin-registration-rev-ultra-1-3`
+**Scope:** tooling/tests/CI only. No runtime theme files, registry entries,
+default skin pointer, JUCE resources, DSP, APVTS, MIDI or audio callback changed.
+
+**Repository audit findings:**
+- The canonical registry is `SKIN/theme_manifest.json`, uses `themes[]`,
+  contains 102 entries and declares `defaultSkin: skin-053`.
+- Skin_053 is already registered as NEON STAGE; Skin_054 and Skin_055 are
+  already registered as Carbon Studio 02 and Carbon Studio 03.
+- The prior standalone registration snippet is incompatible with the live
+  registry contract (`skins[]` / `folder` assumptions) and must not be run.
+- The runtime `theme.schema.json` is not the pack contract and is not modified.
+  G1-G4 acceptance is delegated to the existing
+  `tools/validate_skin_pack.py` validator.
+
+**Implemented:**
+- Added `tools/register_skin_pack.py` REV ULTRA 1.3.
+- Canonical `themes[]` and `totalSkins` are validated before any writes.
+- Import accepts only `GENERATED_NOT_MERGED` packs that start exactly at
+  current total + 1; no renumbering or overwrite is permitted.
+- Registry IDs, indices, paths, default pointer and pack range are checked.
+- Dry-run is the default; filesystem writes require explicit `--apply`.
+- Candidate folders are copied to a staging area and passed through the existing
+  G1-G4 validator before promotion.
+- The exact staged bytes that passed G1-G4 are promoted; source folders are not
+  recopied after validation.
+- Multi-path promotion has rollback for promoted folders and exact original
+  registry/pack-manifest bytes. No guessed schema maximum is written.
+- Added `tests/test_register_skin_pack.py` with registry/pack guard unit tests.
+- Added `.github/workflows/skin-registration-contract.yml` for Windows Python
+  3.12 unit tests, existing G1-G4 pack validation, full registry validation and
+  explicit confirmation of 102 entries / NEON STAGE default.
+
+**Current repository state:**
+- Existing 102-theme registry remains unchanged.
+- `defaultSkin` remains `skin-053`.
+- No new theme pack has been imported.
+- No asset folder has been overwritten or renumbered.
+
+**Verification status at commit time:**
+- Code and test files committed to the dedicated work branch.
+- GitHub Actions for the new workflow has not yet been observed; unit tests,
+  G1-G4 and registry checks are NOT declared PASS until the workflow completes.
+- No VST3 build, CTest, pluginval or FL Studio 20 host test is part of this
+  registrar-only workflow.
+
+**Status:** REV ULTRA 1.3 IMPLEMENTED / CI PENDING / NO REGISTRY MUTATION.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — SKIN-REGISTRATION-REV-ULTRA-1.3 CI FAILURE TRIAGE
+==============================================================================
+**Run:** 43634499893  
+**PR merge commit tested:** 4b4ee4526c73291c92cb6728515e7bf884a734e2  
+**Result:** FAILED in the registrar unit-test step; subsequent validation steps were skipped.
+
+**Exact failure:** 9 of 10 registrar tests passed. The count-mismatch test expected
+the phrase "does not match", while the validator emitted
+"totalSkins=3, but themes contains 2 entries". The guard itself correctly
+rejected the invalid registry; the failure was a test/diagnostic wording mismatch,
+not a registry mutation or a failed runtime skin validation.
+
+**Correction:** Align the diagnostic with the test's stable contract:
+"totalSkins=<n> does not match themes length <n>". No registry, theme asset,
+default pointer, runtime schema or VST3 code is changed.
+
+**Next verification:** Push this correction and require a fresh Windows Actions
+run to pass all registrar tests, merged-pack G1-G4 and complete skin-manifest
+validation. No PASS is claimed until that run completes.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — SKIN-REGISTRATION-REV-ULTRA-1.3 WINDOWS CI PASS
+==============================================================================
+**Corrected commit:** ce67795effb177bcb926502bd59bf57193f1a005  
+**Workflow:** Skin Registration REV ULTRA 1.3 Contract  
+**Run:** 43634657485  
+**Conclusion:** SUCCESS (Windows latest, Python 3.12).
+
+Passed steps:
+1. Registrar guard unit tests — 10 tests, all PASS.
+2. Existing merged skin-pack G1-G4 validation — PASS.
+3. Complete skin registry/theme manifest validation — PASS.
+4. Explicit invariant check — 102 themes and defaultSkin remains skin-053 — PASS.
+
+The previous failure (run 43634499893) was caused by a mismatch between
+the count-mismatch error wording and its test assertion. The diagnostic was
+aligned, and the fresh run passed all steps.
+
+**Scope remains tooling/QA only.** No new skin pack was generated or imported;
+the registry remains at 102 entries. NEON STAGE remains the default.
+No VST3 build, CTest, pluginval or FL Studio 20 host test is implied by this run.
+
+**Status:** REGISTRAR CONTRACT + CURRENT SKIN REGISTRY CI VERIFIED / NEW PACK NOT YET GENERATED.
+==============================================================================
