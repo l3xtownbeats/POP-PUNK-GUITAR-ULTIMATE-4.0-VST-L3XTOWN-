@@ -10,7 +10,7 @@ The musical experience is inspired by the workflow and playability of Session Gu
 
 ## Required release scope
 
-1. **300 factory presets**: 150 Melody and 150 Pattern presets, organized by style, artist-inspired category, gain/amp character, and use case. Include the agreed pop-punk reference palette: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, All-American Rejects, MGK, and later Avril Lavigne-era pop-punk. Artist names describe tonal inspiration, not endorsements or copied recordings.
+1. **At least 500 unique factory presets across MELODY + PATTERN (target approximately 600)**, organized by style, artist-inspired category, gain/amp character, and use case. Include the agreed pop-punk reference palette: Blink-182, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, Angels & Airwaves, All-American Rejects, MGK, and later Avril Lavigne-era pop-punk. Artist names describe tonal inspiration, not endorsements or copied recordings.
 2. **Melody mode**: each MIDI key plays the corresponding sampled guitar note; correct pitch mapping, velocity layers, round-robin where available, palm mute/open articulations, release behavior, bounded polyphony, voice stealing, and acoustic/electric instrument profiles.
 3. **Pattern mode**: playable guitar performances following the player's chord changes, with Open Strum, Tight Palm Mute, Dead/Mute Percussion, Power Riff, Arpeggio/Picking, and Alternate Down-Up families. Use real performance-event/sample metadata. Do not fake this with a generic chord pad or blindly transposed MIDI phrase.
 4. **Fast preset and sound loading**: scan/index libraries off the audio thread; lazy-load/prefetch sample data; cache recently used material; show loading/coverage status; keep audio callback allocation-free and free of file I/O/locks; release unused bank memory safely. Preset browsing must remain responsive while audio is playing.
@@ -87,3 +87,12 @@ The complete Russian-language product requirements, including all previously agr
 ## Canonical execution roadmap
 
 The consolidated approved execution order, all user-approved additions, cross-module dependencies, current verified CI status and release gates are maintained in [`PPGU_MASTER_DEVELOPMENT_PLAN_RU.md`](./PPGU_MASTER_DEVELOPMENT_PLAN_RU.md). Use it together with the detailed product specification; it does not convert documented scope into implemented status.
+
+
+## Latest approved preset scope expansion
+
+The older 300-entry target is superseded as the minimum. Require at least 500 unique MELODY + PATTERN factory presets total, target approximately 600. Travis Barker 82 is a separate category of 82 unique complete presets, separately counted and never duplicated/double-counted. The legacy 300-entry catalogue remains to be audited; catalog records are not proof of playable, validated presets.
+
+Add Angels & Airwaves album-era families for *We Don't Need to Whisper* (2006), *I-Empire* (2007), and *Lifeforms* (2021), plus Tom DeLonge technique presets in both MELODY and PATTERN. Research notes, confirmed facts vs interpretations, tone concepts, legal limits and tests are in [PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md](./PPGU_ANGELS_AIRWAVES_TOM_DELONGE_PRESET_RESEARCH_RU.md).
+
+Research public interviews, gear/tone breakdowns and free preset examples. Include third-party preset files/IRs/samples only when their actual license permits commercial redistribution inside the plugin. Otherwise build an independent tone recipe. Never copy protected riffs, stems, proprietary presets or samples.
