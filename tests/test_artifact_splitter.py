@@ -53,5 +53,29 @@ class SplitArtifactTests(unittest.TestCase):
                 splitter.split_archive(source, root / "parts", "PPGU_EMPTY", 4)
 
 
+    def test_split_uses_bounded_memory_chunks(self):
+        source = MODULE_PATH.read_text(encoding="utf-8")
+        self.assertIn("COPY_CHUNK_BYTES = 8 * 1024 * 1024", source)
+        self.assertIn("src.read(min(COPY_CHUNK_BYTES, part_size - part_bytes))", source)
+        self.assertNotIn("chunk = src.read(part_size)", source)
+
+    def test_verification_rejects_manifest_path_traversal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.json"
+            manifest.write_text(
+                json.dumps({
+                    "schema": "ppgu.split-artifact.v1",
+                    "part_count": 1,
+                    "parts": [{"index": 1, "name": "../outside.part-0001", "size_bytes": 1, "sha256": "0" * 64}],
+                    "total_size_bytes": 1,
+                    "archive_sha256": "0" * 64,
+                }),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ValueError):
+                splitter.verify_manifest(manifest, root)
+
+
 if __name__ == "__main__":
     unittest.main()
