@@ -376,3 +376,17 @@ Required behavior:
 - Validation must include automated full-range MIDI note sweeps, velocity sweeps, note-on/note-off and overlapping-note tests, plus rendered audio checks for silence, wrong pitch, mapping gaps, stuck notes, and abrupt source changes. Test actual DAW/VST3 runtime when available.
 
 This is a core instrument behavior, not an optional feature. It complements compatible-source fallback and efficient multi-source tone assembly; it does not permit arbitrary sample substitution or relax licensing, source integrity, or resource-budget requirements.
+
+## EXPLICIT ACCEPTANCE RULE: DISTINCT MIDI PITCH PER KEY (2026-11-14)
+
+User explicitly confirms this as an approved, mandatory acceptance requirement for POP PUNK GUITAR ULTIMATE:
+
+- Every MIDI key in the supported instrument range must produce its own corresponding musical pitch. Pressing different keys must not trigger the same fixed note or an identical unpitched one-shot.
+- The MIDI note number must be used to select the correct mapped sample/root key and/or calculate the correct pitch transposition. Sample playback must preserve the requested note pitch across the keyboard.
+- The rule applies identically to an external MIDI keyboard/controller, the DAW piano roll, and any on-screen/mouse-playable keyboard.
+- The instrument must support genuine melodic and chordal playing, overlapping notes, correct note-on/note-off, and polyphony—not merely trigger a single sample or prerecorded riff for every key.
+- Where the source library does not contain a recording for every semitone, use musically valid root-key mapping and pitch shifting within a quality-approved range, or another compatible mapped source/layer. Never silently fill the entire keyboard with one fixed-pitch sample. Do not stretch a sample beyond acceptable quality or across incompatible ranges.
+- Build automated tests that send distinct MIDI note numbers across the supported range and verify the rendered fundamental pitch for each note, including octave consistency, semitone intervals, velocity variations, overlapping notes, and all three input paths where testable.
+- Acceptance must fail if multiple different MIDI keys render the same fixed pitch, if keys are silent unexpectedly, or if pitch mapping is wrong. A preset is not complete until these tests and actual audio/runtime checks pass.
+
+This rule is part of the approved standard VSTi preset-load/full-keyboard behavior and is binding for all factory and user presets. It does not claim implementation or test completion; implementation and validation status must be reported separately.
