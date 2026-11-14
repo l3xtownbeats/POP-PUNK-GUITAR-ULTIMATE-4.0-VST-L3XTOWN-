@@ -5,7 +5,7 @@
   "name": "NEON STAGE",
   "family": "neon_basement",
   "layout": "STUDIO_CONSOLE",
-  "description": "NEON STAGE is the single unified product identity: main theme, skin, visual design system and complete interface shell. All UI surfaces and the plugin shell are NEON STAGE. No separate SIGNAL FORGE interface identity exists.",
+  "description": "NEON STAGE is the single unified product identity: main theme, skin, graphic user interface, visual design system and complete plugin shell. Every interface surface belongs to NEON STAGE.",
   "palette": {
     "window_bg": "#050811",
     "panel": "#091321",
@@ -342,12 +342,12 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "USER_APPROVED_SINGLE_PRODUCT_IDENTITY_NEON_STAGE",
+  "designStatus": "USER_APPROVED_SINGLE_UNIFIED_IDENTITY_NEON_STAGE",
   "notes": [
     "All 27 mandatory REV 14 control IDs are mapped.",
     "PUNK GROUP, LED activity, Auto Discover, Curator, Settings and About are contract placeholders until their runtime functionality is implemented; never present them as active working features.",
     "Control coordinates are design metadata. Existing JUCE bounds remain authoritative until a dedicated layout engine consumes this map.",
     "ThemeManager and registry-driven editor support are committed; CI validation is pending. Control coordinates remain metadata and do not reflow the live JUCE editor.",
-    "User decision (2026-11-15): the one and only common name for the main theme, skin, visual identity and complete interface shell is NEON STAGE. Do not use SIGNAL FORGE as a separate interface, shell, brand or identity."
+    "User decision (2026-11-15): NEON STAGE is the one and only name for the main theme, skin, graphic user interface and complete plugin shell."
   ]
 }
