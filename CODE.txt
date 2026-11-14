@@ -424,3 +424,16 @@ First approved file = authoritative layout/appearance/control inventory (preserv
 - Visual authority: first mockup controls layout and inventory; second AutoChords reference supplies palette only; third FX EDIT + AutoChords reference remains separate. Skins are visual-only.
 - No audio-thread I/O/allocation/blocking/decoding/logging/GUI calls. No APVTS/DSP/MIDI/sampler/scheduler/preset-data changes to implement browser UI.
 - Documentation-only indexing. No production source/tests/assets changed; no build, CTest, pluginval or FL Studio 20 pass claimed.
+
+
+## 2026-11-14 — TX-UI-BROWSER-SEPARATION-006 higher-priority guard
+
+- Newer approved INFO entry supersedes any reading of the general hierarchy as one combined browser.
+- Three independent browsers: PRESET BROWSER (Tone/Factory/User Presets), STYLE browser (playing style/articulation), PATTERN browser (rhythm patterns). Separate catalogs, selection, preview and transaction state; do not merge.
+- STYLE model path: GENRE → GROUP/ARTIST → SONG SELECTION → SONG SECTION → PLAYING STYLE / ARTICULATION. GROUP/ARTIST is reserved; visible named artist/group/product catalog is blocked by MASTER PROMPT REV 17.0 §11/§15 until formal MAJOR revision.
+- PATTERN categories: DOWNSTROKES, DOWN/UP, PALM MUTE, POWER CHORDS, ALTERNATE PICKING, CUSTOM PATTERNS. Exactly 8 Pattern Slots per Song Section.
+- STYLE/ARTICULATION controls how guitar is played; PATTERN controls rhythm/timing/gate/velocity/accent. Chord/voicing, source, tone/FX, style/articulation and rhythm pattern remain independent axes. MELODY stays one key = one note.
+- PREVIEW is isolated; APPLY/SELECT commits; CANCEL rolls back. Host-synchronized pattern transitions must avoid stuck notes, duplicate triggers, timing jumps and abrupt cuts. Unsupported backend = disabled truthful BACKEND PENDING/UNAVAILABLE.
+- Preserve MIDI keyboard visibility/hit-testing; progressive disclosure and scoped search/filter/favorites/sort/prev/next.
+- Preserve MASTER PROMPT REV 17.0 FINAL, I1–I8, R01–R34; runtime default skin ID/name remains default-ppgu / DEFAULT POP PUNK GUITAR ULTIMATE SKIN. NEON STAGE is not default without formal MAJOR revision. Keep one S6.5 pipeline, stable IDs, factory extension-only/read-only, user data separation, approved file extensions and realtime/licensing gates.
+- Requirements/index only. No production implementation or host/CI PASS claimed.
