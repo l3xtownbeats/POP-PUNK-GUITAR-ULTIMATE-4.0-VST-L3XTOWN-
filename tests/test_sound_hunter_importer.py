@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused regression tests for Sound Hunter import path and per-run size cap."""
+"""Focused regression tests for Sound Hunter import path and aggregate 40 GB library ceiling."""
 from pathlib import Path
 import importlib.util
 import unittest
@@ -29,12 +29,12 @@ class SoundHunterRegressionTests(unittest.TestCase):
                 Path("/tmp/run/source"), "../outside/sample.wav"
             )
 
-    def test_aggregate_library_ceiling_is_40_gib(self):
+    def test_aggregate_library_ceiling_is_40_gb(self):
         limit = 40_000_000_000
         self.assertTrue(sound_hunter.within_library_limit(0, 39_000_000_000, limit))
-        self.assertTrue(sound_hunter.within_library_limit(39 * 1024**3, 1_000_000_000, limit))
+        self.assertTrue(sound_hunter.within_library_limit(39_000_000_000, 1_000_000_000, limit))
         self.assertFalse(sound_hunter.within_library_limit(39 * 1024**3, 2_000_000_000, limit))
-        self.assertFalse(sound_hunter.within_library_limit(40 * 1024**3, 1, limit))
+        self.assertFalse(sound_hunter.within_library_limit(40_000_000_000, 1, limit))
 
     def test_existing_audio_bytes_counts_audio_only(self):
         import tempfile
