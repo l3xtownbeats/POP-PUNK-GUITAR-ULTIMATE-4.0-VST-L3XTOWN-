@@ -125,5 +125,5 @@
       "notes": "Recorded archtop guitar multisample; catalogue marks CC0-1.0."
     }
   ],
-  "policy_notes": "No artificial aggregate or per-run size ceiling for Samples. Retain all unique, verified and licensed assets. If GitHub artifact or transfer limits are encountered, split transport packages into checksummed parts and reconstruct/verify them; transport chunking is not a content-size cap."
+  "policy_notes": "REV.18: Samples has no artificial content-size cap or per-run cap. Keep every unique, verified and legally distributable asset. GitHub Actions/artifact/transfer limits are transport constraints only; split large packages into ordered SHA-256-verified parts with a reconstruction manifest, then restore and verify the complete library. Never delete or overwrite existing samples."
 }
