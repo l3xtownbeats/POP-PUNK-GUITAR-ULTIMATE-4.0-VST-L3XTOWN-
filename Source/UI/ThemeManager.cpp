@@ -252,24 +252,14 @@ namespace
         }
 
         juce::var assets;
-        if (!hasObject(root, "assets", assets))
-        {
-            error = "Skin Studio asset paths are incomplete";
-            return false;
-        }
-
-        const auto previewPath = assets.getProperty("preview", "").toString();
-        const auto heroPath = assets.getProperty("hero", "").toString();
-        const bool legacyAssetPaths = previewPath == "assets/preview.png"
-                                   && heroPath == "assets/hero.png";
-        const bool rev18AssetPaths = previewPath == "assets/preview/preview.png"
-                                  && heroPath == "assets/hero/hero.png";
-        if ((!legacyAssetPaths && !rev18AssetPaths)
+        if (!hasObject(root, "assets", assets)
+            || assets.getProperty("preview", "").toString() != "assets/preview.png"
+            || assets.getProperty("hero", "").toString() != "assets/hero.png"
             || !hasStringProperty(assets, "texture")
             || !hasStringProperty(assets, "bezel")
             || !hasStringProperty(assets, "crest"))
         {
-            error = "Skin Studio asset paths are incomplete or not canonical";
+            error = "Skin Studio asset paths are incomplete";
             return false;
         }
 
