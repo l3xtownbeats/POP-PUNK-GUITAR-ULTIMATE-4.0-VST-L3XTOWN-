@@ -524,3 +524,23 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 **Файлы:** все 171 файл дерева (вычистка разделителей/отступов), SKIN/Skin_001..052/assets/bg.png (перегенерированы реальные PNG), Resources/TestData/TestProbe.wav (реальный PCM WAV), Info.txt, CODE.txt, README.md.
 **Тесты:** 7 валидаторов G0-G6 — прогон на восстановленном дереве (результаты в Info.txt 6.9).
 **Статус:** IMPLEMENTED / VALIDATION PENDING.
+
+## 2026-11-14 — TX-UI-PRESET-GUARD-004 documentation consolidation
+
+**Type:** documentation-only requirements consolidation; no production source change.  
+**Base main HEAD:** `cab7dea6609fd02d41725f0c0a643a5860ae146a`.  
+**Canonical requirements record:** `Info.txt` entry dated 2026-11-14; detailed product requirements appended to `docs/MASTER_PRODUCT_SPEC_4_0_RU.md`.
+
+**Consolidated scope:**
+- Preset browser hierarchy: GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN.
+- Sections: Intro, Verse, Pre-Chorus, Chorus, Bridge, Outro; eight Pattern Slots per section.
+- Browser operations: BROWSER, FAVORITES, CATEGORIES, SEARCH, FILTER, SORT, PREV/NEXT, FAVORITE, PRESET NAME/CATEGORY, PREVIEW, SELECT. PREV/NEXT preserve the active search/filter context.
+- Preview is non-destructive; Apply commits; Cancel rolls back. Preview must not change the active preset/project or persistent DAW state.
+- Factory catalog is extension-only; stable IDs and existing entries are immutable; import conflicts require explicit handling; no silent overwrite.
+- Latest formats: .ppgm MELODY, .ppgp PATTERN, .ppgbank bank. Eight QA profiles are coverage material, not eight automatic factory presets.
+- Latest visual guard: SIGNAL FORGE / NEON, default NEON STAGE; first reference file = layout/appearance/placement, second = palette; skins change graphics only and preserve exact control geometry, placement, bindings, functions and audio.
+- No decorative/fake controls; no engine-function deletion or changes to APVTS IDs/semantics, DSP, MIDI or sampler.
+- PATTERN/AutoChords section/slot workflow, legacy patternSlot compatibility, host-synced transitions, recorded-articulation availability and AutoChords keyboard non-overlap are preserved as requirements.
+
+**Validation status:** DOCUMENTATION CONSOLIDATED ONLY. No source files changed; no build, CTest, pluginval, package or FL Studio 20 acceptance is claimed by this entry. Implementation status remains whatever the exact source/CI evidence establishes.
+
