@@ -183,7 +183,8 @@ def main():
                     digest=hashlib.sha256(data).hexdigest()
                     if digest in seen: continue
                     if not within_library_limit(library_bytes, source_size, limit):
-                        print(f"40 GiB LIBRARY CEILING reached at {sid}; remaining files are not imported.")
+                        print(f"40 GB LIBRARY CEILING reached at {sid}; remaining files are not imported.")
+                        capacity_reached=True
                         break
                     target=source_dir.joinpath(*rel.parts[1:])
                     target.parent.mkdir(parents=True,exist_ok=True)
@@ -212,7 +213,8 @@ def main():
                             data=rz.read(name); digest=hashlib.sha256(data).hexdigest()
                             if digest in seen: continue
                             if not within_library_limit(library_bytes, len(data), limit):
-                                print(f"40 GiB LIBRARY CEILING reached in release asset {asset_name}; remaining files are not imported.")
+                                print(f"40 GB LIBRARY CEILING reached in release asset {asset_name}; remaining files are not imported.")
+                                capacity_reached=True
                                 break
                             target=release_asset_target(source_dir, name)
                             target.parent.mkdir(parents=True,exist_ok=True)
