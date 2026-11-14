@@ -674,7 +674,7 @@ def render_reference_art(size, path):
     )
     path.parent.mkdir(parents=True, exist_ok=True)
     # REV ULTRA requires indexed 8-bit PNG assets (not RGBA PNGs).
-    indexed = canvas.convert("RGB").quantize(colors=256, method=Image.Quantize.FASTOCTREE)
+    indexed = canvas.convert("RGB").quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
     indexed.save(path, "PNG", optimize=True)
 
 
@@ -752,9 +752,13 @@ def step_package():
     temp_path=dist/(zip_path.name + ".tmp")
     try:
         with zipfile.ZipFile(temp_path,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
-            for p in OUT.rglob("*"):
+            for p in sorted(OUT.rglob("*")):
                 if p.is_file():
-                    z.write(p,p.relative_to(OUT).as_posix())
+                    info=zipfile.ZipInfo(p.relative_to(OUT).as_posix(),date_time=(2020,1,1,0,0,0))
+                    info.compress_type=zipfile.ZIP_DEFLATED
+                    info.external_attr=0o100644 << 16
+                    info.create_system=3
+                    z.writestr(info,p.read_bytes(),compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
         with zipfile.ZipFile(temp_path,"r") as check:
             bad_member=check.testzip()
             if bad_member is not None:
