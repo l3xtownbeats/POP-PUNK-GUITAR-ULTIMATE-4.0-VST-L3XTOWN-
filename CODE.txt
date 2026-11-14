@@ -578,3 +578,16 @@ Static integration discrepancies found: CMake references missing Source/Engine/*
 Important: static path audit only; no Windows configure/build/CTest/pluginval was run. No actual build failure is asserted. Do not move/rename duplicate code before API/namespace/APVTS/MIDI/lifecycle/test/history comparison. Production implementation and test status remain unchanged.
 
 Next: canonical source graph map → CMake/JUCE provisioning reconciliation → test path reconciliation → end-to-end processor/sampler/pattern/chord/FX integration tests → exact-SHA Windows Release/CTest/pluginval/FL Studio 20 validation.
+
+
+## 2026-11-14 — SOUND LIBRARY SCOPE + AUTONOMOUS DEFECT REMEDIATION POLICY (APPROVED)
+
+- New canonical requirements: `docs/PPGU_GUITAR_SOUND_LIBRARY_MASTER_PLAN_RU.md`.
+- Scope: unlimited guitar One-Shots, Sample Loops, multisamples/performance sets, SoundBank assets and all MELODY/PATTERN/browser preset/style/articulation/technique/rhythm/variation categories.
+- Entity separation: One-Shot ≠ Loop ≠ Multisample ≠ MIDI Pattern ≠ Preset. Electric/acoustic and factory/user assets stay correctly typed and separated.
+- No arbitrary global or per-category caps. Stable IDs, metadata manifests, lazy loading, bounded cache, background decoding, exact hashes, source/license evidence and quality/mapping validators required.
+- Factory bundling requires explicit redistribution rights. Local user import of commercial libraries is not prohibited solely because factory redistribution is not allowed.
+- User approved automatic detection and repair during each development item for clear, reversible, non-breaking defects, followed by targeted/regression tests and evidence logging in INFO/CODE. No repetitive per-defect notifications; report at milestones or on request.
+- Autonomy stops only for decisions that alter approved behavior/contracts, conflicting approvals, uncertain rights/provenance, irreversible actions or user-data risk. Pause affected scope, ask one precise decision; continue independent safe work. Never fake PASS; unrun tests are NOT RUN.
+- Baseline registry audit: assets/sound_hunter/registry.json has assetCount=0 and sourceCount=0. This is a bootstrap marker; no populated/FACTORY-READY library is claimed.
+- Documentation only in this commit; no audio assets or production code added. Status: APPROVED / DOCUMENTED / VERIFIED after refetch; not IMPLEMENTED / TESTED / FACTORY-READY.
