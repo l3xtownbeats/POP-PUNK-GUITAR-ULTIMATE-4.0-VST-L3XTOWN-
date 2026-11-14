@@ -729,3 +729,13 @@ Superseded/limited: old global PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL
 **Behavior:** preview must not commit or mutate active preset/project; PREV/NEXT respects active browser context; real browser actions connect to preset manager and sound engine; mouse and keyboard support; Curator remains separate.
 **Open questions deliberately not invented:** sort fields/ranking, exact filter set, genre/artist taxonomy, auto-load and double-click semantics, preview duration/waveform.
 **Status:** REQUIREMENTS RECORDED / IMPLEMENTATION AUDIT REQUIRED / NO PRODUCTION SOURCE CHANGE.
+
+
+## 2026-11-14 — TX-UI-PRESET-GUARD-004 — UI fidelity / preset preservation guard
+- Утверждённый mockup — максимально точный one-to-one reference; все journal-approved controls должны быть видимыми и рабочими. Неспецифицированные mockup-only функции можно убрать/заменить только на уровне UI.
+- Запрет: удалять engine capabilities, менять APVTS IDs/semantics, DSP/MIDI/sampler behavior, добавлять fake controls. Контракт распространяется на пять утверждённых skin/UI-вариантов; существующие registry IDs/legacy compatibility сохраняются.
+- Reference roles: первый файл задаёт layout/appearance, второй — color palette. SKINS меняет только графику/палитру, не controls, dimensions, coordinates, layout, bindings или звук. Утверждённая оболочка загружается автоматически; не вводить обязательный theme-selection gate.
+- Preset catalog is expansion-only. Не удалять/заменять существующие presets. Portable files: MELODY `.ppgm`, PATTERN `.ppgp`, banks `.ppgbank`; imports must not silently overwrite IDs/content.
+- Восемь профилей — reference/QA material для сверки существующих слотов, не автоматические восемь новых factory presets. Current playMode range remains 0..1.
+- Continue from existing REV.17 modules; no parallel/replacement engines. Mandatory cycle: CHECK → ANALYZE → FIX → RE-ANALYZE → RESULT. CI/build PASS is exact-SHA only; CTest/pluginval/package/FL Studio 20 are separate gates.
+- **Status:** requirements/constraints index only; source code unchanged; no implementation status promoted.
