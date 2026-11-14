@@ -56,12 +56,12 @@ echo [6/8] Draft theme and staging manifest
 python 06_manifest.py
 if errorlevel 1 goto :fail
 
-echo [7/8] ZIP and JUCE resource staging
-python 07_package.py
+echo [7/8] Final structural report
+python 08_report.py
 if errorlevel 1 goto :fail
 
-echo [8/8] Final structural report
-python 08_report.py
+echo [8/8] ZIP and JUCE resource staging
+python 07_package.py
 if errorlevel 1 goto :fail
 
 echo.
