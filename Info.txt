@@ -3466,3 +3466,29 @@ REV ULTRA 3.0 задаёт обязательный производственн
 
 **Статус:** STAGING PACKAGE GENERATED / G1–G4 PASS / DETERMINISM PASS на SHA `586f174ae64098cfd61f9fa9e1bda756f19718f7` / USER VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
 ================================================================================
+
+================================================================================
+2026-11-15 — NEON STAGE hero correction and refreshed REV ULTRA 3.0 staging artifact
+================================================================================
+
+**Проверенный SHA:** `963db4dcfde23b69cfa895d31d9ca0e2517a4783`
+**Skin workflow:** run `43639369907` — **SUCCESS** на точном SHA.
+**Artifact ID:** `14131596932` (`neon-stage-default-skin-1-staging`).
+**Artifact SHA-256:** `57253f6b48bade67fa5d4d85ab7a7b43e6845912e292f841e036b0741971efad`.
+**Внутренний staging ZIP SHA-256:** `e1ea5ed23c9537713c904c5beb30a4facd24dbeb9219a602536c730241a1ef4e`.
+**Состав:** 78 файлов; 23 atlas index / 1,044 frames / 14 SVG / 28 controls. `SELF_CHECK.txt` подтверждает G1–G4 PASS и DETERMINISM PASS.
+
+### Исправление hero
+- `hero.png` теперь строится из отдельного banner crop утверждённого макета 01: электрогитара, корона и PPGU lettering.
+- Удалён ошибочный вариант, в котором весь screenshot главного окна уменьшался в hero-слот.
+- Размер hero PNG/WebP остаётся 800×450; preview.png остаётся отдельной миниатюрой полного главного окна.
+- Фон главного окна остаётся отдельным token-derived background.png.
+
+### Важное обновление по VST3 / CTest
+- Предыдущий VST3 run `43638467897`: Windows Release VST3 build успешно собрался, но CTest дал 11/12; `ppgu_theme_contracts` проверял старые palette names и отвергал legacy Skin_054..Skin_102.
+- Исправлен ThemeManager: Skin_052/053 читают новый 21-token NEON STAGE palette; Skin_054..Skin_102 сохраняют старую REV14 palette schema без массовой миграции. Legacy aliases сохранены.
+- Обновлены ThemeManager tests: проверяются новые NEON STAGE tokens, RGBA alpha decoding и архивное имя Skin_053.
+- Новый VST3 run `43639119534` на SHA `5035ff1a476b47ae6c797a8d249d466417a11007` прошёл APVTS validation, dual-schema skin-pack validation, JUCE/BinaryData checks и CMake x64 Release configure; шаг Build VST3 ещё выполнялся на момент записи. CTest/pluginval/packaging/host acceptance пока не объявляются PASS.
+
+**Статус:** HERO ASSET CORRECTED / STAGING G1–G4 + DETERMINISM PASS на SHA `963db4dcfde23b69cfa895d31d9ca0e2517a4783` / USER VISUAL APPROVAL PENDING / RUNTIME PROMOTION DISABLED.
+================================================================================
