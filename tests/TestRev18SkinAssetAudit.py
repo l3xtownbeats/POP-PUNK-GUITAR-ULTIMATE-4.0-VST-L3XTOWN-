@@ -22,6 +22,15 @@ def chunk(kind: bytes, payload: bytes) -> bytes:
             + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF))
 
 
+def rgba_png(width: int, height: int, pixel: tuple[int, int, int, int] = (0, 0, 0, 0)) -> bytes:
+    raw = b"".join(b"\x00" + bytes(pixel) * width for _ in range(height))
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        body = kind + payload
+        return struct.pack(">I", len(payload)) + body + struct.pack(">I", zlib.crc32(body) & 0xffffffff)
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
+
+
 def tiny_png() -> bytes:
     # 2x1, 8-bit RGBA, filter byte + two opaque white pixels.
     header = struct.pack(">IIBBBBB", 2, 1, 8, 6, 0, 0, 0)
@@ -95,7 +104,6 @@ class Rev18SvgSafetyTests(unittest.TestCase):
 
 class Rev18IconManifestTests(unittest.TestCase):
     def test_manifest_checksums_and_paths_are_verified(self) -> None:
-        from PIL import Image
         import hashlib, json
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -104,7 +112,7 @@ class Rev18IconManifestTests(unittest.TestCase):
             svg = b'<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10"/></svg>'
             (root / "assets/master/icons/skins.svg").write_bytes(svg)
             image_path = root / "assets/icons/skins.png"
-            Image.new("RGBA", (256, 256), (0, 0, 0, 0)).save(image_path)
+            image_path.write_bytes(rgba_png(256, 256))
             records = []
             for suffix, rel in (("master_svg", "assets/master/icons/skins.svg"),
                                 ("runtime_png", "assets/icons/skins.png")):
@@ -170,7 +178,6 @@ class Rev18ArtworkManifestTests(unittest.TestCase):
 class Rev18ControlManifestTests(unittest.TestCase):
     def test_control_manifest_checks_master_runtime_and_reserved_visibility(self) -> None:
         import hashlib, json
-        from PIL import Image
         with tempfile.TemporaryDirectory() as temp:
             theme_dir = Path(temp)
             records = []
@@ -180,7 +187,7 @@ class Rev18ControlManifestTests(unittest.TestCase):
                     rel = f"{relbase}/knob01_{state}.png"
                     path = theme_dir / rel
                     path.parent.mkdir(parents=True, exist_ok=True)
-                    Image.new("RGBA", (512, 512), (0, 0, 0, 0)).save(path)
+                    path.write_bytes(rgba_png(512, 512))
                     raw = path.read_bytes()
                     records.append({"id": f"knob01.{state}.{tier}", "path": rel,
                         "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
