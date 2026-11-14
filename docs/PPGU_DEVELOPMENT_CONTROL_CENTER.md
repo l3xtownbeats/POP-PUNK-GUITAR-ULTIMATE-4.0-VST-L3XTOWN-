@@ -221,3 +221,23 @@ The user has now approved all compatible proposals above through D-RETRO-015. D-
 **Reviewed proposal sources:** conversation history available through 2026-11-12..2026-11-14, prior assistant proposals surfaced in conversation context, Info.txt and CODE.txt current canonical journals.  
 **Outcome:** D-RETRO-001..015 APPROVED within stated boundaries; D-RETRO-016..019 PARTIALLY APPROVED / SUPERSEDED as detailed above.  
 **Implementation:** none in this transaction; this is a governance/decision-record update only.
+
+
+## 12. TX-MASTER-REGISTER-001 — 2026-11-14 — MASTER REQUIREMENTS REGISTER
+
+The canonical detailed checklist is `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md`. It consolidates the user-ratified baseline, Info.txt sections A–K, CODE.txt evidence and decisions D-RETRO-001..019 into one ordered operational register.
+
+**Current canonical preflight:** `51c68e377ee5905e40684299348a0a4b56acac11`.  
+**Parallel reconciliation branch observed:** `work/rev17-full-reconciliation-2026-11-14` @ `ff5c8da1ac6f9dd3d6fb0467a2a037b284294a29`; do not merge wholesale.  
+**Transaction scope:** documentation-only; no production source or test behavior changed.  
+**Synchronized files:** Info.txt, CODE.txt, this Control Center and the new master register.
+
+### Permanent synchronization rule
+- During each active PPGU work session, update Info/CODE/master register/Control Center synchronously: task start before work, each discrete completed item and commit/push, each verification, each closeout.
+- At every new session, reload all four documents and current branch refs before implementation.
+- Never silently delete or downgrade requirements; corrections/superseding amendments are append-only and cite old IDs/evidence.
+- No background watcher/daemon is active between sessions. The assistant cannot autonomously observe GitHub while no active session/tool execution is running. Do not claim continuous background monitoring.
+- The term “lifelong” means append-only governance for the entire project lifecycle, not autonomous execution while inactive.
+
+### TX-MASTER-REGISTER-001 closeout
+**Status:** DOCUMENTATION COMMIT PENDING READBACK at entry creation. No production source changed. Exact resulting SHA and blob readback are appended after the GitHub transaction completes.

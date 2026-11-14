@@ -2215,3 +2215,17 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 **SUPERSEDED / LIMITED:** прежний общий порядок PRESETS→EFFECTS→PATTERN→MELODY→ADDITIONAL FUNCTIONS заменён более новым порядком из раздела K этого журнала; старое ограничение branch review только веткой main расширено на все релевантные ветки; ранжирование PATTERN P1 как безусловного следующего пункта заменено актуальной очередностью Info.txt K; “DREAMING IN NEON” остаётся исторической меткой до сопоставления с точным утверждённым NEON STAGE/SIGNAL FORGE deliverable.
 
 **Важно:** утверждение предложения означает утверждение направления/контракта, а не реализацию функции. Реальный статус остаётся по доказательствам. Не утверждать, что тесты или функции выполнены этим документальным решением.
+
+
+## 2026-11-14 — TX-MASTER-REGISTER-001 — MASTER REQUIREMENTS / IMPLEMENTATION REGISTER
+
+**Status:** DOCUMENTATION CONSOLIDATION COMMITTED; NO PRODUCTION SOURCE CHANGED.  
+**Canonical branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`  
+**Preflight HEAD / parent:** `51c68e377ee5905e40684299348a0a4b56acac11`  
+**Parallel reconciliation branch observed:** `work/rev17-full-reconciliation-2026-11-14` @ `ff5c8da1ac6f9dd3d6fb0467a2a037b284294a29`; no merge performed.  
+**New canonical document:** `docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md`.  
+**Purpose:** full checklist of ratified product requirements, source-backed completed/partial work, missing work, ordered roadmap, acceptance criteria and lifelong journal governance. Consolidates Info.txt sections A–K, CODE.txt implementation evidence, Control Center TX-GOV-001/TX-DEC-002 and D-RETRO-001..019.  
+**Journal synchronization:** Info.txt, CODE.txt and Control Center are updated in the same documentation transaction; the master register is indexed by all three.  
+**Evidence boundary:** historical full CI pass remains tied to SHA `8c75820cab1b909ff43c55736f25150338e384d0`; it does not certify current HEAD. No production code/tests/build/host behavior changed in this transaction.  
+**Real-time rule:** synchronize during every active work session and reload at every session start. No background daemon/watcher is running between sessions; do not claim autonomous between-session monitoring.  
+**Next:** execute Phase 0 preflight and UI/NEON STAGE component matrix before changing production code.
