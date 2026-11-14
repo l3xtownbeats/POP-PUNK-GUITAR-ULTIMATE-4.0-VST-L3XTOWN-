@@ -77,6 +77,16 @@ Replacement rules:
 - Record replacement provenance: old and new asset IDs, reason, comparison/validation results, source URL, license status, SHA-256 and date.
 
 
+
+## User confirmation — direct import folder
+
+The user explicitly confirms the corrected direct-import folder path and distinction:
+- `Samples/Import Guitar Sample/` is the dedicated folder inside `Samples/` for directly placing/importing individual sound files without using the separate `Import Guitar` plugin function.
+- `Import Guitar` remains a distinct, separate import mechanism.
+- `Samples/Import Bank Guitar` is not the approved name/path for this direct-import workflow and must not be used as a substitute.
+- Directly placed files must pass the defined scan, validation, hash deduplication, metadata/tagging, licensing and registry workflow before becoming available to presets.
+- This folder path is an approved implementation requirement; do not claim its automatic scanning/import is operational until the code exists and has been tested.
+
 ## Explicitly confirmed sample-library invariants
 
 The user explicitly confirms and approves these mandatory rules:
