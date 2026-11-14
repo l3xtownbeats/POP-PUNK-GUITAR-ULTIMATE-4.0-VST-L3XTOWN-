@@ -34,8 +34,8 @@ public:
             juce::Colour lowlight { 0xff0a1421 };
         };
 
-        juce::String id { "skin-053" };
-        juce::String name { "NEON STAGE" };
+        juce::String id { "skin-052" };
+        juce::String name { "NEON STAGE / SIGNAL FORGE" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
         juce::Colour canvas { 0xff050811 };
