@@ -33,6 +33,20 @@ int main()
     CHECK(parsed.regions[1].loopMode == "one_shot");
     CHECK(parsed.regions[2].lowVelocity == 91 && parsed.regions[2].highVelocity == 127);
 
+    // SFZ note-name octave suffixes may be signed or multi-digit.
+    const auto extendedOctaves = parseText(
+        "<region> sample=low.wav key=C-1\\n"
+        "<region> sample=sharp-low.wav key=C#-1\\n"
+        "<region> sample=high.wav key=G9\\n", base);
+    CHECK(extendedOctaves.succeeded());
+    CHECK(extendedOctaves.regions.size() == 3);
+    CHECK(extendedOctaves.regions[0].rootKey == 0);
+    CHECK(extendedOctaves.regions[1].rootKey == 1);
+    CHECK(extendedOctaves.regions[2].rootKey == 127);
+    const auto invalidOctave = parseText(
+        "<region> sample=out-of-range.wav key=C10\\n", base);
+    CHECK(!invalidOctave.succeeded());
+
     const auto rrMetadata = parseText(
         "<group> group=12 seq_length=3\n"
         "<region> sample=rr1.wav key=60 seq_position=1\n"
