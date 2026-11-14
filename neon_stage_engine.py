@@ -209,7 +209,7 @@ def _atlas(name, frames, columns):
     if any(frame[2].size != (cell_w, cell_h) for frame in frames):
         raise ValueError(f"Atlas {name} contains mixed frame dimensions")
     rows = (len(frames) + columns - 1) // columns
-    sheet = Image.new("RGB", (columns * cell_w, rows * cell_h), PALETTE["panel"])
+    sheet = Image.new("RGB", (columns * cell_w, rows * cell_h), rgb(PALETTE["panel"]))
     index = {"schemaVersion":"1.0.0", "atlas":name, "cellWidth":cell_w,
              "cellHeight":cell_h, "columns":columns, "rows":rows, "frameCount":len(frames),
              "frames":[]}
