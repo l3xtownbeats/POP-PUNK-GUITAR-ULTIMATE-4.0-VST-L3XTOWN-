@@ -74,6 +74,18 @@ Replacement rules:
 - Run preset regression checks after a replacement: playback across the mapped key and velocity ranges, articulation switching, loops/one-shots behavior where applicable, and no missing-file references. If validation fails, keep the previous asset active.
 - Record replacement provenance: old and new asset IDs, reason, comparison/validation results, source URL, license status, SHA-256 and date.
 
+
+## Explicitly confirmed sample-library invariants
+
+The user explicitly confirms and approves these mandatory rules:
+- Store each original audio file once; avoid unnecessary duplicate payload copies. Use registry-based category views and hash deduplication.
+- A sound may carry multiple genre/style tags where musically appropriate.
+- Presets must reference stable asset IDs or registry identifiers, never fragile absolute paths or filenames alone.
+- Unsupported or unvalidated formats must not be represented as ready for playback.
+- Assets without verified permission for commercial redistribution must remain separated from the distributable release library and must not enter commercial builds.
+
+These invariants apply to all import routes, including Import Guitar, Samples/Import Bank Guitar and controlled direct imports into Samples.
+
 ## Technical and safety requirements
 
 - Never remove license checks, attribution obligations, source provenance or integrity checks to increase library size.
