@@ -45,35 +45,51 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          $branch = $env:GITHUB_REF_NAME
           $sourceRoot = Join-Path $PWD 'dist/neon_stage_staging/Skin_052/assets'
           $targetRoot = Join-Path $PWD 'SKIN/Skin_052/assets'
-          $changed = $false
           foreach ($name in @('preview.png', 'hero.png')) {
-            $source = Join-Path $sourceRoot $name
-            $target = Join-Path $targetRoot $name
-            if (-not (Test-Path -LiteralPath $source)) {
-              throw "Generated reviewed asset is missing: $source"
-            }
-            $sourceHash = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash
-            $targetHash = if (Test-Path -LiteralPath $target) {
-              (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash
-            } else { '' }
-            if ($sourceHash -ne $targetHash) {
-              Copy-Item -LiteralPath $source -Destination $target -Force
-              Write-Host "Staged canonical NEON STAGE asset: $name ($sourceHash)"
-              $changed = $true
-            } else {
-              Write-Host "Canonical NEON STAGE asset already matches staging output: $name"
+            if (-not (Test-Path -LiteralPath (Join-Path $sourceRoot $name))) {
+              throw "Generated NEON STAGE asset is missing: $name"
             }
           }
-          if ($changed) {
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          $pushed = $false
+          for ($attempt = 1; $attempt -le 4; $attempt++) {
+            # Rebase the asset promotion on the newest branch tip. Reset only tracked
+            # files; generated dist/ assets remain available for the next attempt.
+            git fetch origin "+refs/heads/$branch:refs/remotes/origin/$branch"
+            if ($LASTEXITCODE -ne 0) { throw "git fetch failed on attempt $attempt" }
+            git reset --hard "origin/$branch"
+            if ($LASTEXITCODE -ne 0) { throw "git reset failed on attempt $attempt" }
+
+            foreach ($name in @('preview.png', 'hero.png')) {
+              $source = Join-Path $sourceRoot $name
+              $target = Join-Path $targetRoot $name
+              Copy-Item -LiteralPath $source -Destination $target -Force
+            }
             git add -- SKIN/Skin_052/assets/preview.png SKIN/Skin_052/assets/hero.png
+            git diff --cached --quiet
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host "NEON STAGE preview/hero already match the generated assets."
+              $pushed = $true
+              break
+            }
+
             git commit -m "assets: sync reviewed NEON STAGE preview and hero"
-            git fetch origin "$env:GITHUB_REF_NAME"
-            git rebase "origin/$env:GITHUB_REF_NAME"
-            git push origin "HEAD:$env:GITHUB_REF_NAME"
+            if ($LASTEXITCODE -ne 0) { throw "git commit failed on attempt $attempt" }
+            git push origin "HEAD:refs/heads/$branch"
+            if ($LASTEXITCODE -eq 0) {
+              $pushed = $true
+              break
+            }
+            Write-Warning "Branch advanced during asset promotion; retrying against latest tip ($attempt/4)."
+            Start-Sleep -Seconds (2 * $attempt)
+          }
+          if (-not $pushed) {
+            throw "Unable to promote NEON STAGE preview/hero after four concurrent-update retries."
           }
       - name: Upload staging package and report
         if: always()
