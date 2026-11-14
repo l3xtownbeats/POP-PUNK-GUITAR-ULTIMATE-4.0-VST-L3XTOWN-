@@ -381,3 +381,18 @@ Verification: pending CI on resulting commit SHA; no passing build claimed.
 ## 2026-11-14 — Final mockup role clarification
 
 First approved file = authoritative layout/appearance/control inventory (preserve one-to-one). Second file, `02 INTERFACE NEON STAGE AUTOCHORDS` = authoritative unified color palette only. Do not substitute second-file layout for first or redesign/remove controls. Sample palette from exact original second file and apply it to first-file design; preserve both originals. Acceptance requires side-by-side structure/control parity plus palette match and functional controls. Requirement clarification only; exact asset verification and implementation remain open.
+
+
+
+## 2026-11-14 — Preset Browser behavior contract indexed
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV-17`  
+**Base HEAD:** `97de456bf175daa9e2b3f43e5b07e7da45a70446`  
+**Change class:** documentation-only; no production source, tests, assets, APVTS, DSP, MIDI, sampler or preset data changed.  
+**Canonical detail:** `Info.txt` → “PRESET BROWSER / PRESET WORKFLOW: APPROVED REQUIREMENTS RECONCILIATION”.
+
+**Indexed scope:** GENRE → ARTIST/BAND → SONG → SECTION → STYLE → PATTERN navigation; Intro/Verse/Pre-Chorus/Chorus/Bridge/Outro sections; BROWSER, FAVORITES, CATEGORIES, FACTORY/USER, SEARCH, FILTER, SORT, PREV/NEXT, FAVORITE, PRESET NAME, CATEGORY, PREVIEW, SELECT/LOAD; user Save/Save As/Rename/Delete/Import/Export/Rescan; selected/previewed/loaded state separation; stable IDs; factory read-only/user namespace; metadata/filter context; error/transactional loading; keyboard/mouse/focus behavior; schema/state/SoundBank dependencies; mockup/layout/palette invariants; realtime and licensing boundaries; exact-SHA acceptance gates.
+
+**Conflict resolution:** only requirements compatible with 2026-11-13/14 decisions and strict project rules were indexed. The first mockup remains authoritative for layout/control inventory; second AutoChords reference supplies palette only; third FX EDIT + AutoChords state remains distinct. No new APVTS IDs or duplicate browser/catalog/schema are authorized.
+
+**Status:** REQUIREMENTS INDEXED; IMPLEMENTATION/TEST/CI/HOST STATUS UNCHANGED; no PASS claimed.
