@@ -752,3 +752,10 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - Fix Meta release asset matching: GitHub release API exposes exact WAV archive names, so catalog now selects the exact `meta-open-sound-meta-steel-guitar-wav.zip` and `meta-open-sound-meta-nylon-guitar-wav.zip` assets, excluding the OGG bundles and alternate ZIPs.
 - GitHub Actions CI confirmed the source-discovery stage and all six regression tests PASS on commit `fbd9e00794c290e375419f81b94ca5edc52a5cc5`. Acquisition stage on that run failed safely before sample import due to overly broad release asset matching; the exact selector correction is now in commit `13b69bc3e85714136abf5ba37f5319985f9f2425`, with a new acquisition run pending/in progress.
 - No successful sample artifact or completed import is claimed until the active workflow completes and its registry/artifact is inspected.
+
+
+## 2026-11-14 — Master development plan consolidation (documentation-only)
+
+- Added `docs/PPGU_MASTER_DEVELOPMENT_PLAN_RU.md`, consolidating approved product scope, architecture requirements, preset and SoundBank rules, album-era families, ANGELA/PSC direction, release gates, and verified/pending status.
+- Updated README navigation and production-priority cross-reference; recorded the decision and CI status in the authoritative development journal.
+- No production C++/DSP/UI code changed in this documentation-only operation. No new build/test pass is claimed by this commit.
