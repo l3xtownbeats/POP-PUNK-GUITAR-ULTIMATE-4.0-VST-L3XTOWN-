@@ -58,6 +58,20 @@ def safe_member(name: str) -> bool:
     p=PurePosixPath(name)
     return not p.is_absolute() and ".." not in p.parts and not re.match(r"^[A-Za-z]:", name)
 
+def release_asset_target(source_dir: Path, member_name: str) -> Path:
+    """Return an isolated destination for files from a GitHub release archive."""
+    if not safe_member(member_name):
+        raise ValueError(f"Unsafe release archive path: {member_name}")
+    parts = PurePosixPath(member_name).parts
+    relative = Path(*parts[1:]) if len(parts) > 1 else Path(parts[0])
+    return source_dir / "release_assets" / relative
+
+
+def within_run_limit(run_bytes: int, incoming_bytes: int, limit_bytes: int) -> bool:
+    """The Sound Hunter cap applies only to bytes imported by this run."""
+    return run_bytes + incoming_bytes <= limit_bytes
+
+
 def fetch_repo_archive(repo: str, dest: Path):
     meta=json_url(f"https://api.github.com/repos/{repo}")
     branch=meta.get("default_branch") or "main"
@@ -106,7 +120,7 @@ def main():
     run_id=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+"-"+os.urandom(3).hex()
     run_root=base/run_id
     run_root.mkdir()  # unique; fail rather than reuse
-    used=sum(p.stat().st_size for p in samples.rglob("*") if p.is_file())
+    used=0  # Count only bytes added by this Sound Hunter run; existing Samples are not charged to this cap.
     limit=int(args.max_gb*1024**3)
     seen=existing_hashes(samples)
     registry={"schema_version":"1.0","run_id":run_id,"classification":"REAL_RECORDED","assets":[],"sources":[]}
@@ -147,7 +161,7 @@ def main():
                         data=fetch_lfs_object(repo,pointer); source_size=len(data)
                     else:
                         data=None; source_size=info.file_size
-                    if used+source_size > limit:
+                    if not within_run_limit(used, source_size, limit):
                         print(f"CAP REACHED at {sid}; remaining source files not imported.")
                         break
                     if data is None: data=z.read(name)
@@ -176,10 +190,10 @@ def main():
                         for name in rz.namelist():
                             if not safe_member(name) or PurePosixPath(name).suffix.lower() not in AUDIO: continue
                             info=rz.getinfo(name)
-                            if info.file_size < 128 or used+info.file_size > limit: continue
+                            if info.file_size < 128 or not within_run_limit(used, info.file_size, limit): continue
                             data=rz.read(name); digest=hashlib.sha256(data).hexdigest()
                             if digest in seen: continue
-                            target=source_dir/"release"/Path(*PurePosixPath(name).parts[1:])
+                            target=release_asset_target(source_dir, name)
                             target.parent.mkdir(parents=True,exist_ok=True)
                             if target.exists(): raise RuntimeError(f"Refusing path collision: {target}")
                             with target.open("xb") as f: f.write(data)
