@@ -820,3 +820,19 @@ Legacy original paths were intentionally retained; no deletion/move was performe
 - UX-оптимизация разрешена только внутри существующего визуального языка: читаемость, подписи, группировка, подсказки, состояния, навигация, доступность и аккуратные interaction refinements.
 - Не заменять тему, палитру, композицию, identity и расположение основных областей; альтернативный редизайн не становится default без отдельного решения пользователя.
 - NEON STAGE DEFAULT продолжает загружаться по умолчанию.
+
+
+## 2026-11-14 — Sound Hunter REV.18 unlimited Samples policy implementation
+
+**Scope:** remove the obsolete 40 GB hard cap from the Sound Hunter acquisition path; preserve no-delete/no-overwrite and integrity safeguards; support checksummed transport splitting.
+
+**Changed production/tooling paths:**
+- `SoundHunter/sound_hunter_real_guitars.py` — removed `--max-library-gb`, 40 GB checks and early-stop logic. Existing aggregate audio byte count remains for transparent reporting only. Commit: `b63717e71709d40b3afa896c1b8898763154b3c2`.
+- `tests/test_sound_hunter_importer.py` — removed 40 GB boundary assertions; added CLI regression proving the obsolete cap is absent. Commit: `793f798a735bf93238a6fa53fa50a1a2ea7393d5`.
+- `SoundHunter/real_guitar_sources.json` — removed max-library metadata and documented unlimited content with checksummed transport parts. Commit: `37b6510d77ff932c243005657458b3fafdb9d6ae`.
+- `.github/workflows/sound-hunter-real-guitar.yml` — acquisition no longer passes a 40 GB cap; package is split into 1,800 MB parts with SHA-256 manifest for transport. Commit: `be6fc5da26010673b63c9a962d0fdfaa78e96f84`.
+- `SoundHunter/README.md` — updated operating policy and artifact name. Commit: `2fddc8f4984b76b1a602b1271428354f087fd52e`.
+
+**Validation:** source changes are committed; a fresh CI run on the resulting exact HEAD is required. Do not claim the modified workflow passed until it completes. Existing successful Sound Hunter run #14 / artifact ID `14110929182` is from the earlier 40 GB workflow and is not evidence for the new unlimited policy. Its artifact was 2,967,193,335 bytes; runtime integration and audio audition remain unverified.
+
+**Unchanged:** existing samples are not deleted/moved/overwritten; source acquisition still verifies repository/release license evidence, archive checksums, path safety and per-file SHA-256. No C++ sampler, DSP, MIDI, APVTS, preset runtime or audio callback was changed in this tooling operation.
