@@ -846,3 +846,28 @@ Use only lawful materials and acquisition methods expressly compatible with thei
 Evaluate every candidate comparatively for actual audio quality, mapping, articulations, musical fit, independent reviews/pro recommendations, ANGELA Engine compatibility, CPU/RAM/latency and license. Record exact product/version, asset/source, license evidence, permitted use method, provenance, SHA-256 and QA. Unclear terms remain REVIEW/QUARANTINE and must not enter a distributable build until resolved. Paid purchases/subscriptions still require separate user approval.
 
 This approval expands the candidate research scope only. It does not mean SHREDAGG, Apple Sound or any other product's license has already been checked or permits embedding; assess each exact product and asset individually. No new audio has been downloaded or integrated by this documentation commit.
+
+
+## 2026-11-14 — USER-APPROVED INITIAL GUITAR SOURCE ACQUISITION SET
+
+The user explicitly approves downloading/acquiring and using all guitar sources proposed in the preceding comparison, subject to the project's license, quality and technical gates. The initial approved acquisition/assessment set is:
+
+- Meta Open Sound — Steel Guitar;
+- Meta Open Sound — Nylon Guitar;
+- FreePats — FSBS Electric Guitar Clean;
+- FreePats — FSBS Electric Guitar Direct DI;
+- FreePats — FSBS Electric Guitar Distorted 1;
+- FreePats — FSBS Electric Guitar Distorted 2;
+- FreePats — FSBS Electric Guitar Jazz;
+- FreePats — Spanish Classical Guitar;
+- Karoryfer — Black and Green Guitars;
+- Karoryfer — Emilyguitar;
+- Karoryfer — Shinyguitar.
+
+These exact candidates are now in the required acquisition/review set and, where the actual files/version pass the stated terms and quality gates, are to be downloaded, prepared and integrated into SAMPLES/appropriate sound roles. A catalog entry or source name is not proof of successful download, current license clearance or quality acceptance. Verify the exact version, actual license file/terms, embedding/redistribution rights, provenance, integrity and format for every package. If an asset fails license or quality review, quarantine that asset and record why; do not silently substitute another.
+
+For every accepted resource: obtain the official source/release, safely extract, compute SHA-256, record provenance/license, inventory technical metadata, run audio quality and mapping/coverage review, deduplicate without losing meaningful variants, preserve originals and store derivatives separately, integrate into the library, and audition in linked presets. Steel/Nylon/Spanish Classical are candidates for acoustic/classical roles; electric sets are assigned to clean/DI/distorted/jazz/indie/rock roles only according to actual audition and mapping, not filename alone.
+
+Every preset claiming a band/artist/track style must reference actual cleared assets from this or another accepted source AND contain the required musical/performance/pattern/articulation data. Importing files or creating mappings alone does not make a preset complete.
+
+**Operational status:** the user-approved candidate set is documented. This commit does not download binary audio or prove that the Sound Hunter GitHub Actions importer has run successfully. Actual acquisition/integration must be evidenced separately by a successful workflow run/artifact, manifest, SHA-256 records and QA. Do not report acquisition complete before that evidence exists.
