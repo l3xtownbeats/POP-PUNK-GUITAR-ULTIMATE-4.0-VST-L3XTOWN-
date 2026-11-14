@@ -4,7 +4,7 @@ cd /d "%~dp0"
 title PPGU - NEON STAGE Skin Build
 
 echo ========================================
-echo PPGU - NEON STAGE (Skin_053) BUILD ENGINE
+echo PPGU - NEON STAGE DEFAULT SKIN-1 BUILD ENGINE
 echo ========================================
 
 where py >nul 2>nul
