@@ -19,31 +19,31 @@ namespace
 int main()
 {
     PPGUThemeManager manager;
-    expect(manager.getPalette().id == "skin-052", "default theme ID");
+    expect(manager.getPalette().id == "skin-053", "default theme ID is NEON STAGE");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
-    expect(manager.getPalette().name == "SIGNAL FORGE", "fallback identity matches the canonical default skin");
+    expect(manager.getPalette().name == "NEON STAGE", "fallback identity matches the canonical NEON STAGE theme");
     const auto& fallbackTokens = manager.getPalette().tokens;
-    expect(fallbackTokens.windowBg == juce::Colour(0xff0b0f12), "fallback window background matches Skin_052");
-    expect(fallbackTokens.panel == juce::Colour(0xff141b20), "fallback panel matches Skin_052");
-    expect(fallbackTokens.panelElevated == juce::Colour(0xff1d2930), "fallback elevated panel matches Skin_052");
-    expect(fallbackTokens.controlBg == juce::Colour(0xff10171b), "fallback control background matches Skin_052");
-    expect(fallbackTokens.controlFace == juce::Colour(0xff26343a), "fallback control face matches Skin_052");
-    expect(fallbackTokens.controlBorder == juce::Colour(0xff53656b), "fallback control border matches Skin_052");
-    expect(fallbackTokens.textPrimary == juce::Colour(0xfff3f7f5), "fallback primary text matches Skin_052");
-    expect(fallbackTokens.textSecondary == juce::Colour(0xffb7c5c2), "fallback secondary text matches Skin_052");
-    expect(fallbackTokens.textDisabled == juce::Colour(0xff788984), "fallback disabled text matches Skin_052");
-    expect(fallbackTokens.accent == juce::Colour(0xffd5ff45), "fallback accent matches Skin_052");
-    expect(fallbackTokens.accentGlow == juce::Colour(0xffb7ff3c), "fallback accent glow matches Skin_052");
-    expect(fallbackTokens.danger == juce::Colour(0xffff5a66), "fallback danger matches Skin_052");
-    expect(fallbackTokens.warning == juce::Colour(0xffffc857), "fallback warning matches Skin_052");
-    expect(fallbackTokens.success == juce::Colour(0xff6ee7a8), "fallback success matches Skin_052");
-    expect(fallbackTokens.lcdBg == juce::Colour(0xff08110e), "fallback LCD background matches Skin_052");
-    expect(fallbackTokens.lcdText == juce::Colour(0xffd7ffb2), "fallback LCD text matches Skin_052");
-    expect(fallbackTokens.ledOn == juce::Colour(0xffa8ff42), "fallback LED on matches Skin_052");
-    expect(fallbackTokens.ledOff == juce::Colour(0xff33443b), "fallback LED off matches Skin_052");
-    expect(fallbackTokens.shadow == juce::Colour(0xff050708), "fallback shadow matches Skin_052");
-    expect(fallbackTokens.highlight == juce::Colour(0xff90a7a0), "fallback highlight matches Skin_052");
-    expect(fallbackTokens.lowlight == juce::Colour(0xff0d1417), "fallback lowlight matches Skin_052");
+    expect(fallbackTokens.windowBg == juce::Colour(0xff050811), "fallback window background matches Skin_053");
+    expect(fallbackTokens.panel == juce::Colour(0xff091321), "fallback panel matches Skin_053");
+    expect(fallbackTokens.panelElevated == juce::Colour(0xff101f32), "fallback elevated panel matches Skin_053");
+    expect(fallbackTokens.controlBg == juce::Colour(0xff07101c), "fallback control background matches Skin_053");
+    expect(fallbackTokens.controlFace == juce::Colour(0xff14263a), "fallback control face matches Skin_053");
+    expect(fallbackTokens.controlBorder == juce::Colour(0xff52718b), "fallback control border matches Skin_053");
+    expect(fallbackTokens.textPrimary == juce::Colour(0xffffffff), "fallback primary text matches Skin_053");
+    expect(fallbackTokens.textSecondary == juce::Colour(0xffd9e8f7), "fallback secondary text matches Skin_053");
+    expect(fallbackTokens.textDisabled == juce::Colour(0xffaabbd0), "fallback disabled text matches Skin_053");
+    expect(fallbackTokens.accent == juce::Colour(0xff66ffff), "fallback accent matches Skin_053");
+    expect(fallbackTokens.accentGlow == juce::Colour(0xffb8ffff), "fallback accent glow matches Skin_053");
+    expect(fallbackTokens.danger == juce::Colour(0xffff5577), "fallback danger matches Skin_053");
+    expect(fallbackTokens.warning == juce::Colour(0xffffd166), "fallback warning matches Skin_053");
+    expect(fallbackTokens.success == juce::Colour(0xff67f5b5), "fallback success matches Skin_053");
+    expect(fallbackTokens.lcdBg == juce::Colour(0xff020a12), "fallback LCD background matches Skin_053");
+    expect(fallbackTokens.lcdText == juce::Colour(0xffc9ffff), "fallback LCD text matches Skin_053");
+    expect(fallbackTokens.ledOn == juce::Colour(0xff66ffff), "fallback LED on matches Skin_053");
+    expect(fallbackTokens.ledOff == juce::Colour(0xff263c50), "fallback LED off matches Skin_053");
+    expect(fallbackTokens.shadow == juce::Colour(0xff02040a), "fallback shadow matches Skin_053");
+    expect(fallbackTokens.highlight == juce::Colour(0xffb8d9f0), "fallback highlight matches Skin_053");
+    expect(fallbackTokens.lowlight == juce::Colour(0xff0a1421), "fallback lowlight matches Skin_053");
     expect(manager.getPalette().focus == fallbackTokens.highlight, "fallback focus alias matches canonical highlight token");
 
 
@@ -55,6 +55,8 @@ int main()
     const auto* themes = themesValue.getArray();
     const auto totalValue = registry.getProperty("totalSkins", juce::var());
     expect(registry.isObject(), "skin registry is a JSON object");
+    expect(registry.getProperty("defaultSkin", "").toString() == "skin-053",
+           "registry default points to NEON STAGE");
     expect(themes != nullptr, "skin registry contains a themes array");
     expect(totalValue.isInt() || totalValue.isInt64(), "skin registry totalSkins is an integer");
 
@@ -157,9 +159,36 @@ int main()
                "extra control ID restores default fallback");
     }
 
+    const auto skin53Manifest = skinRoot.getChildFile("Skin_053").getChildFile("theme.json");
+    const auto skin53Json = skin53Manifest.loadFileAsString();
+    expect(skin53Json.isNotEmpty(), "Skin_053 manifest readable");
+    const bool skin53Loaded = manager.loadFromFile(skin53Manifest);
+    expect(skin53Loaded, "NEON STAGE manifest accepted"
+           + (skin53Loaded ? juce::String{} : ": " + manager.getLastError()));
+    if (skin53Loaded)
+    {
+        expect(manager.getPalette().id == "skin-053", "NEON STAGE ID matches index 53");
+        expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE identity is decoded");
+        expect(!manager.getPalette().usedFallback, "NEON STAGE manifest does not use fallback");
+        const auto neonTokens = juce::JSON::parse(skin53Json).getProperty("palette", juce::var());
+        const juce::StringArray tokenNames {
+            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
+            "control_border", "text_primary", "text_secondary", "text_disabled",
+            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
+            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
+        };
+        for (const auto& tokenName : tokenNames)
+        {
+            const auto expected = juce::Colour::fromString(
+                "ff" + neonTokens.getProperty(tokenName, juce::var()).toString().substring(1));
+            expect(manager.getPalette().token(tokenName) == expected,
+                   "NEON STAGE token is exposed exactly: " + tokenName);
+        }
+    }
+
     const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
-    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
     const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
@@ -170,11 +199,11 @@ int main()
            "Skin Studio compatibility failure restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
-    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
-           "malformed JSON restores SIGNAL FORGE fallback");
+    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
+           "malformed JSON restores NEON STAGE fallback");
 
     expect(!manager.loadFromJson("{}"), "empty object rejected");
-    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "incomplete manifest restores fallback");
 
     expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");

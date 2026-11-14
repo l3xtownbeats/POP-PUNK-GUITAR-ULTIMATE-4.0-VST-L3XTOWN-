@@ -1,10 +1,10 @@
 """Procedural asset builder for PPGU NEON STAGE Skin_053.
-Writes only to dist/neon_stage_staging and juce_resources; never mutates SKIN/.
+Writes staging outputs only; never mutates the runtime registry or JUCE resources.
 """
 from __future__ import annotations
-import json, math, os, shutil, zipfile
+import json, math, os, zipfile
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 SOURCE_THEME = ROOT / "SKIN" / "Skin_053" / "theme.json"
@@ -25,7 +25,7 @@ REQUIRED = (
     "preset_browser","mode_selector",*(f"knob{i:02d}" for i in range(1,10)),
     *(f"fx_switch{i:02d}" for i in range(1,8)),"midi_keyboard","LCD_display",
     "LED_indicator","SKIN_button","Import_Guitar","Auto_Discover","Curator",
-    "Settings","About"
+    "Settings","About","sync_selector"
 )
 FX_NAMES = ("compressor","eq","distortion","chorus","delay","reverb","cabinet")
 
@@ -91,11 +91,11 @@ def vertical_strip(size,path):
 def step_palette():
     ensure_dirs()
     checks={
-      "text_primary/window_bg":(PALETTE["text_primary"],PALETTE["window_bg"],17.0),
-      "text_secondary/window_bg":(PALETTE["text_secondary"],PALETTE["window_bg"],10.0),
-      "text_disabled/window_bg":(PALETTE["text_disabled"],PALETTE["window_bg"],5.0),
-      "lcd_text/lcd_bg":(PALETTE["lcd_text"],PALETTE["lcd_bg"],17.0),
-      "accent/panel":(PALETTE["accent"],PALETTE["panel"],15.0)
+      "text_primary/window_bg":(PALETTE["text_primary"],PALETTE["window_bg"],7.0),
+      "text_secondary/window_bg":(PALETTE["text_secondary"],PALETTE["window_bg"],4.5),
+      "text_disabled/window_bg":(PALETTE["text_disabled"],PALETTE["window_bg"],3.0),
+      "lcd_text/lcd_bg":(PALETTE["lcd_text"],PALETTE["lcd_bg"],7.0),
+      "accent/panel":(PALETTE["accent"],PALETTE["panel"],3.0)
     }
     report={}
     for name,(fg,bg,minimum) in checks.items():
@@ -128,7 +128,7 @@ def step_ui():
                             outline=outline,width=2)
         if state=="on":
             d.line((x+24,h//2,x+36,h//2),fill=PALETTE["window_bg"],width=3)
-        atlas.save(ASSETS/"buttons"/"btn_states.png",optimize=True)
+    atlas.save(ASSETS/"buttons"/"btn_states.png",optimize=True)
     tile_w,tile_h=220,72
     fx=Image.new("RGBA",(tile_w*len(FX_NAMES),tile_h*2),(0,0,0,0))
     for row in range(2):
@@ -172,8 +172,6 @@ def svg_knob_pointer():
 
 def step_svg():
     ensure_dirs()
-    svg_dir=SKIN/"svg"
-    svg_dir.mkdir(parents=True,exist_ok=True)
     texture=f'''<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
 <rect width="128" height="128" fill="{PALETTE['window_bg']}"/>
 <path d="M0 16H128 M0 64H128 M0 112H128" stroke="{PALETTE['highlight']}" stroke-opacity=".08"/>
@@ -188,38 +186,51 @@ def step_svg():
 <path d="M18 48 L48 12 H208 L238 48 L208 84 H48 Z" fill="{PALETTE['panel']}" stroke="{PALETTE['accent']}" stroke-width="2"/>
 <path d="M58 48 H198" stroke="{PALETTE['accent_glow']}" stroke-width="2" opacity=".7"/>
 </svg>'''
-    (svg_dir/"texture.svg").write_text(texture,encoding="utf-8")
-    (svg_dir/"bezel.svg").write_text(bezel,encoding="utf-8")
-    (svg_dir/"crest.svg").write_text(crest,encoding="utf-8")
-    # Legacy path references used by the current theme schema.
-    (ASSETS/"texture"/"texture.svg").write_text(texture,encoding="utf-8")
+    (ASSETS/"texture.svg").write_text(texture,encoding="utf-8")
+    (ASSETS/"bezel.svg").write_text(bezel,encoding="utf-8")
+    (ASSETS/"crest.svg").write_text(crest,encoding="utf-8")
     print("Generated safe, static SVG assets.")
 
-def draw_promo(size,title,subtitle,path):
-    im=Image.new("RGBA",size,(*rgb(PALETTE["window_bg"]),255))
-    d=ImageDraw.Draw(im)
-    w,h=size
-    # Subtle technical grid and neon edge lighting.
-    for x in range(0,w,40): d.line((x,0,x,h),fill=rgb(PALETTE["lowlight"]),width=1)
-    for y in range(0,h,40): d.line((0,y,w,y),fill=rgb(PALETTE["lowlight"]),width=1)
-    d.rounded_rectangle((int(w*.035),int(h*.07),int(w*.965),int(h*.93)),
-                        radius=max(12,int(h*.04)),outline=rgb(PALETTE["control_border"]),width=max(2,w//500))
-    d.text((int(w*.08),int(h*.19)),title,font=font(max(22,h//8),True),fill=rgb(PALETTE["text_primary"]))
-    d.text((int(w*.08),int(h*.38)),subtitle,font=font(max(12,h//22)),fill=rgb(PALETTE["accent"]))
-    # Abstract 9-control console: visual-only promo, not a runtime screenshot.
-    for i in range(9):
-        col=i%5; row=i//5
-        cx=int(w*(.15+col*.17)); cy=int(h*(.67+row*.16)); r=max(10,int(h*.055))
-        d.ellipse((cx-r,cy-r,cx+r,cy+r),fill=rgb(PALETTE["control_face"]),outline=rgb(PALETTE["accent"]),width=max(2,w//600))
-        a=math.radians(-135+(i%9)*30)
-        d.line((cx,cy,cx+math.cos(a)*r*.68,cy+math.sin(a)*r*.68),fill=rgb(PALETTE["accent_glow"]),width=max(2,w//500))
-    im.save(path,"PNG",optimize=True)
+def render_reference_art(size, path):
+    """Render a faithful contain-fit of the approved primary UI mockup.
+
+    Do not synthesize a fake plugin screenshot: the uploaded NEON STAGE
+    reference is the source of truth for preview and hero artwork.
+    """
+    reference = ROOT / "01 INTERFACE  NEON STAGE DEFAULT .png"
+    if not reference.is_file():
+        raise FileNotFoundError(
+            f"Approved NEON STAGE reference mockup is missing: {reference.name}"
+        )
+    with Image.open(reference) as opened:
+        source = opened.convert("RGBA")
+    fitted = ImageOps.contain(source, size, method=Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", size, (*rgb(PALETTE["window_bg"]), 255))
+    x = (size[0] - fitted.width) // 2
+    y = (size[1] - fitted.height) // 2
+    canvas.alpha_composite(fitted, (x, y))
+    draw = ImageDraw.Draw(canvas)
+    inset = max(2, min(size) // 100)
+    draw.rounded_rectangle(
+        (inset, inset, size[0] - inset - 1, size[1] - inset - 1),
+        radius=max(4, min(size) // 45),
+        outline=rgb(PALETTE["control_border"]),
+        width=max(1, min(size) // 240),
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # REV ULTRA requires indexed 8-bit PNG assets (not RGBA PNGs).
+    indexed = canvas.convert("RGB").quantize(colors=256, method=Image.Quantize.FASTOCTREE)
+    indexed.save(path, "PNG", optimize=True)
+
 
 def step_promo():
     ensure_dirs()
-    draw_promo((360,240),"NEON STAGE","PPGU  /  SKIN 053",ASSETS/"preview.png")
-    draw_promo((800,450),"NEON STAGE","POP PUNK GUITAR ULTIMATE  /  VISUAL THEME",ASSETS/"hero.png")
-    print("Generated 360x240 preview and 800x450 hero.")
+    # Dimensions follow the current SKIN asset production specification.
+    render_reference_art((360, 240), ASSETS / "preview.png")
+    render_reference_art((800, 450), ASSETS / "hero.png")
+    print("Rendered preview and hero from the approved NEON STAGE reference mockup.")
+    print("No synthetic UI screenshot or invented control layout was generated.")
+
 
 def step_manifest():
     ensure_dirs()
@@ -235,11 +246,25 @@ def step_manifest():
     theme["palette"]=PALETTE
     theme["effects"]={
       "material":"midnight stage console with cyan edge lighting",
-      "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg",
+      "texture":"assets/texture.svg","bezel":"assets/bezel.svg","crest":"assets/crest.svg",
       "shadowDepth":0.38,"edgeHighlight":0.34,"glow":"restrained cyan LED halo; reduced in ECO mode"
     }
     theme["assets"]={"preview":"assets/preview.png","hero":"assets/hero.png",
-                     "texture":"svg/texture.svg","bezel":"svg/bezel.svg","crest":"svg/crest.svg"}
+                     "texture":"assets/texture.svg","bezel":"assets/bezel.svg","crest":"assets/crest.svg"}
+    # Canonical 28-control grid map for the REV ULTRA G2 contract.
+    control_map={}
+    for control_id, spec in theme.get("controls",{}).items():
+        grid=spec.get("grid",{})
+        control_map[control_id]={
+            "col":grid.get("x"),"row":grid.get("y"),
+            "colSpan":grid.get("w"),"rowSpan":grid.get("h")
+        }
+    if len(control_map)!=28 or len(set(control_map))!=28:
+        raise RuntimeError(f"G2 requires exactly 28 unique controls; found {len(control_map)}")
+    (SKIN/"control_map.json").write_text(json.dumps({
+        "schemaVersion":"1.0.0","grid":{"columns":12,"rows":16},
+        "controlCount":28,"controls":control_map
+    },indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     theme["designStatus"]="STAGING_NOT_MERGED"
     theme["notes"]=[
       "Generated by NEON_STAGE_BUILD_ENGINE.",
@@ -259,21 +284,32 @@ def step_manifest():
     print("Wrote Skin_053 draft and staging manifest. Registry untouched.")
 
 def step_package():
+    """Create a staging ZIP without modifying any runtime/JUCE resource tree."""
     ensure_dirs()
-    dist=ROOT/"dist"; dist.mkdir(exist_ok=True)
+    dist=ROOT/"dist"
+    dist.mkdir(exist_ok=True)
     zip_path=dist/"NEON_STAGE_SKIN_053_STAGING.zip"
-    if zip_path.exists(): zip_path.unlink()
-    with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
-        for p in OUT.rglob("*"):
-            if p.is_file(): z.write(p,p.relative_to(OUT).as_posix())
-    juce=ROOT/"juce_resources"/"Skins"/"Skin_053"
-    if juce.exists(): shutil.rmtree(juce)
-    shutil.copytree(SKIN,juce)
-    print(f"Packaged {zip_path} and copied resources to {juce}")
+    temp_path=dist/(zip_path.name + ".tmp")
+    try:
+        with zipfile.ZipFile(temp_path,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+            for p in OUT.rglob("*"):
+                if p.is_file():
+                    z.write(p,p.relative_to(OUT).as_posix())
+        with zipfile.ZipFile(temp_path,"r") as check:
+            bad_member=check.testzip()
+            if bad_member is not None:
+                raise RuntimeError(f"Staging ZIP integrity check failed at: {bad_member}")
+        os.replace(temp_path,zip_path)
+    finally:
+        if temp_path.exists():
+            temp_path.unlink()
+    print(f"Packaged staging-only archive: {zip_path}")
+    print("Runtime/JUCE resources were not modified.")
 
 def step_report():
     errors=[]
     theme_path=SKIN/"theme.json"
+    control_map_path=SKIN/"control_map.json"
     if not theme_path.is_file(): errors.append("theme.json missing")
     else:
         theme=json.loads(theme_path.read_text(encoding="utf-8"))
@@ -281,8 +317,8 @@ def step_report():
         if set(theme.get("palette",{}))!=set(TOKENS): errors.append("palette token parity failure")
         missing=sorted(set(REQUIRED)-set(theme.get("controls",{})))
         if missing: errors.append("missing controls: "+", ".join(missing))
-        for fg,bg,minimum in (("text_primary","window_bg",17),("text_secondary","window_bg",10),
-                              ("text_disabled","window_bg",5),("lcd_text","lcd_bg",17),("accent","panel",15)):
+        for fg,bg,minimum in (("text_primary","window_bg",7),("text_secondary","window_bg",4.5),
+                              ("text_disabled","window_bg",3),("lcd_text","lcd_bg",7),("accent","panel",3)):
             ratio=contrast(theme["palette"][fg],theme["palette"][bg])
             if ratio<minimum: errors.append(f"contrast {fg}/{bg}: {ratio:.2f} < {minimum}")
     pngs={"assets/preview.png":(360,240),"assets/hero.png":(800,450),
@@ -297,23 +333,60 @@ def step_report():
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         try:
             with Image.open(p) as im:
-                if im.format!="PNG" or im.mode!="RGBA" or im.size!=expected:
-                    errors.append(f"{rel}: expected RGBA PNG {expected}, got {im.format}/{im.mode}/{im.size}")
+                expected_mode="P" if rel in ("assets/preview.png","assets/hero.png") else "RGBA"
+                if im.format!="PNG" or im.mode!=expected_mode or im.size!=expected:
+                    errors.append(f"{rel}: expected {expected_mode} PNG {expected}, got {im.format}/{im.mode}/{im.size}")
                 im.verify()
         except Exception as exc: errors.append(f"{rel}: decode failed: {exc}")
-    for rel in ("svg/texture.svg","svg/bezel.svg","svg/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
+    for rel in ("assets/texture.svg","assets/bezel.svg","assets/crest.svg","assets/knob/knob_body.svg","assets/knob/knob_pointer.svg"):
         p=SKIN/rel
         if not p.is_file(): errors.append(f"missing {rel}"); continue
         data=p.read_text(encoding="utf-8")
         if "<script" in data.lower() or "javascript:" in data.lower() or "<animate" in data.lower() or "xlink:href" in data.lower():
             errors.append(f"unsafe SVG content in {rel}")
+    # G4 identity and authoritative registry contract.
+    if SKIN.name != "Skin_053":
+        errors.append(f"G4 folder identity mismatch: expected Skin_053, got {SKIN.name}")
+    registry_path=ROOT/"SKIN"/"theme_manifest.json"
+    if not registry_path.is_file():
+        errors.append("G4 authoritative SKIN/theme_manifest.json is missing")
+    else:
+        registry=json.loads(registry_path.read_text(encoding="utf-8"))
+        entries=registry.get("themes",[])
+        indices=[entry.get("index") for entry in entries]
+        ids=[entry.get("id") for entry in entries]
+        if indices != list(range(1,len(entries)+1)):
+            errors.append("G4 registry indices are not continuous from 1 through the final registered skin")
+        if len(ids)!=len(set(ids)):
+            errors.append("G4 duplicate skin IDs found in authoritative registry")
+        matches=[entry for entry in entries if entry.get("id")=="skin-053"]
+        if len(matches)!=1:
+            errors.append(f"G4 expected one registry entry for skin-053, found {len(matches)}")
+        elif matches[0].get("index")!=53 or matches[0].get("path")!="Skin_053/theme.json":
+            errors.append("G4 registry identity/path mismatch for Skin_053")
+    if theme_path.is_file():
+        generated_theme=json.loads(theme_path.read_text(encoding="utf-8"))
+        if generated_theme.get("id")!="skin-053" or generated_theme.get("index")!=53:
+            errors.append("G4 generated theme id/index mismatch")
+    if not control_map_path.is_file():
+        errors.append("missing control_map.json")
+    else:
+        control_data=json.loads(control_map_path.read_text(encoding="utf-8"))
+        mapped=control_data.get("controls",{})
+        if control_data.get("grid")!={"columns":12,"rows":16} or len(mapped)!=28 or len(set(mapped))!=28:
+            errors.append("G2 control_map.json must contain exactly 28 unique controls in a 12x16 grid")
+        for cid,box in mapped.items():
+            col,row,cs,rs=(box.get(k) for k in ("col","row","colSpan","rowSpan"))
+            if not all(isinstance(v,int) for v in (col,row,cs,rs)) or col<0 or row<0 or cs<1 or rs<1 or col+cs>12 or row+rs>16:
+                errors.append(f"G2 out-of-bounds or invalid control map entry: {cid}")
     result={"project":"PPGU NEON STAGE","skin":"Skin_053","status":"PASS" if not errors else "FAIL",
             "checks":{"palette_tokens":len(TOKENS),"required_controls":len(REQUIRED),"png_assets":len(pngs),
-                      "svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
+                      "control_map_controls":28,"svg_assets":5,"skin_registry_modified":False,"runtime_tests_run":False},
             "errors":errors,
             "limitations":["This is a procedural staging render, not a verified pixel-match to the approved reference mockup.",
                            "No JUCE build, CTest, pluginval or FL Studio runtime test is performed by this Python asset pipeline."]}
     (ROOT/"dist"/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    (OUT/"NEON_STAGE_BUILD_REPORT.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps(result,indent=2,ensure_ascii=False))
     if errors: raise SystemExit(1)
 

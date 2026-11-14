@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "totalSkins": 102,
-  "defaultSkin": "skin-052",
+  "defaultSkin": "skin-053",
   "selector": "SKIN",
   "status": "102-themes-merged-gallery-source-implemented-exact-sha-validation-pending",
   "themes": [
@@ -478,8 +478,8 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "Carbon Studio 01",
-      "family": "carbon_studio",
+      "name": "NEON STAGE",
+      "family": "neon_basement",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
       "preview": "Skin_053/assets/preview.png",
