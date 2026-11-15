@@ -12,3 +12,11 @@
 2. `VST3/*.vst3` → `C:\Program Files\Common Files\VST3\`.
 3. `SKINS/` → рядом с bundle или в портативный content root `PPGU/SKINS/`.
 4. Открой плагин в FL Studio 20 → IMPORT GUITAR → импортируй натуральные сэмплы (формат выбирается до импорта).
+
+## Отдельный ZIP только с плагином (без библиотеки)
+
+Имя артефакта: POP_PUNK_GUITAR_ULTIMATE_STANDALONE_VST3_Windows_x64_NO_SAMPLES.zip. Это отдельный portable-пакет: VST3, Skins, Resources, PRESETS, Documents и Licenses. Папок Samples/SOUNDBANK и аудиофайлов библиотеки внутри нет. Для воспроизведения сэмплов подключается совместимая внешняя SoundBank/SFZ библиотека.
+
+## Полный ZIP с библиотекой
+
+Имя артефакта: POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip. Это полный portable-пакет, включая SOUNDBANK. Оба ZIP формируются и публикуются как отдельные GitHub Actions artifacts после общих проверок сборки и тестов. До успешного CI run ссылки на готовые ZIP не считаются подтверждёнными.
