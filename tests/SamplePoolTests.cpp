@@ -610,9 +610,38 @@ int main()
         std::cerr << "Could not prepare vibrato regression fixtures.\\n";
         return 1;
     }
+    juce::AudioBuffer<float> vibratoWarmReference(2, 128);
+    juce::AudioBuffer<float> vibratoWarmApplied(2, 128);
+    bool vibratoPagesReady = false;
+    for (int attempt = 0; attempt < 100 && !vibratoPagesReady; ++attempt)
+    {
+        vibratoWarmReference.clear();
+        vibratoWarmApplied.clear();
+        vibratoReferenceEngine.render(vibratoWarmReference, 0, 128);
+        vibratoAppliedEngine.render(vibratoWarmApplied, 0, 128);
+        vibratoPagesReady =
+            vibratoWarmReference.getMagnitude(0, 0, 128) > 0.001f
+            && vibratoWarmApplied.getMagnitude(0, 0, 128) > 0.001f;
+        if (!vibratoPagesReady)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!vibratoPagesReady)
+    {
+        std::cerr << "Vibrato regression sample pages never became ready.\\n";
+        return 1;
+    }
+    // Reset voices after both caches are warm so the comparison starts at
+    // the same source position and cannot pass because of a cache-miss offset.
+    vibratoReferenceEngine.reset();
+    vibratoAppliedEngine.reset();
+    if (!vibratoReferenceEngine.noteOn(60, 100)
+        || !vibratoAppliedEngine.noteOn(60, 100))
+    {
+        std::cerr << "Could not retrigger warmed vibrato fixtures.\\n";
+        return 1;
+    }
     vibratoAppliedEngine.setVibratoDepths(0.0f, 1.0f);
     vibratoAppliedEngine.setModWheel(1, 1.0f);
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     juce::AudioBuffer<float> vibratoReferenceAudio(2, 4096);
     juce::AudioBuffer<float> vibratoAppliedAudio(2, 4096);
     vibratoReferenceAudio.clear();
