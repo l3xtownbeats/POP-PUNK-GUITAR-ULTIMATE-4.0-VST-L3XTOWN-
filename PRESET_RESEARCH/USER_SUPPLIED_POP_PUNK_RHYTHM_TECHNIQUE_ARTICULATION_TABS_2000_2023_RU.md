@@ -8,7 +8,7 @@
 
 The user describes the material as community reconstructions based on tabs and recording breakdowns, not official scores. Treat artist/song descriptions as stylistic hypotheses and practical starting points, not universal rules or verified transcriptions. Tab examples are illustrative and must be checked for tuning, string numbering, fingering, rhythmic grid and musical correctness before implementation. Artist-specific technique claims require source/listening verification before being presented as historical fact.
 
-The received message ends partway through section 18, at checklist item 4 (“Контраст…”). The missing continuation has not been inferred or invented.
+The initial submission ended partway through section 18. The user later resubmitted the complete material, supplying the remainder of the practice checklist and the consolidated style table (sections 18–19); these are now incorporated below.
 
 ## 2. Genre-wide performance model supplied
 
@@ -209,3 +209,35 @@ Before any pattern, articulation map or preset is counted READY:
 
 ---
 **Attribution:** Supplied directly by the user in the conversation on 2026-11-15. No external verification is implied by this record.
+
+
+## 10. Completed practice checklist and consolidated style table (user's later full submission)
+
+### Practice checklist (source section 18)
+
+1. Downpick eighth notes at 120 BPM cleanly, without muddiness, for four minutes.
+2. Repeat at the same tempo with palm muting; keep muting even and avoid ringing tails.
+3. Practise octave positions by moving through an eight-note E-form sequence (E F G A B C D E).
+4. Practise muted-to-open contrast: two bars muted, two bars open.
+5. Practise a one-beat rest / gate before the chorus.
+6. Play a short pentatonic solo with two whole-step bends and finish on the 12th-fret harmonic.
+7. Double-track test: record the riff twice and pan L/R; check whether the takes maintain the pulse and a convincing tight rhythm wall.
+
+### Consolidated style table (source section 19)
+
+| Style / artist reference | Main rhythmic / articulation characteristics supplied |
+|---|---|
+| Green Day | Downpicked staccato, lower-gain tone, pick attack carries weight more than distortion |
+| Blink-182 — Tom | Octave riffs, delayed chord entries, palm muting |
+| Blink-182 — Mark | Simple pentatonic vocabulary in a five-fret box; track-role claim requires verification |
+| Sum 41 | Gallops, tapping, alternate picking, metal-influenced articulation |
+| The Offspring | Octave punk chugs, rests / omitted beats |
+| New Found Glory | Drop-D chugs, hardcore-influenced muting |
+| Simple Plan | Straight eighth notes, minimal syncopation |
+| Fall Out Boy | Emo legato, expanded chords, tapping |
+| Paramore | Syncopated riffs, Drop D, slides |
+| Avril Lavigne | Chord strumming, capo use, muted “chunk” attacks |
+| MGK (2020) | Drop C, stops before choruses, few solos |
+| Blink-182 (2023) | Classic eighth-note drive, octave riffs, muted-to-open contrast |
+
+**Implementation note:** The practice checklist is a human training reference, not a requirement to add a training module or new UI controls. The consolidated table is a compact style index; use it alongside the detailed sections above rather than as a replacement.
