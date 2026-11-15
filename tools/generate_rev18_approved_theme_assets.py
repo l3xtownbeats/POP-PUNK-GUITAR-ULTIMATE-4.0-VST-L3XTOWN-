@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate deterministic, original REV18 premium theme asset packs.
 
+This entry point is executed by the focused PR validation workflow.
+
 The generator is visual-only. It reads approved theme tokens and the canonical
 27-control schema; it never changes APVTS, layout geometry, DSP, MIDI or audio.
 Existing different files are never overwritten.
