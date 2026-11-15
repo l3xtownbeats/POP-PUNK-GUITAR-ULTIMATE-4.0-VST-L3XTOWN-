@@ -305,3 +305,27 @@ No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio c
 ## 2026-11-15 — Final approved premium theme order
 
 Пользователь подтвердил порядок активной премиальной линейки: **SKIN-1 — NEON FORGE (DEFAULT)**, далее SKIN-2, SKIN-3 … последовательно до SKIN-16. NEON FORGE (DEFAULT) является темой по умолчанию при запуске. Имена, стабильные ID и порядок SKIN-2…SKIN-16 сохраняются по утверждённой последовательности. Legacy-набор из 102 записей не удаляется и не перенумеровывается; в активную премиальную линейку входят только 16 утверждённых тем после прохождения artwork/PNG и runtime acceptance gates.
+
+
+## 2026-11-15 — Зафиксированная и утверждённая последовательность SKIN-1…SKIN-16
+
+Пользователь окончательно утвердил фиксированный порядок активной линейки из 16 тем. Порядок и наименования являются неизменяемым контрактом и не подлежат перестановке, переименованию или расширению без отдельного явного разрешения пользователя:
+
+1. **SKIN-1 — NEON FORGE (DEFAULT)**
+2. **SKIN-2 — OBSIDIAN GOLD**
+3. **SKIN-3 — CARBON FORGE**
+4. **SKIN-4 — MIDNIGHT CRIMSON**
+5. **SKIN-5 — ARCTIC PLATINUM**
+6. **SKIN-6 — VIOLET NOIR**
+7. **SKIN-7 — TITANIUM STORM**
+8. **SKIN-8 — EMERALD CIRCUIT**
+9. **SKIN-9 — SOLAR FLARE**
+10. **SKIN-10 — DEEP OCEAN**
+11. **SKIN-11 — ROSE CHROME**
+12. **SKIN-12 — DESERT AMBER**
+13. **SKIN-13 — GLACIER TEAL**
+14. **SKIN-14 — PHANTOM GRAPHITE**
+15. **SKIN-15 — ULTRAVIOLET DRIVE**
+16. **SKIN-16 — VOLCANIC STEEL**
+
+**SKIN-1 — NEON FORGE (DEFAULT)** является темой по умолчанию. Artwork/PNG и runtime acceptance gates отслеживаются отдельно и не меняют утверждённый порядок. Исторические темы не входят в активную линейку и не должны автоматически возвращаться в галерею.
