@@ -200,6 +200,10 @@ jobs:
           $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
           $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
           if ($audioFiles.Count -lt 100) { throw "Expected a substantial natural-guitar sample library; only $($audioFiles.Count) audio files found." }
+          $managedBytes = [int64](($audioFiles | Measure-Object -Property Length -Sum).Sum)
+          $managedLimitBytes = [int64]40000000000
+          if ($managedBytes -gt $managedLimitBytes) { throw "Managed Samples exceeds approved 40 GB decimal ceiling: $managedBytes / $managedLimitBytes bytes." }
+          Write-Host ("Managed Samples payload: {0:N0} bytes ({1:N2} GB decimal), approved ceiling: 40,000,000,000 bytes." -f $managedBytes,($managedBytes / 1e9))
           $hashLines = foreach ($file in $audioFiles) {
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
@@ -224,6 +228,10 @@ jobs:
           $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
           $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
           if ($audioFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($audioFiles.Count) audio files found." }
+          $managedBytes = [int64](($audioFiles | Measure-Object -Property Length -Sum).Sum)
+          $managedLimitBytes = [int64]40000000000
+          if ($managedBytes -gt $managedLimitBytes) { throw "Restored managed Samples exceeds approved 40 GB decimal ceiling: $managedBytes / $managedLimitBytes bytes." }
+          Write-Host ("Verified managed Samples payload: {0:N0} bytes ({1:N2} GB decimal)." -f $managedBytes,($managedBytes / 1e9))
           foreach ($license in @(
             'Meta-meta-steel-guitar/LICENSE',
             'Meta-meta-nylon-guitar/LICENSE',
