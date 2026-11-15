@@ -3224,3 +3224,4 @@ unverified until their steps complete successfully.
 **Ограничения:** линейная интерполяция коэффициентов не является математической гарантией устойчивости для произвольных крайних наборов biquad. Тесты фильтра и длительный сигнал обязательны; затем — processor-level automation/click test и exact-HEAD Windows build/CTest/pluginval. FL Studio 20 host acceptance отдельно не выполнена.
 
 **Статус:** SOURCE PATCH PREPARED; CI/BUILD NOT YET VERIFIED.
+- Оптимизация RT CPU: интерполированные коэффициенты рассчитываются один раз на sample и совместно используются левым/правым каналом, а не пересчитываются отдельно для каждого канала.

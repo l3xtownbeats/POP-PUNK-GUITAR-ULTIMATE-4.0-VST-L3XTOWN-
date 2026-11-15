@@ -728,21 +728,30 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         // Smooth coefficient and bypass transitions across the host block.
         // The filter states keep running while bypassed, so toggling EQ does not
         // discard their history and create a discontinuity on the next note.
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        std::array<float*, 2> channelData {};
+        const int channelCount = juce::jmin(2, buffer.getNumChannels());
+        for (int channel = 0; channel < channelCount; ++channel)
+            channelData[static_cast<size_t>(channel)] = buffer.getWritePointer(channel);
+
+        // Calculate each interpolated coefficient set once per sample, then
+        // reuse it for both channels instead of duplicating coefficient math.
+        for (int sample = 0; sample < samples; ++sample)
         {
-            auto* data = buffer.getWritePointer(channel);
-            auto& states = eqStates[static_cast<size_t>(channel)];
-            for (int sample = 0; sample < samples; ++sample)
+            const float proportion = static_cast<float>(sample + 1) / static_cast<float>(samples);
+            const auto low = ppgu::dsp::interpolate(startCoefficients[0], targetCoefficients[0], proportion);
+            const auto mid = ppgu::dsp::interpolate(startCoefficients[1], targetCoefficients[1], proportion);
+            const auto high = ppgu::dsp::interpolate(startCoefficients[2], targetCoefficients[2], proportion);
+            const float wet = startMix + (targetMix - startMix) * proportion;
+
+            for (int channel = 0; channel < channelCount; ++channel)
             {
-                const float proportion = static_cast<float>(sample + 1) / static_cast<float>(samples);
-                const auto low = ppgu::dsp::interpolate(startCoefficients[0], targetCoefficients[0], proportion);
-                const auto mid = ppgu::dsp::interpolate(startCoefficients[1], targetCoefficients[1], proportion);
-                const auto high = ppgu::dsp::interpolate(startCoefficients[2], targetCoefficients[2], proportion);
-                float filtered = states[0].process(data[sample], low);
+                auto& states = eqStates[static_cast<size_t>(channel)];
+                auto& value = channelData[static_cast<size_t>(channel)][sample];
+                const float dry = value;
+                float filtered = states[0].process(dry, low);
                 filtered = states[1].process(filtered, mid);
                 filtered = states[2].process(filtered, high);
-                const float wet = startMix + (targetMix - startMix) * proportion;
-                data[sample] += (filtered - data[sample]) * wet;
+                value = dry + (filtered - dry) * wet;
             }
         }
 
