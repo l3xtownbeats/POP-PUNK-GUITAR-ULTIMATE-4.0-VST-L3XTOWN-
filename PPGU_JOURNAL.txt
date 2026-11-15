@@ -574,3 +574,23 @@ Current main HEAD after this journal update: the commit created by this append-o
 - GitHub About description/topics и Social Preview metadata не менялись: доступные GitHub actions в этой интеграции предоставляют чтение репозитория и запись файлов, но не отдельное редактирование About/Social Preview.
 
 Статус: REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.
+
+
+2026-11-15 — USER-APPROVED NEON STAGE GUI COMPLETION / INTERACTION ACCEPTANCE SCOPE
+
+Пользователь утвердил и поручил приступить к следующему обязательному объёму работ для NEON STAGE и всех 16 утверждённых тем:
+
+1. Довести каждый существующий визуальный элемент до соответствия утверждённым макетам.
+2. Создать недостающие визуальные элементы для всех уже утверждённых функций; не добавлять самовольно новые продуктовые функции и не менять утверждённую структуру.
+3. Довести каждое отдельное окно/панель до законченного производственного вида.
+4. Проверить все состояния кнопок, rotary/sliders, списков, ComboBox, вкладок, режимов, переключателей, лампочек, индикаторов, статусов и уведомлений.
+5. Завершить адаптацию интерфейса к поддерживаемым размерам окна и проверить переполнение/обрезание/доступность элементов.
+6. Проверить визуальную целостность всех 16 тем и одинаковость функционального поведения при смене темы.
+
+ОБЯЗАТЕЛЬНЫЙ FUNCTIONAL ACCEPTANCE: каждый видимый интерактивный элемент должен иметь реальную связь и проверяемое поведение. Проверять цепочку UI input/event → callback/command → существующий parameter/backend/state → наблюдаемый результат → обратное обновление UI → persistence/restore, если сохранение предусмотрено контрактом. Каждый rotary должен менять назначенный параметр; каждая кнопка выполнять назначенное действие; каждое окно/вкладка открываться и закрываться; каждый режим действительно переключать свою логику; Preset Browser должен отображать/прокручивать/фильтровать/выбирать реальные записи и загружать назначенные параметры/ресурсы; индикаторы и уведомления должны отражать реальные состояния. Декоративные/фиктивные активные controls запрещены. Если backend ещё не существует, control должен быть явно disabled/not available с честным статусом до реализации backend.
+
+NON-REGRESSION / CONTRACTS: сохранить 27-control parity, только семь утверждённых FX bypass IDs, все существующие APVTS IDs и смысл attachments, processor state, MIDI/audio/DSP boundaries, утверждённые панели/режимы/функции и legacy skin records. Не затрагивать аудиодвижок, realtime callback, MIDI processing или processor state без необходимости и отдельного обоснования. Смена темы меняет оформление, но не функциональность и bindings.
+
+ПЛАН ПРИЁМКИ: source inventory и binding audit → реализация недостающих bindings/визуальных состояний в утверждённом scope → отдельная проверка каждой панели/контрола → resize/window tests → theme-by-theme parity checks для 16 тем → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Все результаты фиксировать по точному commit SHA. Source presence или визуальный макет сами по себе не считаются доказательством завершения.
+
+Статус этой записи: SCOPE APPROVED / WORK AUTHORIZED / ACCEPTANCE CRITERIA FIXED. Это фиксация объёма и критериев, не заявление о завершённой реализации или пройденных тестах.
