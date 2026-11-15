@@ -2634,3 +2634,43 @@ Outstanding acceptance:
 - Runtime asset packaging, Windows x64 Release build, full CTest, pluginval strictness 5 and FL Studio 20 manual host test remain required.
 - No release-ready or 100% completion claim until exact-HEAD acceptance evidence exists.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 NEON STAGE shared design system: user approval + 12-module source audit
+==============================================================================
+
+**User decision:** explicitly approved, confirmed and fixed the shared NEON STAGE design system and six hard constraints for the 12 named modules. This approval is binding for subsequent UI work.
+
+**Shared design system:** canonical NEON STAGE palette; typography/text hierarchy; rotary controls/buttons/toggles; icons/indicators; panels/borders/separators; Active/Inactive/Hover/Focus/Disabled states; animation and visual feedback. Each module retains its own functional composition and workflow.
+
+**Hard constraints:**
+1. No fake buttons, functions, simulated results or decorative elements represented as functional.
+2. Do not change Audio Engine, DSP, MIDI or APVTS.
+3. Do not rename/change existing control IDs, parameter IDs, bindings or attachment meaning.
+4. Do not break existing functions, workflows or module composition.
+5. GitHub-uploaded NEON STAGE DEFAULT mockups remain the primary visual reference.
+6. Theme must operate in actual plugin runtime, not only as images/JSON.
+
+**Source audit document updated:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md` (append-only addendum; historical preflight preserved). Documentation commit: `839444681da238a13f51f3080f8511b55983f228`.
+
+**Current module inventory from live source:**
+- Source-backed: Main Interface, AutoChords, FX EDIT, Import Guitar, Performance display, Settings and Skin Gallery.
+- Partial: AMP & TONE (existing amp/EQ controls, no separate complete module confirmed).
+- Not established as production runtime modules in inspected source: Curator, Sound Hunter, Auto Discover and About. These are not to be represented by fake or decorative placeholders.
+- Shared palette/runtime propagation and rotary/button/ComboBox hover/focus/disabled rendering exist in source.
+- Typography is partial: palette typeface metadata and LookAndFeel default font exist, but many components still set fonts locally.
+- Text fields/tabs/status components, icon/indicator system, animations and per-component state parity remain incomplete or unaudited.
+
+**Protected visible parameter mappings retained:**
+- Nine knobs: `ampGain`, `eqHigh`, `eqMid`, `eqLow`, `velocity`, `dynamics`, `swing`, `humanize`, `accent`.
+- Seven FX bypasses: `compressorOn`, `eqOn`, `distortionOn`, `chorusOn`, `delayOn`, `reverbOn`, `cabinetOn`.
+
+**Current source branch:** `ui/neon-stage-skin1-completion`; PR #43 remains Draft and unmerged. Source commits already present include workspace palette propagation `751ccee1a1998752e02354e0c80617af3d5d3d6d`, editor palette/default integration `9a62b848b5413b62de077c47f22c604ec6f34211`, shared control-state pass `775cd7901ab628579a9f6ce9c7a02924ed72d143`, token correction `ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b`, and pack manifest correction `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`.
+
+**Validation:** exact current PR HEAD at audit start was `e68250720c74f3bb8bb904708532c29c7c730e97`; workflow lookup returned no runs for that SHA. No exact-HEAD Windows Release build, full CTest, pluginval strictness 5, packaged VST3 asset-load validation or FL Studio 20 host acceptance is claimed. Historical workflow results apply only to their own SHAs.
+
+**Next sequence:** finish source-backed component typography/text/tab/status/state audit; unify actual existing controls; separately locate/implement missing modules only when backed by real product functionality; verify runtime assets/package; run G1–G4/PNG checks, exact-HEAD Windows Release, CTest, VST3 locate, pluginval 5 and separate FL Studio 20 host acceptance.
+
+**Status:** USER REQUIREMENTS APPROVED / SOURCE INVENTORY DOCUMENTED / UI INTEGRATION PARTIAL / VALIDATION PENDING / NOT RELEASE READY.
+==============================================================================
