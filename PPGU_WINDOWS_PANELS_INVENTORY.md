@@ -33,3 +33,6 @@ NOT IMPLEMENTED / DISABLED BY DESIGN. Обновлять при каждом sco
 - **AUTO SOUND HUNTER / CURATOR:** remain disabled; production discovery/curation backends are not established.
 - **AutoChords:** Circle of Fifths and chord-name/harmony setup are present in source; MIDI generation/playback remains unavailable by design.
 - **Validation:** run `43718887827` passed for SHA `cd4935576c93f6974c6a5af4f319413b3ae03024`, which predates the About-panel source commits. The current branch HEAD `1a1910aad51538ef556f7b09902f52bdea3b069b` still requires exact-HEAD CI and host acceptance.
+
+
+Audit note: the latest inventory and component-status reconciliation is committed on the working branch. Do not infer visual acceptance from source presence; current About panel and the earlier gallery fixes remain subject to the exact-HEAD workflow and separate FL Studio 20 host acceptance.
