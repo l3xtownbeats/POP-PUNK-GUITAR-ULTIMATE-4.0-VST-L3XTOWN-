@@ -701,3 +701,10 @@ Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state afte
 - The update is visual-only: no panel geometry, IDs, callbacks, lifecycle, persistence, APVTS, DSP, MIDI or audio behavior changed.
 - Commit: `3190359d295d83bb06970836c9b34c62c6ccadb4`.
 - Status: SOURCE FIX COMMITTED; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime theme/resize checks and FL Studio 20 acceptance remain PENDING.
+
+## 2026-11-15 — NEON STAGE AutoChords typography parity
+
+- Updated `PPGUCircleOfFifths::paint()` to render both fifth-node labels and the component caption through the shared `makeThemeFont()` helper.
+- The Circle of Fifths now follows the active theme's UI typeface and font scale instead of using fixed default JUCE fonts. Existing sizes/weight intent, geometry, fifths ordering, keyboard/mouse selection and `scaleRoot` callback remain unchanged.
+- Source commit: `597ad5ffe958ad4b33d440dfeb4e81b97e001fdf`.
+- Status: SOURCE FIX COMMITTED; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime theme/resize and FL Studio 20 acceptance remain PENDING.
