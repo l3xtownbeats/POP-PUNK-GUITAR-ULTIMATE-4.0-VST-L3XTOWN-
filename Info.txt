@@ -3022,3 +3022,28 @@ unverified until their steps complete successfully.
 **Проверки:** scheduler tests added; exact-SHA workflow runs: 0. Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 
 **Следующий шаг:** FX slot reorder (7 утверждённых slots, Flanger остаётся отдельным stage без 8-го bypass); затем sampler streaming/64-voice stress and state restoration audit.
+
+
+## 2026-11-15 — Seven-slot FX routing / live order implementation
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Закрыт подтверждённый backend gap: `fxSlot1..fxSlot7` ранее были APVTS choices, но не меняли фактический порядок DSP.
+
+**Изменения:**
+- `Source/DSP/FxOrder.h`: валидатор permutation для 7 стадий; invalid/out-of-range/duplicate order безопасно откатывается к canonical order, чтобы ни одна стадия не пропадала и не запускалась дважды.
+- `Source/PluginProcessor.cpp`: Compressor, EQ, Distortion, Chorus, Delay, Reverb и Cabinet теперь вызываются в порядке `fxSlot1..fxSlot7`; order считывается один раз за block. Изменение slot order действует со следующего audio block.
+- `AMP & TONE` вынесены в pre-FX stage, чтобы Amp Gain/Tone не меняли смысл при перестановке FX.
+- Flanger остаётся независимым post-chain modulation stage и не занимает восьмой slot; его существующий `flangerOn` и остальные параметры сохранены.
+- `toneStates` сбрасываются в prepare/release.
+- `tests/FxOrderTests.cpp` и CMake target `ppgu_fx_order_contracts`: identity, reverse, arbitrary permutation, duplicate fallback и out-of-range fallback.
+
+**Commit:** `3de76f470c697bb221174bb65e6331ae42a287fa`; parent `c6091176e7063bb9d36b3029b1e549b9e9b99753`.
+
+**Canonical default order:** Compressor → EQ → Distortion → Chorus → Delay → Reverb → Cabinet IR; AMP & TONE до FX chain; Flanger после семи reorderable slots. Это соответствует APVTS slot defaults 0..6 и не создаёт восьмого bypass.
+
+**Совместимость:** все семь существующих APVTS IDs, ranges, defaults и state serialization сохранены. Bypass IDs не менялись. Нет heap allocations в audio callback из-за slot resolution.
+
+**Проверки:** helper test скомпилирован локальным `g++ -std=c++20 -Wall -Wextra -Wpedantic` и прошёл. Это не заменяет CTest/полный JUCE build. Exact-SHA workflow runs: 0; Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+
+**Следующий шаг:** audit/reset/tail behavior for each FX stage after reordering; then sampler streaming/64-voice stress and state restoration.

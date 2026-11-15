@@ -1073,3 +1073,26 @@ Approved requirements:
 **Тесты:** source-level tests added; exact-SHA Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** implement real seven-slot FX reorder with Flanger treated as its separately approved stage, then sampler streaming/64-voice stress and state restoration audit.
+
+
+## 2026-11-15 — Seven-slot FX routing and live processing order
+
+**Тип:** production DSP refactor + pure C++ contract test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commit:** `3de76f470c697bb221174bb65e6331ae42a287fa`.
+**Parent:** `c6091176e7063bb9d36b3029b1e549b9e9b99753`.
+
+**Файлы / symbols:**
+- `Source/DSP/FxOrder.h` — `defaultFxOrder`, `resolveFxOrder()`.
+- `Source/PluginProcessor.h` — independent per-channel `toneStates`.
+- `Source/PluginProcessor.cpp` — local no-allocation stage functions for Compressor, EQ, Distortion, Chorus, Delay, Reverb, Cabinet; seven APVTS slots dispatch those functions in the selected permutation; Flanger remains independent after the chain; AMP & TONE is pre-chain.
+- `tests/FxOrderTests.cpp` — permutation validity and fail-closed behavior.
+- `CMakeLists.txt` — `ppgu_fx_order_contracts`.
+
+**Canonical default order:** Compressor → EQ → Distortion → Chorus → Delay → Reverb → Cabinet IR. Flanger is post-chain and does not consume one of the seven slots. AMP & TONE is pre-chain. Duplicate or invalid slot values fall back to canonical order.
+
+**Compatibility:** existing `fxSlot1..fxSlot7` APVTS IDs/defaults/ranges and effect bypass IDs preserved; no preset/state schema changes. No audio-thread allocations introduced by routing.
+
+**Тесты:** FxOrder helper/test compiled and passed locally with g++ C++20; full CTest/JUCE Windows Release/pluginval/FL Studio 20 not run for this SHA.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** verify effect tail/reset/bypass and channel behavior under reordered permutations; then sampler stress and state restore.
