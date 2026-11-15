@@ -448,3 +448,61 @@ FX names in this section are sound-design scope/reference taxonomy, not proof th
 Artist/band names remain reference points for tonal direction only; применять конкретные элементы только когда они помогают добиться целевого характера звука. Не приписывать неизвестные source samples конкретным моделям и не заявлять точные artist settings без доказательств. Все технические ограничения, лицензирование, quality gates, 27-control parity, seven approved FX bypass IDs и APVTS/state contract остаются обязательными.
 
 Статус: USER CONFIRMED / APPROVED / FIXED. Applies to all future preset design and sound selection.
+
+
+## 2026-11-15 — POP-PUNK PRESET STARTING SETTINGS: 2000s CORE / JERRY FINN-INSPIRED DUAL-AMP / MODERN VARIANTS (USER PROVIDED & APPROVED AS REFERENCE)
+
+Назначение: сохранить приведённые пользователем значения как стартовые sound-design recipes для создания и настройки пресетов. Это ориентировочные реконструкции/практические starting points, а не подтверждённые точные настройки ручек в студии, не точные схемы конкретных записей и не универсальные значения для всех гитар/усилителей. При адаптации учитывать шкалу и поведение конкретного amp/DSP, гитарный источник, строй, темп, партию и микс. Прослушивание и настройка по результату обязательны.
+
+### A. Базовая точка поп-панка 2000-х (шкала 0–10)
+- Gain: 5.5
+- Bass: 5.0
+- Mids: 5.5
+- Treble: 7.0
+- Presence: 6.0
+Цель: яркий, быстрый, умеренно насыщенный тон; power chords должны сохранять punch и разборчивость, бас не должен размывать быстрые ритмы. Это исходная точка, а не обязательная финальная настройка.
+
+### B. Песенные tonal-reference значения (Gain / Bass / Mids / Treble, шкала 0–10)
+- Blink-182 — “All the Small Things”: 6 / 5 / 6 / 7.
+- Green Day — “Basket Case”: 6 / 6 / 6 / 5.
+- Sum 41 — “In Too Deep”: 8 / 6 / 6 / 4.
+- The Offspring — “Self Esteem”: 7 / 6 / 6 / 7.
+- Fall Out Boy — “Sugar, We're Goin Down”: 7 / 5 / 7 / 6.
+Эти цифры — user-supplied comparative approximations for tonal direction, not verified session settings. Не маркировать как exact song presets.
+
+### C. Общий диапазон для 2000s pop-punk rhythm
+- Gain: 5.5–6.5; более тяжёлые варианты могут начинаться около 7–8, если сохраняется атака и читаемость.
+- Bass: 5–6; контролировать низ, чтобы даблтрекинг и бас-гитара не создавали гул.
+- Mids: 5.5–6.5; поддерживать читаемую midrange-атаку и присутствие гитары в миксе.
+- Treble: 5–7; сохранять атаку медиатора без резкого/песочного верха.
+- Presence: около 5.5–6; добавлять ясность, избегать harshness.
+- Bright channel: optional/on when source and amp benefit; выключать при чрезмерно резком верхе.
+- Rhythm reverb: dry or near-zero; short plate/room ambience may be used on lead only where needed.
+
+### D. Jerry Finn-inspired dual-amp production concept
+Use as a production architecture reference, not as a claim that every cited record used an identical setup:
+- Blend two complementary amp paths when the engine/resources support it: Mesa/Boogie Triple Rectifier-style path for weight/low-end and Marshall JCM900-style path for focused upper-mid bite.
+- A cleaner Marshall path pushed toward edge-of-breakup/strong midrange can add definition over a heavier amp layer; do not assume an exact gain/channel setting from the reference anecdote.
+- Preserve phase alignment, polarity, timing and level balance when blending paths; check mono compatibility and avoid comb filtering.
+- Optional high-gain amp switcher/splitter is a studio routing reference, not a required plugin feature.
+- Double-track rhythm performances L/R as a recording/mix technique where actual separate performances exist. Do not fake double tracking by duplicating one mono sample and claiming it is two takes.
+- Keep rhythm guitars mostly dry and tight; use short plate/room on lead sparingly. Leave deliberate spectral room for bass and drums; use compression only if it improves transient consistency without flattening pick attack.
+
+### E. Modern style variants
+- MGK / “Tickets to My Downfall” (2020)-inspired: contemporary, aggressive pop-punk direction; tighter/stronger gain and low-end control; possible lower tuning (e.g. Drop C/D) only for the specific preset/source that supports it; do not assume every track or guitar uses those tunings. Maintain note separation and pick attack.
+- Avril Lavigne / “Love Sux” (2022)-inspired: modern Marshally pop-punk direction; assertive crunchy rhythm guitars, clear mids, controlled bass and bright but non-harsh top; adjust gain to arrangement density.
+- Blink-182 / “One More Time...” (2023)-inspired: modern production referencing the band's established bright, weighty pop-punk guitar character; use complementary low-mid weight and upper-mid definition as needed, without claiming exact session chain/settings.
+
+### F. Practical performance/recording notes (optional per preset)
+- Pickups: humbucker-family source can provide thicker output; single-coil-family source can provide more open/bright attack. Use only when source metadata supports it; do not fabricate pickup identity.
+- String gauge and pick thickness are physical performance/recording references, not plugin controls. The user-provided 009–010 string and 0.60–0.73 mm pick notes are optional context only, not universal requirements or DSP parameters.
+- Palm muting, downstrokes, alternate picking, open/power chords and tight note releases matter as much as amp gain. Preset must pair tone with appropriate articulation/performance mapping.
+- Compression should be subtle/role-dependent; avoid crushing transients. Gate should remove unwanted noise without chopping note tails.
+- Bass/guitar separation is a mix task: control low frequencies and arrangement overlap rather than indiscriminately cutting all bass from guitar.
+
+### G. Preset implementation rule
+Create a compact set of reusable starting profiles (e.g. 2000s Pop-Punk Core, Bright Blink-Style Rhythm, Mid-Focused Melodic Punk, Heavier Skate-Punk, Modern Aggressive Pop-Punk, Dry Classic Punk, Lead Plate) only where they correspond to actual available resources and implemented DSP. Expose only parameters already supported by approved architecture; do not add APVTS IDs or controls, and preserve 27-control parity and seven approved FX bypass IDs. Translate 0–10 reference values into actual DSP ranges only after confirming each parameter's mapping and response. Never assume 5 on an arbitrary amp means neutral or matches another amp.
+
+Each preset's documentation should label these values “starting point / tonal reference”, state the intended sound and useful adjustments, and avoid claiming exact artist/song settings. READY requires actual playback, chain binding, level/phase checks where relevant, listening review, state persistence and regression tests.
+
+Статус: USER-PROVIDED SETTINGS RECORDED / APPROVED AS STARTING REFERENCES. DSP mapping, implementation, preset creation and listening validation remain PENDING.
