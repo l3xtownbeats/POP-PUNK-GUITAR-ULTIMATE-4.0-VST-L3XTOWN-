@@ -164,29 +164,46 @@ def draw_guitar(base, palette, seed=0):
     return Image.alpha_composite(base.convert("RGBA"), layer).convert("RGB")
 
 
-def material_texture(palette, seed):
+def material_texture(palette, seed, material=""):
     size = 128
     base = rgb(palette["lowlight"])
     accent = rgb(palette["control_border"])
+    name = material.lower()
     tile = Image.new("RGB", (size, size))
     px = tile.load()
     rng = random.Random(seed)
     for y in range(size):
         for x in range(size):
-            wave = (math.sin(2*math.pi*x/16) + math.sin(2*math.pi*(x+y)/32)) * 1.8
-            weave = 3 if ((x//8 + y//8) % 2) else -2
+            if "carbon" in name or "forged" in name:
+                pattern = 9 if ((x // 8 + y // 8) % 2) else -5
+                grain = 2 * math.sin(2 * math.pi * (x + y) / 16)
+            elif "obsidian" in name or "glass" in name:
+                pattern = 5 * math.sin(2 * math.pi * x / 32)
+                grain = 3 * math.sin(2 * math.pi * (x + y) / 48)
+            elif "crimson" in name or "enamel" in name:
+                pattern = 7 * math.sin(2 * math.pi * y / 12)
+                grain = 2 * math.sin(2 * math.pi * x / 64)
+            elif "arctic" in name or "frost" in name or "platinum" in name:
+                pattern = 5 * math.sin(2 * math.pi * (x + y) / 24)
+                grain = 4 * math.cos(2 * math.pi * (x - y) / 40)
+            elif "violet" in name or "smoked" in name:
+                pattern = 5 * math.sin(2 * math.pi * x / 24)
+                grain = 4 * math.cos(2 * math.pi * y / 48)
+            else:
+                pattern = 4 * math.sin(2 * math.pi * (x + y) / 24)
+                grain = 2 * math.cos(2 * math.pi * x / 32)
             noise = rng.randint(-2, 2)
-            amount = max(0, min(1, .20 + (wave + weave + noise + 8) / 30))
-            px[x,y] = tuple(max(0,min(255,round(base[i]*(1-amount)+accent[i]*amount*.32))) for i in range(3))
-    # Match opposite tile edges exactly so repeated material has no visible seams.
+            amount = max(0.04, min(0.42, .16 + (pattern + grain + noise + 8) / 42))
+            px[x, y] = tuple(max(0, min(255, round(base[i] * (1 - amount) + accent[i] * amount))) for i in range(3))
+    # Force opposite borders to match exactly for a seamless repeated tile.
     for y in range(size):
         px[size - 1, y] = px[0, y]
     for x in range(size):
         px[x, size - 1] = px[x, 0]
-    out = Image.new("RGB", (1024,1024))
-    for y in range(0,1024,size):
-        for x in range(0,1024,size):
-            out.paste(tile,(x,y))
+    out = Image.new("RGB", (1024, 1024))
+    for y in range(0, 1024, size):
+        for x in range(0, 1024, size):
+            out.paste(tile, (x, y))
     return out
 
 
@@ -353,9 +370,9 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
 
     # Full-resolution original stage artwork and separate runtime exports.
     hero=stage_background((1600,900),palette,item["index"],guitar=True)
-    preview=hero.resize((720,480),Image.Resampling.LANCZOS)
+    preview=ImageOps.fit(hero,(720,480),method=Image.Resampling.LANCZOS)
     bg=stage_background((2560,1440),palette,item["index"],guitar=False)
-    texture=material_texture(palette,item["index"])
+    texture=material_texture(palette,item["index"],theme.get("effects",{}).get("material",""))
     for rel,img,cat in [
         ("assets/master/hero/hero.png",hero,"hero-master"),
         ("assets/hero/hero.png",hero.resize((800,450),Image.Resampling.LANCZOS),"hero-runtime"),
@@ -443,18 +460,16 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
     generated["assets/controls/control_states_manifest.json"]=control_raw
     add_record(records,"assets/controls/control_states_manifest.json",control_raw,"control-state-manifest")
 
-    # Combined manifest excludes itself to avoid a recursive checksum.
-    asset_raw=(json.dumps({"schemaVersion":"1.0.0","skinId":stable_id,"theme":item["name"],
-        "assetCount":len(records),"records":records},indent=2,ensure_ascii=False)+"\n").encode()
-    # Include the three existing approved vector material masters in the same checksum set.
+    # Include the three approved vector material masters in the checksum set.
     for rel in ("svg/texture.svg", "svg/bezel.svg", "svg/crest.svg"):
         source = folder / rel
         if not source.is_file():
             raise RuntimeError(f"approved vector source is missing: {source}")
         raw = source.read_bytes()
         add_record(records, rel, raw, "material-vector-source")
+    # Combined manifest excludes itself to avoid a recursive checksum.
     asset_raw=(json.dumps({"schemaVersion":"1.0.0","skinId":stable_id,"theme":item["name"],
-        "assetCount":len(records),"records":records},indent=2,ensure_ascii=False)+"\\n").encode()
+        "assetCount":len(records),"records":records},indent=2,ensure_ascii=False)+"\n").encode()
     generated["assets/asset_manifest.json"]=asset_raw
 
     # Refuse to replace any existing non-identical asset.
