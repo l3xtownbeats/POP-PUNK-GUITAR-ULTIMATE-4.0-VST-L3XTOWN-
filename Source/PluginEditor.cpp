@@ -51,12 +51,14 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
 class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
-    struct Skin { int index = 0; juce::String id, name, family, familyKey, layout; juce::File preview; juce::Colour accent { 0xff00d9ff }; bool active = false; };
+    struct Skin { int index = 0; juce::String id, name, family, familyKey, layout; juce::File preview; juce::Colour accent { 0xff00d9ff }; bool active = false, favorite = false; };
 
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn, PPGUThemeManager::Palette paletteIn,
-                         int activeIndex, std::function<bool(int)> previewIn,
-                         std::function<bool(int)> applyIn, std::function<void(int)> cancelIn)
+                         int activeIndex, juce::StringArray favoritesIn, std::function<void(const juce::StringArray&)> saveFavoritesIn,
+                         std::function<bool(int)> previewIn, std::function<bool(int)> applyIn,
+                         std::function<void(int)> cancelIn)
         : skins(std::move(skinsIn)), palette(std::move(paletteIn)), selection(activeIndex),
+          favorites(std::move(favoritesIn)), saveFavorites(std::move(saveFavoritesIn)),
           preview(std::move(previewIn)), apply(std::move(applyIn)), cancel(std::move(cancelIn))
     {
         setWantsKeyboardFocus(true);
@@ -82,6 +84,7 @@ public:
         familyFilter.addItem("CHROME PARADE", 4); familyFilter.addItem("WOOD SUMMER", 5);
         familyFilter.addItem("VINTAGE TAPE", 6); familyFilter.addItem("SUNSET SUBURB", 7);
         familyFilter.addItem("SPECIAL", 8); familyFilter.addItem("LEGACY THEMES", 9);
+        familyFilter.addItem("FAVORITES ONLY", 10);
         familyFilter.setSelectedId(1, juce::dontSendNotification);
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
@@ -94,8 +97,9 @@ public:
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
-        previewButton.setButtonText("PREVIEW"); applyButton.setButtonText("APPLY"); cancelButton.setButtonText("CANCEL");
-        for (auto* button : { &previewButton, &applyButton, &cancelButton })
+        previewButton.setButtonText("PREVIEW"); favoriteButton.setButtonText("☆ FAVORITE");
+        applyButton.setButtonText("APPLY"); cancelButton.setButtonText("CANCEL");
+        for (auto* button : { &previewButton, &favoriteButton, &applyButton, &cancelButton })
         {
             button->setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
             button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
@@ -104,6 +108,7 @@ public:
         applyButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
         applyButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
         previewButton.onClick = [this] { previewDraft(); };
+        favoriteButton.onClick = [this] { toggleFavorite(); };
         applyButton.onClick = [this] { applyDraft(); };
         cancelButton.onClick = [this] { cancelDraft(); };
 
@@ -137,7 +142,7 @@ public:
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
-        for (auto* button : { &previewButton, &applyButton, &cancelButton })
+        for (auto* button : { &previewButton, &favoriteButton, &applyButton, &cancelButton })
         {
             button->setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
             button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
@@ -181,6 +186,7 @@ public:
         auto footer = area.removeFromBottom(36);
         cancelButton.setBounds(footer.removeFromRight(100).reduced(2)); footer.removeFromRight(8);
         applyButton.setBounds(footer.removeFromRight(100).reduced(2)); footer.removeFromRight(8);
+        favoriteButton.setBounds(footer.removeFromRight(130).reduced(2)); footer.removeFromRight(8);
         previewButton.setBounds(footer.removeFromRight(110).reduced(2));
         viewport.setBounds(area); rebuildCards();
     }
@@ -270,7 +276,29 @@ private:
     private: std::vector<std::unique_ptr<Card>> cards;
     };
 
-    void selectDraft(int index) { if (selection.select(index)) grid.setSelectedIndex(index); }
+    void selectDraft(int index)
+    {
+        if (selection.select(index))
+        {
+            grid.setSelectedIndex(index);
+            favoriteButton.setButtonText(favorites.contains(skinIdForIndex(index)) ? "★ FAVORITE" : "☆ FAVORITE");
+        }
+    }
+    juce::String skinIdForIndex(int index) const
+    {
+        for (const auto& skin : skins) if (skin.index == index) return skin.id;
+        return {};
+    }
+    void toggleFavorite()
+    {
+        const auto id = skinIdForIndex(selection.draftIndex());
+        if (id.isEmpty()) return;
+        const int existing = favorites.indexOf(id);
+        if (existing >= 0) favorites.remove(existing); else favorites.add(id);
+        if (saveFavorites) saveFavorites(favorites);
+        favoriteButton.setButtonText(existing >= 0 ? "☆ FAVORITE" : "★ FAVORITE");
+        rebuildCards();
+    }
     void previewDraft() { if (preview && preview(selection.draftIndex())) selection.markPreviewed(); }
     void applyDraft()
     {
@@ -288,6 +316,7 @@ private:
         grid.clearCards(); visibleIndices.clear();
         const auto query = search.getText().trim().toLowerCase();
         const int selectedFamily = familyFilter.getSelectedId();
+        const bool favoritesOnly = selectedFamily == 10;
         const juce::StringArray families { "", "carbon_studio", "neon_basement", "chrome_parade",
             "wood_summer", "vintage_tape", "sunset_suburb", "special", "legacy" };
         const auto familyKey = selectedFamily > 1 && selectedFamily <= families.size()
@@ -295,11 +324,14 @@ private:
         for (const auto& item : skins)
         {
             if (familyKey.isNotEmpty() && item.familyKey != familyKey) continue;
+            const bool isFavorite = favorites.contains(item.id);
+            if (favoritesOnly && !isFavorite) continue;
+            auto cardItem = item; cardItem.favorite = isFavorite;
             const auto haystack = (item.name + " " + item.family + " " + item.layout).toLowerCase();
             if (query.isNotEmpty() && !haystack.contains(query)) continue;
             visibleIndices.push_back(item.index);
             auto safe = juce::Component::SafePointer<PPGUSkinGalleryPanel>(this);
-            grid.addCard(std::make_unique<Card>(item, palette, selection.draftIndex(),
+            grid.addCard(std::make_unique<Card>(cardItem, palette, selection.draftIndex(),
                 [safe](int index) { if (safe != nullptr) safe->selectDraft(index); }));
         }
         const int visibleCount = grid.getNumChildComponents();
@@ -307,6 +339,8 @@ private:
                            juce::dontSendNotification);
         previewButton.setEnabled(selection.draftIndex() > 0);
         applyButton.setEnabled(selection.draftIndex() > 0);
+        favoriteButton.setEnabled(selection.draftIndex() > 0);
+        favoriteButton.setButtonText(favorites.contains(skinIdForIndex(selection.draftIndex())) ? "★ FAVORITE" : "☆ FAVORITE");
         constexpr int gap = 12, minCardWidth = 205, cardHeight = 136;
         const int columns = juce::jmax(1, (viewport.getWidth() - gap) / (minCardWidth + gap));
         const int rows = (visibleCount + columns - 1) / columns;
@@ -317,13 +351,15 @@ private:
 
     std::vector<Skin> skins; PPGUThemeManager::Palette palette;
     ppgu::ui::SkinGallerySelection selection;
+    juce::StringArray favorites;
+    std::function<void(const juce::StringArray&)> saveFavorites;
     std::function<bool(int)> preview, apply;
     std::function<void(int)> cancel;
     bool finalized = false;
     std::vector<int> visibleIndices;
     juce::Label heading, subtitle, countLabel;
     juce::TextEditor search; juce::ComboBox familyFilter;
-    juce::TextButton previewButton, applyButton, cancelButton;
+    juce::TextButton previewButton, favoriteButton, applyButton, cancelButton;
     Grid grid; juce::Viewport viewport;
 };;
 
@@ -1712,8 +1748,21 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
                     safe->auxiliaryWorkspace->setVisible(false);
             });
         };
+        juce::StringArray favoriteSkinIds;
+        if (auto* settings = uiProperties.getUserSettings())
+            favoriteSkinIds.addTokens(settings->getValue("skinGalleryFavorites"), ",", "");
+        auto saveFavoriteSkinIds = [safe](const juce::StringArray& values)
+        {
+            if (safe == nullptr) return;
+            if (auto* settings = safe->uiProperties.getUserSettings())
+            {
+                settings->setValue("skinGalleryFavorites", values.joinIntoString(","));
+                settings->saveIfNeeded();
+            }
+        };
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
-            std::move(skins), themeManager.getPalette(), activeIndex,
+            std::move(skins), themeManager.getPalette(), activeIndex, std::move(favoriteSkinIds),
+            std::move(saveFavoriteSkinIds),
             [safe](int index) { return safe != nullptr && safe->loadSkinByIndex(index, false); },
             [safe, closeGalleryAsync](int index)
             {
