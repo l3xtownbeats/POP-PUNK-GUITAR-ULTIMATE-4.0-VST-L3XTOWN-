@@ -2893,3 +2893,27 @@ unverified until their steps complete successfully.
 **Compatibility boundary:** UI-only. No APVTS, audio/DSP, MIDI, sampler, preset serialization, SoundBank or skin asset changes.
 
 **Validation:** changes committed; contract test execution and JUCE build remain pending. No PASS claim.
+
+
+## 2026-11-15 — REV18 NEON-STAGE-ARTIFACT-AUDIT — approved mockup and asset-source reconciliation
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Reference material inspected:** `NEON_STAGE_REFERENCE_CONTACT_SHEET(3).png`, `Неоновая панель PPGU: студия поп-панк гитары.png`, `preview.png`, `hero.png`.
+**Source archive:** `NEON_STAGE_REV18_SKIN1_ASSET_SOURCE.zip` (322 entries, 2,717,534 bytes; SHA-256 `5c14d873475f12e90c534c6415dc3e313017000dc0322e50ecc3e409e33570e8`).
+**Staging archive:** `neon-stage-skin1-staging.zip` (953,929 bytes; SHA-256 `fce41e5ca905d74d7f342f1eacc02a450fba028b5fe5f838c794b11d540e5b73`).
+
+**Reference contract:** The approved mockup establishes the visual direction and STUDIO_CONSOLE composition: dark carbon/metal surfaces, electric blue/cyan lighting with violet/magenta accents, guitar hero artwork, browser, MELODY/PATTERN core, nine rotary controls, seven FX switches, AutoChords, FX Edit, Amp & Tone, MIDI keyboard and auxiliary windows. It is a design reference, not proof of runtime behavior. The binding control inventory/A7 and current backend state take precedence over mockup-only elements; do not fake PUNK GROUP, CPU/RAM meters, wheels, LED activity, Favorite/Save/Prev/Next or other prohibited/nonexistent functions.
+
+**Source archive audit:** `tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053` returned PASS, 17 checks, 0 failures. However deterministic reproduction gates failed:
+- `generate_rev18_skin_artwork.py --check`: FAIL — 11 artwork/atlas files differ from current generator output.
+- `generate_rev18_skin_controls.py --check`: FAIL — control/state sprite files differ from current generator output.
+- `generate_rev18_skin_icons.py --check`: FAIL — six runtime icon exports differ.
+The archive's theme and manifests still identify `skin-053 / Skin_053`, not the current user-approved `skin-001 / Skin_001`. Passing the read-only asset audit alone does not make it eligible for release.
+
+**Staging archive audit:** The nested staging package is `Skin_052`, not `Skin_001`; its pack manifest says `STAGING_NOT_MERGED`, `sourceRegistryTotal=102`, but `startIndex=52`. It explicitly says runtime tests were not run and pixel-match to the approved reference is not verified. It is not mergeable and must not overwrite historical `Skin_052`.
+
+**[DECISION — lossless identity migration]:** The latest explicit user decision is `SKIN-1 = skin-001 / Skin_001 = NEON STAGE`, superseding older `skin-053` identity text. Preserve every existing historical ID and folder (`skin-01`, `skin-052`, `skin-053`, and all others). Add the canonical `skin-001` as a new registry record at unused historical index 103, path `Skin_001/theme.json`, and `activeOrdinal=1`; set it as `defaultSkin`. This keeps all old IDs/indexes/paths intact. Runtime and Python registry validators must explicitly permit this one stable-ID/index exception; active gallery order is based on `activeOrdinal`, not the historical storage index. No migration is complete until ThemeManager fallback, fresh install/reset, saved preference, registry validator and pack audit all agree.
+
+**Current status:** no theme assets were copied, no registry default was changed and no release skin was activated in this audit. The source package is an audited but non-reproducible legacy candidate; the staging package is rejected. Do not claim NEON STAGE is loaded in the plugin.
+
+**Next:** reconcile/generate reproducible assets against the approved mockup and the 27-control/21-token contract; create the additive `Skin_001` folder and registry record; update runtime/validator default resolution; run G1–G4 and exact-SHA CI before calling the theme integrated.
