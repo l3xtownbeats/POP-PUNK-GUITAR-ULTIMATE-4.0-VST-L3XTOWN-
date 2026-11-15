@@ -136,6 +136,32 @@ int main()
     CHECK(!defaultPathTraversal.succeeded());
     CHECK(!defaultPathTraversal.errors.empty());
 
-    std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\n";
+    // A lexically-contained sample path must also remain inside the library
+    // after resolving symlinks. Skip only when the platform disallows creating
+    // directory symlinks (the lexical traversal cases above still run).
+    const auto symlinkRoot = base / "symlink-root";
+    const auto outsideRoot = base / "symlink-outside";
+    std::error_code filesystemError;
+    std::filesystem::create_directories(symlinkRoot, filesystemError);
+    filesystemError.clear();
+    std::filesystem::create_directories(outsideRoot, filesystemError);
+    filesystemError.clear();
+    const auto escapeLink = symlinkRoot / "linked";
+    std::filesystem::create_directory_symlink(outsideRoot, escapeLink, filesystemError);
+    if (!filesystemError)
+    {
+        const auto symlinkEscape = parseText(
+            "<region> sample=linked/secret.wav key=60\\n", symlinkRoot);
+        CHECK(!symlinkEscape.succeeded());
+        CHECK(!symlinkEscape.errors.empty());
+
+        const auto symlinkDefaultPathEscape = parseText(
+            "<control> default_path=linked\\n"
+            "<region> sample=secret.wav key=60\\n", symlinkRoot);
+        CHECK(!symlinkDefaultPathEscape.succeeded());
+        CHECK(!symlinkDefaultPathEscape.errors.empty());
+    }
+
+    std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\\n";
     return 0;
 }
