@@ -2998,3 +2998,27 @@ unverified until their steps complete successfully.
 **Проверки:** test source added/read back. Workflow runs for exact SHA: 0. Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 
 **Следующий шаг:** продолжить оставшиеся Pattern timing/transport parameters; артикуляции Legato/Slide/Hammer/Pull не имитировать без соответствующих реальных записей и mappings.
+
+
+## 2026-11-15 — Pattern timing/feel controls: PPQ offset, Swing Base, Humanize, Style DNA accents
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Подключены ранее объявленные Pattern controls, для которых поведение можно безопасно реализовать на существующей authored MIDI-grid без подмены реальных гитарных performance recordings.
+
+**Изменения:**
+- `globalPpqOffset`: сдвигает опубликованный Pattern block clock; исходный host snapshot остаётся нетронутым для seek/discontinuity detection. Исправлено повторное применение offset к internal scheduler reset, чтобы offset не накапливался по блокам.
+- `swingBase`: 8th swing сдвигает вторую восьмую долю; 16th swing сдвигает нечётные шестнадцатые.
+- `humanize`: добавлен детерминированный bounded positive timing offset; одинаковые bar/step/strum/note дают одинаковый результат, без RNG/allocation в audio callback.
+- `dnaStringSpread`: управляет межструнным spread; default 0.5 сохраняет прежние 0.012 beats.
+- `dnaBeatAccent`: добавляет отдельный акцент downbeat и вторичный акцент на offbeat; не заменяет основной `accent`.
+- `PatternEvent::timingOffsetBeats` применяется после grid quantization, чтобы swing/humanize не округлялись обратно к сетке.
+- Добавлены scheduler contract tests для 1/8 vs 1/16 swing, deterministic humanize и сохранения timing offset после quantization.
+
+**Commits:** `0004fdd7f57d6acb91ca092174bc56d385c0b0a9` (parent `1d6681b121b45deeee610fb4f5c82e63fdb8068d`); internal-clock offset correction `f6dd7eb66a391c9554db724691cf742ed100942c` (parent `0004fdd7f57d6acb91ca092174bc56d385c0b0a9`).
+
+**Ограничения:** `preserveHumanTiming` остаётся deferred, пока не появятся импортированные/записанные performance events с исходными timing offsets. `dnaChugDensity`, `dnaHammerPullProbability`, `dnaFxTaste`, `chordSlashBass`, `singleMidiNoteAsChordRoot`, `melodyPatternSlot`, `endingLength`, `palmHitOnEnding`, `stringSlapOnEnding` не активируются фиктивно: для них нужны подтверждённые chord/performance/sample mappings или отдельная согласованная семантика. Double Track остаётся DISABLED BY DESIGN до аудио-review.
+
+**Проверки:** scheduler tests added; exact-SHA workflow runs: 0. Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+
+**Следующий шаг:** FX slot reorder (7 утверждённых slots, Flanger остаётся отдельным stage без 8-го bypass); затем sampler streaming/64-voice stress and state restoration audit.

@@ -1051,3 +1051,25 @@ Approved requirements:
 **Тесты:** regression source added; exact-SHA CTest/build/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** Pattern timing/transport controls; do not synthesize unsupported legato/slide/hammer-pull articulations without recorded mappings.
+
+
+## 2026-11-15 — Pattern scheduler timing feel / transport controls
+
+**Тип:** production Pattern scheduler implementation + contract tests.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `0004fdd7f57d6acb91ca092174bc56d385c0b0a9` (parent `1d6681b121b45deeee610fb4f5c82e63fdb8068d`).
+- `f6dd7eb66a391c9554db724691cf742ed100942c` (parent `0004fdd7f57d6acb91ca092174bc56d385c0b0a9`).
+
+**Файлы / symbols:**
+- `Source/Performance/PatternScheduler.h` — `PatternEvent::timingOffsetBeats`, `swingOffsetForStep()`, `deterministicHumanizeOffset()`; offset is applied after quantization and bounded.
+- `Source/PluginProcessor.cpp` — reads `globalPpqOffset`, `swingBase`, `humanize`, `dnaStringSpread`, `dnaBeatAccent`; Pattern event generation supplies independent timing offsets and beat accents; internal scheduler reset subtracts the applied PPQ offset to prevent accumulation.
+- `tests/PatternSchedulerTests.cpp` — swing base, deterministic humanization, and post-quantize timing offset contracts.
+
+**Behavior:** eighth-note swing delays step 2/6 offbeats by up to 0.125 quarter-note; sixteenth swing delays odd 16th steps by up to 0.0625 quarter-note. Humanize adds deterministic 0..0.02 beat offset. String spread defaults to previous 0.012-beat spacing. DNA Beat Accent is a separate downbeat/offbeat shaping control.
+
+**Deferred by design:** preserveHumanTiming requires genuine recorded performance timing data. DNA Chug Density / Hammer-Pull Probability / FX Taste and chord slash/single-note-root/ending controls remain unbound until their approved data/semantic contracts are present. Double Track remains disabled until audio review.
+
+**Тесты:** source-level tests added; exact-SHA Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** implement real seven-slot FX reorder with Flanger treated as its separately approved stage, then sampler streaming/64-voice stress and state restoration audit.
