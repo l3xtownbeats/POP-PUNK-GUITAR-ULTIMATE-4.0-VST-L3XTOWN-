@@ -97,6 +97,21 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertIn("settings->saveIfNeeded()", OPEN_GALLERY)
         self.assertIn("saveFavourites(favourites)", GALLERY)
 
+    def test_empty_filter_invalidates_hidden_selection_and_actions(self) -> None:
+        rebuild_start = GALLERY.index("void rebuildCards()")
+        rebuild_end = GALLERY.index("std::vector<Skin> skins;", rebuild_start)
+        rebuild = GALLERY[rebuild_start:rebuild_end]
+        self.assertIn("if (visibleSkins.empty())", rebuild)
+        self.assertIn("selectedIndex = 0", rebuild)
+        self.assertIn("previewImage = {}", rebuild)
+        selection_start = GALLERY.index("void updateSelectionControls()")
+        selection_end = GALLERY.index("bool isFavourite", selection_start)
+        selection_controls = GALLERY[selection_start:selection_end]
+        self.assertIn("previewButton.setEnabled(valid)", selection_controls)
+        self.assertIn("applyButton.setEnabled(valid)", selection_controls)
+        self.assertIn("previewTitle.clear", selection_controls)
+        self.assertIn("previewDetails.clear", selection_controls)
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
