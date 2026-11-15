@@ -1530,8 +1530,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     addAndMakeVisible(*keyboard);
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor);
     addAndMakeVisible(*performanceDisplay);
-    melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
-    patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    // Explicitly notify the APVTS ComboBoxAttachment: setSelectedId() defaults to no notification.
+    // Without this, the visible MELODY/PATTERN tabs can change the ComboBox selection silently
+    // while the actual playMode parameter remains unchanged.
+    melodyTab.onClick = [this] { modeBox.setSelectedId(1, juce::sendNotificationSync); };
+    patternTab.onClick = [this] { modeBox.setSelectedId(2, juce::sendNotificationSync); };
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
