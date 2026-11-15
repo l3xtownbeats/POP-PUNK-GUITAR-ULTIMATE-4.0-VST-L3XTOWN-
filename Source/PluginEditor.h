@@ -10,6 +10,7 @@ class PPGUPremiumLookAndFeel final : public juce::LookAndFeel_V4
 {
 public:
     void setPalette(const PPGUThemeManager::Palette& value) { palette = value; setDefaultSansSerifTypefaceName(palette.uiTypeface); }
+    void setSkinAssetsRoot(const juce::File& root) { knobSprite = juce::ImageFileFormat::loadFrom(root.getChildFile("controls/knob01_default.png")); }
     void drawRotarySlider(juce::Graphics&, int, int, int, int, float, float, float, juce::Slider&) override;
     void drawButtonBackground(juce::Graphics&, juce::Button&, const juce::Colour&, bool, bool) override;
     void drawComboBox(juce::Graphics&, int, int, bool, int, int, int, int, juce::ComboBox&) override;
@@ -17,6 +18,7 @@ public:
     void drawTextEditorOutline(juce::Graphics&, int, int, juce::TextEditor&) override;
 private:
     PPGUThemeManager::Palette palette;
+    juce::Image knobSprite;
 };
 
 class PPGUPerformanceDisplay;
@@ -57,6 +59,7 @@ private:
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
     juce::File runtimeSkinRoot;
+    juce::Image stageBackground;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     // These REV.18 entry points are intentionally disabled until their real backends exist.
     juce::TextButton autoSoundHunterButton { "AUTO SOUND HUNTER" }, curatorButton { "CURATOR" }, aboutButton { "ABOUT" };
