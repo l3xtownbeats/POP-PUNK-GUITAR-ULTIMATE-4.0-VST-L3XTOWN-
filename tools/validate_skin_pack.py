@@ -136,6 +136,7 @@ def validate_registry_contract(registry: dict) -> int:
     seen_indices: set[int] = set()
     seen_ordinals: set[int] = set()
     default_is_first = False
+    canonical_default_record = False
     legacy_names = {
         "neon riot", "dark metal", "modern studio", "carbon relay",
         "blackout voltage", "signal forge", "sound forge",
@@ -163,6 +164,15 @@ def validate_registry_contract(registry: dict) -> int:
         seen_ids.add(theme_id)
         seen_indices.add(index)
 
+        if theme_id == "skin-001":
+            canonical_default_record = (
+                index == 1
+                and name == "NEON STAGE DEFAULT"
+                and path == "Skin_001/theme.json"
+                and active is True
+                and entry.get("activeOrdinal") == 1
+            )
+
         if active:
             ordinal = entry.get("activeOrdinal")
             if (not isinstance(ordinal, int) or isinstance(ordinal, bool)
@@ -181,8 +191,11 @@ def validate_registry_contract(registry: dict) -> int:
         fail("activeThemeCount does not match the number of active registry entries")
     if seen_ordinals != set(range(1, declared_active + 1)):
         fail("activeOrdinal values must be sequential from 1 without gaps")
-    if not default_is_first:
-        fail("skin-001 must be the first active theme (SKIN-1 / NEON STAGE DEFAULT)")
+    if not default_is_first or not canonical_default_record:
+        fail(
+            "skin-001 must be the canonical active first theme: "
+            "index=1, name=NEON STAGE DEFAULT, path=Skin_001/theme.json, activeOrdinal=1"
+        )
     return active_count
 
 
