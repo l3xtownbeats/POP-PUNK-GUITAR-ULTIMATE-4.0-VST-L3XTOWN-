@@ -280,6 +280,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi)
 {
     juce::ScopedNoDenormals noDenormals;
+    sampler.processPendingSampleBankClear();
     buffer.clear();
 
     const int fadeLength = juce::jmax(1, static_cast<int>(currentSampleRate * panicFadeMs / 1000.0));

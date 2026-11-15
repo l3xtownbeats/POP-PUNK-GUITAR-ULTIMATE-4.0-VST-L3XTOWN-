@@ -480,8 +480,16 @@ void SamplerEngine::prepare(double sampleRate) noexcept
 
 void SamplerEngine::clearSampleBank()
 {
-    reset();
+    // Called by state restore on a non-audio thread. Clear the active map now,
+    // but defer voice/reader mutation to the next audio callback.
     pool.clearActiveSnapshot();
+    clearVoicesRequested.store(true, std::memory_order_release);
+}
+
+void SamplerEngine::processPendingSampleBankClear() noexcept
+{
+    if (clearVoicesRequested.exchange(false, std::memory_order_acq_rel))
+        reset();
 }
 
 void SamplerEngine::reset() noexcept
