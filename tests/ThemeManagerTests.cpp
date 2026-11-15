@@ -138,7 +138,7 @@ int main()
     expect(manager.getPalette().usedFallback,
            "missing mandatory control ID restores default fallback");
 
-    auto unexpectedControl = juce::JSON::parse(validJson);
+    auto unexpectedControl = juce::JSON::parse(canonicalJson);
     auto* unexpectedControls = unexpectedControl.getProperty("controls", juce::var()).getDynamicObject();
     expect(unexpectedControls != nullptr, "canonical controls object is mutable for extra-key test");
     if (unexpectedControls != nullptr)
