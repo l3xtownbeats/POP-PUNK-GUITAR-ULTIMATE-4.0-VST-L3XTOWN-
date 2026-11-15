@@ -56,6 +56,30 @@ class SkinRegistryContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_registry_contract(candidate)
 
+    def test_default_record_is_the_canonical_neon_stage_package(self) -> None:
+        default_entry = next(entry for entry in self.registry["themes"] if entry["id"] == "skin-001")
+        self.assertEqual(default_entry["index"], 1)
+        self.assertEqual(default_entry["name"], "NEON STAGE DEFAULT")
+        self.assertEqual(default_entry["path"], "Skin_001/theme.json")
+        self.assertIs(default_entry["active"], True)
+        self.assertEqual(default_entry["activeOrdinal"], 1)
+
+    def test_default_record_cannot_be_renamed_relocated_or_deactivated(self) -> None:
+        mutations = (
+            ("name", "Other Theme"),
+            ("path", "Skin_053/theme.json"),
+            ("active", False),
+            ("activeOrdinal", 2),
+            ("index", 2),
+        )
+        for key, value in mutations:
+            with self.subTest(key=key):
+                candidate = copy.deepcopy(self.registry)
+                default_entry = next(entry for entry in candidate["themes"] if entry["id"] == "skin-001")
+                default_entry[key] = value
+                with self.assertRaises(ValueError):
+                    validate_registry_contract(candidate)
+
     def test_release_target_is_exactly_sixteen(self) -> None:
         candidate = copy.deepcopy(self.registry)
         candidate["releaseTargetActiveThemeCount"] = 15
