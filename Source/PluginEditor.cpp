@@ -995,9 +995,6 @@ public:
         keyBox.onChange = [this] { circle.setSelectedRoot(keyBox.getSelectedId() - 1); refreshChordNames(); };
         modeBox.onChange = [this] { refreshChordNames(); };
 
-        circle.setSelectedRoot(0);
-        circle.setPalette(palette);
-        circle.onSelect = nullptr;
         circleComponent = std::make_unique<PPGUCircleOfFifths>([this](int root)
         {
             keyBox.setSelectedId(root + 1, juce::sendNotification);
