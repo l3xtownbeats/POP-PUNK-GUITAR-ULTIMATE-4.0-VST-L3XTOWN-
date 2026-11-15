@@ -1732,7 +1732,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);if(performanceDisplay)performanceDisplay->setPalette(p);
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(juce::Font(p.displayTypeface, 28.0f * p.fontScale, juce::Font::bold).withExtraKerningFactor(p.letterSpacing));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),

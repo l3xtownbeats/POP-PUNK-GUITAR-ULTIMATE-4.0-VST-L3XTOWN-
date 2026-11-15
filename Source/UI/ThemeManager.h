@@ -36,6 +36,11 @@ public:
 
         juce::String id { "skin-053" };
         juce::String name { "NEON STAGE DEFAULT" };
+        juce::String uiTypeface { "Segoe UI" };
+        juce::String displayTypeface { "Consolas" };
+        juce::String typographyWeight { "semibold" };
+        float fontScale = 1.0f;
+        float letterSpacing = 0.35f;
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
         juce::Colour canvas { 0xff080b14 };
