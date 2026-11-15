@@ -1782,8 +1782,8 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
 {
 #if JUCE_WINDOWS
  HMODULE module=nullptr;auto address=reinterpret_cast<LPCWSTR>(reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
- DWORD flags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
- if(GetModuleHandleExW(flags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
+ DWORD moduleFlags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
+ if(GetModuleHandleExW(moduleFlags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
   if(n>0&&n<path.size()){juce::File f(fromWidePath(path.data(), static_cast<int>(n)));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
 #endif
  auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
@@ -1851,17 +1851,15 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     const auto& entry = themes->getReference(index - 1);
     if (!entry.isObject())
         return {};
-    {
-        const auto relativePath = entry.getProperty("path", "").toString();
-        if (relativePath.isEmpty() || relativePath.startsWith("/")
-            || relativePath.contains("..") || !relativePath.startsWith("Skin_")
-            || !relativePath.endsWith("/theme.json"))
-            return {};
 
-        const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
-        return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
-    }
-    return {};
+    const auto relativePath = entry.getProperty("path", "").toString();
+    if (relativePath.isEmpty() || relativePath.startsWith("/")
+        || relativePath.contains("..") || !relativePath.startsWith("Skin_")
+        || !relativePath.endsWith("/theme.json"))
+        return {};
+
+    const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
+    return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
@@ -2034,11 +2032,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     constexpr int settingsPanelId = 6;
     if (!auxiliaryWorkspace->isPanelOpen(settingsPanelId))
     {
-        auto* properties = uiProperties.getUserSettings();
-        const auto panelScale = properties != nullptr
-            ? static_cast<float>(properties->getDoubleValue("workspacePanelScale", 1.0)) : 1.0f;
-        const auto panelGap = properties != nullptr
-            ? properties->getIntValue("workspacePanelGap", 12) : 12;
+        auto* settingsProperties = uiProperties.getUserSettings();
+        const auto panelScale = settingsProperties != nullptr
+            ? static_cast<float>(settingsProperties->getDoubleValue("workspacePanelScale", 1.0)) : 1.0f;
+        const auto panelGap = settingsProperties != nullptr
+            ? settingsProperties->getIntValue("workspacePanelGap", 12) : 12;
 
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
         auto content = std::make_unique<PPGUSettingsPanel>(
