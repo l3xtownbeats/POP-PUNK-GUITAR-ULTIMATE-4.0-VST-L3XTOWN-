@@ -2915,3 +2915,25 @@ unverified until their steps complete successfully.
 **Тесты:** тестовый код добавлен, но Windows Release build и CTest ещё не запускались на exact SHA `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d`. pluginval strictness 5 и FL Studio 20 также NOT RUN / NOT VERIFIED. Не объявлять фильтры TESTED до фактического запуска.
 
 **Следующий шаг:** запустить exact-HEAD Windows Release/CTest; исправить compile/test failures, затем добавить processor-level audio-response tests и продолжить сверку остальных declared-but-unconsumed APVTS controls.
+
+
+## 2026-11-15 — MELODY/PATTERN: velocity-triggered Palm Mute
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Исправлен ранее подтверждённый разрыв APVTS → audio engine: `palmMuteThreshold` был объявлен, но не использовался. Теперь низкая итоговая velocity включает Palm Mute; выбор Articulation = Palm Mute также принудительно включает эту артикуляцию.
+
+**Изменения:**
+- `Source/PluginProcessor.cpp`: `processBlock()` читает существующие `palmMuteThreshold` и `articulation`; и MELODY, и PATTERN передают флаг Palm Mute в общий SamplerEngine.
+- `Source/Sampler/SamplePool.h/.cpp`: voice хранит независимые фильтровые состояния и decay state; Palm Mute применяет per-voice low-pass 1.8 kHz и естественный decay примерно 120 ms даже при удерживаемой MIDI-клавише. Обычная Open артикуляция сохраняет loop/sustain.
+- `tests/SamplePoolTests.cpp`: добавлена проверка, что palm-muted continuous-loop voice становится слышимым и завершается, а open continuous-loop voice остаётся активным; ожидание streaming pages выполняется по небольшим блокам.
+
+**Commit:** `f0474f6f1052318cbc7a71765cd63b5f2fa3d587` (parent `97eb53ab0ae5f467ed5a58df9908d41984f96e4e`); test stabilization follow-up `99e16eacb015c4dd7dbed236744ea5bd3974f72c` (parent `f0474f6f1052318cbc7a71765cd63b5f2fa3d587`).
+
+**Совместимость:** существующие APVTS IDs/ranges/defaults не менялись; сигнатура SamplerEngine расширена последним defaulted argument, поэтому старые call sites сохраняют прежнее поведение. Новый per-voice state не использует heap allocations в render callback.
+
+**Ограничения:** это DSP palm-mute fallback, а не утверждение о наличии специализированных palm-muted sample layers в текущем SFZ. Flageolet/Tremolo, pick/finger timbre и другие артикуляции остаются отдельными задачами и не считаются реализованными.
+
+**Проверки:** regression test добавлен, но CTest/Windows Release/pluginval/FL Studio 20 на exact SHA `99e16eacb015c4dd7dbed236744ea5bd3974f72c` не запускались или не подтверждены. Не считать TESTED до результата CI.
+
+**Следующий шаг:** exact-SHA CTest/build; затем MIDI Pitch Bend / Mod Wheel / Vibrato, voice targeting и оставшиеся артикуляции с учётом доступных sample mappings.

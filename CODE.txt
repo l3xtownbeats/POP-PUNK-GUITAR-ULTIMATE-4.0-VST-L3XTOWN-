@@ -963,3 +963,26 @@ Approved requirements:
 **Тесты:** test source added; no compiler/CTest/pluginval/FL Studio result yet for SHA `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d`.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** exact-SHA Windows build + CTest; then processor-level response tests and remaining APVTS/DSP gap audit.
+
+
+## 2026-11-15 — Sampler voice-level Palm Mute articulation
+
+**Тип:** production sampler/MIDI implementation + regression test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `f0474f6f1052318cbc7a71765cd63b5f2fa3d587` (parent `97eb53ab0ae5f467ed5a58df9908d41984f96e4e`).
+- `99e16eacb015c4dd7dbed236744ea5bd3974f72c` (parent `f0474f6f1052318cbc7a71765cd63b5f2fa3d587`).
+
+**Файлы / symbols:**
+- `Source/Sampler/SamplePool.h` — `SamplerEngine::noteOn(..., bool palmMuted)`, per-voice palm-mute state.
+- `Source/Sampler/SamplePool.cpp` — `SamplerEngine::prepare()`, `noteOn()`, `render()`; 1.8 kHz per-voice low-pass and 120 ms natural decay.
+- `Source/PluginProcessor.cpp` — `processBlock()`; reads `palmMuteThreshold` and `articulation` and passes articulation state in MELODY and PATTERN.
+- `tests/SamplePoolTests.cpp` — held-loop decay vs open-loop sustain regression.
+
+**Причина:** existing `palmMuteThreshold` and `articulation` parameters had no audio-engine behavior.
+
+**Совместимость:** no APVTS ID/range/default changes. The new `noteOn` argument is defaulted to false, preserving existing call sites. No new audio-thread allocations.
+
+**Тесты:** regression test source added and made streaming-cache tolerant; exact-SHA CTest/build/pluginval/FL Studio 20 not yet run.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** MIDI pitch bend / modulation / vibrato, then remaining articulation and Style DNA gaps.
