@@ -1,0 +1,35 @@
+# ============================================================================
+# CMAKE_ALL_IN_BOX_SNIPPET.txt — интеграция all-in-box модулей PPGU REV 18
+# ============================================================================
+# Вставить в корневой CMakeLists.txt ПОСЛЕ существующих target-ов.
+# Три production файла собираются в основной plugin target как есть.
+# Три контрактных теста — отдельными консольными target-ами (CTest),
+# по образцу уже принятых в проекте (см. CODE.txt: CTest target registration).
+# ============================================================================
+
+# --- 1. Основной plugin target: добавить в существующий список исходников ---
+# target_sources(PPGU_VST3 PRIVATE
+#     Source/UI/SkinGalleryAllInOne.cpp
+#     Source/UI/OverlayManagerAllInOne.cpp
+#     Source/Security/SecureSkinImportAllInOne.cpp
+# )
+# Примечание: тестовые секции внутри файлов активируются ТОЛЬКО при
+# соответствующем define, поэтому основной target компилирует их как пустые.
+
+# --- 2. Контрактные тесты ---
+# add_executable(ppgu_skin_gallery_contract Source/UI/SkinGalleryAllInOne.cpp)
+# target_compile_definitions(ppgu_skin_gallery_contract PRIVATE PPGU_GALLERY_CONTRACT_TESTS)
+# add_test(NAME ppgu_skin_gallery_contract COMMAND ppgu_skin_gallery_contract)
+
+# add_executable(ppgu_overlay_contract Source/UI/OverlayManagerAllInOne.cpp)
+# target_compile_definitions(ppgu_overlay_contract PRIVATE PPGU_OVERLAY_CONTRACT_TESTS)
+# add_test(NAME ppgu_overlay_contract COMMAND ppgu_overlay_contract)
+
+# add_executable(ppgu_skinimport_contract Source/Security/SecureSkinImportAllInOne.cpp)
+# target_compile_definitions(ppgu_skinimport_contract PRIVATE PPGU_SKINIMPORT_CONTRACT_TESTS)
+# add_test(NAME ppgu_skinimport_contract COMMAND ppgu_skinimport_contract)
+
+# --- 3. Рекомендуемые флаги (как в существующем workflow) ---
+# set_target_properties(ppgu_skin_gallery_contract ppgu_overlay_contract ppgu_skinimport_contract
+#     PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+# Для MSVC: /W4 /permissive- — файлы написаны без расширений GNU.

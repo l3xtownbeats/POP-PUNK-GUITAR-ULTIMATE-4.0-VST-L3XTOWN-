@@ -1,0 +1,18 @@
+## 2026-11-15 — ALL-IN-BOX: Gallery REV18 v2.0 + O1 OverlayManager + S1 SecureSkinImport (production modules)
+
+**Тип:** production code + contract tests + build registration (draft, готово к копированию в канонические пути).
+**Ветка:** готово к переносу на активную ветку REV.18 (preflight обязателен по правилам журнала).
+**Commit SHA:** присваивается после переноса файлов и commit (запись дополняется на месте).
+**Parent SHA:** фиксируется на месте переноса.
+
+**Файлы:**
+- Source/UI/SkinGalleryAllInOne.cpp — Model (JUCE-free), SkinGalleryPanel (JUCE UI), 15 контрактных сценариев. Реализует раздел 7 REV 18 v2.0: Select/Preview/Apply/Back/Close без применения до Apply, Favorites (сортированный список + бинарный поиск), поиск/фильтр по name/family/id без учёта регистра, клавиатура (стрелки/Enter/Esc/F), маркеры SELECTED/ACTIVE/FAVOURITE, NEON STAGE fallback-палитра.
+- Source/UI/OverlayManagerAllInOne.cpp — O1 production module: три overlay-панели (AMP_TONE/FX_CHAIN/PLAYBACK), z-order через фокус, клампинг к хосту, min 120x80, ECO «одно видимое окно», serialize/deserialize одной строкой. ИСПРАВЛЕН известный дефект ZIP-версии: close() возвращает true по факту открытия, независимо от Listener.
+- Source/Security/SecureSkinImportAllInOne.cpp — S1 production module: whitelist расширений, блок traversal/absolute/backslash/drive/scheme, PNG/JPEG/WAV magic, SVG policy с case-insensitive inline handlers и блоком protocol-relative/external href (закрыты оба обхода ZIP-версии: mixed-case ONLOAD и HREF=//evil), bounds-checked ZIP local-header parser с полным набором полей, manifest с обязательными 21 canonical tokens и well-formed #rrggbb, собственный SHA-256 с KAT (empty/abc/56-byte/1M). Модуль только валидирует; запись на диск — после PASS.
+
+**Причина:** закрыть открытые блокеры O1/S1 и gallery UX-gap, зафиксированные аудитами 2026-11-13/14.
+**Совместимость / non-goals:** APVTS, DSP, audio callback, sampler, MIDI, presets, SoundBank, theme registry structure — не затронуты. Тестовые секции активируются defines; основной target их не исполняет.
+**Тесты:** 15 gallery + 12 overlay + 16 import = 43 контрактных сценария; проверены программным 1:1 портом логики — все PASS. C++ компиляция/CTest — только через exact-SHA CI.
+**CI run / artifacts:** отсутствуют на момент записи; ожидается exact-SHA Windows Release run.
+**Статус:** IMPLEMENTED / VALIDATION PENDING.
+**Следующий шаг:** перенос в канонические пути, CMake registration, exact-SHA CI: configure → build → полный CTest → pluginval 5.

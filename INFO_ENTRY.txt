@@ -1,0 +1,12 @@
+## 2026-11-15 — ALL-IN-BOX REV18: Gallery UX + O1 OverlayManager + S1 SecureSkinImport
+
+**Статус:** IMPLEMENTED / VALIDATION PENDING. Production source не сливался в live-ветку: файлы подготовлены как единый пакет и требуют переноса в канонические пути с branch/HEAD preflight.
+
+**Что закрыто пакетом:**
+- Skin Gallery REV 18 v2.0 раздел 7: транзакционный workflow Select/Preview/Apply/Back/Close; Preview не меняет активную палитру и не пишет настройки; Close сбрасывает выбор на SKIN-1; Favorites с отсортированным списком; поиск/фильтр семейств; клавиатурная навигация со клампингом; enlarged preview с метаданными.
+- O1 OverlayManager: независимые окна AMP & TONE / FX CHAIN / PLAYBACK; z-order, фокус, клампинг границ, min-размеры, ECO «одно видимое окно», persistence одной строкой. Исправлен известный дефект ZIP-версии close() (зависимость от наличия Listener).
+- S1 SecureSkinImport: traversal/absolute/scheme/backslash-защита, whitelist расширений, PNG/JPEG/WAV magic, SVG security (case-insensitive on*-handlers, protocol-relative/external href, script/foreignObject/data-URI), bounds-checked ZIP parser, манифест 21 token, SHA-256 KAT. Оба известных обхода ZIP-версии закрыты и покрыты негативными тестами.
+
+**Что НЕ закрыто пакетом (остаётся открытым):** NEON STAGE artwork/master assets и PNG CRC полного набора; 15 дополнительных активных тем SKIN-2..16; FX EDIT 10–15 реальных эффектов; PATTERN section-first UX; AutoChords generation; Sound Hunter production; CPU/RAM measurements; FL Studio 20 full host acceptance; exact-SHA Windows Release + полный CTest + pluginval 5.
+
+**Правило достоверности:** статусы BUILD/TESTED/HOST VERIFIED не присваиваются до exact-SHA CI PASS. Логика моделей проверена программным 1:1 портом — 39/39 PASS (43 тестовых сценария C++ покрывают те же контракты).
