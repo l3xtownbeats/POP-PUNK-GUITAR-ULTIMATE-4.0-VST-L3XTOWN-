@@ -2874,3 +2874,20 @@ unverified until their steps complete successfully.
 - Regression tests: `6b1475279dffb355305abc0e90b125d9eff0ebcb`
 
 **Проверки:** локальный запуск тестов из этого интерфейса не выполнялся; ожидается новый Windows GitHub Actions run на exact HEAD. До его завершения тесты считаются добавленными, но не подтверждёнными исполнением. PR #41 остаётся Draft; merge/approve не выполнялись.
+
+
+## 2026-11-15 — DSP AUDIT: oversized host blocks in Chorus / Reverb
+
+**Статус:** SOURCE FIX COMMITTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Проверка `Source/PluginProcessor.cpp::processBlock()` выявила, что Chorus и Reverb могли молча обходиться при размере host audio block больше `maximumBlockSize`. В Reverb дополнительно был риск выхода за размер scratch buffer, если копировать весь блок сразу.
+
+**Изменения исходников:**
+- Commit `3e4423c4f9d309861aab5a8012b50cf725f4f6aa` (parent `5c1c72fb2194058fab31e598f75643af605db7a8`): Chorus больше не отключается из-за нестандартного размера блока; Reverb переведён на последовательную обработку bounded chunks размером не более preallocated `maximumBlockSize`.
+- Commit `88159cb59aad755933152cb8c4eee7b3952ae596` (parent `d83d3b1fb8ca6b0aa24700bdce8b105f07e1e394`): удалено оставшееся условие `samples <= maximumBlockSize` из Reverb guard. Без этого guard chunking существовал, но для oversized blocks так и не вызывался.
+
+**Безопасность/совместимость:** APVTS IDs, ranges/defaults, preset serialization, MIDI routing, sampler, voice allocation и FX parameter semantics не менялись. Новые heap allocations в audio callback не добавлены; Reverb scratch buffers остаются preallocated в `prepareToPlay()`.
+
+**Проверки:** source readback подтверждает обе правки. Для SHA `3e4423c4...` и `88159cb5...` GitHub Actions workflow runs не возвращены; Windows Release build, CTest, pluginval strictness 5 и FL Studio 20 host verification НЕ ЗАПУЩЕНЫ / НЕ ПОДТВЕРЖДЕНЫ. Regression tests для oversized blocks пока не добавлены.
+
+**Следующий шаг:** добавить processor-level regression coverage для блока больше expectedBlockSize (Chorus/Reverb on/off и mono/stereo), затем перейти к следующей подтверждённой несостыковке APVTS→DSP без изменения существующих IDs.

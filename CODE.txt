@@ -912,3 +912,28 @@ Approved requirements:
 - `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
 - No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
 - Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
+
+
+## 2026-11-15 — DSP oversized-block safety: Chorus / Reverb
+
+**Тип:** production DSP fix; validation pending.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Исходные commits:**
+- `3e4423c4f9d309861aab5a8012b50cf725f4f6aa`, parent `5c1c72fb2194058fab31e598f75643af605db7a8`.
+- `88159cb59aad755933152cb8c4eee7b3952ae596`, parent `d83d3b1fb8ca6b0aa24700bdce8b105f07e1e394`.
+**Файл / символы:**
+- `Source/PluginProcessor.cpp` — `PopPunkGuitarUltimateAudioProcessor::processBlock()`, Chorus stage and Reverb stage.
+
+**Причина:** oversized host blocks were silently bypassing Chorus/Reverb. Reverb scratch buffers are sized to `maximumBlockSize`; whole-block copy could overrun them if the guard were removed without chunking.
+
+**Изменения:**
+- Chorus processing no longer checks `buffer.getNumSamples() <= maximumBlockSize`.
+- Reverb dry/wet processing copies and processes bounded chunks of at most `maximumBlockSize`, using preallocated scratch buffers.
+- Follow-up removes the stale Reverb `samples <= maximumBlockSize` guard so the chunk loop actually runs for oversized blocks.
+
+**Совместимость / non-goals:** no APVTS ID/range/default changes; no MIDI, sampler, preset serialization, skin/UI, or FX ordering changes. No allocation added to audio callback.
+
+**Тесты:** source readback only. No oversized-block regression test added yet. Windows Release, CTest, pluginval strictness 5 and FL Studio 20: NOT RUN / NOT VERIFIED. Workflow runs for both commits: none returned by commit-run lookup.
+
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** add regression coverage for block sizes exceeding expectedBlockSize, mono/stereo, effects enabled/disabled; continue APVTS-to-DSP mismatch audit.
