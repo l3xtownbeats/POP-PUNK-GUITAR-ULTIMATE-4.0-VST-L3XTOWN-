@@ -333,9 +333,9 @@ void PPGUMultiWindowWorkspace::setPanelScale(float scale)
     layoutPanels();
 }
 
-void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* properties)
+void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* settingsFile)
 {
-    persistenceProperties = properties;
+    persistenceProperties = settingsFile;
 }
 
 void PPGUMultiWindowWorkspace::setThemePalette(const PPGUThemeManager::Palette& palette)
