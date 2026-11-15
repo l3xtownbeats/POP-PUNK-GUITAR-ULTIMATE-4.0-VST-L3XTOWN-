@@ -2910,3 +2910,12 @@ Commit: `de879ac648d0a512de0e6af29e62acfeac948b8b`.
 - Windows x64 build completed successfully, but CTest exposed a real contract failure: 50 Skin Studio manifests (skin-052 and skin-054 through skin-102) contained an unapproved extra `sync_selector` entry (28 controls) instead of the required exact 27 canonical IDs. The 27-ID contract is unchanged; remove only that extra manifest key from those 50 themes and rerun the complete Windows validation.
 - No plugin behavior, APVTS IDs, FX bypass IDs, layout, or audio behavior is changed by this correction.
 - Portable ZIP is not available until CTest, pluginval strictness 5, packaging and artifact upload all pass.
+
+
+## 2026-11-15 — REV.18 SoundBank underfill correction / A8-S enforcement
+
+- Audit of Windows run `43699883066` found the cache restored only `1,678,284,042` bytes (~1.56 GiB) under the old cache key `ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1`; the network download step was skipped on cache hit. The package therefore contained only the five cached sources: Meta Steel, Meta Nylon, FreePats Clean, Distortion 1 and Distortion 2. The uploaded ZIP size was `1,675,277,132` bytes. This is NOT the approved full SoundBank and must not be presented as such.
+- REV.18 A8-S is binding: inventory-first, SHA-256 deduplication, preserve existing samples without delete/move/overwrite, no artificial size cap, report actual payload size, and split large transfers into verified ~1800 MiB parts with per-part and whole-archive SHA-256.
+- REV.18 A8-H lists 11 CC0 natural-guitar sources. The previous CI pipeline covered only 5. Workflow correction committed separately: restore the old cache as a prefix, preserve all existing sample folders, add the six missing sources (FreePats Direct, FreePats Jazz, FreePats Spanish Classical, Karoryfer Black And Green, Emilyguitar, Shinyguitar), retain original licenses/SFZ maps, hash all WAV/FLAC/OGG/AIFF/MP3 audio, and validate the full manifest. This does not yet claim the full managed Samples target has been reached.
+- Commercial/custom-license candidates remain separately quarantined until their exact acquisition and redistribution rights are established; no paid archive is silently included in the distributable ZIP.
+- New SoundBank pipeline commit: `98e92674dfa2097e8ebd1caf34b97136fe06ee1a`. New Windows CI result and actual expanded payload size are pending.
