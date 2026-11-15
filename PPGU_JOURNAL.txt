@@ -1008,3 +1008,18 @@ No source behavior was changed in this audit. This is a source-level finding onl
 Follow-up source inspection confirmed that the resize corner already uses JUCE's ResizableCornerComponent and the window content relayouts in Window::resized(). However, the parent tile surface previously remained at its old dimensions after a manual resize/move, which could clip a window enlarged beyond the current surface. Updated handleGeometryChanged() to recompute the scrollable tile-surface extent from the current viewport and all open window bounds. This lets the existing viewport scrollbars expose intentional panel overflow while the viewport continues clipping the UI to the plugin editor's own workspace boundary. Manual geometry continues to be persisted per panel.
 
 Source commit: 78d0f47b4d7f3dae2b97b973a064d3e25028feac. SOURCE IMPLEMENTED ONLY; runtime behavior and regression tests remain pending. In particular verify resizing in both axes, scrollbars after overflow, move/resize persistence, viewport clipping, host editor resize, maximize/restore, and no geometry feedback loop.
+
+
+2026-11-15 — NEON STAGE: VIEWPORT-BOUNDED DRAG/RESIZE AND SINGLE-PANEL GEOMETRY RETENTION
+
+Implemented a targeted follow-up to the approved auxiliary-window contract:
+- Header dragging now clamps the panel origin to the current workspace viewport area. When a panel is larger than the available area, its origin remains anchored within the viewport so it cannot be dragged completely off the plugin workspace; the existing viewport remains the clipping/scrolling boundary.
+- The resize constrainer now refreshes its maximum width/height from the remaining viewport space after the panel's current origin, while retaining each panel's approved minimum dimensions. This prevents ordinary resizing from expanding a panel beyond the available plugin workspace area; if the viewport is smaller than the panel's required minimum, the existing scrollable surface remains the fallback.
+- A per-window preserve-user-geometry flag is set when valid saved bounds are restored or the user moves/resizes the window. For a single open panel, subsequent workspace relayouts preserve that geometry and only clamp its position to the current viewport; first-open panels still use the existing automatic layout.
+- No new controls, panel IDs, APVTS IDs, FX IDs, audio behavior or inventory entries were introduced.
+
+Source commits:
+- 5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c — viewport-aware drag and dynamic resize limits.
+- a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 — preserve-user-geometry state and workspace layout declaration.
+
+STATUS: SOURCE IMPLEMENTED ONLY. A Windows x64 VST3 workflow was triggered for exact HEAD a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 and was still in progress at the time of this journal update. No compile, CTest, pluginval or runtime pass is claimed yet. Required verification remains: first-open default placement; resize in both axes; drag at all viewport edges; close/reopen restoration; host editor smaller/larger; maximize/restore; overflow/scrolling; and FL Studio 20 host behavior. Multi-panel auto-tiling and visual readability of all sixteen themes remain separate acceptance checks.
