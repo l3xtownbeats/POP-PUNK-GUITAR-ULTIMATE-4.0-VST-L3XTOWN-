@@ -71,7 +71,7 @@ Live REV.18 source currently says otherwise:
 - `skin-03 = Modern Studio`;
 - `Source/UI/ThemeManager.h`: default Palette id `skin-052`, name `SIGNAL FORGE`.
 
-**Status: BLOCKED / IDENTITY MISMATCH.** Do not rename, renumber, delete, overwrite or reorder existing skin records until a full 102-entry ID/manifest/assets/gallery migration map is prepared and duplicate/loss checks pass. SIGNAL FORGE remains the engineering standard; it must not be conflated with NEON STAGE or SOUND FORGE.
+**Historical preflight status — SUPERSEDED (2026-11-15):** the user has now explicitly approved removal of the obsolete historical theme set. The product boundary is the fixed 16-theme factory sequence in `SKIN/approved_theme_sequence.json`; no 102-entry migration or preservation project remains. NEON STAGE is the shared GUI design system; SKIN-1 is NEON FORGE (DEFAULT).
 
 ## 5. Approved visual reference evidence
 
@@ -90,7 +90,7 @@ This run does not yet validate the matrix or current host behavior. Any later CI
 
 ## 7. Ordered next work (per INFO section K)
 
-1. Resolve exact canonical NEON STAGE reference asset and approved ID/name mapping; create a no-loss migration map for all 102 themes.
+1. Complete exact canonical NEON STAGE reference asset mapping and visual acceptance for the fixed 16-theme sequence; historical theme migration is retired.
 2. Reconcile `theme_manifest.json`, Skin_01..03 manifests, ThemeManager default/fallback, Gallery order and persistence without changing IDs until mapping is verified.
 3. Complete main window and auxiliary-window component/control parity, real callbacks/APVTS bindings, persistence, keyboard/focus and tests.
 4. Implement Gallery draft Preview → Apply / Back rollback, Favorites, enlarged preview and keyboard navigation; then persistence/reset/fallback tests.
@@ -316,7 +316,7 @@ Implemented:
 
 **Mandatory behavior:** every visible interactive element must be genuinely bound and operable. Validate UI event → callback/action → real parameter/backend/state → observable effect → UI feedback → persistence/restore where specified. Rotary controls change their assigned parameters; buttons execute their actual commands; windows/tabs open and close; modes switch real behavior; Preset Browser scrolls, searches, filters, selects and loads real entries; indicators/status/notifications reflect real state. No decorative active controls. If a required backend is not yet available, expose an honest disabled/unavailable state until it exists.
 
-**Non-regression:** preserve 27-control parity, the seven approved FX bypass IDs, all existing APVTS IDs and attachment semantics, processor state, MIDI/audio/DSP boundaries, approved product structure and legacy skin records. Skin changes may alter presentation only, never functional bindings or behavior.
+**Non-regression:** preserve 27-control parity, the seven approved FX bypass IDs, all existing APVTS IDs and attachment semantics, processor state, MIDI/audio/DSP boundaries, approved product structure and the fixed 16-theme boundary. Skin changes may alter presentation only, never functional bindings or behavior.
 
 **Acceptance sequence:** inventory and binding audit → implementation of missing approved bindings/states → per-panel and per-control verification → resize/window checks → 16-theme parity checks → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Evidence must name the exact commit SHA. Source presence or a mockup is not proof of completion.
 
@@ -676,7 +676,7 @@ Status: RESEARCH STARTED / PARTIAL EVIDENCE REGISTER. Full 21-group matrix, all 
 
 ## 2026-11-15 — NEON STAGE Skin Gallery transaction bugfix
 
-Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state after a failed skin preview. Failed previews now restore the original active skin and invalidate prior preview eligibility; Apply requires a successful preview of the currently selected skin. No APVTS IDs, 27-control parity, seven FX bypass IDs, audio/DSP/MIDI behavior, skin IDs, manifests or the 102 legacy records were changed. Validation still requires exact-HEAD Windows CI, CTest, pluginval Strictness 5, visual comparison and FL Studio 20 acceptance.
+Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state after a failed skin preview. Failed previews now restore the original active skin and invalidate prior preview eligibility; Apply requires a successful preview of the currently selected skin. No APVTS IDs, 27-control parity, seven FX bypass IDs, audio/DSP/MIDI behavior, or approved 16-theme IDs were changed. Validation still requires exact-HEAD Windows CI, CTest, pluginval Strictness 5, visual comparison and FL Studio 20 acceptance.
 
 ## 2026-11-15 — Default skin identity label correction
 
@@ -708,3 +708,16 @@ Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state afte
 - The Circle of Fifths now follows the active theme's UI typeface and font scale instead of using fixed default JUCE fonts. Existing sizes/weight intent, geometry, fifths ordering, keyboard/mouse selection and `scaleRoot` callback remain unchanged.
 - Source commit: `597ad5ffe958ad4b33d440dfeb4e81b97e001fdf`.
 - Status: SOURCE FIX COMMITTED; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime theme/resize and FL Studio 20 acceptance remain PENDING.
+
+
+## 2026-11-15 — USER-APPROVED HISTORICAL SKIN CLEANUP / FIXED FACTORY CATALOG
+
+**User decision:** explicitly approved and fixed. POP PUNK GUITAR ULTIMATE has exactly sixteen factory themes. NEON STAGE is the shared GUI design system; SKIN-1 remains NEON FORGE (DEFAULT), the existing first factory theme.
+
+**Repository cleanup:** removed the 101 obsolete non-product theme records and their archived asset folders from `SKIN/isolated_legacy/`. Removed obsolete historical 102-entry registry/pack snapshots from `SKIN/backups/`. Kept the canonical SKIN-1 and the fifteen approved SKIN-2…SKIN-16 theme folders. Generic schemas and non-theme tooling backups are retained only where still relevant.
+
+**Safety:** active `SKIN/theme_manifest.json` remains the runtime authority and currently exposes only SKIN-1. The 16-theme sequence remains fixed in `SKIN/approved_theme_sequence.json`; SKIN-2…SKIN-16 are not declared runtime-ready until their PNG artwork, G1–G4, runtime and host acceptance gates pass. Historical files remain recoverable through ordinary Git history; they are not present in the current branch tree or shipped packages.
+
+**Anti-regression:** `tests/ValidateSkinManifests.py` now fails if the retired archive reappears or if the SKIN folder set differs from the approved sixteen. Theme batch generation and merge entry points are disabled. No APVTS IDs, 27-control parity, seven approved FX bypass IDs, DSP, MIDI, processor state or audio callback changes are included.
+
+**Status:** CLEANUP SOURCE CHANGE / EXACT-HEAD CI PENDING / FL STUDIO 20 HOST ACCEPTANCE PENDING.
