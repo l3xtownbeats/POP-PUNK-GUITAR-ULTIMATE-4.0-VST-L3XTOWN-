@@ -334,3 +334,10 @@ User clarification: downloading is allowed when lawful and compliant with source
 **PR #43 correction:** GitHub reports PR #43 merged at 2026-11-15 06:26:27 UTC, merge commit `1808127e1d906e5c6ab1254f7eae3014cbacc14a`. The merge message describes a VST3 launch-inspection checkpoint and explicitly does not claim full REV18 acceptance. Earlier “Draft / unmerged” notes are historical and require this correction.
 
 **Current task:** port only the user-approved AUTO SOUND HUNTER display-name correction to the active REV18 line, preserve `Auto_Discover` schema key and all runtime behavior, and record exact-SHA validation separately.
+
+ 
+## 2026-11-15 — REV18 theme audit status
+
+The AUTO SOUND HUNTER naming correction on SHA `78f7a66e0e7e5805092dc694920091f69080faa4` passed workflow run `43692734450`: Windows x64 VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS and interim CI packaging. FL Studio 20 manual host acceptance remains outstanding.
+
+The approved UI specification is `PPGU_UI_THEME_SPEC_FULL.txt` v1.3, with `01 INTERFACE  NEON STAGE DEFAULT .png` as canonical main-interface reference and 02–07 as supporting module/workspace references. The REV18 16-theme audit is now hardened and integrated into the Windows workflow; local tests 9/9 pass, audit 0 errors / 45 expected warnings. Missing preview/hero PNGs and registry promotion for SKIN-2..SKIN-16 remain open. No registry migration, theme activation or release acceptance has been performed.

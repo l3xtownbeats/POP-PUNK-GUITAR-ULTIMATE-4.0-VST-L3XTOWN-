@@ -1031,3 +1031,19 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 **Repository-state correction:** PR #43 is merged at `1808127e1d906e5c6ab1254f7eae3014cbacc14a` (2026-11-15 06:26:27 UTC). The merge message explicitly limits it to a VST3 launch-inspection checkpoint; full REV18 acceptance is not claimed.
 
 **Status:** SOURCE NAME CORRECTION IMPLEMENTED IN CURRENT REV18 LINE / EXACT-HEAD VALIDATION PENDING / NOT RELEASE READY.
+
+ 
+## 2026-11-15 — REV18 approved-theme audit hardening and CI integration
+
+**Parent SHA:** `78f7a66e0e7e5805092dc694920091f69080faa4`  
+**Changed paths:**
+- `tools/audit_skin_rev18_assets.py` — corrected SVG safety validation; added exact sequence/name checks, required-control subset, shared typography parity, visual-only compatibility checks, distinct resource/effects parity, safe path checks and PNG integrity/dimension checks.
+- `tests/test_skin_asset_audit.py` — added nine SVG security regression tests.
+- `.github/workflows/vst3-build.yml` — runs the new tests and the non-strict 16-theme audit before build.
+- `Info.txt`, `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md`, `docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md` — recorded approved references, current status and audit results.
+
+**Local verification:** 9/9 security tests passed; approved-theme audit returned 0 errors / 45 expected warnings. Warnings: missing preview/hero for SKIN-2..16 and pending registry promotion. No registry, theme IDs, plugin runtime, audio/DSP/MIDI/APVTS or UI layout changes.
+
+**Previous exact-SHA validation:** AUTO SOUND HUNTER rename commit `78f7a66e0e7e5805092dc694920091f69080faa4`, run `43692734450`: Windows VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS, interim package. FL Studio 20 host acceptance remains pending.
+
+**New commit SHA:** pending GitHub commit creation; append exact SHA and CI result after workflow completion.

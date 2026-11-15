@@ -61,6 +61,16 @@ jobs:
         shell: pwsh
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
 
+      - name: Test REV18 theme asset audit safety
+        shell: pwsh
+        run: python tests/test_skin_asset_audit.py
+
+      - name: Audit REV18 approved theme sequence (non-strict while artwork is pending)
+        shell: pwsh
+        run: |
+          python tools/audit_skin_rev18_assets.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 approved theme sequence audit failed.' }
+
       - name: Select checked-out project source
         shell: pwsh
         run: |

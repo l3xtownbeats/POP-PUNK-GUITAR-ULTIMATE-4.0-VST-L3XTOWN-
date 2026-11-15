@@ -2827,3 +2827,43 @@ The read-only audit now expects all 16 approved sequence entries and resolves th
 **Текущая реализация:** этот commit переносит утверждённое имя в рабочую линию `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`. Exact-HEAD Windows build/CTest/pluginval/packaging и FL Studio 20 acceptance для нового SHA ожидают повторной проверки.
 **Граница:** только UI naming/tooltip и журналы. Audio Engine, DSP, MIDI, APVTS, parameter IDs, stable control IDs, callbacks, layout и фактическое поведение не менялись.
 ==============================================================================
+==============================================================================
+2026-11-15 — REV18 UI SPECIFICATION AND APPROVED MOCKUP INDEX
+==============================================================================
+
+**Current binding documents:**
+- `PPGU_MASTER_PROMPT_REV18_v6.2.txt` — current master operating/product specification.
+- `PPGU_UI_THEME_SPEC_FULL.txt` — REV18 v1.3 FULL CONTROL REFERENCE EDITION, user-approved visual/UI specification.
+- `Info.txt` — sole authoritative factual project journal; later approved additions and corrections in this journal take precedence over older snapshots.
+
+**Approved visual references in the repository root:**
+- `01 INTERFACE  NEON STAGE DEFAULT .png` — canonical main-interface visual reference.
+- `02 INTERFACE  NEON STAGE DEFAULT AUTOCHORDS .png` — AutoChords surface reference.
+- `03 INTERFACE  NEON STAGE DEFAULT .png` — FX EDIT surface reference.
+- `04 INTERFACE  NEON STAGE DEFAULT .png` — multi-window/workspace and auxiliary-surface reference.
+- `05 INTERFACE  NEON STAGE DEFAULT .png` — main interface with FX EDIT and AutoChords open.
+- `06 INTERFACE  NEON STAGE DEFAULT .png` — expanded AutoChords surface.
+- `07 INTERFACE  NEON STAGE DEFAULT .png` — floating/secondary AutoChords presentation.
+These images are implementation references, not permission to show an unimplemented control or backend as functional. Preserve the approved component states and existing runtime limitations.
+
+**Minimalism clarification:** MINIMALISM is the default display mode of NEON STAGE, not a separate skin and not a reason to remove any approved component. Separate legacy themes that are simplified/cheap-looking are not counted among the 16 active premium themes; their historical records remain preserved. The approved 16-theme sequence remains SKIN-1 through SKIN-16.
+
+**Status:** DOCUMENT VERSIONS AND VISUAL REFERENCE ROLES IDENTIFIED / NO SPECIFICATION OR THEME ID WAS CHANGED.
+==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 THEME AUDIT HARDENING AND CI INTEGRATION
+==============================================================================
+
+**Exact-SHA build evidence for the preceding AUTO SOUND HUNTER naming correction:** commit `78f7a66e0e7e5805092dc694920091f69080faa4`, workflow run `43692734450`, Windows job completed successfully. CTest: **12/12 passed**. pluginval strictness level 5: **SUCCESS**. VST3 bundle located and interim CI package created. This does not constitute FL Studio 20 manual host acceptance or final REV18 release acceptance.
+
+**Audit defect found and corrected:** the previous SVG audit rejected the standard W3C SVG namespace URI as an external URL, causing 48 false errors. The validator now parses SVG XML and rejects script/foreignObject elements, event-handler attributes, DTD/entities, javascript URLs, external hrefs, xml:base and external CSS/url() references while allowing standard W3C namespaces, embedded data images and internal `url(#id)` references.
+
+**Additional audit checks:** 16-entry sequence/ordinal and stable-ID uniqueness; SKIN-1 identity; exact approved manifest names; 21 canonical palette tokens; required control IDs and cross-theme control-map parity; shared typography parity; visual-only compatibility flags; distinct texture/bezel/crest resources and effects-path parity; safe relative asset paths; PNG structure/CRC/dimensions when present; registry promotion status.
+
+**Local verification:** `python tests/test_skin_asset_audit.py` — 9/9 tests passed. `python tools/audit_skin_rev18_assets.py --root SKIN` — 0 errors, 45 expected warnings. Warnings are exactly the outstanding preview.png/hero.png pair for each of SKIN-2..SKIN-16 and their pending canonical registry promotion. No registry migration or theme activation was performed.
+
+**CI integration:** the Windows VST3 workflow now runs the SVG safety regression tests and the non-strict REV18 theme-sequence audit. Strict raster-asset mode remains off until the missing artwork is generated and validated.
+
+**Status:** AUDIT FALSE POSITIVE FIXED / SECURITY TESTS PASS LOCALLY / WORKFLOW STEP ADDED / EXACT-HEAD CI PENDING / 15 THEME PREVIEW-HERO PAIRS STILL PENDING.
+==============================================================================

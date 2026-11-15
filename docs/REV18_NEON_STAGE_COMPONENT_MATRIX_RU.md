@@ -235,3 +235,10 @@ At audit base HEAD `e68250720c74f3bb8bb904708532c29c7c730e97`:
 ## 2026-11-15 — UI entry-point naming correction
 
 The UI entry point previously called **Auto Discover** in historical audit rows now has the approved display name **AUTO SOUND HUNTER**. This is a naming correction only. Keep the separate **Sound Hunter** subsystem/pipeline and **Curator** module distinct. Preserve the existing schema key `Auto_Discover`; do not rename stable control IDs. The current button remains disabled until a real production discovery/search/import backend is integrated and validated. No fake functionality is permitted.
+
+ 
+## 2026-11-15 — REV18 approved-theme audit integration
+
+The binding UI references are `PPGU_UI_THEME_SPEC_FULL.txt` v1.3 and the canonical `01 INTERFACE  NEON STAGE DEFAULT .png`, with 02–07 as supporting module/workspace references. MINIMALISM remains the default mode within NEON STAGE, not a separate skin; cheap/simplified legacy themes do not count among the 16 active premium themes.
+
+The REV18 audit now validates the 16 approved manifests, names, stable IDs, 21 palette tokens, required control IDs, shared typography, visual-only compatibility, unique texture/bezel/crest resources, effects-path parity, safe asset paths, SVG active/external content and PNG integrity/dimensions. Nine security tests pass locally. Current non-strict audit: 0 errors / 45 expected warnings. Outstanding warnings are the missing preview/hero PNG pair and pending registry promotion for SKIN-2 through SKIN-16. No gallery registration or ID migration is claimed.
