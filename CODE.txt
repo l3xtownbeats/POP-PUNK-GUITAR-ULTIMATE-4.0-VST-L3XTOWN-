@@ -1008,3 +1008,25 @@ Approved requirements:
 **Тесты:** regression source added; exact-SHA CTest, Windows Release, pluginval strictness 5 and FL Studio 20 NOT RUN / NOT VERIFIED.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** implement CC1 Mod Wheel / Vibrato and verify articulation controls.
+
+
+## 2026-11-15 — MIDI CC1 Mod Wheel and voice-level Vibrato
+
+**Тип:** production MIDI/sampler implementation + regression test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `435f74cce03464faad8c3c3be74d9196db2f603a` (parent `6d276ca105bd97e166e6ac2db2299f96fa4bf90a`).
+- `594bc8377afd1bcd00d58e6ba8b049dbdf927341` (parent `435f74cce03464faad8c3c3be74d9196db2f603a`).
+
+**Файлы / symbols:**
+- `Source/PluginProcessor.cpp` — reads `vibrato` / `modWheelVibrato`; routes CC1 in MELODY and PATTERN.
+- `Source/Sampler/SamplePool.h/.cpp` — `setModWheel()`, `setVibratoDepths()`, per-channel CC1 values and per-voice low-cost LFO.
+- `tests/SamplePoolTests.cpp` — waveform comparison with Mod Wheel vibrato enabled/disabled; streaming-page warmup and aligned retrigger.
+
+**Behavior:** effective vibrato depth = base Vibrato + (MIDI CC1 × Mod Wheel Vibrato Depth), clamped 0..1. LFO rate is 5.2 Hz, depth up to ±0.25 semitone. The oscillator uses a recurrence initialized off the audio thread; the sample loop avoids per-sample trigonometric and exponential calls.
+
+**Совместимость / non-goals:** no APVTS IDs/ranges/defaults changed; no sample, preset or skin content changed; no realtime allocation or disk access added. LFO depth/rate remain bounded internal behavior.
+
+**Тесты:** regression source added; exact-SHA CTest/build/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** remaining MIDI articulation and Style DNA integration.

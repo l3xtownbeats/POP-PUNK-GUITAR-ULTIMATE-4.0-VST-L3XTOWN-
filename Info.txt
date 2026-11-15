@@ -2958,3 +2958,23 @@ unverified until their steps complete successfully.
 **Проверки:** test source добавлен. Commit workflow lookup вернул 0 workflow run(s); exact-SHA Windows Release/CTest/pluginval/FL Studio 20 пока НЕ ПОДТВЕРЖДЕНЫ. Не считать MIDI pitch bend TESTED до запуска regression suite.
 
 **Следующий шаг:** реализовать CC1 Mod Wheel + Vibrato с per-channel state и voice-level modulation, затем проверить остальные MIDI articulation controls.
+
+
+## 2026-11-15 — MIDI CC1 Mod Wheel / Vibrato integration
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Закрыта следующая часть MIDI → Sampler gaps: существующие `vibrato` и `modWheelVibrato` ранее не влияли на звук, а MIDI CC1 не обрабатывался.
+
+**Изменения:**
+- `Source/PluginProcessor.cpp`: значения `vibrato` и `modWheelVibrato` передаются SamplerEngine один раз за блок; MIDI CC1 (Mod Wheel) обрабатывается в MELODY и PATTERN по MIDI channel.
+- `Source/Sampler/SamplePool.h/.cpp`: добавлены per-channel Mod Wheel state и per-voice vibrato LFO; base vibrato + CC1 × Mod Wheel Vibrato Depth формируют итоговую глубину до 0.25 semitones. LFO использует рекуррентный oscillator (sin/cos step из prepare), без вызова `sin()` или `pow()` на каждом sample и без heap allocation.
+- `tests/SamplePoolTests.cpp`: добавлено сравнение rendered waveform с CC1 vibrato и без него; streaming pages предварительно прогреваются, а сравнение начинается с одинаковой позиции sample.
+
+**Commits:** source `435f74cce03464faad8c3c3be74d9196db2f603a` (parent `6d276ca105bd97e166e6ac2db2299f96fa4bf90a`); test reliability follow-up `594bc8377afd1bcd00d58e6ba8b049dbdf927341` (parent `435f74cce03464faad8c3c3be74d9196db2f603a`).
+
+**Совместимость:** существующие APVTS IDs/ranges/defaults сохранены. Mod Wheel state разделён по MIDI channel. Pitch Bend and Palm Mute behavior remain intact. No realtime allocations or disk I/O introduced.
+
+**Проверки:** test source added and read back. Commit workflow lookup returned 0 run(s); Windows Release/CTest/pluginval/FL Studio 20 exact-SHA verification remains NOT CONFIRMED.
+
+**Следующий шаг:** implement remaining MIDI articulation behavior (legato, slide, hammer/pull) only with safe sample mapping; then continue Style DNA and Pattern parameter coverage.
