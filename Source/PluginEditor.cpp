@@ -358,7 +358,7 @@ public:
         };
         addAndMakeVisible(gapSlider);
 
-        restoreButton.setButtonText("RESTORE SIGNAL FORGE DEFAULT");
+        restoreButton.setButtonText("RESTORE NEON STAGE DEFAULT");
         restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
         restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         restoreButton.onClick = [this] { if (restoreTheme) restoreTheme(); };
@@ -444,15 +444,18 @@ public:
                             "The existing background loader validates and registers the bank.",
                             juce::dontSendNotification);
         description.setJustificationType(juce::Justification::topLeft);
-        description.setColour(juce::Label::textColourId, juce::Colour(0xffb5c4cb));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(description);
         status.setText("No SFZ library loaded in this session.", juce::dontSendNotification);
         status.setJustificationType(juce::Justification::topLeft);
-        status.setColour(juce::Label::textColourId, juce::Colour(0xffd7ffb2));
+        status.setColour(juce::Label::textColourId, palette.token("lcd_text"));
         addAndMakeVisible(status);
         loadButton.setButtonText("LOAD SFZ");
+        loadButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
+        loadButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
         loadButton.onClick = [this] { if (loadAction) loadAction(&status, &loadButton); };
         addAndMakeVisible(loadButton);
+        setThemePalette(palette);
     }
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
@@ -711,7 +714,7 @@ public:
 
         title.setText("NEON STAGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
 
         for (size_t i = 0; i < groups.size(); ++i)
@@ -724,10 +727,10 @@ public:
         powerButton.setClickingTogglesState(true);
         addAndMakeVisible(powerButton);
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
-        graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        graphCaption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(graphCaption);
         status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
-        status.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        status.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(status);
 
         for (size_t groupIndex = 0; groupIndex < groups.size(); ++groupIndex)
@@ -736,17 +739,17 @@ public:
             {
                 auto label = std::make_unique<juce::Label>();
                 label->setText(item.first, juce::dontSendNotification);
-                label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+                label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
                 label->setFont(juce::Font(11.0f, juce::Font::bold));
                 addAndMakeVisible(*label);
 
                 auto slider = std::make_unique<juce::Slider>();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
-                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffb7f34a));
-                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff43545e));
-                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xffe7f0f4));
-                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xffe7f0f4));
+                slider->setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
+                slider->setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
+                slider->setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
                 addAndMakeVisible(*slider);
 
                 auto attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, item.second, *slider);
@@ -754,6 +757,7 @@ public:
             }
         }
         selectGroup(effectSelector.getSelectedId() - 1);
+        setThemePalette(palette);
     }
 
     void setThemePalette(const PPGUThemeManager::Palette& value) override
@@ -892,10 +896,10 @@ public:
     {
         title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
         stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
-        stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
+        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
         addAndMakeVisible(stateLabel);
         offButton.setButtonText("AUTOCHORDS OFF");
         offButton.setEnabled(false);
@@ -914,12 +918,13 @@ public:
         patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
         for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
         {
-            label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
             addAndMakeVisible(*label);
         }
         keyLabel.setText("KEY", juce::dontSendNotification);
         modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
         patternLabel.setText("RHYTHM PATTERN SLOT", juce::dontSendNotification);
+        setThemePalette(palette);
     }
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
