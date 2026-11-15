@@ -721,3 +721,10 @@ Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state afte
 **Anti-regression:** `tests/ValidateSkinManifests.py` now fails if the retired archive reappears or if the SKIN folder set differs from the approved sixteen. Theme batch generation and merge entry points are disabled. No APVTS IDs, 27-control parity, seven approved FX bypass IDs, DSP, MIDI, processor state or audio callback changes are included.
 
 **Status:** CLEANUP SOURCE CHANGE / EXACT-HEAD CI PENDING / FL STUDIO 20 HOST ACCEPTANCE PENDING.
+
+
+## 2026-11-15 — NEON STAGE auxiliary-window geometry update
+
+Implemented viewport-aware drag and resize limits, plus preservation of a user's saved geometry for a single reopened panel across subsequent workspace relayouts. First-open automatic layout remains active. Source commits: `5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c`, `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9`.
+
+Exact-HEAD CI run `43726066887` (SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9`) was in progress at the time of this update. Runtime checks, CTest, pluginval Strictness 5 and FL Studio 20 acceptance are not yet verified.
