@@ -2880,3 +2880,24 @@ Workflow commit: `f55a49fb8735dc72620787fdc9bf80df96e9285f`.
 - Добавлена повторная проверка наличия `.vst3` после очистки перед ZIP.
 
 **Ограничения:** PR-triggered REV18 theme checks не являются Windows VST3 build. Пока нет результата Windows Release, CTest, pluginval и package artifact на точном SHA, ZIP не считается созданным или готовым. FL Studio 20 host acceptance остаётся отдельной ручной проверкой. PORTABLE означает отсутствие Setup.exe/инсталлятора; runtime sample loading по текущему UI по-прежнему требует выбора SFZ пользователем.
+
+
+## 2026-11-15 — NEON STAGE DEFAULT portable-package guard
+
+**Статус:** DEFAULT THEME PRESENT IN SOURCE / PORTABLE PACKAGE ASSERTIONS ADDED; WINDOWS ARTIFACT PENDING.
+
+Commit: `de879ac648d0a512de0e6af29e62acfeac948b8b`.
+
+Подтверждено в исходниках:
+- `SKIN/theme_manifest.json` объявляет `defaultSkin: skin-053`;
+- запись `skin-053` указывает на `Skin_053/theme.json`;
+- `Skin_053/theme.json` имеет каноническое имя `NEON STAGE DEFAULT`, ID `skin-053`, index `53`;
+- PluginEditor вызывает `loadSavedSkin()` при создании редактора; при отсутствии пользовательского выбора используется `skin-053`;
+- ThemeManager содержит встроенную NEON STAGE DEFAULT fallback palette.
+
+Исправлено в portable packaging workflow:
+- сборка теперь завершается ошибкой, если canonical defaultSkin не `skin-053`, запись/manifest отсутствуют или их ID/name/index не совпадают;
+- после копирования в release staging отдельно проверяется наличие и identity `Skins/Skin_053/theme.json`;
+- исправлен ранее обнаруженный upload path mismatch: artifact upload теперь указывает на фактическое имя создаваемого portable ZIP.
+
+Это подтверждает наличие default theme в исходной конфигурации и защиту её включения в пакет, но не заменяет runtime визуальную приёмку. Windows VST3 build, ZIP artifact и FL Studio 20 host acceptance остаются pending.
