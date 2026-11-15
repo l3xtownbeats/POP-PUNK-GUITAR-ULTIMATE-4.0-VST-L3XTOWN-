@@ -937,3 +937,29 @@ Approved requirements:
 
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** add regression coverage for block sizes exceeding expectedBlockSize, mono/stereo, effects enabled/disabled; continue APVTS-to-DSP mismatch audit.
+
+
+## 2026-11-15 — APVTS → DSP: parameterized EQ, Distortion Tone and Cabinet cuts
+
+**Тип:** production DSP implementation + contract test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `ac9781efd72fe23a0784e07a480c161cd8645719` (parent `ab71ca9aec2d6bc5dda964304de5836c08157910`).
+- `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d` (parent `ac9781efd72fe23a0784e07a480c161cd8645719`).
+
+**Файлы / symbols:**
+- `Source/DSP/BiquadFilter.h` — `BiquadCoefficients`, `BiquadState`, `makeLowShelf()`, `makePeaking()`, `makeHighShelf()`.
+- `Source/PluginProcessor.h` — per-channel EQ and tone/filter states.
+- `Source/PluginProcessor.cpp` — `processBlock()` EQ, distortion and cabinet stages; reset in `prepareToPlay()` / `releaseResources()`.
+- `tests/DspFilterTests.cpp` — frequency response, neutral gain and sustained stability checks.
+- `CMakeLists.txt` — `ppgu_dsp_filter_contracts`.
+
+**Причина:** existing APVTS parameters `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`, `distortionTone`, `cabinetLowCut`, `cabinetHighCut` were not consumed by DSP.
+
+**Изменения:** 3-band EQ now uses low/high shelves and a Q-controlled peaking mid filter; preset Tone remains neutral at 5 and active while EQ is bypassed. Distortion Tone controls a post-shaper low-pass response. Cabinet Low/High Cut filter the wet cabinet response. Cabinet coefficients are computed once per block, not per sample.
+
+**Compatibility / non-goals:** no APVTS IDs/ranges/defaults changed; no sampler/MIDI/preset serialization/skin changes; no new audio-thread allocations. Parameter smoothing remains an open follow-up if tests/listening reveal zipper artifacts.
+
+**Тесты:** test source added; no compiler/CTest/pluginval/FL Studio result yet for SHA `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d`.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** exact-SHA Windows build + CTest; then processor-level response tests and remaining APVTS/DSP gap audit.

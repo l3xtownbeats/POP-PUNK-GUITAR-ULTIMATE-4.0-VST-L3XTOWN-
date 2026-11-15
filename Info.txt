@@ -2891,3 +2891,27 @@ unverified until their steps complete successfully.
 **Проверки:** source readback подтверждает обе правки. Для SHA `3e4423c4...` и `88159cb5...` GitHub Actions workflow runs не возвращены; Windows Release build, CTest, pluginval strictness 5 и FL Studio 20 host verification НЕ ЗАПУЩЕНЫ / НЕ ПОДТВЕРЖДЕНЫ. Regression tests для oversized blocks пока не добавлены.
 
 **Следующий шаг:** добавить processor-level regression coverage для блока больше expectedBlockSize (Chorus/Reverb on/off и mono/stereo), затем перейти к следующей подтверждённой несостыковке APVTS→DSP без изменения существующих IDs.
+
+
+## 2026-11-15 — DSP parameter-to-processing repair: EQ / Distortion / Cabinet
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/CTest/PLUGINVAL/DAW VALIDATION PENDING.
+
+Продолжен обязательный аудит APVTS → DSP. До исправления следующие существующие APVTS controls были объявлены и отображались, но не влияли на звук: `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`, `distortionTone`, `cabinetLowCut`, `cabinetHighCut`.
+
+**Production commits:**
+- `ac9781efd72fe23a0784e07a480c161cd8645719`, parent `ab71ca9aec2d6bc5dda964304de5836c08157910`: добавлен allocation-free RBJ biquad helper; EQ переведён на low-shelf / Q-controlled mid peak / high-shelf с реальными частотами; distortionTone управляет cutoff фильтра тембра после soft clipping; Cabinet Low/High Cut фильтруют wet cabinet response.
+- `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d`, parent `ac9781efd72fe23a0784e07a480c161cd8645719`: коэффициенты cabinet cut теперь рассчитываются один раз за блок, а не на каждом sample/channel, чтобы не создавать лишнюю нагрузку на realtime callback.
+
+**Изменённые файлы:**
+- `Source/DSP/BiquadFilter.h` — новые scalar coefficient factories и per-channel biquad state.
+- `Source/PluginProcessor.h` — persistent filter states.
+- `Source/PluginProcessor.cpp` — parameter-driven EQ, distortion tone и cabinet filtering; state reset в prepare/release.
+- `tests/DspFilterTests.cpp` — response/neutrality/stability contract tests.
+- `CMakeLists.txt` — зарегистрирован `ppgu_dsp_filter_contracts`.
+
+**Совместимость:** все существующие APVTS IDs, ranges и defaults сохранены; новые параметры не добавлялись. State/preset serialization format, MIDI, sampler и UI не менялись. DSP filters используют preallocated scalar state; динамические allocations в audio callback не добавлены.
+
+**Тесты:** тестовый код добавлен, но Windows Release build и CTest ещё не запускались на exact SHA `998e11d38ab2b0d78c1a1c20caa92506dc2c7e3d`. pluginval strictness 5 и FL Studio 20 также NOT RUN / NOT VERIFIED. Не объявлять фильтры TESTED до фактического запуска.
+
+**Следующий шаг:** запустить exact-HEAD Windows Release/CTest; исправить compile/test failures, затем добавить processor-level audio-response tests и продолжить сверку остальных declared-but-unconsumed APVTS controls.
