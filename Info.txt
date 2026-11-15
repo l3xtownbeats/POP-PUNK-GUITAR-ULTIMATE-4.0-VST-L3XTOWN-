@@ -684,3 +684,12 @@ Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state afte
 - No parameter IDs, controls, callbacks, audio/DSP/MIDI behavior, theme assets or registry entries changed.
 - Commit: `c58252182aa11144b6b14951fc6f97e512202ab8`.
 - Exact-HEAD CI: pending; the preceding run is not evidence for this source SHA.
+
+## 2026-11-15 — NEON STAGE About panel — source implementation
+
+- Added the approved About entry point as a real auxiliary workspace panel (PPGUAboutPanel, panel ID 2103).
+- The panel presents only established product identity and description: POP PUNK GUITAR ULTIMATE, NEON STAGE / VST3 instrument, L3XTOWN AUDIO LAB, and the existing product summary. No invented version/build number, unsupported feature claims, or dummy actions are displayed.
+- The About button is now enabled and opens the informational panel; its typography and colours follow the active theme palette.
+- AUTO SOUND HUNTER and CURATOR remain disabled because their production backends are not established.
+- Changed source: Source/PluginEditor.h, Source/PluginEditor.cpp.
+- Status: SOURCE IMPLEMENTED / EXACT-HEAD BUILD, CTest, pluginval, runtime resize/theme checks and FL Studio 20 acceptance PENDING. This is one bounded UI slice, not completion of NEON STAGE.
