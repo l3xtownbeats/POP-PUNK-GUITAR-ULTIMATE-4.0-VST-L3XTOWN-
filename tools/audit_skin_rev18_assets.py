@@ -90,8 +90,8 @@ def main() -> int:
 
     for item in themes:
         label, stable_id, index = item.get("label"), item.get("stableId"), item.get("index")
-        folder = root / f"Skin_{index}"
         manifest_path = root / item.get("path", "")
+        folder = manifest_path.parent
         try:
             theme = json.loads(manifest_path.read_text(encoding="utf-8"))
         except Exception as exc:
