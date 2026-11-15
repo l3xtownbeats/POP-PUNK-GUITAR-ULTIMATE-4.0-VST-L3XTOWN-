@@ -2855,3 +2855,22 @@ unverified until their steps complete successfully.
 - SKIN-1 / `skin-001` остаётся единственной активной темой и default. Главный редактор, preset browser, amp/FX rack, keyboard/performance strip и theme-aware auxiliary panels используют одну палитру; галерея, FX Edit, Settings, Import Guitar и AutoChords получают тему через workspace.
 - Изменение только UI runtime path resolution и INFO. APVTS, DSP, sampler, MIDI и audio routing не менялись.
 - Exact-HEAD Windows Release, CTest и pluginval должны быть повторно подтверждены новым workflow run; FL Studio 20 visual acceptance остаётся отдельным шагом.
+
+## 2026-11-15 — NEON STAGE DEFAULT canonical registry enforcement
+
+**Статус:** SOURCE + REGRESSION CONTRACT UPDATED; EXACT-HEAD CI VALIDATION PENDING.
+
+По прямому требованию пользователя NEON STAGE DEFAULT должна быть темой интерфейса по умолчанию при установке/первом запуске плагина.
+
+- Проверена текущая логика JUCE editor: при отсутствии сохранённого выбора используется `skin-001`; сохранённая тема принимается только если она присутствует среди активных записей реестра. Неактивная/устаревшая запись приводит к возврату к `defaultSkin`.
+- Реестр уже объявляет `defaultSkin = skin-001`; единственная активная запись — `skin-001`, `activeOrdinal = 1`, пакетный manifest — `Skin_001/theme.json`.
+- Усилен `tools/validate_skin_pack.py`: теперь проверяется не только ID/порядок default-темы, но и точная каноническая запись: index=1, name=NEON STAGE DEFAULT, path=Skin_001/theme.json, active=true, activeOrdinal=1.
+- Усилен `tests/TestSkinRegistryContract.py`: добавлены проверки канонической записи и негативные mutation cases для неверного имени, пути, active-флага, ordinal и index.
+- Исторические темы не переименовывались и не активировались. Пользовательский выбор другой активной темы по-прежнему сохраняется; default применяется при первом запуске, отсутствии/невалидности сохранённого выбора и сбросе настроек.
+- DSP, APVTS, sampler, MIDI и audio routing не менялись.
+
+**Commits:**
+- Validator: `046221c3a610c853c3a1ba0e055c4fe98ff5b62d`
+- Regression tests: `6b1475279dffb355305abc0e90b125d9eff0ebcb`
+
+**Проверки:** локальный запуск тестов из этого интерфейса не выполнялся; ожидается новый Windows GitHub Actions run на exact HEAD. До его завершения тесты считаются добавленными, но не подтверждёнными исполнением. PR #41 остаётся Draft; merge/approve не выполнялись.
