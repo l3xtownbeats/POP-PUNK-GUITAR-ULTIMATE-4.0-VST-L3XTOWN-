@@ -73,16 +73,6 @@ jobs:
       # Preset catalog validation is performed from the checked-in JSON above.
       # Do not mutate source files during CI; preset content belongs in reviewed commits.
 
-      - name: Publish extracted source for final implementation review
-        shell: pwsh
-        run: |
-          Compress-Archive -Path "$env:PROJECT_DIR/*" -DestinationPath "$env:RUNNER_TEMP/POP_PUNK_GUITAR_SOURCE_REVIEW.zip" -Force
-      - uses: actions/upload-artifact@v4
-        with:
-          name: POP-PUNK-GUITAR-SOURCE-REVIEW
-          path: ${{ runner.temp }}/POP_PUNK_GUITAR_SOURCE_REVIEW.zip
-          if-no-files-found: error
-
       - name: Restore redistributable sample library cache
         id: sample-cache
         uses: actions/cache@v4
@@ -280,7 +270,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -310,7 +300,6 @@ jobs:
           Copy-Item -LiteralPath $sourceRegistryPath -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'theme.schema.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination $runtimeSkins
-          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'assets/*') -Destination (Join-Path $release 'Assets') -Recurse
 
           # Keep human-readable install notes and provenance in Resources.
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
@@ -345,9 +334,9 @@ jobs:
           if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
 
           @'
-          POP PUNK GUITAR ULTIMATE — INTERIM WINDOWS x64 CI BUILD (NOT FINAL RELEASE)
+          POP PUNK GUITAR ULTIMATE — PORTABLE WINDOWS x64 VST3 QA BUILD
           =============================================================================
-          STATUS: CI VALIDATION ARTIFACT ONLY. NOT A FINAL REV.18 PRODUCT RELEASE.
+          STATUS: PORTABLE QA BUILD. FL STUDIO 20 MANUAL HOST ACCEPTANCE IS STILL REQUIRED.
           VST3/       The compiled Windows x64 VST3 plugin bundle.
           SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
                       Sound Hunter asset-level registry is empty; final factory admission is pending.
@@ -355,33 +344,42 @@ jobs:
                       Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
           Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
-          Assets/     Product artwork and visual assets.
 
-          INSTALL (DEVELOPMENT / QA ONLY):
-          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
-             C:\Program Files\Common Files\VST3\
-             Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
-          2. In the plugin, use its SFZ load control and select an instrument SFZ
-             from SOUNDBANK/. Keep SOUNDBANK on disk.
+          PORTABLE USE — NO INSTALLER:
+          1. Extract this ZIP anywhere. To use in FL Studio, copy only the .vst3 bundle into your VST3 folder and copy Skins/ beside it. No Setup.exe or installer is used.
+          2. Keep SOUNDBANK/ on disk and load an instrument SFZ through the plugin's SFZ load control.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
           4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 
+          No source tree, Git metadata, build intermediates, debug symbols or artwork-only files are shipped.
           Automated CMake build, CTest and pluginval results are reported by this workflow.
           FL Studio 20 manual host acceptance remains a separate step and is not implied.
           This interim artifact does not certify 1000 READY presets, full Sound Hunter clearance,
           final FX EDIT / Skin Gallery / Settings acceptance, CPU/RAM targets or release readiness.
-          '@ | Set-Content -Encoding utf8 (Join-Path $release 'INSTALL_AND_CONTENTS.txt')
+          '@ | Set-Content -Encoding utf8 (Join-Path $release 'PORTABLE_README.txt')
 
-          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip'
+          # Keep the ZIP runtime-only: remove temporary/cache/build debris, but retain
+          # the VST3 bundle, approved Skins, licensed SOUNDBANK, presets and provenance.
+          Get-ChildItem -LiteralPath $release -Directory -Force -Recurse |
+            Where-Object { $_.Name -in @('.git', '__pycache__', '.pytest_cache', 'CMakeFiles') } |
+            Sort-Object FullName -Descending |
+            Remove-Item -Recurse -Force
+          Get-ChildItem -LiteralPath $release -File -Force -Recurse |
+            Where-Object { $_.Extension -in @('.pdb', '.ilk', '.exp', '.lib', '.obj', '.pch', '.log', '.tmp', '.pyc') -or $_.Name -in @('.DS_Store', 'Thumbs.db') } |
+            Remove-Item -Force
+          if (-not (Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1)) {
+            throw 'Portable package cleanup removed or failed to include the VST3 bundle.'
+          }
+          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip'
           if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
           Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
 
       - uses: actions/upload-artifact@v4
         with:
-          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-INTERIM-CI-NOT-RELEASE
+          name: POP-PUNK-GUITAR-ULTIMATE-PORTABLE-VST3-Windows-x64
           path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip
           if-no-files-found: error
 
