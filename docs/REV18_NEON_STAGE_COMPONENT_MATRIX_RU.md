@@ -101,3 +101,19 @@ This run does not yet validate the matrix or current host behavior. Any later CI
 9. Run exact-SHA Windows Release, full CTest, pluginval, package audit; record FL Studio 20 host and CPU/RAM/audio profiling separately.
 
 **Phase 0 result:** matrix completed; production source unchanged. Next coding step is identity/reference reconciliation, not an arbitrary UI redesign.
+
+## REV.18 live follow-up — 2026-11-15, branch `ui/neon-stage-skin1-completion`
+
+Latest inspected implementation commits:
+- `775cd7901ab628579a9f6ce9c7a02924ed72d143` — shared LookAndFeel hover/focus/disabled rendering for rotary controls, buttons and ComboBoxes.
+- `ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b` — palette access corrected to use canonical token lookup for shadow/disabled/lowlight.
+- `8bb05d7d88fd06c7815882e79ee8b2c3022d771e` — pack manifest index 53 corrected to match NEON STAGE DEFAULT / special.
+
+### Current implementation boundary
+The runtime editor is a single large `Source/PluginEditor.cpp`; the inspected tree does not contain separate production source modules named Curator, Sound Hunter, Auto Discover, AMP & TONE or About. Existing source-backed UI surfaces include the main editor, Skin Gallery, Settings, Import Guitar, FX EDIT, AutoChords, Performance display and shared workspace. Do not count absent modules as integrated and do not add active-looking mock controls.
+
+### CI finding and correction
+Windows workflow run `43679932917` failed at the G1–G4 skin validator before configure/build. Exact error: `merged registry entry mismatch at index 53: name`. The mismatch was between `SKIN/theme_pack_manifest.json` (Carbon Studio 01 / carbon_studio) and the canonical registry/theme manifest (NEON STAGE DEFAULT / special). The pack entry was corrected in commit `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`. Re-run result must be checked against the new exact HEAD; no build/test pass is inferred.
+
+### Next implementation/validation gate
+Continue component-level palette propagation and typography/state audit on actual components; then require successful exact-HEAD G1–G4, Windows x64 Release configure/build, CTest, VST3 asset/package audit and pluginval strictness 5. FL Studio 20 remains a separate manual host check.

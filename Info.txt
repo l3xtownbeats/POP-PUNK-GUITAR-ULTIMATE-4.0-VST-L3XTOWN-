@@ -2611,3 +2611,26 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Статус:** SOURCE CHANGES COMMITTED / BUILD AND RUNTIME VALIDATION PENDING / NOT RELEASE READY.
 **Следующий шаг:** verify exact current branch/HEAD and CI; continue the source inventory for remaining modules, then unify shared component states/typography/interaction styling without creating fake controls.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE control-state implementation update
+==============================================================================
+Branch: ui/neon-stage-skin1-completion
+Commits:
+- 775cd7901ab628579a9f6ce9c7a02924ed72d143 — shared rotary/button/ComboBox hover, focus and disabled rendering.
+- ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b — canonical token access correction.
+- 8bb05d7d88fd06c7815882e79ee8b2c3022d771e — Skin Studio pack index 53 identity synchronized with canonical registry.
+
+Implemented in this pass:
+- Rotary controls: hover accent response, keyboard focus ring, disabled track/value/pointer.
+- Buttons: active/hover/down/disabled states and visible keyboard-focus ring.
+- ComboBoxes: hover/pressed/disabled states and visible keyboard-focus ring.
+- All are driven by the current ThemeManager palette; no new controls or functionality are introduced.
+- G4 pack metadata discrepancy at index 53 fixed: theme_pack_manifest now agrees with registry and Skin_053 theme manifest.
+
+Outstanding acceptance:
+- Audit and integrate all actual existing panel controls against the shared theme source, including typography, text fields, tabs, status displays, workspace chrome and per-panel focus/disabled behavior.
+- Curator, Sound Hunter, Auto Discover, AMP & TONE and About are not all established as complete production runtime modules in the inspected source. Do not create fake active controls; inventory and implement only from their real functional contracts.
+- Runtime asset packaging, Windows x64 Release build, full CTest, pluginval strictness 5 and FL Studio 20 manual host test remain required.
+- No release-ready or 100% completion claim until exact-HEAD acceptance evidence exists.
+==============================================================================

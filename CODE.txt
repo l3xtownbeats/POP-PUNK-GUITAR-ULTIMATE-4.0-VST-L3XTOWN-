@@ -939,3 +939,25 @@ Approved requirements:
 
 **Статус:** IMPLEMENTED / VALIDATION PENDING.
 **Следующий шаг:** inspect and map the remaining requested module surfaces from actual repository files; apply shared palette/typography/control states incrementally, preserving each module's own layout and real functionality.
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE shared control-state pass
+==============================================================================
+Branch: ui/neon-stage-skin1-completion
+Source commit: 775cd7901ab628579a9f6ce9c7a02924ed72d143
+Follow-up token fix: ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b
+Registry pack correction: 8bb05d7d88fd06c7815882e79ee8b2c3022d771e
+
+Changed:
+- Source/PluginEditor.cpp: PPGUPremiumLookAndFeel rotary, button and ComboBox rendering now distinguishes hover, keyboard focus and disabled states using the active NEON STAGE palette tokens. Focus gets a visible focus ring; disabled rotary track/value/pointer and combo arrow use disabled tokens; button disabled surface uses the canonical lowlight/border tokens.
+- SKIN/theme_pack_manifest.json: index 53 metadata now matches the approved NEON STAGE DEFAULT / special identity in both theme registry and Skin_053/theme.json. This corrects the exact G4 validator failure reported by Windows CI.
+
+Safety:
+- Visual-only. No processor, DSP, MIDI, APVTS, parameter IDs, audio callbacks, sample engine, preset data or control bindings intentionally changed.
+- No missing module is represented as an active or fake feature.
+
+Validation:
+- Previous Windows workflow run 43679932917 failed before configure/build at the skin pack validator: merged registry entry mismatch at index 53: name. The pack metadata mismatch is corrected in commit 8bb05d7d88fd06c7815882e79ee8b2c3022d771e.
+- Windows workflow run 43680094486 was triggered for source commit 775cd7901ab628579a9f6ce9c7a02924ed72d143; result pending at the time of this entry.
+- No exact-head Windows build, CTest, pluginval strictness 5 or FL Studio 20 host pass is claimed here.
+==============================================================================

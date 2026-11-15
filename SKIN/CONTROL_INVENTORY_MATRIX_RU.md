@@ -155,3 +155,11 @@ Current source confirms preset selector/category/search, Import Guitar, SKIN Gal
 
 Critical identity mismatch: approved SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE conflicts with live manifest default skin-052 SIGNAL FORGE and live Skin_01..03 names. No IDs or manifests were changed; a complete 102-entry no-loss mapping is required first.
 
+
+## REV.18 follow-up — live source and control-state status (2026-11-15)
+
+The editor's shared LookAndFeel now renders hover, keyboard focus and disabled states for rotary controls, buttons and ComboBoxes using the active theme palette (source commits `775cd7901ab628579a9f6ce9c7a02924ed72d143` and `ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b`). This is a control-rendering improvement, not evidence that all twelve requested product modules exist or are complete.
+
+The inspected source tree currently has the main editor and embedded panels (Skin Gallery, Settings, Import Guitar, FX EDIT, AutoChords), Performance display and multi-window workspace. Curator, Sound Hunter, Auto Discover, AMP & TONE and About are not verified as complete production modules in this branch. They must remain NOT IMPLEMENTED / DEFERRED until their actual functional implementations and bindings are present; do not represent them with fake active controls.
+
+CI correction: run `43679932917` stopped at G4 because pack manifest index 53 still said Carbon Studio 01 while the canonical registry and Skin_053 said NEON STAGE DEFAULT. `SKIN/theme_pack_manifest.json` has been synchronized in commit `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`. Await exact-HEAD rerun before marking G1–G4 pass.
