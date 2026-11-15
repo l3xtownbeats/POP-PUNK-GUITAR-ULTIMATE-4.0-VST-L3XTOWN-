@@ -1,11 +1,16 @@
 # PPGU — skin manifests, palette runtime и Skin Studio
 
-## Фактическое состояние — рабочая ветка REV.17
+## REV.18 — canonical identity correction (2026-11-15)
 
-Актуальная рабочая ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+- Binding identity: **SKIN-1 = NEON STAGE DEFAULT = skin-053 / Skin_053**. Stable ID and numeric index 53 are preserved; no IDs are renumbered or deleted.
+- `theme_manifest.json` now selects `skin-053` as default; the registry entry is named `NEON STAGE DEFAULT`.
+- `Skin_053` has the 21-token graphite / cyan / electric-blue / violet / magenta palette and new vector bezel, crest and texture assets. Default display mode is MINIMALISM; premium effects are opt-in.
+- `skin-052` and all legacy records remain untouched as historical data.
+- This branch is an artwork/identity correction, not a host-verified release. JUCE build, runtime ThemeManager load, G1–G4, PNG CRC, pluginval and FL Studio 20 capture remain mandatory.
 
-- Runtime registry содержит **102 темы**: legacy `Skin_01`…`Skin_51` и Skin Studio `Skin_052`…`Skin_102`.
-- Каноническая тема по умолчанию и fallback — **SIGNAL FORGE (`skin-052`)**.
+## Historical implementation notes
+
+Earlier REV.17 notes below are historical and do not override the REV.18 identity contract.
 - `ThemeManager` поддерживает legacy nested-token schema для Skin_01…51 и Skin Studio 21-token palette/control-map schema для Skin_052+.
 - Кнопка **SKIN** и Ctrl+K открывают встроенную в Multi-Window Workspace **Premium Skin Gallery**: карточки с preview, именем, семейством/layout, активной темой, поиском и фильтром семейств. Нажатие на карточку применяет тему и сохраняет stable ID.
 - Preview PNG декодируются лениво по мере отображения карточек. Отсутствующая preview-картинка даёт fallback-card, а не блокирует выбор палитры.
