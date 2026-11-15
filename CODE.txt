@@ -1014,3 +1014,17 @@ The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.
 **Validation:** canonical schema and six manifests were parsed; each manifest now contains exactly the same 27 IDs as the schema. Audit/test source changes are committed. CTest, Windows VST3 build, pluginval and FL Studio 20 host validation have NOT yet been run on the final commit.
 
 **Status:** 27-CONTROL CONTRACT CORRECTED / REGRESSION TEST REGISTERED / TEST EXECUTION PENDING / PREMIUM THEME ASSETS AND G1–G4 PENDING.
+
+
+## 2026-11-15 — REV18 theme audit path fix and focused CI gate
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`  
+**Commits:** `6e19118e` — resolve theme asset folders from each manifest path; `a78b04b6` — add focused GitHub Actions theme-contract workflow.
+
+**Implementation:**
+- Corrected the audit folder resolution to use `manifest_path.parent`. This preserves zero-padded `Skin_053` and avoids incorrectly resolving it as `Skin_53`.
+- Added `.github/workflows/ppgu-rev18-theme-contract.yml`, scoped to the visual-theme work branch. It runs the 27-control regression test and the read-only REV18 theme/vector audit on pushes and manual dispatch.
+
+**Validation status:** workflow definition committed; no completed workflow-run evidence has been retrieved. Do not mark CTest/CI PASS until the run result is available. Missing PNG masters/runtime assets remain expected audit warnings at this stage.
+
+**Status:** AUDIT PATH FIX COMMITTED / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING.
