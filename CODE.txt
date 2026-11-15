@@ -980,3 +980,15 @@ Validation:
 **Validation:** source re-fetched; declarations and definitions are present. No compiler/build/CTest/pluginval result is available for this exact SHA. The override signatures target JUCE LookAndFeel_V2 API inherited by LookAndFeel_V4; exact Windows compile confirmation remains pending.
 
 **Status:** SOURCE IMPLEMENTED / BUILD AND RUNTIME VALIDATION PENDING.
+
+
+### API compatibility correction — JUCE 7.0.12
+
+The first TextEditor background override draft used the wrong method name. It was corrected immediately before validation: the JUCE 7.0.12 LookAndFeel API is `fillTextEditorBackground(Graphics&, int, int, TextEditor&)`, paired with `drawTextEditorOutline(Graphics&, int, int, TextEditor&)`.
+
+Correction commits:
+- `d0e4295780bb9b768eb2f98cab01ef6eaa7e8a9e` — header declaration.
+- `85af92c09e42494297a708cc9aac5a80c17f6340` — source definition.
+- `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` — component matrix API wording.
+
+The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.h` declaration. Source declarations and definitions were re-fetched and confirmed. This is API-source confirmation, not a successful compiler result.
