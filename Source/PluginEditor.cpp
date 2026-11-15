@@ -1537,7 +1537,6 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
-    const auto full = getLocalBounds().toFloat();
     g.fillAll(p.token("window_bg"));
 
     // Branded top rail: purely graphical chrome behind the existing live buttons.
