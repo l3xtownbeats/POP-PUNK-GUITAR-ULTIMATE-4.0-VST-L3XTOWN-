@@ -702,3 +702,17 @@ Modern directions: MGK “Tickets to My Downfall” (2020) aggressive contempora
 Implementation: use only where musically relevant and where actual samples/DSP support the chain; translate 0–10 values only after parameter mapping is confirmed; preserve 27-control parity, seven approved FX bypass IDs, APVTS/state contract. READY requires playback, phase/level checks, listening, persistence and regression tests.
 
 Статус: USER-PROVIDED SETTINGS RECORDED / APPROVED AS STARTING REFERENCES. Implementation and validation remain PENDING.
+
+
+2026-11-15 — USER-APPROVED 15-EFFECT SCOPE / KEEP ONLY USEFUL SOUND-DESIGN INFORMATION
+
+Пользователь утвердил обязательный каталог из 15 типов эффектов для POP PUNK GUITAR ULTIMATE:
+1 Compressor; 2 EQ; 3 Noise Gate; 4 Boost; 5 Overdrive; 6 Distortion; 7 Fuzz; 8 Chorus; 9 Flanger; 10 Phaser; 11 Delay; 12 Reverb; 13 Tremolo; 14 Vibrato; 15 Octave / Pitch Shift.
+
+Это ровно 15 effect types в целевом scope, выбранных по практической полезности для гитарных pop-punk/punk/rock/alternative звуков. Amp и Cabinet/IR — отдельные стадии amp/cab, не дополнительные эффекты в этом счёте. Wah/Auto-Wah, Looper и Tuner не входят в утверждённую пятнадцатку и не должны добавляться/показываться как её часть без отдельного решения пользователя.
+
+Не включать все эффекты одновременно: для каждого пресета выбирать только то, что нужно для целевого звука и музыкальной роли. Использовать только нужную информацию из утверждённых гитарных моделей, групп, усилителей и sound references; не перегружать пресеты лишними деталями. Главный критерий — качество итогового звука из доступного исходного гитарного материала с реальной обработкой.
+
+Scope approval не означает, что 15 DSP effects уже существуют. Каждый эффект должен иметь настоящий DSP route, корректные параметры, binding/bypass/state, тесты и слышимый результат до обозначения как работающего. Сохранить 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; не выдумывать IDs или фиктивные элементы. Если существующие семь bypass slots не позволяют представить 15 типов, зафиксировать архитектурный gap и не обходить ограничения самовольно.
+
+Статус: USER APPROVED / FIXED PRODUCT SCOPE. Implementation and validation remain PENDING unless separately proven.
