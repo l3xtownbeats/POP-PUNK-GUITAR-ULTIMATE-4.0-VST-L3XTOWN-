@@ -1047,3 +1047,14 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 **Previous exact-SHA validation:** AUTO SOUND HUNTER rename commit `78f7a66e0e7e5805092dc694920091f69080faa4`, run `43692734450`: Windows VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS, interim package. FL Studio 20 host acceptance remains pending.
 
 **New commit SHA:** pending GitHub commit creation; append exact SHA and CI result after workflow completion.
+
+
+## 2026-11-15 — NEON STAGE auxiliary-window viewport geometry
+
+**Changed source commits:**
+- `5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c` — drag origin is clamped to the workspace viewport; resize limits are recalculated from the remaining viewport width/height.
+- `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9` — per-window user-geometry preservation; a single reopened/manual panel retains its saved size and position during subsequent workspace relayouts.
+
+First-open automatic layout remains unchanged. Existing viewport clipping/scrolling remains the fallback when minimum panel dimensions exceed a small workspace. No panel/control/parameter/FX/audio contracts changed.
+
+**Validation:** exact-HEAD Windows x64 workflow run `43726066887` was in progress when recorded. Build, CTest, pluginval Strictness 5, runtime window checks and FL Studio 20 host acceptance are pending; no pass is claimed.
