@@ -123,10 +123,12 @@ int main()
         expect(manager.getPalette().letterSpacing == 0.35f, "NEON STAGE letter spacing decoded");
     }
 
+    const auto canonicalJson = skin53Manifest.loadFileAsString();
+
     // The active runtime registry intentionally contains only the approved
     // canonical default while the remaining approved themes pass artwork gates.
     // Do not load retired SIGNAL FORGE / Skin_052 as a runtime theme.
-    auto missingControl = juce::JSON::parse(validJson);
+    auto missingControl = juce::JSON::parse(canonicalJson);
     auto* missingControls = missingControl.getProperty("controls", juce::var()).getDynamicObject();
     expect(missingControls != nullptr, "canonical controls object is mutable for contract tests");
     if (missingControls != nullptr)
@@ -147,7 +149,6 @@ int main()
     expect(manager.getPalette().usedFallback,
            "extra control ID restores default fallback");
 
-    const auto canonicalJson = skin53Manifest.loadFileAsString();
     const auto badStudioColour = canonicalJson.replace("#00D9FF", "#GGD9FF");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
