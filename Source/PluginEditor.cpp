@@ -2028,10 +2028,39 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             skins.push_back(std::move(item));
         }
 
+        juce::StringArray favourites;
+        auto* properties = uiProperties.getUserSettings();
+        const auto storedFavourites = properties != nullptr
+            ? properties->getValue("ppguGalleryFavourites") : juce::String{};
+        const auto restoredFavourites = juce::StringArray::fromTokens(storedFavourites, "|", "");
+        for (const auto& id : restoredFavourites)
+        {
+            const auto knownSkin = std::find_if(skins.begin(), skins.end(),
+                [&id](const PPGUSkinGalleryPanel::Skin& item) { return item.id == id; });
+            if (knownSkin != skins.end() && !favourites.contains(id))
+                favourites.add(id);
+        }
+        const auto normalizedFavourites = favourites.joinIntoString("|");
+        if (properties != nullptr && storedFavourites != normalizedFavourites)
+        {
+            properties->setValue("ppguGalleryFavourites", normalizedFavourites);
+            properties->saveIfNeeded();
+        }
+
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
         const auto gallerySkinCount = static_cast<int>(skins.size());
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
-            std::move(skins), themeManager.getPalette(),
+            std::move(skins), themeManager.getPalette(), std::move(favourites),
+            [safe](const juce::StringArray& ids)
+            {
+                if (safe == nullptr)
+                    return;
+                if (auto* settings = safe->uiProperties.getUserSettings())
+                {
+                    settings->setValue("ppguGalleryFavourites", ids.joinIntoString("|"));
+                    settings->saveIfNeeded();
+                }
+            },
             [safe](int index)
             {
                 if (safe == nullptr)
