@@ -60,7 +60,7 @@ private:
     void handleGeometryChanged(int id);
     juce::String geometryKey(int id, const juce::String& suffix) const;
     void reorderPanels(int draggedId, int targetId);
-    void layoutPanels(bool restoreSinglePanelGeometry = false);
+    void layoutPanels();
 
     juce::Viewport viewport;
     std::unique_ptr<TileSurface> tileSurface;
