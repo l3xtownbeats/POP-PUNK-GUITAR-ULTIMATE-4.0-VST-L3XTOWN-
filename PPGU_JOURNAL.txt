@@ -641,3 +641,14 @@ Validation: source-level correction committed. Exact-HEAD Windows build, CTest, 
 Приёмка 10 GB: считать только фактически интегрированные, лицензированные, проверенные и доступные движку файлы, а не candidate archives или внешние ссылки. Отчёт включает объём, число наборов/файлов, категории/модели, license/provenance register, исключения, SHA-256 manifest и runtime availability. После создания базы на её основе продолжается ранее утверждённое производство минимум 500 READY MELODY + 500 READY PATTERN; READY-пресет требует реальной загрузки, воспроизведения и полной проверки.
 
 Статус: USER CONFIRMED / APPROVED / FIXED. Download/collection, rights audit, integration and verified 10 GB acceptance remain PENDING; не заявлять, что объём уже скачан или интегрирован.
+
+
+2026-11-15 — MASTER GUITAR LIBRARY SOUND-QUALITY PRIORITY (USER CONFIRMED)
+
+Пользователь уточнил главный критерий: нужны САМЫЕ ЛУЧШИЕ КАЧЕСТВЕННЫЕ гитарные звуки, максимально соответствующие давно зафиксированным потребностям POP PUNK GUITAR ULTIMATE / NEON STAGE. Неважно, чистые они или обработанные: DI, clean, amp-recorded, distorted/high-gain, cabinet/mic, produced/mixed, acoustic, loops, one-shots и multisamples допустимы и желательны, если конкретный материал качественный и подходит задаче. Не отдавать автоматическое предпочтение DI/clean и не исключать обработанные записи только из-за обработки.
+
+Оценивать профессиональное качество записи, реалистичность/выразительность, pop-punk/punk/rock/emo/easycore fit, palm-muted и open/power chords, атаку/сустейн/релиз, динамику/velocity, читаемость в миксе, тональность/строй/темп, отсутствие шума/клиппинга/артефактов/фазовых проблем и пригодность для sampler/preset engine. Сохранять signal type/processing metadata; clean/DI нужны для гибкости и дальнейшей обработки, обработанные тона — для готового музыкального результата. При наличии разных версий хранить полезные варианты раздельно и с маркировкой.
+
+Качество и соответствие важнее наполнения диска ради объёма: минимум 10 GB должен быть набран из реально качественных, лицензированных и интегрированных материалов, а не низкокачественных filler files. Сохраняются ранее утверждённые требования: реалистичные сразу playable pop-punk гитары, MIDI note playback, музыкально точные rhythm/articulation, velocity-triggered palm mute, acoustic variants и готовые к миксу звуки по утверждённым стилевым референсам.
+
+Статус: USER CONFIRMED / APPROVED / FIXED AS PRIMARY SOUND-SELECTION RULE. Реальный download, audition, scoring, licensing and integration — PENDING.
