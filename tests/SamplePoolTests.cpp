@@ -878,6 +878,81 @@ int main()
         return 1;
     }
 
+    // Maximum-polyphony stress: all 64 preallocated voices must be
+    // triggerable, render finite audio, and use deterministic oldest-voice
+    // stealing when the configured cap is reached.
+    ppgu::sampler::SamplerEngine sixtyFourVoiceEngine;
+    sixtyFourVoiceEngine.prepare(44100.0);
+    if (!sixtyFourVoiceEngine.loadSfz(sfzFile).success
+        || !sixtyFourVoiceEngine.noteOn(60, 100, 64, 1))
+    {
+        std::cerr << "Could not prepare 64-voice stress fixture.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> voiceWarmBlock(2, 128);
+    bool voicePagesReady = false;
+    for (int attempt = 0; attempt < 100 && !voicePagesReady; ++attempt)
+    {
+        voiceWarmBlock.clear();
+        sixtyFourVoiceEngine.render(voiceWarmBlock, 0, voiceWarmBlock.getNumSamples());
+        voicePagesReady = voiceWarmBlock.getMagnitude(0, 0, voiceWarmBlock.getNumSamples()) > 0.001f;
+        if (!voicePagesReady)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!voicePagesReady)
+    {
+        std::cerr << "64-voice stress sample page did not become ready.\\n";
+        return 1;
+    }
+    sixtyFourVoiceEngine.reset();
+    for (int voice = 0; voice < ppgu::sampler::SamplerEngine::maximumVoices; ++voice)
+        if (!sixtyFourVoiceEngine.noteOn(60, 4, 64, 1))
+        {
+            std::cerr << "64-voice stress failed at voice " << voice << ".\\n";
+            return 1;
+        }
+    if (sixtyFourVoiceEngine.getActiveVoiceCount() != 64
+        || !sixtyFourVoiceEngine.noteOn(60, 4, 64, 1)
+        || sixtyFourVoiceEngine.getActiveVoiceCount() != 64)
+    {
+        std::cerr << "64-voice capacity or oldest-voice stealing contract failed.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> sixtyFourVoiceRender(2, 512);
+    sixtyFourVoiceRender.clear();
+    sixtyFourVoiceEngine.render(sixtyFourVoiceRender, 0, sixtyFourVoiceRender.getNumSamples());
+    if (sixtyFourVoiceRender.getMagnitude(0, 0, sixtyFourVoiceRender.getNumSamples()) <= 0.001f)
+    {
+        std::cerr << "64 simultaneous voices rendered silence.\\n";
+        return 1;
+    }
+    for (int channel = 0; channel < sixtyFourVoiceRender.getNumChannels(); ++channel)
+        for (int sample = 0; sample < sixtyFourVoiceRender.getNumSamples(); ++sample)
+            if (!std::isfinite(sixtyFourVoiceRender.getSample(channel, sample)))
+            {
+                std::cerr << "64-voice render produced a non-finite sample.\\n";
+                return 1;
+            }
+
+    ppgu::sampler::SamplerEngine cappedVoiceEngine;
+    cappedVoiceEngine.prepare(44100.0);
+    if (!cappedVoiceEngine.loadSfz(sfzFile).success)
+    {
+        std::cerr << "Could not load capped-voice stress bank.\\n";
+        return 1;
+    }
+    for (int voice = 0; voice < 64; ++voice)
+        if (!cappedVoiceEngine.noteOn(60, 4, 32, 1))
+        {
+            std::cerr << "32-voice cap trigger failed at voice " << voice << ".\\n";
+            return 1;
+        }
+    if (cappedVoiceEngine.getActiveVoiceCount() != 32)
+    {
+        std::cerr << "Configured polyphony cap did not limit active voices to 32.\\n";
+        return 1;
+    }
+
     // M2 acceptance regression: 100 repeated guitar hits at changing
     // velocities must remain finite and avoid abrupt discontinuities.
     ppgu::sampler::SamplerEngine repeatedHitEngine;

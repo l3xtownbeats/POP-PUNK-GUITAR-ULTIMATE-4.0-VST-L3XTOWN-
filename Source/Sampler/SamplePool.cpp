@@ -576,6 +576,16 @@ void SamplerEngine::applyPitchBendForChannel(int channelIndex) noexcept
         return;
     const float bend = channelPitchBendSemitones[static_cast<size_t>(channelIndex)];
     const int target = channelPitchBendTarget[static_cast<size_t>(channelIndex)];
+    if (bend == 0.0f)
+    {
+        for (auto& voice : voices)
+            if (voice.region != nullptr && voice.midiChannel == channelIndex + 1)
+            {
+                voice.pitchBendSemitones = 0.0f;
+                voice.increment = voice.baseIncrement;
+            }
+        return;
+    }
     int selectedVoice = -1;
 
     for (int i = 0; i < maximumVoices; ++i)
