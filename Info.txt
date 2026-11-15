@@ -332,3 +332,20 @@ Fix committed in Source/PluginEditor.cpp: both callbacks now call setSelectedId(
 Commit: 7692eb0b2549ff7856eb38788994fcba79bcf451.
 
 Validation: source-level correction committed. Exact-HEAD Windows build, CTest, pluginval Strictness 5 and runtime/FL Studio interaction verification remain PENDING. This fix is one identified audit defect, not a claim that all controls are now complete.
+
+
+## 2026-11-15 — USER-APPROVED SECOND-LEVEL FACTORY PRESET PRODUCTION SCOPE
+
+Пользователь утвердил отдельный второй уровень работ: после завершения и функциональной приёмки полноценной Preset Gallery / Preset Browser изготовить и наполнить весь утверждённый каталог factory presets в соответствии с утверждёнными макетами, референсными образцами, группами, артистическими/альбомными профилями, стилями, жанрами и музыкальными характеристиками.
+
+Обязательное содержание каждого пресета: реальный playable preset с корректными параметрами/ресурсами, назначенной музыкальной функцией и проверенным звучанием; соответствующие группе и жанру тембр, ритмика/groove, артикуляция, динамика/velocity, palm-mute/open-chord/picking/арпеджио/fills и другие применимые техники; корректное распределение MELODY или PATTERN; согласованные имя, категория, стиль, описание, artwork/metadata там, где они предусмотрены утверждённым макетом. Все карточки и фильтры галереи должны описывать реальные записи, а не концептуальные заглушки.
+
+Каталог создавать по утверждённым sample libraries и законно распространяемым ресурсам после проверки происхождения, лицензии и SHA-256. Не копировать защищённые риффы, stems, записи или чужие пресеты; артистические/альбомные профили использовать как подтверждённые production/style references, а не как основание для незаконного воспроизведения контента. Для Travis Barker 82 сохраняется ранее утверждённое правило: 82 уникальных пресета внутри соответствующих групп/артистических профилей, только при документированной production-role связи; не выделять отдельную верхнеуровневую категорию и считать каждый пресет ровно один раз.
+
+Количественный ориентир остаётся последним утверждённым REV.18 superseding requirement: минимум 500 READY MELODY + 500 READY PATTERN. READY означает не просто JSON/карточку/название: запись должна иметь валидные ресурсы и mappings, реально загружаться и воспроизводиться, соответствовать своей музыкальной задаче, иметь проверенные параметры/артикуляции и пройти автоматические проверки каталога плюс runtime/прослушивание. Непроверенные или незавершённые записи не засчитывать в READY; не публиковать фиктивные счётчики.
+
+Порядок: (1) закончить Preset Gallery/Browser UI и её реальные навигацию/поиск/категории/избранное/загрузку; (2) сверить approved mockups, sample references, genre/style/group taxonomy и preset metadata schema; (3) сформировать production matrix и provenance/license register; (4) изготовить и интегрировать все MELODY/PATTERN presets партиями; (5) выполнить mapping, articulation, velocity, rhythm, resource and duplicate checks; (6) прослушать/проверить каждую запись и проверить совместимость с preset loading/state; (7) подтвердить точный итог READY отдельно по MELODY и PATTERN.
+
+Ограничения: не менять утверждённые UI-макеты/структуру без необходимости; не создавать фиктивные пресеты; не засчитывать legacy JSON definitions как READY без полной проверки; сохранять APVTS/control IDs, 27-control parity, семь FX bypass IDs, processor state и audio/MIDI/DSP boundaries. Это второй уровень работ, следующий за завершением галереи, а не заявление о том, что каталог уже изготовлен.
+
+Статус: USER CONFIRMED / APPROVED / FIXED FOR SECOND-LEVEL EXECUTION. Реализация и READY-приёмка — PENDING.
