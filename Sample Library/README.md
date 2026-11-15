@@ -4,7 +4,7 @@ This directory is the source-controlled inventory and layout for the PPGU guitar
 
 ## Portable package contract
 
-The portable distribution contains the VST3 bundle and its adjacent `SOUNDBANK/` directory. No installer, Setup.exe, mandatory AppData install, or external account is required. The plugin must resolve its bundled bank relative to its own portable package location. User banks remain separate from factory-cleared content.
+The portable distribution has one top-level folder, `PPGU PORTABLE/`, containing exactly two library folders: `Sample Library/` (the growing canonical factory library) and `Import Sample Guitar/` (the user's import inbox). There is no `SOUNDBANK/` folder. No installer, Setup.exe, mandatory AppData install, or external account is required. The plugin indexes and loads factory content directly from `Sample Library/`; it does not create a duplicate runtime sound-bank folder.
 
 ## Current factory source batch — 11 natural guitar collections
 
