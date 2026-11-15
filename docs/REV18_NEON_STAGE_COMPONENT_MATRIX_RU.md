@@ -259,3 +259,13 @@ Implemented:
 - All 9 approved rotary APVTS bindings and 7 approved FX bypass bindings remain unchanged. No DSP, MIDI, processor state or audio callback was touched.
 
 **Validation boundary:** source change only. Exact-HEAD Windows build, CTest, pluginval strictness 5, portable VST3 packaging, pixel-level comparison and FL Studio 20 acceptance remain PENDING. This is the first bounded implementation slice, not completion of the NEON STAGE interface.
+
+
+## 2026-11-15 — AUTOCHORDS REQUIRED HARMONY TOOLS (USER CONFIRMED)
+
+| Требование | Live source | Статус | Следующий шаг / ограничения |
+|---|---|---|---|
+| Circle of Fifths | PPGUAutoChordsPanel: не обнаружен | REQUIRED / NOT IMPLEMENTED | Интерактивный квинтовый круг для выбора тональности/гармонического контекста; связать с chord vocabulary и chord progression. |
+| Chord Management | PPGUAutoChordsPanel: не обнаружен | REQUIRED / NOT IMPLEMENTED | Управление аккордами и последовательностью: добавление, удаление, перестановка, отображение и сохранение набора. Точная interaction model — отдельный следующий design/code slice. |
+
+Обе функции подтверждены пользователем как обязательные. Это реальные функциональные инструменты, не декоративные элементы. Сохранять 27 control-ID, APVTS IDs и audio/MIDI boundaries. Наличие Circle/Manager UI не означает готовность MIDI generation/playback: backend остаётся отдельным gate до интеграции и тестов.
