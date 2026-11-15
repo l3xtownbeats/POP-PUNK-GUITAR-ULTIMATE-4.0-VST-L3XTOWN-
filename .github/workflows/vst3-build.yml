@@ -6,6 +6,19 @@ concurrency:
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'CMakeLists.txt'
+      - 'Source/**'
+      - 'tests/**'
+      - 'SKIN/**'
+      - 'tools/**'
+      - '.github/workflows/vst3-build.yml'
+      - 'presets/factory_bank_300.json'
+      - 'tools/validate_factory_bank.py'
+      - 'tools/validate_preset_files.py'
+      - 'presets/examples/**'
+      - 'docs/**'
   push:
     paths:
       - 'CMakeLists.txt'
