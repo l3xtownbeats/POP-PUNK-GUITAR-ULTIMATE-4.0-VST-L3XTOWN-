@@ -2806,3 +2806,24 @@ Still pending: preview.png and hero.png (do not treat SVG as a substitute); G1�
 ==============================================================================
 The read-only audit now expects all 16 approved sequence entries and resolves theme folders from the canonical manifest path, including zero-padded Skin_053…Skin_107 paths. It also checks ordinal continuity 1…16. Missing preview/hero remain warnings unless strict-assets is requested. Tooling-only correction; no runtime/source audio changes. PNG artwork, registry promotion and host validation remain pending.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV18 UI NAME CORRECTION: AUTO SOUND HUNTER
+==============================================================================
+
+**Пользовательское исправление названия:** прежняя UI-точка входа `AUTO DISCOVER` теперь называется **AUTO SOUND HUNTER**. Это исправление утверждённого имени, а не новая функция и не разрешение менять архитектуру.
+
+- Видимая подпись и внутреннее имя кнопки в `Source/PluginEditor.h/.cpp` приведены к `AUTO SOUND HUNTER`.
+- Существующий schema/control key `Auto_Discover` сохранён без переименования: стабильные control IDs и schema contract не меняются.
+- `SOUND HUNTER` остаётся отдельным названием подсистемы/пайплайна; `CURATOR` остаётся отдельной точкой входа. Название кнопки не объединяет эти модули.
+- Кнопка остаётся честно disabled: production discovery/search/auto-import backend не подтверждён. Никакие фиктивные действия или результаты не добавлены.
+- Исторические записи с прежним именем сохраняются как история; это дополнение задаёт актуальное отображаемое имя.
+
+**Состояние PR #43 — исправление прежней записи журнала:** GitHub показывает, что PR #43 был merged 2026-11-15 06:26:27 UTC в commit `1808127e1d906e5c6ab1254f7eae3014cbacc14a`. Поэтому более ранняя формулировка «Draft / unmerged» является историческим снимком и больше не описывает текущее состояние. Сообщение merge commit определяет его как checkpoint для VST3 launch inspection и прямо не заявляет прохождение полного REV18 acceptance gate. Merge не означает release-ready.
+
+**Предшествующая проверка того же rename:** commit `a1b67b8a10858c95a6d7e7a370dc2962428324b6` на ветке `ui/neon-stage-skin1-completion` прошёл Windows workflow run `43686566559` (job success; VST3 build, CTest, pluginval strictness 5 и interim CI packaging завершились успешно). Это доказательство относится только к SHA `a1b67b8...`, а не к текущему HEAD; artifact помечен INTERIM-CI-NOT-RELEASE. FL Studio 20 host acceptance не подтверждён.
+
+**Текущая реализация:** этот commit переносит утверждённое имя в рабочую линию `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`. Exact-HEAD Windows build/CTest/pluginval/packaging и FL Studio 20 acceptance для нового SHA ожидают повторной проверки.
+**Граница:** только UI naming/tooltip и журналы. Audio Engine, DSP, MIDI, APVTS, parameter IDs, stable control IDs, callbacks, layout и фактическое поведение не менялись.
+==============================================================================

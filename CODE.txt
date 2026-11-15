@@ -1014,3 +1014,20 @@ Status: DISTINCT SVG ASSET STRUCTURE CREATED / VALIDATION PENDING / NOT RELEASE 
 Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.18
 Parent HEAD: 933f5a2b60cf4d9d1340997b7d296ce64abfa332
 Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; checks sequential ordinals; resolves folder from declared manifest path to respect zero-padded stable directories. This is an audit-tool correction only. Runtime registry, PNG artwork, G1-G4 full pack acceptance, build/CTest/pluginval and FL Studio 20 remain pending.
+
+
+## 2026-11-15 — REV18 UI name correction: AUTO SOUND HUNTER
+
+**Branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
+**Parent SHA:** `ffbd5c952856e81277de07ffa077618b0103a38b`  
+**Changed files:**
+- `Source/PluginEditor.h`: renamed the JUCE button member and visible caption from `autoDiscoverButton / AUTO DISCOVER` to `autoSoundHunterButton / AUTO SOUND HUNTER`.
+- `Source/PluginEditor.cpp`: updated all references and the unavailable-state tooltip; clarified that CURATOR is a separate unavailable entry point.
+
+**Contract preservation:** schema/control key `Auto_Discover` is intentionally unchanged; no stable control ID, APVTS parameter ID, attachment, callback, layout, audio, DSP or MIDI behavior changed. AUTO SOUND HUNTER remains disabled because its production backend is not implemented/verified. No fake search/import behavior was added.
+
+**Prior evidence:** equivalent rename source on `ui/neon-stage-skin1-completion`, SHA `a1b67b8a10858c95a6d7e7a370dc2962428324b6`, passed workflow run `43686566559` including Windows x64 VST3 build, CTest, pluginval strictness 5 and interim non-release package. That evidence does not transfer to the current branch SHA. New exact-HEAD CI is pending; FL Studio 20 host acceptance remains separate.
+
+**Repository-state correction:** PR #43 is merged at `1808127e1d906e5c6ab1254f7eae3014cbacc14a` (2026-11-15 06:26:27 UTC). The merge message explicitly limits it to a VST3 launch-inspection checkpoint; full REV18 acceptance is not claimed.
+
+**Status:** SOURCE NAME CORRECTION IMPLEMENTED IN CURRENT REV18 LINE / EXACT-HEAD VALIDATION PENDING / NOT RELEASE READY.

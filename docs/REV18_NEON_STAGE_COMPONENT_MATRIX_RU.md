@@ -230,3 +230,8 @@ At audit base HEAD `e68250720c74f3bb8bb904708532c29c7c730e97`:
 - Source inspection is not a substitute for visual or runtime acceptance.
 
 **Decision:** continue source-backed NEON STAGE integration incrementally. Do not merge or mark release-ready until every applicable gate above has exact-SHA evidence.
+
+
+## 2026-11-15 — UI entry-point naming correction
+
+The UI entry point previously called **Auto Discover** in historical audit rows now has the approved display name **AUTO SOUND HUNTER**. This is a naming correction only. Keep the separate **Sound Hunter** subsystem/pipeline and **Curator** module distinct. Preserve the existing schema key `Auto_Discover`; do not rename stable control IDs. The current button remains disabled until a real production discovery/search/import backend is integrated and validated. No fake functionality is permitted.

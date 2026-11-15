@@ -325,3 +325,12 @@ User clarification: downloading is allowed when lawful and compliant with source
 Технические детали остальных направлений поручено определять ассистенту самостоятельно. Это полномочие действует в пределах существующей архитектуры и не разрешает создавать второй Sample Engine, нарушать realtime/MIDI/APVTS/preset contracts или менять защищённую архитектуру без критической необходимости и отдельного согласования.
 
 **Классификация:** утверждённые требования/направления; реализация не подразумевается. Каждый этап проходит аудит текущего кода, оценку реализуемости, измерения, тесты и проверку на точном SHA. В рамках этой записи production source/assets и runtime не менялись.
+
+
+## 2026-11-15 — REV18 repository-state reconciliation
+
+**Observed active working line:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`, HEAD `ffbd5c952856e81277de07ffa077618b0103a38b` before the following source/documentation transaction. This is a task/session snapshot; the Control Center's previously stated canonical REV.17 policy is not silently rewritten by this observation.
+
+**PR #43 correction:** GitHub reports PR #43 merged at 2026-11-15 06:26:27 UTC, merge commit `1808127e1d906e5c6ab1254f7eae3014cbacc14a`. The merge message describes a VST3 launch-inspection checkpoint and explicitly does not claim full REV18 acceptance. Earlier “Draft / unmerged” notes are historical and require this correction.
+
+**Current task:** port only the user-approved AUTO SOUND HUNTER display-name correction to the active REV18 line, preserve `Auto_Discover` schema key and all runtime behavior, and record exact-SHA validation separately.
