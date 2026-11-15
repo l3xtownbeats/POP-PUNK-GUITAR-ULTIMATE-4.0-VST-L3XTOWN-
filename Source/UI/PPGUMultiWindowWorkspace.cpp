@@ -287,17 +287,34 @@ bool PPGUMultiWindowWorkspace::openPanel(PanelSpec spec)
     auto bounds = juce::Rectangle<int>(nextCascadeOffset, nextCascadeOffset,
         static_cast<int>(window->getDesiredSize().width), static_cast<int>(window->getDesiredSize().height));
     nextCascadeOffset = (nextCascadeOffset + 34) % 170;
+    bool hasSavedGeometry = false;
     if (persistenceProperties != nullptr)
     {
         juce::StringArray values;
         values.addTokens(persistenceProperties->getValue(geometryKey(panelId, "bounds")), ",", "");
         if (values.size() == 4)
-            bounds = { values[0].getIntValue(), values[1].getIntValue(), values[2].getIntValue(), values[3].getIntValue() };
+        {
+            const auto savedX = values[0].getIntValue();
+            const auto savedY = values[1].getIntValue();
+            const auto savedWidth = values[2].getIntValue();
+            const auto savedHeight = values[3].getIntValue();
+            if (savedWidth >= static_cast<int>(window->getMinimumSize().width)
+                && savedHeight >= static_cast<int>(window->getMinimumSize().height)
+                && savedWidth <= 32768 && savedHeight <= 32768
+                && std::abs(static_cast<std::int64_t>(savedX)) <= 32768
+                && std::abs(static_cast<std::int64_t>(savedY)) <= 32768)
+            {
+                bounds = { savedX, savedY, savedWidth, savedHeight };
+                hasSavedGeometry = true;
+            }
+        }
     }
     window->setBounds(bounds);
     tileSurface->addAndMakeVisible(*window);
     windows.push_back(std::move(window));
-    layoutPanels();
+    // A simple reopen restores the user's saved size and position. Automatic
+    // tiling remains in effect when the active panel set changes.
+    layoutPanels(hasSavedGeometry && windows.size() == 1);
     viewport.setViewPosition(0, 0);
     return true;
 }
@@ -447,7 +464,7 @@ void PPGUMultiWindowWorkspace::reorderPanels(int draggedId, int targetId)
     layoutPanels();
 }
 
-void PPGUMultiWindowWorkspace::layoutPanels()
+void PPGUMultiWindowWorkspace::layoutPanels(bool restoreSinglePanelGeometry)
 {
     if (tileSurface == nullptr || layingOutPanels)
         return;
@@ -456,6 +473,31 @@ void PPGUMultiWindowWorkspace::layoutPanels()
     const auto view = viewport.getViewArea();
     const int viewWidth = juce::jmax(1, view.getWidth());
     const int viewHeight = juce::jmax(1, view.getHeight());
+
+    if (restoreSinglePanelGeometry && windows.size() == 1)
+    {
+        auto& window = *windows.front();
+        auto bounds = window.getBounds();
+        const int width = juce::jmax(static_cast<int>(window.getMinimumSize().width), bounds.getWidth());
+        const int height = juce::jmax(static_cast<int>(window.getMinimumSize().height), bounds.getHeight());
+        bounds.setSize(width, height);
+        bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
+        if (width <= viewWidth)
+            bounds.setX(juce::jmin(bounds.getX(), viewWidth - width));
+        if (height <= viewHeight)
+            bounds.setY(juce::jmin(bounds.getY(), viewHeight - height));
+        window.setPanelBounds(bounds);
+        tileSurface->setSize(juce::jmax(viewWidth, bounds.getRight() + panelGap),
+                             juce::jmax(viewHeight, bounds.getBottom() + panelGap));
+        if (persistenceProperties != nullptr)
+        {
+            persistenceProperties->setValue(geometryKey(window.getPanelId(), "bounds"),
+                juce::String(bounds.getX()) + "," + juce::String(bounds.getY()) + ","
+                + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
+            persistenceProperties->saveIfNeeded();
+        }
+        return;
+    }
 
     std::vector<ppgu::ui::PanelRequest> requests;
     requests.reserve(windows.size());
