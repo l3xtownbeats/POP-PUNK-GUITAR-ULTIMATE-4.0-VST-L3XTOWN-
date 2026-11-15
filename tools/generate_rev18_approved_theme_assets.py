@@ -116,7 +116,7 @@ def stage_background(size, palette, seed=0, guitar=False):
     vignette = vignette.filter(ImageFilter.GaussianBlur(max(12, w // 18)))
     shade = Image.new("RGBA", size, (0, 0, 0, 110))
     shade.putalpha(vignette.point(lambda p: 110 - p // 2))
-    return Image.alpha_composite(im, shade).convert("RGB")
+    return Image.alpha_composite(im.convert("RGBA"), shade).convert("RGB")
 
 
 def draw_guitar(base, palette, seed=0):
