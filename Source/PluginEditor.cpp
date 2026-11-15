@@ -942,7 +942,7 @@ public:
             g.fillEllipse(x - node * 0.5f, y - node * 0.5f, node, node);
             g.setColour(active ? palette.token("window_bg") : palette.token("text_primary"));
             g.setFont(juce::Font(active ? 13.0f : 11.5f, juce::Font::bold));
-            g.drawText(names[i], juce::Rectangle<float>(x - 22.0f, y - 11.0f, 44.0f, 22.0f),
+            g.drawText(names[i], juce::Rectangle<int>(static_cast<int>(x - 22.0f), static_cast<int>(y - 11.0f), 44, 22),
                        juce::Justification::centred);
         }
         g.setColour(palette.token("text_secondary"));
@@ -987,7 +987,7 @@ public:
         addAndMakeVisible(offButton);
 
         keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
-        modeBox.addItemList({ "Major", "Minor" }, 1);
+        modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
         addAndMakeVisible(keyBox);
         addAndMakeVisible(modeBox);
         keyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleRoot", keyBox);
@@ -1094,7 +1094,7 @@ private:
         static const int majorOffsets[] = { 0, 2, 4, 5, 7, 9, 11 };
         static const int minorOffsets[] = { 0, 2, 3, 5, 7, 8, 10 };
         const int root = juce::jlimit(0, 11, keyBox.getSelectedId() - 1);
-        const bool minor = modeBox.getSelectedId() == 2;
+        const bool minor = modeBox.getSelectedId() == 3;
         const auto* offsets = minor ? minorOffsets : majorOffsets;
         juce::StringArray names;
         for (auto& slot : chordSlots)
