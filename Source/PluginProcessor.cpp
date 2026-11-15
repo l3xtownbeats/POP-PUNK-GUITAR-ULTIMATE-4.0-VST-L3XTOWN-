@@ -215,8 +215,12 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     flangerWritePosition = 0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
-    eqLowState.fill(0.0f);
-    eqHighState.fill(0.0f);
+    for (auto& channelStates : eqStates)
+        for (auto& state : channelStates)
+            state.reset();
+    distortionToneState.fill(0.0f);
+    cabinetLowCutState.fill(0.0f);
+    cabinetHighCutState.fill(0.0f);
     compressorEnvelope.fill(0.0f);
     for (auto& history : cabinetHistory) history.fill(0.0f);
     cabinetWritePosition = 0;
@@ -250,8 +254,12 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
     flangerWritePosition = 0;
     flangerPhase = 0.0;
     chorusPhase = 0.0;
-    eqLowState.fill(0.0f);
-    eqHighState.fill(0.0f);
+    for (auto& channelStates : eqStates)
+        for (auto& state : channelStates)
+            state.reset();
+    distortionToneState.fill(0.0f);
+    cabinetLowCutState.fill(0.0f);
+    cabinetHighCutState.fill(0.0f);
     compressorEnvelope.fill(0.0f);
     for (auto& history : cabinetHistory) history.fill(0.0f);
     cabinetWritePosition = 0;
@@ -590,38 +598,46 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
     }
 
-    // AMP & TONE: low/mid/high split with persistent one-pole filter states.
+    // Three-band parametric EQ: low/high shelves and a Q-controlled mid peak.
+    // Coefficients are calculated as scalar values per block; per-channel delay
+    // states are persistent and no filter object or heap allocation is created.
     const float ampGainDb = (juce::jlimit(0.0f, 10.0f, parameters.getRawParameterValue("ampGain")->load(std::memory_order_relaxed)) - 5.0f) * 2.0f;
     const float ampGain = juce::Decibels::decibelsToGain(ampGainDb);
     const bool eqEnabled = parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) > 0.5f;
-    const float lowGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)));
-    const float midGain = juce::Decibels::decibelsToGain(juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)));
-    const float highGainDb = juce::jlimit(-12.0f, 12.0f, parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed));
-    // The preset-level Tone control is a neutral-at-5 high-shelf trim. Keep it
-    // active even when the three-band EQ is bypassed so preset tone is audible.
+    const float lowGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
+        parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)) : 0.0f;
+    const float midGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
+        parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)) : 0.0f;
+    const float highEqGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
+        parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed)) : 0.0f;
+    const float lowFrequency = juce::jlimit(20.0f, 500.0f,
+        parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
+    const float midFrequency = juce::jlimit(100.0f, 8000.0f,
+        parameters.getRawParameterValue("eqMidFreq")->load(std::memory_order_relaxed));
+    const float midQ = juce::jlimit(0.1f, 10.0f,
+        parameters.getRawParameterValue("eqMidQ")->load(std::memory_order_relaxed));
+    const float highFrequency = juce::jlimit(2000.0f, 20000.0f,
+        parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
+    // Tone remains active at neutral=5 even while the three EQ bands are bypassed.
     const float tone = juce::jlimit(0.0f, 10.0f,
         parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed));
-    const float toneGain = juce::Decibels::decibelsToGain(tone - 5.0f);
-    const float highGain = juce::Decibels::decibelsToGain(highGainDb) * toneGain;
-    const float lowAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 250.0f / static_cast<float>(currentSampleRate));
-    const float highAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi * 2500.0f / static_cast<float>(currentSampleRate));
+    const float highGainDb = highEqGainDb + (tone - 5.0f);
+    const auto lowCoefficients = ppgu::dsp::makeLowShelf(
+        static_cast<float>(currentSampleRate), lowFrequency, lowGainDb);
+    const auto midCoefficients = ppgu::dsp::makePeaking(
+        static_cast<float>(currentSampleRate), midFrequency, midQ, midGainDb);
+    const auto highCoefficients = ppgu::dsp::makeHighShelf(
+        static_cast<float>(currentSampleRate), highFrequency, highGainDb);
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
         auto* data = buffer.getWritePointer(channel);
-        auto& lowState = eqLowState[static_cast<size_t>(channel)];
-        auto& highState = eqHighState[static_cast<size_t>(channel)];
+        auto& states = eqStates[static_cast<size_t>(channel)];
         for (int sample = 0; sample < samples; ++sample)
         {
-            const float input = data[sample] * ampGain;
-            lowState += lowAlpha * (input - lowState);
-            highState += highAlpha * (input - highState);
-            const float low = lowState;
-            const float high = input - highState;
-            const float mid = input - low - high;
-            if (eqEnabled)
-                data[sample] = low * lowGain + mid * midGain + high * highGain;
-            else
-                data[sample] = input + high * (toneGain - 1.0f);
+            float value = data[sample] * ampGain;
+            value = states[0].process(value, lowCoefficients);
+            value = states[1].process(value, midCoefficients);
+            data[sample] = states[2].process(value, highCoefficients);
         }
     }
 
@@ -712,7 +728,21 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         read = read == 0 ? cabinetImpulse.size() - 1 : read - 1;
                     }
                     const float dry = data[sample];
-                    data[sample] = dry + (wet - dry) * mix;
+                    const float lowCutHz = juce::jlimit(20.0f, 500.0f,
+                        parameters.getRawParameterValue("cabinetLowCut")->load(std::memory_order_relaxed));
+                    const float highCutHz = juce::jlimit(2000.0f,
+                        static_cast<float>(currentSampleRate * 0.45),
+                        parameters.getRawParameterValue("cabinetHighCut")->load(std::memory_order_relaxed));
+                    const float lowCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                        * lowCutHz / static_cast<float>(currentSampleRate));
+                    const float highCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                        * highCutHz / static_cast<float>(currentSampleRate));
+                    auto& lowCutState = cabinetLowCutState[static_cast<size_t>(channel)];
+                    auto& highCutState = cabinetHighCutState[static_cast<size_t>(channel)];
+                    lowCutState += lowCutAlpha * (wet - lowCutState);
+                    const float highPassed = wet - lowCutState;
+                    highCutState += highCutAlpha * (highPassed - highCutState);
+                    data[sample] = dry + (highCutState - dry) * mix;
                 }
                 cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
             }
@@ -727,14 +757,22 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float wet = juce::jlimit(0.0f, 1.0f,
             parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
         const float normalizer = std::tanh(drive);
+        const float tone = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("distortionTone")->load(std::memory_order_relaxed));
+        const float toneCutoff = juce::jlimit(300.0f, static_cast<float>(currentSampleRate * 0.45),
+            500.0f + 15000.0f * tone * tone);
+        const float toneAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+            * toneCutoff / static_cast<float>(currentSampleRate));
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
             auto* data = buffer.getWritePointer(channel);
+            auto& toneState = distortionToneState[static_cast<size_t>(channel)];
             for (int sample = 0; sample < samples; ++sample)
             {
                 const float dry = data[sample];
                 const float shaped = std::tanh(dry * drive) / normalizer;
-                data[sample] = dry + (shaped - dry) * wet;
+                toneState += toneAlpha * (shaped - toneState);
+                data[sample] = dry + (toneState - dry) * wet;
             }
         }
     }

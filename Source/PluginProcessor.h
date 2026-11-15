@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DSP/BiquadFilter.h"
 #include <atomic>
 #include <cstdint>
 #include <functional>
@@ -88,8 +89,10 @@ private:
     std::array<std::vector<float>, 2> delayBuffers;
     std::array<std::vector<float>, 2> chorusBuffers;
     std::array<std::vector<float>, 2> flangerBuffers;
-    std::array<float, 2> eqLowState {};
-    std::array<float, 2> eqHighState {};
+    std::array<std::array<ppgu::dsp::BiquadState, 3>, 2> eqStates {};
+    std::array<float, 2> distortionToneState {};
+    std::array<float, 2> cabinetLowCutState {};
+    std::array<float, 2> cabinetHighCutState {};
     std::array<float, 2> compressorEnvelope {};
     std::array<float, 64> cabinetImpulse {};
     std::array<std::array<float, 64>, 2> cabinetHistory {};

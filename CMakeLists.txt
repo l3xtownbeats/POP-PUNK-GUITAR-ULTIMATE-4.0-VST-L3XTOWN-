@@ -96,6 +96,9 @@ function(ppgu_add_test target source)
 endfunction()
 
 # Pure C++ contract tests.
+ppgu_add_test(ppgu_dsp_filter_contracts tests/DspFilterTests.cpp)
+target_include_directories(ppgu_dsp_filter_contracts PRIVATE Source)
+
 ppgu_add_test(ppgu_pattern_contracts tests/PatternSchedulerTests.cpp)
 target_include_directories(ppgu_pattern_contracts PRIVATE Source/Performance)
 
