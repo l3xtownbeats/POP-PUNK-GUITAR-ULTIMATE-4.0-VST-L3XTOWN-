@@ -127,11 +127,31 @@ bool parseKey(const std::string& text, int& value)
 
 bool pathStaysInside(const std::filesystem::path& base, const std::filesystem::path& candidate)
 {
-    const auto relative = candidate.lexically_relative(base);
-    if (relative.empty()) return candidate == base;
-    if (relative.is_absolute()) return false;
-    const auto first = *relative.begin();
-    return first != "..";
+    // Lexical checks alone do not stop a library from escaping through a
+    // symlink inside the SFZ folder. Resolve every existing path component
+    // before checking containment; weakly_canonical also supports not-yet-
+    // created sample files while resolving existing parent symlinks.
+    std::error_code error;
+    const auto canonicalBase = std::filesystem::weakly_canonical(base, error);
+    if (error)
+        return false;
+
+    error.clear();
+    const auto canonicalCandidate = std::filesystem::weakly_canonical(candidate, error);
+    if (error)
+        return false;
+
+    const auto relative = canonicalCandidate.lexically_relative(canonicalBase);
+    if (relative.empty())
+        return canonicalCandidate == canonicalBase;
+    if (relative.is_absolute())
+        return false;
+
+    for (const auto& component : relative)
+        if (component == "..")
+            return false;
+
+    return true;
 }
 
 void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& value,
