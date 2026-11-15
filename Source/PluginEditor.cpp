@@ -1537,7 +1537,26 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
+    const auto full = getLocalBounds().toFloat();
     g.fillAll(p.token("window_bg"));
+
+    // Branded top rail: purely graphical chrome behind the existing live buttons.
+    // No new action, parameter, or processor dependency is introduced here.
+    auto header = getLocalBounds().reduced(14).removeFromTop(48).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
+                                           header.getX(), header.getY(),
+                                           p.token("panel"), header.getRight(),
+                                           header.getBottom(), false));
+    g.fillRoundedRectangle(header, 9.0f);
+    g.setColour(p.token("control_border").withAlpha(0.8f));
+    g.drawRoundedRectangle(header.reduced(0.5f), 9.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.9f));
+    g.fillRoundedRectangle(header.getX() + 8.0f, header.getY() + 8.0f,
+                           2.0f, header.getHeight() - 16.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.22f));
+    g.drawHorizontalLine(static_cast<int>(header.getBottom() - 1.0f),
+                         header.getX() + 14.0f, header.getRight() - 14.0f);
+
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1551,7 +1570,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
     drawPanel(g, area, "PLAYING CORE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    drawPanel(g, right, "FX CHAIN");
 
     // NEON STAGE Playing Core hero artwork is loaded from the active skin manifest.
     // It is a visual-only surface; all nine live controls remain separate JUCE components.
@@ -1568,13 +1587,26 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
                           juce::RectanglePlacement::centred);
         g.restoreState();
     }
+    else
+    {
+        // Honest visual fallback when a theme has no hero asset.
+        g.setColour(p.token("text_secondary").withAlpha(0.14f));
+        g.drawRoundedRectangle(heroSlot.toFloat().reduced(1.0f), 7.0f, 1.0f);
+        g.setColour(p.token("text_secondary").withAlpha(0.7f));
+        g.setFont(makeThemeFont(p, 10.0f, false, true));
+        g.drawText("ACTIVE SKIN ARTWORK", heroSlot.toNearestInt(),
+                   juce::Justification::centred);
+    }
     g.setColour(p.token("accent").withAlpha(0.72f));
     g.drawRoundedRectangle(heroSlot.toFloat().reduced(0.5f), 8.0f, 1.0f);
 
-    // Restrained texture is cached by JUCE's normal component repaint path.
-    g.setColour(p.token("text_secondary").withAlpha(0.08f));
+    // Subtle technical grid, clipped to the central instrument zone.
+    g.saveState();
+    g.reduceClipRegion(area);
+    g.setColour(p.token("text_secondary").withAlpha(0.055f));
     for (int x = area.getX() + 16; x < area.getRight(); x += 32)
         g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    g.restoreState();
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
