@@ -961,3 +961,22 @@ Validation:
 - Windows workflow run 43680094486 was triggered for source commit 775cd7901ab628579a9f6ce9c7a02924ed72d143; result pending at the time of this entry.
 - No exact-head Windows build, CTest, pluginval strictness 5 or FL Studio 20 host pass is claimed here.
 ==============================================================================
+
+
+## 2026-11-15 — NEON STAGE shared TextEditor states
+
+**Branch:** `ui/neon-stage-skin1-completion`  
+**Source commits:**
+- `07262b7ba7429366dd600ebbdef78069506920ad` — declare shared TextEditor drawing overrides in `Source/PluginEditor.h`.
+- `c0d694bb7979248773d4fc4300df75d2d7ed411c` — implement shared TextEditor drawing in `Source/PluginEditor.cpp`.
+
+**Implementation:**
+- Added shared palette-driven TextEditor background rendering: enabled fields use `control_bg`; disabled fields use `lowlight`.
+- Added shared rounded outline rendering with distinct normal, hover, keyboard-focus and disabled states using `control_border`, `accent`, `highlight` and `lowlight`.
+- This applies through the editor's existing `PPGUPremiumLookAndFeel`; it adds no controls or new product functionality.
+
+**Safety:** no Audio Engine, DSP, MIDI processing, APVTS definitions/state, parameter IDs, control IDs, attachments, sampler, presets or panel workflows intentionally changed.
+
+**Validation:** source re-fetched; declarations and definitions are present. No compiler/build/CTest/pluginval result is available for this exact SHA. The override signatures target JUCE LookAndFeel_V2 API inherited by LookAndFeel_V4; exact Windows compile confirmation remains pending.
+
+**Status:** SOURCE IMPLEMENTED / BUILD AND RUNTIME VALIDATION PENDING.
