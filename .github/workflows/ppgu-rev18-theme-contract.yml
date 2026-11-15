@@ -1,3 +1,4 @@
+# REV18 generator mode fix follow-up: 50f9506a
 name: PPGU REV18 Theme Contract
 on:
   pull_request:
