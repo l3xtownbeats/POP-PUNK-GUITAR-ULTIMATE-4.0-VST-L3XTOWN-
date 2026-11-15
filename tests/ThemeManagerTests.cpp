@@ -154,7 +154,7 @@ int main()
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
-    const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
+    const auto badStudioCompatibility = canonicalJson.replace("\"audioChanges\": false",
                                                             "\"audioChanges\": true");
     expect(!manager.loadFromJson(badStudioCompatibility),
            "audio-changing Skin Studio theme rejected");
