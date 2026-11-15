@@ -43,6 +43,7 @@ private:
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
     void openSettingsPanel();
+    void openAboutPanel();
     void applyPalette();
     void refreshHeroArtwork();
     void persistSkinPreference();
