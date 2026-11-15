@@ -262,3 +262,43 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 - Не менялись APVTS IDs/values, MIDI routing, генератор, sampler, scheduler или preset semantics.
 
 **Статус:** AUTOCHORDS SOURCE AUDIT + COMPACT LAYOUT FIX COMMITTED / VISUAL QA PENDING / BUILD & HOST QA PENDING. Следующий модуль по утверждённой очереди — Curator; он остаётся заблокирован до готовности реальной функциональной части, поэтому вместо создания фиктивного UI выполняется аудит фактического наличия backend/контрактов.
+
+
+## CURATOR — gate check (UI intentionally not created)
+
+**Дата:** 2026-11-15  
+**Проверенная ветка:** `rev18/neon-stage-skin1-implementation`, HEAD до этой записи `ec02a2744929e9b68306368fbb2e2bfd3e669057`.
+
+### Проверка фактической готовности backend
+
+- `PPGU_TASK_REGISTRY.md` фиксирует SH-02 DeepSearchWorker, SH-03 StyleClassifier и SH-04 CuratorPanel как **Not implemented**; SH-05 GREEN registry integration также Not implemented.
+- В дереве `Source/` отсутствуют Curator/SoundHunter source modules и классы; есть только UI shell `Source/PluginEditor.cpp`, performance, sampler и общие UI components.
+- Спецификация `docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md` прямо помечена PRODUCT / SYSTEM DESIGN — DESIGNED, НЕ IMPLEMENTED.
+- `assets/sound_hunter/registry.json` существует, но содержит пустой массив `assets: []`; реальных кандидатов и результатов кураторства нет.
+- `tools/validate_sound_asset_registry.py` — metadata/policy validator. В docstring прямо указано, что он не выполняет legal review, downloads, guitar identification или audio-quality measurement.
+- `tests/TestSoundAssetRegistry.py` тестирует правила GREEN/YELLOW/RED, provenance, hash и лицензии на фиктивных временных fixtures. Эти unit tests не являются реальным Curator service и не доказывают end-to-end curation.
+
+### Решение
+
+**CURATOR: BLOCKED BY BACKEND READINESS.** Интерфейс не создавался. Нельзя показывать фиктивные GREEN/YELLOW/RED verdicts, scan progress, confidence или curator approvals. Возврат к UI разрешён только после реализации и проверки DeepSearchWorker, StyleClassifier, реального per-asset evidence flow и интеграции GREEN registry. Это соответствует утверждённому порядку пользователя.
+
+## SOUND HUNTER — source / integration audit
+
+### Подтверждённое состояние
+
+- На текущем HEAD в `Source/` нет отдельного Sound Hunter/DiscoveryEngine production module.
+- `assets/sound_hunter/registry.json` имеет schemaVersion 1.0.0 и policy PPGU-REV-10.1, но `assets` пуст.
+- SH-01 (исправить две упавшие sound registry CTest assertions) — Not implemented в task registry; SH-02 DeepSearchWorker и SH-03 StyleClassifier — Not implemented.
+- Registry validator действительно проверяет метаданные, допустимые license basis, local file existence, SHA-256, provenance, screening fields и guitar classification claims. Однако валидатор не проводит само аудиоизмерение и не проверяет юридическую силу лицензии; он проверяет записанные evidence fields.
+- Unit tests используют временный тестовый WAV fixture и примерные license files/URLs. Их pass не означает, что в Sound Hunter загружены реальные или лицензированные звуки.
+- В спецификации предусмотрен внешний worker/companion boundary: сеть, HTTP, загрузки, hash/decode и screening должны идти вне audio callback/realtime voice path. Production worker и интеграция с SoundBank S6 пока не подтверждены.
+
+### Блокеры и следующие действия
+
+1. Сначала SH-01: получить фактический результат CTest, локализовать и исправить две failing assertions; статус не менять на pass без запуска тестов.
+2. Затем реализовать/проверить worker, source adapters, pause/cancel/checkpoint, bounded downloads и quarantine согласно REV 10.1; никаких сетевых операций в audio callback.
+3. Реализовать реальный guitar classifier и аудио-screening; metadata claims не заменяют аудиоанализа.
+4. Только после этого связать per-asset provenance/license/hash/screening/classification/curator state с реальным registry и SoundBank S6.
+5. Curator UI — после backend readiness; Auto Discover UI — после готовности discovery mechanism.
+
+**Статус:** SOUND HUNTER BACKEND NOT IMPLEMENTED / EMPTY REGISTRY / UI NOT READY. Аудит не менял SoundBank, sampler, audio engine, presets или лицензии. Следующий модуль по утверждённой очереди — Auto Discover; он также должен оставаться без фиктивного scan UI, пока discovery mechanism не реализован.
