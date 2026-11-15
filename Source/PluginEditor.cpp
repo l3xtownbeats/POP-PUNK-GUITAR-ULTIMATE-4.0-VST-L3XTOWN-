@@ -1096,12 +1096,12 @@ public:
             g.setColour(active ? palette.token("accent") : palette.token("control_bg"));
             g.fillEllipse(x - node * 0.5f, y - node * 0.5f, node, node);
             g.setColour(active ? palette.token("window_bg") : palette.token("text_primary"));
-            g.setFont(juce::Font(active ? 13.0f : 11.5f, juce::Font::bold));
+            g.setFont(makeThemeFont(palette, active ? 13.0f : 11.5f, false, true));
             g.drawText(names[i], juce::Rectangle<int>(static_cast<int>(x - 22.0f), static_cast<int>(y - 11.0f), 44, 22),
                        juce::Justification::centred);
         }
         g.setColour(palette.token("text_secondary"));
-        g.setFont(10.0f);
+        g.setFont(makeThemeFont(palette, 10.0f, false, true));
         g.drawText("CIRCLE OF FIFTHS", getLocalBounds().removeFromTop(18), juce::Justification::centred);
     }
     bool keyPressed(const juce::KeyPress& key) override
