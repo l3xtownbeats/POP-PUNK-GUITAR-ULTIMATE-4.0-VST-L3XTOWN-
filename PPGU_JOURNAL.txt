@@ -729,3 +729,12 @@ Scope approval не означает, что 15 DSP effects уже сущест�
 Каждый отдельный файл проходит READY gate только после реальных ресурсов/mappings, MIDI playback, корректной MELODY/PATTERN роли, DSP routing, state round-trip, host compatibility, level matching, listening review, duplicate checks и regression tests. Цели 500 READY MELODY + 500 READY PATTERN сохраняются; черновики не считать READY.
 
 Статус: USER APPROVED / FIXED AS DESIGN DIRECTION. Implementation and validation PENDING.
+
+
+2026-11-15 — USER CONFIRMED AUTONOMY FOR PRESET RESEARCH AND CREATION
+
+Пользователь утвердил, что в плане создания пресетов исполнительская свобода предоставлена разработчику: самостоятельно исследовать группы, источники и характерные tonal directions; выбирать порядок и глубину исследования; формировать названия, категории, роли MELODY/PATTERN и варианты звучания; выбирать релевантные источники, реальные ресурсы и реализованные DSP; сравнивать и отбирать лучшие варианты по качеству на слух и технической проверке. Не запрашивать отдельное подтверждение каждого внутреннего sound-design решения, если оно находится в утверждённом scope.
+
+Эта автономия не отменяет фиксированные границы: лицензии/авторское право, достоверность источников, запрет копирования защищённых stems/риффов/записей/коммерческих пресетов, запрет фиктивных функций и завышенных статусов, 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и state contract, REV.18, сохранность оригинальных ресурсов и READY gates. Не менять утверждённый scope молча; при архитектурном конфликте или необходимости нового разрешения документировать gap.
+
+Статус: USER APPROVED AUTONOMY WITHIN FIXED SCOPE; legal, licensing, technical, quality and verification gates remain mandatory.
