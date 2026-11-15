@@ -1012,7 +1012,10 @@ public:
                               - juce::MathConstants<float>::halfPi;
             const float x = centre.x + std::cos(angle) * radius;
             const float y = centre.y + std::sin(angle) * radius;
-            const bool active = i == selectedRoot;
+            // Circle slots are drawn in fifths order, while selectedRoot is a chromatic pitch class.
+            // Compare against the pitch class represented by this slot, not the slot index.
+            static const int fifthsRoots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+            const bool active = fifthsRoots[i] == selectedRoot;
             const float node = active ? 29.0f : 24.0f;
             g.setColour(active ? palette.token("accent") : palette.token("control_bg"));
             g.fillEllipse(x - node * 0.5f, y - node * 0.5f, node, node);
