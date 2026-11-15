@@ -172,6 +172,37 @@
         "multisample"
       ],
       "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "blue-jeans-and-moonbeams",
+      "name": "Blue Jeans And Moonbeams",
+      "creator": "Malaclypse the Younger",
+      "repository": "https://github.com/sfzinstruments/sfzinstruments.github.io",
+      "downloadReference": "https://github.com/sfzinstruments/sfzinstruments.github.io/blob/master/data/sfz/instruments.yml",
+      "license": "MIT listed in SFZ Instruments catalog; audio-file and redistribution terms require independent verification",
+      "role": [
+        "electric",
+        "acoustic",
+        "multisample",
+        "melody",
+        "candidate"
+      ],
+      "status": "CANDIDATE_RIGHTS_AND_ARCHIVE_VALIDATION_PENDING",
+      "note": "Do not add to factory payload until the actual archive, embedded audio rights, license text, and redistribution permission are verified."
+    },
+    {
+      "id": "versilian-community-sample-library",
+      "name": "Versilian Community Sample Library",
+      "creator": "Versilian Studios",
+      "repository": "https://www.versilstudios.com/vsco-community.html",
+      "license": "Not yet verified for the specific guitar assets and redistribution scope",
+      "role": [
+        "guitar",
+        "multisample",
+        "candidate"
+      ],
+      "status": "CANDIDATE_SOURCE_AND_RIGHTS_REVIEW_PENDING",
+      "note": "Candidate only; inspect exact guitar assets and license terms before downloading into factory payload."
     }
   ],
   "expansionTargets": [
@@ -243,5 +274,96 @@
     "red": "never include in factory bank",
     "gold": "human listening approval",
     "looperman": "RED until explicit written permission covers commercial VST embedding and sample-library redistribution"
-  }
+  },
+  "factoryLibraryGoal": {
+    "minimumAudioPayloadBytes": 10737418240,
+    "minimumHumanReadable": "10 GiB",
+    "maximumSize": null,
+    "rule": "Collect the largest useful set of real guitar recordings and performances; do not pad with duplicates, synthetic substitutes, unrelated sounds, or legally incompatible material.",
+    "status": "APPROVED_TARGET_NOT_YET_MET"
+  },
+  "factoryContentPlan": {
+    "categories": [
+      "Melody",
+      "Pattern",
+      "OneShots",
+      "Loops",
+      "Acoustic",
+      "Electric"
+    ],
+    "guitarTypes": [
+      "steel-string acoustic",
+      "nylon/classical acoustic",
+      "electro-acoustic",
+      "clean electric",
+      "DI electric",
+      "crunch/overdrive electric",
+      "distorted electric",
+      "hollowbody/archtop electric"
+    ],
+    "performanceContent": [
+      "single notes",
+      "power chords",
+      "open chords",
+      "downstrokes",
+      "upstrokes",
+      "palm-muted eighth notes",
+      "palm-muted sixteenth notes",
+      "dead notes",
+      "strumming",
+      "fingerpicking",
+      "arpeggios",
+      "riffs",
+      "fills",
+      "transitions",
+      "slides",
+      "bends",
+      "harmonics",
+      "natural release and fret noises"
+    ],
+    "styleCoverage": [
+      "pop-punk",
+      "punk-rock",
+      "skate-punk",
+      "alternative rock",
+      "emo",
+      "indie rock",
+      "pop-rock",
+      "classic rock",
+      "hard rock",
+      "blues",
+      "jazz",
+      "acoustic"
+    ],
+    "presetProduction": "Build playable factory presets from verified audio zones and performance material; every preset must reference real shipped samples and be tested for note range, velocity response, articulation, level, and save/load.",
+    "status": "APPROVED_COLLECTION_AND_PRESET_TARGET"
+  },
+  "sourceIntakePolicy": {
+    "addOnly": true,
+    "preserveExistingLibrary": true,
+    "preserveOriginalArchivesAndMaps": true,
+    "deduplicateBySha256": true,
+    "requirePerSourceLicenseAndAttribution": true,
+    "requireCommercialEmbeddingAndRawSampleRedistributionRights": true,
+    "separateUnverifiedCandidates": true,
+    "neverIncludeNC_ND_orUnclearRights": true,
+    "userImportsRemainSeparateUntilScannedAndCleared": true
+  },
+  "researchFindings": [
+    {
+      "source": "FreePats Clean Electric Guitar",
+      "reference": "https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html",
+      "finding": "The official source lists CC0-1.0 and offers SFZ FLAC and WAV variants; its 2026 clean variant lists 118 MiB FLAC / 456 MiB WAV. Check whether this exact variant is already present before adding."
+    },
+    {
+      "source": "FreePats Distorted Electric Guitar",
+      "reference": "https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html",
+      "finding": "The official source lists CC0-1.0; distorted variants include 300 MiB and 129 MiB FLAC downloads and 600 MiB and 245 MiB WAV downloads. Check exact source versions and hashes to avoid duplication."
+    },
+    {
+      "source": "SFZ Instruments guitar catalog",
+      "reference": "https://sfzinstruments.github.io/guitars/",
+      "finding": "Catalog lists guitar libraries and stated licenses/sizes. Commercial entries are excluded unless separate written redistribution permission is obtained; MIT-listed entries require checking the actual audio archive terms."
+    }
+  ]
 }
