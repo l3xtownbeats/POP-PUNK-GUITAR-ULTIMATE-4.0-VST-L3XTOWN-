@@ -41,7 +41,7 @@ class Rev18ThemeControlParityTests(unittest.TestCase):
         self.assertNotIn("sync_selector", validator)
 
         match = re.search(
-            r"const juce::StringArray requiredControlIds\\s*\\{(?P<body>.*?)\\};",
+            r"const juce::StringArray requiredControlIds\s*\{(?P<body>.*?)\};",
             validator,
             re.DOTALL,
         )
