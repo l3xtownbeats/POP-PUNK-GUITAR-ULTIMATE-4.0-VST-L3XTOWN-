@@ -478,6 +478,11 @@ private:
             previewDetails.setText(selected->family + "  /  " + selected->layout
                 + "  /  " + selected->id, juce::dontSendNotification);
         }
+        else
+        {
+            previewTitle.clear(juce::dontSendNotification);
+            previewDetails.clear(juce::dontSendNotification);
+        }
     }
 
     bool isFavourite(const juce::String& id) const
@@ -547,7 +552,13 @@ private:
 
         const auto selectedIsVisible = std::any_of(visibleSkins.begin(), visibleSkins.end(),
             [this](const Skin* item) { return item->index == selectedIndex; });
-        if (!selectedIsVisible && !visibleSkins.empty())
+        if (visibleSkins.empty())
+        {
+            selectedIndex = 0;
+            previewImage = {};
+            updateSelectionControls();
+        }
+        else if (!selectedIsVisible)
         {
             const auto active = std::find_if(visibleSkins.begin(), visibleSkins.end(),
                 [](const Skin* item) { return item->active; });
