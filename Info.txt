@@ -437,3 +437,14 @@ FX names in this section are sound-design scope/reference taxonomy, not proof th
 Приёмка каждого style preset: лицензия и происхождение ресурсов проверены; sample mappings и articulations корректны; MIDI playback работает; реальная FX/amp/cab chain реализована и привязана к существующим approved controls; сохранение/восстановление состояния работает; уровень согласован; прослушивание подтверждает жанровое соответствие и читаемость в миксе; автоматические/regression checks пройдены. Не реализованные эффекты не включать в READY chain и не показывать как работающие.
 
 Статус: USER ANALYZED / APPROVED / CONFIRMED / FIXED FOR PRESET SOUND DESIGN. Actual implementation, resource acquisition, preset creation and listening/technical acceptance remain PENDING.
+
+
+## 2026-11-15 — PRESET DESIGN RELEVANCE RULE (USER CONFIRMED)
+
+Использовать из утверждённых списков гитар, групп, усилителей, кабинетов, эффектов и sound-design references ТОЛЬКО ту информацию, которая действительно нужна для конкретного пресета и получения требуемого итогового гитарного звучания. Не пытаться включать все модели, эффекты, бренды, артистические ссылки или параметры в каждый пресет. Не добавлять лишние настройки, цепочки, метаданные и визуальные элементы, если они не влияют на звук, игровое поведение, навигацию или понятное объяснение пользователю.
+
+Для каждого пресета сначала определить целевой звук и музыкальную роль; затем выбрать минимально достаточные и наиболее подходящие source/guitar character, amp/cab, FX chain, EQ/gain, articulation и performance settings. Приоритет — качество и точность итогового звучания в музыкальном контексте, а не количество задействованных эффектов или подробность описания. Любая настройка должна иметь слышимую/функциональную цель. Если эффект не улучшает целевой звук — не включать его без необходимости. Сохранять только полезные пользователю сведения: что формирует звук, для чего он предназначен и какие ключевые параметры менять для коррекции.
+
+Artist/band names remain reference points for tonal direction only; применять конкретные элементы только когда они помогают добиться целевого характера звука. Не приписывать неизвестные source samples конкретным моделям и не заявлять точные artist settings без доказательств. Все технические ограничения, лицензирование, quality gates, 27-control parity, seven approved FX bypass IDs и APVTS/state contract остаются обязательными.
+
+Статус: USER CONFIRMED / APPROVED / FIXED. Applies to all future preset design and sound selection.
