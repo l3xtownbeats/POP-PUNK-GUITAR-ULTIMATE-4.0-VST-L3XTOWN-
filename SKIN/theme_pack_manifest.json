@@ -1,10 +1,11 @@
 {
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
-  "status": "ISOLATED_LEGACY_PACK_NOT_USED_FOR_RUNTIME_OR_GENERATION",
-  "startIndex": 53,
-  "endIndex": 102,
+  "contract": "FIXED 16 FACTORY THEMES — NO EXPANSION PACK",
+  "status": "RETIRED_NO_EXTRA_THEME_PACKS_ALLOWED",
+  "startIndex": null,
+  "endIndex": null,
   "totalSkins": 0,
   "themes": [],
-  "archiveReference": "isolated_legacy/theme_pack_manifest.json"
+  "note": "Use SKIN/approved_theme_sequence.json for the immutable 16-theme product sequence. This file is intentionally empty. Theme batch generation and registry merge are disabled."
 }
