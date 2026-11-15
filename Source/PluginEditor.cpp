@@ -244,6 +244,7 @@ public:
             familyFilter.setVisible(false);
             countLabel.setVisible(false);
             viewport.setVisible(false);
+            emptyResultsLabel.setVisible(false);
             previewButton.setVisible(false);
             previewTitle.setVisible(true);
             previewDetails.setVisible(true);
