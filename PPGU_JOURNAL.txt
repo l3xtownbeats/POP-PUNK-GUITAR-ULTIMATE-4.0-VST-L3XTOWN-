@@ -930,3 +930,14 @@ Corrected setPanelBounds(): when a window is maximized, relayout now keeps it fi
 
 Source commit: 701e7f3b12d1d5c0b2144f2ae767e58e000cbbd3.
 This is a source-level behavioral correction. Runtime resize/open-close regression checks, exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 host acceptance remain pending. No panel IDs, controls, APVTS IDs or approved product scope were changed.
+
+
+2026-11-15 — NEON STAGE WORKSPACE AUDIT: GEOMETRY RESTORE / AUTO-TILE CONTRACT FLAGGED
+
+A further source audit traced the auxiliary-window geometry path:
+- `openPanel()` reads the saved per-panel bounds from PropertiesFile and applies them to the new Window.
+- It then calls `layoutPanels()`, whose normal-fit and overflow branches both assign calculated placements to every non-maximized window. The normal-fit branch subsequently writes those calculated bounds back to persistence.
+- Therefore the restored bounds are overwritten by automatic tiling on panel open; the persisted manual drag/resize geometry does not currently survive reopening as an effective restored position/size.
+- The source comment in `handleGeometryChanged()` says manual geometry is user geometry and automatic tiling runs only when the panel set or workspace size changes. That comment is consistent with relayout on panel-set changes, but does not clarify whether saved manual bounds should take precedence on a single-panel reopen or be deliberately normalized by the auto-tile contract.
+
+No source behavior was changed in this pass because the intended precedence between restored user geometry and automatic tiling is not explicitly established by the current workspace contract. This is recorded as an unresolved persistence/tiling acceptance item, not as a confirmed defect or completed fix. Resolve against the approved workspace behavior before altering layout semantics. Required tests after resolution: first open, manual move/resize, close/reopen, second panel open/close, workspace resize, scale/gap change, maximize/restore, and overflow scrolling. Exact-HEAD build, CTest, pluginval and host validation remain pending.
