@@ -93,3 +93,6 @@ All five new theme manifests preserve the 21-token palette contract and the same
 Each of Skin_108…Skin_117 now contains three separate palette-derived SVG files: `svg/texture.svg`, `svg/bezel.svg`, and `svg/crest.svg`. The `effects.*` and `assets.*` references in each theme manifest point to the matching resource. These are vector foundations, not finished gallery cards or screenshots.
 
 Still pending for SKIN-7…SKIN-16: exact-size `assets/preview.png` and `assets/hero.png`, G1–G4/CRC validation, canonical registry registration, runtime gallery and asset-load checks, exact-SHA Windows x64 VST3 build, CTest, pluginval strictness 5 and FL Studio 20 host acceptance. The themes are not runtime/release ready.
+
+
+REV18 audit correction: `tools/audit_skin_rev18_assets.py` now audits the complete 16-theme approved sequence and resolves folder names from canonical manifest paths, preserving zero-padded IDs. Missing PNG preview/hero remain warnings unless strict mode is requested.

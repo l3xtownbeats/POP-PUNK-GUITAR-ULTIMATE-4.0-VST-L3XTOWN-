@@ -1008,3 +1008,9 @@ Changes: created separate palette-derived svg/texture.svg, svg/bezel.svg and svg
 Validation: JSON was serialized from the fetched manifests and updated with the three distinct paths; each SVG was generated as standalone XML text from that theme's palette. Re-fetch/schema/path/SVG safety checks remain required after commit. PNG preview/hero, G1–G4, registry/runtime integration, Windows build, CTest, pluginval and FL Studio 20 host acceptance remain pending.
 Safety: visual asset/manifests only. No Audio Engine, DSP, MIDI, APVTS, sampler, presets, control IDs or runtime code changed.
 Status: DISTINCT SVG ASSET STRUCTURE CREATED / VALIDATION PENDING / NOT RELEASE READY.
+
+
+2026-11-15 — REV18 audit tooling correction
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.18
+Parent HEAD: 933f5a2b60cf4d9d1340997b7d296ce64abfa332
+Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; checks sequential ordinals; resolves folder from declared manifest path to respect zero-padded stable directories. This is an audit-tool correction only. Runtime registry, PNG artwork, G1-G4 full pack acceptance, build/CTest/pluginval and FL Studio 20 remain pending.

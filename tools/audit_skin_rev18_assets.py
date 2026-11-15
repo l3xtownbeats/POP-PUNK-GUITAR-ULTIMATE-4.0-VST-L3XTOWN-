@@ -74,16 +74,19 @@ def main() -> int:
         return 2
 
     themes = sequence.get("themes", [])
-    if len(themes) != 6:
-        errors.append(f"approved sequence must contain 6 entries, got {len(themes)}")
+    if len(themes) != 16:
+        errors.append(f"approved sequence must contain 16 entries, got {len(themes)}")
     if registry.get("totalSkins") != len(registry.get("themes", [])):
         errors.append("registry totalSkins does not match themes array")
     registry_ids = {x.get("id") for x in registry.get("themes", [])}
+    ordinals = [item.get("ordinal") for item in themes if isinstance(item, dict)]
+    if ordinals != list(range(1, 17)):
+        errors.append(f"approved sequence ordinals must be exactly 1..16, got {ordinals}")
     reference_controls = None
 
     for item in themes:
         label, stable_id, index = item.get("label"), item.get("stableId"), item.get("index")
-        folder = root / f"Skin_{index}"
+        folder = root / Path(item.get("path", "")).parent
         manifest_path = root / item.get("path", "")
         try:
             theme = json.loads(manifest_path.read_text(encoding="utf-8"))
