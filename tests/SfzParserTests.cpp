@@ -151,17 +151,17 @@ int main()
     if (!filesystemError)
     {
         const auto symlinkEscape = parseText(
-            "<region> sample=linked/secret.wav key=60\\n", symlinkRoot);
+            "<region> sample=linked/secret.wav key=60\n", symlinkRoot);
         CHECK(!symlinkEscape.succeeded());
         CHECK(!symlinkEscape.errors.empty());
 
         const auto symlinkDefaultPathEscape = parseText(
-            "<control> default_path=linked\\n"
-            "<region> sample=secret.wav key=60\\n", symlinkRoot);
+            "<control> default_path=linked\n"
+            "<region> sample=secret.wav key=60\n", symlinkRoot);
         CHECK(!symlinkDefaultPathEscape.succeeded());
         CHECK(!symlinkDefaultPathEscape.errors.empty());
     }
 
-    std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\\n";
+    std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\n";
     return 0;
 }
