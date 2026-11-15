@@ -992,7 +992,7 @@ public:
         addAndMakeVisible(modeBox);
         keyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleRoot", keyBox);
         modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleMode", modeBox);
-        keyBox.onChange = [this] { circle.setSelectedRoot(keyBox.getSelectedId() - 1); refreshChordNames(); };
+        keyBox.onChange = [this] { if (circleComponent) circleComponent->setSelectedRoot(keyBox.getSelectedId() - 1); refreshChordNames(); };
         modeBox.onChange = [this] { refreshChordNames(); };
 
         circleComponent = std::make_unique<PPGUCircleOfFifths>([this](int root)
@@ -1106,7 +1106,13 @@ private:
             const bool diminished = minor ? degree == 1 : degree == 6;
             names.add(juce::String(noteNames[note]) + (diminished ? "dim" : minorChord ? "m" : ""));
         }
-        summary.setText("PROGRESSION  →  " + names.join("   –   "), juce::dontSendNotification);
+        juce::String progression;
+        for (int i = 0; i < names.size(); ++i)
+        {
+            if (i > 0) progression += "   –   ";
+            progression += names[i];
+        }
+        summary.setText("PROGRESSION  →  " + progression, juce::dontSendNotification);
         if (circleComponent) circleComponent->setSelectedRoot(root);
     }
 
