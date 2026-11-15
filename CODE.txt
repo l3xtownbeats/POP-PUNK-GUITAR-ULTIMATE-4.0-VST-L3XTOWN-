@@ -912,3 +912,30 @@ Approved requirements:
 - `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
 - No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
 - Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
+
+## 2026-11-15 — NEON STAGE runtime UI integration / phase 1
+
+**Тип:** production UI source change + append-only code journal.
+**Ветка:** `ui/neon-stage-skin1-completion`.
+**Source commit SHA:** `9a62b848b5413b62de077c47f22c604ec6f34211`.
+**Parent source SHA:** `751ccee1a1998752e02354e0c80617af3d5d3d6d`.
+**Journal update:** `Info.txt` updated in commit `7236ca6e87e80066e65f58c481862309b527ddcc`; this CODE entry is appended in the current documentation commit.
+
+**Файлы и затронутые элементы:**
+- `Source/PluginEditor.cpp`
+  - `PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin`: first-run skin preference fallback now resolves to `skin-053` (NEON STAGE DEFAULT), consistent with the approved identity and existing registry entry index 53.
+  - `PPGUSettingsPanel`: restore action label identifies NEON STAGE DEFAULT.
+  - `PPGUFXEditPanel`: visible title and constructor-time labels/knob colours use NEON STAGE palette tokens; existing APVTS slider/button attachments and parameter IDs are preserved.
+  - `PPGUAutoChordsPanel`: constructor-time heading/state/label colours use palette tokens; its existing unavailable-generation state remains visibly disabled and honest.
+  - `PPGUImportGuitarPanel`: initial description/status colours use palette tokens.
+  - Main editor MIDI keyboard: white-key surface uses the palette highlight token; palette refresh continues to use canonical tokens.
+- `Source/UI/PPGUMultiWindowWorkspace.cpp` (source commit `751ccee1...`): active palette updates shared workspace surfaces and existing theme-aware window contents.
+
+**Причина:** align the real runtime UI defaults and existing auxiliary panels with the user-approved NEON STAGE DEFAULT system, not just theme JSON/SVG artwork.
+
+**Совместимость / non-goals:** no Audio Engine, DSP, audio callback, MIDI processing, APVTS parameter definitions/IDs, sample engine, preset catalog or control attachment logic changed. No new controls or simulated functionality were introduced.
+
+**Тесты / CI:** source re-fetch and targeted source inspection only. No compile, CTest, pluginval, Windows x64 VST3 package or FL Studio 20 host test has been completed on this exact source SHA. Workflow lookup returned no runs for `9a62b848b5413b62de077c47f22c604ec6f34211` at the time checked.
+
+**Статус:** IMPLEMENTED / VALIDATION PENDING.
+**Следующий шаг:** inspect and map the remaining requested module surfaces from actual repository files; apply shared palette/typography/control states incrementally, preserving each module's own layout and real functionality.
