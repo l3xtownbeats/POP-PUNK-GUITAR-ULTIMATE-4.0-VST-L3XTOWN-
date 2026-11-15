@@ -2831,3 +2831,25 @@ unverified until their steps complete successfully.
 **Validation:** source and test committed. The new and existing contract tests have not yet been executed; no CTest, Windows build, pluginval or FL Studio 20 result is claimed. Runtime scheduling/lifetime behavior still requires compilation and execution on the Windows/JUCE toolchain.
 
 **Next:** continue Gallery state correctness and Favorites integration, then O1/S1 security implementation and release gates.
+
+
+## 2026-11-15 — REV18 GALLERY-03/04 — filtered selection integrity and empty-results state
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commits:** `1e36e40b38ec1d7ec5f7c44a472d93a6a81c1e80` (selection fallback), `8701be965375aee974b30f99a347aeb49599505a` (empty-results UI), `c1e36645c5081a630f6d114a27949f3aa93119ef` (preview visibility correction).
+**Regression-test commit:** `7e7c9667dddc6ca36f16ebc1a1672d4a658f4c83`.
+**Files:** `Source/PluginEditor.cpp`, `tests/TestSkinGalleryInteractionContract.py`.
+
+**GALLERY-03 defect:** Search/family filtering could hide the selected item while leaving selection controls and preview metadata pointing at an item that was no longer visible. Search also omitted stable IDs.
+**Correction:** Build the visible registry subset first; include stable ID in search; preserve selection when visible; otherwise fall back to the active skin in the filtered subset, or its first item. Clear cached preview when fallback changes and refresh selection controls.
+
+**GALLERY-04 defect:** A zero-result filter had no explicit empty state.
+**Correction:** Add a non-interactive empty-results label, display it only when the filtered set is empty in gallery mode, hide it in Preview mode, and keep its bounds aligned to the viewport.
+
+**Regression coverage added:** `test_filter_keeps_selection_inside_visible_registry` and `test_empty_results_state_is_explicit_and_preview_safe`.
+
+**Compatibility boundary:** UI-only; no audio engine, DSP, MIDI, APVTS, sampler, preset, SoundBank or theme asset changes.
+
+**Validation:** production and test commits recorded. Tests have not been executed; no CI, CTest, Windows build, pluginval or FL Studio 20 result is claimed. JUCE compile and runtime verification remain required.
+
+**Next:** continue Gallery interaction/lifecycle and Favorites integration; then proceed through the remaining REV18 module integration sequence.
