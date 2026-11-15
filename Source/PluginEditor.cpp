@@ -253,6 +253,8 @@ private:
         }
 
         void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+        int getIndex() const noexcept { return item.index; }
+        void setSelected(bool value) { item.selected = value; repaint(); }
 
         void mouseEnter(const juce::MouseEvent&) override { hovered = true; repaint(); }
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
@@ -287,6 +289,11 @@ private:
         {
             for (auto& card : cards)
                 card->setPalette(value);
+        }
+        void setSelectedIndex(int index)
+        {
+            for (auto& card : cards)
+                card->setSelected(card->getIndex() == index);
         }
         void clearCards() { cards.clear(); }
         void addCard(std::unique_ptr<Card> card)
@@ -360,7 +367,7 @@ private:
                          [index](const auto& skin) { return skin.index == index; }))
             return;
         selectedIndex = index;
-        rebuildCards();
+        grid.setSelectedIndex(index);
     }
 
     std::vector<Skin> skins;
