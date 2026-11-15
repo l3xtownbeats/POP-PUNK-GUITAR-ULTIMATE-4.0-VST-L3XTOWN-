@@ -1040,8 +1040,8 @@ public:
             && code != juce::KeyPress::upKey && code != juce::KeyPress::downKey)
             return false;
 
-        const auto found = std::find(std::begin(roots), std::end(roots), selectedRoot);
-        const int current = found == std::end(roots) ? 0 : static_cast<int>(std::distance(std::begin(roots), found));
+        const auto* found = std::find(roots, roots + 12, selectedRoot);
+        const int current = found == roots + 12 ? 0 : static_cast<int>(found - roots);
         const int direction = (code == juce::KeyPress::rightKey || code == juce::KeyPress::downKey) ? 1 : -1;
         selectedRoot = roots[(current + direction + 12) % 12];
         if (onSelect)
