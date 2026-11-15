@@ -102,6 +102,27 @@ int main()
         || events[0].sampleOffset != 600)
         return 13;
 
+    // Timing feel offsets are applied after grid quantization so swing and
+    // humanization survive both the 1/16 and 1/32 quantize settings.
+    PatternScheduler feelScheduler;
+    std::array<PatternEvent, 1> feelPattern {{{ 0.5, 0.25, 60, 100, 1, 0.125 }}};
+    const auto feelClock = feelScheduler.beginBlock(
+        { true, true, 120.0, 0.0 }, false, 120.0, 48000.0, 24000);
+    const auto feelCount = feelScheduler.schedule(
+        feelPattern, 4.0, 0.0, feelClock, 48000.0, 24000, 0.25, 0, events);
+    if (feelCount != 2 || events[0].kind != EventKind::NoteOn || events[0].sampleOffset != 15000)
+        return 32;
+    if (PatternScheduler::swingOffsetForStep(2, 0, 1.0) != 0.125
+        || PatternScheduler::swingOffsetForStep(1, 0, 1.0) != 0.0
+        || PatternScheduler::swingOffsetForStep(1, 1, 1.0) != 0.0625
+        || PatternScheduler::swingOffsetForStep(2, 1, 1.0) != 0.0)
+        return 33;
+    const auto humanizeA = PatternScheduler::deterministicHumanizeOffset(0x12345678u, 1.0, 0.02);
+    const auto humanizeB = PatternScheduler::deterministicHumanizeOffset(0x12345678u, 1.0, 0.02);
+    if (humanizeA != humanizeB || humanizeA < 0.0 || humanizeA > 0.02
+        || PatternScheduler::deterministicHumanizeOffset(0x12345678u, 0.0, 0.02) != 0.0)
+        return 34;
+
     // Invalid BPM cannot create a zero/negative or unbounded clock.
     if (PatternScheduler::clampBpm(-50.0) != 120.0
         || PatternScheduler::clampBpm(900.0) != 120.0)
@@ -299,6 +320,6 @@ int main()
     if (extremeSpanCount != 0 || !extremeSpanScheduler.consumePendingOverflow())
         return 31;
 
-    std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering.\n";
+    std::cout << "PatternScheduler tests passed: transport, seek, clock source, tempo/block changes, gates, ordering and feel offsets.\n";
     return 0;
 }

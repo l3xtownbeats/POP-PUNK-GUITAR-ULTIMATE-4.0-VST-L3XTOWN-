@@ -26,6 +26,7 @@ namespace ppgu::performance
         std::uint8_t note = 60;
         std::uint8_t velocity = 100;
         std::uint8_t channel = 1;
+        double timingOffsetBeats = 0.0; // Non-negative performance feel offset applied after grid quantization.
     };
 
     enum class EventKind : std::uint8_t { NoteOff = 0, NoteOn = 1 };
@@ -233,8 +234,12 @@ namespace ppgu::performance
                     double onset = cyclePpq + event.beat;
                     if (quantizeBeats > 0.0)
                         onset = cyclePpq + quantize(onset - cyclePpq, quantizeBeats);
-                    if (!std::isfinite(onset))
+                    if (!std::isfinite(onset) || !std::isfinite(event.timingOffsetBeats))
                         continue;
+                    // Quantize the authored grid first, then apply the
+                    // bounded feel offset so swing/humanization are not
+                    // rounded away by the selected 1/16 or 1/32 grid.
+                    onset += std::clamp(event.timingOffsetBeats, 0.0, 0.1875);
                     const double noteOffPpq = onset + event.duration;
                     if (!std::isfinite(noteOffPpq))
                         continue;
@@ -339,6 +344,33 @@ namespace ppgu::performance
         }
 
     public:
+        static double swingOffsetForStep(int step, int swingBase, double amount) noexcept
+        {
+            if (!std::isfinite(amount))
+                return 0.0;
+            const double swing = std::clamp(amount, 0.0, 1.0);
+            if (swingBase == 0 && step % 4 == 2)
+                return 0.125 * swing; // Eighth-note swing: move the second eighth of each beat.
+            if (swingBase == 1 && step % 2 == 1)
+                return 0.0625 * swing; // Sixteenth-note swing: move each odd sixteenth.
+            return 0.0;
+        }
+
+        static double deterministicHumanizeOffset(std::uint32_t seed, double amount,
+                                                  double maximumBeats) noexcept
+        {
+            if (!std::isfinite(amount) || !std::isfinite(maximumBeats))
+                return 0.0;
+            seed ^= seed >> 16;
+            seed *= 0x7feb352du;
+            seed ^= seed >> 15;
+            seed *= 0x846ca68bu;
+            seed ^= seed >> 16;
+            const double unit = static_cast<double>(seed & 0x00ffffffu) / 16777215.0;
+            return unit * std::clamp(amount, 0.0, 1.0)
+                * std::clamp(maximumBeats, 0.0, 0.125);
+        }
+
         static double quantizePpqForward(double ppq, double gridBeats) noexcept
         {
             if (!std::isfinite(ppq) || !std::isfinite(gridBeats) || gridBeats <= 0.0)

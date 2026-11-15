@@ -350,6 +350,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const double fallbackBpm = parameters.getRawParameterValue("bpm")->load(std::memory_order_relaxed);
     patternTransportClock = patternScheduler.beginBlock(
         hostTransport, useInternalClock, fallbackBpm, currentSampleRate, samples);
+    // Apply the approved global alignment offset to the published pattern
+    // block clock, not to the host snapshot used for seek/discontinuity checks.
+    const double globalPpqOffset = juce::jlimit(-16.0, 16.0,
+        static_cast<double>(parameters.getRawParameterValue("globalPpqOffset")->load(std::memory_order_relaxed)));
+    patternTransportClock.startPpq += globalPpqOffset;
+    patternTransportClock.endPpq += globalPpqOffset;
 
     if (playMode != previousPlayMode)
     {
@@ -443,7 +449,16 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const int patternLengthChoice = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
         const double patternLengthBeats = patternLengthChoice == 0 ? 4.0 : (patternLengthChoice == 1 ? 8.0 : 16.0);
         const float swing = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
+        const int swingBase = juce::jlimit(0, 1,
+            static_cast<int>(parameters.getRawParameterValue("swingBase")->load(std::memory_order_relaxed)));
+        const float humanize = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("humanize")->load(std::memory_order_relaxed));
         const float accent = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("accent")->load(std::memory_order_relaxed));
+        const float dnaStringSpread = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("dnaStringSpread")->load(std::memory_order_relaxed));
+        const float dnaBeatAccent = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("dnaBeatAccent")->load(std::memory_order_relaxed));
+        const double strumSpreadBeats = 0.004 + static_cast<double>(dnaStringSpread) * 0.016;
         const std::array<std::uint16_t, 8> rhythmMasks {{ 0x5555, 0x1111, 0x3333, 0xffff, 0x9999, 0x1111, 0x4444, 0xffff }};
         const bool arpeggio = patternSlot == 7;
         const int quantizeChoice = juce::jlimit(0, 1, static_cast<int>(parameters.getRawParameterValue("patternQuantize")->load(std::memory_order_relaxed)));
@@ -537,17 +552,31 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 for (int step = 0; step < 16; ++step)
                 {
                     if ((rhythmMasks[static_cast<size_t>(patternSlot)] & (1u << step)) == 0) continue;
-                    const double swingOffset = (step % 4 == 2) ? 0.125 * swing : 0.0;
-                    const double beat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25 + swingOffset;
+                    const double beat = static_cast<double>(bar * 4) + static_cast<double>(step) * 0.25;
+                    const double swingOffset = ppgu::performance::PatternScheduler::swingOffsetForStep(
+                        step, swingBase, swing);
                     const int notesThisStep = arpeggio ? 1 : count;
                     for (int strum = 0; strum < notesThisStep && patternEventCount < patternEvents.size(); ++strum)
                     {
                         const int chordIndex = arpeggio ? ((bar * 16 + step) % count)
                             : ((step % 2 == 0) ? strum : count - 1 - strum);
-                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(78.0f + accent * 38.0f - static_cast<float>(strum) * 2.0f));
-                        patternEvents[patternEventCount++] = { beat + static_cast<double>(strum) * 0.012, 0.20,
-                            static_cast<std::uint8_t>(notes[static_cast<size_t>(chordIndex)]),
-                            static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel) };
+                        const int note = notes[static_cast<size_t>(chordIndex)];
+                        const float beatWeight = (step % 4 == 0) ? 1.0f : ((step % 4 == 2) ? 0.4f : 0.0f);
+                        const float dnaAccentGain = dnaBeatAccent * beatWeight * 10.0f;
+                        const int velocity = juce::jlimit(1, 127, juce::roundToInt(
+                            78.0f + accent * 38.0f + dnaAccentGain - static_cast<float>(strum) * 2.0f));
+                        const auto seed = static_cast<std::uint32_t>((bar + 1) * 0x9e3779b9u)
+                            ^ static_cast<std::uint32_t>((step + 1) * 0x85ebca6bu)
+                            ^ static_cast<std::uint32_t>((strum + 1) * 0xc2b2ae35u)
+                            ^ static_cast<std::uint32_t>((note + 1) * 0x27d4eb2du);
+                        const double humanizeOffset = ppgu::performance::PatternScheduler::deterministicHumanizeOffset(
+                            seed, humanize, 0.02);
+                        const double timingOffset = swingOffset
+                            + static_cast<double>(strum) * strumSpreadBeats + humanizeOffset;
+                        patternEvents[patternEventCount++] = { beat, 0.20,
+                            static_cast<std::uint8_t>(note),
+                            static_cast<std::uint8_t>(velocity), static_cast<std::uint8_t>(channel),
+                            timingOffset };
                     }
                 }
 
