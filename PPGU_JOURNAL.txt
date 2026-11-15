@@ -912,3 +912,12 @@ Completed a source-level pass over Source/PluginEditor.cpp after the workspace-t
 - Confirmed the auxiliary workspace applies the active typeface/font scale to its window title.
 
 Scope limitation: this is a static source audit only. It does NOT prove visual correctness at runtime, clipping-free layouts, contrast/accessibility across all 16 themes, resize behavior, focus/hover/disabled feedback, or host acceptance. Those remain open acceptance tasks and require an exact-HEAD Windows x64 build plus runtime checks. No new UI feature or APVTS ID was added; no functional behavior was changed.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: WORKSPACE TITLE TYPOGRAPHY CONSISTENCY FIX
+
+A follow-up source audit found that auxiliary window titles used the active theme typeface and fontScale, but did not inherit the palette typographyWeight or letterSpacing settings. This left workspace chrome slightly inconsistent with the shared makeThemeFont() typography contract used by panel content.
+
+Updated PPGUMultiWindowWorkspace::Window::setThemePalette() to apply the palette typographyWeight and letterSpacing alongside uiTypeface and fontScale. The change is limited to title font styling; window geometry, drag/resize/maximize behavior, panel lifecycle, IDs, callbacks, APVTS bindings and audio behavior are unchanged.
+
+Source commit: 52a52cda304ffa4542ef4479240421d07e0176bd.
+Acceptance remains pending: exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime checks across all 16 themes, resize/DPI/focus/hover/disabled-state inspection and FL Studio 20 host acceptance. This is a source-level correction, not a claim of completed visual acceptance.
