@@ -2804,3 +2804,15 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Status:** failure recorded; correction committed; rerun pending. Do not claim the asset generator, deterministic check, strict asset audit, G1–G4, VST3 build, pluginval or FL Studio 20 acceptance as PASS until fresh evidence is available.
 ============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — Deterministic artwork generation correction
+==============================================================================
+
+The full-pack generation step completed in PR validation run `43693362834`. Review identified that Pillow `Image.effect_noise()` is non-deterministic: repeated calls with identical parameters produced different pixel data. Therefore, byte-for-byte regeneration could not be trusted with that implementation.
+
+**Correction:** current PR head `5db6561e` replaces it with a seeded seamless noise tile and uses lossless PNG compression level 6 for faster generation without image-quality loss. The approved SKIN-1 hero/preview binaries remain preserved byte-for-byte; no theme layout, palette, control IDs or audio behavior changed.
+
+The running jobs had checked out the previous generator revision before this correction. Fresh validation of the corrected head is still required. Do not mark deterministic generation, strict asset audit, G1-G4, runtime loading, VST3 build, pluginval or FL Studio 20 acceptance as PASS until new evidence is available.
+============================================================================== 
