@@ -12,10 +12,10 @@ NOT IMPLEMENTED / DISABLED BY DESIGN. Обновлять при каждом sco
 | 5 | Skin Gallery | выбор темы | PARTIAL | runtime hot-swap, DPI/ECO gates |
 | 6 | FX EDIT | 8 страниц параметров | DESIGNED | source-to-control audit |
 | 7 | Performance | read-only телеметрия | DESIGNED | не рисовать неподключённые данные |
-| 8 | AutoChords | селекторы/превью | DISABLED BY DESIGN | backend/MIDI routing |
+| 8 | AutoChords | Circle of Fifths и chord management / harmony setup | SOURCE PRESENT / HARMONY SETUP ONLY | MIDI generation/playback/export and progression persistence not connected |
 | 9 | Auto Discover | discovery UI | NOT IMPLEMENTED | pipeline S6.5 |
 | 10 | Curator | GREEN/YELLOW/RED разбор | NOT IMPLEMENTED | policy in production |
-| 11 | About | информация | NOT IMPLEMENTED | — |
+| 11 | About | фактическая информация о продукте | SOURCE IMPLEMENTED / VALIDATION PENDING | exact-HEAD CI, resize/theme propagation and FL Studio 20 acceptance |
 | 12 | Overlay windows (popup, z-order, focus, persistence, tiling) | — | NOT IMPLEMENTED | порядок: OverlayManager -> workspace -> окна |
 
 Правила:
@@ -25,3 +25,11 @@ NOT IMPLEMENTED / DISABLED BY DESIGN. Обновлять при каждом sco
   не реализованы и не проверены.
 - Каждый переход статуса — через отдельную запись INFO (+CODE при изменении
   исходников) с exact-SHA доказательством.
+
+
+## Scoped update — 2026-11-15 (branch `ui/neon-stage-playing-core`)
+
+- **About:** source implementation is present as `PPGUAboutPanel` (workspace panel ID 2103), opened by the enabled ABOUT button. It shows only established product identity/description and follows the active theme palette. It does not claim an invented version/build or expose dummy actions.
+- **AUTO SOUND HUNTER / CURATOR:** remain disabled; production discovery/curation backends are not established.
+- **AutoChords:** Circle of Fifths and chord-name/harmony setup are present in source; MIDI generation/playback remains unavailable by design.
+- **Validation:** run `43718887827` passed for SHA `cd4935576c93f6974c6a5af4f319413b3ae03024`, which predates the About-panel source commits. The current branch HEAD `1a1910aad51538ef556f7b09902f52bdea3b069b` still requires exact-HEAD CI and host acceptance.
