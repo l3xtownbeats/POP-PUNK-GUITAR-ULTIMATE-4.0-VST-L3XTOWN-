@@ -269,3 +269,13 @@ Implemented:
 | Chord Management | PPGUAutoChordsPanel: не обнаружен | REQUIRED / NOT IMPLEMENTED | Управление аккордами и последовательностью: добавление, удаление, перестановка, отображение и сохранение набора. Точная interaction model — отдельный следующий design/code slice. |
 
 Обе функции подтверждены пользователем как обязательные. Это реальные функциональные инструменты, не декоративные элементы. Сохранять 27 control-ID, APVTS IDs и audio/MIDI boundaries. Наличие Circle/Manager UI не означает готовность MIDI generation/playback: backend остаётся отдельным gate до интеграции и тестов.
+
+
+## NEON STAGE Phase 2 — visual shell / layout slice (2026-11-15)
+
+- Header rail: theme-aware gradient surface, fine outline, accent spine and lower divider drawn behind existing top-level controls. No new button/action/parameter added.
+- Main right-hand zone chrome is labelled **FX CHAIN**, matching the existing seven bound bypass buttons and AMP & TONE heading.
+- Playing Core hero surface now shows an honest fallback label if the active theme has no valid hero image; technical grid drawing is clipped to the centre zone.
+- Layout contract: see `docs/NEON_STAGE_PHASE_2_LAYOUT_SPEC_RU.md` for the exact current responsive geometry and immutable control-binding contract.
+- Preserved the nine rotary APVTS attachments, seven approved FX bypass IDs, MIDI keyboard, preset selector, theme registry and auxiliary workspace.
+- This is a source-level visual-shell increment only. Pixel-level match against the supplied NEON STAGE DEFAULT references, exact-HEAD Windows x64 VST3 build, CTest, pluginval strictness 5, portable packaging and FL Studio 20 host acceptance remain **PENDING**.
