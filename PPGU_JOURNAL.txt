@@ -782,3 +782,11 @@ FACTORY LIBRARY LOCK возможен только после legal/resource val
 Это утверждённый порядок работ, а не заявление о завершении визуального этапа, наличии готовых библиотек или готовых factory presets. Текущий статус каждого этапа отражать по фактическим доказательствам; не перескакивать к массовому наполнению пресетов до завершения визуального этапа и проверки библиотечных ресурсов.
 
 Статус: USER CONFIRMED / PROJECT SEQUENCE LOCKED. Visual completion, library qualification, factory preset composition and acceptance remain in progress/pending until evidenced.
+
+
+
+2026-11-15 — USER RECONFIRMED PROJECT SEQUENCE BASELINE LOCK
+
+Пользователь повторно утвердил и подтвердил зафиксированный порядок: NEON STAGE visual completion → sound library verification/integration → factory preset composition → factory library validation and lock.
+
+Статус: APPROVED · CONFIRMED · BASELINE LOCKED. Повторное подтверждение не изменяет ранее утверждённые scope, архитектурные ограничения, критерии качества и acceptance gates.
