@@ -2708,3 +2708,42 @@ Both declarations and definitions were re-fetched and confirmed. The method sign
 
 **Status:** API SIGNATURE VERIFIED / COMPILATION STILL PENDING.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — Approved sequential themes SKIN-2…SKIN-6: design specs + SVG foundations
+==============================================================================
+
+**User instruction:** after canonical SKIN-1 NEON STAGE DEFAULT, create the additional themes explicitly approved today. The six approved visual concepts are treated as a sequence:
+- SKIN-1 — NEON STAGE DEFAULT (existing canonical default, stable ID `skin-053`, index 53);
+- SKIN-2 — OBSIDIAN GOLD (new stable ID `skin-103`, index 103);
+- SKIN-3 — CARBON FORGE (new stable ID `skin-104`, index 104);
+- SKIN-4 — MIDNIGHT CRIMSON (new stable ID `skin-105`, index 105);
+- SKIN-5 — ARCTIC PLATINUM (new stable ID `skin-106`, index 106);
+- SKIN-6 — VIOLET NOIR (new stable ID `skin-107`, index 107).
+
+**Why the stable IDs start at 103:** the current canonical registry already contains legacy IDs/indices 1–102 and SKIN-1 is the existing stable record `skin-053`. To preserve all old IDs and data, logical sequence ordinals SKIN-2…SKIN-6 are mapped to fresh stable IDs/indices 103–107. No existing records were renamed, overwritten, deleted or renumbered.
+
+**Created on `ui/neon-stage-skin1-completion`:**
+- `SKIN/approved_theme_sequence.json` — explicit logical SKIN-1…SKIN-6 to stable-ID mapping and acceptance state.
+- `SKIN/Skin_103/theme.json` and `SKIN/Skin_103/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_104/theme.json` and `SKIN/Skin_104/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_105/theme.json` and `SKIN/Skin_105/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_106/theme.json` and `SKIN/Skin_106/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_107/theme.json` and `SKIN/Skin_107/svg/{texture,bezel,crest}.svg`.
+
+All five new theme manifests were re-fetched and parsed as JSON. Each contains exactly 21 palette tokens and preserves the same 28-entry control map as SKIN-1. All 15 SVG files were re-fetched; they are well-formed SVG text with no script, foreignObject, event handlers or external href references.
+
+**Visual direction:**
+- OBSIDIAN GOLD — black obsidian surfaces, champagne-gold metal accents.
+- CARBON FORGE — forged carbon, titanium and satin-metal accents.
+- MIDNIGHT CRIMSON — deep burgundy surfaces and ruby-red accents.
+- ARCTIC PLATINUM — platinum surfaces, frosted glass and icy-blue highlights.
+- VIOLET NOIR — smoked violet glass and ultraviolet accents.
+
+**Shared contract:** all five themes inherit the same NEON STAGE design-system language and exact control map. Only palette/material tokens vary. Every manifest declares visual-only compatibility: no APVTS, layout geometry, audio or MIDI changes.
+
+**Not yet complete / not registered in runtime gallery:** binary `assets/preview.png` (360×240) and `assets/hero.png` (800×450) are still pending for each theme. Therefore G1–G4 pack validation, PNG CRC checks, canonical `theme_manifest.json` registration, Skin Gallery visibility, runtime asset-load, exact-SHA Windows build, CTest, pluginval and FL Studio 20 host acceptance are NOT claimed. The five designs remain approved source-level theme specifications with vector foundations, not finished/host-tested skins. Do not set them as default or merge PR #43.
+
+**Status:** FIVE APPROVED THEME SPECS + 15 SVG FOUNDATIONS CREATED / PNG ARTWORK PENDING / REGISTRY AND RUNTIME GALLERY REGISTRATION PENDING / NOT RELEASE READY.
+==============================================================================
