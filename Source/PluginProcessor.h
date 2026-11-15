@@ -51,6 +51,7 @@ public:
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
     [[nodiscard]] bool hasLoadedSampleBank() const noexcept { return sampler.hasSamples(); }
     [[nodiscard]] std::size_t getLoadedRegionCount() const noexcept { return sampler.getRegionCount(); }
+    [[nodiscard]] int getActiveVoiceCountForDiagnostics() const noexcept { return sampler.getActiveVoiceCountSnapshot(); }
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;

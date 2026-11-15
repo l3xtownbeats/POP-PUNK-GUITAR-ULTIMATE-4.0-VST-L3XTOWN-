@@ -498,6 +498,7 @@ void SamplerEngine::reset() noexcept
     channelPitchBendTarget.fill(0);
     channelModWheel.fill(0.0f);
     sustainPedalDown.fill(false);
+    activeVoiceCountSnapshot.store(0, std::memory_order_relaxed);
     vibratoBaseDepth = 0.0f;
     vibratoModWheelDepth = 0.0f;
     for (std::size_t i = 0; i < voices.size(); ++i)
@@ -744,12 +745,14 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
 {
     const int channels = output.getNumChannels();
     const int endSample = juce::jmin(output.getNumSamples(), startSample + numSamples);
+    int activeVoiceCount = 0;
     for (std::size_t voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
     {
         auto& voice = voices[voiceIndex];
         auto& streamReader = streamingReaders[voiceIndex];
         if (voice.region == nullptr)
             continue;
+        ++activeVoiceCount;
 
         const auto& region = *voice.region;
         const float modWheelValue = channelModWheel[static_cast<size_t>(voice.midiChannel - 1)];
@@ -916,6 +919,8 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
         if (channelPitchBendTarget[static_cast<size_t>(channel)] != 0
             && std::abs(channelPitchBendSemitones[static_cast<size_t>(channel)]) > 1.0e-6f)
             applyPitchBendForChannel(channel);
+
+    activeVoiceCountSnapshot.store(activeVoiceCount, std::memory_order_relaxed);
 }
 
 bool SamplerEngine::hasSamples() const noexcept

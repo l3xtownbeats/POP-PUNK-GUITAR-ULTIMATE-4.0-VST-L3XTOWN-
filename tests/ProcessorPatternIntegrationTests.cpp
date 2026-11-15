@@ -401,12 +401,10 @@ int main()
                     midi.addEvent(juce::MidiMessage::noteOn(1, 60, static_cast<juce::uint8>(110)), 0);
                 missingBankProcessor.processBlock(warm, midi);
                 oldBankAudible = rms(warm, 0, warm.getNumSamples()) > 0.001;
-                if (!oldBankAudible)
-                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
-            }
-            if (!oldBankAudible)
+                if (!oldBankAudible
+                || missingBankProcessor.getActiveVoiceCountForDiagnostics() == 0)
             {
-                std::cerr << "Could not warm the old bank before missing-path restore.\n";
+                std::cerr << "Could not establish an active old voice before missing-path restore.\n";
                 result = 1;
             }
 
@@ -436,7 +434,7 @@ int main()
                 afterRestore.clear();
                 juce::MidiBuffer noMidi;
                 missingBankProcessor.processBlock(afterRestore, noMidi);
-                if (rms(afterRestore, 0, afterRestore.getNumSamples()) > 0.0001)
+                if (missingBankProcessor.getActiveVoiceCountForDiagnostics() != 0)
                 {
                     std::cerr << "Old sample voices survived the next audio callback after missing-bank restore.\n";
                     result = 1;

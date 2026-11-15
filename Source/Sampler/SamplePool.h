@@ -141,6 +141,10 @@ public:
     [[nodiscard]] std::size_t getRegionCount() const noexcept;
     [[nodiscard]] std::size_t getSampleCount() const noexcept;
     [[nodiscard]] int getActiveVoiceCount() const noexcept;
+    [[nodiscard]] int getActiveVoiceCountSnapshot() const noexcept
+    {
+        return activeVoiceCountSnapshot.load(std::memory_order_relaxed);
+    }
 
 private:
     struct Voice
@@ -187,6 +191,7 @@ private:
     std::array<float, 16> channelModWheel {};
     std::array<bool, 16> sustainPedalDown {};
     std::atomic<bool> clearVoicesRequested { false };
+    std::atomic<int> activeVoiceCountSnapshot { 0 };
     std::array<float, 16> channelPitchBendSemitones {};
     std::array<int, 16> channelPitchBendTarget {};
     std::uint64_t nextAge = 1;
