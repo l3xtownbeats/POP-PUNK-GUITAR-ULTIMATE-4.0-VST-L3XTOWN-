@@ -2609,3 +2609,44 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Следующий обязательный шаг:** source/reference preflight — установить точные пути загруженных NEON STAGE mockups и текущие реализации компонентов/ThemeManager на этой ветке; затем начать интеграцию общей системы в Main Interface без изменения audio/MIDI/APVTS.
 
 ============================================================================== 
+
+
+==============================================================================
+2026-11-15 — REV.18 NEON STAGE UI — PHASE 0 SOURCE/ASSET PREFLIGHT
+==============================================================================
+
+**Ветка:** `work/rev18-neon-stage-unified-ui`
+**Проверка:** статический GitHub source/tree audit; production source не менялся на этом этапе.
+
+### 1. Эталонные материалы найдены в репозитории
+
+В корне ветки обнаружены две группы PNG-материалов:
+- `01 INTERFACE  NEON STAGE DEFAULT .png` … `07 INTERFACE  NEON STAGE DEFAULT .png`;
+- `02 INTERFACE  NEON STAGE DEFAULT AUTOCHORDS .png`;
+- `NEON STAGE DEFAULT THEME (1).png` … `NEON STAGE DEFAULT THEME (7).png`.
+
+Также присутствуют дополнительные PNG с UUID-именами. Файлы доступны в репозитории, однако текущий текстовый GitHub fetch не декодирует бинарные PNG; визуальная классификация каждого кадра и доказанная привязка всех семи изображений к конкретным модулям пока не выполнены. Не считать нумерацию файлов доказательством назначения. README cover не использовался как UI-эталон.
+
+### 2. Найденная архитектура UI
+
+- Main editor: `Source/PluginEditor.h/.cpp`; основной файл редактора содержит текущую реализацию shell, preset browser, controls, FX buttons, skin gallery и открытие части auxiliary panels.
+- Shared UI: `Source/UI/ThemeManager.h/.cpp`, `PPGUMultiWindowWorkspace.h/.cpp`, `AuxiliaryPanelLayout.h/.cpp`.
+- В `PluginEditor.h` подтверждены существующие 9 APVTS slider attachments и 7 FX button attachments. Их IDs/семантика должны остаться неизменными.
+- На текущем source inventory не подтверждены production-компоненты всех заявленных модулей (в частности Curator, Sound Hunter/Auto Discover и About). Требуется дальнейшая проверка panel factories и реальных callbacks; нельзя визуально активировать несуществующую функциональность.
+- Theme palette уже распространяется в premium LookAndFeel, performance display и multi-window workspace через `applyPalette()`; это существующая точка интеграции для общего стиля, а не повод создавать второй theme engine.
+
+### 3. Критические расхождения, обнаруженные до редактирования C++
+
+- Пользовательская обязательная идентичность: NEON STAGE = DEFAULT SKIN-1, существующая запись `skin-053 / Skin_053`.
+- `SKIN/theme_manifest.json` в текущей ветке всё ещё указывает `defaultSkin: skin-052`.
+- `Source/UI/ThemeManager.h` задаёт fallback `skin-052 / SIGNAL FORGE`; `resetToDefault()` восстанавливает именно этот объект.
+- `SKIN/Skin_053/theme.json` сейчас называется `Carbon Studio 01`, а `designStatus` указан как `GENERATED_NOT_MERGED`. Его палитра совпадает с существующей тёмной carbon/acid-green системой, но manifest не оформлен как NEON STAGE DEFAULT.
+- Следовательно, runtime default/fallback и пользовательская каноническая идентичность не синхронизированы. Это блокер для безопасной интеграции: нельзя объявлять SKIN-1 активной темой, пока не выполнена согласованная миграция registry + manifest + fallback + тестов с сохранением всех skin IDs.
+
+### 4. Статус и границы
+
+**PHASE 0 PARTIAL — SOURCE/ASSET PATHS DISCOVERED; VISUAL IMAGE MAPPING AND IDENTITY RECONCILIATION OPEN.**
+C++ source, manifests, APVTS, audio, MIDI и preset state в этой записи не изменялись. Сборка, CTest, pluginval и FL Studio 20 не запускались. Не заявлять, что макеты уже интегрированы или что UI уже прошёл визуальную приёмку.
+
+**Следующий шаг:** завершить визуальную идентификацию PNG-эталонов и сопоставление экранов; затем подготовить отдельную минимальную миграцию NEON STAGE default/fallback на уже существующий `skin-053`, предварительно проверив registry, schema, gallery indexing и тесты. После миграции — shared LookAndFeel token foundation и Main Interface.
+==============================================================================
