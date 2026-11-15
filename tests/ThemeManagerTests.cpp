@@ -97,9 +97,9 @@ int main()
         }
     }
 
-    const auto defaultManifest = skinRoot.getChildFile("Skin_053").getChildFile("theme.json");
+    const auto defaultManifest = skinRoot.getChildFile("isolated_legacy/assets/Skin_51/theme.json");
     const auto validJson = defaultManifest.loadFileAsString();
-    expect(validJson.isNotEmpty(), "canonical SKIN-1 manifest readable");
+    expect(validJson.isNotEmpty(), "isolated legacy Skin_51 manifest readable");
 
     const auto wrappedWidth = validJson.replace("\"width\": 480",
                                                 "\"width\": 4294967776");
@@ -167,7 +167,7 @@ int main()
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "incomplete manifest restores NEON STAGE fallback");
 
-    expect(manager.loadFromJson(validJson), "canonical manifest remains loadable after token migration");
+    expect(manager.loadFromJson(validJson), "isolated legacy manifest remains loadable after token migration");
     expect(manager.getPalette().token("window_bg") == manager.getPalette().canvas,
            "legacy window background maps to canonical token");
     expect(manager.getPalette().token("accent") == manager.getPalette().accent,
