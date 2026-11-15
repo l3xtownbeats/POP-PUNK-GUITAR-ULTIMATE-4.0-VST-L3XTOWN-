@@ -57,12 +57,18 @@ public:
         juce::File preview;
         juce::Colour accent { 0xff00d9ff };
         bool active = false;
+        bool selected = false;
     };
 
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn,
                          PPGUThemeManager::Palette paletteIn,
-                         std::function<void(int)> applyIn)
-        : skins(std::move(skinsIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+                         int initialSelection,
+                         std::function<void(int)> previewIn,
+                         std::function<void()> applyIn,
+                         std::function<void()> cancelIn)
+        : skins(std::move(skinsIn)), palette(std::move(paletteIn)),
+          selectedIndex(initialSelection), preview(std::move(previewIn)),
+          apply(std::move(applyIn)), cancel(std::move(cancelIn))
     {
         heading.setText("VISUAL SKIN GALLERY", juce::dontSendNotification);
         heading.setFont(makeThemeFont(palette, 17.0f, false, true));
@@ -103,6 +109,27 @@ public:
         countLabel.setFont(makeThemeFont(palette, 10.5f, false, true));
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
+
+        previewButton.setButtonText("PREVIEW");
+        applyButton.setButtonText("APPLY");
+        backButton.setButtonText("BACK");
+        for (auto* button : { &previewButton, &applyButton, &backButton })
+        {
+            button->setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+            button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+            button->setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+            addAndMakeVisible(*button);
+        }
+        previewButton.onClick = [this]
+        {
+            if (selectedIndex > 0 && preview)
+                preview(selectedIndex);
+        };
+        applyButton.onClick = [this] { if (apply) apply(); };
+        backButton.onClick = [this] { if (cancel) cancel(); };
+
+        for (auto& skin : skins)
+            skin.selected = skin.index == selectedIndex;
 
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
@@ -152,6 +179,12 @@ public:
         familyFilter.setBounds(filters.removeFromLeft(190).reduced(1, 2));
         countLabel.setBounds(filters);
         area.removeFromTop(4);
+        auto footer = area.removeFromBottom(38);
+        backButton.setBounds(footer.removeFromRight(92).reduced(1, 2));
+        footer.removeFromRight(8);
+        applyButton.setBounds(footer.removeFromRight(104).reduced(1, 2));
+        footer.removeFromRight(8);
+        previewButton.setBounds(footer.removeFromRight(112).reduced(1, 2));
         viewport.setBounds(area);
         rebuildCards();
     }
@@ -161,8 +194,8 @@ private:
     {
     public:
         Card(Skin itemIn, PPGUThemeManager::Palette paletteIn,
-             std::function<void(int)> applyIn)
-            : item(std::move(itemIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+             std::function<void(int)> selectIn)
+            : item(std::move(itemIn)), palette(std::move(paletteIn)), select(std::move(selectIn))
         {
             setMouseCursor(juce::MouseCursor::PointingHandCursor);
         }
@@ -172,8 +205,9 @@ private:
             auto bounds = getLocalBounds().toFloat().reduced(1.0f);
             g.setColour(hovered ? palette.token("panel_elevated") : palette.token("panel"));
             g.fillRoundedRectangle(bounds, 9.0f);
-            g.setColour(item.active ? item.accent : palette.token("control_border"));
-            g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
+            g.setColour(item.selected || item.active ? item.accent : palette.token("control_border"));
+            g.drawRoundedRectangle(bounds, 9.0f,
+                                   item.selected ? 2.4f : (item.active ? 1.8f : 1.0f));
 
             auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
             if (item.preview.existsAsFile())
@@ -199,13 +233,14 @@ private:
             g.drawText(item.family + "  /  " + item.layout,
                        textArea.removeFromTop(14.0f), juce::Justification::centredLeft, true);
 
-            if (item.active)
+            if (item.selected || item.active)
             {
                 g.setColour(item.accent);
                 g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(makeThemeFont(palette, 8.0f, false, true));
-                g.drawText("ACTIVE", getWidth() - 58, 10, 48, 17, juce::Justification::centred);
+                g.drawText(item.selected ? "SELECTED" : "ACTIVE",
+                           getWidth() - 58, 10, 48, 17, juce::Justification::centred);
             }
             else
             {
@@ -213,7 +248,7 @@ private:
                 g.fillRoundedRectangle(getWidth() - 54.0f, 10.0f, 44.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(makeThemeFont(palette, 8.0f, false, true));
-                g.drawText("APPLY", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
+                g.drawText("PREVIEW", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
             }
         }
 
@@ -223,8 +258,8 @@ private:
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
         void mouseUp(const juce::MouseEvent& event) override
         {
-            if (event.mouseWasClicked() && apply)
-                apply(item.index);
+            if (event.mouseWasClicked() && select)
+                select(item.index);
         }
 
     private:
@@ -241,7 +276,7 @@ private:
 
         Skin item;
         PPGUThemeManager::Palette palette;
-        std::function<void(int)> apply;
+        std::function<void(int)> select;
         bool hovered = false;
     };
 
@@ -301,7 +336,10 @@ private:
             const auto haystack = (item.name + " " + item.family + " " + item.layout).toLowerCase();
             if (query.isNotEmpty() && !haystack.contains(query))
                 continue;
-            grid.addCard(std::make_unique<Card>(item, palette, apply));
+            auto selectedItem = item;
+            selectedItem.selected = selectedItem.index == selectedIndex;
+            grid.addCard(std::make_unique<Card>(selectedItem, palette,
+                [this](int index) { selectSkin(index); }));
         }
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
@@ -316,10 +354,22 @@ private:
         grid.resized();
     }
 
+    void selectSkin(int index)
+    {
+        if (std::none_of(skins.begin(), skins.end(),
+                         [index](const auto& skin) { return skin.index == index; }))
+            return;
+        selectedIndex = index;
+        rebuildCards();
+    }
+
     std::vector<Skin> skins;
     PPGUThemeManager::Palette palette;
-    std::function<void(int)> apply;
+    int selectedIndex = 0;
+    std::function<void(int)> preview;
+    std::function<void()> apply, cancel;
     juce::Label heading, subtitle, countLabel;
+    juce::TextButton previewButton, applyButton, backButton;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
     Grid grid;
