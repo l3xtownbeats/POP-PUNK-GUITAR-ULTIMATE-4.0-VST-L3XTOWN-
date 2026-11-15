@@ -72,14 +72,17 @@ public:
         addAndMakeVisible(search);
 
         familyFilter.addItem("ALL FAMILIES", 1);
-        familyFilter.addItem("CARBON STUDIO", 2);
-        familyFilter.addItem("NEON BASEMENT", 3);
-        familyFilter.addItem("CHROME PARADE", 4);
-        familyFilter.addItem("WOOD SUMMER", 5);
-        familyFilter.addItem("VINTAGE TAPE", 6);
-        familyFilter.addItem("SUNSET SUBURB", 7);
-        familyFilter.addItem("SPECIAL", 8);
-        familyFilter.addItem("LEGACY THEMES", 9);
+        familyFilterKeys.clear();
+        for (const auto& skin : skins)
+        {
+            if (skin.familyKey.isEmpty() || familyFilterKeys.contains(skin.familyKey))
+                continue;
+
+            familyFilterKeys.add(skin.familyKey);
+            const auto familyName = skin.family.isNotEmpty()
+                ? skin.family : skin.familyKey.replaceCharacter('_', ' ');
+            familyFilter.addItem(familyName.toUpperCase(), familyFilterKeys.size() + 1);
+        }
         familyFilter.setSelectedId(1, juce::dontSendNotification);
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
@@ -435,12 +438,9 @@ private:
         grid.clearCards();
         const auto query = search.getText().trim().toLowerCase();
         const int selectedFamily = familyFilter.getSelectedId();
-        const juce::StringArray families {
-            "", "carbon_studio", "neon_basement", "chrome_parade", "wood_summer",
-            "vintage_tape", "sunset_suburb", "special", "legacy"
-        };
-        const auto familyKey = selectedFamily > 1 && selectedFamily <= families.size()
-            ? families[selectedFamily - 1] : juce::String{};
+        const int familyIndex = selectedFamily - 2;
+        const auto familyKey = familyIndex >= 0 && familyIndex < familyFilterKeys.size()
+            ? familyFilterKeys[familyIndex] : juce::String{};
 
         for (const auto& item : skins)
         {
@@ -472,6 +472,7 @@ private:
     juce::Label heading, subtitle, countLabel, previewTitle, previewDetails;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
+    juce::StringArray familyFilterKeys;
     juce::TextButton previewButton { "PREVIEW" }, applyButton { "APPLY" }, backButton { "CLOSE" };
     juce::Rectangle<int> previewBounds;
     juce::Image previewImage;
