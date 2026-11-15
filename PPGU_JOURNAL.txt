@@ -814,3 +814,13 @@ Key design distinction recorded: the preset defines the reusable guitar sound id
 2026-11-15 — COMPLETE POP-PUNK RHYTHM REFERENCE RECEIVED AND INCORPORATED
 
 User resubmitted the full rhythm/technique/articulation/tab reference, completing the earlier partial section 18 and adding the consolidated section 19 style matrix. Updated `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_RHYTHM_TECHNIQUE_ARTICULATION_TABS_2000_2023_RU.md` in commit `f43dd8952ab7c3b15b5d4263152389024379dbba`. Added the complete seven-part practice checklist and 12-row artist/style summary. This supersedes the earlier note that the received checklist was incomplete. Content remains user-supplied community reconstruction and requires musical/source validation; it is not READY pattern/preset data. No new UI/control/APVTS scope is authorized. Preset sound identity remains distinct from PATTERN rhythm/event content, and each sound must be validated in both single-note and chord/pattern contexts. Locked project phase order unchanged.
+
+2026-11-15 — USER APPROVAL: TWO MIDI RHYTHM-CREATION WORKFLOWS FIXED
+
+User explicitly approved and confirmed two future ways to create single-guitar rhythmic parts:
+1. Draw/edit MIDI note events directly in a MIDI editor/grid (timing, duration, rests, accents, velocity and only genuinely supported articulations).
+2. Select one guitar pitch and edit it into a rhythmic sequence of note events, with timing, duration, rests, accents, velocity and supported articulations.
+
+SOUND PRESET remains the sound identity/response; MIDI / PATTERN remains the note-event and rhythm content. Patterns should be reusable with different presets, and presets should be validated in single-note, chord and pattern contexts.
+
+This is an approved future product requirement, not an implemented feature. It does not authorize new controls, APVTS IDs, panels or architecture changes during the current NEON STAGE visual phase. Locked order remains NEON STAGE completion and verification → sound-library qualification → factory preset creation → factory library validation/finalization. No claim of MIDI editing, pattern generation or playback implementation without code and host-test evidence.
