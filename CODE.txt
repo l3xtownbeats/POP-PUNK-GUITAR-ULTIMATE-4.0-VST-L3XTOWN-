@@ -944,3 +944,18 @@ Approved requirements:
 **Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
 **Execution evidence:** test source added, execution pending; no CI, build, CTest, pluginval or host acceptance result is available for this SHA.
 **Open risk:** message-thread decode may still cause a short UI stall for unusually slow storage; compile/runtime test must verify SafePointer callback and repeated repaint behavior. If profiling shows stalls, move decoding to a bounded worker and marshal only the image result to the message thread.
+
+
+## 2026-11-15 — REV18 GALLERY-03/04 — filtered selection integrity and empty-results state
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commits:** `1e36e40b38ec1d7ec5f7c44a472d93a6a81c1e80`, `8701be965375aee974b30f99a347aeb49599505a`, `c1e36645c5081a630f6d114a27949f3aa93119ef`.
+**Test commit:** `7e7c9667dddc6ca36f16ebc1a1672d4a658f4c83`.
+**Journal commit:** `6b13cb067aace4e9aa45297210d928e13e8850dd`.
+**Paths:** `Source/PluginEditor.cpp`, `tests/TestSkinGalleryInteractionContract.py`, `Info.txt`, `CODE.txt`.
+
+**Implementation:** filtered selection now resolves to a visible item (active item preferred, first visible fallback); stable IDs participate in search; stale preview image is cleared on fallback. Gallery now displays an explicit empty-results label and suppresses it in Preview mode.
+**Regression contracts:** selection fallback and empty-results/preview visibility checks added.
+**Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
+**Execution evidence:** source-level regression tests added but not run. No test/build/pluginval/FL Studio PASS claim.
+**Open work:** Favorites persistence and unknown-ID validation; keyboard/focus and close/back/apply lifecycle; theme migration and O1/S1.
