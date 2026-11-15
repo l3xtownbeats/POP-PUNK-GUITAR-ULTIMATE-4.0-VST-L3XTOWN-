@@ -440,6 +440,24 @@ void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
             + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
         persistenceProperties->saveIfNeeded();
     }
+    // Keep the scrollable child surface large enough to contain manually
+    // resized/moved windows. The viewport still clips all content to the plugin
+    // editor boundary, while its scrollbars expose any intentional overflow.
+    const auto view = viewport.getViewArea();
+    int surfaceWidth = juce::jmax(1, view.getWidth());
+    int surfaceHeight = juce::jmax(1, view.getHeight());
+    for (const auto& window : windows)
+    {
+        const auto windowBounds = window->getBounds();
+        const auto right = static_cast<std::int64_t>(windowBounds.getRight()) + panelGap;
+        const auto bottom = static_cast<std::int64_t>(windowBounds.getBottom()) + panelGap;
+        surfaceWidth = juce::jmax(surfaceWidth, static_cast<int>(
+            juce::jlimit<std::int64_t>(1, std::numeric_limits<int>::max(), right)));
+        surfaceHeight = juce::jmax(surfaceHeight, static_cast<int>(
+            juce::jlimit<std::int64_t>(1, std::numeric_limits<int>::max(), bottom)));
+    }
+    tileSurface->setSize(surfaceWidth, surfaceHeight);
+
     // Manual drag/resize/maximize is user geometry, not a request to retile.
     // Automatic tiling runs only when the panel set or workspace size changes.
 }
