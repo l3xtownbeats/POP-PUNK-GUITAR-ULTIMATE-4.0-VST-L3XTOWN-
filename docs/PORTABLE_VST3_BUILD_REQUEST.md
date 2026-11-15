@@ -18,3 +18,7 @@ This tracked build request intentionally triggers the Windows VST3 CI workflow f
 The current workflow labels its output an interim QA build. A successful CI artifact is not equivalent to final product release approval or FL Studio 20 manual host acceptance. Do not claim either until separately verified.
 
 The workflow must preserve the approved REV.18 contracts and only clean temporary release staging; it must not delete or prune source repository files.
+
+## CI trigger record — 2026-11-15
+
+A repository push affecting this tracked `docs/` path is requested to start the Windows x64 VST3 workflow on this branch. Verify the resulting run by workflow name and head SHA; PR theme-gate runs alone do not satisfy this request.
