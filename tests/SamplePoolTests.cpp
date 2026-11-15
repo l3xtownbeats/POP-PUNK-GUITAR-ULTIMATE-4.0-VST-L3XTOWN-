@@ -166,7 +166,7 @@ int main()
     if (!palmMutedEngine.loadSfz(sfzFile).success
         || !palmMutedEngine.noteOn(60, 100, 64, 1, 0.0, true))
     {
-        std::cerr << "Could not start palm-muted sampler regression fixture.\\n";
+        std::cerr << "Could not start palm-muted sampler regression fixture.\n";
         return 1;
     }
     juce::AudioBuffer<float> palmMutedRender(2, 8192);
@@ -183,7 +183,7 @@ int main()
     }
     if (!palmMuteBecameAudible || palmMutedEngine.getActiveVoiceCount() != 0)
     {
-        std::cerr << "Palm-muted continuous-loop voice did not become audible, decay and retire.\\n";
+        std::cerr << "Palm-muted continuous-loop voice did not become audible, decay and retire.\n";
         return 1;
     }
 
@@ -192,7 +192,7 @@ int main()
     if (!openSustainEngine.loadSfz(sfzFile).success
         || !openSustainEngine.noteOn(60, 100, 64, 1))
     {
-        std::cerr << "Could not start open-sustain comparison fixture.\\n";
+        std::cerr << "Could not start open-sustain comparison fixture.\n";
         return 1;
     }
     juce::AudioBuffer<float> openSustainRender(2, 8192);
@@ -205,7 +205,7 @@ int main()
     }
     if (openSustainEngine.getActiveVoiceCount() != 1)
     {
-        std::cerr << "Open continuous-loop voice was incorrectly shortened.\\n";
+        std::cerr << "Open continuous-loop voice was incorrectly shortened.\n";
         return 1;
     }
 
@@ -564,7 +564,7 @@ int main()
         || !bendReferenceEngine.noteOn(60, 100)
         || !bendAppliedEngine.noteOn(60, 100))
     {
-        std::cerr << "Could not prepare pitch-bend regression fixtures.\\n";
+        std::cerr << "Could not prepare pitch-bend regression fixtures.\n";
         return 1;
     }
     bendAppliedEngine.setPitchBend(1, 2.0f, 0);
@@ -591,7 +591,7 @@ int main()
     const int bentCrossings = countRisingCrossings(bendAppliedAudio);
     if (unbentCrossings < 5 || bentCrossings <= unbentCrossings)
     {
-        std::cerr << "Pitch bend did not raise the rendered sample frequency.\\n";
+        std::cerr << "Pitch bend did not raise the rendered sample frequency.\n";
         return 1;
     }
 
@@ -607,7 +607,7 @@ int main()
         || !vibratoReferenceEngine.noteOn(60, 100)
         || !vibratoAppliedEngine.noteOn(60, 100))
     {
-        std::cerr << "Could not prepare vibrato regression fixtures.\\n";
+        std::cerr << "Could not prepare vibrato regression fixtures.\n";
         return 1;
     }
     juce::AudioBuffer<float> vibratoWarmReference(2, 128);
@@ -627,7 +627,7 @@ int main()
     }
     if (!vibratoPagesReady)
     {
-        std::cerr << "Vibrato regression sample pages never became ready.\\n";
+        std::cerr << "Vibrato regression sample pages never became ready.\n";
         return 1;
     }
     // Reset voices after both caches are warm so the comparison starts at
@@ -637,7 +637,7 @@ int main()
     if (!vibratoReferenceEngine.noteOn(60, 100)
         || !vibratoAppliedEngine.noteOn(60, 100))
     {
-        std::cerr << "Could not retrigger warmed vibrato fixtures.\\n";
+        std::cerr << "Could not retrigger warmed vibrato fixtures.\n";
         return 1;
     }
     vibratoAppliedEngine.setVibratoDepths(0.0f, 1.0f);
@@ -657,7 +657,7 @@ int main()
     }
     if (vibratoDifference < 0.001)
     {
-        std::cerr << "Mod Wheel vibrato did not change the rendered waveform.\\n";
+        std::cerr << "Mod Wheel vibrato did not change the rendered waveform.\n";
         return 1;
     }
 
@@ -668,7 +668,7 @@ int main()
     if (!sustainPedalEngine.loadSfz(sfzFile).success
         || !sustainPedalEngine.noteOn(60, 100, 64, 1))
     {
-        std::cerr << "Could not prepare sustain-pedal regression fixture.\\n";
+        std::cerr << "Could not prepare sustain-pedal regression fixture.\n";
         return 1;
     }
     juce::AudioBuffer<float> sustainWarm(2, 128);
@@ -683,7 +683,7 @@ int main()
     }
     if (!sustainPageReady)
     {
-        std::cerr << "Sustain-pedal sample page never became ready.\\n";
+        std::cerr << "Sustain-pedal sample page never became ready.\n";
         return 1;
     }
     sustainPedalEngine.setSustainPedal(1, true);
@@ -693,7 +693,7 @@ int main()
     sustainPedalEngine.render(sustainHeldBlock, 0, sustainHeldBlock.getNumSamples());
     if (sustainPedalEngine.getActiveVoiceCount() != 1)
     {
-        std::cerr << "CC64 down did not hold the released note.\\n";
+        std::cerr << "CC64 down did not hold the released note.\n";
         return 1;
     }
     sustainPedalEngine.setSustainPedal(1, false);
@@ -702,7 +702,7 @@ int main()
     sustainPedalEngine.render(sustainReleaseBlock, 0, sustainReleaseBlock.getNumSamples());
     if (sustainPedalEngine.getActiveVoiceCount() != 0)
     {
-        std::cerr << "CC64 up did not release the sustained voice.\\n";
+        std::cerr << "CC64 up did not release the sustained voice.\n";
         return 1;
     }
 
@@ -886,7 +886,7 @@ int main()
     if (!sixtyFourVoiceEngine.loadSfz(sfzFile).success
         || !sixtyFourVoiceEngine.noteOn(60, 100, 64, 1))
     {
-        std::cerr << "Could not prepare 64-voice stress fixture.\\n";
+        std::cerr << "Could not prepare 64-voice stress fixture.\n";
         return 1;
     }
     juce::AudioBuffer<float> voiceWarmBlock(2, 128);
@@ -901,21 +901,21 @@ int main()
     }
     if (!voicePagesReady)
     {
-        std::cerr << "64-voice stress sample page did not become ready.\\n";
+        std::cerr << "64-voice stress sample page did not become ready.\n";
         return 1;
     }
     sixtyFourVoiceEngine.reset();
     for (int voice = 0; voice < ppgu::sampler::SamplerEngine::maximumVoices; ++voice)
         if (!sixtyFourVoiceEngine.noteOn(60, 4, 64, 1))
         {
-            std::cerr << "64-voice stress failed at voice " << voice << ".\\n";
+            std::cerr << "64-voice stress failed at voice " << voice << ".\n";
             return 1;
         }
     if (sixtyFourVoiceEngine.getActiveVoiceCount() != 64
         || !sixtyFourVoiceEngine.noteOn(60, 4, 64, 1)
         || sixtyFourVoiceEngine.getActiveVoiceCount() != 64)
     {
-        std::cerr << "64-voice capacity or oldest-voice stealing contract failed.\\n";
+        std::cerr << "64-voice capacity or oldest-voice stealing contract failed.\n";
         return 1;
     }
     juce::AudioBuffer<float> sixtyFourVoiceRender(2, 512);
@@ -923,14 +923,14 @@ int main()
     sixtyFourVoiceEngine.render(sixtyFourVoiceRender, 0, sixtyFourVoiceRender.getNumSamples());
     if (sixtyFourVoiceRender.getMagnitude(0, 0, sixtyFourVoiceRender.getNumSamples()) <= 0.001f)
     {
-        std::cerr << "64 simultaneous voices rendered silence.\\n";
+        std::cerr << "64 simultaneous voices rendered silence.\n";
         return 1;
     }
     for (int channel = 0; channel < sixtyFourVoiceRender.getNumChannels(); ++channel)
         for (int sample = 0; sample < sixtyFourVoiceRender.getNumSamples(); ++sample)
             if (!std::isfinite(sixtyFourVoiceRender.getSample(channel, sample)))
             {
-                std::cerr << "64-voice render produced a non-finite sample.\\n";
+                std::cerr << "64-voice render produced a non-finite sample.\n";
                 return 1;
             }
 
@@ -938,18 +938,18 @@ int main()
     cappedVoiceEngine.prepare(44100.0);
     if (!cappedVoiceEngine.loadSfz(sfzFile).success)
     {
-        std::cerr << "Could not load capped-voice stress bank.\\n";
+        std::cerr << "Could not load capped-voice stress bank.\n";
         return 1;
     }
     for (int voice = 0; voice < 64; ++voice)
         if (!cappedVoiceEngine.noteOn(60, 4, 32, 1))
         {
-            std::cerr << "32-voice cap trigger failed at voice " << voice << ".\\n";
+            std::cerr << "32-voice cap trigger failed at voice " << voice << ".\n";
             return 1;
         }
     if (cappedVoiceEngine.getActiveVoiceCount() != 32)
     {
-        std::cerr << "Configured polyphony cap did not limit active voices to 32.\\n";
+        std::cerr << "Configured polyphony cap did not limit active voices to 32.\n";
         return 1;
     }
 

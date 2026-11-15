@@ -44,7 +44,7 @@ int main()
     auto scan = index.scanDirectory(juce::File(root.string()));
     if (!scan.success || scan.samples.size() != 1)
     {
-        std::cerr << "Streaming test could not index its WAV fixture.\\n";
+        std::cerr << "Streaming test could not index its WAV fixture.\n";
         return 1;
     }
 
@@ -55,7 +55,7 @@ int main()
             scan.samples, 1, std::numeric_limits<std::uint32_t>::max());
         if (oversizedService.isValid() || oversizedService.start())
         {
-            std::cerr << "Streaming service accepted an oversized cache configuration.\\n";
+            std::cerr << "Streaming service accepted an oversized cache configuration.\n";
             return 1;
         }
     }
@@ -63,23 +63,23 @@ int main()
     ppgu::sampler::SampleStreamingService service(std::move(scan.samples), 4, 256);
     if (!service.isValid() || service.cacheBytes() != 4U * 256U * 2U * sizeof(float))
     {
-        std::cerr << "Streaming service did not create the expected bounded cache.\\n";
+        std::cerr << "Streaming service did not create the expected bounded cache.\n";
         return 1;
     }
     if (!service.start())
     {
-        std::cerr << "Streaming service failed to start its worker.\\n";
+        std::cerr << "Streaming service failed to start its worker.\n";
         return 1;
     }
 
     if (service.requestPage({ 99, 0 }))
     {
-        std::cerr << "Streaming service accepted an invalid sample ID.\\n";
+        std::cerr << "Streaming service accepted an invalid sample ID.\n";
         return 1;
     }
     if (!service.requestPage({ 0, 2 }))
     {
-        std::cerr << "Streaming service rejected a valid page request.\\n";
+        std::cerr << "Streaming service rejected a valid page request.\n";
         return 1;
     }
 
@@ -91,7 +91,7 @@ int main()
 
     if (!lease || lease.channels != 2 || lease.frames != 256)
     {
-        std::cerr << "Worker did not publish the requested page before timeout.\\n";
+        std::cerr << "Worker did not publish the requested page before timeout.\n";
         return 1;
     }
 
@@ -101,7 +101,7 @@ int main()
     if (std::abs(lease.samples[37] - expected) > 0.0001f
         || std::abs(lease.samples[37] + lease.samples[256 + 37]) > 0.0001f)
     {
-        std::cerr << "Streaming worker published corrupted planar page data.\\n";
+        std::cerr << "Streaming worker published corrupted planar page data.\n";
         return 1;
     }
     service.release(lease);
@@ -118,7 +118,7 @@ int main()
         || stats.requestsSubmitted != 2 || stats.requestsProcessed != 2
         || stats.decodeFailures != 0)
     {
-        std::cerr << "Streaming statistics or ready-page duplicate suppression failed.\\n";
+        std::cerr << "Streaming statistics or ready-page duplicate suppression failed.\n";
         return 1;
     }
 
@@ -140,7 +140,7 @@ int main()
     if (!hermiteReady || std::abs(streamedLeft + streamedRight) > 0.0001f
         || std::abs(streamedLeft) < 0.01f)
     {
-        std::cerr << "Streaming voice reader failed Hermite interpolation across a page boundary.\\n";
+        std::cerr << "Streaming voice reader failed Hermite interpolation across a page boundary.\n";
         return 1;
     }
     voiceReader.prefetch(510);
@@ -171,7 +171,7 @@ int main()
             2.0 * juce::MathConstants<double>::pi * 330.0 * (sourceFrames - 1) / 48000.0);
         if (!verifyEdge(0, firstExpected) || !verifyEdge(sourceFrames - 1, lastExpected))
         {
-            std::cerr << "Streaming voice reader failed interpolation at a sample-region edge.\\n";
+            std::cerr << "Streaming voice reader failed interpolation at a sample-region edge.\n";
             return 1;
         }
 
@@ -181,7 +181,7 @@ int main()
             || edgeReader.readHermite(0, 0.0f, 10, 10, untouchedLeft, untouchedRight)
             || untouchedLeft != 123.0f || untouchedRight != 456.0f)
         {
-            std::cerr << "Streaming voice reader accepted an invalid region or changed outputs on failure.\\n";
+            std::cerr << "Streaming voice reader accepted an invalid region or changed outputs on failure.\n";
             return 1;
         }
     }
@@ -189,11 +189,11 @@ int main()
     service.stop();
     if (service.requestPage({ 0, 1 }))
     {
-        std::cerr << "Streaming service accepted requests after worker shutdown.\\n";
+        std::cerr << "Streaming service accepted requests after worker shutdown.\n";
         return 1;
     }
 
     std::filesystem::remove_all(root);
-    std::cout << "Streaming service tests passed: bounded cache, worker decode, audio-side acquire, duplicate suppression and shutdown.\\n";
+    std::cout << "Streaming service tests passed: bounded cache, worker decode, audio-side acquire, duplicate suppression and shutdown.\n";
     return 0;
 }

@@ -97,7 +97,7 @@ int main()
 {
     if (PPGUTestData::ppgu_test_data_txtSize <= 0)
     {
-        std::cerr << "Generated PPGU test binary-data fixture is empty.\\n";
+        std::cerr << "Generated PPGU test binary-data fixture is empty.\n";
         return 1;
     }
 
@@ -228,7 +228,7 @@ int main()
         wetProcessor.prepareToPlay(48000.0, 128);
         if (!dryProcessor.loadSfzFile(sfz).success || !wetProcessor.loadSfzFile(sfz).success)
         {
-            std::cerr << "Could not load oversized-block DSP fixtures.\\n";
+            std::cerr << "Could not load oversized-block DSP fixtures.\n";
             result = 1;
         }
 
@@ -274,7 +274,7 @@ int main()
                 || !configure(wetProcessor, false, false)
                 || !prime(dryProcessor) || !prime(wetProcessor)))
         {
-            std::cerr << "Oversized-block DSP fixtures did not become audible.\\n";
+            std::cerr << "Oversized-block DSP fixtures did not become audible.\n";
             result = 1;
         }
 
@@ -321,7 +321,7 @@ int main()
                 || !renderOversized(wetProcessor, true, false, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.00001))
         {
-            std::cerr << "Chorus was bypassed or ineffective for a host block larger than expectedBlockSize.\\n";
+            std::cerr << "Chorus was bypassed or ineffective for a host block larger than expectedBlockSize.\n";
             result = 1;
         }
 
@@ -330,7 +330,7 @@ int main()
                 || !renderOversized(wetProcessor, false, true, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.00001))
         {
-            std::cerr << "Reverb was bypassed or ineffective for a host block larger than expectedBlockSize.\\n";
+            std::cerr << "Reverb was bypassed or ineffective for a host block larger than expectedBlockSize.\n";
             result = 1;
         }
     }
@@ -345,7 +345,7 @@ int main()
         const auto sourceLoad = stateSource.loadSfzFile(sfz);
         if (!sourceLoad.success)
         {
-            std::cerr << "Could not prepare state-restore source bank.\\n";
+            std::cerr << "Could not prepare state-restore source bank.\n";
             result = 1;
         }
         else
@@ -358,7 +358,7 @@ int main()
                 static_cast<int>(savedState.getSize()));
             if (restoredProcessor.getCurrentSfzFilePath() != sfz.getFullPathName())
             {
-                std::cerr << "State restore did not retain the saved SFZ path.\\n";
+                std::cerr << "State restore did not retain the saved SFZ path.\n";
                 result = 1;
             }
             bool restoredBankReady = false;
@@ -371,7 +371,7 @@ int main()
             }
             if (!restoredBankReady)
             {
-                std::cerr << "State restore did not asynchronously publish the saved SFZ bank.\\n";
+                std::cerr << "State restore did not asynchronously publish the saved SFZ bank.\n";
                 result = 1;
             }
         }
@@ -386,7 +386,7 @@ int main()
         const auto oldBankLoad = missingBankProcessor.loadSfzFile(sfz);
         if (!oldBankLoad.success || !missingBankProcessor.hasLoadedSampleBank())
         {
-            std::cerr << "Could not prepare pre-existing bank for missing-path restore test.\\n";
+            std::cerr << "Could not prepare pre-existing bank for missing-path restore test.\n";
             result = 1;
         }
         else
@@ -406,7 +406,7 @@ int main()
             }
             if (!oldBankAudible)
             {
-                std::cerr << "Could not warm the old bank before missing-path restore.\\n";
+                std::cerr << "Could not warm the old bank before missing-path restore.\n";
                 result = 1;
             }
 
@@ -418,7 +418,7 @@ int main()
             if (renameError)
             {
                 std::cerr << "Could not stage missing-library state-restore test: "
-                          << renameError.message() << "\\n";
+                          << renameError.message() << "\n";
                 result = 1;
             }
             else
@@ -429,7 +429,7 @@ int main()
                     || missingBankProcessor.hasLoadedSampleBank()
                     || missingBankProcessor.getLoadedRegionCount() != 0)
                 {
-                    std::cerr << "Missing SFZ restore retained a stale in-memory sample bank.\\n";
+                    std::cerr << "Missing SFZ restore retained a stale in-memory sample bank.\n";
                     result = 1;
                 }
                 juce::AudioBuffer<float> afterRestore(2, 128);
@@ -438,7 +438,7 @@ int main()
                 missingBankProcessor.processBlock(afterRestore, noMidi);
                 if (rms(afterRestore, 0, afterRestore.getNumSamples()) > 0.0001)
                 {
-                    std::cerr << "Old sample voices survived the next audio callback after missing-bank restore.\\n";
+                    std::cerr << "Old sample voices survived the next audio callback after missing-bank restore.\n";
                     result = 1;
                 }
                 renameError.clear();
@@ -446,7 +446,7 @@ int main()
                 if (renameError)
                 {
                     std::cerr << "Could not restore temporary SFZ fixture after missing-path test: "
-                              << renameError.message() << "\\n";
+                              << renameError.message() << "\n";
                     result = 1;
                 }
             }

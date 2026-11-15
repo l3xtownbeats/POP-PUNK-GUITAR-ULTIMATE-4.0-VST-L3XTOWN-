@@ -66,7 +66,7 @@ int main()
         [](const std::string& warning) { return warning.find("mono/stereo only") != std::string::npos; });
     if (!hasChannelWarning || result.samples.size() != 1)
     {
-        std::cerr << "Metadata index did not consistently reject multichannel WAV data.\\n";
+        std::cerr << "Metadata index did not consistently reject multichannel WAV data.\n";
         return 1;
     }
 
@@ -135,7 +135,7 @@ int main()
                                                          directFrames, pageFrames);
     if (wrongChannels.success || directFrames != 0)
     {
-        std::cerr << "WAV page reader accepted a mismatched preallocated channel layout.\\n";
+        std::cerr << "WAV page reader accepted a mismatched preallocated channel layout.\n";
         return 1;
     }
 
@@ -187,7 +187,7 @@ int main()
     std::string multichannelError;
     if (multichannelReader.open(multichannelMetadata, multichannelError))
     {
-        std::cerr << "WAV page reader accepted unsupported multichannel metadata.\\n";
+        std::cerr << "WAV page reader accepted unsupported multichannel metadata.\n";
         return 1;
     }
 
@@ -197,7 +197,7 @@ int main()
     std::string invalidError;
     if (invalidReader.open(invalidMetadata, invalidError))
     {
-        std::cerr << "WAV page reader accepted a mismatched WAV header.\\n";
+        std::cerr << "WAV page reader accepted a mismatched WAV header.\n";
         return 1;
     }
 
@@ -216,7 +216,7 @@ int main()
         std::string malformedRateError;
         if (malformedRateReader.open(malformedRate, malformedRateError))
         {
-            std::cerr << "WAV page reader accepted invalid sample-rate metadata.\\n";
+            std::cerr << "WAV page reader accepted invalid sample-rate metadata.\n";
             return 1;
         }
     }
@@ -227,7 +227,7 @@ int main()
     std::string emptyError;
     if (emptyReader.open(emptyMetadata, emptyError))
     {
-        std::cerr << "WAV page reader accepted zero-frame metadata.\\n";
+        std::cerr << "WAV page reader accepted zero-frame metadata.\n";
         return 1;
     }
 

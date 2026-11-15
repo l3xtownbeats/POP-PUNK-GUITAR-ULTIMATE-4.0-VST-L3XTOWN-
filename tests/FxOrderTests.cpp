@@ -18,9 +18,9 @@ int main()
         || resolveFxOrder(duplicate) != canonical
         || resolveFxOrder(outOfRange) != canonical)
     {
-        std::cerr << "FX order permutation contract failed.\\n";
+        std::cerr << "FX order permutation contract failed.\n";
         return 1;
     }
-    std::cout << "FX order contracts passed.\\n";
+    std::cout << "FX order contracts passed.\n";
     return 0;
 }
