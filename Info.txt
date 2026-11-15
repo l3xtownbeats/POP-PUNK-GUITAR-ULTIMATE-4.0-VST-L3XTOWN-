@@ -289,3 +289,12 @@ Implemented:
 - Commit(s): `e28aa685bf99f605e71a7cc4c1bc2d8caa44514c`, `0e472a056377925a24a2f8f868fedd8ee0d77530`.
 - Validation: CI for the new HEAD is pending; the preceding exact-HEAD run `43712521581` passed Windows x64 Release build, CTest, pluginval strictness 5 and interim CI packaging. That prior run does not validate these latest commits.
 - Status: source fix committed; regression/CI confirmation pending. Not a release claim.
+
+
+## 2026-11-15 — Circle of Fifths selected-root highlight correction
+
+- Source: `Source/PluginEditor.cpp`, `PPGUCircleOfFifths::paint`.
+- Defect: the twelve labels are laid out in fifths order (C, G, D, A, E, B, F#, C#, G#, D#, A#, F), but the selected key is stored as a chromatic pitch class (C=0 ... B=11). Comparing the loop index directly with the chromatic root highlighted the wrong key for most selections.
+- Fix: compare the selected chromatic root with the pitch-class lookup for each fifth-order slot. No APVTS IDs, control IDs, audio/DSP/MIDI processing or parameter attachments changed.
+- Commit: `0ffcd3302e005bd4988a04224a10a021f948e558`.
+- Validation: exact-HEAD Windows x64 build, CTest and pluginval are pending for this correction. Previous exact HEAD `3ef09d854c7919d9bd69aa2bb5cc6f7ceb82ee46` passed Windows x64 Release configure/build, CTest, VST3 bundle location and pluginval Strictness 5; that result does not validate this new commit.
