@@ -745,14 +745,12 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
 {
     const int channels = output.getNumChannels();
     const int endSample = juce::jmin(output.getNumSamples(), startSample + numSamples);
-    int activeVoiceCount = 0;
     for (std::size_t voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
     {
         auto& voice = voices[voiceIndex];
         auto& streamReader = streamingReaders[voiceIndex];
         if (voice.region == nullptr)
             continue;
-        ++activeVoiceCount;
 
         const auto& region = *voice.region;
         const float modWheelValue = channelModWheel[static_cast<size_t>(voice.midiChannel - 1)];
@@ -920,6 +918,10 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             && std::abs(channelPitchBendSemitones[static_cast<size_t>(channel)]) > 1.0e-6f)
             applyPitchBendForChannel(channel);
 
+    int activeVoiceCount = 0;
+    for (const auto& voice : voices)
+        if (voice.region != nullptr)
+            ++activeVoiceCount;
     activeVoiceCountSnapshot.store(activeVoiceCount, std::memory_order_relaxed);
 }
 
