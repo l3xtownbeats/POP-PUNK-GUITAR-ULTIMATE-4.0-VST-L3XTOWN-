@@ -1,4 +1,19 @@
 
+#include "PluginEditor.h"
+#include "PPGUData.h"
+
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+#include <string>
+#include <set>
+#include <limits>
+#include <vector>
+#if JUCE_WINDOWS
+ #ifndef NOMINMAX
+  #define NOMINMAX
+ #endif
+
 namespace
 {
 // Shared theme typography factory. It changes font metrics only; component bounds,
@@ -14,21 +29,6 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
         .withExtraKerningFactor(palette.letterSpacing);
 }
 }
-
-#include "PluginEditor.h"
-#include "PPGUData.h"
-
-#include <algorithm>
-#include <cmath>
-#include <cstdint>
-#include <string>
-#include <set>
-#include <limits>
-#include <vector>
-#if JUCE_WINDOWS
- #ifndef NOMINMAX
-  #define NOMINMAX
- #endif
  #include <windows.h>
 juce::String fromWidePath(const wchar_t* value, int length)
 {
@@ -1793,7 +1793,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);const auto titleWeight = p.typographyWeight.equalsIgnoreCase("normal") ? juce::Font::plain : juce::Font::bold;titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
