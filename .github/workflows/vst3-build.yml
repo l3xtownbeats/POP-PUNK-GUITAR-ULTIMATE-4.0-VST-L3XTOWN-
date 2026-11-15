@@ -11,7 +11,6 @@ on:
       - 'Source/**'
       - 'tests/**'
       - 'SKIN/**'
-      - 'Samples/**'
       - 'Sample Library/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
@@ -80,7 +79,7 @@ jobs:
         run: |
           $sampleRoot = Join-Path $env:PROJECT_DIR 'Sample Library'
           if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) {
-            throw 'Canonical Sample Library library workspace is missing; do not replace it with an empty directory.'
+            throw 'Canonical Sample Library workspace is missing; do not replace it with an empty directory.'
           }
           Write-Host 'Canonical Sample Library library workspace confirmed.'
 
@@ -277,7 +276,7 @@ jobs:
 
       - name: Audit canonical factory sample inventory and SFZ references
         shell: pwsh
-        run: python tools/audit_sample_library.py --root Samples --output build/sample_library_audit.json
+        run: python tools/audit_sample_library.py --root 'Sample Library' --output build/sample_library_audit.json
 
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh
@@ -346,7 +345,7 @@ jobs:
           $sampleAudio = Get-ChildItem -LiteralPath $sampleRoot -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') }
           if ($sampleAudio.Count -lt 100) { throw "Canonical Sample Library library is incomplete: only $($sampleAudio.Count) audio files." }
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
-          # Factory SOUNDBANK is always assembled from the preserved canonical Samples tree.
+          # Factory SOUNDBANK is always assembled from the preserved canonical Sample Library tree.
           Copy-Item -Path (Join-Path $sampleRoot '*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Optional source/reference material is shipped separately from runtime payload.
