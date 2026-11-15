@@ -60,6 +60,18 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertIn("SafePointer<Card>", card)
         self.assertIn("ImageCache::getFromFile", card[card.index("void requestThumbnailLoad"):])
 
+    def test_filter_keeps_selection_inside_visible_registry(self) -> None:
+        rebuild_start = GALLERY.index("void rebuildCards()")
+        rebuild_end = GALLERY.index("std::vector<Skin> skins;", rebuild_start)
+        rebuild = GALLERY[rebuild_start:rebuild_end]
+        self.assertIn("visibleSkins", rebuild)
+        self.assertIn("selectedIsVisible", rebuild)
+        self.assertIn("if (!selectedIsVisible && !visibleSkins.empty())", rebuild)
+        self.assertIn("previewImage = {}", rebuild)
+        self.assertIn("updateSelectionControls()", rebuild)
+        self.assertIn("const auto active = std::find_if", rebuild)
+        self.assertIn("visibleSkins.front()->index", rebuild)
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
