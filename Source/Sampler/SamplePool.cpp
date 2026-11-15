@@ -482,8 +482,13 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
 
 bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones, bool palmMuted) noexcept
 {
-    const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
-    if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
+    // Reject velocity-zero note-ons before region lookup: round-robin cursors
+    // must advance only for notes that actually trigger a voice.
+    if (midiNote < 0 || midiNote > 127 || velocity <= 0)
+        return false;
+    const int safeMidiChannel = juce::jlimit(1, 16, midiChannel);
+    const auto* region = pool.findRegion(midiNote, velocity, safeMidiChannel);
+    if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr))
         return false;
 
     // SFZ off_by groups implement guitar-string choking: a new note on the
@@ -502,7 +507,7 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     voice = {};
     voice.region = region;
     voice.note = midiNote;
-    voice.midiChannel = juce::jlimit(1, 16, midiChannel);
+    voice.midiChannel = safeMidiChannel;
     voice.direction = 1;
     voice.position = static_cast<double>(region->startFrame);
     voice.vibratoLfoSin = 0.0f;

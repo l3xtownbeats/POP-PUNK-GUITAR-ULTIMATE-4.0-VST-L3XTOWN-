@@ -49,6 +49,8 @@ public:
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
+    [[nodiscard]] bool hasLoadedSampleBank() const noexcept { return sampler.hasSamples(); }
+    [[nodiscard]] std::size_t getLoadedRegionCount() const noexcept { return sampler.getRegionCount(); }
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;

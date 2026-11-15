@@ -104,6 +104,163 @@ int main()
     juce::ScopedJuceInitialiser_GUI juceInitialiser;
     const auto root = std::filesystem::temp_directory_path() / "ppgu-processor-pattern-integration";
     std::error_code cleanupError;
+ 
+    // Oversized host blocks must continue through Chorus and Reverb even
+    // when prepareToPlay advertised a much smaller expected block size.
+    {
+        PopPunkGuitarUltimateAudioProcessor dryProcessor;
+        PopPunkGuitarUltimateAudioProcessor wetProcessor;
+        dryProcessor.prepareToPlay(48000.0, 128);
+        wetProcessor.prepareToPlay(48000.0, 128);
+        if (!dryProcessor.loadSfzFile(sfz).success || !wetProcessor.loadSfzFile(sfz).success)
+        {
+            std::cerr << "Could not load oversized-block DSP fixtures.\\n";
+            result = 1;
+        }
+
+        const auto configure = [&](PopPunkGuitarUltimateAudioProcessor& target,
+                                   bool chorusEnabled, bool reverbEnabled)
+        {
+            const std::array<std::pair<const char*, float>, 20> values {{
+                { "playMode", 0.0f }, { "voices", 64.0f }, { "master", 1.0f },
+                { "output", 0.0f }, { "pan", 0.0f }, { "ampGain", 5.0f },
+                { "tone", 5.0f }, { "eqOn", 0.0f }, { "compressorOn", 0.0f },
+                { "distortionOn", 0.0f }, { "flangerOn", 0.0f }, { "delayOn", 0.0f },
+                { "cabinetOn", 0.0f }, { "doubleTrackOn", 0.0f },
+                { "chorusOn", chorusEnabled ? 1.0f : 0.0f },
+                { "chorusMix", 1.0f }, { "reverbOn", reverbEnabled ? 1.0f : 0.0f },
+                { "reverbMix", 1.0f }, { "vibrato", 0.0f }, { "modWheelVibrato", 0.0f }
+            }};
+            bool ok = true;
+            for (const auto& value : values)
+                ok = setParameter(target, value.first, value.second) && ok;
+            return ok;
+        };
+
+        const auto prime = [&](PopPunkGuitarUltimateAudioProcessor& target)
+        {
+            bool audible = false;
+            for (int attempt = 0; attempt < 100 && !audible; ++attempt)
+            {
+                juce::AudioBuffer<float> warm(2, 128);
+                warm.clear();
+                juce::MidiBuffer midi;
+                if (attempt == 0)
+                    midi.addEvent(juce::MidiMessage::noteOn(1, 60, static_cast<juce::uint8>(110)), 0);
+                target.processBlock(warm, midi);
+                audible = rms(warm, 0, warm.getNumSamples()) > 0.001;
+                if (!audible)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            }
+            return audible;
+        };
+
+        if (result == 0
+            && (!configure(dryProcessor, false, false)
+                || !configure(wetProcessor, false, false)
+                || !prime(dryProcessor) || !prime(wetProcessor)))
+        {
+            std::cerr << "Oversized-block DSP fixtures did not become audible.\\n";
+            result = 1;
+        }
+
+        const auto renderOversized = [&](PopPunkGuitarUltimateAudioProcessor& target,
+                                         bool chorusEnabled, bool reverbEnabled,
+                                         juce::AudioBuffer<float>& largeBlock)
+        {
+            target.prepareToPlay(48000.0, 128);
+            if (!configure(target, chorusEnabled, reverbEnabled))
+                return false;
+            juce::AudioBuffer<float> triggerBlock(2, 128);
+            triggerBlock.clear();
+            juce::MidiBuffer noteOn;
+            noteOn.addEvent(juce::MidiMessage::noteOn(1, 60, static_cast<juce::uint8>(110)), 0);
+            target.processBlock(triggerBlock, noteOn);
+            largeBlock.clear();
+            juce::MidiBuffer noMidi;
+            target.processBlock(largeBlock, noMidi);
+            return true;
+        };
+
+        const auto differenceRms = [](const juce::AudioBuffer<float>& a,
+                                      const juce::AudioBuffer<float>& b)
+        {
+            if (a.getNumChannels() != b.getNumChannels()
+                || a.getNumSamples() != b.getNumSamples())
+                return 0.0;
+            double sum = 0.0;
+            std::uint64_t count = 0;
+            for (int channel = 0; channel < a.getNumChannels(); ++channel)
+                for (int sample = 0; sample < a.getNumSamples(); ++sample)
+                {
+                    const double delta = static_cast<double>(a.getSample(channel, sample))
+                        - static_cast<double>(b.getSample(channel, sample));
+                    sum += delta * delta;
+                    ++count;
+                }
+            return count == 0 ? 0.0 : std::sqrt(sum / static_cast<double>(count));
+        };
+
+        juce::AudioBuffer<float> dryLarge(2, 2048), wetLarge(2, 2048);
+        if (result == 0
+            && (!renderOversized(dryProcessor, false, false, dryLarge)
+                || !renderOversized(wetProcessor, true, false, wetLarge)
+                || differenceRms(dryLarge, wetLarge) < 0.00001))
+        {
+            std::cerr << "Chorus was bypassed or ineffective for a host block larger than expectedBlockSize.\\n";
+            result = 1;
+        }
+
+        if (result == 0
+            && (!renderOversized(dryProcessor, false, false, dryLarge)
+                || !renderOversized(wetProcessor, false, true, wetLarge)
+                || differenceRms(dryLarge, wetLarge) < 0.00001))
+        {
+            std::cerr << "Reverb was bypassed or ineffective for a host block larger than expectedBlockSize.\\n";
+            result = 1;
+        }
+    }
+
+    // State restore must asynchronously reload the same SFZ bank and retain
+    // the absolute path in the serialized APVTS state.
+    {
+        PopPunkGuitarUltimateAudioProcessor stateSource;
+        stateSource.prepareToPlay(48000.0, 128);
+        const auto sourceLoad = stateSource.loadSfzFile(sfz);
+        if (!sourceLoad.success)
+        {
+            std::cerr << "Could not prepare state-restore source bank.\\n";
+            result = 1;
+        }
+        else
+        {
+            juce::MemoryBlock savedState;
+            stateSource.getStateInformation(savedState);
+            PopPunkGuitarUltimateAudioProcessor restoredProcessor;
+            restoredProcessor.prepareToPlay(48000.0, 128);
+            restoredProcessor.setStateInformation(savedState.getData(),
+                static_cast<int>(savedState.getSize()));
+            if (restoredProcessor.getCurrentSfzFilePath() != sfz.getFullPathName())
+            {
+                std::cerr << "State restore did not retain the saved SFZ path.\\n";
+                result = 1;
+            }
+            bool restoredBankReady = false;
+            for (int attempt = 0; attempt < 300 && !restoredBankReady; ++attempt)
+            {
+                restoredBankReady = restoredProcessor.hasLoadedSampleBank()
+                    && restoredProcessor.getLoadedRegionCount() == 9;
+                if (!restoredBankReady)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
+            if (!restoredBankReady)
+            {
+                std::cerr << "State restore did not asynchronously publish the saved SFZ bank.\\n";
+                result = 1;
+            }
+        }
+    }
+
     std::filesystem::remove_all(root, cleanupError);
     std::filesystem::create_directories(root);
 
