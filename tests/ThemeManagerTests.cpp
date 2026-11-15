@@ -97,16 +97,9 @@ int main()
         }
     }
 
-    const auto defaultManifest = skinRoot.getChildFile("isolated_legacy/assets/Skin_51/theme.json");
-    const auto validJson = defaultManifest.loadFileAsString();
-    expect(validJson.isNotEmpty(), "isolated legacy Skin_51 manifest readable");
-
-    const auto wrappedWidth = validJson.replace("\"width\": 480",
-                                                "\"width\": 4294967776");
-    expect(!manager.loadFromJson(wrappedWidth),
-           "int64 asset width that wraps to 480 after narrowing is rejected");
-    expect(manager.getPalette().usedFallback,
-           "overflowing asset dimensions restore default fallback");
+    const auto retiredLegacyRoot = skinRoot.getChildFile("isolated_legacy");
+    expect(!retiredLegacyRoot.exists(),
+           "retired legacy theme archive is absent from the active source tree");
 
     const auto skin53Manifest = skinRoot.getChildFile("Skin_053").getChildFile("theme.json");
     const bool skin53Loaded = skin53Manifest.existsAsFile() && manager.loadFromFile(skin53Manifest);
@@ -169,26 +162,6 @@ int main()
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "incomplete manifest restores NEON STAGE fallback");
 
-    expect(manager.loadFromJson(validJson), "isolated legacy manifest remains loadable after token migration");
-    expect(manager.getPalette().token("window_bg") == manager.getPalette().canvas,
-           "legacy window background maps to canonical token");
-    expect(manager.getPalette().token("accent") == manager.getPalette().accent,
-           "legacy accent maps to canonical token");
-    expect(manager.getPalette().token("danger").isOpaque(),
-           "legacy semantic token receives a deterministic fallback");
-
-    const auto badColour = validJson.replace("#090C10", "#GG0C10");
-    expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
-    expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
-
-    const auto badCompatibility = validJson.replace("\"audioChanges\": false",
-                                                     "\"audioChanges\": true");
-    expect(!manager.loadFromJson(badCompatibility), "legacy audio-changing theme rejected");
-    expect(manager.getPalette().usedFallback, "legacy compatibility failure restores fallback");
-
-    const auto mismatchedIndex = validJson.replace("\"index\": 51", "\"index\": 50");
-    expect(!manager.loadFromJson(mismatchedIndex), "legacy ID/index mismatch rejected");
-    expect(manager.getPalette().usedFallback, "legacy ID/index failure restores fallback");
 
     if (failures != 0)
     {
