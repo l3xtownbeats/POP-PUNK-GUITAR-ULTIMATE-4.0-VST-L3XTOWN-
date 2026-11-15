@@ -95,6 +95,13 @@ public:
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
+        emptyResultsLabel.setText("NO THEMES MATCH YOUR SEARCH", juce::dontSendNotification);
+        emptyResultsLabel.setFont(juce::Font(12.0f, juce::Font::bold));
+        emptyResultsLabel.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        emptyResultsLabel.setJustificationType(juce::Justification::centred);
+        emptyResultsLabel.setInterceptsMouseClicks(false, false);
+        addChildComponent(emptyResultsLabel);
+
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
         viewport.setScrollBarsShown(true, false);
@@ -205,6 +212,7 @@ public:
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        emptyResultsLabel.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         previewTitle.setColour(juce::Label::textColourId, palette.token("text_primary"));
         previewDetails.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         const auto styleAction = [this](juce::TextButton& button, bool primary)
@@ -276,6 +284,7 @@ public:
         backButton.setVisible(true);
         backButton.setBounds(actions.removeFromRight(112).reduced(1, 2));
         viewport.setBounds(area);
+        emptyResultsLabel.setBounds(viewport.getBounds());
         rebuildCards();
         updateSelectionControls();
     }
@@ -497,6 +506,7 @@ private:
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
                            + juce::String(skins.size()) + " THEMES", juce::dontSendNotification);
+        emptyResultsLabel.setVisible(visibleSkins.empty() && !showingPreview);
         const int gap = 12;
         const int minCardWidth = 205;
         const int columns = juce::jmax(1, (viewport.getWidth() - gap) / (minCardWidth + gap));
@@ -511,7 +521,7 @@ private:
     PPGUThemeManager::Palette palette;
     std::function<void(int)> apply;
     std::function<void()> back;
-    juce::Label heading, subtitle, countLabel, previewTitle, previewDetails;
+    juce::Label heading, subtitle, countLabel, emptyResultsLabel, previewTitle, previewDetails;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
     juce::StringArray familyFilterKeys;
