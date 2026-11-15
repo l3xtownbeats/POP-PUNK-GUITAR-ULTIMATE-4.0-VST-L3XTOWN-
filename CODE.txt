@@ -985,3 +985,15 @@ Approved requirements:
 **Implementation:** no visible items → clear transient selection, preview cache and detail labels; disable Preview/Apply/Favorite through existing validity checks; restoring a filter falls back to active/first visible theme.
 **Test:** `test_empty_filter_invalidates_hidden_selection_and_actions`.
 **Runtime execution:** pending; no test/build/host PASS claim.
+
+
+## 2026-11-15 — REV18 NEON-STAGE-ARTIFACT-AUDIT — approved mockup and asset-source reconciliation
+
+**Branch:** work/skin001-rev18-functional-repair.
+**INFO:** 38dbf9fda66df8650d2edb80196fa7b36f187bb5.
+**Source ZIP SHA-256:** 5c14d873475f12e90c534c6415dc3e313017000dc0322e50ecc3e409e33570e8.
+**Staging ZIP SHA-256:** fce41e5ca905d74d7f342f1eacc02a450fba028b5fe5f838c794b11d540e5b73.
+**Findings:** approved visual reference located; source archive audit 17/17 PASS but artwork/control/icon deterministic --check gates FAIL; staging package is Skin_052 with invalid unmerged startIndex 52 against registry total 102 and no runtime tests. Neither candidate is accepted for runtime installation.
+**Migration decision:** preserve all 102 historical IDs/paths/indexes. Add skin-001 / Skin_001 at unused registry index 103, activeOrdinal 1; make it default. Update runtime and Python validators to allow this single stable-ID/index exception. The runtime gallery uses activeOrdinal for load order. No assets/registry changed in this audit.
+**UI constraints:** follow mockup style/composition but never fake prohibited controls or backend functions.
+**Status:** audit recorded; actual theme integration pending reproducible asset reconciliation and registry/runtime migration.
