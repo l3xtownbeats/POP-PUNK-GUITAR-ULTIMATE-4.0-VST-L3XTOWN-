@@ -250,10 +250,9 @@ def control_frame(control_id, state, palette):
         d.arc((94,82,418,406),135,405,fill=mix(border,secondary,.35),width=18)
         d.arc((94,82,418,406),135,310 if state!="disabled" else 210,fill=accent,width=18)
         d.ellipse((126,114,386,374),fill=raised,outline=border,width=7)
-        d.ellipse((148,136,364,352),fill=gradient((216,216),raised,bg).getpixel((108,108)),outline=mix(border,accent,.25),width=4)
-        d.ellipse((176,164,336,324),fill=panel,outline=border,width=3)
-        d.ellipse((194,182,318,306),fill=raised,outline=mix(border,accent,.25),width=3)
-        d.arc((198,186,314,302),205,330,fill=(*primary,),width=4)
+        d.ellipse((148,136,364,352),fill=panel,outline=mix(border,accent,.25),width=4)
+        d.ellipse((174,162,338,326),fill=raised,outline=border,width=3)
+        d.arc((182,170,330,318),205,330,fill=primary,width=4)
         for angle in range(0,360,24):
             a=math.radians(angle)
             x1=cx+int(194*math.cos(a)); y1=cy+int(194*math.sin(a))
@@ -266,17 +265,90 @@ def control_frame(control_id, state, palette):
         d.rounded_rectangle((75,188,437,324),radius=68,fill=mix(bg,accent,.35 if state!="disabled" else .08))
         thumb_x=348 if state!="pressed" else 164
         d.ellipse((thumb_x-65,194,thumb_x+65,324),fill=raised,outline=primary,width=5)
-        d.ellipse((thumb_x-38,218,thumb_x+38,294),fill=gradient((76,76),raised,bg).getpixel((38,38)),outline=border,width=3)
+        d.ellipse((thumb_x-38,218,thumb_x+38,294),fill=panel,outline=border,width=3)
         d.ellipse((thumb_x-12,244,thumb_x+12,268),fill=accent)
+    elif control_id=="preset_browser":
+        d.rounded_rectangle((48,76,464,404),radius=24,fill=bg,outline=border,width=6)
+        d.rounded_rectangle((62,90,450,148),radius=16,fill=raised,outline=border,width=2)
+        for row in range(4):
+            y=164+row*54
+            selected=(row==1 and state!="disabled")
+            fill=mix(raised,accent,.20) if selected else panel
+            d.rounded_rectangle((68,y,444,y+42),radius=10,fill=fill,
+                                outline=accent if selected else border,width=3)
+            d.ellipse((84,y+13,100,y+29),fill=accent if selected else secondary)
+            d.line((116,y+21,390,y+21),fill=primary if selected else secondary,width=5)
+    elif control_id=="mode_selector":
+        d.rounded_rectangle((44,176,468,336),radius=34,fill=bg,outline=border,width=7)
+        labels=("MELODY","PATTERN","CHORDS")
+        active=1 if state=="pressed" else 0
+        for i,label in enumerate(labels):
+            x=54+i*136
+            fill=accent if i==active and state!="disabled" else raised
+            d.rounded_rectangle((x,188,x+126,324),radius=25,fill=fill,
+                                outline=primary if i==active else border,width=3)
+            tw=d.textbbox((0,0),label,font=FONT)[2]
+            d.text((x+(126-tw)//2,247),label,font=FONT,
+                   fill=bg if i==active and state!="disabled" else primary)
+    elif control_id=="midi_keyboard":
+        d.rounded_rectangle((38,172,474,356),radius=18,fill=bg,outline=border,width=7)
+        key_w=49
+        for i in range(8):
+            x=48+i*key_w
+            d.rounded_rectangle((x,190,x+key_w-3,340),radius=5,fill=primary,outline=border,width=2)
+        for i in (0,1,3,4,5):
+            x=48+i*key_w+29
+            d.rounded_rectangle((x,190,x+25,284),radius=4,fill=bg,outline=border,width=2)
+        d.rounded_rectangle((48+3*key_w,190,48+4*key_w-3,340),radius=5,
+                            outline=accent,width=5)
+    elif control_id=="LCD_display":
+        d.rounded_rectangle((42,142,470,370),radius=24,fill=bg,outline=border,width=8)
+        d.rounded_rectangle((62,162,450,350),radius=14,fill=rgb(palette["lcd_bg"]),
+                            outline=mix(border,accent,.25),width=2)
+        d.text((88,188),"PATCH / STATUS",font=FONT,fill=rgb(palette["lcd_text"]))
+        for i in range(22):
+            x=92+i*15
+            height=18+((i*23)%66)
+            d.rounded_rectangle((x,300-height//2,x+5,300+height//2),radius=2,fill=accent)
+    elif control_id=="LED_indicator":
+        d.ellipse((90,90,422,422),fill=bg,outline=border,width=10)
+        d.ellipse((136,136,376,376),fill=raised,outline=mix(border,accent,.35),width=6)
+        d.ellipse((176,176,336,336),fill=panel,outline=border,width=4)
+        d.ellipse((206,196,282,270),fill=(*accent,150),outline=primary,width=3)
+        d.arc((154,154,358,358),205,320,fill=secondary,width=6)
     else:
-        d.rounded_rectangle((58,108,454,390),radius=34,fill=raised,outline=accent,width=6)
-        d.rounded_rectangle((76,126,436,372),radius=26,outline=mix(border,accent,.4),width=2)
-        # A raised status jewel and engraved label make utility controls feel like hardware.
-        d.ellipse((220,170,292,242),fill=bg,outline=border,width=5)
-        d.ellipse((238,188,274,224),fill=accent,outline=primary,width=2)
-        d.line((132,278,380,278),fill=border,width=5)
-        d.line((160,300,352,300),fill=secondary,width=3)
-        d.rounded_rectangle((160,330,352,352),radius=10,fill=bg,outline=border,width=2)
+        d.rounded_rectangle((54,94,458,398),radius=42,fill=raised,outline=accent,width=7)
+        d.rounded_rectangle((70,110,442,382),radius=32,outline=mix(border,accent,.4),width=2)
+        if control_id in ("SKIN_button","Settings"):
+            d.ellipse((190,164,322,296),outline=primary,width=13)
+            d.ellipse((232,206,280,254),fill=accent)
+            for angle in range(0,360,45):
+                a=math.radians(angle)
+                d.line((cx+int(74*math.cos(a)),cy+int(74*math.sin(a)),
+                        cx+int(108*math.cos(a)),cy+int(108*math.sin(a))),fill=primary,width=10)
+        elif control_id=="Import_Guitar":
+            d.ellipse((138,210,244,318),outline=primary,width=12)
+            d.line((218,238,344,112),fill=primary,width=16)
+            d.polygon([(330,102),(370,62),(414,106),(374,148)],outline=accent)
+            d.line((286,326,390,326),fill=accent,width=12)
+            d.line((338,274,338,378),fill=accent,width=12)
+        elif control_id=="Auto_Discover":
+            d.ellipse((136,126,322,312),outline=primary,width=13)
+            d.line((294,286,390,382),fill=accent,width=18)
+            d.line((228,158,228,280),fill=secondary,width=5)
+            d.line((166,220,290,220),fill=secondary,width=5)
+        elif control_id=="Curator":
+            d.rounded_rectangle((144,130,368,350),radius=22,outline=primary,width=10)
+            for y in (188,238,288): d.line((184,y,328,y),fill=secondary,width=7)
+            d.polygon([(348,280),(364,310),(398,316),(372,340),(378,374),(348,356),(318,374),(324,340),(298,316),(332,310)],fill=accent)
+        elif control_id=="About":
+            d.ellipse((146,126,366,346),outline=primary,width=12)
+            d.line((256,206,256,300),fill=accent,width=16)
+            d.ellipse((244,158,268,182),fill=accent)
+        else:
+            d.rounded_rectangle((152,164,360,328),radius=20,outline=primary,width=9)
+            d.line((184,214,328,214),fill=secondary,width=7)
+            d.line((184,260,300,260),fill=accent,width=7)
     label=control_id.replace("_"," ").upper()[:28]
     d.text((42,432),label,font=FONT,fill=primary)
     d.text((42,462),state.upper(),font=FONT,fill=accent)
