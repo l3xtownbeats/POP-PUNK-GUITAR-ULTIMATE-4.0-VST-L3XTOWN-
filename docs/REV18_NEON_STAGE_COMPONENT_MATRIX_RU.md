@@ -329,3 +329,17 @@ No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio c
 16. **SKIN-16 — VOLCANIC STEEL**
 
 **SKIN-1 — NEON FORGE (DEFAULT)** является темой по умолчанию. Artwork/PNG и runtime acceptance gates отслеживаются отдельно и не меняют утверждённый порядок. Исторические темы не входят в активную линейку и не должны автоматически возвращаться в галерею.
+
+
+## 2026-11-15 — Current branch delta: About panel and latest validation boundary
+
+Branch: `ui/neon-stage-playing-core`  
+Current source HEAD at audit: `1a1910aad51538ef556f7b09902f52bdea3b069b`.
+
+- **About:** `PPGUAboutPanel` exists in `Source/PluginEditor.cpp`; `openAboutPanel()` creates workspace panel ID `2103`; the ABOUT button is enabled and opens it. The panel contains established product identity and description only, uses active-theme palette typography/colours, and has no invented version/build metadata or dummy actions. Status: SOURCE IMPLEMENTED / EXACT-HEAD BUILD + RUNTIME + FL STUDIO 20 ACCEPTANCE PENDING.
+- **AUTO SOUND HUNTER / CURATOR:** buttons remain disabled until their real production backends are integrated. No placeholder functionality is claimed.
+- **AutoChords:** current source contains the interactive Circle of Fifths, key/mode selection and eight diatonic chord slots with calculated chord names. This is harmony setup only; MIDI generation/playback/export and progression persistence remain unimplemented.
+- **Skin Gallery fixes:** run `43718887827` completed SUCCESS for SHA `cd4935576c93f6974c6a5af4f319413b3ae03024`, covering the gallery transaction and NEON FORGE restore-label fixes. The run predates the About-panel commits and is not exact-HEAD evidence for current HEAD.
+- **No scope drift:** 27-control parity, nine approved rotary bindings, seven approved FX bypass IDs, APVTS IDs/semantics, DSP/audio callback/MIDI and processor state remain protected; this documentation update does not alter them.
+
+Next visual work remains component parity and acceptance, not factory preset expansion: main-window missing controls, FX EDIT/AMP & TONE parity, Gallery Favorites/keyboard navigation/expanded preview and runtime hot-swap/DPI/ECO, workspace overlay/focus lifecycle, and exact reference pixel comparison. The 15 approved themes SKIN-2…SKIN-16 still require complete preview/hero artwork and runtime acceptance before activation.
