@@ -346,7 +346,7 @@
   "notes": [
     "Canonical identity: SKIN-1 = NEON STAGE = skin-053 / Skin_053.",
     "Visual-only change: APVTS, audio, MIDI, DSP, sampler and control IDs are unchanged.",
-    "All 27 canonical control bindings and 12x16 grid coordinates are preserved.",
+    "All 28 canonical control bindings and 12x16 grid coordinates are preserved.",
     "Theme manifest and SVG decorative assets are prepared; runtime integration and validation remain pending."
   ]
 }
