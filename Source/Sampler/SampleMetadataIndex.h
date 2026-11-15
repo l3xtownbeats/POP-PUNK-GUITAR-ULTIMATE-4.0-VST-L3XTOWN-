@@ -2,6 +2,7 @@
 
 #include <juce_audio_formats/juce_audio_formats.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -35,6 +36,10 @@ struct SampleIndexReport
 class SampleMetadataIndex final
 {
 public:
-    [[nodiscard]] SampleIndexReport scanDirectory(const juce::File& directory) const;
+    // Bound metadata memory/scan work for unusually large or hostile folders.
+    static constexpr std::size_t defaultMaximumSamples = 65536;
+    [[nodiscard]] SampleIndexReport scanDirectory(
+        const juce::File& directory,
+        std::size_t maximumSamples = defaultMaximumSamples) const;
 };
 }
