@@ -2,7 +2,9 @@
 
 **Record type:** user-provided tonal reference / community reconstruction  
 **Received:** 2026-11-15  
-**Status:** ACCEPTED AS RESEARCH INPUT · NOT VERIFIED · NOT READY PRESET DATA
+**Status:** ACCEPTED AS RESEARCH INPUT · USER REVISION 2 RECEIVED 2026-11-15 · NOT VERIFIED · NOT READY PRESET DATA
+
+**Revision note:** This document incorporates the user's repeated, refined submission from 2026-11-15. The latest wording is authoritative where it clarifies the earlier supplied version; the content remains a tonal-reconstruction reference, not verified historical studio data.
 
 ## Evidence and usage rules
 
@@ -31,8 +33,8 @@ Principle: bright, fast, moderate gain; power chords remain intelligible at spee
 ## 2. Artist / era tonal hypotheses
 
 ### Green Day — Billie Joe Armstrong
-- Amp hypothesis: modified Marshall Super Lead / Plexi pair.
-- Starting controls: Gain ~4; Bass 5; Mid 5–6; Treble 5; Presence 5.
+- Amp hypothesis: a pair of modified Marshall Super Lead (Plexi) amplifiers.
+- Starting controls: Gain ~4; Bass 5; Mid 5–6; Treble 5; Presence 5. User's note describes controls around noon and Master/Gain at 10; treat this as an approximate, ambiguous clock-position description rather than a calibrated value.
 - Guitar/pickup references supplied: Les Paul Junior Special with P-90; Fernandes Stratocaster-style copies; later Les Paul with P-90.
 - Tuning note supplied: standard; early records sometimes Eb.
 - Tonal principle: lower gain, balanced EQ, forceful pick attack.
@@ -44,12 +46,12 @@ Principle: bright, fast, moderate gain; power chords remain intelligible at spee
 - Tonal principle: substantial Mesa low end, reduced/controlled mids, bright top.
 
 ### Blink-182 — Mark Hoppus
-- Supplied hypothesis: Marshall JCM900 clean channel driven hard; high master; Seymour Duncan Invader pickup; strong midrange layer against Tom's Mesa low end.
-- Guitar references supplied: Fender guitars with single coils; Fender Precision Bass is noted as the bass reference.
-- **Verification flag:** distinguish the bass rig/role from guitar-track equipment; do not treat the Invader/JCM900 description as a verified guitar recording chain without sources.
+- Supplied hypothesis: Marshall JCM900 clean channel with gain turned up; full volume, with saturation attributed to the pickup/input; Seymour Duncan Invader driven directly into the input; bass full and treble moderate. Intended role in the split: a cutting midrange layer over Tom's Mesa low end.
+- Guitar references supplied: Fender guitars with single coils.
+- **Verification flag:** do not treat the Invader/JCM900 description as a verified guitar recording chain without primary sources.
 
 ### Jerry Finn production-school notes
-- Dual-amp blend hypothesis: Mesa Triple Rectifier + Marshall JCM900; Mesa/Boogie High Gain Amp Switcher named in the supplied notes.
+- Dual-amp blend hypothesis: split one signal to Mesa Triple Rectifier and Marshall JCM900, then blend; Mesa/Boogie High Gain Amp Switcher named in the supplied notes.
 - Rhythm double-tracking, L/R panning, at least two takes.
 - Build the sound during tracking rather than relying on post-added effects.
 - Frequency separation with bass; controlled guitar low end; compression may support fast power chords.
@@ -99,8 +101,8 @@ Principle: bright, fast, moderate gain; power chords remain intelligible at spee
 - Tempo/production notes supplied: 85–110 BPM, live Travis Barker drums, limited quantization, three-chord melodic pop-punk approach.
 
 ### Blink-182 — “One More Time...” (2023)
-- Supplied hypothesis: Fractal Axe-Fx recording workflow for rapid tone changes; recreated Triple Rectifier + JCM900 blend.
-- Tonal target: Mesa-style low end + JCM900-style midrange + bright top, Presence ~6.
+- Supplied hypothesis: all guitars on the album recorded through Fractal Axe-Fx rather than live Mesa amps, reportedly to allow Tom to change tones quickly while rewriting parts; Axe-Fx presets recreate a Triple Rectifier + JCM900 pair.
+- Tonal target: Mesa-style low end + JCM900-style midrange + bright top, Presence around 6.
 - **Verification flag:** the categorical claim that all guitars on the album were recorded through Axe-Fx must be checked against primary interviews/technical sources before being repeated as fact.
 
 ## 3. Amp starting-point recipes
