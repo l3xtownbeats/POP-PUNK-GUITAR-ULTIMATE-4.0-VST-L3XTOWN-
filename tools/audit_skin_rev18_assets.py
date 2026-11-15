@@ -79,7 +79,14 @@ def main() -> int:
     if registry.get("totalSkins") != len(registry.get("themes", [])):
         errors.append("registry totalSkins does not match themes array")
     registry_ids = {x.get("id") for x in registry.get("themes", [])}
-    reference_controls = None
+    try:
+        control_schema = json.loads((root / "control_schema.json").read_text(encoding="utf-8"))
+        required_controls = set(control_schema["x-ppgu-contract"]["requiredControlIds"])
+    except Exception as exc:
+        print(f"FATAL: cannot read canonical control schema: {exc}")
+        return 2
+    if len(required_controls) != 27:
+        errors.append(f"canonical control schema must define exactly 27 IDs, got {len(required_controls)}")
 
     for item in themes:
         label, stable_id, index = item.get("label"), item.get("stableId"), item.get("index")
@@ -102,10 +109,10 @@ def main() -> int:
             if not HEX.fullmatch(str(colour)):
                 errors.append(f"{prefix}: invalid colour for {token}: {colour!r}")
         controls = set(theme.get("controls", {}))
-        if reference_controls is None:
-            reference_controls = controls
-        elif controls != reference_controls:
-            errors.append(f"{prefix}: control-map keys differ from SKIN-1")
+        if controls != required_controls:
+            missing = sorted(required_controls - controls)
+            extra = sorted(controls - required_controls)
+            errors.append(f"{prefix}: control-map must match the canonical 27 IDs (missing={missing}, extra={extra})")
         assets = theme.get("assets", {})
         for key, rel in assets.items():
             path = folder / rel
