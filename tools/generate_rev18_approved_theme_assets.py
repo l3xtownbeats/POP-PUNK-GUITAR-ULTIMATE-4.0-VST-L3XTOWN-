@@ -634,7 +634,12 @@ def main():
         generate_theme(args.root,item,controls,args.check)
     sequence["status"]="APPROVED_SIX_THEME_FULL_ASSET_PACK_GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     for item in sequence["themes"]:
-        item["status"]="FULL_ASSET_PACK_GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
+        item["assetPackStatus"]="GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
+    sequence["pending"]=[
+        "G1-G4 validation and PNG CRC checks.",
+        "Canonical registry/gallery registration after asset validation.",
+        "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance."
+    ]
     sequence_raw=(json.dumps(sequence,indent=2,ensure_ascii=False)+"\n").encode()
     write_metadata(sequence_path,sequence_raw,args.check)
     print("REV18 approved theme asset generation complete; registry activation is intentionally a separate validated step.")
