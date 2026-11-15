@@ -1028,3 +1028,13 @@ The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.
 **Validation status:** workflow definition committed; no completed workflow-run evidence has been retrieved. Do not mark CTest/CI PASS until the run result is available. Missing PNG masters/runtime assets remain expected audit warnings at this stage.
 
 **Status:** AUDIT PATH FIX COMMITTED / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING.
+
+
+## 2026-11-15 — Premium theme generator: first CI failure and correction
+
+**Run:** GitHub Actions run `43692794120`, PR #45, head `21ece651`.  
+**Observed failure:** generator stopped in `stage_background()` with Pillow `ValueError: image has wrong mode` when the guitar-art helper returned RGB and the final shadow composite expected RGBA.
+
+**Correction:** commit `50f9506a` normalizes the image to RGBA before alpha compositing. This is an isolated rendering-pipeline correction; approved theme files, palette tokens, existing SKIN-1 hero/preview binaries, and runtime behavior are unchanged.
+
+**Status:** first generator run FAILED as recorded; mode correction committed; rerun and all downstream deterministic/27-control/strict-asset checks remain PENDING. No generated asset pack or G1–G4 PASS is claimed.
