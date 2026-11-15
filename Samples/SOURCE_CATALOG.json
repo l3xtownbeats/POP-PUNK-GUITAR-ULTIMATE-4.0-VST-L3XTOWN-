@@ -1,0 +1,247 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "branch": "POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03",
+  "policy": "NATURAL_SAMPLES_ONLY",
+  "status": "SOURCE_BATCH_DEFINED; CI_DOWNLOAD_AND_LICENSE_PRESENCE_VALIDATED; FINAL_VST3_BUILD_PENDING",
+  "sourceBatchEvidence": {
+    "branch": "work/ppgu-rev18-premium-theme-assets-rerun",
+    "commit": "98e92674dfa2097e8ebd1caf34b97136fe06ee1a",
+    "workflowRun": 43701170834,
+    "downloadStep": "success",
+    "licenseValidationStep": "success",
+    "buildStep": "in_progress"
+  },
+  "sources": [
+    {
+      "id": "meta-steel-guitar",
+      "name": "Meta Open Sound Steel Guitar",
+      "creator": "Meta Creative Audio",
+      "repository": "https://github.com/facebookincubator/Meta-open-sound",
+      "license": "CC0-1.0",
+      "role": [
+        "acoustic",
+        "steel-string",
+        "multisample",
+        "melody"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED",
+      "runtimeNote": "SFZ standard zones; 375 samples, E2-C6, three velocity layers per clearance record."
+    },
+    {
+      "id": "meta-nylon-guitar",
+      "name": "Meta Open Sound Nylon Guitar",
+      "creator": "Meta Creative Audio",
+      "repository": "https://github.com/facebookincubator/Meta-open-sound",
+      "license": "CC0-1.0",
+      "role": [
+        "acoustic",
+        "nylon",
+        "classical",
+        "multisample",
+        "melody"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED",
+      "runtimeNote": "Keyswitch and velocity-crossfade opcodes need runtime coverage before claiming full articulation support."
+    },
+    {
+      "id": "freepats-clean",
+      "name": "FSBS Electric Guitar Clean",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/electric-guitar-FSBS-clean",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "clean",
+        "pop-rock",
+        "indie",
+        "melody"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "freepats-dist1",
+      "name": "FSBS Electric Guitar Distortion 1",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/electric-guitar-FSBS-dist1",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "distortion",
+        "punk-rock",
+        "pop-punk-candidate",
+        "hard-rock"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "freepats-dist2",
+      "name": "FSBS Electric Guitar Distortion 2",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/electric-guitar-FSBS-dist2",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "distortion",
+        "punk-rock",
+        "pop-punk-candidate",
+        "hard-rock"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "freepats-direct",
+      "name": "FSBS Electric Guitar Direct",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/electric-guitar-FSBS-direct",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "DI",
+        "amp-processing-source",
+        "multi-genre"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "freepats-jazz",
+      "name": "FSBS Electric Guitar Jazz",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/electric-guitar-FSBS-jazz",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "jazz-clean",
+        "clean",
+        "melody"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "freepats-spanish-classical",
+      "name": "Spanish Classical Guitar",
+      "creator": "FreePats",
+      "repository": "https://github.com/freepats/spanish-classical-guitar",
+      "license": "CC0-1.0",
+      "role": [
+        "acoustic",
+        "classical",
+        "nylon",
+        "melody"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "karoryfer-black-and-green",
+      "name": "Black And Green Guitars",
+      "creator": "Karoryfer Samples",
+      "repository": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "hollowbody",
+        "clean",
+        "multisample"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "karoryfer-emilyguitar",
+      "name": "Emilyguitar",
+      "creator": "Karoryfer Samples",
+      "repository": "https://github.com/sfzinstruments/karoryfer.emilyguitar",
+      "license": "CC0-1.0",
+      "role": [
+        "acoustic-electric",
+        "general-purpose",
+        "multisample"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    },
+    {
+      "id": "karoryfer-shinyguitar",
+      "name": "Shinyguitar",
+      "creator": "Karoryfer Samples",
+      "repository": "https://github.com/sfzinstruments/karoryfer.shinyguitar",
+      "license": "CC0-1.0",
+      "role": [
+        "electric",
+        "archtop",
+        "clean",
+        "jazz",
+        "multisample"
+      ],
+      "status": "CI_SOURCE_AND_LICENSE_CHECK_PASSED"
+    }
+  ],
+  "expansionTargets": [
+    {
+      "family": "Pattern",
+      "targets": [
+        "pop-punk power-chord progressions",
+        "punk down/up strums",
+        "palm-muted eighths and sixteenths",
+        "alt-rock and emo riffs",
+        "clean arpeggios",
+        "indie jangle",
+        "classic-rock rhythm and fills",
+        "acoustic strumming and fingerpicking"
+      ],
+      "status": "RESEARCH_AND_RECORDING_EXPANSION"
+    },
+    {
+      "family": "OneShots",
+      "targets": [
+        "single power chords",
+        "muted power chords",
+        "dead-note hits",
+        "pick attacks",
+        "string scrapes",
+        "slides",
+        "bends",
+        "harmonics",
+        "natural release and fret noises"
+      ],
+      "status": "RESEARCH_AND_RECORDING_EXPANSION"
+    },
+    {
+      "family": "Loops",
+      "targets": [
+        "dry electric riffs",
+        "amped pop-punk rhythms",
+        "punk-rock downstrokes",
+        "alternative/indie clean loops",
+        "acoustic strums",
+        "arpeggio phrases",
+        "fills and transitions"
+      ],
+      "metadataRequired": [
+        "BPM",
+        "key",
+        "meter",
+        "tuning",
+        "duration",
+        "articulation",
+        "dryWet",
+        "source",
+        "license",
+        "sha256"
+      ],
+      "status": "RESEARCH_AND_RECORDING_EXPANSION"
+    }
+  ],
+  "licensePolicy": {
+    "factoryAllow": [
+      "CC0_PD_VERIFIED",
+      "CC_BY_ATTRIBUTION",
+      "EXPLICIT_PERMISSION",
+      "OWN_RECORDING",
+      "OWN_DSP",
+      "COMMERCIAL_REDISTRIBUTION"
+    ],
+    "yellow": "manual review",
+    "red": "never include in factory bank",
+    "gold": "human listening approval",
+    "looperman": "RED until explicit written permission covers commercial VST embedding and sample-library redistribution"
+  }
+}
