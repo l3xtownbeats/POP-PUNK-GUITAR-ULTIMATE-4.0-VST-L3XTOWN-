@@ -178,6 +178,14 @@ int main()
     const auto tokenLimited = parseText(tooManyTokens + "\n", base);
     CHECK(!tokenLimited.succeeded());
     CHECK(!tokenLimited.errors.empty());
+    std::string tooManyLines;
+    tooManyLines.reserve(maximumSfzLines + 1U);
+    for (std::size_t line = 0; line <= maximumSfzLines; ++line)
+        tooManyLines += "\n";
+    const auto lineLimited = parseText(tooManyLines, base);
+    CHECK(!lineLimited.succeeded());
+    CHECK(!lineLimited.errors.empty());
+
     std::string tooManyRegions;
     tooManyRegions.reserve((maximumSfzRegions + 1U) * 32U);
     for (std::size_t region = 0; region <= maximumSfzRegions; ++region)
