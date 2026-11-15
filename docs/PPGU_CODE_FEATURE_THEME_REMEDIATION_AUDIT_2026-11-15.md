@@ -97,3 +97,12 @@ Current source review:
 4. Exact-HEAD Windows x64 Release, full CTest, pluginval strictness 5 and FL Studio 20 host review have not been run for commit `99e28835798ef4586256e80dcf650b0a64aeea4e`.
 
 **No PASS claim:** this revalidation is a source inspection plus a test-source change. It is not a build, runtime, pluginval or DAW acceptance result.
+
+
+### Processor-level EQ response test — 2026-11-15
+
+- Added a real `processBlock()` integration check in `tests/ProcessorPatternIntegrationTests.cpp`: compare the same synthetic SFZ playback with neutral EQ versus +9 dB Low Shelf at 300 Hz.
+- Existing Chorus and Reverb oversized-block tests remain in place.
+- Test fixture uses 24 parameter entries and explicit EQ state per render.
+- Commit: `818520fadcdcfbd1ecd73651f0ecfc210033eeee`.
+- Status: SOURCE TEST ADDED; exact-SHA build and execution pending. No PASS claim until CI.
