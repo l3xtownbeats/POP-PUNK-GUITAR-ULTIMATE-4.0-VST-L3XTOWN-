@@ -80,9 +80,14 @@ public:
         // as its panel content. The previous fixed-size default-font title made
         // auxiliary window headers visibly diverge from the active skin.
         if (palette.uiTypeface.isNotEmpty())
+        {
+            const auto weight = palette.typographyWeight.equalsIgnoreCase("normal")
+                ? juce::Font::plain : juce::Font::bold;
             title.setFont(juce::Font(palette.uiTypeface,
                                      14.0f * palette.fontScale,
-                                     juce::Font::bold));
+                                     weight)
+                              .withExtraKerningFactor(palette.letterSpacing));
+        }
 
         if (content != nullptr)
             if (auto* themed = dynamic_cast<PPGUThemeAwarePanel*>(content.get()))
