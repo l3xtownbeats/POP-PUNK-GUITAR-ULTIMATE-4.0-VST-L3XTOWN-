@@ -99,7 +99,7 @@ public:
         addAndMakeVisible(familyFilter);
 
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
-        countLabel.setFont(makeThemeFont(palette, 10.5.0f, false, true));
+        countLabel.setFont(makeThemeFont(palette, 10.5f, false, true));
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
@@ -188,7 +188,7 @@ private:
             auto textArea = bounds.reduced(10.0f, 8.0f);
             textArea.removeFromTop(78);
             g.setColour(palette.token("text_primary"));
-            g.setFont(makeThemeFont(palette, 12.5.0f, false, true));
+            g.setFont(makeThemeFont(palette, 12.5f, false, true));
             g.drawText(item.name, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
             g.setColour(palette.token("text_secondary"));
             g.setFont(makeThemeFont(palette, 9.0f, false, false));
@@ -352,7 +352,7 @@ public:
         gapLabel.setText("SPACE BETWEEN PANELS", juce::dontSendNotification);
         for (auto* label : { &scaleLabel, &gapLabel })
         {
-            label->setFont(makeThemeFont(palette, 9.5.0f, false, true));
+            label->setFont(makeThemeFont(palette, 9.5f, false, true));
             label->setColour(juce::Label::textColourId, palette.token("accent"));
             addAndMakeVisible(*label);
         }
@@ -536,7 +536,7 @@ public:
         auto area = getLocalBounds().reduced(14, 5);
         auto harmony = area.removeFromLeft(190);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
+        g.setFont(makeThemeFont(palette, 8.5f, false, true));
         g.drawText("LIVE HARMONY", harmony.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.accent);
         g.setFont(makeThemeFont(palette, 23.0f, false, true));
@@ -545,7 +545,7 @@ public:
         area.removeFromLeft(10);
         auto keyArea = area.removeFromRight(148);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
+        g.setFont(makeThemeFont(palette, 8.5f, false, true));
         g.drawText("SCALE / KEY", keyArea.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.textPrimary);
         g.setFont(makeThemeFont(palette, 12.0f, false, true));
@@ -553,7 +553,7 @@ public:
 
         area.removeFromRight(8);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
+        g.setFont(makeThemeFont(palette, 8.5f, false, true));
         g.drawText("NOTES HELD", area.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.textPrimary);
         g.setFont(makeThemeFont(palette, 12.0f, false, false));
@@ -1144,7 +1144,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(titleLabel);
     subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
-    subtitleLabel.setFont(makeThemeFont(themeManager.getPalette(), 9.5.0f, false, true));
+    subtitleLabel.setFont(makeThemeFont(themeManager.getPalette(), 9.5f, false, true));
     subtitleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
     addAndMakeVisible(subtitleLabel);
     presetBox.setTextWhenNothingSelected("FACTORY PRESET CATALOG");
@@ -1353,7 +1353,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
     s.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     addAndMakeVisible(s);
     l.setText(name, juce::dontSendNotification);
-    l.setFont(makeThemeFont(themeManager.getPalette(), 9.5.0f, false, true));
+    l.setFont(makeThemeFont(themeManager.getPalette(), 9.5f, false, true));
     l.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_secondary"));
     l.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(l);
@@ -1376,7 +1376,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
     // Section chrome belongs to the visual shell; it does not create or
     // reassign controls and follows the active theme's semantic palette.
     g.setColour(p.token("text_secondary"));
-    g.setFont(makeThemeFont(p, 9.5.0f, false, true));
+    g.setFont(makeThemeFont(p, 9.5f, false, true));
     auto heading = area.reduced(15, 7).removeFromTop(19);
     g.drawText(sectionTitle, heading, juce::Justification::centredLeft, true);
 
