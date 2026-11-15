@@ -22,7 +22,7 @@ def main():
  missing=[]; resolved_via_fallback=0
  for sfz in maps:
   text=sfz.read_text(encoding="utf-8",errors="replace")
-  defaults=re.findall(r'^\\s*default_path\\s*=\\s*["\\']?([^"\\'\\s]+)',text,re.I|re.M)
+  defaults=re.findall(r'^\s*default_path\s*=\s*["\']?([^"\'\s]+)',text,re.I|re.M)
   default_path=defaults[-1].replace("\\\\","/").replace("\\","/") if defaults else ""
   for raw in RX.findall(text):
    normalized=raw.replace("\\\\","/").replace("\\","/")
@@ -51,7 +51,7 @@ def main():
   "audio":[{"path":p.relative_to(root).as_posix(),"bytes":p.stat().st_size,"sha256":digest(p)} for p in audio],
   "sfzMappings":[p.relative_to(root).as_posix() for p in maps],"unresolvedSampleReferences":missing,
   "limitations":["Inventory does not prove license compatibility, guitar identity, audible quality, SNR, clipping, DC offset, or runtime playback correctness."]}
- a.output.parent.mkdir(parents=True,exist_ok=True); a.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\\n",encoding="utf-8")
+ a.output.parent.mkdir(parents=True,exist_ok=True); a.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
  print(f"Sample audit: {len(audio)} audio files, {len(maps)} SFZ maps, {len(licenses)} license files, {resolved_via_fallback} uniquely resolved by suffix, {len(missing)} unresolved references.")
  for item in missing[:20]: print("UNRESOLVED:",json.dumps(item,ensure_ascii=False))
  return 2 if missing else 0
