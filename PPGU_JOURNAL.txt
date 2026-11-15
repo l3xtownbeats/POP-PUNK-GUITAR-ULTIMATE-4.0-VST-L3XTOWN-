@@ -678,3 +678,12 @@ Artist/band references: Blink-182 / Tom DeLonge / Box Car Racer / Angels & Airwa
 Сохраняются quality/licensing/10GB/master library/500+500 READY и технические ограничения: 27 controls, seven approved bypass IDs, existing APVTS/state contract, no fake functionality. READY требует реальных resources, MIDI playback, FX chain, persistence, level matching, listening review and regression tests.
 
 Статус: USER ANALYZED / APPROVED / CONFIRMED / FIXED FOR PRESET SOUND DESIGN. Implementation and acceptance remain PENDING.
+
+
+2026-11-15 — PRESET DESIGN RELEVANCE RULE (USER CONFIRMED)
+
+Пользователь уточнил: использовать из всей утверждённой информации только то, что необходимо для конкретных пресетов и получения нужного итогового гитарного звучания. Не включать все гитары/группы/усилители/эффекты в каждый пресет. Сначала определить целевой звук и музыкальную роль, затем выбрать минимально достаточные source/guitar character, amp/cab, FX, EQ/gain, articulations и performance settings. Не добавлять эффект или параметр без слышимой/функциональной цели. Качество итогового звука важнее числа эффектов и объёма описания. Оставлять только полезные пользователю объяснения о характере, назначении и ключевых способах корректировки тембра.
+
+Artist/band refs — ориентиры, не обязательные компоненты каждого пресета; не выдавать предположительные модели источников и exact artist settings за факты. Сохранять licensing/quality gates, 27-control parity, seven approved FX bypass IDs и существующий APVTS/state contract.
+
+Статус: USER CONFIRMED / APPROVED / FIXED. Applies to all future preset design and sound selection.
