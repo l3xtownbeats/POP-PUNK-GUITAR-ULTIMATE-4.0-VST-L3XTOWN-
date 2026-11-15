@@ -865,3 +865,15 @@ User reconfirmed continuation of development. Following the authoritative journa
 - Inventory/status documentation commit: 806b6b39ca9644ff50fb5e1b07db91e77c4d660b.
 
 Acceptance status: SOURCE IMPLEMENTED ONLY. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime resize/theme checks and FL Studio 20 interaction acceptance have not yet been run or confirmed. This does not complete NEON STAGE and does not authorize transition to sound-library work. The approved phase order and all control/APVTS/FX bypass constraints remain unchanged.
+
+2026-11-15 — USER APPROVAL: NEON STAGE ABOUT PANEL BASELINE CONFIRMED
+
+The user explicitly APPROVED, CONFIRMED and FIXED the implemented NEON STAGE About Panel as part of the project baseline. Preserve the current approved implementation and its factual-content constraints:
+- Existing ABOUT button opens PPGUAboutPanel in the auxiliary workspace (panel ID 2103).
+- Panel displays only established product identity/description and follows the active theme palette.
+- Do not invent version/build metadata or claim unimplemented capabilities.
+- AUTO SOUND HUNTER and CURATOR remain disabled until their real backends exist.
+- This approval confirms the source implementation as an approved project baseline; it does not mean build, CTest, pluginval, runtime/theme/resize checks or FL Studio 20 acceptance have passed. Those remain pending until evidenced.
+- Continue the current NEON STAGE visual completion phase and preserve the locked phase order and all existing control/APVTS/FX bypass/inventory constraints.
+
+STATUS: USER APPROVED · CONFIRMED · FIXED IN PROJECT BASE.
