@@ -10,6 +10,9 @@ SOURCE = (ROOT / "Source" / "PluginEditor.cpp").read_text(encoding="utf-8")
 START = SOURCE.index("class PPGUSkinGalleryPanel")
 END = SOURCE.index("// UI-only settings panel", START)
 GALLERY = SOURCE[START:END]
+OPEN_START = SOURCE.index("void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()")
+OPEN_END = SOURCE.index("void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()", OPEN_START)
+OPEN_GALLERY = SOURCE[OPEN_START:OPEN_END]
 
 
 class SkinGalleryInteractionContractTests(unittest.TestCase):
@@ -80,6 +83,19 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         preview_layout = GALLERY[preview_start:preview_end]
         self.assertIn("emptyResultsLabel.setVisible(false)", preview_layout)
         self.assertIn("emptyResultsLabel.setBounds(viewport.getBounds())", GALLERY)
+
+    def test_favourites_are_restored_only_for_registered_skin_ids(self) -> None:
+        self.assertIn('getValue("ppguGalleryFavourites")', OPEN_GALLERY)
+        self.assertIn("juce::StringArray::fromTokens(storedFavourites, \"|\", \"\")", OPEN_GALLERY)
+        self.assertIn("std::find_if(skins.begin(), skins.end()", OPEN_GALLERY)
+        self.assertIn("knownSkin != skins.end()", OPEN_GALLERY)
+        self.assertIn("!favourites.contains(id)", OPEN_GALLERY)
+
+    def test_favourites_are_persisted_to_user_properties(self) -> None:
+        self.assertIn("std::move(favourites)", OPEN_GALLERY)
+        self.assertIn('setValue("ppguGalleryFavourites", ids.joinIntoString("|"))', OPEN_GALLERY)
+        self.assertIn("settings->saveIfNeeded()", OPEN_GALLERY)
+        self.assertIn("saveFavourites(favourites)", GALLERY)
 
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
