@@ -2779,3 +2779,65 @@ ARTICULATIONS и RHYTHM PATTERNS — самостоятельные оси вы�
 
 **FINAL LOCK:** WINDOW 1 = PRESETS (GENRE → ARTIST/BAND → PART/PRESET). WINDOW 2 = PLAYING STYLE / PATTERN RHYTHM (independent ARTICULATIONS selector + independent RHYTHM PATTERN selector in the same area). Требование утверждено пользователем 2026-11-15; повторное обсуждение и согласование не требуется.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — USER CONFIRMATION LOCK: MELODY THREE-WINDOW WORKFLOW
+==============================================================================
+
+**Статус: FINAL USER APPROVAL — FIXED REQUIREMENT. NO FURTHER DISCUSSION OR RECONFIRMATION REQUIRED.**
+
+Пользователь окончательно утвердил отдельную трёхоконную структуру для режима **MELODY**. Эта структура относится только к MELODY workflow и не заменяет, не переставляет и не изменяет ранее утверждённую двухоконную структуру PRESETS → PLAYING STYLE / PATTERN RHYTHM для другого workflow.
+
+### WINDOW 1 — PRESETS
+
+Окно предназначено для выбора готовой звуковой основы / артистического пресета либо прямого выбора тембра.
+
+Примеры:
+- **BLINK-182 → LEAD**
+- **SUM 41 → LEAD**
+- **SIMPLE PLAN → LEAD**
+- **CLEAN**
+- **ACOUSTIC CLEAN**
+- **POP PUNK LEAD**
+
+Пользователь может выбрать готовый artist/band preset (например, BLINK-182 → LEAD) или непосредственно CLEAN. CLEAN является самостоятельным выбором звуковой основы, а не STYLE и не PATTERN.
+
+### WINDOW 2 — STYLE
+
+Окно предназначено для выбора типа/характера мелодической партии.
+
+Примеры:
+- **LEAD**
+- MELODY
+- RIFF
+- OCTAVE MELODY
+- ARPEGGIO
+- HOOK
+- POWER CHORD MELODY
+
+STYLE = LEAD остаётся отдельным выбором второго окна, даже если слово LEAD также присутствует в названии готового пресета первого окна. Эти значения относятся к разным уровням выбора и не должны автоматически объединяться.
+
+### WINDOW 3 — PATTERN
+
+Окно предназначено для выбора конкретного мелодического рисунка / последовательности нот.
+
+Примеры:
+- MELODY PATTERN 01
+- VERSE MELODY
+- CHORUS MELODY
+- LEAD HOOK
+- SKATE PUNK MELODY
+- OCTAVE RIFF
+
+### SEPARATION OF RESPONSIBILITIES
+
+- WINDOW 1 / PRESETS выбирает звуковую основу и/или готовый artist/band preset.
+- WINDOW 2 / STYLE определяет тип мелодической партии.
+- WINDOW 3 / PATTERN определяет конкретный нотный рисунок и последовательность исполнения.
+- Не смешивать PRESETS, STYLE и PATTERN в один список или один неоднозначный параметр.
+- Сохранять независимую ответственность каждого этапа; изменение одного этапа не должно без явной предусмотренной логики подменять смысл двух других.
+- Эта MELODY-спецификация не меняет и не отменяет ранее зафиксированный workflow WINDOW 1 = PRESETS и WINDOW 2 = PLAYING STYLE / PATTERN RHYTHM с независимыми ARTICULATIONS и RHYTHM PATTERN selectors.
+
+**FINAL LOCK:** MELODY = WINDOW 1 PRESETS → WINDOW 2 STYLE → WINDOW 3 PATTERN. Пользователь утвердил структуру 2026-11-15; повторное обсуждение и согласование не требуются. Запись фиксирует требование, но сама по себе не означает, что UI уже реализован или прошёл runtime/host QA.
+==============================================================================
