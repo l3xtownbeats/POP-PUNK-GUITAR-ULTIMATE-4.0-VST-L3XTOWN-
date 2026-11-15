@@ -75,6 +75,7 @@ int main()
             return 1;
         }
 
+    const auto stressed = ppgu::dsp::makePeaking(sampleRate, 3000.0f, 0.2f, 18.0f);
     const auto interpolatedStart = ppgu::dsp::interpolate(neutralMid, stressed, 0.0f);
     const auto interpolatedEnd = ppgu::dsp::interpolate(neutralMid, stressed, 1.0f);
     const auto interpolatedHalf = ppgu::dsp::interpolate(neutralMid, stressed, 0.5f);
@@ -88,7 +89,6 @@ int main()
     }
 
     ppgu::dsp::BiquadState state;
-    const auto stressed = ppgu::dsp::makePeaking(sampleRate, 3000.0f, 0.2f, 18.0f);
     for (int i = 0; i < 200000; ++i)
     {
         const float input = 0.5f * std::sin(6.2831853071795864769f * 440.0f
