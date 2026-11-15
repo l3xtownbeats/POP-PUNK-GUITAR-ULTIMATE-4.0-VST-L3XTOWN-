@@ -43,6 +43,10 @@ public:
     void loadSfzFileAsync(const juce::File& sfzFile,
                           std::function<void(ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
+    void setSampleLibraryRootDirectory(const juce::File& directory);
+    [[nodiscard]] juce::File getSampleLibraryRootDirectory() const;
+    void loadFactorySampleProfileAsync(const juce::String& profile, float drive,
+                                       std::function<void(ppgu::sampler::LoadReport)> completion);
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
@@ -94,6 +98,7 @@ private:
     // Protect the serialized library path from concurrent UI/worker/state callbacks.
     mutable juce::CriticalSection sampleStateLock;
     juce::String currentSfzFilePath;
+    juce::String sampleLibraryRootPath;
     // Monotonic request token: only the newest requested bank may publish its
     // path/callback. A single worker serializes sampler mutations; stale queued
     // jobs are skipped before doing disk/index work.

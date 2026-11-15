@@ -410,10 +410,21 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     };
     addAndMakeVisible(fxOpenButton);
     loadButton.setButtonText("IMPORT SOUNDS");
-    loadButton.setTooltip("Current build imports SFZ instruments and their referenced WAV samples.");
+    loadButton.setTooltip("Load a custom SFZ or select the bundled Samples folder for automatic factory-bank switching.");
     loadButton.setColour(juce::TextButton::buttonColourId, pink);
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-    loadButton.onClick = [this] { chooseSfzFile(); };
+    loadButton.onClick = [this] {
+        juce::PopupMenu menu;
+        menu.addItem(1, "Load Custom SFZ...");
+        menu.addItem(2, "Choose Bundled Samples Folder...");
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+        menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&loadButton),
+            [safeThis](int result) {
+                if (safeThis == nullptr) return;
+                if (result == 1) safeThis->chooseSfzFile();
+                else if (result == 2) safeThis->chooseSampleLibraryFolder();
+            });
+    };
     addAndMakeVisible(loadButton);
 
     skinsButton.setTooltip("Choose one of 10 interface skins. The selected theme is saved with this plugin instance.");
@@ -899,9 +910,36 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyFactoryPreset(int index)
     else
     {
         auto message = "PRESET LOADED: " + preset.name + "  /  " + preset.soundCharacter;
-        if (acousticProfile)
-            message += "  /  LOAD AN ACOUSTIC SFZ BANK FOR ACOUSTIC SAMPLES";
-        statusLabel.setText(message, juce::dontSendNotification);
+        if (processor.getSampleLibraryRootDirectory().isDirectory())
+        {
+            const auto bankProfile = acousticProfile
+                ? (preset.sampleProfile.containsIgnoreCase("nylon") ? "acoustic-nylon" : "acoustic-steel")
+                : "electric";
+            statusLabel.setText(message + "  /  SWITCHING FACTORY SAMPLE BANK...", juce::dontSendNotification);
+            juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+            const auto presetName = preset.name;
+            const float presetDrive = preset.drive;
+            processor.loadFactorySampleProfileAsync(bankProfile, presetDrive,
+                [safeThis, presetName](ppgu::sampler::LoadReport report)
+                {
+                    if (safeThis == nullptr) return;
+                    if (report.success)
+                        safeThis->statusLabel.setText("READY  /  " + presetName + "  /  "
+                            + juce::String(static_cast<int>(report.loadedRegions)) + " REGIONS",
+                            juce::dontSendNotification);
+                    else
+                        safeThis->statusLabel.setText("PRESET LOADED, SAMPLE BANK NOT READY  /  "
+                            + (report.errors.empty() ? juce::String("UNKNOWN SFZ ERROR")
+                                                     : juce::String(report.errors.front())),
+                            juce::dontSendNotification);
+                });
+        }
+        else
+        {
+            if (acousticProfile)
+                message += "  /  SET SAMPLES FOLDER TO AUTO-LOAD STEEL/NYLON BANK";
+            statusLabel.setText(message, juce::dontSendNotification);
+        }
     }
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
@@ -920,6 +958,41 @@ void PopPunkGuitarUltimateAudioProcessorEditor::clearFactoryPreset()
     for (const auto& parameterId : presetOwnedParameters)
         if (auto* parameter = processor.parameters.getParameter(parameterId))
             parameter->setValueNotifyingHost(parameter->getDefaultValue());
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::chooseSampleLibraryFolder()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Choose the bundled Samples folder",
+        juce::File::getSpecialLocation(juce::File::userHomeDirectory));
+    juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode
+                                 | juce::FileBrowserComponent::canSelectDirectories,
+        [safeThis](const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr) return;
+            const auto selected = chooser.getResult();
+            if (!selected.isDirectory()) return;
+
+            safeThis->processor.setSampleLibraryRootDirectory(selected);
+            safeThis->statusLabel.setText("SAMPLES FOLDER SET  /  LOADING ELECTRIC CLEAN BANK...", juce::dontSendNotification);
+            safeThis->loadButton.setEnabled(false);
+            safeThis->processor.loadFactorySampleProfileAsync("electric", 0.0f,
+                [safeThis](ppgu::sampler::LoadReport report)
+                {
+                    if (safeThis == nullptr) return;
+                    safeThis->loadButton.setEnabled(true);
+                    if (report.success)
+                        safeThis->statusLabel.setText("FACTORY BANK READY  /  "
+                            + juce::String(static_cast<int>(report.loadedRegions)) + " REGIONS  /  "
+                            + juce::String(static_cast<int>(report.loadedSamples)) + " WAV SAMPLES",
+                            juce::dontSendNotification);
+                    else
+                        safeThis->statusLabel.setText(report.errors.empty()
+                            ? "FACTORY SAMPLE BANK LOAD FAILED" : juce::String(report.errors.front()),
+                            juce::dontSendNotification);
+                });
+        });
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::chooseSfzFile()
