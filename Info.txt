@@ -2867,3 +2867,7 @@ These images are implementation references, not permission to show an unimplemen
 
 **Status:** AUDIT FALSE POSITIVE FIXED / SECURITY TESTS PASS LOCALLY / WORKFLOW STEP ADDED / EXACT-HEAD CI PENDING / 15 THEME PREVIEW-HERO PAIRS STILL PENDING.
 ==============================================================================
+
+## 2026-11-15 — NEON STAGE approved-layout GUI implementation pass
+
+**Статус:** SOURCE UPDATED / BUILD AND VISUAL ACCEPTANCE PENDING. На единственной активной рабочей ветке REV.18 переразложен существующий JUCE Editor по утверждённым зонам: TOP BAR, PRESET LIBRARY, PLAYING CORE, AMP & TONE, семимодульная FX CHAIN и нижняя PERFORMANCE/MIDI-зона. Шесть существующих performance-контролов вынесены в центральную PLAYING CORE, три существующих EQ-контрола — в AMP & TONE; все девять APVTS attachments и семь утверждённых FX bypass IDs сохранены. Добавлен показ hero artwork активной темы из её theme.json; при отсутствии ассета применяется только графический fallback. В браузере отображается только вычисляемая информация реального factory catalog. Новые функции, APVTS IDs и FX-переключатели не добавлялись; отключённые точки входа остаются отключёнными. Изменены только Source/PluginEditor.cpp и Source/PluginEditor.h. Windows Release, CTest, pluginval, runtime screenshot и FL Studio 20 host acceptance ещё не выполнены и не заявляются.

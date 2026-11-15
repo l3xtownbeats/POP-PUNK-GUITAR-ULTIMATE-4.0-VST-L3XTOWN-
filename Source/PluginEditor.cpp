@@ -1348,8 +1348,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadSavedSkin();
     applyPalette();
     uiSettingsReady = true;
-    setSize(juce::jlimit(900, 1600, restoredWidth),
-            juce::jlimit(640, 1100, restoredHeight));
+    setSize(juce::jlimit(900, 1600, restoredWidth == 1024 ? 1280 : restoredWidth),
+            juce::jlimit(640, 1100, restoredHeight == 700 ? 800 : restoredHeight));
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
@@ -1394,27 +1394,26 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
 {
     const auto& p = themeManager.getPalette();
     const auto bounds = area.toFloat();
-
+    g.setColour(p.token("shadow").withAlpha(0.72f));
+    g.fillRoundedRectangle(bounds.translated(0.0f, 4.0f), 13.0f);
     g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
-                                           bounds.getX(), bounds.getY(),
-                                           p.token("panel"),
-                                           bounds.getX(), bounds.getBottom(), false));
-    g.fillRoundedRectangle(bounds, 12.0f);
-    g.setColour(p.token("control_border").withAlpha(0.78f));
-    g.drawRoundedRectangle(bounds.reduced(0.5f), 12.0f, 1.0f);
-
-    // Section chrome belongs to the visual shell; it does not create or
-    // reassign controls and follows the active theme's semantic palette.
-    g.setColour(p.token("text_secondary"));
-    g.setFont(makeThemeFont(p, 9.5f, false, true));
-    auto heading = area.reduced(15, 7).removeFromTop(19);
-    g.drawText(sectionTitle, heading, juce::Justification::centredLeft, true);
-
-    g.setColour(p.token("accent").withAlpha(0.9f));
-    g.fillRoundedRectangle(bounds.getX() + 15.0f, bounds.getY() + 29.0f,
-                           34.0f, 2.0f, 1.0f);
-    g.setColour(p.token("control_border").withAlpha(0.45f));
-    g.drawHorizontalLine(static_cast<int>(bounds.getY() + 33.0f),
+        bounds.getX(), bounds.getY(), p.token("panel"),
+        bounds.getX(), bounds.getBottom(), false));
+    g.fillRoundedRectangle(bounds, 13.0f);
+    g.setColour(p.token("control_border").withAlpha(0.88f));
+    g.drawRoundedRectangle(bounds.reduced(0.5f), 13.0f, 1.0f);
+    g.setColour(p.token("highlight").withAlpha(0.12f));
+    g.drawHorizontalLine(static_cast<int>(bounds.getY() + 1.0f),
+                         bounds.getX() + 13.0f, bounds.getRight() - 13.0f);
+    auto heading = area.reduced(15, 7).removeFromTop(22);
+    g.setColour(p.token("text_primary"));
+    g.setFont(makeThemeFont(p, 10.0f, false, true));
+    g.drawText(sectionTitle.toUpperCase(), heading, juce::Justification::centredLeft, true);
+    g.setColour(p.token("accent"));
+    g.fillRoundedRectangle(bounds.getX() + 15.0f, bounds.getY() + 30.0f,
+                           42.0f, 2.5f, 1.25f);
+    g.setColour(p.token("control_border").withAlpha(0.55f));
+    g.drawHorizontalLine(static_cast<int>(bounds.getY() + 35.0f),
                          bounds.getX() + 15.0f, bounds.getRight() - 15.0f);
 }
 
@@ -1422,117 +1421,229 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
-    auto area = getLocalBounds().reduced(14);
-    area.removeFromTop(48);
-    area.removeFromBottom(132);
-    area.removeFromTop(8);
+    auto outer = getLocalBounds().reduced(12);
+    auto header = outer.removeFromTop(56).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"), header.getX(), header.getY(),
+        p.token("window_bg"), header.getX(), header.getBottom(), false));
+    g.fillRoundedRectangle(header, 11.0f);
+    g.setColour(p.token("control_border").withAlpha(0.8f));
+    g.drawRoundedRectangle(header.reduced(0.5f), 11.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.85f));
+    g.fillRoundedRectangle(header.getX() + 12.0f, header.getBottom() - 3.0f, 62.0f, 2.0f, 1.0f);
+    auto footer = outer.removeFromBottom(132);
+    g.setColour(p.token("panel").withAlpha(0.92f));
+    g.fillRoundedRectangle(footer.toFloat(), 11.0f);
+    g.setColour(p.token("control_border").withAlpha(0.65f));
+    g.drawRoundedRectangle(footer.toFloat().reduced(0.5f), 11.0f, 1.0f);
+    outer.removeFromTop(9);
     const int gap = 10;
-    const int browserWidth = juce::jlimit(190, 250, area.getWidth() / 5);
-    const int rightWidth = juce::jlimit(230, 300, area.getWidth() / 4);
-    auto browser = area.removeFromLeft(browserWidth);
-    area.removeFromLeft(gap);
-    auto right = area.removeFromRight(rightWidth);
-    area.removeFromRight(gap);
-    drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    const int browserWidth = juce::jlimit(205, 270, outer.getWidth() / 5);
+    const int rightWidth = juce::jlimit(245, 310, outer.getWidth() / 4);
+    auto browser = outer.removeFromLeft(browserWidth);
+    outer.removeFromLeft(gap);
+    auto right = outer.removeFromRight(rightWidth);
+    outer.removeFromRight(gap);
+    auto centre = outer;
+    drawPanel(g, browser, "01  /  PRESET LIBRARY");
+    drawPanel(g, centre, "02  /  PLAYING CORE");
+    drawPanel(g, right, "03  /  AMP & SIGNAL CHAIN");
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
+    auto hero = centre.reduced(14, 0);
+    hero.removeFromTop(48);
+    hero.removeFromBottom(174);
+    hero = hero.removeFromTop(104).reduced(2, 2);
+    g.setColour(p.token("control_bg").withAlpha(0.86f));
+    g.fillRoundedRectangle(hero.toFloat(), 9.0f);
+    g.setColour(p.token("control_border").withAlpha(0.75f));
+    g.drawRoundedRectangle(hero.toFloat().reduced(0.5f), 9.0f, 1.0f);
+    if (heroArtwork.isValid())
+    {
+        g.saveState();
+        g.reduceClipRegion(hero);
+        g.setOpacity(0.82f);
+        g.drawImageWithin(heroArtwork, hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight(),
+                          juce::RectanglePlacement::centred | juce::RectanglePlacement::onlyReduceInSize);
+        g.restoreState();
+        g.setColour(p.token("window_bg").withAlpha(0.35f));
+        g.fillRoundedRectangle(hero.toFloat(), 9.0f);
+    }
+    else
+    {
+        g.setColour(p.token("accent").withAlpha(0.22f));
+        for (int i = 0; i < 7; ++i)
+        {
+            const float x = static_cast<float>(hero.getX() + 24 + i * (hero.getWidth() - 48) / 6);
+            g.drawLine(x, static_cast<float>(hero.getY() + 16), x,
+                       static_cast<float>(hero.getBottom() - 16), 1.0f);
+        }
+        g.setColour(p.token("accent").withAlpha(0.65f));
+        juce::Path wave;
+        const float midY = hero.getCentreY();
+        wave.startNewSubPath(static_cast<float>(hero.getX() + 18), midY);
+        for (int x = hero.getX() + 18; x < hero.getRight() - 18; x += 4)
+        {
+            const float phase = static_cast<float>(x - hero.getX()) * 0.045f;
+            wave.lineTo(static_cast<float>(x), midY + std::sin(phase) * 13.0f);
+        }
+        g.strokePath(wave, juce::PathStrokeType(1.5f));
+    }
+    g.setColour(p.token("text_primary"));
+    g.setFont(makeThemeFont(p, 15.0f, true, true));
+    g.drawText("NEON STAGE", hero.reduced(16, 8), juce::Justification::centredLeft, true);
+    g.setColour(p.token("text_secondary"));
+    g.setFont(makeThemeFont(p, 8.5f, false, true));
+    g.drawText("POP PUNK GUITAR  /  PLAYING CORE",
+               hero.reduced(16, 8).withTrimmedTop(27), juce::Justification::centredLeft, true);
+
+    auto browserInfo = browser.reduced(15, 0);
+    browserInfo.removeFromTop(174);
+    browserInfo.removeFromBottom(14);
+    g.setColour(p.token("control_border").withAlpha(0.65f));
+    g.fillRoundedRectangle(browserInfo.toFloat(), 8.0f);
     g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
-    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
-        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    g.setFont(makeThemeFont(p, 8.5f, false, true));
+    g.drawText("FACTORY BANK", browserInfo.removeFromTop(24).reduced(10, 0),
+               juce::Justification::centredLeft, true);
+    g.setColour(p.token("text_primary"));
+    g.setFont(makeThemeFont(p, 18.0f, true, true));
+    g.drawText(juce::String(factoryPresets.size()), browserInfo.removeFromTop(28).reduced(10, 0),
+               juce::Justification::centredLeft, true);
+    g.setColour(p.token("text_secondary"));
+    g.setFont(makeThemeFont(p, 8.5f));
+    const int melodyCount = static_cast<int>(std::count_if(factoryPresets.begin(), factoryPresets.end(),
+        [](const FactoryPreset& item) { return item.mode == "MELODY"; }));
+    const int patternCount = static_cast<int>(std::count_if(factoryPresets.begin(), factoryPresets.end(),
+        [](const FactoryPreset& item) { return item.mode == "PATTERN"; }));
+    g.drawText("MELODY  " + juce::String(melodyCount), browserInfo.removeFromTop(18).reduced(10, 0),
+               juce::Justification::centredLeft, true);
+    g.drawText("PATTERN  " + juce::String(patternCount), browserInfo.removeFromTop(18).reduced(10, 0),
+               juce::Justification::centredLeft, true);
+    if (presetBox.getSelectedId() > 0 && presetBox.getSelectedId() <= static_cast<int>(visiblePresetIndices.size()))
+    {
+        const auto index = visiblePresetIndices[static_cast<size_t>(presetBox.getSelectedId() - 1)];
+        if (index >= 0 && index < static_cast<int>(factoryPresets.size()))
+        {
+            const auto& selected = factoryPresets[static_cast<size_t>(index)];
+            browserInfo.removeFromTop(8);
+            g.setColour(p.token("accent"));
+            g.drawText("SELECTED SOUND", browserInfo.removeFromTop(16).reduced(10, 0),
+                       juce::Justification::centredLeft, true);
+            g.setColour(p.token("text_primary"));
+            g.setFont(makeThemeFont(p, 10.0f, false, true));
+            g.drawFittedText(selected.name, browserInfo.removeFromTop(36).reduced(10, 0),
+                             juce::Justification::topLeft, 2);
+            g.setColour(p.token("text_secondary"));
+            g.setFont(makeThemeFont(p, 8.0f));
+            g.drawFittedText(selected.soundCharacter + "\n" + selected.groove + "\n" + selected.articulation,
+                             browserInfo.reduced(10, 0), juce::Justification::topLeft, 3);
+        }
+    }
+    auto rack = right.reduced(14, 0);
+    rack.removeFromTop(48);
+    rack.removeFromBottom(8);
+    auto eqHeading = rack.removeFromTop(20);
+    g.setColour(p.token("accent"));
+    g.setFont(makeThemeFont(p, 8.5f, false, true));
+    g.drawText("TONE / 3-BAND EQ", eqHeading, juce::Justification::centredLeft, true);
+    rack.removeFromTop(104);
+    rack.removeFromTop(6);
+    auto fxHeading = rack.removeFromTop(20);
+    g.setColour(p.token("accent"));
+    g.drawText("FX CHAIN  /  7 MODULES", fxHeading, juce::Justification::centredLeft, true);
+    g.setColour(p.token("control_border").withAlpha(0.28f));
+    g.drawVerticalLine(browser.getRight() + 5, static_cast<float>(browser.getY() + 44),
+                       static_cast<float>(browser.getBottom() - 8));
+    g.drawVerticalLine(right.getX() - 5, static_cast<float>(right.getY() + 44),
+                       static_cast<float>(right.getBottom() - 8));
 }
-
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 {
-    // Debounce disk persistence while the user drags the resize corner.
     if (uiSettingsReady)
         startTimer(450);
-
-    auto bounds = getLocalBounds().reduced(14);
+    auto bounds = getLocalBounds().reduced(12);
     if (auxiliaryWorkspace != nullptr)
         auxiliaryWorkspace->setBounds(bounds);
-
-    // NEON STAGE three-zone shell: browser / instrument / amp+FX.
-    // Lower performance strip remains full width. APVTS attachments are untouched.
-    auto header = bounds.removeFromTop(48);
-    titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
-    subtitleLabel.setBounds(18, 47, 150, 14);
-    header.removeFromLeft(8);
-    skinButton.setBounds(header.removeFromRight(78).reduced(2, 5));
-    aboutButton.setBounds(header.removeFromRight(72).reduced(2, 5));
-    settingsButton.setBounds(header.removeFromRight(92).reduced(2, 5));
-    curatorButton.setBounds(header.removeFromRight(88).reduced(2, 5));
-    autoSoundHunterButton.setBounds(header.removeFromRight(112).reduced(2, 5));
-    autoChordsButton.setBounds(header.removeFromRight(112).reduced(2, 5));
-    loadButton.setBounds(header.removeFromRight(112).reduced(2, 5));
-    header.removeFromRight(8);
+    auto header = bounds.removeFromTop(56);
+    titleLabel.setBounds(header.removeFromLeft(190).reduced(5, 3));
+    subtitleLabel.setBounds(18, 39, 180, 12);
+    header.removeFromLeft(6);
+    skinButton.setBounds(header.removeFromRight(76).reduced(2, 5));
+    aboutButton.setBounds(header.removeFromRight(68).reduced(2, 5));
+    settingsButton.setBounds(header.removeFromRight(86).reduced(2, 5));
+    curatorButton.setBounds(header.removeFromRight(78).reduced(2, 5));
+    autoSoundHunterButton.setBounds(header.removeFromRight(108).reduced(2, 5));
+    autoChordsButton.setBounds(header.removeFromRight(100).reduced(2, 5));
+    loadButton.setBounds(header.removeFromRight(104).reduced(2, 5));
 
     auto footer = bounds.removeFromBottom(132);
-    statusLabel.setBounds(footer.removeFromBottom(22).reduced(3, 1));
-    footer.removeFromBottom(4);
+    statusLabel.setBounds(footer.removeFromBottom(21).reduced(8, 1));
+    footer.removeFromBottom(3);
     if (performanceDisplay != nullptr)
-        performanceDisplay->setBounds(footer.removeFromTop(42).reduced(2, 1));
-    footer.removeFromTop(5);
+        performanceDisplay->setBounds(footer.removeFromTop(40).reduced(4, 1));
+    footer.removeFromTop(4);
     if (keyboard != nullptr)
-        keyboard->setBounds(footer.reduced(2, 2));
+        keyboard->setBounds(footer.reduced(4, 2));
 
-    bounds.removeFromTop(8);
+    bounds.removeFromTop(9);
     const int gap = 10;
-    const int browserWidth = juce::jlimit(190, 250, bounds.getWidth() / 5);
-    const int rightWidth = juce::jlimit(230, 300, bounds.getWidth() / 4);
+    const int browserWidth = juce::jlimit(205, 270, bounds.getWidth() / 5);
+    const int rightWidth = juce::jlimit(245, 310, bounds.getWidth() / 4);
     auto browser = bounds.removeFromLeft(browserWidth);
     bounds.removeFromLeft(gap);
     auto right = bounds.removeFromRight(rightWidth);
     bounds.removeFromRight(gap);
     auto centre = bounds;
 
-    // Left preset browser: section chrome is reserved above live controls.
-    browser.removeFromTop(34);
-    presetBox.setBounds(browser.removeFromTop(42).reduced(3, 3));
+    browser.removeFromTop(42);
+    presetBox.setBounds(browser.removeFromTop(42).reduced(4, 3));
     browser.removeFromTop(5);
-    categoryBox.setBounds(browser.removeFromTop(34).reduced(3, 2));
+    categoryBox.setBounds(browser.removeFromTop(34).reduced(4, 2));
     browser.removeFromTop(5);
-    presetSearch.setBounds(browser.removeFromTop(34).reduced(3, 2));
+    presetSearch.setBounds(browser.removeFromTop(34).reduced(4, 2));
 
-    // Center instrument zone: tabs, mode and all nine performance controls.
-    auto modeRow = centre.removeFromTop(42);
-    melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(2, 3));
-    patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
-    modeBox.setBounds(modeRow.reduced(2, 3));
-    centre.removeFromTop(6);
-    auto knobArea = centre;
-    knobArea.removeFromBottom(42);
-    const int cols = 3;
-    const int rows = 3;
-    const int cellW = juce::jmax(1, knobArea.getWidth() / cols);
-    const int cellH = juce::jmax(1, knobArea.getHeight() / rows);
-    for (size_t i = 0; i < knobs.size(); ++i)
+    auto modeRow = centre.removeFromTop(40);
+    melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(3, 3));
+    patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(3, 3));
+    modeBox.setBounds(modeRow.reduced(3, 3));
+    centre.removeFromTop(5);
+    centre.removeFromTop(104);
+    centre.removeFromTop(5);
+    auto coreControls = centre.removeFromTop(126);
+    const std::array<size_t, 6> coreKnobs { 0, 4, 5, 6, 7, 8 };
+    const int coreCellW = juce::jmax(1, coreControls.getWidth() / 6);
+    for (size_t slot = 0; slot < coreKnobs.size(); ++slot)
     {
-        const int col = static_cast<int>(i) % cols;
-        const int row = static_cast<int>(i) / cols;
-        auto cell = juce::Rectangle<int>(knobArea.getX() + col * cellW,
-            knobArea.getY() + row * cellH, cellW, cellH).reduced(3, 2);
-        knobLabels[i].setBounds(cell.removeFromTop(20));
-        knobs[i].setBounds(cell.reduced(2, 1));
+        const auto index = coreKnobs[slot];
+        auto cell = juce::Rectangle<int>(coreControls.getX() + static_cast<int>(slot) * coreCellW,
+            coreControls.getY(), coreCellW, coreControls.getHeight()).reduced(3, 2);
+        knobLabels[index].setBounds(cell.removeFromTop(18));
+        knobs[index].setBounds(cell.reduced(2, 1));
     }
-    startModeBox.setBounds(centre.removeFromBottom(36).reduced(3, 2));
+    startModeBox.setBounds(centre.removeFromBottom(34).reduced(4, 2));
 
-    // Right rack: section chrome is reserved above amplifier and FX headings.
-    right.removeFromTop(34);
-    ampTitle.setBounds(right.removeFromTop(32).reduced(5, 2));
-    fxTitle.setBounds(right.removeFromTop(28).reduced(5, 1));
+    right.removeFromTop(42);
+    ampTitle.setBounds(right.removeFromTop(23).reduced(4, 1));
+    auto eqRow = right.removeFromTop(112);
+    const std::array<size_t, 3> eqKnobs { 1, 2, 3 };
+    const int eqCellW = juce::jmax(1, eqRow.getWidth() / 3);
+    for (size_t slot = 0; slot < eqKnobs.size(); ++slot)
+    {
+        const auto index = eqKnobs[slot];
+        auto cell = juce::Rectangle<int>(eqRow.getX() + static_cast<int>(slot) * eqCellW,
+            eqRow.getY(), eqCellW, eqRow.getHeight()).reduced(2, 1);
+        knobLabels[index].setBounds(cell.removeFromTop(18));
+        knobs[index].setBounds(cell.reduced(1, 1));
+    }
+    fxTitle.setBounds(right.removeFromTop(25).reduced(4, 1));
+    const int fxGap = 4;
+    const int fxRowHeight = juce::jmax(30, (right.getHeight() - fxGap * 6) / 7);
     for (size_t i = 0; i < fxButtons.size(); ++i)
     {
-        auto row = right.removeFromTop(juce::jmax(1, right.getHeight()
-            / static_cast<int>(fxButtons.size() - i)));
-        fxButtons[i].setBounds(row.reduced(5, 2));
+        auto row = right.removeFromTop(fxRowHeight);
+        fxButtons[i].setBounds(row.reduced(3, 2));
+        if (i + 1 < fxButtons.size())
+            right.removeFromTop(fxGap);
     }
-
-    // Legacy title is no longer part of the visible main shell.
     playbackTitle.setVisible(false);
 }
 
@@ -1808,9 +1919,30 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::loadThemeArtwork()
+{
+    heroArtwork = {};
+    const auto id = themeManager.getPalette().id;
+    const int index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
+    const auto manifest = getSkinManifest(index);
+    if (!manifest.existsAsFile())
+        return;
+    const auto root = juce::JSON::parse(manifest.loadFileAsString());
+    if (!root.isObject())
+        return;
+    const auto assets = root.getProperty("assets", juce::var());
+    const auto relative = assets.getProperty("hero", "assets/hero.png").toString();
+    if (relative.isEmpty() || relative.startsWith("/") || relative.contains(".."))
+        return;
+    const auto imageFile = manifest.getParentDirectory().getChildFile(relative);
+    if (imageFile.isAChildOf(manifest.getParentDirectory()) && imageFile.existsAsFile())
+        heroArtwork = juce::ImageCache::getFromFile(imageFile);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
+  loadThemeArtwork();
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 20.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
