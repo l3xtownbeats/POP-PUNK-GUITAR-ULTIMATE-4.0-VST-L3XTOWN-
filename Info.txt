@@ -321,3 +321,14 @@ Implemented:
 **Acceptance sequence:** inventory and binding audit → implementation of missing approved bindings/states → per-panel and per-control verification → resize/window checks → 16-theme parity checks → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Evidence must name the exact commit SHA. Source presence or a mockup is not proof of completion.
 
 **Status:** SCOPE APPROVED / WORK AUTHORIZED / ACCEPTANCE CRITERIA FIXED. This entry records authorization and acceptance requirements; it does not claim implementation or tests are complete.
+
+
+2026-11-15 — GUI INTERACTION AUDIT / MELODY-PATTERN TAB BINDING FIX
+
+Audit of the live Source/PluginEditor.cpp constructor found that the MELODY and PATTERN tab callbacks called modeBox.setSelectedId(1/2) without a notification. JUCE ComboBox selection changes default to dontSendNotification; therefore the visible tab click could change the ComboBox display without notifying its existing playMode APVTS ComboBoxAttachment. This violated the approved UI → parameter binding contract.
+
+Fix committed in Source/PluginEditor.cpp: both callbacks now call setSelectedId(..., juce::sendNotificationSync), explicitly notifying the existing attachment. No new APVTS IDs, control IDs, parameter meanings, DSP, MIDI, processor state or audio callback behavior were added or changed.
+
+Commit: 7692eb0b2549ff7856eb38788994fcba79bcf451.
+
+Validation: source-level correction committed. Exact-HEAD Windows build, CTest, pluginval Strictness 5 and runtime/FL Studio interaction verification remain PENDING. This fix is one identified audit defect, not a claim that all controls are now complete.
