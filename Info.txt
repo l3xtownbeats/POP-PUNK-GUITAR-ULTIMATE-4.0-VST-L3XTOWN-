@@ -506,3 +506,31 @@ Create a compact set of reusable starting profiles (e.g. 2000s Pop-Punk Core, Br
 Each preset's documentation should label these values “starting point / tonal reference”, state the intended sound and useful adjustments, and avoid claiming exact artist/song settings. READY requires actual playback, chain binding, level/phase checks where relevant, listening review, state persistence and regression tests.
 
 Статус: USER-PROVIDED SETTINGS RECORDED / APPROVED AS STARTING REFERENCES. DSP mapping, implementation, preset creation and listening validation remain PENDING.
+
+
+## 2026-11-15 — USER-APPROVED 15-EFFECT SOUND ENGINE SCOPE AND RELEVANCE FILTER
+
+Пользователь прямо утвердил: в продукте должно быть 15 эффектов. Зафиксировать именно 15 типов эффектов как целевой каталог обработки для гитарного sound-design/FX EDIT. Перечень выбран из ранее обсуждавшихся возможностей по практической полезности для получения pop-punk/punk/rock/alternative guitar tones:
+1. Compressor
+2. EQ
+3. Noise Gate
+4. Boost
+5. Overdrive
+6. Distortion
+7. Fuzz
+8. Chorus
+9. Flanger
+10. Phaser
+11. Delay
+12. Reverb
+13. Tremolo
+14. Vibrato
+15. Octave / Pitch Shift
+
+Смысл каталога: эти 15 типов должны быть доступны как предусмотренные продуктом виды обработки, но не должны автоматически включаться все сразу в каждом пресете. Для каждого конкретного звука выбирать только необходимые эффекты; цель — получить требуемый результат из исходного гитарного материала при помощи реально доступных и качественно настроенных DSP-модулей. Amp и Cabinet/IR рассматриваются как отдельные amp/cab processing stages, а не как дополнительные позиции в этом счёте 15. Wah/Auto-Wah, Looper и Tuner не входят в утверждённую пятнадцатку; не реализовывать и не показывать их как входящие в этот scope без отдельного решения пользователя.
+
+КРИТИЧЕСКОЕ РАЗЛИЧИЕ: утверждение каталога из 15 эффектов — это продуктовый scope, а не свидетельство того, что все 15 DSP-модулей уже реализованы. Перед отображением эффекта как доступного/работающего требуется реальный DSP backend, корректная обработка аудио, параметры, bypass/automation/state binding, тесты и слышимая проверка. Сохранять утверждённые 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и processor state contract. Не создавать новые APVTS IDs и не менять назначение существующих bypass controls. Если текущая архитектура не позволяет честно представить 15 типов в существующих FX slots/selector, сначала документировать gap и согласовать техническое решение, не подменяя его фиктивными кнопками.
+
+ПРАВИЛО ОТБОРА ИНФОРМАЦИИ: использовать из всех ранее утверждённых списков только сведения, которые реально помогают выбрать исходный гитарный материал, сформировать нужный тембр и настроить конкретный пресет. Не переносить в пресеты лишние модели, группы, усилители, эффекты, параметры и исторические детали. Целевой звук и музыкальная роль определяются первыми; затем выбираются подходящий source/articulation, amp/cab и минимально достаточная цепочка. Качество результата и пригодность в миксе важнее количества включённых эффектов и объёма описания. Все числовые настройки — starting points, пока не проверены на реальном DSP и слухом.
+
+Статус: 15 EFFECT TYPES USER-APPROVED / FIXED AS PRODUCT SCOPE. Реализация каждого DSP effect, FX EDIT presentation, routing, tests and audible validation remain PENDING unless independently evidenced.
