@@ -76,6 +76,14 @@ public:
 
     void setThemePalette(const PPGUThemeManager::Palette& palette)
     {
+        // Keep the shared workspace chrome on the same theme typography contract
+        // as its panel content. The previous fixed-size default-font title made
+        // auxiliary window headers visibly diverge from the active skin.
+        if (palette.uiTypeface.isNotEmpty())
+            title.setFont(juce::Font(palette.uiTypeface,
+                                     14.0f * palette.fontScale,
+                                     juce::Font::bold));
+
         if (content != nullptr)
             if (auto* themed = dynamic_cast<PPGUThemeAwarePanel*>(content.get()))
                 themed->setThemePalette(palette);
