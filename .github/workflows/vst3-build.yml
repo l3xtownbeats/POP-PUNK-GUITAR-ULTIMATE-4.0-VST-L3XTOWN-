@@ -289,6 +289,21 @@ jobs:
           if ($expectedSkinCount -lt 1 -or @($sourceRegistry.themes).Count -ne $expectedSkinCount) {
             throw 'Source skin registry totalSkins does not match its themes array.'
           }
+          if ($sourceRegistry.defaultSkin -ne 'skin-053') {
+            throw "Canonical default theme must be skin-053 (NEON STAGE DEFAULT); found '$($sourceRegistry.defaultSkin)'."
+          }
+          $defaultEntries = @($sourceRegistry.themes | Where-Object { $_.id -eq 'skin-053' })
+          if ($defaultEntries.Count -ne 1 -or $defaultEntries[0].index -ne 53 -or $defaultEntries[0].path -ne 'Skin_053/theme.json') {
+            throw 'NEON STAGE DEFAULT registry entry is missing, duplicated or points to the wrong manifest.'
+          }
+          $defaultSourceManifest = Join-Path $sourceSkinRoot 'Skin_053/theme.json'
+          if (-not (Test-Path -LiteralPath $defaultSourceManifest)) {
+            throw 'NEON STAGE DEFAULT source theme manifest is missing.'
+          }
+          $defaultSourceData = Get-Content -LiteralPath $defaultSourceManifest -Raw | ConvertFrom-Json
+          if ($defaultSourceData.id -ne 'skin-053' -or $defaultSourceData.name -ne 'NEON STAGE DEFAULT') {
+            throw 'Skin_053 identity does not match canonical NEON STAGE DEFAULT.'
+          }
           foreach ($theme in $sourceRegistry.themes) {
             $themeManifest = Join-Path $sourceSkinRoot $theme.path
             if (-not (Test-Path -LiteralPath $themeManifest)) {
@@ -314,6 +329,14 @@ jobs:
           if ($expectedSkinCount -lt 1 -or @($skinRegistry.themes).Count -ne $expectedSkinCount) { throw 'Skin registry totalSkins does not match its themes array.' }
           $skinManifests = Get-ChildItem $runtimeSkins -Recurse -File -Filter 'theme.json'
           if ($skinManifests.Count -ne $expectedSkinCount) { throw "Runtime Skins manifest count mismatch: registry=$expectedSkinCount, files=$($skinManifests.Count)." }
+          $packagedDefault = Join-Path $runtimeSkins 'Skin_053/theme.json'
+          if (-not (Test-Path -LiteralPath $packagedDefault)) {
+            throw 'Portable ZIP is missing the required NEON STAGE DEFAULT runtime theme.'
+          }
+          $packagedDefaultData = Get-Content -LiteralPath $packagedDefault -Raw | ConvertFrom-Json
+          if ($packagedDefaultData.id -ne 'skin-053' -or $packagedDefaultData.name -ne 'NEON STAGE DEFAULT') {
+            throw 'Packaged NEON STAGE DEFAULT identity validation failed.'
+          }
           foreach ($theme in $skinRegistry.themes) {
             $manifestPath = Join-Path $runtimeSkins $theme.path
             if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Registered runtime skin manifest missing: $($theme.path)" }
@@ -380,6 +403,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: POP-PUNK-GUITAR-ULTIMATE-PORTABLE-VST3-Windows-x64
-          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip
+          path: POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip
           if-no-files-found: error
 
