@@ -22,7 +22,7 @@ def main():
  missing=[]
  for sfz in maps:
   for raw in RX.findall(sfz.read_text(encoding="utf-8",errors="replace")):
-   target=(sfz.parent/raw.replace("\\\\","/")).resolve()
+   target=(sfz.parent/raw.replace("\\","/")).resolve()
    try: target.relative_to(root)
    except ValueError:
     missing.append({"sfz":sfz.relative_to(root).as_posix(),"sample":raw,"error":"path_escapes_root"}); continue
