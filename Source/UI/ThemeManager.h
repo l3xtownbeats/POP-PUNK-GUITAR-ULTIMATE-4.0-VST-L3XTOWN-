@@ -25,11 +25,11 @@ public:
             juce::Colour danger { 0xffff5a66 };
             juce::Colour warning { 0xffffc857 };
             juce::Colour success { 0xff6ee7a8 };
-            juce::Colour lcdBg { 0xff08110e };
+            juce::Colour lcdBg { 0xff080d16 };
             juce::Colour lcdText { 0xffd9f7ff };
             juce::Colour ledOn { 0xff2dd4ff };
-            juce::Colour ledOff { 0xff33443b };
-            juce::Colour shadow { 0xff050708 };
+            juce::Colour ledOff { 0xff3b2b49 };
+            juce::Colour shadow { 0xff05030a };
             juce::Colour highlight { 0xffb58bd8 };
             juce::Colour lowlight { 0xff150d1e };
         };
