@@ -135,7 +135,12 @@ public:
 
         for (auto& skin : skins)
             skin.selected = skin.index == selectedIndex;
-        previewedIndex = initialSelection;
+
+        // A gallery session starts with no preview transaction. The current
+        // theme is already active; Apply must remain unavailable until the user
+        // explicitly previews a valid selection in this session.
+        previewedIndex = 0;
+        applyButton.setEnabled(false);
 
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
