@@ -137,3 +137,43 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 8. Сохранять NEON STAGE DEFAULT / SKIN-1 как единый визуальный эталон и не создавать дублирующую тему.
 
 **Статус:** план утверждён пользователем; выполнение следующих проверок остаётся открытым.
+
+
+## MAIN INTERFACE — FULL VISUAL AUDIT (первый source-аудит)
+
+**Дата:** 2026-11-15  
+**Область:** Source/PluginEditor.cpp, Source/UI/ThemeManager.h, Source/UI/PPGUMultiWindowWorkspace.h.  
+**Статус:** source-level audit выполнен частично; визуальное сравнение с PNG и host QA остаются открытыми.
+
+### Подтверждено в исходном коде
+
+- Основной редактор имеет трёхзонную компоновку: preset browser / guitar engine & performance / amp & FX; отдельная нижняя полоса содержит MIDI keyboard, performance display и статус библиотеки.
+- В центральной зоне размещены MELODY/PATTERN tabs, режим воспроизведения и девять rotary-контролов. Их SliderAttachment создаются к существующим APVTS parameter IDs.
+- В правой зоне размещены AMP & TONE и существующие FX toggle-кнопки; для них создаются APVTS ButtonAttachment.
+- MIDI keyboard ограничена диапазоном 36–84. Performance display читает реально удерживаемые MIDI-ноты и существующие параметры scale root/mode; это не фиктивная телеметрия.
+- Header содержит реальные действия открытия Skin Gallery, Settings, AutoChords и Import Guitar. Панели открываются через общий PPGUMultiWindowWorkspace.
+- applyPalette() обновляет семантические цвета основных labels, combo boxes, search, кнопок, tabs, sliders, MIDI keyboard и workspace. Workspace и Performance display получают активную палитру.
+
+### Найденные и исправленные несоответствия
+
+1. **Default skin mismatch:** loadSavedSkin() использовал skin-052 как fallback, хотя канонический SKIN-1 — skin-053. Исправлено на skin-053.
+2. **Restore mismatch:** Settings вызывал loadSkinByIndex(52), что восстанавливало не канонический SKIN-1. Исправлено на index 53.
+3. **Hardcoded foreground colours:** два белых foreground назначения в главном редакторе заменены на семантический window_bg, согласованный с контрастной схемой NEON STAGE.
+4. **Hardcoded rotary shadow:** чёрная тень rotary control переведена на semantic token shadow.
+5. **Stale source terminology:** комментарий компоновки SIGNAL FORGE заменён на NEON STAGE; алиасы темы не должны выглядеть отдельным брендом.
+
+### Открытые замечания / blockers
+
+- Эталонные PNG-макеты ещё не удалось визуально прочитать через GitHub connector. Следовательно, соответствие размеров, отступов, типографики, визуальной иерархии и конкретных элементов макету не подтверждено.
+- В исходнике видны потенциально спорные точки для визуальной проверки: фиксированные размеры header/footer и трёх колонок; subtitleLabel позиционируется абсолютными координатами; компоновка knob grid фиксирована 3×3. Их корректность должна оцениваться по утверждённому макету и в реальном resize/DPI, а не объявляться дефектом без визуального эталона.
+- Полный host-level контроль контрастности, clipping, focus/hover/disabled states, 100/125/150% DPI и resizing не выполнялся.
+- Проверка runtime discovery каталога Skins и реального применения skin-053 при старте/restore требует сборки и host-теста.
+
+### Source revision
+
+- Source/PluginEditor.cpp: после исправления fallback/restore/semantic colours и stale comment — blob SHA 97c89f4700b3ce458b85a53239d481dc363160ff.
+- Изменения внесены коммитами:
+  - 954dd0b9d72480ca261fd741f289dd63cea5bde5 — canonical fallback/restore + semantic colours.
+  - dfbaa91db0380465ab27337527c7dba32d593925 — NEON STAGE shell terminology.
+
+**Решение этапа:** source-level несоответствия исправлены; MAIN INTERFACE не закрыт как визуально принятый. Следующий шаг — получить PNG-макеты в читаемом виде, провести pixel/layout comparison, затем исправлять только подтверждённые расхождения.
