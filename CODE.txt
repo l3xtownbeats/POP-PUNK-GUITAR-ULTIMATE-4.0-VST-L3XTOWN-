@@ -992,3 +992,25 @@ Correction commits:
 - `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` — component matrix API wording.
 
 The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.h` declaration. Source declarations and definitions were re-fetched and confirmed. This is API-source confirmation, not a successful compiler result.
+
+
+## 2026-11-15 — REV18 exact 27-control parity correction
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`  
+**Authority:** PPGU MASTER PROMPT REV18 v6.2; canonical `SKIN/control_schema.json` (27 required control IDs); approved theme sequence SKIN-1…SKIN-6.
+
+**Finding:** the six theme manifests contained 28 control-map keys. The extra `sync_selector` was not present in the canonical 27-ID control schema and was not an approved control.
+
+**Implementation:**
+- Removed only the unsupported `sync_selector` metadata entry from `Skin_053/theme.json` and `Skin_103…Skin_107/theme.json`.
+- Preserved all 27 canonical control IDs, grid coordinates, palette tokens, theme identities, stable IDs and ordinals.
+- Updated `tools/audit_skin_rev18_assets.py` to compare every theme against the canonical `x-ppgu-contract.requiredControlIds`, not merely against another theme.
+- Added `tests/TestRev18ThemeControlParity.py` and registered it as `ppgu_rev18_theme_control_parity` in CTest.
+
+**Source commits:** `21e03671`, `b6474dd0`, `9b9d92a9`, `62e7d7e5`, `c7c88a36`, `ebeb946b`, `e9f00346`, `a2bb6dd0`, `0547e232`.
+
+**Safety:** metadata/test-only correction. No APVTS IDs, runtime control bindings, layout geometry, DSP, MIDI, sampler, presets or audio code changed.
+
+**Validation:** canonical schema and six manifests were parsed; each manifest now contains exactly the same 27 IDs as the schema. Audit/test source changes are committed. CTest, Windows VST3 build, pluginval and FL Studio 20 host validation have NOT yet been run on the final commit.
+
+**Status:** 27-CONTROL CONTRACT CORRECTED / REGRESSION TEST REGISTERED / TEST EXECUTION PENDING / PREMIUM THEME ASSETS AND G1–G4 PENDING.
