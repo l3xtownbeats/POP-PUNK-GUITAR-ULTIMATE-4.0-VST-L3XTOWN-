@@ -199,6 +199,20 @@ jobs:
             Remove-Item -Recurse -Force
           $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
           $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
+          # NO-DELETE / NO-OVERWRITE: never remove or replace collected audio in Samples/.
+          # Exact duplicate audio is a hard validation failure; preserve every file and report paths.
+          $hashGroups = @{}
+          foreach ($file in $audioFiles) {
+            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
+            if (-not $hashGroups.ContainsKey($hash)) { $hashGroups[$hash] = [System.Collections.Generic.List[string]]::new() }
+            $hashGroups[$hash].Add($file.FullName.Substring($sampleRoot.Length + 1).Replace('\\','/'))
+          }
+          $duplicates = @($hashGroups.GetEnumerator() | Where-Object { $_.Value.Count -gt 1 })
+          if ($duplicates.Count -gt 0) {
+            $report = foreach ($entry in $duplicates) { "SHA256 $($entry.Key): $($entry.Value -join ' | ')" }
+            throw ("Exact duplicate audio detected. No files were deleted or changed; resolve through an approved no-loss process:`n" + ($report -join "`n"))
+          }
+          Write-Host ("Unique audio files verified: {0}; no byte-identical repeats." -f $audioFiles.Count)
           if ($audioFiles.Count -lt 100) { throw "Expected a substantial natural-guitar sample library; only $($audioFiles.Count) audio files found." }
           $managedBytes = [int64](($audioFiles | Measure-Object -Property Length -Sum).Sum)
           $managedLimitBytes = [int64]40000000000
