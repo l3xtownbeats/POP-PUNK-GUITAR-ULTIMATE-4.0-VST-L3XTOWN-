@@ -125,9 +125,10 @@ public:
             if (selectedIndex > 0 && preview)
             {
                 const bool succeeded = preview(selectedIndex);
-                if (succeeded)
-                    previewedIndex = selectedIndex;
-                applyButton.setEnabled(succeeded || selectedIndex == previewedIndex);
+                // Only the currently successful preview is eligible for Apply.
+                // A failed preview invalidates the previous preview transaction.
+                previewedIndex = succeeded ? selectedIndex : 0;
+                applyButton.setEnabled(succeeded);
             }
         };
         applyButton.onClick = [this] { if (apply) apply(); };
@@ -2010,11 +2011,17 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
             std::move(skins), themeManager.getPalette(), originalOrdinal,
-            [safe, previewSucceeded](int index)
+            [safe, originalOrdinal, previewSucceeded](int index)
             {
                 if (safe == nullptr || safe->shuttingDown)
                     return false;
                 *previewSucceeded = safe->loadSkinByIndex(index, false);
+                if (!*previewSucceeded)
+                {
+                    // A malformed/missing skin must not leave the editor on the
+                    // ThemeManager fallback palette or preserve a stale Apply state.
+                    safe->loadSkinByIndex(originalOrdinal, false);
+                }
                 return *previewSucceeded;
             },
             [safe, originalOrdinal, transactionResolved, previewSucceeded, closeGallery]
