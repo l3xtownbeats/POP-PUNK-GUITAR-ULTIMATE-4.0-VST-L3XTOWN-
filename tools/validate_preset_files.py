@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate portable .ppgm/.ppgp preset examples before VST3 integration."""
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -14,9 +15,13 @@ seen = set()
 for path in files:
     try:
         item = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as exc:
+    except (OSError, json.JSONDecodeError) as exc:
         errors.append(f"{path}: invalid JSON: {exc}")
         continue
+    if not isinstance(item, dict):
+        errors.append(f"{path}: root must be a JSON object")
+        continue
+
     expected = "MELODY" if path.suffix == ".ppgm" else "PATTERN"
     required = ("format", "formatVersion", "id", "name", "mode", "parameters", "sampleProfile")
     for key in required:
@@ -26,16 +31,35 @@ for path in files:
         errors.append(f"{path}: unsupported format identifier")
     if item.get("mode") != expected:
         errors.append(f"{path}: extension {path.suffix} requires mode {expected}")
-    if not item.get("id") or item.get("id") in seen:
-        errors.append(f"{path}: missing or duplicate preset id {item.get('id')!r}")
-    seen.add(item.get("id"))
+
+    preset_id = item.get("id")
+    if not isinstance(preset_id, str) or not preset_id.strip():
+        errors.append(f"{path}: id must be a non-empty string")
+    elif preset_id in seen:
+        errors.append(f"{path}: duplicate preset id {preset_id!r}")
+    else:
+        seen.add(preset_id)
+
+    if not isinstance(item.get("name"), str) or not item["name"].strip():
+        errors.append(f"{path}: name must be a non-empty string")
+
     params = item.get("parameters", {})
-    for key in ("drive", "tone", "reverb"):
-        if not isinstance(params.get(key), (int, float)):
+    if not isinstance(params, dict):
+        errors.append(f"{path}: parameters must be an object")
+        params = {}
+    for key, upper in (("drive", 1.0), ("tone", 10.0), ("reverb", 1.0)):
+        value = params.get(key)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
             errors.append(f"{path}: parameters.{key} must be numeric")
-    if expected == "MELODY" and not isinstance(item.get("melody"), dict):
-        errors.append(f"{path}: missing melody object")
-    if expected == "PATTERN":
+        elif not math.isfinite(value):
+            errors.append(f"{path}: parameters.{key} must be finite")
+        elif not 0.0 <= value <= upper:
+            errors.append(f"{path}: parameters.{key} outside 0..{upper:g}")
+
+    if expected == "MELODY":
+        if not isinstance(item.get("melody"), dict):
+            errors.append(f"{path}: missing melody object")
+    else:
         pattern = item.get("pattern")
         if not isinstance(pattern, dict) or not isinstance(pattern.get("steps"), list) or not pattern["steps"]:
             errors.append(f"{path}: pattern.steps must be a non-empty array")
