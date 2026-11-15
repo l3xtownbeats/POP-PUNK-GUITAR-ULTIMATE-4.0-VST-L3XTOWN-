@@ -713,6 +713,15 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("cabinetMix")->load(std::memory_order_relaxed));
         if (mix > 0.0f)
         {
+            const float lowCutHz = juce::jlimit(20.0f, 500.0f,
+                parameters.getRawParameterValue("cabinetLowCut")->load(std::memory_order_relaxed));
+            const float highCutHz = juce::jlimit(2000.0f,
+                static_cast<float>(currentSampleRate * 0.45),
+                parameters.getRawParameterValue("cabinetHighCut")->load(std::memory_order_relaxed));
+            const float lowCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                * lowCutHz / static_cast<float>(currentSampleRate));
+            const float highCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                * highCutHz / static_cast<float>(currentSampleRate));
             for (int sample = 0; sample < samples; ++sample)
             {
                 for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
@@ -728,15 +737,6 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         read = read == 0 ? cabinetImpulse.size() - 1 : read - 1;
                     }
                     const float dry = data[sample];
-                    const float lowCutHz = juce::jlimit(20.0f, 500.0f,
-                        parameters.getRawParameterValue("cabinetLowCut")->load(std::memory_order_relaxed));
-                    const float highCutHz = juce::jlimit(2000.0f,
-                        static_cast<float>(currentSampleRate * 0.45),
-                        parameters.getRawParameterValue("cabinetHighCut")->load(std::memory_order_relaxed));
-                    const float lowCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
-                        * lowCutHz / static_cast<float>(currentSampleRate));
-                    const float highCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
-                        * highCutHz / static_cast<float>(currentSampleRate));
                     auto& lowCutState = cabinetLowCutState[static_cast<size_t>(channel)];
                     auto& highCutState = cabinetHighCutState[static_cast<size_t>(channel)];
                     lowCutState += lowCutAlpha * (wet - lowCutState);
