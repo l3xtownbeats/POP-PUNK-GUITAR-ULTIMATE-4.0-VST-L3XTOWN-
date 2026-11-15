@@ -1434,7 +1434,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
+    drawPanel(g, area, "PLAYING CORE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
     // NEON STAGE Playing Core hero artwork is loaded from the active skin manifest.
