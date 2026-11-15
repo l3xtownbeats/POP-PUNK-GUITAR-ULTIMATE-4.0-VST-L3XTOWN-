@@ -1,0 +1,24 @@
+name: PPGU REV18 Theme Contract
+on:
+  push:
+    branches:
+      - work/ppgu-rev18-premium-theme-assets
+    paths:
+      - 'SKIN/**'
+      - 'tools/audit_skin_rev18_assets.py'
+      - 'tests/TestRev18ThemeControlParity.py'
+      - '.github/workflows/ppgu-rev18-theme-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  theme-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate exact approved 27-control parity
+        run: python3 tests/TestRev18ThemeControlParity.py
+      - name: Audit approved theme manifests and vector assets
+        run: python3 tools/audit_skin_rev18_assets.py --root SKIN
