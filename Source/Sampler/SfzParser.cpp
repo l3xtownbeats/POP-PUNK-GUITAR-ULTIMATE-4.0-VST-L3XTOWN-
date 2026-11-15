@@ -492,7 +492,7 @@ ParseResult parseFile(const std::filesystem::path& sfzPath)
 
     // Read exactly the indexed size. A file that grows/shrinks during the
     // read must not bypass the parser's memory bound or produce a partial map.
-    std::string contents(static_cast<std::size_t>(fileBytes), '\\0');
+    std::string contents(static_cast<std::size_t>(fileBytes), '\0');
     if (fileBytes > 0)
         stream.read(contents.data(), static_cast<std::streamsize>(fileBytes));
     if (stream.bad() || static_cast<std::uint64_t>(stream.gcount()) != fileBytes)
