@@ -112,12 +112,13 @@ target_sources(ppgu_sfz_contracts PRIVATE Source/Sampler/SfzParser.cpp)
 target_include_directories(ppgu_sfz_contracts PRIVATE Source/Sampler)
 
 ppgu_add_test(ppgu_queue_contracts tests/BoundedSpscQueueTests.cpp)
-target_include_directories(ppgu_queue_contracts PRIVATE Source Source/Sampler)
+target_include_directories(ppgu_queue_contracts PRIVATE Source/Sampler)
 target_link_libraries(ppgu_queue_contracts PRIVATE Threads::Threads)
 
 ppgu_add_test(ppgu_page_cache_contracts tests/PageCacheSlotsTests.cpp)
 target_sources(ppgu_page_cache_contracts PRIVATE Source/Sampler/PageCacheSlots.cpp)
-target_include_directories(ppgu_page_cache_contracts PRIVATE Source Source/Sampler)
+target_include_directories(ppgu_page_cache_contracts PRIVATE Source/Sampler)
+target_link_libraries(ppgu_page_cache_contracts PRIVATE Threads::Threads)
 
 ppgu_add_test(ppgu_metadata_contracts tests/SampleMetadataIndexTests.cpp)
 target_include_directories(ppgu_metadata_contracts PRIVATE Source Source/Sampler)
