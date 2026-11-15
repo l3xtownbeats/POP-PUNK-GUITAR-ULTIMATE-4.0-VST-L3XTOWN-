@@ -1001,3 +1001,10 @@ Auxiliary window geometry findings:
 - The current maximize action targets viewport.getViewArea(), but the resize/drag boundary and persisted-geometry precedence are not yet implemented as approved.
 
 No source behavior was changed in this audit. This is a source-level finding only; runtime theme readability, host viewport boundaries, manual resize/move, reopen persistence, resize adaptation and FL Studio 20 acceptance remain unverified. The next bounded implementation task is to enforce viewport constraints for both drag and resize, then preserve per-panel user geometry across close/reopen without allowing the layout pass to overwrite it. Add regression coverage for first open, resize, move, close/reopen, another panel opening/closing, host editor resize, maximize/restore and overflow before marking this behavior accepted.
+
+
+2026-11-15 — NEON STAGE: RESIZE OVERFLOW SUPPORT FOR AUXILIARY WINDOWS
+
+Follow-up source inspection confirmed that the resize corner already uses JUCE's ResizableCornerComponent and the window content relayouts in Window::resized(). However, the parent tile surface previously remained at its old dimensions after a manual resize/move, which could clip a window enlarged beyond the current surface. Updated handleGeometryChanged() to recompute the scrollable tile-surface extent from the current viewport and all open window bounds. This lets the existing viewport scrollbars expose intentional panel overflow while the viewport continues clipping the UI to the plugin editor's own workspace boundary. Manual geometry continues to be persisted per panel.
+
+Source commit: 78d0f47b4d7f3dae2b97b973a064d3e25028feac. SOURCE IMPLEMENTED ONLY; runtime behavior and regression tests remain pending. In particular verify resizing in both axes, scrollbars after overflow, move/resize persistence, viewport clipping, host editor resize, maximize/restore, and no geometry feedback loop.
