@@ -86,3 +86,10 @@ The legacy registry already contains indices 1–102. Logical SKIN numbering is 
 All five new theme manifests preserve the 21-token palette contract and the same 28-entry control map. They vary only palette/material tokens and retain the shared NEON STAGE component language. No APVTS, DSP, MIDI, audio, parameter/control ID or live layout changes are authorized.
 
 **Important:** these are approved design specifications with vector texture/bezel/crest foundations. They are not yet complete gallery/runtime themes. PNG preview/hero assets, G1–G4 and CRC validation, registry/gallery registration, package/runtime loading and host acceptance remain pending. Do not represent them as available in the plugin until those gates pass.
+
+
+### REV.18 — SKIN-7…SKIN-16 distinct vector asset correction
+
+Each of Skin_108…Skin_117 now contains three separate palette-derived SVG files: `svg/texture.svg`, `svg/bezel.svg`, and `svg/crest.svg`. The `effects.*` and `assets.*` references in each theme manifest point to the matching resource. These are vector foundations, not finished gallery cards or screenshots.
+
+Still pending for SKIN-7…SKIN-16: exact-size `assets/preview.png` and `assets/hero.png`, G1–G4/CRC validation, canonical registry registration, runtime gallery and asset-load checks, exact-SHA Windows x64 VST3 build, CTest, pluginval strictness 5 and FL Studio 20 host acceptance. The themes are not runtime/release ready.

@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_SVG_ARTWORK_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
   "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
@@ -68,7 +68,7 @@
       "stableId": "skin-108",
       "index": 108,
       "path": "Skin_108/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 8,
@@ -77,7 +77,7 @@
       "stableId": "skin-109",
       "index": 109,
       "path": "Skin_109/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 9,
@@ -86,7 +86,7 @@
       "stableId": "skin-110",
       "index": 110,
       "path": "Skin_110/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 10,
@@ -95,7 +95,7 @@
       "stableId": "skin-111",
       "index": 111,
       "path": "Skin_111/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 11,
@@ -104,7 +104,7 @@
       "stableId": "skin-112",
       "index": 112,
       "path": "Skin_112/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 12,
@@ -113,7 +113,7 @@
       "stableId": "skin-113",
       "index": 113,
       "path": "Skin_113/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 13,
@@ -122,7 +122,7 @@
       "stableId": "skin-114",
       "index": 114,
       "path": "Skin_114/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 14,
@@ -131,7 +131,7 @@
       "stableId": "skin-115",
       "index": 115,
       "path": "Skin_115/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 15,
@@ -140,7 +140,7 @@
       "stableId": "skin-116",
       "index": 116,
       "path": "Skin_116/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 16,
@@ -149,7 +149,7 @@
       "stableId": "skin-117",
       "index": 117,
       "path": "Skin_117/theme.json",
-      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+      "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     }
   ],
   "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",

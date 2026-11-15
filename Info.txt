@@ -2786,3 +2786,16 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Статус:** ПРАВИЛО УТВЕРЖДЕНО ПОЛЬЗОВАТЕЛЕМ / ЗАФИКСИРОВАНО В ОСНОВНОМ ЖУРНАЛЕ / ОБЯЗАТЕЛЬНО К ИСПОЛНЕНИЮ.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 SKIN-7…SKIN-16 distinct SVG asset correction
+==============================================================================
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.18
+Parent HEAD before this documentation/assets batch: bf4b68cf9269d483da994a0fb0be5821bc48997e.
+
+Correction: the first SKIN-7…SKIN-16 draft pointed texture, bezel and crest to the same svg/material.svg. This did not meet the separate-resource structure used by SKIN-2…SKIN-6. Each of SKIN-7…SKIN-16 now has distinct self-contained svg/texture.svg, svg/bezel.svg and svg/crest.svg resources, and both effects.* and assets.* paths in each theme.json point to the corresponding separate resource.
+
+All 30 SVGs are generated from each theme's own palette tokens. JSON and SVG source have been created for all ten themes. This is an asset-structure correction only; no audio/DSP/MIDI/APVTS/sampler/preset/control-ID/layout changes.
+
+Still pending: preview.png and hero.png (do not treat SVG as a substitute); G1–G4 and full pack validation; canonical registry integration; exact-SHA Windows x64 Release VST3 build, CTest, pluginval and FL Studio 20 acceptance. Not release-ready.
+==============================================================================

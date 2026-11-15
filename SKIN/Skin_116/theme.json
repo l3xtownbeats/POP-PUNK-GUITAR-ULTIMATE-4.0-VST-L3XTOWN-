@@ -38,9 +38,9 @@
   },
   "effects": {
     "material": "black violet glass / ultraviolet plasma",
-    "texture": "svg/material.svg",
-    "bezel": "svg/material.svg",
-    "crest": "svg/material.svg",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg",
     "shadowDepth": 0.3,
     "edgeHighlight": 0.22,
     "glow": "restrained optional accent lighting; off in default minimal mode"
@@ -332,9 +332,9 @@
   "assets": {
     "preview": "assets/preview.png",
     "hero": "assets/hero.png",
-    "texture": "svg/material.svg",
-    "bezel": "svg/material.svg",
-    "crest": "svg/material.svg"
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg"
   },
   "compatibility": {
     "minimumPluginVersion": "4.0.0",
@@ -342,13 +342,14 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "CONCEPT_SELECTED_SPEC_CREATED_SVG_ARTWORK_PENDING_PNG_AND_RUNTIME_VALIDATION",
+  "designStatus": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING",
   "notes": [
     "Concept selected under user's delegated direction on 2026-11-15. Logical SKIN-15; stable identity skin-116 / index 116.",
     "Legacy IDs and indices 1–102 are preserved.",
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
-    "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending."
+    "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
   ],
   "ordinal": 15
 }
