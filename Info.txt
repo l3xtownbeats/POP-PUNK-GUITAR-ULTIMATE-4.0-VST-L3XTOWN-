@@ -2843,3 +2843,15 @@ unverified until their steps complete successfully.
 - Предыдущие runs на промежуточных SHA были отменены новым commit; они не являются PASS.
 
 **PR:** #41, branch `work/neon-stage-rich-console-ui`, Draft=true, merged=false. Не approve / не merge. Текущий этап — продолжить parameter/DSP consistency audit, устранить подтверждённые mismatch с regression tests, затем повторить exact-HEAD Windows Release, CTest и pluginval. FL Studio 20 host acceptance и CPU/RAM profiling остаются отдельными непроверенными критериями.
+
+
+==============================================================================
+
+## 2026-11-15 — NEON STAGE DEFAULT runtime package path correction
+
+- Проверена фактическая структура CI-пакета: `<release>/VST3/<Plugin>.vst3` и `<release>/Skins/`.
+- Исправлен поиск runtime skin root: раньше он возвращал `<release>/VST3/Skins`, тогда как сборочный workflow кладёт каталог рядом с папкой `VST3` — в `<release>/Skins`. Из-за этого установленный VST3 мог не находить registry, hero artwork и skin assets, хотя dev fallback работал.
+- Теперь runtime resolver сначала ищет `theme_manifest.json` в `<release>/Skins`, затем поддерживает соседний layout `<release>/VST3/Skins`; добавлен ограниченный поиск для dev/host executable и проверка реального registry-файла.
+- SKIN-1 / `skin-001` остаётся единственной активной темой и default. Главный редактор, preset browser, amp/FX rack, keyboard/performance strip и theme-aware auxiliary panels используют одну палитру; галерея, FX Edit, Settings, Import Guitar и AutoChords получают тему через workspace.
+- Изменение только UI runtime path resolution и INFO. APVTS, DSP, sampler, MIDI и audio routing не менялись.
+- Exact-HEAD Windows Release, CTest и pluginval должны быть повторно подтверждены новым workflow run; FL Studio 20 visual acceptance остаётся отдельным шагом.

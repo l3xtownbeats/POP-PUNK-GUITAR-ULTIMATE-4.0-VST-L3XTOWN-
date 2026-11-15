@@ -1652,14 +1652,82 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
 {
+    const auto isSkinRoot = [](const juce::File& directory)
+    {
+        return directory.isDirectory()
+            && directory.getChildFile("theme_manifest.json").existsAsFile();
+    };
+
 #if JUCE_WINDOWS
- HMODULE module=nullptr;auto address=reinterpret_cast<LPCWSTR>(reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
- DWORD flags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
- if(GetModuleHandleExW(flags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
-  if(n>0&&n<path.size()){juce::File f(fromWidePath(path.data(), static_cast<int>(n)));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
+    HMODULE module = nullptr;
+    const auto address = reinterpret_cast<LPCWSTR>(
+        reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
+    const DWORD flags = GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+        | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
+
+    if (GetModuleHandleExW(flags, address, &module) != 0 && module != nullptr)
+    {
+        std::array<wchar_t, 32768> path {};
+        const DWORD length = GetModuleFileNameW(module, path.data(),
+                                                 static_cast<DWORD>(path.size()));
+        if (length > 0 && length < path.size())
+        {
+            juce::File current(fromWidePath(path.data(), static_cast<int>(length)));
+            for (int depth = 0; depth < 10 && current != juce::File{}; ++depth)
+            {
+                const auto directory = current.isDirectory()
+                    ? current : current.getParentDirectory();
+
+                if (directory.getFileName().endsWithIgnoreCase(".vst3"))
+                {
+                    // The release bundle is laid out as:
+                    // <release>/VST3/<Plugin>.vst3 and <release>/Skins/.
+                    // Check both supported sibling layouts, preferring the
+                    // documented release-root location.
+                    const auto vst3Folder = directory.getParentDirectory();
+                    const auto releaseRoot = vst3Folder.getParentDirectory();
+                    const auto releaseSkins = releaseRoot.getChildFile("Skins");
+                    if (isSkinRoot(releaseSkins))
+                        return releaseSkins;
+
+                    const auto adjacentSkins = vst3Folder.getChildFile("Skins");
+                    if (isSkinRoot(adjacentSkins))
+                        return adjacentSkins;
+
+                    return releaseSkins;
+                }
+
+                const auto parent = directory.getParentDirectory();
+                if (parent == directory)
+                    break;
+                current = parent;
+            }
+        }
+    }
 #endif
- auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
- auto dev=juce::File::getCurrentWorkingDirectory().getChildFile("SKIN");return dev.isDirectory()?dev:beside;
+
+    // Development installs may place Skins next to the executable. Walk a
+    // bounded number of parents so this also works when hosted by a DAW.
+    auto executableDirectory = juce::File::getSpecialLocation(
+        juce::File::currentExecutableFile).getParentDirectory();
+    for (int depth = 0; depth < 6 && executableDirectory != juce::File{}; ++depth)
+    {
+        const auto adjacentSkins = executableDirectory.getChildFile("Skins");
+        if (isSkinRoot(adjacentSkins))
+            return adjacentSkins;
+
+        const auto parent = executableDirectory.getParentDirectory();
+        if (parent == executableDirectory)
+            break;
+        executableDirectory = parent;
+    }
+
+    const auto developmentSkinRoot = juce::File::getCurrentWorkingDirectory()
+        .getChildFile("SKIN");
+    if (isSkinRoot(developmentSkinRoot))
+        return developmentSkinRoot;
+
+    return executableDirectory.getChildFile("Skins");
 }
 int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
 {
