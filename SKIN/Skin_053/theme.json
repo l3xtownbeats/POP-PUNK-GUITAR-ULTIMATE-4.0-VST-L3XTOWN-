@@ -324,7 +324,18 @@
     "hero": "assets/hero.png",
     "texture": "svg/texture.svg",
     "bezel": "svg/bezel.svg",
-    "crest": "svg/crest.svg"
+    "crest": "svg/crest.svg",
+    "background": "assets/background/main.png",
+    "textureRaster": "assets/textures/material.png",
+    "iconAtlas": "assets/atlas/topbar_icons.png",
+    "assetManifest": "assets/asset_manifest.json",
+    "artworkManifest": "assets/artwork_manifest.json",
+    "controlManifest": "assets/controls/control_states_manifest.json",
+    "fontManifest": "fonts/font_manifest.json",
+    "fxStageGlow": "assets/fx_layers/stage_glow.png",
+    "fxEdgeHighlight": "assets/fx_layers/edge_highlight.png",
+    "fxSpecular": "assets/fx_layers/specular.png",
+    "fxShadow": "assets/fx_layers/shadow.png"
   },
   "compatibility": {
     "minimumPluginVersion": "4.0.0",
@@ -338,6 +349,8 @@
     "Default display mode is MINIMALISM; premium glow/effects are opt-in only.",
     "All control IDs and grid metadata are preserved from the REV18 canonical source.",
     "Visual-only change: no APVTS, DSP, sampler, MIDI, preset or audio callback changes.",
-    "Existing PNG preview/hero binaries are retained pending visual inspection and the REV18 artwork acceptance checks."
-  ]
+    "Existing PNG preview/hero binaries are retained pending visual inspection and the REV18 artwork acceptance checks.",
+    "[DECISION] Original premium artwork/control-state pack generated from approved palette and material brief; runtime and G1-G4 validation remain separate gates."
+  ],
+  "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
 }

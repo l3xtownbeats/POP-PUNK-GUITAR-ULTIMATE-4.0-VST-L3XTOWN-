@@ -1,0 +1,3075 @@
+{
+  "schemaVersion": "1.0.0",
+  "skinId": "skin-107",
+  "theme": "VIOLET NOIR",
+  "assetCount": 308,
+  "records": [
+    {
+      "path": "assets/master/hero/hero.png",
+      "format": "PNG",
+      "category": "hero-master",
+      "bytes": 559574,
+      "sha256": "414497b1f6f238fa515a29918029747fe406368cac6ee328b3a3489df1324458",
+      "crc32": "F89EA8B9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1600x900"
+    },
+    {
+      "path": "assets/hero/hero.png",
+      "format": "PNG",
+      "category": "hero-runtime",
+      "bytes": 193600,
+      "sha256": "92df02ea2e20c91204a627cd1a23a2e497541f07ecd81df5178c32166795030a",
+      "crc32": "5FB7F1A5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/hero.png",
+      "format": "PNG",
+      "category": "hero-runtime-compat",
+      "bytes": 193600,
+      "sha256": "92df02ea2e20c91204a627cd1a23a2e497541f07ecd81df5178c32166795030a",
+      "crc32": "5FB7F1A5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/master/preview/preview.png",
+      "format": "PNG",
+      "category": "preview-master",
+      "bytes": 221119,
+      "sha256": "d07f7b97d339071af9b51d9cc85465617edc76caf453b7ce3de3406de911fb66",
+      "crc32": "C257236A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "720x480"
+    },
+    {
+      "path": "assets/preview/preview.png",
+      "format": "PNG",
+      "category": "preview-runtime",
+      "bytes": 66714,
+      "sha256": "79e812fa79da32745624ce6d3e927b62fab2cc0bd160fbef08a2e393f1bd3d4d",
+      "crc32": "8EA38912",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "360x240"
+    },
+    {
+      "path": "assets/preview.png",
+      "format": "PNG",
+      "category": "preview-runtime-compat",
+      "bytes": 66714,
+      "sha256": "79e812fa79da32745624ce6d3e927b62fab2cc0bd160fbef08a2e393f1bd3d4d",
+      "crc32": "8EA38912",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "360x240"
+    },
+    {
+      "path": "assets/master/background/main.png",
+      "format": "PNG",
+      "category": "background-master",
+      "bytes": 1234161,
+      "sha256": "b21e4e826356164937310889a929925b42cf55f67d0745f36ae3af9e285926d3",
+      "crc32": "5B0B987D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "2560x1440"
+    },
+    {
+      "path": "assets/background/main.png",
+      "format": "PNG",
+      "category": "background-runtime",
+      "bytes": 1234161,
+      "sha256": "b21e4e826356164937310889a929925b42cf55f67d0745f36ae3af9e285926d3",
+      "crc32": "5B0B987D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "2560x1440"
+    },
+    {
+      "path": "assets/master/textures/material.png",
+      "format": "PNG",
+      "category": "texture-master",
+      "bytes": 172599,
+      "sha256": "31252311f2608ded4059d2b85487c45d9a021f3e98634db242d5cb44fbf5b28b",
+      "crc32": "A1E1AB44",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1024x1024"
+    },
+    {
+      "path": "assets/textures/material.png",
+      "format": "PNG",
+      "category": "texture-runtime",
+      "bytes": 172599,
+      "sha256": "31252311f2608ded4059d2b85487c45d9a021f3e98634db242d5cb44fbf5b28b",
+      "crc32": "A1E1AB44",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1024x1024"
+    },
+    {
+      "path": "assets/master/fx_layers/stage_glow.png",
+      "format": "PNG",
+      "category": "stage_glow-master",
+      "bytes": 426883,
+      "sha256": "e023546ba8a8b1e192d8c97f75643259cf362aca4482717502da8124533aebf4",
+      "crc32": "6E6900F3",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1600x900"
+    },
+    {
+      "path": "assets/fx_layers/stage_glow.png",
+      "format": "PNG",
+      "category": "stage_glow-runtime",
+      "bytes": 67960,
+      "sha256": "ab148caf666bfca8ffe22b9f7027ded464c4a3c22a29c9ac44bc48459ce096da",
+      "crc32": "2C80FA9D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/master/fx_layers/edge_highlight.png",
+      "format": "PNG",
+      "category": "edge_highlight-master",
+      "bytes": 6182,
+      "sha256": "3f17c49ebc476934b58e6a8a3065c38b9b768ac896080363d90b491e4786155f",
+      "crc32": "909E7F79",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1600x900"
+    },
+    {
+      "path": "assets/fx_layers/edge_highlight.png",
+      "format": "PNG",
+      "category": "edge_highlight-runtime",
+      "bytes": 1723,
+      "sha256": "6efdb1154644258ed1c0727f7edd110811de8333b18933ebc02b3b46ea3c27e1",
+      "crc32": "E0980C25",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/master/fx_layers/specular.png",
+      "format": "PNG",
+      "category": "specular-master",
+      "bytes": 268283,
+      "sha256": "bc3ac99b2b3279e22b60c1d5dbe8640a4e53d422c144b1e199e71c8701cce0cb",
+      "crc32": "F6ACCBE5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1600x900"
+    },
+    {
+      "path": "assets/fx_layers/specular.png",
+      "format": "PNG",
+      "category": "specular-runtime",
+      "bytes": 48502,
+      "sha256": "9b06e176c00552f228284d90313e35fd9d9fef84aa8556ac11599afae70b36e8",
+      "crc32": "08C944C1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/master/fx_layers/shadow.png",
+      "format": "PNG",
+      "category": "shadow-master",
+      "bytes": 102508,
+      "sha256": "e0d48209361113e286debb4196586051b06fc9a126880600f5bcbd2a8138750a",
+      "crc32": "846C3DEF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "1600x900"
+    },
+    {
+      "path": "assets/fx_layers/shadow.png",
+      "format": "PNG",
+      "category": "shadow-runtime",
+      "bytes": 51003,
+      "sha256": "3837b7fdc51c24690425b6afd4f66af6c315ff2e39cac8d992d40270ee8fca4c",
+      "crc32": "2CA0C4EA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "800x450"
+    },
+    {
+      "path": "assets/master/controls/preset_browser_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7312,
+      "sha256": "ca928dd7cee58ae064dc7ee12ddd244e81e8948b6ca80efe83e80eddf640a429",
+      "crc32": "92EA8E13",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/preset_browser_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13108,
+      "sha256": "ce429454a85cebc6a78d31f979c8609d444ece9195455f30a77b67909910dc2b",
+      "crc32": "6BF9FB8F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/preset_browser_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7374,
+      "sha256": "0ab9b626b9396f5d6f6f9add480d8cd0d5e5a590db14c45bad259b2d1bfeef7b",
+      "crc32": "2B66FFD1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/preset_browser_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13050,
+      "sha256": "6d1c7193d53b7890bd8e57ef130d4bab6601e692de4bf2b3481b90346ef58b16",
+      "crc32": "45E14C36",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/preset_browser_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7381,
+      "sha256": "c937529c9a262a5257d4bc0fa85ca2ef159149a317c21d007007cb00cb43ca41",
+      "crc32": "511F1CCC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/preset_browser_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 12872,
+      "sha256": "2274d7668c7c5b33bd8899580d95bae901be73738eafbee7eb81e42ee2731fef",
+      "crc32": "6929C552",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/preset_browser_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7367,
+      "sha256": "8d749a177012abaa6fe743ee293cdd0242b1eb7b68aa5a6dc5e6ee72a160ea83",
+      "crc32": "1C1F9F5E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/preset_browser_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10625,
+      "sha256": "d7bd1ba8faf31196f634a310d80250ad01ecb21e2b3b84773b17950cef1c6a45",
+      "crc32": "306C1FE1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/preset_browser_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7469,
+      "sha256": "7cbf1159b512d73d281196f0caecbe43000cd8283e1c31643c0430d2b52a3217",
+      "crc32": "073777BE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/preset_browser_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13163,
+      "sha256": "3f2139880c43743fdc13fff68cb3f129a039d8007bb9c3a71a5e4cc6aefb3e85",
+      "crc32": "01C30EA9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/mode_selector_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 9145,
+      "sha256": "22d9a0340215f674560866099404673292ec881ef82d402c294e5e8680e7a2cb",
+      "crc32": "47697ABC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/mode_selector_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13671,
+      "sha256": "c15e0e373dc20ff074f80eae023d841fa91f3df3979359308ccc94cda5b39f3a",
+      "crc32": "A34989EF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/mode_selector_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 9204,
+      "sha256": "9740f90e759190888a248e27a0c1eee111129a51f52e1af2b8e210e16ea67911",
+      "crc32": "914EF464",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/mode_selector_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13541,
+      "sha256": "034fb57ae1358a596e1827ac0fe6ff46c292c36499f8a6cac170f80fb6829a09",
+      "crc32": "2E3A42EA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/mode_selector_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 9060,
+      "sha256": "1578dceccca6d5a13aa840a7018813901a890db91cada8a52f74e2027e73d392",
+      "crc32": "5A318542",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/mode_selector_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13851,
+      "sha256": "76a6d3314452df2089a44173129384eff533d7a84650c0098806dfdd1d9cb78d",
+      "crc32": "DF50A2BB",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/mode_selector_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8868,
+      "sha256": "dc1f5f3449896b505eeaf910efcbc8a49f8aa5a418490bc33d501057fc1a9063",
+      "crc32": "79091336",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/mode_selector_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 12867,
+      "sha256": "67723a06e82dac0826194a332a81bf6db31d1bc04efc4735ada66e99c3b22ae3",
+      "crc32": "BBD855F5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/mode_selector_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 9290,
+      "sha256": "0833da8adbf04db8cb80e5051d0b39c8d3718e7461e5ffd598905de6cd228c59",
+      "crc32": "0FBF4017",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/mode_selector_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13794,
+      "sha256": "16a671d97fc591e21c242a32b627088d208fe739bf671f52aad10eae3694b11d",
+      "crc32": "35F0AA63",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob01_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13449,
+      "sha256": "5d6dfb9590a73cf39f913681a3da729306c8a9bbe8854ec26d9d81783b90b3e6",
+      "crc32": "57A66286",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob01_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44266,
+      "sha256": "6d41fbfcfda2657957ad72adfc45b101f4c6480687ff09a257bfdac752ac17b3",
+      "crc32": "5C362C81",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob01_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13461,
+      "sha256": "08eb942c93983cc8c08bc41a8b384f1e6acf807717be1f7ee742ed2de907c7b5",
+      "crc32": "5449FDE1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob01_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44489,
+      "sha256": "2a6ec528fc09edae1b508f302e45ea4df5fa5a07a277d0da64053e7f1a151667",
+      "crc32": "ABC1E63F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob01_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13562,
+      "sha256": "4a4477ad969b399068ddd45f0e9f78ceef032b53255341fb9e50755d1ee953f5",
+      "crc32": "E26C80EF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob01_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43285,
+      "sha256": "d559d82347c8eb11794309f4e490a511a612a92b7d1cb8102d7250c63a1cc718",
+      "crc32": "75AD5E94",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob01_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13522,
+      "sha256": "ba6fe7feddfef9656815dc21240238fdbfea15a3e07bc527f05a5500c6d443bf",
+      "crc32": "D21E667B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob01_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42448,
+      "sha256": "97399c09ff66476fe3b9819b9a952c0c05872976c40e3b9853c29c1f0c6f3f38",
+      "crc32": "EBC5CBB2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob01_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13542,
+      "sha256": "d4d82406e058e2abf007ac6e805b9ed8fd44936aef270fb514e3b6a62e52f8c0",
+      "crc32": "D4802BFF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob01_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44769,
+      "sha256": "0c88b3453d7cde9fc396b573c40223e7a027faa3f6169a1d465852d6f8836633",
+      "crc32": "AD23DCA8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob02_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13578,
+      "sha256": "654c8c6697726ed463c43dd5b1204713d0a25329c18880681b9a377091d86b2d",
+      "crc32": "11334A19",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob02_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44284,
+      "sha256": "0dde1c8b8e2ec69ba2cf36325d7d8a0de1108db2e0b5ea2ed1ce3cddaa6774cd",
+      "crc32": "F8143663",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob02_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13592,
+      "sha256": "fde0a4ddc8c73da493d0667d10ae4c62519b3ad176191222bdb7cd5d832acd7d",
+      "crc32": "9DE6B4A5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob02_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44507,
+      "sha256": "1c21bb3ca6ae7653b00063076c92a6c43e196a790df5ab563ea571eb366deda7",
+      "crc32": "177CDA9A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob02_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13697,
+      "sha256": "92f1a3200cc9679475ddce830b0766f943b083869edccf07346f3639751546b5",
+      "crc32": "A3C1111B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob02_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43307,
+      "sha256": "31c93bb1ccd4dcdb43a9ad18a9571cf83008971068c0db0312e69e847932ee76",
+      "crc32": "88E0726A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob02_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13632,
+      "sha256": "6fc0b6be1de64493200ec71a6fb6e4d4e5432100caa9924c5efd978034d2bf6f",
+      "crc32": "2C910737",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob02_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42464,
+      "sha256": "ecc09151309b52978b4c7b4808c27967af0614943a6a756684770e59294ff74f",
+      "crc32": "DD1FA328",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob02_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13671,
+      "sha256": "cb9ebbc0e49f4b7f0de724f4e7238f404fffd311d4696c9343ae60b0ddb58325",
+      "crc32": "33CECFBB",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob02_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44788,
+      "sha256": "eabeff06ddf2291c8a9a5ab9dec621628ddc002d8d9fb4c2ac045d1c31d770be",
+      "crc32": "CEE40B35",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob03_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13555,
+      "sha256": "1456f5267be8686e55f5c89f8ca3e13ecd856ec499d53ea7b372367334645e53",
+      "crc32": "3FC80403",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob03_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44286,
+      "sha256": "e8d3f0be5e542c75055cd7417789d8787d54af90fdba339a7fcbc2dbded92dc4",
+      "crc32": "892E65EC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob03_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13565,
+      "sha256": "b31d6a5c35f17a34ac3af391e6bc308c8470ee06f6f877c94e5558080a3450c3",
+      "crc32": "A7984CA6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob03_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44509,
+      "sha256": "b8e5f35b72c95b7084958bbb77806c40c9d07150422c7746816daf352312313e",
+      "crc32": "D15DE3A5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob03_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13673,
+      "sha256": "fe18be1943fa47eae8be4cf7f8a7d680f76e6f91e82b49678d6a996a18ed5df0",
+      "crc32": "7AA642C8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob03_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43308,
+      "sha256": "b3ae142765c6e8e59a7dc4d23d7a4559af1af6638e3c55b3b45bd28a73d79949",
+      "crc32": "BA2C44FE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob03_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13635,
+      "sha256": "4864ebe4374890065501bdde082861b2213f16ab3395f1c66b209828a99b1130",
+      "crc32": "CA685C9E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob03_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42464,
+      "sha256": "a721dc1f8934e50e3c602ff0a27686f1c43a7a1af50805049f96acbf8ac3cd13",
+      "crc32": "978ED0B1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob03_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13646,
+      "sha256": "17efb081fdde9530a6fc83fa04a9a61cf261b5425b6c34561ef9a7368468e051",
+      "crc32": "4BB4CD36",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob03_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44790,
+      "sha256": "9600a64ae49c211ac05b06298cc44fe534d00587ddb30492c96406f62d1b961b",
+      "crc32": "58C4764E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob04_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13530,
+      "sha256": "8f15fa9935f3e1d4a4de46b952c1dcd377989c5d0f6bd69825e17c36cb863812",
+      "crc32": "F2A4F4D4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob04_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44271,
+      "sha256": "88e1c4fee4afceb7500f8bd3de8d247aa4bac83409c639b4ac9cd767bb80c945",
+      "crc32": "A4E59CD0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob04_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13541,
+      "sha256": "6c841392f7677a88a6353937acf4c48fb709b86c903e2c09c3f5ae810aee3333",
+      "crc32": "A652A169",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob04_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44499,
+      "sha256": "ad5cc1ab9c5f2d54178d41db67679423d9eb7e753185d997ac37ead3425ed250",
+      "crc32": "91237D97",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob04_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13648,
+      "sha256": "b29091b8d13a2c89f9049612bd3d374d8840692aa4f02d9a91f6aa5c8ff5c8af",
+      "crc32": "2605BAB8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob04_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43295,
+      "sha256": "7ff5245b3303f965153aae741bf79667f1b765ecac32a2d2001bb7d7f657ca4e",
+      "crc32": "E99658F0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob04_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13612,
+      "sha256": "198a4ee6db4348b20da6149b8289396119f90252ed6390c2d05e8aea3ae5c9a4",
+      "crc32": "4B5B7F45",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob04_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42472,
+      "sha256": "875e4bcc4b7a585fb8bffa3f3a64de51551c277a7e4766d68c736ddd6dfd18a1",
+      "crc32": "38AF73B1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob04_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13624,
+      "sha256": "6227a22075f908bb5810679825df96479cb55057811e2cffac6f0f7fcde915dc",
+      "crc32": "FC9F3F65",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob04_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44778,
+      "sha256": "0b185dfa53c7596dc86b9da2a3b2177268d0190d7f76b339b56a05a214cbe0ed",
+      "crc32": "2FE6A570",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob05_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13541,
+      "sha256": "ae276f5a69b853a4347677b1aa3b262c8e9a99a7bc6914b761ca0b5415f59872",
+      "crc32": "4201A313",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob05_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44283,
+      "sha256": "571c18e6a0eba2fc9a85b446e979d76fc3035f2c58c1cb8542dd321dcfd81e16",
+      "crc32": "82832C08",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob05_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13552,
+      "sha256": "12206bbe946fae16eddfad59565d1f4aa70125b1af693aa8ea4c1e1b3b4b53b2",
+      "crc32": "893F5C4D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob05_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44510,
+      "sha256": "73ebf04ebe856f7e303537959def2dc6f4f6d01285b670f5f2a18c0a71f7df3b",
+      "crc32": "3718DE68",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob05_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13660,
+      "sha256": "fcde128d84efa78c09cc3b6345a723fb71d66084a2f05d65e8a6f1b19e43f624",
+      "crc32": "9DDE0C93",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob05_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43303,
+      "sha256": "393cb30120fc7d6fa15baf3b35a74c52d7447c3de0270c3f897d5fce4e726070",
+      "crc32": "C34E9306",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob05_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13623,
+      "sha256": "2531481d5104104612c584c8452dfc5d89446ec0bf435b31f896b759d7dc915d",
+      "crc32": "258826C8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob05_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42466,
+      "sha256": "f43d2ae3eeaf3be6f822b8cab94e6e61ebb9e4dab09fd3c8773c8ee39a85ea87",
+      "crc32": "FE395CA6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob05_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13633,
+      "sha256": "01e08da3bb7c84ad71ce8a9a2d8e1f12c643dd99c6537308bfb6a834ff65b37f",
+      "crc32": "9593AFB4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob05_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44788,
+      "sha256": "9c2fa93de3016e1f0ede3962c919bbe82e8559e936d7b90648275ff67cd6caa9",
+      "crc32": "37080E15",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob06_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13568,
+      "sha256": "a23174cdd59195f521e1afe7722359e9283b1bee8bf0f3320a1a1bcf743a7317",
+      "crc32": "1699351D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob06_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44279,
+      "sha256": "0b8f42c51dfbd5e536c15ca64665f45c8a8fb32fc5bd5fb4abcdd8cc38c855df",
+      "crc32": "446478E5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob06_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13580,
+      "sha256": "1a5a6a30ff97a4bca04e57407ed6f30e0a47b51d4a5330689ab1f3c626e8d95a",
+      "crc32": "59B5CB17",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob06_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44499,
+      "sha256": "a33b23320bfcdd9c53c44171d94224974ce9a13bcd9270f8c7d7fb408c7b115c",
+      "crc32": "18C7185C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob06_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13688,
+      "sha256": "a429b918fc059f4a7bda382343bb328c72305fe070c0e9be6d81675ed9c89695",
+      "crc32": "73DC702D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob06_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43304,
+      "sha256": "8a803b93e0e22a3c5e9599ef41c3bfdb5e0adcf57f1cf9bdc558d3169f8c26c6",
+      "crc32": "99853741",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob06_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13642,
+      "sha256": "dae9eb9a9e3fd87fdf195dda24f0193444c12eaa1705d0fe91c760bdd750b85b",
+      "crc32": "E5A93B51",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob06_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42460,
+      "sha256": "b044ab7b626c4edb1fc00937e38728a2afd1cc68d21d3701fb8ab2d031c157a2",
+      "crc32": "6DC3698F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob06_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13660,
+      "sha256": "6ab5a2d6e7222557e20cb70a563ae943dce4767c8d9aa7dcec143b87c8edebd9",
+      "crc32": "2F01A453",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob06_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44781,
+      "sha256": "10a69aa87d26d5b9a613ef44d7d2709ea2f5cd966e8b1cf39a953106da8eb343",
+      "crc32": "C87C8368",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob07_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13521,
+      "sha256": "c133bf5474a0e30c371eac6d8c6ef9698b7b4666d55471cd5385aa59c88267bc",
+      "crc32": "2ECF1442",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob07_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44269,
+      "sha256": "66090aacdc18ab198fa5556136fe20816376cb6e6a5e2785bd9503f0c3cda70e",
+      "crc32": "9C6BC8A2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob07_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13534,
+      "sha256": "e1aaf7497ec6d2689250d7cf428b16a09199294cc3223419531c54f0f05ba96b",
+      "crc32": "F05412D2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob07_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44492,
+      "sha256": "7ffdba5e6a29dab6368c18515ee31759356103b9d3dc2df97b65c120d1b186f4",
+      "crc32": "67823370",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob07_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13641,
+      "sha256": "fb2eb77783083cd3af2d2d52b4f9ce4ee0f020a21f7aad37c12620987f0b3790",
+      "crc32": "663FE779",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob07_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43290,
+      "sha256": "b6d0f696f2ec2ea4773abd82c9d76b20b9f7d249b8195b9cf986d3508c204c81",
+      "crc32": "CDD257BE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob07_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13588,
+      "sha256": "84491afc984de0256d9a63c4b3e3bd3f8429909e9e5781c70ac448d8e87cb1ec",
+      "crc32": "2856EA7E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob07_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42460,
+      "sha256": "163e4b8a5688e427236eba86bf8d109d4423cce5050f9825116a083fc7ceb51f",
+      "crc32": "162DB4BE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob07_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13614,
+      "sha256": "36c6530cf99f600b5057daa35f5d33fa14c1e6942b721156e7eb8c5379720c7c",
+      "crc32": "817C7E14",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob07_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44770,
+      "sha256": "6b2f54a4497f12ab5e3672142682ba0442f04aa51a8e2b5df09b08dd215dcb2f",
+      "crc32": "34C0E4CE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob08_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13574,
+      "sha256": "912a326daca2d2bceaf549ef4bd1107e6664ffb892f26d8bbc429c7f33477265",
+      "crc32": "48691E20",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob08_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44281,
+      "sha256": "5dc7777769cf33315dda20e53456d50d2352425586e56c433beed6111c0b7038",
+      "crc32": "8A3C7078",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob08_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13589,
+      "sha256": "ae606254b870b3eb795fd6dc16b16eb56774c05f9436e59d8df61125bb92df45",
+      "crc32": "B6197DBA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob08_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44506,
+      "sha256": "0dc23cabec2f9fedde6dec34fc22f38477f859112e996c6366b0db9584062a47",
+      "crc32": "A2415079",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob08_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13695,
+      "sha256": "30bf8e7f8c2eeb968e5fbf5830bfea6464bf1c753abb5fc9393828fbdd493ed7",
+      "crc32": "6673B11B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob08_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43305,
+      "sha256": "af3799d8c2ea679ff9b2ff1621100faac62f4faa412f6cc942f8fa45ed958f0d",
+      "crc32": "6213D119",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob08_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13648,
+      "sha256": "11abed32eac2a4ca7c0823eeb2be1a15eaea07e5472f5234864d553033e593dc",
+      "crc32": "CF7DFC69",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob08_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42465,
+      "sha256": "5920f99c49ac97b664cefe9a5d3198d2c0004e15e50633362d1ec1c47056fdaf",
+      "crc32": "B3E50DA7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob08_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13666,
+      "sha256": "cfe59eadb69f5849515ba8ab993a68bdd2d53bc3a8ac2eaf4e0a34d35d683d7b",
+      "crc32": "C38EFBA1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob08_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44786,
+      "sha256": "cf7be90e922a814936ca25dc08d1e9d44e475b5464214833688470b69706db86",
+      "crc32": "9AA6F15A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob09_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13565,
+      "sha256": "b82a7febd1572e1ebb5584f1446b1983a41a0b284fb111a46467d18fe0b07eff",
+      "crc32": "AD6EA1F6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob09_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44280,
+      "sha256": "535de082b10de25f02510dda17cb8b0ec6687c51842612a66de974436c8c6356",
+      "crc32": "B9801197",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob09_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13574,
+      "sha256": "4cf94357e96bb952838b3054cc0f45499b88bdf5d84a7d52c81dbe67c85babd4",
+      "crc32": "CBB96B81",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob09_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44508,
+      "sha256": "8b03aba16a3eb96ffd4b2e7ee28f95f25df56d7e5e92126811a29a058a5ed4fa",
+      "crc32": "2DF86254",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob09_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13684,
+      "sha256": "cb3f6c97fabe3080051a8a5adce9cc53e1feb4c82905fd4e74cb09b0af965d22",
+      "crc32": "C950F0C6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob09_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 43303,
+      "sha256": "397acf68b0e9d0cc1eba00327362df0cbbdd90873daa442dcd57670918c1a951",
+      "crc32": "49667884",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob09_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13654,
+      "sha256": "abb67102f061ac4259317e25a22db5e016e9afc893bda6890d371447e1c8f11e",
+      "crc32": "590E3472",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob09_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 42468,
+      "sha256": "4f926785243fa2d23a6563ef3a522fbe341ba0a3faac93738f121168bb1b68c7",
+      "crc32": "385F9216",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/knob09_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 13656,
+      "sha256": "17ed3200f778f605668be9812ed6f3f08134fa2905ef326ed9f60dddfa3e3854",
+      "crc32": "D3A51A7F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/knob09_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 44789,
+      "sha256": "fc33af6f31d2fa3d0524d3f0c0d2cc7ec0ce1d2e3b9c06a1b158d292caa6401b",
+      "crc32": "01F09C06",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch01_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8592,
+      "sha256": "b1f2ffa66bd61b2958e0f3bf112a8f3d9ba9b873b482fec02b15403ecf4fbf3d",
+      "crc32": "7FB3A700",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch01_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20419,
+      "sha256": "4e2158b5d041c6628582dcf4ac78fcbe6fcf1bc8edfef72001dc65a182825662",
+      "crc32": "0DDF4E96",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch01_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8654,
+      "sha256": "e8dd0a13f03b9dab89924e83d8c2f9df55dc076193b6f84c2fac05a108c147f9",
+      "crc32": "80DAA910",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch01_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20372,
+      "sha256": "2e8de9a932dabc9c015e36ff51a6cd1c622c71a2c1ae3cdf7d7d317dad1ff4ba",
+      "crc32": "937EF666",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch01_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8664,
+      "sha256": "a4b15cb095bd0360c33e958f5312719819dffbb2dd51325cb5707b4df5f99514",
+      "crc32": "69B562D8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch01_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20165,
+      "sha256": "522287b3b901635fd40c9a1a7deaf166a5adde3ae3364cb0250e9e645df6ceb8",
+      "crc32": "FB931EB6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch01_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8734,
+      "sha256": "55ad212c9780ec4e1921989db0df7fd71b54ee5af981b7bb7e31aabd2ea7094c",
+      "crc32": "7FF14EA8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch01_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18247,
+      "sha256": "32796385344e1054012d13fc28f47ce95343f5decc3f669e40af456ee348f4f7",
+      "crc32": "964EBA00",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch01_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8729,
+      "sha256": "a3d93809b510ffb09efa649b22a614641025c76e64c28b26f59febee927dd613",
+      "crc32": "231B4A27",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch01_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20539,
+      "sha256": "3ca15ccaf7673535224357605837b8ed28f660c9ec008c06ac396b8f6339d89b",
+      "crc32": "065EBF92",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch02_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8721,
+      "sha256": "f22365aec18b40a7af7b01ec25279fb8c5764c853639bc42f103be164b228011",
+      "crc32": "A485B444",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch02_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20461,
+      "sha256": "296e37cc406ba34a0b2954ea01bc5e85691b65de4e27599d4eb1af445138b51c",
+      "crc32": "8872D34B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch02_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8782,
+      "sha256": "afd97d18ef0182cdcd236ea2f2fe98b9b1f0281db4aba2a9c25e93d01cab7f49",
+      "crc32": "06A2BE13",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch02_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20416,
+      "sha256": "edb42d134f2f45d7abdce8412d5ef1288716b2d330137a5bac029db5c537ccad",
+      "crc32": "8EB37047",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch02_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8792,
+      "sha256": "70e970df9712da5bf25fbca0a1bb9464c0750df1bfd3d1148afd0beb0c86375d",
+      "crc32": "1AA0F9B9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch02_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20210,
+      "sha256": "3bc25f261bbb809ce0914c4dafec3ce32bdb350720360c391f55414efed1e0b2",
+      "crc32": "9EAC23C9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch02_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8843,
+      "sha256": "2919154de5ca2bebdcf573792f1e3bfda13f3c4c45897330f7db8d5c8090b7ed",
+      "crc32": "0D9E3FBA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch02_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18288,
+      "sha256": "b685c86f9ddfc23d7fb2c62ebdc59c71626716808c8525bd7555b840430af708",
+      "crc32": "7D97034F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch02_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8855,
+      "sha256": "d3d0dd212d3b7796311ecf43fbcd2833d1a3974bb91e86b2e39c5ba11590e11a",
+      "crc32": "338EF50C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch02_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20585,
+      "sha256": "167e1a0d3b7595ac653f291a9cd6c7e3dc94a13d06d98f53ae52c1a6ed94c9b9",
+      "crc32": "A680A08C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch03_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8724,
+      "sha256": "208cbe844f50d32c1b6c1cf87e7f51d237c1ce49eab49335592eab3fe2843beb",
+      "crc32": "B6CE7CBC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch03_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20447,
+      "sha256": "bdb6c4344065e221866b3e8ef678a51b7e711d318c4c5c09c673c1e82b7d8350",
+      "crc32": "DC23258B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch03_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8782,
+      "sha256": "927ca4d9001a1d090174608261b306e6297a182581aa6cf785c39ee198010e16",
+      "crc32": "AF5E428A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch03_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20397,
+      "sha256": "288023bd66c8804bedff5061356847d14772d49f0670e8f78de1615ccd622abd",
+      "crc32": "E5C9E43E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch03_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8795,
+      "sha256": "5130de1ca837e65ed4d7698a5c9ab60a916ce9c3789e56d875218fa14fc128f3",
+      "crc32": "64FFAAFD",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch03_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20202,
+      "sha256": "014f07435ed02a18dc244f03215d7f814d59494b792b6bdf2362a6a41ebb32d0",
+      "crc32": "B22062FA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch03_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8833,
+      "sha256": "72cf33a8e33ab5966d74b8259d327f0cb4f352046059ce43ff4c4595476f6c66",
+      "crc32": "522FE262",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch03_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18288,
+      "sha256": "03b7d4fdb44f57fa120296e89d74c431fe12e12cada7ace25f2a180f4e231acb",
+      "crc32": "C85220BC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch03_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8857,
+      "sha256": "d82468e90195b4a28f52189b7ac989bb3d518ce55eb140ed14d8d5b5030af969",
+      "crc32": "A2448015",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch03_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20575,
+      "sha256": "d898c2c2349906b0de4e1f549c33b55b3552c1e956c6440073357b0bd4ff4f0d",
+      "crc32": "099BD4B2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch04_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8675,
+      "sha256": "d5d1eeb2eb263c93e376cdcbc28e069cc3862b9f3405a3b6c1321530d3371bdf",
+      "crc32": "2C251F76",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch04_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20427,
+      "sha256": "a59039ab1cd960ed4a1613fe9caabb4976bd57d62859545a449e6f69539ad918",
+      "crc32": "09945B81",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch04_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8736,
+      "sha256": "8ecdfb52afd3b462012becb59d2dde36e0ce2015691d8d9d5618f3195d7fa16a",
+      "crc32": "7B233D08",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch04_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20385,
+      "sha256": "252f68d5fdea89b7e0943aceabfa9b3148a1f339cd357d6a232eaba5f6db3f88",
+      "crc32": "265E47A2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch04_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8748,
+      "sha256": "c8fa9a76576313d240e2a0291e6560870825f3d8a045efe2ccacd92c3268ad6c",
+      "crc32": "ED862AA9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch04_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20178,
+      "sha256": "213c1fb32e54b0c293742fe364465b73192fc8e974b0199f0951942e5bc0691a",
+      "crc32": "A685E869",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch04_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8803,
+      "sha256": "51aa2a8275d05e96205793f27be4b4b2292d343d92c191c025f9db92aa1764ca",
+      "crc32": "FF68B3B4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch04_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18270,
+      "sha256": "aab1a4a55b218d95041e22f8949228d31732ffb9cfa5d72293993e12d8bcabd6",
+      "crc32": "3C264225",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch04_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8812,
+      "sha256": "a27a6505e0894f4025fb1083304a9ee0af588b81bfdf71ae075dd414c3af20de",
+      "crc32": "BB23E45B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch04_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20551,
+      "sha256": "7b9543025728e308c0645458bbb0a9ee99a77e352d82e6cc3c72bf9efb637ebe",
+      "crc32": "23B6FA07",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch05_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8710,
+      "sha256": "4bd6d7d67c77d2a747f4a8f3314d9d8267af51677881bfcbdb0e21e93709cfde",
+      "crc32": "EB1C10C8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch05_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20448,
+      "sha256": "8e8905db6399e41a8d30a28a81c5d2fc90ccd4b45b28335b590572375284d148",
+      "crc32": "625954EC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch05_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8773,
+      "sha256": "e6acde569abe8f90080f6c78f0d3ef0502ed4c579b28efb8ea2dc072adb88833",
+      "crc32": "631A27FE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch05_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20400,
+      "sha256": "5a20cadfa8af65eb90c2e36ad65fc4b7edfe0d1f9e1f84616a9653e74ff21caa",
+      "crc32": "6A6B450E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch05_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8781,
+      "sha256": "4fbacc312b1397cf48cd42aa11e6f4372a2f9c0d1b57053edcab2e815e7deb93",
+      "crc32": "770C8AC9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch05_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20198,
+      "sha256": "0d037345881fe579a69252f47a3e3c984b648bda7b302867c2436fac759e05e0",
+      "crc32": "299EEF99",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch05_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8848,
+      "sha256": "56311164dae992703d9df0fa0e2cfb3446026256a86fbdc9eb7b2ab3c13b1f8c",
+      "crc32": "D99216C1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch05_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18273,
+      "sha256": "b62a5b13f92a54fcb4328c2cfa9304b5707404785be653b1d57c2c0d3023f98c",
+      "crc32": "B42ABCF2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch05_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8844,
+      "sha256": "a7f5299ca9654b2468bf2dac65b90bf5f8f20bb8f6e6ad65723007e68e03f455",
+      "crc32": "75630BE7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch05_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20571,
+      "sha256": "bb345536a516556be92c9408fdceedbe5121d5d71052129ce10c2cf2edc0c66c",
+      "crc32": "30134CA6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch06_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8722,
+      "sha256": "a2173a0e26e262dd0deb6ba6da28ad8a968e54abb3fad61d6b1bd4833c25a419",
+      "crc32": "C56E1B1A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch06_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20448,
+      "sha256": "4ce1e3e496375e9f4c2198ed551186fabb50a8ceceb3f3ea35bd5397cfe96e54",
+      "crc32": "B1458531",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch06_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8786,
+      "sha256": "95bd657b55ec927ae4b85801ae4ec3125c318896b65d2d8e3734818dbea83175",
+      "crc32": "108B1A29",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch06_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20406,
+      "sha256": "0e64bfc10e59f73c2044f3ccec52983a245aa3f2714f0c256c6ac54819fe3446",
+      "crc32": "009FD65A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch06_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8796,
+      "sha256": "cc7126fbd3c7968e55f0024a36bb2dae1c0b64f52fb4fdc793b0f76c9589327c",
+      "crc32": "73B8232A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch06_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20193,
+      "sha256": "abdc9b6c4ba47ea2ff3d3f442547223ec89c082ab494d12143db744ee33a3019",
+      "crc32": "D0079B57",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch06_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8853,
+      "sha256": "5ad2ef37201b2804d4e8bb571fb281a8d0e0d58b3f249b578bcced2a5d2fbada",
+      "crc32": "E3D408E7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch06_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18293,
+      "sha256": "7576574286d1260fb5f1c474d3f184db3aa8f5b0a8fc90f1e280cb72a838c9da",
+      "crc32": "925ED9AA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch06_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8859,
+      "sha256": "190604f007076d5430b82a982ffec94e3f4a6362816d33f758434fe6a974cbf2",
+      "crc32": "D40BE65D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch06_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20566,
+      "sha256": "71b442e4222aa0a2e3ccd1f9cbbdbaa1d9821c92876c0ceb36566adb9c43a63f",
+      "crc32": "49CC84C6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch07_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8661,
+      "sha256": "6654c544528e6c98e3ed3b527b8e90fdacfb849e59ae4c00305238d97710e886",
+      "crc32": "06DF909F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch07_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20433,
+      "sha256": "6d10a47b4582f608faedbfa965aaf3f3cce9a6a77348a8aeb16be11e77f90235",
+      "crc32": "8E9C83E2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch07_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8725,
+      "sha256": "9cae48049cb7c00dfa55a874bf71296ba4844e428bb22c6c992712d35ecf7a97",
+      "crc32": "2DFD0D6C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch07_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20379,
+      "sha256": "621304095315b37e8ecda42f93f0d159f397adc003a0c570f3a9d357ac4f3410",
+      "crc32": "EC61E9A2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch07_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8732,
+      "sha256": "fc0a5db61a44601c665ecb82122d5b8c471c211d1b2ec108d62b22f99714de83",
+      "crc32": "4EEF0792",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch07_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20178,
+      "sha256": "d2caca9b9393919f178e36deab26331a6aa0bdf46d3578f686d0779219e343fc",
+      "crc32": "F0E57092",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch07_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8790,
+      "sha256": "efddc2c27e8523fd0aee58056633e2410b954c85c05c88ecda7a48bdc2a8a809",
+      "crc32": "40CE2CB4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch07_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18268,
+      "sha256": "3c404bd8ab4ab29c05ded893078f8f6faf68fa954195801897759a4513bb159e",
+      "crc32": "98AF0433",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/fx_switch07_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8798,
+      "sha256": "770a9ed75f0fae3032ba732b6fe318ff190ef97b08dbd8b3bfd011862ae96272",
+      "crc32": "49930A09",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/fx_switch07_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20552,
+      "sha256": "80a2ce9cecb0ef95b3377a6a10b393ac8e5aad0a35cc29fd2ff4b980c0bf9da3",
+      "crc32": "4F79F3A5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/midi_keyboard_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 6408,
+      "sha256": "ab4586ffc9f592c0c3c275e7b35c52fa1f9ff9a242171bb92adb8cf4c6d3b4bd",
+      "crc32": "34D82FF8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/midi_keyboard_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10461,
+      "sha256": "7be5aef68b3c01bb9d845e0b5f52a209d95e0864c921576b53eca04ddad92ecc",
+      "crc32": "15A4A926",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/midi_keyboard_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 6476,
+      "sha256": "7e793e200ea1fb75e6d1a374f43dabe200d5fdcf7e65c7a7ed57955f33b9be66",
+      "crc32": "90457444",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/midi_keyboard_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10389,
+      "sha256": "99c6ce49a826525359aece6208382b57597ce686b0b6cc1295a929e07a871719",
+      "crc32": "9CD44673",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/midi_keyboard_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 6478,
+      "sha256": "61ec73b7d24bd3bc0eb98fb98c07160a3d6d264c083e87f833bbf64f0acbf939",
+      "crc32": "692FF4F7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/midi_keyboard_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10350,
+      "sha256": "8228986ff0e1bb894aa9a602a1337d43df231b96be3f3020dc92422316227474",
+      "crc32": "23DF545C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/midi_keyboard_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 6537,
+      "sha256": "cad29b486f3457515ff8e1bed35f553f4240be6970f7162adc00ad07cc79184e",
+      "crc32": "BE95178A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/midi_keyboard_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 9719,
+      "sha256": "58ea81eeda8d6383602eae5bce6fc15482406c89712782d270e2268a5254d989",
+      "crc32": "2178B191",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/midi_keyboard_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 6567,
+      "sha256": "6f9e76b0f83b86056ad57bb4acf1b7ac79fa39130389d2980f67e6e5aaafe993",
+      "crc32": "AD408C23",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/midi_keyboard_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10536,
+      "sha256": "47a2791f74136c7c27b43b053644b3e6685c8a2f8bcd5004de800e14c58e8470",
+      "crc32": "B0E05418",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LCD_display_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7464,
+      "sha256": "bd3133d8fe14a66b811c5ad5fcb7e1af995a9e4a2402a5747e3d7f706045803b",
+      "crc32": "E3779804",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LCD_display_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 11565,
+      "sha256": "2884de4c1b12cbbe1537a9e6c88dae762b03961f3a63cd75dcba3e7685c9fd5c",
+      "crc32": "A87A7964",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LCD_display_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7527,
+      "sha256": "26cf0c7ac6c3831f22d7d4d6ca24cbb8b4dcb3e7f48abc4923d9402872db00b6",
+      "crc32": "63978C3B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LCD_display_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 11472,
+      "sha256": "b82ba6c5997f45bad89084b6b8cee9c3efac5e9d102fb6e261553f6323f269e9",
+      "crc32": "76C0E653",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LCD_display_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7568,
+      "sha256": "4f534d8dcd59f0c0198fd6119151df14c4b0b80ae85417956c3b3f88d5a8bb75",
+      "crc32": "57E228BC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LCD_display_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 11325,
+      "sha256": "fc8ebffb1c4e201d2fea4f12c62acdb5711ce42826d2d823aea4693f0d069916",
+      "crc32": "A14F05AF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LCD_display_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7671,
+      "sha256": "a59121f2ce947e21bed93e9ab6fe256a77eaa40fa62082783aadae0f7be60212",
+      "crc32": "B2D6C67F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LCD_display_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 10985,
+      "sha256": "dffec093a3a034e2a6947ccc11825344aef4aa4cb53a735f29e3dd1cd38a402a",
+      "crc32": "CEDB47C9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LCD_display_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7605,
+      "sha256": "ca344c947c81db66148adb523db5778c4678606cc4c1bdefe89439059c256bae",
+      "crc32": "9300A163",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LCD_display_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 11551,
+      "sha256": "147481e8cf66058b71a516517407e6175cd1753a7f4ecaf043134deceabb4f28",
+      "crc32": "99463936",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LED_indicator_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 10892,
+      "sha256": "c81df6bfc22370501f6674f700df89472998765cc27de7b849b40013326547ef",
+      "crc32": "409FBA58",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LED_indicator_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 31695,
+      "sha256": "d4c2c75c9268d89a2e8b0d1116ae0ea0b9931911d02b343c2fb40e783e5f53a1",
+      "crc32": "C7607268",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LED_indicator_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 10963,
+      "sha256": "9369aa7c5436dbb74bc6a9bf1d1cbde408b9f1da5e42cb6ff6a49b9a7e8e2b82",
+      "crc32": "478C3995",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LED_indicator_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 31692,
+      "sha256": "79adeec4e277d1513abf4d4e319bcf05a624dcc918e0931534843af7a75dca53",
+      "crc32": "54B8D992",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LED_indicator_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 10988,
+      "sha256": "8da875b897f74fa13d34b6d8c315811aeefa41888ee70cff8327f05e7dcb22e1",
+      "crc32": "9D08CB9E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LED_indicator_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 31197,
+      "sha256": "b8fe75ca9a41c696d24b90379d3f3d710c68a7533e976238e3856152e17f627f",
+      "crc32": "12E605AC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LED_indicator_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 11030,
+      "sha256": "bf937c84558feb64628f0da4f796dad7e6e25129c7207c8f778cb363b41c14b2",
+      "crc32": "0F2FA3B2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LED_indicator_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 30424,
+      "sha256": "ddb9b27879fffabfa53915d01a32eeffde59ce64f0f340bd67010ecfcbb1d6d8",
+      "crc32": "A06FB376",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/LED_indicator_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 11049,
+      "sha256": "5ceecb991e328b154286257e4a720e371c7f715b6866bcaee86bd4e8f04c0be7",
+      "crc32": "CB3CE5FF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/LED_indicator_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 32011,
+      "sha256": "b61d160f4a91e3378125d32d2a600bee619cf3e3e941cdc17cd55a188a7d5eb0",
+      "crc32": "D6B80580",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/SKIN_button_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7901,
+      "sha256": "0bdf84cffde5cf2306adcc8a97c07925914f608ab5b6c1976409ed6587ff56eb",
+      "crc32": "EF3FAFCA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/SKIN_button_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19258,
+      "sha256": "53f8a56edf2580fbe056a4534ea7d5b7f46d688837634af2bcf732329f1958bc",
+      "crc32": "072CF921",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/SKIN_button_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7967,
+      "sha256": "2858f55f054a77879efa526c229309ab20f5697ebd984cd861ce322f3a59a764",
+      "crc32": "52DD0C25",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/SKIN_button_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19322,
+      "sha256": "ae39dabfbaf3a62036c9e70260f9cb20f61e3d9f0adeb850260c5bc7a45da2ac",
+      "crc32": "2FEF0AF3",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/SKIN_button_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7981,
+      "sha256": "2b97b9ac9bdc50d6ed337d8ae45062932b7411e10a2be8447652084220e9e548",
+      "crc32": "61229895",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/SKIN_button_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18840,
+      "sha256": "e0329c00ce2a3c7ea6d372dcf712155f9130b7ceee5d75737a64aa68339c0bd2",
+      "crc32": "C51D009B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/SKIN_button_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8013,
+      "sha256": "3dc2e41c4efd083e0104f75d4ef7c52b41658ae02a7cb45e01c79132f46fe1a9",
+      "crc32": "E831D0AA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/SKIN_button_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 16709,
+      "sha256": "3dbe04b2bbd713412fc65e54d5e9c2f2aea92cc62371a4b0b46872cfde169a52",
+      "crc32": "3FAB585E",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/SKIN_button_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8061,
+      "sha256": "0be2bbf522b32bf5a84d03213308e5444e0a0017ecb29409f3a705f9b7e871d7",
+      "crc32": "FCB5EF90",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/SKIN_button_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19369,
+      "sha256": "0d8f408128e2d6358de468a3b639c526e9c24b4751cbb4025bbdb3638fc384b8",
+      "crc32": "0A471F86",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Import_Guitar_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8172,
+      "sha256": "b2392c8a73eb788c936ea0793e07973b1608d84f1f09341e85ab6d25398cee47",
+      "crc32": "9CF25875",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Import_Guitar_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 17810,
+      "sha256": "581d0fd2eb003c31dcf3172bbc744ba5fe688d8bd689d71f67a72391ab69ac7f",
+      "crc32": "45F6C4B8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Import_Guitar_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8240,
+      "sha256": "d6f65759ed1fa52aa1add9cdf703236f688a561f05cd5fe2a14340d163648d9f",
+      "crc32": "9759B92C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Import_Guitar_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 17901,
+      "sha256": "47209a69574a763ab0e2328c90726979d13168726bcb5885482b3f12541ea934",
+      "crc32": "FAD1EA04",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Import_Guitar_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8255,
+      "sha256": "133d6d5937c98678154e316efb207bc8c2dcd1a489b7d99a89d4e1a8c4d5640f",
+      "crc32": "17C72528",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Import_Guitar_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 17290,
+      "sha256": "d3b469738068d5ff28b6dd1cf2ecf94811c2bdf2a9011bef8c5a0640a9dde7ff",
+      "crc32": "74BF9AFD",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Import_Guitar_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8255,
+      "sha256": "6af864d270c60da8377207fc6a250c7c03d9b353368d00bb1f0750dda93bbd88",
+      "crc32": "91ACB99D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Import_Guitar_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 15748,
+      "sha256": "1bc6dcb7c30d960394ee8d552926dd6af5e4d50886342c0575df1b0445755d63",
+      "crc32": "B23865C4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Import_Guitar_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8334,
+      "sha256": "73129f01b049d698a108d51c3acdf0cbd7e00bbdcee34a5ce47b6c6982e9a58c",
+      "crc32": "3106445A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Import_Guitar_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18014,
+      "sha256": "fe192c0ef5724764f5ebe3a2a6d1ed11a6cb2dbc261fafd067f5edfb38abbe54",
+      "crc32": "550AAF14",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Auto_Discover_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8436,
+      "sha256": "a5d3798343f2be648633a382963257129c954b5b45bf7ebef984bb664963baf6",
+      "crc32": "44D984DE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Auto_Discover_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19863,
+      "sha256": "766374f428a310cede59c8750a7b9a803b6ac369c4aa8f8a549ed9ddd813fa85",
+      "crc32": "0F3CD785",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Auto_Discover_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8507,
+      "sha256": "78b6f5216e2af552bc69e6ce30a5c3062ae257741135dfe8e47f85870e7af270",
+      "crc32": "0A90F84C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Auto_Discover_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19891,
+      "sha256": "57fe2ae74945c283c8769bc6f6240ddab8b5c1dc42acf257b8f7a198e534e262",
+      "crc32": "C338A2DC",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Auto_Discover_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8516,
+      "sha256": "7ac2ef4472853162abfd4b52483dfd7d3afe635d58853ad653cb85bf63f41d02",
+      "crc32": "43CD2FD2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Auto_Discover_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19424,
+      "sha256": "de77aa4d24e1ee0742cdf7072258918de97051e927bde395a87407c8dbdb1181",
+      "crc32": "B4B3A6D0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Auto_Discover_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8500,
+      "sha256": "e48dbf3919311ed2b2725a88dcc95eff07cb9074b8be9954944e5db985b8fdb8",
+      "crc32": "C569AD05",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Auto_Discover_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 17252,
+      "sha256": "615111e41f8057c4d13959c4a4a60f4c320a1db78339c0ef3e996f57f7d183b5",
+      "crc32": "B1FE841B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Auto_Discover_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 8600,
+      "sha256": "94af747cba0a94d9e65918eba0cd0e77249ee23bf53192396775e02631e7edc5",
+      "crc32": "6B4616A9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Auto_Discover_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19951,
+      "sha256": "5d1cb8c846104ed131ad0c5a505efe905165c929c16fba70a28e2ecad65db2fa",
+      "crc32": "F852FBFE",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Curator_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7025,
+      "sha256": "82d0d9e7606deaabe6776407fe213abddf3ff01c6f9a8e1ef7365f88a8737ced",
+      "crc32": "483239C9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Curator_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 15089,
+      "sha256": "cc42bbf46199e56b134a730e3451cdef7cf2c44a1b064b046dab3cc86abd4bdb",
+      "crc32": "CE92FDA4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Curator_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7091,
+      "sha256": "df4a04c71f4f350a1d033ed923ee192bb8ebcfd9a01844ed5c63c63a80062506",
+      "crc32": "2E348BC2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Curator_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 15167,
+      "sha256": "0da35c661f11247f09917d386401d459f0df3c9d03571b98cee0dd36ffce12c3",
+      "crc32": "047A72D6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Curator_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7129,
+      "sha256": "6c4b53bbcdeab2222216dce5bc4862559d0a81d53512c9472732d69d08971e33",
+      "crc32": "0699DDF7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Curator_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 14445,
+      "sha256": "80a18dec850f276e3c4a1aefb93a34f1885dc206f800fccb59d7e3ab53954ca6",
+      "crc32": "DE8229B7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Curator_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7137,
+      "sha256": "dd6a03e50cff8360e238d649dc3705e9dcff2dc4ea8d4fdc1153c4dd07806588",
+      "crc32": "234AC6B0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Curator_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 13624,
+      "sha256": "e86ee4ccf7c86f1b4151bc99096434c5351ff5dd32224a4e73ff23cd5cccbed3",
+      "crc32": "3F0D5490",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Curator_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7189,
+      "sha256": "229f40f0b26e72164dd6686ac4dddbb22b73ce74c0eecbb0089d98db1fc4b379",
+      "crc32": "E289333B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Curator_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 15115,
+      "sha256": "2d0a53342bf96ca797607a5740f9c2bcb3310c10473f3ae6ceda146f2fdfed8a",
+      "crc32": "D8C1EB6A",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Settings_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7608,
+      "sha256": "1e0dbfe76c541542dbf9901d8ca45cf517b9f76d7cb1d39be9c4d7904cf93cb1",
+      "crc32": "B43BE2F9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Settings_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19072,
+      "sha256": "7912a9cb8da943939feb61b04655a933e480281c93bda23e302ef08edf876ada",
+      "crc32": "FA8F2E7D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Settings_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7682,
+      "sha256": "a998eeace3f208e54d0aa146d7c81d4d69c25b40c431a23705636066967555a6",
+      "crc32": "85E4EDD0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Settings_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19147,
+      "sha256": "fbf4cce736ac5619792d032cfc7364d5239f66683122f5060592b3f3be980c5e",
+      "crc32": "3DBB40F5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Settings_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7697,
+      "sha256": "b9f0aecd4d80cf2a1058df839ce4bae5c31292a55a38f8119d0cc5befc2c2998",
+      "crc32": "99B91375",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Settings_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 18601,
+      "sha256": "ded8c80c138aaa7a07456fbd9ac8ff1f67dcd784b4664972d464fb9a7cea116b",
+      "crc32": "CB7AE5CF",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Settings_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7760,
+      "sha256": "f04f6f775ff6e9a6dbdf0b1e295cb7cf4ac7f31be749252fc56bc30225bdbca4",
+      "crc32": "55CC6A10",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Settings_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 16564,
+      "sha256": "8194f943844bcbf603d4ace824c5c97397bc9394606dc90aa294d0dc78e3df82",
+      "crc32": "A5157C4C",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/Settings_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7769,
+      "sha256": "e6465458b95a026b07ead0bafa863f0559c2da9fe62cc2a2a42ae832185cd3c2",
+      "crc32": "81047CCA",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/Settings_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19195,
+      "sha256": "8038281d729cea47ddc6cd682ea10efa4f70c3a330cc72c91365928f03a959f8",
+      "crc32": "676C519B",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/About_default.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7501,
+      "sha256": "61cd1e57b3b2675d91613d96eea2fd1adbfead56621497bcb8ad11d6cf8896b8",
+      "crc32": "8B3E7259",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/About_default.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20058,
+      "sha256": "669bcb1cd9a15940cccef36b4feb268628572c1b3a961d804aadb6c13f982d6d",
+      "crc32": "FFA271A6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/About_hover.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7568,
+      "sha256": "3b47979df13ebba42e0f212c1e7bc575e1957211142480e30d01000a311f78bc",
+      "crc32": "AF429536",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/About_hover.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20108,
+      "sha256": "e08de79707e0f15c0f09aa3e3b70df9057079c9eea21af544539c2eb39020ac9",
+      "crc32": "7B6F7D26",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/About_pressed.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7599,
+      "sha256": "abeba6a219bbd70b4680d352a25e336d8e45d38bdc9685376fba6036caa57a20",
+      "crc32": "FBB26FA2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/About_pressed.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 19601,
+      "sha256": "86314bc82b929a1d66c97d2d43c9bfb6ac0dfc3aaca2eb61b77ca1c1f4cefb35",
+      "crc32": "CF8C0243",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/About_disabled.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7643,
+      "sha256": "f5f1942117e753eab3f66802a75e5ec827a5a9eb7e91eddfe6defd2c1aaa9411",
+      "crc32": "8FB889D3",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/About_disabled.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 17221,
+      "sha256": "af7e6b55d3e09c0c74c9f77a52d45efd94778fab946392dee3e732aee46bd460",
+      "crc32": "029BF562",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/controls/About_dragged.png",
+      "format": "PNG",
+      "category": "control-state-master",
+      "bytes": 7668,
+      "sha256": "121d861bcec471ee1777555c2dff4a3b7ab640d19f293c9409257ee4e2f659ea",
+      "crc32": "111743F0",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "512x512"
+    },
+    {
+      "path": "assets/controls/About_dragged.png",
+      "format": "PNG",
+      "category": "control-state-runtime",
+      "bytes": 20132,
+      "sha256": "3c37b8f954e507c699b23576706f472bbbfda5f56bb457249168209aa9bcaec3",
+      "crc32": "045D411D",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/skins.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 486,
+      "sha256": "7e07d3fdb2b76d703ff587003f790e851bd95373fc01004bf03688c60a92632c",
+      "crc32": "4CAF0802",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/skins.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 1667,
+      "sha256": "acc6b24b3f812961ecb4f695dcbf0f64e361dc99da76ae0484cbe32743548379",
+      "crc32": "0F9246F1",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/import_guitar.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 333,
+      "sha256": "f35028143a77361eb8388a994da02238248d614463625895e9a01b364a97d957",
+      "crc32": "89A82DF3",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/import_guitar.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 2360,
+      "sha256": "0fb15ce38db0b3027ca82345f997f9a6100fe9946012e15a35947fd8fe723cf8",
+      "crc32": "9E79F827",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/auto_discover.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 343,
+      "sha256": "dc212b231df172ff3a7e463dd55bc23619f33ffefd3e9cbcac66e187e5701742",
+      "crc32": "090FC451",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/auto_discover.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 2657,
+      "sha256": "4484b67b8822f6e66c8a87489e921c4d0ced571c7d82600a0110b36ae79ab3e1",
+      "crc32": "277C3BE8",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/curator.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 379,
+      "sha256": "b4fcd9cb1cb201ae562b4da1c92b5f344ca2c8a311199a382b0fc37f2df240e2",
+      "crc32": "82DD63FD",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/curator.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 1710,
+      "sha256": "f657acefba1782c41828a8ce2728f84f2b2085e1c9cbdd8213562e8f60212b02",
+      "crc32": "4EE3CAA5",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/settings.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 328,
+      "sha256": "5a177f86837272092f079135afd51553e5aa27db4b4cde4f5efedfb15b16cc8d",
+      "crc32": "73E06F7F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/settings.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 1992,
+      "sha256": "07d05ccf5be5d50b9ddca6fea014216c8ae71d586500f95619155f3436001e7e",
+      "crc32": "F8D3A4D2",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/master/icons/about.svg",
+      "format": "SVG",
+      "category": "topbar-icon-master",
+      "bytes": 316,
+      "sha256": "7a16c93636618b3e82b018895d5b517c182068d7b2754e2e35610d4183a02f9a",
+      "crc32": "E1A30DBB",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/icons/about.png",
+      "format": "PNG",
+      "category": "topbar-icon-runtime",
+      "bytes": 1938,
+      "sha256": "b0784af653c05ae2114cb9fc113753527b431e6c769755682592a591fa39493d",
+      "crc32": "C37D09F7",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "256x256"
+    },
+    {
+      "path": "assets/atlas/topbar_icons.png",
+      "format": "PNG",
+      "category": "topbar-icon-atlas",
+      "bytes": 10592,
+      "sha256": "3f5b88b7b8d8e29829928d344a43026577b5f9ee5e5b9b4a98ca06c9d7014228",
+      "crc32": "BD3C0917",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens",
+      "dimensions": "768x512"
+    },
+    {
+      "path": "assets/atlas/topbar_icons.json",
+      "format": "JSON",
+      "category": "topbar-icon-atlas-map",
+      "bytes": 671,
+      "sha256": "f438b3f9cbfe9afd060251fe8bdcb3e57df282758823ffc2c7ba450ecf335129",
+      "crc32": "5B459AD9",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "fonts/font_manifest.json",
+      "format": "JSON",
+      "category": "font-license-manifest",
+      "bytes": 527,
+      "sha256": "47751407bc4850967573a80c1cd30ccf101ff4f0ab968199ef329d3305808266",
+      "crc32": "A7979414",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/artwork_manifest.json",
+      "format": "JSON",
+      "category": "artwork-manifest",
+      "bytes": 2569,
+      "sha256": "553321f8f02725bb08ed84f74fff5f10bb3abf286f62c0f2df25697eae0a3b0d",
+      "crc32": "672A9DD6",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "assets/controls/control_states_manifest.json",
+      "format": "JSON",
+      "category": "control-state-manifest",
+      "bytes": 35194,
+      "sha256": "9b21942ed069435b1078c4732c5edbf48e7fe82698e1e8af9c82b6abdf1ccbad",
+      "crc32": "DA52D984",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "svg/texture.svg",
+      "format": "SVG",
+      "category": "material-vector-source",
+      "bytes": 582,
+      "sha256": "0ec274667e35250e512619708e8e6dacef4c3759231442152bdb894f5a2b4d2f",
+      "crc32": "F5E76F1F",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "svg/bezel.svg",
+      "format": "SVG",
+      "category": "material-vector-source",
+      "bytes": 938,
+      "sha256": "3404f81a3e47f5c691e9e169f498de68c628a4a77cb1a43247319affc944037b",
+      "crc32": "377209C4",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    },
+    {
+      "path": "svg/crest.svg",
+      "format": "SVG",
+      "category": "material-vector-source",
+      "bytes": 609,
+      "sha256": "62b0c7fb73ed2efa47e54898b767961a233365290652650ebadb3780368da7c9",
+      "crc32": "708D9F11",
+      "origin": "[DECISION] original deterministic PPGU REV18 artwork generated from approved theme tokens"
+    }
+  ]
+}

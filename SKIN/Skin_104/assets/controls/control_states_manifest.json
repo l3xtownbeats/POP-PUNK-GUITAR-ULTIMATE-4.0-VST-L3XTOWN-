@@ -1,0 +1,1124 @@
+{
+  "schemaVersion": "1.0.0",
+  "skinId": "skin-104",
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "disabled",
+    "dragged"
+  ],
+  "controlIds": [
+    "preset_browser",
+    "mode_selector",
+    "knob01",
+    "knob02",
+    "knob03",
+    "knob04",
+    "knob05",
+    "knob06",
+    "knob07",
+    "knob08",
+    "knob09",
+    "fx_switch01",
+    "fx_switch02",
+    "fx_switch03",
+    "fx_switch04",
+    "fx_switch05",
+    "fx_switch06",
+    "fx_switch07",
+    "midi_keyboard",
+    "LCD_display",
+    "LED_indicator",
+    "SKIN_button",
+    "Import_Guitar",
+    "Auto_Discover",
+    "Curator",
+    "Settings",
+    "About"
+  ],
+  "frameSize": "512x512",
+  "runtimeFrameSize": "256x256",
+  "records": [
+    {
+      "controlId": "preset_browser",
+      "state": "default",
+      "master": "assets/master/controls/preset_browser_default.png",
+      "runtime": "assets/controls/preset_browser_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "preset_browser",
+      "state": "hover",
+      "master": "assets/master/controls/preset_browser_hover.png",
+      "runtime": "assets/controls/preset_browser_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "preset_browser",
+      "state": "pressed",
+      "master": "assets/master/controls/preset_browser_pressed.png",
+      "runtime": "assets/controls/preset_browser_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "preset_browser",
+      "state": "disabled",
+      "master": "assets/master/controls/preset_browser_disabled.png",
+      "runtime": "assets/controls/preset_browser_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "preset_browser",
+      "state": "dragged",
+      "master": "assets/master/controls/preset_browser_dragged.png",
+      "runtime": "assets/controls/preset_browser_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "mode_selector",
+      "state": "default",
+      "master": "assets/master/controls/mode_selector_default.png",
+      "runtime": "assets/controls/mode_selector_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "mode_selector",
+      "state": "hover",
+      "master": "assets/master/controls/mode_selector_hover.png",
+      "runtime": "assets/controls/mode_selector_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "mode_selector",
+      "state": "pressed",
+      "master": "assets/master/controls/mode_selector_pressed.png",
+      "runtime": "assets/controls/mode_selector_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "mode_selector",
+      "state": "disabled",
+      "master": "assets/master/controls/mode_selector_disabled.png",
+      "runtime": "assets/controls/mode_selector_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "mode_selector",
+      "state": "dragged",
+      "master": "assets/master/controls/mode_selector_dragged.png",
+      "runtime": "assets/controls/mode_selector_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob01",
+      "state": "default",
+      "master": "assets/master/controls/knob01_default.png",
+      "runtime": "assets/controls/knob01_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob01",
+      "state": "hover",
+      "master": "assets/master/controls/knob01_hover.png",
+      "runtime": "assets/controls/knob01_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob01",
+      "state": "pressed",
+      "master": "assets/master/controls/knob01_pressed.png",
+      "runtime": "assets/controls/knob01_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob01",
+      "state": "disabled",
+      "master": "assets/master/controls/knob01_disabled.png",
+      "runtime": "assets/controls/knob01_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob01",
+      "state": "dragged",
+      "master": "assets/master/controls/knob01_dragged.png",
+      "runtime": "assets/controls/knob01_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob02",
+      "state": "default",
+      "master": "assets/master/controls/knob02_default.png",
+      "runtime": "assets/controls/knob02_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob02",
+      "state": "hover",
+      "master": "assets/master/controls/knob02_hover.png",
+      "runtime": "assets/controls/knob02_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob02",
+      "state": "pressed",
+      "master": "assets/master/controls/knob02_pressed.png",
+      "runtime": "assets/controls/knob02_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob02",
+      "state": "disabled",
+      "master": "assets/master/controls/knob02_disabled.png",
+      "runtime": "assets/controls/knob02_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob02",
+      "state": "dragged",
+      "master": "assets/master/controls/knob02_dragged.png",
+      "runtime": "assets/controls/knob02_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob03",
+      "state": "default",
+      "master": "assets/master/controls/knob03_default.png",
+      "runtime": "assets/controls/knob03_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob03",
+      "state": "hover",
+      "master": "assets/master/controls/knob03_hover.png",
+      "runtime": "assets/controls/knob03_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob03",
+      "state": "pressed",
+      "master": "assets/master/controls/knob03_pressed.png",
+      "runtime": "assets/controls/knob03_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob03",
+      "state": "disabled",
+      "master": "assets/master/controls/knob03_disabled.png",
+      "runtime": "assets/controls/knob03_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob03",
+      "state": "dragged",
+      "master": "assets/master/controls/knob03_dragged.png",
+      "runtime": "assets/controls/knob03_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob04",
+      "state": "default",
+      "master": "assets/master/controls/knob04_default.png",
+      "runtime": "assets/controls/knob04_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob04",
+      "state": "hover",
+      "master": "assets/master/controls/knob04_hover.png",
+      "runtime": "assets/controls/knob04_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob04",
+      "state": "pressed",
+      "master": "assets/master/controls/knob04_pressed.png",
+      "runtime": "assets/controls/knob04_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob04",
+      "state": "disabled",
+      "master": "assets/master/controls/knob04_disabled.png",
+      "runtime": "assets/controls/knob04_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob04",
+      "state": "dragged",
+      "master": "assets/master/controls/knob04_dragged.png",
+      "runtime": "assets/controls/knob04_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob05",
+      "state": "default",
+      "master": "assets/master/controls/knob05_default.png",
+      "runtime": "assets/controls/knob05_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob05",
+      "state": "hover",
+      "master": "assets/master/controls/knob05_hover.png",
+      "runtime": "assets/controls/knob05_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob05",
+      "state": "pressed",
+      "master": "assets/master/controls/knob05_pressed.png",
+      "runtime": "assets/controls/knob05_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob05",
+      "state": "disabled",
+      "master": "assets/master/controls/knob05_disabled.png",
+      "runtime": "assets/controls/knob05_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob05",
+      "state": "dragged",
+      "master": "assets/master/controls/knob05_dragged.png",
+      "runtime": "assets/controls/knob05_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob06",
+      "state": "default",
+      "master": "assets/master/controls/knob06_default.png",
+      "runtime": "assets/controls/knob06_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob06",
+      "state": "hover",
+      "master": "assets/master/controls/knob06_hover.png",
+      "runtime": "assets/controls/knob06_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob06",
+      "state": "pressed",
+      "master": "assets/master/controls/knob06_pressed.png",
+      "runtime": "assets/controls/knob06_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob06",
+      "state": "disabled",
+      "master": "assets/master/controls/knob06_disabled.png",
+      "runtime": "assets/controls/knob06_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob06",
+      "state": "dragged",
+      "master": "assets/master/controls/knob06_dragged.png",
+      "runtime": "assets/controls/knob06_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob07",
+      "state": "default",
+      "master": "assets/master/controls/knob07_default.png",
+      "runtime": "assets/controls/knob07_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob07",
+      "state": "hover",
+      "master": "assets/master/controls/knob07_hover.png",
+      "runtime": "assets/controls/knob07_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob07",
+      "state": "pressed",
+      "master": "assets/master/controls/knob07_pressed.png",
+      "runtime": "assets/controls/knob07_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob07",
+      "state": "disabled",
+      "master": "assets/master/controls/knob07_disabled.png",
+      "runtime": "assets/controls/knob07_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob07",
+      "state": "dragged",
+      "master": "assets/master/controls/knob07_dragged.png",
+      "runtime": "assets/controls/knob07_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob08",
+      "state": "default",
+      "master": "assets/master/controls/knob08_default.png",
+      "runtime": "assets/controls/knob08_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob08",
+      "state": "hover",
+      "master": "assets/master/controls/knob08_hover.png",
+      "runtime": "assets/controls/knob08_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob08",
+      "state": "pressed",
+      "master": "assets/master/controls/knob08_pressed.png",
+      "runtime": "assets/controls/knob08_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob08",
+      "state": "disabled",
+      "master": "assets/master/controls/knob08_disabled.png",
+      "runtime": "assets/controls/knob08_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob08",
+      "state": "dragged",
+      "master": "assets/master/controls/knob08_dragged.png",
+      "runtime": "assets/controls/knob08_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob09",
+      "state": "default",
+      "master": "assets/master/controls/knob09_default.png",
+      "runtime": "assets/controls/knob09_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob09",
+      "state": "hover",
+      "master": "assets/master/controls/knob09_hover.png",
+      "runtime": "assets/controls/knob09_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob09",
+      "state": "pressed",
+      "master": "assets/master/controls/knob09_pressed.png",
+      "runtime": "assets/controls/knob09_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob09",
+      "state": "disabled",
+      "master": "assets/master/controls/knob09_disabled.png",
+      "runtime": "assets/controls/knob09_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "knob09",
+      "state": "dragged",
+      "master": "assets/master/controls/knob09_dragged.png",
+      "runtime": "assets/controls/knob09_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch01",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch01_default.png",
+      "runtime": "assets/controls/fx_switch01_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch01",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch01_hover.png",
+      "runtime": "assets/controls/fx_switch01_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch01",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch01_pressed.png",
+      "runtime": "assets/controls/fx_switch01_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch01",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch01_disabled.png",
+      "runtime": "assets/controls/fx_switch01_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch01",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch01_dragged.png",
+      "runtime": "assets/controls/fx_switch01_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch02",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch02_default.png",
+      "runtime": "assets/controls/fx_switch02_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch02",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch02_hover.png",
+      "runtime": "assets/controls/fx_switch02_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch02",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch02_pressed.png",
+      "runtime": "assets/controls/fx_switch02_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch02",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch02_disabled.png",
+      "runtime": "assets/controls/fx_switch02_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch02",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch02_dragged.png",
+      "runtime": "assets/controls/fx_switch02_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch03",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch03_default.png",
+      "runtime": "assets/controls/fx_switch03_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch03",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch03_hover.png",
+      "runtime": "assets/controls/fx_switch03_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch03",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch03_pressed.png",
+      "runtime": "assets/controls/fx_switch03_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch03",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch03_disabled.png",
+      "runtime": "assets/controls/fx_switch03_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch03",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch03_dragged.png",
+      "runtime": "assets/controls/fx_switch03_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch04",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch04_default.png",
+      "runtime": "assets/controls/fx_switch04_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch04",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch04_hover.png",
+      "runtime": "assets/controls/fx_switch04_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch04",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch04_pressed.png",
+      "runtime": "assets/controls/fx_switch04_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch04",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch04_disabled.png",
+      "runtime": "assets/controls/fx_switch04_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch04",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch04_dragged.png",
+      "runtime": "assets/controls/fx_switch04_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch05",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch05_default.png",
+      "runtime": "assets/controls/fx_switch05_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch05",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch05_hover.png",
+      "runtime": "assets/controls/fx_switch05_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch05",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch05_pressed.png",
+      "runtime": "assets/controls/fx_switch05_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch05",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch05_disabled.png",
+      "runtime": "assets/controls/fx_switch05_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch05",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch05_dragged.png",
+      "runtime": "assets/controls/fx_switch05_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch06",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch06_default.png",
+      "runtime": "assets/controls/fx_switch06_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch06",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch06_hover.png",
+      "runtime": "assets/controls/fx_switch06_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch06",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch06_pressed.png",
+      "runtime": "assets/controls/fx_switch06_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch06",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch06_disabled.png",
+      "runtime": "assets/controls/fx_switch06_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch06",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch06_dragged.png",
+      "runtime": "assets/controls/fx_switch06_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch07",
+      "state": "default",
+      "master": "assets/master/controls/fx_switch07_default.png",
+      "runtime": "assets/controls/fx_switch07_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch07",
+      "state": "hover",
+      "master": "assets/master/controls/fx_switch07_hover.png",
+      "runtime": "assets/controls/fx_switch07_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch07",
+      "state": "pressed",
+      "master": "assets/master/controls/fx_switch07_pressed.png",
+      "runtime": "assets/controls/fx_switch07_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch07",
+      "state": "disabled",
+      "master": "assets/master/controls/fx_switch07_disabled.png",
+      "runtime": "assets/controls/fx_switch07_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "fx_switch07",
+      "state": "dragged",
+      "master": "assets/master/controls/fx_switch07_dragged.png",
+      "runtime": "assets/controls/fx_switch07_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "midi_keyboard",
+      "state": "default",
+      "master": "assets/master/controls/midi_keyboard_default.png",
+      "runtime": "assets/controls/midi_keyboard_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "midi_keyboard",
+      "state": "hover",
+      "master": "assets/master/controls/midi_keyboard_hover.png",
+      "runtime": "assets/controls/midi_keyboard_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "midi_keyboard",
+      "state": "pressed",
+      "master": "assets/master/controls/midi_keyboard_pressed.png",
+      "runtime": "assets/controls/midi_keyboard_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "midi_keyboard",
+      "state": "disabled",
+      "master": "assets/master/controls/midi_keyboard_disabled.png",
+      "runtime": "assets/controls/midi_keyboard_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "midi_keyboard",
+      "state": "dragged",
+      "master": "assets/master/controls/midi_keyboard_dragged.png",
+      "runtime": "assets/controls/midi_keyboard_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LCD_display",
+      "state": "default",
+      "master": "assets/master/controls/LCD_display_default.png",
+      "runtime": "assets/controls/LCD_display_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LCD_display",
+      "state": "hover",
+      "master": "assets/master/controls/LCD_display_hover.png",
+      "runtime": "assets/controls/LCD_display_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LCD_display",
+      "state": "pressed",
+      "master": "assets/master/controls/LCD_display_pressed.png",
+      "runtime": "assets/controls/LCD_display_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LCD_display",
+      "state": "disabled",
+      "master": "assets/master/controls/LCD_display_disabled.png",
+      "runtime": "assets/controls/LCD_display_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LCD_display",
+      "state": "dragged",
+      "master": "assets/master/controls/LCD_display_dragged.png",
+      "runtime": "assets/controls/LCD_display_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LED_indicator",
+      "state": "default",
+      "master": "assets/master/controls/LED_indicator_default.png",
+      "runtime": "assets/controls/LED_indicator_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LED_indicator",
+      "state": "hover",
+      "master": "assets/master/controls/LED_indicator_hover.png",
+      "runtime": "assets/controls/LED_indicator_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LED_indicator",
+      "state": "pressed",
+      "master": "assets/master/controls/LED_indicator_pressed.png",
+      "runtime": "assets/controls/LED_indicator_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LED_indicator",
+      "state": "disabled",
+      "master": "assets/master/controls/LED_indicator_disabled.png",
+      "runtime": "assets/controls/LED_indicator_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "LED_indicator",
+      "state": "dragged",
+      "master": "assets/master/controls/LED_indicator_dragged.png",
+      "runtime": "assets/controls/LED_indicator_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "SKIN_button",
+      "state": "default",
+      "master": "assets/master/controls/SKIN_button_default.png",
+      "runtime": "assets/controls/SKIN_button_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "SKIN_button",
+      "state": "hover",
+      "master": "assets/master/controls/SKIN_button_hover.png",
+      "runtime": "assets/controls/SKIN_button_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "SKIN_button",
+      "state": "pressed",
+      "master": "assets/master/controls/SKIN_button_pressed.png",
+      "runtime": "assets/controls/SKIN_button_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "SKIN_button",
+      "state": "disabled",
+      "master": "assets/master/controls/SKIN_button_disabled.png",
+      "runtime": "assets/controls/SKIN_button_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "SKIN_button",
+      "state": "dragged",
+      "master": "assets/master/controls/SKIN_button_dragged.png",
+      "runtime": "assets/controls/SKIN_button_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Import_Guitar",
+      "state": "default",
+      "master": "assets/master/controls/Import_Guitar_default.png",
+      "runtime": "assets/controls/Import_Guitar_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Import_Guitar",
+      "state": "hover",
+      "master": "assets/master/controls/Import_Guitar_hover.png",
+      "runtime": "assets/controls/Import_Guitar_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Import_Guitar",
+      "state": "pressed",
+      "master": "assets/master/controls/Import_Guitar_pressed.png",
+      "runtime": "assets/controls/Import_Guitar_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Import_Guitar",
+      "state": "disabled",
+      "master": "assets/master/controls/Import_Guitar_disabled.png",
+      "runtime": "assets/controls/Import_Guitar_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Import_Guitar",
+      "state": "dragged",
+      "master": "assets/master/controls/Import_Guitar_dragged.png",
+      "runtime": "assets/controls/Import_Guitar_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Auto_Discover",
+      "state": "default",
+      "master": "assets/master/controls/Auto_Discover_default.png",
+      "runtime": "assets/controls/Auto_Discover_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Auto_Discover",
+      "state": "hover",
+      "master": "assets/master/controls/Auto_Discover_hover.png",
+      "runtime": "assets/controls/Auto_Discover_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Auto_Discover",
+      "state": "pressed",
+      "master": "assets/master/controls/Auto_Discover_pressed.png",
+      "runtime": "assets/controls/Auto_Discover_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Auto_Discover",
+      "state": "disabled",
+      "master": "assets/master/controls/Auto_Discover_disabled.png",
+      "runtime": "assets/controls/Auto_Discover_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Auto_Discover",
+      "state": "dragged",
+      "master": "assets/master/controls/Auto_Discover_dragged.png",
+      "runtime": "assets/controls/Auto_Discover_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Curator",
+      "state": "default",
+      "master": "assets/master/controls/Curator_default.png",
+      "runtime": "assets/controls/Curator_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Curator",
+      "state": "hover",
+      "master": "assets/master/controls/Curator_hover.png",
+      "runtime": "assets/controls/Curator_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Curator",
+      "state": "pressed",
+      "master": "assets/master/controls/Curator_pressed.png",
+      "runtime": "assets/controls/Curator_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Curator",
+      "state": "disabled",
+      "master": "assets/master/controls/Curator_disabled.png",
+      "runtime": "assets/controls/Curator_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Curator",
+      "state": "dragged",
+      "master": "assets/master/controls/Curator_dragged.png",
+      "runtime": "assets/controls/Curator_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Settings",
+      "state": "default",
+      "master": "assets/master/controls/Settings_default.png",
+      "runtime": "assets/controls/Settings_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Settings",
+      "state": "hover",
+      "master": "assets/master/controls/Settings_hover.png",
+      "runtime": "assets/controls/Settings_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Settings",
+      "state": "pressed",
+      "master": "assets/master/controls/Settings_pressed.png",
+      "runtime": "assets/controls/Settings_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Settings",
+      "state": "disabled",
+      "master": "assets/master/controls/Settings_disabled.png",
+      "runtime": "assets/controls/Settings_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "Settings",
+      "state": "dragged",
+      "master": "assets/master/controls/Settings_dragged.png",
+      "runtime": "assets/controls/Settings_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "About",
+      "state": "default",
+      "master": "assets/master/controls/About_default.png",
+      "runtime": "assets/controls/About_default.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "About",
+      "state": "hover",
+      "master": "assets/master/controls/About_hover.png",
+      "runtime": "assets/controls/About_hover.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "About",
+      "state": "pressed",
+      "master": "assets/master/controls/About_pressed.png",
+      "runtime": "assets/controls/About_pressed.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "About",
+      "state": "disabled",
+      "master": "assets/master/controls/About_disabled.png",
+      "runtime": "assets/controls/About_disabled.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    },
+    {
+      "controlId": "About",
+      "state": "dragged",
+      "master": "assets/master/controls/About_dragged.png",
+      "runtime": "assets/controls/About_dragged.png",
+      "masterSize": "512x512",
+      "runtimeSize": "256x256"
+    }
+  ]
+}

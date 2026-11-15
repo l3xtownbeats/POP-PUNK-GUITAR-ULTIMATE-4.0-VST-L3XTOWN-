@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "skinId": "skin-103",
+  "image": "assets/atlas/topbar_icons.png",
+  "width": 768,
+  "height": 512,
+  "frames": {
+    "skins": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "import_guitar": {
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "auto_discover": {
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "curator": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "settings": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "about": {
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    }
+  }
+}

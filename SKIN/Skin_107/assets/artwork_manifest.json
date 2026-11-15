@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "skinId": "skin-107",
+  "theme": "VIOLET NOIR",
+  "origin": "[DECISION] Original artwork generated from the approved palette/material brief; no third-party logos or product artwork.",
+  "records": [
+    {
+      "path": "assets/master/hero/hero.png",
+      "dimensions": "1600x900",
+      "category": "hero-master"
+    },
+    {
+      "path": "assets/hero/hero.png",
+      "dimensions": "800x450",
+      "category": "hero-runtime"
+    },
+    {
+      "path": "assets/hero.png",
+      "dimensions": "800x450",
+      "category": "hero-runtime-compat"
+    },
+    {
+      "path": "assets/master/preview/preview.png",
+      "dimensions": "720x480",
+      "category": "preview-master"
+    },
+    {
+      "path": "assets/preview/preview.png",
+      "dimensions": "360x240",
+      "category": "preview-runtime"
+    },
+    {
+      "path": "assets/preview.png",
+      "dimensions": "360x240",
+      "category": "preview-runtime-compat"
+    },
+    {
+      "path": "assets/master/background/main.png",
+      "dimensions": "2560x1440",
+      "category": "background-master"
+    },
+    {
+      "path": "assets/background/main.png",
+      "dimensions": "2560x1440",
+      "category": "background-runtime"
+    },
+    {
+      "path": "assets/master/textures/material.png",
+      "dimensions": "1024x1024",
+      "category": "texture-master"
+    },
+    {
+      "path": "assets/textures/material.png",
+      "dimensions": "1024x1024",
+      "category": "texture-runtime"
+    },
+    {
+      "path": "assets/master/fx_layers/stage_glow.png",
+      "dimensions": "1600x900",
+      "category": "stage_glow-master"
+    },
+    {
+      "path": "assets/fx_layers/stage_glow.png",
+      "dimensions": "800x450",
+      "category": "stage_glow-runtime"
+    },
+    {
+      "path": "assets/master/fx_layers/edge_highlight.png",
+      "dimensions": "1600x900",
+      "category": "edge_highlight-master"
+    },
+    {
+      "path": "assets/fx_layers/edge_highlight.png",
+      "dimensions": "800x450",
+      "category": "edge_highlight-runtime"
+    },
+    {
+      "path": "assets/master/fx_layers/specular.png",
+      "dimensions": "1600x900",
+      "category": "specular-master"
+    },
+    {
+      "path": "assets/fx_layers/specular.png",
+      "dimensions": "800x450",
+      "category": "specular-runtime"
+    },
+    {
+      "path": "assets/master/fx_layers/shadow.png",
+      "dimensions": "1600x900",
+      "category": "shadow-master"
+    },
+    {
+      "path": "assets/fx_layers/shadow.png",
+      "dimensions": "800x450",
+      "category": "shadow-runtime"
+    }
+  ]
+}
