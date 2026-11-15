@@ -3,7 +3,7 @@
 <img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — NEON STAGE visual cover" width="100%">
 
 # POP PUNK GUITAR ULTIMATE 4.0
-### L3XTOWN AUDIO LAB · WINDOWS x64 · VST3 · JUCE · C++20
+### L3XTOWN AUDIO LAB · NEON STAGE · WINDOWS x64 · VST3 · JUCE · C++20
 
 **A dedicated pop-punk guitar instrument for tight rhythm parts, power chords, palm-muted patterns, riffs and melodic hooks.**
 
