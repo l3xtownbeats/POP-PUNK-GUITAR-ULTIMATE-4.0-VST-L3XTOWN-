@@ -440,18 +440,58 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
         generated[rel]=raw
         add_record(records,rel,raw,category,image.size)
 
-    # Full-resolution original stage artwork and separate runtime exports.
-    hero=stage_background((1600,900),palette,item["index"],guitar=True)
-    preview=ImageOps.fit(hero,(720,480),method=Image.Resampling.LANCZOS)
+    def add_raw(rel, raw, category, dimensions):
+        generated[rel]=raw
+        add_record(records,rel,raw,category,dimensions)
+
+    # SKIN-1 runtime artwork is an already-approved binary. Retain it byte-for-byte;
+    # only create the missing master-resolution copies from that approved source.
+    if stable_id == "skin-053":
+        from io import BytesIO
+        hero_path=folder/"assets/hero.png"
+        preview_path=folder/"assets/preview.png"
+        if not hero_path.is_file() or not preview_path.is_file():
+            raise RuntimeError("approved SKIN-1 hero.png/preview.png source binaries are missing")
+        hero_raw=hero_path.read_bytes()
+        preview_raw=preview_path.read_bytes()
+        hero=Image.open(BytesIO(hero_raw)).convert("RGB")
+        preview=Image.open(BytesIO(preview_raw)).convert("RGB")
+        if hero.size != (800,450) or preview.size != (360,240):
+            raise RuntimeError(f"approved SKIN-1 source dimensions are unexpected: hero={hero.size}, preview={preview.size}")
+        add_raw("assets/hero.png",hero_raw,"preserved-approved-hero-runtime",(800,450))
+        records[-1]["origin"]="[PRESERVED] Existing approved SKIN-1 hero.png retained byte-for-byte."
+        add_raw("assets/preview.png",preview_raw,"preserved-approved-preview-runtime",(360,240))
+        records[-1]["origin"]="[PRESERVED] Existing approved SKIN-1 preview.png retained byte-for-byte."
+        add_raw("assets/hero/hero.png",hero_raw,"hero-runtime-copy",(800,450))
+        add_raw("assets/preview/preview.png",preview_raw,"preview-runtime-copy",(360,240))
+        hero_master=hero.resize((1600,900),Image.Resampling.LANCZOS)
+        preview_master=preview.resize((720,480),Image.Resampling.LANCZOS)
+        add("assets/master/hero/hero.png",hero_master,"hero-master-upscaled-from-approved-runtime")
+        add("assets/master/preview/preview.png",preview_master,"preview-master-upscaled-from-approved-runtime")
+        artwork.extend([
+            {"path":"assets/hero.png","dimensions":"800x450","category":"preserved-approved-hero-runtime"},
+            {"path":"assets/preview.png","dimensions":"360x240","category":"preserved-approved-preview-runtime"},
+            {"path":"assets/master/hero/hero.png","dimensions":"1600x900","category":"hero-master-upscaled-from-approved-runtime"},
+            {"path":"assets/master/preview/preview.png","dimensions":"720x480","category":"preview-master-upscaled-from-approved-runtime"},
+        ])
+    else:
+        hero=stage_background((1600,900),palette,item["index"],guitar=True)
+        preview=ImageOps.fit(hero,(720,480),method=Image.Resampling.LANCZOS)
+        hero_runtime=hero.resize((800,450),Image.Resampling.LANCZOS)
+        preview_runtime=preview.resize((360,240),Image.Resampling.LANCZOS)
+        for rel,img,cat in [
+            ("assets/master/hero/hero.png",hero,"hero-master"),
+            ("assets/hero/hero.png",hero_runtime,"hero-runtime"),
+            ("assets/hero.png",hero_runtime,"hero-runtime-compat"),
+            ("assets/master/preview/preview.png",preview,"preview-master"),
+            ("assets/preview/preview.png",preview_runtime,"preview-runtime"),
+            ("assets/preview.png",preview_runtime,"preview-runtime-compat"),
+        ]:
+            add(rel,img,cat); artwork.append({"path":rel,"dimensions":f"{img.width}x{img.height}","category":cat})
+
     bg=stage_background((2560,1440),palette,item["index"],guitar=False)
     texture=material_texture(palette,item["index"],theme.get("effects",{}).get("material",""))
     for rel,img,cat in [
-        ("assets/master/hero/hero.png",hero,"hero-master"),
-        ("assets/hero/hero.png",hero.resize((800,450),Image.Resampling.LANCZOS),"hero-runtime"),
-        ("assets/hero.png",hero.resize((800,450),Image.Resampling.LANCZOS),"hero-runtime-compat"),
-        ("assets/master/preview/preview.png",preview,"preview-master"),
-        ("assets/preview/preview.png",preview.resize((360,240),Image.Resampling.LANCZOS),"preview-runtime"),
-        ("assets/preview.png",preview.resize((360,240),Image.Resampling.LANCZOS),"preview-runtime-compat"),
         ("assets/master/background/main.png",bg,"background-master"),
         ("assets/background/main.png",bg,"background-runtime"),
         ("assets/master/textures/material.png",texture,"texture-master"),
