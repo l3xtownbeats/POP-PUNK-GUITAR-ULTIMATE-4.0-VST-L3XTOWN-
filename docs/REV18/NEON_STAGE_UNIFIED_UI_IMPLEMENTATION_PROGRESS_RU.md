@@ -71,3 +71,24 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 3. Implement missing visual shells only where the approved specification permits; keep non-existent backends honestly disabled.
 4. Add/complete token parity and panel geometry tests.
 5. Run Windows Release, CTest, pluginval and FL Studio 20 host acceptance; record results against exact commit SHA.
+
+
+## Дополнительный CI-аудит и исправление канонического Skin-1
+
+**Проверенный CI run:** [43678727830](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43678727830) для HEAD `96098a6740bf35c0fa8e0037704d6cbe400a36cf`.
+
+- Workflow Windows VST3 стартовал и успешно прошёл шаги генерации/проверки legacy artwork, каталога 300 пресетов, REV.18 readiness unit tests, portable preset examples и APVTS registry (97 объявленных ID; 96 стабильных ID сохранены).
+- CI остановился на шаге `validate_skin_pack.py`: `SKIN/Skin_053/theme.json: pack manifest name mismatch`.
+- Причина: канонический `Skin_053/theme.json` уже назывался NEON STAGE, а два реестра всё ещё содержали старую идентичность Carbon Studio 01. Поэтому CMake build, CTest и pluginval были пропущены; это не ошибка компиляции и не успешная сборка.
+
+**Исправлено на feature branch:**
+- `SKIN/theme_manifest.json`: запись skin-053 синхронизирована с NEON STAGE / neon_basement; `defaultSkin` установлен в `skin-053`.
+- `SKIN/theme_pack_manifest.json`: соответствующая запись синхронизирована с тем же каноническим именем и семейством.
+- `SKIN/Skin_053/theme.json`: исправлено текстовое описание количества привязок с 27 на 28 (сами bindings не менялись).
+
+Исправления внесены отдельными коммитами:
+- `78635790fa779a67666f50a1729782a946b8144c` — registry + canonical default.
+- `e7a2fd16c23b8533d2c872c4b98723df22943413` — pack manifest parity.
+- `a3264a093cc4bd7308bdd9955308f5fe4d441d98` — control-count note.
+
+**Повторная CI-проверка после этих исправлений ещё не подтверждена.** Следующий запуск должен заново пройти manifest validation и только после этого перейти к конфигурации, Windows Release build, CTest и pluginval. Никаких заявлений о runtime/FL Studio acceptance пока нет.
