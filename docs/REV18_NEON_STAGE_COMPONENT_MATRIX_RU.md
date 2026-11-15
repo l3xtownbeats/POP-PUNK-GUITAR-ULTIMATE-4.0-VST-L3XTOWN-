@@ -279,3 +279,19 @@ Implemented:
 - Layout contract: see `docs/NEON_STAGE_PHASE_2_LAYOUT_SPEC_RU.md` for the exact current responsive geometry and immutable control-binding contract.
 - Preserved the nine rotary APVTS attachments, seven approved FX bypass IDs, MIDI keyboard, preset selector, theme registry and auxiliary workspace.
 - This is a source-level visual-shell increment only. Pixel-level match against the supplied NEON STAGE DEFAULT references, exact-HEAD Windows x64 VST3 build, CTest, pluginval strictness 5, portable packaging and FL Studio 20 host acceptance remain **PENDING**.
+
+
+## 2026-11-15 — Exact-HEAD CI compile failure and correction
+
+**Failed source SHA:** `9744a9e2c89b338a10d9b7cf9f6db663d5980eab`  
+**Workflow run:** `43707767253` — Windows x64 Release configure passed; compilation failed in `Source/PluginEditor.cpp`. CTest, VST3 discovery and pluginval were skipped.
+
+Compiler errors from the job log:
+- C2065: `circle` was undeclared in the AUTOCHORDS key-change callback; the live member is `circleComponent`.
+- C2039: `juce::StringArray::join` is unavailable in the pinned JUCE 7.0.12 API.
+
+Correction committed in `33cb48cb373a70246f458ba6808ff9004f09c6fc`:
+- Route the selected root through the existing `circleComponent` pointer with a null guard.
+- Build the displayed chord progression using an explicit `juce::String` loop instead of the unavailable `StringArray::join` call.
+
+No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio callback were changed. The correction is source-level only until the new exact-HEAD Windows workflow completes. CTest, pluginval, portable VST3 packaging and FL Studio 20 remain unverified.
