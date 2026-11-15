@@ -3167,3 +3167,23 @@ unverified until their steps complete successfully.
 **Проверки:** regression test source added; CMake/CTest, Windows x64 Release, pluginval strictness 5 и FL Studio 20 для нового exact HEAD ещё не запускались/не подтверждены. Не объявлять PASS до CI.
 
 **Следующий шаг:** запустить exact-HEAD Windows VST3 build + полный CTest; исправить все compile/test failures, затем pluginval и host acceptance.
+
+## 2026-11-15 — Audio Engine integration pass 01: truthful Cabinet stage naming
+
+**Статус:** SOURCE PATCH COMMITTED; exact-HEAD Windows build/CTest/pluginval pending.
+
+**Проверка исходного кода перед изменением (PR #41 head dd69c22030f8a03278454ea5e8de10c04fa88226):**
+- В `PluginProcessor.cpp` Cabinet stage использует встроенный детерминированный 64-tap damped response, сгенерированный в `prepareToPlay`, и собственную обработку low/high cut.
+- Загрузка внешнего Cabinet IR-файла и выбор IR-asset в этом пути не обнаружены.
+- Прежние подписи **Cabinet IR / Cabinet IR Mix / Cabinet IR On** обещали внешний импульсный отклик, которого этот код не загружает. Это несоответствие интерфейса реальной реализации.
+
+**Исправлено на уровне кода:**
+- `Source/PluginProcessor.cpp`: отображаемые имена FX stage и параметров изменены на **Cabinet Colour**; APVTS IDs `cabinetOn` и `cabinetMix` сохранены без изменений.
+- `Source/PluginEditor.cpp`: название страницы FX EDIT изменено на **CABINET COLOUR**; реальные параметры low/high cut и mix сохранены.
+- DSP, аудиомаршрут, параметры, диапазоны, значения по умолчанию, сериализация и FX slot identity не менялись. Внешний IR loader этим изменением не заявляется и не создавался.
+
+**Регрессионные риски:** обязательны exact-SHA compile/CTest/pluginval и проверка восстановления старого состояния. FL Studio 20 host acceptance отдельно не выполнена.
+
+**Следующий этап:** пройти оставшиеся FX DSP параметры и bypass на реальном signal path; затем добавить точечные processor-level regression tests. Не включать AutoChords/IR controls как активные функции без настоящего backend.
+
+**Commit:** SOURCE ONLY до запуска exact-SHA CI; BUILD-VERIFIED не заявляется.

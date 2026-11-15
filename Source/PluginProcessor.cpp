@@ -120,7 +120,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("dnaFxTaste", "DNA FX Taste", 0.0f, 1.0f, 0.5f));
 
     // Seven FX slots can be reordered without changing their parameter IDs.
-    const juce::StringArray fxNames { "Compressor", "EQ", "Distortion", "Chorus", "Delay", "Reverb", "Cabinet IR" };
+    const juce::StringArray fxNames { "Compressor", "EQ", "Distortion", "Chorus", "Delay", "Reverb", "Cabinet Colour" };
     for (int slot = 0; slot < 7; ++slot)
         p.add(std::make_unique<juce::AudioParameterChoice>(
             juce::ParameterID { "fxSlot" + juce::String(slot + 1), 1 },
@@ -141,7 +141,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("delayFeedback", "Delay Feedback", 0.0f, 0.95f, 0.25f, 0.001f));
     p.add(floatParameter("reverbRoomSize", "Reverb Room Size", 0.0f, 1.0f, 0.45f));
     p.add(floatParameter("reverbDamping", "Reverb Damping", 0.0f, 1.0f, 0.5f));
-    p.add(floatParameter("cabinetMix", "Cabinet IR Mix", 0.0f, 1.0f, 1.0f));
+    p.add(floatParameter("cabinetMix", "Cabinet Colour Mix", 0.0f, 1.0f, 1.0f));
     p.add(floatParameter("cabinetLowCut", "Cabinet Low Cut", 20.0f, 500.0f, 80.0f, 1.0f));
     p.add(floatParameter("cabinetHighCut", "Cabinet High Cut", 2000.0f, 20000.0f, 12000.0f, 1.0f));
 
@@ -179,7 +179,7 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("delayMix", "Delay Mix", 0.0f, 1.0f, 0.15f));
     p.add(boolParameter("reverbOn", "Reverb On", true));
     p.add(floatParameter("reverbMix", "Reverb Mix", 0.0f, 1.0f, 0.12f));
-    p.add(boolParameter("cabinetOn", "Cabinet IR On", true));
+    p.add(boolParameter("cabinetOn", "Cabinet Colour On", true));
     p.add(boolParameter("doubleTrackOn", "Double Track On", false));
     p.add(floatParameter("doubleTrackMix", "Double Track Mix", 0.0f, 1.0f, 0.5f));
 
