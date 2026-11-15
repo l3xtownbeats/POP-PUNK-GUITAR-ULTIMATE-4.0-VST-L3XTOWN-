@@ -981,3 +981,23 @@ Implemented the previously approved browser/auxiliary-window geometry contract i
 - Keep automatic tiling for active panel-set changes and ordinary layout passes. This narrowly resolves the simple single-panel close/reopen case without changing panel IDs, controls, APVTS, audio, or the locked UI inventory.
 
 Source change is committed separately from this journal entry. Acceptance is SOURCE IMPLEMENTED ONLY. Required regression coverage/runtime checks remain: first open; manual resize and move; close/reopen; open/close a second panel; smaller/larger host editor; maximize/restore; viewport overflow/scrolling; persistence after editor/plugin restart. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 validation remain pending.
+
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: SKIN GALLERY TRANSACTION AND AUXILIARY WINDOW GEOMETRY
+
+Completed a focused static source pass on the Skin Gallery callbacks and auxiliary workspace window implementation.
+
+Skin Gallery source findings:
+- PREVIEW calls the editor's skin loader without persisting the preference.
+- A failed preview restores the originally active skin and clears the successful-preview transaction, so Apply cannot commit a stale/failed selection.
+- APPLY persists the currently previewed skin preference and closes the gallery.
+- BACK restores the original skin and closes the gallery without persisting the preview.
+- Apply is initially disabled and becomes available only after a successful preview. This confirms the source-level transaction wiring; it does not prove visual contrast/readability for all 16 themes at runtime.
+
+Auxiliary window geometry findings:
+- A visible resize-corner component is present and connected to a ComponentBoundsConstrainer; the source currently configures a minimum size but does not configure a maximum workspace-bound rectangle.
+- Header dragging clamps only the left/top coordinates to zero; it does not clamp the complete window rectangle to the workspace viewport.
+- openPanel() reads persisted bounds, but immediately calls layoutPanels(); the layout pass assigns calculated placements to non-maximized windows and writes those placements back. Thus the saved manual geometry is still not reliably restored on reopen.
+- The current maximize action targets viewport.getViewArea(), but the resize/drag boundary and persisted-geometry precedence are not yet implemented as approved.
+
+No source behavior was changed in this audit. This is a source-level finding only; runtime theme readability, host viewport boundaries, manual resize/move, reopen persistence, resize adaptation and FL Studio 20 acceptance remain unverified. The next bounded implementation task is to enforce viewport constraints for both drag and resize, then preserve per-panel user geometry across close/reopen without allowing the layout pass to overwrite it. Add regression coverage for first open, resize, move, close/reopen, another panel opening/closing, host editor resize, maximize/restore and overflow before marking this behavior accepted.
