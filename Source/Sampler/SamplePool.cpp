@@ -451,6 +451,10 @@ void SamplerEngine::prepare(double sampleRate) noexcept
     outputSampleRate = juce::jmax(1.0, sampleRate);
     palmMuteFilterAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
         * 1800.0f / static_cast<float>(outputSampleRate));
+    const float vibratoStep = juce::MathConstants<float>::twoPi * 5.2f
+        / static_cast<float>(outputSampleRate);
+    vibratoLfoSinStep = std::sin(vibratoStep);
+    vibratoLfoCosStep = std::cos(vibratoStep);
     reset();
 }
 
@@ -458,6 +462,9 @@ void SamplerEngine::reset() noexcept
 {
     channelPitchBendSemitones.fill(0.0f);
     channelPitchBendTarget.fill(0);
+    channelModWheel.fill(0.0f);
+    vibratoBaseDepth = 0.0f;
+    vibratoModWheelDepth = 0.0f;
     for (std::size_t i = 0; i < voices.size(); ++i)
     {
         streamingReaders[i].release();
@@ -497,6 +504,8 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     voice.midiChannel = juce::jlimit(1, 16, midiChannel);
     voice.direction = 1;
     voice.position = static_cast<double>(region->startFrame);
+    voice.vibratoLfoSin = 0.0f;
+    voice.vibratoLfoCos = 1.0f;
     const double safeGlobalTuning = std::isfinite(globalTuningSemitones)
         ? juce::jlimit(-48.0, 48.0, globalTuningSemitones) : 0.0;
     const double semitones = static_cast<double>(midiNote - region->rootKey)
@@ -520,6 +529,20 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     }
     applyPitchBendForChannel(voice.midiChannel - 1);
     return true;
+}
+
+void SamplerEngine::setModWheel(int midiChannel, float value) noexcept
+{
+    const int channelIndex = juce::jlimit(0, 15, midiChannel - 1);
+    channelModWheel[static_cast<size_t>(channelIndex)] =
+        std::isfinite(value) ? juce::jlimit(0.0f, 1.0f, value) : 0.0f;
+}
+
+void SamplerEngine::setVibratoDepths(float baseDepth, float modWheelDepth) noexcept
+{
+    vibratoBaseDepth = std::isfinite(baseDepth) ? juce::jlimit(0.0f, 1.0f, baseDepth) : 0.0f;
+    vibratoModWheelDepth = std::isfinite(modWheelDepth)
+        ? juce::jlimit(0.0f, 1.0f, modWheelDepth) : 0.0f;
 }
 
 void SamplerEngine::setPitchBend(int midiChannel, float semitones, int targetMode) noexcept
@@ -654,6 +677,9 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             continue;
 
         const auto& region = *voice.region;
+        const float modWheelValue = channelModWheel[static_cast<size_t>(voice.midiChannel - 1)];
+        const float voiceVibratoDepth = juce::jlimit(0.0f, 1.0f,
+            vibratoBaseDepth + modWheelValue * vibratoModWheelDepth);
         const auto* source = region.audio;
         const int sourceChannels = source != nullptr ? source->getNumChannels() : 2;
         const std::uint64_t sourceEnd = region.endFrame;
@@ -779,7 +805,22 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
                     output.addSample(ch, outIndex, 0.5f * (sampleL + sampleR) * envelope);
             }
 
-            voice.position += voice.increment * static_cast<double>(voice.direction);
+            double currentIncrement = voice.increment;
+            if (voiceVibratoDepth > 0.0f)
+            {
+                const float vibratoSemitones = voice.vibratoLfoSin * (0.25f * voiceVibratoDepth);
+                // Linearized semitone-to-ratio conversion is accurate for the
+                // small +/-0.25-semitone vibrato range and avoids pow()/sin()
+                // in the per-sample voice loop.
+                currentIncrement *= 1.0 + static_cast<double>(vibratoSemitones) * 0.0577622650466621;
+                const float nextSin = voice.vibratoLfoSin * vibratoLfoCosStep
+                    + voice.vibratoLfoCos * vibratoLfoSinStep;
+                const float nextCos = voice.vibratoLfoCos * vibratoLfoCosStep
+                    - voice.vibratoLfoSin * vibratoLfoSinStep;
+                voice.vibratoLfoSin = nextSin;
+                voice.vibratoLfoCos = nextCos;
+            }
+            voice.position += currentIncrement * static_cast<double>(voice.direction);
             if (voice.releasing || voice.palmMuted)
             {
                 voice.gain -= voice.releasing ? voice.releaseStep : voice.palmMuteDecayStep;

@@ -595,6 +595,43 @@ int main()
         return 1;
     }
 
+    // CC1 drives the existing modWheelVibrato depth control; vibrato is
+    // rendered as a low-cost per-voice LFO without allocating or calling sin()
+    // in the sample loop.
+    ppgu::sampler::SamplerEngine vibratoReferenceEngine;
+    vibratoReferenceEngine.prepare(44100.0);
+    ppgu::sampler::SamplerEngine vibratoAppliedEngine;
+    vibratoAppliedEngine.prepare(44100.0);
+    if (!vibratoReferenceEngine.loadSfz(sfzFile).success
+        || !vibratoAppliedEngine.loadSfz(sfzFile).success
+        || !vibratoReferenceEngine.noteOn(60, 100)
+        || !vibratoAppliedEngine.noteOn(60, 100))
+    {
+        std::cerr << "Could not prepare vibrato regression fixtures.\\n";
+        return 1;
+    }
+    vibratoAppliedEngine.setVibratoDepths(0.0f, 1.0f);
+    vibratoAppliedEngine.setModWheel(1, 1.0f);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    juce::AudioBuffer<float> vibratoReferenceAudio(2, 4096);
+    juce::AudioBuffer<float> vibratoAppliedAudio(2, 4096);
+    vibratoReferenceAudio.clear();
+    vibratoAppliedAudio.clear();
+    vibratoReferenceEngine.render(vibratoReferenceAudio, 0, vibratoReferenceAudio.getNumSamples());
+    vibratoAppliedEngine.render(vibratoAppliedAudio, 0, vibratoAppliedAudio.getNumSamples());
+    double vibratoDifference = 0.0;
+    for (int sample = 0; sample < vibratoReferenceAudio.getNumSamples(); ++sample)
+    {
+        const double delta = static_cast<double>(vibratoAppliedAudio.getSample(0, sample))
+            - static_cast<double>(vibratoReferenceAudio.getSample(0, sample));
+        vibratoDifference += delta * delta;
+    }
+    if (vibratoDifference < 0.001)
+    {
+        std::cerr << "Mod Wheel vibrato did not change the rendered waveform.\\n";
+        return 1;
+    }
+
     // A failed reload must leave the previously published map intact. The
     // first new WAV is valid, the second is deliberately corrupt.
     const auto orphanWav = directory.getChildFile("orphan.wav");

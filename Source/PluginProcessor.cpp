@@ -318,6 +318,11 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         static_cast<int>(parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)));
     const int pitchBendTarget = juce::jlimit(0, 5,
         static_cast<int>(parameters.getRawParameterValue("pitchBendTarget")->load(std::memory_order_relaxed)));
+    const float vibratoDepth = juce::jlimit(0.0f, 1.0f,
+        parameters.getRawParameterValue("vibrato")->load(std::memory_order_relaxed));
+    const float modWheelVibratoDepth = juce::jlimit(0.0f, 1.0f,
+        parameters.getRawParameterValue("modWheelVibrato")->load(std::memory_order_relaxed));
+    sampler.setVibratoDepths(vibratoDepth, modWheelVibratoDepth);
 
     // Read one immutable host-position snapshot per block. Pattern timing is
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
@@ -422,6 +427,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                     * (2.0f / 8192.0f);
                 sampler.setPitchBend(message.getChannel(), bend, pitchBendTarget);
             }
+            else if (message.isController() && message.getControllerNumber() == 1)
+                sampler.setModWheel(message.getChannel(),
+                    static_cast<float>(message.getControllerValue()) / 127.0f);
         }
         renderSegment(cursor, samples - cursor);
     }
@@ -605,6 +613,9 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                         * (2.0f / 8192.0f);
                     sampler.setPitchBend(message.getChannel(), bend, pitchBendTarget);
                 }
+                else if (message.isController() && message.getControllerNumber() == 1)
+                    sampler.setModWheel(message.getChannel(),
+                        static_cast<float>(message.getControllerValue()) / 127.0f);
             },
             [&](int eventSample)
             {
