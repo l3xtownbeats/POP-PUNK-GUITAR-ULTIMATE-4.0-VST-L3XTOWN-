@@ -7,6 +7,10 @@
 
 namespace ppgu::sfz
 {
+inline constexpr std::size_t maximumSfzFileBytes = 16U * 1024U * 1024U;
+inline constexpr std::size_t maximumSfzLineLength = 64U * 1024U;
+inline constexpr std::size_t maximumSfzTokensPerLine = 4096U;
+inline constexpr std::size_t maximumSfzRegions = 65536U;
 struct Region
 {
     std::filesystem::path samplePath;

@@ -254,6 +254,11 @@ void applyOpcode(Opcodes& target, const std::string& opcode, const std::string& 
 ParseResult parseText(const std::string& text, const std::filesystem::path& sfzDirectory)
 {
     ParseResult result;
+    if (text.size() > maximumSfzFileBytes)
+    {
+        result.errors.push_back({ 0, "SFZ text exceeds the 16 MiB parser safety limit." });
+        return result;
+    }
     const auto base = std::filesystem::absolute(sfzDirectory).lexically_normal();
     auto sampleBase = base;
     Opcodes global;
@@ -265,11 +270,20 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
     bool inGlobal = false;
     bool inMaster = false;
     bool ignoreSection = false;
+    bool regionLimitReported = false;
     std::size_t lineNumber = 0;
     auto flushRegion = [&]
     {
         if (inRegion && region.hasSample)
         {
+            if (result.regions.size() >= maximumSfzRegions)
+            {
+                if (!regionLimitReported)
+                    result.errors.push_back({ lineNumber, "SFZ region count exceeds the 65536-region safety limit." });
+                regionLimitReported = true;
+                inRegion = false;
+                return;
+            }
             const auto& item = region.values;
             if (item.lowKey > item.highKey || item.lowVelocity > item.highVelocity
                 || item.seqLength < 1 || item.seqLength > 256
@@ -293,6 +307,11 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
     while (std::getline(input, line))
     {
         ++lineNumber;
+        if (line.size() > maximumSfzLineLength)
+        {
+            result.errors.push_back({ lineNumber, "SFZ line exceeds the 64 KiB parser safety limit." });
+            continue;
+        }
         bool quoted = false;
         std::size_t comment = std::string::npos;
         for (std::size_t i = 0; i + 1 < line.size(); ++i)
@@ -302,6 +321,11 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
         }
         if (comment != std::string::npos) line.erase(comment);
         auto tokens = tokenize(line);
+        if (tokens.size() > maximumSfzTokensPerLine)
+        {
+            result.errors.push_back({ lineNumber, "SFZ line exceeds the 4096-token parser safety limit." });
+            continue;
+        }
         for (const auto& token : tokens)
         {
             if (token.size() >= 3 && token.front() == '<' && token.back() == '>')
@@ -349,6 +373,15 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
                 else if (section == "region")
                 {
                     inControl = false;
+                    if (result.regions.size() >= maximumSfzRegions)
+                    {
+                        if (!regionLimitReported)
+                            result.errors.push_back({ lineNumber, "SFZ region count exceeds the 65536-region safety limit." });
+                        regionLimitReported = true;
+                        inRegion = false;
+                        ignoreSection = true;
+                        continue;
+                    }
                     region = group;
                     region.values.sourceLine = lineNumber;
                     inRegion = true;
@@ -420,10 +453,27 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
 
 ParseResult parseFile(const std::filesystem::path& sfzPath)
 {
+    ParseResult result;
+    std::error_code fileError;
+    if (!std::filesystem::is_regular_file(sfzPath, fileError) || fileError)
+    {
+        result.errors.push_back({ 0, "SFZ path is not a readable regular file: " + sfzPath.string() });
+        return result;
+    }
+    const auto fileBytes = std::filesystem::file_size(sfzPath, fileError);
+    if (fileError)
+    {
+        result.errors.push_back({ 0, "Could not read SFZ file size: " + fileError.message() });
+        return result;
+    }
+    if (fileBytes > maximumSfzFileBytes)
+    {
+        result.errors.push_back({ 0, "SFZ file exceeds the 16 MiB parser safety limit." });
+        return result;
+    }
     std::ifstream stream(sfzPath, std::ios::binary);
     if (!stream)
     {
-        ParseResult result;
         result.errors.push_back({ 0, "Could not open SFZ file: " + sfzPath.string() });
         return result;
     }
@@ -436,8 +486,13 @@ std::vector<Diagnostic> validateSampleFiles(const ParseResult& parsed)
 {
     std::vector<Diagnostic> issues;
     for (const auto& region : parsed.regions)
-        if (!std::filesystem::is_regular_file(region.samplePath))
-            issues.push_back({ region.sourceLine, "Sample file not found: " + region.samplePath.string() });
+    {
+        std::error_code error;
+        const bool regularFile = std::filesystem::is_regular_file(region.samplePath, error);
+        if (error || !regularFile)
+            issues.push_back({ region.sourceLine, "Sample file not found or could not be inspected: "
+                + region.samplePath.string() });
+    }
     return issues;
 }
 }

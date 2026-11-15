@@ -1,6 +1,7 @@
 #include "SfzParser.h"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 using namespace ppgu::sfz;
@@ -161,6 +162,43 @@ int main()
         CHECK(!symlinkDefaultPathEscape.succeeded());
         CHECK(!symlinkDefaultPathEscape.errors.empty());
     }
+
+    // External SFZ text/files are bounded before parser vectors and strings
+    // can grow without limit.
+    const auto oversizedText = parseText(std::string(maximumSfzFileBytes + 1U, ' '), base);
+    CHECK(!oversizedText.succeeded());
+    CHECK(!oversizedText.errors.empty());
+    const auto oversizedLine = parseText(
+        "<region> sample=x.wav key=60 " + std::string(maximumSfzLineLength, 'x') + "\n", base);
+    CHECK(!oversizedLine.succeeded());
+    CHECK(!oversizedLine.errors.empty());
+    std::string tooManyTokens = "<region> sample=x.wav key=60";
+    for (std::size_t token = 0; token <= maximumSfzTokensPerLine; ++token)
+        tooManyTokens += " unsupported=1";
+    const auto tokenLimited = parseText(tooManyTokens + "\n", base);
+    CHECK(!tokenLimited.succeeded());
+    CHECK(!tokenLimited.errors.empty());
+    std::string tooManyRegions;
+    tooManyRegions.reserve((maximumSfzRegions + 1U) * 32U);
+    for (std::size_t region = 0; region <= maximumSfzRegions; ++region)
+        tooManyRegions += "<region> sample=x.wav key=60\n";
+    const auto regionLimited = parseText(tooManyRegions, base);
+    CHECK(!regionLimited.succeeded());
+    CHECK(regionLimited.regions.size() == maximumSfzRegions);
+    CHECK(!regionLimited.errors.empty());
+
+    std::error_code fileLimitError;
+    std::filesystem::create_directories(base, fileLimitError);
+    const auto oversizedFile = base / "oversized.sfz";
+    {
+        std::ofstream emptyFile(oversizedFile, std::ios::binary);
+        CHECK(static_cast<bool>(emptyFile));
+    }
+    std::filesystem::resize_file(oversizedFile, maximumSfzFileBytes + 1U, fileLimitError);
+    CHECK(!fileLimitError);
+    const auto oversizedFileResult = parseFile(oversizedFile);
+    CHECK(!oversizedFileResult.succeeded());
+    std::filesystem::remove(oversizedFile, fileLimitError);
 
     std::cout << "SFZ parser tests passed: inheritance, note names, velocity zones, metadata, path safety, validation.\n";
     return 0;
