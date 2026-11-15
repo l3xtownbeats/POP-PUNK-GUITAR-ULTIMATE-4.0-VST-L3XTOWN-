@@ -2674,3 +2674,23 @@ Outstanding acceptance:
 
 **Status:** USER REQUIREMENTS APPROVED / SOURCE INVENTORY DOCUMENTED / UI INTEGRATION PARTIAL / VALIDATION PENDING / NOT RELEASE READY.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 NEON STAGE shared TextEditor states
+==============================================================================
+
+**Source commits:**
+- `07262b7ba7429366dd600ebbdef78069506920ad` — declarations in `Source/PluginEditor.h`.
+- `c0d694bb7979248773d4fc4300df75d2d7ed411c` — implementation in `Source/PluginEditor.cpp`.
+
+`PPGUPremiumLookAndFeel` now supplies palette-driven TextEditor background and outline rendering. Enabled fields use the canonical control surface; disabled fields use the lowlight surface. Outlines distinguish normal, hover, keyboard-focus and disabled states using canonical palette tokens. This extends the shared visual system to existing text fields without creating controls or changing their behavior.
+
+The component matrix was updated in commit `52eaf122e6b3decc919ee7d521ff618272f8d74d` to record this source-backed state. CODE journal entry was appended in its own commit.
+
+**Safety:** no Audio Engine, DSP, MIDI, APVTS, parameter/control IDs, attachments, sampler, presets or panel workflows intentionally changed.
+
+**Validation:** source declarations/definitions re-fetched and confirmed. No exact-HEAD compiler/build, CTest, pluginval, package or FL Studio 20 host result is claimed. JUCE override signature compile confirmation remains pending.
+
+**Status:** SOURCE IMPLEMENTED / VALIDATION PENDING / NOT RELEASE READY.
+==============================================================================
