@@ -2867,3 +2867,20 @@ These images are implementation references, not permission to show an unimplemen
 
 **Status:** AUDIT FALSE POSITIVE FIXED / SECURITY TESTS PASS LOCALLY / WORKFLOW STEP ADDED / EXACT-HEAD CI PENDING / 15 THEME PREVIEW-HERO PAIRS STILL PENDING.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — NEON STAGE MOCKUP IS THE GUI SOURCE OF TRUTH
+==============================================================================
+
+**Пользовательское уточнение — обязательное:** визуальная оболочка плагина должна воспроизводить утверждённый образец NEON STAGE, а не произвольную упрощённую компоновку. Канонический главный референс — `01 INTERFACE  NEON STAGE DEFAULT .png`; связанные изображения `02`–`07` задают AUTOCHORDS, FX EDIT и multi-window состояния.
+
+`assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` — только брендовая обложка/баннер. Он не является темой, skin package, runtime GUI или подтверждением реализации интерфейса. Его нельзя использовать вместо NEON STAGE в качестве UI.
+
+Обязательная цель визуального соответствия: композиция образца, графический верхний бренд-блок, галерея скинов и preset browser, центральная зона Playing Core с hero artwork и девятью контролами, FX Chain, FX EDIT, AUTOCHORDS, Import Guitar, Settings, About entry point, Performance MIDI monitor и предусмотренные образцом визуальные поверхности. Геометрия, пропорции, плотность, рамки, световые акценты, artwork, типографика и оформление контролов сверяются непосредственно с референсами.
+
+Сохраняются неизменными: 27-control contract, существующие APVTS IDs, ровно семь разрешённых FX bypass IDs, утверждённый inventory и честные статусы незавершённых backend-функций. Нереализованные точки входа визуально disabled; их нельзя изображать работающими.
+
+**GitHub correction:** README на этой рабочей ветке теперь показывает утверждённый PNG-референс вместо SVG-баннера и больше не утверждает, что интерфейс ограничен двумя окнами. Draft PR #53 закрыт как SUPERSEDED / DO NOT MERGE, поскольку его компоновка не соответствовала образцу. Это исправление документации и ссылки на референс, а не заявление о завершённой GUI-реализации.
+
+**Статус:** VISUAL SOURCE OF TRUTH CONFIRMED / README CORRECTED / EXACT GUI REIMPLEMENTATION PENDING / BUILD AND HOST ACCEPTANCE NOT CLAIMED.
+==============================================================================
