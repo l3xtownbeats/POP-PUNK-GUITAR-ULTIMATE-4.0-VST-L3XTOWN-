@@ -600,3 +600,29 @@ Each preset's documentation should label these values “starting point / tonal 
 
 ## 2026-11-15 — EXPLICIT RECONFIRMATION / BASELINE LOCK
 Пользователь повторно подтвердил и распорядился зафиксировать в проектной базе все принципы SOUND QUALITY PRIORITY, записанные выше: RAW/CLEAN/DI/ACOUSTIC source quality first; then high-quality processed tones; quality over preset/effect count; developer autonomy over methods within approved scope; truthful status/licensing/READY gates. Также подтверждено требование восстановить точный утверждённый список 21 групп и закреплённых песен-референсов, не заменяя его догадками. Это подтверждение фиксирует требования как утверждённую базовую основу проекта; не является заявлением, что 21-group/song matrix или сами пресеты уже реализованы.
+
+
+## 2026-11-15 — PRESET RESEARCH WORKSTREAM STARTED: EVIDENCE REGISTER (PARTIAL, NOT THE 21-GROUP LOCKED MATRIX)
+
+This entry starts the source-backed song/tonal research work. It deliberately does NOT claim that the complete previously approved 21-group list or its exact song selections have been recovered. Only references below are documented in the current evidence pass; they are research anchors, not copied musical content and not READY presets.
+
+### Blink-182 — initial research anchors
+- “Enema of the State” (1999) as a distinct late-90s polished/aggressive pop-punk family; candidate track anchors: “All the Small Things”, “What's My Age Again?”, “Dumpweed”. The user's earlier approved tonal approximation for “All the Small Things” remains a starting-point reference, not a verified session setting.
+- “blink-182” (2003) should remain a separate, broader family; do not collapse its darker/ambient/alternative directions into the 1999 profile.
+- “One More Time...” (2023) is a separate modern reference family, not a substitute for earlier eras.
+- Evidence: Premier Guitar Rig Rundown (Jan. 14, 2026) documents current Tom DeLonge touring guitar and Fractal-based signal chain; MusicRadar interview discusses the evolution toward Vox AC30H2 + Fender '65 Twin Reverb and Tom's explanation of spectral space. These are era-specific context, not proof of the exact studio chain for every track.
+- Sources: https://www.premierguitar.com/videos/rig-rundown/blink-182 ; https://www.musicradar.com/news/tom-delonge-interview-blink-182
+
+### Green Day — initial research anchors
+- “Dookie” (1994): candidate track anchors “Basket Case”, “Longview”, “When I Come Around”. “Basket Case” remains the user's tonal starting-point reference, not a verified knob recipe.
+- “American Idiot” (2004): candidate anchors “American Idiot”, “Holiday”, “Jesus of Suburbia”; keep its sound family distinct from Dookie.
+- Guitar World interview (Feb. 26, 2024) includes Billie Joe Armstrong's retrospective on Dookie and discussion of guitars/amps used on Saviors; the same source describes the band's broad guitar approach and song-specific contrasts. Guitar.com provides a historical Dookie gear account, but disputed/retrospective details must be cross-checked before asserting exact session gear.
+- Sources: https://www.guitarworld.com/features/green-day-billie-joe-armstrong-saviors-interview ; https://guitar.com/features/artist-rigs/the-gear-used-by-billie-joe-armstrong-on-green-days-dookie/
+
+### Required next research steps
+- Recover the exact 21-group approved roster from the original user-approved project records before declaring it complete. Current visible source files enumerate only a subset and refer to the 21-group scope without listing all 21.
+- For each recovered group, choose a small, musically representative set of song anchors across relevant eras/roles; document evidence and confidence; separate confirmed gear/production facts from interpretation.
+- Build RAW/CLEAN/DI/ACOUSTIC source-quality profiles first. Only then create processed variations where the actual legal source material and implemented DSP justify them.
+- Song titles are reference anchors for analysis of tone, arrangement role and articulation only; do not copy protected riffs, recordings, stems or commercial presets.
+
+Status: RESEARCH STARTED / PARTIAL EVIDENCE REGISTER. Full 21-group matrix, all group-specific song selections, source acquisition, preset implementation and listening acceptance remain pending.
