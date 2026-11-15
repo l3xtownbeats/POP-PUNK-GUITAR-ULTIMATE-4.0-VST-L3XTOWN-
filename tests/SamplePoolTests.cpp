@@ -159,6 +159,44 @@ int main()
         return 1;
     }
 
+    // Palm mute is a real per-voice articulation: it damps the sample and
+    // applies a short natural decay even while a continuous-loop key is held.
+    ppgu::sampler::SamplerEngine palmMutedEngine;
+    palmMutedEngine.prepare(44100.0);
+    if (!palmMutedEngine.loadSfz(sfzFile).success
+        || !palmMutedEngine.noteOn(60, 100, 64, 1, 0.0, true))
+    {
+        std::cerr << "Could not start palm-muted sampler regression fixture.\\n";
+        return 1;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    juce::AudioBuffer<float> palmMutedRender(2, 8192);
+    palmMutedRender.clear();
+    palmMutedEngine.render(palmMutedRender, 0, palmMutedRender.getNumSamples());
+    if (palmMutedEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Palm-muted continuous-loop voice did not decay and retire.\\n";
+        return 1;
+    }
+
+    ppgu::sampler::SamplerEngine openSustainEngine;
+    openSustainEngine.prepare(44100.0);
+    if (!openSustainEngine.loadSfz(sfzFile).success
+        || !openSustainEngine.noteOn(60, 100, 64, 1))
+    {
+        std::cerr << "Could not start open-sustain comparison fixture.\\n";
+        return 1;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    juce::AudioBuffer<float> openSustainRender(2, 8192);
+    openSustainRender.clear();
+    openSustainEngine.render(openSustainRender, 0, openSustainRender.getNumSamples());
+    if (openSustainEngine.getActiveVoiceCount() != 1)
+    {
+        std::cerr << "Open continuous-loop voice was incorrectly shortened.\\n";
+        return 1;
+    }
+
     // Streaming frame positions are 64-bit: a sample longer than the old
     // arbitrary 120-second ceiling must remain loadable without decoding it
     // into one giant AudioBuffer.

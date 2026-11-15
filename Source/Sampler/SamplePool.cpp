@@ -449,6 +449,8 @@ std::size_t SamplePool::getSampleCount() const noexcept
 void SamplerEngine::prepare(double sampleRate) noexcept
 {
     outputSampleRate = juce::jmax(1.0, sampleRate);
+    palmMuteFilterAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+        * 1800.0f / static_cast<float>(outputSampleRate));
     reset();
 }
 
@@ -468,7 +470,7 @@ LoadReport SamplerEngine::loadSfz(const juce::File& sfzFile,
     return pool.loadSfz(sfzFile, requestGeneration, expectedGeneration);
 }
 
-bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones) noexcept
+bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, int midiChannel, double globalTuningSemitones, bool palmMuted) noexcept
 {
     const auto* region = pool.findRegion(midiNote, velocity, midiChannel);
     if (region == nullptr || (region->audio == nullptr && region->streaming == nullptr) || velocity <= 0)
@@ -499,6 +501,10 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
     voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
     voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
+    voice.palmMuted = palmMuted;
+    if (voice.palmMuted)
+        voice.palmMuteDecayStep = voice.gain
+            / juce::jmax(1.0f, static_cast<float>(outputSampleRate * 0.12));
     voice.age = nextAge++;
     if (region->streaming != nullptr)
     {
@@ -690,6 +696,14 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
             voice.streamingMissSamples = 0;
 
+            if (voice.palmMuted)
+            {
+                voice.palmMuteFilterLeft += palmMuteFilterAlpha * (sampleL - voice.palmMuteFilterLeft);
+                voice.palmMuteFilterRight += palmMuteFilterAlpha * (sampleR - voice.palmMuteFilterRight);
+                sampleL = voice.palmMuteFilterLeft;
+                sampleR = voice.palmMuteFilterRight;
+            }
+
             const float panLeft = region.pan > 0.0f ? 1.0f - region.pan : 1.0f;
             const float panRight = region.pan < 0.0f ? 1.0f + region.pan : 1.0f;
             const float envelope = voice.gain;
@@ -705,9 +719,9 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
 
             voice.position += voice.increment * static_cast<double>(voice.direction);
-            if (voice.releasing)
+            if (voice.releasing || voice.palmMuted)
             {
-                voice.gain -= voice.releaseStep;
+                voice.gain -= voice.releasing ? voice.releaseStep : voice.palmMuteDecayStep;
                 if (voice.gain <= 0.0f)
                 {
                     streamReader.release();
