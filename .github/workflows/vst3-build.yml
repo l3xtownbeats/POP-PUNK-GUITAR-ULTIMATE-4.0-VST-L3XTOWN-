@@ -11,6 +11,7 @@ on:
       - 'Source/**'
       - 'tests/**'
       - 'SKIN/**'
+      - 'Samples/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
       - 'presets/factory_bank_300.json'
@@ -273,6 +274,10 @@ jobs:
             if ($actualHash -ne $manifestEntries[$relative]) { throw "SHA-256 mismatch for sample: $relative" }
           }
 
+      - name: Audit canonical factory sample inventory and SFZ references
+        shell: pwsh
+        run: python tools/audit_sample_library.py --root Samples --output build/sample_library_audit.json
+
       - name: Validate JUCE BinaryData include, link and declaration order
         shell: pwsh
         run: python tools/check_binary_data_links.py
@@ -389,6 +394,7 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination $runtimeSkins
 
           # Keep human-readable install notes and provenance in Resources.
+          Copy-Item -LiteralPath (Join-Path $PWD 'build/sample_library_audit.json') -Destination (Join-Path $release 'Resources/SAMPLE_LIBRARY_AUDIT.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
