@@ -1068,3 +1068,11 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 - Added processor integration assertions for state round-trip and preview transience.
 - No APVTS IDs, existing parameter semantics, 27-control inventory, seven FX bypass IDs, or theme IDs changed.
 - Parent: efe5486f90e166fdf377867b42f028d45293e670; validation pending on resulting commit SHA.
+
+
+## 2026-11-15 — TX-FACTORY-LIBRARY-FIRST-001
+- Зафиксирована последовательность: сначала постоянная Factory Sample Library в Samples/, затем playable factory presets, напрямую привязанные к реальным sample zones.
+- Пресет не READY при одном лишь tonal description или неподключённых параметрах; обязательны проверка sample references, нот/velocity, playback, audition, уровней/FX и save/load.
+- Samples/ закреплена как persistent canonical library: только additive ingest и безопасная реорганизация; аудио/SFZ/license/provenance не удаляются.
+- CI получил guard на наличие Samples/ и минимальную наполненность; release SOUNDBANK копируется напрямую из Samples/.
+- Validation pending on exact commit SHA.

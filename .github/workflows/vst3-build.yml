@@ -73,6 +73,15 @@ jobs:
       # Preset catalog validation is performed from the checked-in JSON above.
       # Do not mutate source files during CI; preset content belongs in reviewed commits.
 
+      - name: Assert canonical Samples library workspace
+        shell: pwsh
+        run: |
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) {
+            throw 'Canonical Samples library workspace is missing; do not replace it with an empty directory.'
+          }
+          Write-Host 'Canonical Samples library workspace confirmed.'
+
       - name: Restore redistributable sample library cache
         id: sample-cache
         uses: actions/cache@v4
@@ -326,8 +335,13 @@ jobs:
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
 
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) { throw 'Canonical Samples library is missing; release packaging stopped.' }
+          $sampleAudio = Get-ChildItem -LiteralPath $sampleRoot -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') }
+          if ($sampleAudio.Count -lt 100) { throw "Canonical Samples library is incomplete: only $($sampleAudio.Count) audio files." }
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
-          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          # Factory SOUNDBANK is always assembled from the preserved canonical Samples tree.
+          Copy-Item -Path (Join-Path $sampleRoot '*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Optional source/reference material is shipped separately from runtime payload.
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Source/*') -Destination (Join-Path $release 'Source') -Recurse

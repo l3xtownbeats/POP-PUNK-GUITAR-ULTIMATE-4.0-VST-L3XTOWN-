@@ -6,7 +6,7 @@
     "pattern": 150,
     "total": 300
   },
-  "note": "Preset definitions are authored tonal/performance targets. They are not represented as fully playable in-plugin presets until connected to the plugin loader and verified against mapped sample/performance libraries. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are style references only. No commercial recordings, stems, riffs, or protected samples are included.",
+  "note": "Preset definitions are authored tonal/performance targets. They are not represented as fully playable in-plugin presets until connected to the plugin loader and verified against mapped sample/performance libraries. Commercial Session Guitarist samples are not bundled or redistributed without explicit licensing permission. Artist names and track titles are style references only. No commercial recordings, stems, riffs, or protected samples are included. Factory creation order is binding: curate and validate the permanent Samples/ factory library first; then author playable factory presets directly against its real SFZ/WAV sample zones. A preset is not READY merely because a tonal/performance description exists; sample references, note/velocity mapping, playback, audition, level, FX and save/load must be verified.",
   "artists": [
     {
       "name": "Blink-182",
@@ -12572,5 +12572,12 @@
     "Lead Drive",
     "Muted Chugs"
   ],
-  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings."
+  "patternStyleNote": "Pattern presets define separate performance groove and soundCharacter. These are original genre reconstructions, not note-for-note transcriptions or redistributed recordings.",
+  "factoryCreationOrder": [
+    "Build and curate the permanent natural-guitar factory library from Samples/ first.",
+    "Preserve source audio, SFZ mappings, licenses, attribution and SHA-256; only add or safely reorganize.",
+    "Create factory presets only from real validated sample banks/zones in Samples/.",
+    "Verify every preset's sample references, keyboard range, velocity/articulation behavior, playback, levels, effects and save/load.",
+    "Do not count descriptive-only or unconnected preset definitions as READY."
+  ]
 }

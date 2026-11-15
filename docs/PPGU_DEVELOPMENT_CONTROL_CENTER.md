@@ -351,3 +351,15 @@ The approved UI specification is `PPGU_UI_THEME_SPEC_FULL.txt` v1.3, with `01 IN
 - Mandatory invariants remain unchanged: one Sample Engine; realtime-safe callback; stable APVTS IDs/semantics; exact 27-control contract; approved seven FX bypass IDs; approved skin IDs and NEON STAGE design; portable VST3; natural samples with explicit commercial embedding/redistribution rights; no fake controls or false completion claims.
 - Ordered implementation follows Master Register phases. Each discrete fix must have source/tests, exact-SHA CI, synchronized journals and remote readback before closure.
 - Transaction status: STARTED / PREFLIGHT COMPLETE / IMPLEMENTATION OPEN.
+
+
+## 2026-11-15 — Binding user approval: factory library first, presets second
+
+The user explicitly approved this sequence: first establish and curate the permanent factory guitar library; then create factory presets using the actual guitar sounds stored in `Samples/`. Presets are bound to verified sample banks/zones, not merely authored as tonal descriptions.
+
+- `Samples/` is persistent and must never be deleted, wiped, or replaced by an empty folder. Only additive ingest and lossless reorganization are permitted.
+- Preserve audio, SFZ mappings, licenses/attribution, manifests and SHA-256. Quarantine uncertain duplicates instead of deleting them.
+- Build/validate the factory sample library first. Only then author presets against real mapped zones.
+- READY preset evidence requires resolved sample references, keyboard/velocity/articulation mapping, audible playback/audition, levels/FX and save/load verification.
+- Portable release `SOUNDBANK/` is copied from the canonical `Samples/` directory; CI guards missing/underfilled library state.
+- The policy does not override source licensing restrictions: commercial embedding and raw sample redistribution rights remain mandatory.

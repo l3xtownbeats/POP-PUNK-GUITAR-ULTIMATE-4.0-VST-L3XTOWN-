@@ -2909,3 +2909,18 @@ Implemented in this transaction:
 Validation: pending exact-SHA Windows x64 VST3 build, CTest and pluginval. FL Studio 20 manual host acceptance remains separate.
 Status: IMPLEMENTED IN SOURCE / VALIDATION PENDING.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — TX-FACTORY-LIBRARY-FIRST-001 — утверждённый порядок Factory Library → Presets
+==============================================================================
+Пользователь утвердил: сначала создаётся постоянная заводская библиотека звуков; далее библиотека дополняется. Создание пресетов должно осуществляться на реальных гитарных звуках из Samples/. Пресеты закрепляются за проверенными sample banks/zones.
+Правила:
+- Samples/ — постоянная каноническая библиотека; запрещено удалять, очищать целиком или заменять пустой структурой.
+- Только additive ingest и безопасная реорганизация; сохранять аудио, SFZ, лицензии/атрибуцию, manifests и SHA-256.
+- Сначала техническая/лицензионная проверка заводских банков, затем создание playable presets на реальных sample mappings.
+- Описание тембра без действительных sample references и тестов не считается готовым пресетом и не входит в READY count.
+- Каждый пресет проверяется по sample resolution, keyboard/velocity mapping, playback, levels/FX и save/load.
+- Portable release SOUNDBANK/ собирается непосредственно из Samples/; CI проверяет наличие и минимальную наполненность каталога перед упаковкой.
+Статус: USER APPROVED / POLICY RECORDED / WORKFLOW GUARD ADDED / EXACT-SHA CI PENDING.
+==============================================================================
