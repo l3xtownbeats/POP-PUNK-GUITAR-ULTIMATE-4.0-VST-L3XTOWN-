@@ -425,16 +425,24 @@ def main() -> int:
         missing = sorted(registered_folders - actual_folders)
         fail(errors, "SKIN", "active registry skin folders missing: " + ", ".join(missing))
 
-    archive_path = SKIN_ROOT / "isolated_legacy" / "theme_manifest.json"
-    archive = load_json(archive_path, errors)
-    if isinstance(archive, dict):
-        archived_entries = archive.get("themes", [])
-        if archive.get("status") != "ISOLATED_LEGACY_ARCHIVE_NOT_LOADED_BY_PLUGIN":
-            fail(errors, "SKIN/isolated_legacy/theme_manifest.json", "archive status is invalid")
-        if archive.get("totalSkins") != len(archived_entries) or len(archived_entries) != 101:
-            fail(errors, "SKIN/isolated_legacy/theme_manifest.json", "expected 101 isolated historical records")
-        if any(item.get("id") == DEFAULT_ID for item in archived_entries if isinstance(item, dict)):
-            fail(errors, "SKIN/isolated_legacy/theme_manifest.json", "canonical default must not be duplicated in archive")
+    # The current source tree must contain only the sixteen approved factory-theme
+    # folders. Historical theme archives are intentionally absent from this branch.
+    legacy_archive = SKIN_ROOT / "isolated_legacy"
+    if legacy_archive.exists():
+        fail(errors, "SKIN/isolated_legacy", "retired historical theme archive must not exist in the current source tree")
+
+    approved_sequence = load_json(SKIN_ROOT / "approved_theme_sequence.json", errors)
+    approved_themes = approved_sequence.get("themes", []) if isinstance(approved_sequence, dict) else []
+    approved_folders = {
+        Path(item.get("path", "")).parent.name
+        for item in approved_themes if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
+    if len(approved_themes) != 16 or len(approved_folders) != 16:
+        fail(errors, "SKIN/approved_theme_sequence.json", "exactly 16 unique approved factory themes are required")
+    if actual_folders != approved_folders:
+        unexpected = sorted(actual_folders - approved_folders)
+        missing = sorted(approved_folders - actual_folders)
+        fail(errors, "SKIN", f"theme folders must match the approved 16-theme sequence; unexpected={unexpected}, missing={missing}")
 
     if errors:
         print(f"SKIN CONTRACT: FAIL ({len(errors)} issue(s))")
@@ -443,7 +451,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, active registry isolation, legacy archive separation and Skin Studio contracts, control maps, assets and contrast pairs verified.")
+    print(f"{len(approved_themes)} approved factory-theme folders verified; {expected_count} runtime registry entries; no historical archive; Skin Studio contracts, control maps, assets and contrast pairs verified.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 
