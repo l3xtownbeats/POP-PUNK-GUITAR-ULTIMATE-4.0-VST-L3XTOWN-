@@ -2811,3 +2811,23 @@ unverified until their steps complete successfully.
 **Validation:** source/test changes committed. The Python contract test, CTest, Windows Release build, pluginval and FL Studio 20 have **not** been run on this SHA. CI evidence is not available yet; do not mark this episode PASS.
 
 **Next:** run the gallery contract and inspect the remaining gallery lifecycle/selection/favorites defects before proceeding to OverlayManager/SecureSkinImport integration.
+
+
+## 2026-11-15 — REV18 GALLERY-02 — defer card thumbnail decoding outside paint
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `5f1843644b0ffa66c847f026e0633b13d6a35a7f` (parent `cd11dda15bfcb0567c5f18a591cdf30ffcafa45c`).
+**Test commit:** `d2ff13a3a621dd8997b83cfbe062380d6af46582` (parent `5f1843644b0ffa66c847f026e0633b13d6a35a7f`).
+**Files:** `Source/PluginEditor.cpp`; `tests/TestSkinGalleryInteractionContract.py`.
+
+**Defect:** The previous paint-time regression only guarded the large Preview view. Individual Gallery Card::paint still called `ImageCache::getFromFile` and `existsAsFile`, so repainting/scolling cards could perform filesystem access and image decoding in the paint callback.
+
+**Correction:** Card paint now draws a cached thumbnail or fallback art and only schedules a deferred message-thread load. The asynchronous callback uses `juce::Component::SafePointer<Card>` to avoid dereferencing a card destroyed before the callback runs; successful decode updates the cached image and repaints the card. Only cards that actually paint request a thumbnail, preserving lazy visible-card behavior.
+
+**Regression coverage added:** `test_card_thumbnail_decode_is_deferred_outside_paint` rejects image decode and filesystem existence checks in Card::paint and requires deferred loading plus SafePointer lifetime protection.
+
+**Compatibility boundary:** UI-only; audio/DSP/MIDI/APVTS/sampler/preset/SoundBank behavior unchanged.
+
+**Validation:** source and test committed. The new and existing contract tests have not yet been executed; no CTest, Windows build, pluginval or FL Studio 20 result is claimed. Runtime scheduling/lifetime behavior still requires compilation and execution on the Windows/JUCE toolchain.
+
+**Next:** continue Gallery state correctness and Favorites integration, then O1/S1 security implementation and release gates.
