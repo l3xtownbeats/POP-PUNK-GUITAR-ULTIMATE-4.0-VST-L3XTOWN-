@@ -4,7 +4,9 @@
 #include "ThemeManager.h"
 #include "PPGUMultiWindowWorkspace.h"
 
+#include <algorithm>
 #include <functional>
+#include <utility>
 #include <vector>
 
 // Production gallery component extracted from PluginEditor.cpp.
