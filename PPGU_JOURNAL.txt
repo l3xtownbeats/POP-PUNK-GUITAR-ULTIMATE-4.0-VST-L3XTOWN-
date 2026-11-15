@@ -716,3 +716,16 @@ Implementation: use only where musically relevant and where actual samples/DSP s
 Scope approval не означает, что 15 DSP effects уже существуют. Каждый эффект должен иметь настоящий DSP route, корректные параметры, binding/bypass/state, тесты и слышимый результат до обозначения как работающего. Сохранить 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; не выдумывать IDs или фиктивные элементы. Если существующие семь bypass slots не позволяют представить 15 типов, зафиксировать архитектурный gap и не обходить ограничения самовольно.
 
 Статус: USER APPROVED / FIXED PRODUCT SCOPE. Implementation and validation remain PENDING unless separately proven.
+
+
+2026-11-15 — USER APPROVAL: RESEARCH METHOD, GROUP PRESET CATALOGUE AND INDIVIDUAL PRESET FILES
+
+Пользователь разъяснил назначение присланных материалов: обучить процессу анализа и проектирования гитарных звуков, затем исследовать интернет-источники и быстрее сформировать каталог пресетов по ранее утверждённым группам. Принцип: изучать интервью музыкантов/техников/продюсеров, Rig Rundown и надёжные записи об оборудовании; отличать подтверждённые факты от реконструкций и собственных tonal approximations; разбирать характер исходного гитарного звука и музыкальную роль; выбирать только реально доступные ресурсы и реализованные DSP; создавать оригинальные, различимые на слух MELODY/PATTERN и role-based presets. Не копировать защищённые записи, stems, риффы или коммерческие пресеты; не приписывать точные настройки без подтверждения.
+
+Группы-ориентиры, явно присутствующие в последнем согласованном каталоге: Blink-182, Green Day, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, The Offspring, Fall Out Boy, Paramore, MGK, Avril Lavigne, All-American Rejects. Сохранять также другие группы из более раннего утверждённого списка; не сужать scope самовольно. Названия групп — навигационные/стилевые ориентиры, не обещание точной копии оригинального rig. Убирать повторяющиеся пресеты с разными именами.
+
+Пользователь утвердил предпочтение индивидуальных файлов пресетов по принципу удобства Nexus, а не хранения всех preset states в одном JSON или по одному JSON на пресет. Целевая рекомендация: один нативный VST3 .vstpreset файл на каждый factory/user preset, после проверки поддержки текущим VST3 implementation и host integration. Preset state — штатная бинарная сериализация VST3; общие аудиосэмплы не копировать внутрь каждого preset-файла, а ссылаться на общую библиотеку через устойчивые resource IDs и валидировать наличие/версию. Общий индекс/каталог допускается для групп, тегов, поиска и метаданных, но не заменяет отдельные preset files. Проверить переносимость, missing-resource behavior, save/load, версии и FL Studio 20.
+
+Каждый отдельный файл проходит READY gate только после реальных ресурсов/mappings, MIDI playback, корректной MELODY/PATTERN роли, DSP routing, state round-trip, host compatibility, level matching, listening review, duplicate checks и regression tests. Цели 500 READY MELODY + 500 READY PATTERN сохраняются; черновики не считать READY.
+
+Статус: USER APPROVED / FIXED AS DESIGN DIRECTION. Implementation and validation PENDING.
