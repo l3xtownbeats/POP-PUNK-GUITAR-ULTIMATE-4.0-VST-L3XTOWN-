@@ -177,7 +177,7 @@ int main()
     expect(manager.getPalette().token("danger").isOpaque(),
            "legacy semantic token receives a deterministic fallback");
 
-    const auto badColour = validJson.replace("#080B14", "#GG0B14");
+    const auto badColour = validJson.replace("#090C10", "#GG0C10");
     expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
     expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
 
