@@ -43,9 +43,15 @@ public:
 
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn,
                          PPGUThemeManager::Palette paletteIn,
-                         std::function<void(int)> applyIn)
-        : skins(std::move(skinsIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+                         std::function<void(int)> applyIn,
+                         std::function<void()> backIn)
+        : skins(std::move(skinsIn)), palette(std::move(paletteIn)),
+          apply(std::move(applyIn)), back(std::move(backIn))
     {
+        for (const auto& skin : skins)
+            if (skin.active) { selectedIndex = skin.index; break; }
+        if (selectedIndex == 0 && !skins.empty())
+            selectedIndex = skins.front().index;
         heading.setText("VISUAL SKIN GALLERY", juce::dontSendNotification);
         heading.setFont(juce::Font(17.0f, juce::Font::bold));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
@@ -91,12 +97,92 @@ public:
         viewport.setScrollBarsShown(true, false);
         viewport.setScrollBarThickness(10);
         addAndMakeVisible(viewport);
+
+        const auto styleAction = [this](juce::TextButton& button, bool primary)
+        {
+            button.setColour(juce::TextButton::buttonColourId,
+                             primary ? palette.token("accent") : palette.token("panel_elevated"));
+            button.setColour(juce::TextButton::textColourOffId,
+                             primary ? palette.token("window_bg") : palette.token("text_primary"));
+            button.setColour(juce::TextButton::buttonOnColourId, palette.token("accent_glow"));
+            button.setColour(juce::TextButton::textColourOnId, palette.token("window_bg"));
+        };
+        styleAction(previewButton, false);
+        styleAction(applyButton, true);
+        styleAction(backButton, false);
+        previewButton.onClick = [this]
+        {
+            if (findSelectedSkin() != nullptr)
+            {
+                showingPreview = true;
+                resized();
+                repaint();
+            }
+        };
+        applyButton.onClick = [this]
+        {
+            if (selectedIndex > 0 && apply)
+                apply(selectedIndex);
+        };
+        backButton.onClick = [this]
+        {
+            if (showingPreview)
+            {
+                showingPreview = false;
+                resized();
+                repaint();
+            }
+            else if (back)
+                back();
+        };
+        addAndMakeVisible(previewButton);
+        addAndMakeVisible(applyButton);
+        addAndMakeVisible(backButton);
+
+        previewTitle.setFont(juce::Font(16.0f, juce::Font::bold));
+        previewTitle.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addChildComponent(previewTitle);
+        previewDetails.setFont(juce::Font(10.0f));
+        previewDetails.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        addChildComponent(previewDetails);
+        updateSelectionControls();
         rebuildCards();
     }
 
     ~PPGUSkinGalleryPanel() override
     {
         viewport.setViewedComponent(nullptr, false);
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        if (!showingPreview)
+            return;
+        auto area = previewBounds.toFloat();
+        g.setColour(palette.token("panel"));
+        g.fillRoundedRectangle(area, 12.0f);
+        g.setColour(palette.token("control_border"));
+        g.drawRoundedRectangle(area, 12.0f, 1.2f);
+        if (const auto* selected = findSelectedSkin())
+        {
+            const auto image = selected->preview.existsAsFile()
+                ? juce::ImageCache::getFromFile(selected->preview) : juce::Image{};
+            if (image.isValid())
+                g.drawImageWithin(image, previewBounds.getX() + 12, previewBounds.getY() + 12,
+                                  previewBounds.getWidth() - 24, previewBounds.getHeight() - 24,
+                                  juce::RectanglePlacement::centred);
+            else
+            {
+                auto art = area.reduced(12.0f);
+                g.setGradientFill(juce::ColourGradient(palette.token("panel_elevated"),
+                    art.getX(), art.getY(), selected->accent.withAlpha(0.72f),
+                    art.getRight(), art.getBottom(), false));
+                g.fillRoundedRectangle(art, 8.0f);
+                g.setColour(palette.token("text_primary"));
+                g.setFont(juce::Font(18.0f, juce::Font::bold));
+                g.drawText(selected->name, art, juce::Justification::centred, true);
+            }
+        }
     }
 
     void setThemePalette(const PPGUThemeManager::Palette& value) override
@@ -115,6 +201,21 @@ public:
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        previewTitle.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        previewDetails.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        const auto styleAction = [this](juce::TextButton& button, bool primary)
+        {
+            button.setColour(juce::TextButton::buttonColourId,
+                             primary ? palette.token("accent") : palette.token("panel_elevated"));
+            button.setColour(juce::TextButton::textColourOffId,
+                             primary ? palette.token("window_bg") : palette.token("text_primary"));
+            button.setColour(juce::TextButton::buttonOnColourId, palette.token("accent_glow"));
+            button.setColour(juce::TextButton::textColourOnId, palette.token("window_bg"));
+        };
+        styleAction(previewButton, false);
+        styleAction(applyButton, true);
+        styleAction(backButton, false);
+        updateSelectionControls();
         rebuildCards();
         repaint();
     }
@@ -125,14 +226,54 @@ public:
         heading.setBounds(area.removeFromTop(24));
         subtitle.setBounds(area.removeFromTop(18));
         area.removeFromTop(4);
+        if (showingPreview)
+        {
+            search.setVisible(false);
+            familyFilter.setVisible(false);
+            countLabel.setVisible(false);
+            viewport.setVisible(false);
+            previewButton.setVisible(false);
+            previewTitle.setVisible(true);
+            previewDetails.setVisible(true);
+            previewTitle.setBounds(area.removeFromTop(24));
+            previewDetails.setBounds(area.removeFromTop(18));
+            area.removeFromTop(8);
+            auto actions = area.removeFromBottom(38);
+            backButton.setButtonText("BACK");
+            backButton.setVisible(true);
+            backButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
+            actions.removeFromLeft(8);
+            applyButton.setVisible(true);
+            applyButton.setBounds(actions.removeFromRight(132).reduced(1, 2));
+            previewBounds = area.reduced(2);
+            updateSelectionControls();
+            return;
+        }
+        search.setVisible(true);
+        familyFilter.setVisible(true);
+        countLabel.setVisible(true);
+        viewport.setVisible(true);
+        previewTitle.setVisible(false);
+        previewDetails.setVisible(false);
         auto filters = area.removeFromTop(32);
         search.setBounds(filters.removeFromLeft(juce::jmin(300, filters.getWidth() / 2)).reduced(1, 2));
         filters.removeFromLeft(8);
         familyFilter.setBounds(filters.removeFromLeft(190).reduced(1, 2));
         countLabel.setBounds(filters);
         area.removeFromTop(4);
+        auto actions = area.removeFromBottom(38);
+        previewButton.setVisible(true);
+        previewButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
+        actions.removeFromLeft(8);
+        applyButton.setVisible(true);
+        applyButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
+        actions.removeFromLeft(8);
+        backButton.setButtonText("CLOSE");
+        backButton.setVisible(true);
+        backButton.setBounds(actions.removeFromRight(112).reduced(1, 2));
         viewport.setBounds(area);
         rebuildCards();
+        updateSelectionControls();
     }
 
 private:
@@ -140,8 +281,9 @@ private:
     {
     public:
         Card(Skin itemIn, PPGUThemeManager::Palette paletteIn,
-             std::function<void(int)> applyIn)
-            : item(std::move(itemIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+             std::function<void(int)> selectIn, bool selectedIn)
+            : item(std::move(itemIn)), palette(std::move(paletteIn)),
+              select(std::move(selectIn)), selected(selectedIn)
         {
             setMouseCursor(juce::MouseCursor::PointingHandCursor);
         }
@@ -151,8 +293,8 @@ private:
             auto bounds = getLocalBounds().toFloat().reduced(1.0f);
             g.setColour(hovered ? palette.token("panel_elevated") : palette.token("panel"));
             g.fillRoundedRectangle(bounds, 9.0f);
-            g.setColour(item.active ? item.accent : palette.token("control_border"));
-            g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
+            g.setColour((selected || item.active) ? item.accent : palette.token("control_border"));
+            g.drawRoundedRectangle(bounds, 9.0f, selected ? 2.4f : (item.active ? 1.8f : 1.0f));
 
             auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
             if (item.preview.existsAsFile())
@@ -178,21 +320,17 @@ private:
             g.drawText(item.family + "  /  " + item.layout,
                        textArea.removeFromTop(14.0f), juce::Justification::centredLeft, true);
 
-            if (item.active)
+            if (item.active || selected)
             {
+                const auto badge = item.active ? juce::String("ACTIVE") : juce::String("SELECTED");
+                const int badgeWidth = item.active ? 48 : 58;
                 g.setColour(item.accent);
-                g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
+                g.fillRoundedRectangle(getWidth() - (float) badgeWidth - 10.0f, 10.0f,
+                                        (float) badgeWidth, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(juce::Font(8.0f, juce::Font::bold));
-                g.drawText("ACTIVE", getWidth() - 58, 10, 48, 17, juce::Justification::centred);
-            }
-            else
-            {
-                g.setColour(palette.token("accent"));
-                g.fillRoundedRectangle(getWidth() - 54.0f, 10.0f, 44.0f, 17.0f, 5.0f);
-                g.setColour(palette.token("window_bg"));
-                g.setFont(juce::Font(8.0f, juce::Font::bold));
-                g.drawText("APPLY", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
+                g.drawText(badge, getWidth() - badgeWidth - 10, 10,
+                           badgeWidth, 17, juce::Justification::centred);
             }
         }
 
@@ -202,8 +340,8 @@ private:
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
         void mouseUp(const juce::MouseEvent& event) override
         {
-            if (event.mouseWasClicked() && apply)
-                apply(item.index);
+            if (event.mouseWasClicked() && select)
+                select(item.index);
         }
 
     private:
@@ -220,7 +358,8 @@ private:
 
         Skin item;
         PPGUThemeManager::Palette palette;
-        std::function<void(int)> apply;
+        std::function<void(int)> select;
+        bool selected = false;
         bool hovered = false;
     };
 
@@ -261,6 +400,34 @@ private:
         std::vector<std::unique_ptr<Card>> cards;
     };
 
+    const Skin* findSelectedSkin() const
+    {
+        const auto it = std::find_if(skins.begin(), skins.end(),
+            [this](const Skin& item) { return item.index == selectedIndex; });
+        return it == skins.end() ? nullptr : &(*it);
+    }
+
+    void updateSelectionControls()
+    {
+        const auto* selected = findSelectedSkin();
+        const bool valid = selected != nullptr;
+        previewButton.setEnabled(valid);
+        applyButton.setEnabled(valid);
+        if (valid)
+        {
+            previewTitle.setText(selected->name, juce::dontSendNotification);
+            previewDetails.setText(selected->family + "  /  " + selected->layout
+                + "  /  " + selected->id, juce::dontSendNotification);
+        }
+    }
+
+    void selectSkin(int index)
+    {
+        selectedIndex = index;
+        updateSelectionControls();
+        rebuildCards();
+    }
+
     void rebuildCards()
     {
         grid.clearCards();
@@ -280,7 +447,8 @@ private:
             const auto haystack = (item.name + " " + item.family + " " + item.layout).toLowerCase();
             if (query.isNotEmpty() && !haystack.contains(query))
                 continue;
-            grid.addCard(std::make_unique<Card>(item, palette, apply));
+            grid.addCard(std::make_unique<Card>(item, palette,
+                [this](int index) { selectSkin(index); }, item.index == selectedIndex));
         }
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
@@ -298,9 +466,14 @@ private:
     std::vector<Skin> skins;
     PPGUThemeManager::Palette palette;
     std::function<void(int)> apply;
-    juce::Label heading, subtitle, countLabel;
+    std::function<void()> back;
+    juce::Label heading, subtitle, countLabel, previewTitle, previewDetails;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
+    juce::TextButton previewButton { "PREVIEW" }, applyButton { "APPLY" }, backButton { "CLOSE" };
+    juce::Rectangle<int> previewBounds;
+    int selectedIndex = 0;
+    bool showingPreview = false;
     Grid grid;
     juce::Viewport viewport;
 };
@@ -1276,13 +1449,49 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
-    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
-    for (int x = area.getX() + 16; x < area.getRight(); x += 32)
-        g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    // Decorative NEON STAGE hero artwork only; all live controls remain JUCE/APVTS-backed.
+    if (!heroArtwork.isNull() && !heroArtworkBounds.isEmpty())
+    {
+        const auto hero = heroArtworkBounds.toFloat();
+        g.setColour(p.token("control_bg"));
+        g.fillRoundedRectangle(hero, 9.0f);
+        juce::Graphics::ScopedSaveState savedState(g);
+        juce::Path clip;
+        clip.addRoundedRectangle(hero, 9.0f);
+        g.reduceClipRegion(clip);
+        g.drawImageWithin(heroArtwork, heroArtworkBounds.getX(), heroArtworkBounds.getY(),
+                          heroArtworkBounds.getWidth(), heroArtworkBounds.getHeight(),
+                          juce::RectanglePlacement::centred | juce::RectanglePlacement::fillDestination);
+        g.setGradientFill(juce::ColourGradient(p.token("window_bg").withAlpha(0.02f),
+                                               hero.getCentreX(), hero.getY(),
+                                               p.token("window_bg").withAlpha(0.82f),
+                                               hero.getCentreX(), hero.getBottom(), false));
+        g.fillRect(hero);
+        g.setColour(p.token("control_border").withAlpha(0.9f));
+        g.drawRoundedRectangle(hero, 9.0f, 1.0f);
+        g.setColour(p.token("text_primary"));
+        g.setFont(juce::Font(18.0f, juce::Font::bold));
+        g.drawText("NEON STAGE", heroArtworkBounds.reduced(14, 8).removeFromTop(25),
+                   juce::Justification::centredLeft, true);
+        g.setColour(p.token("accent"));
+        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.drawText("POP-PUNK GUITAR  /  PERFORMANCE CONSOLE",
+                   heroArtworkBounds.reduced(14, 8).removeFromBottom(17),
+                   juce::Justification::centredLeft, true);
+    }
+    else if (!heroArtworkBounds.isEmpty())
+    {
+        const auto hero = heroArtworkBounds.toFloat();
+        g.setColour(p.token("panel_elevated"));
+        g.fillRoundedRectangle(hero, 9.0f);
+        g.setColour(p.token("accent"));
+        g.fillRoundedRectangle(hero.getX() + 12.0f, hero.getY() + 12.0f, 4.0f,
+                               juce::jmax(8.0f, hero.getHeight() - 24.0f), 2.0f);
+        g.setColour(p.token("text_primary"));
+        g.setFont(juce::Font(17.0f, juce::Font::bold));
+        g.drawText("NEON STAGE", hero.toNearestInt().reduced(25, 8),
+                   juce::Justification::centredLeft, true);
+    }
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1339,6 +1548,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     melodyTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 3).reduced(2, 3));
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
+    centre.removeFromTop(6);
+    heroArtworkBounds = centre.removeFromTop(
+        juce::jlimit(76, 112, centre.getHeight() / 5)).reduced(3, 2);
     centre.removeFromTop(6);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
@@ -1405,8 +1617,19 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         return 0;
     const auto total = static_cast<int>(total64);
 
+    const auto activeCountValue = registry.getProperty("activeThemeCount", juce::var());
+    if (!activeCountValue.isInt() && !activeCountValue.isInt64())
+        return 0;
+    const auto activeCount64 = activeCountValue.toString().getLargeIntValue();
+    if (activeCount64 < 1 || activeCount64 > 16)
+        return 0;
+    const int declaredActiveCount = static_cast<int>(activeCount64);
+
     std::set<int> indices;
     std::set<std::string> ids;
+    std::set<int> activeOrdinals;
+    int activeCount = 0;
+    juce::String defaultSkin = registry.getProperty("defaultSkin", "").toString();
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
@@ -1415,8 +1638,9 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         const auto indexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
+        const auto activeValue = entry.getProperty("active", juce::var());
         if ((!indexValue.isInt() && !indexValue.isInt64())
-            || id.isEmpty() || path.isEmpty()
+            || !activeValue.isBool() || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
@@ -1427,9 +1651,35 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
             || !indices.insert(static_cast<int>(index64)).second
             || !ids.insert(id.toStdString()).second)
             return 0;
+
+        if (static_cast<bool>(activeValue))
+        {
+            const auto ordinalValue = entry.getProperty("activeOrdinal", juce::var());
+            if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+                || ordinalValue.toString().getLargeIntValue() < 1
+                || ordinalValue.toString().getLargeIntValue() > declaredActiveCount
+                || !activeOrdinals.insert(static_cast<int>(ordinalValue.toString().getLargeIntValue())).second)
+                return 0;
+            ++activeCount;
+            if (ordinalValue.toString().getLargeIntValue() == 1 && id != defaultSkin)
+                return 0;
+        }
+        else if (!entry.getProperty("activeOrdinal", juce::var()).isVoid())
+        {
+            return 0;
+        }
     }
 
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    if (static_cast<int>(indices.size()) != total
+        || activeCount != declaredActiveCount
+        || static_cast<int>(activeOrdinals.size()) != declaredActiveCount
+        || *activeOrdinals.begin() != 1
+        || *activeOrdinals.rbegin() != declaredActiveCount)
+        return 0;
+    for (int ordinal = 1; ordinal <= declaredActiveCount; ++ordinal)
+        if (activeOrdinals.count(ordinal) == 0)
+            return 0;
+    return activeCount;
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
@@ -1449,11 +1699,11 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 
     for (const auto& entry : *themes)
     {
-        if (!entry.isObject())
+        if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false)))
             continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
+        const auto ordinalValue = entry.getProperty("activeOrdinal", juce::var());
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || ordinalValue.toString().getLargeIntValue() != index)
             continue;
 
         const auto relativePath = entry.getProperty("path", "").toString();
@@ -1471,12 +1721,109 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    int activeOrdinal = 0;
+    if (registryFile.existsAsFile())
+    {
+        const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+        const auto themesValue = registry.getProperty("themes", juce::var());
+        const auto* themes = themesValue.getArray();
+        if (themes != nullptr)
+        {
+            const auto defaultId = registry.getProperty("defaultSkin", "skin-053").toString();
+            bool foundSavedId = false;
+            for (const auto& entry : *themes)
+            {
+                if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false)))
+                    continue;
+                const auto entryId = entry.getProperty("id", "").toString();
+                const auto ordinal = entry.getProperty("activeOrdinal", juce::var());
+                if ((!ordinal.isInt() && !ordinal.isInt64()) || ordinal.toString().getLargeIntValue() < 1)
+                    continue;
+                if (entryId == id)
+                {
+                    activeOrdinal = static_cast<int>(ordinal.toString().getLargeIntValue());
+                    foundSavedId = true;
+                    break;
+                }
+            }
+            if (!foundSavedId)
+            {
+                id = defaultId;
+                for (const auto& entry : *themes)
+                {
+                    if (!entry.isObject() || !static_cast<bool>(entry.getProperty("active", false))
+                        || entry.getProperty("id", "").toString() != defaultId)
+                        continue;
+                    const auto ordinal = entry.getProperty("activeOrdinal", juce::var());
+                    if ((ordinal.isInt() || ordinal.isInt64()) && ordinal.toString().getLargeIntValue() >= 1)
+                        activeOrdinal = static_cast<int>(ordinal.toString().getLargeIntValue());
+                    break;
+                }
+            }
+        }
+    }
+    if (activeOrdinal < 1 || activeOrdinal > getSkinCount()
+        || !loadSkinByIndex(activeOrdinal, false))
     {
         themeManager.resetToDefault();
         applyPalette();
+        loadThemeArtwork();
+    }
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::loadThemeArtwork()
+{
+    heroArtwork = {};
+    if (runtimeSkinRoot == juce::File{})
+        return;
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return;
+
+    const auto activeId = themeManager.getPalette().id;
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != activeId)
+            continue;
+
+        const auto relativeManifest = entry.getProperty("path", "").toString();
+        if (relativeManifest.isEmpty() || relativeManifest.startsWith("/")
+            || relativeManifest.contains(".."))
+            return;
+
+        const auto manifest = runtimeSkinRoot.getChildFile(relativeManifest);
+        if (!manifest.isAChildOf(runtimeSkinRoot) || !manifest.existsAsFile())
+            return;
+
+        const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+        const auto rev18Assets = theme.getProperty("rev18Assets", juce::var());
+        const auto assets = theme.getProperty("assets", juce::var());
+        auto relativeHero = rev18Assets.getProperty("hero", juce::var()).toString();
+        if (relativeHero.isEmpty())
+            relativeHero = assets.getProperty("hero", "assets/hero.png").toString();
+        if (relativeHero.isEmpty())
+            relativeHero = "assets/hero/hero.png";
+        if (relativeHero.startsWith("/") || relativeHero.contains(".."))
+            return;
+
+        const auto skinDirectory = manifest.getParentDirectory();
+        auto heroFile = skinDirectory.getChildFile(relativeHero);
+        if (!heroFile.isAChildOf(skinDirectory) || !heroFile.existsAsFile())
+            heroFile = skinDirectory.getChildFile("assets/hero/hero.png");
+        if (!heroFile.existsAsFile())
+            heroFile = skinDirectory.getChildFile("assets/hero.png");
+        if (heroFile.isAChildOf(skinDirectory) && heroFile.existsAsFile())
+            heroArtwork = juce::ImageCache::getFromFile(heroFile);
+        return;
     }
 }
 
@@ -1490,6 +1837,7 @@ bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool 
     if (!loaded)
         themeManager.resetToDefault();
     applyPalette();
+    loadThemeArtwork();
     if (save && loaded)
         persistSkinPreference();
     return loaded;
@@ -1527,7 +1875,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
             juce::File preview;
             const auto assets = root.getProperty("assets", juce::var());
-            auto previewRelative = assets.getProperty("preview", juce::var()).toString();
+            const auto rev18Assets = root.getProperty("rev18Assets", juce::var());
+            auto previewRelative = rev18Assets.getProperty("preview", juce::var()).toString();
+            if (previewRelative.isEmpty())
+                previewRelative = assets.getProperty("preview", juce::var()).toString();
             if (previewRelative.isEmpty())
                 previewRelative = "assets/preview.png";
             if (!previewRelative.startsWith("/") && !previewRelative.contains(".."))
@@ -1559,8 +1910,16 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             {
                 if (safe == nullptr)
                     return;
-                safe->loadSkinByIndex(index, true);
-                if (safe->auxiliaryWorkspace != nullptr)
+                if (safe->loadSkinByIndex(index, true) && safe->auxiliaryWorkspace != nullptr)
+                {
+                    safe->auxiliaryWorkspace->closePanel(5);
+                    if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
+                        safe->auxiliaryWorkspace->setVisible(false);
+                }
+            },
+            [safe]
+            {
+                if (safe != nullptr && safe->auxiliaryWorkspace != nullptr)
                 {
                     safe->auxiliaryWorkspace->closePanel(5);
                     if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)

@@ -45,9 +45,9 @@ def main(skin_root):
         if open(png, "rb").read(8) != b"\x89PNG\r\n\x1a\n":
             print(f"FAIL: {e['id']}: bg.png not valid PNG"); return 1
         validated += 1
-    if reg.get("defaultSkin") != "skin-052":
-        print("FAIL: defaultSkin must be skin-052"); return 1
+    if reg.get("defaultSkin") != "skin-053":
+        print("FAIL: defaultSkin must be skin-053"); return 1
     print(f"PASS G1-G4: {validated} themes validated")
-    print(f"PASS: skin registry consistent ({total} themes, continuous range, default skin-052)")
+    print(f"PASS: skin registry consistent ({total} themes, continuous range, default skin-053)")
     return 0
 if __name__ == "__main__": sys.exit(main(sys.argv[1]))

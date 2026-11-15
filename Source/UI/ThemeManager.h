@@ -14,28 +14,28 @@ public:
             juce::Colour windowBg { 0xff0b0f12 };
             juce::Colour panel { 0xff141b20 };
             juce::Colour panelElevated { 0xff1d2930 };
-            juce::Colour controlBg { 0xff10171b };
-            juce::Colour controlFace { 0xff26343a };
+            juce::Colour controlBg { 0xff0f1519 };
+            juce::Colour controlFace { 0xff192329 };
             juce::Colour controlBorder { 0xff53656b };
             juce::Colour textPrimary { 0xfff3f7f5 };
             juce::Colour textSecondary { 0xffb7c5c2 };
-            juce::Colour textDisabled { 0xff788984 };
+            juce::Colour textDisabled { 0xff879791 };
             juce::Colour accent { 0xffd5ff45 };
-            juce::Colour accentGlow { 0xffb7ff3c };
+            juce::Colour accentGlow { 0xffdeff6e };
             juce::Colour danger { 0xffff5a66 };
             juce::Colour warning { 0xffffc857 };
             juce::Colour success { 0xff6ee7a8 };
             juce::Colour lcdBg { 0xff08110e };
             juce::Colour lcdText { 0xffd7ffb2 };
-            juce::Colour ledOn { 0xffa8ff42 };
+            juce::Colour ledOn { 0xffd5ff45 };
             juce::Colour ledOff { 0xff33443b };
             juce::Colour shadow { 0xff050708 };
             juce::Colour highlight { 0xff90a7a0 };
             juce::Colour lowlight { 0xff0d1417 };
         };
 
-        juce::String id { "skin-052" };
-        juce::String name { "SIGNAL FORGE" };
+        juce::String id { "skin-053" };
+        juce::String name { "NEON STAGE DEFAULT" };
         Tokens tokens;
         // Compatibility aliases used by the existing editor shell.
         juce::Colour canvas { 0xff0b0f12 };
@@ -46,7 +46,7 @@ public:
         juce::Colour text { 0xfff3f7f5 };
         juce::Colour textSecondary { 0xffb7c5c2 };
         juce::Colour accent { 0xffd5ff45 };
-        juce::Colour accentSecondary { 0xffb7ff3c };
+        juce::Colour accentSecondary { 0xffdeff6e };
         juce::Colour border { 0xff53656b };
         juce::Colour focus { 0xff90a7a0 };
         bool usedFallback = true;
@@ -57,7 +57,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the canonical SIGNAL FORGE palette.
+    // A failed load always restores the canonical NEON STAGE DEFAULT palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;

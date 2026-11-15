@@ -38,7 +38,21 @@ jobs:
         shell: pwsh
         run: |
           python tools/T2_generate_missing_artwork.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'Legacy skin artwork generation failed.' }
           python tools/T2_generate_missing_artwork.py --root SKIN --check
+          if ($LASTEXITCODE -ne 0) { throw 'Legacy skin artwork verification failed.' }
+          python tools/generate_rev18_skin_icons.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 icon export failed.' }
+          python tools/generate_rev18_skin_icons.py --root SKIN --check
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 icon export is not deterministic.' }
+          python tools/generate_rev18_skin_artwork.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 artwork generation failed.' }
+          python tools/generate_rev18_skin_artwork.py --root SKIN --check
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 artwork export is not deterministic.' }
+          python tools/generate_rev18_skin_controls.py --root SKIN
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 control sprite generation failed.' }
+          python tools/generate_rev18_skin_controls.py --root SKIN --check
+          if ($LASTEXITCODE -ne 0) { throw 'REV18 SKIN-1 control sprite export is not deterministic.' }
       - name: Validate 300-preset factory catalog
         shell: pwsh
         run: python tools/validate_factory_bank.py presets/factory_bank_300.json
@@ -60,6 +74,36 @@ jobs:
       - name: Validate PPGU REV 14 skin pack (contrast, parity, assets, identity)
         shell: pwsh
         run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+
+      - name: Run REV.18 SKIN-1 asset baseline audit (non-blocking while assets are migrated)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build | Out-Null
+          # PowerShell 7 can promote a native process' non-zero exit code to a
+          # terminating error before $LASTEXITCODE is inspected. Exit code 1 is
+          # an expected "asset gaps" result during migration, so capture it.
+          $nativePreference = $PSNativeCommandUseErrorActionPreference
+          $PSNativeCommandUseErrorActionPreference = $false
+          try {
+            & python tools/audit_skin_rev18_assets.py --root SKIN --skin-id skin-053 --report build/skin-053-rev18-asset-audit.json
+            $auditExit = $LASTEXITCODE
+          } finally {
+            $PSNativeCommandUseErrorActionPreference = $nativePreference
+          }
+          if ($auditExit -gt 1) { throw 'REV.18 asset auditor could not read the skin contract or registry.' }
+          if ($auditExit -eq 1) { Write-Warning 'REV.18 SKIN-1 asset gaps recorded; this baseline step is intentionally non-blocking until the asset migration is complete.' }
+          if ($auditExit -eq 0) { Write-Host 'REV.18 SKIN-1 asset audit PASS.' }
+          # Explicitly neutralize Python's expected exit code 1 so the
+          # GitHub Actions PowerShell runner does not mark this step failed.
+          exit 0
+
+      - name: Upload REV.18 SKIN-1 asset audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rev18-skin-1-asset-audit
+          path: build/skin-053-rev18-asset-audit.json
+          if-no-files-found: warn
 
       - name: Select checked-out project source
         shell: pwsh
@@ -280,7 +324,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Resources', 'Assets')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -288,11 +332,21 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
-          # Runtime skin payload is a sibling of VST3/, so both can be copied
-          # into the host's Common Files\\VST3 directory. Do not ship SKIN source docs.
-          $runtimeSkins = Join-Path $release 'Skins'
+          # Runtime Skins must be a sibling of PPGU.vst3 inside release/VST3.
+          # Copy the contents of release/VST3 into the host Common Files\\VST3 directory.
+          # Do not ship master PNGs or SKIN source docs in the runtime payload.
+          $runtimeSkins = Join-Path (Join-Path $release 'VST3') 'Skins'
+          New-Item -ItemType Directory -Force -Path $runtimeSkins | Out-Null
           Get-ChildItem (Join-Path $env:PROJECT_DIR 'SKIN') -Directory -Filter 'Skin_*' |
-            Copy-Item -Destination $runtimeSkins -Recurse
+            ForEach-Object {
+              $targetTheme = Join-Path $runtimeSkins $_.Name
+              Copy-Item -LiteralPath $_.FullName -Destination $targetTheme -Recurse
+              # Master artwork remains in source control/source-review only.
+              $masterAssets = Join-Path $targetTheme 'assets/master'
+              if (Test-Path -LiteralPath $masterAssets) {
+                Remove-Item -LiteralPath $masterAssets -Recurse -Force
+              }
+            }
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme_manifest.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination $runtimeSkins
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination $runtimeSkins
@@ -323,6 +377,41 @@ jobs:
               throw "Runtime skin '$($theme.id)' violates visual-only compatibility."
             }
           }
+          $neonStageRuntime = Join-Path $runtimeSkins 'Skin_053'
+          $requiredNeonRuntime = @(
+            'assets/hero/hero.png',
+            'assets/preview/preview.png',
+            'assets/background/main.png',
+            'assets/textures/carbon_weave.png',
+            'assets/fx_layers/stage_glow.png',
+            'assets/icons/skins.png',
+            'assets/controls/knob01_default.png',
+            'assets/asset_manifest.json',
+            'assets/artwork_manifest.json',
+            'assets/control_manifest.json',
+            'fonts/Inter[opsz,wght].ttf',
+            'fonts/OFL.txt',
+            'fonts/font_manifest.json',
+            'atlas/atlas.png',
+            'atlas/atlas.json'
+          )
+          foreach ($relativeAsset in $requiredNeonRuntime) {
+            $runtimeAsset = Join-Path $neonStageRuntime ($relativeAsset -replace '/', '\\')
+            if (-not (Test-Path -LiteralPath $runtimeAsset -PathType Leaf)) {
+              throw "REV18 NEON STAGE runtime asset missing from package: $relativeAsset"
+            }
+          }
+          if (Test-Path -LiteralPath (Join-Path $neonStageRuntime 'assets/master')) {
+            throw 'Master assets must not be copied into the runtime Skins package.'
+          }
+
+          $controlSprites = Get-ChildItem (Join-Path $neonStageRuntime 'assets/controls') -File -Filter '*.png'
+          if ($controlSprites.Count -ne 135) { throw "REV18 runtime control sprite count mismatch: $($controlSprites.Count), expected 135." }
+          $topBarIcons = Get-ChildItem (Join-Path $neonStageRuntime 'assets/icons') -File -Filter '*.png'
+          if ($topBarIcons.Count -ne 6) { throw "REV18 runtime top-bar icon count mismatch: $($topBarIcons.Count), expected 6." }
+          $fxLayers = Get-ChildItem (Join-Path $neonStageRuntime 'assets/fx_layers') -File -Filter '*.png'
+          if ($fxLayers.Count -ne 2) { throw "REV18 runtime FX layer count mismatch: $($fxLayers.Count), expected 2." }
+
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
@@ -334,24 +423,24 @@ jobs:
           POP PUNK GUITAR ULTIMATE — INTERIM WINDOWS x64 CI BUILD (NOT FINAL RELEASE)
           =============================================================================
           STATUS: CI VALIDATION ARTIFACT ONLY. NOT A FINAL REV.18 PRODUCT RELEASE.
-          VST3/       The compiled Windows x64 VST3 plugin bundle.
+          VST3/       The compiled Windows x64 .vst3 bundle plus its sibling runtime Skins/ folder.
           SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
                       Sound Hunter asset-level registry is empty; final factory admission is pending.
           PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
                       Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
-          Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
+          VST3/Skins/ Registry-driven visual themes and runtime exports only; master PNGs stay in source review.
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
           INSTALL (DEVELOPMENT / QA ONLY):
-          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
+          1. Copy the CONTENTS of VST3/ (the .vst3 bundle and sibling Skins/ folder) into:
              C:\Program Files\Common Files\VST3\
              Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
           2. In the plugin, use its SFZ load control and select an instrument SFZ
              from SOUNDBANK/. Keep SOUNDBANK on disk.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
-          4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
+          4. VST3/Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 
