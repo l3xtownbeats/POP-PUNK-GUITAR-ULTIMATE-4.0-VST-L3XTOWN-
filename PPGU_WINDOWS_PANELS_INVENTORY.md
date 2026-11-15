@@ -36,3 +36,10 @@ NOT IMPLEMENTED / DISABLED BY DESIGN. Обновлять при каждом sco
 
 
 Audit note: the latest inventory and component-status reconciliation is committed on the working branch. Do not infer visual acceptance from source presence; current About panel and the earlier gallery fixes remain subject to the exact-HEAD workflow and separate FL Studio 20 host acceptance.
+
+## Scoped update — 2026-11-15 (auxiliary workspace typography)
+
+- Window-header title labels now receive the active theme `uiTypeface` and `fontScale` through `Window::setThemePalette()`.
+- This closes one identified shared-typography inconsistency in workspace chrome; it does not complete panel geometry, lifecycle/focus/z-order, responsive sizing or visual acceptance.
+- Source commit: `3190359d295d83bb06970836c9b34c62c6ccadb4`.
+- Exact-HEAD build/CTest/pluginval and runtime/FL Studio 20 validation remain pending.
