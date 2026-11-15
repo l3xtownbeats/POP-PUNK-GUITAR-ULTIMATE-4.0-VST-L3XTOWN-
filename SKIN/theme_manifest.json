@@ -16,9 +16,5 @@
       "preview": "Skin_053/assets/preview.png",
       "hero": "Skin_053/assets/hero.png"
     }
-  ],
-  "skinRange": {
-    "first": 1,
-    "last": 102
-  }
+  ]
 }
