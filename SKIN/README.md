@@ -1,11 +1,16 @@
 # PPGU — skin manifests, palette runtime и Skin Studio
 
-## Фактическое состояние — рабочая ветка REV.17
+## REV.18 — canonical identity correction (2026-11-15)
 
-Актуальная рабочая ветка: `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`.
+- Binding identity: **SKIN-1 = NEON STAGE DEFAULT = skin-053 / Skin_053**. Stable ID and numeric index 53 are preserved; no IDs are renumbered or deleted.
+- `theme_manifest.json` now selects `skin-053` as default; the registry entry is named `NEON STAGE DEFAULT`.
+- `Skin_053` has the 21-token graphite / cyan / electric-blue / violet / magenta palette and new vector bezel, crest and texture assets. Default display mode is MINIMALISM; premium effects are opt-in.
+- `skin-052` and all legacy records remain untouched as historical data.
+- This branch is an artwork/identity correction, not a host-verified release. JUCE build, runtime ThemeManager load, G1–G4, PNG CRC, pluginval and FL Studio 20 capture remain mandatory.
 
-- Runtime registry содержит **102 темы**: legacy `Skin_01`…`Skin_51` и Skin Studio `Skin_052`…`Skin_102`.
-- Каноническая тема по умолчанию и fallback — **SIGNAL FORGE (`skin-052`)**.
+## Historical implementation notes
+
+Earlier REV.17 notes below are historical and do not override the REV.18 identity contract.
 - `ThemeManager` поддерживает legacy nested-token schema для Skin_01…51 и Skin Studio 21-token palette/control-map schema для Skin_052+.
 - Кнопка **SKIN** и Ctrl+K открывают встроенную в Multi-Window Workspace **Premium Skin Gallery**: карточки с preview, именем, семейством/layout, активной темой, поиском и фильтром семейств. Нажатие на карточку применяет тему и сохраняет stable ID.
 - Preview PNG декодируются лениво по мере отображения карточек. Отсутствующая preview-картинка даёт fallback-card, а не блокирует выбор палитры.
@@ -61,3 +66,23 @@ PNG/SVG assets — ресурсы skin pack, но сами по себе не д
 - `SKIN_ENGINE_GAP_AUDIT_RU.md` — оставшиеся runtime gaps.
 - `CONTROL_INVENTORY_MATRIX_RU.md` — фактические controls.
 - `../docs/MASTER_PRODUCT_SPEC_4_0_RU.md` — продуктовая спецификация.
+
+
+## REV.18 — approved sequential theme concepts (2026-11-15)
+
+The approved logical theme sequence is recorded in `approved_theme_sequence.json`:
+
+| Logical theme | Name | Immutable stable ID / registry index | Current asset state |
+|---|---|---|---|
+| SKIN-1 | NEON STAGE DEFAULT | `skin-053` / 53 | Canonical default |
+| SKIN-2 | OBSIDIAN GOLD | `skin-103` / 103 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-3 | CARBON FORGE | `skin-104` / 104 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / 105 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-5 | ARCTIC PLATINUM | `skin-106` / 106 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-6 | VIOLET NOIR | `skin-107` / 107 | Manifest + 3 SVG foundations; PNG pending |
+
+The legacy registry already contains indices 1–102. Logical SKIN numbering is therefore mapped to new stable IDs 103–107; no old directory, ID, registry entry or asset is renamed or overwritten.
+
+All five new theme manifests preserve the 21-token palette contract and the same 28-entry control map. They vary only palette/material tokens and retain the shared NEON STAGE component language. No APVTS, DSP, MIDI, audio, parameter/control ID or live layout changes are authorized.
+
+**Important:** these are approved design specifications with vector texture/bezel/crest foundations. They are not yet complete gallery/runtime themes. PNG preview/hero assets, G1–G4 and CRC validation, registry/gallery registration, package/runtime loading and host acceptance remain pending. Do not represent them as available in the plugin until those gates pass.

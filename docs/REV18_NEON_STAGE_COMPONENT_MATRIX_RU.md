@@ -101,3 +101,132 @@ This run does not yet validate the matrix or current host behavior. Any later CI
 9. Run exact-SHA Windows Release, full CTest, pluginval, package audit; record FL Studio 20 host and CPU/RAM/audio profiling separately.
 
 **Phase 0 result:** matrix completed; production source unchanged. Next coding step is identity/reference reconciliation, not an arbitrary UI redesign.
+
+## REV.18 live follow-up — 2026-11-15, branch `ui/neon-stage-skin1-completion`
+
+Latest inspected implementation commits:
+- `775cd7901ab628579a9f6ce9c7a02924ed72d143` — shared LookAndFeel hover/focus/disabled rendering for rotary controls, buttons and ComboBoxes.
+- `ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b` — palette access corrected to use canonical token lookup for shadow/disabled/lowlight.
+- `8bb05d7d88fd06c7815882e79ee8b2c3022d771e` — pack manifest index 53 corrected to match NEON STAGE DEFAULT / special.
+
+### Current implementation boundary
+The runtime editor is a single large `Source/PluginEditor.cpp`; the inspected tree does not contain separate production source modules named Curator, Sound Hunter, Auto Discover, AMP & TONE or About. Existing source-backed UI surfaces include the main editor, Skin Gallery, Settings, Import Guitar, FX EDIT, AutoChords, Performance display and shared workspace. Do not count absent modules as integrated and do not add active-looking mock controls.
+
+### CI finding and correction
+Windows workflow run `43679932917` failed at the G1–G4 skin validator before configure/build. Exact error: `merged registry entry mismatch at index 53: name`. The mismatch was between `SKIN/theme_pack_manifest.json` (Carbon Studio 01 / carbon_studio) and the canonical registry/theme manifest (NEON STAGE DEFAULT / special). The pack entry was corrected in commit `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`. Re-run result must be checked against the new exact HEAD; no build/test pass is inferred.
+
+### Next implementation/validation gate
+Continue component-level palette propagation and typography/state audit on actual components; then require successful exact-HEAD G1–G4, Windows x64 Release configure/build, CTest, VST3 asset/package audit and pluginval strictness 5. FL Studio 20 remains a separate manual host check.
+
+
+---
+
+# REV.18 ADDENDUM — NEON STAGE DEFAULT runtime integration status (2026-11-15)
+
+**Branch:** `ui/neon-stage-skin1-completion`  
+**Audit base HEAD:** `e68250720c74f3bb8bb904708532c29c7c730e97`  
+**Purpose:** supersede outdated statements in the historical preflight above where they conflict with the current REV.18 branch. Historical findings remain preserved as historical evidence; this addendum records the current source inspection.  
+**Audit type:** source-level inventory; not visual acceptance, compilation, runtime or DAW host validation.
+
+## A. Binding visual contract
+
+The user has explicitly approved and fixed one shared design system for all 12 named surfaces:
+
+1. Main Interface
+2. AutoChords
+3. Curator
+4. Sound Hunter
+5. Auto Discover
+6. FX EDIT
+7. AMP & TONE
+8. Import Guitar
+9. Performance
+10. Settings
+11. Skin Gallery
+12. About
+
+Shared visual language:
+- canonical NEON STAGE DEFAULT / SKIN-1 palette;
+- typography and text hierarchy;
+- rotary controls, buttons and toggles;
+- icons and indicators;
+- panels, borders and separators;
+- Active / Inactive / Hover / Focus / Disabled states;
+- animation and visual feedback.
+
+A shared visual language does not authorize identical layouts. Each existing module keeps its functional composition and workflows. A module absent from production source is not to be represented by a decorative or active-looking placeholder.
+
+## B. Non-negotiable constraints
+
+1. No fake buttons, fake functions, simulated meters or decorative elements represented as functional.
+2. No changes to Audio Engine, DSP, MIDI processing or APVTS definitions/state.
+3. No renaming or changing existing control IDs, parameter IDs, control bindings or attachment meaning.
+4. No breaking existing functions, panel workflows or module layouts.
+5. User-uploaded NEON STAGE DEFAULT GitHub mockups remain the primary visual reference; this source audit is not pixel-level visual acceptance.
+6. The theme must be consumed by the actual plugin runtime, not merely exist as artwork or JSON.
+
+Scope is visual/UI integration only.
+
+## C. Current source-backed module inventory
+
+| Module | Current source evidence | Current status | Remaining work / guardrail |
+|---|---|---|---|
+| Main Interface | `PopPunkGuitarUltimateAudioProcessorEditor`, `PPGUPremiumLookAndFeel`, preset browser, 9 attached knobs, 7 attached FX toggles, MELODY/PATTERN, MIDI keyboard | SOURCE PRESENT / THEME CONNECTED / PARTIAL VISUAL AUDIT | Complete typography, text editor, tabs, status and component-state audit; compare layout to approved mockup. Preserve all existing attachments and geometry until approved. |
+| AutoChords | `PPGUAutoChordsPanel` in `PluginEditor.cpp`; existing setup/preview controls | SOURCE PRESENT / VISUAL PALETTE CONNECTED / GENERATION UNAVAILABLE | Keep MIDI generation explicitly unavailable; do not add a fake Generate action. Audit all text/control states. |
+| Curator | No production Curator panel/class established in inspected editor/source inventory | MISSING / NOT INTEGRATED | First define against real library-analysis/Curator functionality. No decorative cards or fake GREEN/YELLOW/RED results. |
+| Sound Hunter | No production Sound Hunter UI/pipeline established in inspected source inventory | MISSING / NOT INTEGRATED | Must use the existing approved S6/Sound Hunter architecture; no second pipeline or fake search results. |
+| Auto Discover | No production Auto Discover panel established in inspected source inventory | MISSING / NOT INTEGRATED | Integrate only when backed by a real discovery pipeline and source callbacks. |
+| FX EDIT | `PPGUFXEditPanel`; effect selectors, power control and APVTS slider/button attachments | SOURCE PRESENT / THEME PALETTE CONNECTED / PARTIAL | Audit all labels, text fields, graph/status areas and all enabled/disabled/focus states. Never invent effects or alter parameter IDs. |
+| AMP & TONE | Existing main-editor amp/EQ controls and parameter attachments; no separate complete AMP & TONE module established | PARTIAL / NO SEPARATE COMPLETE MODULE CONFIRMED | Reuse only real amp/tone parameters and current bindings. Do not create model selectors or cabinet controls without real DSP routes. |
+| Import Guitar | `PPGUImportGuitarPanel`; SFZ chooser and asynchronous load path | SOURCE PRESENT / THEME PALETTE CONNECTED / PARTIAL | Audit loading, success/error states and keyboard/focus styling; no fake import status. |
+| Performance | `PPGUPerformanceDisplay` and editor palette propagation | SOURCE PRESENT / PARTIAL | Audit real MIDI/transport display states. Do not show unmeasured CPU/RAM or fabricated activity indicators. |
+| Settings | `PPGUSettingsPanel`; workspace scale/gap, restore default theme and open gallery | SOURCE PRESENT / UI-ONLY | Palette and wording are theme-aware. Do not imply these controls are full audio/MIDI/library settings. |
+| Skin Gallery | `PPGUSkinGalleryPanel`; registry cards, preview images, search, family filter, active state and click-to-apply | SOURCE PRESENT / PARTIAL | Draft Preview → Apply/Back rollback, favorites, full keyboard navigation, rescan and transition/fade remain unaccepted. Verify real image files and runtime paths. |
+| About | No production About panel established in inspected source inventory | MISSING / NOT INTEGRATED | Add only a factual product-information panel; no dummy buttons or invented version/build data. |
+
+**Important distinction:** “not established in inspected source” is not proof that no related design document exists. It means the module is not accepted as a production runtime surface based on the inspected live source.
+
+## D. Shared-system implementation evidence
+
+| Shared element | Current source evidence | Status |
+|---|---|---|
+| Canonical palette | `PPGUThemeManager::Palette`, 21 canonical tokens and NEON STAGE fallback | IMPLEMENTED IN SOURCE; exact runtime asset packaging still pending |
+| Runtime theme application | Editor theme manager and palette refresh; workspace receives palette and updates workspace chrome/open theme-aware panel contents | SOURCE CONNECTED |
+| Typography | Palette defines UI/display typefaces, weight, scale and letter spacing; LookAndFeel sets default sans-serif typeface | PARTIAL — many labels still set explicit fonts locally; global hierarchy/scale/letter-spacing parity not demonstrated |
+| Rotary controls | `PPGUPremiumLookAndFeel::drawRotarySlider` | SHARED RENDERING: hover, focus, disabled states present |
+| Buttons | `drawButtonBackground` | SHARED RENDERING: active/toggle, hover, pressed, disabled and keyboard focus present |
+| ComboBoxes | `drawComboBox` | SHARED RENDERING: hover/pressed, disabled and keyboard focus present |
+| Text editors | `PPGUPremiumLookAndFeel::fillTextEditorBackground` and `drawTextEditorOutline` (JUCE 7.0.12 API) | SHARED background + hover/focus/disabled outline states implemented; text colour/font hierarchy remains component-level |
+| Icons / indicators | Theme tokens include LED colours; no complete shared icon/indicator component system established | NOT COMPLETE |
+| Panels / borders / separators | Workspace chrome uses palette-derived background, panel, border, heading and text colours | SOURCE CONNECTED; per-panel parity audit pending |
+| Animation / feedback | No complete shared animation system or timing contract established by this source audit | NOT COMPLETE |
+| Hover / Focus / Disabled | Shared rotary/button/ComboBox renderer | PARTIAL — not yet proven for every interactive component in every module |
+
+## E. Protected control inventory
+
+The existing nine main knobs and seven FX bypass controls remain fixed:
+
+- `ampGain`, `eqHigh`, `eqMid`, `eqLow`, `velocity`, `dynamics`, `swing`, `humanize`, `accent`.
+- `compressorOn`, `eqOn`, `distortionOn`, `chorusOn`, `delayOn`, `reverbOn`, `cabinetOn`.
+
+This addendum authorizes no ID changes, remapping, new APVTS parameters or changed audio/MIDI behavior.
+
+## F. Ordered implementation and acceptance gates
+
+1. Finish component-level visual audit of all existing real controls: fonts, hierarchy, text editors, tabs, labels, status, hover, focus, disabled and pressed states.
+2. Add/reuse shared UI-only drawing/style helpers only where the real component inventory supports them; do not change module geometry/workflow without reference comparison.
+3. Locate and integrate Curator, Sound Hunter, Auto Discover, AMP & TONE and About only against real product functionality. If the production functionality is absent, record the module as blocked/missing rather than fabricate it.
+4. Verify all runtime theme assets and packaging paths from the actual VST3 bundle.
+5. Run G1–G4 skin validators and PNG CRC/dimension checks.
+6. Run exact-HEAD Windows x64 Release configure/build, full CTest, locate packaged VST3 and pluginval strictness 5.
+7. Perform separate manual FL Studio 20 visual/interaction acceptance.
+
+## G. Current validation status
+
+At audit base HEAD `e68250720c74f3bb8bb904708532c29c7c730e97`:
+- PR #43 remains Draft and unmerged.
+- GitHub Actions workflow lookup returned no runs associated with this exact HEAD at the time of inspection.
+- No exact-HEAD Windows build, CTest, pluginval, VST3 runtime asset-load check or FL Studio 20 host pass is claimed.
+- Source inspection is not a substitute for visual or runtime acceptance.
+
+**Decision:** continue source-backed NEON STAGE integration incrementally. Do not merge or mark release-ready until every applicable gate above has exact-SHA evidence.

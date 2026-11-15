@@ -318,6 +318,15 @@ void PPGUMultiWindowWorkspace::setThemePalette(const PPGUThemeManager::Palette& 
 {
     currentThemePalette = palette;
     hasThemePalette = true;
+
+    // Apply the canonical palette to both the panel contents and the shared
+    // workspace chrome. This keeps already-open and newly-opened windows in sync.
+    setSurfaceColours(palette.token("window_bg"),
+                      palette.token("panel"),
+                      palette.token("control_border"),
+                      palette.token("accent"),
+                      palette.token("text_primary"));
+
     for (auto& window : windows)
         window->setThemePalette(currentThemePalette);
 }

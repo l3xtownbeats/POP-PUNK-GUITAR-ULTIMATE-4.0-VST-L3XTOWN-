@@ -912,3 +912,83 @@ Approved requirements:
 - `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
 - No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
 - Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
+
+## 2026-11-15 — NEON STAGE runtime UI integration / phase 1
+
+**Тип:** production UI source change + append-only code journal.
+**Ветка:** `ui/neon-stage-skin1-completion`.
+**Source commit SHA:** `9a62b848b5413b62de077c47f22c604ec6f34211`.
+**Parent source SHA:** `751ccee1a1998752e02354e0c80617af3d5d3d6d`.
+**Journal update:** `Info.txt` updated in commit `7236ca6e87e80066e65f58c481862309b527ddcc`; this CODE entry is appended in the current documentation commit.
+
+**Файлы и затронутые элементы:**
+- `Source/PluginEditor.cpp`
+  - `PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin`: first-run skin preference fallback now resolves to `skin-053` (NEON STAGE DEFAULT), consistent with the approved identity and existing registry entry index 53.
+  - `PPGUSettingsPanel`: restore action label identifies NEON STAGE DEFAULT.
+  - `PPGUFXEditPanel`: visible title and constructor-time labels/knob colours use NEON STAGE palette tokens; existing APVTS slider/button attachments and parameter IDs are preserved.
+  - `PPGUAutoChordsPanel`: constructor-time heading/state/label colours use palette tokens; its existing unavailable-generation state remains visibly disabled and honest.
+  - `PPGUImportGuitarPanel`: initial description/status colours use palette tokens.
+  - Main editor MIDI keyboard: white-key surface uses the palette highlight token; palette refresh continues to use canonical tokens.
+- `Source/UI/PPGUMultiWindowWorkspace.cpp` (source commit `751ccee1...`): active palette updates shared workspace surfaces and existing theme-aware window contents.
+
+**Причина:** align the real runtime UI defaults and existing auxiliary panels with the user-approved NEON STAGE DEFAULT system, not just theme JSON/SVG artwork.
+
+**Совместимость / non-goals:** no Audio Engine, DSP, audio callback, MIDI processing, APVTS parameter definitions/IDs, sample engine, preset catalog or control attachment logic changed. No new controls or simulated functionality were introduced.
+
+**Тесты / CI:** source re-fetch and targeted source inspection only. No compile, CTest, pluginval, Windows x64 VST3 package or FL Studio 20 host test has been completed on this exact source SHA. Workflow lookup returned no runs for `9a62b848b5413b62de077c47f22c604ec6f34211` at the time checked.
+
+**Статус:** IMPLEMENTED / VALIDATION PENDING.
+**Следующий шаг:** inspect and map the remaining requested module surfaces from actual repository files; apply shared palette/typography/control states incrementally, preserving each module's own layout and real functionality.
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE shared control-state pass
+==============================================================================
+Branch: ui/neon-stage-skin1-completion
+Source commit: 775cd7901ab628579a9f6ce9c7a02924ed72d143
+Follow-up token fix: ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b
+Registry pack correction: 8bb05d7d88fd06c7815882e79ee8b2c3022d771e
+
+Changed:
+- Source/PluginEditor.cpp: PPGUPremiumLookAndFeel rotary, button and ComboBox rendering now distinguishes hover, keyboard focus and disabled states using the active NEON STAGE palette tokens. Focus gets a visible focus ring; disabled rotary track/value/pointer and combo arrow use disabled tokens; button disabled surface uses the canonical lowlight/border tokens.
+- SKIN/theme_pack_manifest.json: index 53 metadata now matches the approved NEON STAGE DEFAULT / special identity in both theme registry and Skin_053/theme.json. This corrects the exact G4 validator failure reported by Windows CI.
+
+Safety:
+- Visual-only. No processor, DSP, MIDI, APVTS, parameter IDs, audio callbacks, sample engine, preset data or control bindings intentionally changed.
+- No missing module is represented as an active or fake feature.
+
+Validation:
+- Previous Windows workflow run 43679932917 failed before configure/build at the skin pack validator: merged registry entry mismatch at index 53: name. The pack metadata mismatch is corrected in commit 8bb05d7d88fd06c7815882e79ee8b2c3022d771e.
+- Windows workflow run 43680094486 was triggered for source commit 775cd7901ab628579a9f6ce9c7a02924ed72d143; result pending at the time of this entry.
+- No exact-head Windows build, CTest, pluginval strictness 5 or FL Studio 20 host pass is claimed here.
+==============================================================================
+
+
+## 2026-11-15 — NEON STAGE shared TextEditor states
+
+**Branch:** `ui/neon-stage-skin1-completion`  
+**Source commits:**
+- `07262b7ba7429366dd600ebbdef78069506920ad` — declare shared TextEditor drawing overrides in `Source/PluginEditor.h`.
+- `c0d694bb7979248773d4fc4300df75d2d7ed411c` — implement shared TextEditor drawing in `Source/PluginEditor.cpp`.
+
+**Implementation:**
+- Added shared palette-driven TextEditor background rendering: enabled fields use `control_bg`; disabled fields use `lowlight`.
+- Added shared rounded outline rendering with distinct normal, hover, keyboard-focus and disabled states using `control_border`, `accent`, `highlight` and `lowlight`.
+- This applies through the editor's existing `PPGUPremiumLookAndFeel`; it adds no controls or new product functionality.
+
+**Safety:** no Audio Engine, DSP, MIDI processing, APVTS definitions/state, parameter IDs, control IDs, attachments, sampler, presets or panel workflows intentionally changed.
+
+**Validation:** source re-fetched; declarations and definitions are present. No compiler/build/CTest/pluginval result is available for this exact SHA. The override signatures target JUCE LookAndFeel_V2 API inherited by LookAndFeel_V4; exact Windows compile confirmation remains pending.
+
+**Status:** SOURCE IMPLEMENTED / BUILD AND RUNTIME VALIDATION PENDING.
+
+
+### API compatibility correction — JUCE 7.0.12
+
+The first TextEditor background override draft used the wrong method name. It was corrected immediately before validation: the JUCE 7.0.12 LookAndFeel API is `fillTextEditorBackground(Graphics&, int, int, TextEditor&)`, paired with `drawTextEditorOutline(Graphics&, int, int, TextEditor&)`.
+
+Correction commits:
+- `d0e4295780bb9b768eb2f98cab01ef6eaa7e8a9e` — header declaration.
+- `85af92c09e42494297a708cc9aac5a80c17f6340` — source definition.
+- `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` — component matrix API wording.
+
+The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.h` declaration. Source declarations and definitions were re-fetched and confirmed. This is API-source confirmation, not a successful compiler result.

@@ -1,0 +1,354 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skin-103",
+  "index": 103,
+  "name": "SKIN-2 — OBSIDIAN GOLD",
+  "family": "special",
+  "layout": "STUDIO_CONSOLE",
+  "description": "OBSIDIAN GOLD: approved sequential PPGU visual theme. black obsidian glass / brushed champagne gold. Preserves the canonical shared component language and existing control map.",
+  "palette": {
+    "window_bg": "#09090D",
+    "panel": "#17151A",
+    "panel_elevated": "#24212A",
+    "control_bg": "#100F14",
+    "control_face": "#302A32",
+    "control_border": "#6D5A3C",
+    "text_primary": "#FFF8E8",
+    "text_secondary": "#D2C5AD",
+    "text_disabled": "#8D806B",
+    "accent": "#D6A84F",
+    "accent_glow": "#FFE2A0",
+    "danger": "#FF647A",
+    "warning": "#F4C66A",
+    "success": "#83D6AE",
+    "lcd_bg": "#09080B",
+    "lcd_text": "#F9DFA8",
+    "led_on": "#D6A84F",
+    "led_off": "#463A2A",
+    "shadow": "#030306",
+    "highlight": "#F1D49A",
+    "lowlight": "#0C0A10"
+  },
+  "typography": {
+    "ui": "Segoe UI",
+    "display": "Consolas",
+    "weight": "semibold",
+    "scale": 1,
+    "letterSpacing": 0.35
+  },
+  "effects": {
+    "material": "black obsidian glass / brushed champagne gold",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg",
+    "shadowDepth": 0.3,
+    "edgeHighlight": 0.22,
+    "glow": "restrained optional accent lighting; off in default minimal mode"
+  },
+  "reduceInEco": true,
+  "hotSwapFadeMs": 150,
+  "controls": {
+    "preset_browser": {
+      "grid": {
+        "x": 2,
+        "y": 0,
+        "w": 5,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "mode_selector": {
+      "grid": {
+        "x": 7,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "SKIN_button": {
+      "grid": {
+        "x": 10,
+        "y": 0,
+        "w": 2,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "LCD_display": {
+      "grid": {
+        "x": 0,
+        "y": 2,
+        "w": 8,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "LED_indicator": {
+      "grid": {
+        "x": 8,
+        "y": 2,
+        "w": 1,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Import_Guitar": {
+      "grid": {
+        "x": 9,
+        "y": 2,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob01": {
+      "grid": {
+        "x": 0,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob02": {
+      "grid": {
+        "x": 2,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob03": {
+      "grid": {
+        "x": 4,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob04": {
+      "grid": {
+        "x": 6,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob05": {
+      "grid": {
+        "x": 8,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob06": {
+      "grid": {
+        "x": 10,
+        "y": 4,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob07": {
+      "grid": {
+        "x": 2,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob08": {
+      "grid": {
+        "x": 5,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "knob09": {
+      "grid": {
+        "x": 8,
+        "y": 7,
+        "w": 2,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch01": {
+      "grid": {
+        "x": 0,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch02": {
+      "grid": {
+        "x": 3,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch03": {
+      "grid": {
+        "x": 6,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch04": {
+      "grid": {
+        "x": 9,
+        "y": 10,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch05": {
+      "grid": {
+        "x": 0,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch06": {
+      "grid": {
+        "x": 4,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "fx_switch07": {
+      "grid": {
+        "x": 8,
+        "y": 11,
+        "w": 4,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "midi_keyboard": {
+      "grid": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 2
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Auto_Discover": {
+      "grid": {
+        "x": 0,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Curator": {
+      "grid": {
+        "x": 3,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "Settings": {
+      "grid": {
+        "x": 6,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "About": {
+      "grid": {
+        "x": 9,
+        "y": 15,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    },
+    "sync_selector": {
+      "grid": {
+        "x": 9,
+        "y": 3,
+        "w": 3,
+        "h": 1
+      },
+      "presentation": "native-control",
+      "runtimeBinding": "control_schema.json"
+    }
+  },
+  "assets": {
+    "preview": "assets/preview.png",
+    "hero": "assets/hero.png",
+    "texture": "svg/texture.svg",
+    "bezel": "svg/bezel.svg",
+    "crest": "svg/crest.svg"
+  },
+  "compatibility": {
+    "minimumPluginVersion": "4.0.0",
+    "apvtsChanges": false,
+    "layoutChanges": false,
+    "audioChanges": false
+  },
+  "designStatus": "APPROVED_THEME_SPEC_VECTOR_ARTWORK_PENDING_PNG_AND_RUNTIME_VALIDATION",
+  "notes": [
+    "Approved concept recorded 2026-11-15. Logical sequence is SKIN-2; stable registry identity is skin-103 / index 103.",
+    "Existing legacy theme IDs and indices are preserved; no renumbering or overwriting.",
+    "Shared NEON STAGE design-system component language is retained; this theme changes visual tokens/materials only.",
+    "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
+    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending."
+  ],
+  "ordinal": 2
+}

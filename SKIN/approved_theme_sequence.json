@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "contract": "PPGU REV18 sequential approved theme sequence",
+  "status": "APPROVED_CONCEPTS_VECTOR_SPECS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING",
+  "defaultLogicalSkin": "SKIN-1",
+  "defaultStableId": "skin-053",
+  "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
+  "themes": [
+    {
+      "ordinal": 1,
+      "label": "SKIN-1",
+      "name": "NEON STAGE DEFAULT",
+      "stableId": "skin-053",
+      "index": 53,
+      "path": "Skin_053/theme.json",
+      "status": "CANONICAL_DEFAULT"
+    },
+    {
+      "ordinal": 2,
+      "label": "SKIN-2",
+      "name": "OBSIDIAN GOLD",
+      "stableId": "skin-103",
+      "index": 103,
+      "path": "Skin_103/theme.json",
+      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    },
+    {
+      "ordinal": 3,
+      "label": "SKIN-3",
+      "name": "CARBON FORGE",
+      "stableId": "skin-104",
+      "index": 104,
+      "path": "Skin_104/theme.json",
+      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    },
+    {
+      "ordinal": 4,
+      "label": "SKIN-4",
+      "name": "MIDNIGHT CRIMSON",
+      "stableId": "skin-105",
+      "index": 105,
+      "path": "Skin_105/theme.json",
+      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    },
+    {
+      "ordinal": 5,
+      "label": "SKIN-5",
+      "name": "ARCTIC PLATINUM",
+      "stableId": "skin-106",
+      "index": 106,
+      "path": "Skin_106/theme.json",
+      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    },
+    {
+      "ordinal": 6,
+      "label": "SKIN-6",
+      "name": "VIOLET NOIR",
+      "stableId": "skin-107",
+      "index": 107,
+      "path": "Skin_107/theme.json",
+      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    }
+  ],
+  "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",
+  "constraints": [
+    "No fake controls or functions.",
+    "No Audio Engine, DSP, MIDI or APVTS changes.",
+    "No existing control/parameter ID changes.",
+    "No breaking existing module functions or layouts.",
+    "GitHub mockups remain the visual reference.",
+    "Runtime and release acceptance require packaged assets and VST3 validation."
+  ],
+  "pending": [
+    "PNG preview.png (360x240) and hero.png (800x450) for each new theme.",
+    "G1-G4 validation and PNG CRC checks.",
+    "Canonical registry/gallery registration after assets pass.",
+    "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance."
+  ]
+}

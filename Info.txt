@@ -2589,3 +2589,161 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 
 **Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE runtime UI integration / phase 1
+==============================================================================
+
+**Тип:** production UI source change + status record.
+**Ветка:** `ui/neon-stage-skin1-completion`.
+**Source commit:** `9a62b848b5413b62de077c47f22c604ec6f34211`.
+**Parent source commit:** `751ccee1a1998752e02354e0c80617af3d5d3d6d`.
+**Файлы исходного кода:**
+- `Source/PluginEditor.cpp` — skin preference default corrected from `skin-052` to canonical `skin-053`; visible FX EDIT and Settings restore labels now identify NEON STAGE DEFAULT; existing FX EDIT, AutoChords and Import Guitar controls initialize with canonical palette tokens instead of legacy hard-coded accent/text colours; main MIDI keyboard white-key colour now uses the theme highlight token.
+- `Source/UI/PPGUMultiWindowWorkspace.cpp` — in preceding source commit `751ccee1a1998752e02354e0c80617af3d5d3d6d`, workspace background/panel/border/heading/text chrome is updated from the active palette and propagated to open theme-aware panels.
+
+**Что подтверждено аудитом исходников:** ThemeManager and the premium LookAndFeel are connected to the main editor; the existing FX EDIT, AutoChords, Import Guitar, Skin Gallery and Settings panel classes implement theme-aware palette updates; Performance display receives the palette from the editor. The currently inspected source does not establish completed Curator, Sound Hunter, Auto Discover, AMP & TONE, About or a complete 12-module UI implementation. Those surfaces remain to be located/implemented and validated; no decorative placeholders are to be added.
+
+**Совместимость / non-goals:** visual-only. No Audio Engine, DSP, MIDI processing, APVTS parameter definitions/IDs, sample engine, preset data or control attachments were intentionally changed. Existing APVTS attachments in FX EDIT and AutoChords were preserved.
+
+**Проверки:** source was re-fetched after commit and audited for residual `SIGNAL FORGE` theme labels, `skin-052` fallback and selected legacy hard-coded colours; none remained in the searched patterns. This is a source inspection only. No build, CTest, pluginval, Windows x64 package or FL Studio 20 host test has been run/confirmed on this SHA. GitHub Actions workflow lookup for source commit `9a62b848b5413b62de077c47f22c604ec6f34211` returned no associated runs at check time.
+
+**Статус:** SOURCE CHANGES COMMITTED / BUILD AND RUNTIME VALIDATION PENDING / NOT RELEASE READY.
+**Следующий шаг:** verify exact current branch/HEAD and CI; continue the source inventory for remaining modules, then unify shared component states/typography/interaction styling without creating fake controls.
+==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE control-state implementation update
+==============================================================================
+Branch: ui/neon-stage-skin1-completion
+Commits:
+- 775cd7901ab628579a9f6ce9c7a02924ed72d143 — shared rotary/button/ComboBox hover, focus and disabled rendering.
+- ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b — canonical token access correction.
+- 8bb05d7d88fd06c7815882e79ee8b2c3022d771e — Skin Studio pack index 53 identity synchronized with canonical registry.
+
+Implemented in this pass:
+- Rotary controls: hover accent response, keyboard focus ring, disabled track/value/pointer.
+- Buttons: active/hover/down/disabled states and visible keyboard-focus ring.
+- ComboBoxes: hover/pressed/disabled states and visible keyboard-focus ring.
+- All are driven by the current ThemeManager palette; no new controls or functionality are introduced.
+- G4 pack metadata discrepancy at index 53 fixed: theme_pack_manifest now agrees with registry and Skin_053 theme manifest.
+
+Outstanding acceptance:
+- Audit and integrate all actual existing panel controls against the shared theme source, including typography, text fields, tabs, status displays, workspace chrome and per-panel focus/disabled behavior.
+- Curator, Sound Hunter, Auto Discover, AMP & TONE and About are not all established as complete production runtime modules in the inspected source. Do not create fake active controls; inventory and implement only from their real functional contracts.
+- Runtime asset packaging, Windows x64 Release build, full CTest, pluginval strictness 5 and FL Studio 20 manual host test remain required.
+- No release-ready or 100% completion claim until exact-HEAD acceptance evidence exists.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 NEON STAGE shared design system: user approval + 12-module source audit
+==============================================================================
+
+**User decision:** explicitly approved, confirmed and fixed the shared NEON STAGE design system and six hard constraints for the 12 named modules. This approval is binding for subsequent UI work.
+
+**Shared design system:** canonical NEON STAGE palette; typography/text hierarchy; rotary controls/buttons/toggles; icons/indicators; panels/borders/separators; Active/Inactive/Hover/Focus/Disabled states; animation and visual feedback. Each module retains its own functional composition and workflow.
+
+**Hard constraints:**
+1. No fake buttons, functions, simulated results or decorative elements represented as functional.
+2. Do not change Audio Engine, DSP, MIDI or APVTS.
+3. Do not rename/change existing control IDs, parameter IDs, bindings or attachment meaning.
+4. Do not break existing functions, workflows or module composition.
+5. GitHub-uploaded NEON STAGE DEFAULT mockups remain the primary visual reference.
+6. Theme must operate in actual plugin runtime, not only as images/JSON.
+
+**Source audit document updated:** `docs/REV18_NEON_STAGE_COMPONENT_MATRIX_RU.md` (append-only addendum; historical preflight preserved). Documentation commit: `839444681da238a13f51f3080f8511b55983f228`.
+
+**Current module inventory from live source:**
+- Source-backed: Main Interface, AutoChords, FX EDIT, Import Guitar, Performance display, Settings and Skin Gallery.
+- Partial: AMP & TONE (existing amp/EQ controls, no separate complete module confirmed).
+- Not established as production runtime modules in inspected source: Curator, Sound Hunter, Auto Discover and About. These are not to be represented by fake or decorative placeholders.
+- Shared palette/runtime propagation and rotary/button/ComboBox hover/focus/disabled rendering exist in source.
+- Typography is partial: palette typeface metadata and LookAndFeel default font exist, but many components still set fonts locally.
+- Text fields/tabs/status components, icon/indicator system, animations and per-component state parity remain incomplete or unaudited.
+
+**Protected visible parameter mappings retained:**
+- Nine knobs: `ampGain`, `eqHigh`, `eqMid`, `eqLow`, `velocity`, `dynamics`, `swing`, `humanize`, `accent`.
+- Seven FX bypasses: `compressorOn`, `eqOn`, `distortionOn`, `chorusOn`, `delayOn`, `reverbOn`, `cabinetOn`.
+
+**Current source branch:** `ui/neon-stage-skin1-completion`; PR #43 remains Draft and unmerged. Source commits already present include workspace palette propagation `751ccee1a1998752e02354e0c80617af3d5d3d6d`, editor palette/default integration `9a62b848b5413b62de077c47f22c604ec6f34211`, shared control-state pass `775cd7901ab628579a9f6ce9c7a02924ed72d143`, token correction `ba9eadf6af2c50abc8317a3e0389e6c2f2244d2b`, and pack manifest correction `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`.
+
+**Validation:** exact current PR HEAD at audit start was `e68250720c74f3bb8bb904708532c29c7c730e97`; workflow lookup returned no runs for that SHA. No exact-HEAD Windows Release build, full CTest, pluginval strictness 5, packaged VST3 asset-load validation or FL Studio 20 host acceptance is claimed. Historical workflow results apply only to their own SHAs.
+
+**Next sequence:** finish source-backed component typography/text/tab/status/state audit; unify actual existing controls; separately locate/implement missing modules only when backed by real product functionality; verify runtime assets/package; run G1–G4/PNG checks, exact-HEAD Windows Release, CTest, VST3 locate, pluginval 5 and separate FL Studio 20 host acceptance.
+
+**Status:** USER REQUIREMENTS APPROVED / SOURCE INVENTORY DOCUMENTED / UI INTEGRATION PARTIAL / VALIDATION PENDING / NOT RELEASE READY.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 NEON STAGE shared TextEditor states
+==============================================================================
+
+**Source commits:**
+- `07262b7ba7429366dd600ebbdef78069506920ad` — declarations in `Source/PluginEditor.h`.
+- `c0d694bb7979248773d4fc4300df75d2d7ed411c` — implementation in `Source/PluginEditor.cpp`.
+
+`PPGUPremiumLookAndFeel` now supplies palette-driven TextEditor background and outline rendering. Enabled fields use the canonical control surface; disabled fields use the lowlight surface. Outlines distinguish normal, hover, keyboard-focus and disabled states using canonical palette tokens. This extends the shared visual system to existing text fields without creating controls or changing their behavior.
+
+The component matrix was updated in commit `52eaf122e6b3decc919ee7d521ff618272f8d74d` to record this source-backed state. CODE journal entry was appended in its own commit.
+
+**Safety:** no Audio Engine, DSP, MIDI, APVTS, parameter/control IDs, attachments, sampler, presets or panel workflows intentionally changed.
+
+**Validation:** source declarations/definitions re-fetched and confirmed. No exact-HEAD compiler/build, CTest, pluginval, package or FL Studio 20 host result is claimed. JUCE override signature compile confirmation remains pending.
+
+**Status:** SOURCE IMPLEMENTED / VALIDATION PENDING / NOT RELEASE READY.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — JUCE TextEditor LookAndFeel API compatibility correction
+==============================================================================
+
+The TextEditor background override was corrected to the exact JUCE 7.0.12 API name: `fillTextEditorBackground(Graphics&, int, int, TextEditor&)`. The outline method is `drawTextEditorOutline(Graphics&, int, int, TextEditor&)`.
+
+Commits: `d0e4295780bb9b768eb2f98cab01ef6eaa7e8a9e` (header), `85af92c09e42494297a708cc9aac5a80c17f6340` (implementation), `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` (matrix correction).
+
+Both declarations and definitions were re-fetched and confirmed. The method signatures were checked against JUCE 7.0.12 public LookAndFeel_V2 header. This does not substitute for compilation.
+
+**Status:** API SIGNATURE VERIFIED / COMPILATION STILL PENDING.
+==============================================================================
+
+
+============================================================================== 
+2026-11-15 — Approved sequential themes SKIN-2…SKIN-6: design specs + SVG foundations
+==============================================================================
+
+**User instruction:** after canonical SKIN-1 NEON STAGE DEFAULT, create the additional themes explicitly approved today. The six approved visual concepts are treated as a sequence:
+- SKIN-1 — NEON STAGE DEFAULT (existing canonical default, stable ID `skin-053`, index 53);
+- SKIN-2 — OBSIDIAN GOLD (new stable ID `skin-103`, index 103);
+- SKIN-3 — CARBON FORGE (new stable ID `skin-104`, index 104);
+- SKIN-4 — MIDNIGHT CRIMSON (new stable ID `skin-105`, index 105);
+- SKIN-5 — ARCTIC PLATINUM (new stable ID `skin-106`, index 106);
+- SKIN-6 — VIOLET NOIR (new stable ID `skin-107`, index 107).
+
+**Why the stable IDs start at 103:** the current canonical registry already contains legacy IDs/indices 1–102 and SKIN-1 is the existing stable record `skin-053`. To preserve all old IDs and data, logical sequence ordinals SKIN-2…SKIN-6 are mapped to fresh stable IDs/indices 103–107. No existing records were renamed, overwritten, deleted or renumbered.
+
+**Created on `ui/neon-stage-skin1-completion`:**
+- `SKIN/approved_theme_sequence.json` — explicit logical SKIN-1…SKIN-6 to stable-ID mapping and acceptance state.
+- `SKIN/Skin_103/theme.json` and `SKIN/Skin_103/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_104/theme.json` and `SKIN/Skin_104/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_105/theme.json` and `SKIN/Skin_105/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_106/theme.json` and `SKIN/Skin_106/svg/{texture,bezel,crest}.svg`.
+- `SKIN/Skin_107/theme.json` and `SKIN/Skin_107/svg/{texture,bezel,crest}.svg`.
+
+All five new theme manifests were re-fetched and parsed as JSON. Each contains exactly 21 palette tokens and preserves the same 28-entry control map as SKIN-1. All 15 SVG files were re-fetched; they are well-formed SVG text with no script, foreignObject, event handlers or external href references.
+
+**Visual direction:**
+- OBSIDIAN GOLD — black obsidian surfaces, champagne-gold metal accents.
+- CARBON FORGE — forged carbon, titanium and satin-metal accents.
+- MIDNIGHT CRIMSON — deep burgundy surfaces and ruby-red accents.
+- ARCTIC PLATINUM — platinum surfaces, frosted glass and icy-blue highlights.
+- VIOLET NOIR — smoked violet glass and ultraviolet accents.
+
+**Shared contract:** all five themes inherit the same NEON STAGE design-system language and exact control map. Only palette/material tokens vary. Every manifest declares visual-only compatibility: no APVTS, layout geometry, audio or MIDI changes.
+
+**Not yet complete / not registered in runtime gallery:** binary `assets/preview.png` (360×240) and `assets/hero.png` (800×450) are still pending for each theme. Therefore G1–G4 pack validation, PNG CRC checks, canonical `theme_manifest.json` registration, Skin Gallery visibility, runtime asset-load, exact-SHA Windows build, CTest, pluginval and FL Studio 20 host acceptance are NOT claimed. The five designs remain approved source-level theme specifications with vector foundations, not finished/host-tested skins. Do not set them as default or merge PR #43.
+
+**Status:** FIVE APPROVED THEME SPECS + 15 SVG FOUNDATIONS CREATED / PNG ARTWORK PENDING / REGISTRY AND RUNTIME GALLERY REGISTRATION PENDING / NOT RELEASE READY.
+==============================================================================

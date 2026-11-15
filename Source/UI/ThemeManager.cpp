@@ -189,6 +189,25 @@ namespace
             return false;
         }
 
+        juce::var typography;
+        if (!hasObject(root, "typography", typography)
+            || !hasStringProperty(typography, "ui")
+            || !hasStringProperty(typography, "display")
+            || !hasStringProperty(typography, "weight")
+            || !isNumber(typography.getProperty("scale", juce::var()))
+            || !isNumber(typography.getProperty("letterSpacing", juce::var())))
+        {
+            error = "Skin Studio typography metadata is incomplete";
+            return false;
+        }
+        const auto fontScale = static_cast<double>(typography.getProperty("scale", 1.0));
+        const auto letterSpacing = static_cast<double>(typography.getProperty("letterSpacing", 0.0));
+        if (fontScale < 0.5 || fontScale > 2.0 || letterSpacing < 0.0 || letterSpacing > 2.0)
+        {
+            error = "Skin Studio typography scale or letter spacing is outside the supported range";
+            return false;
+        }
+
         juce::var paletteTokens;
         if (!hasObject(root, "palette", paletteTokens))
         {
@@ -280,6 +299,11 @@ namespace
         palette = PPGUThemeManager::Palette{};
         palette.id = id;
         palette.name = name;
+        palette.uiTypeface = typography.getProperty("ui", "Segoe UI").toString();
+        palette.displayTypeface = typography.getProperty("display", "Consolas").toString();
+        palette.typographyWeight = typography.getProperty("weight", "semibold").toString();
+        palette.fontScale = static_cast<float>(fontScale);
+        palette.letterSpacing = static_cast<float>(letterSpacing);
 
         const auto readStudioToken = [&paletteTokens](const juce::String& key)
         {
