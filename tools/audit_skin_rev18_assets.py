@@ -126,7 +126,7 @@ def main() -> int:
                 try:
                     text = path.read_text(encoding="utf-8")
                     doc = ET.fromstring(text)
-                    if re.search(r"<\\s*script\\b|javascript:|https?://", text, re.I):
+                    if re.search(r"<\s*script\\b|javascript:|https?://", text, re.I):
                         errors.append(f"{prefix}: unsafe SVG content in {rel}")
                     for element in doc.iter():
                         for attr in ("href", "{http://www.w3.org/1999/xlink}href"):
