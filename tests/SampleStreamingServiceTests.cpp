@@ -40,11 +40,23 @@ int main()
     if (!writer->writeFromAudioSampleBuffer(source, 0, sourceFrames)) return 1;
     writer.reset();
 
+    // A second valid WAV makes it possible to exercise the metadata-index
+    // resource cap without creating tens of thousands of fixture files.
+    std::filesystem::copy_file(wav.getFullPathName().toStdString(),
+                               (root / "stream-copy.wav"));
     ppgu::sampler::SampleMetadataIndex index;
     auto scan = index.scanDirectory(juce::File(root.string()));
-    if (!scan.success || scan.samples.size() != 1)
+    if (!scan.success || scan.samples.size() != 2)
     {
-        std::cerr << "Streaming test could not index its WAV fixture.\n";
+        std::cerr << "Streaming test could not index its WAV fixtures.\n";
+        return 1;
+    }
+
+    const auto limitedScan = index.scanDirectory(juce::File(root.string()), 1);
+    if (limitedScan.success || limitedScan.errors.empty()
+        || limitedScan.samples.size() != 1)
+    {
+        std::cerr << "Sample metadata index did not enforce its configured WAV limit.\n";
         return 1;
     }
 
