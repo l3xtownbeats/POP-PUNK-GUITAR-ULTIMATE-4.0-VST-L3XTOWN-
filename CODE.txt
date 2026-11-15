@@ -912,3 +912,28 @@ Approved requirements:
 - `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
 - No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
 - Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
+
+## 2026-11-15 — TX-REV18-NEON-STAGE-UI-TOKEN-001 — semantic palette enforcement
+
+**Type:** production UI source + validator/CTest integration.
+**Branch:** `rev18/neon-stage-skin1-implementation`.
+**Source commits:**
+- `2712065c2fee672c3a4ee6957be6a8ebad08cfc2` (parent `c9b791ef6e489915f014292ca8392fbac4446eb5`).
+- `9fa3f1c54dd3ec286bae07fd7816537fb068ff8f` (validator correction; parent is the first source commit).
+**INFO record commit:** `6fc2435869616fe662399a2f377cac28611759f1`.
+
+**Files / symbols:**
+- `Source/PluginEditor.cpp` — Skin Gallery card accent no longer carries a duplicate hard-coded hex default. A transparent/unset card accent falls back to the active theme's semantic `accent` token.
+- `Source/UI/PPGUMultiWindowWorkspace.h` — workspace surface colour members no longer embed a second copy of the palette's hex values.
+- `Source/UI/PPGUMultiWindowWorkspace.cpp` — `PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace` seeds background/panel/border/heading/text from the default `PPGUThemeManager::Palette` via `setSurfaceColours`, preserving existing theme propagation and panel behavior.
+- `tools/validate_skin053.py` — adds source scan that rejects raw hex colour literals in live UI C++ sources, excluding the canonical palette definition in `Source/UI/ThemeManager.h`. Follow-up commit fixes the regex word boundaries and diagnostic newlines.
+- `CMakeLists.txt` — registers `ppgu_skin053_ui_contract` as a Python-backed CTest.
+
+**Reason:** prevent independent module/workspace colours from drifting away from the canonical NEON STAGE semantic palette and make this rule executable in the regression suite.
+
+**Compatibility / non-goals:** no APVTS IDs/values, control IDs, attachments, callbacks, MIDI, Audio Engine, DSP, sampler, scheduler, presets or sound assets changed. No new user-facing controls or simulated features added.
+
+**Verification:** exact branch readback confirmed the changed blobs. Static GitHub-source inspection found no raw hex colour literals in `PluginEditor.cpp/.h` and current `Source/UI/*.cpp/.h` outside the explicitly allowed `ThemeManager.h`; manifest identity/token/control counts are 53 / 21 / 28. CTest registration and corrected validator regex were confirmed. GitHub Actions run `43680164068` on exact source SHA `9fa3f1c54dd3ec286bae07fd7816537fb068ff8f` was IN PROGRESS at the time of verification; no BUILD PASS / CTest PASS / pluginval PASS / HOST VERIFIED claim is made.
+
+**Status:** IMPLEMENTED / EXACT-SHA CI PENDING.
+**Next:** inspect run `43680164068`; continue the 12-module source-to-control audit and visual-state parity without changing module workflows.

@@ -223,6 +223,14 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
     options.osxLibrarySubFolder = "Application Support";
     ownedProperties = std::make_unique<juce::PropertiesFile>(options);
     persistenceProperties = ownedProperties.get();
+
+    // Seed workspace chrome from the canonical ThemeManager fallback.
+    const auto& palette = currentThemePalette;
+    setSurfaceColours(palette.token("window_bg"),
+                      palette.token("panel"),
+                      palette.token("control_border"),
+                      palette.token("accent"),
+                      palette.token("text_primary"));
 }
 
 PPGUMultiWindowWorkspace::~PPGUMultiWindowWorkspace()
