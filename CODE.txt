@@ -1131,3 +1131,22 @@ Approved requirements:
 **Тесты:** lexical delimiter scan passed. Regression source added; not yet compiled or executed under CTest. Windows Release/pluginval/FL Studio 20 not run.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** finish streaming/cache/state-generation audit; then run exact-SHA full build and CTest.
+
+
+## 2026-11-15 — SFZ parser hard bounds and missing-bank state restore test
+
+**Тип:** parser security hardening + processor state recovery regression.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:** `d856c3f58a590950c22a30ca39c2c2a42f690be8`, `623f88fb51c8bdedc09ab920737e8073042f75a4`, `490fc89664c6533b4918566abe2fd553aef2c82f`, `d36317263ae4673fd1296de4a42ff7102a5afe99`, `78938958c9d7b9af7942dfe062603fabb98292c7`, `463a96dc98494134e8c83a55da61332063a6b225`.
+
+**Файлы / symbols:**
+- `Source/Sampler/SfzParser.h` — bounded parser constants: 16 MiB, 64 KiB line, 4096 tokens/line, 262144 lines, 65536 regions.
+- `Source/Sampler/SfzParser.cpp` — bounded stable-size file read, size/mtime recheck, explicit errors for growth/truncation, error-code file validation.
+- `tests/SfzParserTests.cpp` — parser input/line/token/region/file-size bounds.
+- `tests/ProcessorPatternIntegrationTests.cpp` — missing SFZ path is retained, no stale sample bank is silently reused.
+
+**Совместимость:** no APVTS IDs/ranges/defaults or preset schema changes. Valid existing SFZ maps within limits retain their parsing behavior.
+
+**Тесты:** regression source added; not compiled/executed under CTest yet. Exact-SHA Windows Release/pluginval/FL Studio 20 not run.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** complete streaming/cache/state audit and run full exact-SHA build/test suite.

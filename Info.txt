@@ -3082,3 +3082,23 @@ unverified until their steps complete successfully.
 **Проверки:** modified C++/header/test files passed lexical delimiter balance scan. Full JUCE/Windows Release/CTest/pluginval/FL Studio 20 not run or confirmed. Exact-SHA workflow runs: 0.
 
 **Следующий шаг:** complete Sampler streaming/cache failure-path and state-generation audit; then exact-SHA CI/build and fix any compile/runtime failures before declaring code stage complete.
+
+
+## 2026-11-15 — SFZ parser input bounds / state restore missing-bank recovery
+
+**Статус:** SOURCE + TESTS ADDED; FULL JUCE BUILD VALIDATION PENDING.
+
+Закрыты parser safety gaps для внешних SFZ-файлов и добавлена проверка поведения при отсутствующей сохранённой библиотеке.
+
+**Изменения:**
+- `SfzParser.h/.cpp`: введены лимиты 16 MiB на SFZ, 64 KiB на строку, 4096 tokens на строку, 262144 строк и 65536 playable regions. Parser прекращает разбор с явной диагностикой, а не допускает неограниченный рост памяти/CPU.
+- `parseFile()`: проверяет regular-file status, размер и mtime; читает строго заранее проверенный объём; обнаруживает truncation/growth и повторно сверяет размер/mtime до parse.
+- `validateSampleFiles()`: filesystem errors теперь обрабатываются через `std::error_code`, без исключений из простого path validation.
+- `tests/SfzParserTests.cpp`: добавлены проверки всех parser limits и oversized file rejection.
+- `tests/ProcessorPatternIntegrationTests.cpp`: добавлена missing-library restore проверка — сохранённый путь остаётся доступным для ручного восстановления, но другой/старый sample bank не подставляется молча.
+
+**Commits:** `d856c3f58a590950c22a30ca39c2c2a42f690be8`; `623f88fb51c8bdedc09ab920737e8073042f75a4`; `490fc89664c6533b4918566abe2fd553aef2c82f`; `d36317263ae4673fd1296de4a42ff7102a5afe99`; `78938958c9d7b9af7942dfe062603fabb98292c7`; `463a96dc98494134e8c83a55da61332063a6b225` (parent `78938958c9d7b9af7942dfe062603fabb98292c7`).
+
+**Проверки:** source and tests read back; lexical delimiter scan pending for this final set. Full CTest/Windows Release/pluginval/FL Studio 20 not run. Exact-SHA workflow runs: 0.
+
+**Следующий шаг:** final sampler cache/state audit, then run exact-SHA CMake/CTest on Windows and repair any compiler/test failures before code-stage sign-off.
