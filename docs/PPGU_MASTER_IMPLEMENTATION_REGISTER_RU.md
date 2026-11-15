@@ -452,3 +452,11 @@ REAL-TIME AUDIO SAFETY; SAMPLE FIDELITY ENGINE; INTELLIGENT MEMORY MANAGEMENT; D
 **Статус всех пунктов:** USER-APPROVED / REQUIREMENTS. Это не означает SOURCE PRESENT, INTEGRATED, TESTED или HOST VERIFIED. Подробные технические решения выбираются ассистентом в рамках утверждённых архитектурных ограничений. Реализация начинается только после проверки текущего source HEAD и feasibility audit.
 
 **Инварианты:** один существующий Sample Engine; realtime-safe callback; без лишнего CPU/RAM; сохранение MIDI/APVTS/preset/state и MELODY/PATTERN contracts; измерения и проверки на точном SHA; не менять защищённую архитектуру без критической причины и отдельного согласования.
+
+
+## 2026-11-15 — TX-PPGU-IMPL-001 — exact REV.19 preflight amendment
+- Active implementation branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03, parent SHA 33d66c4731d2da0c37f235d2f7e4b5f2da33de60. This is the current user-directed work line based on REV.18; legacy REV.17/REV.18 header references in older documents are historical and do not override the current active branch selection.
+- Exact-SHA CI on parent: Windows x64 Release VST3 build, CTest and pluginval strictness 5 passed; portable interim artifact ID 14157037322 created (SHA-256 29ef436eef24237370e5d479720a21a5fc31bb4cb17ef04d3ffc37520476b9fa). This is not release acceptance; FL Studio 20 host verification remains separate.
+- Current source audit confirms partial foundations and open requirements. In particular: section-first PATTERN model/state integration; AUTOCHORDS MIDI generation; PUNK GROUP playable path; gallery transaction; complete FX/UI parity; preset dependency/playability validation; import/sample lifecycle recovery; secure skin import; full component acceptance; measured performance and host tests remain open until implemented and evidenced.
+- This amendment updates the working checkpoint only. It does not silently change any approved product requirement, APVTS ID, control contract, skin identity, architecture or release gate.
+- Status: preflight evidence refreshed; implementation open.

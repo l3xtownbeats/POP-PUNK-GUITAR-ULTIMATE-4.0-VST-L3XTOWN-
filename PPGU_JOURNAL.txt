@@ -574,3 +574,22 @@ Current main HEAD after this journal update: the commit created by this append-o
 - GitHub About description/topics и Social Preview metadata не менялись: доступные GitHub actions в этой интеграции предоставляют чтение репозитория и запись файлов, но не отдельное редактирование About/Social Preview.
 
 Статус: REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.
+
+
+2026-11-15 — TX-PPGU-IMPL-001 — START полного implementation pass
+
+Рабочая ветка: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03 @ 33d66c4731d2da0c37f235d2f7e4b5f2da33de60.
+Пользователь подтвердил реализацию всей утверждённой базы по генеральному журналу и базовым отметкам.
+
+На exact parent SHA CI:
+- Windows x64 Release VST3 build PASS.
+- CTest PASS.
+- pluginval strictness 5 PASS.
+- Portable CI artifact создан: ID 14157037322, 2,976,218,414 bytes, SHA-256 29ef436eef24237370e5d479720a21a5fc31bb4cb17ef04d3ffc37520476b9fa.
+- Package является interim CI artifact, не RELEASED; FL Studio 20 host acceptance для этого SHA не заявлен.
+
+Production target использует Source/*; root-level legacy code не считать runtime production. Предварительно подтверждены sampler/SFZ/streaming, voice/transport/pattern/DSP/UI foundations и перечислены незакрытые интеграционные gaps. Никакой пункт не будет считаться готовым только по наличию файла, макета, параметра или CI без релевантного теста.
+
+Инварианты: APVTS IDs/semantics; 27-control contract; approved seven FX bypass IDs; approved GUI/skin IDs; один Sample Engine; realtime-safe audio callback; законность каждого bundled sample; portable VST3 delivery. Реализация будет идти по фазам Master Register с CHECK → ANALYZE → FIX → RE-ANALYZE → RESULT и синхронизацией журналов.
+
+Статус: START / PREFLIGHT COMPLETE / IMPLEMENTATION OPEN.

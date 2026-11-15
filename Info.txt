@@ -2867,3 +2867,28 @@ These images are implementation references, not permission to show an unimplemen
 
 **Status:** AUDIT FALSE POSITIVE FIXED / SECURITY TESTS PASS LOCALLY / WORKFLOW STEP ADDED / EXACT-HEAD CI PENDING / 15 THEME PREVIEW-HERO PAIRS STILL PENDING.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — TX-PPGU-IMPL-001 — START: полная реализация утверждённой базы
+==============================================================================
+Рабочая ветка: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+Исходный HEAD: 33d66c4731d2da0c37f235d2f7e4b5f2da33de60
+Запрос пользователя: реализовать функциональность по генеральному журналу разработки и утверждённым/подтверждённым/зафиксированным базовым отметкам.
+
+Текущий exact-SHA evidence preflight:
+- Windows x64 Release VST3 build: PASS на исходном SHA.
+- CTest regression suite: PASS на исходном SHA.
+- pluginval strictness 5: PASS на исходном SHA.
+- Portable CI package: создан; artifact ID 14157037322, имя POP-PUNK-GUITAR-ULTIMATE-PORTABLE-VST3-Windows-x64, размер 2,976,218,414 bytes, SHA-256 29ef436eef24237370e5d479720a21a5fc31bb4cb17ef04d3ffc37520476b9fa.
+- Это interim CI artifact, не RELEASED. FL Studio 20 host acceptance для данного SHA отдельно не подтверждён.
+
+Source preflight:
+- Production CMake target собирает Source/PluginProcessor.cpp, Source/PluginEditor.cpp, Source/Sampler/*, Source/Performance/*, Source/UI/*. Root-level legacy cpp/h duplicates не считать production implementation.
+- В production source уже присутствуют sampler/streaming, SFZ import, voice control, host transport/pattern scheduler, DSP blocks и NEON STAGE UI foundations; наличие исходников не приравнивается к полной интеграции.
+- Подтверждённые gaps остаются: component-level GUI binding/parity, Gallery transactional Preview/Apply/Cancel, section-first PATTERN state integration, AUTOCHORDS MIDI generation, PUNK GROUP playability, complete preset dependency/playable validation, lifecycle/security/worker recovery, measured performance and exact-SHA FL Studio 20 host tests.
+- APVTS IDs/semantics, 27-control GUI contract, approved seven FX bypass IDs, existing theme/skin IDs, one Sample Engine, realtime guarantees and portable packaging are invariants.
+
+Порядок реализации: строго по Master Register phases and Control Center; CHECK → ANALYZE → FIX → RE-ANALYZE → RESULT. Малые изолированные транзакции, точные tests, journals and remote readback. Не включать недостающие controls как fake/disabled-as-if-working; не подменять натуральные licensed samples синтетикой; не считать preset JSON аудиобанком.
+
+Статус: TX STARTED / PREFLIGHT RECORDED / IMPLEMENTATION OPEN.
+==============================================================================

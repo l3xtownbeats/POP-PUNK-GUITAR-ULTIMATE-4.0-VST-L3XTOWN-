@@ -341,3 +341,13 @@ User clarification: downloading is allowed when lawful and compliant with source
 The AUTO SOUND HUNTER naming correction on SHA `78f7a66e0e7e5805092dc694920091f69080faa4` passed workflow run `43692734450`: Windows x64 VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS and interim CI packaging. FL Studio 20 manual host acceptance remains outstanding.
 
 The approved UI specification is `PPGU_UI_THEME_SPEC_FULL.txt` v1.3, with `01 INTERFACE  NEON STAGE DEFAULT .png` as canonical main-interface reference and 02–07 as supporting module/workspace references. The REV18 16-theme audit is now hardened and integrated into the Windows workflow; local tests 9/9 pass, audit 0 errors / 45 expected warnings. Missing preview/hero PNGs and registry promotion for SKIN-2..SKIN-16 remain open. No registry migration, theme activation or release acceptance has been performed.
+
+
+## 2026-11-15 — TX-PPGU-IMPL-001 — active implementation transaction
+- User request: implement all functionality in the approved/confirmed/recorded baseline according to the master development journal.
+- Active work branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03 @ 33d66c4731d2da0c37f235d2f7e4b5f2da33de60, derived from the current REV.18 production baseline. This branch supersedes the old REV.17/REV.18 task snapshot for this transaction only; no other branch is silently merged or rewritten.
+- Preflight exact-SHA CI: Windows x64 Release VST3 build PASS; CTest PASS; pluginval strictness 5 PASS; portable interim artifact ID 14157037322 created. SHA-256: 29ef436eef24237370e5d479720a21a5fc31bb4cb17ef04d3ffc37520476b9fa. FL Studio 20 host verification remains separate; artifact is not a release.
+- Source target is Source/ as defined by CMake. Root-level duplicate cpp/h files are legacy and are not authoritative for the VST3 build.
+- Mandatory invariants remain unchanged: one Sample Engine; realtime-safe callback; stable APVTS IDs/semantics; exact 27-control contract; approved seven FX bypass IDs; approved skin IDs and NEON STAGE design; portable VST3; natural samples with explicit commercial embedding/redistribution rights; no fake controls or false completion claims.
+- Ordered implementation follows Master Register phases. Each discrete fix must have source/tests, exact-SHA CI, synchronized journals and remote readback before closure.
+- Transaction status: STARTED / PREFLIGHT COMPLETE / IMPLEMENTATION OPEN.

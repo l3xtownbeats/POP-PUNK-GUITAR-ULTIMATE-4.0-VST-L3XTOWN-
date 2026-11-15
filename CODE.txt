@@ -1047,3 +1047,15 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 **Previous exact-SHA validation:** AUTO SOUND HUNTER rename commit `78f7a66e0e7e5805092dc694920091f69080faa4`, run `43692734450`: Windows VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS, interim package. FL Studio 20 host acceptance remains pending.
 
 **New commit SHA:** pending GitHub commit creation; append exact SHA and CI result after workflow completion.
+
+
+## 2026-11-15 — TX-PPGU-IMPL-001 — implementation program START
+- Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+- Parent SHA: 33d66c4731d2da0c37f235d2f7e4b5f2da33de60
+- Scope: execute the ratified Master Implementation Register and immutable user-approved baseline in ordered, independently testable work packages.
+- Exact-SHA preflight evidence on parent: Windows x64 VST3 build PASS; CTest PASS; pluginval strictness 5 PASS; interim portable CI artifact created (artifact 14157037322, 2,976,218,414 bytes, SHA-256 29ef436eef24237370e5d479720a21a5fc31bb4cb17ef04d3ffc37520476b9fa). Not a release; FL Studio 20 host verification is not established for this SHA.
+- Production target source is under Source/; root-level legacy cpp/h duplicates are not the CMake production target.
+- Preflight confirmed foundations and gaps: sampler/SFZ/streaming, voice control, host transport/pattern scheduler, DSP and NEON STAGE UI exist in source; transactional gallery, section-first pattern persistence, AutoChords MIDI generator, PUNK GROUP playable path, preset dependency/playability evidence, sampler lifecycle recovery/security, complete GUI parity and measured performance remain open or require exact source audit.
+- Invariants: no APVTS ID/semantic changes; preserve exact 27-control contract and approved seven FX bypass IDs; no new UI controls outside approved inventory; one Sample Engine; no audio callback I/O/locks/allocations; portable VST3 only; license/provenance gate for all bundled natural guitar audio.
+- No production code changed in this START record. First implementation item will follow the approved phase order and be committed/tested independently.
+- Status: STARTED / PREFLIGHT COMPLETE / IMPLEMENTATION OPEN.
