@@ -1533,6 +1533,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    shuttingDown = true;
     stopTimer();
     timerCallback();
     setLookAndFeel(nullptr);
