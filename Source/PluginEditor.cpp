@@ -1083,6 +1083,34 @@ void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int w, int h, bool 
                                               juce::PathStrokeType::rounded));
 }
 
+void PPGUPremiumLookAndFeel::drawTextEditorBackground(juce::Graphics& g, int width, int height,
+                                                            juce::TextEditor& editor)
+{
+    const auto surface = editor.isEnabled() ? palette.token("control_bg")
+                                            : palette.token("lowlight");
+    g.setColour(surface);
+    g.fillRoundedRectangle(0.5f, 0.5f, static_cast<float>(width) - 1.0f,
+                           static_cast<float>(height) - 1.0f, 6.0f);
+}
+
+void PPGUPremiumLookAndFeel::drawTextEditorOutline(juce::Graphics& g, int width, int height,
+                                                    juce::TextEditor& editor)
+{
+    const bool enabled = editor.isEnabled();
+    const bool focused = enabled && editor.hasKeyboardFocus(true);
+    const bool hovered = enabled && editor.isMouseOver();
+
+    const auto outline = !enabled ? palette.token("lowlight")
+        : focused ? palette.token("highlight")
+        : hovered ? palette.token("accent")
+        : palette.token("control_border");
+
+    g.setColour(outline);
+    g.drawRoundedRectangle(0.5f, 0.5f, static_cast<float>(width) - 1.0f,
+                           static_cast<float>(height) - 1.0f, 6.0f,
+                           focused ? 2.0f : 1.0f);
+}
+
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
     : AudioProcessorEditor(&p), processor(p)
 {
