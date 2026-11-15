@@ -391,6 +391,25 @@ int main()
         }
         else
         {
+            bool oldBankAudible = false;
+            for (int attempt = 0; attempt < 100 && !oldBankAudible; ++attempt)
+            {
+                juce::AudioBuffer<float> warm(2, 128);
+                warm.clear();
+                juce::MidiBuffer midi;
+                if (attempt == 0)
+                    midi.addEvent(juce::MidiMessage::noteOn(1, 60, static_cast<juce::uint8>(110)), 0);
+                missingBankProcessor.processBlock(warm, midi);
+                oldBankAudible = rms(warm, 0, warm.getNumSamples()) > 0.001;
+                if (!oldBankAudible)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            }
+            if (!oldBankAudible)
+            {
+                std::cerr << "Could not warm the old bank before missing-path restore.\\n";
+                result = 1;
+            }
+
             const auto originalSfzPath = std::filesystem::path(sfz.getFullPathName().toStdString());
             auto backupSfzPath = originalSfzPath;
             backupSfzPath += ".missing";
@@ -411,6 +430,15 @@ int main()
                     || missingBankProcessor.getLoadedRegionCount() != 0)
                 {
                     std::cerr << "Missing SFZ restore retained a stale in-memory sample bank.\\n";
+                    result = 1;
+                }
+                juce::AudioBuffer<float> afterRestore(2, 128);
+                afterRestore.clear();
+                juce::MidiBuffer noMidi;
+                missingBankProcessor.processBlock(afterRestore, noMidi);
+                if (rms(afterRestore, 0, afterRestore.getNumSamples()) > 0.0001)
+                {
+                    std::cerr << "Old sample voices survived the next audio callback after missing-bank restore.\\n";
                     result = 1;
                 }
                 renameError.clear();
