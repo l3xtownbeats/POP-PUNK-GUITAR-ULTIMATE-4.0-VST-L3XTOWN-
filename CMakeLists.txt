@@ -73,7 +73,8 @@ target_sources(PPGU PRIVATE
     Source/PluginEditor.cpp
     Source/UI/ThemeManager.cpp
     Source/UI/AuxiliaryPanelLayout.cpp
-    Source/UI/PPGUMultiWindowWorkspace.cpp)
+    Source/UI/PPGUMultiWindowWorkspace.cpp
+    Source/UI/PPGUSkinGalleryPanel.cpp)
 target_include_directories(PPGU PRIVATE Source Source/Sampler Source/Performance Source/UI)
 target_compile_definitions(PPGU PUBLIC ${PPGU_JUCE_DEFINITIONS})
 target_link_libraries(PPGU PRIVATE
@@ -158,7 +159,8 @@ target_sources(ppgu_processor_pattern_tests PRIVATE
     Source/PluginEditor.cpp
     Source/UI/ThemeManager.cpp
     Source/UI/AuxiliaryPanelLayout.cpp
-    Source/UI/PPGUMultiWindowWorkspace.cpp)
+    Source/UI/PPGUMultiWindowWorkspace.cpp
+    Source/UI/PPGUSkinGalleryPanel.cpp)
 target_include_directories(ppgu_processor_pattern_tests PRIVATE
     Source Source/Sampler Source/Performance Source/UI)
 target_compile_definitions(ppgu_processor_pattern_tests PRIVATE ${PPGU_JUCE_DEFINITIONS})
