@@ -2792,3 +2792,15 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Status:** AUDIT PATH FIX / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING / ASSET GENERATION PENDING.
 ============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — Premium theme generator: first CI failure and correction
+==============================================================================
+
+**Evidence:** GitHub Actions run `43692794120` on PR #45 / head `21ece651` failed during the first artwork-generation step. Pillow reported `ValueError: image has wrong mode` at the final alpha composite in `stage_background()`; the guitar helper had returned RGB while the shadow layer was RGBA.
+
+**Correction:** commit `50f9506a` explicitly converts the base image to RGBA before the final alpha composite. This changes only the generator's pixel-mode handling; no approved design tokens, control IDs, layout geometry, existing SKIN-1 hero/preview binaries, APVTS, DSP or audio behavior were changed.
+
+**Status:** failure recorded; correction committed; rerun pending. Do not claim the asset generator, deterministic check, strict asset audit, G1–G4, VST3 build, pluginval or FL Studio 20 acceptance as PASS until fresh evidence is available.
+============================================================================== 
