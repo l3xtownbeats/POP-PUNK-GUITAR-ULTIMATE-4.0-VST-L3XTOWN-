@@ -797,3 +797,8 @@ FACTORY LIBRARY LOCK возможен только после legal/resource val
 2026-11-15 — USER-SUPPLIED POP-PUNK TONE REFERENCE ADDED
 
 Added `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_TONE_REFERENCE_2000_2023_RU.md` (commit `a2519ba11f427ecb04817ba3e06b66a4ba08e04b`). It preserves the user's 2000s genre formula, artist/era tone hypotheses, amp recipes, pickup/guitar references and seven song-level starting points. Explicit caveat retained: numerical knob settings are community tonal reconstructions, not published exact studio settings. Unverified equipment/production claims are flagged for future primary-source verification. The document is a research input only; it does not certify preset readiness, sample licensing, DSP implementation or change the approved phase order. Current work remains NEON STAGE visual completion.
+
+
+2026-11-15 — USER RESUBMITTED / REFINED POP-PUNK TONE REFERENCE (REVISION 2)
+
+Updated `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_TONE_REFERENCE_2000_2023_RU.md` in commit `0753e32984d58bd03b37b8b299a7223dd16956f6`. Latest user wording supersedes earlier wording where it adds precision, notably the Green Day modified Super Lead pair and ambiguous control-clock note, Mark Hoppus split-layer description, Jerry Finn split-routing note, and the categorical Axe-Fx claim for Blink-182's `One More Time...` (retained as an unverified claim requiring primary-source confirmation). Numeric settings remain explicitly community tonal reconstructions. This is still reference material only, not verified studio data or READY preset evidence; approved phase order remains unchanged.
