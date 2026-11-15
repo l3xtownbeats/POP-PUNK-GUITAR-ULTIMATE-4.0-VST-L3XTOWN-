@@ -74,6 +74,8 @@ private:
     std::array<std::vector<float>, 2> delayBuffers;
     std::array<std::vector<float>, 2> chorusBuffers;
     std::array<std::vector<float>, 2> flangerBuffers;
+    // Dedicated short-delay memory for the DOUBLE thickening stage.
+    std::array<std::vector<float>, 2> doubleTrackBuffers;
     std::array<float, 2> eqLowState {};
     std::array<float, 2> eqHighState {};
     std::array<float, 2> compressorEnvelope {};
@@ -84,6 +86,7 @@ private:
     size_t delayWritePosition = 0;
     size_t chorusWritePosition = 0;
     size_t flangerWritePosition = 0;
+    size_t doubleTrackWritePosition = 0;
     double flangerPhase = 0.0;
     double chorusPhase = 0.0;
     juce::Reverb reverb;

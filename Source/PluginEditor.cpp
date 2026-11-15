@@ -95,6 +95,21 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
     loadButton.onClick = [this] { chooseSfzFile(); };
     addAndMakeVisible(loadButton);
+    powerProfileBox.addItem("GOOD", 1);
+    powerProfileBox.addItem("NORMAL", 2);
+    powerProfileBox.addItem("NIGHT", 3);
+    powerProfileBox.setColour(juce::ComboBox::backgroundColourId, panel2);
+    powerProfileBox.setColour(juce::ComboBox::textColourId, pale);
+    powerProfileBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    addAndMakeVisible(powerProfileBox);
+    powerProfileAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "powerProfile", powerProfileBox);
+    doubleTrackButton.setClickingTogglesState(true);
+    doubleTrackButton.setColour(juce::TextButton::buttonColourId, panel2);
+    doubleTrackButton.setColour(juce::TextButton::buttonOnColourId, pink);
+    doubleTrackButton.setColour(juce::TextButton::textColourOffId, pale);
+    doubleTrackButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    doubleTrackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, "doubleTrackOn", doubleTrackButton);
+    addAndMakeVisible(doubleTrackButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -250,6 +265,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     presetBox.setBounds(top.removeFromLeft(220).reduced(3, 5));
     presetSearch.setBounds(top.removeFromLeft(145).reduced(3, 7));
     categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
+    powerProfileBox.setBounds(top.removeFromLeft(105).reduced(3, 7));
+    doubleTrackButton.setBounds(top.removeFromLeft(86).reduced(3, 7));
     loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(220);

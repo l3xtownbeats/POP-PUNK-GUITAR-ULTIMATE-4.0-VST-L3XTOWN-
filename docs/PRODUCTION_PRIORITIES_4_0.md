@@ -87,3 +87,15 @@ The complete Russian-language product requirements, including all previously agr
 ## Execution update — 10 Nov 2026
 
 Parallel M4/M5 work is allowed only on isolated branches and without modifying the active M1–M3 audio build. M5 foundation has passed Windows CI run `42840410645`; M4 AutoChords/FingeringGenerator foundation is in run `42842050531` and must not be marked complete until build, CTest and pluginval finish. M1–M3 Windows Release run `42841128991` and separate M1/M2 run `42841133299` passed, but host validation and specific M2/M3 end-to-end criteria remain open. See `WORK_LOG_M1_M5_INTEGRATION_RU.md` for exact evidence and merge gates.
+
+
+## Power profiles, DOUBLE and multicore policy (November 2026)
+
+- **GOOD:** permits the configured voice limit up to 64; use when maximum polyphony and full sound design are preferred.
+- **NORMAL:** caps active sampler voices at 32; balanced default for typical projects.
+- **NIGHT:** caps active sampler voices at 12 to reduce sustained CPU demand and power use on laptops/quiet sessions. The user-selected effects are not silently disabled; the profile is a voice-budget policy, not a hidden tone-changing preset.
+- The selected profile is a real APVTS parameter and must persist in host state/automation. The UI must expose GOOD / NORMAL / NIGHT.
+- **DOUBLE:** a user-switchable, preallocated short-delay stereo thickener with slightly different left/right offsets and adjustable mix. It must not create threads, allocate memory, or perform I/O in the audio callback. This is a widening/thickening effect, not a claim of two separately recorded performances. A true two-take mode requires independent performance/sample material and should be a separate future implementation.
+- **Multicore:** do not parallelize the host audio callback by spawning/joining threads per block or by adding blocking barriers; this risks dropouts and host oversubscription. The existing architecture already isolates file decoding in streaming workers (one worker per active streaming library, with a bounded maximum of eight libraries) and performs SFZ loading in a background worker pool. A user-selectable multicore control is not considered implemented until worker-count control and a multi-consumer-safe request queue are implemented, tested under concurrent cache pressure, and benchmarked. The DSP callback remains single-threaded and real-time safe; parallel work belongs in sample indexing, decoding, and cache preparation.
+- **Power evidence required:** benchmark GOOD/NORMAL/NIGHT with identical MIDI material, sample rate, block size, polyphony and FX state. Record average/peak CPU, audio underruns, peak RAM and energy/power proxy on a named PC. Do not claim watt savings from the profile caps alone.
+- Current branch implementation scope: adds the APVTS power-profile selector, enforces the 64/32/12 voice caps, wires the editor selector, implements the DOUBLE short-delay stage, and exposes its on/off switch. Multicore worker-count control and quantitative benchmark remain outstanding until their own tests pass.
