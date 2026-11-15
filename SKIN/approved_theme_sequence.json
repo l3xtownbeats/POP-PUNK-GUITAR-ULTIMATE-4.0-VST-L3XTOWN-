@@ -10,7 +10,7 @@
     {
       "ordinal": 1,
       "label": "SKIN-1",
-      "name": "NEON STAGE DEFAULT",
+      "name": "NEON FORGE",
       "stableId": "skin-053",
       "index": 53,
       "path": "Skin_053/theme.json",
@@ -152,7 +152,7 @@
       "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     }
   ],
-  "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",
+  "sharedSystem": "All 16 premium themes use the shared NEON STAGE component design language; SKIN-1 is named NEON FORGE.",
   "constraints": [
     "No fake controls or functions.",
     "No Audio Engine, DSP, MIDI or APVTS changes.",
