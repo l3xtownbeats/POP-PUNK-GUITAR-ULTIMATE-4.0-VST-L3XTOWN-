@@ -337,6 +337,8 @@ int main()
 
     // State restore must asynchronously reload the same SFZ bank and retain
     // the absolute path in the serialized APVTS state.
+    juce::MemoryBlock savedState;
+    bool stateWasSaved = false;
     {
         PopPunkGuitarUltimateAudioProcessor stateSource;
         stateSource.prepareToPlay(48000.0, 128);
@@ -348,8 +350,8 @@ int main()
         }
         else
         {
-            juce::MemoryBlock savedState;
             stateSource.getStateInformation(savedState);
+            stateWasSaved = true;
             PopPunkGuitarUltimateAudioProcessor restoredProcessor;
             restoredProcessor.prepareToPlay(48000.0, 128);
             restoredProcessor.setStateInformation(savedState.getData(),
@@ -375,6 +377,46 @@ int main()
         }
     }
 
+    // A missing saved SFZ path is retained for manual recovery and must not
+    // silently reuse a different in-memory bank.
+    if (stateWasSaved)
+    {
+        const auto originalSfzPath = std::filesystem::path(sfz.getFullPathName().toStdString());
+        auto backupSfzPath = originalSfzPath;
+        backupSfzPath += ".missing";
+        std::error_code renameError;
+        std::filesystem::rename(originalSfzPath, backupSfzPath, renameError);
+        if (renameError)
+        {
+            std::cerr << "Could not stage missing-library state-restore test: "
+                      << renameError.message() << "\\n";
+            result = 1;
+        }
+        else
+        {
+            {
+                PopPunkGuitarUltimateAudioProcessor missingBankProcessor;
+                missingBankProcessor.prepareToPlay(48000.0, 128);
+                missingBankProcessor.setStateInformation(savedState.getData(),
+                    static_cast<int>(savedState.getSize()));
+                if (missingBankProcessor.getCurrentSfzFilePath() != sfz.getFullPathName()
+                    || missingBankProcessor.hasLoadedSampleBank()
+                    || missingBankProcessor.getLoadedRegionCount() != 0)
+                {
+                    std::cerr << "Missing SFZ restore did not retain its path without reusing stale samples.\\n";
+                    result = 1;
+                }
+            }
+            renameError.clear();
+            std::filesystem::rename(backupSfzPath, originalSfzPath, renameError);
+            if (renameError)
+            {
+                std::cerr << "Could not restore temporary SFZ fixture after missing-path test: "
+                          << renameError.message() << "\\n";
+                result = 1;
+            }
+        }
+    }
 
     std::filesystem::remove_all(root, cleanupError);
     if (cleanupError)
