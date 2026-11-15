@@ -13,6 +13,8 @@ public:
     void drawRotarySlider(juce::Graphics&, int, int, int, int, float, float, float, juce::Slider&) override;
     void drawButtonBackground(juce::Graphics&, juce::Button&, const juce::Colour&, bool, bool) override;
     void drawComboBox(juce::Graphics&, int, int, bool, int, int, int, int, juce::ComboBox&) override;
+    void drawTextEditorBackground(juce::Graphics&, int, int, juce::TextEditor&) override;
+    void drawTextEditorOutline(juce::Graphics&, int, int, juce::TextEditor&) override;
 private:
     PPGUThemeManager::Palette palette;
 };
