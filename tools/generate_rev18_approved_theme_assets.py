@@ -41,7 +41,7 @@ def mix(a, b, amount):
 def png_bytes(image: Image.Image) -> bytes:
     from io import BytesIO
     stream = BytesIO()
-    image.save(stream, format="PNG", optimize=True, compress_level=9)
+    image.save(stream, format="PNG", optimize=False, compress_level=6)
     return stream.getvalue()
 
 
