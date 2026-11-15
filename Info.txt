@@ -2747,3 +2747,30 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Status:** FIVE APPROVED THEME SPECS + 15 SVG FOUNDATIONS CREATED / PNG ARTWORK PENDING / REGISTRY AND RUNTIME GALLERY REGISTRATION PENDING / NOT RELEASE READY.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 canonical 27-control parity correction
+==============================================================================
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets` (isolated visual-theme implementation branch, based on `ui/neon-stage-skin1-completion`).
+
+**Authority:** PPGU MASTER PROMPT REV18 v6.2; canonical `SKIN/control_schema.json`; approved sequence SKIN-1…SKIN-6.
+
+**Audit finding:** all six approved theme manifests had 28 control-map keys, while the canonical schema declares exactly 27. The extra `sync_selector` key is absent from the approved control inventory. This was a metadata mismatch, not a valid additional control.
+
+**Implemented correction:**
+- Removed only `sync_selector` from `SKIN/Skin_053/theme.json` and `SKIN/Skin_103…Skin_107/theme.json`.
+- Preserved all 27 canonical control IDs and their existing grid coordinates.
+- Preserved theme names, stable IDs, historical indices, ordinals, all 21 palette tokens and all existing SVG/source assets.
+- Strengthened `tools/audit_skin_rev18_assets.py` to validate exact parity against `control_schema.json`.
+- Added `tests/TestRev18ThemeControlParity.py` and registered it in CTest as `ppgu_rev18_theme_control_parity`.
+
+**Relevant commits:** `21e03671`, `b6474dd0`, `9b9d92a9`, `62e7d7e5`, `c7c88a36`, `ebeb946b`, `e9f00346`, `a2bb6dd0`, `0547e232`. Latest source commit for this correction: `e84ccb9f098577035a5eb5c55eb2b02a67c7754b`.
+
+**Safety boundary:** no APVTS/parameter IDs, actual control bindings, layout geometry, DSP, audio, MIDI, sampler or preset behavior changed. No historical registry record was deleted or renumbered.
+
+**Evidence boundary:** source JSON parsing and 27-ID parity checks passed in the edit transaction. The newly registered Python CTest has not yet been executed; Windows Release/VST3, pluginval and FL Studio 20 acceptance remain pending. The five additional themes still lack their complete raster asset packs; no G1–G4 or release-ready status is claimed.
+
+**Status:** CONTROL CONTRACT CORRECTED / TEST REGISTERED / EXECUTION PENDING / ASSET PACKS PENDING.
+============================================================================== 
