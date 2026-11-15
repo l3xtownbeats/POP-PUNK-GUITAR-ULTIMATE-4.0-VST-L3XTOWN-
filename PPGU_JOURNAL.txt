@@ -824,3 +824,16 @@ User explicitly approved and confirmed two future ways to create single-guitar r
 SOUND PRESET remains the sound identity/response; MIDI / PATTERN remains the note-event and rhythm content. Patterns should be reusable with different presets, and presets should be validated in single-note, chord and pattern contexts.
 
 This is an approved future product requirement, not an implemented feature. It does not authorize new controls, APVTS IDs, panels or architecture changes during the current NEON STAGE visual phase. Locked order remains NEON STAGE completion and verification → sound-library qualification → factory preset creation → factory library validation/finalization. No claim of MIDI editing, pattern generation or playback implementation without code and host-test evidence.
+
+2026-11-15 — USER CONFIRMATION: USE THE COMPLETE SUPPLIED RESEARCH BASE; SUPPLEMENT WITH WEB RESEARCH WHEN NEEDED
+
+The user confirmed that all supplied pop-punk tone, guitar/pickup, tuning, production, rhythm, technique, articulation and MIDI-pattern reference material should be used as the project's research foundation for future sound-preset and pattern work. If the supplied information is insufficient for a particular target sound, the project may be supplemented with internet research.
+
+Research rules remain in force:
+- Prefer primary and high-quality sources: artist/technician/producer interviews, rig rundowns, manufacturer documentation, session/recording accounts and reliable technical sources.
+- Distinguish documented facts from community reconstructions, hypotheses and tonal approximations; retain source links and confidence notes.
+- Do not present community knob settings as exact studio settings or claim an artist used a particular rig without verification.
+- Use research to guide original, legally compliant sound design; do not copy protected recordings, stems, riffs or commercial presets.
+- For sample libraries, separately verify redistribution rights, provenance, license/attribution and file integrity before inclusion.
+- SOUND PRESET remains distinct from MIDI / PATTERN content; validate sounds in single-note, chord and pattern contexts.
+- This confirmation does not change the locked development order. Current phase remains NEON STAGE visual completion and verification. Sound-library research/integration and factory preset creation begin only in their approved later phases.
