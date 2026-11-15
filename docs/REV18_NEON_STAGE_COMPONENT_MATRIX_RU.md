@@ -300,3 +300,8 @@ No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio c
 ## 2026-11-15 — Canonical premium theme identity correction
 
 Пользователь подтвердил: **SKIN-1 = NEON FORGE**. Стабильный ID `skin-053`, индекс `53` и путь `Skin_053/` сохранены без перенумерации. `NEON STAGE` остаётся названием общей GUI design system/reference language, а не названием SKIN-1. Утверждённая линейка содержит ровно 16 премиальных графических тем; SKIN-2…SKIN-16 сохраняют утверждённые имена и stable IDs. Старые 102 записи не удаляются и не переписываются. Полноценные preview/hero PNG для SKIN-2…SKIN-16 и runtime gallery registration остаются отдельными незавершёнными gates; спецификации и SVG не выдаются за готовые полноценные графические темы.
+
+
+## 2026-11-15 — Final approved premium theme order
+
+Пользователь подтвердил порядок активной премиальной линейки: **SKIN-1 — NEON FORGE (DEFAULT)**, далее SKIN-2, SKIN-3 … последовательно до SKIN-16. NEON FORGE (DEFAULT) является темой по умолчанию при запуске. Имена, стабильные ID и порядок SKIN-2…SKIN-16 сохраняются по утверждённой последовательности. Legacy-набор из 102 записей не удаляется и не перенумеровывается; в активную премиальную линейку входят только 16 утверждённых тем после прохождения artwork/PNG и runtime acceptance gates.
