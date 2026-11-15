@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg" alt="POP PUNK GUITAR ULTIMATE — NEON STAGE visual cover" width="100%">
+<img src="01%20INTERFACE%20%20NEON%20STAGE%20DEFAULT%20.png" alt="NEON STAGE DEFAULT — approved full plugin interface reference" width="100%">
 
 # POP PUNK GUITAR ULTIMATE 4.0
 ### L3XTOWN AUDIO LAB · NEON STAGE · WINDOWS x64 · VST3 · JUCE · C++20
@@ -35,7 +35,7 @@ The product goal is simple: load a sound, play immediately, write convincing gui
 | **MELODY** | Riffs, octave lines, lead hooks, picked notes and melodic guitar parts | Preset → Playing Style → Articulation → MIDI performance |
 | **PATTERN** | Chord-driven rhythm guitars, downstrokes, upstrokes, palm-muted verses, open choruses and rhythmic variations | Preset → Playing Style → Optional Variation |
 
-These are the product's two playing modes. The interface architecture remains deliberately focused: **two main windows only** — Preset Browser and the Editor. No third application window and no parallel sound engine.
+These are the product's two playing modes. The approved NEON STAGE interface is a full multi-surface studio console: the main Editor, preset browser, Playing Core, AMP & TONE, seven-slot FX Chain, and the approved auxiliary surfaces (Skin Gallery, FX EDIT, AUTOCHORDS, Import Guitar, Settings and Performance). The visual layout follows the approved NEON STAGE mockups; auxiliary panels remain honest about incomplete backends.
 
 ## Instrument and sound design
 
@@ -86,12 +86,15 @@ The detailed requirements are maintained in the engineering journal and master r
 
 ## Interface and visual identity
 
-The repository cover now uses the **NEON STAGE** visual direction: a premium dark stage-console aesthetic with controlled electric-blue, cyan, violet and magenta lighting, high-contrast typography and a refined instrument-panel presentation.
+**NEON STAGE DEFAULT is the canonical runtime theme:** SKIN-1 / SKIN-053. The approved full-interface reference is `01 INTERFACE  NEON STAGE DEFAULT .png`; the related approved references `02`–`07` specify AUTOCHORDS, FX EDIT and multi-window surfaces.
 
-The cover is a **brand/design showcase**, not a screenshot of a running VST3. It does not certify that NEON STAGE is the current runtime default skin. Runtime skin identity and default selection are governed by the canonical skin registry and must be reconciled through the project's skin audit before any runtime claim is made.
+The GitHub SVG `assets/POP_PUNK_GUITAR_ULTIMATE_BANNER.svg` is branding artwork only. It is **not** the NEON STAGE theme, not the plugin GUI, and not evidence of runtime implementation. This README displays the approved interface reference instead of presenting the SVG banner as the interface.
 
-The product UI remains governed by the approved NEON STAGE design direction and the existing two-window architecture. Skins are visual-only: they must not change DSP, MIDI, APVTS semantics, sampler behaviour or preset state.
+The implementation target is the approved mockup composition: branded top strip; skin gallery and preset browser; central guitar/Playing Core with the nine approved controls; seven-module FX Chain; FX EDIT; AUTOCHORDS; Import Guitar; Settings; About entry point; Performance MIDI monitor; and the approved visual asset/component surfaces. Layout, spacing, artwork, panel frames, neon treatment, control styling and typography must follow the reference—not a generic three-column placeholder.
 
+Runtime honesty remains mandatory: existing 27-control contract and seven approved FX bypass IDs are preserved; unsupported or unimplemented entry points stay visibly disabled and must never be dressed up as functioning controls. The mockup is the visual acceptance target, while successful build and host testing are separate acceptance gates.
+
+Skins are visual-only: they must not change DSP, MIDI, APVTS semantics, sampler behaviour or preset state.
 ## Platform and technical baseline
 
 | Item | Target |
@@ -103,7 +106,7 @@ The product UI remains governed by the approved NEON STAGE design direction and 
 | Language | C++20 |
 | Audio architecture | One existing Sample Engine |
 | Playing modes | MELODY and PATTERN |
-| Main windows | Preset Browser and Editor |
+| Main interface | NEON STAGE Editor with approved auxiliary workspace surfaces |
 | Realtime rule | No file/network I/O, blocking waits or unbounded work in the audio callback |
 
 Performance goals are measured, not assumed. CPU, RAM, latency, sample-load time and preset-switch time must be reported against a reproducible test profile before numerical performance claims are published.
