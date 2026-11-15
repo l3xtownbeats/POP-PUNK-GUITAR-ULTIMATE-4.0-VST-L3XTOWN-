@@ -1,107 +1,68 @@
-# PPGU — skin manifests, palette runtime и Skin Studio
+# PPGU — SKIN / NEON STAGE theme system
 
-## REV.18 — canonical identity correction (2026-11-15)
+## Fixed product boundary
 
-- Binding identity: **SKIN-1 = NEON STAGE DEFAULT = skin-053 / Skin_053**. Stable ID and numeric index 53 are preserved; no IDs are renumbered or deleted.
-- `theme_manifest.json` now selects `skin-053` as default; the registry entry is named `NEON STAGE DEFAULT`.
-- `Skin_053` has the 21-token graphite / cyan / electric-blue / violet / magenta palette and new vector bezel, crest and texture assets. Default display mode is MINIMALISM; premium effects are opt-in.
-- `skin-052` and all legacy records remain untouched as historical data.
-- This branch is an artwork/identity correction, not a host-verified release. JUCE build, runtime ThemeManager load, G1–G4, PNG CRC, pluginval and FL Studio 20 capture remain mandatory.
+The product has **exactly 16 approved factory themes**. No historical/legacy theme pack is part of the product, runtime gallery, installer, or future generation pipeline.
 
-## Historical implementation notes
+- **NEON STAGE** is the shared GUI design system and visual language for the plugin.
+- **SKIN-1 — NEON FORGE (DEFAULT)** is the existing canonical factory theme, stable ID `skin-053`, folder `Skin_053/`. It is the default at startup.
+- **SKIN-2…SKIN-16** are the other fifteen approved factory themes, with immutable names/order/stable IDs defined in `approved_theme_sequence.json`.
 
-Earlier REV.17 notes below are historical and do not override the REV.18 identity contract.
-- `ThemeManager` поддерживает legacy nested-token schema для Skin_01…51 и Skin Studio 21-token palette/control-map schema для Skin_052+.
-- Кнопка **SKIN** и Ctrl+K открывают встроенную в Multi-Window Workspace **Premium Skin Gallery**: карточки с preview, именем, семейством/layout, активной темой, поиском и фильтром семейств. Нажатие на карточку применяет тему и сохраняет stable ID.
-- Preview PNG декодируются лениво по мере отображения карточек. Отсутствующая preview-картинка даёт fallback-card, а не блокирует выбор палитры.
-- Skin_053–102 с PNG preview/hero и SVG bezel/crest/texture опубликованы в commit `3a2ceb52062be112429f96d411ae223d87df17a6`; workflow `43195205929` завершился SUCCESS. Registry: 102 entries, pack state MERGED, default skin-052.
+The distinction above is intentional: NEON STAGE names the overall interface system; NEON FORGE is the first individual theme.
 
-Оставшиеся ограничения, которые нельзя выдавать за готовые:
-- Favorites, полноценная клавиатурная навигация внутри gallery и фоновой filesystem watcher/rescan не реализованы.
-- `controls.*.grid` остаётся design metadata и не перестраивает реальные JUCE controls.
-- 150 ms animated hot-swap, ECO animation policy и asset memory LRU/budget не подтверждены.
-- Не все декоративные материалы Skin Studio (texture/bezel/crest) загружаются как отдельные runtime layers; gallery использует preview artwork, а editor и все открытые auxiliary panels получают semantic palette через theme-aware panel contract.
-- Runtime control parity по всем обязательным IDs остаётся частичной: отсутствующие LED/Auto Discover/Curator/About не становятся активными только из-за skin manifest. Settings panel имеет реальные UI-only настройки workspace.
-- Windows x64 build/CTest/pluginval и FL Studio 20 host acceptance должны подтверждаться отдельно на точном SHA.
+## Approved factory sequence
 
-Все изменения тем остаются visual-only: не менять APVTS, MIDI, presets, sampler, DSP или audio callback.
+| Logical ID | Factory theme | Stable ID / folder | Current status |
+|---|---|---|---|
+| SKIN-1 | NEON FORGE (DEFAULT) | `skin-053` / `Skin_053` | Existing canonical default |
+| SKIN-2 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-3 | CARBON FORGE | `skin-104` / `Skin_104` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-5 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-6 | VIOLET NOIR | `skin-107` / `Skin_107` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-7 | TITANIUM STORM | `skin-108` / `Skin_108` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-8 | EMERALD CIRCUIT | `skin-109` / `Skin_109` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-9 | SOLAR FLARE | `skin-110` / `Skin_110` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-10 | DEEP OCEAN | `skin-111` / `Skin_111` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-11 | ROSE CHROME | `skin-112` / `Skin_112` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-12 | DESERT AMBER | `skin-113` / `Skin_113` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-13 | GLACIER TEAL | `skin-114` / `Skin_114` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-14 | PHANTOM GRAPHITE | `skin-115` / `Skin_115` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-15 | ULTRAVIOLET DRIVE | `skin-116` / `Skin_116` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-16 | VOLCANIC STEEL | `skin-117` / `Skin_117` | Approved specification/SVG; finish artwork and acceptance |
 
-## Форматы и каталоги
+## What is implemented versus pending
 
-- `theme_manifest.json` — canonical registry, источник количества, ID, индексов и относительных путей.
-- `theme.schema.json` — legacy manifest contract для Skin_01…Skin_51; не использовать его как schema для Skin Studio.
-- `control_schema.json` — REV14 Skin Studio schema, 21 palette tokens, required control IDs и layout grid.
-- `theme_pack_manifest.json` — состав следующего неслитого Skin Studio pack.
-- `Skin_NNN/theme.json` — новая тема; PNG preview/hero и SVG texture/bezel/crest находятся рядом в соответствующих подкаталогах.
-- `backups/` — сохранённые версии registry/schema перед merge; резервные копии не являются runtime themes.
+- The active runtime registry intentionally exposes only SKIN-1 until the other fifteen themes pass their artwork, asset, runtime and host acceptance gates.
+- SKIN-2…SKIN-16 already have approved theme specifications and SVG foundations. This does **not** mean all fifteen are complete gallery-ready themes.
+- Remaining work per theme: finished preview/hero artwork, asset integrity and G1–G4 checks, registry/gallery promotion, runtime theme switching, exact-SHA Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 acceptance.
+- The active registry `theme_manifest.json` is the sole source of themes currently selectable in the plugin. The approved sequence file is the source of the fixed sixteen-theme product order.
 
-## Skin Studio pipeline
+## Historical theme cleanup
 
-Из корня репозитория:
+The old 101 non-product theme records and their archived asset folders have been removed from the current branch. The former 102-entry registry snapshots and obsolete pack snapshots have also been removed from the current working tree. They are not shipped, scanned, shown, loaded, or counted as factory themes.
+
+This is a source-tree cleanup, not a rewrite of Git history: prior commits retain normal repository history for audit/recovery. No historical theme is to be restored or regenerated into the product without a new explicit user decision.
+
+## Safety and compatibility rules
+
+- Do not create theme 17 or generate arbitrary 50-theme batches.
+- Do not change the approved sixteen names, order, stable IDs, or folder paths.
+- Do not promote SKIN-2…SKIN-16 into the runtime registry before all acceptance gates pass.
+- Theme changes are visual-only. Preserve APVTS IDs/bindings, the 27-control parity contract, seven approved FX bypass IDs, processor state, DSP, MIDI and audio callback behavior.
+- `theme.schema.json` remains a schema/compatibility contract; it is not a collection of legacy themes.
+- `control_schema.json` defines the shared 21-token palette/control contract.
+- `approved_theme_sequence.json` is the immutable factory sequence.
+- `theme_pack_manifest.json` is retired and intentionally empty; batch generation and merge scripts are disabled.
+
+## Validation
+
+Run:
 
 ```bash
-python tools/generate_skin_batch.py --dry-run
-python tools/generate_skin_batch.py
-python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
-python tools/merge_skin_pack.py --dry-run
-python tools/merge_skin_pack.py
 python tests/ValidateSkinManifests.py
+python tools/audit_skin_rev18_assets.py --root SKIN
+python tests/test_skin_asset_audit.py
 ```
 
-Генератор по умолчанию готовит ровно 50 тем: шесть визуальных семейств по восемь вариантов и две специальные темы. Он читает следующий индекс из canonical registry, не перезаписывает существующие папки, создаёт PNG/SVG assets и запускает G1–G4 validator. Merge сначала валидирует pack, проверяет непрерывность/уникальность registry, создаёт backups и только затем атомарно обновляет реестр. Он сохраняет legacy и REV14 schemas раздельно.
-
-Не запускайте merge, если pack validator не завершился PASS. Не удаляйте папки для обхода registry parity и не меняйте счётчик вручную.
-
-## Release package
-
-Workflow собирает sibling runtime folder `Skins/` рядом с VST3 bundle и включает canonical registry, legacy schema и REV14 control schema. Количество тем берётся из registry, а не из фиксированного числа. Полный ZIP публикуется только после Windows x64 Release, полного CTest, pluginval strictness 5 и успешной упаковки. Это всё ещё не заменяет ручную проверку загрузки/переключения в FL Studio 20.
-
-## Artwork и host evidence
-
-PNG/SVG assets — ресурсы skin pack, но сами по себе не доказывают внешний вид или корректность собранного плагина. Единственное доказательство реального UI — свежий capture собранного VST3 в host с указанием commit SHA и CI run. Не маркировать дизайн-макет как screenshot плагина.
-
-## Связанные документы
-
-- `../README.md` — продукт.
-- `SKIN_ENGINE_GAP_AUDIT_RU.md` — оставшиеся runtime gaps.
-- `CONTROL_INVENTORY_MATRIX_RU.md` — фактические controls.
-- `../docs/MASTER_PRODUCT_SPEC_4_0_RU.md` — продуктовая спецификация.
-
-
-## REV.18 — approved sequential theme concepts (2026-11-15)
-
-The approved logical theme sequence is recorded in `approved_theme_sequence.json`:
-
-| Logical theme | Name | Immutable stable ID / registry index | Current asset state |
-|---|---|---|---|
-| SKIN-1 | NEON STAGE DEFAULT | `skin-053` / 53 | Canonical default |
-| SKIN-2 | OBSIDIAN GOLD | `skin-103` / 103 | Manifest + 3 SVG foundations; PNG pending |
-| SKIN-3 | CARBON FORGE | `skin-104` / 104 | Manifest + 3 SVG foundations; PNG pending |
-| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / 105 | Manifest + 3 SVG foundations; PNG pending |
-| SKIN-5 | ARCTIC PLATINUM | `skin-106` / 106 | Manifest + 3 SVG foundations; PNG pending |
-| SKIN-6 | VIOLET NOIR | `skin-107` / 107 | Manifest + 3 SVG foundations; PNG pending |
-
-The legacy registry already contains indices 1–102. Logical SKIN numbering is therefore mapped to new stable IDs 103–107; no old directory, ID, registry entry or asset is renamed or overwritten.
-
-All five new theme manifests preserve the 21-token palette contract and the same 28-entry control map. They vary only palette/material tokens and retain the shared NEON STAGE component language. No APVTS, DSP, MIDI, audio, parameter/control ID or live layout changes are authorized.
-
-**Important:** these are approved design specifications with vector texture/bezel/crest foundations. They are not yet complete gallery/runtime themes. PNG preview/hero assets, G1–G4 and CRC validation, registry/gallery registration, package/runtime loading and host acceptance remain pending. Do not represent them as available in the plugin until those gates pass.
-
-
-### REV.18 — SKIN-7…SKIN-16 distinct vector asset correction
-
-Each of Skin_108…Skin_117 now contains three separate palette-derived SVG files: `svg/texture.svg`, `svg/bezel.svg`, and `svg/crest.svg`. The `effects.*` and `assets.*` references in each theme manifest point to the matching resource. These are vector foundations, not finished gallery cards or screenshots.
-
-Still pending for SKIN-7…SKIN-16: exact-size `assets/preview.png` and `assets/hero.png`, G1–G4/CRC validation, canonical registry registration, runtime gallery and asset-load checks, exact-SHA Windows x64 VST3 build, CTest, pluginval strictness 5 and FL Studio 20 host acceptance. The themes are not runtime/release ready.
-
-
-REV18 audit correction: `tools/audit_skin_rev18_assets.py` now audits the complete 16-theme approved sequence and resolves folder names from canonical manifest paths, preserving zero-padded IDs. Missing PNG preview/hero remain warnings unless strict mode is requested.
-
-
-## 2026-11-15 — legacy registry isolation
-
-- The plugin-facing canonical registry is now limited to the approved active default `skin-053` (logical SKIN-1). The 101 other records from the former 102-entry registry are retained in `isolated_legacy/theme_manifest.json` and are not enumerated by the plugin gallery or loaded by runtime selection.
-- The former merged pack manifest is retained at `isolated_legacy/theme_pack_manifest.json`; its expansion workflow is retired to prevent regeneration/merging of the historical 53–102 batch.
-- Historical asset directories for the 101 isolated records have been physically moved under `SKIN/isolated_legacy/assets/`. They remain preserved as cold storage, are not registered, bundled as active gallery entries, or loaded through the canonical runtime registry.
-- SKIN-2…SKIN-16 remain governed by `approved_theme_sequence.json`; they are not exposed as selectable themes until their asset and runtime acceptance gates pass.
-- The active gallery uses registry ordinal positions while stable IDs and indices remain unchanged. This keeps `skin-053` stable without requiring its legacy numeric index to be 1.
+A passing source validator does not replace Windows x64 VST3 build, CTest, pluginval, visual comparison or FL Studio 20 host acceptance.
