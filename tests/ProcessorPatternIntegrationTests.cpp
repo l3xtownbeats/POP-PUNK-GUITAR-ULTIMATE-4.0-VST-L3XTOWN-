@@ -235,7 +235,7 @@ int main()
         const auto configure = [&](PopPunkGuitarUltimateAudioProcessor& target,
                                    bool chorusEnabled, bool reverbEnabled, bool eqEnabled)
         {
-            const std::array<std::pair<const char*, float>, 23> values {{
+            const std::array<std::pair<const char*, float>, 24> values {{
                 { "playMode", 0.0f }, { "voices", 64.0f }, { "master", 1.0f },
                 { "output", 0.0f }, { "pan", 0.0f }, { "ampGain", 5.0f },
                 { "tone", 5.0f }, { "eqOn", eqEnabled ? 1.0f : 0.0f },
@@ -328,7 +328,7 @@ int main()
         }
 
         if (result == 0
-            && (!renderOversized(dryProcessor, false, false, dryLarge)
+            && (!renderOversized(dryProcessor, false, false, false, dryLarge)
                 || !renderOversized(wetProcessor, false, true, false, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.00001))
         {
@@ -341,9 +341,10 @@ int main()
                 || !renderOversized(wetProcessor, false, false, true, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.0001))
         {
-            std::cerr << "EQ low-shelf gain control was bypassed or ineffective in the processor signal path.\\n";
+            std::cerr << "EQ low-shelf gain control was bypassed or ineffective in the processor signal path.\n";
             result = 1;
-        }    }
+        }
+    }
 
     // State restore must asynchronously reload the same SFZ bank and retain
     // the absolute path in the serialized APVTS state.
