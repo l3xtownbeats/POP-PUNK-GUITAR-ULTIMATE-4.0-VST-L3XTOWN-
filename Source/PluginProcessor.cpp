@@ -814,7 +814,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const float reverbMix = juce::jlimit(0.0f, 1.0f,
         parameters.getRawParameterValue("reverbMix")->load(std::memory_order_relaxed));
     if (parameters.getRawParameterValue("reverbOn")->load(std::memory_order_relaxed) > 0.5f
-        && reverbMix > 0.0f && samples <= maximumBlockSize)
+        && reverbMix > 0.0f)
     {
         juce::Reverb::Parameters reverbParameters;
         reverbParameters.roomSize = juce::jlimit(0.0f, 1.0f,
