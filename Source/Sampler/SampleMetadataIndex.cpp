@@ -27,9 +27,15 @@ bool isWav(const std::filesystem::path& path)
 }
 }
 
-SampleIndexReport SampleMetadataIndex::scanDirectory(const juce::File& directory) const
+SampleIndexReport SampleMetadataIndex::scanDirectory(
+    const juce::File& directory, std::size_t maximumSamples) const
 {
     SampleIndexReport report;
+    if (maximumSamples == 0)
+    {
+        report.errors.emplace_back("Sample metadata index limit must be greater than zero.");
+        return report;
+    }
     if (!directory.isDirectory())
     {
         report.errors.emplace_back("Sample library directory does not exist or is not a directory.");
@@ -129,6 +135,14 @@ SampleIndexReport SampleMetadataIndex::scanDirectory(const juce::File& directory
             report.warnings.emplace_back("Skipped WAV because aggregate library metadata would overflow 64-bit counters: "
                                          + canonical.string());
             continue;
+        }
+
+        if (report.samples.size() >= maximumSamples)
+        {
+            report.errors.emplace_back(
+                "Sample library exceeds the configured metadata index limit of "
+                + std::to_string(maximumSamples) + " readable WAV files.");
+            break;
         }
 
         report.totalFileBytes += bytes;
