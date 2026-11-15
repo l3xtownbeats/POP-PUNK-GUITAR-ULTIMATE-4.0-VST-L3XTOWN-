@@ -792,3 +792,8 @@ FACTORY LIBRARY LOCK возможен только после legal/resource val
 Статус: APPROVED · CONFIRMED · BASELINE LOCKED. Повторное подтверждение не изменяет ранее утверждённые scope, архитектурные ограничения, критерии качества и acceptance gates.
 
 2026-11-15 — NEON STAGE Gallery transaction fix committed: `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618`. Corrected stale Apply eligibility when a new preview fails after a previous successful preview. Failed preview rolls back to original active skin; Apply remains disabled until current selection is successfully previewed. Scope limited to GUI transaction handling; no APVTS/processor/audio/MIDI/skin identity changes. Exact-HEAD validation pending.
+
+
+2026-11-15 — USER-SUPPLIED POP-PUNK TONE REFERENCE ADDED
+
+Added `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_TONE_REFERENCE_2000_2023_RU.md` (commit `a2519ba11f427ecb04817ba3e06b66a4ba08e04b`). It preserves the user's 2000s genre formula, artist/era tone hypotheses, amp recipes, pickup/guitar references and seven song-level starting points. Explicit caveat retained: numerical knob settings are community tonal reconstructions, not published exact studio settings. Unverified equipment/production claims are flagged for future primary-source verification. The document is a research input only; it does not certify preset readiness, sample licensing, DSP implementation or change the approved phase order. Current work remains NEON STAGE visual completion.
