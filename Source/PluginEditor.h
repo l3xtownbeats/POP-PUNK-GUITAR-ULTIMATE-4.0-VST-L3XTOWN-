@@ -57,6 +57,7 @@ private:
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
+    bool shuttingDown = false;
     juce::File runtimeSkinRoot;
     juce::File heroArtworkFile;
     juce::Image heroArtwork;
