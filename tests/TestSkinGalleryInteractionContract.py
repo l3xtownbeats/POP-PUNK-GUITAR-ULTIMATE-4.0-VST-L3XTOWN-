@@ -37,6 +37,16 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertIn("ImageCache::getFromFile", preview_handler)
         self.assertIn("previewImage", paint_body)
 
+    def test_family_filter_is_derived_from_registry(self) -> None:
+        constructor_start = GALLERY.index("PPGUSkinGalleryPanel(std::vector<Skin> skinsIn")
+        constructor_end = GALLERY.index("~PPGUSkinGalleryPanel", constructor_start)
+        constructor = GALLERY[constructor_start:constructor_end]
+        self.assertIn("familyFilterKeys.clear()", constructor)
+        self.assertIn("for (const auto& skin : skins)", constructor)
+        self.assertIn("familyFilterKeys.contains(skin.familyKey)", constructor)
+        self.assertNotIn('"CARBON STUDIO", 2', constructor)
+        self.assertIn("familyFilterKeys[familyIndex]", GALLERY)
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
