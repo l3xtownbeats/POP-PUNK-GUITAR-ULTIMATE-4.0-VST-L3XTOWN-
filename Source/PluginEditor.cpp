@@ -996,7 +996,11 @@ class PPGUCircleOfFifths final : public juce::Component
 {
 public:
     explicit PPGUCircleOfFifths(std::function<void(int)> onSelectIn)
-        : onSelect(std::move(onSelectIn)) {}
+        : onSelect(std::move(onSelectIn))
+    {
+        setWantsKeyboardFocus(true);
+        setMouseClickGrabsKeyboardFocus(true);
+    }
     void setSelectedRoot(int value) { selectedRoot = juce::jlimit(0, 11, value); repaint(); }
     void paint(juce::Graphics& g) override
     {
@@ -1028,8 +1032,27 @@ public:
         g.setFont(10.0f);
         g.drawText("CIRCLE OF FIFTHS", getLocalBounds().removeFromTop(18), juce::Justification::centred);
     }
+    bool keyPressed(const juce::KeyPress& key) override
+    {
+        static const int roots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+        const int code = key.getKeyCode();
+        if (code != juce::KeyPress::leftKey && code != juce::KeyPress::rightKey
+            && code != juce::KeyPress::upKey && code != juce::KeyPress::downKey)
+            return false;
+
+        const auto found = std::find(std::begin(roots), std::end(roots), selectedRoot);
+        const int current = found == std::end(roots) ? 0 : static_cast<int>(std::distance(std::begin(roots), found));
+        const int direction = (code == juce::KeyPress::rightKey || code == juce::KeyPress::downKey) ? 1 : -1;
+        selectedRoot = roots[(current + direction + 12) % 12];
+        if (onSelect)
+            onSelect(selectedRoot);
+        repaint();
+        return true;
+    }
+
     void mouseDown(const juce::MouseEvent& e) override
     {
+        grabKeyboardFocus();
         static const int roots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
         const auto area = getLocalBounds().toFloat().reduced(24.0f);
         const auto centre = area.getCentre();
