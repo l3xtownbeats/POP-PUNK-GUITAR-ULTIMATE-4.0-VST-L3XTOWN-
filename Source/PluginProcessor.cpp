@@ -741,8 +741,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
     // Chorus: short modulated stereo delay. Delay memories are allocated in
     // prepareToPlay; this loop performs no heap work on the audio thread.
-    if (parameters.getRawParameterValue("chorusOn")->load(std::memory_order_relaxed) > 0.5f
-        && buffer.getNumSamples() <= maximumBlockSize)
+    if (parameters.getRawParameterValue("chorusOn")->load(std::memory_order_relaxed) > 0.5f)
     {
         const float mix = juce::jlimit(0.0f, 1.0f,
             parameters.getRawParameterValue("chorusMix")->load(std::memory_order_relaxed));
@@ -828,22 +827,31 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         reverbParameters.freezeMode = 0.0f;
         reverb.setParameters(reverbParameters);
 
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-            std::copy_n(buffer.getReadPointer(channel), samples,
-                        reverbDryBuffers[static_cast<size_t>(channel)].begin());
-
-        if (buffer.getNumChannels() >= 2)
-            reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), samples);
-        else
-            reverb.processMono(buffer.getWritePointer(0), samples);
-
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        // Process oversized host blocks in bounded chunks. Scratch buffers
+        // are sized in prepareToPlay, so this remains allocation-free on the
+        // audio thread and never silently bypasses reverb for unusual hosts.
+        const int chunkCapacity = juce::jmax(1, maximumBlockSize);
+        for (int offset = 0; offset < samples; offset += chunkCapacity)
         {
-            auto* data = buffer.getWritePointer(channel);
-            const auto& dry = reverbDryBuffers[static_cast<size_t>(channel)];
-            for (int sample = 0; sample < samples; ++sample)
-                data[sample] = dry[static_cast<size_t>(sample)]
-                    + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+            const int chunkSamples = juce::jmin(chunkCapacity, samples - offset);
+            for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                std::copy_n(buffer.getReadPointer(channel, offset), chunkSamples,
+                            reverbDryBuffers[static_cast<size_t>(channel)].begin());
+
+            if (buffer.getNumChannels() >= 2)
+                reverb.processStereo(buffer.getWritePointer(0, offset),
+                                     buffer.getWritePointer(1, offset), chunkSamples);
+            else
+                reverb.processMono(buffer.getWritePointer(0, offset), chunkSamples);
+
+            for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+            {
+                auto* data = buffer.getWritePointer(channel, offset);
+                const auto& dry = reverbDryBuffers[static_cast<size_t>(channel)];
+                for (int sample = 0; sample < chunkSamples; ++sample)
+                    data[sample] = dry[static_cast<size_t>(sample)]
+                        + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+            }
         }
     }
 
