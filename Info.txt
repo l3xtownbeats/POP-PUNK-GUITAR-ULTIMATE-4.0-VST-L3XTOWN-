@@ -3143,3 +3143,27 @@ unverified until their steps complete successfully.
 **Проверки:** changed C++/header/test files passed lexical delimiter scan. Full CTest/Windows Release/pluginval/FL Studio 20 not run. Exact-SHA workflow runs: 0.
 
 **Следующий шаг:** finish streaming/RT-safety audit, then exact-SHA CMake/CTest and Windows build.
+
+
+
+## 2026-11-15 — Sample metadata index resource bound
+
+**Статус:** SOURCE + REGRESSION TEST ADDED; EXACT-HEAD BUILD/CTest PENDING.
+
+В streaming/RT-safety audit обнаружено, что SFZ parser ограничивает число playable regions, а metadata scanner до этого мог без верхнего предела накапливать WAV metadata для всей выбранной папки. Для чрезмерно большой/случайно выбранной директории это создавало ненужный риск длительного сканирования и исчерпания памяти ещё до создания bounded page cache.
+
+**Изменения:**
+- `SampleMetadataIndex::defaultMaximumSamples` задаёт предел 65 536 readable WAV files на одну библиотеку.
+- `scanDirectory()` принимает необязательный лимит; значение 0 отклоняется сразу.
+- При обнаружении следующего корректного WAV сверх лимита сканирование завершается явной ошибкой, отчёт остаётся unsuccessful и частичный индекс не публикуется.
+- Счётчики total bytes/frames обновляются только для файлов, которые вошли в допустимый индекс.
+- `tests/SampleStreamingServiceTests.cpp` теперь проверяет полный индекс двух WAV и отказ при тестовом лимите 1 без создания огромного набора файлов.
+- Default API остаётся source-compatible; production SFZ loader автоматически использует безопасный предел.
+
+**Изменённые файлы:** `Source/Sampler/SampleMetadataIndex.h`, `Source/Sampler/SampleMetadataIndex.cpp`, `tests/SampleStreamingServiceTests.cpp`, `Info.txt`.
+
+**RT-safety audit:** audio-side page requests/acquire/release используют фиксированную SPSC очередь и атомарные cache leases; decode/file I/O остаются на worker thread. Snapshot publication отделена от длинного scan/load; voice readers освобождают leases до уничтожения streaming services. Это source-level review, не замена ThreadSanitizer или host stress test.
+
+**Проверки:** regression test source added; CMake/CTest, Windows x64 Release, pluginval strictness 5 и FL Studio 20 для нового exact HEAD ещё не запускались/не подтверждены. Не объявлять PASS до CI.
+
+**Следующий шаг:** запустить exact-HEAD Windows VST3 build + полный CTest; исправить все compile/test failures, затем pluginval и host acceptance.
