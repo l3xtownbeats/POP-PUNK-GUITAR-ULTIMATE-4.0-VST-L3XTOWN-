@@ -335,7 +335,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')
+          $folders = @('VST3', 'Sample Library', 'Import Sample Guitar', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -345,8 +345,8 @@ jobs:
           $sampleAudio = Get-ChildItem -LiteralPath $sampleRoot -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') }
           if ($sampleAudio.Count -lt 100) { throw "Canonical Sample Library library is incomplete: only $($sampleAudio.Count) audio files." }
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
-          # Factory SOUNDBANK is always assembled from the preserved canonical Sample Library tree.
-          Copy-Item -Path (Join-Path $sampleRoot '*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
+          # Ship the canonical factory library once, at the portable root. There is no SOUNDBANK alias/copy.
+          Copy-Item -Path (Join-Path $sampleRoot '*') -Destination (Join-Path $release 'Sample Library') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Optional source/reference material is shipped separately from runtime payload.
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Source/*') -Destination (Join-Path $release 'Source') -Recurse
@@ -394,15 +394,15 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination $runtimeSkins
 
           # Keep human-readable install notes and provenance in Resources.
-          $manualImport = Join-Path $release 'Import Sample Guitar/Sample Library'
+          $manualImport = Join-Path $release 'Import Sample Guitar'
           New-Item -ItemType Directory -Force -Path $manualImport | Out-Null
-          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Sample Library/*') -Destination $manualImport -Recurse -Force
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Import Sample Guitar/README_RU.md') -Destination $manualImport -Force
           Copy-Item -LiteralPath (Join-Path $PWD 'build/sample_library_audit.json') -Destination (Join-Path $release 'Resources/SAMPLE_LIBRARY_AUDIT.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES_REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES_REV18.txt')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK-REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS_REV18.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SAMPLE_SOURCES_AND_LICENSES_REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES_REV18.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SHA256SUMS-POP-PUNK-REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS_REV18.txt')
 
           $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
           $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
@@ -433,8 +433,8 @@ jobs:
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
-          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File | Where-Object { $soundExtensions -contains $_.Extension.ToLowerInvariant() }
-          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) audio files found." }
+          $soundFiles = Get-ChildItem (Join-Path $release 'Sample Library') -Recurse -File | Where-Object { $soundExtensions -contains $_.Extension.ToLowerInvariant() }
+          if ($soundFiles.Count -lt 100) { throw "Sample Library is incomplete: only $($soundFiles.Count) audio files found." }
           $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
           if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
 
@@ -443,7 +443,8 @@ jobs:
           =============================================================================
           STATUS: PORTABLE QA BUILD. FL STUDIO 20 MANUAL HOST ACCEPTANCE IS STILL REQUIRED.
           VST3/       The compiled Windows x64 VST3 plugin bundle.
-          SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
+          Sample Library/  Factory guitar audio, SFZ maps, licenses and SHA-256 manifest.
+          Import Sample Guitar/  Separate user drop-zone; never mixed with factory content.
                       Sound Hunter asset-level registry is empty; final factory admission is pending.
           PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
                       Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
@@ -455,7 +456,7 @@ jobs:
 
           PORTABLE USE — NO INSTALLER:
           1. Extract this ZIP anywhere. To use in FL Studio, copy only the .vst3 bundle into your VST3 folder and copy Skins/ beside it. No Setup.exe or installer is used.
-          2. Keep SOUNDBANK/ on disk and load an instrument SFZ through the plugin's SFZ load control.
+          2. Keep Sample Library/ intact. Put personal banks in Import Sample Guitar/ and load their SFZ through IMPORT GUITAR -> LOAD SFZ.
           3. The factory preset catalog is embedded in the plugin and also shipped
              as PRESETS/factory_bank_300.json. Portable preset examples are in PRESETS/examples/.
           4. Skins/ is the runtime palette directory beside the .vst3 bundle. Use SKIN or Ctrl+K to switch themes.
@@ -470,7 +471,7 @@ jobs:
           '@ | Set-Content -Encoding utf8 (Join-Path $release 'PORTABLE_README.txt')
 
           # Keep the ZIP runtime-only: remove temporary/cache/build debris, but retain
-          # the VST3 bundle, approved Skins, licensed SOUNDBANK, presets and provenance.
+          # the VST3 bundle, approved Skins, factory Sample Library, user Import Sample Guitar folder, presets and provenance.
           Get-ChildItem -LiteralPath $release -Directory -Force -Recurse |
             Where-Object { $_.Name -in @('.git', '__pycache__', '.pytest_cache', 'CMakeFiles') } |
             Sort-Object FullName -Descending |
@@ -481,7 +482,7 @@ jobs:
           if (-not (Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1)) {
             throw 'Portable package cleanup removed or failed to include the VST3 bundle.'
           }
-          foreach ($requiredFolder in @('SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')) {
+          foreach ($requiredFolder in @('Sample Library', 'Import Sample Guitar', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')) {
             $folderPath = Join-Path $release $requiredFolder
             if (-not (Test-Path -LiteralPath $folderPath -PathType Container) -or -not (Get-ChildItem -LiteralPath $folderPath -Force | Select-Object -First 1)) {
               throw "Portable package folder is missing or empty: $requiredFolder"
