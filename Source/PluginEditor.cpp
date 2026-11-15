@@ -1083,7 +1083,7 @@ void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int w, int h, bool 
                                               juce::PathStrokeType::rounded));
 }
 
-void PPGUPremiumLookAndFeel::drawTextEditorBackground(juce::Graphics& g, int width, int height,
+void PPGUPremiumLookAndFeel::fillTextEditorBackground(juce::Graphics& g, int width, int height,
                                                             juce::TextEditor& editor)
 {
     const auto surface = editor.isEnabled() ? palette.token("control_bg")
