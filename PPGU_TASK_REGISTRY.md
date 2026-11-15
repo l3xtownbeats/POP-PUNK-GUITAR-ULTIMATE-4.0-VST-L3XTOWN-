@@ -81,7 +81,7 @@
 |---|---|---|---|---|
 | UI-00 | Requirements-to-live-source component matrix A–H | Implemented (AUDIT COMPLETE; docs only) | P1 | INFO K |
 | UI-01 | Resolve exact canonical NEON STAGE reference and approved visual asset | Blocked (38 reference assets indexed; canonical image/approval mapping unresolved) | P1 | reference decision/asset evidence |
-| UI-02 | Reconcile SKIN-1/2/3 identity, default/fallback, manifests and Gallery without ID loss | Blocked (live manifest/ThemeManager mismatch) | P1 | UI-01; 102-entry no-loss map |
+| UI-02 | Retire obsolete historical skin catalog; enforce exactly 16 approved factory themes | Implemented in source/docs; exact-HEAD CI pending | P1 | exact-HEAD validator/build; FL Studio 20 host acceptance |
 | UI-03 | Complete main-window control parity and real callbacks/APVTS/state | Partial | P1 | UI-01/UI-02 |
 | UI-04 | Gallery Preview/Apply/Back/Favorites/keyboard navigation | Partial | P1 | UI-02; testable selection state |
 | UI-05 | Auxiliary OverlayManager lifecycle/focus/z-order integration | Not implemented | P1 | workspace API audit; lifecycle tests |
@@ -126,3 +126,15 @@
 | UI-07 | Current-branch exact-SHA Windows x64 build + CTest + pluginval after About panel commits | Unverified | P1 | current branch HEAD `1a1910aad51538ef556f7b09902f52bdea3b069b` |
 
 The About panel is a bounded source implementation, not completion of the full visual phase. AUTO SOUND HUNTER and CURATOR remain disabled pending production backends. Circle of Fifths/chord management are present as harmony setup; MIDI generation/playback remains unimplemented.
+
+
+## User-approved fixed factory theme boundary — 2026-11-15
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| SKIN-CLEAN-01 | Remove 101 obsolete historical theme records/assets and obsolete 102-entry registry/pack snapshots from current branch | Implemented; exact-HEAD CI pending | P1 | validator and package audit |
+| SKIN-CLEAN-02 | Enforce exactly sixteen approved factory-theme folders; reject legacy archive reintroduction | Implemented in validator source | P1 | exact-HEAD CI |
+| SKIN-CLEAN-03 | Disable arbitrary 50-theme generation and registry merge entry points | Implemented in source | P1 | script smoke test |
+| SKIN-16-01 | Complete SKIN-2…SKIN-16 artwork, G1–G4, registry promotion, runtime and host acceptance | Pending | P1 | per-theme artwork and runtime QA |
+
+The fixed product boundary is SKIN-1…SKIN-16 only. NEON STAGE is the shared GUI design system; SKIN-1 is NEON FORGE (DEFAULT). Only SKIN-1 is currently runtime-registered; do not claim all sixteen are already implemented/selectable.
