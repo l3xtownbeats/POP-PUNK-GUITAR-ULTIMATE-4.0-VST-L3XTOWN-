@@ -2875,3 +2875,21 @@ unverified until their steps complete successfully.
 **Validation:** production and test source committed. Python contract execution, CTest, Windows Release, pluginval and FL Studio 20 verification remain pending; no PASS is claimed. This source-level change must compile against the pinned JUCE 7.0.12 API before it is considered runtime-verified.
 
 **Next:** finish Gallery zero-visible selection semantics and lifecycle tests, then continue lossless SKIN-1 identity/registry reconciliation using the approved reference and authoritative journal.
+
+
+## 2026-11-15 — REV18 GALLERY-06 — invalidate hidden selection when filters return zero results
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `75dcc21d0621d2d2ab9625d06671d3b8080d7492`.
+**Regression-test commit:** `8d7054ffd4508a765ac35ecd7b12b9bce65a5b8a`.
+**Files:** `Source/PluginEditor.cpp`; `tests/TestSkinGalleryInteractionContract.py`.
+
+**Defect:** When a filter produced no visible themes, the previous selection remained valid against the full registry. Preview, Apply and Favorite could therefore remain enabled for a theme that the current filtered gallery did not show.
+
+**Correction:** An empty filtered result now invalidates the transient gallery selection (`selectedIndex=0`), clears preview cache and details, and refreshes control enabled state. Clearing the filter allows the normal active/first-visible fallback to select a valid item again. No skin is applied or persisted by this fallback.
+
+**Regression coverage added:** `test_empty_filter_invalidates_hidden_selection_and_actions`.
+
+**Compatibility boundary:** UI-only. No APVTS, audio/DSP, MIDI, sampler, preset serialization, SoundBank or skin asset changes.
+
+**Validation:** changes committed; contract test execution and JUCE build remain pending. No PASS claim.
