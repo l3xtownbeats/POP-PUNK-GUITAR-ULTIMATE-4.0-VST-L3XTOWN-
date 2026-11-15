@@ -96,3 +96,12 @@ Still pending for SKIN-7…SKIN-16: exact-size `assets/preview.png` and `assets/
 
 
 REV18 audit correction: `tools/audit_skin_rev18_assets.py` now audits the complete 16-theme approved sequence and resolves folder names from canonical manifest paths, preserving zero-padded IDs. Missing PNG preview/hero remain warnings unless strict mode is requested.
+
+
+## 2026-11-15 — legacy registry isolation
+
+- The plugin-facing canonical registry is now limited to the approved active default `skin-053` (logical SKIN-1). The 101 other records from the former 102-entry registry are retained in `isolated_legacy/theme_manifest.json` and are not enumerated by the plugin gallery or loaded by runtime selection.
+- The former merged pack manifest is retained at `isolated_legacy/theme_pack_manifest.json`; its expansion workflow is retired to prevent regeneration/merging of the historical 53–102 batch.
+- Historical asset directories remain physically preserved in the repository as cold storage. They are not deleted, registered, bundled as active gallery entries, or loaded through the canonical runtime registry.
+- SKIN-2…SKIN-16 remain governed by `approved_theme_sequence.json`; they are not exposed as selectable themes until their asset and runtime acceptance gates pass.
+- The active gallery uses registry ordinal positions while stable IDs and indices remain unchanged. This keeps `skin-053` stable without requiring its legacy numeric index to be 1.
