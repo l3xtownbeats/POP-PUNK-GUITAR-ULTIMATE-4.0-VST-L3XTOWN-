@@ -116,3 +116,13 @@
 | ENG-20 | AUTOMATED QUALITY TESTING | APPROVED REQUIREMENT | P1 | CTest/CI/host test strategy |
 
 Все записи отражают утверждение требований, не реализацию. Следующий технический рабочий пакет — MIDI ENGINE после завершения согласованной последовательности и проверки актуального source state.
+
+
+## REV.18 NEON STAGE follow-up — 2026-11-15
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| UI-06 | About panel source implementation (panel ID 2103; factual product information; theme propagation) | Implemented (EXACT-HEAD VALIDATION PENDING) | P2 | QA-01, resize/theme runtime checks |
+| UI-07 | Current-branch exact-SHA Windows x64 build + CTest + pluginval after About panel commits | Unverified | P1 | current branch HEAD `1a1910aad51538ef556f7b09902f52bdea3b069b` |
+
+The About panel is a bounded source implementation, not completion of the full visual phase. AUTO SOUND HUNTER and CURATOR remain disabled pending production backends. Circle of Fifths/chord management are present as harmony setup; MIDI generation/playback remains unimplemented.
