@@ -594,3 +594,14 @@ NON-REGRESSION / CONTRACTS: сохранить 27-control parity, только �
 ПЛАН ПРИЁМКИ: source inventory и binding audit → реализация недостающих bindings/визуальных состояний в утверждённом scope → отдельная проверка каждой панели/контрола → resize/window tests → theme-by-theme parity checks для 16 тем → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Все результаты фиксировать по точному commit SHA. Source presence или визуальный макет сами по себе не считаются доказательством завершения.
 
 Статус этой записи: SCOPE APPROVED / WORK AUTHORIZED / ACCEPTANCE CRITERIA FIXED. Это фиксация объёма и критериев, не заявление о завершённой реализации или пройденных тестах.
+
+
+2026-11-15 — GUI INTERACTION AUDIT / MELODY-PATTERN TAB BINDING FIX
+
+Audit of the live Source/PluginEditor.cpp constructor found that the MELODY and PATTERN tab callbacks called modeBox.setSelectedId(1/2) without a notification. JUCE ComboBox selection changes default to dontSendNotification; therefore the visible tab click could change the ComboBox display without notifying its existing playMode APVTS ComboBoxAttachment. This violated the approved UI → parameter binding contract.
+
+Fix committed in Source/PluginEditor.cpp: both callbacks now call setSelectedId(..., juce::sendNotificationSync), explicitly notifying the existing attachment. No new APVTS IDs, control IDs, parameter meanings, DSP, MIDI, processor state or audio callback behavior were added or changed.
+
+Commit: 7692eb0b2549ff7856eb38788994fcba79bcf451.
+
+Validation: source-level correction committed. Exact-HEAD Windows build, CTest, pluginval Strictness 5 and runtime/FL Studio interaction verification remain PENDING. This fix is one identified audit defect, not a claim that all controls are now complete.
