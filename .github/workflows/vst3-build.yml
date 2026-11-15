@@ -496,3 +496,49 @@ jobs:
           path: POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip
           if-no-files-found: error
 
+      - name: Package standalone plugin ZIP without sample library
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $standalone = Join-Path $PWD 'release-plugin-only'
+          New-Item -ItemType Directory -Force -Path $standalone | Out-Null
+          # Deliberately omit SOUNDBANK/Samples. This is a separate plugin download.
+          foreach ($folder in @('VST3', 'PRESETS', 'Skins', 'Resources', 'Documents', 'Licenses')) {
+            $source = Join-Path (Join-Path $PWD 'release') $folder
+            if (-not (Test-Path -LiteralPath $source -PathType Container)) { throw "Standalone package source folder missing: $folder" }
+            Copy-Item -LiteralPath $source -Destination $standalone -Recurse
+          }
+          @'
+          POP PUNK GUITAR ULTIMATE — STANDALONE PORTABLE VST3
+          ====================================================
+          This ZIP intentionally does NOT contain the Samples/SOUNDBANK library.
+          It is a separate plugin download, independent of the full sample-library ZIP.
+          Included: VST3 bundle, preset definitions/examples, approved Skins, runtime
+          Resources, Documents and Licenses.
+          Required guitar sample content must be supplied separately through a
+          compatible external SoundBank/SFZ library. Preset definitions do not imply
+          that their sample dependencies are bundled or ready to play.
+          
+          PORTABLE USE — NO INSTALLER:
+          1. Extract this ZIP.
+          2. Copy VST3/*.vst3 to the Windows VST3 folder.
+          3. Keep Skins/ beside the VST3 bundle.
+          4. Add/load a separately obtained compatible SoundBank when you want sample playback.
+          No Setup.exe or installer is included.
+          '@ | Set-Content -Encoding utf8 (Join-Path $standalone 'PLUGIN_ONLY_README.txt')
+          $bundle = Get-ChildItem (Join-Path $standalone 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
+          if (-not $bundle) { throw 'Standalone plugin ZIP has no compiled .vst3 bundle.' }
+          $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
+          $audio = Get-ChildItem -LiteralPath $standalone -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
+          if ($audio.Count -gt 0) { throw "Standalone plugin ZIP must not contain sample audio; found $($audio.Count) audio files." }
+          if (Test-Path (Join-Path $standalone 'SOUNDBANK')) { throw 'Standalone plugin ZIP must not contain SOUNDBANK/.' }
+          $pluginZip = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_STANDALONE_VST3_Windows_x64_NO_SAMPLES.zip'
+          Compress-Archive -Path (Join-Path $standalone '*') -DestinationPath $pluginZip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: POP-PUNK-GUITAR-ULTIMATE-STANDALONE-VST3-Windows-x64-NO-SAMPLES
+          path: POP_PUNK_GUITAR_ULTIMATE_STANDALONE_VST3_Windows_x64_NO_SAMPLES.zip
+          if-no-files-found: error
+
+
