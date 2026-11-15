@@ -228,6 +228,8 @@ private:
             g.drawText(tag, getWidth() - 68, 10, 58, 17, juce::Justification::centred);
         }
         void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+        void setSelected(bool value) { if (selected != value) { selected = value; repaint(); } }
+        int getIndex() const noexcept { return item.index; }
         void mouseEnter(const juce::MouseEvent&) override { hovered = true; repaint(); }
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
         void mouseUp(const juce::MouseEvent& event) override
@@ -251,6 +253,8 @@ private:
         void setPalette(const PPGUThemeManager::Palette& value) { for (auto& card : cards) card->setPalette(value); }
         void clearCards() { cards.clear(); }
         void addCard(std::unique_ptr<Card> card) { addAndMakeVisible(*card); cards.push_back(std::move(card)); }
+        void setSelectedIndex(int index)
+        { for (auto& card : cards) card->setSelected(card->getIndex() == index); }
         void resized() override
         {
             constexpr int gap = 12, minCardWidth = 205, cardHeight = 136;
@@ -266,7 +270,7 @@ private:
     private: std::vector<std::unique_ptr<Card>> cards;
     };
 
-    void selectDraft(int index) { if (selection.select(index)) rebuildCards(); }
+    void selectDraft(int index) { if (selection.select(index)) grid.setSelectedIndex(index); }
     void previewDraft() { if (preview && preview(selection.draftIndex())) selection.markPreviewed(); }
     void applyDraft()
     {
