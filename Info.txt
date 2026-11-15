@@ -3238,3 +3238,14 @@ unverified until their steps complete successfully.
 **Исправление тестовой обвязки до фиксации:** массив настроек расширен до фактического числа 24 элементов; вызовы oversized renderer приведены к единой сигнатуре с явным EQ флагом; восстановлены корректные границы блока и диагностическое сообщение.
 
 **Статус:** test source committed; exact-HEAD Windows build/CTest/pluginval пока не подтверждены. Threshold является regression guard, его устойчивость должна быть подтверждена запуском Windows CI. Это не утверждение о полном FX acceptance.
+
+
+## 2026-11-15 — Skin manifest validation: int64 dimension overflow guard
+
+**Изменено:** `Source/UI/ThemeManager.cpp`, `tests/ThemeManagerTests.cpp`.
+
+**Найденная проблема:** проверка размеров theme assets сужала значение `juce::var` до `int` до сравнения с ожидаемой шириной/высотой. Злонамеренное int64-значение (например, 4294967776) могло после переполнения превратиться в 480 и пройти проверку вместо отказа.
+
+**Исправлено:** размеры сравниваются в исходном 64-битном представлении до любого сужения. Добавлена регрессия: значение ширины 4294967776 вместо 480 должно быть отклонено, после ошибки ThemeManager обязан восстановить безопасную fallback-палитру. APVTS, аудиодвижок, 27-control contract, FX bypass IDs и theme identity не менялись.
+
+**Статус:** SOURCE PATCH + REGRESSION TEST ADDED; exact-SHA Windows build/CTest/pluginval pending. FL Studio 20 host acceptance не выполнялась и остаётся отдельной проверкой пользователя.

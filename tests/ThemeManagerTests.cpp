@@ -72,6 +72,14 @@ int main()
     const auto validJson = defaultManifest.loadFileAsString();
     expect(validJson.isNotEmpty(), "Skin_51 fallback manifest readable");
 
+    // A hostile int64 value must not wrap to the valid 480px width when narrowed.
+    const auto wrappedWidth = validJson.replace("\"width\": 480",
+                                                "\"width\": 4294967776");
+    expect(!manager.loadFromJson(wrappedWidth),
+           "int64 asset width that wraps to 480 after narrowing is rejected");
+    expect(manager.getPalette().usedFallback,
+           "overflowing asset dimensions restore default fallback");
+
     const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
     const auto skin52Json = skin52Manifest.loadFileAsString();
     expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
