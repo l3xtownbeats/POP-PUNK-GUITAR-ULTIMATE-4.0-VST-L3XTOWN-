@@ -916,61 +916,132 @@ private:
     int selectedGroup = 0;
 };
 
+class PPGUCircleOfFifths final : public juce::Component
+{
+public:
+    explicit PPGUCircleOfFifths(std::function<void(int)> onSelectIn)
+        : onSelect(std::move(onSelectIn)) {}
+    void setSelectedRoot(int value) { selectedRoot = juce::jlimit(0, 11, value); repaint(); }
+    void paint(juce::Graphics& g) override
+    {
+        static const char* names[] = { "C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#", "F" };
+        const auto area = getLocalBounds().toFloat().reduced(24.0f);
+        const float radius = juce::jmin(area.getWidth(), area.getHeight()) * 0.39f;
+        const auto centre = area.getCentre();
+        g.setColour(palette.token("control_border").withAlpha(0.65f));
+        g.drawEllipse(centre.x - radius, centre.y - radius, radius * 2.0f, radius * 2.0f, 1.2f);
+        for (int i = 0; i < 12; ++i)
+        {
+            const float angle = juce::MathConstants<float>::twoPi * static_cast<float>(i) / 12.0f
+                              - juce::MathConstants<float>::halfPi;
+            const float x = centre.x + std::cos(angle) * radius;
+            const float y = centre.y + std::sin(angle) * radius;
+            const bool active = i == selectedRoot;
+            const float node = active ? 29.0f : 24.0f;
+            g.setColour(active ? palette.token("accent") : palette.token("control_bg"));
+            g.fillEllipse(x - node * 0.5f, y - node * 0.5f, node, node);
+            g.setColour(active ? palette.token("window_bg") : palette.token("text_primary"));
+            g.setFont(juce::Font(active ? 13.0f : 11.5f, juce::Font::bold));
+            g.drawText(names[i], juce::Rectangle<float>(x - 22.0f, y - 11.0f, 44.0f, 22.0f),
+                       juce::Justification::centred);
+        }
+        g.setColour(palette.token("text_secondary"));
+        g.setFont(10.0f);
+        g.drawText("CIRCLE OF FIFTHS", getLocalBounds().removeFromTop(18), juce::Justification::centred);
+    }
+    void mouseDown(const juce::MouseEvent& e) override
+    {
+        static const int roots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+        const auto area = getLocalBounds().toFloat().reduced(24.0f);
+        const auto centre = area.getCentre();
+        const float radius = juce::jmin(area.getWidth(), area.getHeight()) * 0.39f;
+        const float dx = e.position.x - centre.x, dy = e.position.y - centre.y;
+        if (std::abs(std::sqrt(dx * dx + dy * dy) - radius) > 34.0f) return;
+        float angle = std::atan2(dy, dx) + juce::MathConstants<float>::halfPi;
+        if (angle < 0.0f) angle += juce::MathConstants<float>::twoPi;
+        const int index = juce::jlimit(0, 11, static_cast<int>(std::round(angle * 12.0f / juce::MathConstants<float>::twoPi)) % 12);
+        selectedRoot = roots[index];
+        if (onSelect) onSelect(selectedRoot);
+        repaint();
+    }
+    void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+private:
+    PPGUThemeManager::Palette palette;
+    std::function<void(int)> onSelect;
+    int selectedRoot = 0;
+};
+
 class PPGUAutoChordsPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
     {
-        title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
-        title.setFont(makeThemeFont(palette, 20.0f, false, true));
-        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        title.setText("AUTOCHORDS  /  HARMONY WORKSPACE", juce::dontSendNotification);
         addAndMakeVisible(title);
-        stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
-        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
+        stateLabel.setText("HARMONY SETUP ONLY — MIDI GENERATION / PLAYBACK ENGINE NOT CONNECTED",
+                           juce::dontSendNotification);
         addAndMakeVisible(stateLabel);
-        offButton.setButtonText("AUTOCHORDS OFF");
+        offButton.setButtonText("MIDI GENERATION UNAVAILABLE");
         offButton.setEnabled(false);
-        offButton.setTooltip("The AutoChords MIDI-generation engine is not implemented yet.");
+        offButton.setTooltip("This workspace edits harmony choices only. No MIDI is generated or played.");
         addAndMakeVisible(offButton);
 
         keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
-        modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
-        patternBox.addItemList({ "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4",
-                                   "Pattern 5", "Pattern 6", "Pattern 7", "Pattern 8" }, 1);
+        modeBox.addItemList({ "Major", "Minor" }, 1);
         addAndMakeVisible(keyBox);
         addAndMakeVisible(modeBox);
-        addAndMakeVisible(patternBox);
         keyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleRoot", keyBox);
         modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleMode", modeBox);
-        patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
+        keyBox.onChange = [this] { circle.setSelectedRoot(keyBox.getSelectedId() - 1); refreshChordNames(); };
+        modeBox.onChange = [this] { refreshChordNames(); };
+
+        circle.setSelectedRoot(0);
+        circle.setPalette(palette);
+        circle.onSelect = nullptr;
+        circleComponent = std::make_unique<PPGUCircleOfFifths>([this](int root)
         {
-            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
-            addAndMakeVisible(*label);
+            keyBox.setSelectedId(root + 1, juce::sendNotification);
+        });
+        circleComponent->setPalette(palette);
+        addAndMakeVisible(*circleComponent);
+
+        for (int i = 0; i < 8; ++i)
+        {
+            slotLabels[static_cast<size_t>(i)].setText("SLOT " + juce::String(i + 1), juce::dontSendNotification);
+            addAndMakeVisible(slotLabels[static_cast<size_t>(i)]);
+            auto& slot = chordSlots[static_cast<size_t>(i)];
+            slot.addItemList({ "I", "ii", "iii", "IV", "V", "vi", "vii°" }, 1);
+            slot.setSelectedId(i < 4 ? (i == 0 ? 1 : i == 1 ? 5 : i == 2 ? 6 : 4) : 1,
+                               juce::dontSendNotification);
+            slot.onChange = [this] { refreshChordNames(); };
+            addAndMakeVisible(slot);
         }
-        keyLabel.setText("KEY", juce::dontSendNotification);
-        modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
-        patternLabel.setText("RHYTHM PATTERN SLOT", juce::dontSendNotification);
+        summary.setText({}, juce::dontSendNotification);
+        summary.setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(summary);
+        refreshChordNames();
     }
+
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
-        title.setFont(makeThemeFont(palette, 20.0f, false, true));
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
-            label->setFont(makeThemeFont(palette, 9.5f, false, true));
-        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
-        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
-            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
-        offButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
-        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
-        for (auto* box : { &keyBox, &modeBox, &patternBox })
+        title.setFont(makeThemeFont(palette, 19.0f, false, true));
+        stateLabel.setFont(makeThemeFont(palette, 10.0f, false, true));
+        summary.setFont(makeThemeFont(palette, 12.0f, false, false));
+        for (auto* label : { &title, &stateLabel, &summary })
+            label->setColour(juce::Label::textColourId, label == &stateLabel
+                ? palette.token("warning") : palette.token("text_primary"));
+        for (auto& label : slotLabels)
         {
-            box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
-            box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
-            box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
-            box->setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+            label.setFont(makeThemeFont(palette, 9.5f, false, true));
+            label.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         }
+        for (auto* box : { &keyBox, &modeBox })
+            styleBox(*box);
+        for (auto& box : chordSlots) styleBox(box);
+        offButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_disabled"));
+        if (circleComponent) circleComponent->setPalette(palette);
         repaint();
     }
 
@@ -978,31 +1049,79 @@ public:
     {
         g.fillAll(palette.token("window_bg"));
         g.setColour(palette.token("control_border"));
-        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
+        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12.0f), 10.0f, 1.0f);
+        auto left = getLocalBounds().removeFromLeft(getWidth() / 2).reduced(14);
+        g.setColour(palette.token("text_secondary"));
+        g.setFont(makeThemeFont(palette, 10.0f, false, true));
+        g.drawText("HARMONY KEY", left.removeFromTop(20), juce::Justification::centredLeft);
     }
+
     void resized() override
     {
-        auto area = getLocalBounds().reduced(24);
-        title.setBounds(area.removeFromTop(38));
-        stateLabel.setBounds(area.removeFromTop(32));
-        offButton.setBounds(area.removeFromTop(44).removeFromLeft(210).reduced(2));
-        area.removeFromTop(24);
-        keyLabel.setBounds(area.removeFromTop(22));
-        keyBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
-        modeLabel.setBounds(area.removeFromTop(22));
-        modeBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
-        patternLabel.setBounds(area.removeFromTop(22));
-        patternBox.setBounds(area.removeFromTop(44).removeFromLeft(360));
+        auto area = getLocalBounds().reduced(22);
+        title.setBounds(area.removeFromTop(32));
+        stateLabel.setBounds(area.removeFromTop(26));
+        offButton.setBounds(area.removeFromTop(34).removeFromLeft(260));
+        area.removeFromTop(8);
+        auto columns = area;
+        auto left = columns.removeFromLeft(columns.getWidth() * 48 / 100);
+        columns.removeFromLeft(18);
+        auto right = columns;
+        auto keyRow = left.removeFromTop(34);
+        keyBox.setBounds(keyRow.removeFromLeft(keyRow.getWidth() / 2).reduced(2));
+        modeBox.setBounds(keyRow.reduced(2));
+        left.removeFromTop(8);
+        circleComponent->setBounds(left);
+        right.removeFromTop(4);
+        for (int i = 0; i < 8; ++i)
+        {
+            auto row = right.removeFromTop(36);
+            slotLabels[static_cast<size_t>(i)].setBounds(row.removeFromLeft(62));
+            chordSlots[static_cast<size_t>(i)].setBounds(row.reduced(2));
+            right.removeFromTop(4);
+        }
+        summary.setBounds(right.removeFromTop(54));
     }
+
 private:
+    void styleBox(juce::ComboBox& box)
+    {
+        box.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+        box.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+        box.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        box.setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+    }
+    void refreshChordNames()
+    {
+        static const char* noteNames[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        static const int majorOffsets[] = { 0, 2, 4, 5, 7, 9, 11 };
+        static const int minorOffsets[] = { 0, 2, 3, 5, 7, 8, 10 };
+        const int root = juce::jlimit(0, 11, keyBox.getSelectedId() - 1);
+        const bool minor = modeBox.getSelectedId() == 2;
+        const auto* offsets = minor ? minorOffsets : majorOffsets;
+        juce::StringArray names;
+        for (auto& slot : chordSlots)
+        {
+            const int degree = juce::jlimit(0, 6, slot.getSelectedId() - 1);
+            const int note = (root + offsets[degree]) % 12;
+            const bool minorChord = minor ? (degree == 0 || degree == 3 || degree == 4)
+                                          : (degree == 1 || degree == 2 || degree == 5);
+            const bool diminished = degree == 6;
+            names.add(juce::String(noteNames[note]) + (diminished ? "dim" : minorChord ? "m" : ""));
+        }
+        summary.setText("PROGRESSION  →  " + names.join("   –   "), juce::dontSendNotification);
+        if (circleComponent) circleComponent->setSelectedRoot(root);
+    }
+
     PPGUThemeManager::Palette palette;
     juce::AudioProcessorValueTreeState& apvts;
-    juce::Label title, stateLabel, keyLabel, modeLabel, patternLabel;
+    juce::Label title, stateLabel, summary;
     juce::TextButton offButton;
-    juce::ComboBox keyBox, modeBox, patternBox;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keyAttachment, modeAttachment, patternAttachment;
+    juce::ComboBox keyBox, modeBox;
+    std::array<juce::Label, 8> slotLabels;
+    std::array<juce::ComboBox, 8> chordSlots;
+    std::unique_ptr<PPGUCircleOfFifths> circleComponent;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keyAttachment, modeAttachment;
 };
 }
 
