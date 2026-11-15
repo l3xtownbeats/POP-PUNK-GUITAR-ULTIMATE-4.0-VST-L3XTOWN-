@@ -333,3 +333,28 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 6. Только после backend readiness проектировать Auto Discover UI в общей NEON STAGE дизайн-системе и подключать к реальному состоянию discovery.
 
 **Изменения кода в этом этапе:** не вносились. Это source/tree/spec audit и gate decision. Windows build, CTest и host acceptance не запускались. Следующий разрешённый этап — аудит следующего UI-модуля по очереди (FX EDIT) без изменения DSP/APVTS; backend-блокеры Sound Hunter остаются отдельно зарегистрированными.
+
+
+## Уточнение названия и утверждённого объёма: AUTO SOUND HUNTER ≠ AUTO DISCOVER
+
+**Дата:** 2026-11-15  
+**HEAD перед записью:** `4f042a93055fbe1936870fc9ed180d4ddf6d969a`.
+
+Зафиксировано уточнение пользователя: **AUTO SOUND HUNTER — ранее утверждённый функциональный модуль/направление; его нельзя подменять отдельным AUTO DISCOVER.** Предыдущая запись выше — аудит готовности AUTO DISCOVER и его backend gate, а не отмена и не переименование AUTO SOUND HUNTER.
+
+Утверждённая функциональная основа AUTO SOUND HUNTER зафиксирована в `docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md` (REV 10.1, DESIGNED):
+- поиск бесплатных гитарных one-shots, single notes, power chords, chugs, harmonics, loops и preset/sample packs;
+- Deep Search через единый DiscoveryEngine S6.5: source adapters, query synthesis RU/EN, pagination/checkpoint, file screening, download в quarantine, verification, conversion, index и атомарный commit;
+- лицензии на уровне каждого asset: GREEN только при доказанной CC0/PD и прохождении всех gates; YELLOW — только ручной импорт; RED — исключить;
+- SHA-256 дедупликация, provenance, source/asset ID, license evidence, retrieval date, file integrity и guitar-only gate;
+- Style Classifier: PP-ROOT, PP-NEO2000, PP-MODERN, PP-EMO и UNCATEGORIZED; сомнительный материал не получает GUITAR_CONFIRMED автоматически;
+- технический screening, copyright-suspect triage и обязательное человеческое прослушивание/кураторское одобрение перед GOLD;
+- передача только прошедших проверку assets в существующий SoundBank S6 / Preset Browser через единый pipeline;
+- поддержка pause/cancel, checkpoint/resume, bounded concurrency, timeouts/retry/backoff, size/disk quotas и диагностических статусов;
+- связанные требования к Curator, curated stacks, attribution report и подсчёту только реально playable/validated presets.
+
+**Разделение пользовательских точек входа:** SOUND HUNTER — поисково-кураторская подсистема и каталог гитарных звуков; AUTO DISCOVER и IMPORT GUITAR — отдельные пользовательские точки входа в согласованной архитектуре S6.5. Сходство backend не делает эти названия взаимозаменяемыми.
+
+**Статус честно:** функционал AUTO SOUND HUNTER утверждён на уровне PRODUCT/SYSTEM DESIGN; в REV 10.1 он обозначен DESIGNED, а production DiscoveryEngine, DeepSearchWorker, StyleClassifier, GREEN adapters, asset registry и автоматическое пополнение SoundBank в проверенном HEAD пока не подтверждены как реализованные. Утверждение функционала не равно доказательству готового кода. Нельзя удалять или урезать утверждённые функции; требуется поэтапно реализовать их и тестировать по H9 acceptance tests.
+
+**Следующий аудит:** отдельно проверить AUTO SOUND HUNTER по полному утверждённому функционалу REV 10.1 и фактическому дереву исходников. AUTO DISCOVER остаётся самостоятельным пунктом плана. Не создавать фиктивный UI и не менять Audio Engine/DSP/MIDI/APVTS/control IDs.
