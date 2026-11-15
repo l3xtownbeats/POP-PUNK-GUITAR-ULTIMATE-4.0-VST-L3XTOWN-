@@ -476,20 +476,52 @@ ParseResult parseFile(const std::filesystem::path& sfzPath)
         result.errors.push_back({ 0, "SFZ file exceeds the 16 MiB parser safety limit." });
         return result;
     }
+    const auto initialWriteTime = std::filesystem::last_write_time(sfzPath, fileError);
+    if (fileError)
+    {
+        result.errors.push_back({ 0, "Could not inspect SFZ modification time: " + fileError.message() });
+        return result;
+    }
+
     std::ifstream stream(sfzPath, std::ios::binary);
     if (!stream)
     {
         result.errors.push_back({ 0, "Could not open SFZ file: " + sfzPath.string() });
         return result;
     }
-    std::ostringstream contents;
-    contents << stream.rdbuf();
-    if (stream.bad())
+
+    // Read exactly the indexed size. A file that grows/shrinks during the
+    // read must not bypass the parser's memory bound or produce a partial map.
+    std::string contents(static_cast<std::size_t>(fileBytes), '\\0');
+    if (fileBytes > 0)
+        stream.read(contents.data(), static_cast<std::streamsize>(fileBytes));
+    if (stream.bad() || static_cast<std::uint64_t>(stream.gcount()) != fileBytes)
     {
-        result.errors.push_back({ 0, "I/O error while reading SFZ file: " + sfzPath.string() });
+        result.errors.push_back({ 0, "I/O error or concurrent truncation while reading SFZ file: " + sfzPath.string() });
         return result;
     }
-    return parseText(contents.str(), sfzPath.parent_path());
+    char unexpectedTrailingByte = 0;
+    if (stream.get(unexpectedTrailingByte))
+    {
+        result.errors.push_back({ 0, "SFZ file grew while being read; retry the load." });
+        return result;
+    }
+
+    fileError.clear();
+    const auto finalBytes = std::filesystem::file_size(sfzPath, fileError);
+    if (fileError || finalBytes != fileBytes)
+    {
+        result.errors.push_back({ 0, "SFZ file size changed while being read; retry the load." });
+        return result;
+    }
+    fileError.clear();
+    const auto finalWriteTime = std::filesystem::last_write_time(sfzPath, fileError);
+    if (fileError || finalWriteTime != initialWriteTime)
+    {
+        result.errors.push_back({ 0, "SFZ file changed while being read; retry the load." });
+        return result;
+    }
+    return parseText(contents, sfzPath.parent_path());
 }
 
 std::vector<Diagnostic> validateSampleFiles(const ParseResult& parsed)
