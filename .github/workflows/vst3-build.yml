@@ -12,6 +12,7 @@ on:
       - 'tests/**'
       - 'SKIN/**'
       - 'Samples/**'
+      - 'Sample Library/**'
       - 'tools/**'
       - '.github/workflows/vst3-build.yml'
       - 'presets/factory_bank_300.json'
@@ -77,17 +78,17 @@ jobs:
       - name: Assert canonical Samples library workspace
         shell: pwsh
         run: |
-          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Sample Library'
           if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) {
-            throw 'Canonical Samples library workspace is missing; do not replace it with an empty directory.'
+            throw 'Canonical Sample Library library workspace is missing; do not replace it with an empty directory.'
           }
-          Write-Host 'Canonical Samples library workspace confirmed.'
+          Write-Host 'Canonical Sample Library library workspace confirmed.'
 
       - name: Restore redistributable sample library cache
         id: sample-cache
         uses: actions/cache@v4
         with:
-          path: Samples
+          path: Sample Library
           key: ppgu-samples-rev18-11-guitar-sources-v2
           restore-keys: |
             ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
@@ -97,7 +98,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Sample Library'
           New-Item -ItemType Directory -Force -Path $sampleRoot | Out-Null
           $headers = @{ 'User-Agent' = 'POP-PUNK-GUITAR-ULTIMATE-build'; 'Accept' = 'application/vnd.github+json' }
 
@@ -217,7 +218,7 @@ jobs:
           }
           $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK-REV18.txt')
           @'
-          REV.18 natural guitar sources in managed Samples:
+          REV.18 natural guitar sources in managed Sample Library:
           - Meta Open Sound Steel Guitar and Nylon Guitar (CC0-1.0): https://github.com/facebookincubator/Meta-open-sound
           - FreePats FSBS Clean, Distortion 1, Distortion 2, Direct and Jazz (CC0-1.0): https://github.com/freepats
           - FreePats Spanish Classical Guitar (CC0-1.0): https://github.com/freepats/spanish-classical-guitar
@@ -230,7 +231,7 @@ jobs:
       - name: Validate restored sample library and licenses
         shell: pwsh
         run: |
-          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Sample Library'
           $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
           $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
           if ($audioFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($audioFiles.Count) audio files found." }
@@ -340,10 +341,10 @@ jobs:
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
 
-          $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
-          if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) { throw 'Canonical Samples library is missing; release packaging stopped.' }
+          $sampleRoot = Join-Path $env:PROJECT_DIR 'Sample Library'
+          if (-not (Test-Path -LiteralPath $sampleRoot -PathType Container)) { throw 'Canonical Sample Library library is missing; release packaging stopped.' }
           $sampleAudio = Get-ChildItem -LiteralPath $sampleRoot -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') }
-          if ($sampleAudio.Count -lt 100) { throw "Canonical Samples library is incomplete: only $($sampleAudio.Count) audio files." }
+          if ($sampleAudio.Count -lt 100) { throw "Canonical Sample Library library is incomplete: only $($sampleAudio.Count) audio files." }
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           # Factory SOUNDBANK is always assembled from the preserved canonical Samples tree.
           Copy-Item -Path (Join-Path $sampleRoot '*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
@@ -394,6 +395,9 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $sourceSkinRoot 'control_schema.json') -Destination $runtimeSkins
 
           # Keep human-readable install notes and provenance in Resources.
+          $manualImport = Join-Path $release 'Import Sample Guitar/Sample Library'
+          New-Item -ItemType Directory -Force -Path $manualImport | Out-Null
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Sample Library/*') -Destination $manualImport -Recurse -Force
           Copy-Item -LiteralPath (Join-Path $PWD 'build/sample_library_audit.json') -Destination (Join-Path $release 'Resources/SAMPLE_LIBRARY_AUDIT.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')

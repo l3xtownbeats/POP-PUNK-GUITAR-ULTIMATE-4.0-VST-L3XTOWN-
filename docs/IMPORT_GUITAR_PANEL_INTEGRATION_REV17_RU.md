@@ -45,3 +45,8 @@ Still pending:
 7. Windows x64 Release build, CTest, pluginval strictness 5 and FL Studio 20 validation.
 
 No successful build is claimed. The workflow-run connector query for the integration commit returned no runs; that query only exposes pull-request-triggered runs, so this is not proof that no push workflow exists or ran.
+
+
+## REV.19 — Import Sample Guitar manual package
+
+Portable builds expose `Import Sample Guitar/Sample Library/` for manual SFZ loading. Use the existing IMPORT GUITAR → LOAD SFZ panel and select the SFZ map while preserving its relative audio paths and adjacent license/attribution files. Standalone WAV import is not implemented by this package-layout change.

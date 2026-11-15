@@ -1,6 +1,6 @@
-# PPGU Samples — portable natural-guitar library
+# PPGU Sample Library — portable natural-guitar library
 
-This directory is the source-controlled inventory and layout for the PPGU guitar banks. The actual WAV/FLAC source payloads are fetched by the Windows VST3 CI workflow into its managed `Samples/` workspace, verified, and included in the portable package; large audio payloads are not committed as opaque Git blobs.
+This directory is the source-controlled inventory and layout for the PPGU guitar banks. The actual WAV/FLAC source payloads are fetched by the Windows VST3 CI workflow into its managed `Sample Library/` workspace, verified, and included in the portable package; large audio payloads are not committed as opaque Git blobs.
 
 ## Portable package contract
 
@@ -54,20 +54,20 @@ There is no artificial product-level cap on the number of user BANKs or total li
 
 ## Постоянное правило сохранности SAMPLES
 
-**Samples/ — каноническая постоянная библиотека звуков проекта. Её нельзя удалять, очищать целиком, заменять пустой структурой или пересоздавать с нуля.** Разрешены только добавление новых банков и безопасная реорганизация с сохранением всех исходников.
+**Sample Library/ — каноническая постоянная библиотека звуков проекта. Её нельзя удалять, очищать целиком, заменять пустой структурой или пересоздавать с нуля.** Разрешены только добавление новых банков и безопасная реорганизация с сохранением всех исходников.
 
 - Сохранять аудио, SFZ, LICENSE/ATTRIBUTION, manifests и SHA-256.
 - Сомнительные/дублирующиеся материалы изолировать для проверки, не удалять автоматически.
 - CI cache может ускорять восстановление, но не заменяет библиотеку; ingest добавляет отсутствующие банки, существующие проверенные каталоги сохраняются.
-- Portable release собирает SOUNDBANK/ непосредственно из Samples/.
+- Portable release собирает SOUNDBANK/ непосредственно из Sample Library/.
 - Удаление допустимо только для временных вложенных .git metadata клонированных upstream-репозиториев, не для аудио или provenance.
 - Право на factory inclusion требует разрешения на коммерческое встраивание и распространение raw samples.
 
 ## Утверждённая последовательность: сначала заводская библиотека, затем пресеты
 
-1. Сначала формируется и проверяется заводская библиотека из реальных гитарных аудиофайлов Samples/.
+1. Сначала формируется и проверяется заводская библиотека из реальных гитарных аудиофайлов Sample Library/.
 2. Каждый банк получает подтверждённый источник/лицензию, SFZ mapping, диапазон нот, velocity/articulation metadata, SHA-256 и результаты технического аудита.
-3. Только после этого создаются заводские пресеты, непосредственно назначенные на реальные sample zones/banks из Samples/. Пресет не считается готовым, если он содержит только описание тембра или неподключённые параметры.
+3. Только после этого создаются заводские пресеты, непосредственно назначенные на реальные sample zones/banks из Sample Library/. Пресет не считается готовым, если он содержит только описание тембра или неподключённые параметры.
 4. Каждый пресет проходит проверку: sample references разрешаются, ноты/velocity работают, звучание прослушано, уровни и FX согласованы, сохранение/загрузка проверены.
 5. Factory preset library остаётся закреплённой за проверенной заводской Sample Library. Новые банки и пресеты пополняются добавочно; уже утверждённые материалы не удаляются.
 

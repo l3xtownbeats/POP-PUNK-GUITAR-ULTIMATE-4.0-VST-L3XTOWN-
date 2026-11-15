@@ -1076,3 +1076,10 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 - Samples/ закреплена как persistent canonical library: только additive ingest и безопасная реорганизация; аудио/SFZ/license/provenance не удаляются.
 - CI получил guard на наличие Samples/ и минимальную наполненность; release SOUNDBANK копируется напрямую из Samples/.
 - Validation pending on exact commit SHA.
+
+
+## 2026-11-15 — TX-SAMPLE-LIBRARY-RENAME-IMPORT-001
+- User approved renaming the canonical source directory from `Samples/` to `Sample Library/`, preserving all contents (no destructive recreation).
+- Portable package adds `Import Sample Guitar/Sample Library/` as the manually browsable/importable source tree; manual loading uses the existing IMPORT GUITAR → LOAD SFZ route and preserves SFZ-relative audio paths and source notices.
+- Runtime `SOUNDBANK/` remains the bundled factory playback copy.
+- This does not claim standalone WAV import or a completed factory audio library. Exact-SHA CI and package readback pending.

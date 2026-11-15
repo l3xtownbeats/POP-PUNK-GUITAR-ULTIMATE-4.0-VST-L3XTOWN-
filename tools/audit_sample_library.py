@@ -14,7 +14,7 @@ def main():
  ap=argparse.ArgumentParser()
  ap.add_argument("--root",type=Path,required=True); ap.add_argument("--output",type=Path,required=True)
  a=ap.parse_args(); root=a.root.resolve()
- if not root.is_dir(): raise SystemExit("Samples root missing")
+ if not root.is_dir(): raise SystemExit("Sample Library root missing")
  audio=sorted(p for p in root.rglob("*") if p.is_file() and p.suffix.lower() in AUDIO)
  maps=sorted(root.rglob("*.sfz"))
  licenses=sorted(p for p in root.rglob("*") if p.is_file() and p.name.lower() in {"license","license.txt","copying","copying.txt"})
@@ -28,7 +28,7 @@ def main():
     missing.append({"sfz":sfz.relative_to(root).as_posix(),"sample":raw,"error":"path_escapes_root"}); continue
    if not target.is_file(): missing.append({"sfz":sfz.relative_to(root).as_posix(),"sample":raw,"error":"missing_file"})
  dirs=sorted({p.parent for p in audio})
- report={"schemaVersion":"1.0.0","audit":"READ_ONLY_CONTENT_INVENTORY","root":"Samples/",
+ report={"schemaVersion":"1.0.0","audit":"READ_ONLY_CONTENT_INVENTORY","root":"Sample Library/",
   "audioFileCount":len(audio),"audioBytes":sum(p.stat().st_size for p in audio),
   "audioExtensions":dict(Counter(p.suffix.lower() for p in audio)),"sfzFileCount":len(maps),
   "licenseFileCount":len(licenses),

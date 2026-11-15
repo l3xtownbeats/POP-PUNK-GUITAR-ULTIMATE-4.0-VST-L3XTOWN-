@@ -2924,3 +2924,12 @@ Status: IMPLEMENTED IN SOURCE / VALIDATION PENDING.
 - Portable release SOUNDBANK/ собирается непосредственно из Samples/; CI проверяет наличие и минимальную наполненность каталога перед упаковкой.
 Статус: USER APPROVED / POLICY RECORDED / WORKFLOW GUARD ADDED / EXACT-SHA CI PENDING.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — TX-SAMPLE-LIBRARY-RENAME-IMPORT-001
+Пользователь утвердил новое имя канонической папки `Sample Library/` вместо `Samples/`. Это переименование с сохранением содержимого, а не очистка/пересоздание библиотеки. Все аудио, SFZ, LICENSE/атрибуция, manifests и SHA-256 должны сохраняться при переносе.
+Portable package дополнительно предоставляет `Import Sample Guitar/Sample Library/` для ручного доступа к исходной структуре. Инструкция: IMPORT GUITAR → LOAD SFZ → выбрать карту SFZ внутри этой папки; сохранять относительные пути к аудиофайлам.
+Runtime SOUNDBANK/ остаётся отдельной копией заводского банка для автоматической загрузки плагином. Текущий Import Guitar loader SFZ-based; standalone WAV import не заявляется.
+Статус: USER APPROVED / REPOSITORY RENAME AND PACKAGE LAYOUT IMPLEMENTATION IN PROGRESS.
+==============================================================================
