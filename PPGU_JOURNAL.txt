@@ -941,3 +941,15 @@ A further source audit traced the auxiliary-window geometry path:
 - The source comment in `handleGeometryChanged()` says manual geometry is user geometry and automatic tiling runs only when the panel set or workspace size changes. That comment is consistent with relayout on panel-set changes, but does not clarify whether saved manual bounds should take precedence on a single-panel reopen or be deliberately normalized by the auto-tile contract.
 
 No source behavior was changed in this pass because the intended precedence between restored user geometry and automatic tiling is not explicitly established by the current workspace contract. This is recorded as an unresolved persistence/tiling acceptance item, not as a confirmed defect or completed fix. Resolve against the approved workspace behavior before altering layout semantics. Required tests after resolution: first open, manual move/resize, close/reopen, second panel open/close, workspace resize, scale/gap change, maximize/restore, and overflow scrolling. Exact-HEAD build, CTest, pluginval and host validation remain pending.
+
+
+2026-11-15 — USER-APPROVED AUXILIARY WINDOW SIZE / BOUNDARY REQUIREMENT
+
+The user clarified the intended behavior for plugin auxiliary/browser windows:
+- Auxiliary windows are plugin-internal panels, not desktop top-level windows and not monitor/full-screen windows.
+- Their maximum extent is the plugin editor's own workspace/viewport client area. A maximize action must never expand a panel to the full 17-inch (or any other) display or outside the plugin editor.
+- Normal/default windows should remain comfortably readable and proportionate to the plugin editor, following familiar instrument-plugin conventions rather than consuming the entire display.
+- When the plugin editor/workspace is small, preserve legibility: use the existing workspace layout/scrolling/overflow behavior rather than shrinking content to unreadable dimensions or escaping the plugin boundary.
+- All panel content must remain accessible; the user should be able to read and operate the panel without it behaving like a separate full-screen application window.
+
+This requirement clarifies the existing in-plugin workspace contract; it does not authorize new panels, controls, IDs, or changes to the approved product structure. The current maximize implementation targets the workspace Viewport view area, which is the intended boundary in source. Runtime verification is still required to confirm that the viewport is correctly constrained by the host plugin editor at common editor sizes and that readable sizing/overflow behavior is preserved. Include tests for small, medium and large plugin editor sizes, maximize/restore, resize, and overflow scrolling. No source behavior was changed by this requirement record.
