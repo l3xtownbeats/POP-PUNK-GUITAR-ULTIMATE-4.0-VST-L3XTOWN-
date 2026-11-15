@@ -988,19 +988,19 @@ void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, i
     const bool hovered = enabled && slider.isMouseOverOrDragging();
     const bool focused = enabled && slider.hasKeyboardFocus(true);
 
-    g.setColour(palette.shadow.withAlpha(0.34f));
+    g.setColour(palette.token("shadow").withAlpha(0.34f));
     g.fillEllipse(cx - r - 1.0f, cy - r + 3.0f, d + 2.0f, d + 2.0f);
 
     juce::Path track;
     track.addCentredArc(cx, cy, r + 5.0f, r + 5.0f, 0.0f, start, end, true);
-    g.setColour(enabled ? palette.border : palette.textDisabled.withAlpha(0.55f));
+    g.setColour(enabled ? palette.border : palette.token("text_disabled").withAlpha(0.55f));
     g.strokePath(track, juce::PathStrokeType(4.0f, juce::PathStrokeType::curved,
                                              juce::PathStrokeType::rounded));
 
     juce::Path value;
     value.addCentredArc(cx, cy, r + 5.0f, r + 5.0f, 0.0f, start, angle, true);
     g.setColour(enabled ? (hovered ? palette.accent.brighter(0.12f) : palette.accent)
-                        : palette.textDisabled.withAlpha(0.42f));
+                        : palette.token("text_disabled").withAlpha(0.42f));
     g.strokePath(value, juce::PathStrokeType(4.0f, juce::PathStrokeType::curved,
                                              juce::PathStrokeType::rounded));
 
@@ -1018,10 +1018,10 @@ void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, i
     pointer.startNewSubPath(cx, cy);
     pointer.lineTo(cx + std::sin(angle) * r * 0.56f,
                    cy - std::cos(angle) * r * 0.56f);
-    g.setColour(enabled ? palette.text : palette.textDisabled);
+    g.setColour(enabled ? palette.text : palette.token("text_disabled"));
     g.strokePath(pointer, juce::PathStrokeType(2.6f, juce::PathStrokeType::curved,
                                                 juce::PathStrokeType::rounded));
-    g.setColour(enabled ? palette.accentSecondary : palette.textDisabled);
+    g.setColour(enabled ? palette.accentSecondary : palette.token("text_disabled"));
     g.fillEllipse(cx - 2.5f, cy - 2.5f, 5.0f, 5.0f);
 }
 
@@ -1044,7 +1044,7 @@ void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Butto
         bounds.getX(), bounds.getY(), face.darker(0.16f), bounds.getX(), bounds.getBottom(), false));
     g.fillRoundedRectangle(bounds, 7.0f);
 
-    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.lowlight));
+    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.token("lowlight")));
     g.drawRoundedRectangle(bounds, 7.0f, focused ? 2.0f : 1.0f);
 
     if (button.getToggleState() && enabled)
@@ -1069,7 +1069,7 @@ void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int w, int h, bool 
 
     g.setColour(face);
     g.fillRoundedRectangle(bounds, 7.0f);
-    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.lowlight));
+    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.token("lowlight")));
     g.drawRoundedRectangle(bounds, 7.0f, focused ? 2.0f : 1.0f);
 
     const float cx = bounds.getRight() - 17.0f;
@@ -1078,7 +1078,7 @@ void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int w, int h, bool 
     arrow.startNewSubPath(cx - 4.0f, cy - 2.0f);
     arrow.lineTo(cx, cy + 2.0f);
     arrow.lineTo(cx + 4.0f, cy - 2.0f);
-    g.setColour(enabled ? palette.accent : palette.textDisabled);
+    g.setColour(enabled ? palette.accent : palette.token("text_disabled"));
     g.strokePath(arrow, juce::PathStrokeType(1.8f, juce::PathStrokeType::curved,
                                               juce::PathStrokeType::rounded));
 }
