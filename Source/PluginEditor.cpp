@@ -984,7 +984,7 @@ namespace { void getPluginModuleAnchor() {} }
 void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
 {
  const float d=juce::jmin((float)w,(float)h)*.76f,r=d*.5f,cx=x+w*.5f,cy=y+h*.5f-2,angle=start+pos*(end-start);
- g.setColour(juce::Colours::black.withAlpha(.34f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
+ g.setColour(palette.tokens.shadow.withAlpha(.34f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
  juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.border);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
  juce::Path value;value.addCentredArc(cx,cy,r+5,r+5,0,start,angle,true);g.setColour(slider.isEnabled()?palette.accent:palette.textSecondary.withAlpha(.4f));g.strokePath(value,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
  g.setGradientFill(juce::ColourGradient(palette.surfaceRaised.brighter(.12f),cx,cy-r,palette.canvasInset.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
@@ -1082,7 +1082,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     presetSearch.onTextChange = refreshPresetList;
     refreshPresetList();
     loadButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("accent"));
-    loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    loadButton.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("window_bg"));
     loadButton.onClick = [this] { openImportGuitarPanel(); };
     addAndMakeVisible(loadButton);
     auxiliaryWorkspace = std::make_unique<PPGUMultiWindowWorkspace>();
@@ -1162,7 +1162,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         b.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("control_bg"));
         b.setColour(juce::TextButton::buttonOnColourId, themeManager.getPalette().token("accent"));
         b.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
-        b.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+        b.setColour(juce::TextButton::textColourOnId, themeManager.getPalette().token("window_bg"));
         fxAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, fxParameterIDs[i], b);
         b.onClick = [this, i] { openFxEditPanel(static_cast<int>(i)); };
         addAndMakeVisible(b);
@@ -1476,7 +1476,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
+    const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
     const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
     if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
     {
@@ -1628,7 +1628,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             [safe]
             {
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(52, true);
+                    safe->loadSkinByIndex(53, true);
             },
             [safe]
             {
