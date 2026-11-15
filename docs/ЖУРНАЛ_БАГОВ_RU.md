@@ -13,3 +13,12 @@
 - **Commits:** `e28aa685bf99f605e71a7cc4c1bc2d8caa44514c`, `0e472a056377925a24a2f8f868fedd8ee0d77530`, `869625491b182a8ae84706072e5f7087599f49a2`.
 - **CI:** предыдущий SHA `fe62a17344aac0c6d594a4be2da3aa09705b5d25` прошёл run `43712521581`; этот результат не покрывает последующие коммиты. Новый exact-HEAD run ожидается.
 - **Status:** FIX COMMITTED / CI PENDING / UI HOST ACCEPTANCE OPEN.
+## UI-SKIN-002 — Устаревшая подпись восстановления темы
+
+- **Severity:** Low (несоответствие утверждённой идентичности в UI).
+- **Root cause:** кнопка Settings называла действие `RESTORE NEON STAGE DEFAULT`, хотя утверждённая SKIN-1 называется `NEON FORGE (DEFAULT)`; NEON STAGE — название общей GUI design system.
+- **Fix:** подпись заменена на `RESTORE NEON FORGE DEFAULT`.
+- **Scope:** только видимый текст; control/APVTS IDs, callback, выбор темы и persistence не изменялись.
+- **Commit:** `c58252182aa11144b6b14951fc6f97e512202ab8`.
+- **Validation:** exact-HEAD Windows build/CTest/pluginval pending.
+- **Status:** FIX COMMITTED / CI PENDING / VISUAL HOST ACCEPTANCE OPEN.
