@@ -1,3 +1,6 @@
+> **SUPERSEDED — 2026-11-15 USER-APPROVED DECISION**  
+> This document is retained only as a historical audit snapshot. Its 102-entry no-loss migration plan is cancelled. The user explicitly approved removing the obsolete historical catalog. The product now has exactly sixteen approved factory themes, defined by `SKIN/approved_theme_sequence.json`. The old archive and historical registry/pack snapshots have been removed from the current branch. Do not follow the legacy instructions below or restore the old catalog. NEON STAGE is the shared GUI design system; SKIN-1 is NEON FORGE (DEFAULT). Only SKIN-1 is currently runtime-registered; SKIN-2…SKIN-16 remain under artwork/runtime acceptance.
+
 # REV18 SKIN-2…SKIN-6 — No-Loss Compatibility Audit
 
 **Date:** 2026-11-15  
