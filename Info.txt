@@ -2864,3 +2864,19 @@ Evidence boundary: these are theme-pack generation and contract/audit CI results
 
 Status: SIX THEME PACK GENERATION + DETERMINISM + 27-CONTROL PARITY + SHA-256/PNG CRC AUDITS = CI SUCCESS / RUNTIME AND PRODUCT VALIDATION PENDING.
 ==============================================================================
+
+
+## 2026-11-15 — PORTABLE VST3 package workflow cleanup
+
+**Статус:** PACKAGING WORKFLOW UPDATED; WINDOWS BUILD / ZIP NOT YET VERIFIED.
+
+Workflow commit: `f55a49fb8735dc72620787fdc9bf80df96e9285f`.
+
+- Целевой архив переименован в `POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip`.
+- Artifact name синхронизирован с PORTABLE VST3 Windows x64.
+- Удалена публикация отдельного source-review ZIP из build workflow.
+- Из runtime staging исключён каталог artwork-only `Assets/`; оставлены VST3, SOUNDBANK, PRESETS, Skins и Resources с лицензиями/контрольными суммами.
+- Добавлена очистка только временного каталога упаковки: Git metadata, Python caches, CMakeFiles, debug symbols, object/intermediate files, logs и OS debris. Исходный репозиторий и исходные файлы не удаляются.
+- Добавлена повторная проверка наличия `.vst3` после очистки перед ZIP.
+
+**Ограничения:** PR-triggered REV18 theme checks не являются Windows VST3 build. Пока нет результата Windows Release, CTest, pluginval и package artifact на точном SHA, ZIP не считается созданным или готовым. FL Studio 20 host acceptance остаётся отдельной ручной проверкой. PORTABLE означает отсутствие Setup.exe/инсталлятора; runtime sample loading по текущему UI по-прежнему требует выбора SFZ пользователем.
