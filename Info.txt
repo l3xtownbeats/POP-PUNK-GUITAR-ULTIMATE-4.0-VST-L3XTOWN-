@@ -3187,3 +3187,21 @@ unverified until their steps complete successfully.
 **Следующий этап:** пройти оставшиеся FX DSP параметры и bypass на реальном signal path; затем добавить точечные processor-level regression tests. Не включать AutoChords/IR controls как активные функции без настоящего backend.
 
 **Commit:** SOURCE ONLY до запуска exact-SHA CI; BUILD-VERIFIED не заявляется.
+
+
+## 2026-11-15 — Current-state revalidation: FX controls and EQ regression contracts
+
+**Контрольная точка:** branch `work/neon-stage-rich-console-ui`.
+**Изменения кода:** `tests/DspFilterTests.cpp`.
+**Commits:** `99e28835798ef4586256e80dcf650b0a64aeea4e` (EQ response regression tests); `b81583f721e570f90f5330db9d6b6fcbf300e57a` (audit correction).
+
+**Повторная проверка исходников:** прежнее замечание о семи неиспользуемых FX controls относится к историческому SHA исходного аудита. В текущем source branch:
+- EQ Low/Mid/High Frequency и Mid Q участвуют в расчёте biquad coefficients в `processEq()`.
+- Distortion Tone управляет cutoff пост-shaper low-pass в `processDistortion()`.
+- Cabinet Low Cut и High Cut управляют фильтрацией встроенного Cabinet Colour response в `processCabinet()`.
+
+**Добавлено:** DSP contract assertions проверяют, что изменение low-shelf frequency, peaking frequency/Q и high-shelf frequency даёт различимый коэффициентный отклик. Это тест уровня DSP coefficient builder, а не полноценный processor/host test.
+
+**Ограничения:** AutoChords остаётся отключённым placeholder; runtime theme asset integrity audit не закрыт; FX processor-level automation/click tests не добавлены; Windows x64 Release, полный CTest, pluginval strictness 5 и FL Studio 20 для нового HEAD не запускались.
+
+**Статус:** SOURCE REVIEW UPDATED; TEST SOURCE ADDED; BUILD/CTest/PLUGINVAL/HOST VALIDATION PENDING. Не объявлять этот этап полностью принятым до CI и host-проверки.
