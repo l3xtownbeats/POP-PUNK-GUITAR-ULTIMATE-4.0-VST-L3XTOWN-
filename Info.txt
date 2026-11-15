@@ -2816,3 +2816,37 @@ The full-pack generation step completed in PR validation run `43693362834`. Revi
 
 The running jobs had checked out the previous generator revision before this correction. Fresh validation of the corrected head is still required. Do not mark deterministic generation, strict asset audit, G1-G4, runtime loading, VST3 build, pluginval or FL Studio 20 acceptance as PASS until new evidence is available.
 ============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — User-approved production GUI extensibility rule
+==============================================================================
+
+**Authority:** explicit user approval in the project conversation on 2026-11-15. This is a binding implementation rule for POP PUNK GUITAR ULTIMATE / NEON STAGE.
+
+**Approved rule:**
+- If an element is required by the approved inventory/specification but has no visual mockup, create its visual representation from the approved NEON STAGE design language and existing approved references.
+- Integrate it into the real JUCE production GUI and its shared component/theme architecture. Do not create a disconnected demonstration shell.
+- Keep GUI/theme implementation independent from the Audio Engine, DSP, sampler, MIDI routing and preset/audio behavior.
+- Support manifest-driven theme changes through the existing visual theme layer; changing a theme must remain visual-only.
+- Preserve the canonical 27-control inventory, the seven approved FX bypass parameter IDs, existing APVTS IDs/bindings, component contracts and approved layout/behavior.
+- Do not invent product functions, add controls outside the approved inventory, alter the approved product structure, or present unavailable backends as working. A required visual entry point whose backend is not implemented must remain honestly disabled/non-operational.
+- Implement already-approved requirements without requesting approval for each individual visual element. Escalate only when the source requirements themselves conflict or are incomplete in a way that prevents a faithful implementation.
+
+**Source audit baseline (REV18 working tree):**
+- The real plugin editor is implemented in `Source/PluginEditor.cpp/.h`; it is not a standalone mockup.
+- `Source/UI/ThemeManager.cpp/.h` provides the visual-only palette/manifest manager and explicitly keeps file access on the UI/control thread.
+- The editor contains the theme gallery, saved theme selection, shared LookAndFeel styling and auxiliary workspace integration.
+- `SKIN/control_schema.json` is the canonical control inventory; REV18 parity tooling enforces exactly 27 IDs. The seven existing FX bypass IDs remain the only approved FX bypass bindings.
+- The active premium-theme work is isolated to the visual theme/assets/validation scope; no DSP, APVTS, MIDI, sampler or preset behavior is authorized to change as part of this GUI rule.
+
+**Next implementation gates:**
+1. Finish and validate the approved REV18 theme asset packs using the deterministic generator and strict asset audit.
+2. Verify the actual runtime editor loads the complete pack and all required component states from the manifest without changing audio/processor state.
+3. Run exact-HEAD Windows x64 Release build, CTest, VST3 package checks and pluginval strictness 5.
+4. Perform separate FL Studio 20 visual/interaction acceptance. Do not claim host acceptance before it is performed.
+
+**Evidence boundary:** this entry records the approved rule and source audit only. It does not claim that the current PR's asset generation, runtime asset integration, Windows build, pluginval or FL Studio 20 acceptance has passed.
+
+**Status:** GUI EXTENSIBILITY RULE APPROVED / EXISTING PRODUCTION GUI BASE AUDITED / REV18 ASSET AND RUNTIME VALIDATION CONTINUES.
+============================================================================== 
