@@ -2694,3 +2694,17 @@ The component matrix was updated in commit `52eaf122e6b3decc919ee7d521ff618272f8
 
 **Status:** SOURCE IMPLEMENTED / VALIDATION PENDING / NOT RELEASE READY.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — JUCE TextEditor LookAndFeel API compatibility correction
+==============================================================================
+
+The TextEditor background override was corrected to the exact JUCE 7.0.12 API name: `fillTextEditorBackground(Graphics&, int, int, TextEditor&)`. The outline method is `drawTextEditorOutline(Graphics&, int, int, TextEditor&)`.
+
+Commits: `d0e4295780bb9b768eb2f98cab01ef6eaa7e8a9e` (header), `85af92c09e42494297a708cc9aac5a80c17f6340` (implementation), `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` (matrix correction).
+
+Both declarations and definitions were re-fetched and confirmed. The method signatures were checked against JUCE 7.0.12 public LookAndFeel_V2 header. This does not substitute for compilation.
+
+**Status:** API SIGNATURE VERIFIED / COMPILATION STILL PENDING.
+==============================================================================
