@@ -2850,3 +2850,17 @@ The running jobs had checked out the previous generator revision before this cor
 
 **Status:** GUI EXTENSIBILITY RULE APPROVED / EXISTING PRODUCTION GUI BASE AUDITED / REV18 ASSET AND RUNTIME VALIDATION CONTINUES.
 ============================================================================== 
+
+
+==============================================================================
+2026-11-15 — Premium theme asset CI evidence update
+==============================================================================
+
+Target PR branch: work/ppgu-rev18-premium-theme-assets-rerun; tested commit: 8b2af21b36a70dbc27118e7c080061aece49b6ff.
+
+GitHub Actions runs 43694775942 (PPGU REV18 Theme Validation Rerun), 43694775951 (PPGU REV18 Theme Contract), and 43694775944 (PPGU REV18 Premium Theme PR Gate) completed with conclusion SUCCESS. Each run reports successful completion of all listed steps: generation of all six approved theme packs, deterministic/no-overwrite verification, exact 27-control parity regression, complete pack/SHA-256/PNG CRC audit, and commit of generated packs to the PR branch.
+
+Evidence boundary: these are theme-pack generation and contract/audit CI results only. They do NOT establish runtime editor loading, G1–G4 runtime acceptance, Windows x64 VST3 build, full CTest suite, pluginval, FL Studio 20 host acceptance, CPU/RAM targets or release readiness. Those remain separate gates and must be validated against the exact resulting HEAD.
+
+Status: SIX THEME PACK GENERATION + DETERMINISM + 27-CONTROL PARITY + SHA-256/PNG CRC AUDITS = CI SUCCESS / RUNTIME AND PRODUCT VALIDATION PENDING.
+==============================================================================
