@@ -57,7 +57,7 @@ jobs:
         shell: pwsh
         run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
 
-      - name: Validate active skin registry and isolated legacy archive
+      - name: Validate active skin registry and exact 16-theme boundary
         shell: pwsh
         run: python tests/ValidateSkinManifests.py
 
