@@ -43,3 +43,10 @@ Audit note: the latest inventory and component-status reconciliation is committe
 - This closes one identified shared-typography inconsistency in workspace chrome; it does not complete panel geometry, lifecycle/focus/z-order, responsive sizing or visual acceptance.
 - Source commit: `3190359d295d83bb06970836c9b34c62c6ccadb4`.
 - Exact-HEAD build/CTest/pluginval and runtime/FL Studio 20 validation remain pending.
+
+## Scoped update — 2026-11-15 (AutoChords typography)
+
+- Circle of Fifths node labels and caption now use the shared theme typography helper, inheriting active `uiTypeface` and `fontScale`.
+- Existing circle geometry, fifth-order/chromatic mapping, keyboard navigation, mouse selection and APVTS callback semantics are unchanged.
+- Source commit: `597ad5ffe958ad4b33d440dfeb4e81b97e001fdf`.
+- Exact-HEAD build/CTest/pluginval and runtime/FL Studio 20 validation remain pending.
