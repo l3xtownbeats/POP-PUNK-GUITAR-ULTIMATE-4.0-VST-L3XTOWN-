@@ -1608,7 +1608,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     centre.removeFromTop(5);
     centre.removeFromTop(104);
     centre.removeFromTop(5);
-    auto coreControls = centre.removeFromTop(126);
+    auto coreControls = centre;
+    coreControls.removeFromBottom(39);
     const std::array<size_t, 6> coreKnobs { 0, 4, 5, 6, 7, 8 };
     const int coreCellW = juce::jmax(1, coreControls.getWidth() / 6);
     for (size_t slot = 0; slot < coreKnobs.size(); ++slot)
@@ -1636,7 +1637,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     }
     fxTitle.setBounds(right.removeFromTop(25).reduced(4, 1));
     const int fxGap = 4;
-    const int fxRowHeight = juce::jmax(30, (right.getHeight() - fxGap * 6) / 7);
+    const int fxRowHeight = juce::jmax(24, (right.getHeight() - fxGap * 6) / 7);
     for (size_t i = 0; i < fxButtons.size(); ++i)
     {
         auto row = right.removeFromTop(fxRowHeight);
