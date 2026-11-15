@@ -561,3 +561,21 @@ Each preset's documentation should label these values “starting point / tonal 
 Отдельный файл не означает READY. READY только после: корректного VST3 preset serialization/deserialization; реальных sample/resource mappings; MIDI playback по разным клавишам; корректной роли MELODY/PATTERN; фактической DSP chain; проверки отсутствующих ресурсов; сохранения/восстановления в standalone/host context; совместимости версии; level matching; listening review; duplicate check; automated/regression tests. Сохранять действующие цели количества (500 READY MELODY + 500 READY PATTERN) и не считать черновики READY.
 
 Статус: USER APPROVED PRESET RESEARCH METHOD AND INDIVIDUAL-FILE DIRECTION. Preset catalog creation, format integration, serialization, host compatibility and acceptance remain PENDING until evidenced by code and tests.
+
+
+## 2026-11-15 — USER GRANTS CREATIVE/RESEARCH AUTONOMY FOR PRESET DEVELOPMENT
+
+Пользователь прямо подтвердил: в рамках утверждённого плана создания пресетов исполнительская свобода и выбор подходов предоставляются разработчику; результат зависит от качества самостоятельного исследования, анализа, отбора и реализации. Не требуется запрашивать отдельное согласование каждого названия, варианта тембра, порядка исследования, комбинации уже утверждённых ресурсов или конкретной sound-design цепочки, если решение остаётся внутри зафиксированного product scope.
+
+Автономия означает:
+- самостоятельно исследовать ранее утверждённые группы и их характерные звуковые направления;
+- выбирать наиболее полезные источники и проверять достоверность сведений;
+- самостоятельно формировать структуру каталога, названия и наборы пресетов MELODY/PATTERN, роли и варианты тембра;
+- создавать и сравнивать несколько оригинальных tonal approaches, отбирать лучшие по слуху и техническим проверкам;
+- выбирать минимально достаточную цепочку из реально доступных и реализованных DSP/ресурсов;
+- исключать нерелевантные детали, слабые/дублирующие варианты и неподтверждённые утверждения;
+- самостоятельно планировать и выполнять исследование/документирование в рамках утверждённой последовательности проекта.
+
+Границы автономии остаются обязательными: не нарушать авторские права и лицензии; не копировать защищённые записи/stems/риффы/коммерческие пресеты; не выдумывать исторические факты или точные настройки; не заявлять нереализованные функции/ресурсы как работающие; не менять утверждённые архитектурные контракты (27 controls, seven FX bypass IDs, APVTS IDs/semantics, state contract), product scope, preset READY gates и существующие требования REV.18. Не удалять/перезаписывать оригинальные ресурсы. Если обнаружен конфликт, риск лицензии, архитектурный gap или необходимость изменения утверждённого scope, зафиксировать проблему и не обходить ограничение молча.
+
+Статус: USER APPROVED CREATIVE AND RESEARCH AUTONOMY WITHIN THE FIXED PROJECT SCOPE. This does not waive legal, licensing, technical, quality or verification gates.
