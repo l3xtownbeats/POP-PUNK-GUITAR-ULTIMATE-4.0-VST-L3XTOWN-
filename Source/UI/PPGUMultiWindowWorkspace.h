@@ -41,7 +41,7 @@ public:
 
     void setPanelGap(int pixels);
     void setPanelScale(float scale);
-    void setPersistenceProperties(juce::PropertiesFile* properties);
+    void setPersistenceProperties(juce::PropertiesFile* settingsFile);
     void setThemePalette(const PPGUThemeManager::Palette& palette);
     void setSurfaceColours(juce::Colour background,
                            juce::Colour panel,
