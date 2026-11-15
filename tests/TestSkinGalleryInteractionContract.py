@@ -72,6 +72,15 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertIn("const auto active = std::find_if", rebuild)
         self.assertIn("visibleSkins.front()->index", rebuild)
 
+    def test_empty_results_state_is_explicit_and_preview_safe(self) -> None:
+        self.assertIn('emptyResultsLabel.setText("NO THEMES MATCH YOUR SEARCH"', GALLERY)
+        self.assertIn("emptyResultsLabel.setVisible(visibleSkins.empty() && !showingPreview)", GALLERY)
+        preview_start = GALLERY.index("if (showingPreview)")
+        preview_end = GALLERY.index("search.setVisible(true)", preview_start)
+        preview_layout = GALLERY[preview_start:preview_end]
+        self.assertIn("emptyResultsLabel.setVisible(false)", preview_layout)
+        self.assertIn("emptyResultsLabel.setBounds(viewport.getBounds())", GALLERY)
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
