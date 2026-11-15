@@ -2978,3 +2978,23 @@ unverified until their steps complete successfully.
 **Проверки:** test source added and read back. Commit workflow lookup returned 0 run(s); Windows Release/CTest/pluginval/FL Studio 20 exact-SHA verification remains NOT CONFIRMED.
 
 **Следующий шаг:** implement remaining MIDI articulation behavior (legato, slide, hammer/pull) only with safe sample mapping; then continue Style DNA and Pattern parameter coverage.
+
+
+## 2026-11-15 — MIDI CC64 Sustain Pedal
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Добавлена отсутствовавшая поддержка MIDI Sustain Pedal (CC64), необходимая для корректного note-off при удерживаемой педали.
+
+**Изменения:**
+- `Source/PluginProcessor.cpp`: CC64 обрабатывается в MELODY и PATTERN; значение >=64 включает pedal, ниже 64 выключает.
+- `Source/Sampler/SamplePool.h/.cpp`: добавлен per-channel pedal state; note-off при нажатой педали переводит voice в sustain-held, pedal-up запускает штатный SFZ release. All Notes Off / Panic сбрасывают pedal state и принудительно освобождают удержанные голоса.
+- `tests/SamplePoolTests.cpp`: добавлен regression для CC64 down → note-off held → CC64 up → release complete.
+
+**Commit:** `5ec051bbb1115e6e7cc4fa2a9b077b6f4d34cdd6`; parent `faf897a1f157219206cbbb18464c610d994a221c`.
+
+**Совместимость:** APVTS IDs и preset/state schema не менялись. Pedal state изолирован по MIDI channel; one-shot regions по-прежнему не прерываются обычным note-off.
+
+**Проверки:** test source added/read back. Workflow runs for exact SHA: 0. Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+
+**Следующий шаг:** продолжить оставшиеся Pattern timing/transport parameters; артикуляции Legato/Slide/Hammer/Pull не имитировать без соответствующих реальных записей и mappings.

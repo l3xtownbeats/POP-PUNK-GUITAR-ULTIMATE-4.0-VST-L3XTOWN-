@@ -1030,3 +1030,24 @@ Approved requirements:
 **Тесты:** regression source added; exact-SHA CTest/build/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** remaining MIDI articulation and Style DNA integration.
+
+
+## 2026-11-15 — MIDI CC64 Sustain Pedal
+
+**Тип:** production MIDI/sampler implementation + regression test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commit:** `5ec051bbb1115e6e7cc4fa2a9b077b6f4d34cdd6`.
+**Parent:** `faf897a1f157219206cbbb18464c610d994a221c`.
+
+**Файлы / symbols:**
+- `Source/PluginProcessor.cpp` — routes CC64 in MELODY and PATTERN.
+- `Source/Sampler/SamplePool.h/.cpp` — `setSustainPedal()`, per-channel pedal state, per-voice deferred note-off.
+- `tests/SamplePoolTests.cpp` — sustain-down hold and pedal-up SFZ release regression.
+
+**Behavior:** CC64 value >=64 sustains note-off on its MIDI channel. CC64 release applies the region's existing SFZ release envelope. All Notes Off and Panic clear pedal states to prevent stuck voices.
+
+**Совместимость / non-goals:** no APVTS IDs/ranges/defaults or preset serialization changes; no audio-thread allocation or file I/O; one-shot semantics preserved.
+
+**Тесты:** regression source added; exact-SHA CTest/build/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** Pattern timing/transport controls; do not synthesize unsupported legato/slide/hammer-pull articulations without recorded mappings.
