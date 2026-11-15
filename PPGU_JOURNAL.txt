@@ -853,3 +853,15 @@ Operating rules:
 - If the journal conflicts with a more specific approved source document or a later explicit user decision, identify the conflict and resolve it by documented authority/date rather than guessing.
 
 STATUS: USER APPROVED · CONFIRMED · FIXED.
+
+2026-11-15 — NEON STAGE DEVELOPMENT CONTINUED: FACTUAL ABOUT PANEL IMPLEMENTED
+
+User reconfirmed continuation of development. Following the authoritative journal and approved NEON STAGE inventory, one bounded visual/UI slice was implemented:
+- Added PPGUAboutPanel in Source/PluginEditor.cpp and openAboutPanel declaration in Source/PluginEditor.h.
+- Enabled the existing ABOUT entry point and connected it to auxiliary workspace panel ID 2103.
+- Content is limited to established product identity and the existing product description. No invented version/build metadata, false capability claims, or dummy actions.
+- Theme palette updates are supported for the panel. AUTO SOUND HUNTER and CURATOR remain honestly disabled pending real backends.
+- Source commit: 8adb6cab870fad2e777510a640d503f21a7fc9b4.
+- Inventory/status documentation commit: 806b6b39ca9644ff50fb5e1b07db91e77c4d660b.
+
+Acceptance status: SOURCE IMPLEMENTED ONLY. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime resize/theme checks and FL Studio 20 interaction acceptance have not yet been run or confirmed. This does not complete NEON STAGE and does not authorize transition to sound-library work. The approved phase order and all control/APVTS/FX bypass constraints remain unchanged.
