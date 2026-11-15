@@ -124,6 +124,7 @@ public:
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
     [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0, bool palmMuted = false) noexcept;
+    void setPitchBend(int midiChannel, float semitones, int targetMode = 0) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
     void allNotesOff() noexcept;
     void panic(int fadeSamples) noexcept;
@@ -139,6 +140,9 @@ private:
         const SamplePool::RegionView* region = nullptr;
         double position = 0.0;
         double increment = 1.0;
+        double baseIncrement = 1.0;
+        float pitchBendSemitones = 0.0f;
+        int triggerVelocity = 0;
         float gain = 0.0f;
         float releaseStep = 0.0f;
         float palmMuteDecayStep = 0.0f;
@@ -155,6 +159,7 @@ private:
     };
 
     [[nodiscard]] int chooseVoice(int maximumActiveVoices) noexcept;
+    void applyPitchBendForChannel(int channelIndex) noexcept;
     void releaseVoice(Voice& voice) noexcept;
 
     SamplePool pool;
@@ -164,6 +169,8 @@ private:
     std::array<Voice, maximumVoices> voices {};
     double outputSampleRate = 44100.0;
     float palmMuteFilterAlpha = 0.0f;
+    std::array<float, 16> channelPitchBendSemitones {};
+    std::array<int, 16> channelPitchBendTarget {};
     std::uint64_t nextAge = 1;
 };
 }

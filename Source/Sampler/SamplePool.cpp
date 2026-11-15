@@ -456,6 +456,8 @@ void SamplerEngine::prepare(double sampleRate) noexcept
 
 void SamplerEngine::reset() noexcept
 {
+    channelPitchBendSemitones.fill(0.0f);
+    channelPitchBendTarget.fill(0);
     for (std::size_t i = 0; i < voices.size(); ++i)
     {
         streamingReaders[i].release();
@@ -499,7 +501,9 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
         ? juce::jlimit(-48.0, 48.0, globalTuningSemitones) : 0.0;
     const double semitones = static_cast<double>(midiNote - region->rootKey)
         + static_cast<double>(region->tuneCents) / 100.0 + safeGlobalTuning;
-    voice.increment = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
+    voice.baseIncrement = (region->sourceSampleRate / outputSampleRate) * std::pow(2.0, semitones / 12.0);
+    voice.increment = voice.baseIncrement;
+    voice.triggerVelocity = velocity;
     voice.gain = (static_cast<float>(velocity) / 127.0f) * region->gain;
     voice.palmMuted = palmMuted;
     if (voice.palmMuted)
@@ -514,7 +518,64 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
             streamReader.requestPrefetch(region->loopStartFrame);
         voice.prefetchedPage = region->startFrame / region->streaming->pageFrames();
     }
+    applyPitchBendForChannel(voice.midiChannel - 1);
     return true;
+}
+
+void SamplerEngine::setPitchBend(int midiChannel, float semitones, int targetMode) noexcept
+{
+    const int channelIndex = juce::jlimit(0, 15, midiChannel - 1);
+    channelPitchBendSemitones[static_cast<size_t>(channelIndex)] =
+        std::isfinite(semitones) ? juce::jlimit(-2.0f, 2.0f, semitones) : 0.0f;
+    channelPitchBendTarget[static_cast<size_t>(channelIndex)] = juce::jlimit(0, 5, targetMode);
+    applyPitchBendForChannel(channelIndex);
+}
+
+void SamplerEngine::applyPitchBendForChannel(int channelIndex) noexcept
+{
+    if (channelIndex < 0 || channelIndex >= 16)
+        return;
+    const float bend = channelPitchBendSemitones[static_cast<size_t>(channelIndex)];
+    const int target = channelPitchBendTarget[static_cast<size_t>(channelIndex)];
+    int selectedVoice = -1;
+
+    for (int i = 0; i < maximumVoices; ++i)
+    {
+        auto& voice = voices[static_cast<size_t>(i)];
+        if (voice.region == nullptr || voice.midiChannel != channelIndex + 1)
+            continue;
+        voice.pitchBendSemitones = 0.0f;
+        voice.increment = voice.baseIncrement;
+        if (target == 0)
+        {
+            voice.pitchBendSemitones = bend;
+            voice.increment = voice.baseIncrement * std::pow(2.0, static_cast<double>(bend) / 12.0);
+            continue;
+        }
+
+        if (selectedVoice < 0)
+        {
+            selectedVoice = i;
+            continue;
+        }
+
+        const auto& selected = voices[static_cast<size_t>(selectedVoice)];
+        const bool replace =
+            (target == 1 && voice.note < selected.note)
+            || (target == 2 && voice.note > selected.note)
+            || (target == 3 && voice.triggerVelocity < selected.triggerVelocity)
+            || (target == 4 && voice.triggerVelocity > selected.triggerVelocity)
+            || (target == 5 && voice.age > selected.age);
+        if (replace)
+            selectedVoice = i;
+    }
+
+    if (target != 0 && selectedVoice >= 0)
+    {
+        auto& voice = voices[static_cast<size_t>(selectedVoice)];
+        voice.pitchBendSemitones = bend;
+        voice.increment = voice.baseIncrement * std::pow(2.0, static_cast<double>(bend) / 12.0);
+    }
 }
 
 void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept
@@ -731,6 +792,14 @@ void SamplerEngine::render(juce::AudioBuffer<float>& output, int startSample, in
             }
         }
     }
+
+    // Targeted bend modes follow the currently sounding voice set. Re-select
+    // once per block so a released/retired target hands control to the next
+    // eligible voice without scanning all voices for every rendered sample.
+    for (int channel = 0; channel < 16; ++channel)
+        if (channelPitchBendTarget[static_cast<size_t>(channel)] != 0
+            && std::abs(channelPitchBendSemitones[static_cast<size_t>(channel)]) > 1.0e-6f)
+            applyPitchBendForChannel(channel);
 }
 
 bool SamplerEngine::hasSamples() const noexcept

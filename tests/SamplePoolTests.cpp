@@ -553,6 +553,48 @@ int main()
         return 1;
     }
 
+    // MIDI pitch bend uses the standard +/-2 semitone range and changes
+    // the playback increment of an already sounding voice.
+    ppgu::sampler::SamplerEngine bendReferenceEngine;
+    bendReferenceEngine.prepare(44100.0);
+    ppgu::sampler::SamplerEngine bendAppliedEngine;
+    bendAppliedEngine.prepare(44100.0);
+    if (!bendReferenceEngine.loadSfz(sfzFile).success
+        || !bendAppliedEngine.loadSfz(sfzFile).success
+        || !bendReferenceEngine.noteOn(60, 100)
+        || !bendAppliedEngine.noteOn(60, 100))
+    {
+        std::cerr << "Could not prepare pitch-bend regression fixtures.\\n";
+        return 1;
+    }
+    bendAppliedEngine.setPitchBend(1, 2.0f, 0);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    juce::AudioBuffer<float> bendReferenceAudio(2, 2048);
+    juce::AudioBuffer<float> bendAppliedAudio(2, 2048);
+    bendReferenceAudio.clear();
+    bendAppliedAudio.clear();
+    bendReferenceEngine.render(bendReferenceAudio, 0, bendReferenceAudio.getNumSamples());
+    bendAppliedEngine.render(bendAppliedAudio, 0, bendAppliedAudio.getNumSamples());
+    const auto countRisingCrossings = [](const juce::AudioBuffer<float>& audio)
+    {
+        int crossings = 0;
+        float previous = audio.getSample(0, 0);
+        for (int sample = 1; sample < audio.getNumSamples(); ++sample)
+        {
+            const float current = audio.getSample(0, sample);
+            if (previous <= 0.0f && current > 0.0f) ++crossings;
+            previous = current;
+        }
+        return crossings;
+    };
+    const int unbentCrossings = countRisingCrossings(bendReferenceAudio);
+    const int bentCrossings = countRisingCrossings(bendAppliedAudio);
+    if (unbentCrossings < 5 || bentCrossings <= unbentCrossings)
+    {
+        std::cerr << "Pitch bend did not raise the rendered sample frequency.\\n";
+        return 1;
+    }
+
     // A failed reload must leave the previously published map intact. The
     // first new WAV is valid, the second is deliberately corrupt.
     const auto orphanWav = directory.getChildFile("orphan.wav");

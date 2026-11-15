@@ -316,6 +316,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         static_cast<int>(parameters.getRawParameterValue("palmMuteThreshold")->load(std::memory_order_relaxed)));
     const int articulation = juce::jlimit(0, 3,
         static_cast<int>(parameters.getRawParameterValue("articulation")->load(std::memory_order_relaxed)));
+    const int pitchBendTarget = juce::jlimit(0, 5,
+        static_cast<int>(parameters.getRawParameterValue("pitchBendTarget")->load(std::memory_order_relaxed)));
 
     // Read one immutable host-position snapshot per block. Pattern timing is
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
@@ -414,6 +416,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             }
             else if (message.isNoteOff())
                 sampler.noteOff(message.getNoteNumber(), message.getChannel());
+            else if (message.isPitchWheel())
+            {
+                const float bend = (static_cast<float>(message.getPitchWheelValue()) - 8192.0f)
+                    * (2.0f / 8192.0f);
+                sampler.setPitchBend(message.getChannel(), bend, pitchBendTarget);
+            }
         }
         renderSegment(cursor, samples - cursor);
     }
@@ -590,6 +598,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 else if (message.isNoteOn() || message.isNoteOff())
                 {
                     patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
+                }
+                else if (message.isPitchWheel())
+                {
+                    const float bend = (static_cast<float>(message.getPitchWheelValue()) - 8192.0f)
+                        * (2.0f / 8192.0f);
+                    sampler.setPitchBend(message.getChannel(), bend, pitchBendTarget);
                 }
             },
             [&](int eventSample)
