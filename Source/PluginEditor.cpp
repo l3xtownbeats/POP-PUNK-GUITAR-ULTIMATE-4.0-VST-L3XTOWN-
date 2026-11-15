@@ -358,7 +358,7 @@ public:
         };
         addAndMakeVisible(gapSlider);
 
-        restoreButton.setButtonText("RESTORE SIGNAL FORGE DEFAULT");
+        restoreButton.setButtonText("RESTORE NEON STAGE DEFAULT");
         restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
         restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         restoreButton.onClick = [this] { if (restoreTheme) restoreTheme(); };
@@ -444,11 +444,11 @@ public:
                             "The existing background loader validates and registers the bank.",
                             juce::dontSendNotification);
         description.setJustificationType(juce::Justification::topLeft);
-        description.setColour(juce::Label::textColourId, juce::Colour(0xffb5c4cb));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(description);
         status.setText("No SFZ library loaded in this session.", juce::dontSendNotification);
         status.setJustificationType(juce::Justification::topLeft);
-        status.setColour(juce::Label::textColourId, juce::Colour(0xffd7ffb2));
+        status.setColour(juce::Label::textColourId, palette.token("lcd_text"));
         addAndMakeVisible(status);
         loadButton.setButtonText("LOAD SFZ");
         loadButton.onClick = [this] { if (loadAction) loadAction(&status, &loadButton); };
@@ -709,9 +709,9 @@ public:
             { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
         };
 
-        title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
+        title.setText("NEON STAGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
 
         for (size_t i = 0; i < groups.size(); ++i)
@@ -724,10 +724,10 @@ public:
         powerButton.setClickingTogglesState(true);
         addAndMakeVisible(powerButton);
         graphCaption.setText("PROCESS RESPONSE  /  VISUAL GUIDE", juce::dontSendNotification);
-        graphCaption.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        graphCaption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(graphCaption);
         status.setText("Controls are attached to the existing APVTS parameters.", juce::dontSendNotification);
-        status.setColour(juce::Label::textColourId, juce::Colour(0xff91a5b0));
+        status.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(status);
 
         for (size_t groupIndex = 0; groupIndex < groups.size(); ++groupIndex)
@@ -736,17 +736,17 @@ public:
             {
                 auto label = std::make_unique<juce::Label>();
                 label->setText(item.first, juce::dontSendNotification);
-                label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+                label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
                 label->setFont(juce::Font(11.0f, juce::Font::bold));
                 addAndMakeVisible(*label);
 
                 auto slider = std::make_unique<juce::Slider>();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
-                slider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xffb7f34a));
-                slider->setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff43545e));
-                slider->setColour(juce::Slider::thumbColourId, juce::Colour(0xffe7f0f4));
-                slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xffe7f0f4));
+                slider->setColour(juce::Slider::rotarySliderFillColourId, palette.token("accent"));
+                slider->setColour(juce::Slider::rotarySliderOutlineColourId, palette.token("control_border"));
+                slider->setColour(juce::Slider::thumbColourId, palette.token("text_primary"));
+                slider->setColour(juce::Slider::textBoxTextColourId, palette.token("text_primary"));
                 addAndMakeVisible(*slider);
 
                 auto attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, item.second, *slider);
@@ -892,10 +892,10 @@ public:
     {
         title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
         title.setFont(juce::Font(20.0f, juce::Font::bold));
-        title.setColour(juce::Label::textColourId, juce::Colour(0xffb7f34a));
+        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(title);
         stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
-        stateLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffc66d));
+        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
         addAndMakeVisible(stateLabel);
         offButton.setButtonText("AUTOCHORDS OFF");
         offButton.setEnabled(false);
@@ -914,7 +914,7 @@ public:
         patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
         for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
         {
-            label->setColour(juce::Label::textColourId, juce::Colour(0xffb5c2ca));
+            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
             addAndMakeVisible(*label);
         }
         keyLabel.setText("KEY", juce::dontSendNotification);
@@ -972,7 +972,7 @@ private:
 };
 }
 
-// Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
+// Premium NEON STAGE shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -1137,7 +1137,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard = std::make_unique<juce::MidiKeyboardComponent>(processor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard);
     keyboard->setAvailableRange(36, 84);
     keyboard->setKeyWidth(18.0f);
-    keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour(0xffe8e7eb));
+    keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, themeManager.getPalette().token("highlight"));
     keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour(0xff17171d));
     keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, juce::Colour(0xff34343d));
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, themeManager.getPalette().token("accent").withAlpha(0.35f));
@@ -1276,7 +1276,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
-    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
+    // Subtle NEON STAGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
     g.setColour(p.token("accent"));
     g.fillRoundedRectangle(badge.toFloat(), 1.5f);
@@ -1295,7 +1295,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     if (auxiliaryWorkspace != nullptr)
         auxiliaryWorkspace->setBounds(bounds);
 
-    // SIGNAL FORGE three-zone shell: browser / instrument / amp+FX.
+    // NEON STAGE three-zone shell: browser / instrument / amp+FX.
     // Lower performance strip remains full width. APVTS attachments are untouched.
     auto header = bounds.removeFromTop(48);
     titleLabel.setBounds(header.removeFromLeft(105).reduced(2, 4));
@@ -1471,7 +1471,7 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
-    const auto id = settings ? settings->getValue("skinId", "skin-052") : juce::String("skin-052");
+    const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
     const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
     if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
     {
@@ -1662,7 +1662,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.token("accent"));s.setColour(juce::Slider::rotarySliderOutlineColourId,p.token("control_border"));s.setColour(juce::Slider::thumbColourId,p.token("text_primary"));s.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));}
  for(auto& l:knobLabels)l.setColour(juce::Label::textColourId,p.token("text_secondary"));
  for(auto& b:fxButtons){b.setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b.setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b.setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
- if(keyboard){keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId,juce::Colour(0xffeaf0f2));keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId,p.token("control_bg"));keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId,p.token("control_border"));keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId,p.token("accent_glow").withAlpha(.3f));keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId,p.token("accent").withAlpha(.88f));}
+ if(keyboard){keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId,p.token("highlight"));keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId,p.token("control_bg"));keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId,p.token("control_border"));keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId,p.token("accent_glow").withAlpha(.3f));keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId,p.token("accent").withAlpha(.88f));}
  repaint();
 }
 void PopPunkGuitarUltimateAudioProcessorEditor::persistSkinPreference(){if(auto* s=uiProperties.getUserSettings()){s->setValue("skinId",themeManager.getPalette().id);s->saveIfNeeded();}}
@@ -1731,7 +1731,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = fxEditPanelId;
-        spec.title = "FX EDIT  /  SIGNAL FORGE";
+        spec.title = "FX EDIT  /  NEON STAGE";
         spec.desired = { 1000, 680 };
         spec.minimum = { 620, 440 };
         spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
