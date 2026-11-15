@@ -687,3 +687,18 @@ Artist/band references: Blink-182 / Tom DeLonge / Box Car Racer / Angels & Airwa
 Artist/band refs — ориентиры, не обязательные компоненты каждого пресета; не выдавать предположительные модели источников и exact artist settings за факты. Сохранять licensing/quality gates, 27-control parity, seven approved FX bypass IDs и существующий APVTS/state contract.
 
 Статус: USER CONFIRMED / APPROVED / FIXED. Applies to all future preset design and sound selection.
+
+
+2026-11-15 — POP-PUNK PRESET STARTING SETTINGS: 2000s CORE / DUAL-AMP / MODERN VARIANTS
+
+Записаны предоставленные пользователем ориентиры для preset design, с обязательной оговоркой: значения являются реконструкциями/starting points, а не подтверждёнными точными студийными настройками песен.
+
+2000s core (0–10): Gain 5.5, Bass 5, Mids 5.5, Treble 7, Presence 6. Song tonal approximations (Gain/Bass/Mids/Treble): Blink-182 “All the Small Things” 6/5/6/7; Green Day “Basket Case” 6/6/6/5; Sum 41 “In Too Deep” 8/6/6/4; The Offspring “Self Esteem” 7/6/6/7; Fall Out Boy “Sugar, We're Goin Down” 7/5/7/6. General rhythm ranges: Gain 5.5–6.5 (heavier directions may start around 7–8), Bass 5–6, Mids 5.5–6.5, Treble 5–7, Presence ~5.5–6; bright channel optional; rhythm mostly dry, short plate/room on lead only if useful.
+
+Jerry Finn-inspired dual-amp concept: complementary Mesa/Boogie Triple Rectifier-style weight + Marshall JCM900-style upper-mid definition; pushed cleaner Marshall path as a possible mid-focused layer; phase/polarity/timing/level and mono checks; double-track L/R only from genuinely separate takes; dry/tight rhythm, restrained lead ambience. This is a production reference, not an exact verified chain for every cited recording.
+
+Modern directions: MGK “Tickets to My Downfall” (2020) aggressive contemporary pop-punk; lower tunings such as Drop C/D only for presets/sources explicitly supporting them. Avril Lavigne “Love Sux” (2022) modern Marshally pop-punk. Blink-182 “One More Time...” (2023) bright/weighty modern pop-punk reference. No unsupported claims of exact session settings. Pickup type only if metadata supports it; string gauge/pick thickness are optional physical references, not plugin controls.
+
+Implementation: use only where musically relevant and where actual samples/DSP support the chain; translate 0–10 values only after parameter mapping is confirmed; preserve 27-control parity, seven approved FX bypass IDs, APVTS/state contract. READY requires playback, phase/level checks, listening, persistence and regression tests.
+
+Статус: USER-PROVIDED SETTINGS RECORDED / APPROVED AS STARTING REFERENCES. Implementation and validation remain PENDING.
