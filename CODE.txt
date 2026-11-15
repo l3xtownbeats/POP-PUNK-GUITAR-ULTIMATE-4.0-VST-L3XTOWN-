@@ -1050,3 +1050,26 @@ The first full-pack generation step completed successfully in PR validation run 
 - Preserved the no-overwrite rule and the byte-for-byte retention of SKIN-1's existing hero/preview binaries.
 
 **Validation status:** the already-running jobs were checked out before this correction and are still testing the previous generator revision. Their deterministic check is not accepted as evidence for the corrected code. A fresh run of the current head is required; no deterministic PASS, strict asset audit PASS, G1-G4 PASS or runtime acceptance is claimed yet.
+
+
+==============================================================================
+2026-11-15 — BASELINE: production GUI system approved by user
+==============================================================================
+
+Authority: explicit user confirmation in the PPGU project conversation on 2026-11-15 ("фиксирую давай делай").
+
+Binding production rule:
+- Build and maintain the real production JUCE GUI inside the plugin; no disconnected demo shell.
+- When an element required by the approved inventory/specification has no visual representation, create the missing visual component using the approved NEON STAGE language and existing approved references.
+- Implement only already-approved functionality. Do not invent features, alter product structure, add controls outside the canonical inventory, or change approved behavior/contracts.
+- Keep GUI and theme presentation independent of the Audio Engine, DSP, MIDI, sampler, preset/audio behavior and APVTS parameter semantics.
+- Use the shared theme architecture for visual-only changes. Every skin must preserve the same canonical controls, IDs, bindings, behavior and interaction feedback.
+- Controls must be real JUCE components with genuine state/action/parameter wiring. Do not present unavailable backends as functional; keep such entry points honestly disabled/non-operational.
+- Add approved visual components and skins without requiring an audio-engine rewrite. Escalate only when authoritative requirements conflict or do not permit a faithful implementation.
+
+Contract guardrails: REV.18 Inventory; exactly 27 canonical control IDs from SKIN/control_schema.json; only the seven approved FX bypass IDs; existing APVTS IDs and bindings; approved component/layout contracts; Info.txt and CODE.txt source-of-truth records.
+
+Implementation scope: this rule authorizes implementation of approved GUI requirements only. It does not authorize DSP, MIDI, sampler, preset or audio-engine changes.
+
+Status: USER APPROVED / BINDING PROJECT BASELINE.
+==============================================================================
