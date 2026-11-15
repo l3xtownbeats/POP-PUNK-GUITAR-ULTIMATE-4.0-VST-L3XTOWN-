@@ -2945,3 +2945,16 @@ Commit: `de879ac648d0a512de0e6af29e62acfeac948b8b`.
 - 40 GB decimal ceiling остаётся действующим. Сохранность оригиналов и отсутствие повторных звуков обязательны одновременно.
 
 Это правило имеет приоритет над любыми cleanup/dedup инструкциями, которые подразумевают удаление или перезапись файлов в `Samples/`.
+
+
+## 2026-11-15 — Separate standalone plugin download (without Samples)
+
+**Статус:** USER-APPROVED PACKAGING REQUIREMENT; workflow implementation committed, artifact awaits CI verification.
+Пользователь утвердил отдельную загрузку самого плагина одним ZIP, не только комплектом с большой библиотекой.
+
+Обязательны два отдельных артефакта из одной проверенной сборки:
+1. FULL PORTABLE ZIP — VST3 + runtime content + SOUNDBANK/Samples.
+2. STANDALONE PLUGIN ZIP — VST3 + Skins + Resources + PRESETS + Documents + Licenses, без SOUNDBANK/, Samples/ и аудиофайлов библиотеки.
+
+Standalone package имеет собственный README с честным указанием, что для звучания требуется отдельно подключить совместимую SoundBank/SFZ библиотеку; наличие preset definitions не означает, что их аудиозависимости включены.
+CI проверяет наличие реального .vst3 bundle и нулевое количество sample audio files во втором ZIP. Оба артефакта публикуются отдельно.
