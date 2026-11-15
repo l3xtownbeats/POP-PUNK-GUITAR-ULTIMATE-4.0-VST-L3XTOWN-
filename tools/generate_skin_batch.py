@@ -202,6 +202,10 @@ def build_pack_entries(start: int) -> list[dict]:
 
 
 def main() -> int:
+    print("DISABLED: PPGU has a fixed 16-theme factory sequence. Do not generate additional theme batches.", file=sys.stderr)
+    return 2
+
+    # Retained below for Git-history/source audit only; unreachable by design.
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("SKIN"))
     parser.add_argument("--manifest", type=Path, default=Path("SKIN/theme_pack_manifest.json"))
