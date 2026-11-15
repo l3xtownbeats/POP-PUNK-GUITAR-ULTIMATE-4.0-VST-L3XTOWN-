@@ -232,6 +232,12 @@ private:
             g.fillRoundedRectangle(getWidth() - 68.0f, 10.0f, 58.0f, 17.0f, 5.0f);
             g.setColour(palette.token("window_bg")); g.setFont(makeThemeFont(palette, 7.5f, false, true));
             g.drawText(tag, getWidth() - 68, 10, 58, 17, juce::Justification::centred);
+            if (item.favorite)
+            {
+                g.setColour(palette.token("warning"));
+                g.setFont(makeThemeFont(palette, 15.0f, false, true));
+                g.drawText("★", getWidth() - 94, 8, 20, 20, juce::Justification::centred);
+            }
         }
         void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
         void setSelected(bool value) { if (selected != value) { selected = value; repaint(); } }
