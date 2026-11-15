@@ -301,18 +301,17 @@ private:
             g.drawRoundedRectangle(bounds, 9.0f, selected ? 2.4f : (item.active ? 1.8f : 1.0f));
 
             auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
-            if (item.preview.existsAsFile())
+            if (thumbnail.isValid())
             {
-                const auto image = juce::ImageCache::getFromFile(item.preview);
-                if (image.isValid())
-                    g.drawImageWithin(image, (int)previewArea.getX(), (int)previewArea.getY(),
-                                      (int)previewArea.getWidth(), (int)previewArea.getHeight(),
-                                      juce::RectanglePlacement::centred);
-                else
-                    paintFallback(g, previewArea);
+                g.drawImageWithin(thumbnail, (int)previewArea.getX(), (int)previewArea.getY(),
+                                  (int)previewArea.getWidth(), (int)previewArea.getHeight(),
+                                  juce::RectanglePlacement::centred);
             }
             else
+            {
                 paintFallback(g, previewArea);
+                requestThumbnailLoad();
+            }
 
             auto textArea = bounds.reduced(10.0f, 8.0f);
             textArea.removeFromTop(78);
@@ -349,6 +348,23 @@ private:
         }
 
     private:
+        void requestThumbnailLoad()
+        {
+            if (thumbnailLoadRequested || item.preview.getFullPathName().isEmpty())
+                return;
+
+            thumbnailLoadRequested = true;
+            juce::Component::SafePointer<Card> safeThis(this);
+            juce::MessageManager::callAsync([safeThis]
+            {
+                if (safeThis == nullptr)
+                    return;
+
+                safeThis->thumbnail = juce::ImageCache::getFromFile(safeThis->item.preview);
+                safeThis->repaint();
+            });
+        }
+
         void paintFallback(juce::Graphics& g, juce::Rectangle<float> area)
         {
             g.setGradientFill(juce::ColourGradient(palette.token("panel_elevated"),
@@ -363,6 +379,8 @@ private:
         Skin item;
         PPGUThemeManager::Palette palette;
         std::function<void(int)> select;
+        juce::Image thumbnail;
+        bool thumbnailLoadRequested = false;
         bool selected = false;
         bool hovered = false;
     };
