@@ -196,7 +196,7 @@ Scope is visual/UI integration only.
 | Rotary controls | `PPGUPremiumLookAndFeel::drawRotarySlider` | SHARED RENDERING: hover, focus, disabled states present |
 | Buttons | `drawButtonBackground` | SHARED RENDERING: active/toggle, hover, pressed, disabled and keyboard focus present |
 | ComboBoxes | `drawComboBox` | SHARED RENDERING: hover/pressed, disabled and keyboard focus present |
-| Text editors | `PPGUPremiumLookAndFeel::drawTextEditorBackground` and `drawTextEditorOutline` | SHARED background + hover/focus/disabled outline states implemented; text colour/font hierarchy remains component-level |
+| Text editors | `PPGUPremiumLookAndFeel::fillTextEditorBackground` and `drawTextEditorOutline` (JUCE 7.0.12 API) | SHARED background + hover/focus/disabled outline states implemented; text colour/font hierarchy remains component-level |
 | Icons / indicators | Theme tokens include LED colours; no complete shared icon/indicator component system established | NOT COMPLETE |
 | Panels / borders / separators | Workspace chrome uses palette-derived background, panel, border, heading and text colours | SOURCE CONNECTED; per-panel parity audit pending |
 | Animation / feedback | No complete shared animation system or timing contract established by this source audit | NOT COMPLETE |
