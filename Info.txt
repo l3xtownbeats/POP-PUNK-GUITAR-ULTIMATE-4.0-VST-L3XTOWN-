@@ -672,3 +672,8 @@ Status: RESEARCH STARTED / PARTIAL EVIDENCE REGISTER. Full 21-group matrix, all 
 
 Статус: APPROVED · CONFIRMED · BASELINE LOCKED.
 Эта запись подтверждает ранее внесённую последовательность и не меняет её содержание, объём, ограничения или критерии готовности. Не требуется повторное согласование этой последовательности.
+
+
+## 2026-11-15 — NEON STAGE Skin Gallery transaction bugfix
+
+Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state after a failed skin preview. Failed previews now restore the original active skin and invalidate prior preview eligibility; Apply requires a successful preview of the currently selected skin. No APVTS IDs, 27-control parity, seven FX bypass IDs, audio/DSP/MIDI behavior, skin IDs, manifests or the 102 legacy records were changed. Validation still requires exact-HEAD Windows CI, CTest, pluginval Strictness 5, visual comparison and FL Studio 20 acceptance.
