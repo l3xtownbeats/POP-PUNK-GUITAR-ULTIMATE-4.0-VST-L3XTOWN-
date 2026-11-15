@@ -1944,6 +1944,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             skins.push_back(std::move(item));
         }
 
+        const auto gallerySkinCount = static_cast<int>(skins.size());
         auto transactionResolved = std::make_shared<bool>(false);
         auto previewSucceeded = std::make_shared<bool>(true);
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
@@ -1987,7 +1988,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = galleryPanelId;
-        spec.title = "SKIN GALLERY  /  " + juce::String(static_cast<int>(skins.size())) + " THEMES";
+        spec.title = "SKIN GALLERY  /  " + juce::String(gallerySkinCount) + " THEMES";
         spec.desired = { 940, 700 };
         spec.minimum = { 500, 360 };
         spec.content = std::move(gallery);
