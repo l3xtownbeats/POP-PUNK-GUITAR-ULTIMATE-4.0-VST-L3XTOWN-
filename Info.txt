@@ -2650,3 +2650,29 @@ C++ source, manifests, APVTS, audio, MIDI и preset state в этой запис
 
 **Следующий шаг:** завершить визуальную идентификацию PNG-эталонов и сопоставление экранов; затем подготовить отдельную минимальную миграцию NEON STAGE default/fallback на уже существующий `skin-053`, предварительно проверив registry, schema, gallery indexing и тесты. После миграции — shared LookAndFeel token foundation и Main Interface.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — REV.18 NEON STAGE — CANONICAL VISUAL REFERENCE IDENTIFIED
+==============================================================================
+
+В ходе дополнительной проверки Library найден и визуально просмотрен эталонный файл:
+`/PPGU/REFERENCE_ASSETS/Неоновая студия гитарного плагина.png`
+(File ID: `file_00000000455c81f4bf280aef440a871f`).
+
+На самом изображении прямо указано **NEON STAGE DEFAULT — SKIN-1**. Оно показывает утверждённую визуальную идентичность: чёрно-синий сценический фон, насыщенные cyan/blue LED-контуры, холодные металлические панели, яркие cyan акценты, читаемые белые подписи, отдельные модульные окна. Это первичный visual anchor для NEON STAGE, а не README cover и не SIGNAL FORGE artwork.
+
+Визуальная привязка по эталону:
+- Main Interface: центральная консоль, верхняя preset/header зона, MELODY/PATTERN, восемь верхних rotary controls, FX CHAIN и MIDI keyboard.
+- FX EDIT: самостоятельное окно с вертикальным списком эффектов, power/bypass, параметрами и графиком/визуализацией, если она реально поддержана DSP.
+- Skin Gallery: карточки SKIN-1… с отдельными Favorite / Apply / Preview / Back / Close состояниями.
+- Import Guitar: drag/drop или Browse, Library Info и Preview; значения должны поступать из реального импортированного SFZ/WAV.
+- Settings: General / Audio / MIDI / GUI и только реально существующие настройки.
+- Вторая обзорная reference image `/PPGU/REFERENCE_ASSETS/Неоновая сцена: интерфейс PPGU.png` визуально показывает AutoChords, Curator, Auto Discover, Performance, About и общий набор элементов. Это candidate supporting reference; функциональные controls на нём не считаются доказательством существующей реализации.
+
+Важная оговорка: более ранние изображения из той же папки с названием SIGNAL FORGE показывают другую/историческую композицию. Они не заменяют NEON STAGE DEFAULT — SKIN-1. Приоритет отдаётся изображению с явной надписью NEON STAGE DEFAULT — SKIN-1 и текущим пользовательским решением.
+
+**Статус UI-01:** CANONICAL VISUAL ANCHOR IDENTIFIED; полное сопоставление семи PNG, module-by-module control mapping и проверка точного соответствия всех экспортированных GitHub mockups ещё открыты.
+
+**Следующий шаг:** миграция уже существующего Skin_053 в runtime DEFAULT SKIN-1 без изменения ID/индексов, после проверки всех consumers of defaultSkin, fallback Palette, Gallery selection, schema и тестов. Не менять palette/layout из изображения наугад; сохранить утверждённую палитру только после проверки соответствия полного Skin_053 manifest.
+==============================================================================
