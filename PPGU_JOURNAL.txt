@@ -769,3 +769,16 @@ PHASE 3: создавать полноценную заводскую библи
 FACTORY LIBRARY LOCK возможен только после legal/resource validation, MIDI playback, mapping/articulation checks, state round-trip, host compatibility, level matching, listening review, duplicate checks и automated/regression tests. Сохранить цели ≥500 READY MELODY + ≥500 READY PATTERN; drafts не засчитывать.
 
 Это утверждённая последовательность, а не заявление о том, что какая-либо из фаз уже завершена.
+
+
+## 2026-11-15 — USER CONFIRMED PROJECT PHASE ORDER: VISUAL COMPLETION → LIBRARIES → FACTORY PRESET LIBRARY
+
+Пользователь подтвердил последовательность дальнейшей разработки:
+1. Завершить визуальную часть NEON STAGE в рамках утверждённого UI inventory, mockups, control/state contracts и 16-theme parity. До закрытия визуального этапа не объявлять интерфейс завершённым; все известные визуальные и binding gaps должны быть проверены по acceptance checklist.
+2. После завершения визуальной части перейти к работе с гитарными библиотеками и исходными звуковыми ресурсами: аудит доступных материалов, качество RAW/CLEAN/DI/ACOUSTIC, лицензии и право на распространение, provenance, hashes, sample mapping, диапазоны нот, velocity layers, articulations, palm mute и acoustic variants.
+3. На базе проверенных библиотек сформировать, скомпоновать и зафиксировать полноценную заводскую библиотеку пресетов. Каждый пресет — отдельный нативный VST3 .vstpreset (после проверки реализации и host compatibility), с устойчивыми ссылками на общие ресурсы; отдельные factory/user files, каталог и metadata. Сначала качество исходной гитары без обработки, затем processed tones. Формировать MELODY/PATTERN роли, групповые/стилевые семейства и song-section roles только на основе ранее утверждённого scope и восстановленной точной 21-group/song matrix.
+4. Каждый preset/resource проходит provenance, license, mapping, MIDI playback, DSP binding, level, listening, save/restore, host and regression acceptance gates. Drafts не считать READY. Цели 500 READY MELODY + 500 READY PATTERN сохраняются; нельзя заявлять готовую полноценную factory library, пока она фактически не собрана и не прошла проверки.
+
+Это утверждённый порядок работ, а не заявление о завершении визуального этапа, наличии готовых библиотек или готовых factory presets. Текущий статус каждого этапа отражать по фактическим доказательствам; не перескакивать к массовому наполнению пресетов до завершения визуального этапа и проверки библиотечных ресурсов.
+
+Статус: USER CONFIRMED / PROJECT SEQUENCE LOCKED. Visual completion, library qualification, factory preset composition and acceptance remain in progress/pending until evidenced.
