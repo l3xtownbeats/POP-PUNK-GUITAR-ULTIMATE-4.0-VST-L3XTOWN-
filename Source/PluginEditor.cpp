@@ -14,6 +14,21 @@
   #define NOMINMAX
  #endif
 
+ #include <windows.h>
+juce::String fromWidePath(const wchar_t* value, int length)
+{
+    if (value == nullptr || length <= 0)
+        return {};
+    const int required = WideCharToMultiByte(CP_UTF8, 0, value, length, nullptr, 0, nullptr, nullptr);
+    if (required <= 0)
+        return {};
+    std::string utf8(static_cast<size_t>(required), '\0');
+    const int written = WideCharToMultiByte(CP_UTF8, 0, value, length,
+                                             utf8.data(), required, nullptr, nullptr);
+    return written == required ? juce::String::fromUTF8(utf8.data(), written) : juce::String();
+}
+#endif
+
 namespace
 {
 // Shared theme typography factory. It changes font metrics only; component bounds,
@@ -29,20 +44,6 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
         .withExtraKerningFactor(palette.letterSpacing);
 }
 }
- #include <windows.h>
-juce::String fromWidePath(const wchar_t* value, int length)
-{
-    if (value == nullptr || length <= 0)
-        return {};
-    const int required = WideCharToMultiByte(CP_UTF8, 0, value, length, nullptr, 0, nullptr, nullptr);
-    if (required <= 0)
-        return {};
-    std::string utf8(static_cast<size_t>(required), '\0');
-    const int written = WideCharToMultiByte(CP_UTF8, 0, value, length,
-                                             utf8.data(), required, nullptr, nullptr);
-    return written == required ? juce::String::fromUTF8(utf8.data(), written) : juce::String();
-}
-#endif
 
 // Scrollable visual browser for the complete registry. Preview images are loaded
 // lazily by visible cards so opening the gallery does not decode all 102 PNGs.
