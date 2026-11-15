@@ -596,3 +596,7 @@ Each preset's documentation should label these values “starting point / tonal 
 Для исследования каталога сначала определить список 21 ранее утверждённой группы и конкретные песни-референсы для каждой. Песни используются как исследовательские ориентиры для разбора ролей/секций и характера звука, а не как материал для копирования защищённых партий или записей. До восстановления точного утверждённого списка не подменять его догадками и не заявлять, что список песен уже зафиксирован.
 
 Статус: USER CONFIRMED / FIXED SOUND-QUALITY PRIORITIES. 21-group/song reference matrix must be retrieved from prior approved records before being declared complete. Source quality, preset implementation and listening validation remain subject to evidence.
+
+
+## 2026-11-15 — EXPLICIT RECONFIRMATION / BASELINE LOCK
+Пользователь повторно подтвердил и распорядился зафиксировать в проектной базе все принципы SOUND QUALITY PRIORITY, записанные выше: RAW/CLEAN/DI/ACOUSTIC source quality first; then high-quality processed tones; quality over preset/effect count; developer autonomy over methods within approved scope; truthful status/licensing/READY gates. Также подтверждено требование восстановить точный утверждённый список 21 групп и закреплённых песен-референсов, не заменяя его догадками. Это подтверждение фиксирует требования как утверждённую базовую основу проекта; не является заявлением, что 21-group/song matrix или сами пресеты уже реализованы.
