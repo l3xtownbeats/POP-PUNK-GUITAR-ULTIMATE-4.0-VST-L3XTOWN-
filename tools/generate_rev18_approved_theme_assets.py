@@ -448,8 +448,10 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
     for rel,img,cat in [
         ("assets/master/hero/hero.png",hero,"hero-master"),
         ("assets/hero/hero.png",hero.resize((800,450),Image.Resampling.LANCZOS),"hero-runtime"),
+        ("assets/hero.png",hero.resize((800,450),Image.Resampling.LANCZOS),"hero-runtime-compat"),
         ("assets/master/preview/preview.png",preview,"preview-master"),
         ("assets/preview/preview.png",preview.resize((360,240),Image.Resampling.LANCZOS),"preview-runtime"),
+        ("assets/preview.png",preview.resize((360,240),Image.Resampling.LANCZOS),"preview-runtime-compat"),
         ("assets/master/background/main.png",bg,"background-master"),
         ("assets/background/main.png",bg,"background-runtime"),
         ("assets/master/textures/material.png",texture,"texture-master"),
