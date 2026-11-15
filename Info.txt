@@ -3226,3 +3226,15 @@ unverified until their steps complete successfully.
 **Статус:** SOURCE PATCH PREPARED; CI/BUILD NOT YET VERIFIED.
 - Оптимизация RT CPU: интерполированные коэффициенты рассчитываются один раз на sample и совместно используются левым/правым каналом, а не пересчитываются отдельно для каждого канала.
 - Предкомпиляционная проверка поймала ошибку порядка объявления в новом unit-тесте: stressed coefficients были использованы до объявления. Исправлено перемещением объявления перед проверками интерполяции; повторно проверено по актуальному тексту теста.
+
+
+## 2026-11-15 — Processor-level FX regression: EQ signal-path response
+
+**Изменено:** `tests/ProcessorPatternIntegrationTests.cpp`.
+**Commit:** `818520fadcdcfbd1ecd73651f0ecfc210033eeee`.
+
+**Добавлено:** integration regression для реального `PopPunkGuitarUltimateAudioProcessor::processBlock()`: два одинаковых тестовых sample-bank processor instance рендерят одинаковый SFZ fixture; один работает с нейтральным EQ, второй включает EQ Low Shelf (+9 dB, 300 Hz). Сравнивается RMS-разница выходных буферов. Проверка направлена на подтверждение того, что EQ реально влияет на audio signal path, а не только рассчитывает коэффициенты отдельно.
+
+**Исправление тестовой обвязки до фиксации:** массив настроек расширен до фактического числа 24 элементов; вызовы oversized renderer приведены к единой сигнатуре с явным EQ флагом; восстановлены корректные границы блока и диагностическое сообщение.
+
+**Статус:** test source committed; exact-HEAD Windows build/CTest/pluginval пока не подтверждены. Threshold является regression guard, его устойчивость должна быть подтверждена запуском Windows CI. Это не утверждение о полном FX acceptance.
