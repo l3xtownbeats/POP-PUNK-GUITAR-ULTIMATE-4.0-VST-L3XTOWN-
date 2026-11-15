@@ -654,6 +654,7 @@ void SamplerEngine::panic(int fadeSamples) noexcept
             voice.releaseStep = voice.gain / samples;
             voice.releasing = true;
         }
+}
 
 void SamplerEngine::releaseVoice(Voice& voice) noexcept
 {
