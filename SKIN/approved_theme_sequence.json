@@ -5,7 +5,7 @@
   "status": "16_THEME_SEQUENCE_FIXED_AND_USER_APPROVED; ARTWORK_AND_RUNTIME_ACCEPTANCE_GATES_TRACKED_SEPARATELY",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
-  "rule": "USER-APPROVED FIXED ORDER: SKIN-1=NEON FORGE (DEFAULT); SKIN-2=OBSIDIAN GOLD; SKIN-3=CARBON FORGE; SKIN-4=MIDNIGHT CRIMSON; SKIN-5=ARCTIC PLATINUM; SKIN-6=VIOLET NOIR; SKIN-7=TITANIUM STORM; SKIN-8=EMERALD CIRCUIT; SKIN-9=SOLAR FLARE; SKIN-10=DEEP OCEAN; SKIN-11=ROSE CHROME; SKIN-12=DESERT AMBER; SKIN-13=GLACIER TEAL; SKIN-14=PHANTOM GRAPHITE; SKIN-15=ULTRAVIOLET DRIVE; SKIN-16=VOLCANIC STEEL. This 16-theme sequence and naming/order are immutable unless the user explicitly approves a change. Historical skin records are outside this active sequence and must not be silently reintroduced into the active gallery.",
+  "rule": "USER-APPROVED FIXED ORDER: SKIN-1=NEON FORGE (DEFAULT); SKIN-2=OBSIDIAN GOLD; SKIN-3=CARBON FORGE; SKIN-4=MIDNIGHT CRIMSON; SKIN-5=ARCTIC PLATINUM; SKIN-6=VIOLET NOIR; SKIN-7=TITANIUM STORM; SKIN-8=EMERALD CIRCUIT; SKIN-9=SOLAR FLARE; SKIN-10=DEEP OCEAN; SKIN-11=ROSE CHROME; SKIN-12=DESERT AMBER; SKIN-13=GLACIER TEAL; SKIN-14=PHANTOM GRAPHITE; SKIN-15=ULTRAVIOLET DRIVE; SKIN-16=VOLCANIC STEEL. This 16-theme sequence and naming/order are immutable unless the user explicitly approves a change. Historical skin records are outside this active sequence and must not be silently reintroduced into the active gallery. The obsolete historical theme archive has been removed from the current branch; only these sixteen factory themes may exist in the product tree.",
   "themes": [
     {
       "ordinal": 1,
@@ -153,14 +153,15 @@
       "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     }
   ],
-  "sharedSystem": "All 16 premium themes use the shared NEON STAGE component design language; SKIN-1 is named NEON FORGE.",
+  "sharedSystem": "All 16 factory themes use the shared NEON STAGE component design language; SKIN-1 is NEON FORGE (DEFAULT).",
   "constraints": [
     "No fake controls or functions.",
     "No Audio Engine, DSP, MIDI or APVTS changes.",
     "No existing control/parameter ID changes.",
     "No breaking existing module functions or layouts.",
     "GitHub mockups remain the visual reference.",
-    "Runtime and release acceptance require packaged assets and VST3 validation."
+    "Runtime and release acceptance require packaged assets and VST3 validation.",
+    "Exactly sixteen factory-theme folders are permitted; no historical skin archive or arbitrary expansion batch may be reintroduced."
   ],
   "pending": [
     "PNG preview.png (360x240) and hero.png (800x450) for SKIN-2…SKIN-16",
