@@ -2901,3 +2901,12 @@ Commit: `de879ac648d0a512de0e6af29e62acfeac948b8b`.
 - исправлен ранее обнаруженный upload path mismatch: artifact upload теперь указывает на фактическое имя создаваемого portable ZIP.
 
 Это подтверждает наличие default theme в исходной конфигурации и защиту её включения в пакет, но не заменяет runtime визуальную приёмку. Windows VST3 build, ZIP artifact и FL Studio 20 host acceptance остаются pending.
+
+
+## 2026-11-15 — Portable package folders and REV.18 skin control parity
+
+- Portable Windows x64 package layout expanded to include `Source/` (reference-only C++ source and CMake project), `Documents/` (project documentation and INFO journal), and `Licenses/` (project-level clearance records), while retaining `Resources/`, runtime `Skins/`, `SOUNDBANK/`, `PRESETS/`, and `VST3/`.
+- Runtime skin directory remains named `Skins/` because it is the established sibling path expected by the plugin; it contains only registry-approved themes, including `skin-053 / NEON STAGE DEFAULT`.
+- Windows x64 build completed successfully, but CTest exposed a real contract failure: 50 Skin Studio manifests (skin-052 and skin-054 through skin-102) contained an unapproved extra `sync_selector` entry (28 controls) instead of the required exact 27 canonical IDs. The 27-ID contract is unchanged; remove only that extra manifest key from those 50 themes and rerun the complete Windows validation.
+- No plugin behavior, APVTS IDs, FX bypass IDs, layout, or audio behavior is changed by this correction.
+- Portable ZIP is not available until CTest, pluginval strictness 5, packaging and artifact upload all pass.
