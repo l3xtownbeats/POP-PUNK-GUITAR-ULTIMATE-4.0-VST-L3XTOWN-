@@ -31,6 +31,15 @@ class Rev18ThemeControlParityTests(unittest.TestCase):
                 self.assertNotIn("sync_selector", controls)
                 self.assertEqual(21, len(theme.get("palette", {})))
 
+    def test_runtime_validator_uses_the_same_exact_27_control_contract(self) -> None:
+        source = (ROOT / "Source" / "UI" / "ThemeManager.cpp").read_text(encoding="utf-8")
+        start = source.index("bool validateSkinStudioManifest(")
+        end = source.index("\n}\n\nbool PPGUThemeManager::readColour", start)
+        validator = source[start:end]
+        self.assertIn("!= requiredControlIds.size()", validator)
+        self.assertNotIn("sync_selector", validator)
+        self.assertIn("requiredControlIds", validator)
+
     def test_skin_one_remains_the_canonical_default(self) -> None:
         first = self.sequence["themes"][0]
         self.assertEqual("SKIN-1", first["label"])
