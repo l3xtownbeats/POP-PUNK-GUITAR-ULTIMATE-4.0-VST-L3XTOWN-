@@ -27,7 +27,16 @@ public:
         closeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
         closeButton.setColour(juce::TextButton::textColourOffId, text);
         closeButton.setColour(juce::TextButton::buttonOnColourId, border);
-        closeButton.onClick = [this] { owner.handleClose(panelId); };
+        closeButton.onClick = [this]
+        {
+            const auto id = panelId;
+            juce::Component::SafePointer<PPGUMultiWindowWorkspace> safeOwner(&owner);
+            juce::MessageManager::callAsync([safeOwner, id]
+            {
+                if (safeOwner != nullptr)
+                    safeOwner->handleClose(id);
+            });
+        };
         addAndMakeVisible(closeButton);
 
         maximizeButton.setButtonText("□");
