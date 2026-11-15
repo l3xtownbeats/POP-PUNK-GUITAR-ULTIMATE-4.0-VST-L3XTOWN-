@@ -290,12 +290,12 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
+          $folders = @('SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Assets')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
 
-          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
+          Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination $release -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
           # Runtime skin payload is a sibling of VST3/, so both can be copied
@@ -351,14 +351,14 @@ jobs:
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
           $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
           if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
-          $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
+          $vst3Bundle = Get-ChildItem $release -Directory -Filter '*.vst3' | Select-Object -First 1
           if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
 
           @'
-          POP PUNK GUITAR ULTIMATE — INTERIM WINDOWS x64 CI BUILD (NOT FINAL RELEASE)
+          POP PUNK GUITAR ULTIMATE — PORTABLE WINDOWS x64 VST3 CI BUILD (NOT FINAL RELEASE)
           =============================================================================
           STATUS: CI VALIDATION ARTIFACT ONLY. NOT A FINAL REV.18 PRODUCT RELEASE.
-          VST3/       The compiled Windows x64 VST3 plugin bundle.
+          ROOT/       The compiled Windows x64 VST3 plugin bundle is at the package root.
           SOUNDBANK/  CI sample payload, SFZ maps, upstream license files and SHA-256 manifest.
                       Sound Hunter asset-level registry is empty; final factory admission is pending.
           PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
@@ -367,8 +367,8 @@ jobs:
           Resources/  Install notes, source/license summary, checksums and skin documentation.
           Assets/     Product artwork and visual assets.
 
-          INSTALL (DEVELOPMENT / QA ONLY):
-          1. Copy the .vst3 bundle from VST3/ AND the Skins/ folder into:
+          PORTABLE USE (NO INSTALLER):
+          1. Extract this archive anywhere on a local drive. No Setup.exe or installer is required. Keep the .vst3 bundle beside Skins/, SOUNDBANK/, PRESETS/, Resources/ and Assets/.
              C:\Program Files\Common Files\VST3\
              Keep Skins/ beside the .vst3 bundle; do not place it in AppData.
           2. In the plugin, use its SFZ load control and select an instrument SFZ
@@ -385,13 +385,13 @@ jobs:
           final FX EDIT / Skin Gallery / Settings acceptance, CPU/RAM targets or release readiness.
           '@ | Set-Content -Encoding utf8 (Join-Path $release 'INSTALL_AND_CONTENTS.txt')
 
-          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip'
+          $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_PORTABLE_CI_NOT_RELEASE.zip'
           if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
           Compress-Archive -Path (Join-Path $release '*') -DestinationPath $zipPath -Force
 
       - uses: actions/upload-artifact@v4
         with:
-          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-INTERIM-CI-NOT-RELEASE
-          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_INTERIM_CI_NOT_RELEASE.zip
+          name: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-PORTABLE-CI-NOT-RELEASE
+          path: POP_PUNK_GUITAR_ULTIMATE_Windows_x64_VST3_PORTABLE_CI_NOT_RELEASE.zip
           if-no-files-found: error
 
