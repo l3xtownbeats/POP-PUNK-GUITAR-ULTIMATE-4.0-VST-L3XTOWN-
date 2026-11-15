@@ -2774,3 +2774,21 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Status:** CONTROL CONTRACT CORRECTED / TEST REGISTERED / EXECUTION PENDING / ASSET PACKS PENDING.
 ============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — REV18 theme audit path correction and focused CI gate
+==============================================================================
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`.
+
+**Changes:**
+- `tools/audit_skin_rev18_assets.py` now resolves each theme's asset folder from the actual `theme.json` path. This correctly handles the canonical zero-padded folder `Skin_053`.
+- Added `.github/workflows/ppgu-rev18-theme-contract.yml`, scoped to this visual-theme branch. The workflow runs `tests/TestRev18ThemeControlParity.py` and the read-only `tools/audit_skin_rev18_assets.py --root SKIN` on branch pushes and manual dispatch.
+
+**Commits:** `6e19118e`, `a78b04b6`; documentation commit `a5c50a64f8f3317ba46fad059521c1e8a4fa4b4b`.
+
+**Evidence boundary:** the workflow is committed and configured to run. A completed run result has not yet been retrieved; no PASS claim is made. Missing preview/hero raster assets are still expected warnings and remain unfinished. G1–G4, full package, runtime gallery, Windows VST3, pluginval and FL Studio 20 acceptance remain pending.
+
+**Status:** AUDIT PATH FIX / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING / ASSET GENERATION PENDING.
+============================================================================== 
