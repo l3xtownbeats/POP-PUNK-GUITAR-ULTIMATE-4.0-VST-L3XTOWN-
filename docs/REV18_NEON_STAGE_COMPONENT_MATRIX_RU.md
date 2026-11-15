@@ -248,12 +248,13 @@ The REV18 audit now validates the 16 approved manifests, names, stable IDs, 21 p
 
 **Working branch:** `ui/neon-stage-playing-core`  
 **Base:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
-**Source commits:** `05ec031e2ad8e081aaa2611c91bf4b6c9fc8d3cc` (editor state), `2ef6cfd8aec0b2974c88ad32158a6da577326e7c` (runtime loading and rendering).
+**Source commits:** `05ec031e2ad8e081aaa2611c91bf4b6c9fc8d3cc`, `2ef6cfd8aec0b2974c88ad32158a6da577326e7c`, `0f3022d8f4e855159771fdbad6d6fa51ce689f35`, `0199d4dcebcc02ac8fcbe959dbedee9dfb8168bb`.
 
 Implemented:
 - `PluginEditor.h` now owns a JUCE image and source-file cache for the active skin's hero artwork.
 - `PluginEditor.cpp` resolves `assets.hero` from the active skin manifest, rejects absolute/traversal paths, checks that the resource remains inside the skin directory, and loads the image only when the active hero changes.
 - Main Playing Core reserves a dedicated artwork strip and paints the active theme's hero image with a theme-derived frame.
+- The center section title is now `PLAYING CORE`; the gallery entry point is labeled `SKINS`.
 - NEON STAGE's existing `Skin_053/assets/hero.png` is present in the branch and is 800×450. No new artwork or placeholder was fabricated.
 - All 9 approved rotary APVTS bindings and 7 approved FX bypass bindings remain unchanged. No DSP, MIDI, processor state or audio callback was touched.
 
