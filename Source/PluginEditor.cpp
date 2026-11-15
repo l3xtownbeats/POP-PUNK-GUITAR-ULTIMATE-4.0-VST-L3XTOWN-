@@ -1437,11 +1437,26 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
+    // NEON STAGE Playing Core hero artwork is loaded from the active skin manifest.
+    // It is a visual-only surface; all nine live controls remain separate JUCE components.
+    area.removeFromTop(48); // MELODY / PATTERN / sync row plus spacing.
+    auto heroSlot = area.removeFromTop(116).reduced(9, 5);
+    g.setColour(p.token("panel_elevated"));
+    g.fillRoundedRectangle(heroSlot.toFloat(), 8.0f);
+    if (!heroArtwork.isNull())
+    {
+        g.saveState();
+        g.reduceClipRegion(heroSlot);
+        g.drawImageWithin(heroArtwork, heroSlot.getX(), heroSlot.getY(),
+                          heroSlot.getWidth(), heroSlot.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+    g.setColour(p.token("accent").withAlpha(0.72f));
+    g.drawRoundedRectangle(heroSlot.toFloat().reduced(0.5f), 8.0f, 1.0f);
+
+    // Restrained texture is cached by JUCE's normal component repaint path.
+    g.setColour(p.token("text_secondary").withAlpha(0.08f));
     for (int x = area.getX() + 16; x < area.getRight(); x += 32)
         g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
 }
@@ -1504,6 +1519,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+    // Dedicated NEON STAGE guitar-artwork strip; the approved nine APVTS knobs stay intact below.
+    centre.removeFromTop(116);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
     const int cols = 3;
@@ -1808,8 +1825,50 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
+{
+    const auto paletteId = themeManager.getPalette().id;
+    const int skinIndex = paletteId.startsWith("skin-")
+        ? paletteId.substring(5).getIntValue() : 0;
+    const auto manifest = getSkinManifest(skinIndex);
+
+    if (!manifest.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+    const auto assets = theme.getProperty("assets", juce::var());
+    const auto relativePath = assets.getProperty("hero", "").toString();
+
+    if (relativePath.isEmpty() || relativePath.startsWith("/")
+        || relativePath.contains(".."))
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
+    if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    if (candidate == heroArtworkFile && !heroArtwork.isNull())
+        return;
+
+    heroArtworkFile = candidate;
+    heroArtwork = juce::ImageFileFormat::loadFrom(heroArtworkFile);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
+ refreshHeroArtwork();
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
