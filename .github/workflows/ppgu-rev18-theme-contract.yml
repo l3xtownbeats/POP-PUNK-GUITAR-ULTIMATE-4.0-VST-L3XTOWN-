@@ -1,13 +1,6 @@
+# REV18 generator mode fix follow-up: 50f9506a
 name: PPGU REV18 Theme Contract
 on:
-  push:
-    branches:
-      - work/ppgu-rev18-premium-theme-assets
-    paths:
-      - 'SKIN/**'
-      - 'tools/**'
-      - 'tests/TestRev18ThemeControlParity.py'
-      - '.github/workflows/ppgu-rev18-theme-contract.yml'
   pull_request:
     branches:
       - ui/neon-stage-skin1-completion
@@ -21,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
       - name: Install artwork generator dependency
         run: python3 -m pip install --disable-pip-version-check pillow
       - name: Generate full approved theme asset packs
@@ -39,7 +34,7 @@ jobs:
           git add SKIN
           if ! git diff --cached --quiet; then
             git commit -m "assets(REV18): generate approved premium theme packs"
-            git push
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
           else
             echo "Generated assets already match the committed pack."
           fi
