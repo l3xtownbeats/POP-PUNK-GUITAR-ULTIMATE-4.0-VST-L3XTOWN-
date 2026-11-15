@@ -1038,15 +1038,23 @@ void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, i
     g.strokePath(value, juce::PathStrokeType(4.0f, juce::PathStrokeType::curved,
                                              juce::PathStrokeType::rounded));
 
-    const auto faceTop = enabled ? palette.surfaceRaised.brighter(0.12f)
-                                 : palette.surfaceSecondary;
-    const auto faceBottom = enabled ? palette.canvasInset.darker(0.12f)
-                                    : palette.canvasInset;
-    g.setGradientFill(juce::ColourGradient(faceTop, cx, cy - r, faceBottom, cx, cy + r, false));
-    g.fillEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f);
-    g.setColour(focused ? palette.focus : palette.border);
-    g.drawEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f,
-                  focused ? 2.0f : 1.2f);
+    if (knobSprite.isValid())
+        g.drawImageWithin(knobSprite, static_cast<int>(cx - r + 4.0f),
+                          static_cast<int>(cy - r + 4.0f),
+                          static_cast<int>(d - 8.0f), static_cast<int>(d - 8.0f),
+                          juce::RectanglePlacement::centred);
+    else
+    {
+        const auto faceTop = enabled ? palette.surfaceRaised.brighter(0.12f)
+                                     : palette.surfaceSecondary;
+        const auto faceBottom = enabled ? palette.canvasInset.darker(0.12f)
+                                        : palette.canvasInset;
+        g.setGradientFill(juce::ColourGradient(faceTop, cx, cy - r, faceBottom, cx, cy + r, false));
+        g.fillEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f);
+        g.setColour(focused ? palette.focus : palette.border);
+        g.drawEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f,
+                      focused ? 2.0f : 1.2f);
+    }
 
     juce::Path pointer;
     pointer.startNewSubPath(cx, cy);
@@ -1151,6 +1159,9 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setWantsKeyboardFocus(true);
     setLookAndFeel(&premiumLookAndFeel);
     runtimeSkinRoot = getRuntimeSkinRoot();
+    const auto neonAssets = runtimeSkinRoot.getChildFile("Skin_053/assets");
+    premiumLookAndFeel.setSkinAssetsRoot(neonAssets);
+    stageBackground = juce::ImageFileFormat::loadFrom(neonAssets.getChildFile("background/main.png"));
     // Medium first-launch footprint for FL Studio; the JUCE resize corner remains enabled.
     // The responsive layout below keeps the main controls visible down to the minimum size.
     setSize(1024, 700);
@@ -1422,6 +1433,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+    if (stageBackground.isValid())
+        g.drawImageWithin(stageBackground, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
