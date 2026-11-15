@@ -2813,3 +2813,33 @@ unverified until their steps complete successfully.
 - Main editor and theme-aware auxiliary panels receive the same NEON STAGE palette. APVTS, DSP, sampler, MIDI, preset state and audio routing are unchanged.
 - Artwork/icon generation and REV.18 asset audit now target `skin-001` / `Skin_001`.
 - Exact-HEAD Windows VST3 build, CTest, pluginval and host acceptance remain pending.
+
+
+==============================================================================
+
+## 2026-11-15 — SOURCE AUDIT: SFZ PATH CONTAINMENT / DSP PARAMETER CONSISTENCY
+
+**Статус:** SFZ SECURITY FIX IMPLEMENTED IN SOURCE; EXACT-HEAD WINDOWS CI PENDING; BROADER DSP / PARAMETER AUDIT OPEN.
+
+Проверка исходников PR #41 выявила и исправила подтверждённую проблему безопасности:
+- Ранее SFZ sample path проверялся только лексически. Путь вида `linked/secret.wav` мог выйти из каталога библиотеки, если `linked` являлся symlink на внешний каталог.
+- `pathStaysInside()` теперь разрешает существующие компоненты через `std::filesystem::weakly_canonical` и проверяет containment по canonical paths. Это сохраняет поддержку ещё не созданных WAV-файлов и блокирует обычный symlink escape.
+- Добавлены regression tests для symlink escape через `sample` и через `<control> default_path`. Тесты выполняют symlink assertions, если текущая ОС/runner разрешает создание directory symlink; существующие lexical traversal tests остаются обязательными.
+- Исправление SFZ signed/multi-digit octave parsing (C-1, C#-1, G9; отказ C10) и regression cases сохранены в той же ветке.
+
+Изменения аудио-кода, уже присутствующие в этой ветке:
+- Commit `7e1d77e53a971f4cdc69c8b4e7b9c5d924df66f0`: параметр `tone` подключён к high-band trim (нейтральное значение 5; диапазон 0…10), `compressorAmount` смешивает unity gain и полную компрессию (0 = bypass amount, 1 = full compression).
+- Эти DSP-изменения ещё не имеют отдельного подтверждённого аудио regression suite; runtime audio acceptance не заявляется.
+
+Подтверждённые функциональные несостыковки, найденные при сверке APVTS registry с DSP:
+- UI exposes EQ frequency/Q controls `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`, но текущий DSP использует фиксированные crossover values 250 Hz / 2500 Hz; эти параметры пока не влияют на обработку.
+- UI exposes `distortionTone`, `cabinetLowCut`, `cabinetHighCut`, но текущий DSP их не читает.
+- Дополнительные declared-but-unconsumed controls относятся к articulation / MIDI behavior / DNA / double-track. Их назначение требует проверки против полной REV18 спецификации и preset serialization; удаление APVTS IDs запрещено без миграционного плана.
+- Эти пункты остаются OPEN; не считать их исправленными и не выдавать декоративные/неподключённые контролы за рабочие.
+
+**CI exact SHA:**
+- Run `43656073757` проверяет commit `17c765d52668e300414059cedeafde21a760327f`.
+- На момент записи job `build` выполняет шаг `Generate and validate missing legacy skin artwork`; configure/build/CTest/pluginval/package ещё не запускались.
+- Предыдущие runs на промежуточных SHA были отменены новым commit; они не являются PASS.
+
+**PR:** #41, branch `work/neon-stage-rich-console-ui`, Draft=true, merged=false. Не approve / не merge. Текущий этап — продолжить parameter/DSP consistency audit, устранить подтверждённые mismatch с regression tests, затем повторить exact-HEAD Windows Release, CTest и pluginval. FL Studio 20 host acceptance и CPU/RAM profiling остаются отдельными непроверенными критериями.
