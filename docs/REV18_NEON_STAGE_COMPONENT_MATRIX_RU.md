@@ -242,3 +242,19 @@ The UI entry point previously called **Auto Discover** in historical audit rows 
 The binding UI references are `PPGU_UI_THEME_SPEC_FULL.txt` v1.3 and the canonical `01 INTERFACE  NEON STAGE DEFAULT .png`, with 02–07 as supporting module/workspace references. MINIMALISM remains the default mode within NEON STAGE, not a separate skin; cheap/simplified legacy themes do not count among the 16 active premium themes.
 
 The REV18 audit now validates the 16 approved manifests, names, stable IDs, 21 palette tokens, required control IDs, shared typography, visual-only compatibility, unique texture/bezel/crest resources, effects-path parity, safe asset paths, SVG active/external content and PNG integrity/dimensions. Nine security tests pass locally. Current non-strict audit: 0 errors / 45 expected warnings. Outstanding warnings are the missing preview/hero PNG pair and pending registry promotion for SKIN-2 through SKIN-16. No gallery registration or ID migration is claimed.
+
+
+## 2026-11-15 — Playing Core hero artwork: first implementation checkpoint
+
+**Working branch:** `ui/neon-stage-playing-core`  
+**Base:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
+**Source commits:** `05ec031e2ad8e081aaa2611c91bf4b6c9fc8d3cc` (editor state), `2ef6cfd8aec0b2974c88ad32158a6da577326e7c` (runtime loading and rendering).
+
+Implemented:
+- `PluginEditor.h` now owns a JUCE image and source-file cache for the active skin's hero artwork.
+- `PluginEditor.cpp` resolves `assets.hero` from the active skin manifest, rejects absolute/traversal paths, checks that the resource remains inside the skin directory, and loads the image only when the active hero changes.
+- Main Playing Core reserves a dedicated artwork strip and paints the active theme's hero image with a theme-derived frame.
+- NEON STAGE's existing `Skin_053/assets/hero.png` is present in the branch and is 800×450. No new artwork or placeholder was fabricated.
+- All 9 approved rotary APVTS bindings and 7 approved FX bypass bindings remain unchanged. No DSP, MIDI, processor state or audio callback was touched.
+
+**Validation boundary:** source change only. Exact-HEAD Windows build, CTest, pluginval strictness 5, portable VST3 packaging, pixel-level comparison and FL Studio 20 acceptance remain PENDING. This is the first bounded implementation slice, not completion of the NEON STAGE interface.
