@@ -2589,3 +2589,23 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 
 **Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV.18 NEON STAGE UNIFIED UI — DESIGN CONTRACT ESTABLISHED
+==============================================================================
+
+**Статус:** APPROVED VISUAL CONTRACT COMMITTED; PRODUCTION MODULE RESTYLING NOT YET CLAIMED.
+
+- Создана рабочая ветка `work/rev18-neon-stage-unified-ui` от `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+- Добавлен `docs/REV18_NEON_STAGE_UNIFIED_DESIGN_SYSTEM_RU.md`: единый визуальный контракт для Main Interface, AutoChords, Curator, Sound Hunter, Auto Discover, FX EDIT, AMP & TONE, Import Guitar, Performance, Settings, Skin Gallery и About.
+- Зафиксировано: все модули используют общие токены/компоненты/состояния NEON STAGE, но сохраняют собственную функциональную компоновку.
+- Обязательны реальные callbacks/state/parameters; фиктивные кнопки, декоративные live-индикаторы и выдуманные статусы запрещены.
+- Запрещены изменения audio engine, DSP, MIDI, APVTS IDs/semantics, sampler и preset compatibility.
+- Последовательность: аудит эталонных макетов и исходников → общая дизайн-система → Main Interface → модули по одному → cross-module audit → exact-SHA build/CTest/pluginval/FL Studio 20.
+- Важно: текущий аудит обнаружил в SKIN/README.md противоречивую/устаревшую ссылку на REV.17 и SIGNAL FORGE skin-052; README также прямо предупреждает о частичной control parity и недоказанной runtime completeness. Каноническая пользовательская идентичность NEON STAGE DEFAULT / SKIN-1 (skin-053 / Skin_053) сохраняется и не должна автоматически заменяться устаревшей документацией.
+- На этом шаге создан контракт и отдельная рабочая ветка. C++ UI source ещё не изменялся; макеты не объявляются runtime UI; сборка и тесты не запускались.
+
+**Следующий обязательный шаг:** source/reference preflight — установить точные пути загруженных NEON STAGE mockups и текущие реализации компонентов/ThemeManager на этой ветке; затем начать интеграцию общей системы в Main Interface без изменения audio/MIDI/APVTS.
+
+============================================================================== 
