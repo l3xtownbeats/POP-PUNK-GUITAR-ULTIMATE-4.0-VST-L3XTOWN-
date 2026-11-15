@@ -279,3 +279,13 @@ Implemented:
 - Границы реализации: это harmony setup / локальное редактирование UI. MIDI chord generation, playback, preview, export, сохранение progression и host transport sync НЕ реализованы и не заявляются.
 - DSP, MIDI/audio callback, 27-control contract и семь утверждённых FX bypass IDs не менялись.
 - Проверка компиляции Windows, CTest, pluginval и FL Studio 20 на новом exact HEAD: PENDING.
+
+## 2026-11-15 — Skin Gallery Apply transaction guard
+
+- Branch: `ui/neon-stage-playing-core` (PR #54; draft remains open and unmerged).
+- Fix: a newly opened Skin Gallery no longer treats the already-active skin as a previewed transaction. `APPLY` starts disabled and becomes available only after a successful explicit `PREVIEW` of the current selection.
+- Safety: selection alone still does not mutate the active theme; `BACK` / close continue to roll back a temporary preview.
+- Corrected a stale source comment: archived legacy assets are not part of the active runtime registry.
+- Commit(s): `e28aa685bf99f605e71a7cc4c1bc2d8caa44514c`, `0e472a056377925a24a2f8f868fedd8ee0d77530`.
+- Validation: CI for the new HEAD is pending; the preceding exact-HEAD run `43712521581` passed Windows x64 Release build, CTest, pluginval strictness 5 and interim CI packaging. That prior run does not validate these latest commits.
+- Status: source fix committed; regression/CI confirmation pending. Not a release claim.
