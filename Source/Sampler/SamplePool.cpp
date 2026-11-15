@@ -366,6 +366,14 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
     return report;
 }
 
+void SamplePool::clearActiveSnapshot()
+{
+    // Serialize with background bank publication. Snapshots are retained so
+    // any previously published readers cannot observe freed region memory.
+    std::lock_guard<std::mutex> lock(loaderMutex);
+    activeSnapshot.store(nullptr, std::memory_order_release);
+}
+
 const SamplePool::RegionView* SamplePool::findRegion(int midiNote, int velocity, int midiChannel) noexcept
 {
     const auto* snapshot = activeSnapshot.load(std::memory_order_acquire);
@@ -456,6 +464,12 @@ void SamplerEngine::prepare(double sampleRate) noexcept
     vibratoLfoSinStep = std::sin(vibratoStep);
     vibratoLfoCosStep = std::cos(vibratoStep);
     reset();
+}
+
+void SamplerEngine::clearSampleBank()
+{
+    reset();
+    pool.clearActiveSnapshot();
 }
 
 void SamplerEngine::reset() noexcept

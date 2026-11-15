@@ -42,6 +42,7 @@ public:
     [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
+    void clearActiveSnapshot();
 
     struct RegionView
     {
@@ -123,6 +124,7 @@ public:
     [[nodiscard]] LoadReport loadSfz(const juce::File& sfzFile,
         const std::atomic<std::uint64_t>* requestGeneration = nullptr,
         std::uint64_t expectedGeneration = 0);
+    void clearSampleBank();
     [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0, bool palmMuted = false) noexcept;
     void setPitchBend(int midiChannel, float semitones, int targetMode = 0) noexcept;
     void setModWheel(int midiChannel, float value) noexcept;

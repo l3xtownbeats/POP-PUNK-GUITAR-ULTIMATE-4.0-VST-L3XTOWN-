@@ -1079,6 +1079,10 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         currentSfzFilePath = restoredSfzPath;
     }
 
+    // Never keep playing a different previously loaded bank when restoring
+    // a session whose saved SFZ path is missing or still loading.
+    sampler.clearSampleBank();
+
     // Legacy sessions have no path property. Missing libraries are deliberately
     // not loaded; the saved path is retained so the user can locate the bank again.
     if (restoredSfzPath.isNotEmpty())
