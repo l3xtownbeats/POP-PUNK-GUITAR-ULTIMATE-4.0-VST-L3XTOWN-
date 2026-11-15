@@ -8,6 +8,9 @@ on:
       - 'tools/**'
       - 'tests/TestRev18ThemeControlParity.py'
       - '.github/workflows/ppgu-rev18-theme-contract.yml'
+  pull_request:
+    branches:
+      - ui/neon-stage-skin1-completion
   workflow_dispatch:
 
 permissions:
