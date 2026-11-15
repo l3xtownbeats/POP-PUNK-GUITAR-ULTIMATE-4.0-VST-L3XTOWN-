@@ -147,7 +147,8 @@ int main()
     expect(manager.getPalette().usedFallback,
            "extra control ID restores default fallback");
 
-    const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
+    const auto canonicalJson = skin53Manifest.loadFileAsString();
+    const auto badStudioColour = canonicalJson.replace("#00D9FF", "#GGD9FF");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
