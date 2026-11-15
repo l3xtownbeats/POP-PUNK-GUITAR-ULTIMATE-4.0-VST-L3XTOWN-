@@ -607,7 +607,7 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
         "fxSpecular":"assets/fx_layers/specular.png",
         "fxShadow":"assets/fx_layers/shadow.png"
     })
-    theme["designStatus"]="APPROVED_FULL_ASSET_PACK_GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
+    theme["assetPackStatus"]="GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     notes=theme.setdefault("notes",[])
     note="[DECISION] Original premium artwork/control-state pack generated from approved palette and material brief; runtime and G1-G4 validation remain separate gates."
     if note not in notes: notes.append(note)
