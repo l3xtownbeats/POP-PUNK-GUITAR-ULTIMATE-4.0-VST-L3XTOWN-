@@ -2589,3 +2589,25 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 
 **Требование синхронизации:** новые UI/theme изменения во всех ветках обязаны сохранять NEON STAGE как DEFAULT SKIN-1; отклонение требует явного согласования пользователя и записи причины/последствий в Info.txt.
 ==============================================================================
+
+==============================================================================
+2026-11-15 — REV18 NEON STAGE runtime UI integration / phase 1
+==============================================================================
+
+**Тип:** production UI source change + status record.
+**Ветка:** `ui/neon-stage-skin1-completion`.
+**Source commit:** `9a62b848b5413b62de077c47f22c604ec6f34211`.
+**Parent source commit:** `751ccee1a1998752e02354e0c80617af3d5d3d6d`.
+**Файлы исходного кода:**
+- `Source/PluginEditor.cpp` — skin preference default corrected from `skin-052` to canonical `skin-053`; visible FX EDIT and Settings restore labels now identify NEON STAGE DEFAULT; existing FX EDIT, AutoChords and Import Guitar controls initialize with canonical palette tokens instead of legacy hard-coded accent/text colours; main MIDI keyboard white-key colour now uses the theme highlight token.
+- `Source/UI/PPGUMultiWindowWorkspace.cpp` — in preceding source commit `751ccee1a1998752e02354e0c80617af3d5d3d6d`, workspace background/panel/border/heading/text chrome is updated from the active palette and propagated to open theme-aware panels.
+
+**Что подтверждено аудитом исходников:** ThemeManager and the premium LookAndFeel are connected to the main editor; the existing FX EDIT, AutoChords, Import Guitar, Skin Gallery and Settings panel classes implement theme-aware palette updates; Performance display receives the palette from the editor. The currently inspected source does not establish completed Curator, Sound Hunter, Auto Discover, AMP & TONE, About or a complete 12-module UI implementation. Those surfaces remain to be located/implemented and validated; no decorative placeholders are to be added.
+
+**Совместимость / non-goals:** visual-only. No Audio Engine, DSP, MIDI processing, APVTS parameter definitions/IDs, sample engine, preset data or control attachments were intentionally changed. Existing APVTS attachments in FX EDIT and AutoChords were preserved.
+
+**Проверки:** source was re-fetched after commit and audited for residual `SIGNAL FORGE` theme labels, `skin-052` fallback and selected legacy hard-coded colours; none remained in the searched patterns. This is a source inspection only. No build, CTest, pluginval, Windows x64 package or FL Studio 20 host test has been run/confirmed on this SHA. GitHub Actions workflow lookup for source commit `9a62b848b5413b62de077c47f22c604ec6f34211` returned no associated runs at check time.
+
+**Статус:** SOURCE CHANGES COMMITTED / BUILD AND RUNTIME VALIDATION PENDING / NOT RELEASE READY.
+**Следующий шаг:** verify exact current branch/HEAD and CI; continue the source inventory for remaining modules, then unify shared component states/typography/interaction styling without creating fake controls.
+==============================================================================
