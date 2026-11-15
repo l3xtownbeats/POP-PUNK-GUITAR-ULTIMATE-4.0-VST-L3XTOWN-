@@ -85,6 +85,27 @@ def gradient(size, top, bottom):
     return ImageOps.colorize(mask, black=top, white=bottom).convert("RGBA")
 
 
+def deterministic_noise(size, seed, sigma=7):
+    # Pillow Image.effect_noise is intentionally random between calls. Use a
+    # seeded, seamless tile so byte-for-byte regeneration is reproducible.
+    tile_size = 128
+    rng = random.Random(seed)
+    tile = Image.new("L", (tile_size, tile_size))
+    px = tile.load()
+    for y in range(tile_size):
+        for x in range(tile_size):
+            px[x, y] = max(0, min(255, 128 + round(rng.gauss(0, sigma))))
+    for y in range(tile_size):
+        px[tile_size - 1, y] = px[0, y]
+    for x in range(tile_size):
+        px[x, tile_size - 1] = px[x, 0]
+    out = Image.new("L", size)
+    for y in range(0, size[1], tile_size):
+        for x in range(0, size[0], tile_size):
+            out.paste(tile, (x, y))
+    return out
+
+
 def stage_background(size, palette, seed=0, guitar=False):
     w, h = size
     top, bottom = rgb(palette["window_bg"]), rgb(palette["panel"])
@@ -102,7 +123,7 @@ def stage_background(size, palette, seed=0, guitar=False):
                   fill=(*glow, alpha))
     overlay = overlay.filter(ImageFilter.GaussianBlur(max(8, w // 150)))
     im = Image.alpha_composite(im, overlay)
-    grain = Image.effect_noise(size, 7).convert("L")
+    grain = deterministic_noise(size, seed + 987, 7)
     grain_rgba = Image.new("RGBA", size, (255, 255, 255, 0))
     grain_rgba.putalpha(grain.point(lambda p: int(p * .07)))
     im = Image.alpha_composite(im, grain_rgba)
