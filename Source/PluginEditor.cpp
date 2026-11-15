@@ -43,9 +43,12 @@ public:
 
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn,
                          PPGUThemeManager::Palette paletteIn,
+                         juce::StringArray favouritesIn,
+                         std::function<void(const juce::StringArray&)> saveFavouritesIn,
                          std::function<void(int)> applyIn,
                          std::function<void()> backIn)
         : skins(std::move(skinsIn)), palette(std::move(paletteIn)),
+          favourites(std::move(favouritesIn)), saveFavourites(std::move(saveFavouritesIn)),
           apply(std::move(applyIn)), back(std::move(backIn))
     {
         for (const auto& skin : skins)
@@ -90,6 +93,15 @@ public:
         familyFilter.onChange = [this] { rebuildCards(); };
         addAndMakeVisible(familyFilter);
 
+        favouritesOnlyButton.setColour(juce::ToggleButton::textColourId, palette.token("text_primary"));
+        favouritesOnlyButton.onClick = [this] { rebuildCards(); };
+        addAndMakeVisible(favouritesOnlyButton);
+
+        favouriteButton.onClick = [this] { toggleSelectedFavourite(); };
+        favouriteButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        favouriteButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        addAndMakeVisible(favouriteButton);
+
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
         countLabel.setFont(juce::Font(10.5f, juce::Font::bold));
         countLabel.setJustificationType(juce::Justification::centredRight);
@@ -120,6 +132,8 @@ public:
         styleAction(previewButton, false);
         styleAction(applyButton, true);
         styleAction(backButton, false);
+        favouriteButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        favouriteButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         previewButton.onClick = [this]
         {
             if (const auto* selected = findSelectedSkin())
@@ -211,6 +225,9 @@ public:
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        favouritesOnlyButton.setColour(juce::ToggleButton::textColourId, palette.token("text_primary"));
+        favouriteButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        favouriteButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
         emptyResultsLabel.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         previewTitle.setColour(juce::Label::textColourId, palette.token("text_primary"));
@@ -246,6 +263,8 @@ public:
             viewport.setVisible(false);
             emptyResultsLabel.setVisible(false);
             previewButton.setVisible(false);
+            favouritesOnlyButton.setVisible(false);
+            favouriteButton.setVisible(true);
             previewTitle.setVisible(true);
             previewDetails.setVisible(true);
             previewTitle.setBounds(area.removeFromTop(24));
@@ -254,36 +273,44 @@ public:
             auto actions = area.removeFromBottom(38);
             backButton.setButtonText("BACK");
             backButton.setVisible(true);
-            backButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
-            actions.removeFromLeft(8);
+            backButton.setBounds(actions.removeFromLeft(92).reduced(1, 2));
+            actions.removeFromLeft(6);
+            favouriteButton.setBounds(actions.removeFromLeft(126).reduced(1, 2));
+            actions.removeFromLeft(6);
             applyButton.setVisible(true);
-            applyButton.setBounds(actions.removeFromRight(132).reduced(1, 2));
+            applyButton.setBounds(actions.removeFromRight(112).reduced(1, 2));
             previewBounds = area.reduced(2);
             updateSelectionControls();
             return;
         }
         search.setVisible(true);
         familyFilter.setVisible(true);
+        favouritesOnlyButton.setVisible(true);
+        favouriteButton.setVisible(true);
         countLabel.setVisible(true);
         viewport.setVisible(true);
         previewTitle.setVisible(false);
         previewDetails.setVisible(false);
         auto filters = area.removeFromTop(32);
-        search.setBounds(filters.removeFromLeft(juce::jmin(300, filters.getWidth() / 2)).reduced(1, 2));
-        filters.removeFromLeft(8);
-        familyFilter.setBounds(filters.removeFromLeft(190).reduced(1, 2));
+        search.setBounds(filters.removeFromLeft(juce::jmin(250, filters.getWidth() / 3)).reduced(1, 2));
+        filters.removeFromLeft(6);
+        familyFilter.setBounds(filters.removeFromLeft(150).reduced(1, 2));
+        filters.removeFromLeft(4);
+        favouritesOnlyButton.setBounds(filters.removeFromLeft(132).reduced(1, 2));
         countLabel.setBounds(filters);
         area.removeFromTop(4);
         auto actions = area.removeFromBottom(38);
         previewButton.setVisible(true);
-        previewButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
-        actions.removeFromLeft(8);
+        previewButton.setBounds(actions.removeFromLeft(92).reduced(1, 2));
+        actions.removeFromLeft(5);
+        favouriteButton.setBounds(actions.removeFromLeft(126).reduced(1, 2));
+        actions.removeFromLeft(5);
         applyButton.setVisible(true);
-        applyButton.setBounds(actions.removeFromLeft(112).reduced(1, 2));
-        actions.removeFromLeft(8);
+        applyButton.setBounds(actions.removeFromLeft(92).reduced(1, 2));
+        actions.removeFromLeft(5);
         backButton.setButtonText("CLOSE");
         backButton.setVisible(true);
-        backButton.setBounds(actions.removeFromRight(112).reduced(1, 2));
+        backButton.setBounds(actions.removeFromRight(92).reduced(1, 2));
         viewport.setBounds(area);
         emptyResultsLabel.setBounds(viewport.getBounds());
         rebuildCards();
@@ -453,11 +480,44 @@ private:
         }
     }
 
+    bool isFavourite(const juce::String& id) const
+    {
+        return id.isNotEmpty() && favourites.contains(id);
+    }
+
+    void updateFavouriteButton()
+    {
+        const auto* selected = findSelectedSkin();
+        const bool valid = selected != nullptr;
+        favouriteButton.setEnabled(valid);
+        favouriteButton.setButtonText(valid && isFavourite(selected->id)
+            ? "★ FAVOURITED" : "☆ FAVOURITE");
+    }
+
+    void toggleSelectedFavourite()
+    {
+        const auto* selected = findSelectedSkin();
+        if (selected == nullptr || selected->id.isEmpty())
+            return;
+
+        if (favourites.contains(selected->id))
+            favourites.removeString(selected->id);
+        else
+            favourites.add(selected->id);
+
+        favourites.sort(true);
+        if (saveFavourites)
+            saveFavourites(favourites);
+        updateFavouriteButton();
+        rebuildCards();
+    }
+
     void selectSkin(int index)
     {
         selectedIndex = index;
         previewImage = {};
         updateSelectionControls();
+        updateFavouriteButton();
         rebuildCards();
     }
 
@@ -475,6 +535,8 @@ private:
         for (const auto& item : skins)
         {
             if (familyKey.isNotEmpty() && item.familyKey != familyKey)
+                continue;
+            if (favouritesOnlyButton.getToggleState() && !favourites.contains(item.id))
                 continue;
             const auto haystack = (item.name + " " + item.family + " " + item.layout
                                    + " " + item.id).toLowerCase();
@@ -507,7 +569,11 @@ private:
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
                            + juce::String(skins.size()) + " THEMES", juce::dontSendNotification);
+        emptyResultsLabel.setText(favouritesOnlyButton.getToggleState()
+            ? "NO FAVOURITE THEMES MATCH YOUR SEARCH"
+            : "NO THEMES MATCH YOUR SEARCH", juce::dontSendNotification);
         emptyResultsLabel.setVisible(visibleSkins.empty() && !showingPreview);
+        updateFavouriteButton();
         const int gap = 12;
         const int minCardWidth = 205;
         const int columns = juce::jmax(1, (viewport.getWidth() - gap) / (minCardWidth + gap));
@@ -525,7 +591,10 @@ private:
     juce::Label heading, subtitle, countLabel, emptyResultsLabel, previewTitle, previewDetails;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
-    juce::StringArray familyFilterKeys;
+    juce::StringArray familyFilterKeys, favourites;
+    juce::ToggleButton favouritesOnlyButton { "FAVOURITES ONLY" };
+    juce::TextButton favouriteButton { "☆ FAVOURITE" };
+    std::function<void(const juce::StringArray&)> saveFavourites;
     juce::TextButton previewButton { "PREVIEW" }, applyButton { "APPLY" }, backButton { "CLOSE" };
     juce::Rectangle<int> previewBounds;
     juce::Image previewImage;
