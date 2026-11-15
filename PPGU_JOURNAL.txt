@@ -953,3 +953,20 @@ The user clarified the intended behavior for plugin auxiliary/browser windows:
 - All panel content must remain accessible; the user should be able to read and operate the panel without it behaving like a separate full-screen application window.
 
 This requirement clarifies the existing in-plugin workspace contract; it does not authorize new panels, controls, IDs, or changes to the approved product structure. The current maximize implementation targets the workspace Viewport view area, which is the intended boundary in source. Runtime verification is still required to confirm that the viewport is correctly constrained by the host plugin editor at common editor sizes and that readable sizing/overflow behavior is preserved. Include tests for small, medium and large plugin editor sizes, maximize/restore, resize, and overflow scrolling. No source behavior was changed by this requirement record.
+
+
+2026-11-15 — USER-APPROVED BROWSER WINDOW RESIZE AND GEOMETRY PERSISTENCE
+
+The user clarified and approved the expected behavior for the in-plugin browser/auxiliary window:
+- The user can resize the browser window manually by dragging its edge/border.
+- The chosen window size and placement are retained as that panel's user geometry and restored when the same panel is opened again.
+- Reopening the browser must not silently replace the saved user size/position with a fresh automatic tile placement.
+- The window remains constrained to the plugin editor's workspace/viewport; persistence never authorizes extending beyond the plugin boundary or opening across the physical monitor.
+- If the saved geometry no longer fits after the host/plugin editor is resized, clamp/adapt it within the current viewport while preserving the user's size/position as far as the available area permits. Keep content readable and use the existing overflow/scrolling behavior where needed.
+- Automatic tiling remains appropriate for first-time placement and layout changes involving the active panel set/workspace constraints, but it must not erase a saved manual browser geometry on a simple close/reopen.
+
+This resolves the previously recorded ambiguity for the browser panel: user-resized geometry takes precedence on reopen, subject to the plugin viewport boundary. Apply the same behavior to other auxiliary panels only where their existing approved contract calls for per-panel geometry persistence; do not silently broaden scope.
+
+Implementation is NOT yet confirmed by this journal entry. The current source path was previously observed to read saved bounds in openPanel() and then call layoutPanels(), which can overwrite them. A targeted implementation and regression tests are required. Verify: first open default size; drag-resize; move; close/reopen restoring bounds; open/close another panel; resize host editor smaller/larger; maximize/restore; overflow; persistence across plugin/editor restart if PropertiesFile lifecycle supports it. Do not claim runtime acceptance until tested.
+
+STATUS: USER APPROVED · CONTRACT CLARIFIED · SOURCE FIX AND TESTS PENDING.
