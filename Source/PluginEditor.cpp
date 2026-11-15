@@ -57,7 +57,7 @@ public:
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
-        subtitle.setText("Browse the complete PPGU collection. Select a card to apply its visual system.",
+        subtitle.setText("Browse the PPGU collection. Select a card, preview it, then apply when ready.",
                          juce::dontSendNotification);
         subtitle.setFont(juce::Font(10.0f));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
@@ -112,8 +112,11 @@ public:
         styleAction(backButton, false);
         previewButton.onClick = [this]
         {
-            if (findSelectedSkin() != nullptr)
+            if (const auto* selected = findSelectedSkin())
             {
+                // Decode outside paint(): the image is cached when entering Preview.
+                previewImage = selected->preview.existsAsFile()
+                    ? juce::ImageCache::getFromFile(selected->preview) : juce::Image{};
                 showingPreview = true;
                 resized();
                 repaint();
@@ -165,10 +168,8 @@ public:
         g.drawRoundedRectangle(area, 12.0f, 1.2f);
         if (const auto* selected = findSelectedSkin())
         {
-            const auto image = selected->preview.existsAsFile()
-                ? juce::ImageCache::getFromFile(selected->preview) : juce::Image{};
-            if (image.isValid())
-                g.drawImageWithin(image, previewBounds.getX() + 12, previewBounds.getY() + 12,
+            if (previewImage.isValid())
+                g.drawImageWithin(previewImage, previewBounds.getX() + 12, previewBounds.getY() + 12,
                                   previewBounds.getWidth() - 24, previewBounds.getHeight() - 24,
                                   juce::RectanglePlacement::centred);
             else
@@ -424,6 +425,7 @@ private:
     void selectSkin(int index)
     {
         selectedIndex = index;
+        previewImage = {};
         updateSelectionControls();
         rebuildCards();
     }
@@ -472,6 +474,7 @@ private:
     juce::ComboBox familyFilter;
     juce::TextButton previewButton { "PREVIEW" }, applyButton { "APPLY" }, backButton { "CLOSE" };
     juce::Rectangle<int> previewBounds;
+    juce::Image previewImage;
     int selectedIndex = 0;
     bool showingPreview = false;
     Grid grid;
