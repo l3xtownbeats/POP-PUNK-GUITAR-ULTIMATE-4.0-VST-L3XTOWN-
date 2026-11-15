@@ -837,3 +837,19 @@ Research rules remain in force:
 - For sample libraries, separately verify redistribution rights, provenance, license/attribution and file integrity before inclusion.
 - SOUND PRESET remains distinct from MIDI / PATTERN content; validate sounds in single-note, chord and pattern contexts.
 - This confirmation does not change the locked development order. Current phase remains NEON STAGE visual completion and verification. Sound-library research/integration and factory preset creation begin only in their approved later phases.
+
+2026-11-15 — JOURNAL AUTHORITY CONFIRMED BY USER — PROJECT SOURCE OF TRUTH
+
+The user explicitly approved, confirmed and fixed PPGU_JOURNAL.txt as the primary authoritative project record and foundation for continuity. The journal is the canonical place to consult for all recorded plans, decisions, approved requirements, work completed, findings, additions, corrections, constraints, phase gates and outstanding tasks.
+
+Operating rules:
+- Before continuing project work, consult the journal and the relevant source documents it references.
+- Treat user-approved and user-confirmed entries as binding project decisions unless the user explicitly revises or supersedes them.
+- Preserve the history of decisions and work; append dated updates rather than silently rewriting or discarding prior approved records.
+- When a decision is refined, record the refinement and its relationship to the earlier entry so the current authoritative meaning is clear.
+- Use linked specifications, inventories, mockups, source files and research documents for their detailed subject matter; the journal remains the central index and decision/history record.
+- Do not infer approval for unrecorded features, silently expand scope, or claim implementation/validation without evidence.
+- Maintain the approved development sequence and all locked technical, licensing, UI, parameter and quality constraints.
+- If the journal conflicts with a more specific approved source document or a later explicit user decision, identify the conflict and resolve it by documented authority/date rather than guessing.
+
+STATUS: USER APPROVED · CONFIRMED · FIXED.
