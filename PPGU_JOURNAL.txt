@@ -921,3 +921,12 @@ Updated PPGUMultiWindowWorkspace::Window::setThemePalette() to apply the palette
 
 Source commit: 52a52cda304ffa4542ef4479240421d07e0176bd.
 Acceptance remains pending: exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime checks across all 16 themes, resize/DPI/focus/hover/disabled-state inspection and FL Studio 20 host acceptance. This is a source-level correction, not a claim of completed visual acceptance.
+
+2026-11-15 — NEON STAGE WORKSPACE AUDIT: MAXIMIZED WINDOW STATE PRESERVATION
+
+Source review found that the shared workspace relayout path called Window::setPanelBounds() for every open panel. That method previously cleared the maximized flag and restored the normal maximize glyph whenever a relayout occurred. As a result, opening/closing another panel, changing workspace scale/gap, or resizing the workspace could silently cancel a user's maximized window state.
+
+Corrected setPanelBounds(): when a window is maximized, relayout now keeps it fitted to the current viewport view area and leaves its maximized state/button state intact; normal tiled placement remains unchanged for non-maximized windows. Restore continues to use the saved pre-maximize bounds.
+
+Source commit: 701e7f3b12d1d5c0b2144f2ae767e58e000cbbd3.
+This is a source-level behavioral correction. Runtime resize/open-close regression checks, exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 host acceptance remain pending. No panel IDs, controls, APVTS IDs or approved product scope were changed.
