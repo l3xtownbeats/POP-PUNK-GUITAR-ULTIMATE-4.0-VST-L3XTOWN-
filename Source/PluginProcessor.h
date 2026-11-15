@@ -90,6 +90,7 @@ private:
     std::array<std::vector<float>, 2> chorusBuffers;
     std::array<std::vector<float>, 2> flangerBuffers;
     std::array<std::array<ppgu::dsp::BiquadState, 3>, 2> eqStates {};
+    std::array<ppgu::dsp::BiquadState, 2> toneStates {};
     std::array<float, 2> distortionToneState {};
     std::array<float, 2> cabinetLowCutState {};
     std::array<float, 2> cabinetHighCutState {};

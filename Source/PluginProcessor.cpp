@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "DSP/FxOrder.h"
 #include "Performance/ChordTransitionTimeline.h"
 #include "Performance/ChordTransitionPolicy.h"
 #include <cmath>
@@ -218,6 +219,8 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     for (auto& channelStates : eqStates)
         for (auto& state : channelStates)
             state.reset();
+    for (auto& state : toneStates)
+        state.reset();
     distortionToneState.fill(0.0f);
     cabinetLowCutState.fill(0.0f);
     cabinetHighCutState.fill(0.0f);
@@ -257,6 +260,8 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
     for (auto& channelStates : eqStates)
         for (auto& state : channelStates)
             state.reset();
+    for (auto& state : toneStates)
+        state.reset();
     distortionToneState.fill(0.0f);
     cabinetLowCutState.fill(0.0f);
     cabinetHighCutState.fill(0.0f);
@@ -663,300 +668,362 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         if (patternScheduler.consumePendingOverflow()) sampler.allNotesOff();
     }
 
-    // Three-band parametric EQ: low/high shelves and a Q-controlled mid peak.
-    // Coefficients are calculated as scalar values per block; per-channel delay
-    // states are persistent and no filter object or heap allocation is created.
-    const float ampGainDb = (juce::jlimit(0.0f, 10.0f, parameters.getRawParameterValue("ampGain")->load(std::memory_order_relaxed)) - 5.0f) * 2.0f;
+    // AMP & TONE is a pre-FX stage, not one of the seven reorderable slots.
+    const float ampGainDb = (juce::jlimit(0.0f, 10.0f,
+        parameters.getRawParameterValue("ampGain")->load(std::memory_order_relaxed)) - 5.0f) * 2.0f;
     const float ampGain = juce::Decibels::decibelsToGain(ampGainDb);
-    const bool eqEnabled = parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) > 0.5f;
-    const float lowGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
-        parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed)) : 0.0f;
-    const float midGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
-        parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed)) : 0.0f;
-    const float highEqGainDb = eqEnabled ? juce::jlimit(-12.0f, 12.0f,
-        parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed)) : 0.0f;
-    const float lowFrequency = juce::jlimit(20.0f, 500.0f,
-        parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
-    const float midFrequency = juce::jlimit(100.0f, 8000.0f,
-        parameters.getRawParameterValue("eqMidFreq")->load(std::memory_order_relaxed));
-    const float midQ = juce::jlimit(0.1f, 10.0f,
-        parameters.getRawParameterValue("eqMidQ")->load(std::memory_order_relaxed));
-    const float highFrequency = juce::jlimit(2000.0f, 20000.0f,
-        parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
-    // Tone remains active at neutral=5 even while the three EQ bands are bypassed.
     const float tone = juce::jlimit(0.0f, 10.0f,
         parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed));
-    const float highGainDb = highEqGainDb + (tone - 5.0f);
-    const auto lowCoefficients = ppgu::dsp::makeLowShelf(
-        static_cast<float>(currentSampleRate), lowFrequency, lowGainDb);
-    const auto midCoefficients = ppgu::dsp::makePeaking(
-        static_cast<float>(currentSampleRate), midFrequency, midQ, midGainDb);
-    const auto highCoefficients = ppgu::dsp::makeHighShelf(
-        static_cast<float>(currentSampleRate), highFrequency, highGainDb);
+    const auto toneCoefficients = ppgu::dsp::makeHighShelf(
+        static_cast<float>(currentSampleRate), 2500.0f, tone - 5.0f);
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
         auto* data = buffer.getWritePointer(channel);
-        auto& states = eqStates[static_cast<size_t>(channel)];
+        auto& state = toneStates[static_cast<size_t>(channel)];
         for (int sample = 0; sample < samples; ++sample)
-        {
-            float value = data[sample] * ampGain;
-            value = states[0].process(value, lowCoefficients);
-            value = states[1].process(value, midCoefficients);
-            data[sample] = states[2].process(value, highCoefficients);
-        }
+            data[sample] = state.process(data[sample] * ampGain, toneCoefficients);
     }
 
-    // Feed-forward compressor with per-channel envelope follower. Attack/release
-    // coefficients are calculated once per block; no allocation or locking.
-    if (parameters.getRawParameterValue("compressorOn")->load(std::memory_order_relaxed) > 0.5f)
+    const auto processEq = [&]() noexcept
     {
-        const float thresholdDb = juce::jlimit(-60.0f, 0.0f, parameters.getRawParameterValue("compressorThreshold")->load(std::memory_order_relaxed));
-        const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
-        const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
-        const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
-        const float amount = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
-        const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
-        const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
+        if (parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) <= 0.5f)
+        {
+            for (auto& states : eqStates)
+                for (auto& state : states)
+                    state.reset();
+            return;
+        }
+        const float lowGainDb = juce::jlimit(-12.0f, 12.0f,
+            parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed));
+        const float midGainDb = juce::jlimit(-12.0f, 12.0f,
+            parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed));
+        const float highGainDb = juce::jlimit(-12.0f, 12.0f,
+            parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed));
+        const float lowFrequency = juce::jlimit(20.0f, 500.0f,
+            parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
+        const float midFrequency = juce::jlimit(100.0f, 8000.0f,
+            parameters.getRawParameterValue("eqMidFreq")->load(std::memory_order_relaxed));
+        const float midQ = juce::jlimit(0.1f, 10.0f,
+            parameters.getRawParameterValue("eqMidQ")->load(std::memory_order_relaxed));
+        const float highFrequency = juce::jlimit(2000.0f, 20000.0f,
+            parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
+        const auto lowCoefficients = ppgu::dsp::makeLowShelf(
+            static_cast<float>(currentSampleRate), lowFrequency, lowGainDb);
+        const auto midCoefficients = ppgu::dsp::makePeaking(
+            static_cast<float>(currentSampleRate), midFrequency, midQ, midGainDb);
+        const auto highCoefficients = ppgu::dsp::makeHighShelf(
+            static_cast<float>(currentSampleRate), highFrequency, highGainDb);
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
             auto* data = buffer.getWritePointer(channel);
-            auto& envelope = compressorEnvelope[static_cast<size_t>(channel)];
+            auto& states = eqStates[static_cast<size_t>(channel)];
             for (int sample = 0; sample < samples; ++sample)
             {
-                const float level = std::abs(data[sample]);
-                const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
-                envelope = coefficient * envelope + (1.0f - coefficient) * level;
-                const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
-                const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
-                const float compressedGain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
-                const float appliedGain = 1.0f + (compressedGain - 1.0f) * amount;
-                data[sample] *= appliedGain;
+                float value = states[0].process(data[sample], lowCoefficients);
+                value = states[1].process(value, midCoefficients);
+                data[sample] = states[2].process(value, highCoefficients);
             }
         }
-    }
+    };
 
-    // Flanger uses a dedicated preallocated ring buffer; it can run alongside chorus and delay.
-    if (parameters.getRawParameterValue("flangerOn")->load(std::memory_order_relaxed) > 0.5f)
+    const auto processCompressor = [&]() noexcept
     {
-        const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerMix")->load(std::memory_order_relaxed));
-        const float depth = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerDepth")->load(std::memory_order_relaxed));
-        const float feedback = juce::jlimit(-0.7f, 0.7f, parameters.getRawParameterValue("flangerFeedback")->load(std::memory_order_relaxed));
-        const double rate = juce::jlimit(0.05, 5.0, static_cast<double>(parameters.getRawParameterValue("flangerRate")->load(std::memory_order_relaxed)));
-        const auto length = flangerBuffers[0].size();
-        if (mix > 0.0f && length > 2)
+        // Feed-forward compressor with per-channel envelope follower. Attack/release
+        // coefficients are calculated once per block; no allocation or locking.
+        if (parameters.getRawParameterValue("compressorOn")->load(std::memory_order_relaxed) > 0.5f)
         {
-            for (int sample = 0; sample < samples; ++sample)
-            {
-                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-                {
-                    auto& line = flangerBuffers[static_cast<size_t>(channel)];
-                    auto* data = buffer.getWritePointer(channel);
-                    const double phase = flangerPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
-                    const double delaySamples = currentSampleRate * (0.001 + 0.006 * depth * (0.5 + 0.5 * std::sin(phase)));
-                    double readPosition = static_cast<double>(flangerWritePosition) - delaySamples;
-                    while (readPosition < 0.0) readPosition += static_cast<double>(length);
-                    const auto a = static_cast<size_t>(readPosition) % length;
-                    const auto b = (a + 1) % length;
-                    const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
-                    const float delayed = line[a] + (line[b] - line[a]) * fraction;
-                    const float dry = data[sample];
-                    line[flangerWritePosition] = dry + delayed * feedback;
-                    data[sample] = dry + (delayed - dry) * mix;
-                }
-                flangerWritePosition = (flangerWritePosition + 1) % length;
-                flangerPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
-                if (flangerPhase >= juce::MathConstants<double>::twoPi) flangerPhase -= juce::MathConstants<double>::twoPi;
-            }
-        }
-    }
-
-    // Built-in cabinet convolution using a compact, original damped IR.
-    // This is a designed cabinet colour, not a third-party recorded cabinet capture.
-    if (parameters.getRawParameterValue("cabinetOn")->load(std::memory_order_relaxed) > 0.5f)
-    {
-        const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("cabinetMix")->load(std::memory_order_relaxed));
-        if (mix > 0.0f)
-        {
-            const float lowCutHz = juce::jlimit(20.0f, 500.0f,
-                parameters.getRawParameterValue("cabinetLowCut")->load(std::memory_order_relaxed));
-            const float highCutHz = juce::jlimit(2000.0f,
-                static_cast<float>(currentSampleRate * 0.45),
-                parameters.getRawParameterValue("cabinetHighCut")->load(std::memory_order_relaxed));
-            const float lowCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
-                * lowCutHz / static_cast<float>(currentSampleRate));
-            const float highCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
-                * highCutHz / static_cast<float>(currentSampleRate));
-            for (int sample = 0; sample < samples; ++sample)
-            {
-                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-                {
-                    auto& history = cabinetHistory[static_cast<size_t>(channel)];
-                    auto* data = buffer.getWritePointer(channel);
-                    history[cabinetWritePosition] = data[sample];
-                    float wet = 0.0f;
-                    size_t read = cabinetWritePosition;
-                    for (size_t tap = 0; tap < cabinetImpulse.size(); ++tap)
-                    {
-                        wet += history[read] * cabinetImpulse[tap];
-                        read = read == 0 ? cabinetImpulse.size() - 1 : read - 1;
-                    }
-                    const float dry = data[sample];
-                    auto& lowCutState = cabinetLowCutState[static_cast<size_t>(channel)];
-                    auto& highCutState = cabinetHighCutState[static_cast<size_t>(channel)];
-                    lowCutState += lowCutAlpha * (wet - lowCutState);
-                    const float highPassed = wet - lowCutState;
-                    highCutState += highCutAlpha * (highPassed - highCutState);
-                    data[sample] = dry + (highCutState - dry) * mix;
-                }
-                cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
-            }
-        }
-    }
-
-    // First production FX stage: bounded soft-clipping distortion. The
-    // processor runs in-place and performs no allocation on the audio thread.
-    if (parameters.getRawParameterValue("distortionOn")->load(std::memory_order_relaxed) > 0.5f)
-    {
-        const float drive = 1.0f + 19.0f * parameters.getRawParameterValue("distortionDrive")->load(std::memory_order_relaxed);
-        const float wet = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
-        const float normalizer = std::tanh(drive);
-        const float tone = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("distortionTone")->load(std::memory_order_relaxed));
-        const float toneCutoff = juce::jlimit(300.0f, static_cast<float>(currentSampleRate * 0.45),
-            500.0f + 15000.0f * tone * tone);
-        const float toneAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
-            * toneCutoff / static_cast<float>(currentSampleRate));
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-        {
-            auto* data = buffer.getWritePointer(channel);
-            auto& toneState = distortionToneState[static_cast<size_t>(channel)];
-            for (int sample = 0; sample < samples; ++sample)
-            {
-                const float dry = data[sample];
-                const float shaped = std::tanh(dry * drive) / normalizer;
-                toneState += toneAlpha * (shaped - toneState);
-                data[sample] = dry + (toneState - dry) * wet;
-            }
-        }
-    }
-
-    // Chorus: short modulated stereo delay. Delay memories are allocated in
-    // prepareToPlay; this loop performs no heap work on the audio thread.
-    if (parameters.getRawParameterValue("chorusOn")->load(std::memory_order_relaxed) > 0.5f)
-    {
-        const float mix = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("chorusMix")->load(std::memory_order_relaxed));
-        const float depth = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("chorusDepth")->load(std::memory_order_relaxed));
-        const double rate = juce::jlimit(0.05, 10.0,
-            static_cast<double>(parameters.getRawParameterValue("chorusRate")->load(std::memory_order_relaxed)));
-        const auto chorusLength = chorusBuffers[0].size();
-        if (mix > 0.0f && chorusLength > 2)
-        {
-            for (int sample = 0; sample < samples; ++sample)
-            {
-                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-                {
-                    auto& line = chorusBuffers[static_cast<size_t>(channel)];
-                    auto* data = buffer.getWritePointer(channel);
-                    const double channelPhase = chorusPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
-                    const double modulation = 0.5 + 0.5 * std::sin(channelPhase);
-                    const double delaySamples = currentSampleRate * (0.008 + 0.012 * depth * modulation);
-                    double readPosition = static_cast<double>(chorusWritePosition) - delaySamples;
-                    while (readPosition < 0.0)
-                        readPosition += static_cast<double>(chorusLength);
-                    const auto indexA = static_cast<size_t>(readPosition) % chorusLength;
-                    const auto indexB = (indexA + 1) % chorusLength;
-                    const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
-                    const float delayed = line[indexA] + (line[indexB] - line[indexA]) * fraction;
-                    const float dry = data[sample];
-                    line[chorusWritePosition] = dry;
-                    data[sample] = dry + (delayed - dry) * mix;
-                }
-                chorusWritePosition = (chorusWritePosition + 1) % chorusLength;
-                chorusPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
-                if (chorusPhase >= juce::MathConstants<double>::twoPi)
-                    chorusPhase -= juce::MathConstants<double>::twoPi;
-            }
-        }
-    }
-
-    // Tempo-independent stereo delay with bounded feedback and a 2-second
-    // maximum delay. The same preallocated ring buffers are reused each block.
-    if (parameters.getRawParameterValue("delayOn")->load(std::memory_order_relaxed) > 0.5f)
-    {
-        const float mix = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("delayMix")->load(std::memory_order_relaxed));
-        const float feedback = juce::jlimit(0.0f, 0.95f,
-            parameters.getRawParameterValue("delayFeedback")->load(std::memory_order_relaxed));
-        const double delayMs = juce::jlimit(1.0, 2000.0,
-            static_cast<double>(parameters.getRawParameterValue("delayTime")->load(std::memory_order_relaxed)));
-        const auto delayLength = delayBuffers[0].size();
-        const auto delaySamples = juce::jlimit<size_t>(1, delayLength - 1,
-            static_cast<size_t>(std::llround(delayMs * currentSampleRate / 1000.0)));
-        for (int sample = 0; sample < samples; ++sample)
-        {
+            const float thresholdDb = juce::jlimit(-60.0f, 0.0f, parameters.getRawParameterValue("compressorThreshold")->load(std::memory_order_relaxed));
+            const float ratio = juce::jlimit(1.0f, 20.0f, parameters.getRawParameterValue("compressorRatio")->load(std::memory_order_relaxed));
+            const float attackMs = juce::jlimit(0.1f, 100.0f, parameters.getRawParameterValue("compressorAttack")->load(std::memory_order_relaxed));
+            const float releaseMs = juce::jlimit(5.0f, 1000.0f, parameters.getRawParameterValue("compressorRelease")->load(std::memory_order_relaxed));
+            const float amount = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("compressorAmount")->load(std::memory_order_relaxed));
+            const float attackCoeff = std::exp(-1.0f / (0.001f * attackMs * static_cast<float>(currentSampleRate)));
+            const float releaseCoeff = std::exp(-1.0f / (0.001f * releaseMs * static_cast<float>(currentSampleRate)));
             for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
             {
-                auto& line = delayBuffers[static_cast<size_t>(channel)];
                 auto* data = buffer.getWritePointer(channel);
-                const auto readPosition = (delayWritePosition + line.size() - delaySamples) % line.size();
-                const float dry = data[sample];
-                const float delayed = line[readPosition];
-                line[delayWritePosition] = dry + delayed * feedback;
-                data[sample] = dry + delayed * mix;
+                auto& envelope = compressorEnvelope[static_cast<size_t>(channel)];
+                for (int sample = 0; sample < samples; ++sample)
+                {
+                    const float level = std::abs(data[sample]);
+                    const float coefficient = level > envelope ? attackCoeff : releaseCoeff;
+                    envelope = coefficient * envelope + (1.0f - coefficient) * level;
+                    const float levelDb = juce::Decibels::gainToDecibels(juce::jmax(envelope, 1.0e-8f));
+                    const float compressedDb = levelDb > thresholdDb ? thresholdDb + (levelDb - thresholdDb) / ratio : levelDb;
+                    const float compressedGain = juce::Decibels::decibelsToGain(compressedDb - levelDb);
+                    const float appliedGain = 1.0f + (compressedGain - 1.0f) * amount;
+                    data[sample] *= appliedGain;
+                }
             }
-            delayWritePosition = (delayWritePosition + 1) % delayLength;
         }
-    }
+    };
 
-    // JUCE's Schroeder reverb is configured wet-only; the dry/wet blend is
-    // applied from preallocated scratch buffers so bypass and mix=0 stay exact.
-    const float reverbMix = juce::jlimit(0.0f, 1.0f,
-        parameters.getRawParameterValue("reverbMix")->load(std::memory_order_relaxed));
-    if (parameters.getRawParameterValue("reverbOn")->load(std::memory_order_relaxed) > 0.5f
-        && reverbMix > 0.0f)
+    const auto processDistortion = [&]() noexcept
     {
-        juce::Reverb::Parameters reverbParameters;
-        reverbParameters.roomSize = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("reverbRoomSize")->load(std::memory_order_relaxed));
-        reverbParameters.damping = juce::jlimit(0.0f, 1.0f,
-            parameters.getRawParameterValue("reverbDamping")->load(std::memory_order_relaxed));
-        reverbParameters.wetLevel = 1.0f;
-        reverbParameters.dryLevel = 0.0f;
-        reverbParameters.width = 1.0f;
-        reverbParameters.freezeMode = 0.0f;
-        reverb.setParameters(reverbParameters);
-
-        // Process oversized host blocks in bounded chunks. Scratch buffers
-        // are sized in prepareToPlay, so this remains allocation-free on the
-        // audio thread and never silently bypasses reverb for unusual hosts.
-        const int chunkCapacity = juce::jmax(1, maximumBlockSize);
-        for (int offset = 0; offset < samples; offset += chunkCapacity)
+        // First production FX stage: bounded soft-clipping distortion. The
+        // processor runs in-place and performs no allocation on the audio thread.
+        if (parameters.getRawParameterValue("distortionOn")->load(std::memory_order_relaxed) > 0.5f)
         {
-            const int chunkSamples = juce::jmin(chunkCapacity, samples - offset);
-            for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-                std::copy_n(buffer.getReadPointer(channel, offset), chunkSamples,
-                            reverbDryBuffers[static_cast<size_t>(channel)].begin());
-
-            if (buffer.getNumChannels() >= 2)
-                reverb.processStereo(buffer.getWritePointer(0, offset),
-                                     buffer.getWritePointer(1, offset), chunkSamples);
-            else
-                reverb.processMono(buffer.getWritePointer(0, offset), chunkSamples);
-
+            const float drive = 1.0f + 19.0f * parameters.getRawParameterValue("distortionDrive")->load(std::memory_order_relaxed);
+            const float wet = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("distortionMix")->load(std::memory_order_relaxed));
+            const float normalizer = std::tanh(drive);
+            const float tone = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("distortionTone")->load(std::memory_order_relaxed));
+            const float toneCutoff = juce::jlimit(300.0f, static_cast<float>(currentSampleRate * 0.45),
+                500.0f + 15000.0f * tone * tone);
+            const float toneAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                * toneCutoff / static_cast<float>(currentSampleRate));
             for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
             {
-                auto* data = buffer.getWritePointer(channel, offset);
-                const auto& dry = reverbDryBuffers[static_cast<size_t>(channel)];
-                for (int sample = 0; sample < chunkSamples; ++sample)
-                    data[sample] = dry[static_cast<size_t>(sample)]
-                        + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+                auto* data = buffer.getWritePointer(channel);
+                auto& toneState = distortionToneState[static_cast<size_t>(channel)];
+                for (int sample = 0; sample < samples; ++sample)
+                {
+                    const float dry = data[sample];
+                    const float shaped = std::tanh(dry * drive) / normalizer;
+                    toneState += toneAlpha * (shaped - toneState);
+                    data[sample] = dry + (toneState - dry) * wet;
+                }
             }
         }
+    };
+
+    const auto processChorus = [&]() noexcept
+    {
+        // Chorus: short modulated stereo delay. Delay memories are allocated in
+        // prepareToPlay; this loop performs no heap work on the audio thread.
+        if (parameters.getRawParameterValue("chorusOn")->load(std::memory_order_relaxed) > 0.5f)
+        {
+            const float mix = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("chorusMix")->load(std::memory_order_relaxed));
+            const float depth = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("chorusDepth")->load(std::memory_order_relaxed));
+            const double rate = juce::jlimit(0.05, 10.0,
+                static_cast<double>(parameters.getRawParameterValue("chorusRate")->load(std::memory_order_relaxed)));
+            const auto chorusLength = chorusBuffers[0].size();
+            if (mix > 0.0f && chorusLength > 2)
+            {
+                for (int sample = 0; sample < samples; ++sample)
+                {
+                    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                    {
+                        auto& line = chorusBuffers[static_cast<size_t>(channel)];
+                        auto* data = buffer.getWritePointer(channel);
+                        const double channelPhase = chorusPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
+                        const double modulation = 0.5 + 0.5 * std::sin(channelPhase);
+                        const double delaySamples = currentSampleRate * (0.008 + 0.012 * depth * modulation);
+                        double readPosition = static_cast<double>(chorusWritePosition) - delaySamples;
+                        while (readPosition < 0.0)
+                            readPosition += static_cast<double>(chorusLength);
+                        const auto indexA = static_cast<size_t>(readPosition) % chorusLength;
+                        const auto indexB = (indexA + 1) % chorusLength;
+                        const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
+                        const float delayed = line[indexA] + (line[indexB] - line[indexA]) * fraction;
+                        const float dry = data[sample];
+                        line[chorusWritePosition] = dry;
+                        data[sample] = dry + (delayed - dry) * mix;
+                    }
+                    chorusWritePosition = (chorusWritePosition + 1) % chorusLength;
+                    chorusPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
+                    if (chorusPhase >= juce::MathConstants<double>::twoPi)
+                        chorusPhase -= juce::MathConstants<double>::twoPi;
+                }
+            }
+        }
+    };
+
+    const auto processDelay = [&]() noexcept
+    {
+        // Tempo-independent stereo delay with bounded feedback and a 2-second
+        // maximum delay. The same preallocated ring buffers are reused each block.
+        if (parameters.getRawParameterValue("delayOn")->load(std::memory_order_relaxed) > 0.5f)
+        {
+            const float mix = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("delayMix")->load(std::memory_order_relaxed));
+            const float feedback = juce::jlimit(0.0f, 0.95f,
+                parameters.getRawParameterValue("delayFeedback")->load(std::memory_order_relaxed));
+            const double delayMs = juce::jlimit(1.0, 2000.0,
+                static_cast<double>(parameters.getRawParameterValue("delayTime")->load(std::memory_order_relaxed)));
+            const auto delayLength = delayBuffers[0].size();
+            const auto delaySamples = juce::jlimit<size_t>(1, delayLength - 1,
+                static_cast<size_t>(std::llround(delayMs * currentSampleRate / 1000.0)));
+            for (int sample = 0; sample < samples; ++sample)
+            {
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto& line = delayBuffers[static_cast<size_t>(channel)];
+                    auto* data = buffer.getWritePointer(channel);
+                    const auto readPosition = (delayWritePosition + line.size() - delaySamples) % line.size();
+                    const float dry = data[sample];
+                    const float delayed = line[readPosition];
+                    line[delayWritePosition] = dry + delayed * feedback;
+                    data[sample] = dry + delayed * mix;
+                }
+                delayWritePosition = (delayWritePosition + 1) % delayLength;
+            }
+        }
+    };
+
+    const auto processReverb = [&]() noexcept
+    {
+        // JUCE's Schroeder reverb is configured wet-only; the dry/wet blend is
+        // applied from preallocated scratch buffers so bypass and mix=0 stay exact.
+        const float reverbMix = juce::jlimit(0.0f, 1.0f,
+            parameters.getRawParameterValue("reverbMix")->load(std::memory_order_relaxed));
+        if (parameters.getRawParameterValue("reverbOn")->load(std::memory_order_relaxed) > 0.5f
+            && reverbMix > 0.0f)
+        {
+            juce::Reverb::Parameters reverbParameters;
+            reverbParameters.roomSize = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("reverbRoomSize")->load(std::memory_order_relaxed));
+            reverbParameters.damping = juce::jlimit(0.0f, 1.0f,
+                parameters.getRawParameterValue("reverbDamping")->load(std::memory_order_relaxed));
+            reverbParameters.wetLevel = 1.0f;
+            reverbParameters.dryLevel = 0.0f;
+            reverbParameters.width = 1.0f;
+            reverbParameters.freezeMode = 0.0f;
+            reverb.setParameters(reverbParameters);
+
+            // Process oversized host blocks in bounded chunks. Scratch buffers
+            // are sized in prepareToPlay, so this remains allocation-free on the
+            // audio thread and never silently bypasses reverb for unusual hosts.
+            const int chunkCapacity = juce::jmax(1, maximumBlockSize);
+            for (int offset = 0; offset < samples; offset += chunkCapacity)
+            {
+                const int chunkSamples = juce::jmin(chunkCapacity, samples - offset);
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                    std::copy_n(buffer.getReadPointer(channel, offset), chunkSamples,
+                                reverbDryBuffers[static_cast<size_t>(channel)].begin());
+
+                if (buffer.getNumChannels() >= 2)
+                    reverb.processStereo(buffer.getWritePointer(0, offset),
+                                         buffer.getWritePointer(1, offset), chunkSamples);
+                else
+                    reverb.processMono(buffer.getWritePointer(0, offset), chunkSamples);
+
+                for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                {
+                    auto* data = buffer.getWritePointer(channel, offset);
+                    const auto& dry = reverbDryBuffers[static_cast<size_t>(channel)];
+                    for (int sample = 0; sample < chunkSamples; ++sample)
+                        data[sample] = dry[static_cast<size_t>(sample)]
+                            + (data[sample] - dry[static_cast<size_t>(sample)]) * reverbMix;
+                }
+            }
+        }
+    };
+
+    const auto processCabinet = [&]() noexcept
+    {
+        // Built-in cabinet convolution using a compact, original damped IR.
+        // This is a designed cabinet colour, not a third-party recorded cabinet capture.
+        if (parameters.getRawParameterValue("cabinetOn")->load(std::memory_order_relaxed) > 0.5f)
+        {
+            const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("cabinetMix")->load(std::memory_order_relaxed));
+            if (mix > 0.0f)
+            {
+                const float lowCutHz = juce::jlimit(20.0f, 500.0f,
+                    parameters.getRawParameterValue("cabinetLowCut")->load(std::memory_order_relaxed));
+                const float highCutHz = juce::jlimit(2000.0f,
+                    static_cast<float>(currentSampleRate * 0.45),
+                    parameters.getRawParameterValue("cabinetHighCut")->load(std::memory_order_relaxed));
+                const float lowCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                    * lowCutHz / static_cast<float>(currentSampleRate));
+                const float highCutAlpha = 1.0f - std::exp(-juce::MathConstants<float>::twoPi
+                    * highCutHz / static_cast<float>(currentSampleRate));
+                for (int sample = 0; sample < samples; ++sample)
+                {
+                    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                    {
+                        auto& history = cabinetHistory[static_cast<size_t>(channel)];
+                        auto* data = buffer.getWritePointer(channel);
+                        history[cabinetWritePosition] = data[sample];
+                        float wet = 0.0f;
+                        size_t read = cabinetWritePosition;
+                        for (size_t tap = 0; tap < cabinetImpulse.size(); ++tap)
+                        {
+                            wet += history[read] * cabinetImpulse[tap];
+                            read = read == 0 ? cabinetImpulse.size() - 1 : read - 1;
+                        }
+                        const float dry = data[sample];
+                        auto& lowCutState = cabinetLowCutState[static_cast<size_t>(channel)];
+                        auto& highCutState = cabinetHighCutState[static_cast<size_t>(channel)];
+                        lowCutState += lowCutAlpha * (wet - lowCutState);
+                        const float highPassed = wet - lowCutState;
+                        highCutState += highCutAlpha * (highPassed - highCutState);
+                        data[sample] = dry + (highCutState - dry) * mix;
+                    }
+                    cabinetWritePosition = (cabinetWritePosition + 1) % cabinetImpulse.size();
+                }
+            }
+        }
+    };
+
+    const auto processFlanger = [&]() noexcept
+    {
+        // Flanger uses a dedicated preallocated ring buffer; it can run alongside chorus and delay.
+        if (parameters.getRawParameterValue("flangerOn")->load(std::memory_order_relaxed) > 0.5f)
+        {
+            const float mix = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerMix")->load(std::memory_order_relaxed));
+            const float depth = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("flangerDepth")->load(std::memory_order_relaxed));
+            const float feedback = juce::jlimit(-0.7f, 0.7f, parameters.getRawParameterValue("flangerFeedback")->load(std::memory_order_relaxed));
+            const double rate = juce::jlimit(0.05, 5.0, static_cast<double>(parameters.getRawParameterValue("flangerRate")->load(std::memory_order_relaxed)));
+            const auto length = flangerBuffers[0].size();
+            if (mix > 0.0f && length > 2)
+            {
+                for (int sample = 0; sample < samples; ++sample)
+                {
+                    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+                    {
+                        auto& line = flangerBuffers[static_cast<size_t>(channel)];
+                        auto* data = buffer.getWritePointer(channel);
+                        const double phase = flangerPhase + (channel == 0 ? 0.0 : juce::MathConstants<double>::pi);
+                        const double delaySamples = currentSampleRate * (0.001 + 0.006 * depth * (0.5 + 0.5 * std::sin(phase)));
+                        double readPosition = static_cast<double>(flangerWritePosition) - delaySamples;
+                        while (readPosition < 0.0) readPosition += static_cast<double>(length);
+                        const auto a = static_cast<size_t>(readPosition) % length;
+                        const auto b = (a + 1) % length;
+                        const float fraction = static_cast<float>(readPosition - std::floor(readPosition));
+                        const float delayed = line[a] + (line[b] - line[a]) * fraction;
+                        const float dry = data[sample];
+                        line[flangerWritePosition] = dry + delayed * feedback;
+                        data[sample] = dry + (delayed - dry) * mix;
+                    }
+                    flangerWritePosition = (flangerWritePosition + 1) % length;
+                    flangerPhase += juce::MathConstants<double>::twoPi * rate / currentSampleRate;
+                    if (flangerPhase >= juce::MathConstants<double>::twoPi) flangerPhase -= juce::MathConstants<double>::twoPi;
+                }
+            }
+        }
+    };
+
+    // FX Slot 1..7 is the real processing order. Flanger remains an
+    // independent post-chain modulation stage and does not consume a slot.
+    const std::array<const char*, 7> fxSlotIds {{
+        "fxSlot1", "fxSlot2", "fxSlot3", "fxSlot4", "fxSlot5", "fxSlot6", "fxSlot7"
+    }};
+    std::array<int, 7> requestedFxOrder {};
+    for (std::size_t slot = 0; slot < requestedFxOrder.size(); ++slot)
+        requestedFxOrder[slot] = static_cast<int>(
+            parameters.getRawParameterValue(fxSlotIds[slot])->load(std::memory_order_relaxed));
+    const auto fxOrder = ppgu::dsp::resolveFxOrder(requestedFxOrder);
+    for (const int stage : fxOrder)
+    {
+        switch (stage)
+        {
+            case 0: processCompressor(); break;
+            case 1: processEq(); break;
+            case 2: processDistortion(); break;
+            case 3: processChorus(); break;
+            case 4: processDelay(); break;
+            case 5: processReverb(); break;
+            case 6: processCabinet(); break;
+            default: break;
+        }
     }
+    processFlanger();
 
     // Global stereo balance and output trim are real post-FX controls.
     const float globalPan = juce::jlimit(-1.0f, 1.0f,
