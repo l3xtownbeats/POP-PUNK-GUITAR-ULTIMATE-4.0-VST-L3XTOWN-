@@ -247,6 +247,8 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
 
 PPGUMultiWindowWorkspace::~PPGUMultiWindowWorkspace()
 {
+    // The external PropertiesFile may already have been destroyed by the editor.
+    persistenceProperties = nullptr;
     closeAllPanels();
     viewport.setViewedComponent(nullptr, false);
     tileSurface.reset();
