@@ -970,3 +970,14 @@ This resolves the previously recorded ambiguity for the browser panel: user-resi
 Implementation is NOT yet confirmed by this journal entry. The current source path was previously observed to read saved bounds in openPanel() and then call layoutPanels(), which can overwrite them. A targeted implementation and regression tests are required. Verify: first open default size; drag-resize; move; close/reopen restoring bounds; open/close another panel; resize host editor smaller/larger; maximize/restore; overflow; persistence across plugin/editor restart if PropertiesFile lifecycle supports it. Do not claim runtime acceptance until tested.
 
 STATUS: USER APPROVED · CONTRACT CLARIFIED · SOURCE FIX AND TESTS PENDING.
+
+
+2026-11-15 — NEON STAGE: IMPLEMENTED SINGLE-PANEL USER GEOMETRY RESTORE
+
+Implemented the previously approved browser/auxiliary-window geometry contract in the workspace source:
+- On a simple reopen of a panel with valid saved bounds, when it is the only open panel, restore its saved position and size instead of immediately replacing them with automatic tile placement.
+- Validate persisted dimensions/coordinates before using them; invalid or out-of-range stored values fall back to the normal first-open layout.
+- Clamp restored position to the current plugin workspace when the saved window fits; if the saved window is larger than the current viewport, retain its size and let the existing viewport scrolling expose the overflow.
+- Keep automatic tiling for active panel-set changes and ordinary layout passes. This narrowly resolves the simple single-panel close/reopen case without changing panel IDs, controls, APVTS, audio, or the locked UI inventory.
+
+Source change is committed separately from this journal entry. Acceptance is SOURCE IMPLEMENTED ONLY. Required regression coverage/runtime checks remain: first open; manual resize and move; close/reopen; open/close a second panel; smaller/larger host editor; maximize/restore; viewport overflow/scrolling; persistence after editor/plugin restart. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 validation remain pending.
