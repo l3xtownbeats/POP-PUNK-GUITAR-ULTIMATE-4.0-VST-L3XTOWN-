@@ -75,7 +75,7 @@ public:
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
-        subtitle.setText("Browse the complete PPGU collection. Select a card to apply its visual system.",
+        subtitle.setText("Select a theme, preview it temporarily, then Apply or Back to restore.",
                          juce::dontSendNotification);
         subtitle.setFont(makeThemeFont(palette, 10.0f, false, false));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
@@ -163,6 +163,12 @@ public:
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        for (auto* button : { &previewButton, &applyButton, &backButton })
+        {
+            button->setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+            button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+            button->setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+        }
         rebuildCards();
         repaint();
     }
@@ -1952,11 +1958,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 
         auto closeGallery = [safe]
         {
-            if (safe == nullptr || safe->shuttingDown || safe->auxiliaryWorkspace == nullptr)
-                return;
-            safe->auxiliaryWorkspace->closePanel(5);
-            if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
-                safe->auxiliaryWorkspace->setVisible(false);
+            juce::MessageManager::callAsync([safe]
+            {
+                if (safe == nullptr || safe->shuttingDown || safe->auxiliaryWorkspace == nullptr)
+                    return;
+                safe->auxiliaryWorkspace->closePanel(5);
+                if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
+                    safe->auxiliaryWorkspace->setVisible(false);
+            });
         };
 
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
