@@ -652,3 +652,16 @@ Validation: source-level correction committed. Exact-HEAD Windows build, CTest, 
 Качество и соответствие важнее наполнения диска ради объёма: минимум 10 GB должен быть набран из реально качественных, лицензированных и интегрированных материалов, а не низкокачественных filler files. Сохраняются ранее утверждённые требования: реалистичные сразу playable pop-punk гитары, MIDI note playback, музыкально точные rhythm/articulation, velocity-triggered palm mute, acoustic variants и готовые к миксу звуки по утверждённым стилевым референсам.
 
 Статус: USER CONFIRMED / APPROVED / FIXED AS PRIMARY SOUND-SELECTION RULE. Реальный download, audition, scoring, licensing and integration — PENDING.
+
+
+2026-11-15 — GUITAR MODEL, FX PRESET DESIGN & ARTIST/GENRE TONE GUIDES
+
+Добавлено требование: фабричные пресеты должны сопровождаться практической информацией о подборе гитарного семейства, типа звукоснимателя/источника, усилителя, кабинета и цепочки эффектов для соответствующего поджанра и artist-inspired sound. Сохранена полная утверждённая модельная таксономия Fender Telecaster/Stratocaster/Jazzmaster/Mustang/Jag-Stang; Gibson Les Paul/SG/Junior/Studio/Melody Maker; Epiphone SG Special; Mosrite Ventures; Gretsch G5445 Double Jet; Danelectro '59; Rickenbacker 330; Harmony Jupiter; B.C. Rich Warlock; Eastwood Sidejack Mach Two; Squier Bullet Strat/Tele; плюс ранее перечисленные artist/model references.
+
+FX и amp/cab reference taxonomy: distortion, overdrive, fuzz, crunch, boost, compressor, EQ, gate, chorus, flanger, phaser, delay, reverb, tremolo, vibrato, octave, pitch shift, wah/auto-wah, looper, tuner; Mesa/Boogie Dual Rectifier, Marshall JCM800/JCM900, Plexi/JMP, Fender Twin Reverb, Vox AC30, cabinet/mic/IR и POD/GT workflow references. Приложены стартовые рецепты для bright Tele pop-punk, thick humbucker/Tom-style, melodic punk/Green-Day-inspired, classic punk, hardcore/heavy punk, post-punk/Jazzmaster, retro/Ramones-style, acoustic/clean и experimental/dark punk. Это sound-design starting points, а не утверждения об exact artist settings.
+
+Каждый пресет должен объяснять WHY THIS TONE и HOW TO ADJUST, хранить фактические source/model/pickup/amp/cab/FX/articulation/velocity/palm-mute/role/provenance metadata. Цепочка обработки ориентировочно: source → input → optional comp → boost/OD/distortion/fuzz → amp → cab/IR → EQ → optional modulation → delay → reverb → output; gate placement зависит от шума/усиления. Не применять все эффекты автоматически.
+
+Ограничения: не нарушать 27-control parity, seven approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; этот документ не разрешает новые controls/IDs. FX taxonomy и recipe references не являются доказательством реализации. Нужны реальные DSP bindings, bypass, audible result, state restore и проверка. Не копировать protected riffs/recordings/stems/presets и не заявлять точные artist settings без надёжных источников.
+
+Статус: USER REQUEST RECORDED / SOUND-DESIGN GUIDANCE APPROVED IN PRINCIPLE. Actual FX backend coverage, recipe implementation, numeric tuning, preset production and listening validation remain PENDING.
