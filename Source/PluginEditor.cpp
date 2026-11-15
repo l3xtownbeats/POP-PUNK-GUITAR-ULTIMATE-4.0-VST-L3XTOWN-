@@ -1103,7 +1103,7 @@ private:
             const int note = (root + offsets[degree]) % 12;
             const bool minorChord = minor ? (degree == 0 || degree == 3 || degree == 4)
                                           : (degree == 1 || degree == 2 || degree == 5);
-            const bool diminished = degree == 6;
+            const bool diminished = minor ? degree == 1 : degree == 6;
             names.add(juce::String(noteNames[note]) + (diminished ? "dim" : minorChord ? "m" : ""));
         }
         summary.setText("PROGRESSION  →  " + names.join("   –   "), juce::dontSendNotification);
