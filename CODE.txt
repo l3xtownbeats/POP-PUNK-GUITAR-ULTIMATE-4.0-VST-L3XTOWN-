@@ -1038,3 +1038,15 @@ The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.
 **Correction:** commit `50f9506a` normalizes the image to RGBA before alpha compositing. This is an isolated rendering-pipeline correction; approved theme files, palette tokens, existing SKIN-1 hero/preview binaries, and runtime behavior are unchanged.
 
 **Status:** first generator run FAILED as recorded; mode correction committed; rerun and all downstream deterministic/27-control/strict-asset checks remain PENDING. No generated asset pack or G1–G4 PASS is claimed.
+
+
+## 2026-11-15 — Deterministic artwork generation correction
+
+The first full-pack generation step completed successfully in PR validation run `43693362834`. During implementation review, the generator's use of Pillow `Image.effect_noise()` was identified as non-deterministic: two calls with identical arguments produced different pixel data, which would invalidate byte-for-byte regeneration checks.
+
+**Correction committed in the current PR head `5db6561e`:**
+- Replaced `Image.effect_noise()` with a seeded, seamless noise tile.
+- Changed PNG compression to lossless level 6 to reduce build time; pixel quality is unchanged.
+- Preserved the no-overwrite rule and the byte-for-byte retention of SKIN-1's existing hero/preview binaries.
+
+**Validation status:** the already-running jobs were checked out before this correction and are still testing the previous generator revision. Their deterministic check is not accepted as evidence for the corrected code. A fresh run of the current head is required; no deterministic PASS, strict asset audit PASS, G1-G4 PASS or runtime acceptance is claimed yet.
