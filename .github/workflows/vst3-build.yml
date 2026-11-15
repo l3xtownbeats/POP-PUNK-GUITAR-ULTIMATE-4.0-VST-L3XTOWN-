@@ -270,7 +270,7 @@ jobs:
 
           # Final user-facing package layout. Keep the VST3 bundle in its own
           # folder so it can be copied directly into the system VST3 directory.
-          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources')
+          $folders = @('VST3', 'SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')
           foreach ($folder in $folders) {
             New-Item -ItemType Directory -Force -Path (Join-Path $release $folder) | Out-Null
           }
@@ -278,6 +278,13 @@ jobs:
           Copy-Item -LiteralPath '${{ steps.vst3.outputs.path }}' -Destination (Join-Path $release 'VST3') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Samples/*') -Destination (Join-Path $release 'SOUNDBANK') -Recurse
           Copy-Item -Path (Join-Path $env:PROJECT_DIR 'presets/*') -Destination (Join-Path $release 'PRESETS') -Recurse
+          # Optional source/reference material is shipped separately from runtime payload.
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'Source/*') -Destination (Join-Path $release 'Source') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'CMakeLists.txt') -Destination (Join-Path $release 'Source/CMakeLists.txt')
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'docs/*') -Destination (Join-Path $release 'Documents') -Recurse
+          Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'Info.txt') -Destination (Join-Path $release 'Documents/Info.txt')
+          if (Test-Path (Join-Path $env:PROJECT_DIR 'README.md')) { Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'README.md') -Destination (Join-Path $release 'Documents/README.md') }
+          Copy-Item -Path (Join-Path $env:PROJECT_DIR 'licenses/*') -Destination (Join-Path $release 'Licenses') -Recurse
           # Runtime skin payload is a sibling of VST3/, so both can be copied
           # into the host's Common Files\\VST3 directory. Ship only registry-approved
           # themes; unregistered working drafts must never leak into the runtime bundle.
@@ -366,7 +373,10 @@ jobs:
           PRESETS/    Legacy factory catalogue (300 authored definitions) and portable examples.
                       Not the REV.18 target of 500 READY MELODY + 500 READY PATTERN.
           Skins/      Registry-driven visual themes and both legacy/REV14 schema contracts; copy beside the VST3 bundle.
-          Resources/  Install notes, source/license summary, checksums and skin documentation.
+          Resources/  Runtime schemas, source/license summary and checksums.
+          Source/     Optional C++ source reference and CMake project file; not required at runtime.
+          Documents/ Project documentation, INFO journal and installation/reference notes.
+          Licenses/   Project-level license and clearance records.
 
           PORTABLE USE — NO INSTALLER:
           1. Extract this ZIP anywhere. To use in FL Studio, copy only the .vst3 bundle into your VST3 folder and copy Skins/ beside it. No Setup.exe or installer is used.
@@ -377,7 +387,7 @@ jobs:
              Theme switching is visual-only; FL Studio 20 host acceptance remains pending.
           5. See Resources/ for source attribution, licenses, checksums and documentation.
 
-          No source tree, Git metadata, build intermediates, debug symbols or artwork-only files are shipped.
+          Source/ is included for reference only; JUCE checkout, Git metadata, build intermediates, debug symbols and artwork-only working files are not shipped.
           Automated CMake build, CTest and pluginval results are reported by this workflow.
           FL Studio 20 manual host acceptance remains a separate step and is not implied.
           This interim artifact does not certify 1000 READY presets, full Sound Hunter clearance,
@@ -395,6 +405,12 @@ jobs:
             Remove-Item -Force
           if (-not (Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1)) {
             throw 'Portable package cleanup removed or failed to include the VST3 bundle.'
+          }
+          foreach ($requiredFolder in @('SOUNDBANK', 'PRESETS', 'Skins', 'Resources', 'Source', 'Documents', 'Licenses')) {
+            $folderPath = Join-Path $release $requiredFolder
+            if (-not (Test-Path -LiteralPath $folderPath -PathType Container) -or -not (Get-ChildItem -LiteralPath $folderPath -Force | Select-Object -First 1)) {
+              throw "Portable package folder is missing or empty: $requiredFolder"
+            }
           }
           $zipPath = Join-Path $PWD 'POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip'
           if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
