@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "themeCount": 20,
+  "themeRoot": "Skins/",
+  "selection": "single THEME/SKIN button opens a visual grid; selecting a pack replaces the complete visual shell without changing audio state",
+  "packFormat": "Each theme folder contains theme.json, preview.png, and transparent PNG assets for background, panels, knobs, sliders, buttons, meters, and logos. JSON maps semantic UI roles to relative asset paths.",
+  "themes": [
+    {
+      "index": 1,
+      "id": "black-pink",
+      "name": "Black Pink",
+      "version": 1,
+      "colors": {
+        "background": "#111116",
+        "surface": "#202027",
+        "accent": "#ED238B",
+        "text": "#F4F0F4",
+        "muted": "#AAA8B2"
+      },
+      "artDirection": "Black satin, hot-pink edge lighting",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 2,
+      "id": "cyber-cyan",
+      "name": "Cyber Cyan",
+      "version": 1,
+      "colors": {
+        "background": "#071116",
+        "surface": "#10252B",
+        "accent": "#00E5FF",
+        "text": "#E9FCFF",
+        "muted": "#91B9C2"
+      },
+      "artDirection": "Cyan circuit traces and dark chrome",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 3,
+      "id": "amber-rock",
+      "name": "Amber Rock",
+      "version": 1,
+      "colors": {
+        "background": "#100D08",
+        "surface": "#21180D",
+        "accent": "#FFB12B",
+        "text": "#FFF5E5",
+        "muted": "#B6A58A"
+      },
+      "artDirection": "Warm amp grille and amber stage lights",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 4,
+      "id": "blood-red",
+      "name": "Blood Red",
+      "version": 1,
+      "colors": {
+        "background": "#150709",
+        "surface": "#2B1115",
+        "accent": "#F02B3D",
+        "text": "#FFF0F1",
+        "muted": "#C6A2A6"
+      },
+      "artDirection": "Black leather and red stage glow",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 5,
+      "id": "classic-studio",
+      "name": "Classic Studio",
+      "version": 1,
+      "colors": {
+        "background": "#171717",
+        "surface": "#292929",
+        "accent": "#D6B46A",
+        "text": "#F5F1E8",
+        "muted": "#B6B0A4"
+      },
+      "artDirection": "Vintage analog console and cream labels",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 6,
+      "id": "ice-silver",
+      "name": "Ice Silver",
+      "version": 1,
+      "colors": {
+        "background": "#0B1118",
+        "surface": "#1C2631",
+        "accent": "#B7D8F2",
+        "text": "#F2F8FF",
+        "muted": "#A8B7C5"
+      },
+      "artDirection": "Brushed silver and cool blue LEDs",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 7,
+      "id": "pop-punk-riot",
+      "name": "Pop Punk Riot",
+      "version": 1,
+      "colors": {
+        "background": "#0A0A0C",
+        "surface": "#202024",
+        "accent": "#FF4B3E",
+        "text": "#FFF8F5",
+        "muted": "#C4B8B4"
+      },
+      "artDirection": "Torn-poster collage and red paint strokes",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 8,
+      "id": "purple-neon",
+      "name": "Purple Neon",
+      "version": 1,
+      "colors": {
+        "background": "#10091B",
+        "surface": "#241437",
+        "accent": "#B45CFF",
+        "text": "#F8EEFF",
+        "muted": "#BDA8D0"
+      },
+      "artDirection": "Purple neon tubes and black glass",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 9,
+      "id": "sunset",
+      "name": "Sunset",
+      "version": 1,
+      "colors": {
+        "background": "#1A0F16",
+        "surface": "#34202A",
+        "accent": "#FF8066",
+        "text": "#FFF2E9",
+        "muted": "#C9A9A0"
+      },
+      "artDirection": "Sunset gradient and warm stage haze",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 10,
+      "id": "toxic-green",
+      "name": "Toxic Green",
+      "version": 1,
+      "colors": {
+        "background": "#09120B",
+        "surface": "#18251B",
+        "accent": "#A8F23A",
+        "text": "#F3FFE9",
+        "muted": "#A9C39A"
+      },
+      "artDirection": "Acid-green stencil and industrial metal",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "starter-token-pack-existing"
+    },
+    {
+      "index": 11,
+      "id": "starlight-stage",
+      "name": "Starlight Stage",
+      "version": 1,
+      "colors": {
+        "background": "#080B18",
+        "surface": "#202945",
+        "accent": "#64C8FF",
+        "text": "#F4F8FF",
+        "muted": "#A7B9D0"
+      },
+      "artDirection": "Starfield and blue concert spotlights",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 12,
+      "id": "rusted-amp",
+      "name": "Rusted Amp",
+      "version": 1,
+      "colors": {
+        "background": "#160D0A",
+        "surface": "#332019",
+        "accent": "#E87932",
+        "text": "#FFF0E4",
+        "muted": "#C9A58D"
+      },
+      "artDirection": "Aged amplifier cloth and copper hardware",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 13,
+      "id": "frostbite",
+      "name": "Frostbite",
+      "version": 1,
+      "colors": {
+        "background": "#07151B",
+        "surface": "#102A35",
+        "accent": "#55E6E0",
+        "text": "#E9FFFF",
+        "muted": "#9DBDC4"
+      },
+      "artDirection": "Frosted glass and icy cyan traces",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 14,
+      "id": "toxic-stage",
+      "name": "Toxic Stage",
+      "version": 1,
+      "colors": {
+        "background": "#09130B",
+        "surface": "#18291A",
+        "accent": "#B6F23D",
+        "text": "#F2FFE6",
+        "muted": "#A9C39A"
+      },
+      "artDirection": "Green laser beams and distressed texture",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 15,
+      "id": "vinyl-noir",
+      "name": "Vinyl Noir",
+      "version": 1,
+      "colors": {
+        "background": "#0D0D10",
+        "surface": "#24242A",
+        "accent": "#D6D0C5",
+        "text": "#F7F4EE",
+        "muted": "#A6A29B"
+      },
+      "artDirection": "Black vinyl grooves and monochrome hardware",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 16,
+      "id": "sunburst-gold",
+      "name": "Sunburst Gold",
+      "version": 1,
+      "colors": {
+        "background": "#171007",
+        "surface": "#34220B",
+        "accent": "#FFC34D",
+        "text": "#FFF7E8",
+        "muted": "#C6AF83"
+      },
+      "artDirection": "Sunburst guitar lacquer and gold trim",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 17,
+      "id": "denim-punk",
+      "name": "Denim Punk",
+      "version": 1,
+      "colors": {
+        "background": "#0B1421",
+        "surface": "#1B2D43",
+        "accent": "#5B9FE8",
+        "text": "#F2F7FF",
+        "muted": "#A8BCD4"
+      },
+      "artDirection": "Blue denim, patches and stitching",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 18,
+      "id": "cherry-crush",
+      "name": "Cherry Crush",
+      "version": 1,
+      "colors": {
+        "background": "#1A080E",
+        "surface": "#35121E",
+        "accent": "#FF4778",
+        "text": "#FFF1F5",
+        "muted": "#D2A7B4"
+      },
+      "artDirection": "Cherry red lacquer and pink neon",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 19,
+      "id": "desert-road",
+      "name": "Desert Road",
+      "version": 1,
+      "colors": {
+        "background": "#17110B",
+        "surface": "#302417",
+        "accent": "#D99A55",
+        "text": "#FFF4E6",
+        "muted": "#C3AA8A"
+      },
+      "artDirection": "Desert road, dust and vintage road-case",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    },
+    {
+      "index": 20,
+      "id": "stage-laser",
+      "name": "Stage Laser",
+      "version": 1,
+      "colors": {
+        "background": "#090914",
+        "surface": "#19192E",
+        "accent": "#9B72FF",
+        "text": "#F6F1FF",
+        "muted": "#B7A9D8"
+      },
+      "artDirection": "Violet lasers and futuristic dark stage",
+      "assetContract": {
+        "background": "assets/background.png",
+        "panel": "assets/panel.png",
+        "knob": "assets/knob.png",
+        "slider": "assets/slider.png",
+        "button": "assets/button.png",
+        "logo": "assets/logo.png",
+        "preview": "preview.png"
+      },
+      "status": "new-theme-spec-assets-pending"
+    }
+  ]
+}
