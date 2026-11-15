@@ -302,3 +302,34 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 5. Curator UI — после backend readiness; Auto Discover UI — после готовности discovery mechanism.
 
 **Статус:** SOUND HUNTER BACKEND NOT IMPLEMENTED / EMPTY REGISTRY / UI NOT READY. Аудит не менял SoundBank, sampler, audio engine, presets или лицензии. Следующий модуль по утверждённой очереди — Auto Discover; он также должен оставаться без фиктивного scan UI, пока discovery mechanism не реализован.
+
+
+## AUTO DISCOVER — backend readiness gate (UI не создавался)
+
+**Дата:** 2026-11-15  
+**Ветка:** `rev18/neon-stage-skin1-implementation`  
+**HEAD до записи:** `9f54f5799abf130e6134963be1773239322d6d97`.
+
+### Проверенные источники
+
+- `PPGU_TASK_REGISTRY.md`, blob `9083fc0d995306783dbbf727e9204fc82783ecea`: SH-01…SH-05 и FR-02 (пополнение реестра легально очищенными assets) имеют статус Not implemented.
+- `docs/PPGU_REV_10_1_SOUND_HUNTER_RU.md`, blob `d33b290aae900516d5d53050edf7a8056c86ee61`: DiscoveryEngine DEEP SEARCH и PROFILE CLASSIFY — запланированные режимы существующего S6.5; документ прямо говорит, что наличие production DiscoveryEngine в текущем HEAD не подтверждено.
+- `Source/PluginProcessor.cpp`, blob `0e3e88fece554f82f0ca8d70fb01ea79be122eef`: найден только отдельный однопоточный `sampleLoadPool` для асинхронной загрузки выбранного SFZ. `loadSfzFileAsync()` принимает конкретный файл, передаёт его sampler и возвращает LoadReport в message thread. Это импорт/загрузка файла, а не поиск источников, discovery, классификация или заполнение каталога.
+- `Source/PluginProcessor.h`, blob `d10e12163317bd9eacda876e24c6572682c1b594`: sample loader pool относится к SFZ loading; production DiscoveryEngine API не найден.
+- Полное дерево `Source/` на текущем HEAD содержит PluginEditor/Processor, Sampler, Performance и UI, но не содержит DiscoveryEngine, AutoDiscover, DeepSearchWorker или StyleClassifier.
+- `CMakeLists.txt`, blob `e6202fedf02391d01c6de1e834f8787c4f62b134`: зарегистрированы sampler/processor tests и sound asset registry contract; отдельного discovery engine/worker target или Auto Discover integration test нет.
+- В UI source не найден действующий Auto Discover component. Наличие preset browser и SFZ import panel не является доказательством discovery-функциональности.
+
+### Решение и безопасная последовательность
+
+**AUTO DISCOVER: BLOCKED — discovery backend не реализован/не подтверждён.** Не создавал кнопку сканирования, фальшивый progress, счётчики N/target, найденные результаты или статус-карточки. Не переиспользовал SFZ loader как будто это discovery.
+
+Перед UI требуются:
+1. Закрыть SH-01 — исправить и фактически выполнить две failing sound registry CTest assertions.
+2. Реализовать DiscoveryEngine S6.5 contract с режимами DEEP SEARCH и PROFILE CLASSIFY; не создавать второй параллельный importer.
+3. Реализовать worker/companion boundary вне audio callback и realtime voice path: bounded concurrency, cancel/pause, checkpoint/resume, timeouts/retry, size/disk quotas и диагностические статусы.
+4. Подключить реальные GREEN source adapters и asset-level provenance/license/hash/audio evidence; пустой registry не должен выдавать фиктивные результаты.
+5. Добавить contract/unit/integration tests и доказательства отсутствия network/file I/O и блокировок в audio callback.
+6. Только после backend readiness проектировать Auto Discover UI в общей NEON STAGE дизайн-системе и подключать к реальному состоянию discovery.
+
+**Изменения кода в этом этапе:** не вносились. Это source/tree/spec audit и gate decision. Windows build, CTest и host acceptance не запускались. Следующий разрешённый этап — аудит следующего UI-модуля по очереди (FX EDIT) без изменения DSP/APVTS; backend-блокеры Sound Hunter остаются отдельно зарегистрированными.
