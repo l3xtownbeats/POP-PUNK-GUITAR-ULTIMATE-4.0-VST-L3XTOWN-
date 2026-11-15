@@ -30,6 +30,30 @@ int main()
     const auto mid = ppgu::dsp::makePeaking(sampleRate, 1200.0f, 1.2f, 6.0f);
     const auto high = ppgu::dsp::makeHighShelf(sampleRate, 7000.0f, 6.0f);
 
+    // Frequency and Q controls must change the response, not merely retain
+    // valid coefficients. Probe away from the centre frequencies so that
+    // moving a control produces an observable response difference.
+    const auto lowAt80 = ppgu::dsp::makeLowShelf(sampleRate, 80.0f, 6.0f);
+    const auto lowAt400 = ppgu::dsp::makeLowShelf(sampleRate, 400.0f, 6.0f);
+    const auto midAt800 = ppgu::dsp::makePeaking(sampleRate, 800.0f, 1.2f, 6.0f);
+    const auto midAt2400 = ppgu::dsp::makePeaking(sampleRate, 2400.0f, 1.2f, 6.0f);
+    const auto narrowMid = ppgu::dsp::makePeaking(sampleRate, 1200.0f, 5.0f, 6.0f);
+    const auto wideMid = ppgu::dsp::makePeaking(sampleRate, 1200.0f, 0.3f, 6.0f);
+    const auto highAt4000 = ppgu::dsp::makeHighShelf(sampleRate, 4000.0f, 6.0f);
+    const auto highAt10000 = ppgu::dsp::makeHighShelf(sampleRate, 10000.0f, 6.0f);
+    if (std::abs(magnitudeAt(lowAt80, 150.0, sampleRate)
+                 - magnitudeAt(lowAt400, 150.0, sampleRate)) < 0.05
+        || std::abs(magnitudeAt(midAt800, 1600.0, sampleRate)
+                    - magnitudeAt(midAt2400, 1600.0, sampleRate)) < 0.05
+        || std::abs(magnitudeAt(narrowMid, 1800.0, sampleRate)
+                    - magnitudeAt(wideMid, 1800.0, sampleRate)) < 0.05
+        || std::abs(magnitudeAt(highAt4000, 7000.0, sampleRate)
+                    - magnitudeAt(highAt10000, 7000.0, sampleRate)) < 0.05)
+    {
+        std::cerr << "EQ frequency/Q controls did not produce distinct filter responses.\\n";
+        return 1;
+    }
+
     if (!nearDb(magnitudeAt(low, 30.0, sampleRate), 6.0)
         || !nearDb(magnitudeAt(low, 10000.0, sampleRate), 0.0)
         || !nearDb(magnitudeAt(mid, 1200.0, sampleRate), 6.0)
