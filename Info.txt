@@ -626,3 +626,23 @@ This entry starts the source-backed song/tonal research work. It deliberately do
 - Song titles are reference anchors for analysis of tone, arrangement role and articulation only; do not copy protected riffs, recordings, stems or commercial presets.
 
 Status: RESEARCH STARTED / PARTIAL EVIDENCE REGISTER. Full 21-group matrix, all group-specific song selections, source acquisition, preset implementation and listening acceptance remain pending.
+
+
+
+## 2026-11-15 — USER-APPROVED PROJECT SEQUENCE: VISUAL COMPLETION → SOUND LIBRARIES → FACTORY PRESET LIBRARY
+
+Пользователь утвердил последовательность дальнейшей работы:
+
+**PHASE 1 — COMPLETE THE VISUAL PART FIRST**
+Завершить утверждённую визуальную часть NEON STAGE: все согласованные окна/панели, состояния, темы и привязки в пределах существующих UI-контрактов. Провести визуальный и control-binding аудит. Не считать фазу завершённой по одному внешнему виду: реальные интерактивные элементы должны иметь подтверждённые backend/parameter bindings либо честно отображаться как недоступные. Сохранить 27-control parity, семь approved FX bypass IDs, APVTS IDs/semantics, processor-state contract, REV.18 inventory и правила сохранности legacy skin records.
+
+**PHASE 2 — SOUND LIBRARIES / RESOURCE FOUNDATION**
+После завершения и проверки визуальной фазы перейти к библиотекам исходного гитарного материала. Исследовать доступные библиотеки и варианты записи/подготовки собственных материалов; проверить качество, происхождение, лицензии и право на распространение исходных файлов внутри SoundBank; вести manifest, SHA-256 и provenance. Приоритет — качество RAW/CLEAN/DI/ACOUSTIC гитары без обработки. Не засчитывать недоступные, непроверенные или неразрешённые к распространению материалы. Не искусственно добирать объём библиотеки.
+
+**PHASE 3 — FACTORY PRESET COMPOSITION AND LOCK**
+На базе проверенной общей библиотеки ресурсов формировать полноценную заводскую библиотеку: отдельные preset files, корректные mappings/articulations/velocity layers/palm mute и роли MELODY/PATTERN; сначала высококачественные исходные звуки без обработки, затем оправданные processed/amped/FX варианты. Использовать точный ранее утверждённый список 21 групп и песен после его восстановления из исходных утверждённых записей; не подменять отсутствующие позиции догадками. Для каждого пресета — уникальность, роль, provenance, ссылки на ресурсы, фактическая цепочка и проверка звучания. Отдельные preset files предпочтительны; целевой VST3 .vstpreset формат подтвердить кодом и host tests.
+
+**PHASE EXIT / FACTORY LIBRARY LOCK**
+Полноценную заводскую библиотеку фиксировать как завершённую только после проверки лицензий и ресурсов, реального MIDI playback, mapping/артикуляций, save/restore, host compatibility, level matching, listening review, duplicate checks и automated/regression tests. Цели ≥500 READY MELODY и ≥500 READY PATTERN сохраняются; черновики и непроверенные записи не считаются READY. Любой недостающий ресурс, DSP или техническая возможность явно документируется, не имитируется.
+
+Порядок утверждён пользователем: визуальная часть → библиотеки → компоновка/создание пресетов → полноценная заводская библиотека и её фиксация. Это план и критерий последовательности, не заявление о завершении любой из фаз.
