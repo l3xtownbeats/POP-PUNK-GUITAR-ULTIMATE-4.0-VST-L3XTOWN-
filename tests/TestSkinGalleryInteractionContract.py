@@ -47,6 +47,19 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertNotIn('"CARBON STUDIO", 2', constructor)
         self.assertIn("familyFilterKeys[familyIndex]", GALLERY)
 
+    def test_card_thumbnail_decode_is_deferred_outside_paint(self) -> None:
+        card_start = GALLERY.index("class Card final")
+        card_end = GALLERY.index("class Grid final", card_start)
+        card = GALLERY[card_start:card_end]
+        paint_start = card.index("void paint(juce::Graphics& g) override")
+        paint_end = card.index("void setPalette", paint_start)
+        paint_body = card[paint_start:paint_end]
+        self.assertNotIn("ImageCache::getFromFile", paint_body)
+        self.assertNotIn("existsAsFile", paint_body)
+        self.assertIn("MessageManager::callAsync", card)
+        self.assertIn("SafePointer<Card>", card)
+        self.assertIn("ImageCache::getFromFile", card[card.index("void requestThumbnailLoad"):])
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
