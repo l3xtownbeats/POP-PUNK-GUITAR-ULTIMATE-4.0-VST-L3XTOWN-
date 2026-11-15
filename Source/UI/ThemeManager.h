@@ -35,7 +35,7 @@ public:
         };
 
         juce::String id { "skin-053" };
-        juce::String name { "NEON STAGE DEFAULT" };
+        juce::String name { "NEON FORGE (DEFAULT)" };
         juce::String uiTypeface { "Segoe UI" };
         juce::String displayTypeface { "Consolas" };
         juce::String typographyWeight { "semibold" };
@@ -62,7 +62,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the canonical NEON STAGE DEFAULT palette.
+    // A failed load always restores the canonical NEON FORGE (DEFAULT) palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;
