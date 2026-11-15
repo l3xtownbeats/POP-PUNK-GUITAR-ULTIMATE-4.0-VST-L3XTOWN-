@@ -976,25 +976,111 @@ private:
 
 namespace { void getPluginModuleAnchor() {} }
 
-void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g,int x,int y,int w,int h,float pos,float start,float end,juce::Slider& slider)
+void PPGUPremiumLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int w, int h,
+                                                    float pos, float start, float end, juce::Slider& slider)
 {
- const float d=juce::jmin((float)w,(float)h)*.76f,r=d*.5f,cx=x+w*.5f,cy=y+h*.5f-2,angle=start+pos*(end-start);
- g.setColour(juce::Colours::black.withAlpha(.34f));g.fillEllipse(cx-r-1,cy-r+3,d+2,d+2);
- juce::Path arc;arc.addCentredArc(cx,cy,r+5,r+5,0,start,end,true);g.setColour(palette.border);g.strokePath(arc,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- juce::Path value;value.addCentredArc(cx,cy,r+5,r+5,0,start,angle,true);g.setColour(slider.isEnabled()?palette.accent:palette.textSecondary.withAlpha(.4f));g.strokePath(value,juce::PathStrokeType(4,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- g.setGradientFill(juce::ColourGradient(palette.surfaceRaised.brighter(.12f),cx,cy-r,palette.canvasInset.darker(.12f),cx,cy+r,false));g.fillEllipse(cx-r+4,cy-r+4,d-8,d-8);g.setColour(palette.border);g.drawEllipse(cx-r+4,cy-r+4,d-8,d-8,1.2f);
- juce::Path pointer;pointer.startNewSubPath(cx,cy);pointer.lineTo(cx+std::sin(angle)*r*.56f,cy-std::cos(angle)*r*.56f);g.setColour(palette.text);g.strokePath(pointer,juce::PathStrokeType(2.6f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));g.setColour(palette.accentSecondary);g.fillEllipse(cx-2.5f,cy-2.5f,5,5);
+    const float d = juce::jmin(static_cast<float>(w), static_cast<float>(h)) * 0.76f;
+    const float r = d * 0.5f;
+    const float cx = x + w * 0.5f;
+    const float cy = y + h * 0.5f - 2.0f;
+    const float angle = start + pos * (end - start);
+    const bool enabled = slider.isEnabled();
+    const bool hovered = enabled && slider.isMouseOverOrDragging();
+    const bool focused = enabled && slider.hasKeyboardFocus(true);
+
+    g.setColour(palette.shadow.withAlpha(0.34f));
+    g.fillEllipse(cx - r - 1.0f, cy - r + 3.0f, d + 2.0f, d + 2.0f);
+
+    juce::Path track;
+    track.addCentredArc(cx, cy, r + 5.0f, r + 5.0f, 0.0f, start, end, true);
+    g.setColour(enabled ? palette.border : palette.textDisabled.withAlpha(0.55f));
+    g.strokePath(track, juce::PathStrokeType(4.0f, juce::PathStrokeType::curved,
+                                             juce::PathStrokeType::rounded));
+
+    juce::Path value;
+    value.addCentredArc(cx, cy, r + 5.0f, r + 5.0f, 0.0f, start, angle, true);
+    g.setColour(enabled ? (hovered ? palette.accent.brighter(0.12f) : palette.accent)
+                        : palette.textDisabled.withAlpha(0.42f));
+    g.strokePath(value, juce::PathStrokeType(4.0f, juce::PathStrokeType::curved,
+                                             juce::PathStrokeType::rounded));
+
+    const auto faceTop = enabled ? palette.surfaceRaised.brighter(0.12f)
+                                 : palette.surfaceSecondary;
+    const auto faceBottom = enabled ? palette.canvasInset.darker(0.12f)
+                                    : palette.canvasInset;
+    g.setGradientFill(juce::ColourGradient(faceTop, cx, cy - r, faceBottom, cx, cy + r, false));
+    g.fillEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f);
+    g.setColour(focused ? palette.focus : palette.border);
+    g.drawEllipse(cx - r + 4.0f, cy - r + 4.0f, d - 8.0f, d - 8.0f,
+                  focused ? 2.0f : 1.2f);
+
+    juce::Path pointer;
+    pointer.startNewSubPath(cx, cy);
+    pointer.lineTo(cx + std::sin(angle) * r * 0.56f,
+                   cy - std::cos(angle) * r * 0.56f);
+    g.setColour(enabled ? palette.text : palette.textDisabled);
+    g.strokePath(pointer, juce::PathStrokeType(2.6f, juce::PathStrokeType::curved,
+                                                juce::PathStrokeType::rounded));
+    g.setColour(enabled ? palette.accentSecondary : palette.textDisabled);
+    g.fillEllipse(cx - 2.5f, cy - 2.5f, 5.0f, 5.0f);
 }
-void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g,juce::Button& b,const juce::Colour& base,bool hi,bool down)
+
+void PPGUPremiumLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button,
+                                                   const juce::Colour& base, bool hovered, bool down)
 {
- auto r=b.getLocalBounds().toFloat().reduced(.5f);auto c=b.getToggleState()?palette.accent:base;if(!b.isEnabled())c=palette.surfaceSecondary;else if(down)c=c.darker(.18f);else if(hi)c=c.brighter(.12f);
- g.setGradientFill(juce::ColourGradient(c.brighter(.08f),r.getX(),r.getY(),c.darker(.16f),r.getX(),r.getBottom(),false));g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
- if(b.getToggleState()&&b.isEnabled()){g.setColour(palette.accentSecondary);g.fillRoundedRectangle(r.removeFromLeft(3),1.5f);}
+    auto bounds = button.getLocalBounds().toFloat().reduced(0.5f);
+    const bool enabled = button.isEnabled();
+    const bool focused = enabled && button.hasKeyboardFocus(true);
+    auto face = button.getToggleState() ? palette.accent : base;
+
+    if (!enabled)
+        face = palette.surfaceSecondary;
+    else if (down)
+        face = face.darker(0.18f);
+    else if (hovered)
+        face = face.brighter(0.12f);
+
+    g.setGradientFill(juce::ColourGradient(face.brighter(enabled ? 0.08f : 0.02f),
+        bounds.getX(), bounds.getY(), face.darker(0.16f), bounds.getX(), bounds.getBottom(), false));
+    g.fillRoundedRectangle(bounds, 7.0f);
+
+    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.lowlight));
+    g.drawRoundedRectangle(bounds, 7.0f, focused ? 2.0f : 1.0f);
+
+    if (button.getToggleState() && enabled)
+    {
+        g.setColour(palette.accentSecondary);
+        g.fillRoundedRectangle(bounds.removeFromLeft(3.0f), 1.5f);
+    }
 }
-void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g,int w,int h,bool down,int,int,int,int,juce::ComboBox& box)
+
+void PPGUPremiumLookAndFeel::drawComboBox(juce::Graphics& g, int w, int h, bool down,
+                                           int, int, int, int, juce::ComboBox& box)
 {
- auto r=juce::Rectangle<float>(.5f,.5f,(float)w-1,(float)h-1);auto c=box.findColour(juce::ComboBox::backgroundColourId);g.setColour(down?c.brighter(.08f):c);g.fillRoundedRectangle(r,7);g.setColour(palette.border);g.drawRoundedRectangle(r,7,1);
- float cx=r.getRight()-17,cy=r.getCentreY();juce::Path p;p.startNewSubPath(cx-4,cy-2);p.lineTo(cx,cy+2);p.lineTo(cx+4,cy-2);g.setColour(palette.accent);g.strokePath(p,juce::PathStrokeType(1.8f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
+    auto bounds = juce::Rectangle<float>(0.5f, 0.5f, static_cast<float>(w) - 1.0f,
+                                         static_cast<float>(h) - 1.0f);
+    const bool enabled = box.isEnabled();
+    const bool focused = enabled && box.hasKeyboardFocus(true);
+    auto face = box.findColour(juce::ComboBox::backgroundColourId);
+    if (!enabled)
+        face = palette.surfaceSecondary;
+    else if (down || box.isMouseOver())
+        face = face.brighter(0.08f);
+
+    g.setColour(face);
+    g.fillRoundedRectangle(bounds, 7.0f);
+    g.setColour(focused ? palette.focus : (enabled ? palette.border : palette.lowlight));
+    g.drawRoundedRectangle(bounds, 7.0f, focused ? 2.0f : 1.0f);
+
+    const float cx = bounds.getRight() - 17.0f;
+    const float cy = bounds.getCentreY();
+    juce::Path arrow;
+    arrow.startNewSubPath(cx - 4.0f, cy - 2.0f);
+    arrow.lineTo(cx, cy + 2.0f);
+    arrow.lineTo(cx + 4.0f, cy - 2.0f);
+    g.setColour(enabled ? palette.accent : palette.textDisabled);
+    g.strokePath(arrow, juce::PathStrokeType(1.8f, juce::PathStrokeType::curved,
+                                              juce::PathStrokeType::rounded));
 }
 
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
