@@ -3064,3 +3064,21 @@ unverified until their steps complete successfully.
 **Проверки:** source files read back; lexical delimiter scan всех затронутых C++/header/test файлов прошёл после panic fix. 64-voice regression test добавлен, но exact-SHA CTest/Windows Release/pluginval/FL Studio 20 не запускались / не подтверждены. Workflow runs: 0.
 
 **Следующий шаг:** sampler streaming/cache stress and state restore audit; затем full exact-SHA Windows build + CTest, прежде чем объявлять code stage complete.
+
+
+## 2026-11-15 — Oversized-block FX regression / async state-restore coverage
+
+**Статус:** SOURCE + REGRESSION TESTS ADDED; FULL JUCE BUILD VALIDATION PENDING.
+
+**Изменения:**
+- `Source/PluginProcessor.h`: добавлены read-only diagnostics `hasLoadedSampleBank()` и `getLoadedRegionCount()` для UI/test status; существующие APVTS и serialization не меняются.
+- `Source/Sampler/SamplePool.cpp`: `SamplerEngine::noteOn()` отклоняет velocity-zero/out-of-range note до region lookup; это не двигает round-robin cursor при note-on velocity 0. MIDI channel нормализуется до поиска region.
+- `tests/ProcessorPatternIntegrationTests.cpp`: добавлен реальный Processor-level regression, где `prepareToPlay()` объявляет block size 128, а host передаёт 2048 samples; отдельно сравнивается Chorus on/off и Reverb on/off, чтобы обнаружить прежний silent bypass/oversized scratch overflow.
+- Там же добавлена state round-trip проверка: `getStateInformation()` → `setStateInformation()` → async reload того же SFZ path и проверка 9 опубликованных regions.
+- Test block перемещён после fixture creation / `result` initialization; scope and declaration order checked.
+
+**Commits:** implementation/tests `5f63c3e2a51bf91d89adcdfd24b15cc5c2839b9c`; test placement correction `e5ba9b74af227e8297190f0baf50735e2238c1a3` (parent `5f63c3e2a51bf91d89adcdfd24b15cc5c2839b9c`).
+
+**Проверки:** modified C++/header/test files passed lexical delimiter balance scan. Full JUCE/Windows Release/CTest/pluginval/FL Studio 20 not run or confirmed. Exact-SHA workflow runs: 0.
+
+**Следующий шаг:** complete Sampler streaming/cache failure-path and state-generation audit; then exact-SHA CI/build and fix any compile/runtime failures before declaring code stage complete.

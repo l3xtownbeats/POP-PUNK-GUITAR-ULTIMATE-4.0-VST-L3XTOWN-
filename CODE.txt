@@ -1113,3 +1113,21 @@ Approved requirements:
 **Тесты:** source-level tests added; lexical delimiter scan passed for modified C++/header/test files. Full compiler/CTest/pluginval/FL Studio 20 validation remains pending.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** sampler streaming/cache stress and state restore audit; then exact-SHA Windows Release + CTest.
+
+
+## 2026-11-15 — Oversized host-block and asynchronous state-restore regression coverage
+
+**Тип:** Processor integration tests + safe note-on validation.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `5f63c3e2a51bf91d89adcdfd24b15cc5c2839b9c` — diagnostics getters, velocity-zero guard, oversized FX and state restore test source.
+- `e5ba9b74af227e8297190f0baf50735e2238c1a3` — moved the inserted integration block after the SFZ fixture and result initialization.
+
+**Файлы / symbols:**
+- `Source/PluginProcessor.h` — `hasLoadedSampleBank()`, `getLoadedRegionCount()`.
+- `Source/Sampler/SamplePool.cpp` — early validation in `SamplerEngine::noteOn()` before `findRegion()`.
+- `tests/ProcessorPatternIntegrationTests.cpp` — oversized 2048-sample block after `prepareToPlay(48000, 128)`; Chorus and Reverb are compared against dry output; async state restore verifies the saved path and expected 9 regions.
+
+**Тесты:** lexical delimiter scan passed. Regression source added; not yet compiled or executed under CTest. Windows Release/pluginval/FL Studio 20 not run.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** finish streaming/cache/state-generation audit; then run exact-SHA full build and CTest.
