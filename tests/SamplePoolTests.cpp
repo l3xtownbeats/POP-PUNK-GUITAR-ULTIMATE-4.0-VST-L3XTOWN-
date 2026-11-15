@@ -523,7 +523,7 @@ int main()
     // the metadata gains and voice count. Both regions reference the same
     // in-phase fixture WAV, so equal-power 0.707 gains must sum to a peak
     // near 0.5 * (64 / 127) * sqrt(2), clearly above a single-layer result.
-    juce::AudioBuffer<float> crossfadeRendered(2, 128);
+    juce::AudioBuffer<float> crossfadeRendered(2, 256);
     bool crossfadeBecameAudible = false;
     float crossfadePeak = 0.0f;
     for (int attempt = 0; attempt < 100 && !crossfadeBecameAudible; ++attempt)

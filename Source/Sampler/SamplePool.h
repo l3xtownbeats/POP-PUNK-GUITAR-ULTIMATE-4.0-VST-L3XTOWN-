@@ -151,6 +151,8 @@ private:
         double position = 0.0;
         double increment = 1.0;
         float gain = 0.0f;
+        float envelopeLevel = 0.0f;
+        float attackStep = 0.0f;
         float releaseStep = 0.0f;
         bool releasing = false;
         int direction = 1;

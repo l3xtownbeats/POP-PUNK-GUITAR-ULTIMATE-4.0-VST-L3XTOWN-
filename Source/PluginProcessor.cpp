@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Performance/ChordTransitionTimeline.h"
+#include "Performance/AutoChordScale.h"
 #include <cmath>
 #include <algorithm>
 #include <tuple>
@@ -73,12 +74,13 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     p.add(floatParameter("slideTime", "Slide Time", 0.01f, 1.0f, 0.25f));
     p.add(boolParameter("legato", "Legato", true));
     p.add(boolParameter("hammerPull", "Hammer On Pull Off", true));
+    p.add(boolParameter("autoChords", "AutoChords", true));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleRoot", 1 }, "Scale Root",
         juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 0));
     p.add(std::make_unique<juce::AudioParameterChoice>(
         juce::ParameterID { "scaleMode", 1 }, "Scale Mode",
-        juce::StringArray { "Chromatic", "Major", "Minor" }, 0));
+        juce::StringArray { "Chromatic", "Major", "Minor" }, 1));
 
     // Melody performance and articulation controls from v33 sections 8 and 13.
     p.add(boolParameter("monoMode", "Monophonic Mode", true));
@@ -193,7 +195,7 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     maximumBlockSize = juce::jmax(1, expectedBlockSize);
     sampler.prepare(currentSampleRate);
     patternScheduler.reset();
-    for (auto& channel : patternHeldNotes) channel.fill(false);
+    patternNoteTracker.clear();
     patternCycleStarted = false;
     previousPatternChordCount = 0;
     previousPatternChordNotes.fill(-1);
@@ -290,8 +292,20 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     const int maximumVoices = juce::jmin(requestedVoices, profileVoiceLimit);
     const float velocityScale = juce::jlimit(0.0f, 2.0f,
         parameters.getRawParameterValue("velocity")->load(std::memory_order_relaxed));
-    const int playMode = juce::jlimit(0, 1,
+    const int playMode = juce::jlimit(0, 2,
         static_cast<int>(parameters.getRawParameterValue("playMode")->load(std::memory_order_relaxed)));
+    // AutoChords is a Pattern-only performance aid (Session Guitarist-style).
+    // Melody mode always passes the played MIDI pitch through unchanged.
+    const bool autoChordsEnabled = playMode == 1
+        && parameters.getRawParameterValue("autoChords")->load(std::memory_order_relaxed) > 0.5f;
+    const int selectedScaleRoot = juce::jlimit(0, 11, static_cast<int>(parameters.getRawParameterValue("scaleRoot")->load(std::memory_order_relaxed)));
+    const int selectedScaleMode = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("scaleMode")->load(std::memory_order_relaxed)));
+    const auto mapPerformanceNote = [&](int note) noexcept
+    {
+        return autoChordsEnabled
+            ? ppgu::performance::mapNoteToScale(note, selectedScaleRoot, selectedScaleMode)
+            : note;
+    };
 
     // Read one immutable host-position snapshot per block. Pattern timing is
     // derived from PPQ/sample-rate; the scheduler never calls the host from a
@@ -324,7 +338,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     {
         sampler.allNotesOff();
         patternScheduler.reset(patternTransportClock.startPpq);
-        for (auto& channel : patternHeldNotes) channel.fill(false);
+        patternNoteTracker.clear();
+        for (auto& channel : melodyMappedNotes) channel.fill(-1);
         patternCycleStarted = false;
         previousPatternChordCount = 0;
         previousPatternChordNotes.fill(-1);
@@ -345,7 +360,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
         previousPatternChordNotes.fill(-1);
         previousPatternChordChannel = 1;
         if (patternTransportClock.transportStopped)
-            for (auto& held : patternHeldNotes) held.fill(false);
+            patternNoteTracker.clear();
     }
 
     const double globalTuningSemitones = juce::jlimit(-12.0, 12.0,
@@ -359,8 +374,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
     if (playMode == 0)
     {
-        // MELODY: one incoming MIDI key always plays its mapped chromatic note.
-        // No pattern scheduler or chord interpretation can intercept it.
+        // MELODY: one incoming MIDI key plays one note. AutoChords optionally snaps
+        // that pitch to the selected key/scale; when disabled Piano Roll pitches pass through.
         int cursor = 0;
         for (const auto metadata : midi)
         {
@@ -371,6 +386,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
             if (message.isAllNotesOff() || message.isAllSoundOff())
             {
+                for (auto& mapped : melodyMappedNotes) mapped.fill(-1);
                 panicRequested.store(true, std::memory_order_release);
                 sampler.panic(fadeLength);
             }
@@ -383,16 +399,25 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const float shapedVelocity = std::pow(normalizedVelocity, 2.0f - 1.5f * dynamics);
                 const int scaledVelocity = juce::jlimit(1, 127,
                     juce::roundToInt(shapedVelocity * 127.0f * velocityScale));
-                const bool triggered = sampler.noteOn(message.getNoteNumber(), scaledVelocity, maximumVoices,
+                const int mappedNote = mapPerformanceNote(message.getNoteNumber());
+                melodyMappedNotes[static_cast<size_t>(message.getChannel() - 1)][static_cast<size_t>(message.getNoteNumber())] = mappedNote;
+                const bool triggered = sampler.noteOn(mappedNote, scaledVelocity, maximumVoices,
                                                       message.getChannel(), globalTuningSemitones);
                 juce::ignoreUnused(triggered);
             }
             else if (message.isNoteOff())
-                sampler.noteOff(message.getNoteNumber(), message.getChannel());
+            {
+                const auto channel = static_cast<size_t>(message.getChannel() - 1);
+                const auto sourceNote = static_cast<size_t>(message.getNoteNumber());
+                const int mappedNote = melodyMappedNotes[channel][sourceNote] >= 0
+                    ? melodyMappedNotes[channel][sourceNote] : message.getNoteNumber();
+                melodyMappedNotes[channel][sourceNote] = -1;
+                sampler.noteOff(mappedNote, message.getChannel());
+            }
         }
         renderSegment(cursor, samples - cursor);
     }
-    else
+    else if (playMode == 1)
     {
         // PATTERN: process every MIDI chord transition at its sample position.
         // Each interval is scheduled independently, preserving every chord change.
@@ -416,11 +441,27 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             int channel = 1;
             for (int ch = 0; ch < 16 && count < static_cast<int>(notes.size()); ++ch)
                 for (int note = 0; note < 128 && count < static_cast<int>(notes.size()); ++note)
-                    if (patternHeldNotes[static_cast<size_t>(ch)][static_cast<size_t>(note)])
+                    if (patternNoteTracker.isHeld(ch, note))
                     {
                         notes[static_cast<size_t>(count++)] = note;
                         channel = ch + 1;
                     }
+            // AutoChords follows the Session Guitarist-style workflow:
+            // a single held root key becomes a scale-aware triad. If the player
+            // holds two or more notes, preserve that explicit voicing (after
+            // scale snapping) rather than stacking extra chords on top.
+            if (autoChordsEnabled && count == 1)
+            {
+                std::array<int, 3> triad {};
+                if (ppgu::performance::makeDiatonicTriad(
+                        notes[0], selectedScaleRoot, selectedScaleMode, triad))
+                {
+                    notes[0] = triad[0];
+                    notes[1] = triad[1];
+                    notes[2] = triad[2];
+                    count = 3;
+                }
+            }
             return std::make_tuple(notes, count, channel);
         };
 
@@ -533,7 +574,7 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 const int channelIndex = juce::jlimit(1, 16, message.getChannel()) - 1;
                 if (message.isAllNotesOff() || message.isAllSoundOff())
                 {
-                    for (auto& held : patternHeldNotes) held.fill(false);
+                    patternNoteTracker.clear();
                     panicRequested.store(true, std::memory_order_release);
                     sampler.panic(fadeLength);
                     patternScheduler.clearPendingNoteOffs();
@@ -544,7 +585,20 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 }
                 else if (message.isNoteOn() || message.isNoteOff())
                 {
-                    patternHeldNotes[static_cast<size_t>(channelIndex)][static_cast<size_t>(message.getNoteNumber())] = message.isNoteOn();
+                    const int sourceNote = message.getNoteNumber();
+                    const int channel = channelIndex;
+                    if (message.isNoteOn())
+                    {
+                        const int mappedNote = mapPerformanceNote(sourceNote);
+                        // Repeated NoteOn for the same source key replaces its
+                        // previous ownership instead of leaking a reference.
+                        patternNoteTracker.noteOn(channel, sourceNote, mappedNote);
+                    }
+                    else
+                    {
+                        const int mappedNote = patternNoteTracker.noteOff(channel, sourceNote);
+                        juce::ignoreUnused(mappedNote);
+                    }
                     const auto [nextNotes, nextCount, nextChannel] = readChord();
                     if (chordDiffers(nextNotes, nextCount, nextChannel))
                         restartForChord(eventSample, nextNotes, nextCount, nextChannel);

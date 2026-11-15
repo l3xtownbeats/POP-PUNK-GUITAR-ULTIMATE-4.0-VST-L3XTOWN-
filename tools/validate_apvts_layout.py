@@ -12,7 +12,7 @@ source = SOURCE.read_text(encoding="utf-8")
 # These IDs are part of the saved-session/automation contract. Keep them stable:
 # adding parameters is allowed, silently renaming/removing an existing ID is not.
 REQUIRED_PARAMETER_IDS = {
-    "master", "voices", "velocity", "dynamics", "palmMuteThreshold",
+    "master", "voices", "autoChords", "velocity", "dynamics", "palmMuteThreshold",
     "tuning", "pan", "output", "playMode", "articulation", "pickStyle",
     "pitchBendTarget", "vibrato", "slideTime", "legato", "hammerPull",
     "scaleRoot", "scaleMode", "monoMode", "fretNoiseOnChordChange",

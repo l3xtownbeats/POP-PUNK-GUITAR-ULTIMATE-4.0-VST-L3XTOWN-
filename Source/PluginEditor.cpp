@@ -5,20 +5,18 @@
 
 // Approved PPGU 4.0 dark/pink skin: all visible rotary and FX controls use APVTS attachments.
 
-namespace
-{
-    const juce::Colour bg { 0xff111116 };
-    const juce::Colour panel { 0xff202027 };
-    const juce::Colour panel2 { 0xff17171d };
-    const juce::Colour pink { 0xffed238b };
-    const juce::Colour pale { 0xfff4f0f4 };
-    const juce::Colour muted { 0xffaaa8b2 };
-}
-
 PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEditor(PopPunkGuitarUltimateAudioProcessor& p)
     : AudioProcessorEditor(&p), processor(p)
 {
-    setSize(1040, 790);
+    coverImage = juce::ImageCache::getFromMemory(BinaryData::Cover_Interface_jpg, BinaryData::Cover_Interface_jpgSize);
+    currentSkin = juce::jlimit(0, 2, static_cast<int>(processor.parameters.state.getProperty("uiSkin", 0)));
+    skinBox.addItem("SKIN: PINK", 1);
+    skinBox.addItem("SKIN: CYAN", 2);
+    skinBox.addItem("SKIN: AMBER", 3);
+    skinBox.setSelectedId(currentSkin + 1, juce::dontSendNotification);
+    skinBox.onChange = [this] { applySkin(skinBox.getSelectedId() - 1); };
+    addAndMakeVisible(skinBox);
+    setSize(1200, 900);
     setResizable(true, true);
     // The current fixed-height control stack needs ~788 px including outer margins.
     // Do not allow a window size that clips the keyboard or lower controls.
@@ -123,8 +121,12 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     statusLabel.setColour(juce::Label::textColourId, muted);
     statusLabel.setFont(juce::Font(11.0f));
     addAndMakeVisible(statusLabel);
-    melodyTab.setClickingTogglesState(false);
-    patternTab.setClickingTogglesState(false);
+    melodyTab.setClickingTogglesState(true);
+    patternTab.setClickingTogglesState(true);
+    melodyTab.setColour(juce::TextButton::buttonOnColourId, pink);
+    patternTab.setColour(juce::TextButton::buttonOnColourId, pink);
+    melodyTab.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    patternTab.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
     for (auto* b : { &melodyTab, &patternTab }) {
         b->setColour(juce::TextButton::buttonColourId, panel2);
         b->setColour(juce::TextButton::textColourOffId, pale);
@@ -132,11 +134,34 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     modeBox.addItem("MELODY", 1);
     modeBox.addItem("PATTERN", 2);
+    modeBox.addItem("OFF", 3);
     modeBox.setColour(juce::ComboBox::backgroundColourId, panel2);
     modeBox.setColour(juce::ComboBox::textColourId, pale);
     modeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
     addAndMakeVisible(modeBox);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "playMode", modeBox);
+    autoChordsButton.setClickingTogglesState(true);
+    autoChordsButton.setColour(juce::TextButton::buttonColourId, panel2);
+    autoChordsButton.setColour(juce::TextButton::buttonOnColourId, pink);
+    autoChordsButton.setColour(juce::TextButton::textColourOffId, pale);
+    autoChordsButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    autoChordsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.parameters, "autoChords", autoChordsButton);
+    addAndMakeVisible(autoChordsButton);
+    for (int note = 0; note < 12; ++note)
+        scaleRootBox.addItem(juce::StringArray { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }[note], note + 1);
+    scaleRootBox.setColour(juce::ComboBox::backgroundColourId, panel2);
+    scaleRootBox.setColour(juce::ComboBox::textColourId, pale);
+    scaleRootBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    addAndMakeVisible(scaleRootBox);
+    scaleRootAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "scaleRoot", scaleRootBox);
+    scaleModeBox.addItem("CHROMATIC", 1);
+    scaleModeBox.addItem("MAJOR", 2);
+    scaleModeBox.addItem("MINOR", 3);
+    scaleModeBox.setColour(juce::ComboBox::backgroundColourId, panel2);
+    scaleModeBox.setColour(juce::ComboBox::textColourId, pale);
+    scaleModeBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    addAndMakeVisible(scaleModeBox);
+    scaleModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(processor.parameters, "scaleMode", scaleModeBox);
     startModeBox.addItem("HOST", 1);
     startModeBox.addItem("HOST START", 2);
     startModeBox.addItem("INTERNAL", 3);
@@ -154,8 +179,30 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
     keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
     addAndMakeVisible(*keyboard);
-    melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
-    patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    const auto syncModeButtons = [this] {
+        const int selected = modeBox.getSelectedId();
+        melodyTab.setToggleState(selected == 1, juce::dontSendNotification);
+        patternTab.setToggleState(selected == 2, juce::dontSendNotification);
+        melodyTab.setButtonText(selected == 1 ? "♫  MELODY  ✓" : "♫  MELODY");
+        patternTab.setButtonText(selected == 2 ? "PATTERN  ✓" : "PATTERN");
+        const bool patternActive = selected == 2;
+        autoChordsButton.setEnabled(patternActive);
+        scaleRootBox.setEnabled(patternActive);
+        scaleModeBox.setEnabled(patternActive);
+        autoChordsButton.setTooltip(patternActive
+            ? "AutoChords: ON/OFF for Pattern mode"
+            : "AutoChords is available only in Pattern mode");
+        scaleRootBox.setTooltip(patternActive ? "AutoChords key" : "Available only in Pattern mode");
+        scaleModeBox.setTooltip(patternActive ? "AutoChords scale" : "Available only in Pattern mode");
+    };
+    modeBox.onChange = syncModeButtons;
+    melodyTab.onClick = [this] {
+        modeBox.setSelectedId(modeBox.getSelectedId() == 1 ? 3 : 1, juce::sendNotification);
+    };
+    patternTab.onClick = [this] {
+        modeBox.setSelectedId(modeBox.getSelectedId() == 2 ? 3 : 2, juce::sendNotification);
+    };
+    syncModeButtons();
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
@@ -178,6 +225,68 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
         l->setColour(juce::Label::textColourId, pink);
         addAndMakeVisible(*l);
     }
+    applySkin(currentSkin);
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::applySkin(int skinIndex)
+{
+    currentSkin = juce::jlimit(0, 2, skinIndex);
+    // Skin selection is UI state, not an audio parameter. Store it in the
+    // processor ValueTree so normal DAW session save/restore remembers it.
+    processor.parameters.state.setProperty("uiSkin", currentSkin, nullptr);
+
+    if (currentSkin == 0) { bg = juce::Colour(0xff111116); panel = juce::Colour(0xff202027); panel2 = juce::Colour(0xff17171d); pink = juce::Colour(0xffed238b); pale = juce::Colour(0xfff4f0f4); muted = juce::Colour(0xffaaa8b2); }
+    else if (currentSkin == 1) { bg = juce::Colour(0xff0b1419); panel = juce::Colour(0xff17272e); panel2 = juce::Colour(0xff101e25); pink = juce::Colour(0xff20d7e8); pale = juce::Colour(0xffe9fbff); muted = juce::Colour(0xff9ab9c2); }
+    else { bg = juce::Colour(0xff17120c); panel = juce::Colour(0xff302317); panel2 = juce::Colour(0xff21180f); pink = juce::Colour(0xffffb13b); pale = juce::Colour(0xfffff5e6); muted = juce::Colour(0xffc4ad8d); }
+
+    skinBox.setColour(juce::ComboBox::backgroundColourId, panel2);
+    skinBox.setColour(juce::ComboBox::textColourId, pale);
+    skinBox.setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.7f));
+    for (auto* combo : { &presetBox, &categoryBox, &powerProfileBox, &modeBox, &startModeBox, &scaleRootBox, &scaleModeBox })
+    {
+        combo->setColour(juce::ComboBox::backgroundColourId, panel2);
+        combo->setColour(juce::ComboBox::textColourId, pale);
+        combo->setColour(juce::ComboBox::outlineColourId, pink.withAlpha(0.5f));
+    }
+    presetSearch.setColour(juce::TextEditor::backgroundColourId, panel2);
+    presetSearch.setColour(juce::TextEditor::textColourId, pale);
+    presetSearch.setColour(juce::TextEditor::outlineColourId, pink.withAlpha(0.4f));
+    loadButton.setColour(juce::TextButton::buttonColourId, pink);
+    loadButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    for (auto* button : { &melodyTab, &patternTab, &autoChordsButton })
+    {
+        button->setColour(juce::TextButton::buttonColourId, panel2);
+        button->setColour(juce::TextButton::buttonOnColourId, pink);
+        button->setColour(juce::TextButton::textColourOffId, pale);
+        button->setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    }
+    for (auto& button : fxButtons)
+    {
+        button.setColour(juce::TextButton::buttonColourId, panel2);
+        button.setColour(juce::TextButton::buttonOnColourId, pink);
+        button.setColour(juce::TextButton::textColourOffId, pale);
+        button.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    }
+    for (size_t i = 0; i < knobs.size(); ++i)
+    {
+        knobs[i].setColour(juce::Slider::rotarySliderFillColourId, pink);
+        knobs[i].setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff44444e));
+        knobs[i].setColour(juce::Slider::thumbColourId, pale);
+        knobs[i].setColour(juce::Slider::textBoxTextColourId, pale);
+        knobLabels[i].setColour(juce::Label::textColourId, muted);
+    }
+    for (auto* label : { &titleLabel, &subtitleLabel, &ampTitle, &fxTitle, &playbackTitle })
+        label->setColour(juce::Label::textColourId, label == &subtitleLabel || label == &ampTitle || label == &fxTitle || label == &playbackTitle ? pink : pale);
+    statusLabel.setColour(juce::Label::textColourId, muted);
+    if (keyboard != nullptr)
+    {
+        keyboard->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, pale);
+        keyboard->setColour(juce::MidiKeyboardComponent::blackNoteColourId, panel2);
+        keyboard->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, muted.withAlpha(0.35f));
+        keyboard->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, pink.withAlpha(0.35f));
+        keyboard->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, pink.withAlpha(0.85f));
+    }
+    repaint();
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, juce::Label& l, const juce::String& name)
@@ -208,53 +317,57 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(juce::Graphics& g, juc
 void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(bg);
+
+    // Header: match the black hardware strip and hot-pink edge from the approved cover.
     g.setColour(juce::Colour(0xff08080b));
     g.fillRect(0, 0, getWidth(), 62);
     g.setColour(pink);
     g.fillRect(0, 0, getWidth(), 3);
-    auto hero = getLocalBounds().reduced(16);
-    hero.removeFromTop(72);
-    hero.setHeight(194);
-    juce::ColourGradient grad(juce::Colour(0xff30202f), static_cast<float>(hero.getX()), static_cast<float>(hero.getY()), juce::Colour(0xff101116), static_cast<float>(hero.getRight()), static_cast<float>(hero.getBottom()), false);
-    g.setGradientFill(grad);
-    g.fillRoundedRectangle(hero.toFloat(), 12.0f);
-    g.setColour(juce::Colour(0xff7b526c).withAlpha(0.5f));
-    g.drawRoundedRectangle(hero.toFloat(), 12.0f, 1.0f);
-    auto textArea = hero.reduced(28, 18);
-    g.setColour(pale);
-    g.setFont(juce::Font(juce::jmin(42.0f, getWidth() * 0.047f), juce::Font::bold));
-    g.drawText("POP PUNK", textArea.removeFromTop(50), juce::Justification::left);
-    g.setColour(pink);
-    g.setFont(juce::Font(juce::jmin(37.0f, getWidth() * 0.041f), juce::Font::italic | juce::Font::bold));
-    g.drawText("GUITAR ULTIMATE", textArea.removeFromTop(42), juce::Justification::left);
-    g.setColour(pale.withAlpha(0.8f));
-    g.setFont(juce::Font(16.0f, juce::Font::italic));
-    g.drawText("Play. Create. Rock.", textArea.removeFromTop(28), juce::Justification::left);
-    // Stylised electric-guitar silhouette as a vector fallback; no external image dependency.
-    auto guitar = hero.removeFromRight(static_cast<int>(hero.getWidth() * 0.43f)).reduced(22, 16);
-    juce::Path body;
-    body.startNewSubPath(guitar.getX() + guitar.getWidth()*0.48f, guitar.getY()+guitar.getHeight()*0.52f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.23f,guitar.getX()+guitar.getWidth()*0.12f,guitar.getY()+guitar.getHeight()*0.45f,guitar.getX()+guitar.getWidth()*0.28f,guitar.getY()+guitar.getHeight()*0.68f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.38f,guitar.getY()+guitar.getHeight()*0.83f,guitar.getX()+guitar.getWidth()*0.60f,guitar.getY()+guitar.getHeight()*0.79f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.60f);
-    body.cubicTo(guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.57f,guitar.getX()+guitar.getWidth()*0.83f,guitar.getY()+guitar.getHeight()*0.38f,guitar.getX()+guitar.getWidth()*0.68f,guitar.getY()+guitar.getHeight()*0.40f);
-    body.closeSubPath();
-    g.setColour(juce::Colour(0xffd9d9df));
-    g.fillPath(body);
-    g.setColour(juce::Colour(0xff292932));
-    g.fillEllipse(guitar.getX()+guitar.getWidth()*0.43f,guitar.getY()+guitar.getHeight()*0.47f, guitar.getWidth()*0.17f,guitar.getHeight()*0.22f);
-    g.setColour(juce::Colour(0xffd8b77c));
-    juce::Path neck;
-    neck.addQuadrilateral(static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.60f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.45f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.08f, static_cast<float>(guitar.getRight()), static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.20f, static_cast<float>(guitar.getX())+static_cast<float>(guitar.getWidth())*0.66f, static_cast<float>(guitar.getY())+static_cast<float>(guitar.getHeight())*0.57f);
-    g.fillPath(neck);
-    g.setColour(pink.withAlpha(0.75f));
-    g.drawLine(static_cast<float>(guitar.getX()+guitar.getWidth()*0.58f),static_cast<float>(guitar.getY()+guitar.getHeight()*0.49f),static_cast<float>(guitar.getRight()),static_cast<float>(guitar.getY()+guitar.getHeight()*0.14f),1.2f);
+    g.setColour(juce::Colour(0xff41414a));
+    g.drawLine(0.0f, 61.0f, static_cast<float>(getWidth()), 61.0f, 1.0f);
+
+    // Use the actual repository cover artwork, cropped to its hero-banner area.
+    auto hero = juce::Rectangle<int>(16, 68, getWidth() - 32, 202);
+    if (coverImage.isValid())
+    {
+        const int sourceY = juce::jlimit(0, juce::jmax(0, coverImage.getHeight() - 1), 65);
+        const int sourceHeight = juce::jmin(312, coverImage.getHeight() - sourceY);
+        g.drawImage(coverImage, hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight(),
+                    0, sourceY, coverImage.getWidth(), sourceHeight);
+        g.setColour(juce::Colour(0xff08080b).withAlpha(0.12f));
+        g.fillRoundedRectangle(hero.toFloat(), 10.0f);
+    }
+    else
+    {
+        juce::ColourGradient fallback(juce::Colour(0xff30202f), 0.0f, 68.0f,
+                                       juce::Colour(0xff101116), static_cast<float>(getWidth()), 270.0f, false);
+        g.setGradientFill(fallback);
+        g.fillRoundedRectangle(hero.toFloat(), 10.0f);
+        g.setColour(pale);
+        g.setFont(juce::Font(36.0f, juce::Font::bold));
+        g.drawText("POP PUNK GUITAR ULTIMATE", hero.reduced(24), juce::Justification::centredLeft);
+    }
+    g.setColour(pink.withAlpha(0.72f));
+    g.drawRoundedRectangle(hero.toFloat().reduced(0.5f), 10.0f, 1.2f);
+
     auto panelArea = getLocalBounds().reduced(16);
     panelArea.removeFromTop(355);
     panelArea.removeFromBottom(80);
-    const int gap=12, ampW=static_cast<int>(panelArea.getWidth()*0.39f), fxW=static_cast<int>(panelArea.getWidth()*0.39f);
-    auto amp=panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
-    auto fx=panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
-    drawPanel(g,amp); drawPanel(g,fx); drawPanel(g,panelArea);
+    const int gap = 12;
+    const int ampW = static_cast<int>(panelArea.getWidth() * 0.39f);
+    const int fxW = static_cast<int>(panelArea.getWidth() * 0.39f);
+    auto amp = panelArea.removeFromLeft(ampW); panelArea.removeFromLeft(gap);
+    auto fx = panelArea.removeFromLeft(fxW); panelArea.removeFromLeft(gap);
+    drawPanel(g, amp);
+    drawPanel(g, fx);
+    drawPanel(g, panelArea);
+
+    // Fine hardware-style separators and lower keyboard frame.
+    g.setColour(juce::Colour(0xff09090d));
+    g.fillRect(0, getHeight() - 84, getWidth(), 84);
+    g.setColour(pink.withAlpha(0.35f));
+    g.drawLine(16.0f, static_cast<float>(getHeight() - 84), static_cast<float>(getWidth() - 16),
+               static_cast<float>(getHeight() - 84), 1.0f);
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -267,13 +380,17 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     categoryBox.setBounds(top.removeFromLeft(130).reduced(3, 7));
     powerProfileBox.setBounds(top.removeFromLeft(105).reduced(3, 7));
     doubleTrackButton.setBounds(top.removeFromLeft(86).reduced(3, 7));
+    skinBox.setBounds(top.removeFromLeft(112).reduced(3, 7));
     loadButton.setBounds(top.removeFromRight(108).reduced(2, 5));
     subtitleLabel.setBounds(top.reduced(4, 0));
     area.removeFromTop(220);
     auto tabs=area.removeFromTop(62);
     melodyTab.setBounds(tabs.removeFromLeft(220).reduced(2,4));
     patternTab.setBounds(tabs.removeFromLeft(190).reduced(6,4));
-    modeBox.setBounds(tabs.removeFromRight(140).reduced(2,8));
+    modeBox.setBounds(tabs.removeFromRight(116).reduced(2,8));
+    scaleModeBox.setBounds(tabs.removeFromRight(92).reduced(2,8));
+    scaleRootBox.setBounds(tabs.removeFromRight(66).reduced(2,8));
+    autoChordsButton.setBounds(tabs.removeFromRight(112).reduced(2,8));
     area.removeFromTop(8);
     auto status=area.removeFromTop(28); statusLabel.setBounds(status);
     area.removeFromTop(12);

@@ -22,7 +22,10 @@ if(WIN32)
         "Destination for the post-build VST3 bundle")
 endif()
 
-juce_add_binary_data(PPGUPresetData SOURCES presets/factory_bank_300.json)
+juce_add_binary_data(PPGUPresetData SOURCES
+    presets/factory_bank_300.json
+    "Cover Interface.jpg"
+)
 
 juce_add_plugin(PopPunkGuitarUltimate
     COMPANY_NAME "L3XTOWN"
@@ -105,6 +108,12 @@ if(BUILD_TESTING)
     )
     target_include_directories(ppgu_pattern_scheduler_tests PRIVATE Source/Performance)
     add_test(NAME ppgu_pattern_scheduler_tests COMMAND ppgu_pattern_scheduler_tests)
+
+    add_executable(ppgu_auto_chord_scale_tests
+        tests/AutoChordScaleTests.cpp
+    )
+    target_include_directories(ppgu_auto_chord_scale_tests PRIVATE Source/Performance)
+    add_test(NAME ppgu_auto_chord_scale_tests COMMAND ppgu_auto_chord_scale_tests)
 endif()
 
 
