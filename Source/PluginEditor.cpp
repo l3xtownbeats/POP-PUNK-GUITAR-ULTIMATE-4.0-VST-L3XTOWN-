@@ -1156,7 +1156,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setSize(1024, 700);
     setResizable(true, true);
     setResizeLimits(900, 640, 1600, 1100);
-    titleLabel.setText("PPGU", juce::dontSendNotification);
+    titleLabel.setText("NEON STAGE", juce::dontSendNotification);
     titleLabel.setFont(makeThemeFont(themeManager.getPalette(), 28.0f, true, true));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(titleLabel);
