@@ -233,12 +233,14 @@ int main()
         }
 
         const auto configure = [&](PopPunkGuitarUltimateAudioProcessor& target,
-                                   bool chorusEnabled, bool reverbEnabled)
+                                   bool chorusEnabled, bool reverbEnabled, bool eqEnabled)
         {
-            const std::array<std::pair<const char*, float>, 20> values {{
+            const std::array<std::pair<const char*, float>, 23> values {{
                 { "playMode", 0.0f }, { "voices", 64.0f }, { "master", 1.0f },
                 { "output", 0.0f }, { "pan", 0.0f }, { "ampGain", 5.0f },
-                { "tone", 5.0f }, { "eqOn", 0.0f }, { "compressorOn", 0.0f },
+                { "tone", 5.0f }, { "eqOn", eqEnabled ? 1.0f : 0.0f },
+                { "eqLow", eqEnabled ? 9.0f : 0.0f }, { "eqLowFreq", 300.0f },
+                { "eqMid", 0.0f }, { "eqHigh", 0.0f }, { "compressorOn", 0.0f },
                 { "distortionOn", 0.0f }, { "flangerOn", 0.0f }, { "delayOn", 0.0f },
                 { "cabinetOn", 0.0f }, { "doubleTrackOn", 0.0f },
                 { "chorusOn", chorusEnabled ? 1.0f : 0.0f },
@@ -270,8 +272,8 @@ int main()
         };
 
         if (result == 0
-            && (!configure(dryProcessor, false, false)
-                || !configure(wetProcessor, false, false)
+            && (!configure(dryProcessor, false, false, false)
+                || !configure(wetProcessor, false, false, false)
                 || !prime(dryProcessor) || !prime(wetProcessor)))
         {
             std::cerr << "Oversized-block DSP fixtures did not become audible.\n";
@@ -279,11 +281,11 @@ int main()
         }
 
         const auto renderOversized = [&](PopPunkGuitarUltimateAudioProcessor& target,
-                                         bool chorusEnabled, bool reverbEnabled,
+                                         bool chorusEnabled, bool reverbEnabled, bool eqEnabled,
                                          juce::AudioBuffer<float>& largeBlock)
         {
             target.prepareToPlay(48000.0, 128);
-            if (!configure(target, chorusEnabled, reverbEnabled))
+            if (!configure(target, chorusEnabled, reverbEnabled, eqEnabled))
                 return false;
             juce::AudioBuffer<float> triggerBlock(2, 128);
             triggerBlock.clear();
@@ -317,8 +319,8 @@ int main()
 
         juce::AudioBuffer<float> dryLarge(2, 2048), wetLarge(2, 2048);
         if (result == 0
-            && (!renderOversized(dryProcessor, false, false, dryLarge)
-                || !renderOversized(wetProcessor, true, false, wetLarge)
+            && (!renderOversized(dryProcessor, false, false, false, dryLarge)
+                || !renderOversized(wetProcessor, true, false, false, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.00001))
         {
             std::cerr << "Chorus was bypassed or ineffective for a host block larger than expectedBlockSize.\n";
@@ -327,13 +329,21 @@ int main()
 
         if (result == 0
             && (!renderOversized(dryProcessor, false, false, dryLarge)
-                || !renderOversized(wetProcessor, false, true, wetLarge)
+                || !renderOversized(wetProcessor, false, true, false, wetLarge)
                 || differenceRms(dryLarge, wetLarge) < 0.00001))
         {
             std::cerr << "Reverb was bypassed or ineffective for a host block larger than expectedBlockSize.\n";
             result = 1;
         }
-    }
+
+        if (result == 0
+            && (!renderOversized(dryProcessor, false, false, false, dryLarge)
+                || !renderOversized(wetProcessor, false, false, true, wetLarge)
+                || differenceRms(dryLarge, wetLarge) < 0.0001))
+        {
+            std::cerr << "EQ low-shelf gain control was bypassed or ineffective in the processor signal path.\\n";
+            result = 1;
+        }    }
 
     // State restore must asynchronously reload the same SFZ bank and retain
     // the absolute path in the serialized APVTS state.
