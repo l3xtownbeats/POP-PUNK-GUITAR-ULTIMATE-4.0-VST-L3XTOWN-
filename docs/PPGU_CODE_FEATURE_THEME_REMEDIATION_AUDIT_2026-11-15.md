@@ -69,3 +69,31 @@ Info.txt is a long append-only history and still contains older statements such 
 ## Change log
 
 - 2026-11-15: Initial source-level audit at 38235b91be38d4dac9eb6fe104c8a218256acb6d. Confirmed findings listed above; remediation pending.
+
+## Revalidation — 2026-11-15, branch HEAD after DSP control implementation
+
+Rechecked the current branch source after the original audit SHA. The original seven-control finding is historical and must not be read as the current source state.
+
+### P1 — Seven FX controls: SOURCE CONNECTION CONFIRMED
+
+Current source review:
+- EQ frequency/Q controls are read in `processEq()` and passed to `makeLowShelf()`, `makePeaking()`, and `makeHighShelf()`: `eqLowFreq`, `eqMidFreq`, `eqMidQ`, `eqHighFreq`.
+- Distortion tone is read in `processDistortion()` and determines the bounded post-shaper one-pole low-pass cutoff: `distortionTone`.
+- Cabinet low/high cuts are read in `processCabinet()` and determine the low-pass/high-pass shaping of the built-in cabinet-colour response: `cabinetLowCut`, `cabinetHighCut`.
+- Existing APVTS IDs and parameter ranges remain present.
+
+**Updated status:** the seven controls are connected at source level in this branch. The original “declared but unused” finding is superseded for this HEAD. This is not yet a complete DSP acceptance: processor-level parameter-sweep tests, automation stress, click/transient review and exact-HEAD CI are still required. The current DSP contract test only directly exercises the biquad coefficient builders.
+
+### Regression coverage added
+
+- `tests/DspFilterTests.cpp`: added response-difference assertions for low-shelf frequency, peaking frequency, peaking Q and high-shelf frequency. This guards against accidentally making these EQ controls inert at the coefficient layer.
+- Commit: `99e28835798ef4586256e80dcf650b0a64aeea4e`.
+
+### Still open
+
+1. AutoChords remains a setup-only placeholder; keep its action disabled until a real MIDI generation/preview engine and note ownership tests exist.
+2. Runtime theme asset validation still needs path traversal, missing/corrupt/oversized image and decode/dimension coverage.
+3. FX processor-level parameter response tests and click-free automation checks remain open.
+4. Exact-HEAD Windows x64 Release, full CTest, pluginval strictness 5 and FL Studio 20 host review have not been run for commit `99e28835798ef4586256e80dcf650b0a64aeea4e`.
+
+**No PASS claim:** this revalidation is a source inspection plus a test-source change. It is not a build, runtime, pluginval or DAW acceptance result.
