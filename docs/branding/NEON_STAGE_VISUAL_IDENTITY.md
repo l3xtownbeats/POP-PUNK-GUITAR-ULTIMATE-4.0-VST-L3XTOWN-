@@ -31,7 +31,7 @@ Development branches should use the canonical cover at the top of `README.md`:
 </div>
 ```
 
-Branch-specific version labels may remain where they are factually correct (for example, a 5.0 development line). Do not make an older revision appear to be a newer release.
+Only two branches are authoritative foundations for ongoing work: the current development branch `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18` and its parent 4.0 line (`main`). Keep their version labels accurate. Do not treat 5.0, REV.17 or unrelated experiment branches as active development foundations.
 
 ## Visual language
 
@@ -49,8 +49,8 @@ Branch-specific version labels may remain where they are factually correct (for 
 3. Keep runtime theme resources in their existing code/manifests-referenced locations. Do not move or duplicate runtime assets merely to improve README appearance.
 4. Keep branch-specific implementation notes, test evidence and status accurate.
 5. Do not describe a mockup, theme preview, preset definition or checklist as a completed runtime feature.
-6. Keep product identity consistent across development branches while preserving genuine version distinctions and branch-specific technical content.
-7. Do not overwrite an experimental branch's deliberate alternative design during cleanup; document it as an experiment and compare it with the canonical standard first.
+6. Apply active product presentation and development updates only to the current REV.18 development branch and the parent 4.0 branch (`main`).
+7. Treat all other branches as historical, archival or isolated experimental references. Do not use them as merge bases, development sources or targets for mass updates. Preserve their history and unique work unless a separate, explicit archival decision is made.
 
 ## Project constraints that visual work must not change
 
@@ -65,4 +65,13 @@ Branch-specific version labels may remain where they are factually correct (for 
 
 ## Branch rollout
 
-The repository contains many independent development branches, including REV.17, REV.18, 5.0, feature, fix, audit, UI and work branches. Apply the shared cover to a branch only after checking its current README, asset path, version identity and divergence. Preserve unique source, tests, theme assets and branch-specific work; never mass-reset or mass-delete branches to achieve visual consistency.
+### Authoritative development bases
+
+- **Current development:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`.
+- **Parent / mother line:** `main` — POP PUNK GUITAR ULTIMATE 4.0.
+
+All new implementation, cleanup, documentation synchronization and NEON STAGE presentation work must be based only on these two lines. REV.18 is the active working line; 4.0 is its parent foundation. Preserve their relationship and do not replace either with a historical snapshot.
+
+### Historical and non-authoritative branches
+
+`5.0`, `REV.17`, and other unrelated feature, fix, audit, UI or work branches are not active foundations. Do not spend active rollout effort updating their README or themes, do not merge them into the authoritative lines automatically, and do not derive new work from them. Retain their history and any unique material as archival references until a deliberate retention decision is made.
