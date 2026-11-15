@@ -4,7 +4,7 @@
   "totalSkins": 102,
   "defaultSkin": "skin-053",
   "selector": "SKIN",
-  "status": "neon-stage-skin1-canonical-identity-corrected-artwork-updated-runtime-validation-pending",
+  "status": "16-premium-theme-sequence; skin-1-neon-forge-canonical; artwork-and-runtime-validation-pending",
   "themes": [
     {
       "id": "skin-01",
@@ -478,7 +478,7 @@
     {
       "id": "skin-053",
       "index": 53,
-      "name": "NEON STAGE DEFAULT",
+      "name": "NEON FORGE",
       "family": "special",
       "layout": "STUDIO_CONSOLE",
       "path": "Skin_053/theme.json",
