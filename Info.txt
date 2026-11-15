@@ -2853,3 +2853,25 @@ unverified until their steps complete successfully.
 **Validation:** production and test commits recorded. Tests have not been executed; no CI, CTest, Windows build, pluginval or FL Studio 20 result is claimed. JUCE compile and runtime verification remain required.
 
 **Next:** continue Gallery interaction/lifecycle and Favorites integration; then proceed through the remaining REV18 module integration sequence.
+
+
+## 2026-11-15 — REV18 GALLERY-05 — persistent Favorites with registry validation
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `577c93f53918adc0622161d9395be54ee55144e0`.
+**Regression-test commit:** `5931eab64365abd725626fbd6c29f198872b46d9`.
+**Files:** `Source/PluginEditor.cpp`; `tests/TestSkinGalleryInteractionContract.py`.
+
+**Reference alignment:** Work continues against the approved NEON STAGE visual reference package: `NEON_STAGE_REFERENCE_CONTACT_SHEET.png` and the detailed PPGU studio panel reference. The reference is a visual/layout source, not evidence that every pictured feature is runtime-implemented. Controls prohibited by the REV18 binding inventory/A7 are not to be faked or activated solely to match a static mockup.
+
+**Defect:** Gallery Favorites UI had no persistence wiring at the editor boundary; constructor signature had been extended but caller was not yet supplying persisted values/callbacks.
+
+**Correction:** Restore `ppguGalleryFavourites` from the editor's user PropertiesFile; parse the pipe-delimited stable IDs; retain only IDs present in the current skin registry; deduplicate; normalize and save cleaned state. The gallery callback now persists changes with `saveIfNeeded()`. Favorites remain visual-gallery metadata and do not modify skin activation or APVTS/audio state.
+
+**Regression coverage added:** `test_favourites_are_restored_only_for_registered_skin_ids` and `test_favourites_are_persisted_to_user_properties`.
+
+**Compatibility boundary:** UI/preferences only. No APVTS IDs/semantics, DSP, audio callback, sampler, MIDI, preset serialization, SoundBank or skin assets changed.
+
+**Validation:** production and test source committed. Python contract execution, CTest, Windows Release, pluginval and FL Studio 20 verification remain pending; no PASS is claimed. This source-level change must compile against the pinned JUCE 7.0.12 API before it is considered runtime-verified.
+
+**Next:** finish Gallery zero-visible selection semantics and lifecycle tests, then continue lossless SKIN-1 identity/registry reconciliation using the approved reference and authoritative journal.
