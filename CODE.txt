@@ -959,3 +959,18 @@ Approved requirements:
 **Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
 **Execution evidence:** source-level regression tests added but not run. No test/build/pluginval/FL Studio PASS claim.
 **Open work:** Favorites persistence and unknown-ID validation; keyboard/focus and close/back/apply lifecycle; theme migration and O1/S1.
+
+
+## 2026-11-15 — REV18 GALLERY-05 — persistent Favorites with registry validation
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production:** `577c93f53918adc0622161d9395be54ee55144e0`.
+**Test:** `5931eab64365abd725626fbd6c29f198872b46d9`.
+**INFO:** `28d4aba1dd8a1aa3f21429b937978703eae095f8`.
+**Paths:** `Source/PluginEditor.cpp`, `tests/TestSkinGalleryInteractionContract.py`, `Info.txt`, `CODE.txt`.
+
+**Implementation:** wired Gallery Favorites to JUCE user PropertiesFile key `ppguGalleryFavourites`; restored pipe-separated stable IDs; filtered unknown IDs against the current registry; deduplicated and normalized restored state; persisted changes and called `saveIfNeeded()`.
+**Tests added:** restore only registered IDs; persist changes to user properties.
+**No audio/APVTS/DSP/MIDI/sampler/preset/SoundBank changes.**
+**Evidence:** commits and source-level tests exist; tests not executed, build and host verification pending. No PASS claim.
+**Reference:** approved NEON STAGE reference/contact sheet governs visual direction; mockup-only controls prohibited by REV18 inventory/A7 must not be faked.
