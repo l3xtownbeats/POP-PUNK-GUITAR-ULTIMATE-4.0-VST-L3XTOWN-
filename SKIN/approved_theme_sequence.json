@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "APPROVED_CONCEPTS_VECTOR_SPECS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING",
+  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_SVG_ARTWORK_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
   "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
@@ -60,6 +60,96 @@
       "index": 107,
       "path": "Skin_107/theme.json",
       "status": "APPROVED_SPEC_AND_SVG_CREATED"
+    },
+    {
+      "ordinal": 7,
+      "label": "SKIN-7",
+      "name": "TITANIUM STORM",
+      "stableId": "skin-108",
+      "index": 108,
+      "path": "Skin_108/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 8,
+      "label": "SKIN-8",
+      "name": "EMERALD CIRCUIT",
+      "stableId": "skin-109",
+      "index": 109,
+      "path": "Skin_109/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 9,
+      "label": "SKIN-9",
+      "name": "SOLAR FLARE",
+      "stableId": "skin-110",
+      "index": 110,
+      "path": "Skin_110/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 10,
+      "label": "SKIN-10",
+      "name": "DEEP OCEAN",
+      "stableId": "skin-111",
+      "index": 111,
+      "path": "Skin_111/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 11,
+      "label": "SKIN-11",
+      "name": "ROSE CHROME",
+      "stableId": "skin-112",
+      "index": 112,
+      "path": "Skin_112/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 12,
+      "label": "SKIN-12",
+      "name": "DESERT AMBER",
+      "stableId": "skin-113",
+      "index": 113,
+      "path": "Skin_113/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 13,
+      "label": "SKIN-13",
+      "name": "GLACIER TEAL",
+      "stableId": "skin-114",
+      "index": 114,
+      "path": "Skin_114/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 14,
+      "label": "SKIN-14",
+      "name": "PHANTOM GRAPHITE",
+      "stableId": "skin-115",
+      "index": 115,
+      "path": "Skin_115/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 15,
+      "label": "SKIN-15",
+      "name": "ULTRAVIOLET DRIVE",
+      "stableId": "skin-116",
+      "index": 116,
+      "path": "Skin_116/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
+    },
+    {
+      "ordinal": 16,
+      "label": "SKIN-16",
+      "name": "VOLCANIC STEEL",
+      "stableId": "skin-117",
+      "index": 117,
+      "path": "Skin_117/theme.json",
+      "status": "SPEC_AND_SVG_MATERIAL_ARTWORK_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     }
   ],
   "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",
@@ -72,9 +162,9 @@
     "Runtime and release acceptance require packaged assets and VST3 validation."
   ],
   "pending": [
-    "PNG preview.png (360x240) and hero.png (800x450) for each new theme.",
-    "G1-G4 validation and PNG CRC checks.",
-    "Canonical registry/gallery registration after assets pass.",
-    "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance."
+    "PNG preview.png (360x240) and hero.png (800x450) for SKIN-2…SKIN-16",
+    "G1-G4 validation and PNG CRC checks",
+    "Canonical registry/gallery registration after assets pass",
+    "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance"
   ]
 }
