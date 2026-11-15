@@ -37,7 +37,7 @@ public:
         int index = 0;
         juce::String id, name, family, familyKey, layout;
         juce::File preview;
-        juce::Colour accent { 0xffd5ff45 };
+        juce::Colour accent { 0xff2dd4ff };
         bool active = false;
     };
 
