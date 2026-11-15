@@ -659,3 +659,16 @@ Status: RESEARCH STARTED / PARTIAL EVIDENCE REGISTER. Full 21-group matrix, all 
 Это утверждённый порядок работ, а не заявление о завершении визуального этапа, наличии готовых библиотек или готовых factory presets. Текущий статус каждого этапа отражать по фактическим доказательствам; не перескакивать к массовому наполнению пресетов до завершения визуального этапа и проверки библиотечных ресурсов.
 
 Статус: USER CONFIRMED / PROJECT SEQUENCE LOCKED. Visual completion, library qualification, factory preset composition and acceptance remain in progress/pending until evidenced.
+
+
+
+## 2026-11-15 — USER RECONFIRMATION: PROJECT SEQUENCE BASELINE LOCKED
+
+Пользователь повторно и явно подтвердил утверждённую последовательность разработки:
+1. Завершение визуальной части NEON STAGE.
+2. Переход к проверке и интеграции sound libraries.
+3. Компоновка и создание factory presets.
+4. Проверка и окончательная фиксация полноценной factory preset library.
+
+Статус: APPROVED · CONFIRMED · BASELINE LOCKED.
+Эта запись подтверждает ранее внесённую последовательность и не меняет её содержание, объём, ограничения или критерии готовности. Не требуется повторное согласование этой последовательности.
