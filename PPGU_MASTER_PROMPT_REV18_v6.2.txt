@@ -446,6 +446,15 @@ transport/BPM snapshot. Панели без реализации не запол
   только verified credits, без top-level категории.
 
 
+## A8-D. ОТДЕЛЬНАЯ ЗАГРУЗКА ПЛАГИНА (BINDING)
+- Обязательны два самостоятельных ZIP-артефакта после прохождения общих build/test gates:
+  1) FULL PORTABLE ZIP — VST3 + runtime assets + SOUNDBANK/Samples;
+  2) STANDALONE PLUGIN ZIP — VST3 + Skins + Resources + PRESETS + Documents + Licenses, БЕЗ Samples/SOUNDBANK и без аудиофайлов библиотеки.
+- Standalone ZIP — отдельная загрузка плагина без обязательного скачивания большой библиотеки. Совместимая SoundBank/SFZ библиотека предоставляется отдельно и подключается пользователем по необходимости.
+- CI обязан проверять наличие реального .vst3 bundle и отсутствие SOUNDBANK/ и аудиофайлов во втором ZIP.
+- Оба ZIP публикуются отдельными GitHub Actions artifacts; отсутствие одного из них блокирует package job.
+- Не заявлять, что preset definitions гарантированно звучат без внешних sample dependencies.
+
 ## A8-S. БИБЛИОТЕКА SAMPLES (BINDING)
 - RETENTION (ABSOLUTE): запрещено удалять, перемещать, переименовывать или перезаписывать любые уже собранные файлы в папке Samples/. Inventory-first; существующие оригиналы неприкосновенны.
 - NO-REPEAT: новый audio asset допускается только после SHA-256 проверки по всей Samples/. Точные дубликаты не импортировать; если уже найдено совпадение — остановить импорт/публикацию и показать оба пути. НИКОГДА не удалять существующий файл ради дедупликации.
