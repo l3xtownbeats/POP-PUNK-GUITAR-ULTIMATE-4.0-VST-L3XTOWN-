@@ -1198,3 +1198,15 @@ Added regression assertions that verify moving the low-shelf frequency, peaking 
 **Source revalidation:** current `PluginProcessor.cpp` reads all four EQ frequency/Q parameters in `processEq()`; `distortionTone` is used in `processDistortion()`; `cabinetLowCut` and `cabinetHighCut` are used in `processCabinet()`. The earlier seven-unused-controls finding is historical for the audited SHA and is superseded at source level on the current branch.
 
 **Validation:** test source added; compilation, execution, exact-HEAD Windows Release, full CTest, pluginval and FL Studio 20 remain pending. Do not report PASS before those runs.
+
+
+## 2026-11-15 — Processor-level EQ signal-path regression
+
+**Commit:** `818520fadcdcfbd1ecd73651f0ecfc210033eeee`.
+**File:** `tests/ProcessorPatternIntegrationTests.cpp`.
+
+Extended the real processor integration fixture with an EQ-on/EQ-off output comparison using the same synthetic SFZ source. The wet instance applies a +9 dB low shelf at 300 Hz; the test requires a measurable output difference from the neutral-EQ instance. Existing oversized-block Chorus/Reverb coverage is retained.
+
+Test fixture corrections included updating the settings array to 24 actual entries and passing the EQ enable flag consistently through the oversized-block renderer.
+
+**Validation pending:** compile, run this integration executable, full CTest, Windows x64 Release, pluginval strictness 5, and FL Studio 20 host verification.
