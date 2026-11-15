@@ -1,3 +1,20 @@
+
+namespace
+{
+// Shared theme typography factory. It changes font metrics only; component bounds,
+// control geometry and all interaction/parameter bindings remain untouched.
+juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSize,
+                         bool display = false, bool bold = false)
+{
+    const auto& family = display ? palette.displayTypeface : palette.uiTypeface;
+    const auto configuredWeight = palette.typographyWeight.equalsIgnoreCase("normal")
+        ? juce::Font::plain : juce::Font::bold;
+    const auto style = bold ? configuredWeight : juce::Font::plain;
+    return juce::Font(family, baseSize * palette.fontScale, style)
+        .withExtraKerningFactor(palette.letterSpacing);
+}
+}
+
 #include "PluginEditor.h"
 #include "PPGUData.h"
 
@@ -47,13 +64,13 @@ public:
         : skins(std::move(skinsIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
     {
         heading.setText("VISUAL SKIN GALLERY", juce::dontSendNotification);
-        heading.setFont(juce::Font(17.0f, juce::Font::bold));
+        heading.setFont(makeThemeFont(palette, 17.0f, false, true));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
         subtitle.setText("Browse the complete PPGU collection. Select a card to apply its visual system.",
                          juce::dontSendNotification);
-        subtitle.setFont(juce::Font(10.0f));
+        subtitle.setFont(makeThemeFont(palette, 10.0f, false, false));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         addAndMakeVisible(subtitle);
 
@@ -82,7 +99,7 @@ public:
         addAndMakeVisible(familyFilter);
 
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
-        countLabel.setFont(juce::Font(10.5f, juce::Font::bold));
+        countLabel.setFont(makeThemeFont(palette, 10.5.0f, false, true));
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
@@ -171,10 +188,10 @@ private:
             auto textArea = bounds.reduced(10.0f, 8.0f);
             textArea.removeFromTop(78);
             g.setColour(palette.token("text_primary"));
-            g.setFont(juce::Font(12.5f, juce::Font::bold));
+            g.setFont(makeThemeFont(palette, 12.5.0f, false, true));
             g.drawText(item.name, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
             g.setColour(palette.token("text_secondary"));
-            g.setFont(juce::Font(9.0f));
+            g.setFont(makeThemeFont(palette, 9.0f, false, false));
             g.drawText(item.family + "  /  " + item.layout,
                        textArea.removeFromTop(14.0f), juce::Justification::centredLeft, true);
 
@@ -183,7 +200,7 @@ private:
                 g.setColour(item.accent);
                 g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
-                g.setFont(juce::Font(8.0f, juce::Font::bold));
+                g.setFont(makeThemeFont(palette, 8.0f, false, true));
                 g.drawText("ACTIVE", getWidth() - 58, 10, 48, 17, juce::Justification::centred);
             }
             else
@@ -191,7 +208,7 @@ private:
                 g.setColour(palette.token("accent"));
                 g.fillRoundedRectangle(getWidth() - 54.0f, 10.0f, 44.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
-                g.setFont(juce::Font(8.0f, juce::Font::bold));
+                g.setFont(makeThemeFont(palette, 8.0f, false, true));
                 g.drawText("APPLY", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
             }
         }
@@ -214,7 +231,7 @@ private:
                 area.getRight(), area.getBottom(), false));
             g.fillRoundedRectangle(area, 6.0f);
             g.setColour(palette.token("text_primary").withAlpha(0.72f));
-            g.setFont(juce::Font(15.0f, juce::Font::bold));
+            g.setFont(makeThemeFont(palette, 15.0f, false, true));
             g.drawText("PPGU  /  " + item.family, area, juce::Justification::centred, true);
         }
 
@@ -319,7 +336,7 @@ public:
           openGallery(std::move(openGalleryIn))
     {
         heading.setText("WORKSPACE SETTINGS", juce::dontSendNotification);
-        heading.setFont(juce::Font(16.0f, juce::Font::bold));
+        heading.setFont(makeThemeFont(palette, 16.0f, false, true));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
@@ -327,7 +344,7 @@ public:
                              "Audio processing, MIDI and instrument parameters are not changed.",
                              juce::dontSendNotification);
         description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
-        description.setFont(juce::Font(10.0f));
+        description.setFont(makeThemeFont(palette, 10.0f, false, false));
         description.setJustificationType(juce::Justification::topLeft);
         addAndMakeVisible(description);
 
@@ -335,7 +352,7 @@ public:
         gapLabel.setText("SPACE BETWEEN PANELS", juce::dontSendNotification);
         for (auto* label : { &scaleLabel, &gapLabel })
         {
-            label->setFont(juce::Font(9.5f, juce::Font::bold));
+            label->setFont(makeThemeFont(palette, 9.5.0f, false, true));
             label->setColour(juce::Label::textColourId, palette.token("accent"));
             addAndMakeVisible(*label);
         }
@@ -437,7 +454,7 @@ public:
         : loadAction(std::move(loadActionIn))
     {
         heading.setText("LICENSED GUITAR LIBRARY", juce::dontSendNotification);
-        heading.setFont(juce::Font(18.0f, juce::Font::bold));
+        heading.setFont(makeThemeFont(palette, 18.0f, false, true));
         heading.setJustificationType(juce::Justification::centredLeft);
         addAndMakeVisible(heading);
         description.setText("Load an SFZ guitar instrument and its referenced WAV samples. "
@@ -519,27 +536,27 @@ public:
         auto area = getLocalBounds().reduced(14, 5);
         auto harmony = area.removeFromLeft(190);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
         g.drawText("LIVE HARMONY", harmony.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.accent);
-        g.setFont(juce::Font(23.0f, juce::Font::bold));
+        g.setFont(makeThemeFont(palette, 23.0f, false, true));
         g.drawFittedText(chordText, harmony, juce::Justification::centredLeft, 1);
 
         area.removeFromLeft(10);
         auto keyArea = area.removeFromRight(148);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
         g.drawText("SCALE / KEY", keyArea.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.textPrimary);
-        g.setFont(juce::Font(12.0f, juce::Font::bold));
+        g.setFont(makeThemeFont(palette, 12.0f, false, true));
         g.drawFittedText(keyText, keyArea, juce::Justification::centredLeft, 1);
 
         area.removeFromRight(8);
         g.setColour(palette.tokens.textSecondary);
-        g.setFont(juce::Font(8.5f, juce::Font::bold));
+        g.setFont(makeThemeFont(palette, 8.5.0f, false, true));
         g.drawText("NOTES HELD", area.removeFromTop(13), juce::Justification::left);
         g.setColour(palette.tokens.textPrimary);
-        g.setFont(juce::Font(12.0f));
+        g.setFont(makeThemeFont(palette, 12.0f, false, false));
         g.drawFittedText(notesText, area, juce::Justification::centredLeft, 1);
     }
 
@@ -710,7 +727,7 @@ public:
         };
 
         title.setText("NEON STAGE  /  FX EDIT", juce::dontSendNotification);
-        title.setFont(juce::Font(20.0f, juce::Font::bold));
+        title.setFont(makeThemeFont(palette, 20.0f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
 
@@ -737,7 +754,7 @@ public:
                 auto label = std::make_unique<juce::Label>();
                 label->setText(item.first, juce::dontSendNotification);
                 label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
-                label->setFont(juce::Font(11.0f, juce::Font::bold));
+                label->setFont(makeThemeFont(palette, 11.0f, false, true));
                 addAndMakeVisible(*label);
 
                 auto slider = std::make_unique<juce::Slider>();
@@ -891,7 +908,7 @@ public:
     explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
     {
         title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
-        title.setFont(juce::Font(20.0f, juce::Font::bold));
+        title.setFont(makeThemeFont(palette, 20.0f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(title);
         stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
@@ -1123,11 +1140,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     setResizable(true, true);
     setResizeLimits(900, 640, 1600, 1100);
     titleLabel.setText("PPGU", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(28.0f, juce::Font::bold));
+    titleLabel.setFont(makeThemeFont(themeManager.getPalette(), 28.0f, true, true));
     titleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_primary"));
     addAndMakeVisible(titleLabel);
     subtitleLabel.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
-    subtitleLabel.setFont(juce::Font(9.5f, juce::Font::bold));
+    subtitleLabel.setFont(makeThemeFont(themeManager.getPalette(), 9.5.0f, false, true));
     subtitleLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
     addAndMakeVisible(subtitleLabel);
     presetBox.setTextWhenNothingSelected("FACTORY PRESET CATALOG");
@@ -1224,7 +1241,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
             juce::dontSendNotification);
     }
     statusLabel.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_secondary"));
-    statusLabel.setFont(juce::Font(11.0f));
+    statusLabel.setFont(makeThemeFont(themeManager.getPalette(), 11.0f, false, false));
     addAndMakeVisible(statusLabel);
     melodyTab.setClickingTogglesState(false);
     patternTab.setClickingTogglesState(false);
@@ -1280,7 +1297,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     fxTitle.setText("FX CHAIN", juce::dontSendNotification);
     playbackTitle.setText("PLAYBACK", juce::dontSendNotification);
     for (auto* l : { &ampTitle, &fxTitle, &playbackTitle }) {
-        l->setFont(juce::Font(15.0f, juce::Font::bold));
+        l->setFont(makeThemeFont(themeManager.getPalette(), 15.0f, false, true));
         l->setColour(juce::Label::textColourId, themeManager.getPalette().token("accent"));
         addAndMakeVisible(*l);
     }
@@ -1336,7 +1353,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::configureKnob(juce::Slider& s, j
     s.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     addAndMakeVisible(s);
     l.setText(name, juce::dontSendNotification);
-    l.setFont(juce::Font(9.5f, juce::Font::bold));
+    l.setFont(makeThemeFont(themeManager.getPalette(), 9.5.0f, false, true));
     l.setColour(juce::Label::textColourId, themeManager.getPalette().token("text_secondary"));
     l.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(l);
@@ -1359,7 +1376,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
     // Section chrome belongs to the visual shell; it does not create or
     // reassign controls and follows the active theme's semantic palette.
     g.setColour(p.token("text_secondary"));
-    g.setFont(juce::Font(9.5f, juce::Font::bold));
+    g.setFont(makeThemeFont(p, 9.5.0f, false, true));
     auto heading = area.reduced(15, 7).removeFromTop(19);
     g.drawText(sectionTitle, heading, juce::Justification::centredLeft, true);
 
