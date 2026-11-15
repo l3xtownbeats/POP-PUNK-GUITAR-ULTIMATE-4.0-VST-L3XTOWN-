@@ -121,6 +121,9 @@ public:
         palette = value;
         for (auto& skin : skins)
             skin.active = skin.id == palette.id;
+        heading.setFont(makeThemeFont(palette, 17.0f, false, true));
+        subtitle.setFont(makeThemeFont(palette, 10.0f));
+        countLabel.setFont(makeThemeFont(palette, 10.5f, false, true));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         search.setColour(juce::TextEditor::backgroundColourId, palette.token("control_bg"));
@@ -391,6 +394,10 @@ public:
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
+        heading.setFont(makeThemeFont(palette, 16.0f, false, true));
+        description.setFont(makeThemeFont(palette, 10.0f));
+        scaleLabel.setFont(makeThemeFont(palette, 9.5f, false, true));
+        gapLabel.setFont(makeThemeFont(palette, 9.5f, false, true));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         scaleLabel.setColour(juce::Label::textColourId, palette.token("accent"));
@@ -474,6 +481,9 @@ public:
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
+        heading.setFont(makeThemeFont(palette, 18.0f, false, true));
+        description.setFont(makeThemeFont(palette, 10.0f));
+        status.setFont(makeThemeFont(palette, 10.0f));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         status.setColour(juce::Label::textColourId, palette.token("lcd_text"));
@@ -776,6 +786,9 @@ public:
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
+        title.setFont(makeThemeFont(palette, 20.0f, false, true));
+        for (auto& control : controls)
+            control.label->setFont(makeThemeFont(palette, 11.0f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("text_primary"));
         graphCaption.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         status.setColour(juce::Label::textColourId, palette.token("text_secondary"));
@@ -941,6 +954,9 @@ public:
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
+        title.setFont(makeThemeFont(palette, 20.0f, false, true));
+        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
+            label->setFont(makeThemeFont(palette, 9.5f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("text_primary"));
         stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
         for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
@@ -1777,7 +1793,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
- const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);const auto titleWeight = p.typographyWeight.equalsIgnoreCase("normal") ? juce::Font::plain : juce::Font::bold;titleLabel.setFont(juce::Font(p.displayTypeface, 28.0f * p.fontScale, titleWeight).withExtraKerningFactor(p.letterSpacing));if(performanceDisplay)performanceDisplay->setPalette(p);
+ const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);const auto titleWeight = p.typographyWeight.equalsIgnoreCase("normal") ? juce::Font::plain : juce::Font::bold;titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
      auxiliaryWorkspace->setSurfaceColours(p.token("window_bg"), p.token("panel"),
