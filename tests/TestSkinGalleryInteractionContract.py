@@ -26,6 +26,17 @@ class SkinGalleryInteractionContractTests(unittest.TestCase):
         self.assertIn("previewBounds", GALLERY)
         self.assertIn("juce::ImageCache::getFromFile", GALLERY)
 
+    def test_preview_image_decode_is_outside_paint(self) -> None:
+        paint_start = GALLERY.index("void paint(juce::Graphics& g) override")
+        paint_end = GALLERY.index("void setThemePalette", paint_start)
+        paint_body = GALLERY[paint_start:paint_end]
+        self.assertNotIn("ImageCache::getFromFile", paint_body)
+        preview_start = GALLERY.index("previewButton.onClick")
+        preview_end = GALLERY.index("applyButton.onClick", preview_start)
+        preview_handler = GALLERY[preview_start:preview_end]
+        self.assertIn("ImageCache::getFromFile", preview_handler)
+        self.assertIn("previewImage", paint_body)
+
     def test_apply_uses_selected_index_only(self) -> None:
         self.assertIn('applyButton.onClick', GALLERY)
         self.assertIn("apply(selectedIndex)", GALLERY)
