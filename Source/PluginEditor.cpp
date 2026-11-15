@@ -37,7 +37,7 @@ public:
         int index = 0;
         juce::String id, name, family, familyKey, layout;
         juce::File preview;
-        juce::Colour accent { 0xff2dd4ff };
+        juce::Colour accent;
         bool active = false;
     };
 
@@ -149,9 +149,11 @@ private:
         void paint(juce::Graphics& g) override
         {
             auto bounds = getLocalBounds().toFloat().reduced(1.0f);
+            const auto cardAccent = item.accent.isTransparent()
+                ? palette.token("accent") : item.accent;
             g.setColour(hovered ? palette.token("panel_elevated") : palette.token("panel"));
             g.fillRoundedRectangle(bounds, 9.0f);
-            g.setColour(item.active ? item.accent : palette.token("control_border"));
+            g.setColour(item.active ? cardAccent : palette.token("control_border"));
             g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
 
             auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
@@ -180,7 +182,7 @@ private:
 
             if (item.active)
             {
-                g.setColour(item.accent);
+                g.setColour(cardAccent);
                 g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(juce::Font(8.0f, juce::Font::bold));
@@ -210,7 +212,7 @@ private:
         void paintFallback(juce::Graphics& g, juce::Rectangle<float> area)
         {
             g.setGradientFill(juce::ColourGradient(palette.token("panel_elevated"),
-                area.getX(), area.getY(), item.accent.withAlpha(0.75f),
+                area.getX(), area.getY(), (item.accent.isTransparent() ? palette.token("accent") : item.accent).withAlpha(0.75f),
                 area.getRight(), area.getBottom(), false));
             g.fillRoundedRectangle(area, 6.0f);
             g.setColour(palette.token("text_primary").withAlpha(0.72f));

@@ -71,11 +71,11 @@ private:
     bool layingOutPanels = false;
     bool hasThemePalette = false;
     PPGUThemeManager::Palette currentThemePalette;
-    juce::Colour backgroundColour { 0xff100b18 };
-    juce::Colour panelColour { 0xff1c1224 };
-    juce::Colour borderColour { 0xff5a4568 };
-    juce::Colour headingColour { 0xff2dd4ff };
-    juce::Colour textColour { 0xfff7f3fb };
+    juce::Colour backgroundColour;
+    juce::Colour panelColour;
+    juce::Colour borderColour;
+    juce::Colour headingColour;
+    juce::Colour textColour;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PPGUMultiWindowWorkspace)
 };

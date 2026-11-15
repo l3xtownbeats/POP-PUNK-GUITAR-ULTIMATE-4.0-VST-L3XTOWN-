@@ -141,6 +141,8 @@ target_sources(ppgu_theme_contracts PRIVATE
     Source/UI/ThemeManager.cpp)
 add_test(NAME ppgu_theme_contracts COMMAND ppgu_theme_contracts)
 set_tests_properties(ppgu_theme_contracts PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_test(NAME ppgu_skin053_ui_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/validate_skin053.py)
 target_include_directories(ppgu_theme_contracts PRIVATE Source Source/UI)
 target_compile_definitions(ppgu_theme_contracts PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
 target_link_libraries(ppgu_theme_contracts PRIVATE juce::juce_core juce::juce_graphics)
