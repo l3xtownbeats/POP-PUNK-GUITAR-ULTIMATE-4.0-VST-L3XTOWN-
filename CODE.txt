@@ -1185,3 +1185,16 @@ Approved requirements:
 **Тесты:** source regression added; delimiter scan passed. CTest/full plugin build still pending.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** finish sampler streaming/state audit; exact-SHA CTest and Windows Release.
+
+
+## 2026-11-15 — EQ control response regression coverage
+
+**Branch:** `work/neon-stage-rich-console-ui`.
+**Commit:** `99e28835798ef4586256e80dcf650b0a64aeea4e`.
+**File:** `tests/DspFilterTests.cpp`.
+
+Added regression assertions that verify moving the low-shelf frequency, peaking frequency, peaking Q and high-shelf frequency produces distinct coefficient responses at fixed probe frequencies. This complements the existing nominal response, neutral-gain and sustained-state stability checks.
+
+**Source revalidation:** current `PluginProcessor.cpp` reads all four EQ frequency/Q parameters in `processEq()`; `distortionTone` is used in `processDistortion()`; `cabinetLowCut` and `cabinetHighCut` are used in `processCabinet()`. The earlier seven-unused-controls finding is historical for the audited SHA and is superseded at source level on the current branch.
+
+**Validation:** test source added; compilation, execution, exact-HEAD Windows Release, full CTest, pluginval and FL Studio 20 remain pending. Do not report PASS before those runs.
