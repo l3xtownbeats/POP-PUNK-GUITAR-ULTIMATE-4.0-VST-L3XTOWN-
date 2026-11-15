@@ -460,15 +460,39 @@ private:
         const auto familyKey = familyIndex >= 0 && familyIndex < familyFilterKeys.size()
             ? familyFilterKeys[familyIndex] : juce::String{};
 
+        std::vector<const Skin*> visibleSkins;
+        visibleSkins.reserve(skins.size());
         for (const auto& item : skins)
         {
             if (familyKey.isNotEmpty() && item.familyKey != familyKey)
                 continue;
-            const auto haystack = (item.name + " " + item.family + " " + item.layout).toLowerCase();
+            const auto haystack = (item.name + " " + item.family + " " + item.layout
+                                   + " " + item.id).toLowerCase();
             if (query.isNotEmpty() && !haystack.contains(query))
                 continue;
-            grid.addCard(std::make_unique<Card>(item, palette,
-                [this](int index) { selectSkin(index); }, item.index == selectedIndex));
+            visibleSkins.push_back(&item);
+        }
+
+        const auto selectedIsVisible = std::any_of(visibleSkins.begin(), visibleSkins.end(),
+            [this](const Skin* item) { return item->index == selectedIndex; });
+        if (!selectedIsVisible && !visibleSkins.empty())
+        {
+            const auto active = std::find_if(visibleSkins.begin(), visibleSkins.end(),
+                [](const Skin* item) { return item->active; });
+            const int fallbackIndex = active != visibleSkins.end()
+                ? (*active)->index : visibleSkins.front()->index;
+            if (fallbackIndex != selectedIndex)
+            {
+                selectedIndex = fallbackIndex;
+                previewImage = {};
+            }
+            updateSelectionControls();
+        }
+
+        for (const auto* item : visibleSkins)
+        {
+            grid.addCard(std::make_unique<Card>(*item, palette,
+                [this](int index) { selectSkin(index); }, item->index == selectedIndex));
         }
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
