@@ -19,9 +19,9 @@ int main()
         assert(!state.shouldRestoreOnClose() && !state.commit());
     }
     {
-        SkinGallerySelection state(53);
+        SkinGallerySelection state(0);
         assert(!state.select(0) && !state.markPreviewed() && !state.commit());
-        assert(state.cancel() == 53);
+        assert(state.cancel() == 0);
     }
     return 0;
 }
