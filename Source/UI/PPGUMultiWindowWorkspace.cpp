@@ -12,7 +12,7 @@ public:
            juce::Colour panel, juce::Colour border,
            juce::Colour heading, juce::Colour text)
         : owner(ownerIn), panelId(spec.id), desired(spec.desired), minimum(spec.minimum),
-          content(std::move(spec.content)),
+          content(std::move(spec.content)), onClose(std::move(spec.onClose)),
           resizeCorner(this, &boundsConstrainer)
     {
         title.setText(spec.title, juce::dontSendNotification);
@@ -51,6 +51,15 @@ public:
     }
 
     int getPanelId() const noexcept { return panelId; }
+    void notifyClosing()
+    {
+        if (closeNotified)
+            return;
+        closeNotified = true;
+        auto callback = std::move(onClose);
+        if (callback)
+            callback();
+    }
     ppgu::ui::PanelSize getDesiredSize() const noexcept { return desired; }
     ppgu::ui::PanelSize getMinimumSize() const noexcept { return minimum; }
     bool isMaximized() const noexcept { return maximized; }
@@ -185,6 +194,8 @@ private:
     ppgu::ui::PanelSize desired;
     ppgu::ui::PanelSize minimum;
     std::unique_ptr<juce::Component> content;
+    std::function<void()> onClose;
+    bool closeNotified = false;
     juce::Label title;
     juce::TextButton closeButton, maximizeButton;
     juce::ComponentBoundsConstrainer boundsConstrainer;
@@ -227,8 +238,8 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
 
 PPGUMultiWindowWorkspace::~PPGUMultiWindowWorkspace()
 {
+    closeAllPanels();
     viewport.setViewedComponent(nullptr, false);
-    windows.clear();
     tileSurface.reset();
 }
 
@@ -272,6 +283,7 @@ bool PPGUMultiWindowWorkspace::closePanel(int id)
     if (it == windows.end())
         return false;
 
+    (*it)->notifyClosing();
     tileSurface->removeChildComponent(it->get());
     windows.erase(it);
     layoutPanels();
@@ -281,7 +293,10 @@ bool PPGUMultiWindowWorkspace::closePanel(int id)
 void PPGUMultiWindowWorkspace::closeAllPanels()
 {
     for (auto& window : windows)
+    {
+        window->notifyClosing();
         tileSurface->removeChildComponent(window.get());
+    }
     windows.clear();
     layoutPanels();
 }
