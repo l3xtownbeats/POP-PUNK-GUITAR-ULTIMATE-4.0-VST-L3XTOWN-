@@ -574,3 +574,19 @@ Current main HEAD after this journal update: the commit created by this append-o
 - GitHub About description/topics и Social Preview metadata не менялись: доступные GitHub actions в этой интеграции предоставляют чтение репозитория и запись файлов, но не отдельное редактирование About/Social Preview.
 
 Статус: REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.
+
+
+==============================================================================
+2026-11-15 — PPGU production GUI baseline approved and recorded
+==============================================================================
+
+User decision: APPROVED / CONFIRMED / FIXED AS PROJECT BASELINE (explicit instruction: "фиксирую давай делай").
+
+Binding rule: implement the real production JUCE GUI inside PPGU, not a demo shell. Create missing visual representations for elements already required by approved specifications, using approved NEON STAGE references. Keep the GUI/theme layer independent of DSP, Audio Engine, MIDI, sampler, presets and APVTS semantics. Use real JUCE components with genuine state, action, parameter bindings and feedback. Theme switching is visual-only and must preserve the exact approved control inventory, IDs, bindings, behavior and contracts. Do not invent functions, add controls beyond REV.18, alter approved product structure, or show unavailable backends as operational. Extend the approved GUI/theme architecture without an audio-engine rewrite.
+
+Guardrails: REV.18 Inventory; canonical 27 IDs in SKIN/control_schema.json; seven approved FX bypass IDs; existing APVTS IDs/bindings; component/layout contracts; Info.txt and CODE.txt.
+
+Implementation authorization: all already-approved GUI requirements may be implemented without requesting approval for each visual element. Ask only if source requirements conflict or prevent faithful implementation. This does not authorize changes to DSP/audio/MIDI/sampler/preset behavior.
+
+Status: USER-APPROVED BINDING BASELINE / RECORDED IN PROJECT JOURNAL.
+==============================================================================
