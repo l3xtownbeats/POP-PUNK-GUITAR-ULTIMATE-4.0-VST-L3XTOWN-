@@ -2937,3 +2937,24 @@ unverified until their steps complete successfully.
 **Проверки:** regression test добавлен, но CTest/Windows Release/pluginval/FL Studio 20 на exact SHA `99e16eacb015c4dd7dbed236744ea5bd3974f72c` не запускались или не подтверждены. Не считать TESTED до результата CI.
 
 **Следующий шаг:** exact-SHA CTest/build; затем MIDI Pitch Bend / Mod Wheel / Vibrato, voice targeting и оставшиеся артикуляции с учётом доступных sample mappings.
+
+
+## 2026-11-15 — MIDI Pitch Bend / Voice Targeting
+
+**Статус:** SOURCE IMPLEMENTED; EXACT-SHA BUILD/TEST VALIDATION PENDING.
+
+Ранее MIDI Pitch Wheel events не обрабатывались audio engine. Теперь pitch wheel передаётся в SamplerEngine и изменяет playback increment активных голосов.
+
+**Изменения:**
+- `Source/PluginProcessor.cpp`: MIDI Pitch Wheel читается в MELODY и PATTERN; 14-bit значение преобразуется в стандартный диапазон ±2 semitones; используется существующий `pitchBendTarget`.
+- `Source/Sampler/SamplePool.h/.cpp`: добавлен `SamplerEngine::setPitchBend()`; bend хранится отдельно для каждого MIDI channel; базовая скорость чтения сохраняется в voice, а pitch ratio пересчитывается без изменения исходного sample position.
+- Реализованы режимы target: All, Lowest, Highest, Softest, Loudest, Latest. Targeted modes пересчитывают выбранный voice один раз после render block; не выполняют поиск на каждый sample.
+- `tests/SamplePoolTests.cpp`: добавлен тест, сравнивающий число rising zero-crossings у unbent и +2-semitone voice.
+
+**Commit:** `e7ca6d3e217a1c84633ab7ca370fe0bcf5a371d1`; parent `785b3fad366c0c308d183a021a6d68f7f84fabe5`.
+
+**Совместимость:** APVTS ID `pitchBendTarget` сохранён; новые APVTS IDs не добавлялись. Существующие noteOn call sites сохраняют прежнее поведение благодаря defaulted API arguments. Sampler playback остаётся streaming-based и не выполняет disk I/O/allocations в render.
+
+**Проверки:** test source добавлен. Commit workflow lookup вернул 0 workflow run(s); exact-SHA Windows Release/CTest/pluginval/FL Studio 20 пока НЕ ПОДТВЕРЖДЕНЫ. Не считать MIDI pitch bend TESTED до запуска regression suite.
+
+**Следующий шаг:** реализовать CC1 Mod Wheel + Vibrato с per-channel state и voice-level modulation, затем проверить остальные MIDI articulation controls.

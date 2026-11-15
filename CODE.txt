@@ -986,3 +986,25 @@ Approved requirements:
 **Тесты:** regression test source added and made streaming-cache tolerant; exact-SHA CTest/build/pluginval/FL Studio 20 not yet run.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** MIDI pitch bend / modulation / vibrato, then remaining articulation and Style DNA gaps.
+
+
+## 2026-11-15 — MIDI Pitch Wheel and voice-targeted bend
+
+**Тип:** production MIDI/sampler implementation + regression test.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commit:** `e7ca6d3e217a1c84633ab7ca370fe0bcf5a371d1`.
+**Parent:** `785b3fad366c0c308d183a021a6d68f7f84fabe5`.
+
+**Файлы / symbols:**
+- `Source/PluginProcessor.cpp` — `processBlock()` MIDI event handling in MELODY and PATTERN; reads existing `pitchBendTarget`.
+- `Source/Sampler/SamplePool.h` — `SamplerEngine::setPitchBend()`, voice base increment/trigger velocity and channel bend state.
+- `Source/Sampler/SamplePool.cpp` — `setPitchBend()`, `applyPitchBendForChannel()`, target selection and per-voice playback increment update.
+- `tests/SamplePoolTests.cpp` — rendered-frequency regression for +2 semitone bend.
+
+**Behavior:** standard MIDI Pitch Wheel is mapped to ±2 semitones. Existing target modes All / Lowest / Highest / Softest / Loudest / Latest select which active voice receives the bend. Bend state is per MIDI channel and is inherited by subsequently triggered notes.
+
+**Compatibility / non-goals:** no APVTS ID/range/default changes; no sample data or preset schema changes; no realtime allocation or file I/O added. Pitch-bend range is fixed at ±2 semitones pending any later approved range control.
+
+**Тесты:** regression source added; exact-SHA CTest, Windows Release, pluginval strictness 5 and FL Studio 20 NOT RUN / NOT VERIFIED.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** implement CC1 Mod Wheel / Vibrato and verify articulation controls.
