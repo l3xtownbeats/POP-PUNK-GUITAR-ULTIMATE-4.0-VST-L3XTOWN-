@@ -1894,9 +1894,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     if (!auxiliaryWorkspace->isPanelOpen(galleryPanelId))
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
-        const auto activeId = themeManager.getPalette().id;
-        const auto count = getSkinCount();
+        const auto originalSkinId = themeManager.getPalette().id;
+        const int count = getSkinCount();
         skins.reserve(static_cast<size_t>(juce::jmax(0, count)));
+        int originalOrdinal = 1;
 
         for (int index = 1; index <= count; ++index)
         {
@@ -1915,7 +1916,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
                 ? familyKey.replace("_", " ").toUpperCase()
                 : "LEGACY / CLUSTER " + legacyCluster;
 
-            juce::File preview;
+            juce::File previewFile;
             const auto assets = root.getProperty("assets", juce::var());
             auto previewRelative = assets.getProperty("preview", juce::var()).toString();
             if (previewRelative.isEmpty())
@@ -1925,7 +1926,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
                 const auto candidatePreview = manifest.getParentDirectory().getChildFile(previewRelative);
                 if (candidatePreview.isAChildOf(manifest.getParentDirectory())
                     && candidatePreview.existsAsFile())
-                    preview = candidatePreview;
+                    previewFile = candidatePreview;
             }
 
             PPGUSkinGalleryPanel::Skin item;
@@ -1935,35 +1936,69 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             item.family = family;
             item.familyKey = familyKey.isNotEmpty() ? familyKey : "legacy";
             item.layout = root.getProperty("layout", "CLASSIC").toString().replace("_", " ");
-            item.preview = preview;
+            item.preview = previewFile;
             item.accent = candidate.getPalette().token("accent");
-            item.active = candidate.getPalette().id == activeId;
+            item.active = candidate.getPalette().id == originalSkinId;
+            if (item.active)
+                originalOrdinal = index;
             skins.push_back(std::move(item));
         }
 
+        auto transactionResolved = std::make_shared<bool>(false);
+        auto previewSucceeded = std::make_shared<bool>(true);
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
-        const auto gallerySkinCount = static_cast<int>(skins.size());
+
+        auto closeGallery = [safe]
+        {
+            if (safe == nullptr || safe->shuttingDown || safe->auxiliaryWorkspace == nullptr)
+                return;
+            safe->auxiliaryWorkspace->closePanel(5);
+            if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
+                safe->auxiliaryWorkspace->setVisible(false);
+        };
+
         auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
-            std::move(skins), themeManager.getPalette(),
-            [safe](int index)
+            std::move(skins), themeManager.getPalette(), originalOrdinal,
+            [safe, previewSucceeded](int index)
             {
-                if (safe == nullptr)
+                if (safe == nullptr || safe->shuttingDown)
                     return;
-                safe->loadSkinByIndex(index, true);
-                if (safe->auxiliaryWorkspace != nullptr)
-                {
-                    safe->auxiliaryWorkspace->closePanel(5);
-                    if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
-                        safe->auxiliaryWorkspace->setVisible(false);
-                }
+                *previewSucceeded = safe->loadSkinByIndex(index, false);
+            },
+            [safe, originalOrdinal, transactionResolved, previewSucceeded, closeGallery]
+            {
+                if (safe == nullptr || safe->shuttingDown)
+                    return;
+                if (*previewSucceeded)
+                    safe->persistSkinPreference();
+                else
+                    safe->loadSkinByIndex(originalOrdinal, false);
+                *transactionResolved = true;
+                closeGallery();
+            },
+            [safe, originalOrdinal, transactionResolved, closeGallery]
+            {
+                if (safe == nullptr || safe->shuttingDown)
+                    return;
+                safe->loadSkinByIndex(originalOrdinal, false);
+                *transactionResolved = true;
+                closeGallery();
             });
 
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = galleryPanelId;
-        spec.title = "SKIN GALLERY  /  " + juce::String(gallerySkinCount) + " THEMES";
+        spec.title = "SKIN GALLERY  /  " + juce::String(static_cast<int>(skins.size())) + " THEMES";
         spec.desired = { 940, 700 };
-        spec.minimum = { 500, 320 };
+        spec.minimum = { 500, 360 };
         spec.content = std::move(gallery);
+        spec.onClose = [safe, originalOrdinal, transactionResolved]
+        {
+            if (*transactionResolved)
+                return;
+            *transactionResolved = true;
+            if (safe != nullptr && !safe->shuttingDown)
+                safe->loadSkinByIndex(originalOrdinal, false);
+        };
         auxiliaryWorkspace->openPanel(std::move(spec));
     }
 
