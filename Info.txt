@@ -3047,3 +3047,20 @@ unverified until their steps complete successfully.
 **Проверки:** helper test скомпилирован локальным `g++ -std=c++20 -Wall -Wextra -Wpedantic` и прошёл. Это не заменяет CTest/полный JUCE build. Exact-SHA workflow runs: 0; Windows Release/CTest/pluginval/FL Studio 20 NOT RUN / NOT VERIFIED.
 
 **Следующий шаг:** audit/reset/tail behavior for each FX stage after reordering; then sampler streaming/64-voice stress and state restoration.
+
+
+## 2026-11-15 — Sampler 64-voice stress contract / Panic scope correction
+
+**Статус:** SOURCE FIX + REGRESSION TEST ADDED; FULL BUILD VALIDATION PENDING.
+
+В sampler audit найден compile-blocking дефект: у `SamplerEngine::panic()` отсутствовала закрывающая скобка функции после sustain-pedal changes. Исправлено отдельным commit `6bb551040f8d26922dd7cd6f2aba456877e907e2` (parent `e163dfd0193cb760e77fc7ea8800637214e90810`).
+
+Дополнительно:
+- `applyPitchBendForChannel()` теперь сбрасывает base increment напрямую при bend=0, не вызывая `pow()` на каждом голосе при обычном отсутствии pitch bend.
+- `tests/SamplePoolTests.cpp`: добавлен stress contract для 64 одновременно активных голосов, finite rendered output, oldest-voice stealing на 65-м trigger и соблюдения пользовательского лимита 32 voices.
+
+**Test commit:** `2fd771e450a7dc9b232db53a719b95cd03a95ece`; parent `6bb551040f8d26922dd7cd6f2aba456877e907e2`.
+
+**Проверки:** source files read back; lexical delimiter scan всех затронутых C++/header/test файлов прошёл после panic fix. 64-voice regression test добавлен, но exact-SHA CTest/Windows Release/pluginval/FL Studio 20 не запускались / не подтверждены. Workflow runs: 0.
+
+**Следующий шаг:** sampler streaming/cache stress and state restore audit; затем full exact-SHA Windows build + CTest, прежде чем объявлять code stage complete.

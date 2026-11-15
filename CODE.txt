@@ -1096,3 +1096,20 @@ Approved requirements:
 **Тесты:** FxOrder helper/test compiled and passed locally with g++ C++20; full CTest/JUCE Windows Release/pluginval/FL Studio 20 not run for this SHA.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** verify effect tail/reset/bypass and channel behavior under reordered permutations; then sampler stress and state restore.
+
+
+## 2026-11-15 — Sampler Panic compile fix and 64-voice stress coverage
+
+**Тип:** compile-blocker repair + sampler regression coverage.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:**
+- `6bb551040f8d26922dd7cd6f2aba456877e907e2` — closes missing function scope in `SamplerEngine::panic()`.
+- `2fd771e450a7dc9b232db53a719b95cd03a95ece` (parent `6bb551040f8d26922dd7cd6f2aba456877e907e2`) — adds 64-voice tests and zero-bend fast path.
+
+**Файлы / symbols:**
+- `Source/Sampler/SamplePool.cpp` — `panic()` scope repair; `applyPitchBendForChannel()` avoids unnecessary `pow(2,0)` when bend is neutral.
+- `tests/SamplePoolTests.cpp` — 64 simultaneous voices, finite output, 65th-note oldest voice stealing, and 32-voice configured cap.
+
+**Тесты:** source-level tests added; lexical delimiter scan passed for modified C++/header/test files. Full compiler/CTest/pluginval/FL Studio 20 validation remains pending.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** sampler streaming/cache stress and state restore audit; then exact-SHA Windows Release + CTest.
