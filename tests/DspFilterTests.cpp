@@ -75,6 +75,18 @@ int main()
             return 1;
         }
 
+    const auto interpolatedStart = ppgu::dsp::interpolate(neutralMid, stressed, 0.0f);
+    const auto interpolatedEnd = ppgu::dsp::interpolate(neutralMid, stressed, 1.0f);
+    const auto interpolatedHalf = ppgu::dsp::interpolate(neutralMid, stressed, 0.5f);
+    if (std::abs(interpolatedStart.b0 - neutralMid.b0) > 1.0e-7f
+        || std::abs(interpolatedEnd.b0 - stressed.b0) > 1.0e-7f
+        || !std::isfinite(interpolatedHalf.a1)
+        || !std::isfinite(interpolatedHalf.a2))
+    {
+        std::cerr << "Biquad coefficient interpolation contract failed.\\n";
+        return 1;
+    }
+
     ppgu::dsp::BiquadState state;
     const auto stressed = ppgu::dsp::makePeaking(sampleRate, 3000.0f, 0.2f, 18.0f);
     for (int i = 0; i < 200000; ++i)

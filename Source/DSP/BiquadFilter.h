@@ -51,6 +51,20 @@ inline BiquadCoefficients normalize(float b0, float b1, float b2,
 
 // RBJ Audio EQ Cookbook filters. Coefficients are plain values: calculating
 // them in processBlock performs no heap allocation and keeps state per channel.
+inline BiquadCoefficients interpolate(const BiquadCoefficients& from,
+                                           const BiquadCoefficients& to,
+                                           float proportion) noexcept
+{
+    const float t = std::clamp(proportion, 0.0f, 1.0f);
+    return {
+        from.b0 + (to.b0 - from.b0) * t,
+        from.b1 + (to.b1 - from.b1) * t,
+        from.b2 + (to.b2 - from.b2) * t,
+        from.a1 + (to.a1 - from.a1) * t,
+        from.a2 + (to.a2 - from.a2) * t
+    };
+}
+
 inline BiquadCoefficients makePeaking(float sampleRate, float frequency,
                                       float q, float gainDb) noexcept
 {

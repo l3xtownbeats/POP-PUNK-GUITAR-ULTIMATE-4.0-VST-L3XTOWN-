@@ -3205,3 +3205,22 @@ unverified until their steps complete successfully.
 **Ограничения:** AutoChords остаётся отключённым placeholder; runtime theme asset integrity audit не закрыт; FX processor-level automation/click tests не добавлены; Windows x64 Release, полный CTest, pluginval strictness 5 и FL Studio 20 для нового HEAD не запускались.
 
 **Статус:** SOURCE REVIEW UPDATED; TEST SOURCE ADDED; BUILD/CTest/PLUGINVAL/HOST VALIDATION PENDING. Не объявлять этот этап полностью принятым до CI и host-проверки.
+
+## 2026-11-15 — Audio Engine integration pass 02: click-reduced EQ automation
+
+**Изменено:** `Source/PluginProcessor.h`, `Source/PluginProcessor.cpp`, `Source/DSP/BiquadFilter.h`, `tests/DspFilterTests.cpp`.
+
+**Найденная проблема:** EQ коэффициенты пересчитывались на блок и сразу заменяли текущие. При автоматизации частоты/Q/gain возможен скачок отклика. При выключении EQ состояния biquad сбрасывались немедленно, что могло создавать переходный щелчок и теряло непрерывность состояния.
+
+**Исправлено:**
+- Добавлены сохранённые текущие коэффициенты EQ и состояние wet/bypass mix.
+- Коэффициенты Low Shelf / Mid Peaking / High Shelf плавно интерполируются от предыдущего набора к новому в пределах блока.
+- Включение/выключение EQ переводится плавным линейным переходом в пределах блока.
+- Состояния фильтров не сбрасываются при каждом bypass; DSP продолжает обновлять их историю, пока wet-составляющая плавно уходит в ноль.
+- Начальное состояние после `prepareToPlay` — нейтральный EQ и полностью сухой bypass.
+- Добавлена unit-проверка интерполяции коэффициентов на концах диапазона и в середине.
+- APVTS IDs, диапазоны, defaults, preset/state serialization и FX slot routing не менялись.
+
+**Ограничения:** линейная интерполяция коэффициентов не является математической гарантией устойчивости для произвольных крайних наборов biquad. Тесты фильтра и длительный сигнал обязательны; затем — processor-level automation/click test и exact-HEAD Windows build/CTest/pluginval. FL Studio 20 host acceptance отдельно не выполнена.
+
+**Статус:** SOURCE PATCH PREPARED; CI/BUILD NOT YET VERIFIED.

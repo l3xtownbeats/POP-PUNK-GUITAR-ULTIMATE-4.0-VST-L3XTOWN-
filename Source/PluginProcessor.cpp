@@ -219,6 +219,12 @@ void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int e
     for (auto& channelStates : eqStates)
         for (auto& state : channelStates)
             state.reset();
+    eqCurrentCoefficients = {{
+        ppgu::dsp::makeLowShelf(static_cast<float>(currentSampleRate), 180.0f, 0.0f),
+        ppgu::dsp::makePeaking(static_cast<float>(currentSampleRate), 1200.0f, 1.0f, 0.0f),
+        ppgu::dsp::makeHighShelf(static_cast<float>(currentSampleRate), 7000.0f, 0.0f)
+    }};
+    eqWetMix = 0.0f;
     for (auto& state : toneStates)
         state.reset();
     distortionToneState.fill(0.0f);
@@ -260,6 +266,7 @@ void PopPunkGuitarUltimateAudioProcessor::releaseResources()
     for (auto& channelStates : eqStates)
         for (auto& state : channelStates)
             state.reset();
+    eqWetMix = 0.0f;
     for (auto& state : toneStates)
         state.reset();
     distortionToneState.fill(0.0f);
@@ -687,44 +694,61 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
 
     const auto processEq = [&]() noexcept
     {
-        if (parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) <= 0.5f)
+        const bool enabled = parameters.getRawParameterValue("eqOn")->load(std::memory_order_relaxed) > 0.5f;
+        auto targetCoefficients = eqCurrentCoefficients;
+        if (enabled)
         {
-            for (auto& states : eqStates)
-                for (auto& state : states)
-                    state.reset();
-            return;
+            const float lowGainDb = juce::jlimit(-12.0f, 12.0f,
+                parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed));
+            const float midGainDb = juce::jlimit(-12.0f, 12.0f,
+                parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed));
+            const float highGainDb = juce::jlimit(-12.0f, 12.0f,
+                parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed));
+            const float lowFrequency = juce::jlimit(20.0f, 500.0f,
+                parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
+            const float midFrequency = juce::jlimit(100.0f, 8000.0f,
+                parameters.getRawParameterValue("eqMidFreq")->load(std::memory_order_relaxed));
+            const float midQ = juce::jlimit(0.1f, 10.0f,
+                parameters.getRawParameterValue("eqMidQ")->load(std::memory_order_relaxed));
+            const float highFrequency = juce::jlimit(2000.0f, 20000.0f,
+                parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
+            targetCoefficients = {{
+                ppgu::dsp::makeLowShelf(static_cast<float>(currentSampleRate), lowFrequency, lowGainDb),
+                ppgu::dsp::makePeaking(static_cast<float>(currentSampleRate), midFrequency, midQ, midGainDb),
+                ppgu::dsp::makeHighShelf(static_cast<float>(currentSampleRate), highFrequency, highGainDb)
+            }};
         }
-        const float lowGainDb = juce::jlimit(-12.0f, 12.0f,
-            parameters.getRawParameterValue("eqLow")->load(std::memory_order_relaxed));
-        const float midGainDb = juce::jlimit(-12.0f, 12.0f,
-            parameters.getRawParameterValue("eqMid")->load(std::memory_order_relaxed));
-        const float highGainDb = juce::jlimit(-12.0f, 12.0f,
-            parameters.getRawParameterValue("eqHigh")->load(std::memory_order_relaxed));
-        const float lowFrequency = juce::jlimit(20.0f, 500.0f,
-            parameters.getRawParameterValue("eqLowFreq")->load(std::memory_order_relaxed));
-        const float midFrequency = juce::jlimit(100.0f, 8000.0f,
-            parameters.getRawParameterValue("eqMidFreq")->load(std::memory_order_relaxed));
-        const float midQ = juce::jlimit(0.1f, 10.0f,
-            parameters.getRawParameterValue("eqMidQ")->load(std::memory_order_relaxed));
-        const float highFrequency = juce::jlimit(2000.0f, 20000.0f,
-            parameters.getRawParameterValue("eqHighFreq")->load(std::memory_order_relaxed));
-        const auto lowCoefficients = ppgu::dsp::makeLowShelf(
-            static_cast<float>(currentSampleRate), lowFrequency, lowGainDb);
-        const auto midCoefficients = ppgu::dsp::makePeaking(
-            static_cast<float>(currentSampleRate), midFrequency, midQ, midGainDb);
-        const auto highCoefficients = ppgu::dsp::makeHighShelf(
-            static_cast<float>(currentSampleRate), highFrequency, highGainDb);
+
+        const auto startCoefficients = eqCurrentCoefficients;
+        const float startMix = eqWetMix;
+        const float targetMix = enabled ? 1.0f : 0.0f;
+        if (samples <= 0)
+            return;
+
+        // Smooth coefficient and bypass transitions across the host block.
+        // The filter states keep running while bypassed, so toggling EQ does not
+        // discard their history and create a discontinuity on the next note.
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
         {
             auto* data = buffer.getWritePointer(channel);
             auto& states = eqStates[static_cast<size_t>(channel)];
             for (int sample = 0; sample < samples; ++sample)
             {
-                float value = states[0].process(data[sample], lowCoefficients);
-                value = states[1].process(value, midCoefficients);
-                data[sample] = states[2].process(value, highCoefficients);
+                const float proportion = static_cast<float>(sample + 1) / static_cast<float>(samples);
+                const auto low = ppgu::dsp::interpolate(startCoefficients[0], targetCoefficients[0], proportion);
+                const auto mid = ppgu::dsp::interpolate(startCoefficients[1], targetCoefficients[1], proportion);
+                const auto high = ppgu::dsp::interpolate(startCoefficients[2], targetCoefficients[2], proportion);
+                float filtered = states[0].process(data[sample], low);
+                filtered = states[1].process(filtered, mid);
+                filtered = states[2].process(filtered, high);
+                const float wet = startMix + (targetMix - startMix) * proportion;
+                data[sample] += (filtered - data[sample]) * wet;
             }
         }
+
+        if (enabled)
+            eqCurrentCoefficients = targetCoefficients;
+        eqWetMix = targetMix;
     };
 
     const auto processCompressor = [&]() noexcept
