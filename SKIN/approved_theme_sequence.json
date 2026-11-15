@@ -5,16 +5,17 @@
   "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
-  "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
+  "rule": "The 16 premium themes are presented in strict order SKIN-1 through SKIN-16. SKIN-1 is NEON FORGE (DEFAULT). Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; approved sequence stable IDs/indices remain unchanged.",
   "themes": [
     {
       "ordinal": 1,
       "label": "SKIN-1",
-      "name": "NEON FORGE",
+      "name": "NEON FORGE (DEFAULT)",
       "stableId": "skin-053",
       "index": 53,
       "path": "Skin_053/theme.json",
-      "status": "CANONICAL_DEFAULT"
+      "status": "CANONICAL_DEFAULT",
+      "displayName": "NEON FORGE (DEFAULT)"
     },
     {
       "ordinal": 2,
