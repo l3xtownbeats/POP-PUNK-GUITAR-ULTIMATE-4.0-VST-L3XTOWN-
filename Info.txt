@@ -2620,3 +2620,72 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Статус:** UI SOURCE CONTRACT IMPLEMENTED / EXACT-SHA CI RUNNING / VISUAL AND HOST ACCEPTANCE PENDING.
 **Следующий шаг:** получить результат run `43680164068`; затем продолжить module-by-module source/binding audit по 12 утверждённым поверхностям, не создавая фиктивные окна/контролы.
 ==============================================================================
+
+==============================================================================
+
+2026-11-15 — USER CONFIRMATION LOCK: PATTERN ARTICULATIONS / RHYTHM PATTERNS
+==============================================================================
+
+**Статус:** USER-APPROVED REQUIREMENT CONFIRMED AND PERMANENTLY RECORDED.
+**Основание:** пользователь повторно подтвердил 2026-11-15, что ранее обсуждавшийся подпункт режима PATTERN называется именно **ARTICULATIONS** (не ARTICLES). Это подтверждение ранее согласованного решения, а не новая функция и не пересмотр спецификации.
+
+### 1. Канонические независимые категории PATTERN
+
+- **SONG STRUCTURE** — музыкальные секции композиции: INTRO, VERSE, PRE-CHORUS, CHORUS, BRIDGE, OUTRO.
+- **ARTICULATIONS** — техника/способ физического гитарного исполнения.
+- **RHYTHM PATTERNS** — временная организация атак, пауз, длительностей, акцентов и ритмических событий.
+- **TONE / PRESET / FX** — тембр и обработка; не смешивать с техникой исполнения и ритмом.
+
+ARTICULATIONS и RHYTHM PATTERNS — самостоятельные оси выбора. Выбор или смена одной не должен самопроизвольно менять другую, выбранный chord/progression или tone preset. Совместимость ограничивается реально доступными guitar recordings, one-shots и performance maps; отсутствующее исполнение нельзя имитировать синтетической гитарой и выдавать за готовую артикуляцию.
+
+### 2. ARTICULATIONS — утверждённый каталог техник
+
+- OPEN CHORDS
+- PALM MUTE
+- DOWNSTROKE
+- UPSTROKE
+- ALTERNATE DOWN-UP
+- POWER CHORDS
+- CHUGS
+- MUTED BRIDGE
+- SKANK / OFFBEAT UPSTROKE
+- OCTAVE HOOKS
+- DOUBLE-STOPS
+- TREMOLO PICKING
+- ARPEGGIO / PICKING
+- SUSTAIN / AMBIENT
+- STOP-START / SYNCOPATED
+
+Сохранять музыкально корректное значение терминов: TREMOLO PICKING — техника игры, не TREMOLO EFFECT; PALM MUTE — артикуляция, не тембровый пресет/эффект; STOP-START / SYNCOPATED описывает исполнение/акцентировку и не сводится к случайному сокращению MIDI note length.
+
+### 3. RHYTHM PATTERNS — утверждённые примеры
+
+- STRAIGHT 8THS
+- FAST SKATE-PUNK
+- GALLOP
+- HALF-TIME
+- STOP-TIME ACCENTS
+- VERSE → OPEN CHORUS
+- SKANK OFFBEATS
+- OCTAVE-HOOK GROOVE
+- ARPEGGIO PATTERN
+
+Полная музыкальная таксономия и сетки событий остаются дополнительно определены в §15.11 MASTER_PRODUCT_SPEC_4_0_RU.md.
+
+### 4. PATTERN browser workflow
+
+Сохранять утверждённую последовательность:
+**GENRE → ARTIST/BAND → SONG/SECTION → STYLE → PATTERN**.
+
+Внутри PATTERN не объединять SONG STRUCTURE, ARTICULATIONS, RHYTHM PATTERNS и TONE в один неоднозначный список. ARTICULATIONS должна быть явно доступна как отдельный подпункт/категория режима PATTERN. Точное визуальное представление (вкладка, отдельная панель или popup) подчиняется утверждённым UI-макетам и UI guard; эта запись фиксирует функциональную структуру и терминологию, но сама по себе не утверждает ранее не описанную геометрию отдельного popup.
+
+### 5. Связанные источники
+
+- `docs/MASTER_PRODUCT_SPEC_4_0_RU.md` §15.8 — базовые техники и ритмы.
+- §15.9 — AutoChords layout.
+- §15.10 — разделение PLAYING STYLE / ARTICULATION и RHYTHM PATTERN.
+- §15.11 — справочник панк-ритм-гитары и event-grid/data requirements.
+- Addendum 2026-11-14, TX-UI-PRESET-GUARD-004, разделы A–D — canonical browser navigation, Preview/Apply/Cancel, sections/slots и PATTERN behavior.
+
+**Правило терминологии:** во всех дальнейших спецификациях, UI labels, макетах, коде и тестах использовать точное название **ARTICULATIONS**. Не переименовывать в ARTICLES, не заменять общим TECHNIQUES и не удалять из PATTERN browser. Ранее утверждённые требования сохраняют силу; повторное согласование не требуется.
+==============================================================================
