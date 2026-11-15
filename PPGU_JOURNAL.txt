@@ -885,3 +885,11 @@ During the source-backed component visual audit, the auxiliary workspace window 
 This is a bounded visual-only correction. Panel geometry, IDs, callbacks, open/close lifecycle, persistence, APVTS, DSP, MIDI and audio behavior are unchanged. Source commit: `3190359d295d83bb06970836c9b34c62c6ccadb4`.
 
 Acceptance: source change committed; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime theme/resize verification and FL Studio 20 acceptance remain pending. Continue the NEON STAGE component audit; do not advance to sound-library work until the visual phase is accepted.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: AUTOCHORDS TYPOGRAPHY FIX
+
+The Circle of Fifths component was found to use fixed JUCE default fonts for its fifth-node labels and caption, bypassing the shared theme typography helper. Updated `PPGUCircleOfFifths::paint()` to use `makeThemeFont()` for both text layers, so the active palette's UI typeface and font scale apply consistently.
+
+No geometry, note/fifths mapping, keyboard or mouse interaction, APVTS attachment, chord setup behavior, DSP, MIDI generation or audio behavior changed. Source commit: `597ad5ffe958ad4b33d440dfeb4e81b97e001fdf`.
+
+Acceptance: source change committed; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime 16-theme/resize checks and FL Studio 20 acceptance remain pending. NEON STAGE visual phase remains open.
