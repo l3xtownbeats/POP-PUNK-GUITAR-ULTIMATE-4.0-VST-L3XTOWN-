@@ -249,9 +249,9 @@ namespace
         if (!hasObject(root, "controls", controls)
             || controls.getDynamicObject() == nullptr
             || controls.getDynamicObject()->getProperties().size()
-                   != requiredControlIds.size() + 1)
+                   != requiredControlIds.size())
         {
-            error = "Skin Studio control map must contain the exact canonical control set";
+            error = "Skin Studio control map must contain exactly the 27 canonical control IDs";
             return false;
         }
 
@@ -262,12 +262,6 @@ namespace
                 error = "Skin Studio control map is missing mandatory ID: " + controlId;
                 return false;
             }
-        }
-
-        if (!controls.getDynamicObject()->hasProperty("sync_selector"))
-        {
-            error = "Skin Studio control map is missing mandatory ID: sync_selector";
-            return false;
         }
 
         juce::var assets;
