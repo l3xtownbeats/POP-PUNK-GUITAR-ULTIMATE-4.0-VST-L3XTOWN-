@@ -308,3 +308,16 @@ Implemented:
 - No new APVTS IDs, control IDs, audio/DSP/MIDI processing or processor-state fields were introduced.
 - Commit: `d499da2cd179098478825a5e1fca49ef117609fa`.
 - Validation: exact-HEAD Windows x64 build, CTest and pluginval remain pending for this addition.
+
+
+## 2026-11-15 — USER-APPROVED NEON STAGE GUI COMPLETION / FUNCTIONAL ACCEPTANCE
+
+**Scope:** all existing and missing visual elements for already-approved functionality; all individual windows/panels; every control state; responsive window sizes; visual integrity and behavior parity across all 16 approved themes.
+
+**Mandatory behavior:** every visible interactive element must be genuinely bound and operable. Validate UI event → callback/action → real parameter/backend/state → observable effect → UI feedback → persistence/restore where specified. Rotary controls change their assigned parameters; buttons execute their actual commands; windows/tabs open and close; modes switch real behavior; Preset Browser scrolls, searches, filters, selects and loads real entries; indicators/status/notifications reflect real state. No decorative active controls. If a required backend is not yet available, expose an honest disabled/unavailable state until it exists.
+
+**Non-regression:** preserve 27-control parity, the seven approved FX bypass IDs, all existing APVTS IDs and attachment semantics, processor state, MIDI/audio/DSP boundaries, approved product structure and legacy skin records. Skin changes may alter presentation only, never functional bindings or behavior.
+
+**Acceptance sequence:** inventory and binding audit → implementation of missing approved bindings/states → per-panel and per-control verification → resize/window checks → 16-theme parity checks → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Evidence must name the exact commit SHA. Source presence or a mockup is not proof of completion.
+
+**Status:** SCOPE APPROVED / WORK AUTHORIZED / ACCEPTANCE CRITERIA FIXED. This entry records authorization and acceptance requirements; it does not claim implementation or tests are complete.
