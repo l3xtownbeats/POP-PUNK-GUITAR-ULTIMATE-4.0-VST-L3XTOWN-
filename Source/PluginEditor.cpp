@@ -63,7 +63,7 @@ public:
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn,
                          PPGUThemeManager::Palette paletteIn,
                          int initialSelection,
-                         std::function<void(int)> previewIn,
+                         std::function<bool(int)> previewIn,
                          std::function<void()> applyIn,
                          std::function<void()> cancelIn)
         : skins(std::move(skinsIn)), palette(std::move(paletteIn)),
@@ -123,13 +123,19 @@ public:
         previewButton.onClick = [this]
         {
             if (selectedIndex > 0 && preview)
-                preview(selectedIndex);
+            {
+                const bool succeeded = preview(selectedIndex);
+                if (succeeded)
+                    previewedIndex = selectedIndex;
+                applyButton.setEnabled(succeeded || selectedIndex == previewedIndex);
+            }
         };
         applyButton.onClick = [this] { if (apply) apply(); };
         backButton.onClick = [this] { if (cancel) cancel(); };
 
         for (auto& skin : skins)
             skin.selected = skin.index == selectedIndex;
+        previewedIndex = initialSelection;
 
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
@@ -374,12 +380,14 @@ private:
             return;
         selectedIndex = index;
         grid.setSelectedIndex(index);
+        applyButton.setEnabled(index == previewedIndex);
     }
 
     std::vector<Skin> skins;
     PPGUThemeManager::Palette palette;
     int selectedIndex = 0;
-    std::function<void(int)> preview;
+    int previewedIndex = 0;
+    std::function<bool(int)> preview;
     std::function<void()> apply, cancel;
     juce::Label heading, subtitle, countLabel;
     juce::TextButton previewButton, applyButton, backButton;
@@ -1973,8 +1981,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             [safe, previewSucceeded](int index)
             {
                 if (safe == nullptr || safe->shuttingDown)
-                    return;
+                    return false;
                 *previewSucceeded = safe->loadSkinByIndex(index, false);
+                return *previewSucceeded;
             },
             [safe, originalOrdinal, transactionResolved, previewSucceeded, closeGallery]
             {
