@@ -974,3 +974,14 @@ Approved requirements:
 **No audio/APVTS/DSP/MIDI/sampler/preset/SoundBank changes.**
 **Evidence:** commits and source-level tests exist; tests not executed, build and host verification pending. No PASS claim.
 **Reference:** approved NEON STAGE reference/contact sheet governs visual direction; mockup-only controls prohibited by REV18 inventory/A7 must not be faked.
+
+
+## 2026-11-15 — REV18 GALLERY-06 — invalidate hidden selection when filters return zero results
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production:** `75dcc21d0621d2d2ab9625d06671d3b8080d7492`.
+**Test:** `8d7054ffd4508a765ac35ecd7b12b9bce65a5b8a`.
+**INFO:** `856a5f75f61f2b3b87b21fe5d14c2ca94758211a`.
+**Implementation:** no visible items → clear transient selection, preview cache and detail labels; disable Preview/Apply/Favorite through existing validity checks; restoring a filter falls back to active/first visible theme.
+**Test:** `test_empty_filter_invalidates_hidden_selection_and_actions`.
+**Runtime execution:** pending; no test/build/host PASS claim.
