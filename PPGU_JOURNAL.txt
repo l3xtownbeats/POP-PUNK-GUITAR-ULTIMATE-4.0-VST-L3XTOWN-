@@ -605,3 +605,20 @@ Fix committed in Source/PluginEditor.cpp: both callbacks now call setSelectedId(
 Commit: 7692eb0b2549ff7856eb38788994fcba79bcf451.
 
 Validation: source-level correction committed. Exact-HEAD Windows build, CTest, pluginval Strictness 5 and runtime/FL Studio interaction verification remain PENDING. This fix is one identified audit defect, not a claim that all controls are now complete.
+
+
+2026-11-15 — USER-APPROVED SECOND-LEVEL FACTORY PRESET PRODUCTION SCOPE
+
+Пользователь подтвердил, утвердил и поручил зафиксировать второй уровень работ: после завершения полноценной Preset Gallery / Preset Browser изготовить и наполнить весь утверждённый каталог factory presets по макетам, образцам, группам, артистическим/альбомным профилям, стилям, жанрам и музыкальным характеристикам.
+
+Для каждого пресета обязательны реальные playable параметры и ресурсы, соответствие группе/жанру/стилю, музыкальная функция, ритмика/groove, артикуляции, динамика/velocity и применимые техники (palm mute, open chords, picking, arpeggios, fills/transitions и др.); корректное назначение MELODY либо PATTERN; достоверные имя, категория, описание, artwork/metadata согласно утверждённому макету. Галерея должна показывать реальные записи, а не фиктивные карточки/счётчики.
+
+Сохраняется утверждённый REV.18 минимум: 500 READY MELODY + 500 READY PATTERN. READY засчитывается только после проверки валидности sample resources/mappings, успешной загрузки и воспроизведения, соответствия музыкальной задаче, параметров/артикуляций, автоматических проверок каталога, отсутствия дублей и runtime/слуховой проверки. JSON entry, preset name или UI card сами по себе не являются READY.
+
+Производство выполнять на основе утверждённых макетов и sample references, с provenance/license register и SHA-256. Не включать ресурсы без разрешающей лицензии; не копировать защищённые риффы, stems, записи или чужие пресеты. Ранее утверждённое Travis Barker 82 правило остаётся в силе: 82 уникальных пресета внутри соответствующих artist/band profiles при документированной production-role связи, не отдельная верхнеуровневая категория, каждый считается один раз.
+
+Порядок исполнения: сначала завершить функциональную галерею/браузер (навигация, поиск, категории, фильтры, избранное и загрузка); затем сверить taxonomy/schema и референсы; составить production matrix и license/provenance register; изготовить и интегрировать пресеты партиями; проверить mappings, артикуляции, velocity, ритмику, ресурсы и дубли; провести runtime и слуховую приёмку каждой записи; подтвердить точные READY totals отдельно для MELODY и PATTERN.
+
+Сохранить все утверждённые ограничения: 27-control parity, семь approved FX bypass IDs, существующие APVTS/control IDs и attachment semantics, processor state, MIDI/audio/DSP boundaries, утверждённую структуру продукта и sample licensing rules. Не выдавать незавершённые или непроверенные записи за готовые.
+
+Статус: USER CONFIRMED / APPROVED / FIXED FOR SECOND-LEVEL EXECUTION. Это фиксация решения и критериев приёмки; изготовление каталога и READY validation остаются PENDING и следуют после завершения галереи.
