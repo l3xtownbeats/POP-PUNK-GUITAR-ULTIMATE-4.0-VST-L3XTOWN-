@@ -307,6 +307,11 @@ ParseResult parseText(const std::string& text, const std::filesystem::path& sfzD
     while (std::getline(input, line))
     {
         ++lineNumber;
+        if (lineNumber > maximumSfzLines)
+        {
+            result.errors.push_back({ lineNumber, "SFZ exceeds the 262144-line parser safety limit." });
+            break;
+        }
         if (line.size() > maximumSfzLineLength)
         {
             result.errors.push_back({ lineNumber, "SFZ line exceeds the 64 KiB parser safety limit." });
@@ -479,6 +484,11 @@ ParseResult parseFile(const std::filesystem::path& sfzPath)
     }
     std::ostringstream contents;
     contents << stream.rdbuf();
+    if (stream.bad())
+    {
+        result.errors.push_back({ 0, "I/O error while reading SFZ file: " + sfzPath.string() });
+        return result;
+    }
     return parseText(contents.str(), sfzPath.parent_path());
 }
 

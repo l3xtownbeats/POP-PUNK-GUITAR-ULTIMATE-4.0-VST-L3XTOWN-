@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <filesystem>
 #include <string>
@@ -11,6 +12,7 @@ inline constexpr std::size_t maximumSfzFileBytes = 16U * 1024U * 1024U;
 inline constexpr std::size_t maximumSfzLineLength = 64U * 1024U;
 inline constexpr std::size_t maximumSfzTokensPerLine = 4096U;
 inline constexpr std::size_t maximumSfzRegions = 65536U;
+inline constexpr std::size_t maximumSfzLines = 262144U;
 struct Region
 {
     std::filesystem::path samplePath;
