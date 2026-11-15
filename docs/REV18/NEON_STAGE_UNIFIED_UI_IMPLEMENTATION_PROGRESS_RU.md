@@ -194,3 +194,35 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 
 **Статус:** SOURCE CONTRACT IMPLEMENTED / CI PENDING / VISUAL QA PENDING.  
 **Следующее:** дождаться exact-SHA CI и продолжить аудит реальных source surfaces для всех 12 модулей. Отсутствующие Curator, Auto Discover и About остаются не реализованными; не добавлять им фиктивную функциональность.
+
+
+## MAIN INTERFACE — повторный source-аудит текущего HEAD
+
+**Дата проверки:** 2026-11-15  
+**Ветка:** `rev18/neon-stage-skin1-implementation`  
+**HEAD до записи этого отчёта:** `247fa531273dcc2a7325275f821f1d4c67c5f4f4`  
+**Проверенный файл:** `Source/PluginEditor.cpp`, blob `bcb43811c9a975aaedd476263d3f654b62c53821`  
+**Проверенные общие компоненты:** `ThemeManager.h` blob `4f095d6a11ea15cd429f968201499acd6f97037b`; `PPGUMultiWindowWorkspace.h` blob `7b5cba5f94d7b7895b64704d1627a287b85caac4`.
+
+### Подтверждено повторным чтением текущего исходника
+
+- Main editor создаётся с базовым размером 1024×700, разрешён resize 900×640…1600×1100; восстановленные размеры ограничиваются теми же пределами.
+- Три области UI: preset browser, guitar engine/performance и AMP/FX rack; нижняя область содержит performance display, MIDI keyboard и status line.
+- Все девять rotary sliders имеют APVTS `SliderAttachment`; FX toggles имеют APVTS `ButtonAttachment`; playback mode и sync mode подключены через `ComboBoxAttachment`. При открытии FX EDIT кнопка также вызывает соответствующую панель.
+- Preset search/filter сохраняет выбранный preset, если он остаётся в отфильтрованном списке; фильтрация не должна незаметно загружать другой preset.
+- MIDI keyboard отображает диапазон MIDI 36–84; performance display получает активную палитру.
+- `applyPalette()` обновляет цвета главных labels, combo boxes, search, кнопок, tabs, rotary controls, FX toggles, performance display и workspace. В `ThemeManager.h` сохранена каноническая палитра из 21 semantic token, id `skin-053`, name `NEON STAGE`.
+- Заголовок, workspace и основные панели остаются в границах UI-only слоя; APVTS IDs/values и audio engine этим аудитом не менялись.
+
+### Замечания для следующего этапа проверки
+
+1. Геометрия трёх колонок вычисляется отдельно в `paint()` и `resized()`. Сейчас формулы выглядят согласованными, но дублирование создаёт риск расхождения при будущих правках; не менять без подтверждения макетом/тестом.
+2. Центральная область жёстко делит девять контролов на сетку 3×3. Не подтверждено, что это соответствует финальному эталону, поскольку PNG всё ещё не удалось прочитать.
+3. Header/footer используют фиксированные высоты 48 px и 132 px, а resize ограничен минимумом 900×640. Нужны проверки на 100/125/150% DPI и реальном host resize; до них нельзя заявлять отсутствие clipping.
+4. Визуальные состояния disabled/hover/focus частично заданы через LookAndFeel и semantic colours, но полного обхода всех состояний в работающем VST3 host не было.
+5. `subtitleLabel` позиционируется абсолютными координатами относительно editor, а не header-контейнера; это остаётся точкой для resize/scale QA.
+6. В текущем source readback не обнаружено оснований менять APVTS bindings или поведение пресетов в рамках этой темы. Любые такие изменения запрещены текущим UI-only scope.
+
+### Решение этапа
+
+**MAIN INTERFACE SOURCE AUDIT: обновлён и зафиксирован.** Кодовая интеграция общей палитры и APVTS-связи подтверждена чтением текущих файлов. **Визуальное соответствие NEON STAGE макетам, runtime skin discovery, DPI/resize, clipping, host behavior и визуальная приёмка остаются OPEN.** PNG-файлы присутствуют в GitHub, однако бинарное содержимое пока недоступно для фактического pixel/layout comparison через текущий коннектор. Следующий шаг по утверждённой очереди — AutoChords source audit; Main Interface остаётся открытым до visual/host QA.
