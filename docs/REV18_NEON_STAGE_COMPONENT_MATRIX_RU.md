@@ -295,3 +295,8 @@ Correction committed in `33cb48cb373a70246f458ba6808ff9004f09c6fc`:
 - Build the displayed chord progression using an explicit `juce::String` loop instead of the unavailable `StringArray::join` call.
 
 No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio callback were changed. The correction is source-level only until the new exact-HEAD Windows workflow completes. CTest, pluginval, portable VST3 packaging and FL Studio 20 remain unverified.
+
+
+## 2026-11-15 — Canonical premium theme identity correction
+
+Пользователь подтвердил: **SKIN-1 = NEON FORGE**. Стабильный ID `skin-053`, индекс `53` и путь `Skin_053/` сохранены без перенумерации. `NEON STAGE` остаётся названием общей GUI design system/reference language, а не названием SKIN-1. Утверждённая линейка содержит ровно 16 премиальных графических тем; SKIN-2…SKIN-16 сохраняют утверждённые имена и stable IDs. Старые 102 записи не удаляются и не переписываются. Полноценные preview/hero PNG для SKIN-2…SKIN-16 и runtime gallery registration остаются отдельными незавершёнными gates; спецификации и SVG не выдаются за готовые полноценные графические темы.
