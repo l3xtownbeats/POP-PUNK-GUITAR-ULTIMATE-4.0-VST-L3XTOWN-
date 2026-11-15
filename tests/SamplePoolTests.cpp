@@ -169,13 +169,21 @@ int main()
         std::cerr << "Could not start palm-muted sampler regression fixture.\\n";
         return 1;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     juce::AudioBuffer<float> palmMutedRender(2, 8192);
     palmMutedRender.clear();
-    palmMutedEngine.render(palmMutedRender, 0, palmMutedRender.getNumSamples());
-    if (palmMutedEngine.getActiveVoiceCount() != 0)
+    bool palmMuteBecameAudible = false;
+    for (int offset = 0; offset < palmMutedRender.getNumSamples(); offset += 256)
     {
-        std::cerr << "Palm-muted continuous-loop voice did not decay and retire.\\n";
+        palmMutedEngine.render(palmMutedRender, offset,
+            juce::jmin(256, palmMutedRender.getNumSamples() - offset));
+        palmMuteBecameAudible = palmMuteBecameAudible
+            || palmMutedRender.getMagnitude(0, offset,
+                juce::jmin(256, palmMutedRender.getNumSamples() - offset)) > 0.001f;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    if (!palmMuteBecameAudible || palmMutedEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "Palm-muted continuous-loop voice did not become audible, decay and retire.\\n";
         return 1;
     }
 
@@ -187,10 +195,14 @@ int main()
         std::cerr << "Could not start open-sustain comparison fixture.\\n";
         return 1;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     juce::AudioBuffer<float> openSustainRender(2, 8192);
     openSustainRender.clear();
-    openSustainEngine.render(openSustainRender, 0, openSustainRender.getNumSamples());
+    for (int offset = 0; offset < openSustainRender.getNumSamples(); offset += 256)
+    {
+        openSustainEngine.render(openSustainRender, offset,
+            juce::jmin(256, openSustainRender.getNumSamples() - offset));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
     if (openSustainEngine.getActiveVoiceCount() != 1)
     {
         std::cerr << "Open continuous-loop voice was incorrectly shortened.\\n";
