@@ -343,3 +343,18 @@ Current source HEAD at audit: `1a1910aad51538ef556f7b09902f52bdea3b069b`.
 - **No scope drift:** 27-control parity, nine approved rotary bindings, seven approved FX bypass IDs, APVTS IDs/semantics, DSP/audio callback/MIDI and processor state remain protected; this documentation update does not alter them.
 
 Next visual work remains component parity and acceptance, not factory preset expansion: main-window missing controls, FX EDIT/AMP & TONE parity, Gallery Favorites/keyboard navigation/expanded preview and runtime hot-swap/DPI/ECO, workspace overlay/focus lifecycle, and exact reference pixel comparison. The 15 approved themes SKIN-2…SKIN-16 still require complete preview/hero artwork and runtime acceptance before activation.
+
+
+## 2026-11-15 — AUTHORITATIVE USER DECISION: 16 FACTORY THEMES ONLY
+
+The user explicitly approved removal of the obsolete historical theme set. The product contains exactly sixteen factory themes, as listed in `SKIN/approved_theme_sequence.json`. No historical 102-entry catalog, 101-entry archive, or arbitrary expansion batch is part of the product.
+
+- NEON STAGE = shared GUI design system / visual language.
+- SKIN-1 = NEON FORGE (DEFAULT), stable ID `skin-053`; this is the already implemented first factory theme.
+- SKIN-2…SKIN-16 = the fifteen remaining approved factory themes, stable IDs `skin-103`…`skin-117`.
+- Only SKIN-1 remains in the runtime registry until the other fifteen pass full artwork, asset, runtime and host acceptance.
+- The historical archive directory and obsolete registry/pack snapshots are removed from the current branch. Git history remains intact for recovery/audit.
+- Validator now enforces exactly sixteen approved theme folders and rejects reintroduction of `SKIN/isolated_legacy`.
+- Arbitrary theme-batch generation and registry merge scripts are disabled.
+
+This decision supersedes older paragraphs in this document that required preservation/migration of 102 legacy records. It does not change any APVTS IDs, control bindings, DSP, MIDI, processor state, audio callback, or the approved theme names/order.
