@@ -33,7 +33,7 @@
     "ui": "Segoe UI",
     "display": "Consolas",
     "weight": "semibold",
-    "scale": 1.0,
+    "scale": 1,
     "letterSpacing": 0.4
   },
   "effects": {
@@ -312,16 +312,6 @@
       "grid": {
         "x": 9,
         "y": 15,
-        "w": 3,
-        "h": 1
-      },
-      "presentation": "native-control",
-      "runtimeBinding": "control_schema.json"
-    },
-    "sync_selector": {
-      "grid": {
-        "x": 9,
-        "y": 3,
         "w": 3,
         "h": 1
       },

@@ -177,6 +177,10 @@ add_test(NAME ppgu_processor_pattern_tests COMMAND ppgu_processor_pattern_tests)
 add_test(NAME ppgu_sound_asset_registry_contract
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/TestSoundAssetRegistry.py)
 
+add_test(NAME ppgu_rev18_theme_control_parity
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/TestRev18ThemeControlParity.py)
+set_tests_properties(ppgu_rev18_theme_control_parity PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+
 # The orphaned root-level OverlayManager/SecureSkinImport test files are not
 # registered: their corresponding production headers and implementations are
 # absent from this REV.17 tree. They remain explicit implementation blockers,

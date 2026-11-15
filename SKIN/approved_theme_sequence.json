@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "APPROVED_CONCEPTS_VECTOR_SPECS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING",
+  "status": "APPROVED_SIX_THEME_FULL_ASSET_PACK_GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
   "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
@@ -14,7 +14,8 @@
       "stableId": "skin-053",
       "index": 53,
       "path": "Skin_053/theme.json",
-      "status": "CANONICAL_DEFAULT"
+      "status": "CANONICAL_DEFAULT",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 2,
@@ -23,7 +24,8 @@
       "stableId": "skin-103",
       "index": 103,
       "path": "Skin_103/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_CREATED",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 3,
@@ -32,7 +34,8 @@
       "stableId": "skin-104",
       "index": 104,
       "path": "Skin_104/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_CREATED",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 4,
@@ -41,7 +44,8 @@
       "stableId": "skin-105",
       "index": 105,
       "path": "Skin_105/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_CREATED",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 5,
@@ -50,7 +54,8 @@
       "stableId": "skin-106",
       "index": 106,
       "path": "Skin_106/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_CREATED",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     },
     {
       "ordinal": 6,
@@ -59,7 +64,8 @@
       "stableId": "skin-107",
       "index": 107,
       "path": "Skin_107/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_CREATED",
+      "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     }
   ],
   "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",
@@ -72,9 +78,8 @@
     "Runtime and release acceptance require packaged assets and VST3 validation."
   ],
   "pending": [
-    "PNG preview.png (360x240) and hero.png (800x450) for each new theme.",
     "G1-G4 validation and PNG CRC checks.",
-    "Canonical registry/gallery registration after assets pass.",
+    "Canonical registry/gallery registration after asset validation.",
     "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance."
   ]
 }

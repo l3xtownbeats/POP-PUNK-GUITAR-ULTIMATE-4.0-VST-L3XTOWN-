@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "skinId": "skin-106",
+  "fonts": [
+    {
+      "family": "Segoe UI",
+      "role": "ui",
+      "source": "Windows 10 system font",
+      "bundled": false,
+      "redistribution": "not redistributed"
+    },
+    {
+      "family": "Consolas",
+      "role": "display",
+      "source": "Windows 10 system font",
+      "bundled": false,
+      "redistribution": "not redistributed"
+    }
+  ],
+  "licenseNote": "No third-party font binary is bundled. Runtime resolves the named Windows system fonts."
+}

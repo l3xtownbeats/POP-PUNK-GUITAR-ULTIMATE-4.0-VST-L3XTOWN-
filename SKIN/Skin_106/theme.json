@@ -317,16 +317,6 @@
       },
       "presentation": "native-control",
       "runtimeBinding": "control_schema.json"
-    },
-    "sync_selector": {
-      "grid": {
-        "x": 9,
-        "y": 3,
-        "w": 3,
-        "h": 1
-      },
-      "presentation": "native-control",
-      "runtimeBinding": "control_schema.json"
     }
   },
   "assets": {
@@ -334,7 +324,18 @@
     "hero": "assets/hero.png",
     "texture": "svg/texture.svg",
     "bezel": "svg/bezel.svg",
-    "crest": "svg/crest.svg"
+    "crest": "svg/crest.svg",
+    "background": "assets/background/main.png",
+    "textureRaster": "assets/textures/material.png",
+    "iconAtlas": "assets/atlas/topbar_icons.png",
+    "assetManifest": "assets/asset_manifest.json",
+    "artworkManifest": "assets/artwork_manifest.json",
+    "controlManifest": "assets/controls/control_states_manifest.json",
+    "fontManifest": "fonts/font_manifest.json",
+    "fxStageGlow": "assets/fx_layers/stage_glow.png",
+    "fxEdgeHighlight": "assets/fx_layers/edge_highlight.png",
+    "fxSpecular": "assets/fx_layers/specular.png",
+    "fxShadow": "assets/fx_layers/shadow.png"
   },
   "compatibility": {
     "minimumPluginVersion": "4.0.0",
@@ -348,7 +349,9 @@
     "Existing legacy theme IDs and indices are preserved; no renumbering or overwriting.",
     "Shared NEON STAGE design-system component language is retained; this theme changes visual tokens/materials only.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
-    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending."
+    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending.",
+    "[DECISION] Original premium artwork/control-state pack generated from approved palette and material brief; runtime and G1-G4 validation remain separate gates."
   ],
-  "ordinal": 5
+  "ordinal": 5,
+  "assetPackStatus": "GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
 }

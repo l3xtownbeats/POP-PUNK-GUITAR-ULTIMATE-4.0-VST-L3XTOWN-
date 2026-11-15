@@ -2747,3 +2747,214 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 
 **Status:** FIVE APPROVED THEME SPECS + 15 SVG FOUNDATIONS CREATED / PNG ARTWORK PENDING / REGISTRY AND RUNTIME GALLERY REGISTRATION PENDING / NOT RELEASE READY.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-15 — REV18 canonical 27-control parity correction
+==============================================================================
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets` (isolated visual-theme implementation branch, based on `ui/neon-stage-skin1-completion`).
+
+**Authority:** PPGU MASTER PROMPT REV18 v6.2; canonical `SKIN/control_schema.json`; approved sequence SKIN-1…SKIN-6.
+
+**Audit finding:** all six approved theme manifests had 28 control-map keys, while the canonical schema declares exactly 27. The extra `sync_selector` key is absent from the approved control inventory. This was a metadata mismatch, not a valid additional control.
+
+**Implemented correction:**
+- Removed only `sync_selector` from `SKIN/Skin_053/theme.json` and `SKIN/Skin_103…Skin_107/theme.json`.
+- Preserved all 27 canonical control IDs and their existing grid coordinates.
+- Preserved theme names, stable IDs, historical indices, ordinals, all 21 palette tokens and all existing SVG/source assets.
+- Strengthened `tools/audit_skin_rev18_assets.py` to validate exact parity against `control_schema.json`.
+- Added `tests/TestRev18ThemeControlParity.py` and registered it in CTest as `ppgu_rev18_theme_control_parity`.
+
+**Relevant commits:** `21e03671`, `b6474dd0`, `9b9d92a9`, `62e7d7e5`, `c7c88a36`, `ebeb946b`, `e9f00346`, `a2bb6dd0`, `0547e232`. Latest source commit for this correction: `e84ccb9f098577035a5eb5c55eb2b02a67c7754b`.
+
+**Safety boundary:** no APVTS/parameter IDs, actual control bindings, layout geometry, DSP, audio, MIDI, sampler or preset behavior changed. No historical registry record was deleted or renumbered.
+
+**Evidence boundary:** source JSON parsing and 27-ID parity checks passed in the edit transaction. The newly registered Python CTest has not yet been executed; Windows Release/VST3, pluginval and FL Studio 20 acceptance remain pending. The five additional themes still lack their complete raster asset packs; no G1–G4 or release-ready status is claimed.
+
+**Status:** CONTROL CONTRACT CORRECTED / TEST REGISTERED / EXECUTION PENDING / ASSET PACKS PENDING.
+============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — REV18 theme audit path correction and focused CI gate
+==============================================================================
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`.
+
+**Changes:**
+- `tools/audit_skin_rev18_assets.py` now resolves each theme's asset folder from the actual `theme.json` path. This correctly handles the canonical zero-padded folder `Skin_053`.
+- Added `.github/workflows/ppgu-rev18-theme-contract.yml`, scoped to this visual-theme branch. The workflow runs `tests/TestRev18ThemeControlParity.py` and the read-only `tools/audit_skin_rev18_assets.py --root SKIN` on branch pushes and manual dispatch.
+
+**Commits:** `6e19118e`, `a78b04b6`; documentation commit `a5c50a64f8f3317ba46fad059521c1e8a4fa4b4b`.
+
+**Evidence boundary:** the workflow is committed and configured to run. A completed run result has not yet been retrieved; no PASS claim is made. Missing preview/hero raster assets are still expected warnings and remain unfinished. G1–G4, full package, runtime gallery, Windows VST3, pluginval and FL Studio 20 acceptance remain pending.
+
+**Status:** AUDIT PATH FIX / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING / ASSET GENERATION PENDING.
+============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — Premium theme generator: first CI failure and correction
+==============================================================================
+
+**Evidence:** GitHub Actions run `43692794120` on PR #45 / head `21ece651` failed during the first artwork-generation step. Pillow reported `ValueError: image has wrong mode` at the final alpha composite in `stage_background()`; the guitar helper had returned RGB while the shadow layer was RGBA.
+
+**Correction:** commit `50f9506a` explicitly converts the base image to RGBA before the final alpha composite. This changes only the generator's pixel-mode handling; no approved design tokens, control IDs, layout geometry, existing SKIN-1 hero/preview binaries, APVTS, DSP or audio behavior were changed.
+
+**Status:** failure recorded; correction committed; rerun pending. Do not claim the asset generator, deterministic check, strict asset audit, G1–G4, VST3 build, pluginval or FL Studio 20 acceptance as PASS until fresh evidence is available.
+============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — Deterministic artwork generation correction
+==============================================================================
+
+The full-pack generation step completed in PR validation run `43693362834`. Review identified that Pillow `Image.effect_noise()` is non-deterministic: repeated calls with identical parameters produced different pixel data. Therefore, byte-for-byte regeneration could not be trusted with that implementation.
+
+**Correction:** current PR head `5db6561e` replaces it with a seeded seamless noise tile and uses lossless PNG compression level 6 for faster generation without image-quality loss. The approved SKIN-1 hero/preview binaries remain preserved byte-for-byte; no theme layout, palette, control IDs or audio behavior changed.
+
+The running jobs had checked out the previous generator revision before this correction. Fresh validation of the corrected head is still required. Do not mark deterministic generation, strict asset audit, G1-G4, runtime loading, VST3 build, pluginval or FL Studio 20 acceptance as PASS until new evidence is available.
+============================================================================== 
+
+
+============================================================================== 
+2026-11-15 — User-approved production GUI extensibility rule
+==============================================================================
+
+**Authority:** explicit user approval in the project conversation on 2026-11-15. This is a binding implementation rule for POP PUNK GUITAR ULTIMATE / NEON STAGE.
+
+**Approved rule:**
+- If an element is required by the approved inventory/specification but has no visual mockup, create its visual representation from the approved NEON STAGE design language and existing approved references.
+- Integrate it into the real JUCE production GUI and its shared component/theme architecture. Do not create a disconnected demonstration shell.
+- Keep GUI/theme implementation independent from the Audio Engine, DSP, sampler, MIDI routing and preset/audio behavior.
+- Support manifest-driven theme changes through the existing visual theme layer; changing a theme must remain visual-only.
+- Preserve the canonical 27-control inventory, the seven approved FX bypass parameter IDs, existing APVTS IDs/bindings, component contracts and approved layout/behavior.
+- Do not invent product functions, add controls outside the approved inventory, alter the approved product structure, or present unavailable backends as working. A required visual entry point whose backend is not implemented must remain honestly disabled/non-operational.
+- Implement already-approved requirements without requesting approval for each individual visual element. Escalate only when the source requirements themselves conflict or are incomplete in a way that prevents a faithful implementation.
+
+**Source audit baseline (REV18 working tree):**
+- The real plugin editor is implemented in `Source/PluginEditor.cpp/.h`; it is not a standalone mockup.
+- `Source/UI/ThemeManager.cpp/.h` provides the visual-only palette/manifest manager and explicitly keeps file access on the UI/control thread.
+- The editor contains the theme gallery, saved theme selection, shared LookAndFeel styling and auxiliary workspace integration.
+- `SKIN/control_schema.json` is the canonical control inventory; REV18 parity tooling enforces exactly 27 IDs. The seven existing FX bypass IDs remain the only approved FX bypass bindings.
+- The active premium-theme work is isolated to the visual theme/assets/validation scope; no DSP, APVTS, MIDI, sampler or preset behavior is authorized to change as part of this GUI rule.
+
+**Next implementation gates:**
+1. Finish and validate the approved REV18 theme asset packs using the deterministic generator and strict asset audit.
+2. Verify the actual runtime editor loads the complete pack and all required component states from the manifest without changing audio/processor state.
+3. Run exact-HEAD Windows x64 Release build, CTest, VST3 package checks and pluginval strictness 5.
+4. Perform separate FL Studio 20 visual/interaction acceptance. Do not claim host acceptance before it is performed.
+
+**Evidence boundary:** this entry records the approved rule and source audit only. It does not claim that the current PR's asset generation, runtime asset integration, Windows build, pluginval or FL Studio 20 acceptance has passed.
+
+**Status:** GUI EXTENSIBILITY RULE APPROVED / EXISTING PRODUCTION GUI BASE AUDITED / REV18 ASSET AND RUNTIME VALIDATION CONTINUES.
+============================================================================== 
+
+
+==============================================================================
+2026-11-15 — Premium theme asset CI evidence update
+==============================================================================
+
+Target PR branch: work/ppgu-rev18-premium-theme-assets-rerun; tested commit: 8b2af21b36a70dbc27118e7c080061aece49b6ff.
+
+GitHub Actions runs 43694775942 (PPGU REV18 Theme Validation Rerun), 43694775951 (PPGU REV18 Theme Contract), and 43694775944 (PPGU REV18 Premium Theme PR Gate) completed with conclusion SUCCESS. Each run reports successful completion of all listed steps: generation of all six approved theme packs, deterministic/no-overwrite verification, exact 27-control parity regression, complete pack/SHA-256/PNG CRC audit, and commit of generated packs to the PR branch.
+
+Evidence boundary: these are theme-pack generation and contract/audit CI results only. They do NOT establish runtime editor loading, G1–G4 runtime acceptance, Windows x64 VST3 build, full CTest suite, pluginval, FL Studio 20 host acceptance, CPU/RAM targets or release readiness. Those remain separate gates and must be validated against the exact resulting HEAD.
+
+Status: SIX THEME PACK GENERATION + DETERMINISM + 27-CONTROL PARITY + SHA-256/PNG CRC AUDITS = CI SUCCESS / RUNTIME AND PRODUCT VALIDATION PENDING.
+==============================================================================
+
+
+## 2026-11-15 — PORTABLE VST3 package workflow cleanup
+
+**Статус:** PACKAGING WORKFLOW UPDATED; WINDOWS BUILD / ZIP NOT YET VERIFIED.
+
+Workflow commit: `f55a49fb8735dc72620787fdc9bf80df96e9285f`.
+
+- Целевой архив переименован в `POP_PUNK_GUITAR_ULTIMATE_PORTABLE_VST3_Windows_x64.zip`.
+- Artifact name синхронизирован с PORTABLE VST3 Windows x64.
+- Удалена публикация отдельного source-review ZIP из build workflow.
+- Из runtime staging исключён каталог artwork-only `Assets/`; оставлены VST3, SOUNDBANK, PRESETS, Skins и Resources с лицензиями/контрольными суммами.
+- Добавлена очистка только временного каталога упаковки: Git metadata, Python caches, CMakeFiles, debug symbols, object/intermediate files, logs и OS debris. Исходный репозиторий и исходные файлы не удаляются.
+- Добавлена повторная проверка наличия `.vst3` после очистки перед ZIP.
+
+**Ограничения:** PR-triggered REV18 theme checks не являются Windows VST3 build. Пока нет результата Windows Release, CTest, pluginval и package artifact на точном SHA, ZIP не считается созданным или готовым. FL Studio 20 host acceptance остаётся отдельной ручной проверкой. PORTABLE означает отсутствие Setup.exe/инсталлятора; runtime sample loading по текущему UI по-прежнему требует выбора SFZ пользователем.
+
+
+## 2026-11-15 — NEON STAGE DEFAULT portable-package guard
+
+**Статус:** DEFAULT THEME PRESENT IN SOURCE / PORTABLE PACKAGE ASSERTIONS ADDED; WINDOWS ARTIFACT PENDING.
+
+Commit: `de879ac648d0a512de0e6af29e62acfeac948b8b`.
+
+Подтверждено в исходниках:
+- `SKIN/theme_manifest.json` объявляет `defaultSkin: skin-053`;
+- запись `skin-053` указывает на `Skin_053/theme.json`;
+- `Skin_053/theme.json` имеет каноническое имя `NEON STAGE DEFAULT`, ID `skin-053`, index `53`;
+- PluginEditor вызывает `loadSavedSkin()` при создании редактора; при отсутствии пользовательского выбора используется `skin-053`;
+- ThemeManager содержит встроенную NEON STAGE DEFAULT fallback palette.
+
+Исправлено в portable packaging workflow:
+- сборка теперь завершается ошибкой, если canonical defaultSkin не `skin-053`, запись/manifest отсутствуют или их ID/name/index не совпадают;
+- после копирования в release staging отдельно проверяется наличие и identity `Skins/Skin_053/theme.json`;
+- исправлен ранее обнаруженный upload path mismatch: artifact upload теперь указывает на фактическое имя создаваемого portable ZIP.
+
+Это подтверждает наличие default theme в исходной конфигурации и защиту её включения в пакет, но не заменяет runtime визуальную приёмку. Windows VST3 build, ZIP artifact и FL Studio 20 host acceptance остаются pending.
+
+
+## 2026-11-15 — Portable package folders and REV.18 skin control parity
+
+- Portable Windows x64 package layout expanded to include `Source/` (reference-only C++ source and CMake project), `Documents/` (project documentation and INFO journal), and `Licenses/` (project-level clearance records), while retaining `Resources/`, runtime `Skins/`, `SOUNDBANK/`, `PRESETS/`, and `VST3/`.
+- Runtime skin directory remains named `Skins/` because it is the established sibling path expected by the plugin; it contains only registry-approved themes, including `skin-053 / NEON STAGE DEFAULT`.
+- Windows x64 build completed successfully, but CTest exposed a real contract failure: 50 Skin Studio manifests (skin-052 and skin-054 through skin-102) contained an unapproved extra `sync_selector` entry (28 controls) instead of the required exact 27 canonical IDs. The 27-ID contract is unchanged; remove only that extra manifest key from those 50 themes and rerun the complete Windows validation.
+- No plugin behavior, APVTS IDs, FX bypass IDs, layout, or audio behavior is changed by this correction.
+- Portable ZIP is not available until CTest, pluginval strictness 5, packaging and artifact upload all pass.
+
+
+## 2026-11-15 — REV.18 SoundBank underfill correction / A8-S enforcement
+
+- Audit of Windows run `43699883066` found the cache restored only `1,678,284,042` bytes (~1.56 GiB) under the old cache key `ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1`; the network download step was skipped on cache hit. The package therefore contained only the five cached sources: Meta Steel, Meta Nylon, FreePats Clean, Distortion 1 and Distortion 2. The uploaded ZIP size was `1,675,277,132` bytes. This is NOT the approved full SoundBank and must not be presented as such.
+- REV.18 A8-S is binding: inventory-first, SHA-256 deduplication, preserve existing samples without delete/move/overwrite, no artificial size cap, report actual payload size, and split large transfers into verified ~1800 MiB parts with per-part and whole-archive SHA-256.
+- REV.18 A8-H lists 11 CC0 natural-guitar sources. The previous CI pipeline covered only 5. Workflow correction committed separately: restore the old cache as a prefix, preserve all existing sample folders, add the six missing sources (FreePats Direct, FreePats Jazz, FreePats Spanish Classical, Karoryfer Black And Green, Emilyguitar, Shinyguitar), retain original licenses/SFZ maps, hash all WAV/FLAC/OGG/AIFF/MP3 audio, and validate the full manifest. This does not yet claim the full managed Samples target has been reached.
+- Commercial/custom-license candidates remain separately quarantined until their exact acquisition and redistribution rights are established; no paid archive is silently included in the distributable ZIP.
+- New SoundBank pipeline commit: `98e92674dfa2097e8ebd1caf34b97136fe06ee1a`. New Windows CI result and actual expanded payload size are pending.
+
+
+## 2026-11-15 — User reaffirmation: managed Samples ceiling is 40 GB
+
+- Пользователь явно повторно утвердил и подтвердил: библиотека managed `Samples` должна пополняться в пределах **до 40 GB decimal (40,000,000,000 bytes)**.
+- Это верхняя граница, не обязательный минимум: не нужно искусственно заполнять недостающий объём, но все подходящие, проверенные и разрешённые источники следует инвентаризировать и добавлять максимально полно, пока не достигнут лимит.
+- Считать суммарный размер уникальных аудиоданных после SHA-256 дедупликации; внешние библиотеки, читаемые по месту без копирования, не входят в managed Samples. Дубликаты не расходуют бюджет.
+- Любая формулировка «искусственного лимита нет» для managed Samples отменена этим подтверждением. Не удалять, не перемещать и не перезаписывать ранее имеющиеся оригиналы.
+- Master prompt updated in commit `4e8e9c9666bc40beb5f756612bae1f3fe8d5f522`; Windows workflow now blocks payloads above 40,000,000,000 bytes and reports the actual expanded audio payload in commit `be5264b3ed07007d3b7576adfdc34e7be02db171`.
+- Новый CI build должен подтвердить фактический объём и checksum inventory; до этого 40 GB target is not claimed as achieved.
+
+
+## 2026-11-15 — SAMPLES retention and duplicate-audio prohibition (BINDING)
+
+**Статус:** USER-APPROVED PROJECT RULE.  
+Пользователь отдельно подтвердил: **запрещено удалять собранные Samples из папки `Samples/`; звуки должны быть без повторов.**
+
+Обязательные правила:
+- Ни один уже собранный sample/audio-файл в `Samples/` нельзя удалять, перемещать, переименовывать или перезаписывать — ни вручную, ни скриптом, ни CI/cache cleanup.
+- Существующие источники и файлы — inventory-first; повторное скачивание/импорт поверх существующего запрещён. При конфликте пути или неполном источнике — остановка с диагностикой, без очистки и замены.
+- Новые звуки добавляются только после проверки SHA-256 по всей библиотеке. Байтово идентичный файл повторно не импортируется.
+- Уже обнаруженные дубликаты не удалять автоматически: сборка/публикация должна остановиться и показать совпадающие пути; исправление — только отдельным согласованным no-loss процессом, который сохраняет оригиналы.
+- SHA-256 выявляет точные копии; разные кодировки/форматы одного и того же исполнения требуют отдельной аудио-идентификации и не должны объявляться уникальными без проверки.
+- 40 GB decimal ceiling остаётся действующим. Сохранность оригиналов и отсутствие повторных звуков обязательны одновременно.
+
+Это правило имеет приоритет над любыми cleanup/dedup инструкциями, которые подразумевают удаление или перезапись файлов в `Samples/`.
+
+
+## 2026-11-15 — Separate standalone plugin download (without Samples)
+
+**Статус:** USER-APPROVED PACKAGING REQUIREMENT; workflow implementation committed, artifact awaits CI verification.
+Пользователь утвердил отдельную загрузку самого плагина одним ZIP, не только комплектом с большой библиотекой.
+
+Обязательны два отдельных артефакта из одной проверенной сборки:
+1. FULL PORTABLE ZIP — VST3 + runtime content + SOUNDBANK/Samples.
+2. STANDALONE PLUGIN ZIP — VST3 + Skins + Resources + PRESETS + Documents + Licenses, без SOUNDBANK/, Samples/ и аудиофайлов библиотеки.
+
+Standalone package имеет собственный README с честным указанием, что для звучания требуется отдельно подключить совместимую SoundBank/SFZ библиотеку; наличие preset definitions не означает, что их аудиозависимости включены.
+CI проверяет наличие реального .vst3 bundle и нулевое количество sample audio files во втором ZIP. Оба артефакта публикуются отдельно.

@@ -992,3 +992,84 @@ Correction commits:
 - `98817c0db733ba3cbcf240f953ad6f8d74cd4f74` — component matrix API wording.
 
 The signatures were checked against the public JUCE 7.0.12 `juce_LookAndFeel_V2.h` declaration. Source declarations and definitions were re-fetched and confirmed. This is API-source confirmation, not a successful compiler result.
+
+
+## 2026-11-15 — REV18 exact 27-control parity correction
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`  
+**Authority:** PPGU MASTER PROMPT REV18 v6.2; canonical `SKIN/control_schema.json` (27 required control IDs); approved theme sequence SKIN-1…SKIN-6.
+
+**Finding:** the six theme manifests contained 28 control-map keys. The extra `sync_selector` was not present in the canonical 27-ID control schema and was not an approved control.
+
+**Implementation:**
+- Removed only the unsupported `sync_selector` metadata entry from `Skin_053/theme.json` and `Skin_103…Skin_107/theme.json`.
+- Preserved all 27 canonical control IDs, grid coordinates, palette tokens, theme identities, stable IDs and ordinals.
+- Updated `tools/audit_skin_rev18_assets.py` to compare every theme against the canonical `x-ppgu-contract.requiredControlIds`, not merely against another theme.
+- Added `tests/TestRev18ThemeControlParity.py` and registered it as `ppgu_rev18_theme_control_parity` in CTest.
+
+**Source commits:** `21e03671`, `b6474dd0`, `9b9d92a9`, `62e7d7e5`, `c7c88a36`, `ebeb946b`, `e9f00346`, `a2bb6dd0`, `0547e232`.
+
+**Safety:** metadata/test-only correction. No APVTS IDs, runtime control bindings, layout geometry, DSP, MIDI, sampler, presets or audio code changed.
+
+**Validation:** canonical schema and six manifests were parsed; each manifest now contains exactly the same 27 IDs as the schema. Audit/test source changes are committed. CTest, Windows VST3 build, pluginval and FL Studio 20 host validation have NOT yet been run on the final commit.
+
+**Status:** 27-CONTROL CONTRACT CORRECTED / REGRESSION TEST REGISTERED / TEST EXECUTION PENDING / PREMIUM THEME ASSETS AND G1–G4 PENDING.
+
+
+## 2026-11-15 — REV18 theme audit path fix and focused CI gate
+
+**Branch:** `work/ppgu-rev18-premium-theme-assets`  
+**Commits:** `6e19118e` — resolve theme asset folders from each manifest path; `a78b04b6` — add focused GitHub Actions theme-contract workflow.
+
+**Implementation:**
+- Corrected the audit folder resolution to use `manifest_path.parent`. This preserves zero-padded `Skin_053` and avoids incorrectly resolving it as `Skin_53`.
+- Added `.github/workflows/ppgu-rev18-theme-contract.yml`, scoped to the visual-theme work branch. It runs the 27-control regression test and the read-only REV18 theme/vector audit on pushes and manual dispatch.
+
+**Validation status:** workflow definition committed; no completed workflow-run evidence has been retrieved. Do not mark CTest/CI PASS until the run result is available. Missing PNG masters/runtime assets remain expected audit warnings at this stage.
+
+**Status:** AUDIT PATH FIX COMMITTED / FOCUSED CI GATE CONFIGURED / EXECUTION PENDING.
+
+
+## 2026-11-15 — Premium theme generator: first CI failure and correction
+
+**Run:** GitHub Actions run `43692794120`, PR #45, head `21ece651`.  
+**Observed failure:** generator stopped in `stage_background()` with Pillow `ValueError: image has wrong mode` when the guitar-art helper returned RGB and the final shadow composite expected RGBA.
+
+**Correction:** commit `50f9506a` normalizes the image to RGBA before alpha compositing. This is an isolated rendering-pipeline correction; approved theme files, palette tokens, existing SKIN-1 hero/preview binaries, and runtime behavior are unchanged.
+
+**Status:** first generator run FAILED as recorded; mode correction committed; rerun and all downstream deterministic/27-control/strict-asset checks remain PENDING. No generated asset pack or G1–G4 PASS is claimed.
+
+
+## 2026-11-15 — Deterministic artwork generation correction
+
+The first full-pack generation step completed successfully in PR validation run `43693362834`. During implementation review, the generator's use of Pillow `Image.effect_noise()` was identified as non-deterministic: two calls with identical arguments produced different pixel data, which would invalidate byte-for-byte regeneration checks.
+
+**Correction committed in the current PR head `5db6561e`:**
+- Replaced `Image.effect_noise()` with a seeded, seamless noise tile.
+- Changed PNG compression to lossless level 6 to reduce build time; pixel quality is unchanged.
+- Preserved the no-overwrite rule and the byte-for-byte retention of SKIN-1's existing hero/preview binaries.
+
+**Validation status:** the already-running jobs were checked out before this correction and are still testing the previous generator revision. Their deterministic check is not accepted as evidence for the corrected code. A fresh run of the current head is required; no deterministic PASS, strict asset audit PASS, G1-G4 PASS or runtime acceptance is claimed yet.
+
+
+==============================================================================
+2026-11-15 — BASELINE: production GUI system approved by user
+==============================================================================
+
+Authority: explicit user confirmation in the PPGU project conversation on 2026-11-15 ("фиксирую давай делай").
+
+Binding production rule:
+- Build and maintain the real production JUCE GUI inside the plugin; no disconnected demo shell.
+- When an element required by the approved inventory/specification has no visual representation, create the missing visual component using the approved NEON STAGE language and existing approved references.
+- Implement only already-approved functionality. Do not invent features, alter product structure, add controls outside the canonical inventory, or change approved behavior/contracts.
+- Keep GUI and theme presentation independent of the Audio Engine, DSP, MIDI, sampler, preset/audio behavior and APVTS parameter semantics.
+- Use the shared theme architecture for visual-only changes. Every skin must preserve the same canonical controls, IDs, bindings, behavior and interaction feedback.
+- Controls must be real JUCE components with genuine state/action/parameter wiring. Do not present unavailable backends as functional; keep such entry points honestly disabled/non-operational.
+- Add approved visual components and skins without requiring an audio-engine rewrite. Escalate only when authoritative requirements conflict or do not permit a faithful implementation.
+
+Contract guardrails: REV.18 Inventory; exactly 27 canonical control IDs from SKIN/control_schema.json; only the seven approved FX bypass IDs; existing APVTS IDs and bindings; approved component/layout contracts; Info.txt and CODE.txt source-of-truth records.
+
+Implementation scope: this rule authorizes implementation of approved GUI requirements only. It does not authorize DSP, MIDI, sampler, preset or audio-engine changes.
+
+Status: USER APPROVED / BINDING PROJECT BASELINE.
+==============================================================================
