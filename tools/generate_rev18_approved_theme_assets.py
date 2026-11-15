@@ -69,6 +69,15 @@ def add_record(records: list, rel: str, raw: bytes, category: str, dimensions=No
     records.append(item)
 
 
+def write_metadata(path: Path, raw: bytes, check: bool) -> None:
+    if check:
+        if not path.is_file() or path.read_bytes() != raw:
+            raise RuntimeError(f"generated metadata differs or is missing: {path}")
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(raw)
+
+
 def gradient(size, top, bottom):
     mask = Image.linear_gradient("L").resize(size, Image.Resampling.BICUBIC)
     return ImageOps.colorize(mask, black=top, white=bottom).convert("RGBA")
@@ -169,6 +178,11 @@ def material_texture(palette, seed):
             noise = rng.randint(-2, 2)
             amount = max(0, min(1, .20 + (wave + weave + noise + 8) / 30))
             px[x,y] = tuple(max(0,min(255,round(base[i]*(1-amount)+accent[i]*amount*.32))) for i in range(3))
+    # Match opposite tile edges exactly so repeated material has no visible seams.
+    for y in range(size):
+        px[size - 1, y] = px[0, y]
+    for x in range(size):
+        px[x, size - 1] = px[x, 0]
     out = Image.new("RGB", (1024,1024))
     for y in range(0,1024,size):
         for x in range(0,1024,size):
@@ -432,6 +446,15 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
     # Combined manifest excludes itself to avoid a recursive checksum.
     asset_raw=(json.dumps({"schemaVersion":"1.0.0","skinId":stable_id,"theme":item["name"],
         "assetCount":len(records),"records":records},indent=2,ensure_ascii=False)+"\n").encode()
+    # Include the three existing approved vector material masters in the same checksum set.
+    for rel in ("svg/texture.svg", "svg/bezel.svg", "svg/crest.svg"):
+        source = folder / rel
+        if not source.is_file():
+            raise RuntimeError(f"approved vector source is missing: {source}")
+        raw = source.read_bytes()
+        add_record(records, rel, raw, "material-vector-source")
+    asset_raw=(json.dumps({"schemaVersion":"1.0.0","skinId":stable_id,"theme":item["name"],
+        "assetCount":len(records),"records":records},indent=2,ensure_ascii=False)+"\\n").encode()
     generated["assets/asset_manifest.json"]=asset_raw
 
     # Refuse to replace any existing non-identical asset.
@@ -460,7 +483,7 @@ def generate_theme(root: Path, item: dict, controls: list[str], check: bool):
     note="[DECISION] Original premium artwork/control-state pack generated from approved palette and material brief; runtime and G1-G4 validation remain separate gates."
     if note not in notes: notes.append(note)
     theme_raw=(json.dumps(theme,indent=2,ensure_ascii=False)+"\n").encode()
-    safe_write(theme_path,theme_raw,check)
+    write_metadata(theme_path,theme_raw,check)
     print(f"{item['label']} {stable_id}: generated {len(generated)} pack files")
 
 
@@ -484,7 +507,7 @@ def main():
     for item in sequence["themes"]:
         item["status"]="FULL_ASSET_PACK_GENERATED_G1_G4_RUNTIME_VALIDATION_PENDING"
     sequence_raw=(json.dumps(sequence,indent=2,ensure_ascii=False)+"\n").encode()
-    safe_write(sequence_path,sequence_raw,args.check)
+    write_metadata(sequence_path,sequence_raw,args.check)
     print("REV18 approved theme asset generation complete; registry activation is intentionally a separate validated step.")
 
 
