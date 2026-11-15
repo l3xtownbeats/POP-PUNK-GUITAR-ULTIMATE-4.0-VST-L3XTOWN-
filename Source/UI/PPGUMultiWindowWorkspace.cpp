@@ -110,10 +110,12 @@ public:
 
     void setPanelBounds(juce::Rectangle<int> bounds)
     {
+        // Layout passes must not silently cancel a user's maximized state.
+        // Keep the window fitted to the current viewport until Restore is used.
         if (maximized)
         {
-            maximized = false;
-            maximizeButton.setButtonText("□");
+            setBounds(owner.viewport.getViewArea());
+            return;
         }
         setBounds(bounds);
     }
