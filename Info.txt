@@ -3120,3 +3120,26 @@ unverified until their steps complete successfully.
 **Проверки:** standalone g++ logic checks для SPSC и PageCache pin/eviction прошли. Это не является запуском repository CTest. Exact-SHA GitHub workflow runs: 0; full JUCE/Windows Release/CTest/pluginval/FL Studio 20 не запускались.
 
 **Следующий шаг:** закончить sampler streaming/state audit, затем запустить полный exact-SHA CMake/CTest.
+
+
+## 2026-11-15 — Safe sample-bank clear during session restore
+
+**Статус:** SOURCE FIX + INTEGRATION REGRESSION ADDED; FULL BUILD VALIDATION PENDING.
+
+Найден и исправлен важный state-restore edge case: восстановление с отсутствующим SFZ path не должно продолжать играть предыдущую библиотеку, но очищать sampler voices непосредственно с host/message thread нельзя.
+
+**Решение:**
+- `SamplePool::clearActiveSnapshot()` очищает active pointer под отдельным коротким `publicationMutex`; длинный SFZ scan/load не блокирует restore.
+- `SamplePool::loadSfz()` сериализует final generation check и snapshot publication с тем же mutex; stale background load не может опубликовать банк после clear.
+- `SamplePool` заранее резервирует bounded ownership vectors, чтобы финальная publication critical section не делала realloc.
+- Sync `loadSfzFile()` теперь тоже передаёт generation token, поэтому его загрузка отменяется при более новом state restore.
+- `SamplerEngine::clearSampleBank()` очищает активную карту и ставит atomic request; реальное изменение voice/reader state выполняется через `processPendingSampleBankClear()` в начале следующего audio callback. Нет конкурентной записи в voice array с host thread.
+- `setStateInformation()` очищает старую активную библиотеку перед асинхронной загрузкой новой; missing path остаётся сохранённым, но не подменяется старым банком.
+
+**Regression:** integration test сначала загружает старый bank и делает голос слышимым, затем временно делает сохранённый SFZ path недоступным, восстанавливает state и проверяет: path сохранён, active region count = 0, следующий audio callback не продолжает старую ноту.
+
+**Commits:** `90ba733a7915d5513150078f26ebd7af565a562b`; `94bd4a31c6a63d1a86d3cb9fe0b8d9827bb0af54`; `fbb0cb0a92ab48d9dfb9ad94e35301cd492c27ba`; `e44d2e55cfee46b75e9cb68807cb133cc78813c9` (parent `fbb0cb0a92ab48d9dfb9ad94e35301cd492c27ba`).
+
+**Проверки:** changed C++/header/test files passed lexical delimiter scan. Full CTest/Windows Release/pluginval/FL Studio 20 not run. Exact-SHA workflow runs: 0.
+
+**Следующий шаг:** finish streaming/RT-safety audit, then exact-SHA CMake/CTest and Windows build.

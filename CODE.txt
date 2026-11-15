@@ -1166,3 +1166,22 @@ Approved requirements:
 **Проверки:** equivalent standalone g++ checks passed for queue and page-cache pin/eviction logic; repository CTest and full plugin build still pending.
 **Статус:** TEST SOURCE PRESENT; FULL VALIDATION PENDING.
 **Следующий шаг:** complete sampler stream/state audit, then run exact-SHA CTest and Windows Release.
+
+
+## 2026-11-15 — Race-safe sample-bank clearing and stale-state prevention
+
+**Тип:** state restore race fix / audio-thread ownership.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:** `90ba733a7915d5513150078f26ebd7af565a562b`, `94bd4a31c6a63d1a86d3cb9fe0b8d9827bb0af54`, `fbb0cb0a92ab48d9dfb9ad94e35301cd492c27ba`, `e44d2e55cfee46b75e9cb68807cb133cc78813c9`.
+
+**Файлы / symbols:**
+- `Source/Sampler/SamplePool.h/.cpp` — `publicationMutex`, reserved ownership vectors, `clearActiveSnapshot()`, final generation-check/publication serialization.
+- `Source/Sampler/SamplePool.h/.cpp` — `SamplerEngine::clearSampleBank()` and `processPendingSampleBankClear()`.
+- `Source/PluginProcessor.cpp` — state restore clears active bank and requests voice reset; audio callback performs reset before MIDI/render.
+- `loadSfzFile()` — synchronous loads now carry generation token.
+- `tests/ProcessorPatternIntegrationTests.cpp` — audible old-bank → missing path restore → next-block silence regression.
+
+**RT-safety:** no direct voice-array mutation from state-restore thread; old snapshots remain retained, so an in-flight audio callback's RegionView pointers remain valid. Clear/publication lock is not taken by the audio callback.
+**Тесты:** source regression added; delimiter scan passed. CTest/full plugin build still pending.
+**Статус:** SOURCE PRESENT; VALIDATION PENDING.
+**Следующий шаг:** finish sampler streaming/state audit; exact-SHA CTest and Windows Release.
