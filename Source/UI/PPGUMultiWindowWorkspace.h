@@ -4,6 +4,7 @@
 #include "AuxiliaryPanelLayout.h"
 #include "ThemeManager.h"
 
+#include <functional>
 #include <memory>
 #include <vector>
 
