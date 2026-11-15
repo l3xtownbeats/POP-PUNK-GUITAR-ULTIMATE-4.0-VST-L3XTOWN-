@@ -1059,3 +1059,12 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 - Invariants: no APVTS ID/semantic changes; preserve exact 27-control contract and approved seven FX bypass IDs; no new UI controls outside approved inventory; one Sample Engine; no audio callback I/O/locks/allocations; portable VST3 only; license/provenance gate for all bundled natural guitar audio.
 - No production code changed in this START record. First implementation item will follow the approved phase order and be committed/tested independently.
 - Status: STARTED / PREFLIGHT COMPLETE / IMPLEMENTATION OPEN.
+
+
+## 2026-11-15 — TX-PATTERN-SECTION-001
+- Implemented atomic song-section routing in PluginProcessor; realtime slot priority is transient preview, section assignment, then legacy APVTS patternSlot.
+- Added ValueTree schema-1 persistence for selected section and five assignments; old projects without the schema inherit the unchanged legacy slot; preview never persists.
+- Added NEON STAGE section-first Pattern/Rhythm panel and wired PATTERN tab to open it. PREVIEW is non-committing; APPLY commits; CANCEL clears audition and restores the panel's opening section.
+- Added processor integration assertions for state round-trip and preview transience.
+- No APVTS IDs, existing parameter semantics, 27-control inventory, seven FX bypass IDs, or theme IDs changed.
+- Parent: efe5486f90e166fdf377867b42f028d45293e670; validation pending on resulting commit SHA.

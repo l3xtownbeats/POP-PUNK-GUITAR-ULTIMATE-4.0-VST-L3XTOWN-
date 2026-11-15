@@ -36,6 +36,7 @@ private:
     void openImportGuitarPanel();
     void openFxEditPanel(int selectedEffect);
     void openAutoChordsPanel();
+    void openPatternSectionPanel();
     juce::File getRuntimeSkinRoot() const;
     int getSkinCount() const;
     juce::File getSkinManifest(int index) const;

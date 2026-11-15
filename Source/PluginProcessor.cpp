@@ -185,6 +185,45 @@ PopPunkGuitarUltimateAudioProcessor::createParameterLayout()
     return p;
 }
 
+void PopPunkGuitarUltimateAudioProcessor::setSelectedSongSection(int section) noexcept
+{
+    if (section >= 0 && section < songSectionCount)
+        selectedSongSection.store(section, std::memory_order_release);
+}
+
+int PopPunkGuitarUltimateAudioProcessor::getSelectedSongSection() const noexcept
+{
+    return selectedSongSection.load(std::memory_order_acquire);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::setSectionPatternSlot(int section, int slot) noexcept
+{
+    if (section >= 0 && section < songSectionCount && slot >= -1 && slot <= 7)
+        sectionPatternSlots[static_cast<size_t>(section)].store(slot, std::memory_order_release);
+}
+
+int PopPunkGuitarUltimateAudioProcessor::getSectionPatternSlot(int section) const noexcept
+{
+    if (section < 0 || section >= songSectionCount)
+        return -1;
+    return sectionPatternSlots[static_cast<size_t>(section)].load(std::memory_order_acquire);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::setPatternPreviewSlot(int slot) noexcept
+{
+    patternPreviewSlot.store(slot >= 0 && slot <= 7 ? slot : -1, std::memory_order_release);
+}
+
+void PopPunkGuitarUltimateAudioProcessor::clearPatternPreview() noexcept
+{
+    patternPreviewSlot.store(-1, std::memory_order_release);
+}
+
+int PopPunkGuitarUltimateAudioProcessor::getPatternPreviewSlot() const noexcept
+{
+    return patternPreviewSlot.load(std::memory_order_acquire);
+}
+
 void PopPunkGuitarUltimateAudioProcessor::prepareToPlay(double sampleRate, int expectedBlockSize)
 {
     currentSampleRate = juce::jlimit(8000.0, 384000.0, sampleRate);
@@ -408,7 +447,12 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
     {
         // PATTERN: process every MIDI chord transition at its sample position.
         // Each interval is scheduled independently, preserving every chord change.
-        const int patternSlot = juce::jlimit(0, 7, static_cast<int>(parameters.getRawParameterValue("patternSlot")->load(std::memory_order_relaxed)));
+        const int legacyPatternSlot = juce::jlimit(0, 7, static_cast<int>(parameters.getRawParameterValue("patternSlot")->load(std::memory_order_relaxed)));
+        const int previewSlot = patternPreviewSlot.load(std::memory_order_acquire);
+        const int section = juce::jlimit(0, songSectionCount - 1, selectedSongSection.load(std::memory_order_acquire));
+        const int assignedSlot = sectionPatternSlots[static_cast<size_t>(section)].load(std::memory_order_acquire);
+        const int patternSlot = previewSlot >= 0 ? previewSlot
+            : (assignedSlot >= 0 ? assignedSlot : legacyPatternSlot);
         const int patternLengthChoice = juce::jlimit(0, 2, static_cast<int>(parameters.getRawParameterValue("patternLength")->load(std::memory_order_relaxed)));
         const double patternLengthBeats = patternLengthChoice == 0 ? 4.0 : (patternLengthChoice == 1 ? 8.0 : 16.0);
         const float swing = juce::jlimit(0.0f, 1.0f, parameters.getRawParameterValue("swing")->load(std::memory_order_relaxed));
@@ -869,6 +913,13 @@ void PopPunkGuitarUltimateAudioProcessor::getStateInformation(juce::MemoryBlock&
         const juce::ScopedLock lock(sampleStateLock);
         state.setProperty("sfzFilePath", currentSfzFilePath, nullptr);
     }
+    state.setProperty("patternSectionSchema", 1, nullptr);
+    state.setProperty("selectedSongSection", getSelectedSongSection(), nullptr);
+    for (int section = 0; section < songSectionCount; ++section)
+        state.setProperty("patternSectionSlot" + juce::String(section),
+                          getSectionPatternSlot(section), nullptr);
+    {
+    }
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     if (xml != nullptr)
         copyXmlToBinary(*xml, destinationData);
@@ -885,6 +936,17 @@ void PopPunkGuitarUltimateAudioProcessor::setStateInformation(const void* data, 
         return;
 
     const auto restoredSfzPath = restoredState.getProperty("sfzFilePath").toString();
+    const int sectionSchema = static_cast<int>(restoredState.getProperty("patternSectionSchema", 0));
+    const int restoredSection = static_cast<int>(restoredState.getProperty("selectedSongSection", 0));
+    setSelectedSongSection(restoredSection);
+    for (int section = 0; section < songSectionCount; ++section)
+    {
+        const int slot = sectionSchema >= 1
+            ? static_cast<int>(restoredState.getProperty("patternSectionSlot" + juce::String(section), -1))
+            : -1;
+        setSectionPatternSlot(section, slot);
+    }
+    clearPatternPreview();
     // Even a state with no bank path supersedes an older pending load.
     sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
     parameters.replaceState(restoredState);

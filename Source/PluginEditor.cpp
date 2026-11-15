@@ -959,6 +959,141 @@ private:
     int selectedGroup = 0;
 };
 
+
+class PPGUPatternSectionPanel final : public juce::Component, public PPGUThemeAwarePanel
+{
+public:
+    explicit PPGUPatternSectionPanel(PopPunkGuitarUltimateAudioProcessor& processorIn)
+        : processor(processorIn), originalSection(processorIn.getSelectedSongSection())
+    {
+        title.setText("PATTERN  /  SONG SECTION ROUTING", juce::dontSendNotification);
+        title.setFont(makeThemeFont(palette, 19.0f, false, true));
+        addAndMakeVisible(title);
+        sectionLabel.setText("SONG SECTION", juce::dontSendNotification);
+        patternLabel.setText("RHYTHM CATALOG", juce::dontSendNotification);
+        for (auto* label : { &sectionLabel, &patternLabel, &status })
+            addAndMakeVisible(*label);
+        sectionBox.addItemList({ "INTRO", "VERSE", "CHORUS", "BRIDGE", "OUTRO" }, 1);
+        for (int i = 0; i < 8; ++i)
+            patternBox.addItem("PATTERN " + juce::String(i + 1), i + 1);
+        sectionBox.setSelectedId(processor.getSelectedSongSection() + 1, juce::dontSendNotification);
+        const int assigned = processor.getSectionPatternSlot(processor.getSelectedSongSection());
+        const int legacy = static_cast<int>(processor.parameters.getRawParameterValue("patternSlot")->load());
+        patternBox.setSelectedId((assigned >= 0 ? assigned : legacy) + 1, juce::dontSendNotification);
+        addAndMakeVisible(sectionBox);
+        addAndMakeVisible(patternBox);
+        preview.setButtonText("PREVIEW");
+        apply.setButtonText("APPLY");
+        cancel.setButtonText("CANCEL");
+        for (auto* button : { &preview, &apply, &cancel })
+            addAndMakeVisible(*button);
+        sectionBox.onChange = [this] { selectSection(); };
+        patternBox.onChange = [this] { updateStatus("Catalog selection only — press PREVIEW to audition."); };
+        preview.onClick = [this]
+        {
+            const int slot = patternBox.getSelectedId() - 1;
+            processor.setPatternPreviewSlot(slot);
+            updateStatus("PREVIEW ARMED — play a MIDI chord. Assignment is not saved.");
+        };
+        apply.onClick = [this]
+        {
+            const int section = sectionBox.getSelectedId() - 1;
+            const int slot = patternBox.getSelectedId() - 1;
+            if (section >= 0 && section < PopPunkGuitarUltimateAudioProcessor::songSectionCount && slot >= 0 && slot < 8)
+            {
+                processor.setSectionPatternSlot(section, slot);
+                processor.clearPatternPreview();
+                updateStatus("APPLIED — " + sectionBox.getText() + " uses PATTERN " + juce::String(slot + 1) + ".");
+            }
+        };
+        cancel.onClick = [this]
+        {
+            processor.clearPatternPreview();
+            processor.setSelectedSongSection(originalSection);
+            sectionBox.setSelectedId(originalSection + 1, juce::dontSendNotification);
+            refreshPatternSelection();
+            updateStatus("CANCELLED — preview cleared; previous section restored.");
+        };
+        updateStatus("Choose a song section, then select a rhythm pattern.");
+        setThemePalette(palette);
+    }
+
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        title.setFont(makeThemeFont(palette, 19.0f, false, true));
+        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        for (auto* label : { &sectionLabel, &patternLabel })
+        {
+            label->setFont(makeThemeFont(palette, 10.0f, false, true));
+            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        }
+        status.setFont(makeThemeFont(palette, 11.0f));
+        status.setColour(juce::Label::textColourId, palette.token("accent"));
+        for (auto* box : { &sectionBox, &patternBox })
+        {
+            box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+            box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+            box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        }
+        for (auto* button : { &preview, &apply, &cancel })
+        {
+            button->setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+            button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+        }
+        apply.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
+        apply.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(22);
+        title.setBounds(area.removeFromTop(34));
+        area.removeFromTop(18);
+        sectionLabel.setBounds(area.removeFromTop(18));
+        sectionBox.setBounds(area.removeFromTop(38));
+        area.removeFromTop(14);
+        patternLabel.setBounds(area.removeFromTop(18));
+        patternBox.setBounds(area.removeFromTop(38));
+        area.removeFromTop(18);
+        auto actions = area.removeFromTop(38);
+        preview.setBounds(actions.removeFromLeft(120));
+        actions.removeFromLeft(10);
+        apply.setBounds(actions.removeFromLeft(120));
+        actions.removeFromLeft(10);
+        cancel.setBounds(actions.removeFromLeft(120));
+        area.removeFromTop(14);
+        status.setBounds(area.removeFromTop(42));
+    }
+
+private:
+    void selectSection()
+    {
+        const int section = sectionBox.getSelectedId() - 1;
+        if (section < 0 || section >= PopPunkGuitarUltimateAudioProcessor::songSectionCount)
+            return;
+        processor.clearPatternPreview();
+        processor.setSelectedSongSection(section);
+        refreshPatternSelection();
+        updateStatus("Selected " + sectionBox.getText() + ". Rhythm assignment is unchanged until APPLY.");
+    }
+    void refreshPatternSelection()
+    {
+        const int section = sectionBox.getSelectedId() - 1;
+        const int assigned = processor.getSectionPatternSlot(section);
+        const int legacy = static_cast<int>(processor.parameters.getRawParameterValue("patternSlot")->load());
+        patternBox.setSelectedId((assigned >= 0 ? assigned : legacy) + 1, juce::dontSendNotification);
+    }
+    void updateStatus(const juce::String& message) { status.setText(message, juce::dontSendNotification); }
+
+    PopPunkGuitarUltimateAudioProcessor& processor;
+    int originalSection = 0;
+    PPGUThemeManager::Palette palette;
+    juce::Label title, sectionLabel, patternLabel, status;
+    juce::ComboBox sectionBox, patternBox;
+    juce::TextButton preview, apply, cancel;
+};
+
 class PPGUAutoChordsPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
@@ -1350,7 +1485,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor);
     addAndMakeVisible(*performanceDisplay);
     melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
-    patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    patternTab.onClick = [this] { modeBox.setSelectedId(2); openPatternSectionPanel(); };
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
@@ -1945,6 +2080,27 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
         spec.desired = { 1000, 680 };
         spec.minimum = { 620, 440 };
         spec.content = std::make_unique<PPGUFXEditPanel>(processor.parameters, selectedEffect);
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
+
+void PopPunkGuitarUltimateAudioProcessorEditor::openPatternSectionPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+    constexpr int patternSectionPanelId = 2103;
+    if (!auxiliaryWorkspace->isPanelOpen(patternSectionPanelId))
+    {
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = patternSectionPanelId;
+        spec.title = "PATTERN  /  RHYTHM";
+        spec.desired = { 620, 430 };
+        spec.minimum = { 420, 320 };
+        spec.content = std::make_unique<PPGUPatternSectionPanel>(processor);
         if (!auxiliaryWorkspace->openPanel(std::move(spec)))
             return;
     }

@@ -2892,3 +2892,20 @@ Source preflight:
 
 Статус: TX STARTED / PREFLIGHT RECORDED / IMPLEMENTATION OPEN.
 ==============================================================================
+
+
+==============================================================================
+2026-11-15 — TX-PATTERN-SECTION-001 — section-first PATTERN/RHYTHM integration
+==============================================================================
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+Parent: efe5486f90e166fdf377867b42f028d45293e670
+Implemented in this transaction:
+- Added five independent song-section assignments: INTRO / VERSE / CHORUS / BRIDGE / OUTRO.
+- Preserved legacy APVTS patternSlot as fallback for every unassigned section; no APVTS IDs or 27-control / seven-bypass contracts changed.
+- Added lock-free atomic section selection, per-section rhythm slots and transient audition slot. Audio callback resolves preview > section assignment > legacy slot without locks or allocation.
+- Added backward-compatible ValueTree persistence (schema 1); absent schema restores legacy inheritance. Preview is deliberately transient and cleared on restore.
+- Added NEON STAGE Pattern/Rhythm workspace with section-first selection and PREVIEW / APPLY / CANCEL. Catalog labels remain neutral PATTERN 1–8; no unverified musical names invented.
+- Added processor integration assertions for routing and state round-trip.
+Validation: pending exact-SHA Windows x64 VST3 build, CTest and pluginval. FL Studio 20 manual host acceptance remains separate.
+Status: IMPLEMENTED IN SOURCE / VALIDATION PENDING.
+==============================================================================

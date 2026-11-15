@@ -142,6 +142,32 @@ int main()
     int result = 0;
     {
         PopPunkGuitarUltimateAudioProcessor processor;
+        // Section routing is independent of the legacy global APVTS slot.
+        processor.setSelectedSongSection(1);
+        processor.setSectionPatternSlot(1, 3);
+        processor.setPatternPreviewSlot(5);
+        if (processor.getSelectedSongSection() != 1
+            || processor.getSectionPatternSlot(1) != 3
+            || processor.getPatternPreviewSlot() != 5)
+        {
+            std::cerr << "Pattern section routing API contract failed.\\n";
+            result = 1;
+        }
+        juce::MemoryBlock sectionState;
+        processor.getStateInformation(sectionState);
+        PopPunkGuitarUltimateAudioProcessor restoredSections;
+        restoredSections.setStateInformation(sectionState.getData(), static_cast<int>(sectionState.getSize()));
+        if (restoredSections.getSelectedSongSection() != 1
+            || restoredSections.getSectionPatternSlot(1) != 3
+            || restoredSections.getPatternPreviewSlot() != -1)
+        {
+            std::cerr << "Pattern section persistence / transient preview contract failed.\\n";
+            result = 1;
+        }
+        processor.clearPatternPreview();
+        processor.setSelectedSongSection(0);
+        processor.setSectionPatternSlot(1, -1);
+
         processor.prepareToPlay(48000.0, 13000);
         const auto load = processor.loadSfzFile(sfz);
         if (!load.success)

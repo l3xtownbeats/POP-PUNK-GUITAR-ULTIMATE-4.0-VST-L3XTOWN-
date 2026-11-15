@@ -49,6 +49,16 @@ public:
                           std::function<void(ppgu::sampler::LoadReport)> completion);
     [[nodiscard]] juce::String getCurrentSfzFilePath() const;
 
+    // Section-first pattern routing. -1 means inherit the legacy global patternSlot.
+    static constexpr int songSectionCount = 5;
+    void setSelectedSongSection(int section) noexcept;
+    int getSelectedSongSection() const noexcept;
+    void setSectionPatternSlot(int section, int slot) noexcept;
+    int getSectionPatternSlot(int section) const noexcept;
+    void setPatternPreviewSlot(int slot) noexcept;
+    void clearPatternPreview() noexcept;
+    int getPatternPreviewSlot() const noexcept;
+
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -65,6 +75,12 @@ public:
 
 private:
     std::atomic<bool> panicRequested { false };
+    std::atomic<int> selectedSongSection { 0 };
+    std::array<std::atomic<int>, songSectionCount> sectionPatternSlots {{
+        std::atomic<int> { -1 }, std::atomic<int> { -1 }, std::atomic<int> { -1 },
+        std::atomic<int> { -1 }, std::atomic<int> { -1 }
+    }};
+    std::atomic<int> patternPreviewSlot { -1 };
     std::array<std::array<std::atomic<bool>, 128>, 16> displayHeldNotes {};
     double currentSampleRate = 44100.0;
     int maximumBlockSize = 512;
