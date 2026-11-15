@@ -928,3 +928,19 @@ Approved requirements:
 **Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
 **Execution evidence:** no test runner or CI result was available for this commit sequence. Static contract added; execution is PENDING. No BUILD PASS / TEST PASS / HOST VERIFIED claim.
 **Open work:** remaining gallery lifecycle, filter-selection behavior, Favorites and close/apply persistence; then O1/S1 security and integration work.
+
+
+## 2026-11-15 — REV18 GALLERY-02 — defer card thumbnail decoding outside paint
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `5f1843644b0ffa66c847f026e0633b13d6a35a7f`.
+**Regression-test commit:** `d2ff13a3a621dd8997b83cfbe062380d6af46582`.
+**Journal commit:** `2e271a4e0a25c09b88fb554923ab58ab566e6642`.
+**Parent sequence:** prior journal HEAD `cd11dda15bfcb0567c5f18a591cdf30ffcafa45c` → production → test → INFO.
+**Paths:** `Source/PluginEditor.cpp`, `tests/TestSkinGalleryInteractionContract.py`, `Info.txt`, `CODE.txt`.
+
+**Code:** Removed file-existence checks and ImageCache decode from Gallery Card::paint. Cards draw cached thumbnails/fallback artwork; first paint schedules deferred decode using MessageManager::callAsync and a SafePointer lifetime guard.
+**Test:** Added `test_card_thumbnail_decode_is_deferred_outside_paint`.
+**Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
+**Execution evidence:** test source added, execution pending; no CI, build, CTest, pluginval or host acceptance result is available for this SHA.
+**Open risk:** message-thread decode may still cause a short UI stall for unusually slow storage; compile/runtime test must verify SafePointer callback and repeated repaint behavior. If profiling shows stalls, move decoding to a bounded worker and marshal only the image result to the message thread.
