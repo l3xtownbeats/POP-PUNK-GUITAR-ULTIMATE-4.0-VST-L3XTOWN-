@@ -57,9 +57,9 @@ jobs:
         shell: pwsh
         run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
 
-      - name: Validate PPGU REV 14 skin pack (contrast, parity, assets, identity)
+      - name: Validate active skin registry and isolated legacy archive
         shell: pwsh
-        run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+        run: python tests/ValidateSkinManifests.py
 
       - name: Test REV18 theme asset audit safety
         shell: pwsh
