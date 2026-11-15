@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -38,7 +39,17 @@ class Rev18ThemeControlParityTests(unittest.TestCase):
         validator = source[start:end]
         self.assertIn("!= requiredControlIds.size()", validator)
         self.assertNotIn("sync_selector", validator)
-        self.assertIn("requiredControlIds", validator)
+
+        match = re.search(
+            r"const juce::StringArray requiredControlIds\\s*\\{(?P<body>.*?)\\};",
+            validator,
+            re.DOTALL,
+        )
+        self.assertIsNotNone(match, "runtime canonical control ID list is missing")
+        runtime_ids = re.findall(r'"([^"]+)"', match.group("body"))
+        self.assertEqual(27, len(runtime_ids))
+        self.assertEqual(27, len(set(runtime_ids)))
+        self.assertEqual(self.required, set(runtime_ids))
 
     def test_skin_one_remains_the_canonical_default(self) -> None:
         first = self.sequence["themes"][0]
