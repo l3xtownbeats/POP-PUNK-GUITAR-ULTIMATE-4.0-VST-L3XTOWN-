@@ -101,6 +101,8 @@ private:
     };
 
     mutable std::mutex loaderMutex;
+    // Short publication lock keeps restore clearing non-blocking during long loads.
+    std::mutex publicationMutex;
     // Streaming services and immutable snapshots are retained until pool
     // destruction so audio-thread region/service pointers never dangle.
     // Repeated banks from one library root share one worker and one bounded

@@ -51,7 +51,13 @@ float hermiteSample(const float* data, std::uint64_t frame, float fraction,
 }
 }
 
-SamplePool::SamplePool() = default;
+SamplePool::SamplePool()
+{
+    // Reserve bounded ownership tables up front so the final publication
+    // critical section never reallocates these vectors.
+    snapshots.reserve(maximumSnapshots);
+    streamingLibraries.reserve(maximumStreamingLibraries);
+}
 
 LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
                                const std::atomic<std::uint64_t>* requestGeneration,
@@ -355,6 +361,12 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
     else if (abortIfSuperseded())
         return report;
 
+    // Serialize the generation check and active-pointer publication with
+    // clearActiveSnapshot(). This closes the restore-vs-load stale publish race.
+    std::lock_guard<std::mutex> publicationLock(publicationMutex);
+    if (abortIfSuperseded())
+        return report;
+
     report.loadedRegions = candidateSnapshot->regions.size();
     report.loadedSamples = samplesUsed.size();
     const auto* published = candidateSnapshot.get();
@@ -368,9 +380,9 @@ LoadReport SamplePool::loadSfz(const juce::File& sfzFile,
 
 void SamplePool::clearActiveSnapshot()
 {
-    // Serialize with background bank publication. Snapshots are retained so
-    // any previously published readers cannot observe freed region memory.
-    std::lock_guard<std::mutex> lock(loaderMutex);
+    // Only the tiny publication section is locked. Long parsing/scanning stays
+    // on the worker thread and cannot stall the host/message thread on restore.
+    std::lock_guard<std::mutex> lock(publicationMutex);
     activeSnapshot.store(nullptr, std::memory_order_release);
 }
 

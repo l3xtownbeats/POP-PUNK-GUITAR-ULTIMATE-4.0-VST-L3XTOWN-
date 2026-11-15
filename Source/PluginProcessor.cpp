@@ -1102,8 +1102,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 ppgu::sampler::LoadReport PopPunkGuitarUltimateAudioProcessor::loadSfzFile(const juce::File& sfzFile)
 {
     // Synchronous API for tests/tools only; supersede any queued async request.
-    sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel);
-    auto report = sampler.loadSfz(sfzFile);
+    const auto generation = sampleLoadGeneration->fetch_add(1, std::memory_order_acq_rel) + 1;
+    auto report = sampler.loadSfz(sfzFile, sampleLoadGeneration.get(), generation);
     if (report.success)
     {
         const juce::ScopedLock lock(sampleStateLock);
