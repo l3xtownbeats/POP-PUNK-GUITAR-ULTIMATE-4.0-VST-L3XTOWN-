@@ -66,3 +66,23 @@ PNG/SVG assets — ресурсы skin pack, но сами по себе не д
 - `SKIN_ENGINE_GAP_AUDIT_RU.md` — оставшиеся runtime gaps.
 - `CONTROL_INVENTORY_MATRIX_RU.md` — фактические controls.
 - `../docs/MASTER_PRODUCT_SPEC_4_0_RU.md` — продуктовая спецификация.
+
+
+## REV.18 — approved sequential theme concepts (2026-11-15)
+
+The approved logical theme sequence is recorded in `approved_theme_sequence.json`:
+
+| Logical theme | Name | Immutable stable ID / registry index | Current asset state |
+|---|---|---|---|
+| SKIN-1 | NEON STAGE DEFAULT | `skin-053` / 53 | Canonical default |
+| SKIN-2 | OBSIDIAN GOLD | `skin-103` / 103 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-3 | CARBON FORGE | `skin-104` / 104 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / 105 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-5 | ARCTIC PLATINUM | `skin-106` / 106 | Manifest + 3 SVG foundations; PNG pending |
+| SKIN-6 | VIOLET NOIR | `skin-107` / 107 | Manifest + 3 SVG foundations; PNG pending |
+
+The legacy registry already contains indices 1–102. Logical SKIN numbering is therefore mapped to new stable IDs 103–107; no old directory, ID, registry entry or asset is renamed or overwritten.
+
+All five new theme manifests preserve the 21-token palette contract and the same 28-entry control map. They vary only palette/material tokens and retain the shared NEON STAGE component language. No APVTS, DSP, MIDI, audio, parameter/control ID or live layout changes are authorized.
+
+**Important:** these are approved design specifications with vector texture/bezel/crest foundations. They are not yet complete gallery/runtime themes. PNG preview/hero assets, G1–G4 and CRC validation, registry/gallery registration, package/runtime loading and host acceptance remain pending. Do not represent them as available in the plugin until those gates pass.
