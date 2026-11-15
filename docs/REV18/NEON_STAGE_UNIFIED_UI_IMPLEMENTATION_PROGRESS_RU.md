@@ -226,3 +226,39 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
 ### Решение этапа
 
 **MAIN INTERFACE SOURCE AUDIT: обновлён и зафиксирован.** Кодовая интеграция общей палитры и APVTS-связи подтверждена чтением текущих файлов. **Визуальное соответствие NEON STAGE макетам, runtime skin discovery, DPI/resize, clipping, host behavior и визуальная приёмка остаются OPEN.** PNG-файлы присутствуют в GitHub, однако бинарное содержимое пока недоступно для фактического pixel/layout comparison через текущий коннектор. Следующий шаг по утверждённой очереди — AutoChords source audit; Main Interface остаётся открытым до visual/host QA.
+
+
+## AUTOCHORDS — source audit и исправление минимальной геометрии
+
+**Дата:** 2026-11-15  
+**Исходник после исправления:** `Source/PluginEditor.cpp`, blob `7796376490426f4e891eb49fb21871ca65439c63`.  
+**Контекст workspace:** `Source/UI/PPGUMultiWindowWorkspace.cpp`, blob `ab1dfff19983842261f5cf4113f66f66d9c76e69`.
+
+### Подтверждено
+
+- AutoChords — отдельная панель workspace, желаемый размер 900×620, минимальный размер окна 560×420.
+- Существующие контролы Key, Scale/Quality и Rhythm Pattern Slot связаны с APVTS параметрами `scaleRoot`, `scaleMode`, `patternSlot` через ComboBoxAttachment.
+- Генерация MIDI-аккордов, custom mode и preview engine явно помечены как NOT CONNECTED. Кнопка AUTOCHORDS OFF отключена и сообщает, что MIDI-generation engine ещё не реализован. Никакие фиктивные генерация/preview не добавлялись.
+- Панель наследует PPGUThemeAwarePanel; setThemePalette обновляет заголовок, warning/status, подписи, кнопку и ComboBox через общие semantic tokens.
+- Открытие AutoChords создаёт панель с ID 2102 в общем workspace.
+
+### Найденная проблема геометрии и исправление
+
+В `PPGUMultiWindowWorkspace.cpp` внутренний контент окна получает высоту окна минус 72 px (рамки, header и отступы). Поэтому при минимальном размере окна 560×420 доступная высота AutoChords content составляет около 348 px. Прежний вертикальный layout формы требовал 376 px — нижний блок Rhythm Pattern Slot мог выходить за пределы панели.
+
+Исправлено только UI-расположение в `PPGUAutoChordsPanel::resized()`:
+- при доступной высоте меньше 376 px включается компактная вертикальная раскладка;
+- уменьшаются только вертикальные интервалы и верхние размеры заголовка/статусной строки/кнопки;
+- размеры и APVTS-связи полей Key, Scale/Quality и Pattern Slot сохранены;
+- при обычном размере 900×620 прежние интервалы остаются без изменений.
+
+Расчёт compact layout: 334 px содержимого при примерно 348 px доступной высоты на минимальном размере окна. Это source-level геометрическая проверка, не runtime screenshot/host acceptance.
+
+### Открытые проверки
+
+- Визуальное соответствие AutoChords PNG-макету не подтверждено: бинарные пиксели эталонов всё ещё недоступны через GitHub connector.
+- Не выполнены host resize, DPI 100/125/150%, clipping/focus/hover/disabled checks.
+- Не выполнялись Windows build, CTest, pluginval или FL Studio 20 acceptance после этого изменения.
+- Не менялись APVTS IDs/values, MIDI routing, генератор, sampler, scheduler или preset semantics.
+
+**Статус:** AUTOCHORDS SOURCE AUDIT + COMPACT LAYOUT FIX COMMITTED / VISUAL QA PENDING / BUILD & HOST QA PENDING. Следующий модуль по утверждённой очереди — Curator; он остаётся заблокирован до готовности реальной функциональной части, поэтому вместо создания фиктивного UI выполняется аудит фактического наличия backend/контрактов.
