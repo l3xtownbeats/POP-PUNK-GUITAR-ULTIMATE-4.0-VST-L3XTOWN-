@@ -45,8 +45,8 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
 }
 }
 
-// Scrollable visual browser for the complete registry. Preview images are loaded
-// lazily by visible cards so opening the gallery does not decode all 102 PNGs.
+// Scrollable browser for entries in the active skin registry. Preview images are
+// decoded on demand by visible cards; archived legacy assets are not runtime themes.
 class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
