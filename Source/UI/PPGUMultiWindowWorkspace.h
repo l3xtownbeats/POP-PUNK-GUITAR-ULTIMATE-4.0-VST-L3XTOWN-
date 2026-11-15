@@ -24,6 +24,7 @@ public:
         int id = 0;
         juce::String title;
         std::unique_ptr<juce::Component> content;
+        std::function<void()> onClose;
         ppgu::ui::PanelSize desired { 520, 360 };
         ppgu::ui::PanelSize minimum { 280, 190 };
     };
