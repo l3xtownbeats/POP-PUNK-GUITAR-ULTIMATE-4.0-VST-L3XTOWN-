@@ -6,10 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = (ROOT / "Source" / "PluginEditor.cpp").read_text(encoding="utf-8")
-START = SOURCE.index("class PPGUSkinGalleryPanel")
-END = SOURCE.index("// UI-only settings panel", START)
-GALLERY = SOURCE[START:END]
+GALLERY = (ROOT / "Source" / "UI" / "PPGUSkinGalleryPanel.h").read_text(encoding="utf-8")
 
 
 class SkinGalleryInteractionContractTests(unittest.TestCase):
