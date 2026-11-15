@@ -1,0 +1,36 @@
+name: PPGU REV18 Full Theme Asset Verification
+on:
+  pull_request:
+    branches:
+      - ui/neon-stage-skin1-completion
+
+permissions:
+  contents: write
+
+jobs:
+  approved-theme-packs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+      - name: Install Pillow
+        run: python3 -m pip install --disable-pip-version-check pillow
+      - name: Generate all approved theme packs
+        run: python3 tools/generate_rev18_approved_theme_assets.py --root SKIN
+      - name: Verify deterministic generation
+        run: python3 tools/generate_rev18_approved_theme_assets.py --root SKIN --check
+      - name: Test canonical 27-control contract
+        run: python3 tests/TestRev18ThemeControlParity.py
+      - name: Verify full assets, checksums and PNG CRC
+        run: python3 tools/audit_skin_rev18_assets.py --root SKIN --strict-assets
+      - name: Commit generated packs to implementation branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add SKIN
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(REV18): generate approved premium theme packs"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
