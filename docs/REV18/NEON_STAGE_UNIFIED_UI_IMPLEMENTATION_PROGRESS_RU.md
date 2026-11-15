@@ -177,3 +177,20 @@ The repository tree confirms all eight NEON STAGE PNG reference files are presen
   - dfbaa91db0380465ab27337527c7dba32d593925 — NEON STAGE shell terminology.
 
 **Решение этапа:** source-level несоответствия исправлены; MAIN INTERFACE не закрыт как визуально принятый. Следующий шаг — получить PNG-макеты в читаемом виде, провести pixel/layout comparison, затем исправлять только подтверждённые расхождения.
+
+## 2026-11-15 — Semantic palette enforcement / CTest contract
+
+**Рабочая ветка:** `rev18/neon-stage-skin1-implementation`  
+**Production source:** `2712065c2fee672c3a4ee6957be6a8ebad08cfc2`  
+**Validator correction:** `9fa3f1c54dd3ec286bae07fd7816537fb068ff8f`
+
+- Удалены дублирующие literal-цвета из Skin Gallery fallback и Workspace member defaults.
+- Workspace теперь получает начальные поверхности из canonical `PPGUThemeManager::Palette`; при дальнейшем выборе темы применяется та же семантическая палитра.
+- Добавлена проверка отсутствия hard-coded hex colours в UI C++ (кроме определения самой палитры в `ThemeManager.h`).
+- Проверка `tools/validate_skin053.py` подключена к CTest как `ppgu_skin053_ui_contract`.
+- Source readback: 0 raw hex colour literals в проверенных UI C++ файлах вне ThemeManager palette source.
+- Manifest readback: `skin-053 / index 53 / NEON STAGE`, 21 tokens, 28 control bindings.
+- GitHub Actions `43680164068` на exact SHA `9fa3f1c54dd3ec286bae07fd7816537fb068ff8f` — IN PROGRESS на момент фиксации; build/test/pluginval/host acceptance пока не присвоены.
+
+**Статус:** SOURCE CONTRACT IMPLEMENTED / CI PENDING / VISUAL QA PENDING.  
+**Следующее:** дождаться exact-SHA CI и продолжить аудит реальных source surfaces для всех 12 модулей. Отсутствующие Curator, Auto Discover и About остаются не реализованными; не добавлять им фиктивную функциональность.
