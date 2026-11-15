@@ -189,12 +189,12 @@ int main()
            "Skin Studio compatibility failure restores fallback");
 
     expect(!manager.loadFromJson("{"), "malformed JSON rejected");
-    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
+    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "malformed JSON restores NEON STAGE fallback");
 
     expect(!manager.loadFromJson("{}"), "empty object rejected");
-    expect(manager.getPalette().id == "skin-052" && manager.getPalette().usedFallback,
-           "incomplete manifest restores fallback");
+    expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
+           "incomplete manifest restores NEON STAGE fallback");
 
     expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");
     expect(manager.getPalette().token("window_bg") == manager.getPalette().canvas,
