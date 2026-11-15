@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-053",
   "index": 53,
-  "name": "NEON FORGE",
+  "name": "NEON FORGE (DEFAULT)",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "Canonical SKIN-1 visual theme: NEON FORGE. Premium dark graphite studio console with restrained cyan, electric-blue, violet and magenta stage accents. Default minimal mode; effects are opt-in.",
+  "description": "Canonical default SKIN-1 visual theme: NEON FORGE (DEFAULT). Premium dark graphite studio console with restrained cyan, electric-blue, violet and magenta stage accents. Default minimal mode; effects are opt-in.",
   "palette": {
     "window_bg": "#080B14",
     "panel": "#101827",
@@ -344,7 +344,7 @@
   },
   "designStatus": "ARTWORK_AND_MANIFEST_UPDATED_RUNTIME_VALIDATION_PENDING",
   "notes": [
-    "[IDENTITY-RULE] SKIN-1 = NEON FORGE = skin-053/Skin_053. Stable asset ID and index 53 are preserved.",
+    "[IDENTITY-RULE] SKIN-1 = NEON FORGE (DEFAULT) = skin-053/Skin_053. Stable asset ID and index 53 are preserved.",
     "Default display mode is MINIMALISM; premium glow/effects are opt-in only.",
     "All control IDs and grid metadata are preserved from the REV18 canonical source.",
     "Visual-only change: no APVTS, DSP, sampler, MIDI, preset or audio callback changes.",
