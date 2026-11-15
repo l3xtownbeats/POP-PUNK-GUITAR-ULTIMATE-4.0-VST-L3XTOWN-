@@ -22,6 +22,10 @@ def fail(message: str, code: int = 2) -> int:
 
 
 def main() -> int:
+    print("DISABLED: factory theme sequence is fixed at sixteen. Theme-pack merging is not permitted.", file=sys.stderr)
+    return 2
+
+    # Retained below for Git-history/source audit only; unreachable by design.
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path("SKIN"))
     parser.add_argument("--manifest", type=Path, default=Path("SKIN/theme_pack_manifest.json"))
