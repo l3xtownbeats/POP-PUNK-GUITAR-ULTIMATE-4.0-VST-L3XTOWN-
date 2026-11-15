@@ -54,14 +54,14 @@ def main() -> None:
     ui_sources.extend(path for path in ui_root.rglob("*")
                       if path.suffix in {".cpp", ".h"}
                       and path.name != "ThemeManager.h")
-    colour_literal = re.compile(r"\\b0x[0-9a-fA-F]{6,8}\\b")
+    colour_literal = re.compile(r"\b0x[0-9a-fA-F]{6,8}\b")
     violations = []
     for source in ui_sources:
         text = source.read_text(encoding="utf-8")
         for line_number, line in enumerate(text.splitlines(), 1):
             if colour_literal.search(line):
                 violations.append(f"{source.relative_to(ROOT)}:{line_number}: {line.strip()}")
-    assert not violations, "Hard-coded UI colour literals found:\\n" + "\\n".join(violations)
+    assert not violations, "Hard-coded UI colour literals found:\n" + "\n".join(violations)
 
     print("PASS: NEON STAGE SKIN-1 manifest, SVG and semantic UI-colour contract")
 
