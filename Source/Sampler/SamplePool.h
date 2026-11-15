@@ -126,6 +126,7 @@ public:
     [[nodiscard]] bool noteOn(int midiNote, int velocity, int maximumActiveVoices = maximumVoices, int midiChannel = 1, double globalTuningSemitones = 0.0, bool palmMuted = false) noexcept;
     void setPitchBend(int midiChannel, float semitones, int targetMode = 0) noexcept;
     void setModWheel(int midiChannel, float value) noexcept;
+    void setSustainPedal(int midiChannel, bool down) noexcept;
     void setVibratoDepths(float baseDepth, float modWheelDepth) noexcept;
     void noteOff(int midiNote, int midiChannel = 1) noexcept;
     void allNotesOff() noexcept;
@@ -154,6 +155,7 @@ private:
         float vibratoLfoCos = 1.0f;
         bool releasing = false;
         bool palmMuted = false;
+        bool sustainHeld = false;
         int direction = 1;
         std::uint64_t age = 0;
         std::uint64_t prefetchedPage = std::numeric_limits<std::uint64_t>::max();
@@ -178,6 +180,7 @@ private:
     float vibratoBaseDepth = 0.0f;
     float vibratoModWheelDepth = 0.0f;
     std::array<float, 16> channelModWheel {};
+    std::array<bool, 16> sustainPedalDown {};
     std::array<float, 16> channelPitchBendSemitones {};
     std::array<int, 16> channelPitchBendTarget {};
     std::uint64_t nextAge = 1;

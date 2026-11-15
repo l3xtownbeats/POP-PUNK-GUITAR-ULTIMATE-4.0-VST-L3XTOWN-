@@ -463,6 +463,7 @@ void SamplerEngine::reset() noexcept
     channelPitchBendSemitones.fill(0.0f);
     channelPitchBendTarget.fill(0);
     channelModWheel.fill(0.0f);
+    sustainPedalDown.fill(false);
     vibratoBaseDepth = 0.0f;
     vibratoModWheelDepth = 0.0f;
     for (std::size_t i = 0; i < voices.size(); ++i)
@@ -529,6 +530,21 @@ bool SamplerEngine::noteOn(int midiNote, int velocity, int maximumActiveVoices, 
     }
     applyPitchBendForChannel(voice.midiChannel - 1);
     return true;
+}
+
+void SamplerEngine::setSustainPedal(int midiChannel, bool down) noexcept
+{
+    const int channelIndex = juce::jlimit(0, 15, midiChannel - 1);
+    const bool wasDown = sustainPedalDown[static_cast<size_t>(channelIndex)];
+    sustainPedalDown[static_cast<size_t>(channelIndex)] = down;
+    if (wasDown && !down)
+        for (auto& voice : voices)
+            if (voice.region != nullptr && voice.midiChannel == channelIndex + 1
+                && voice.sustainHeld && !voice.releasing)
+            {
+                voice.sustainHeld = false;
+                releaseVoice(voice);
+            }
 }
 
 void SamplerEngine::setModWheel(int midiChannel, float value) noexcept
@@ -609,32 +625,41 @@ void SamplerEngine::noteOff(int midiNote, int midiChannel) noexcept
             {
                 if (voice.region->loopMode == 2 || voice.region->loopMode == 3)
                     voice.direction = 1;
-                releaseVoice(voice);
+                if (sustainPedalDown[static_cast<size_t>(juce::jlimit(1, 16, midiChannel) - 1)])
+                    voice.sustainHeld = true;
+                else
+                    releaseVoice(voice);
             }
 }
 
 void SamplerEngine::allNotesOff() noexcept
 {
+    sustainPedalDown.fill(false);
     for (auto& voice : voices)
         if (voice.region != nullptr)
+        {
+            voice.sustainHeld = false;
             releaseVoice(voice);
+        }
 }
 
 void SamplerEngine::panic(int fadeSamples) noexcept
 {
+    sustainPedalDown.fill(false);
     const float samples = static_cast<float>(juce::jmax(1, fadeSamples));
     for (auto& voice : voices)
         if (voice.region != nullptr)
         {
+            voice.sustainHeld = false;
             voice.releaseStep = voice.gain / samples;
             voice.releasing = true;
         }
-}
 
 void SamplerEngine::releaseVoice(Voice& voice) noexcept
 {
     if (voice.region == nullptr) return;
     const int releaseSamples = juce::jmax(1, static_cast<int>(voice.region->releaseSeconds * outputSampleRate));
+    voice.sustainHeld = false;
     voice.releaseStep = voice.gain / static_cast<float>(releaseSamples);
     voice.releasing = true;
 }

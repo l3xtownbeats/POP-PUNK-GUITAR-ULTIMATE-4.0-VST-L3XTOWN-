@@ -430,6 +430,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
             else if (message.isController() && message.getControllerNumber() == 1)
                 sampler.setModWheel(message.getChannel(),
                     static_cast<float>(message.getControllerValue()) / 127.0f);
+            else if (message.isController() && message.getControllerNumber() == 64)
+                sampler.setSustainPedal(message.getChannel(), message.getControllerValue() >= 64);
         }
         renderSegment(cursor, samples - cursor);
     }
@@ -616,6 +618,8 @@ void PopPunkGuitarUltimateAudioProcessor::processBlock(
                 else if (message.isController() && message.getControllerNumber() == 1)
                     sampler.setModWheel(message.getChannel(),
                         static_cast<float>(message.getControllerValue()) / 127.0f);
+                else if (message.isController() && message.getControllerNumber() == 64)
+                    sampler.setSustainPedal(message.getChannel(), message.getControllerValue() >= 64);
             },
             [&](int eventSample)
             {

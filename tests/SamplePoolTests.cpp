@@ -661,6 +661,51 @@ int main()
         return 1;
     }
 
+    // MIDI CC64 sustain holds note-off until the pedal is released, then
+    // applies the SFZ release envelope. The behavior is isolated per channel.
+    ppgu::sampler::SamplerEngine sustainPedalEngine;
+    sustainPedalEngine.prepare(44100.0);
+    if (!sustainPedalEngine.loadSfz(sfzFile).success
+        || !sustainPedalEngine.noteOn(60, 100, 64, 1))
+    {
+        std::cerr << "Could not prepare sustain-pedal regression fixture.\\n";
+        return 1;
+    }
+    juce::AudioBuffer<float> sustainWarm(2, 128);
+    bool sustainPageReady = false;
+    for (int attempt = 0; attempt < 100 && !sustainPageReady; ++attempt)
+    {
+        sustainWarm.clear();
+        sustainPedalEngine.render(sustainWarm, 0, sustainWarm.getNumSamples());
+        sustainPageReady = sustainWarm.getMagnitude(0, 0, sustainWarm.getNumSamples()) > 0.001f;
+        if (!sustainPageReady)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    if (!sustainPageReady)
+    {
+        std::cerr << "Sustain-pedal sample page never became ready.\\n";
+        return 1;
+    }
+    sustainPedalEngine.setSustainPedal(1, true);
+    sustainPedalEngine.noteOff(60, 1);
+    juce::AudioBuffer<float> sustainHeldBlock(2, 256);
+    sustainHeldBlock.clear();
+    sustainPedalEngine.render(sustainHeldBlock, 0, sustainHeldBlock.getNumSamples());
+    if (sustainPedalEngine.getActiveVoiceCount() != 1)
+    {
+        std::cerr << "CC64 down did not hold the released note.\\n";
+        return 1;
+    }
+    sustainPedalEngine.setSustainPedal(1, false);
+    juce::AudioBuffer<float> sustainReleaseBlock(2, 600);
+    sustainReleaseBlock.clear();
+    sustainPedalEngine.render(sustainReleaseBlock, 0, sustainReleaseBlock.getNumSamples());
+    if (sustainPedalEngine.getActiveVoiceCount() != 0)
+    {
+        std::cerr << "CC64 up did not release the sustained voice.\\n";
+        return 1;
+    }
+
     // A failed reload must leave the previously published map intact. The
     // first new WAV is valid, the second is deliberately corrupt.
     const auto orphanWav = directory.getChildFile("orphan.wav");
