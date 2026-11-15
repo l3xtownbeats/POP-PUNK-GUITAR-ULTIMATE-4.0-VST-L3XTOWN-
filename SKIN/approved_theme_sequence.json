@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "status": "16_THEME_SEQUENCE_FIXED_AND_USER_APPROVED; ARTWORK_AND_RUNTIME_ACCEPTANCE_GATES_TRACKED_SEPARATELY",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
-  "rule": "The 16 premium themes are presented in strict order SKIN-1 through SKIN-16. SKIN-1 is NEON FORGE (DEFAULT). Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; approved sequence stable IDs/indices remain unchanged.",
+  "rule": "USER-APPROVED FIXED ORDER: SKIN-1=NEON FORGE (DEFAULT); SKIN-2=OBSIDIAN GOLD; SKIN-3=CARBON FORGE; SKIN-4=MIDNIGHT CRIMSON; SKIN-5=ARCTIC PLATINUM; SKIN-6=VIOLET NOIR; SKIN-7=TITANIUM STORM; SKIN-8=EMERALD CIRCUIT; SKIN-9=SOLAR FLARE; SKIN-10=DEEP OCEAN; SKIN-11=ROSE CHROME; SKIN-12=DESERT AMBER; SKIN-13=GLACIER TEAL; SKIN-14=PHANTOM GRAPHITE; SKIN-15=ULTRAVIOLET DRIVE; SKIN-16=VOLCANIC STEEL. This 16-theme sequence and naming/order are immutable unless the user explicitly approves a change. Historical skin records are outside this active sequence and must not be silently reintroduced into the active gallery.",
   "themes": [
     {
       "ordinal": 1,
