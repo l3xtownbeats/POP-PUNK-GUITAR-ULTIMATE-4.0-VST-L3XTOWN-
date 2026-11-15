@@ -912,3 +912,19 @@ Approved requirements:
 - `Cover Interface.jpg` — retained as a legacy asset but no longer referenced by the landing page.
 - No C++ production source, DSP, MIDI, sampler, APVTS, presets or runtime assets changed.
 - Build/CTest/pluginval/FL Studio 20 were not run for this documentation/branding change.
+
+
+## 2026-11-15 — REV18 GALLERY-01 — registry-driven family filter
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `df52a1281a2e94f9c88b56c145693efdc225fed7`.
+**Regression-test commit:** `f0b5f6928ce4545d2eccfaf1d2b9bfd9f277ca96`.
+**Journal commit:** `04bb90193bf41bff37de9013d0aa8afbf4d0010b`.
+**Parent sequence:** `a0f829d3d1d5855181265b5be80f55df6bdc68cc` → production → test → INFO → CODE.
+**Paths:** `Source/PluginEditor.cpp`, `tests/TestSkinGalleryInteractionContract.py`, `Info.txt`, `CODE.txt`.
+
+**Code:** Removed hard-coded family ComboBox options. Gallery now derives unique family keys and labels from the actual skin registry and maps selected IDs through `familyFilterKeys`.
+**Test:** Added `test_family_filter_is_derived_from_registry`.
+**Protected areas:** no audio/DSP/MIDI/APVTS/sampler/preset/SoundBank changes.
+**Execution evidence:** no test runner or CI result was available for this commit sequence. Static contract added; execution is PENDING. No BUILD PASS / TEST PASS / HOST VERIFIED claim.
+**Open work:** remaining gallery lifecycle, filter-selection behavior, Favorites and close/apply persistence; then O1/S1 security and integration work.
