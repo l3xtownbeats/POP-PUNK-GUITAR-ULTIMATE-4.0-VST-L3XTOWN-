@@ -901,3 +901,14 @@ User explicitly clarified that the complete product must implement and operate A
 Acceptance rule: every approved feature must have its real underlying implementation and complete interaction path (UI event -> callback/action -> real parameter/backend/state -> observable result -> truthful UI feedback -> persistence/restore where specified), plus appropriate tests and host validation. A visual mockup, placeholder, disabled control, description, or source-level shell does NOT count as completed functionality. A feature may be marked unavailable only as an honest interim status while its implementation is pending; it must not be represented as finished. No approved requirement is to be silently dropped, replaced by a visual-only approximation, or treated as optional.
 
 This clarification reinforces the existing approved scope and acceptance gates; it does not authorize inventing new features, IDs, controls, panels, or changing locked contracts (including 27-control parity, seven approved FX bypass IDs, REV.18 Inventory/Info.txt constraints, and the mandatory phase order). Preserve the NEON STAGE -> SOUND LIBRARIES -> FACTORY PRESETS -> FACTORY LIBRARY sequence. Track every approved requirement to implementation and evidence-based acceptance.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: THEME TYPOGRAPHY / PALETTE SOURCE PASS
+
+Completed a source-level pass over Source/PluginEditor.cpp after the workspace-title and Circle of Fifths typography corrections.
+
+- Checked all direct .setFont() calls in the editor source: no remaining calls bypass the shared makeThemeFont() helper.
+- Checked explicit hard-coded colour literals/usages in the editor source: only the shared default accent seed and a transparent slider text-box outline remain; component paint and control styling otherwise consume the theme palette.
+- Confirmed theme palette application paths are present for Skin Gallery, Settings, About, Import Guitar, FX Edit and AutoChords; the Circle of Fifths receives the palette from AutoChords, and the live Performance display has its own palette setter.
+- Confirmed the auxiliary workspace applies the active typeface/font scale to its window title.
+
+Scope limitation: this is a static source audit only. It does NOT prove visual correctness at runtime, clipping-free layouts, contrast/accessibility across all 16 themes, resize behavior, focus/hover/disabled feedback, or host acceptance. Those remain open acceptance tasks and require an exact-HEAD Windows x64 build plus runtime checks. No new UI feature or APVTS ID was added; no functional behavior was changed.
