@@ -665,3 +665,16 @@ FX и amp/cab reference taxonomy: distortion, overdrive, fuzz, crunch, boost, co
 Ограничения: не нарушать 27-control parity, seven approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; этот документ не разрешает новые controls/IDs. FX taxonomy и recipe references не являются доказательством реализации. Нужны реальные DSP bindings, bypass, audible result, state restore и проверка. Не копировать protected riffs/recordings/stems/presets и не заявлять точные artist settings без надёжных источников.
 
 Статус: USER REQUEST RECORDED / SOUND-DESIGN GUIDANCE APPROVED IN PRINCIPLE. Actual FX backend coverage, recipe implementation, numeric tuning, preset production and listening validation remain PENDING.
+
+
+2026-11-15 — USER FINAL APPROVAL: POP-PUNK SOUND PROFILES & BAND-INSPIRED PRESET SETTINGS
+
+Пользователь прямо подтвердил: проанализировать, утвердить, подтвердить и зафиксировать использование ранее перечисленных настроек поп-панк звучания, гитарных моделей, групп/исполнителей, amp/cab families, FX и sound-design recipes. Утверждённые данные использовать как основу factory preset sound design, style profiles, metadata, описаний и инструкций настройки.
+
+Artist/band references: Blink-182 / Tom DeLonge / Box Car Racer / Angels & Airwaves; Green Day / Billie Joe Armstrong; The Clash / Joe Strummer; Ramones / Johnny Ramone; Sex Pistols / Steve Jones; Joan Jett; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; All-American Rejects; MGK; Avril Lavigne-era pop-punk. Genre references: punk, pop-punk, skate punk, melodic punk, hardcore punk, post-punk, emo punk, easycore, ska punk, classic punk, acoustic/clean alternative, experimental/dark punk.
+
+Для каждого профиля учитывать guitar/pickup character, gain, amp/cab, EQ, FX chain, transient/sustain, stereo/space, rhythmic tightness, playing articulations и роль в миксе. Делать оригинальные presets на основе общих tonal/production traits, не копировать защищённые записи. Не приписывать sample конкретной модели без подтверждения и не выдавать предположительные exact artist settings за факт. Numeric settings определить через реальное прослушивание и микс-тесты.
+
+Сохраняются quality/licensing/10GB/master library/500+500 READY и технические ограничения: 27 controls, seven approved bypass IDs, existing APVTS/state contract, no fake functionality. READY требует реальных resources, MIDI playback, FX chain, persistence, level matching, listening review and regression tests.
+
+Статус: USER ANALYZED / APPROVED / CONFIRMED / FIXED FOR PRESET SOUND DESIGN. Implementation and acceptance remain PENDING.
