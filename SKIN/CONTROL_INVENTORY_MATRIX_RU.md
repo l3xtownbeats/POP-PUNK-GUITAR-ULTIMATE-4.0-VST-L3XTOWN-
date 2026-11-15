@@ -163,3 +163,8 @@ The editor's shared LookAndFeel now renders hover, keyboard focus and disabled s
 The inspected source tree currently has the main editor and embedded panels (Skin Gallery, Settings, Import Guitar, FX EDIT, AutoChords), Performance display and multi-window workspace. Curator, Sound Hunter, Auto Discover, AMP & TONE and About are not verified as complete production modules in this branch. They must remain NOT IMPLEMENTED / DEFERRED until their actual functional implementations and bindings are present; do not represent them with fake active controls.
 
 CI correction: run `43679932917` stopped at G4 because pack manifest index 53 still said Carbon Studio 01 while the canonical registry and Skin_053 said NEON STAGE DEFAULT. `SKIN/theme_pack_manifest.json` has been synchronized in commit `8bb05d7d88fd06c7815882e79ee8b2c3022d771e`. Await exact-HEAD rerun before marking G1–G4 pass.
+
+
+## REV.18 Gallery transaction regression fix — 2026-11-15
+
+Source commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale-preview edge case: if a user successfully previews skin A, then a malformed/missing skin B fails to load, the gallery now invalidates the previous preview's Apply eligibility and restores the original active skin. Selecting A again cannot incorrectly enable Apply for a stale preview. Apply is enabled only after a successful Preview of the currently selected skin. Back/window close still roll back the temporary preview. This is a source-level fix; exact-HEAD Windows build, CTest, pluginval, pixel comparison and FL Studio 20 host acceptance remain pending.
