@@ -956,16 +956,19 @@ public:
     void resized() override
     {
         auto area = getLocalBounds().reduced(24);
-        title.setBounds(area.removeFromTop(38));
-        stateLabel.setBounds(area.removeFromTop(32));
-        offButton.setBounds(area.removeFromTop(44).removeFromLeft(210).reduced(2));
-        area.removeFromTop(24);
+        // Keep the complete setup form reachable at the declared 560x420
+        // minimum workspace size. Preserve the spacious default layout above it.
+        const bool compact = area.getHeight() < 376;
+        title.setBounds(area.removeFromTop(compact ? 34 : 38));
+        stateLabel.setBounds(area.removeFromTop(compact ? 28 : 32));
+        offButton.setBounds(area.removeFromTop(compact ? 40 : 44).removeFromLeft(210).reduced(2));
+        area.removeFromTop(compact ? 10 : 24);
         keyLabel.setBounds(area.removeFromTop(22));
         keyBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
+        area.removeFromTop(compact ? 12 : 20);
         modeLabel.setBounds(area.removeFromTop(22));
         modeBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
+        area.removeFromTop(compact ? 12 : 20);
         patternLabel.setBounds(area.removeFromTop(22));
         patternBox.setBounds(area.removeFromTop(44).removeFromLeft(360));
     }
