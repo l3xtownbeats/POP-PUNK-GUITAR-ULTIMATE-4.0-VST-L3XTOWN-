@@ -78,7 +78,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Samples
-          key: ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
+          key: ppgu-samples-rev18-11-guitar-sources-v2
+          restore-keys: |
+            ppgu-samples-meta-v1.0.0-freepats-fsbs-cc0-v1
 
       - name: Download redistributable guitar sample libraries
         if: steps.sample-cache.outputs.cache-hit != 'true'
@@ -123,6 +125,13 @@ jobs:
             $asset = $release.assets | Where-Object { $_.name -eq "meta-open-sound-$id-wav.zip" -or $_.name -eq "$id-wav.zip" } | Select-Object -First 1
             if (-not $asset) { throw "WAV ZIP asset missing for $tag. Available: $($release.assets.name -join ', ')" }
             $dest = Join-Path $sampleRoot "Meta-$id"
+            if (Test-Path -LiteralPath $dest) {
+              if (-not (Get-ChildItem $dest -Recurse -File -Filter '*.wav' | Select-Object -First 1) -or -not (Test-Path (Join-Path $dest 'LICENSE')) -or -not (Test-Path (Join-Path $dest "$id.sfz"))) {
+                throw "Existing Meta sample folder is incomplete; preserving it rather than overwriting: $dest"
+              }
+              Write-Host "Inventory hit; preserving existing Meta source: $dest"
+              continue
+            }
             $zip = Join-Path $env:RUNNER_TEMP "$id.zip"
             Invoke-DownloadWithRetry -Uri $asset.browser_download_url -OutFile $zip -RequestHeaders $headers
             New-Item -ItemType Directory -Force -Path $dest | Out-Null
@@ -144,47 +153,89 @@ jobs:
           )
           foreach ($item in $freepats) {
             $dest = Join-Path $sampleRoot $item.folder
+            if (Test-Path -LiteralPath $dest) {
+              if (-not (Get-ChildItem $dest -Recurse -File | Where-Object { $_.Extension -in @('.wav','.flac') } | Select-Object -First 1) -or -not (Get-ChildItem $dest -Recurse -File -Filter '*.sfz' | Select-Object -First 1) -or -not (Test-Path (Join-Path $dest 'LICENSE.txt'))) {
+                throw "Existing FreePats folder is incomplete; preserving it rather than overwriting: $dest"
+              }
+              Write-Host "Inventory hit; preserving existing FreePats source: $dest"
+              continue
+            }
             git clone --depth 1 "https://github.com/freepats/$($item.repo).git" $dest
             if (-not (Get-ChildItem $dest -Recurse -Filter '*.sfz' | Select-Object -First 1)) { throw "SFZ map missing for $($item.repo)." }
             if (-not (Test-Path (Join-Path $dest 'LICENSE.txt'))) { throw "License missing for $($item.repo)." }
+          }
+
+          # Remaining A8-H CC0 guitar sources: FreePats direct + jazz + Spanish classical,
+          # and Karoryfer Black And Green, Emilyguitar and Shinyguitar. Preserve every
+          # existing folder; only absent sources are cloned into unique paths.
+          $additionalSources = @(
+            @{ repo='https://github.com/freepats/electric-guitar-FSBS-direct.git'; folder='FreePats-Direct'; license='LICENSE.txt'; map='*.sfz' },
+            @{ repo='https://github.com/freepats/electric-guitar-FSBS-jazz.git'; folder='FreePats-Jazz'; license='LICENSE.txt'; map='*.sfz' },
+            @{ repo='https://github.com/freepats/spanish-classical-guitar.git'; folder='FreePats-Spanish-Classical'; license='LICENSE'; map='*.sfz' },
+            @{ repo='https://github.com/sfzinstruments/karoryfer.black-and-green-guitars.git'; folder='Karoryfer-Black-And-Green'; license='LICENSE'; map='*.sfz' },
+            @{ repo='https://github.com/sfzinstruments/karoryfer.emilyguitar.git'; folder='Karoryfer-Emilyguitar'; license='LICENSE'; map='*.sfz' },
+            @{ repo='https://github.com/sfzinstruments/karoryfer.shinyguitar.git'; folder='Karoryfer-Shinyguitar'; license='LICENSE'; map='*.sfz' }
+          )
+          foreach ($item in $additionalSources) {
+            $dest = Join-Path $sampleRoot $item.folder
+            if (Test-Path -LiteralPath $dest) {
+              $audio = Get-ChildItem $dest -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') } | Select-Object -First 1
+              if (-not $audio -or -not (Get-ChildItem $dest -Recurse -File -Filter $item.map | Select-Object -First 1) -or -not (Test-Path (Join-Path $dest $item.license))) {
+                throw "Existing guitar source folder is incomplete; preserving it rather than overwriting: $dest"
+              }
+              Write-Host "Inventory hit; preserving existing guitar source: $dest"
+              continue
+            }
+            git clone --depth 1 $item.repo $dest
+            $audio = Get-ChildItem $dest -Recurse -File | Where-Object { $_.Extension.ToLowerInvariant() -in @('.wav','.flac','.ogg','.aiff','.aif','.mp3') } | Select-Object -First 1
+            if (-not $audio) { throw "No audio samples found for $($item.repo)." }
+            if (-not (Get-ChildItem $dest -Recurse -File -Filter $item.map | Select-Object -First 1)) { throw "SFZ map missing for $($item.repo)." }
+            if (-not (Test-Path (Join-Path $dest $item.license))) { throw "License missing for $($item.repo)." }
           }
 
           # Keep source licenses and SFZ maps, but strip cloned Git metadata
           # from the redistributable package and its reusable CI cache.
           Get-ChildItem $sampleRoot -Directory -Force -Recurse -Filter '.git' |
             Remove-Item -Recurse -Force
-          $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Expected a substantial multisample library; only $($wavFiles.Count) WAV files found." }
-          $hashLines = foreach ($file in $wavFiles) {
+          $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
+          $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
+          if ($audioFiles.Count -lt 100) { throw "Expected a substantial natural-guitar sample library; only $($audioFiles.Count) audio files found." }
+          $hashLines = foreach ($file in $audioFiles) {
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
             "$hash  $relative"
           }
-          $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt')
+          $hashLines | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK-REV18.txt')
           @'
-          Sample library sources included in this package:
-          - Meta Open Sound Meta Steel Guitar and Meta Nylon Guitar, CC0 1.0 Universal.
-            https://github.com/facebookincubator/Meta-open-sound
-          - FreePats FSBS Clean, Distortion 1 and Distortion 2 electric guitars, CC0 1.0.
-            https://github.com/freepats/electric-guitar-FSBS-clean
-            https://github.com/freepats/electric-guitar-FSBS-dist1
-            https://github.com/freepats/electric-guitar-FSBS-dist2
-          Original license files, SFZ maps and source checksum manifests are retained beside the samples.
-          SHA256SUMS-POP-PUNK.txt contains hashes for every packaged WAV file.
-          '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES.txt')
+          REV.18 natural guitar sources in managed Samples:
+          - Meta Open Sound Steel Guitar and Nylon Guitar (CC0-1.0): https://github.com/facebookincubator/Meta-open-sound
+          - FreePats FSBS Clean, Distortion 1, Distortion 2, Direct and Jazz (CC0-1.0): https://github.com/freepats
+          - FreePats Spanish Classical Guitar (CC0-1.0): https://github.com/freepats/spanish-classical-guitar
+          - Karoryfer Black And Green Guitars, Emilyguitar and Shinyguitar (CC0-1.0): https://github.com/sfzinstruments
+          All source LICENSE files and SFZ maps are retained beside the samples.
+          SHA256SUMS-POP-PUNK-REV18.txt contains SHA-256 hashes for every included WAV/FLAC/OGG/AIFF/MP3 file.
+          This source batch is not the complete size target; further unique legal guitar assets remain eligible under REV.18 A8-S.
+          '@ | Set-Content -Encoding utf8 (Join-Path $sampleRoot 'SAMPLE_SOURCES_AND_LICENSES_REV18.txt')
 
       - name: Validate restored sample library and licenses
         shell: pwsh
         run: |
           $sampleRoot = Join-Path $env:PROJECT_DIR 'Samples'
-          $wavFiles = Get-ChildItem $sampleRoot -Recurse -File -Filter '*.wav'
-          if ($wavFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($wavFiles.Count) WAV files found." }
+          $audioExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
+          $audioFiles = Get-ChildItem $sampleRoot -Recurse -File | Where-Object { $audioExtensions -contains $_.Extension.ToLowerInvariant() }
+          if ($audioFiles.Count -lt 100) { throw "Sample cache is incomplete: only $($audioFiles.Count) audio files found." }
           foreach ($license in @(
             'Meta-meta-steel-guitar/LICENSE',
             'Meta-meta-nylon-guitar/LICENSE',
             'FreePats-Clean/LICENSE.txt',
             'FreePats-Distortion-1/LICENSE.txt',
-            'FreePats-Distortion-2/LICENSE.txt'
+            'FreePats-Distortion-2/LICENSE.txt',
+            'FreePats-Direct/LICENSE.txt',
+            'FreePats-Jazz/LICENSE.txt',
+            'FreePats-Spanish-Classical/LICENSE',
+            'Karoryfer-Black-And-Green/LICENSE',
+            'Karoryfer-Emilyguitar/LICENSE',
+            'Karoryfer-Shinyguitar/LICENSE'
           )) {
             if (-not (Test-Path (Join-Path $sampleRoot $license))) { throw "Required sample license missing: $license" }
           }
@@ -192,7 +243,7 @@ jobs:
           if ($gitDirs.Count -gt 0) { throw 'Git metadata must not be included in the sample package.' }
 
           # Re-verify every WAV even when the Actions cache was restored.
-          $manifestPath = Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK.txt'
+          $manifestPath = Join-Path $sampleRoot 'SHA256SUMS-POP-PUNK-REV18.txt'
           if (-not (Test-Path -LiteralPath $manifestPath)) { throw 'Sample SHA-256 manifest is missing.' }
           $manifestEntries = @{}
           foreach ($line in Get-Content -LiteralPath $manifestPath) {
@@ -203,10 +254,10 @@ jobs:
             if ($manifestEntries.ContainsKey($relative)) { throw "Duplicate sample manifest path: $relative" }
             $manifestEntries[$relative] = $Matches.hash.ToLowerInvariant()
           }
-          if ($manifestEntries.Count -ne $wavFiles.Count) {
-            throw "Sample manifest count mismatch: manifest=$($manifestEntries.Count), WAV files=$($wavFiles.Count)."
+          if ($manifestEntries.Count -ne $audioFiles.Count) {
+            throw "Sample manifest count mismatch: manifest=$($manifestEntries.Count), audio files=$($audioFiles.Count)."
           }
-          foreach ($file in $wavFiles) {
+          foreach ($file in $audioFiles) {
             $relative = $file.FullName.Substring($sampleRoot.Length + 1).Replace('\','/')
             if (-not $manifestEntries.ContainsKey($relative)) { throw "WAV missing from SHA-256 manifest: $relative" }
             $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
@@ -327,8 +378,8 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES.txt')
-          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SAMPLE_SOURCES_AND_LICENSES_REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES_REV18.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'SOUNDBANK/SHA256SUMS-POP-PUNK-REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS_REV18.txt')
 
           $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
           $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
@@ -358,8 +409,9 @@ jobs:
           }
           $presetCatalog = Join-Path $release 'PRESETS/factory_bank_300.json'
           if (-not (Test-Path $presetCatalog)) { throw 'Factory preset catalog missing from PRESETS.' }
-          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File -Filter '*.wav'
-          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) WAV files found." }
+          $soundExtensions = @('.wav','.flac','.ogg','.aiff','.aif','.mp3')
+          $soundFiles = Get-ChildItem (Join-Path $release 'SOUNDBANK') -Recurse -File | Where-Object { $soundExtensions -contains $_.Extension.ToLowerInvariant() }
+          if ($soundFiles.Count -lt 100) { throw "SOUNDBANK is incomplete: only $($soundFiles.Count) audio files found." }
           $vst3Bundle = Get-ChildItem (Join-Path $release 'VST3') -Directory -Filter '*.vst3' | Select-Object -First 1
           if (-not $vst3Bundle) { throw 'VST3 bundle missing from VST3 package folder.' }
 
