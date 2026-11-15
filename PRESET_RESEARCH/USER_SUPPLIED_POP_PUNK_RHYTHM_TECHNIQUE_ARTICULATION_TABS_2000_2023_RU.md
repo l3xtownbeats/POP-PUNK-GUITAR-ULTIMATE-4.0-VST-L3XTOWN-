@@ -241,3 +241,22 @@ Before any pattern, articulation map or preset is counted READY:
 | Blink-182 (2023) | Classic eighth-note drive, octave riffs, muted-to-open contrast |
 
 **Implementation note:** The practice checklist is a human training reference, not a requirement to add a training module or new UI controls. The consolidated table is a compact style index; use it alongside the detailed sections above rather than as a replacement.
+
+## 20. USER-APPROVED FUTURE MIDI RHYTHM CREATION REQUIREMENT — 2026-11-15
+
+**Status:** APPROVED · CONFIRMED · FIXED AS A FUTURE PRODUCT REQUIREMENT  
+**Phase:** FUTURE PATTERN / MIDI IMPLEMENTATION — NOT CURRENTLY IMPLEMENTED
+
+The user explicitly approved both complementary ways to create a rhythmic part for a single guitar sound:
+
+1. **Draw the rhythm directly in a MIDI editor.** The user can enter and edit note events on a MIDI timeline/grid, including note positions, durations, rests, accents and velocity. Where the articulation engine supports them, events may select or trigger articulations such as Palm Mute and Open; Downstroke / Upstroke must not be presented as functional unless actually implemented.
+2. **Turn one selected guitar note into a rhythmic pattern.** The user selects a single pitch and edits its repeated note events, timing, durations, rests, accents, velocity and supported articulations. The result is a rhythmic MIDI phrase using that one pitch, rather than a newly invented sound preset.
+
+**Core separation remains mandatory:**
+- SOUND PRESET defines the guitar sound identity and response.
+- MIDI / PATTERN defines which notes play, when they play, their durations, rests, accents, velocity and supported articulation events.
+- A rhythm may be reused with different sound presets; a sound preset may be used with different MIDI rhythms.
+- Validate the same sound preset in single-note, chord and pattern contexts.
+
+This approval records product behavior and design intent only. It does **not** authorize new controls, APVTS IDs, panels, architecture changes or changes to the current NEON STAGE scope. Do not implement this during the current visual-completion phase. The locked phase order remains: finish and verify NEON STAGE → qualify sound libraries → compose factory presets → verify/finalize the factory library. Do not describe MIDI drawing, single-note rhythm editing, pattern generation or playback as implemented until code and host-level tests prove it.
+
