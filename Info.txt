@@ -2791,3 +2791,23 @@ unverified until their steps complete successfully.
 коммита ожидают exact-head CI; до успешного завершения этих шагов статус PENDING.
 
 ==============================================================================
+
+
+## 2026-11-15 — REV18 GALLERY-01 — registry-driven family filter
+
+**Branch:** `work/skin001-rev18-functional-repair`.
+**Production commit:** `df52a1281a2e94f9c88b56c145693efdc225fed7` (parent `a0f829d3d1d5855181265b5be80f55df6bdc68cc`).
+**Test commit:** `f0b5f6928ce4545d2eccfaf1d2b9bfd9f277ca96` (parent `df52a1281a2e94f9c88b56c145693efdc225fed7`).
+**Files:** `Source/PluginEditor.cpp`; `tests/TestSkinGalleryInteractionContract.py`.
+
+**Defect:** Gallery family filter was hard-coded to a fixed list of family labels/keys. Newly registered families and future themes could be omitted or become unfilterable.
+
+**Correction:** Build ComboBox entries from unique non-empty `familyKey` values in the actual gallery skin registry; display the supplied family label (fallback to a readable key); resolve selected ComboBox IDs through the generated key list. This removes the duplicated static family catalog and keeps filter choices synchronized with the registered themes.
+
+**Regression coverage added:** `test_family_filter_is_derived_from_registry` verifies registry-driven construction, unique-key handling and removal of the old hard-coded family list.
+
+**Compatibility boundary:** UI-only. No DSP, audio callback, sampler, MIDI, APVTS IDs/semantics, preset format, SoundBank or theme assets changed.
+
+**Validation:** source/test changes committed. The Python contract test, CTest, Windows Release build, pluginval and FL Studio 20 have **not** been run on this SHA. CI evidence is not available yet; do not mark this episode PASS.
+
+**Next:** run the gallery contract and inspect the remaining gallery lifecycle/selection/favorites defects before proceeding to OverlayManager/SecureSkinImport integration.
