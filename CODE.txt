@@ -1150,3 +1150,19 @@ Approved requirements:
 **Тесты:** regression source added; not compiled/executed under CTest yet. Exact-SHA Windows Release/pluginval/FL Studio 20 not run.
 **Статус:** SOURCE PRESENT; VALIDATION PENDING.
 **Следующий шаг:** complete streaming/cache/state audit and run full exact-SHA build/test suite.
+
+
+## 2026-11-15 — SPSC request queue and streaming page-cache contract tests
+
+**Тип:** concurrency/cache contract test coverage + CMake target correction.
+**Ветка:** `work/neon-stage-rich-console-ui`.
+**Commits:** `e0cc14256f7b3ccd9f5124ae3b63ec14699e328d`, `539d0b9e85cea43565592d5ddca9f62cf1c4a848`, `7a7bac741258cc3e37c9b04cfb62b44d983f4a1a`, `ec75e63c7af068df08e3dfdd293dca78967eaa57`.
+
+**Файлы:**
+- `tests/BoundedSpscQueueTests.cpp` — bounded capacity, FIFO, wrap-around, 250k concurrent SPSC sequence.
+- `tests/PageCacheSlotsTests.cpp` — pinning prevents eviction, unpinned page eviction, loading cancellation and retry.
+- `CMakeLists.txt` — explicit Threads target link; PageCacheSlots.cpp explicitly linked to standalone test target.
+
+**Проверки:** equivalent standalone g++ checks passed for queue and page-cache pin/eviction logic; repository CTest and full plugin build still pending.
+**Статус:** TEST SOURCE PRESENT; FULL VALIDATION PENDING.
+**Следующий шаг:** complete sampler stream/state audit, then run exact-SHA CTest and Windows Release.

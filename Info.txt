@@ -3102,3 +3102,21 @@ unverified until their steps complete successfully.
 **Проверки:** source and tests read back; lexical delimiter scan pending for this final set. Full CTest/Windows Release/pluginval/FL Studio 20 not run. Exact-SHA workflow runs: 0.
 
 **Следующий шаг:** final sampler cache/state audit, then run exact-SHA CMake/CTest on Windows and repair any compiler/test failures before code-stage sign-off.
+
+
+## 2026-11-15 — Streaming queue / page-cache contract coverage
+
+**Статус:** TEST SOURCE ADDED; STANDALONE LOGIC CHECKS PASSED; FULL CTEST PENDING.
+
+Для аудиопотока добавлены независимые contract tests на две lock-free структуры, от которых зависит streaming при высокой полифонии.
+
+**Изменения:**
+- `tests/BoundedSpscQueueTests.cpp`: capacity/full/empty, FIFO, wrap-around и single-producer/single-consumer concurrent stress на 250000 элементов.
+- `tests/PageCacheSlotsTests.cpp`: две pinned pages не вытесняются; после release незакреплённая страница может быть вытеснена; проверены сохранность второй pinned page и cancel/retry loading slot.
+- `CMakeLists.txt`: отдельные targets; для SPSC test добавлен `Threads::Threads`; для PageCache test исходник `PageCacheSlots.cpp` явно добавлен через `target_sources` (учтено, что `ppgu_add_test` принимает только один source аргумент).
+
+**Commits:** `e0cc14256f7b3ccd9f5124ae3b63ec14699e328d`; `539d0b9e85cea43565592d5ddca9f62cf1c4a848`; `7a7bac741258cc3e37c9b04cfb62b44d983f4a1a`; `ec75e63c7af068df08e3dfdd293dca78967eaa57` (parent `7a7bac741258cc3e37c9b04cfb62b44d983f4a1a`).
+
+**Проверки:** standalone g++ logic checks для SPSC и PageCache pin/eviction прошли. Это не является запуском repository CTest. Exact-SHA GitHub workflow runs: 0; full JUCE/Windows Release/CTest/pluginval/FL Studio 20 не запускались.
+
+**Следующий шаг:** закончить sampler streaming/state audit, затем запустить полный exact-SHA CMake/CTest.
