@@ -1,7 +1,11 @@
-> **Актуализация 2026-11-12:** этот документ сохраняется как базовая спецификация PPGU 4.0. Для приоритетов, release gates, текущих технических решений и фактического статуса использовать принятую MASTER PROMPT REV 13.0 FINAL и единственный журнал Info.txt. Более поздние прямые решения пользователя имеют приоритет над этим документом.
+> **REV.19 canonical status (2026-11-16):** this is the detailed product specification, not a project journal. The sole journal and canonical decision/status record is Info.txt. Later user-approved REV.19 decisions supersede conflicting wording in this document.  
 >
-> **UI decision:** текущий продуктовый интерфейс — один фиксированный JUCE editor в палитре dark charcoal / magenta. Не считать отдельные SVG-концепты или skin manifests готовыми runtime skins; не показывать несуществующий skin selector/gallery/hot-swap.
-
+> **Approved interface baseline:** SIGNAL FORGE = CONTROL DECK; NEON STAGE = GRAPHIC SKIN. The factory set is exactly 16 themes SKIN-1…SKIN-16, with SKIN-1 as NEON STAGE. The 27-user-control contract and seven approved FX bypass IDs are fixed; sync_selector is service-only; the legacy 102-theme set is EXCLUDED. A skin changes presentation only and cannot invent controls or runtime behavior.  
+>
+> **Approved factory preset baseline:** exactly 500 presets total — 250 MELODY + 250 PATTERN. All 500 use one unified internal source; the mode browsers are filtered views. Preserve the approved UI without redesign; build/reuse a stable-ID metadata index off the audio thread, avoid full filesystem scans per browser action, and verify performance with measurements.  
+>
+> **Audit status:** DOC-01…DOC-08 reconciliation is still in progress. The presence of a requirement here does not prove implementation; every active claim must be reconciled against Info.txt, approved contracts, current REV.19 source and exact-SHA test/host evidence. Any conflicting historical wording below is non-active until corrected.  
+>
 # POP PUNK GUITAR ULTIMATE 4.0 — полное техническое задание
 
 **Статус документа:** сводное утверждённое описание требований пользователя.  
