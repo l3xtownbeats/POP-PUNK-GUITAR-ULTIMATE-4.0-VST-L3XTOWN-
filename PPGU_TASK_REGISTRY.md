@@ -116,3 +116,22 @@
 | ENG-20 | AUTOMATED QUALITY TESTING | APPROVED REQUIREMENT | P1 | CTest/CI/host test strategy |
 
 Все записи отражают утверждение требований, не реализацию. Следующий технический рабочий пакет — MIDI ENGINE после завершения согласованной последовательности и проверки актуального source state.
+
+
+## 2026-11-16 — REV.19 single canonical workline + SIMPLE CORE implementation queue
+
+**Only active line:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`  
+**Decision-time source HEAD:** `1f58f25378992c0ddbfe5d0d38598a2034adb3e3`.
+
+REV.19 is the sole place for active development, source integration, synchronized records, builds and tests. REV.18 is the prior approved baseline/history, not a parallel workline. REV.17 and earlier are archive only. Do not create competing development branches for the same work; consolidate accepted decisions in REV.19.
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| REV19-ARCH-01 | Keep one shared SamplerEngine/SamplePool/streaming/cache/voice core for MELODY and PATTERN | SOURCE PRESENT at recorded HEAD | P1 | ongoing regression tests |
+| REV19-ARCH-02 | Establish reproducible REV.19 CPU/RAM/callback/dropout/cache baseline | NOT MEASURED | P1 | fixed Windows test profile |
+| REV19-ARCH-03 | Extract MELODY orchestration into a small, clear component without changing note/MIDI behavior | NOT IMPLEMENTED at inspected HEAD | P1 | REV19-ARCH-02; MIDI/APVTS audit |
+| REV19-ARCH-04 | Extract PATTERN orchestration into a small, clear component using the same shared sampler | NOT IMPLEMENTED at inspected HEAD | P1 | REV19-ARCH-02; PatternScheduler audit |
+| REV19-ARCH-05 | Add isolation, mode-switch, note lifecycle, AUTOCHORDS routing and shared-sampler contract tests | OPEN | P1 | ARCH-03/04 |
+| REV19-ARCH-06 | Optimize only profiled hotspots and compare measurements on identical conditions | OPEN | P2 | ARCH-05 |
+
+Guardrails: no second sampler; no duplicate sample bank/cache; no UI/browser layout changes; no APVTS/control-ID changes; no AUTOCHORDS in MELODY; no claims of performance gain without comparable measurements. All tasks execute on REV.19.
