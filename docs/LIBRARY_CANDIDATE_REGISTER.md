@@ -62,3 +62,25 @@ For every individual library and archive, add:
 
 ## Important
 This register records research leads, not completed downloads. No candidate is counted toward the BASIC 15 GB or EXPANDED +15 GB target until it is approved and integrated. Never inflate library size with duplicate or low-quality content.
+
+
+## Research update — 2026-11-16
+
+New leads found during electric-guitar-first research. These are discovery results only; no samples have been downloaded, auditioned, or approved in this update.
+
+| Candidate | Source / official or primary page | Published details | License / redistribution assessment | Status / notes |
+|---|---|---|---|---|
+| Guitar DI Lite (Boyss-Sound-e-Scapes / Sebastian McQueen) | https://www.audiartist.com/guitar-di-lite-free-kontakt-sfz-decent-sampler-wav/ | 96 WAV; 3 velocity layers; 2 round robins; Kontakt, SFZ, Decent Sampler; dry DI electric guitar | The article describes a free pack but the exact source-pack license and explicit permission to redistribute raw WAVs inside a commercial VST must be checked at the pack's own download/license page | FOUND / LICENSE REVIEW; technically promising for velocity/RR and DI coverage, but dry-only and not a ready-mix source |
+| Mood Guitars (BeastSamples) | https://beastsamples.com/mood-guitars/ | 15 electric guitar riffs; WAV and AIFF; key/BPM-labelled loops | “Royalty-free” usage for music productions does not establish permission to redistribute the raw loops inside PPGU | FOUND / LICENSE REVIEW; possible phrase-content lead only; exclude from bundled library unless explicit raw-loop redistribution rights are obtained |
+| SampleScience Clean Electric Guitar | https://wavloft.app/plugins/samplescience-clean-electric-guitar/ | Two clean electric guitars sampled note-by-note; intended as source for amp sims/effects | Public-domain description appears in secondary listing; verify SampleScience's own license and exact downloadable sample terms before inclusion | FOUND / LICENSE REVIEW; potential multisample source, clean/DI-oriented rather than finished Pop Punk tone |
+| FreePats FSBS Jazz/Clean GitHub mirror | https://github.com/freepats/electric-guitar-FSBS-jazz | SFZ instrument, bridge-pickup samples, LICENSE.txt and README; source describes CC0 | Repository contains a CC0 license file; verify checksum/content against official FreePats download before integrating | FOUND; corroborating source for FreePats clean/jazz family, not a separate sound bank if identical files |
+| FreePats FSBS Distortion #1 GitHub mirror | https://github.com/freepats/electric-guitar-FSBS-dist1 | SFZ instrument, processed distortion/overdrive; LICENSE.txt and README | Repository describes CC0; verify exact archive/file hashes against official source | FOUND; corroborating source, not an additional bank unless audio/file comparison proves distinct |
+| FreePats FSBS Distortion #2 GitHub mirror | https://github.com/freepats/electric-guitar-FSBS-dist2 | SFZ instrument, second processed distortion/overdrive variant; LICENSE.txt and README | Repository describes CC0; verify exact archive/file hashes against official source | FOUND; compare against Distortion #1 and official downloads; do not count as unique capacity until deduplication |
+
+### Structural classification rules reinforced by this research
+- Multisampled playable instruments belong under `Samples/Factory/Electric/<ToneFamily>/` with their original SFZ/mapping files preserved alongside or in a matching `Mapping/` record.
+- DI sources belong under `Samples/Factory/Electric/DI/`; do not label them as ready-mix presets.
+- Finished processed clean/crunch/overdrive/distortion sources are preferred for immediate factory-preset usability; DI is a supplemental signal path.
+- Riffs/loops belong in a separate phrase pool (for example `Samples/Factory/Phrases/Electric/`), never mixed into note-by-note multisample mappings.
+- A royalty-free composition-use license is not sufficient for raw sample redistribution. Such candidates remain unapproved until the exact pack terms explicitly permit commercial redistribution/embedding in a VST.
+- Mirror repositories and alternate formats are not separate content by default. Compare SHA-256 at file level and count only unique audio.
