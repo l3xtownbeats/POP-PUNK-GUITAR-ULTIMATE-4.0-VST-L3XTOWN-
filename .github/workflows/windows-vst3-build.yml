@@ -14,6 +14,9 @@ on:
       - Source/UI/PPGUMultiWindowWorkspace.cpp
       - Source/UI/PPGUMultiWindowWorkspace.h
       - tests/ThemeManagerTests.cpp
+      - tests/ValidateSkinManifests.py
+      - tools/audit_skin_rev18_assets.py
+      - tools/package_active_skins.py
       - SKIN/theme_manifest.json
       - SKIN/approved_theme_sequence.json
       - SKIN/Skin_053/**
