@@ -1676,6 +1676,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+    if (skinTexture != nullptr)
+        skinTexture->drawWithin(g, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit, 0.18f);
+    if (skinBezel != nullptr)
+        skinBezel->drawWithin(g, getLocalBounds().reduced(5).toFloat(), juce::RectanglePlacement::centred, 0.38f);
 
     // Branded top rail: purely graphical chrome behind the existing live buttons.
     // No new action, parameter, or processor dependency is introduced here.
@@ -1687,6 +1691,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillRoundedRectangle(header, 9.0f);
     g.setColour(p.token("control_border").withAlpha(0.8f));
     g.drawRoundedRectangle(header.reduced(0.5f), 9.0f, 1.0f);
+    if (skinCrest != nullptr)
+        skinCrest->drawWithin(g,
+            juce::Rectangle<float>(header.getX() + 116.0f, header.getY() + 5.0f, 168.0f, 38.0f),
+            juce::RectanglePlacement::centred, 0.72f);
     g.setColour(p.token("accent").withAlpha(0.9f));
     g.fillRoundedRectangle(header.getX() + 8.0f, header.getY() + 8.0f,
                            2.0f, header.getHeight() - 16.0f, 1.0f);
@@ -2154,42 +2162,54 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 
 void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
 {
-    const auto paletteId = themeManager.getPalette().id;
-    const int skinIndex = getSkinOrdinalForId(paletteId);
-    const auto manifest = getSkinManifest(skinIndex);
+    heroArtwork = {};
+    heroArtworkFile = {};
+    skinTexture.reset();
+    skinBezel.reset();
+    skinCrest.reset();
 
+    const auto paletteId = themeManager.getPalette().id;
+    const int skinOrdinal = getSkinOrdinalForId(paletteId);
+    const auto manifest = getSkinManifest(skinOrdinal);
     if (!manifest.existsAsFile())
-    {
-        heroArtwork = {};
-        heroArtworkFile = {};
         return;
-    }
 
     const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+    if (!theme.isObject())
+        return;
+
     const auto assets = theme.getProperty("assets", juce::var());
-    const auto relativePath = assets.getProperty("hero", "").toString();
-
-    if (relativePath.isEmpty() || relativePath.startsWith("/")
-        || relativePath.contains(".."))
+    const auto loadImage = [this, &manifest](const juce::var& object, const juce::String& key)
     {
-        heroArtwork = {};
-        heroArtworkFile = {};
-        return;
-    }
+        const auto relativePath = object.getProperty(key, "").toString();
+        if (relativePath.isEmpty() || relativePath.startsWith("/") || relativePath.contains(".."))
+            return juce::File{};
+        const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
+        return candidate.isAChildOf(manifest.getParentDirectory()) && candidate.existsAsFile()
+            ? candidate : juce::File{};
+    };
 
-    const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
-    if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
+    heroArtworkFile = loadImage(assets, "hero");
+    if (heroArtworkFile.existsAsFile())
+        heroArtwork = juce::ImageFileFormat::loadFrom(heroArtworkFile);
+
+    const auto effects = theme.getProperty("effects", juce::var());
+    const auto loadSvg = [&manifest](const juce::var& object, const juce::String& key)
+        -> std::unique_ptr<juce::Drawable>
     {
-        heroArtwork = {};
-        heroArtworkFile = {};
-        return;
-    }
+        const auto relativePath = object.getProperty(key, "").toString();
+        if (relativePath.isEmpty() || relativePath.startsWith("/") || relativePath.contains(".."))
+            return {};
+        const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
+        if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
+            return {};
+        const auto xml = juce::XmlDocument::parse(candidate);
+        return xml != nullptr ? juce::Drawable::createFromSVG(*xml) : nullptr;
+    };
 
-    if (candidate == heroArtworkFile && !heroArtwork.isNull())
-        return;
-
-    heroArtworkFile = candidate;
-    heroArtwork = juce::ImageFileFormat::loadFrom(heroArtworkFile);
+    skinTexture = loadSvg(effects, "texture");
+    skinBezel = loadSvg(effects, "bezel");
+    skinCrest = loadSvg(effects, "crest");
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
