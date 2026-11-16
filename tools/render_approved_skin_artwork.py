@@ -35,17 +35,35 @@ def motif(d,n,w,h,p):
             x=rng.randrange(w); y=rng.randrange(h); s=rng.randrange(55,150)
             d.polygon([(x,y),(x+s,y-s//3),(x+s//2,y+s)],fill=(*a,15),outline=(*g,70))
         d.arc((w*.3,h*.1,w*1.1,h*1.1),190,330,fill=(*g,95),width=5)
-    elif n in (5,13): # Frost crystal fractures
-        for _ in range(22):
-            x=rng.randrange(w); y=rng.randrange(h); s=rng.randrange(35,140)
-            pts=[(x,y),(x+rng.randrange(-28,29),y+s*.4),(x+rng.randrange(-65,66),y+s)]
-            d.line(pts,fill=(*g,rng.randrange(30,85)),width=2)
-            d.line((pts[1],(pts[1][0]+rng.randrange(20,55),pts[1][1]+20)),fill=(*hi,45),width=1)
-    elif n in (6,15): # Violet plasma arcs / drive trails
-        for i in range(10):
-            y=h*(.16+i*.065); d.arc((w*.25-i*14,y-70,w*1.12+i*14,y+170),185,330,fill=(*a,30+i*4),width=3)
-        for _ in range(22):
-            x=rng.randrange(w); y=rng.randrange(h); d.line((x,y,x+rng.randrange(25,100),y-rng.randrange(2,18)),fill=(*g,45),width=2)
+    elif n==5: # Arctic platinum: faceted crystal prisms
+        for _ in range(18):
+            x=rng.randrange(w); y=rng.randrange(h); size=rng.randrange(45,125)
+            pts=[(x,y-size),(x+size*.62,y-size*.12),(x+size*.18,y+size),(x-size*.58,y+size*.24)]
+            d.polygon(pts,outline=(*hi,rng.randrange(28,78)),width=2)
+            d.line((pts[0],pts[2]),fill=(*g,38),width=1)
+            d.line((pts[1],pts[3]),fill=(*a,28),width=1)
+    elif n==13: # Glacier teal: branching frost fractures
+        for _ in range(24):
+            x=rng.randrange(w); y=rng.randrange(h); length=rng.randrange(45,165)
+            pts=[(x,y),(x+rng.randrange(-24,25),y+length*.35),(x+rng.randrange(-55,56),y+length)]
+            d.line(pts,fill=(*g,rng.randrange(35,90)),width=2)
+            branch=(pts[1][0]+rng.randrange(20,65),pts[1][1]+rng.randrange(8,38))
+            d.line((pts[1],branch),fill=(*hi,55),width=1)
+            d.line((pts[2],(pts[2][0]-rng.randrange(18,42),pts[2][1]-rng.randrange(8,32))),fill=(*a,35),width=1)
+    elif n==6: # Violet noir: smoked-glass vortex and soft amethyst rings
+        for i in range(9):
+            box=(w*.34-i*17,h*.10-i*12,w*1.08+i*18,h*1.12+i*10)
+            d.arc(box,195+i*3,338-i*2,fill=(*a,24+i*4),width=4 if i%2==0 else 2)
+        for i in range(7):
+            x=int(w*.68)+i*9; y=int(h*.48)-i*5; r=22+i*13
+            d.ellipse((x-r,y-r,x+r,y+r),fill=(*g,7),outline=(*hi,18+i*3),width=2)
+    elif n==15: # Ultraviolet drive: directional plasma speed trails
+        for i in range(18):
+            y=int(h*(.12+i*.045)); x0=int(w*(.05+(i%4)*.035))
+            d.line((x0,y,x0+int(w*.72),y-int(h*.16)),fill=(*a,24+i*2),width=2 if i%3 else 4)
+        for i in range(8):
+            box=(w*.42-i*10,h*.20-i*7,w*1.08+i*14,h*.92+i*10)
+            d.arc(box,205,295,fill=(*g,35+i*5),width=2)
     elif n==7: # Brushed titanium and storm cut
         for y in range(0,h,5): d.line((0,y,w,y),fill=(*hi,rng.randrange(8,28)),width=1)
         pts=[(w*.08,h*.2),(w*.25,h*.38),(w*.2,h*.5),(w*.43,h*.62),(w*.39,h*.74),(w*.65,h*.9)]
