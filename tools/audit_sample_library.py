@@ -23,6 +23,23 @@ def digest(p):
 def norm(value):
     return value.replace("\\\\","/").replace("\\","/").strip()
 
+def normalize_suffix(value):
+    """Normalize a relative SFZ path for unique in-root suffix matching.
+
+    Parent components are collapsed lexically only for the fallback index;
+    actual filesystem candidates are still resolved and checked against root.
+    """
+    stack=[]
+    for part in norm(value).split("/"):
+        if part in ("", "."):
+            continue
+        if part == "..":
+            if stack:
+                stack.pop()
+            continue
+        stack.append(part)
+    return "/".join(stack)
+
 def inside(root, candidate):
     try:
         candidate.relative_to(root)
@@ -98,7 +115,7 @@ def main():
                 continue
 
             if found is None:
-                suffix=(Path(default_path)/rel).as_posix() if default_path else rel.as_posix()
+                suffix=normalize_suffix((Path(default_path)/rel).as_posix() if default_path else rel.as_posix())
                 matches=suffix_index.get(suffix.casefold(),[])
                 if len(matches)==1:
                     found=matches[0]
