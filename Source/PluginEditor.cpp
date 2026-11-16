@@ -1578,6 +1578,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
                                            p.token("panel"),
                                            bounds.getX(), bounds.getBottom(), false));
     g.fillRoundedRectangle(bounds, 12.0f);
+    if (p.textureArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.10f);
+        g.drawImageWithin(p.textureArtwork, area.getX() + 2, area.getY() + 2,
+                         juce::jmax(1, area.getWidth() - 4), juce::jmax(1, area.getHeight() - 4),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+    if (p.bezelArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.42f);
+        g.drawImageWithin(p.bezelArtwork, area.getX(), area.getY(),
+                         area.getWidth(), area.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
     g.setColour(p.token("control_border").withAlpha(0.78f));
     g.drawRoundedRectangle(bounds.reduced(0.5f), 12.0f, 1.0f);
 
@@ -1600,6 +1618,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+    if (p.textureArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.16f);
+        g.drawImageWithin(p.textureArtwork, 0, 0, getWidth(), getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1614,6 +1640,28 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, browser, "PRESET LIBRARY");
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
+
+    if (p.crestArtwork.isValid())
+    {
+        const auto crestWidth = juce::jmin(420, juce::jmax(1, area.getWidth() - 32));
+        const auto crestHeight = juce::jmin(148, juce::jmax(1, area.getHeight() - 32));
+        const auto crestBounds = area.withSizeKeepingCentre(crestWidth, crestHeight);
+        g.saveState();
+        g.setOpacity(0.055f);
+        g.drawImageWithin(p.crestArtwork, crestBounds.getX(), crestBounds.getY(),
+                          crestBounds.getWidth(), crestBounds.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+
+    if (p.bezelArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.78f);
+        g.drawImageWithin(p.bezelArtwork, 0, 0, getWidth(), getHeight(),
+                          juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
 
     // Subtle NEON STAGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
