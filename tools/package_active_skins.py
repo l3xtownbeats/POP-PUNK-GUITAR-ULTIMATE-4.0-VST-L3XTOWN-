@@ -70,9 +70,6 @@ def main() -> int:
     (output / "theme_manifest.json").write_text(
         json.dumps(runtime_registry, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8")
-    copy_one(root, output, "control_schema.json")
-    copy_one(root, output, "approved_theme_sequence.json")
-
     approved_by_ordinal = {item.get("ordinal"): item for item in approved if isinstance(item, dict)}
     seen_ids = set()
     seen_indices = set()
