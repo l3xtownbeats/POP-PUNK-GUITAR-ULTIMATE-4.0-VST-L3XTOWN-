@@ -1,11 +1,44 @@
-# POP PUNK GUITAR ULTIMATE — MASTER IMPLEMENTATION & REQUIREMENTS REGISTER
-**Document ID:** PPGU-MASTER-REGISTER-RU  
-**Revision:** 1.0  
-**Created:** 2026-11-14  
-**Canonical branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`  
-**Purpose:** one complete operational checklist of approved requirements, verified existing work, partial implementations, missing work, sequence, invariants, acceptance gates and journal rules.
+# POP PUNK GUITAR ULTIMATE — MASTER IMPLEMENTATION & REQUIREMENTS REGISTER (REV.19)
 
-> **Authority and status:** This register consolidates the user-ratified product baseline, SIGNAL FORGE v10/v10.1 standards, Info.txt master consolidation (sections A–K), CODE.txt implementation history, Control Center decisions D-RETRO-001..019, and the latest available source audits. It is not evidence that a requirement is implemented. Actual status is always determined from source + tests + exact-SHA CI/host evidence. If a newer explicit user decision conflicts with this register, the newer decision must be recorded as an append-only superseding amendment before the register is revised.
+**Document ID:** PPGU-MASTER-REGISTER-RU  
+**Revision:** 2.0 — REV.19 governance reconciliation  
+**Updated:** 2026-11-16  
+**Canonical branch:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`  
+**Preflight HEAD:** `f7e7cb1b3e3ec5b6471b501e8d26da918a003b37`  
+**Status:** IN_PROGRESS — legacy rows are being revalidated; this is not a claim of implementation.
+
+## Authority and scope
+
+- `Info.txt` is the sole active project journal and canonical record of approved decisions, current status and evidence.
+- This register is a structured requirements/acceptance index. It cannot override `Info.txt`, approved contracts or the current REV.19 source.
+- The legacy material below is preserved unchanged for provenance. Its REV.17/REV.18 branch references, counts, priorities, statuses, queues and journal instructions are **HISTORICAL / UNVERIFIED** until each row is independently reconciled. Do not use it as an active work queue.
+- Documentation status is not implementation status. `IMPLEMENTED`, `VERIFIED` or `PASS` requires evidence tied to the exact relevant source SHA and applicable test/host result.
+
+## Current locked REV.19 baseline
+
+| ID | Approved rule | Status | Source / acceptance |
+|---|---|---|---|
+| GOV-REV19-01 | Only active development branch is `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`. REV.18 is historical baseline; REV.17 and earlier are archive. | APPROVED · LOCKED | `Info.txt` canonical baseline; verify branch before every write. |
+| GOV-REV19-02 | `Info.txt` is the only active journal; secondary journals and continuation packets are historical references only. | APPROVED · LOCKED | `Info.txt`; no parallel append-only journal. |
+| UI-REV19-01 | SIGNAL FORGE = CONTROL DECK; NEON STAGE = GRAPHIC SKIN. | APPROVED · LOCKED | `Info.txt`; skin cannot invent or alter function. |
+| UI-REV19-02 | Exactly 27 user-facing controls; `sync_selector` is service-only; only seven approved FX bypass IDs. | APPROVED · LOCKED | Approved control/APVTS contracts; no inferred IDs. |
+| SKIN-REV19-01 | Exactly 16 factory themes SKIN-1…SKIN-16; SKIN-1 is NEON STAGE; legacy 102-theme set is EXCLUDED. | APPROVED · LOCKED | `Info.txt` and approved theme sequence; runtime parity still requires evidence. |
+| PRESET-REV19-01 | Exactly 500 factory presets total: 250 MELODY + 250 PATTERN. | APPROVED · LOCKED · IN_PROGRESS | `Info.txt`, `TX-REV19-FACTORY-PRESET-TARGET-500-001`; playable readiness requires real licensed assets, mappings, runtime audition and per-preset validation. |
+| PRESET-REV19-02 | One unified internal source for all 500 factory presets; MELODY/PATTERN browser views are filtered views, not separate physical banks. | APPROVED · IN_PROGRESS | `Info.txt`, `TX-REV19-UNIFIED-PRESET-ENGINE-FAST-INDEX-NO-UI-CHANGE-001`; stable-ID metadata index, off-audio-thread indexing, no full filesystem scan per browser action, and no UI redesign. Runtime/performance acceptance remains open. |
+
+## Required record fields
+
+Every active requirement/task record must include: unique ID; title and type; status; exact user decision/source; dependencies; objective acceptance criteria; evidence path/commit/test; and next action or precise blocker. Use the current status vocabulary in `Info.txt`; do not infer completion from documentation or file presence.
+
+## Reconciliation boundary
+
+This current header is the active REV.19 governance wrapper. The legacy snapshot below is preserved for provenance and is not a clean, complete REV.19 implementation register. DOC-01…DOC-08 reconciliation remains in progress; each legacy row must be migrated, corrected, superseded or marked historical in scoped passes without deleting source history or inventing requirements.
+
+---
+
+## LEGACY SOURCE SNAPSHOT — HISTORICAL / NOT ACTIVE UNTIL ROW-BY-ROW REV.19 REVIEW
+
+The following section is retained verbatim as audit material. Any instruction or status that conflicts with the current baseline above or `Info.txt` is superseded and must not be executed.
 
 ## 0. Current checkpoint and evidence boundary
 

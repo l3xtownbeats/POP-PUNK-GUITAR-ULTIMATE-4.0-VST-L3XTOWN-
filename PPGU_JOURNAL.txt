@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED — NOT AN ACTIVE REV.19 AUTHORITY (2026-11-16).** This file is a secondary historical journal. Do not append new project decisions or status here. Its historical claims (including old sample limits, branch names and preset targets) must be checked against `Info.txt`; the current factory preset target is 500 total (250 MELODY + 250 PATTERN).
+>
+> Preserve this file for provenance and audit only. Do not execute its old branch, journal, priority, preset-count, theme-count, packaging or implementation instructions as current requirements. Reuse a historical statement only after checking it against the current canonical `Info.txt`, the REV.19 audit map and the exact current source. `Info.txt` is the only active project journal; the only active development branch is `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`.
+
+---
+
 
 
 Samples — дополнительное утверждение пользователя (2026-11-14)

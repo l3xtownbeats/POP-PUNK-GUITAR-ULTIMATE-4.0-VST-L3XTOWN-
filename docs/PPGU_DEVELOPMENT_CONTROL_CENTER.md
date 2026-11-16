@@ -1,3 +1,9 @@
+> **HISTORICAL / SUPERSEDED — NOT AN ACTIVE REV.19 AUTHORITY (2026-11-16).** This document is the old REV.17/REV.18 Control Center protocol. Its branch authority, dual-journal requirements (`Info.txt` + `CODE.txt`), append-only ledgers and old process rules are superseded by the REV.19 canonical baseline. The later REV.19 notes remain historical evidence, not a second control authority.
+>
+> Preserve this file for provenance and audit only. Do not execute its old branch, journal, priority, preset-count, theme-count, packaging or implementation instructions as current requirements. Reuse a historical statement only after checking it against the current canonical `Info.txt`, the REV.19 audit map and the exact current source. `Info.txt` is the only active project journal; the only active development branch is `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`.
+
+---
+
 
 # PPGU DEVELOPMENT CONTROL CENTER
 ## Permanent session, branch, decision, transaction and evidence protocol
