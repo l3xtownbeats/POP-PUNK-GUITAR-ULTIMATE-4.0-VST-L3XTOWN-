@@ -14,7 +14,7 @@
 
 | Source | Guitar content | Public license evidence | Current PPGU status |
 |---|---|---|---|
-| Meta Open Sound — Meta Steel Guitar | 375 multisamples, steel-string acoustic, E2–C6, 3 velocity layers, SFZ + design spec | Collection marked CC0-1.0; collection-specific LICENSE and SHA256SUMS are provided | Approved source candidate; download, checksum and package audit pending |
+| Meta Open Sound — Meta Steel Guitar | 375 multisamples, steel-string acoustic, E2–C6, 3 velocity layers, SFZ + design spec | Collection-specific CC0-1.0 LICENSE; pinned official release archive SHA-256 | Archive pinned: 663,385,210 bytes; SHA-256 `caaa8a9c07217f4a82d1dfd9f5657c286155464b66bf4dd27797811c2558a909`; payload not yet downloaded/integrated |
 | Meta Open Sound — Meta Nylon Guitar | 348 multisamples, nylon-string acoustic, E2–B5, 3 dynamic layers, SFZ + design spec | Collection marked CC0-1.0; collection-specific LICENSE and SHA256SUMS are provided | Approved source candidate; download, checksum and package audit pending |
 | FreePats — FSBS Clean Electric Guitar | Natural electric guitar multisamples; SFZ WAV/FLAC variants | Source page marks CC0-1.0 | Candidate; choose one canonical format/variant and verify exact archive/license |
 | FreePats — FSBS Distorted Electric Guitar | Natural recorded electric guitar processed through amp/effects; SFZ WAV/FLAC variants | Source page marks CC0-1.0 | Candidate; verify exact archive/license and avoid duplicate variants |
@@ -43,3 +43,8 @@
 - SFZ Instruments guitar index (discovery only; publisher license remains authoritative): https://sfzinstruments.github.io/guitars/
 
 **Important:** these sources are a starting set, not a claim that the 15 GB BASIC payload has been downloaded or that any source alone satisfies the target. No audio payload is counted until the original files are downloaded, rights-cleared, checksummed and catalogued.
+
+
+## Pinned acquisition tranche — Meta acoustic baseline
+
+The official WAV release assets are now pinned by exact filename, byte size and GitHub SHA-256 digest in `assets/library/source_acquisition_manifest.json`. `tools/Download_Meta_CC0_Guitar_Libraries.ps1` now refuses changed/unpinned release assets and verifies the archive digest before extraction, then verifies the upstream per-file SHA256SUMS. This is a source-intake hardening step, not evidence that the audio has already been downloaded. The two Meta collections are acoustic reference material and must not be counted as electric pop-punk coverage or as a 15 GB BASIC payload.
