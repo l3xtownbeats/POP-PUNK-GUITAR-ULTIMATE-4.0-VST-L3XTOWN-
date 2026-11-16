@@ -2,15 +2,15 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "status": "16_THEME_SEQUENCE_APPROVED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
-  "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
+  "rule": "The 16 approved logical SKIN names are canonical. Immutable stable IDs remain skin-053 and skin-103..skin-117. Legacy Skin_01..Skin_102 records/assets must be safely archived outside the active runtime gallery after a no-loss backup; do not delete or renumber source assets.",
   "themes": [
     {
       "ordinal": 1,
       "label": "SKIN-1",
-      "name": "NEON STAGE DEFAULT",
+      "name": "NEON STAGE",
       "stableId": "skin-053",
       "index": 53,
       "path": "Skin_053/theme.json",
