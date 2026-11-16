@@ -1991,7 +1991,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
 {
     if (auxiliaryWorkspace == nullptr) return;
     constexpr int galleryPanelId = 5;
-    if (!auxiliaryWorkspace->isPanelOpen(galleryPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(galleryPanelId))
+        auxiliaryWorkspace->focusPanel(galleryPanelId);
+    else
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
         const auto activeId = themeManager.getPalette().id;
@@ -2081,7 +2083,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openAboutPanel()
         return;
 
     constexpr int aboutPanelId = 2103;
-    if (!auxiliaryWorkspace->isPanelOpen(aboutPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(aboutPanelId))
+        auxiliaryWorkspace->focusPanel(aboutPanelId);
+    else
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = aboutPanelId;
@@ -2103,7 +2107,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
         return;
 
     constexpr int settingsPanelId = 6;
-    if (!auxiliaryWorkspace->isPanelOpen(settingsPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(settingsPanelId))
+        auxiliaryWorkspace->focusPanel(settingsPanelId);
+    else
     {
         auto* properties = uiProperties.getUserSettings();
         const auto panelScale = properties != nullptr
@@ -2300,7 +2306,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openFxEditPanel(int selectedEffe
     if (auxiliaryWorkspace == nullptr)
         return;
     constexpr int fxEditPanelId = 2101;
-    if (!auxiliaryWorkspace->isPanelOpen(fxEditPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(fxEditPanelId))
+        auxiliaryWorkspace->focusPanel(fxEditPanelId);
+    else
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = fxEditPanelId;
@@ -2320,8 +2328,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openPatternSectionPanel()
 {
     if (auxiliaryWorkspace == nullptr)
         return;
-    constexpr int patternSectionPanelId = 2103;
-    if (!auxiliaryWorkspace->isPanelOpen(patternSectionPanelId))
+    constexpr int patternSectionPanelId = 2104;
+    if (auxiliaryWorkspace->isPanelOpen(patternSectionPanelId))
+        auxiliaryWorkspace->focusPanel(patternSectionPanelId);
+    else
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = patternSectionPanelId;
@@ -2341,7 +2351,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openAutoChordsPanel()
     if (auxiliaryWorkspace == nullptr)
         return;
     constexpr int autoChordsPanelId = 2102;
-    if (!auxiliaryWorkspace->isPanelOpen(autoChordsPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(autoChordsPanelId))
+        auxiliaryWorkspace->focusPanel(autoChordsPanelId);
+    else
     {
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = autoChordsPanelId;
@@ -2361,7 +2373,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openImportGuitarPanel()
     if (auxiliaryWorkspace == nullptr)
         return;
     constexpr int importGuitarPanelId = 1001;
-    if (!auxiliaryWorkspace->isPanelOpen(importGuitarPanelId))
+    if (auxiliaryWorkspace->isPanelOpen(importGuitarPanelId))
+        auxiliaryWorkspace->focusPanel(importGuitarPanelId);
+    else
     {
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safeThis(this);
         PPGUMultiWindowWorkspace::PanelSpec spec;
