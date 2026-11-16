@@ -147,3 +147,15 @@ Guardrails: no second sampler; no duplicate sample bank/cache; no UI/browser lay
 | PSET-09 | Avoid repeated filesystem scans; keep indexing off audio thread; measure lookup/switch latency | NOT IMPLEMENTED | P1 | PSET-07; performance harness |
 
 Acceptance: unchanged approved UI; one source; exact 250+250; cached/indexed mode filtering; no full scan per browser action/preset selection; no blocking or disk I/O in audio callback. Requirement approval is not implementation completion.
+
+
+## 2026-11-16 — TX-REV19-PRESET-CATEGORIES-BOTH-MODES-001
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| PSET-10 | Extend preset schema and validator with exactly two main modes and three categories available in each mode | APPROVED / LOCKED — NOT IMPLEMENTED | P1 | PSET-01; PSET-02 |
+| PSET-11 | Classify the 500-entry unified factory catalog by stable ID, main mode and category; preserve exact 250+250 mode balance | NOT IMPLEMENTED | P1 | PSET-10; PSET-07 |
+| PSET-12 | Expose PLAYING, PATTERN and ARTICULATIONS as category filters in both existing mode-browser views without changing UI appearance | NOT IMPLEMENTED | P1 | PSET-08; PSET-10 |
+| PSET-13 | Validate mode-compatible content and runtime behavior for each category, including sample/articulation/performance dependencies | NOT IMPLEMENTED | P1 | PSET-11; sample-library audit; playback engine |
+
+Acceptance: MELODY and PATTERN are the only main modes; each offers PLAYING, PATTERN and ARTICULATIONS categories; each record has one stable ID, one main mode and one valid category; total remains exactly 500 (250+250); category counts are subdivisions, not extra presets; existing UI remains visually unchanged; actual playback and dependencies are verified before READY.
