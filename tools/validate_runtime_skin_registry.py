@@ -2,6 +2,7 @@
 """Validate only the approved themes currently admitted to the REV.19 runtime registry."""
 from __future__ import annotations
 import json
+import re
 import sys
 import zlib
 from pathlib import Path
@@ -77,6 +78,19 @@ def validate_svg(path: Path) -> None:
             if any(token in text for token in ("http://", "https://", "file://", "data:")):
                 fail(f"{path}: external SVG resource reference is forbidden")
 
+def luminance(value: str) -> float:
+    if not isinstance(value, str) or re.fullmatch(r"#[0-9A-Fa-f]{6}", value) is None:
+        fail(f"invalid palette colour: {value!r}")
+    channels = [int(value[i:i + 2], 16) / 255.0 for i in (1, 3, 5)]
+    linear = [channel / 12.92 if channel <= 0.04045 else ((channel + 0.055) / 1.055) ** 2.4
+              for channel in channels]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+def contrast(foreground: str, background: str) -> float:
+    first, second = luminance(foreground), luminance(background)
+    lighter, darker = max(first, second), min(first, second)
+    return (lighter + 0.05) / (darker + 0.05)
+
 def validate(root: Path) -> int:
     registry = load_json(root / "theme_manifest.json")
     sequence = load_json(root / "approved_theme_sequence.json")
@@ -122,8 +136,30 @@ def validate(root: Path) -> int:
         palette, controls = theme.get("palette"), theme.get("controls")
         if not isinstance(palette, dict) or set(palette) != set(tokens):
             fail(f"{theme_path}: palette must contain exactly the 21 contract tokens")
+        for token in tokens:
+            luminance(palette[token])
+        for foreground, background, minimum in (
+            ("text_primary", "window_bg", 4.0),
+            ("text_secondary", "window_bg", 4.0),
+            ("text_disabled", "window_bg", 4.0),
+            ("lcd_text", "lcd_bg", 4.0),
+            ("accent", "panel", 2.2),
+        ):
+            ratio = contrast(palette[foreground], palette[background])
+            if ratio < minimum:
+                fail(f"{theme_path}: {foreground}/{background} contrast {ratio:.2f} < {minimum:.1f}")
         if not isinstance(controls, dict) or set(controls) != set(required) | {"sync_selector"}:
             fail(f"{theme_path}: controls must contain exactly 27 canonical IDs plus sync_selector")
+        for control_id in required:
+            control = controls[control_id]
+            grid = control.get("grid", {}) if isinstance(control, dict) else {}
+            x, y, width, height = (grid.get(key) for key in ("x", "y", "w", "h")) if isinstance(grid, dict) else (None, None, None, None)
+            if not all(isinstance(value, int) and not isinstance(value, bool) for value in (x, y, width, height)):
+                fail(f"{theme_path}: invalid grid coordinates for {control_id}")
+            if min(x, y) < 0 or min(width, height) < 1 or x + width > 12 or y + height > 16:
+                fail(f"{theme_path}: grid outside 12x16 layout for {control_id}")
+            if not isinstance(control.get("presentation"), str) or not isinstance(control.get("runtimeBinding"), str):
+                fail(f"{theme_path}: missing presentation/runtime binding for {control_id}")
         compatibility = theme.get("compatibility", {})
         if compatibility.get("apvtsChanges") or compatibility.get("layoutChanges") or compatibility.get("audioChanges"):
             fail(f"{theme_path}: skin must remain visual-only")
