@@ -1038,3 +1038,22 @@ Important scope/limitations:
 Artifact: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-PORTABLE-CI-NOT-RELEASE, artifact ID 14166697237, SHA-256 b5e1e07a4d00aaead8e7fd55a7330e568d73eafa1dec2f8c31bf82313ba5629b. Artifact expires 2027-02-13. It is 1.66 GB and is retained as CI evidence, not promoted as a release.
 
 STATUS: WINDOWS X64 BUILD PASS · CTEST 12/12 PASS · PLUGINVAL STRICTNESS 5 PASS · MANUAL HOST/GUI ACCEPTANCE PENDING. Next NEON STAGE work remains the runtime visual/interaction audit of approved panels and all sixteen themes; only after NEON STAGE acceptance may the project proceed to the sound-library phase.
+
+
+2026-11-16 — NEON STAGE: 16-THEME GALLERY REGISTRY AND PALETTE AUDIT
+
+Completed a focused source/data audit of all sixteen entries in SKIN/approved_theme_sequence.json and their corresponding theme.json files (SKIN-1 Skin_053; SKIN-2..16 Skin_103..Skin_117).
+
+Confirmed:
+- All sixteen theme.json files exist and parse as JSON.
+- Each theme declares the same canonical 21 palette-token keys and a complete palette object.
+- Static WCAG-style relative-luminance calculations for text_primary/text_secondary/text_disabled against panel, accent against control_bg, and lcd_text against lcd_bg show the current supplied values meet 4.5:1 in the checked pairings. These calculations are a data-level preflight only; they do not establish actual rendered contrast on every component/state/background.
+- The Gallery source has working search, family filter, selection cards, Preview, Apply and Back callbacks. Preview is temporary; Apply persists the successful previewed skin; Back/close restores the original selection. Apply is disabled until a successful Preview in the current session.
+
+Blocking finding:
+- The runtime authority SKIN/theme_manifest.json currently declares totalSkins=1 and contains only skin-053 / Skin_053.
+- getSkinCount() and getSkinManifest() in Source/PluginEditor.cpp read only this runtime manifest. openSkinGalleryPanel() builds its cards from that count. Therefore the production Gallery currently exposes only one theme, despite the approved sequence and the existence of fifteen additional theme specifications.
+- SKIN-2..SKIN-16 theme manifests explicitly mark PNG preview/hero artwork and runtime validation as pending; their folders currently provide SVG assets but no packaged PNG preview.png/hero.png. The approved sequence itself lists these PNGs and G1-G4 validation as pending.
+- Do not inflate the runtime registry to sixteen or claim all sixteen selectable until artwork/asset validation, runtime loading and exact-SHA package tests pass. Keep the approved sixteen sequence fixed; do not reintroduce the retired historical 102-record archive.
+
+STATUS: 16 THEME SPECIFICATIONS/PALLETTES PRESENT · STATIC CONTRAST PREFLIGHT PASS · GALLERY TRANSACTION SOURCE PRESENT · RUNTIME GALLERY CURRENTLY 1/16 · SKIN-2..16 PNG/G1-G4/REGISTRY/PACKAGE/RUNTIME ACCEPTANCE PENDING. Next bounded task: complete missing per-theme PNG artwork and asset checks, then safely promote the approved sequence into the runtime registry and test preview/apply/rollback for all sixteen. No source/UI behavior was changed in this audit.
