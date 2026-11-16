@@ -388,7 +388,7 @@ def main() -> int:
     sequence = load_json(SKIN_ROOT / "approved_theme_sequence.json", errors)
     archive = load_json(SKIN_ROOT / "archive" / "theme_manifest.legacy-102.json", errors)
     if not isinstance(registry, dict) or not isinstance(sequence, dict):
-        print("\\n".join(errors))
+        print("\n".join(errors))
         return 1
 
     if registry.get("defaultSkin") != DEFAULT_ID:
