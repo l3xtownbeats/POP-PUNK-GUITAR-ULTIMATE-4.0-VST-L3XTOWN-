@@ -3244,3 +3244,37 @@ POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 Следующий этап: controlled NEON STAGE source/assets integration and verification into REV.19; no redesign.
 
 ==============================================================================
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-PRODUCT-IMPLEMENTATION-EXECUTION-001
+STATUS: IN_PROGRESS · ACCEPTED FOR EXECUTION · IMPLEMENTATION PREFLIGHT RECORDED
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+
+Пользователь поручил приступить к дальнейшей реализации всех действующих пунктов проекта POP PUNK GUITAR ULTIMATE. Задача принята к исполнению в полном утверждённом объёме. Работа ведётся последовательно по зависимостям; утверждённые пункты не возвращаются на повторное согласование. Результат «ГОТОВО / ВЫПОЛНЕНО / 100% ГОТОВО» допускается только после фактической реализации, интеграции и проверок.
+
+Первый технический preflight по теме NEON STAGE / 16 factory skins:
+- Подтверждено наличие канонической ветки REV.19 и доступность исходников в ней.
+- `Source/PluginEditor.cpp`: runtime gallery и загрузчик сейчас используют `SKIN/theme_manifest.json`; `getSkinCount()` проверяет `totalSkins`, требует непрерывные индексы от 1 до total, а `loadSavedSkin()` извлекает числовой суффикс из stable ID как runtime index. Это несовместимо с утверждённой последовательностью из 16 тем, у которой ordinal 1…16 отделён от stable IDs/indices skin-053 и skin-103…skin-117.
+- `openSettingsPanel()` содержит возврат к индексу 53; при переходе на логический порядок SKIN-1…SKIN-16 это значение также должно стать ordinal SKIN-1, сохраняя stable ID skin-053.
+- `SKIN/theme_manifest.json` содержит 102 записи; `SKIN/theme_pack_manifest.json` содержит отдельный набор 50 тем 53…102; `SKIN/approved_theme_sequence.json` описывает утверждённые 16 тем (skin-053, skin-103…skin-117). Эти три реестра и текущая runtime-логика не согласованы.
+- `.github/workflows/vst3-build.yml` валидирует старый 50-theme pack и при упаковке копирует темы из theme_manifest. До миграции реестра и workflow нельзя считать, что runtime package ограничен утверждёнными 16 темами.
+- В 16 theme JSON обнаружено 28 ключей controls: 27 пользовательских контролов плюс служебный sync_selector; compatibility flags сохраняют APVTS/layout/audio без изменений. Это структурная проверка JSON, не runtime parity PASS.
+- По предыдущему аудиту отсутствуют как минимум preview/hero assets у Skin_103 и Skin_108; полный аудит всех PNG/SVG ресурсов 16 тем ещё не завершён. Ни одна тема не получает PASS на основании наличия JSON.
+- Историческая ветка `ui/neon-stage-playing-core` находится на 205 коммитов впереди общей базы и её diff включает массовые удаления старых skin-каталогов и другие изменения. Слепое слияние запрещено; интеграция NEON STAGE выполняется только выборочно после проверки конкретных diff и зависимостей.
+
+Порядок ближайшей реализации:
+1. Разделить logical ordinal SKIN-1…SKIN-16 и immutable stable ID/index (skin-053, skin-103…skin-117) в runtime loader/gallery; исправить default/reset mapping и тесты SkinGallerySelection.
+2. Свести runtime registry и pack manifest к единственному набору из 16 тем, не удаляя физические архивные каталоги до отдельной проверки зависимостей.
+3. Обновить validator и Windows packaging workflow так, чтобы старые 102/50 theme records не попадали в runtime bundle или активные проверки.
+4. Проверить полный набор ресурсов, parity и runtime rendering; затем выполнить Windows x64 Release, CTest, pluginval и отдельную ручную приёмку FL Studio 20.
+5. После завершения этого этапа перейти к следующим утверждённым блокам разработки по зависимостям: CONTROL DECK/окна, MELODY/PATTERN/PUNK GROUP/AUTOCHORDS, MIDI/sampler/FX, presets/sample library/import/licensing, QA/release.
+
+Ограничения текущей записи:
+- Это preflight и регистрация принятой к исполнению задачи; изменения C++/JSON/workflow в этой транзакции не выполнялись.
+- Сборка, CTest, pluginval, runtime gallery и FL Studio 20 не запускались; никаких PASS/VERIFIED не заявлено.
+- Не удалялись файлы, каталоги или ресурсы.
+- Следующая транзакция должна выполнять первый безопасный кодовый шаг, а не повторять этот аудит.
+
+==============================================================================
