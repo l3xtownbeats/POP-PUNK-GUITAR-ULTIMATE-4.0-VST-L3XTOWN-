@@ -63,6 +63,7 @@ private:
     juce::File runtimeSkinRoot;
     juce::File heroArtworkFile;
     juce::Image heroArtwork;
+    std::unique_ptr<juce::Drawable> skinTexture, skinBezel, skinCrest;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     // These REV.18 entry points are intentionally disabled until their real backends exist.
     juce::TextButton autoSoundHunterButton { "AUTO SOUND HUNTER" }, curatorButton { "CURATOR" }, aboutButton { "ABOUT" };
