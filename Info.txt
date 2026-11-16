@@ -4104,3 +4104,12 @@ RUNTIME PACKAGE ИЗОЛИРОВАН ОТ LEGACY:
 - ppgu_theme_contracts остановился на Source/UI/ThemeManager.cpp: juce::Drawable / createFromSVG не были видны в target, потому что target link list включал juce_core + juce_graphics, но не juce_gui_basics.
 - Исправление: добавлен juce::juce_gui_basics в target_link_libraries(ppgu_theme_contracts).
 - Ошибка локализована; повторный запуск того же workflow job поставлен в очередь для проверки исправления. До завершения rerun C++/CTest статус остаётся PENDING.
+
+
+2026-11-16 — TX-REV19-SKIN-LOAD-FAILSAFE-008
+
+- loadSkinByIndex теперь при ошибке загрузки не оставляет пустой fallback без artwork: пытается полностью загрузить NEON STAGE (ordinal 01) из Skin_053/theme.json.
+- При неудаче сообщает через существующий statusLabel и сохраняет фактически восстановленный stable skin ID, если вызов был пользовательским.
+- loadSavedSkin упрощён: stable ID разрешается в ordinal, затем выполняется один безопасный load attempt; двойная загрузка default устранена.
+- APVTS, processor, MIDI, sampler, DSP и audio callback не изменялись.
+- Ошибка default NEON STAGE manifest всё ещё оставляет встроенный palette fallback без artwork — это последний резервный путь при повреждении самой default темы.
