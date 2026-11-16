@@ -4081,3 +4081,16 @@ SVG ARTWORK LAYERS ВСТРОЕНЫ В UI SOURCE:
 - Существующие close/maximize/resize/drag controls и geometry persistence не изменялись.
 - Windows build workflow path filters включают PPGUMultiWindowWorkspace.cpp/.h.
 - C++/Windows build run, начатый до последнего workspace commit, не является проверкой этой последней правки; требуется новый exact-head run.
+
+
+2026-11-16 — TX-REV19-16-SKIN-RUNTIME-PACKAGING-007
+
+RUNTIME PACKAGE ИЗОЛИРОВАН ОТ LEGACY:
+- Добавлен tools/package_active_skins.py.
+- Скрипт сверяет active theme_manifest.json с approved_theme_sequence.json, требует ровно 16 ordinals 1…16, проверяет stable ID/index/name/path, копирует только активный registry и 16 папок с theme.json + preview/hero/texture/bezel/crest.
+- Runtime copy удаляет documentation-only legacyRegistryArchive pointer; archive/, старый 50-theme pack, Skin_01…Skin_102 legacy folders и любые не зарегистрированные темы не попадают в VST3/Skins.
+- Windows workflow теперь вызывает package script после build/tests и публикует .vst3 bundle вместе с sibling VST3/Skins.
+- Artwork workflow также дополнен staging test в /tmp/ppgu-runtime-skins; это изменение требует нового workflow run.
+- Новый Windows workflow run 43833381428 был запущен до последнего workspace/package-script commit и не считается проверкой exact HEAD. Требуется повторный PR reopen/run после всех текущих изменений.
+
+СТАТУС: 16-SKIN SOURCE/ARTWORK PACK VERIFIED; ACTIVE REGISTRY VERIFIED; SVG LAYER WIRING IMPLEMENTED; 16-ONLY PACKAGE SCRIPT IMPLEMENTED. WINDOWS BUILD / CTEST / SVG DECODE / PACKAGE STAGING / HOST ACCEPTANCE PENDING.
