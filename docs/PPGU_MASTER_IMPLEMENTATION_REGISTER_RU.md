@@ -452,3 +452,33 @@ REAL-TIME AUDIO SAFETY; SAMPLE FIDELITY ENGINE; INTELLIGENT MEMORY MANAGEMENT; D
 **Статус всех пунктов:** USER-APPROVED / REQUIREMENTS. Это не означает SOURCE PRESENT, INTEGRATED, TESTED или HOST VERIFIED. Подробные технические решения выбираются ассистентом в рамках утверждённых архитектурных ограничений. Реализация начинается только после проверки текущего source HEAD и feasibility audit.
 
 **Инварианты:** один существующий Sample Engine; realtime-safe callback; без лишнего CPU/RAM; сохранение MIDI/APVTS/preset/state и MELODY/PATTERN contracts; измерения и проверки на точном SHA; не менять защищённую архитектуру без критической причины и отдельного согласования.
+
+
+
+## TX-SIMPLE-CORE-DUAL-ENGINE-001 — user-ratified architecture amendment (2026-11-16)
+
+**Authority:** explicit user approval in the conversation on 2026-11-16. This amendment supplements existing engine/resource requirements and does not silently rewrite historical architecture records.
+
+### Binding architecture
+- Separate MELODY and PATTERN by musical responsibility and orchestration.
+- Keep one shared low-level SamplerEngine / SamplePool / streaming / cache / voice playback core.
+- Keep shared DSP/FX infrastructure.
+- Do not duplicate sample banks, WAV data, sampler instances, identical FX chains, or per-note/per-preset workers.
+- AUTOCHORDS remains PATTERN-only.
+- Preserve approved UI, browser geometry/structure, control inventory, APVTS IDs, stable control IDs, 27-control contract and seven approved FX bypass IDs.
+
+### Simplicity and performance rules
+- SIMPLE CORE — MAXIMUM PERFORMANCE: no unnecessary engine layers, abstractions, managers or threads.
+- Each component has one clear responsibility and a small interface.
+- Audio callback: bounded, deterministic, preallocated realtime work only; no file/network I/O, blocking waits, unbounded work or dynamic allocation.
+- Heavy loading, scanning, hashing and indexing remain off the audio callback.
+- Keep realtime event scheduling bounded and fixed-capacity.
+- Performance improvements require comparable before/after CPU, callback-time, dropout, RAM, voice and cache measurements.
+
+### Source audit boundary
+At REV18 source SHA `c20cc6b76d4c66b70bcfcec27d8e79514ada147b`, `PluginProcessor` owns one `SamplerEngine` and one `PatternScheduler`. MELODY and PATTERN behavior are separate branches inside `processBlock`, but dedicated mode orchestration classes are not yet present in the inspected processor header. Both branches use the same sampler. The sampler has 64 preallocated voices; SamplePool declares limits of 128 snapshots, 8 streaming roots and 256 cache slots; PatternScheduler uses a fixed 512-event block buffer.
+
+**Current status:** requirement RATIFIED; shared sampler SOURCE PRESENT; explicit mode-component extraction NOT YET PRESENT; performance gain NOT MEASURED; exact-SHA Windows build/CTest/pluginval/FL Studio 20 NOT CONFIRMED. No production source changed in this amendment.
+
+### Next implementation gate
+First establish a reproducible baseline and audit current tests. Then perform only a small, behavior-preserving extraction of MELODY and PATTERN orchestration around the existing shared sampler. Add isolation/transition tests before optimizing profiled hotspots. Do not alter SamplePool lifetime/ownership until a dedicated quiescence/concurrency audit proves safety.
