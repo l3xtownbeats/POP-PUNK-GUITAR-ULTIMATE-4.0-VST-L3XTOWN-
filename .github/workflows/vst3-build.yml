@@ -1,10 +1,24 @@
 name: POP PUNK GUITAR ULTIMATE - Windows VST3
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Do not cancel a long Windows compiler/linker run when a follow-up commit is pushed.
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'CMakeLists.txt'
+      - 'Source/**'
+      - 'tests/**'
+      - 'SKIN/**'
+      - 'tools/**'
+      - '.github/workflows/vst3-build.yml'
+      - 'presets/factory_bank_300.json'
+      - 'tools/validate_factory_bank.py'
+      - 'tools/validate_preset_files.py'
+      - 'presets/examples/**'
+      - 'docs/**'
   push:
     paths:
       - 'CMakeLists.txt'
@@ -21,6 +35,7 @@ on:
 jobs:
   build:
     runs-on: windows-2022
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -255,6 +270,37 @@ jobs:
           $plugin = Get-ChildItem build -Directory -Recurse -Filter '*.vst3' | Select-Object -First 1
           if (-not $plugin) { throw 'VST3 bundle not found after successful build.' }
           "path=$($plugin.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Validate VST3 package layout and x64 binary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $plugin = Get-ChildItem build -Directory -Recurse -Filter '*.vst3' | Select-Object -First 1
+          if (-not $plugin) { throw 'VST3 bundle disappeared before package validation.' }
+          $binaryRoot = Join-Path $plugin.FullName 'Contents/x86_64-win'
+          if (-not (Test-Path -LiteralPath $binaryRoot -PathType Container)) {
+            throw "VST3 x64 payload directory is missing: $binaryRoot"
+          }
+          $binary = Get-ChildItem -LiteralPath $binaryRoot -File -Filter '*.vst3' | Select-Object -First 1
+          if (-not $binary) { throw 'VST3 x64 plugin binary is missing from Contents/x86_64-win.' }
+          $stream = [IO.File]::OpenRead($binary.FullName)
+          try {
+            $reader = [IO.BinaryReader]::new($stream)
+            $stream.Position = 0x3c
+            $peOffset = $reader.ReadInt32()
+            if ($peOffset -lt 0 -or $peOffset -gt ($stream.Length - 6)) { throw 'Invalid PE header offset in VST3 binary.' }
+            $stream.Position = $peOffset
+            $signature = $reader.ReadUInt32()
+            $machine = $reader.ReadUInt16()
+            if ($signature -ne 0x00004550) { throw 'VST3 payload is not a valid Windows PE binary.' }
+            if ($machine -ne 0x8664) { throw ('VST3 payload is not x64; PE machine=0x{0:X4}.' -f $machine) }
+          }
+          finally { $stream.Dispose() }
+          $moduleInfo = Get-ChildItem -LiteralPath $plugin.FullName -Recurse -File -Filter 'moduleinfo.json' | Select-Object -First 1
+          if (-not $moduleInfo) { throw 'VST3 moduleinfo.json is missing from the bundle.' }
+          $moduleData = Get-Content -LiteralPath $moduleInfo.FullName -Raw | ConvertFrom-Json
+          if (-not $moduleData) { throw 'VST3 moduleinfo.json is empty or invalid.' }
+          Write-Host "VST3 package structure OK: $($binary.FullName) is PE x64; moduleinfo.json is present."
 
       - name: Run pluginval strictness level 5
         shell: pwsh
