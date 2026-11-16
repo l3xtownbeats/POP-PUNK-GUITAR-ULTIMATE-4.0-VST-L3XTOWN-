@@ -1,0 +1,97 @@
+name: Windows x64 VST3 and skin runtime verification
+
+on:
+  push:
+    branches:
+      - work/approved-16-skins-completion
+    paths:
+      - .github/workflows/windows-vst3-build.yml
+      - CMakeLists.txt
+      - Source/**
+      - tests/**
+      - tools/**
+      - SKIN/**
+      - Source/PluginEditor.cpp
+      - Source/PluginEditor.h
+      - Source/UI/ThemeManager.cpp
+      - Source/UI/ThemeManager.h
+      - Source/UI/PPGUMultiWindowWorkspace.cpp
+      - Source/UI/PPGUMultiWindowWorkspace.h
+      - tests/ThemeManagerTests.cpp
+      - tests/ValidateSkinManifests.py
+      - tools/audit_skin_rev18_assets.py
+      - tools/package_active_skins.py
+      - SKIN/theme_manifest.json
+      - SKIN/control_schema.json
+      - SKIN/archive/theme_manifest.legacy-102.json
+      - SKIN/approved_theme_sequence.json
+      - SKIN/Skin_053/**
+      - SKIN/Skin_103/**
+      - SKIN/Skin_104/**
+      - SKIN/Skin_105/**
+      - SKIN/Skin_106/**
+      - SKIN/Skin_107/**
+      - SKIN/Skin_108/**
+      - SKIN/Skin_109/**
+      - SKIN/Skin_110/**
+      - SKIN/Skin_111/**
+      - SKIN/Skin_112/**
+      - SKIN/Skin_113/**
+      - SKIN/Skin_114/**
+      - SKIN/Skin_115/**
+      - SKIN/Skin_116/**
+      - SKIN/Skin_117/**
+  pull_request:
+    branches:
+      - POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-x64-vst3:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout approved 16-skin branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Checkout JUCE 7.0.12
+        shell: bash
+        run: git clone --depth 1 --branch 7.0.12 https://github.com/juce-framework/JUCE.git JUCE
+
+      - name: Configure Windows x64
+        run: cmake -S . -B build -A x64
+
+      - name: Build VST3 and all C++ contract tests
+        run: cmake --build build --config Release --parallel
+
+      - name: Run full CTest suite
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Run strict 16-skin asset audit
+        run: python tools/audit_skin_rev18_assets.py --root SKIN --strict-assets
+
+      - name: Run 16-skin registry and manifest contract
+        run: python tests/ValidateSkinManifests.py
+
+      - name: Stage only the 16 active skins beside the VST3 bundle
+        run: python tools/package_active_skins.py --root SKIN --output build/PPGU_artefacts/Release/VST3/Skins
+
+      - name: Upload Windows VST3 build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPGU-Windows-x64-VST3-REV19-16-SKINS
+          path: |
+            build/PPGU_artefacts/Release/VST3/*.vst3
+            build/PPGU_artefacts/Release/VST3/Skins/**
+          if-no-files-found: error
+          retention-days: 14

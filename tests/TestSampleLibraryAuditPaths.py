@@ -23,7 +23,7 @@ def main():
     import re
     opcodes = [next((v for v in m.groups()[1:] if v is not None), "")
                for m in ASSIGNMENT.finditer(
-                   'sample=*sine\\n sample="Samples/guitar/note.wav"\\n'
+                   'sample=*sine\n sample="Samples/guitar/note.wav"\n'
                ) if m.group(1).lower() == "sample"]
     if opcodes != ["*sine", "Samples/guitar/note.wav"]:
         raise AssertionError(f"Unexpected SFZ sample opcodes: {opcodes!r}")

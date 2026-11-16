@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-115",
   "index": 115,
-  "name": "SKIN-14 — PHANTOM GRAPHITE",
+  "name": "PHANTOM GRAPHITE",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "PHANTOM GRAPHITE: premium PPGU visual theme. matte black / gunmetal silver. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Matte black and gunmetal silver with micro-brushed graphite, stealth bevels and nearly monochrome edge detailing. Contrast comes from material texture and precision machining, with minimal lighting and no coloured wash. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#090B0D",
     "panel": "#171A1E",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Matte black and gunmetal silver with micro-brushed graphite, stealth bevels and nearly monochrome edge detailing. Contrast comes from material texture and precision machining, with minimal lighting and no coloured wash.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 14
 }

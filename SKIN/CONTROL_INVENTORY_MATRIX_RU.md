@@ -1,8 +1,8 @@
-# PPGU SKIN — инвентарная матрица контролов (REV 14.0)
+# PPGU SKIN — инвентарная матрица контролов (REV.19 / 16 factory skins)
 
-Дата актуализации: 12 ноября 2026. Источник истины по обязательным ID и layout grid: `control_schema.json`. Источник фактической реализации: `Source/PluginEditor.h/.cpp` и `Source/PluginProcessor.cpp`.
+Дата актуализации: 16 ноября 2026. Источник истины по обязательным ID и layout grid: `control_schema.json`. Источник фактической реализации: `Source/PluginEditor.h/.cpp`, `Source/PluginProcessor.cpp` и `Source/UI/PPGUMultiWindowWorkspace.cpp`.
 
-## 1. Фактический GUI в рабочей ветке REV.17 (`POP-PUNK-GUITAR-ULTIMATE-VST-REV.17`)
+## 1. Фактический GUI в рабочей ветке REV.19 (`work/approved-16-skins-completion`)
 
 В текущем редакторе подтверждены:
 - Заголовок PPGU / L3XTOWN AUDIO LAB.
@@ -14,11 +14,13 @@
 - Семь FX bypass toggles с APVTS attachments.
 - Start/sync selector (HOST / HOST START / INTERNAL; APVTS `syncMode`).
 - On-screen MIDI keyboard.
-- Кнопка SKIN открывает Premium Skin Gallery: 102 registry themes, preview cards, search, family filter, active marker, click-to-apply; Ctrl+K открывает ту же панель. Stable skin ID сохраняется в UI Properties.
+- Кнопка SKIN открывает Premium Skin Gallery: ровно 16 утверждённых factory skins, preview cards, search, ALL SKINS / FAVORITES ONLY filter, active marker и click-to-apply; Ctrl+K открывает ту же панель. Stable skin ID сохраняется в UI Properties, а gallery ordinal 01–16 разрешается отдельно от stable ID.
+- Активный `SKIN/theme_manifest.json` содержит ровно 16 записей. Прежний 102-entry registry и старый 50-theme pack manifest сохранены в `SKIN/archive/`; legacy source folders не удалялись и не входят в active gallery.
+- PNG preview/hero и SVG texture/bezel/crest assets для 16 тем прошли strict asset audit. SVG layers загружаются на UI thread и подключены к основному окну и auxiliary panel surfaces на рабочей ветке.
 
-Gallery implemented with previews/search/family filter. Favorites, full gallery keyboard navigation, background rescan, 150 ms fade and ECO policy remain NOT IMPLEMENTED.
+Gallery preview/search/filter/active marker/click-to-apply и stable-ID persistence реализованы. Полная keyboard navigation, background rescan, подтверждённый 150 ms fade и ECO policy остаются NOT VERIFIED / NOT IMPLEMENTED.
 
-## 2. Обязательные REV 14 control IDs
+## 2. Обязательный контракт 27 control IDs (без изменений APVTS)
 
 | Control ID | Реальный компонент / APVTS | Реальная функция | Статус |
 |---|---|---|---|
@@ -43,11 +45,11 @@ Gallery implemented with previews/search/family filter. Favorites, full gallery 
 | midi_keyboard | keyboard | On-screen MIDI note input | IMPLEMENTED |
 | LCD_display | statusLabel | Preset/library/status feedback; currently not a dedicated LCD widget | PARTIAL |
 | LED_indicator | none | Activity/status indicator; no real meter/activity source is wired | NOT IMPLEMENTED |
-| SKIN_button | skinButton + `PPGUSkinGalleryPanel` / Ctrl+K | Opens searchable 102-theme preview gallery; applies selected visual palette and persists skin ID | IMPLEMENTED (favorites/keyboard browsing deferred) |
+| SKIN_button | skinButton + `PPGUSkinGalleryPanel` / Ctrl+K | Opens searchable 16-theme preview gallery; applies selected visual theme and persists stable skin ID | IMPLEMENTED (favorites/keyboard browsing deferred) |
 | Import_Guitar | loadButton | SFZ file chooser + async library load | IMPLEMENTED |
 | Auto_Discover | none | Reserved for production Sound Hunter/S6 discovery | NOT IMPLEMENTED |
 | Curator | none | Reserved for production library curation/review | NOT IMPLEMENTED |
-| Settings | settingsButton + `PPGUSettingsPanel` | Persisted auxiliary panel scale and spacing; restore SIGNAL FORGE default; jump to Skin Gallery | IMPLEMENTED (UI-only) |
+| Settings | settingsButton + `PPGUSettingsPanel` | Persisted auxiliary panel scale and spacing; restore NEON STAGE default; jump to Skin Gallery | IMPLEMENTED (UI-only) |
 | About | none | No About panel in current editor | NOT IMPLEMENTED |
 
 A skin may map every required ID, but that does not create the missing processor/UI feature. Missing features must be shown as unavailable/disabled with an honest reason; no fake LED activity, fake scanner, fake curator or active dummy buttons.

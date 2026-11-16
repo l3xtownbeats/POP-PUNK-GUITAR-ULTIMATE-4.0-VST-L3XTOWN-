@@ -1,0 +1,82 @@
+name: Render approved 16-skin artwork
+
+on:
+  push:
+    branches:
+      - work/approved-16-skins-completion
+    paths:
+      - .github/workflows/render-approved-skin-artwork.yml
+      - tools/render_approved_skin_artwork.py
+      - tools/package_active_skins.py
+      - tools/audit_skin_rev18_assets.py
+      - tests/ValidateSkinManifests.py
+      - SKIN/approved_theme_sequence.json
+      - SKIN/control_schema.json
+      - SKIN/archive/theme_manifest.legacy-102.json
+      - SKIN/Skin_103/theme.json
+      - SKIN/Skin_104/theme.json
+      - SKIN/Skin_105/theme.json
+      - SKIN/Skin_106/theme.json
+      - SKIN/Skin_107/theme.json
+      - SKIN/Skin_108/theme.json
+      - SKIN/Skin_109/theme.json
+      - SKIN/Skin_110/theme.json
+      - SKIN/Skin_111/theme.json
+      - SKIN/Skin_112/theme.json
+      - SKIN/Skin_113/theme.json
+      - SKIN/Skin_114/theme.json
+      - SKIN/Skin_115/theme.json
+      - SKIN/Skin_116/theme.json
+      - SKIN/Skin_117/theme.json
+  pull_request:
+    branches:
+      - POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout completion branch
+        uses: actions/checkout@v4
+        with:
+          ref: work/approved-16-skins-completion
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install artwork renderer dependency
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0
+
+      - name: Render missing approved-skin artwork
+        run: python tools/render_approved_skin_artwork.py --root SKIN --force
+
+      - name: Validate all 16 approved theme assets
+        run: python tools/audit_skin_rev18_assets.py --root SKIN --strict-assets
+
+      - name: Validate active factory registry and legacy archive
+        run: python tests/ValidateSkinManifests.py
+
+      - name: Verify 16-only runtime package staging
+        run: python tools/package_active_skins.py --root SKIN --output /tmp/ppgu-runtime-skins
+
+      - name: Commit generated PNG assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add SKIN/Skin_1??/assets/preview.png SKIN/Skin_1??/assets/hero.png
+          if git diff --cached --quiet; then
+            echo "No new artwork assets to commit."
+            exit 0
+          fi
+          git commit -m "artwork(skins): render approved SKIN 02-16 preview and hero assets"
+          git fetch origin work/approved-16-skins-completion
+          git rebase FETCH_HEAD
+          git push origin HEAD:work/approved-16-skins-completion

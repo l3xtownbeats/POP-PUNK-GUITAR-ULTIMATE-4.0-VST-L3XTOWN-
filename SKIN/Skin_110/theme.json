@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-110",
   "index": 110,
-  "name": "SKIN-9 — SOLAR FLARE",
+  "name": "SOLAR FLARE",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "SOLAR FLARE: premium PPGU visual theme. smoked bronze / molten amber. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Smoked bronze, molten-amber inlays, radial sunburst micro-engraving and heat-treated copper edges. Warm highlights create a focused solar core while the surrounding surfaces stay dark and low-glare. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#120B07",
     "panel": "#24170F",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Smoked bronze, molten-amber inlays, radial sunburst micro-engraving and heat-treated copper edges. Warm highlights create a focused solar core while the surrounding surfaces stay dark and low-glare.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 9
 }

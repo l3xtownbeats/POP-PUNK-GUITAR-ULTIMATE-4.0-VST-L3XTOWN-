@@ -44,10 +44,51 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
     return juce::Font(family, baseSize * palette.fontScale, style)
         .withExtraKerningFactor(palette.letterSpacing);
 }
+
+void drawThemeArtworkLayers(juce::Graphics& g, juce::Rectangle<int> bounds,
+                            const PPGUThemeManager::Palette& palette,
+                            float textureOpacity = 0.10f,
+                            float bezelOpacity = 0.32f,
+                            float crestOpacity = 0.035f)
+{
+    if (palette.textureArtwork.isValid() && textureOpacity > 0.0f)
+    {
+        g.saveState();
+        g.setOpacity(textureOpacity);
+        g.drawImageWithin(palette.textureArtwork, bounds.getX(), bounds.getY(),
+                         bounds.getWidth(), bounds.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+
+    if (palette.bezelArtwork.isValid() && bezelOpacity > 0.0f)
+    {
+        g.saveState();
+        g.setOpacity(bezelOpacity);
+        g.drawImageWithin(palette.bezelArtwork, bounds.getX(), bounds.getY(),
+                         bounds.getWidth(), bounds.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+
+    if (palette.crestArtwork.isValid() && crestOpacity > 0.0f
+        && bounds.getWidth() >= 320 && bounds.getHeight() >= 220)
+    {
+        const auto crestWidth = juce::jmin(420, juce::jmax(1, bounds.getWidth() - 32));
+        const auto crestHeight = juce::jmin(148, juce::jmax(1, bounds.getHeight() - 32));
+        const auto crestBounds = bounds.withSizeKeepingCentre(crestWidth, crestHeight);
+        g.saveState();
+        g.setOpacity(crestOpacity);
+        g.drawImageWithin(palette.crestArtwork, crestBounds.getX(), crestBounds.getY(),
+                          crestBounds.getWidth(), crestBounds.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+}
 }
 
-// Scrollable visual browser for the complete registry. Preview images are loaded
-// lazily by visible cards so opening the gallery does not decode all 102 PNGs.
+// Scrollable visual browser for the approved 16-skin factory registry. Preview images are
+// loaded lazily by visible cards so opening the gallery does not decode all 16 PNGs.
 class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
@@ -79,12 +120,8 @@ public:
         search.onTextChange = [this] { rebuildCards(); };
         addAndMakeVisible(search);
 
-        familyFilter.addItem("ALL FAMILIES", 1);
-        familyFilter.addItem("CARBON STUDIO", 2); familyFilter.addItem("NEON BASEMENT", 3);
-        familyFilter.addItem("CHROME PARADE", 4); familyFilter.addItem("WOOD SUMMER", 5);
-        familyFilter.addItem("VINTAGE TAPE", 6); familyFilter.addItem("SUNSET SUBURB", 7);
-        familyFilter.addItem("SPECIAL", 8); familyFilter.addItem("LEGACY THEMES", 9);
-        familyFilter.addItem("FAVORITES ONLY", 10);
+        familyFilter.addItem("ALL SKINS", 1);
+        familyFilter.addItem("FAVORITES ONLY", 2);
         familyFilter.setSelectedId(1, juce::dontSendNotification);
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
@@ -150,6 +187,12 @@ public:
         applyButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
         applyButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
         grid.setPalette(palette); rebuildCards(); repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.11f, 0.30f, 0.025f);
     }
 
     bool keyPressed(const juce::KeyPress& key) override
@@ -224,7 +267,8 @@ private:
             g.setColour(palette.token("text_primary")); g.setFont(makeThemeFont(palette, 12.5f, false, true));
             g.drawText(item.name, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
             g.setColour(palette.token("text_secondary")); g.setFont(makeThemeFont(palette, 9.0f));
-            g.drawText(item.family + "  /  " + item.layout, textArea.removeFromTop(14.0f),
+            g.drawText("SKIN " + juce::String(item.index).paddedLeft('0', 2)
+                           + "  /  " + item.layout, textArea.removeFromTop(14.0f),
                        juce::Justification::centredLeft, true);
             const auto tag = item.active ? juce::String("ACTIVE")
                 : (selected ? juce::String("SELECTED") : juce::String("PREVIEW"));
@@ -321,15 +365,10 @@ private:
     {
         grid.clearCards(); visibleIndices.clear();
         const auto query = search.getText().trim().toLowerCase();
-        const int selectedFamily = familyFilter.getSelectedId();
-        const bool favoritesOnly = selectedFamily == 10;
-        const juce::StringArray families { "", "carbon_studio", "neon_basement", "chrome_parade",
-            "wood_summer", "vintage_tape", "sunset_suburb", "special", "legacy" };
-        const auto familyKey = selectedFamily > 1 && selectedFamily <= families.size()
-            ? families[selectedFamily - 1] : juce::String{};
+        const int selectedFilter = familyFilter.getSelectedId();
+        const bool favoritesOnly = selectedFilter == 2;
         for (const auto& item : skins)
         {
-            if (familyKey.isNotEmpty() && item.familyKey != familyKey) continue;
             const bool isFavorite = favorites.contains(item.id);
             if (favoritesOnly && !isFavorite) continue;
             auto cardItem = item; cardItem.favorite = isFavorite;
@@ -455,6 +494,12 @@ public:
         repaint();
     }
 
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.12f, 0.34f, 0.04f);
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(12);
@@ -536,6 +581,12 @@ public:
         repaint();
     }
 
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.12f, 0.34f, 0.04f);
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(18);
@@ -581,6 +632,7 @@ public:
                                                palette.tokens.panel,
                                                bounds.getX(), bounds.getBottom(), false));
         g.fillRoundedRectangle(bounds, 9.0f);
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.045f, 0.0f, 0.0f);
         g.setColour(palette.tokens.controlBorder.withAlpha(0.9f));
         g.drawRoundedRectangle(bounds.reduced(0.5f), 9.0f, 1.0f);
         g.setColour(palette.tokens.accent);
@@ -780,7 +832,7 @@ public:
             { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
         };
 
-        title.setText("NEON STAGE  /  FX EDIT", juce::dontSendNotification);
+        title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(makeThemeFont(palette, 20.0f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
@@ -860,6 +912,7 @@ public:
     void paint(juce::Graphics& g) override
     {
         g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.32f, 0.035f);
         auto area = getLocalBounds().toFloat().reduced(12.0f);
         g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
@@ -1043,6 +1096,13 @@ public:
         }
         apply.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
         apply.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.30f, 0.035f);
     }
 
     void resized() override
@@ -1155,6 +1215,7 @@ public:
     void paint(juce::Graphics& g) override
     {
         g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.30f, 0.035f);
         g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
     }
@@ -1184,7 +1245,7 @@ private:
 };
 }
 
-// Premium NEON STAGE shell. Visual theme code never touches processor/audio state.
+// Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -1578,6 +1639,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::drawPanel(
                                            p.token("panel"),
                                            bounds.getX(), bounds.getBottom(), false));
     g.fillRoundedRectangle(bounds, 12.0f);
+    if (p.textureArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.10f);
+        g.drawImageWithin(p.textureArtwork, area.getX() + 2, area.getY() + 2,
+                         juce::jmax(1, area.getWidth() - 4), juce::jmax(1, area.getHeight() - 4),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+    if (p.bezelArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.42f);
+        g.drawImageWithin(p.bezelArtwork, area.getX(), area.getY(),
+                         area.getWidth(), area.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
     g.setColour(p.token("control_border").withAlpha(0.78f));
     g.drawRoundedRectangle(bounds.reduced(0.5f), 12.0f, 1.0f);
 
@@ -1600,6 +1679,14 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+    if (p.textureArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.16f);
+        g.drawImageWithin(p.textureArtwork, 0, 0, getWidth(), getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1615,7 +1702,29 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
     drawPanel(g, right, "SIGNAL CHAIN");
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
+    if (p.crestArtwork.isValid())
+    {
+        const auto crestWidth = juce::jmin(420, juce::jmax(1, area.getWidth() - 32));
+        const auto crestHeight = juce::jmin(148, juce::jmax(1, area.getHeight() - 32));
+        const auto crestBounds = area.withSizeKeepingCentre(crestWidth, crestHeight);
+        g.saveState();
+        g.setOpacity(0.055f);
+        g.drawImageWithin(p.crestArtwork, crestBounds.getX(), crestBounds.getY(),
+                          crestBounds.getWidth(), crestBounds.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+
+    if (p.bezelArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.78f);
+        g.drawImageWithin(p.bezelArtwork, 0, 0, getWidth(), getHeight(),
+                          juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+
+    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
     g.setColour(p.token("accent"));
     g.fillRoundedRectangle(badge.toFloat(), 1.5f);
@@ -1747,31 +1856,39 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         return 0;
     const auto total = static_cast<int>(total64);
 
-    std::set<int> indices;
+    std::set<int> ordinals;
+    std::set<int> stableIndices;
     std::set<std::string> ids;
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
             return 0;
 
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
         const auto indexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
-        if ((!indexValue.isInt() && !indexValue.isInt64())
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || (!indexValue.isInt() && !indexValue.isInt64())
             || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
 
+        const auto ordinal64 = ordinalValue.toString().getLargeIntValue();
         const auto index64 = indexValue.toString().getLargeIntValue();
-        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
+        if (ordinal64 < 1 || ordinal64 > total
+            || index64 < 52 || index64 > std::numeric_limits<int>::max()
+            || !id.startsWith("skin-")
             || id.substring(5).getLargeIntValue() != index64
-            || !indices.insert(static_cast<int>(index64)).second
+            || !ordinals.insert(static_cast<int>(ordinal64)).second
+            || !stableIndices.insert(static_cast<int>(index64)).second
             || !ids.insert(id.toStdString()).second)
             return 0;
     }
 
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    return static_cast<int>(ordinals.size()) == total
+        && static_cast<int>(stableIndices.size()) == total ? total : 0;
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
@@ -1793,9 +1910,9 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     {
         if (!entry.isObject())
             continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || ordinalValue.toString().getLargeIntValue() != index)
             continue;
 
         const auto relativePath = entry.getProperty("path", "").toString();
@@ -1810,16 +1927,40 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     return {};
 }
 
+int PopPunkGuitarUltimateAudioProcessorEditor::getSkinOrdinalForId(const juce::String& id) const
+{
+    if (id.isEmpty())
+        return 0;
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return 0;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return 0;
+
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != id)
+            continue;
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if (!ordinalValue.isInt() && !ordinalValue.isInt64())
+            return 0;
+        const auto ordinal = ordinalValue.toString().getLargeIntValue();
+        return ordinal >= 1 && ordinal <= getSkinCount() ? static_cast<int>(ordinal) : 0;
+    }
+    return 0;
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
     const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
-    {
-        themeManager.resetToDefault();
-        applyPalette();
-    }
+    const auto ordinal = getSkinOrdinalForId(id);
+    loadSkinByIndex(ordinal >= 1 ? ordinal : 1, false);
 }
 
 bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool save)
@@ -1830,9 +1971,19 @@ bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool 
     const auto manifest = getSkinManifest(index);
     const bool loaded = manifest.existsAsFile() && themeManager.loadFromFile(manifest);
     if (!loaded)
+    {
         themeManager.resetToDefault();
+        if (index != 1)
+        {
+            const auto defaultManifest = getSkinManifest(1);
+            if (defaultManifest.existsAsFile())
+                themeManager.loadFromFile(defaultManifest);
+        }
+        statusLabel.setText("SKIN LOAD FAILED  /  NEON STAGE RESTORED",
+                            juce::dontSendNotification);
+    }
     applyPalette();
-    if (save && loaded)
+    if (save)
         persistSkinPreference();
     return loaded;
 }
@@ -1845,7 +1996,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
         const auto activeId = themeManager.getPalette().id;
-        const int activeIndex = activeId.startsWith("skin-") ? activeId.substring(5).getIntValue() : 0;
+        const int activeIndex = getSkinOrdinalForId(activeId);
         const auto count = getSkinCount();
         skins.reserve(static_cast<size_t>(juce::jmax(0, count)));
         for (int index = 1; index <= count; ++index)
@@ -1967,7 +2118,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             [safe]
             {
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(53, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {

@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-103",
   "index": 103,
-  "name": "SKIN-2 — OBSIDIAN GOLD",
+  "name": "OBSIDIAN GOLD",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "OBSIDIAN GOLD: approved sequential PPGU visual theme. black obsidian glass / brushed champagne gold. Preserves the canonical shared component language and existing control map.",
+  "description": "Black obsidian glass with deep near-black facets; brushed champagne-gold perimeter machining, radial precision engraving and fine metallic inlays. Gold is reserved for focus and active-state details, never a broad luminous wash. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#09090D",
     "panel": "#17151A",
@@ -348,7 +348,9 @@
     "Existing legacy theme IDs and indices are preserved; no renumbering or overwriting.",
     "Shared NEON STAGE design-system component language is retained; this theme changes visual tokens/materials only.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
-    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending."
+    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending.",
+    "Individual approved art direction: Black obsidian glass with deep near-black facets; brushed champagne-gold perimeter machining, radial precision engraving and fine metallic inlays. Gold is reserved for focus and active-state details, never a broad luminous wash.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 2
 }

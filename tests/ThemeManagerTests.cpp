@@ -18,10 +18,11 @@ namespace
 
 int main()
 {
+    juce::ScopedJuceInitialiser_GUI juceInitialiser;
     PPGUThemeManager manager;
     expect(manager.getPalette().id == "skin-053", "default theme ID");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
-    expect(manager.getPalette().name == "NEON STAGE DEFAULT", "fallback identity matches the canonical default skin");
+    expect(manager.getPalette().name == "NEON STAGE", "fallback identity matches the canonical default skin");
     const auto& fallbackTokens = manager.getPalette().tokens;
     expect(fallbackTokens.windowBg == juce::Colour(0xff080b14), "fallback window background matches NEON STAGE");
     expect(fallbackTokens.panel == juce::Colour(0xff101827), "fallback panel matches NEON STAGE");
@@ -61,6 +62,10 @@ int main()
     expect(registry.isObject(), "skin registry is a JSON object");
     expect(themes != nullptr, "skin registry contains a themes array");
     expect(totalValue.isInt() || totalValue.isInt64(), "skin registry totalSkins is an integer");
+    expect(registry.getProperty("defaultSkin", "").toString() == "skin-053",
+           "active factory registry defaults to NEON STAGE");
+    expect(totalValue.toString().getLargeIntValue() == 16,
+           "active factory registry contains exactly 16 themes");
 
     if (themes != nullptr && (totalValue.isInt() || totalValue.isInt64()))
     {
@@ -75,7 +80,9 @@ int main()
                 continue;
 
             const auto id = entry.getProperty("id", "").toString();
+            const auto ordinalValue = entry.getProperty("ordinal", juce::var());
             const auto indexValue = entry.getProperty("index", juce::var());
+            expect(ordinalValue.isInt() || ordinalValue.isInt64(), id + " ordinal is an integer");
             const auto relativePath = entry.getProperty("path", "").toString();
             expect(indexValue.isInt() || indexValue.isInt64(), id + " index is an integer");
             expect(relativePath.startsWith("Skin_") && relativePath.endsWith("/theme.json"),
@@ -93,6 +100,13 @@ int main()
                 expect(manager.getPalette().id == id, id + " ID matches registry");
                 expect(id.substring(5).getLargeIntValue() == index, id + " ID matches registry index");
                 expect(!manager.getPalette().usedFallback, id + " does not use fallback");
+                expect(manager.getPalette().textureArtwork.isValid(), id + " texture SVG decoded");
+                expect(manager.getPalette().bezelArtwork.isValid(), id + " bezel SVG decoded");
+                expect(manager.getPalette().crestArtwork.isValid(), id + " crest SVG decoded");
+                if (ordinalValue.isInt() || ordinalValue.isInt64())
+                    expect(ordinalValue.toString().getLargeIntValue() >= 1
+                           && ordinalValue.toString().getLargeIntValue() <= 16,
+                           id + " logical ordinal is within the approved 16-skin range");
             }
         }
     }
@@ -115,7 +129,7 @@ int main()
     if (skin53Loaded)
     {
         expect(manager.getPalette().id == "skin-053", "NEON STAGE stable ID preserved");
-        expect(manager.getPalette().name == "NEON STAGE DEFAULT", "NEON STAGE display identity decoded");
+        expect(manager.getPalette().name == "NEON STAGE", "NEON STAGE display identity decoded");
         expect(manager.getPalette().uiTypeface == "Segoe UI", "NEON STAGE UI typeface decoded");
         expect(manager.getPalette().displayTypeface == "Consolas", "NEON STAGE display typeface decoded");
         expect(manager.getPalette().typographyWeight == "semibold", "NEON STAGE typography weight decoded");
@@ -125,15 +139,15 @@ int main()
 
     const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
     const auto skin52Json = skin52Manifest.loadFileAsString();
-    expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
+    expect(skin52Json.isNotEmpty(), "archived Skin_052 compatibility manifest readable");
     const bool skin52Loaded = manager.loadFromFile(skin52Manifest);
-    expect(skin52Loaded, "Skin Studio 052 manifest accepted"
+    expect(skin52Loaded, "archived Skin_052 compatibility manifest accepted"
            + (skin52Loaded ? juce::String{} : ": " + manager.getLastError()));
     if (skin52Loaded)
     {
-        expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
-        expect(manager.getPalette().name == "SIGNAL FORGE", "Skin_052 SIGNAL FORGE name is decoded");
-        expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
+        expect(manager.getPalette().id == "skin-052", "archived Skin_052 stable ID remains readable");
+        expect(manager.getPalette().name == "SIGNAL FORGE", "archived Skin_052 historical label is decoded (not an active factory skin)");
+        expect(!manager.getPalette().usedFallback, "archived Skin_052 compatibility manifest does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
 

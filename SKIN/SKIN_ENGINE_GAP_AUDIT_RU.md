@@ -120,3 +120,32 @@ Settings is no longer a deferred/absent panel in this branch. `settingsButton` o
 ## Live panel palette propagation — 12.11.2026
 
 `PPGUThemeAwarePanel` is now the common contract for workspace child content. `PPGUMultiWindowWorkspace` stores the current `PPGUThemeManager::Palette`, applies it to panels already open, and applies it immediately to newly opened panels. FX EDIT, AutoChords, Import Guitar, Settings and Skin Gallery implement the contract and recolour their labels, controls, graphs/cards and status text. Theme switching remains UI-only. Remaining hardcoded colours in the main editor and future components still require audit; do not claim complete zero-hardcoded-colour parity.
+
+
+---
+
+# Актуализация REV.19 — утверждённая линейка 16 GRAPHIC SKINS (2026-11-16)
+
+Эта секция является текущим статусом для рабочей ветки `work/approved-16-skins-completion`; исторические snapshot-данные REV.14/REV.17/REV.18 выше не описывают новую active registry.
+
+## Подтверждено в исходниках и CI
+
+- Утверждённая последовательность содержит ровно 16 factory themes: NEON STAGE, OBSIDIAN GOLD, CARBON FORGE, MIDNIGHT CRIMSON, ARCTIC PLATINUM, VIOLET NOIR, TITANIUM STORM, EMERALD CIRCUIT, SOLAR FLARE, DEEP OCEAN, ROSE CHROME, DESERT AMBER, GLACIER TEAL, PHANTOM GRAPHITE, ULTRAVIOLET DRIVE, VOLCANIC STEEL.
+- Active `SKIN/theme_manifest.json` содержит ровно 16 entries. Logical `ordinal` 1…16 отделён от immutable stable IDs/indexes: `skin-053`/53 и `skin-103…skin-117`/103…117.
+- Старый 102-entry registry сохранён без потери в `SKIN/archive/theme_manifest.legacy-102.json`; старый 50-theme pack manifest сохранён в `SKIN/archive/theme_pack_manifest.legacy-50.json`. Legacy source folders не удалялись.
+- `PluginEditor.cpp/.h` разрешают stable skin ID в logical ordinal; Gallery active marker, persisted selection и Restore default больше не используют числовой суффикс stable ID как ordinal.
+- Для SKIN 02–16 существуют 45 отдельных SVG texture/bezel/crest assets и 30 PNG preview/hero assets. Размеры PNG: preview 360×240, hero 800×450.
+- Workflow `Render approved 16-skin artwork`, run `43831852908`, завершился SUCCESS. Strict asset audit: 16 theme specs, active registry 16 entries, 0 errors, 0 warnings. `tests/ValidateSkinManifests.py`: SKIN CONTRACT PASS; 102 legacy registry entries preserved in archive.
+- Для каждого из 15 новых skin manifests проверены точные утверждённые имя, 21 palette token, 27 обязательных control IDs и существующий `sync_selector` metadata entry, ECO reduction и 150 ms metadata. Это manifest/asset verification, не runtime host acceptance.
+
+## Оставшиеся runtime implementation gaps
+
+1. Gallery теперь имеет 16 active entries и PNG previews, но реальный host capture каждого skin ещё не выполнен.
+2. SVG texture/bezel/crest loading и drawing добавлены в рабочую ветку: ThemeManager безопасно декодирует три слоя в reference-counted juce::Image на UI thread; main console, gallery, FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PATTERN и PERFORMANCE используют общий drawThemeArtworkLayers helper или эквивалентный paint path; floating workspace Window chrome и workspace background также получают texture/bezel layers. C++ compile и host capture ещё не пройдены, поэтому runtime rendering остаётся IMPLEMENTED-ON-BRANCH / BUILD-VERIFICATION-PENDING.
+3. Полная очистка hardcoded visual colours в основном PluginEditor и всех открытых auxiliary panels не подтверждена; использовать 21-token palette, не менять функциональные bounds/hit targets/attachments.
+4. Добавлен `tools/package_active_skins.py`: он валидирует active registry/approved sequence и собирает sibling `VST3/Skins` только из `theme_manifest.json` + 16 folders и пяти требуемых assets на тему. Архивные/legacy folders не копируются. Скрипт включён в Windows build workflow; packaging PASS ещё ожидает нового exact-head run.
+5. 150 ms hot-swap fade, ECO policy, image memory budget/LRU и safe background asset loading требуют отдельной реализации/измерения. Никакого I/O, allocation, locking или GUI work в audio callback.
+6. Runtime parity остаётся ровно по утверждённым 27 required control IDs. Дополнительный `sync_selector` metadata entry не является новым control ID. Не активировать фиктивные LED/Auto Discover/Curator/About элементы.
+7. Обязательны Windows x64 VST3 build, полный CTest, pluginval strictness 5, DPI 100/125/150%, FL Studio 20 preview/apply/cancel/persistence, repeated hot-swap test и audio-buffer/parameter-state equivalence.
+
+**Статус:** THEME SPECS + SVG + PNG ASSET PACK = VERIFIED BY CI. ACTIVE REGISTRY + STABLE-ID/ORDINAL MAPPING = IMPLEMENTED ON WORKING BRANCH. SVG LAYER LOADING/DRAWING = IMPLEMENTED ON WORKING BRANCH, C++ BUILD NOT YET VERIFIED. WINDOWS VST3 / FULL CTEST / PLUGINVAL / HOST ACCEPTANCE = PENDING.

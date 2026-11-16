@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-109",
   "index": 109,
-  "name": "SKIN-8 — EMERALD CIRCUIT",
+  "name": "EMERALD CIRCUIT",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "EMERALD CIRCUIT: premium PPGU visual theme. black ceramic / emerald circuitry. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Black ceramic surfaces with emerald circuit traces etched beneath smoked glass, fine illuminated nodes and deep-green raised controls. Circuit light is localized to seams and active states, keeping the console calm and readable. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#06100D",
     "panel": "#10201A",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Black ceramic surfaces with emerald circuit traces etched beneath smoked glass, fine illuminated nodes and deep-green raised controls. Circuit light is localized to seams and active states, keeping the console calm and readable.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 8
 }

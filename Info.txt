@@ -3999,3 +3999,142 @@ G. Только после прохождения критериев объяв�
 - Сохранять уже завершённые материалы и дорабатывать только реальные пробелы.
 
 РЕЗУЛЬТАТ: ПОЛНЫЙ СПИСОК 16 SKINS И СООТВЕТСТВИЕ SKIN 02–16 ИХ STABLE IDs ЗАФИКСИРОВАНЫ В ЕДИНОМ INFO. ТЕКУЩИЙ СТАТУС — МАНИФЕСТЫ И ПАЛИТРЫ НАЙДЕНЫ; ПОШАГОВЫЙ ARTWORK AUDIT И ИНДИВИДУАЛЬНАЯ ГРАФИЧЕСКАЯ ПРИЁМКА ПРОДОЛЖАЮТСЯ.
+
+
+2026-11-16 — TX-REV19-APPROVED-SKIN-NAME-AND-ASSET-AUDIT-CORRECTION-002
+
+ПРОВЕРКА ПОЛНОЙ ЛИНЕЙКИ SKIN 02–16 НА ВЕТКЕ work/approved-16-skins-completion:
+- Для всех 15 тем Skin_103…Skin_117 подтверждены точные утверждённые названия без добавочных префиксов: OBSIDIAN GOLD, CARBON FORGE, MIDNIGHT CRIMSON, ARCTIC PLATINUM, VIOLET NOIR, TITANIUM STORM, EMERALD CIRCUIT, SOLAR FLARE, DEEP OCEAN, ROSE CHROME, DESERT AMBER, GLACIER TEAL, PHANTOM GRAPHITE, ULTRAVIOLET DRIVE, VOLCANIC STEEL.
+- Во всех 15 theme.json подтверждены 21 palette token, 28 существующих записей control-map, reduceInEco=true, hotSwapFadeMs=150 и неизменные пути preview/hero/texture/bezel/crest.
+- Для каждой из 15 тем найдены все три отдельных SVG-ресурса: svg/texture.svg, svg/bezel.svg, svg/crest.svg. Итого подтверждены 45 SVG-файлов.
+- Повторная проверка точных путей SKIN/Skin_103…Skin_117/assets/preview.png и hero.png показала отсутствие всех 30 PNG-файлов. Они являются текущим главным блокером завершения artwork/галереи.
+- Имя SKIN-1 приведено к точному утверждённому NEON STAGE в Skin_053/theme.json, active registry entry и approved_theme_sequence.json. Runtime ThemeManager default label и asset audit validator синхронизированы с точным именем NEON STAGE.
+- Для SKIN 02–16 добавлены индивидуальные описания art direction в theme.json; это описание материалов, геометрии, фактуры и поведения акцентов, а не заявление о завершённом PNG artwork.
+
+ВАЖНО: это аудит файлов и нормализация спецификаций на рабочей ветке. Все 15 тем пока не готовы к runtime/release: PNG preview/hero отсутствуют, canonical active registry по-прежнему содержит 102 старые записи, stable-ID/ordinal runtime mapping ещё не мигрирован, runtime gallery и exact-SHA Windows VST3/CTest/pluginval/FL Studio 20 acceptance не пройдены. Старые 102 папки/ресурса не удалять; исключение из активной галереи выполнять только после резервного копирования и безопасной миграции registry/loader.
+
+
+2026-11-16 — TX-REV19-16-SKIN-REGISTRY-AND-ORDINAL-MIGRATION-003
+
+БЕЗОПАСНАЯ МИГРАЦИЯ АКТИВНОЙ ГАЛЕРЕИ:
+- Перед изменением active registry создан no-loss backup прежнего 102-entry registry: SKIN/archive/theme_manifest.legacy-102.json.
+- Прежний 50-theme pack manifest сохранён как SKIN/archive/theme_pack_manifest.legacy-50.json и удалён из активного пути SKIN/theme_pack_manifest.json, чтобы не вводить в заблуждение и не запускать старую batch pipeline.
+- SKIN/theme_manifest.json теперь содержит ровно 16 утверждённых factory skins. Все прежние папки Skin_01…Skin_102 и их исходные файлы сохранены; физическое удаление не выполнялось.
+- В active registry добавлено отдельное поле ordinal 1…16. Stable IDs и stable indices сохранены: skin-053/53, skin-103/103 … skin-117/117. Порядок фабричной галереи больше не зависит от цифрового суффикса stable ID.
+- Source/PluginEditor.cpp/.h обновлены: getSkinCount проверяет logical ordinals и уникальные stable IDs/indices; getSkinManifest ищет по ordinal; сохранённый skinId разрешается через getSkinOrdinalForId; Gallery active marker и Restore NEON STAGE используют ordinal 1, а не index 53.
+- tests/ValidateSkinManifests.py и tools/audit_skin_rev18_assets.py обновлены для проверки ровно 16 активных тем, ordinal/stable-ID mapping и 102-entry legacy archive.
+
+СТАТУС:
+- Миграция active registry и loader mapping внесена в рабочую ветку work/approved-16-skins-completion.
+- 15 theme.json: exact approved names, 21 palette tokens, 27 required control IDs plus the existing sync_selector metadata entry, ECO reduction, 150 ms hot-swap metadata; все 45 SVG texture/bezel/crest assets присутствуют.
+- 30 PNG preview/hero assets SKIN 02–16 пока отсутствуют. Добавлен детерминированный renderer tools/render_approved_skin_artwork.py и GitHub Actions workflow для генерации/строгой проверки этих файлов.
+- Draft PR #58 создан для изолированной проверки; он не является релизом и не должен сливаться до прохождения всех asset/runtime/build/host gates.
+- Не заявлять о прохождении C++ build, CTest, pluginval или FL Studio 20 host acceptance: эти проверки ещё не подтверждены.
+
+
+2026-11-16 — TX-REV19-16-SKIN-ASSET-PACK-CI-PASS-004
+
+ASSET PACK ЗАВЕРШЁН И ПРОВЕРЕН:
+- Для SKIN 02–16 сгенерированы и добавлены в рабочую ветку все 30 PNG: 15 preview.png 360×240 и 15 hero.png 800×450.
+- Генерация выполнена детерминированным per-skin renderer с индивидуальными материалами/мотивами; существующие файлы по умолчанию не перезаписываются.
+- GitHub Actions workflow run 43831852908 завершился SUCCESS.
+- Strict audit: 16 approved theme specs; active registry 16 entries; 0 errors, 0 warnings.
+- tests/ValidateSkinManifests.py: SKIN CONTRACT PASS; exact 16 factory themes, stable-ID/logical-ordinal mapping, source manifests, control maps, assets and contrast pairs verified; 102 legacy registry entries preserved in archive.
+- Визуально проверены все 15 preview PNG SKIN 02–16: индивидуальные материалы/мотивы различаются, общая композиционная основа сохраняется. Дополнительно разведены близкие пары ARCTIC PLATINUM vs GLACIER TEAL (crystal facets vs branching frost fractures) и VIOLET NOIR vs ULTRAVIOLET DRIVE (smoked-glass vortex vs directional plasma speed trails).
+- Все 45 SVG texture/bezel/crest assets и все 30 PNG preview/hero assets присутствуют.
+
+ОБНОВЛЁННЫЙ СТАТУС:
+- THEME SPECS: VERIFIED.
+- INDIVIDUAL ART DIRECTION: RECORDED.
+- SVG FOUNDATIONS: VERIFIED.
+- PREVIEW/HERO PNG ASSET PACK: GENERATED + STRICT AUDIT PASS.
+- ACTIVE 16-ENTRY REGISTRY: IMPLEMENTED; old 102-entry registry and legacy 50-theme pack safely archived; old folders/assets preserved.
+- STABLE-ID ↔ LOGICAL-ORDINAL LOADER MAPPING: IMPLEMENTED ON WORKING BRANCH.
+- FULL SVG MATERIAL LAYER INTEGRATION ACROSS REAL JUCE UI: NOT YET VERIFIED/COMPLETE.
+- WINDOWS x64 VST3 BUILD, FULL CTEST, PLUGINVAL STRICTNESS 5, DPI 100/125/150%, FL STUDIO 20 HOST ACCEPTANCE, 150 ms/ECO/MEMORY/1000-HOT-SWAP AND AUDIO-STATE INVARIANCE: PENDING.
+
+DRAFT PR #58 remains open and must not be merged as release-ready until all runtime/build/host gates pass. The current verified result is the 16-theme source/asset pack and contract audit, not a final tested VST3 release.
+
+
+2026-11-16 — TX-REV19-SVG-RUNTIME-LAYER-WIRING-005
+
+SVG ARTWORK LAYERS ВСТРОЕНЫ В UI SOURCE:
+- PPGUThemeManager::Palette теперь хранит reference-counted textureArtwork, bezelArtwork и crestArtwork.
+- ThemeManager::loadFromFile загружает три SVG текущей темы только на UI/message thread, проверяет относительные пути, размер файла, SVG root и запрещённые external/script/image references, затем rasterizes в ограниченные размеры: texture 512×512, bezel 800×450, crest 480×168.
+- Main SIGNAL FORGE console рисует texture background, panel texture/bezel overlays, crest watermark и outer bezel.
+- Общий drawThemeArtworkLayers подключён к Skin Gallery, FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PATTERN и PERFORMANCE. Контролы, APVTS attachments, hit targets и functional layout не менялись.
+- Удалены устаревшие family/legacy filters из active Skin Gallery; оставлены ALL SKINS и FAVORITES ONLY. Карточки показывают logical ordinal SKIN 01…16. Заголовок FX EDIT использует SIGNAL FORGE, а не имя default skin.
+- ThemeManagerTests.cpp обновлён: проверяет точное имя NEON STAGE, active registry total 16, и наличие всех трёх decoded SVG layers для каждой active темы.
+- Добавлен Windows workflow .github/workflows/windows-vst3-build.yml: checkout JUCE 7.0.12, Windows x64 CMake build, full CTest, strict asset audit, registry test и VST3 artifact upload. Workflow definition committed, но run для этого нового workflow пока не подтверждён.
+
+ОГРАНИЧЕНИЕ СТАТУСА:
+- SVG loading/drawing = IMPLEMENTED ON WORKING BRANCH.
+- C++ compile / JUCE SVG decode tests / Windows x64 VST3 / full CTest / pluginval / FL Studio 20 = PENDING; не объявлять runtime integration VERIFIED до успешного exact-SHA run.
+- Artwork asset pack remains verified by workflow 43831852908 (SUCCESS, 0 errors, 0 warnings); the later motif refinement for ARCTIC PLATINUM, VIOLET NOIR, GLACIER TEAL and ULTRAVIOLET DRIVE was regenerated and the asset/contract workflow rerun also completed SUCCESS.
+
+
+2026-11-16 — TX-REV19-WORKSPACE-CHROME-SKIN-LAYERS-006
+
+Дополнительно подключены material artwork layers к floating workspace chrome:
+- PPGUMultiWindowWorkspace::Window хранит shared Palette reference и рисует texture/bezel слои под header/content.
+- PPGUMultiWindowWorkspace background рисует низкоинтенсивную texture.
+- Существующие close/maximize/resize/drag controls и geometry persistence не изменялись.
+- Windows build workflow path filters включают PPGUMultiWindowWorkspace.cpp/.h.
+- C++/Windows build run, начатый до последнего workspace commit, не является проверкой этой последней правки; требуется новый exact-head run.
+
+
+2026-11-16 — TX-REV19-16-SKIN-RUNTIME-PACKAGING-007
+
+RUNTIME PACKAGE ИЗОЛИРОВАН ОТ LEGACY:
+- Добавлен tools/package_active_skins.py.
+- Скрипт сверяет active theme_manifest.json с approved_theme_sequence.json, требует ровно 16 ordinals 1…16, проверяет stable ID/index/name/path, копирует только активный registry и 16 папок с theme.json + preview/hero/texture/bezel/crest.
+- Runtime copy удаляет documentation-only legacyRegistryArchive pointer; archive/, старый 50-theme pack, Skin_01…Skin_102 legacy folders и любые не зарегистрированные темы не попадают в VST3/Skins.
+- Windows workflow теперь вызывает package script после build/tests и публикует .vst3 bundle вместе с sibling VST3/Skins.
+- Artwork workflow также дополнен staging test в /tmp/ppgu-runtime-skins; это изменение требует нового workflow run.
+- Новый Windows workflow run 43833381428 был запущен до последнего workspace/package-script commit и не считается проверкой exact HEAD. Требуется повторный PR reopen/run после всех текущих изменений.
+
+СТАТУС: 16-SKIN SOURCE/ARTWORK PACK VERIFIED; ACTIVE REGISTRY VERIFIED; SVG LAYER WIRING IMPLEMENTED; 16-ONLY PACKAGE SCRIPT IMPLEMENTED. WINDOWS BUILD / CTEST / SVG DECODE / PACKAGE STAGING / HOST ACCEPTANCE PENDING.
+
+
+2026-11-16 — TX-REV19-WINDOWS-BUILD-ISSUE-001
+
+ПЕРВЫЙ WINDOWS x64 BUILD:
+- CMake configure и JUCE 7.0.12 checkout прошли успешно.
+- PluginEditor.cpp и PPGUMultiWindowWorkspace.cpp с artwork-layer drawing скомпилировались в ppgu_processor_pattern_tests target без ошибок (были только прежние conversion/shadow warnings).
+- ppgu_theme_contracts остановился на Source/UI/ThemeManager.cpp: juce::Drawable / createFromSVG не были видны в target, потому что target link list включал juce_core + juce_graphics, но не juce_gui_basics.
+- Исправление: добавлен juce::juce_gui_basics в target_link_libraries(ppgu_theme_contracts).
+- Ошибка локализована; повторный запуск того же workflow job поставлен в очередь для проверки исправления. До завершения rerun C++/CTest статус остаётся PENDING.
+
+
+2026-11-16 — TX-REV19-SKIN-LOAD-FAILSAFE-008
+
+- loadSkinByIndex теперь при ошибке загрузки не оставляет пустой fallback без artwork: пытается полностью загрузить NEON STAGE (ordinal 01) из Skin_053/theme.json.
+- При неудаче сообщает через существующий statusLabel и сохраняет фактически восстановленный stable skin ID, если вызов был пользовательским.
+- loadSavedSkin упрощён: stable ID разрешается в ordinal, затем выполняется один безопасный load attempt; двойная загрузка default устранена.
+- APVTS, processor, MIDI, sampler, DSP и audio callback не изменялись.
+- Ошибка default NEON STAGE manifest всё ещё оставляет встроенный palette fallback без artwork — это последний резервный путь при повреждении самой default темы.
+
+
+2026-11-16 — TX-REV19-SVG-TEST-INITIALIZATION-009
+
+- ThemeManagerTests now creates juce::ScopedJuceInitialiser_GUI before decoding SVG assets, so the headless Windows contract test initializes JUCE GUI/font facilities explicitly.
+- This test change is newer than the currently running C++ build attempt; include it in the next exact-head Windows run.
+
+
+2026-11-16 — TX-REV19-WINDOWS-BUILD-AND-TEST-RESULT-010
+
+WINDOWS x64 BUILD / C++:
+- Windows x64 CMake configure succeeded.
+- Full C++ build succeeded, including VST3-related targets, ppgu_theme_contracts and ppgu_processor_pattern_tests.
+- JUCE ThemeManager contract test passed, including SVG texture/bezel/crest decoding for all 16 active registry themes.
+- Processor/pattern integration test passed; PluginEditor.cpp and PPGUMultiWindowWorkspace.cpp artwork-layer rendering compiled.
+- CTest result: 13/14 passed. Only failure was unrelated tests/TestSampleLibraryAuditPaths.py fixture: it used literal backslash-n characters instead of actual line breaks, causing the sample opcode parser to capture '*sine\\n'.
+- Fixed the test fixture to use actual newline escapes. Runtime sampler code was not changed.
+- Full workflow rerun is required to confirm 14/14 CTest; Windows package staging/strict audit/upload steps still require the new exact-head workflow run.
+
+
+2026-11-16 — TX-REV19-CTEST-RERUN-QUEUE-011
+
+- Rerun job 133191808665 is queued for workflow run 43833381428 after fixing the SFZ test fixture.
+- This rerun uses the original workflow definition (so it will not execute the newly added 16-only package step) but checks out the current working branch ref and re-runs the C++ build/CTest/strict audit/registry contract.
+- The updated Windows workflow now checks out exact PR head SHA and includes package_active_skins.py + combined VST3/Skins artifact; trigger that updated definition after the current rerun completes.

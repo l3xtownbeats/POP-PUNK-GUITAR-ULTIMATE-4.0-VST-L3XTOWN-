@@ -58,9 +58,12 @@ public:
 
     void setThemePalette(const PPGUThemeManager::Palette& palette)
     {
+        themePalette = palette;
+        hasThemePalette = true;
         if (content != nullptr)
             if (auto* themed = dynamic_cast<PPGUThemeAwarePanel*>(content.get()))
                 themed->setThemePalette(palette);
+        repaint();
     }
 
     void setColours(juce::Colour panel, juce::Colour border,
@@ -146,6 +149,25 @@ public:
         auto area = getLocalBounds().toFloat();
         g.setColour(panelColour);
         g.fillRoundedRectangle(area, 8.0f);
+
+        if (hasThemePalette && themePalette.textureArtwork.isValid())
+        {
+            g.saveState();
+            g.setOpacity(0.075f);
+            g.drawImageWithin(themePalette.textureArtwork, 2, 2,
+                              juce::jmax(1, getWidth() - 4), juce::jmax(1, getHeight() - 4),
+                              juce::RectanglePlacement::stretchToFit);
+            g.restoreState();
+        }
+        if (hasThemePalette && themePalette.bezelArtwork.isValid())
+        {
+            g.saveState();
+            g.setOpacity(0.28f);
+            g.drawImageWithin(themePalette.bezelArtwork, 0, 0, getWidth(), getHeight(),
+                              juce::RectanglePlacement::stretchToFit);
+            g.restoreState();
+        }
+
         g.setColour(borderColour);
         g.drawRoundedRectangle(area.reduced(0.5f), 8.0f, 1.0f);
         g.setColour(borderColour.withAlpha(0.55f));
@@ -190,6 +212,8 @@ private:
     juce::ComponentBoundsConstrainer boundsConstrainer;
     juce::ResizableCornerComponent resizeCorner;
     juce::Colour panelColour, borderColour;
+    PPGUThemeManager::Palette themePalette;
+    bool hasThemePalette = false;
     juce::Rectangle<int> dragStartBounds, restoreBoundsBeforeMaximize;
     juce::Point<int> dragStartScreen;
     bool draggingHeader = false;
@@ -357,6 +381,14 @@ void PPGUMultiWindowWorkspace::resized()
 void PPGUMultiWindowWorkspace::paint(juce::Graphics& g)
 {
     g.fillAll(backgroundColour);
+    if (hasThemePalette && currentThemePalette.textureArtwork.isValid())
+    {
+        g.saveState();
+        g.setOpacity(0.045f);
+        g.drawImageWithin(currentThemePalette.textureArtwork, 0, 0, getWidth(), getHeight(),
+                          juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
 }
 
 juce::String PPGUMultiWindowWorkspace::geometryKey(int id, const juce::String& suffix) const

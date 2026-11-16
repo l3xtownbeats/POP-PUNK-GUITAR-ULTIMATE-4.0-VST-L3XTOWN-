@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-113",
   "index": 113,
-  "name": "SKIN-12 — DESERT AMBER",
+  "name": "DESERT AMBER",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "DESERT AMBER: premium PPGU visual theme. dark walnut / copper sandblasted metal. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Dark-walnut grain, copper sandblasted metal, warm dune-like contour engraving and muted amber inlays. The material feels tactile and sun-worn, distinct from polished gold or bronze, with highlights kept soft. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#110D08",
     "panel": "#21190F",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Dark-walnut grain, copper sandblasted metal, warm dune-like contour engraving and muted amber inlays. The material feels tactile and sun-worn, distinct from polished gold or bronze, with highlights kept soft.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 12
 }

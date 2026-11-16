@@ -35,13 +35,18 @@ public:
         };
 
         juce::String id { "skin-053" };
-        juce::String name { "NEON STAGE DEFAULT" };
+        juce::String name { "NEON STAGE" };
         juce::String uiTypeface { "Segoe UI" };
         juce::String displayTypeface { "Consolas" };
         juce::String typographyWeight { "semibold" };
         float fontScale = 1.0f;
         float letterSpacing = 0.35f;
         Tokens tokens;
+        // Decoded on the UI/message thread from the active theme's local SVG assets.
+        // juce::Image is reference-counted, so Palette copies share the same pixels.
+        juce::Image textureArtwork;
+        juce::Image bezelArtwork;
+        juce::Image crestArtwork;
         // Compatibility aliases used by the existing editor shell.
         juce::Colour canvas { 0xff080b14 };
         juce::Colour canvasInset { 0xff0c1422 };
@@ -62,7 +67,7 @@ public:
     PPGUThemeManager() = default;
 
     // Parsing and file access are UI/control-thread operations only.
-    // A failed load always restores the canonical NEON STAGE DEFAULT palette.
+    // A failed load always restores the canonical NEON STAGE palette.
     bool loadFromJson(const juce::String& jsonText);
     bool loadFromFile(const juce::File& manifestFile);
     void resetToDefault() noexcept;

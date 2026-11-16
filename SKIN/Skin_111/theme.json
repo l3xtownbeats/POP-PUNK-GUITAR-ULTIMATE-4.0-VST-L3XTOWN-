@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-111",
   "index": 111,
-  "name": "SKIN-10 — DEEP OCEAN",
+  "name": "DEEP OCEAN",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "DEEP OCEAN: premium PPGU visual theme. midnight navy / luminous marine blue. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Midnight-navy anodized surfaces, layered marine-blue glass, deep-water gradients and subtle wave-contour machining. Cool luminous blue is used for selected states and fine edge lighting, creating depth without visual noise. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#050C17",
     "panel": "#0D1B2D",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Midnight-navy anodized surfaces, layered marine-blue glass, deep-water gradients and subtle wave-contour machining. Cool luminous blue is used for selected states and fine edge lighting, creating depth without visual noise.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 10
 }

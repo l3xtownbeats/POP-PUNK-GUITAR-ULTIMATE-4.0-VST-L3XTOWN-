@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-117",
   "index": 117,
-  "name": "SKIN-16 — VOLCANIC STEEL",
+  "name": "VOLCANIC STEEL",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "VOLCANIC STEEL: premium PPGU visual theme. basalt / forged steel with lava-orange accents. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Basalt-black surfaces, forged-steel bevels, controlled lava-orange fissure inlays and heat-treated metallic texture. Orange light is confined to fine seams and selected indicators, preserving a dark industrial console. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#100A08",
     "panel": "#211410",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Basalt-black surfaces, forged-steel bevels, controlled lava-orange fissure inlays and heat-treated metallic texture. Orange light is confined to fine seams and selected indicators, preserving a dark industrial console.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 16
 }

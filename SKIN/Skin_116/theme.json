@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-116",
   "index": 116,
-  "name": "SKIN-15 — ULTRAVIOLET DRIVE",
+  "name": "ULTRAVIOLET DRIVE",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "ULTRAVIOLET DRIVE: premium PPGU visual theme. black violet glass / ultraviolet plasma. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Black-violet glass, ultraviolet plasma arcs, layered speed-line geometry and deep-purple anodized edges. The visual energy is directional and kinetic, with thin localized accents rather than broad neon haze. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#0C0715",
     "panel": "#1A1028",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Black-violet glass, ultraviolet plasma arcs, layered speed-line geometry and deep-purple anodized edges. The visual energy is directional and kinetic, with thin localized accents rather than broad neon haze.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 15
 }

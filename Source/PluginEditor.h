@@ -40,6 +40,7 @@ private:
     juce::File getRuntimeSkinRoot() const;
     int getSkinCount() const;
     juce::File getSkinManifest(int index) const;
+    int getSkinOrdinalForId(const juce::String& id) const;
     void loadSavedSkin();
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
