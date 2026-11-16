@@ -21,9 +21,10 @@ def main():
             raise AssertionError(f"{source!r}: expected {expected!r}, got {actual!r}")
     # SFZ generator opcodes are not sample-file paths.
     import re
-    opcodes = [m.group(2) for m in ASSIGNMENT.finditer(
-        'sample=*sine\\n sample="Samples/guitar/note.wav"\\n'
-    ) if m.group(1).lower() == "sample"]
+    opcodes = [next((v for v in m.groups()[1:] if v is not None), "")
+               for m in ASSIGNMENT.finditer(
+                   'sample=*sine\\n sample="Samples/guitar/note.wav"\\n'
+               ) if m.group(1).lower() == "sample"]
     if opcodes != ["*sine", "Samples/guitar/note.wav"]:
         raise AssertionError(f"Unexpected SFZ sample opcodes: {opcodes!r}")
     print(f"SFZ path/opcode contract: {len(cases)} path cases and {len(opcodes)} opcode cases passed")
