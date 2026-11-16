@@ -18,6 +18,7 @@ namespace
 
 int main()
 {
+    juce::ScopedJuceInitialiser_GUI juceInitialiser;
     PPGUThemeManager manager;
     expect(manager.getPalette().id == "skin-053", "default theme ID");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
