@@ -26,3 +26,13 @@ The master baseline and all individual briefs under `SKIN/PREMIUM_UPGRADE/` are 
 
 ## Approval semantics
 This file records approval of the requirements and baseline only. It does not claim that artwork, integration, runtime validation, VST3 builds, pluginval, or FL Studio host acceptance have been completed.
+
+## Approved performance and safe-switching addendum
+
+The user additionally approves the mandatory requirements in
+`SKIN/PREMIUM_UPGRADE/PERFORMANCE_AND_SAFE_SWITCHING_ADDENDUM.md`.
+All 16 visual skins must remain lightweight and resource-efficient. Skin
+switching is presentation-only and must not affect audio, MIDI, presets,
+parameters, automation, sampler playback, or host stability. Resource use and
+switching safety require measured verification; no unrun test may be reported
+as passed.
