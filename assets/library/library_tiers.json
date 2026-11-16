@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "storageUnits": {
+    "label": "GB",
+    "definition": "DECIMAL",
+    "bytesPerGB": 1000000000
+  },
+  "factoryPresets": {
+    "requiredPlayableCount": 500,
+    "requiresBasicLibrary": true,
+    "requiresExpandedLibrary": false
+  },
+  "libraries": {
+    "basic": {
+      "id": "PPGU-BASIC",
+      "displayName": "BASIC LIBRARY",
+      "targetBytes": 15000000000,
+      "targetGB": 15,
+      "distribution": "INCLUDED_IN_STANDARD_PRODUCT_PACKAGE",
+      "mandatory": true,
+      "independentlyPlayable": true,
+      "supportsFactoryPresetCount": 500
+    },
+    "expanded": {
+      "id": "PPGU-EXPANDED",
+      "displayName": "EXPANDED LIBRARY",
+      "addonBytes": 15000000000,
+      "addonGB": 15,
+      "initialCombinedBytes": 30000000000,
+      "initialCombinedGB": 30,
+      "distribution": "OPTIONAL_ADDITIVE_ADDON",
+      "requiresBasic": true,
+      "replacesBasic": false,
+      "expandable": true,
+      "maximumBytes": null,
+      "purposes": [
+        "ADDITIONAL_TONE_VARIATIONS",
+        "SOUND_QUALITY_AND_REALISM_ENHANCEMENT",
+        "ADDITIONAL_ARTICULATIONS_AND_PERFORMANCES",
+        "ADDITIONAL_FACTORY_PRESETS"
+      ]
+    }
+  },
+  "engine": {
+    "sampleDiscovery": "AUTOMATIC",
+    "sampleAnalysis": "AUTOMATIC",
+    "sampleClassification": "AUTOMATIC_WITH_CONFIDENCE_AND_REVIEW_GATES",
+    "sampleDistribution": "AUTOMATIC_BY_PRESET_AND_PLAYBACK_NEEDS",
+    "manualPerSampleAssignmentRequired": false,
+    "indexingAndHashingThread": "BACKGROUND_WORKER",
+    "audioCallbackDiskIoAllowed": false,
+    "audioCallbackBlockingAllowed": false,
+    "audioCallbackUnboundedAllocationAllowed": false,
+    "preserveSourceLicenseAndProvenance": true,
+    "preserveSha256Integrity": true
+  },
+  "releaseGates": {
+    "basicPackageMustContainAllRequiredAssets": true,
+    "all500FactoryPresetsMustResolveAgainstBasic": true,
+    "expandedMustNotBeRequiredForBasicPresetPlayback": true,
+    "noPaddingOrDuplicateAudioToReachTargetSize": true,
+    "noAssetMayBeRedistributedWithoutVerifiedRights": true,
+    "measuredPackageSizeMustBeReported": true
+  }
+}
