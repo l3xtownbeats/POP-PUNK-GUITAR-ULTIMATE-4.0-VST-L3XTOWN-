@@ -18,7 +18,7 @@ The distinction above is intentional: NEON STAGE names the overall interface sys
 | SKIN-2 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Renderer and exact-SHA CI generation/PNG validation passed; PNGs not yet committed; G1–G4/runtime acceptance pending |
 | SKIN-3 | CARBON FORGE | `skin-104` / `Skin_104` | Renderer and exact-SHA CI generation/PNG validation passed; PNGs not yet committed; G1–G4/runtime acceptance pending |
 | SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Renderer extended; exact-SHA CI validation pending |
-| SKIN-5 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-5 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Renderer implemented; exact-SHA CI generation/PNG validation pending; G1–G4/runtime acceptance pending |
 | SKIN-6 | VIOLET NOIR | `skin-107` / `Skin_107` | Approved specification/SVG; finish artwork and acceptance |
 | SKIN-7 | TITANIUM STORM | `skin-108` / `Skin_108` | Approved specification/SVG; finish artwork and acceptance |
 | SKIN-8 | EMERALD CIRCUIT | `skin-109` / `Skin_109` | Approved specification/SVG; finish artwork and acceptance |
