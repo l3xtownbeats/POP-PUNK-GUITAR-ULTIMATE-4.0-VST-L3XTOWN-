@@ -1057,3 +1057,14 @@ Blocking finding:
 - Do not inflate the runtime registry to sixteen or claim all sixteen selectable until artwork/asset validation, runtime loading and exact-SHA package tests pass. Keep the approved sixteen sequence fixed; do not reintroduce the retired historical 102-record archive.
 
 STATUS: 16 THEME SPECIFICATIONS/PALLETTES PRESENT · STATIC CONTRAST PREFLIGHT PASS · GALLERY TRANSACTION SOURCE PRESENT · RUNTIME GALLERY CURRENTLY 1/16 · SKIN-2..16 PNG/G1-G4/REGISTRY/PACKAGE/RUNTIME ACCEPTANCE PENDING. Next bounded task: complete missing per-theme PNG artwork and asset checks, then safely promote the approved sequence into the runtime registry and test preview/apply/rollback for all sixteen. No source/UI behavior was changed in this audit.
+
+
+2026-11-16 — NEON STAGE: ARTWORK PIPELINE CONTRACT GAP
+
+Follow-up inspection of the exact Windows CI logs and validation tools clarified the pending 15-theme artwork gate:
+- Run 43726066887 reports 16 approved theme specifications, runtime registry 1 entry, and 45 warnings: SKIN-2..SKIN-16 each lack assets/preview.png and assets/hero.png and are not promoted into the runtime registry.
+- The workflow step named “Generate and validate missing legacy skin artwork” runs tools/T2_generate_missing_artwork.py. That generator iterates only active-registry entries with index < 52, so it intentionally skips the current Skin Studio indices 53 and 103..117. It does not create the missing artwork for the approved sixteen-theme sequence.
+- The live Skin Studio contract in tests/ValidateSkinManifests.py and tools/audit_skin_rev18_assets.py requires preview.png at 360x240 and hero.png at 800x450. The older SKIN/ASSET_SPECIFICATIONS_RU.md describes a conflicting 480x300 PNG / 1200x420 WebP contract and must be reconciled before authoring assets; do not generate assets to the stale dimensions or use the legacy generator as a substitute.
+- The CI theme audit is deliberately non-strict while artwork is pending, so workflow SUCCESS does not mean all 16 theme assets passed. The active registry validator checks the one registered theme, while the read-only sequence audit emits the 45 pending warnings.
+
+No artwork or runtime registry changes were made. Required next step is to resolve the authoritative asset-size/format contract, then produce genuine product-shell previews and hero artwork for SKIN-2..SKIN-16, validate PNG structure/dimensions/CRC and SVG safety, and only then promote the full approved sequence. Do not replace real product previews with generic poster placeholders.
