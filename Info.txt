@@ -2884,3 +2884,69 @@ These images are implementation references, not permission to show an unimplemen
 
 **Статус:** VISUAL SOURCE OF TRUTH CONFIRMED / README CORRECTED / EXACT GUI REIMPLEMENTATION PENDING / BUILD AND HOST ACCEPTANCE NOT CLAIMED.
 ==============================================================================
+
+
+
+==============================================================================
+2026-11-16 — TX-SIMPLE-CORE-DUAL-ENGINE-001 — USER-RATIFIED ARCHITECTURE
+==============================================================================
+
+**Основание:** пользователь прямо утвердил и зафиксировал архитектуру DUAL ENGINE + SHARED AUDIO CORE и принцип SIMPLE CORE — MAXIMUM PERFORMANCE.
+
+## Утверждённая простая архитектура
+
+1. **MELODY ENGINE** — самостоятельная логика исполнения отдельных MIDI-нот, velocity, артикуляций, note-on/off и выразительности.
+2. **PATTERN ENGINE** — самостоятельная логика аккордов, voicings, ритмических рисунков, переходов и AUTOCHORDS (только PATTERN).
+3. **Один общий SAMPLE / AUDIO CORE** — существующий SamplerEngine, SamplePool, потоковая загрузка, cache, voice playback и общие ресурсы.
+4. **Один общий FX CORE** — существующая общая обработка сигнала; не создавать отдельные копии одинаковой цепи для режимов без доказанной необходимости.
+5. **Простое управление ресурсами** — ограниченные заранее выделенные буферы/очереди, общий cache, отсутствие повторной загрузки одинаковых данных.
+
+MELODY и PATTERN разделяются по музыкальной ответственности, а не дублированием низкоуровневого sampler. Отдельные режимные компоненты не должны создавать второй SamplePool, второй банк одинаковых WAV или отдельный worker на каждую ноту/пресет.
+
+## SIMPLE CORE — обязательные инженерные правила
+
+- Не создавать дополнительные движки, слои абстракции, диспетчеры и потоки без измеримой пользы.
+- Каждый компонент имеет одну понятную задачу и минимальный интерфейс.
+- Audio callback выполняет только ограниченную realtime-работу: никаких файловых/сетевых операций, блокирующих ожиданий, неограниченных циклов и динамических выделений памяти.
+- SFZ/WAV loading, file scan, hashing, indexing и тяжёлая подготовка выполняются вне audio callback.
+- Событийное планирование, которое необходимо в realtime, остаётся bounded, deterministic и использует заранее выделенное хранилище.
+- Сохраняются утверждённый UI, структура браузеров, функциональный контракт, APVTS IDs, stable control IDs, 27-control contract и семь разрешённых FX bypass IDs.
+- Внутренние алгоритмы можно модернизировать без изменения пользовательского интерфейса и согласованного поведения.
+- Любая оптимизация подтверждается измерением до/после: CPU callback time, dropout/xrun, RAM, active voices, cache hit/miss, sample-load и preset-switch time.
+
+## Source preflight — фактическое состояние на базе REV18
+
+**Проверенная ветка:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
+**Точный исходный SHA:** `c20cc6b76d4c66b70bcfcec27d8e79514ada147b`  
+**Тип:** статический аудит исходников и фиксация требований; production source не менялся.
+
+Подтверждено по исходникам:
+- `Source/PluginProcessor.h` содержит один член `ppgu::sampler::SamplerEngine sampler` и один `PatternScheduler`.
+- MELODY и PATTERN имеют отдельные ветви поведения в `PluginProcessor::processBlock`, но их orchestration пока находится в одном методе; отдельные классы MelodyEngine/PatternEngine в проверенном processor header не обнаружены.
+- Обе ветви используют тот же `sampler`; второй SamplerEngine не создаётся.
+- `SamplerEngine` имеет 64 заранее выделенных voice slots.
+- `SamplePool` ограничивает snapshots до 128, streaming library roots до 8; в заголовке задано 256 cache slots.
+- `PatternScheduler` использует фиксированное хранилище событий до 512 событий на блок.
+- SFZ loading выполняется через отдельный loader pool; streaming/cache компоненты вынесены в `Source/Sampler`.
+
+Следовательно, базовый принцип общего sampler уже присутствует, а разделение MELODY/PATTERN пока реализовано главным образом как две ветви внутри processor, а не как два изолированных orchestration-компонента.
+
+## Безопасная следующая последовательность
+
+1. Не менять аудиокод сразу: сначала зафиксировать baseline текущего точного SHA и проверить существующие тесты.
+2. Подготовить небольшой рефакторинг границ ответственности: вынести только режимную логику MELODY и PATTERN в простые компоненты, сохранив один SamplerEngine и текущие MIDI/APVTS/state contracts.
+3. Добавить contract tests: Melody не вызывает Pattern/AUTOCHORDS; Pattern не перехватывает Melody MIDI; оба используют один sampler; переключение режима не оставляет зависших голосов.
+4. Измерить CPU/RAM и поведение до/после на одинаковых sample rate, buffer size, polyphony и test MIDI.
+5. Оптимизировать только подтверждённые профилем горячие участки. Не менять SamplePool snapshot lifetime/ownership без отдельного quiescence и concurrency audit.
+
+## Статус и доказательства
+
+- Архитектура и простота: **USER-RATIFIED / REQUIREMENT**.
+- Общий SamplerEngine: **SOURCE PRESENT** на проверенном SHA.
+- Раздельные orchestration-классы MELODY/PATTERN: **NOT YET PRESENT** в проверенном processor header.
+- CPU/RAM performance gain: **NOT MEASURED**.
+- Windows exact-SHA build, CTest, pluginval и FL Studio 20 acceptance для этого SHA: **NOT CONFIRMED**.
+- Production source changed: **NO**.
+- Это дополнение фиксирует принятое решение и preflight; оно не заявляет о завершённой реализации или ускорении.
+==============================================================================
+
