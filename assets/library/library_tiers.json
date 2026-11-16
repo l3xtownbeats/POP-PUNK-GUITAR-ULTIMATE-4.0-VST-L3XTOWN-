@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "storageUnits": {
     "label": "GB",
@@ -32,7 +32,31 @@
       "independentlyPlayable": true,
       "supportsFactoryPresetCount": 500,
       "mayExceedMinimumTarget": true,
-      "qualityMustNotBeReducedToMeetSizeTarget": true
+      "qualityMustNotBeReducedToMeetSizeTarget": true,
+      "qualityReplacementPolicy": {
+        "enabled": true,
+        "allowReplacingExistingSamplesWithHigherQualityAlternatives": true,
+        "goal": "IMPROVE_OR_MAINTAIN_AUDIBLE_QUALITY_WHILE_REDUCING_INSTALLED_DISK_FOOTPRINT",
+        "replacementMustPreserveOrImprove": [
+          "NOTE_AND_ROOT_KEY_COVERAGE",
+          "VELOCITY_LAYERS_AND_DYNAMIC_RESPONSE",
+          "ROUND_ROBIN_VARIATION",
+          "ARTICULATIONS_AND_PLAYING_TECHNIQUES",
+          "SAMPLE_RATE_BIT_DEPTH_AND_USABLE_SIGNAL_QUALITY",
+          "PRESET_TONE_AND_MIX_READINESS",
+          "LICENSE_AND_REDISTRIBUTION_RIGHTS"
+        ],
+        "compareBeforeReplacement": true,
+        "requireVerifiedListeningOrObjectiveQualityEvidence": true,
+        "requireMappingAndPresetDependencyAudit": true,
+        "requireNewAssetChecksumAndLicenseRecord": true,
+        "updateStableAssetReferencesAtomically": true,
+        "removeSupersededAssetFromShippedPackageAfterAcceptance": true,
+        "retainOnlyRequiredProvenanceMetadata": true,
+        "neverDeleteUserImportedSourceFiles": true,
+        "neverReplaceWithLowerQualityOrIncompleteCoverage": true,
+        "allowLosslessOrMoreEfficientEncodingOnlyWhenQualityIsPreserved": true
+      }
     },
     "expanded": {
       "id": "PPGU-EXPANDED",
@@ -66,7 +90,15 @@
     "audioCallbackBlockingAllowed": false,
     "audioCallbackUnboundedAllocationAllowed": false,
     "preserveSourceLicenseAndProvenance": true,
-    "preserveSha256Integrity": true
+    "preserveSha256Integrity": true,
+    "duplicateManagement": {
+      "detectExactDuplicatesBySha256": true,
+      "detectPotentialAudioDuplicatesByAcousticFingerprint": true,
+      "acousticMatchesRequireReviewBeforeRemoval": true,
+      "deduplicateShippedPayload": true,
+      "doNotCountDuplicatesTowardLibrarySize": true,
+      "keepOneBestVerifiedCanonicalAssetPerEquivalentUseCase": true
+    }
   },
   "releaseGates": {
     "basicPackageMustContainAtLeastMinimumTarget": true,
@@ -76,6 +108,9 @@
     "noPaddingOrDuplicateAudioToReachTargetSize": true,
     "noAssetMayBeRedistributedWithoutVerifiedRights": true,
     "measuredPackageSizeMustBeReported": true,
-    "doNotReduceAudioQualityToMeetNominalPackageSize": true
+    "doNotReduceAudioQualityToMeetNominalPackageSize": true,
+    "supersededAssetsMustNotRemainInShippedPayloadAfterApprovedReplacement": true,
+    "replacementMustNotBreakAnyFactoryPresetMapping": true,
+    "noLowerQualityReplacement": true
   }
 }
