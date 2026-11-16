@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from audit_sample_library import normalize_suffix
+from audit_sample_library import normalize_suffix, ASSIGNMENT
 
 
 def main():
@@ -19,7 +19,14 @@ def main():
         actual = normalize_suffix(source)
         if actual != expected:
             raise AssertionError(f"{source!r}: expected {expected!r}, got {actual!r}")
-    print(f"SFZ path normalization contract: {len(cases)} cases passed")
+    # SFZ generator opcodes are not sample-file paths.
+    import re
+    opcodes = [m.group(2) for m in ASSIGNMENT.finditer(
+        'sample=*sine\\n sample="Samples/guitar/note.wav"\\n'
+    ) if m.group(1).lower() == "sample"]
+    if opcodes != ["*sine", "Samples/guitar/note.wav"]:
+        raise AssertionError(f"Unexpected SFZ sample opcodes: {opcodes!r}")
+    print(f"SFZ path/opcode contract: {len(cases)} path cases and {len(opcodes)} opcode cases passed")
 
 
 if __name__ == "__main__":
