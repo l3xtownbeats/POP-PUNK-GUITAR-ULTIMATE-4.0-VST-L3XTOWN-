@@ -3185,14 +3185,14 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 Первый технический preflight по теме NEON STAGE / 16 factory skins:
 - Подтверждено наличие канонической ветки REV.19 и доступность исходников в ней.
 - `Source/PluginEditor.cpp`: runtime gallery и загрузчик сейчас используют `SKIN/theme_manifest.json`; `getSkinCount()` проверяет `totalSkins`, требует непрерывные индексы от 1 до total, а `loadSavedSkin()` извлекает числовой суффикс из stable ID как runtime index. Это несовместимо с утверждённой последовательностью из 16 тем, у которой ordinal 1…16 отделён от stable IDs/indices skin-053 и skin-103…skin-117.
-- `openSettingsPanel()` содержит возврат к индексу 53; при переходе на логический порядок SKIN-1…SKIN-16 это значение также должно стать ordinal SKIN-1, сохраняя stable ID skin-053.
+- `openSettingsPanel()` сбрасывает выбор к логическому ordinal SKIN-1; stable ID темы по умолчанию остаётся `skin-053`.
 - `.github/workflows/vst3-build.yml` валидирует старый 50-theme pack и при упаковке копирует темы из theme_manifest. До миграции реестра и workflow нельзя считать, что runtime package ограничен утверждёнными 16 темами.
 - В 16 theme JSON обнаружено 28 ключей controls: 27 пользовательских контролов плюс служебный sync_selector; compatibility flags сохраняют APVTS/layout/audio без изменений. Это структурная проверка JSON, не runtime parity PASS.
 - По предыдущему аудиту отсутствуют как минимум preview/hero assets у Skin_103 и Skin_108; полный аудит всех PNG/SVG ресурсов 16 тем ещё не завершён. Ни одна тема не получает PASS на основании наличия JSON.
 - Историческая ветка `ui/neon-stage-playing-core` находится на 205 коммитов впереди общей базы и её diff включает массовые удаления старых skin-каталогов и другие изменения. Слепое слияние запрещено; интеграция NEON STAGE выполняется только выборочно после проверки конкретных diff и зависимостей.
 
 Порядок ближайшей реализации:
-1. Разделить logical ordinal SKIN-1…SKIN-16 и immutable stable ID/index (skin-053, skin-103…skin-117) в runtime loader/gallery; исправить default/reset mapping и тесты SkinGallerySelection.
+1. Проверить на точном HEAD CI и runtime, что logical ordinal SKIN-1…SKIN-16 корректно сопоставляется с immutable stable ID/index и что default/reset mapping не меняет сохранённые идентификаторы.
 3. Обновить validator и Windows packaging workflow так, чтобы старые 102/50 theme records не попадали в runtime bundle или активные проверки.
 4. Проверить полный набор ресурсов, parity и runtime rendering; затем выполнить Windows x64 Release, CTest, pluginval и отдельную ручную приёмку FL Studio 20.
 5. После завершения этого этапа перейти к следующим утверждённым блокам разработки по зависимостям: CONTROL DECK/окна, MELODY/PATTERN/PUNK GROUP/AUTOCHORDS, MIDI/sampler/FX, presets/sample library/import/licensing, QA/release.
