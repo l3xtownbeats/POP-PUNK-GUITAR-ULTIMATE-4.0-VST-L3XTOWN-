@@ -4119,3 +4119,15 @@ RUNTIME PACKAGE ИЗОЛИРОВАН ОТ LEGACY:
 
 - ThemeManagerTests now creates juce::ScopedJuceInitialiser_GUI before decoding SVG assets, so the headless Windows contract test initializes JUCE GUI/font facilities explicitly.
 - This test change is newer than the currently running C++ build attempt; include it in the next exact-head Windows run.
+
+
+2026-11-16 — TX-REV19-WINDOWS-BUILD-AND-TEST-RESULT-010
+
+WINDOWS x64 BUILD / C++:
+- Windows x64 CMake configure succeeded.
+- Full C++ build succeeded, including VST3-related targets, ppgu_theme_contracts and ppgu_processor_pattern_tests.
+- JUCE ThemeManager contract test passed, including SVG texture/bezel/crest decoding for all 16 active registry themes.
+- Processor/pattern integration test passed; PluginEditor.cpp and PPGUMultiWindowWorkspace.cpp artwork-layer rendering compiled.
+- CTest result: 13/14 passed. Only failure was unrelated tests/TestSampleLibraryAuditPaths.py fixture: it used literal backslash-n characters instead of actual line breaks, causing the sample opcode parser to capture '*sine\\n'.
+- Fixed the test fixture to use actual newline escapes. Runtime sampler code was not changed.
+- Full workflow rerun is required to confirm 14/14 CTest; Windows package staging/strict audit/upload steps still require the new exact-head workflow run.
