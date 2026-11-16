@@ -77,7 +77,12 @@ def main():
             normalized=norm(raw)
             rel=Path(normalized)
             sfz_rel=sfz.relative_to(root).as_posix()
-            if rel.is_absolute() or ".." in rel.parts:
+            # SFZ libraries commonly keep maps in nested folders and use safe
+            # parent-relative references such as ../Samples/guitar/note.wav.
+            # Do not reject '..' lexically: resolve each candidate first, then
+            # enforce the canonical library-root boundary (also blocks symlink
+            # escapes and absolute paths).
+            if rel.is_absolute():
                 missing.append({"sfz":sfz_rel,"sample":raw,"error":"unsafe_or_absolute_path"})
                 continue
 
@@ -86,7 +91,11 @@ def main():
                 candidates.append((sfz.parent/Path(default_path)/rel).resolve())
             candidates.append((sfz.parent/rel).resolve())
             candidates.append((root/rel).resolve())
-            found=next((p for p in candidates if inside(root,p) and p.is_file()),None)
+            safe_candidates=[p for p in candidates if inside(root,p)]
+            found=next((p for p in safe_candidates if p.is_file()),None)
+            if found is None and not safe_candidates:
+                missing.append({"sfz":sfz_rel,"sample":raw,"default_path":default_path,"error":"unsafe_or_absolute_path"})
+                continue
 
             if found is None:
                 suffix=(Path(default_path)/rel).as_posix() if default_path else rel.as_posix()
