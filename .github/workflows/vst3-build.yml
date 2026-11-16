@@ -58,9 +58,9 @@ jobs:
         shell: pwsh
         run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
 
-      - name: Validate PPGU REV 14 skin pack (contrast, parity, assets, identity)
+      - name: Validate approved REV.19 runtime skins (identity, control parity, PNG CRC/dimensions, SVG safety)
         shell: pwsh
-        run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+        run: python tools/validate_runtime_skin_registry.py SKIN
 
       - name: Select checked-out project source
         shell: pwsh
