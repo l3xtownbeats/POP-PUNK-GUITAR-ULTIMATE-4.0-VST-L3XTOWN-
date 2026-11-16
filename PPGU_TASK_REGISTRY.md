@@ -188,3 +188,13 @@ Acceptance: unchanged approved UI; one source; exact 250+250; cached/indexed mod
 
 ### Clarification — minimum factory Sample Library size (2026-11-16)
 The factory **Sample Library itself must be at least 10 GB**. 2.97 GB is the size of the previously reported portable QA build artifact, NOT the Sample Library size and NOT an acceptable library target. The 10 GB minimum applies to the actual factory-distributed sample content, excluding the plugin binary, source code, documents, tools, presets metadata and other package overhead. The intended library may exceed 10 GB whenever quality, variety and licensing justify it; no upper cap is imposed. The expanded library remains 40 GB+ as previously approved. Do not mark SAMPLES complete or report its size based on the overall QA artifact size.
+
+
+### Binding clarification — Standard 10 GB library is the complete preset baseline (2026-11-16)
+- The **Standard Factory Sample Library is at least 10 GB** and is the complete required content baseline for the product.
+- **Every one of the 500 factory presets (250 MELODY + 250 PATTERN) must work using only the Standard 10 GB library.** No factory preset may require an asset that exists only in the Expanded Library.
+- Every preset's sample references must resolve to assets included in the Standard library; validate playback and mappings against that baseline.
+- The **Expanded Library (40 GB+) is optional additional content**. It may add alternate takes, extra articulations, layers, variations or additional sound choices, but must not be a prerequisite for any factory preset to load and play.
+- When expanded assets are present, they may enhance or extend a preset; when absent, the preset must remain fully playable from the Standard library without missing-sample errors or silent notes.
+- Keep stable sample IDs and explicit Standard/Expanded availability metadata. Do not duplicate the whole Standard library inside the Expanded library unless a concrete technical requirement justifies it.
+- Acceptance must include a clean Standard-only install test: install only the Standard library, scan it, load and audition all 500 presets, and confirm there are no unresolved sample references. Expanded-library testing is additional, not a substitute.
