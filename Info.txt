@@ -738,3 +738,8 @@ Exact source SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9` passed GitHub Action
 ## 2026-11-16 — 16-theme Gallery runtime status
 
 Audit confirms all 16 approved theme specifications and 21 palette tokens exist. Static contrast preflight passed for text/panel, accent/control and LCD pairings, but rendered state contrast is not yet accepted. Runtime `SKIN/theme_manifest.json` contains only SKIN-1 (`skin-053`); Gallery code reads this manifest, therefore only 1/16 themes is currently exposed. SKIN-2…SKIN-16 still need preview/hero PNG artwork, G1-G4 validation, registry promotion, package/runtime checks and FL Studio 20 visual acceptance. Gallery Preview/Apply/Back transaction source exists; no claim of sixteen-theme runtime acceptance.
+
+
+## 2026-11-16 — Skin Studio artwork pipeline gap
+
+CI run `43726066887` reported 45 warnings for missing preview/hero PNGs and unpromoted registry entries across SKIN-2…SKIN-16. The existing legacy artwork generator only processes indices below 52 and therefore does not generate Skin Studio assets. Current Skin Studio validators require 360x240 preview PNG and 800x450 hero PNG, while the older asset specification doc states conflicting dimensions/formats; resolve the authoritative contract before artwork production. Runtime registry remains 1/16. Do not use generic poster placeholders or promote incomplete themes.
