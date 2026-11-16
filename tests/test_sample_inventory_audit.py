@@ -32,5 +32,18 @@ class SfzSuffixKeyTests(unittest.TestCase):
         )
 
 
+class SfzBuiltinSampleTokenTests(unittest.TestCase):
+    def test_known_builtin_oscillators_are_explicitly_recognized(self):
+        for token in ("*sine", "*triangle", "*saw", "*square", "*noise", "*silence"):
+            with self.subTest(token=token):
+                self.assertIn(token, AUDIT.BUILTIN_SAMPLE_TOKENS)
+
+    def test_builtin_token_matching_is_case_insensitive(self):
+        self.assertIn("*SINE".casefold(), AUDIT.BUILTIN_SAMPLE_TOKENS)
+
+    def test_unknown_builtin_like_token_is_not_silently_ignored(self):
+        self.assertNotIn("*procedural_guitar", AUDIT.BUILTIN_SAMPLE_TOKENS)
+
+
 if __name__ == "__main__":
     unittest.main()
