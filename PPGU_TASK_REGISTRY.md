@@ -135,3 +135,15 @@ REV.19 is the sole place for active development, source integration, synchronize
 | REV19-ARCH-06 | Optimize only profiled hotspots and compare measurements on identical conditions | OPEN | P2 | ARCH-05 |
 
 Guardrails: no second sampler; no duplicate sample bank/cache; no UI/browser layout changes; no APVTS/control-ID changes; no AUTOCHORDS in MELODY; no claims of performance gain without comparable measurements. All tasks execute on REV.19.
+
+
+## 2026-11-16 — TX-REV19-UNIFIED-PRESET-ENGINE-FAST-INDEX-NO-UI-CHANGE-001
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| PSET-06 | Preserve approved UI exactly; no visual redesign for preset organization | APPROVED / LOCKED | P1 | UI parity baseline |
+| PSET-07 | Build reusable metadata index for the unified 500-preset source | NOT IMPLEMENTED | P1 | PSET-01 / PSET-02 |
+| PSET-08 | Serve MELODY and PATTERN browser views by indexed mode filtering and stable IDs | NOT IMPLEMENTED | P1 | PSET-07 |
+| PSET-09 | Avoid repeated filesystem scans; keep indexing off audio thread; measure lookup/switch latency | NOT IMPLEMENTED | P1 | PSET-07; performance harness |
+
+Acceptance: unchanged approved UI; one source; exact 250+250; cached/indexed mode filtering; no full scan per browser action/preset selection; no blocking or disk I/O in audio callback. Requirement approval is not implementation completion.
