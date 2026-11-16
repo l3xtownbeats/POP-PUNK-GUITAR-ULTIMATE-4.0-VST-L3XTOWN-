@@ -12,9 +12,12 @@ def safe_source(root: Path, relative: str) -> Path:
     rel = Path(relative)
     if rel.is_absolute() or not relative or any(part in ("", ".", "..") for part in rel.parts):
         raise ValueError(f"unsafe relative asset path: {relative!r}")
-    source = (root / rel).resolve()
+    candidate = root / rel
+    if candidate.is_symlink():
+        raise ValueError(f"symbolic-link asset path is not allowed: {relative}")
+    source = candidate.resolve()
     root_real = root.resolve()
-    if not source.is_relative_to(root_real) or source.is_symlink() or not source.is_file():
+    if not source.is_relative_to(root_real) or not source.is_file():
         raise ValueError(f"missing, linked, or out-of-root source file: {relative}")
     return source
 
@@ -31,17 +34,25 @@ def main() -> int:
     args = parser.parse_args()
 
     root = args.root.resolve()
-    output = args.output.resolve()
+    output_candidate = args.output.absolute()
+    if output_candidate.is_symlink():
+        raise SystemExit("output path must not be a symbolic link")
+    output = output_candidate.resolve()
     if output == root or root.is_relative_to(output):
         raise SystemExit("output must be a separate build/staging directory, not the SKIN source root or its parent")
 
     registry_path = safe_source(root, "theme_manifest.json")
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    sequence_path = safe_source(root, "approved_theme_sequence.json")
+    sequence = json.loads(sequence_path.read_text(encoding="utf-8"))
+    approved = sequence.get("themes", [])
     entries = registry.get("themes", [])
     if registry.get("totalSkins") != 16 or len(entries) != 16:
         raise SystemExit("active registry must contain exactly 16 factory skins")
     if registry.get("defaultSkin") != "skin-053":
         raise SystemExit("active registry default must be skin-053 (NEON STAGE)")
+    if len(approved) != 16:
+        raise SystemExit("approved_theme_sequence.json must contain exactly 16 themes")
 
     ordinals = [entry.get("ordinal") for entry in entries]
     if ordinals != list(range(1, 17)):
@@ -54,10 +65,15 @@ def main() -> int:
         shutil.rmtree(output)
     output.mkdir(parents=True, exist_ok=True)
 
-    copy_one(root, output, "theme_manifest.json")
+    runtime_registry = dict(registry)
+    runtime_registry.pop("legacyRegistryArchive", None)
+    (output / "theme_manifest.json").write_text(
+        json.dumps(runtime_registry, indent=2, ensure_ascii=False) + "\\n",
+        encoding="utf-8")
     copy_one(root, output, "control_schema.json")
     copy_one(root, output, "approved_theme_sequence.json")
 
+    approved_by_ordinal = {item.get("ordinal"): item for item in approved if isinstance(item, dict)}
     seen_ids = set()
     seen_indices = set()
     expected_folders = set()
@@ -68,6 +84,12 @@ def main() -> int:
         name = entry.get("name")
         if not isinstance(ordinal, int) or not isinstance(index, int):
             raise SystemExit(f"invalid ordinal/index in registry entry: {entry}")
+        approved_entry = approved_by_ordinal.get(ordinal)
+        if not isinstance(approved_entry, dict) or (
+            approved_entry.get("stableId"), approved_entry.get("index"),
+            approved_entry.get("name"), approved_entry.get("path")
+        ) != (stable_id, index, name, entry.get("path")):
+            raise SystemExit(f"registry/approved-sequence mismatch for ordinal {ordinal}")
         if stable_id != f"skin-{index:03d}" or index < 52:
             raise SystemExit(f"stable ID/index mismatch for {name}: {stable_id} / {index}")
         if stable_id in seen_ids or index in seen_indices:
