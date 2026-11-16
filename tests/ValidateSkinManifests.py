@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-052"
+DEFAULT_ID = "skin-053"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -385,8 +385,10 @@ def validate_theme(index: int, registry_entry: dict, errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     registry = load_json(REGISTRY_PATH, errors)
-    if not isinstance(registry, dict):
-        print("\n".join(errors))
+    sequence = load_json(SKIN_ROOT / "approved_theme_sequence.json", errors)
+    archive = load_json(SKIN_ROOT / "archive" / "theme_manifest.legacy-102.json", errors)
+    if not isinstance(registry, dict) or not isinstance(sequence, dict):
+        print("\\n".join(errors))
         return 1
 
     if registry.get("defaultSkin") != DEFAULT_ID:
@@ -394,40 +396,71 @@ def main() -> int:
     if registry.get("selector") != "SKIN":
         fail(errors, "SKIN/theme_manifest.json", "selector must be SKIN")
 
+    approved = sequence.get("themes")
     entries = registry.get("themes")
-    if not isinstance(entries, list) or not entries:
-        fail(errors, "SKIN/theme_manifest.json", "themes must be a non-empty registry array")
+    if not isinstance(approved, list) or len(approved) != 16:
+        fail(errors, "SKIN/approved_theme_sequence.json", "approved sequence must contain exactly 16 themes")
+        approved = approved if isinstance(approved, list) else []
+    if not isinstance(entries, list) or len(entries) != 16:
+        fail(errors, "SKIN/theme_manifest.json", "active factory registry must contain exactly 16 themes")
         entries = entries if isinstance(entries, list) else []
+    if registry.get("totalSkins") != 16 or len(entries) != 16:
+        fail(errors, "SKIN/theme_manifest.json", "totalSkins must equal 16")
 
-    expected_count = len(entries)
-    if registry.get("totalSkins") != expected_count:
-        fail(errors, "SKIN/theme_manifest.json", "totalSkins must equal registry entry count")
+    ordinals = [item.get("ordinal") for item in approved if isinstance(item, dict)]
+    if ordinals != list(range(1, 17)):
+        fail(errors, "SKIN/approved_theme_sequence.json", "logical ordinals must be exactly 1..16")
 
-    ids = [entry.get("id") for entry in entries if isinstance(entry, dict)]
-    indices = [entry.get("index") for entry in entries if isinstance(entry, dict)]
-    if len(set(ids)) != expected_count:
-        fail(errors, "SKIN/theme_manifest.json", "theme ids must be unique")
-    if sorted(indices) != list(range(1, expected_count + 1)):
-        fail(errors, "SKIN/theme_manifest.json", "indices must be unique and cover the registry range")
-
-    by_index = {entry.get("index"): entry for entry in entries if isinstance(entry, dict)}
-    for index in range(1, expected_count + 1):
-        validate_theme(index, by_index.get(index, {}), errors)
-
-    registered_folders = {
-        Path(entry.get("path", "")).parent.name
-        for entry in entries if isinstance(entry, dict) and isinstance(entry.get("path"), str)
+    by_ordinal = {
+        entry.get("ordinal"): entry for entry in entries
+        if isinstance(entry, dict) and isinstance(entry.get("ordinal"), int)
     }
-    if len(registered_folders) != expected_count:
-        fail(errors, "SKIN/theme_manifest.json", "registry paths must resolve to unique skin folders")
-    actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
-    if actual_folders != registered_folders:
-        missing = sorted(registered_folders - actual_folders)
-        unregistered = sorted(actual_folders - registered_folders)
-        if missing:
-            fail(errors, "SKIN", "registered skin folders missing: " + ", ".join(missing))
-        if unregistered:
-            fail(errors, "SKIN", "unregistered skin folders present: " + ", ".join(unregistered))
+    ids = [entry.get("id") for entry in entries if isinstance(entry, dict)]
+    stable_indices = [entry.get("index") for entry in entries if isinstance(entry, dict)]
+    if len(set(ids)) != 16:
+        fail(errors, "SKIN/theme_manifest.json", "stable theme IDs must be unique")
+    if len(set(stable_indices)) != 16:
+        fail(errors, "SKIN/theme_manifest.json", "stable theme indices must be unique")
+
+    approved_ids = []
+    approved_folders = set()
+    for item in approved:
+        if not isinstance(item, dict):
+            fail(errors, "SKIN/approved_theme_sequence.json", "malformed approved theme entry")
+            continue
+        ordinal = item.get("ordinal")
+        stable_id = item.get("stableId")
+        stable_index = item.get("index")
+        expected_name = item.get("name")
+        entry = by_ordinal.get(ordinal)
+        if not isinstance(entry, dict):
+            fail(errors, "SKIN/theme_manifest.json", f"missing registry ordinal {ordinal}")
+            continue
+        approved_ids.append(stable_id)
+        if (entry.get("id"), entry.get("index"), entry.get("ordinal"), entry.get("name")) != (
+            stable_id, stable_index, ordinal, expected_name
+        ):
+            fail(errors, "SKIN/theme_manifest.json", f"registry mapping mismatch for ordinal {ordinal}")
+        if entry.get("path") != item.get("path"):
+            fail(errors, "SKIN/theme_manifest.json", f"manifest path mismatch for ordinal {ordinal}")
+
+        manifest = load_json(SKIN_ROOT / str(item.get("path", "")), errors)
+        if isinstance(manifest, dict) and manifest.get("name") != expected_name:
+            fail(errors, str(item.get("path")), f"name must exactly match approved name {expected_name!r}")
+        if isinstance(stable_index, int):
+            validate_skin_studio_theme(stable_index, entry, errors)
+        folder = Path(str(item.get("path", ""))).parent.name
+        approved_folders.add(folder)
+        if not (SKIN_ROOT / folder).is_dir():
+            fail(errors, "SKIN", f"approved folder missing: {folder}")
+
+    if set(ids) != set(approved_ids):
+        fail(errors, "SKIN/theme_manifest.json", "active registry contains IDs outside the approved 16-theme sequence")
+    if len(approved_folders) != 16:
+        fail(errors, "SKIN/approved_theme_sequence.json", "approved sequence must map to 16 unique source folders")
+
+    if not isinstance(archive, dict) or archive.get("totalSkins") != 102 or len(archive.get("themes", [])) != 102:
+        fail(errors, "SKIN/archive/theme_manifest.legacy-102.json", "no-loss legacy registry backup must preserve all 102 old entries")
 
     if errors:
         print(f"SKIN CONTRACT: FAIL ({len(errors)} issue(s))")
@@ -436,7 +469,8 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, exact folder parity, legacy and Skin Studio contracts, control maps, assets and contrast pairs verified.")
+    print("16 approved factory themes, stable-ID/ordinal mapping, source manifests, control maps, assets and contrast pairs verified.")
+    print("102 legacy registry entries preserved in the archive; legacy folders are intentionally not deleted.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 
