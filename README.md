@@ -7,7 +7,7 @@
 
 **A dedicated pop-punk guitar instrument for tight rhythm parts, power chords, palm-muted patterns, riffs and melodic hooks.**
 
-[DEVELOPMENT BRANCH](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/POP-PUNK-GUITAR-ULTIMATE-VST-REV.18) · [ACTIONS & BUILDS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions) · [ENGINEERING JOURNAL](Info.txt) · [CODE HISTORY](CODE.txt) · [DOCUMENTATION](docs/) · [ISSUES](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/issues)
+[DEVELOPMENT BRANCH](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03) · [ACTIONS & BUILDS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions) · [ENGINEERING JOURNAL](Info.txt) · [CODE HISTORY](CODE.txt) · [DOCUMENTATION](docs/) · [ISSUES](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/issues)
 
 ![Platform](https://img.shields.io/badge/PLATFORM-Windows%2010%20x64-111827?style=for-the-badge)
 ![Format](https://img.shields.io/badge/PLUGIN-VST3-075985?style=for-the-badge)
@@ -88,7 +88,7 @@ The detailed requirements are maintained in the engineering journal and master r
 
 The repository cover now uses the **NEON STAGE** visual direction: a premium dark stage-console aesthetic with controlled electric-blue, cyan, violet and magenta lighting, high-contrast typography and a refined instrument-panel presentation.
 
-The cover is a **brand/design showcase**, not a screenshot of a running VST3. It does not certify that NEON STAGE is the current runtime default skin. Runtime skin identity and default selection are governed by the canonical skin registry and must be reconciled through the project's skin audit before any runtime claim is made.
+The cover is a **brand/design showcase**, not a screenshot of a running VST3. It does not certify that NEON STAGE is the current runtime default skin. Runtime skin identity and default selection are governed by the canonical 16-entry factory registry. On the current working branch, NEON STAGE (`skin-053`) is the default; the previous 102-entry registry is preserved in `SKIN/archive/` and excluded from the active gallery.
 
 The product UI remains governed by the approved NEON STAGE design direction and the existing two-window architecture. Skins are visual-only: they must not change DSP, MIDI, APVTS semantics, sampler behaviour or preset state.
 
@@ -110,10 +110,11 @@ Performance goals are measured, not assumed. CPU, RAM, latency, sample-load time
 
 ## Current development status
 
-- **Active engineering branch:** [`POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/POP-PUNK-GUITAR-ULTIMATE-VST-REV.18).
+- **Active engineering branch:** [`POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/tree/POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03).
 - **Current product state:** active development; not declared release-ready.
 - **Latest known run checked for the previous UI audit:** [GitHub Actions #43592701287](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43592701287) — **CANCELLED**, on source SHA `7a7fb55641f36353fe32873c677e5db64142624c`. It is not a successful build or release gate.
-- **Current exact-SHA build, full CTest, pluginval and package verification:** not confirmed by this page.
+- **16-skin artwork/source status:** all 45 SVG foundations and 30 preview/hero PNG assets are present; strict asset audit and 16-theme registry contract passed. SVG layer loading/drawing is wired into the UI source; Windows compile and host verification are pending.
+- **Draft implementation PR:** [#58 — Complete the 16 approved GRAPHIC SKINS](https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/pull/58) — intentionally not release-ready.
 - **FL Studio 20 host acceptance on the current exact SHA:** not confirmed.
 - **Download:** no current release package is declared approved here.
 
@@ -150,7 +151,7 @@ Preserve the approved architecture, MIDI/APVTS and preset-state compatibility. I
 
 ## Canonical development line — REV.19
 
-All current development, integration, builds, tests and final packaging are performed on `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`. REV.18 is the previous approved baseline and historical source of compatible decisions; REV.17 and earlier are archive only. Accepted architecture and product decisions are consolidated in REV.19 so there is one active source of truth.
+All current development, integration, builds, tests and final packaging are performed against `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`. The 16-skin implementation is isolated in draft PR #58 until exact-SHA build and host gates pass. REV.18 is the previous approved baseline and historical source of compatible decisions; REV.17 and earlier are archive only. Accepted architecture and product decisions are consolidated in REV.19 so there is one active source of truth.
 
 **SIMPLE CORE — MAXIMUM PERFORMANCE:** separate MELODY and PATTERN by musical responsibility, retain one shared SamplerEngine/SamplePool/streaming/cache/voice core and shared FX infrastructure, avoid redundant layers and threads, keep the audio callback realtime-safe, and preserve the approved UI and control contracts. Performance improvements require comparable measurements and exact-SHA tests.
 
