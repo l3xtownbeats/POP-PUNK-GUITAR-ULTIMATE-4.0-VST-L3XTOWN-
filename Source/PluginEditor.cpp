@@ -2179,7 +2179,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
         return;
 
     const auto assets = theme.getProperty("assets", juce::var());
-    const auto loadImage = [this, &manifest](const juce::var& object, const juce::String& key)
+    const auto loadImage = [&manifest](const juce::var& object, const juce::String& key)
     {
         const auto relativePath = object.getProperty(key, "").toString();
         if (relativePath.isEmpty() || relativePath.startsWith("/") || relativePath.contains(".."))
@@ -2204,7 +2204,9 @@ void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
         if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
             return {};
         const auto xml = juce::XmlDocument::parse(candidate);
-        return xml != nullptr ? juce::Drawable::createFromSVG(*xml) : nullptr;
+        if (xml == nullptr)
+            return {};
+        return juce::Drawable::createFromSVG(*xml);
     };
 
     skinTexture = loadSvg(effects, "texture");
