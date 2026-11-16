@@ -2,8 +2,8 @@
 
 ## REV.18 — canonical identity correction (2026-11-15)
 
-- Binding identity: **SKIN-1 = NEON STAGE DEFAULT = skin-053 / Skin_053**. Stable ID and numeric index 53 are preserved; no IDs are renumbered or deleted.
-- `theme_manifest.json` now selects `skin-053` as default; the registry entry is named `NEON STAGE DEFAULT`.
+- Binding identity: **SKIN-1 = NEON STAGE = skin-053 / Skin_053**. Stable ID and numeric index 53 are preserved; no IDs are renumbered or deleted.
+- `theme_manifest.json` now selects `skin-053` as default; the registry entry is named `NEON STAGE`.
 - `Skin_053` has the 21-token graphite / cyan / electric-blue / violet / magenta palette and new vector bezel, crest and texture assets. Default display mode is MINIMALISM; premium effects are opt-in.
 - `skin-052` and all legacy records remain untouched as historical data.
 - This branch is an artwork/identity correction, not a host-verified release. JUCE build, runtime ThemeManager load, G1–G4, PNG CRC, pluginval and FL Studio 20 capture remain mandatory.
@@ -74,7 +74,7 @@ The approved logical theme sequence is recorded in `approved_theme_sequence.json
 
 | Logical theme | Name | Immutable stable ID / registry index | Current asset state |
 |---|---|---|---|
-| SKIN-1 | NEON STAGE DEFAULT | `skin-053` / 53 | Canonical default |
+| SKIN-1 | NEON STAGE | `skin-053` / 53 | Canonical default |
 | SKIN-2 | OBSIDIAN GOLD | `skin-103` / 103 | Manifest + 3 SVG foundations; PNG pending |
 | SKIN-3 | CARBON FORGE | `skin-104` / 104 | Manifest + 3 SVG foundations; PNG pending |
 | SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / 105 | Manifest + 3 SVG foundations; PNG pending |
