@@ -59,7 +59,7 @@ There is no artificial product-level cap on the number of user BANKs or total li
 - Сохранять аудио, SFZ, LICENSE/ATTRIBUTION, manifests и SHA-256.
 - Сомнительные/дублирующиеся материалы изолировать для проверки, не удалять автоматически.
 - CI cache может ускорять восстановление, но не заменяет библиотеку; ingest добавляет отсутствующие банки, существующие проверенные каталоги сохраняются.
-- Portable release собирает SOUNDBANK/ непосредственно из Sample Library/.
+- Portable release включает единственную папку `Sample Library/`; плагин читает её напрямую. Отдельной runtime-копии WAV/FLAC и папки `SOUNDBANK/` нет. Для скорости используются индекс, ограниченный page-cache и фоновый streaming.
 - Удаление допустимо только для временных вложенных .git metadata клонированных upstream-репозиториев, не для аудио или provenance.
 - Право на factory inclusion требует разрешения на коммерческое встраивание и распространение raw samples.
 
