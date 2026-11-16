@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "id": "skin-053",
   "index": 53,
-  "name": "NEON STAGE DEFAULT",
+  "name": "NEON STAGE",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "Canonical SKIN-1 visual shell: dark graphite studio console with restrained cyan, electric-blue, violet and magenta stage accents. Default minimal mode; effects are opt-in.",
+  "description": "Canonical NEON STAGE visual shell: dark graphite studio console with restrained cyan, electric-blue, violet and magenta stage accents. Default minimal mode; effects are opt-in.",
   "palette": {
     "window_bg": "#080B14",
     "panel": "#101827",
