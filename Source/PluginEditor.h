@@ -44,6 +44,8 @@ private:
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
     void openSettingsPanel();
+    void openAboutPanel();
+    void refreshHeroArtwork();
     void applyPalette();
     void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
@@ -58,6 +60,8 @@ private:
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
     juce::File runtimeSkinRoot;
+    juce::File heroArtworkFile;
+    juce::Image heroArtwork;
     juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     // These REV.18 entry points are intentionally disabled until their real backends exist.
     juce::TextButton autoSoundHunterButton { "AUTO SOUND HUNTER" }, curatorButton { "CURATOR" }, aboutButton { "ABOUT" };
