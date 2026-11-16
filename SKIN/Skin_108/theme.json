@@ -5,7 +5,7 @@
   "name": "TITANIUM STORM",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "TITANIUM STORM: premium PPGU visual theme. titanium storm / graphite alloy. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Brushed titanium and graphite-alloy panels with precision-milled edges, storm-swept directional grain and cold electric-blue highlights. The finish is industrial and aerodynamic, with no oversized glow or altered control geometry. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#080D12",
     "panel": "#151F28",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Brushed titanium and graphite-alloy panels with precision-milled edges, storm-swept directional grain and cold electric-blue highlights. The finish is industrial and aerodynamic, with no oversized glow or altered control geometry.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 7
 }
