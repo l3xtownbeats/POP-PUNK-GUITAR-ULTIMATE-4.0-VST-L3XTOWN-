@@ -50,7 +50,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check Pillow==12.3.0
 
       - name: Render missing approved-skin artwork
-        run: python tools/render_approved_skin_artwork.py --root SKIN
+        run: python tools/render_approved_skin_artwork.py --root SKIN --force
 
       - name: Validate all 16 approved theme assets
         run: python tools/audit_skin_rev18_assets.py --root SKIN --strict-assets
