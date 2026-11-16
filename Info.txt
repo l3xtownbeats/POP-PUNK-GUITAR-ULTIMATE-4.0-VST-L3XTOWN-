@@ -3444,3 +3444,24 @@ Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
 Проверки / ограничения: документационные изменения сохранены в указанном commit. Build, CTest, pluginval, FL Studio host test и runtime-функции этим transaction не выполнялись и не заявляются. Полная построчная сверка старых master/task/spec документов остаётся открытой.
 
 Следующий шаг: продолжить DOC-01 с нормализации PPGU_TASK_REGISTRY и проверки оставшихся активных master/spec заголовков, затем перейти к DOC-02 по утверждённой последовательности.
+
+
+==============================================================================
+2026-11-16 — TX-REV19-DOC01-MASTER-SPEC-HEADER-001 — MASTER PRODUCT SPEC HEADER
+==============================================================================
+
+Тип: DOCUMENTATION / MASTER SPECIFICATION.
+Статус: IMPLEMENTED; full body reconciliation remains IN_PROGRESS.
+Каноническая ветка: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03.
+Preflight HEAD: f35b49f7136f155f20fa9ff631010ad1f6552291.
+Evidence commit: f35b49f7136f155f20fa9ff631010ad1f6552291.
+
+Источник: текущая утверждённая REV.19 база Info.txt; TX-REV19-FACTORY-PRESET-TARGET-500-001; TX-REV19-UNIFIED-PRESET-ENGINE-FAST-INDEX-NO-UI-CHANGE-001; утверждённые SIGNAL FORGE / NEON STAGE / 16-theme / 27-control / seven-FX-bypass rules.
+
+Зависимости: DOC-01 governance cleanup; точная проверка существующего master specification header и последних решений.
+
+Выполнено: в docs/MASTER_PRODUCT_SPEC_4_0_RU.md заменён устаревший REV13/fixed-editor preamble на текущую REV.19 baseline: SIGNAL FORGE = CONTROL DECK; NEON STAGE = GRAPHIC SKIN; 16 тем; 27 controls; семь утверждённых FX bypass IDs; sync_selector service-only; старые 102 темы EXCLUDED; 500 пресетов (250 MELODY + 250 PATTERN); единый источник и стабильный metadata index; запрет UI redesign и full filesystem scans per browser action; indexing off audio thread.
+
+Критерии приёмки: старый фиксированный-editor тезис и ссылка на MASTER PROMPT REV13 больше не задают активную базу; текущие утверждённые правила видны в начале спецификации; неподтверждённые детали тела не были автоматически переписаны или объявлены VERIFIED.
+
+Ограничения: изменён только header/preamble. Полная построчная сверка всех разделов MASTER_PRODUCT_SPEC_4_0_RU.md остаётся открытой. Никакой source code, GUI runtime или audio behavior не менялся и не тестировался.
