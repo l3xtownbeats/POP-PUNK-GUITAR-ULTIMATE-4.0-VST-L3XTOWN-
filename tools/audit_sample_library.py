@@ -9,6 +9,9 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 AUDIO={".wav",".flac",".ogg",".aiff",".aif",".mp3"}
+# SFZ built-in oscillator/sample generators are opcodes, not filesystem paths.
+# Keep this allowlist explicit: unknown *tokens must remain visible to the audit.
+BUILTIN_SAMPLE_TOKENS={"*silence","*sine","*triangle","*saw","*square","*noise"}
 ASSIGNMENT=re.compile(
     r"""(?im)^\s*(sample|default_path)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s;]+))"""
 )
@@ -82,6 +85,7 @@ def main():
 
     missing=[]
     resolved_via_fallback=0
+    builtin_sample_tokens=0
     references=0
     for sfz in maps:
         source=sfz.read_text(encoding="utf-8",errors="replace")
@@ -99,6 +103,9 @@ def main():
                 continue
             references+=1
             normalized=norm(raw)
+            if normalized.casefold() in BUILTIN_SAMPLE_TOKENS:
+                builtin_sample_tokens+=1
+                continue
             rel=Path(normalized)
             sfz_rel=sfz.relative_to(root).as_posix()
             # SFZ libraries commonly keep maps in nested folders and use safe
@@ -145,6 +152,7 @@ def main():
         "sfzSampleReferenceCount":references,
         "licenseFileCount":len(licenses),
         "resolvedByUniqueSuffixFallback":resolved_via_fallback,
+        "resolvedBuiltinSampleTokenCount":builtin_sample_tokens,
         "banks":[{"directory":d.relative_to(root).as_posix(),"audioFilesRecursive":sum(1 for p in audio if d in p.parents or p.parent==d)} for d in dirs],
         "audio":[{"path":relative_by_path[p],"bytes":p.stat().st_size,"sha256":digest(p)} for p in audio],
         "sfzMappings":[p.relative_to(root).as_posix() for p in maps],
@@ -153,7 +161,7 @@ def main():
     }
     a.output.parent.mkdir(parents=True,exist_ok=True)
     a.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    print(f"Sample audit: {len(audio)} audio files, {len(maps)} SFZ maps, {references} references, {licenses.__len__()} license files, {resolved_via_fallback} suffix-resolved, {len(missing)} unresolved.")
+    print(f"Sample audit: {len(audio)} audio files, {len(maps)} SFZ maps, {references} references, {licenses.__len__()} license files, {resolved_via_fallback} suffix-resolved, {builtin_sample_tokens} built-in tokens, {len(missing)} unresolved.")
     for item in missing[:30]:
         print("UNRESOLVED:",json.dumps(item,ensure_ascii=False))
     return 2 if missing else 0
