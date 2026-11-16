@@ -1960,14 +1960,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
     auto* settings = uiProperties.getUserSettings();
     const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
     const auto ordinal = getSkinOrdinalForId(id);
-    if (ordinal < 1 || !loadSkinByIndex(ordinal, false))
-    {
-        if (!loadSkinByIndex(1, false))
-        {
-            themeManager.resetToDefault();
-            applyPalette();
-        }
-    }
+    loadSkinByIndex(ordinal >= 1 ? ordinal : 1, false);
 }
 
 bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool save)
