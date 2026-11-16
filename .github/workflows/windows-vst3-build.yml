@@ -18,6 +18,8 @@ on:
       - tools/audit_skin_rev18_assets.py
       - tools/package_active_skins.py
       - SKIN/theme_manifest.json
+      - SKIN/control_schema.json
+      - SKIN/archive/theme_manifest.legacy-102.json
       - SKIN/approved_theme_sequence.json
       - SKIN/Skin_053/**
       - SKIN/Skin_103/**
