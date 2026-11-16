@@ -4012,3 +4012,21 @@ G. Только после прохождения критериев объяв�
 - Для SKIN 02–16 добавлены индивидуальные описания art direction в theme.json; это описание материалов, геометрии, фактуры и поведения акцентов, а не заявление о завершённом PNG artwork.
 
 ВАЖНО: это аудит файлов и нормализация спецификаций на рабочей ветке. Все 15 тем пока не готовы к runtime/release: PNG preview/hero отсутствуют, canonical active registry по-прежнему содержит 102 старые записи, stable-ID/ordinal runtime mapping ещё не мигрирован, runtime gallery и exact-SHA Windows VST3/CTest/pluginval/FL Studio 20 acceptance не пройдены. Старые 102 папки/ресурса не удалять; исключение из активной галереи выполнять только после резервного копирования и безопасной миграции registry/loader.
+
+
+2026-11-16 — TX-REV19-16-SKIN-REGISTRY-AND-ORDINAL-MIGRATION-003
+
+БЕЗОПАСНАЯ МИГРАЦИЯ АКТИВНОЙ ГАЛЕРЕИ:
+- Перед изменением active registry создан no-loss backup прежнего 102-entry registry: SKIN/archive/theme_manifest.legacy-102.json.
+- Прежний 50-theme pack manifest сохранён как SKIN/archive/theme_pack_manifest.legacy-50.json и удалён из активного пути SKIN/theme_pack_manifest.json, чтобы не вводить в заблуждение и не запускать старую batch pipeline.
+- SKIN/theme_manifest.json теперь содержит ровно 16 утверждённых factory skins. Все прежние папки Skin_01…Skin_102 и их исходные файлы сохранены; физическое удаление не выполнялось.
+- В active registry добавлено отдельное поле ordinal 1…16. Stable IDs и stable indices сохранены: skin-053/53, skin-103/103 … skin-117/117. Порядок фабричной галереи больше не зависит от цифрового суффикса stable ID.
+- Source/PluginEditor.cpp/.h обновлены: getSkinCount проверяет logical ordinals и уникальные stable IDs/indices; getSkinManifest ищет по ordinal; сохранённый skinId разрешается через getSkinOrdinalForId; Gallery active marker и Restore NEON STAGE используют ordinal 1, а не index 53.
+- tests/ValidateSkinManifests.py и tools/audit_skin_rev18_assets.py обновлены для проверки ровно 16 активных тем, ordinal/stable-ID mapping и 102-entry legacy archive.
+
+СТАТУС:
+- Миграция active registry и loader mapping внесена в рабочую ветку work/approved-16-skins-completion.
+- 15 theme.json: exact approved names, 21 palette tokens, 28 existing control-map entries, ECO reduction, 150 ms hot-swap metadata; все 45 SVG texture/bezel/crest assets присутствуют.
+- 30 PNG preview/hero assets SKIN 02–16 пока отсутствуют. Добавлен детерминированный renderer tools/render_approved_skin_artwork.py и GitHub Actions workflow для генерации/строгой проверки этих файлов.
+- Draft PR #58 создан для изолированной проверки; он не является релизом и не должен сливаться до прохождения всех asset/runtime/build/host gates.
+- Не заявлять о прохождении C++ build, CTest, pluginval или FL Studio 20 host acceptance: эти проверки ещё не подтверждены.
