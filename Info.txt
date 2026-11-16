@@ -4026,7 +4026,7 @@ G. Только после прохождения критериев объяв�
 
 СТАТУС:
 - Миграция active registry и loader mapping внесена в рабочую ветку work/approved-16-skins-completion.
-- 15 theme.json: exact approved names, 21 palette tokens, 28 existing control-map entries, ECO reduction, 150 ms hot-swap metadata; все 45 SVG texture/bezel/crest assets присутствуют.
+- 15 theme.json: exact approved names, 21 palette tokens, 27 required control IDs plus the existing sync_selector metadata entry, ECO reduction, 150 ms hot-swap metadata; все 45 SVG texture/bezel/crest assets присутствуют.
 - 30 PNG preview/hero assets SKIN 02–16 пока отсутствуют. Добавлен детерминированный renderer tools/render_approved_skin_artwork.py и GitHub Actions workflow для генерации/строгой проверки этих файлов.
 - Draft PR #58 создан для изолированной проверки; он не является релизом и не должен сливаться до прохождения всех asset/runtime/build/host gates.
 - Не заявлять о прохождении C++ build, CTest, pluginval или FL Studio 20 host acceptance: эти проверки ещё не подтверждены.
