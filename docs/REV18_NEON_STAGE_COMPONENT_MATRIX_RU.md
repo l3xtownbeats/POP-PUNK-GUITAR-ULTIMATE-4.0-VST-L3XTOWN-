@@ -48,7 +48,7 @@
 | D — FX Chain | `fxButtons[7]`, `fxAttachments[7]` | `compressorOn`, `eqOn`, `distortionOn`, `chorusOn`, `delayOn`, `reverbOn`, `cabinetOn` | SOURCE + BINDING | Пользовательская цель FX EDIT — 10–15 реально реализованных DSP effects; текущий UI показывает 7 slots. Нужен полный DSP-to-control audit. |
 | F — FX EDIT | `PPGUFXEditPanel`, `openFxEditPanel` | Панель открывается в workspace; detail controls имеют APVTS attachments | SOURCE / PARTIAL | Подтвердить все реальные DSP modules, 10–15 EFFECT SELECT entries, 8 approved pages, 7 bypass switches, automation/state and tests. |
 | G — AMP & TONE | `ampTitle`, nine existing controls, processor amp/EQ parameters | Часть параметров имеет attachments | PARTIAL | Не найдено подтверждение полного amp-model / cabinet / tone-control parity из утверждённого UI. Проверить реальные DSP routes, не добавлять декоративные selectors. |
-| E — AutoChords | `PPGUAutoChordsPanel`, `openAutoChordsPanel` | Setup/preview controls; не подтверждён MIDI generator | SOURCE ONLY / DISABLED BY DESIGN for generation | Не заявлять генерацию MIDI. Сначала отдельный integration contract и MIDI/transport tests. |
+| E — AutoChords | `PPGUAutoChordsPanel`, `PPGUCircleOfFifths`, 8 chord-slot selectors | `scaleRoot` / `scaleMode` APVTS attachments; chord slots are local UI state; MIDI generator не подключён | SOURCE + BINDING (harmony setup) / MIDI GENERATION NOT IMPLEMENTED | Circle of Fifths выбирает тональность; менеджер редактирует 8 ступеней и показывает рассчитанные аккорды. Нет MIDI preview/playback/export, progression persistence или host-sync acceptance. |
 | H — On-screen keyboard | `juce::MidiKeyboardComponent` | Подключена к `processor.keyboardState`; диапазон 36–84 | SOURCE + BINDING | Проверить external host MIDI note feedback, velocity, note-off and all required key ranges in FL Studio 20. |
 | H — Pitch / Mod wheels | В editor header не обнаружены | Нет подтверждённых bindings | MISSING | Нужны реальные pitch-bend / mod-wheel bindings, не декоративные изображения. |
 | H — Performance / CPU / RAM / transport status | `PPGUPerformanceDisplay`, `statusLabel`, `startModeBox` | Read-only monitor / syncMode; processor has additional parameters | PARTIAL | Не найдены подтверждённые measured CPU/RAM meters or full tempo/transport UI. Не показывать hard-coded values. |
@@ -242,3 +242,119 @@ The UI entry point previously called **Auto Discover** in historical audit rows 
 The binding UI references are `PPGU_UI_THEME_SPEC_FULL.txt` v1.3 and the canonical `01 INTERFACE  NEON STAGE DEFAULT .png`, with 02–07 as supporting module/workspace references. MINIMALISM remains the default mode within NEON STAGE, not a separate skin; cheap/simplified legacy themes do not count among the 16 active premium themes.
 
 The REV18 audit now validates the 16 approved manifests, names, stable IDs, 21 palette tokens, required control IDs, shared typography, visual-only compatibility, unique texture/bezel/crest resources, effects-path parity, safe asset paths, SVG active/external content and PNG integrity/dimensions. Nine security tests pass locally. Current non-strict audit: 0 errors / 45 expected warnings. Outstanding warnings are the missing preview/hero PNG pair and pending registry promotion for SKIN-2 through SKIN-16. No gallery registration or ID migration is claimed.
+
+
+## 2026-11-15 — Playing Core hero artwork: first implementation checkpoint
+
+**Working branch:** `ui/neon-stage-playing-core`  
+**Base:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.18`  
+**Source commits:** `05ec031e2ad8e081aaa2611c91bf4b6c9fc8d3cc`, `2ef6cfd8aec0b2974c88ad32158a6da577326e7c`, `0f3022d8f4e855159771fdbad6d6fa51ce689f35`, `0199d4dcebcc02ac8fcbe959dbedee9dfb8168bb`.
+
+Implemented:
+- `PluginEditor.h` now owns a JUCE image and source-file cache for the active skin's hero artwork.
+- `PluginEditor.cpp` resolves `assets.hero` from the active skin manifest, rejects absolute/traversal paths, checks that the resource remains inside the skin directory, and loads the image only when the active hero changes.
+- Main Playing Core reserves a dedicated artwork strip and paints the active theme's hero image with a theme-derived frame.
+- The center section title is now `PLAYING CORE`; the gallery entry point is labeled `SKINS`.
+- NEON STAGE's existing `Skin_053/assets/hero.png` is present in the branch and is 800×450. No new artwork or placeholder was fabricated.
+- All 9 approved rotary APVTS bindings and 7 approved FX bypass bindings remain unchanged. No DSP, MIDI, processor state or audio callback was touched.
+
+**Validation boundary:** source change only. Exact-HEAD Windows build, CTest, pluginval strictness 5, portable VST3 packaging, pixel-level comparison and FL Studio 20 acceptance remain PENDING. This is the first bounded implementation slice, not completion of the NEON STAGE interface.
+
+
+## 2026-11-15 — AUTOCHORDS REQUIRED HARMONY TOOLS (USER CONFIRMED)
+
+| Требование | Live source | Статус | Следующий шаг / ограничения |
+|---|---|---|---|
+| Circle of Fifths | PPGUAutoChordsPanel: не обнаружен | REQUIRED / NOT IMPLEMENTED | Интерактивный квинтовый круг для выбора тональности/гармонического контекста; связать с chord vocabulary и chord progression. |
+| Chord Management | PPGUAutoChordsPanel: не обнаружен | REQUIRED / NOT IMPLEMENTED | Управление аккордами и последовательностью: добавление, удаление, перестановка, отображение и сохранение набора. Точная interaction model — отдельный следующий design/code slice. |
+
+Обе функции подтверждены пользователем как обязательные. Это реальные функциональные инструменты, не декоративные элементы. Сохранять 27 control-ID, APVTS IDs и audio/MIDI boundaries. Наличие Circle/Manager UI не означает готовность MIDI generation/playback: backend остаётся отдельным gate до интеграции и тестов.
+
+
+## NEON STAGE Phase 2 — visual shell / layout slice (2026-11-15)
+
+- Header rail: theme-aware gradient surface, fine outline, accent spine and lower divider drawn behind existing top-level controls. No new button/action/parameter added.
+- Main right-hand zone chrome is labelled **FX CHAIN**, matching the existing seven bound bypass buttons and AMP & TONE heading.
+- Playing Core hero surface now shows an honest fallback label if the active theme has no valid hero image; technical grid drawing is clipped to the centre zone.
+- Layout contract: see `docs/NEON_STAGE_PHASE_2_LAYOUT_SPEC_RU.md` for the exact current responsive geometry and immutable control-binding contract.
+- Preserved the nine rotary APVTS attachments, seven approved FX bypass IDs, MIDI keyboard, preset selector, theme registry and auxiliary workspace.
+- This is a source-level visual-shell increment only. Pixel-level match against the supplied NEON STAGE DEFAULT references, exact-HEAD Windows x64 VST3 build, CTest, pluginval strictness 5, portable packaging and FL Studio 20 host acceptance remain **PENDING**.
+
+
+## 2026-11-15 — Exact-HEAD CI compile failure and correction
+
+**Failed source SHA:** `9744a9e2c89b338a10d9b7cf9f6db663d5980eab`  
+**Workflow run:** `43707767253` — Windows x64 Release configure passed; compilation failed in `Source/PluginEditor.cpp`. CTest, VST3 discovery and pluginval were skipped.
+
+Compiler errors from the job log:
+- C2065: `circle` was undeclared in the AUTOCHORDS key-change callback; the live member is `circleComponent`.
+- C2039: `juce::StringArray::join` is unavailable in the pinned JUCE 7.0.12 API.
+
+Correction committed in `33cb48cb373a70246f458ba6808ff9004f09c6fc`:
+- Route the selected root through the existing `circleComponent` pointer with a null guard.
+- Build the displayed chord progression using an explicit `juce::String` loop instead of the unavailable `StringArray::join` call.
+
+No APVTS IDs, control bindings, DSP, MIDI processing, processor state or audio callback were changed. The correction is source-level only until the new exact-HEAD Windows workflow completes. CTest, pluginval, portable VST3 packaging and FL Studio 20 remain unverified.
+
+
+## 2026-11-15 — Canonical premium theme identity correction
+
+Пользователь подтвердил: **SKIN-1 = NEON FORGE**. Стабильный ID `skin-053`, индекс `53` и путь `Skin_053/` сохранены без перенумерации. `NEON STAGE` остаётся названием общей GUI design system/reference language, а не названием SKIN-1. Утверждённая линейка содержит ровно 16 премиальных графических тем; SKIN-2…SKIN-16 сохраняют утверждённые имена и stable IDs. Старые 102 записи не удаляются и не переписываются. Полноценные preview/hero PNG для SKIN-2…SKIN-16 и runtime gallery registration остаются отдельными незавершёнными gates; спецификации и SVG не выдаются за готовые полноценные графические темы.
+
+
+## 2026-11-15 — Final approved premium theme order
+
+Пользователь подтвердил порядок активной премиальной линейки: **SKIN-1 — NEON FORGE (DEFAULT)**, далее SKIN-2, SKIN-3 … последовательно до SKIN-16. NEON FORGE (DEFAULT) является темой по умолчанию при запуске. Имена, стабильные ID и порядок SKIN-2…SKIN-16 сохраняются по утверждённой последовательности. Legacy-набор из 102 записей не удаляется и не перенумеровывается; в активную премиальную линейку входят только 16 утверждённых тем после прохождения artwork/PNG и runtime acceptance gates.
+
+
+## 2026-11-15 — Зафиксированная и утверждённая последовательность SKIN-1…SKIN-16
+
+Пользователь окончательно утвердил фиксированный порядок активной линейки из 16 тем. Порядок и наименования являются неизменяемым контрактом и не подлежат перестановке, переименованию или расширению без отдельного явного разрешения пользователя:
+
+1. **SKIN-1 — NEON FORGE (DEFAULT)**
+2. **SKIN-2 — OBSIDIAN GOLD**
+3. **SKIN-3 — CARBON FORGE**
+4. **SKIN-4 — MIDNIGHT CRIMSON**
+5. **SKIN-5 — ARCTIC PLATINUM**
+6. **SKIN-6 — VIOLET NOIR**
+7. **SKIN-7 — TITANIUM STORM**
+8. **SKIN-8 — EMERALD CIRCUIT**
+9. **SKIN-9 — SOLAR FLARE**
+10. **SKIN-10 — DEEP OCEAN**
+11. **SKIN-11 — ROSE CHROME**
+12. **SKIN-12 — DESERT AMBER**
+13. **SKIN-13 — GLACIER TEAL**
+14. **SKIN-14 — PHANTOM GRAPHITE**
+15. **SKIN-15 — ULTRAVIOLET DRIVE**
+16. **SKIN-16 — VOLCANIC STEEL**
+
+**SKIN-1 — NEON FORGE (DEFAULT)** является темой по умолчанию. Artwork/PNG и runtime acceptance gates отслеживаются отдельно и не меняют утверждённый порядок. Исторические темы не входят в активную линейку и не должны автоматически возвращаться в галерею.
+
+
+## 2026-11-15 — Current branch delta: About panel and latest validation boundary
+
+Branch: `ui/neon-stage-playing-core`  
+Current source HEAD at audit: `1a1910aad51538ef556f7b09902f52bdea3b069b`.
+
+- **About:** `PPGUAboutPanel` exists in `Source/PluginEditor.cpp`; `openAboutPanel()` creates workspace panel ID `2103`; the ABOUT button is enabled and opens it. The panel contains established product identity and description only, uses active-theme palette typography/colours, and has no invented version/build metadata or dummy actions. Status: SOURCE IMPLEMENTED / EXACT-HEAD BUILD + RUNTIME + FL STUDIO 20 ACCEPTANCE PENDING.
+- **AUTO SOUND HUNTER / CURATOR:** buttons remain disabled until their real production backends are integrated. No placeholder functionality is claimed.
+- **AutoChords:** current source contains the interactive Circle of Fifths, key/mode selection and eight diatonic chord slots with calculated chord names. This is harmony setup only; MIDI generation/playback/export and progression persistence remain unimplemented.
+- **Skin Gallery fixes:** run `43718887827` completed SUCCESS for SHA `cd4935576c93f6974c6a5af4f319413b3ae03024`, covering the gallery transaction and NEON FORGE restore-label fixes. The run predates the About-panel commits and is not exact-HEAD evidence for current HEAD.
+- **No scope drift:** 27-control parity, nine approved rotary bindings, seven approved FX bypass IDs, APVTS IDs/semantics, DSP/audio callback/MIDI and processor state remain protected; this documentation update does not alter them.
+
+Next visual work remains component parity and acceptance, not factory preset expansion: main-window missing controls, FX EDIT/AMP & TONE parity, Gallery Favorites/keyboard navigation/expanded preview and runtime hot-swap/DPI/ECO, workspace overlay/focus lifecycle, and exact reference pixel comparison. The 15 approved themes SKIN-2…SKIN-16 still require complete preview/hero artwork and runtime acceptance before activation.
+
+
+## 2026-11-15 — AUTHORITATIVE USER DECISION: 16 FACTORY THEMES ONLY
+
+The user explicitly approved removal of the obsolete historical theme set. The product contains exactly sixteen factory themes, as listed in `SKIN/approved_theme_sequence.json`. No historical 102-entry catalog, 101-entry archive, or arbitrary expansion batch is part of the product.
+
+- NEON STAGE = shared GUI design system / visual language.
+- SKIN-1 = NEON FORGE (DEFAULT), stable ID `skin-053`; this is the already implemented first factory theme.
+- SKIN-2…SKIN-16 = the fifteen remaining approved factory themes, stable IDs `skin-103`…`skin-117`.
+- Only SKIN-1 remains in the runtime registry until the other fifteen pass full artwork, asset, runtime and host acceptance.
+- The historical archive directory and obsolete registry/pack snapshots are removed from the current branch. Git history remains intact for recovery/audit.
+- Validator now enforces exactly sixteen approved theme folders and rejects reintroduction of `SKIN/isolated_legacy`.
+- Arbitrary theme-batch generation and registry merge scripts are disabled.
+
+This decision supersedes older paragraphs in this document that required preservation/migration of 102 legacy records. It does not change any APVTS IDs, control bindings, DSP, MIDI, processor state, audio callback, or the approved theme names/order.

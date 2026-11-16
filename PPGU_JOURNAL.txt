@@ -574,3 +574,497 @@ Current main HEAD after this journal update: the commit created by this append-o
 - GitHub About description/topics и Social Preview metadata не менялись: доступные GitHub actions в этой интеграции предоставляют чтение репозитория и запись файлов, но не отдельное редактирование About/Social Preview.
 
 Статус: REPOSITORY LANDING PAGE FILES UPDATED; VISUAL CONCEPT ONLY; NO PRODUCT RELEASE CLAIM.
+
+
+2026-11-15 — USER-APPROVED NEON STAGE GUI COMPLETION / INTERACTION ACCEPTANCE SCOPE
+
+Пользователь утвердил и поручил приступить к следующему обязательному объёму работ для NEON STAGE и всех 16 утверждённых тем:
+
+1. Довести каждый существующий визуальный элемент до соответствия утверждённым макетам.
+2. Создать недостающие визуальные элементы для всех уже утверждённых функций; не добавлять самовольно новые продуктовые функции и не менять утверждённую структуру.
+3. Довести каждое отдельное окно/панель до законченного производственного вида.
+4. Проверить все состояния кнопок, rotary/sliders, списков, ComboBox, вкладок, режимов, переключателей, лампочек, индикаторов, статусов и уведомлений.
+5. Завершить адаптацию интерфейса к поддерживаемым размерам окна и проверить переполнение/обрезание/доступность элементов.
+6. Проверить визуальную целостность всех 16 тем и одинаковость функционального поведения при смене темы.
+
+ОБЯЗАТЕЛЬНЫЙ FUNCTIONAL ACCEPTANCE: каждый видимый интерактивный элемент должен иметь реальную связь и проверяемое поведение. Проверять цепочку UI input/event → callback/command → существующий parameter/backend/state → наблюдаемый результат → обратное обновление UI → persistence/restore, если сохранение предусмотрено контрактом. Каждый rotary должен менять назначенный параметр; каждая кнопка выполнять назначенное действие; каждое окно/вкладка открываться и закрываться; каждый режим действительно переключать свою логику; Preset Browser должен отображать/прокручивать/фильтровать/выбирать реальные записи и загружать назначенные параметры/ресурсы; индикаторы и уведомления должны отражать реальные состояния. Декоративные/фиктивные активные controls запрещены. Если backend ещё не существует, control должен быть явно disabled/not available с честным статусом до реализации backend.
+
+NON-REGRESSION / CONTRACTS: сохранить 27-control parity, только семь утверждённых FX bypass IDs, все существующие APVTS IDs и смысл attachments, processor state, MIDI/audio/DSP boundaries, утверждённые панели/режимы/функции и legacy skin records. Не затрагивать аудиодвижок, realtime callback, MIDI processing или processor state без необходимости и отдельного обоснования. Смена темы меняет оформление, но не функциональность и bindings.
+
+ПЛАН ПРИЁМКИ: source inventory и binding audit → реализация недостающих bindings/визуальных состояний в утверждённом scope → отдельная проверка каждой панели/контрола → resize/window tests → theme-by-theme parity checks для 16 тем → exact-HEAD Windows x64 build → CTest → pluginval Strictness 5 → runtime resource checks → FL Studio 20 interaction/host acceptance. Все результаты фиксировать по точному commit SHA. Source presence или визуальный макет сами по себе не считаются доказательством завершения.
+
+Статус этой записи: SCOPE APPROVED / WORK AUTHORIZED / ACCEPTANCE CRITERIA FIXED. Это фиксация объёма и критериев, не заявление о завершённой реализации или пройденных тестах.
+
+
+2026-11-15 — GUI INTERACTION AUDIT / MELODY-PATTERN TAB BINDING FIX
+
+Audit of the live Source/PluginEditor.cpp constructor found that the MELODY and PATTERN tab callbacks called modeBox.setSelectedId(1/2) without a notification. JUCE ComboBox selection changes default to dontSendNotification; therefore the visible tab click could change the ComboBox display without notifying its existing playMode APVTS ComboBoxAttachment. This violated the approved UI → parameter binding contract.
+
+Fix committed in Source/PluginEditor.cpp: both callbacks now call setSelectedId(..., juce::sendNotificationSync), explicitly notifying the existing attachment. No new APVTS IDs, control IDs, parameter meanings, DSP, MIDI, processor state or audio callback behavior were added or changed.
+
+Commit: 7692eb0b2549ff7856eb38788994fcba79bcf451.
+
+Validation: source-level correction committed. Exact-HEAD Windows build, CTest, pluginval Strictness 5 and runtime/FL Studio interaction verification remain PENDING. This fix is one identified audit defect, not a claim that all controls are now complete.
+
+
+2026-11-15 — USER-APPROVED SECOND-LEVEL FACTORY PRESET PRODUCTION SCOPE
+
+Пользователь подтвердил, утвердил и поручил зафиксировать второй уровень работ: после завершения полноценной Preset Gallery / Preset Browser изготовить и наполнить весь утверждённый каталог factory presets по макетам, образцам, группам, артистическим/альбомным профилям, стилям, жанрам и музыкальным характеристикам.
+
+Для каждого пресета обязательны реальные playable параметры и ресурсы, соответствие группе/жанру/стилю, музыкальная функция, ритмика/groove, артикуляции, динамика/velocity и применимые техники (palm mute, open chords, picking, arpeggios, fills/transitions и др.); корректное назначение MELODY либо PATTERN; достоверные имя, категория, описание, artwork/metadata согласно утверждённому макету. Галерея должна показывать реальные записи, а не фиктивные карточки/счётчики.
+
+Сохраняется утверждённый REV.18 минимум: 500 READY MELODY + 500 READY PATTERN. READY засчитывается только после проверки валидности sample resources/mappings, успешной загрузки и воспроизведения, соответствия музыкальной задаче, параметров/артикуляций, автоматических проверок каталога, отсутствия дублей и runtime/слуховой проверки. JSON entry, preset name или UI card сами по себе не являются READY.
+
+Производство выполнять на основе утверждённых макетов и sample references, с provenance/license register и SHA-256. Не включать ресурсы без разрешающей лицензии; не копировать защищённые риффы, stems, записи или чужие пресеты. Ранее утверждённое Travis Barker 82 правило остаётся в силе: 82 уникальных пресета внутри соответствующих artist/band profiles при документированной production-role связи, не отдельная верхнеуровневая категория, каждый считается один раз.
+
+Порядок исполнения: сначала завершить функциональную галерею/браузер (навигация, поиск, категории, фильтры, избранное и загрузка); затем сверить taxonomy/schema и референсы; составить production matrix и license/provenance register; изготовить и интегрировать пресеты партиями; проверить mappings, артикуляции, velocity, ритмику, ресурсы и дубли; провести runtime и слуховую приёмку каждой записи; подтвердить точные READY totals отдельно для MELODY и PATTERN.
+
+Сохранить все утверждённые ограничения: 27-control parity, семь approved FX bypass IDs, существующие APVTS/control IDs и attachment semantics, processor state, MIDI/audio/DSP boundaries, утверждённую структуру продукта и sample licensing rules. Не выдавать незавершённые или непроверенные записи за готовые.
+
+Статус: USER CONFIRMED / APPROVED / FIXED FOR SECOND-LEVEL EXECUTION. Это фиксация решения и критериев приёмки; изготовление каталога и READY validation остаются PENDING и следуют после завершения галереи.
+
+
+2026-11-15 — USER-APPROVED PPGU MASTER GUITAR SAMPLE LIBRARY FOUNDATION (LEVEL 2)
+
+Пользователь подтвердил и утвердил сборку общей базовой PPGU MASTER GUITAR SAMPLE LIBRARY объёмом минимум 10 GB; если доступно больше качественных и законно распространяемых звуков — собирать больше. Искусственный верхний предел размера не устанавливать. Эта библиотека является фундаментом sampler/unified engine, preset engine, MELODY и PATTERN, а не необязательным дополнением.
+
+Максимально широко собирать релевантные и разрешённые к распространению материалы по категориям: GUITAR LOOPS, ONE-SHOTS, SAMPLES, BANKS, LEAD, PUNK, POP PUNK, ACOUSTIC, DISTORTION, ROCK, CLEAN, STRUM, RHYTHM, SOLO GUITAR; использовать также русскоязычные поисковые варианты (гитара/гитары, библиотека гитар, акустическая/электрогитара, соло-, панк-, ритм- и лид-гитара, гитарные сэмплы/лупы/банки). Нормализовать синонимы, исключать дубли.
+
+Покрыть звуковые семейства/модели: Stratocaster; Fender Telecaster, Stratocaster, Jazzmaster, Mustang, Jag-Stang; Gibson Les Paul, SG, Les Paul Junior, Les Paul Studio, Melody Maker, Les Paul Custom, Les Paul Deluxe, ES-333; Epiphone SG Special; Mosrite Ventures; Gretsch G5445 Double Jet; Danelectro '59; Rickenbacker 330; Harmony Jupiter; B.C. Rich Warlock; Eastwood Sidejack Mach Two; Squier Bullet Stratocaster и Bullet Telecaster; Fernandes Stratocaster “Blue”. Учитывать пользовательские artist/model references: Tom DeLonge signature Stratocaster и Gibson ES-333; Billie Joe Armstrong Fernandes Stratocaster “Blue” и Gibson Les Paul Junior; Joe Strummer Fender Telecaster; Johnny Ramone Mosrite Ventures; Steve Jones Gibson Les Paul Custom. Эти наименования — таксономия/поисковые ориентиры, не заявление об endorsement, точной аутентичности инструмента или правах на чужие записи.
+
+Нужны отдельные ноты/multisamples, one-shots, loops, DI/clean, distorted/processed, acoustic, rhythm/strumming, lead/solo, palm mute/open chords/power chords, picking/arpeggios, harmonics/fills и другие подходящие артикуляции. Сохранять, где применимо, note/key ranges, velocity layers, round robins, articulation tags, BPM/tempo, root key, tuning, loop points, audio format/sample rate/bit depth, provenance и SHA-256. WAV/SFZ и утверждённые custom formats должны быть реально индексируемы, загружаемы и воспроизводимы.
+
+Лицензирование — жёсткий gate: в распространяемый SoundBank включать только собственные записи, CC0/Public Domain, CC-BY с выполнением attribution, материалы с письменным разрешением или коммерческой лицензией, прямо разрешающей redistribution исходных samples. Бесплатность скачивания не равна праву включать/перераспространять. Неясные, personal-use-only, non-redistributable и несовместимые наборы исключать из distributable SoundBank, сохраняя запись об исключении/внешнем референсе. Для каждого набора фиксировать источник, автора/правообладателя, лицензию/атрибуцию, дату получения, файлы и SHA-256.
+
+Общая библиотека должна питать MELODY и PATTERN. IMPORT GUITAR поддерживает WAV/SFZ/custom approved formats, валидацию формата/целостности/лицензии, key ranges, velocity layers и articulations. Успешно импортированные пользовательские звуки доступны обеим системам, пользовательским пресетам и после перезапуска. Оригиналы сохраняются; lossless PPGU Native conversion допускается с контролем целостности и без потери/дублирования исходника. AUTO DISCOVER → CURATOR → FORMAT CONVERTER → SAMPLE MANAGER/CACHE → sampler/preset availability — единая проверяемая цепочка; никаких фиктивных результатов/статусов.
+
+Приёмка 10 GB: считать только фактически интегрированные, лицензированные, проверенные и доступные движку файлы, а не candidate archives или внешние ссылки. Отчёт включает объём, число наборов/файлов, категории/модели, license/provenance register, исключения, SHA-256 manifest и runtime availability. После создания базы на её основе продолжается ранее утверждённое производство минимум 500 READY MELODY + 500 READY PATTERN; READY-пресет требует реальной загрузки, воспроизведения и полной проверки.
+
+Статус: USER CONFIRMED / APPROVED / FIXED. Download/collection, rights audit, integration and verified 10 GB acceptance remain PENDING; не заявлять, что объём уже скачан или интегрирован.
+
+
+2026-11-15 — MASTER GUITAR LIBRARY SOUND-QUALITY PRIORITY (USER CONFIRMED)
+
+Пользователь уточнил главный критерий: нужны САМЫЕ ЛУЧШИЕ КАЧЕСТВЕННЫЕ гитарные звуки, максимально соответствующие давно зафиксированным потребностям POP PUNK GUITAR ULTIMATE / NEON STAGE. Неважно, чистые они или обработанные: DI, clean, amp-recorded, distorted/high-gain, cabinet/mic, produced/mixed, acoustic, loops, one-shots и multisamples допустимы и желательны, если конкретный материал качественный и подходит задаче. Не отдавать автоматическое предпочтение DI/clean и не исключать обработанные записи только из-за обработки.
+
+Оценивать профессиональное качество записи, реалистичность/выразительность, pop-punk/punk/rock/emo/easycore fit, palm-muted и open/power chords, атаку/сустейн/релиз, динамику/velocity, читаемость в миксе, тональность/строй/темп, отсутствие шума/клиппинга/артефактов/фазовых проблем и пригодность для sampler/preset engine. Сохранять signal type/processing metadata; clean/DI нужны для гибкости и дальнейшей обработки, обработанные тона — для готового музыкального результата. При наличии разных версий хранить полезные варианты раздельно и с маркировкой.
+
+Качество и соответствие важнее наполнения диска ради объёма: минимум 10 GB должен быть набран из реально качественных, лицензированных и интегрированных материалов, а не низкокачественных filler files. Сохраняются ранее утверждённые требования: реалистичные сразу playable pop-punk гитары, MIDI note playback, музыкально точные rhythm/articulation, velocity-triggered palm mute, acoustic variants и готовые к миксу звуки по утверждённым стилевым референсам.
+
+Статус: USER CONFIRMED / APPROVED / FIXED AS PRIMARY SOUND-SELECTION RULE. Реальный download, audition, scoring, licensing and integration — PENDING.
+
+
+2026-11-15 — GUITAR MODEL, FX PRESET DESIGN & ARTIST/GENRE TONE GUIDES
+
+Добавлено требование: фабричные пресеты должны сопровождаться практической информацией о подборе гитарного семейства, типа звукоснимателя/источника, усилителя, кабинета и цепочки эффектов для соответствующего поджанра и artist-inspired sound. Сохранена полная утверждённая модельная таксономия Fender Telecaster/Stratocaster/Jazzmaster/Mustang/Jag-Stang; Gibson Les Paul/SG/Junior/Studio/Melody Maker; Epiphone SG Special; Mosrite Ventures; Gretsch G5445 Double Jet; Danelectro '59; Rickenbacker 330; Harmony Jupiter; B.C. Rich Warlock; Eastwood Sidejack Mach Two; Squier Bullet Strat/Tele; плюс ранее перечисленные artist/model references.
+
+FX и amp/cab reference taxonomy: distortion, overdrive, fuzz, crunch, boost, compressor, EQ, gate, chorus, flanger, phaser, delay, reverb, tremolo, vibrato, octave, pitch shift, wah/auto-wah, looper, tuner; Mesa/Boogie Dual Rectifier, Marshall JCM800/JCM900, Plexi/JMP, Fender Twin Reverb, Vox AC30, cabinet/mic/IR и POD/GT workflow references. Приложены стартовые рецепты для bright Tele pop-punk, thick humbucker/Tom-style, melodic punk/Green-Day-inspired, classic punk, hardcore/heavy punk, post-punk/Jazzmaster, retro/Ramones-style, acoustic/clean и experimental/dark punk. Это sound-design starting points, а не утверждения об exact artist settings.
+
+Каждый пресет должен объяснять WHY THIS TONE и HOW TO ADJUST, хранить фактические source/model/pickup/amp/cab/FX/articulation/velocity/palm-mute/role/provenance metadata. Цепочка обработки ориентировочно: source → input → optional comp → boost/OD/distortion/fuzz → amp → cab/IR → EQ → optional modulation → delay → reverb → output; gate placement зависит от шума/усиления. Не применять все эффекты автоматически.
+
+Ограничения: не нарушать 27-control parity, seven approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; этот документ не разрешает новые controls/IDs. FX taxonomy и recipe references не являются доказательством реализации. Нужны реальные DSP bindings, bypass, audible result, state restore и проверка. Не копировать protected riffs/recordings/stems/presets и не заявлять точные artist settings без надёжных источников.
+
+Статус: USER REQUEST RECORDED / SOUND-DESIGN GUIDANCE APPROVED IN PRINCIPLE. Actual FX backend coverage, recipe implementation, numeric tuning, preset production and listening validation remain PENDING.
+
+
+2026-11-15 — USER FINAL APPROVAL: POP-PUNK SOUND PROFILES & BAND-INSPIRED PRESET SETTINGS
+
+Пользователь прямо подтвердил: проанализировать, утвердить, подтвердить и зафиксировать использование ранее перечисленных настроек поп-панк звучания, гитарных моделей, групп/исполнителей, amp/cab families, FX и sound-design recipes. Утверждённые данные использовать как основу factory preset sound design, style profiles, metadata, описаний и инструкций настройки.
+
+Artist/band references: Blink-182 / Tom DeLonge / Box Car Racer / Angels & Airwaves; Green Day / Billie Joe Armstrong; The Clash / Joe Strummer; Ramones / Johnny Ramone; Sex Pistols / Steve Jones; Joan Jett; Sum 41; Simple Plan; New Found Glory; Good Charlotte; Mest; All-American Rejects; MGK; Avril Lavigne-era pop-punk. Genre references: punk, pop-punk, skate punk, melodic punk, hardcore punk, post-punk, emo punk, easycore, ska punk, classic punk, acoustic/clean alternative, experimental/dark punk.
+
+Для каждого профиля учитывать guitar/pickup character, gain, amp/cab, EQ, FX chain, transient/sustain, stereo/space, rhythmic tightness, playing articulations и роль в миксе. Делать оригинальные presets на основе общих tonal/production traits, не копировать защищённые записи. Не приписывать sample конкретной модели без подтверждения и не выдавать предположительные exact artist settings за факт. Numeric settings определить через реальное прослушивание и микс-тесты.
+
+Сохраняются quality/licensing/10GB/master library/500+500 READY и технические ограничения: 27 controls, seven approved bypass IDs, existing APVTS/state contract, no fake functionality. READY требует реальных resources, MIDI playback, FX chain, persistence, level matching, listening review and regression tests.
+
+Статус: USER ANALYZED / APPROVED / CONFIRMED / FIXED FOR PRESET SOUND DESIGN. Implementation and acceptance remain PENDING.
+
+
+2026-11-15 — PRESET DESIGN RELEVANCE RULE (USER CONFIRMED)
+
+Пользователь уточнил: использовать из всей утверждённой информации только то, что необходимо для конкретных пресетов и получения нужного итогового гитарного звучания. Не включать все гитары/группы/усилители/эффекты в каждый пресет. Сначала определить целевой звук и музыкальную роль, затем выбрать минимально достаточные source/guitar character, amp/cab, FX, EQ/gain, articulations и performance settings. Не добавлять эффект или параметр без слышимой/функциональной цели. Качество итогового звука важнее числа эффектов и объёма описания. Оставлять только полезные пользователю объяснения о характере, назначении и ключевых способах корректировки тембра.
+
+Artist/band refs — ориентиры, не обязательные компоненты каждого пресета; не выдавать предположительные модели источников и exact artist settings за факты. Сохранять licensing/quality gates, 27-control parity, seven approved FX bypass IDs и существующий APVTS/state contract.
+
+Статус: USER CONFIRMED / APPROVED / FIXED. Applies to all future preset design and sound selection.
+
+
+2026-11-15 — POP-PUNK PRESET STARTING SETTINGS: 2000s CORE / DUAL-AMP / MODERN VARIANTS
+
+Записаны предоставленные пользователем ориентиры для preset design, с обязательной оговоркой: значения являются реконструкциями/starting points, а не подтверждёнными точными студийными настройками песен.
+
+2000s core (0–10): Gain 5.5, Bass 5, Mids 5.5, Treble 7, Presence 6. Song tonal approximations (Gain/Bass/Mids/Treble): Blink-182 “All the Small Things” 6/5/6/7; Green Day “Basket Case” 6/6/6/5; Sum 41 “In Too Deep” 8/6/6/4; The Offspring “Self Esteem” 7/6/6/7; Fall Out Boy “Sugar, We're Goin Down” 7/5/7/6. General rhythm ranges: Gain 5.5–6.5 (heavier directions may start around 7–8), Bass 5–6, Mids 5.5–6.5, Treble 5–7, Presence ~5.5–6; bright channel optional; rhythm mostly dry, short plate/room on lead only if useful.
+
+Jerry Finn-inspired dual-amp concept: complementary Mesa/Boogie Triple Rectifier-style weight + Marshall JCM900-style upper-mid definition; pushed cleaner Marshall path as a possible mid-focused layer; phase/polarity/timing/level and mono checks; double-track L/R only from genuinely separate takes; dry/tight rhythm, restrained lead ambience. This is a production reference, not an exact verified chain for every cited recording.
+
+Modern directions: MGK “Tickets to My Downfall” (2020) aggressive contemporary pop-punk; lower tunings such as Drop C/D only for presets/sources explicitly supporting them. Avril Lavigne “Love Sux” (2022) modern Marshally pop-punk. Blink-182 “One More Time...” (2023) bright/weighty modern pop-punk reference. No unsupported claims of exact session settings. Pickup type only if metadata supports it; string gauge/pick thickness are optional physical references, not plugin controls.
+
+Implementation: use only where musically relevant and where actual samples/DSP support the chain; translate 0–10 values only after parameter mapping is confirmed; preserve 27-control parity, seven approved FX bypass IDs, APVTS/state contract. READY requires playback, phase/level checks, listening, persistence and regression tests.
+
+Статус: USER-PROVIDED SETTINGS RECORDED / APPROVED AS STARTING REFERENCES. Implementation and validation remain PENDING.
+
+
+2026-11-15 — USER-APPROVED 15-EFFECT SCOPE / KEEP ONLY USEFUL SOUND-DESIGN INFORMATION
+
+Пользователь утвердил обязательный каталог из 15 типов эффектов для POP PUNK GUITAR ULTIMATE:
+1 Compressor; 2 EQ; 3 Noise Gate; 4 Boost; 5 Overdrive; 6 Distortion; 7 Fuzz; 8 Chorus; 9 Flanger; 10 Phaser; 11 Delay; 12 Reverb; 13 Tremolo; 14 Vibrato; 15 Octave / Pitch Shift.
+
+Это ровно 15 effect types в целевом scope, выбранных по практической полезности для гитарных pop-punk/punk/rock/alternative звуков. Amp и Cabinet/IR — отдельные стадии amp/cab, не дополнительные эффекты в этом счёте. Wah/Auto-Wah, Looper и Tuner не входят в утверждённую пятнадцатку и не должны добавляться/показываться как её часть без отдельного решения пользователя.
+
+Не включать все эффекты одновременно: для каждого пресета выбирать только то, что нужно для целевого звука и музыкальной роли. Использовать только нужную информацию из утверждённых гитарных моделей, групп, усилителей и sound references; не перегружать пресеты лишними деталями. Главный критерий — качество итогового звука из доступного исходного гитарного материала с реальной обработкой.
+
+Scope approval не означает, что 15 DSP effects уже существуют. Каждый эффект должен иметь настоящий DSP route, корректные параметры, binding/bypass/state, тесты и слышимый результат до обозначения как работающего. Сохранить 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и state contract; не выдумывать IDs или фиктивные элементы. Если существующие семь bypass slots не позволяют представить 15 типов, зафиксировать архитектурный gap и не обходить ограничения самовольно.
+
+Статус: USER APPROVED / FIXED PRODUCT SCOPE. Implementation and validation remain PENDING unless separately proven.
+
+
+2026-11-15 — USER APPROVAL: RESEARCH METHOD, GROUP PRESET CATALOGUE AND INDIVIDUAL PRESET FILES
+
+Пользователь разъяснил назначение присланных материалов: обучить процессу анализа и проектирования гитарных звуков, затем исследовать интернет-источники и быстрее сформировать каталог пресетов по ранее утверждённым группам. Принцип: изучать интервью музыкантов/техников/продюсеров, Rig Rundown и надёжные записи об оборудовании; отличать подтверждённые факты от реконструкций и собственных tonal approximations; разбирать характер исходного гитарного звука и музыкальную роль; выбирать только реально доступные ресурсы и реализованные DSP; создавать оригинальные, различимые на слух MELODY/PATTERN и role-based presets. Не копировать защищённые записи, stems, риффы или коммерческие пресеты; не приписывать точные настройки без подтверждения.
+
+Группы-ориентиры, явно присутствующие в последнем согласованном каталоге: Blink-182, Green Day, Sum 41, Simple Plan, New Found Glory, Good Charlotte, Mest, The Offspring, Fall Out Boy, Paramore, MGK, Avril Lavigne, All-American Rejects. Сохранять также другие группы из более раннего утверждённого списка; не сужать scope самовольно. Названия групп — навигационные/стилевые ориентиры, не обещание точной копии оригинального rig. Убирать повторяющиеся пресеты с разными именами.
+
+Пользователь утвердил предпочтение индивидуальных файлов пресетов по принципу удобства Nexus, а не хранения всех preset states в одном JSON или по одному JSON на пресет. Целевая рекомендация: один нативный VST3 .vstpreset файл на каждый factory/user preset, после проверки поддержки текущим VST3 implementation и host integration. Preset state — штатная бинарная сериализация VST3; общие аудиосэмплы не копировать внутрь каждого preset-файла, а ссылаться на общую библиотеку через устойчивые resource IDs и валидировать наличие/версию. Общий индекс/каталог допускается для групп, тегов, поиска и метаданных, но не заменяет отдельные preset files. Проверить переносимость, missing-resource behavior, save/load, версии и FL Studio 20.
+
+Каждый отдельный файл проходит READY gate только после реальных ресурсов/mappings, MIDI playback, корректной MELODY/PATTERN роли, DSP routing, state round-trip, host compatibility, level matching, listening review, duplicate checks и regression tests. Цели 500 READY MELODY + 500 READY PATTERN сохраняются; черновики не считать READY.
+
+Статус: USER APPROVED / FIXED AS DESIGN DIRECTION. Implementation and validation PENDING.
+
+
+2026-11-15 — USER CONFIRMED AUTONOMY FOR PRESET RESEARCH AND CREATION
+
+Пользователь утвердил, что в плане создания пресетов исполнительская свобода предоставлена разработчику: самостоятельно исследовать группы, источники и характерные tonal directions; выбирать порядок и глубину исследования; формировать названия, категории, роли MELODY/PATTERN и варианты звучания; выбирать релевантные источники, реальные ресурсы и реализованные DSP; сравнивать и отбирать лучшие варианты по качеству на слух и технической проверке. Не запрашивать отдельное подтверждение каждого внутреннего sound-design решения, если оно находится в утверждённом scope.
+
+Эта автономия не отменяет фиксированные границы: лицензии/авторское право, достоверность источников, запрет копирования защищённых stems/риффов/записей/коммерческих пресетов, запрет фиктивных функций и завышенных статусов, 27-control parity, семь approved FX bypass IDs, существующие APVTS IDs/semantics и state contract, REV.18, сохранность оригинальных ресурсов и READY gates. Не менять утверждённый scope молча; при архитектурном конфликте или необходимости нового разрешения документировать gap.
+
+Статус: USER APPROVED AUTONOMY WITHIN FIXED SCOPE; legal, licensing, technical, quality and verification gates remain mandatory.
+
+
+2026-11-15 — USER CONFIRMED SOUND QUALITY PRIORITY: RAW GUITAR FIRST
+
+Пользователь подтвердил: главный приоритет — качественно звучащая гитара. Первым приоритетом является высококачественный исходный звук БЕЗ ОБРАБОТКИ (raw/clean/DI/acoustic): естественный тембр, атака, динамика, нотация, sustain, корректные артикуляции, отсутствие артефактов и нежелательного шума. Второй приоритет — качественные обработанные гитарные звуки, создаваемые на основе хорошего исходника. Обработка не должна маскировать слабый source или ухудшать читаемость/динамику. Качество каждого пресета и музыкальная применимость важнее количества эффектов/пресетов/описаний.
+
+Способ достижения результата оставлен на усмотрение разработчика: легальный подбор/запись/редактирование исходного материала, mapping, артикуляции, sampler playback, DSP, amp/cab/IR и их сочетания — выбирать по фактическому качеству результата и поддержке продукта. Ясно маркировать RAW/CLEAN/DI/ACOUSTIC и PROCESSED/AMPED/FX; не выдавать одно за другое. Сохранять лицензирование, source provenance, запрет копирования защищённых записей/stems/riffs/commercial presets и строгий READY gate: реальные ресурсы, mapping, MIDI playback, динамика/артикуляции, save/restore, listening review, tests.
+
+Для формирования каталога требуется восстановить точный ранее утверждённый список 21 группы и конкретных песен-референсов для каждой. Песни — только исследовательские ориентиры для анализа звучания/ролей/секций, не источник для копирования защищённых партий или записей. Не подменять недостающий точный список предположениями и не объявлять song matrix зафиксированной до сверки с предыдущими утверждениями.
+
+Статус: USER CONFIRMED / FIXED. 21-group/song matrix retrieval and source/preset implementation remain pending.
+
+
+2026-11-15 — USER RECONFIRMATION: BASELINE LOCKED
+Пользователь повторно подтвердил: записать и считать утверждённой базовой основой проекта приоритет качества исходной гитары без обработки, затем качества обработанных гитарных тонов; качество важнее количества; метод достижения качества выбирается разработчиком в рамках утверждённого scope и лицензионных/технических ограничений. Требование точного восстановления ранее утверждённых 21 групп и конкретных песен-референсов также подтверждено. Это фиксация требований, не подтверждение готовности каталога, ресурсов, пресетов или тестов.
+
+
+
+2026-11-15 — USER APPROVED SEQUENCING: VISUAL → SOUND LIBRARIES → FACTORY PRESETS
+
+Пользователь установил следующий порядок работ: сначала полностью завершить утверждённую визуальную часть NEON STAGE и провести её аудит; только после этого перейти к исследованию, проверке и интеграции гитарных библиотек/исходных ресурсов; затем выполнять компоновку и создание пресетов на базе проверенной библиотеки и зафиксировать полноценную заводскую библиотеку.
+
+PHASE 1: закончить все утверждённые панели/окна/темы, интерактивные состояния и binding audit, не нарушая 27-control parity, seven approved FX bypass IDs, APVTS/state contract, REV.18 и сохранность legacy records. Визуальная готовность не равна функциональной готовности: неподключённые элементы должны честно оставаться unavailable.
+
+PHASE 2: проверять качество RAW/CLEAN/DI/ACOUSTIC исходников в первую очередь, лицензии и право на распространение source files, provenance, manifest и SHA-256. Не считать непроверенные/неразрешённые материалы частью SoundBank и не добирать объём искусственно.
+
+PHASE 3: создавать полноценную заводскую библиотеку с отдельными preset files, реальными sample mappings, артикуляциями, velocity/palm-mute behavior и ролями MELODY/PATTERN. Сначала высококачественные звуки без обработки, затем оправданные обработанные варианты. Восстановить точный ранее утверждённый список 21 групп и песен; не угадывать недостающие позиции. Проверить нативный VST3 preset format и host integration.
+
+FACTORY LIBRARY LOCK возможен только после legal/resource validation, MIDI playback, mapping/articulation checks, state round-trip, host compatibility, level matching, listening review, duplicate checks и automated/regression tests. Сохранить цели ≥500 READY MELODY + ≥500 READY PATTERN; drafts не засчитывать.
+
+Это утверждённая последовательность, а не заявление о том, что какая-либо из фаз уже завершена.
+
+
+## 2026-11-15 — USER CONFIRMED PROJECT PHASE ORDER: VISUAL COMPLETION → LIBRARIES → FACTORY PRESET LIBRARY
+
+Пользователь подтвердил последовательность дальнейшей разработки:
+1. Завершить визуальную часть NEON STAGE в рамках утверждённого UI inventory, mockups, control/state contracts и 16-theme parity. До закрытия визуального этапа не объявлять интерфейс завершённым; все известные визуальные и binding gaps должны быть проверены по acceptance checklist.
+2. После завершения визуальной части перейти к работе с гитарными библиотеками и исходными звуковыми ресурсами: аудит доступных материалов, качество RAW/CLEAN/DI/ACOUSTIC, лицензии и право на распространение, provenance, hashes, sample mapping, диапазоны нот, velocity layers, articulations, palm mute и acoustic variants.
+3. На базе проверенных библиотек сформировать, скомпоновать и зафиксировать полноценную заводскую библиотеку пресетов. Каждый пресет — отдельный нативный VST3 .vstpreset (после проверки реализации и host compatibility), с устойчивыми ссылками на общие ресурсы; отдельные factory/user files, каталог и metadata. Сначала качество исходной гитары без обработки, затем processed tones. Формировать MELODY/PATTERN роли, групповые/стилевые семейства и song-section roles только на основе ранее утверждённого scope и восстановленной точной 21-group/song matrix.
+4. Каждый preset/resource проходит provenance, license, mapping, MIDI playback, DSP binding, level, listening, save/restore, host and regression acceptance gates. Drafts не считать READY. Цели 500 READY MELODY + 500 READY PATTERN сохраняются; нельзя заявлять готовую полноценную factory library, пока она фактически не собрана и не прошла проверки.
+
+Это утверждённый порядок работ, а не заявление о завершении визуального этапа, наличии готовых библиотек или готовых factory presets. Текущий статус каждого этапа отражать по фактическим доказательствам; не перескакивать к массовому наполнению пресетов до завершения визуального этапа и проверки библиотечных ресурсов.
+
+Статус: USER CONFIRMED / PROJECT SEQUENCE LOCKED. Visual completion, library qualification, factory preset composition and acceptance remain in progress/pending until evidenced.
+
+
+
+2026-11-15 — USER RECONFIRMED PROJECT SEQUENCE BASELINE LOCK
+
+Пользователь повторно утвердил и подтвердил зафиксированный порядок: NEON STAGE visual completion → sound library verification/integration → factory preset composition → factory library validation and lock.
+
+Статус: APPROVED · CONFIRMED · BASELINE LOCKED. Повторное подтверждение не изменяет ранее утверждённые scope, архитектурные ограничения, критерии качества и acceptance gates.
+
+2026-11-15 — NEON STAGE Gallery transaction fix committed: `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618`. Corrected stale Apply eligibility when a new preview fails after a previous successful preview. Failed preview rolls back to original active skin; Apply remains disabled until current selection is successfully previewed. Scope limited to GUI transaction handling; no APVTS/processor/audio/MIDI/skin identity changes. Exact-HEAD validation pending.
+
+
+2026-11-15 — USER-SUPPLIED POP-PUNK TONE REFERENCE ADDED
+
+Added `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_TONE_REFERENCE_2000_2023_RU.md` (commit `a2519ba11f427ecb04817ba3e06b66a4ba08e04b`). It preserves the user's 2000s genre formula, artist/era tone hypotheses, amp recipes, pickup/guitar references and seven song-level starting points. Explicit caveat retained: numerical knob settings are community tonal reconstructions, not published exact studio settings. Unverified equipment/production claims are flagged for future primary-source verification. The document is a research input only; it does not certify preset readiness, sample licensing, DSP implementation or change the approved phase order. Current work remains NEON STAGE visual completion.
+
+
+2026-11-15 — USER RESUBMITTED / REFINED POP-PUNK TONE REFERENCE (REVISION 2)
+
+Updated `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_TONE_REFERENCE_2000_2023_RU.md` in commit `0753e32984d58bd03b37b8b299a7223dd16956f6`. Latest user wording supersedes earlier wording where it adds precision, notably the Green Day modified Super Lead pair and ambiguous control-clock note, Mark Hoppus split-layer description, Jerry Finn split-routing note, and the categorical Axe-Fx claim for Blink-182's `One More Time...` (retained as an unverified claim requiring primary-source confirmation). Numeric settings remain explicitly community tonal reconstructions. This is still reference material only, not verified studio data or READY preset evidence; approved phase order remains unchanged.
+
+
+2026-11-15 — USER-CONFIRMED PATTERN / ARTICULATION RESEARCH BASE ADDED
+
+Added `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_RHYTHM_TECHNIQUE_ARTICULATION_TABS_2000_2023_RU.md` (commit `f3480c559bc1bf16e5160df570042b9ada0accdf`). The record preserves the user's genre rhythm model, band/style technique notes, articulation vocabulary, tuning/tab caveats and illustrative tab fragments. The user explicitly confirmed this material is especially useful for PATTERN mode and articulation styling, requested maximum relevant information/capabilities for future preset creation, and clarified that a preset is a guitar sound configuration intended to work in both single-note and chord/pattern contexts.
+
+Key design distinction recorded: the preset defines the reusable guitar sound identity and response; PATTERN content defines rhythm, note sequence, rests, accents and articulation events. Same preset must be auditioned and validated in both melody/single-note and chord/pattern contexts. No feature, control, APVTS ID or architecture change is authorized by this research note. Community tabs and artist-specific technique claims remain unverified until checked; no READY status is implied. The source message ended mid-checklist at item 4, so missing text was not reconstructed. Approved phase order remains unchanged; current work remains NEON STAGE visual completion.
+
+
+2026-11-15 — COMPLETE POP-PUNK RHYTHM REFERENCE RECEIVED AND INCORPORATED
+
+User resubmitted the full rhythm/technique/articulation/tab reference, completing the earlier partial section 18 and adding the consolidated section 19 style matrix. Updated `PRESET_RESEARCH/USER_SUPPLIED_POP_PUNK_RHYTHM_TECHNIQUE_ARTICULATION_TABS_2000_2023_RU.md` in commit `f43dd8952ab7c3b15b5d4263152389024379dbba`. Added the complete seven-part practice checklist and 12-row artist/style summary. This supersedes the earlier note that the received checklist was incomplete. Content remains user-supplied community reconstruction and requires musical/source validation; it is not READY pattern/preset data. No new UI/control/APVTS scope is authorized. Preset sound identity remains distinct from PATTERN rhythm/event content, and each sound must be validated in both single-note and chord/pattern contexts. Locked project phase order unchanged.
+
+2026-11-15 — USER APPROVAL: TWO MIDI RHYTHM-CREATION WORKFLOWS FIXED
+
+User explicitly approved and confirmed two future ways to create single-guitar rhythmic parts:
+1. Draw/edit MIDI note events directly in a MIDI editor/grid (timing, duration, rests, accents, velocity and only genuinely supported articulations).
+2. Select one guitar pitch and edit it into a rhythmic sequence of note events, with timing, duration, rests, accents, velocity and supported articulations.
+
+SOUND PRESET remains the sound identity/response; MIDI / PATTERN remains the note-event and rhythm content. Patterns should be reusable with different presets, and presets should be validated in single-note, chord and pattern contexts.
+
+This is an approved future product requirement, not an implemented feature. It does not authorize new controls, APVTS IDs, panels or architecture changes during the current NEON STAGE visual phase. Locked order remains NEON STAGE completion and verification → sound-library qualification → factory preset creation → factory library validation/finalization. No claim of MIDI editing, pattern generation or playback implementation without code and host-test evidence.
+
+2026-11-15 — USER CONFIRMATION: USE THE COMPLETE SUPPLIED RESEARCH BASE; SUPPLEMENT WITH WEB RESEARCH WHEN NEEDED
+
+The user confirmed that all supplied pop-punk tone, guitar/pickup, tuning, production, rhythm, technique, articulation and MIDI-pattern reference material should be used as the project's research foundation for future sound-preset and pattern work. If the supplied information is insufficient for a particular target sound, the project may be supplemented with internet research.
+
+Research rules remain in force:
+- Prefer primary and high-quality sources: artist/technician/producer interviews, rig rundowns, manufacturer documentation, session/recording accounts and reliable technical sources.
+- Distinguish documented facts from community reconstructions, hypotheses and tonal approximations; retain source links and confidence notes.
+- Do not present community knob settings as exact studio settings or claim an artist used a particular rig without verification.
+- Use research to guide original, legally compliant sound design; do not copy protected recordings, stems, riffs or commercial presets.
+- For sample libraries, separately verify redistribution rights, provenance, license/attribution and file integrity before inclusion.
+- SOUND PRESET remains distinct from MIDI / PATTERN content; validate sounds in single-note, chord and pattern contexts.
+- This confirmation does not change the locked development order. Current phase remains NEON STAGE visual completion and verification. Sound-library research/integration and factory preset creation begin only in their approved later phases.
+
+2026-11-15 — JOURNAL AUTHORITY CONFIRMED BY USER — PROJECT SOURCE OF TRUTH
+
+The user explicitly approved, confirmed and fixed PPGU_JOURNAL.txt as the primary authoritative project record and foundation for continuity. The journal is the canonical place to consult for all recorded plans, decisions, approved requirements, work completed, findings, additions, corrections, constraints, phase gates and outstanding tasks.
+
+Operating rules:
+- Before continuing project work, consult the journal and the relevant source documents it references.
+- Treat user-approved and user-confirmed entries as binding project decisions unless the user explicitly revises or supersedes them.
+- Preserve the history of decisions and work; append dated updates rather than silently rewriting or discarding prior approved records.
+- When a decision is refined, record the refinement and its relationship to the earlier entry so the current authoritative meaning is clear.
+- Use linked specifications, inventories, mockups, source files and research documents for their detailed subject matter; the journal remains the central index and decision/history record.
+- Do not infer approval for unrecorded features, silently expand scope, or claim implementation/validation without evidence.
+- Maintain the approved development sequence and all locked technical, licensing, UI, parameter and quality constraints.
+- If the journal conflicts with a more specific approved source document or a later explicit user decision, identify the conflict and resolve it by documented authority/date rather than guessing.
+
+STATUS: USER APPROVED · CONFIRMED · FIXED.
+
+2026-11-15 — NEON STAGE DEVELOPMENT CONTINUED: FACTUAL ABOUT PANEL IMPLEMENTED
+
+User reconfirmed continuation of development. Following the authoritative journal and approved NEON STAGE inventory, one bounded visual/UI slice was implemented:
+- Added PPGUAboutPanel in Source/PluginEditor.cpp and openAboutPanel declaration in Source/PluginEditor.h.
+- Enabled the existing ABOUT entry point and connected it to auxiliary workspace panel ID 2103.
+- Content is limited to established product identity and the existing product description. No invented version/build metadata, false capability claims, or dummy actions.
+- Theme palette updates are supported for the panel. AUTO SOUND HUNTER and CURATOR remain honestly disabled pending real backends.
+- Source commit: 8adb6cab870fad2e777510a640d503f21a7fc9b4.
+- Inventory/status documentation commit: 806b6b39ca9644ff50fb5e1b07db91e77c4d660b.
+
+Acceptance status: SOURCE IMPLEMENTED ONLY. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime resize/theme checks and FL Studio 20 interaction acceptance have not yet been run or confirmed. This does not complete NEON STAGE and does not authorize transition to sound-library work. The approved phase order and all control/APVTS/FX bypass constraints remain unchanged.
+
+2026-11-15 — USER APPROVAL: NEON STAGE ABOUT PANEL BASELINE CONFIRMED
+
+The user explicitly APPROVED, CONFIRMED and FIXED the implemented NEON STAGE About Panel as part of the project baseline. Preserve the current approved implementation and its factual-content constraints:
+- Existing ABOUT button opens PPGUAboutPanel in the auxiliary workspace (panel ID 2103).
+- Panel displays only established product identity/description and follows the active theme palette.
+- Do not invent version/build metadata or claim unimplemented capabilities.
+- AUTO SOUND HUNTER and CURATOR remain disabled until their real backends exist.
+- This approval confirms the source implementation as an approved project baseline; it does not mean build, CTest, pluginval, runtime/theme/resize checks or FL Studio 20 acceptance have passed. Those remain pending until evidenced.
+- Continue the current NEON STAGE visual completion phase and preserve the locked phase order and all existing control/APVTS/FX bypass/inventory constraints.
+
+STATUS: USER APPROVED · CONFIRMED · FIXED IN PROJECT BASE.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: AUXILIARY WORKSPACE TYPOGRAPHY FIX
+
+During the source-backed component visual audit, the auxiliary workspace window title label was found to use a fixed default-font face/size while the child panel contents already consumed the active theme palette. Updated `PPGUMultiWindowWorkspace::Window::setThemePalette()` so the actual window title uses the active palette's `uiTypeface` and `fontScale`.
+
+This is a bounded visual-only correction. Panel geometry, IDs, callbacks, open/close lifecycle, persistence, APVTS, DSP, MIDI and audio behavior are unchanged. Source commit: `3190359d295d83bb06970836c9b34c62c6ccadb4`.
+
+Acceptance: source change committed; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime theme/resize verification and FL Studio 20 acceptance remain pending. Continue the NEON STAGE component audit; do not advance to sound-library work until the visual phase is accepted.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: AUTOCHORDS TYPOGRAPHY FIX
+
+The Circle of Fifths component was found to use fixed JUCE default fonts for its fifth-node labels and caption, bypassing the shared theme typography helper. Updated `PPGUCircleOfFifths::paint()` to use `makeThemeFont()` for both text layers, so the active palette's UI typeface and font scale apply consistently.
+
+No geometry, note/fifths mapping, keyboard or mouse interaction, APVTS attachment, chord setup behavior, DSP, MIDI generation or audio behavior changed. Source commit: `597ad5ffe958ad4b33d440dfeb4e81b97e001fdf`.
+
+Acceptance: source change committed; exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime 16-theme/resize checks and FL Studio 20 acceptance remain pending. NEON STAGE visual phase remains open.
+
+2026-11-15 — USER REQUIREMENT CONFIRMED: ALL APPROVED FUNCTIONALITY MUST BE REAL AND OPERATIONAL
+
+User explicitly clarified that the complete product must implement and operate ALL functionality previously discussed, approved, confirmed and recorded — not merely its visual representation. This requirement applies across the entire approved product scope, including AUTO-related functionality (including AutoChords and Auto Sound Hunter where specified), musical/harmony workflows, Circle of Fifths and chord management, MIDI/pattern workflows, guitar import/library handling, effects, presets, performance/settings, persistence and host integration, as applicable to the approved specifications.
+
+Acceptance rule: every approved feature must have its real underlying implementation and complete interaction path (UI event -> callback/action -> real parameter/backend/state -> observable result -> truthful UI feedback -> persistence/restore where specified), plus appropriate tests and host validation. A visual mockup, placeholder, disabled control, description, or source-level shell does NOT count as completed functionality. A feature may be marked unavailable only as an honest interim status while its implementation is pending; it must not be represented as finished. No approved requirement is to be silently dropped, replaced by a visual-only approximation, or treated as optional.
+
+This clarification reinforces the existing approved scope and acceptance gates; it does not authorize inventing new features, IDs, controls, panels, or changing locked contracts (including 27-control parity, seven approved FX bypass IDs, REV.18 Inventory/Info.txt constraints, and the mandatory phase order). Preserve the NEON STAGE -> SOUND LIBRARIES -> FACTORY PRESETS -> FACTORY LIBRARY sequence. Track every approved requirement to implementation and evidence-based acceptance.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: THEME TYPOGRAPHY / PALETTE SOURCE PASS
+
+Completed a source-level pass over Source/PluginEditor.cpp after the workspace-title and Circle of Fifths typography corrections.
+
+- Checked all direct .setFont() calls in the editor source: no remaining calls bypass the shared makeThemeFont() helper.
+- Checked explicit hard-coded colour literals/usages in the editor source: only the shared default accent seed and a transparent slider text-box outline remain; component paint and control styling otherwise consume the theme palette.
+- Confirmed theme palette application paths are present for Skin Gallery, Settings, About, Import Guitar, FX Edit and AutoChords; the Circle of Fifths receives the palette from AutoChords, and the live Performance display has its own palette setter.
+- Confirmed the auxiliary workspace applies the active typeface/font scale to its window title.
+
+Scope limitation: this is a static source audit only. It does NOT prove visual correctness at runtime, clipping-free layouts, contrast/accessibility across all 16 themes, resize behavior, focus/hover/disabled feedback, or host acceptance. Those remain open acceptance tasks and require an exact-HEAD Windows x64 build plus runtime checks. No new UI feature or APVTS ID was added; no functional behavior was changed.
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: WORKSPACE TITLE TYPOGRAPHY CONSISTENCY FIX
+
+A follow-up source audit found that auxiliary window titles used the active theme typeface and fontScale, but did not inherit the palette typographyWeight or letterSpacing settings. This left workspace chrome slightly inconsistent with the shared makeThemeFont() typography contract used by panel content.
+
+Updated PPGUMultiWindowWorkspace::Window::setThemePalette() to apply the palette typographyWeight and letterSpacing alongside uiTypeface and fontScale. The change is limited to title font styling; window geometry, drag/resize/maximize behavior, panel lifecycle, IDs, callbacks, APVTS bindings and audio behavior are unchanged.
+
+Source commit: 52a52cda304ffa4542ef4479240421d07e0176bd.
+Acceptance remains pending: exact-HEAD Windows x64 build, CTest, pluginval Strictness 5, runtime checks across all 16 themes, resize/DPI/focus/hover/disabled-state inspection and FL Studio 20 host acceptance. This is a source-level correction, not a claim of completed visual acceptance.
+
+2026-11-15 — NEON STAGE WORKSPACE AUDIT: MAXIMIZED WINDOW STATE PRESERVATION
+
+Source review found that the shared workspace relayout path called Window::setPanelBounds() for every open panel. That method previously cleared the maximized flag and restored the normal maximize glyph whenever a relayout occurred. As a result, opening/closing another panel, changing workspace scale/gap, or resizing the workspace could silently cancel a user's maximized window state.
+
+Corrected setPanelBounds(): when a window is maximized, relayout now keeps it fitted to the current viewport view area and leaves its maximized state/button state intact; normal tiled placement remains unchanged for non-maximized windows. Restore continues to use the saved pre-maximize bounds.
+
+Source commit: 701e7f3b12d1d5c0b2144f2ae767e58e000cbbd3.
+This is a source-level behavioral correction. Runtime resize/open-close regression checks, exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 host acceptance remain pending. No panel IDs, controls, APVTS IDs or approved product scope were changed.
+
+
+2026-11-15 — NEON STAGE WORKSPACE AUDIT: GEOMETRY RESTORE / AUTO-TILE CONTRACT FLAGGED
+
+A further source audit traced the auxiliary-window geometry path:
+- `openPanel()` reads the saved per-panel bounds from PropertiesFile and applies them to the new Window.
+- It then calls `layoutPanels()`, whose normal-fit and overflow branches both assign calculated placements to every non-maximized window. The normal-fit branch subsequently writes those calculated bounds back to persistence.
+- Therefore the restored bounds are overwritten by automatic tiling on panel open; the persisted manual drag/resize geometry does not currently survive reopening as an effective restored position/size.
+- The source comment in `handleGeometryChanged()` says manual geometry is user geometry and automatic tiling runs only when the panel set or workspace size changes. That comment is consistent with relayout on panel-set changes, but does not clarify whether saved manual bounds should take precedence on a single-panel reopen or be deliberately normalized by the auto-tile contract.
+
+No source behavior was changed in this pass because the intended precedence between restored user geometry and automatic tiling is not explicitly established by the current workspace contract. This is recorded as an unresolved persistence/tiling acceptance item, not as a confirmed defect or completed fix. Resolve against the approved workspace behavior before altering layout semantics. Required tests after resolution: first open, manual move/resize, close/reopen, second panel open/close, workspace resize, scale/gap change, maximize/restore, and overflow scrolling. Exact-HEAD build, CTest, pluginval and host validation remain pending.
+
+
+2026-11-15 — USER-APPROVED AUXILIARY WINDOW SIZE / BOUNDARY REQUIREMENT
+
+The user clarified the intended behavior for plugin auxiliary/browser windows:
+- Auxiliary windows are plugin-internal panels, not desktop top-level windows and not monitor/full-screen windows.
+- Their maximum extent is the plugin editor's own workspace/viewport client area. A maximize action must never expand a panel to the full 17-inch (or any other) display or outside the plugin editor.
+- Normal/default windows should remain comfortably readable and proportionate to the plugin editor, following familiar instrument-plugin conventions rather than consuming the entire display.
+- When the plugin editor/workspace is small, preserve legibility: use the existing workspace layout/scrolling/overflow behavior rather than shrinking content to unreadable dimensions or escaping the plugin boundary.
+- All panel content must remain accessible; the user should be able to read and operate the panel without it behaving like a separate full-screen application window.
+
+This requirement clarifies the existing in-plugin workspace contract; it does not authorize new panels, controls, IDs, or changes to the approved product structure. The current maximize implementation targets the workspace Viewport view area, which is the intended boundary in source. Runtime verification is still required to confirm that the viewport is correctly constrained by the host plugin editor at common editor sizes and that readable sizing/overflow behavior is preserved. Include tests for small, medium and large plugin editor sizes, maximize/restore, resize, and overflow scrolling. No source behavior was changed by this requirement record.
+
+
+2026-11-15 — USER-APPROVED BROWSER WINDOW RESIZE AND GEOMETRY PERSISTENCE
+
+The user clarified and approved the expected behavior for the in-plugin browser/auxiliary window:
+- The user can resize the browser window manually by dragging its edge/border.
+- The chosen window size and placement are retained as that panel's user geometry and restored when the same panel is opened again.
+- Reopening the browser must not silently replace the saved user size/position with a fresh automatic tile placement.
+- The window remains constrained to the plugin editor's workspace/viewport; persistence never authorizes extending beyond the plugin boundary or opening across the physical monitor.
+- If the saved geometry no longer fits after the host/plugin editor is resized, clamp/adapt it within the current viewport while preserving the user's size/position as far as the available area permits. Keep content readable and use the existing overflow/scrolling behavior where needed.
+- Automatic tiling remains appropriate for first-time placement and layout changes involving the active panel set/workspace constraints, but it must not erase a saved manual browser geometry on a simple close/reopen.
+
+This resolves the previously recorded ambiguity for the browser panel: user-resized geometry takes precedence on reopen, subject to the plugin viewport boundary. Apply the same behavior to other auxiliary panels only where their existing approved contract calls for per-panel geometry persistence; do not silently broaden scope.
+
+Implementation is NOT yet confirmed by this journal entry. The current source path was previously observed to read saved bounds in openPanel() and then call layoutPanels(), which can overwrite them. A targeted implementation and regression tests are required. Verify: first open default size; drag-resize; move; close/reopen restoring bounds; open/close another panel; resize host editor smaller/larger; maximize/restore; overflow; persistence across plugin/editor restart if PropertiesFile lifecycle supports it. Do not claim runtime acceptance until tested.
+
+STATUS: USER APPROVED · CONTRACT CLARIFIED · SOURCE FIX AND TESTS PENDING.
+
+
+2026-11-15 — NEON STAGE: IMPLEMENTED SINGLE-PANEL USER GEOMETRY RESTORE
+
+Implemented the previously approved browser/auxiliary-window geometry contract in the workspace source:
+- On a simple reopen of a panel with valid saved bounds, when it is the only open panel, restore its saved position and size instead of immediately replacing them with automatic tile placement.
+- Validate persisted dimensions/coordinates before using them; invalid or out-of-range stored values fall back to the normal first-open layout.
+- Clamp restored position to the current plugin workspace when the saved window fits; if the saved window is larger than the current viewport, retain its size and let the existing viewport scrolling expose the overflow.
+- Keep automatic tiling for active panel-set changes and ordinary layout passes. This narrowly resolves the simple single-panel close/reopen case without changing panel IDs, controls, APVTS, audio, or the locked UI inventory.
+
+Source change is committed separately from this journal entry. Acceptance is SOURCE IMPLEMENTED ONLY. Required regression coverage/runtime checks remain: first open; manual resize and move; close/reopen; open/close a second panel; smaller/larger host editor; maximize/restore; viewport overflow/scrolling; persistence after editor/plugin restart. Exact-HEAD Windows x64 build, CTest, pluginval Strictness 5 and FL Studio 20 validation remain pending.
+
+
+2026-11-15 — NEON STAGE VISUAL AUDIT: SKIN GALLERY TRANSACTION AND AUXILIARY WINDOW GEOMETRY
+
+Completed a focused static source pass on the Skin Gallery callbacks and auxiliary workspace window implementation.
+
+Skin Gallery source findings:
+- PREVIEW calls the editor's skin loader without persisting the preference.
+- A failed preview restores the originally active skin and clears the successful-preview transaction, so Apply cannot commit a stale/failed selection.
+- APPLY persists the currently previewed skin preference and closes the gallery.
+- BACK restores the original skin and closes the gallery without persisting the preview.
+- Apply is initially disabled and becomes available only after a successful preview. This confirms the source-level transaction wiring; it does not prove visual contrast/readability for all 16 themes at runtime.
+
+Auxiliary window geometry findings:
+- A visible resize-corner component is present and connected to a ComponentBoundsConstrainer; the source currently configures a minimum size but does not configure a maximum workspace-bound rectangle.
+- Header dragging clamps only the left/top coordinates to zero; it does not clamp the complete window rectangle to the workspace viewport.
+- openPanel() reads persisted bounds, but immediately calls layoutPanels(); the layout pass assigns calculated placements to non-maximized windows and writes those placements back. Thus the saved manual geometry is still not reliably restored on reopen.
+- The current maximize action targets viewport.getViewArea(), but the resize/drag boundary and persisted-geometry precedence are not yet implemented as approved.
+
+No source behavior was changed in this audit. This is a source-level finding only; runtime theme readability, host viewport boundaries, manual resize/move, reopen persistence, resize adaptation and FL Studio 20 acceptance remain unverified. The next bounded implementation task is to enforce viewport constraints for both drag and resize, then preserve per-panel user geometry across close/reopen without allowing the layout pass to overwrite it. Add regression coverage for first open, resize, move, close/reopen, another panel opening/closing, host editor resize, maximize/restore and overflow before marking this behavior accepted.
+
+
+2026-11-15 — NEON STAGE: RESIZE OVERFLOW SUPPORT FOR AUXILIARY WINDOWS
+
+Follow-up source inspection confirmed that the resize corner already uses JUCE's ResizableCornerComponent and the window content relayouts in Window::resized(). However, the parent tile surface previously remained at its old dimensions after a manual resize/move, which could clip a window enlarged beyond the current surface. Updated handleGeometryChanged() to recompute the scrollable tile-surface extent from the current viewport and all open window bounds. This lets the existing viewport scrollbars expose intentional panel overflow while the viewport continues clipping the UI to the plugin editor's own workspace boundary. Manual geometry continues to be persisted per panel.
+
+Source commit: 78d0f47b4d7f3dae2b97b973a064d3e25028feac. SOURCE IMPLEMENTED ONLY; runtime behavior and regression tests remain pending. In particular verify resizing in both axes, scrollbars after overflow, move/resize persistence, viewport clipping, host editor resize, maximize/restore, and no geometry feedback loop.
+
+
+2026-11-15 — NEON STAGE: VIEWPORT-BOUNDED DRAG/RESIZE AND SINGLE-PANEL GEOMETRY RETENTION
+
+Implemented a targeted follow-up to the approved auxiliary-window contract:
+- Header dragging now clamps the panel origin to the current workspace viewport area. When a panel is larger than the available area, its origin remains anchored within the viewport so it cannot be dragged completely off the plugin workspace; the existing viewport remains the clipping/scrolling boundary.
+- The resize constrainer now refreshes its maximum width/height from the remaining viewport space after the panel's current origin, while retaining each panel's approved minimum dimensions. This prevents ordinary resizing from expanding a panel beyond the available plugin workspace area; if the viewport is smaller than the panel's required minimum, the existing scrollable surface remains the fallback.
+- A per-window preserve-user-geometry flag is set when valid saved bounds are restored or the user moves/resizes the window. For a single open panel, subsequent workspace relayouts preserve that geometry and only clamp its position to the current viewport; first-open panels still use the existing automatic layout.
+- No new controls, panel IDs, APVTS IDs, FX IDs, audio behavior or inventory entries were introduced.
+
+Source commits:
+- 5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c — viewport-aware drag and dynamic resize limits.
+- a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 — preserve-user-geometry state and workspace layout declaration.
+
+STATUS: SOURCE IMPLEMENTED ONLY. A Windows x64 VST3 workflow was triggered for exact HEAD a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 and was still in progress at the time of this journal update. No compile, CTest, pluginval or runtime pass is claimed yet. Required verification remains: first-open default placement; resize in both axes; drag at all viewport edges; close/reopen restoration; host editor smaller/larger; maximize/restore; overflow/scrolling; and FL Studio 20 host behavior. Multi-panel auto-tiling and visual readability of all sixteen themes remain separate acceptance checks.
+
+
+2026-11-16 — NEON STAGE: EXACT-SHA WINDOWS BUILD AND AUTOMATED VALIDATION RESULT
+
+Polled the completed GitHub Actions run 43726066887 for source SHA a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9. The workflow conclusion is SUCCESS. The Windows x64 Release VST3 target and test executables compiled successfully; CTest reports 12/12 tests passed (0 failed); pluginval Strictness 5 completed and ended in SUCCESS. The workflow located the VST3 bundle and uploaded an interim CI validation artifact.
+
+Important scope/limitations:
+- The workflow's VST3 validator sub-check was skipped because no validator executable path was configured; pluginval's own Strictness 5 suite passed.
+- This is automated Windows CI validation, not manual FL Studio 20 acceptance and not proof of GUI geometry behavior in a real host.
+- The artifact is explicitly named CI-NOT-RELEASE and must not be represented as the final product/release. Its package notes explicitly exclude certification of 1000 READY presets, full Sound Hunter clearance, final FX EDIT/Skin Gallery/Settings acceptance, CPU/RAM targets and release readiness.
+- The run built source SHA a41b472...; branch HEAD now includes subsequent documentation-only commits through ec61efbd4fb820683c77df97f658752c3c9ad542. No later source change is implied by those documentation commits.
+
+Artifact: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-PORTABLE-CI-NOT-RELEASE, artifact ID 14166697237, SHA-256 b5e1e07a4d00aaead8e7fd55a7330e568d73eafa1dec2f8c31bf82313ba5629b. Artifact expires 2027-02-13. It is 1.66 GB and is retained as CI evidence, not promoted as a release.
+
+STATUS: WINDOWS X64 BUILD PASS · CTEST 12/12 PASS · PLUGINVAL STRICTNESS 5 PASS · MANUAL HOST/GUI ACCEPTANCE PENDING. Next NEON STAGE work remains the runtime visual/interaction audit of approved panels and all sixteen themes; only after NEON STAGE acceptance may the project proceed to the sound-library phase.
+
+
+2026-11-16 — NEON STAGE: 16-THEME GALLERY REGISTRY AND PALETTE AUDIT
+
+Completed a focused source/data audit of all sixteen entries in SKIN/approved_theme_sequence.json and their corresponding theme.json files (SKIN-1 Skin_053; SKIN-2..16 Skin_103..Skin_117).
+
+Confirmed:
+- All sixteen theme.json files exist and parse as JSON.
+- Each theme declares the same canonical 21 palette-token keys and a complete palette object.
+- Static WCAG-style relative-luminance calculations for text_primary/text_secondary/text_disabled against panel, accent against control_bg, and lcd_text against lcd_bg show the current supplied values meet 4.5:1 in the checked pairings. These calculations are a data-level preflight only; they do not establish actual rendered contrast on every component/state/background.
+- The Gallery source has working search, family filter, selection cards, Preview, Apply and Back callbacks. Preview is temporary; Apply persists the successful previewed skin; Back/close restores the original selection. Apply is disabled until a successful Preview in the current session.
+
+Blocking finding:
+- The runtime authority SKIN/theme_manifest.json currently declares totalSkins=1 and contains only skin-053 / Skin_053.
+- getSkinCount() and getSkinManifest() in Source/PluginEditor.cpp read only this runtime manifest. openSkinGalleryPanel() builds its cards from that count. Therefore the production Gallery currently exposes only one theme, despite the approved sequence and the existence of fifteen additional theme specifications.
+- SKIN-2..SKIN-16 theme manifests explicitly mark PNG preview/hero artwork and runtime validation as pending; their folders currently provide SVG assets but no packaged PNG preview.png/hero.png. The approved sequence itself lists these PNGs and G1-G4 validation as pending.
+- Do not inflate the runtime registry to sixteen or claim all sixteen selectable until artwork/asset validation, runtime loading and exact-SHA package tests pass. Keep the approved sixteen sequence fixed; do not reintroduce the retired historical 102-record archive.
+
+STATUS: 16 THEME SPECIFICATIONS/PALLETTES PRESENT · STATIC CONTRAST PREFLIGHT PASS · GALLERY TRANSACTION SOURCE PRESENT · RUNTIME GALLERY CURRENTLY 1/16 · SKIN-2..16 PNG/G1-G4/REGISTRY/PACKAGE/RUNTIME ACCEPTANCE PENDING. Next bounded task: complete missing per-theme PNG artwork and asset checks, then safely promote the approved sequence into the runtime registry and test preview/apply/rollback for all sixteen. No source/UI behavior was changed in this audit.
+
+
+2026-11-16 — NEON STAGE: ARTWORK PIPELINE CONTRACT GAP
+
+Follow-up inspection of the exact Windows CI logs and validation tools clarified the pending 15-theme artwork gate:
+- Run 43726066887 reports 16 approved theme specifications, runtime registry 1 entry, and 45 warnings: SKIN-2..SKIN-16 each lack assets/preview.png and assets/hero.png and are not promoted into the runtime registry.
+- The workflow step named “Generate and validate missing legacy skin artwork” runs tools/T2_generate_missing_artwork.py. That generator iterates only active-registry entries with index < 52, so it intentionally skips the current Skin Studio indices 53 and 103..117. It does not create the missing artwork for the approved sixteen-theme sequence.
+- The live Skin Studio contract in tests/ValidateSkinManifests.py and tools/audit_skin_rev18_assets.py requires preview.png at 360x240 and hero.png at 800x450. The older SKIN/ASSET_SPECIFICATIONS_RU.md describes a conflicting 480x300 PNG / 1200x420 WebP contract and must be reconciled before authoring assets; do not generate assets to the stale dimensions or use the legacy generator as a substitute.
+- The CI theme audit is deliberately non-strict while artwork is pending, so workflow SUCCESS does not mean all 16 theme assets passed. The active registry validator checks the one registered theme, while the read-only sequence audit emits the 45 pending warnings.
+
+No artwork or runtime registry changes were made. Required next step is to resolve the authoritative asset-size/format contract, then produce genuine product-shell previews and hero artwork for SKIN-2..SKIN-16, validate PNG structure/dimensions/CRC and SVG safety, and only then promote the full approved sequence. Do not replace real product previews with generic poster placeholders.

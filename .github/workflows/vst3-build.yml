@@ -31,14 +31,18 @@ jobs:
           ref: 7.0.12
           path: JUCE
           persist-credentials: false
-      - name: Install artwork generator dependency
+      - name: Install approved theme artwork renderer dependency
         shell: pwsh
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Generate and validate missing legacy skin artwork
+      - name: Render and validate approved SKIN-2 and SKIN-3 artwork
         shell: pwsh
         run: |
-          python tools/T2_generate_missing_artwork.py --root SKIN
-          python tools/T2_generate_missing_artwork.py --root SKIN --check
+          foreach ($theme in @('SKIN-2', 'SKIN-3')) {
+            python tools/render_approved_theme_artwork.py --root SKIN --theme $theme
+            if ($LASTEXITCODE -ne 0) { throw "$theme artwork rendering failed." }
+            python tools/render_approved_theme_artwork.py --root SKIN --theme $theme --check
+            if ($LASTEXITCODE -ne 0) { throw "$theme artwork validation failed." }
+          }
       - name: Validate 300-preset factory catalog
         shell: pwsh
         run: python tools/validate_factory_bank.py presets/factory_bank_300.json
@@ -57,9 +61,9 @@ jobs:
         shell: pwsh
         run: python tools/validate_apvts_layout.py Source/PluginProcessor.cpp
 
-      - name: Validate PPGU REV 14 skin pack (contrast, parity, assets, identity)
+      - name: Validate active skin registry and exact 16-theme boundary
         shell: pwsh
-        run: python tools/validate_skin_pack.py --root SKIN --manifest SKIN/theme_pack_manifest.json
+        run: python tests/ValidateSkinManifests.py
 
       - name: Test REV18 theme asset audit safety
         shell: pwsh

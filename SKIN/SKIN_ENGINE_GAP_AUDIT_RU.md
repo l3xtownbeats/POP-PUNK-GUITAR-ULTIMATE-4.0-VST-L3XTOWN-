@@ -120,3 +120,14 @@ Settings is no longer a deferred/absent panel in this branch. `settingsButton` o
 ## Live panel palette propagation — 12.11.2026
 
 `PPGUThemeAwarePanel` is now the common contract for workspace child content. `PPGUMultiWindowWorkspace` stores the current `PPGUThemeManager::Palette`, applies it to panels already open, and applies it immediately to newly opened panels. FX EDIT, AutoChords, Import Guitar, Settings and Skin Gallery implement the contract and recolour their labels, controls, graphs/cards and status text. Theme switching remains UI-only. Remaining hardcoded colours in the main editor and future components still require audit; do not claim complete zero-hardcoded-colour parity.
+
+
+## Актуальное решение от 2026-11-15 — исторический каталог удалён
+
+Все сведения выше о runtime registry из 102 тем, старых Skin_01…Skin_51, Skin Studio pack 53–102 и legacy gallery описывают прежние состояния проекта и не являются текущей спецификацией.
+
+Пользователь утвердил ровно 16 заводских тем. Старые 101 записи, их архивные assets и устаревшие snapshots registry/pack удалены из текущего дерева ветки. Git history оставлена для аудита и восстановления. Никакие старые темы не должны сканироваться, импортироваться, собираться в package или возвращаться в Gallery.
+
+NEON STAGE — общий GUI design system. SKIN-1 — NEON FORGE (DEFAULT), `skin-053`. SKIN-2…SKIN-16 — утверждённые темы с ID `skin-103`…`skin-117`. В runtime registry пока включена только SKIN-1 до завершения acceptance остальных пятнадцати. Актуальные требования и порядок находятся в `SKIN/README.md` и `SKIN/approved_theme_sequence.json`.
+
+Статус: HISTORICAL AUDIT / SUPERSEDED BY FIXED 16-THEME CONTRACT.

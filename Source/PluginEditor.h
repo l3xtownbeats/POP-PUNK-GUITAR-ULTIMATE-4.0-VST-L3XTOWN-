@@ -43,7 +43,9 @@ private:
     bool loadSkinByIndex(int index, bool persist);
     void openSkinGalleryPanel();
     void openSettingsPanel();
+    void openAboutPanel();
     void applyPalette();
+    void refreshHeroArtwork();
     void persistSkinPreference();
     void configureKnob(juce::Slider&, juce::Label&, const juce::String&);
     void drawPanel(juce::Graphics&, juce::Rectangle<int>, const juce::String& sectionTitle);
@@ -56,8 +58,11 @@ private:
     PPGUPremiumLookAndFeel premiumLookAndFeel;
     juce::ApplicationProperties uiProperties;
     bool uiSettingsReady = false;
+    bool shuttingDown = false;
     juce::File runtimeSkinRoot;
-    juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKIN  v" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
+    juce::File heroArtworkFile;
+    juce::Image heroArtwork;
+    juce::TextButton loadButton { "IMPORT GUITAR" }, skinButton { "SKINS" }, autoChordsButton { "AUTOCHORDS" }, settingsButton { "SETTINGS" };
     // These REV.18 entry points are intentionally disabled until their real backends exist.
     juce::TextButton autoSoundHunterButton { "AUTO SOUND HUNTER" }, curatorButton { "CURATOR" }, aboutButton { "ABOUT" };
     juce::ComboBox presetBox, categoryBox;

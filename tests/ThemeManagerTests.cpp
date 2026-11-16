@@ -21,7 +21,7 @@ int main()
     PPGUThemeManager manager;
     expect(manager.getPalette().id == "skin-053", "default theme ID");
     expect(manager.getPalette().usedFallback, "default palette is marked fallback");
-    expect(manager.getPalette().name == "NEON STAGE DEFAULT", "fallback identity matches the canonical default skin");
+    expect(manager.getPalette().name == "NEON FORGE (DEFAULT)", "fallback identity matches canonical SKIN-1");
     const auto& fallbackTokens = manager.getPalette().tokens;
     expect(fallbackTokens.windowBg == juce::Colour(0xff080b14), "fallback window background matches NEON STAGE");
     expect(fallbackTokens.panel == juce::Colour(0xff101827), "fallback panel matches NEON STAGE");
@@ -97,16 +97,9 @@ int main()
         }
     }
 
-    const auto defaultManifest = skinRoot.getChildFile("Skin_51").getChildFile("theme.json");
-    const auto validJson = defaultManifest.loadFileAsString();
-    expect(validJson.isNotEmpty(), "legacy Skin_51 manifest readable");
-
-    const auto wrappedWidth = validJson.replace("\"width\": 480",
-                                                "\"width\": 4294967776");
-    expect(!manager.loadFromJson(wrappedWidth),
-           "int64 asset width that wraps to 480 after narrowing is rejected");
-    expect(manager.getPalette().usedFallback,
-           "overflowing asset dimensions restore default fallback");
+    const auto retiredLegacyRoot = skinRoot.getChildFile("isolated_legacy");
+    expect(!retiredLegacyRoot.exists(),
+           "retired legacy theme archive is absent from the active source tree");
 
     const auto skin53Manifest = skinRoot.getChildFile("Skin_053").getChildFile("theme.json");
     const bool skin53Loaded = skin53Manifest.existsAsFile() && manager.loadFromFile(skin53Manifest);
@@ -115,7 +108,7 @@ int main()
     if (skin53Loaded)
     {
         expect(manager.getPalette().id == "skin-053", "NEON STAGE stable ID preserved");
-        expect(manager.getPalette().name == "NEON STAGE DEFAULT", "NEON STAGE display identity decoded");
+        expect(manager.getPalette().name == "NEON FORGE (DEFAULT)", "NEON FORGE display identity decoded");
         expect(manager.getPalette().uiTypeface == "Segoe UI", "NEON STAGE UI typeface decoded");
         expect(manager.getPalette().displayTypeface == "Consolas", "NEON STAGE display typeface decoded");
         expect(manager.getPalette().typographyWeight == "semibold", "NEON STAGE typography weight decoded");
@@ -123,65 +116,38 @@ int main()
         expect(manager.getPalette().letterSpacing == 0.35f, "NEON STAGE letter spacing decoded");
     }
 
-    const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
-    const auto skin52Json = skin52Manifest.loadFileAsString();
-    expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
-    const bool skin52Loaded = manager.loadFromFile(skin52Manifest);
-    expect(skin52Loaded, "Skin Studio 052 manifest accepted"
-           + (skin52Loaded ? juce::String{} : ": " + manager.getLastError()));
-    if (skin52Loaded)
-    {
-        expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
-        expect(manager.getPalette().name == "SIGNAL FORGE", "Skin_052 SIGNAL FORGE name is decoded");
-        expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
-        expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
-               "Skin_052 window background is mapped");
+    const auto canonicalJson = skin53Manifest.loadFileAsString();
 
-        const auto studioTokens = juce::JSON::parse(skin52Json).getProperty("palette", juce::var());
-        const juce::StringArray tokenNames {
-            "window_bg", "panel", "panel_elevated", "control_bg", "control_face",
-            "control_border", "text_primary", "text_secondary", "text_disabled",
-            "accent", "accent_glow", "danger", "warning", "success", "lcd_bg",
-            "lcd_text", "led_on", "led_off", "shadow", "highlight", "lowlight"
-        };
-        for (const auto& tokenName : tokenNames)
-        {
-            const auto expected = juce::Colour::fromString(
-                "ff" + studioTokens.getProperty(tokenName, juce::var()).toString().substring(1));
-            expect(manager.getPalette().token(tokenName) == expected,
-                   "Skin_052 token is exposed exactly: " + tokenName);
-        }
-        expect(!manager.getPalette().token("unknown_token").isOpaque(),
-               "unknown token does not silently alias a valid colour");
+    // The active runtime registry intentionally contains only the approved
+    // canonical default while the remaining approved themes pass artwork gates.
+    // Do not load retired SIGNAL FORGE / Skin_052 as a runtime theme.
+    auto missingControl = juce::JSON::parse(canonicalJson);
+    auto* missingControls = missingControl.getProperty("controls", juce::var()).getDynamicObject();
+    expect(missingControls != nullptr, "canonical controls object is mutable for contract tests");
+    if (missingControls != nullptr)
+        missingControls->removeProperty("About");
+    expect(!manager.loadFromJson(juce::JSON::toString(missingControl)),
+           "canonical manifest rejects a missing mandatory control ID");
+    expect(manager.getPalette().usedFallback,
+           "missing mandatory control ID restores default fallback");
 
-        auto missingControl = juce::JSON::parse(skin52Json);
-        auto* missingControls = missingControl.getProperty("controls", juce::var()).getDynamicObject();
-        expect(missingControls != nullptr, "Skin_052 controls object is mutable for contract tests");
-        if (missingControls != nullptr)
-            missingControls->removeProperty("About");
-        expect(!manager.loadFromJson(juce::JSON::toString(missingControl)),
-               "Skin_052 rejects a missing mandatory control ID");
-        expect(manager.getPalette().usedFallback,
-               "missing mandatory control ID restores default fallback");
+    auto unexpectedControl = juce::JSON::parse(canonicalJson);
+    auto* unexpectedControls = unexpectedControl.getProperty("controls", juce::var()).getDynamicObject();
+    expect(unexpectedControls != nullptr, "canonical controls object is mutable for extra-key test");
+    if (unexpectedControls != nullptr)
+        unexpectedControls->setProperty("unapproved_control",
+                                         unexpectedControls->getProperty("About"));
+    expect(!manager.loadFromJson(juce::JSON::toString(unexpectedControl)),
+           "canonical manifest rejects an unapproved extra control ID");
+    expect(manager.getPalette().usedFallback,
+           "extra control ID restores default fallback");
 
-        auto unexpectedControl = juce::JSON::parse(skin52Json);
-        auto* unexpectedControls = unexpectedControl.getProperty("controls", juce::var()).getDynamicObject();
-        expect(unexpectedControls != nullptr, "Skin_052 controls object is mutable for extra-key test");
-        if (unexpectedControls != nullptr)
-            unexpectedControls->setProperty("unapproved_control",
-                                             unexpectedControls->getProperty("About"));
-        expect(!manager.loadFromJson(juce::JSON::toString(unexpectedControl)),
-               "Skin_052 rejects an unapproved extra control ID");
-        expect(manager.getPalette().usedFallback,
-               "extra control ID restores default fallback");
-    }
-
-    const auto badStudioColour = skin52Json.replace("#D5FF45", "#GG5FF45");
+    const auto badStudioColour = canonicalJson.replace("#00D9FF", "#GGD9FF");
     expect(!manager.loadFromJson(badStudioColour), "invalid Skin Studio HEX token rejected");
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "invalid Skin Studio manifest restores default fallback");
 
-    const auto badStudioCompatibility = skin52Json.replace("\"audioChanges\": false",
+    const auto badStudioCompatibility = canonicalJson.replace("\"audioChanges\": false",
                                                             "\"audioChanges\": true");
     expect(!manager.loadFromJson(badStudioCompatibility),
            "audio-changing Skin Studio theme rejected");
@@ -196,26 +162,6 @@ int main()
     expect(manager.getPalette().id == "skin-053" && manager.getPalette().usedFallback,
            "incomplete manifest restores NEON STAGE fallback");
 
-    expect(manager.loadFromJson(validJson), "legacy skin remains loadable after token migration");
-    expect(manager.getPalette().token("window_bg") == manager.getPalette().canvas,
-           "legacy window background maps to canonical token");
-    expect(manager.getPalette().token("accent") == manager.getPalette().accent,
-           "legacy accent maps to canonical token");
-    expect(manager.getPalette().token("danger").isOpaque(),
-           "legacy semantic token receives a deterministic fallback");
-
-    const auto badColour = validJson.replace("#090C10", "#GG0C10");
-    expect(!manager.loadFromJson(badColour), "invalid legacy HEX colour rejected");
-    expect(manager.getPalette().usedFallback, "invalid legacy HEX restores fallback");
-
-    const auto badCompatibility = validJson.replace("\"audioChanges\": false",
-                                                     "\"audioChanges\": true");
-    expect(!manager.loadFromJson(badCompatibility), "legacy audio-changing theme rejected");
-    expect(manager.getPalette().usedFallback, "legacy compatibility failure restores fallback");
-
-    const auto mismatchedIndex = validJson.replace("\"index\": 51", "\"index\": 50");
-    expect(!manager.loadFromJson(mismatchedIndex), "legacy ID/index mismatch rejected");
-    expect(manager.getPalette().usedFallback, "legacy ID/index failure restores fallback");
 
     if (failures != 0)
     {

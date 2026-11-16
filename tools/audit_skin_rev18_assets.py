@@ -149,8 +149,8 @@ def main() -> int:
         errors.append("approved sequence contains duplicate stable indices")
     if (not themes or themes[0].get("stableId") != "skin-053"
             or themes[0].get("label") != "SKIN-1"
-            or themes[0].get("name") != "NEON STAGE DEFAULT"):
-        errors.append("SKIN-1 must be the first entry: label SKIN-1, name NEON STAGE DEFAULT, stable ID skin-053")
+            or themes[0].get("name") != "NEON FORGE (DEFAULT)"):
+        errors.append("SKIN-1 must be the first entry: label SKIN-1, name NEON FORGE (DEFAULT), stable ID skin-053")
 
     contract = schema.get("x-ppgu-contract", {})
     required_control_ids = set(contract.get("requiredControlIds", []))

@@ -136,7 +136,7 @@ A successful run on an older commit does not certify a newer commit. Release cla
 
 ## Project principles
 
-**One engine. Two playing modes. Two main windows. Real functionality over decorative controls.**
+**One engine. Two playing modes. One main interface with independently managed auxiliary panels. Real functionality over decorative controls.**
 
 Preserve the approved architecture, MIDI/APVTS and preset-state compatibility. Improve existing components before proposing new ones. Keep audio processing real-time safe, control CPU/RAM, protect sample rights and validate every material change on the exact commit that contains it.
 

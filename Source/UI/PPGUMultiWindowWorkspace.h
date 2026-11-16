@@ -4,6 +4,7 @@
 #include "AuxiliaryPanelLayout.h"
 #include "ThemeManager.h"
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -24,6 +25,7 @@ public:
         int id = 0;
         juce::String title;
         std::unique_ptr<juce::Component> content;
+        std::function<void()> onClose;
         ppgu::ui::PanelSize desired { 520, 360 };
         ppgu::ui::PanelSize minimum { 280, 190 };
     };
@@ -39,7 +41,7 @@ public:
 
     void setPanelGap(int pixels);
     void setPanelScale(float scale);
-    void setPersistenceProperties(juce::PropertiesFile* properties);
+    void setPersistenceProperties(juce::PropertiesFile* settingsFile);
     void setThemePalette(const PPGUThemeManager::Palette& palette);
     void setSurfaceColours(juce::Colour background,
                            juce::Colour panel,

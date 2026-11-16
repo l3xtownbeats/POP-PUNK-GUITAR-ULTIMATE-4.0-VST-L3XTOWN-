@@ -12,7 +12,7 @@ public:
            juce::Colour panel, juce::Colour border,
            juce::Colour heading, juce::Colour text)
         : owner(ownerIn), panelId(spec.id), desired(spec.desired), minimum(spec.minimum),
-          content(std::move(spec.content)),
+          content(std::move(spec.content)), onClose(std::move(spec.onClose)),
           resizeCorner(this, &boundsConstrainer)
     {
         title.setText(spec.title, juce::dontSendNotification);
@@ -27,7 +27,16 @@ public:
         closeButton.setColour(juce::TextButton::buttonColourId, panel.darker(0.2f));
         closeButton.setColour(juce::TextButton::textColourOffId, text);
         closeButton.setColour(juce::TextButton::buttonOnColourId, border);
-        closeButton.onClick = [this] { owner.handleClose(panelId); };
+        closeButton.onClick = [this]
+        {
+            const auto id = panelId;
+            juce::Component::SafePointer<PPGUMultiWindowWorkspace> safeOwner(&owner);
+            juce::MessageManager::callAsync([safeOwner, id]
+            {
+                if (safeOwner != nullptr)
+                    safeOwner->handleClose(id);
+            });
+        };
         addAndMakeVisible(closeButton);
 
         maximizeButton.setButtonText("□");
@@ -51,13 +60,37 @@ public:
     }
 
     int getPanelId() const noexcept { return panelId; }
+    void notifyClosing()
+    {
+        if (closeNotified)
+            return;
+        closeNotified = true;
+        auto callback = std::move(onClose);
+        if (callback)
+            callback();
+    }
     ppgu::ui::PanelSize getDesiredSize() const noexcept { return desired; }
     ppgu::ui::PanelSize getMinimumSize() const noexcept { return minimum; }
     bool isMaximized() const noexcept { return maximized; }
+    bool shouldPreserveUserGeometry() const noexcept { return preserveUserGeometry; }
+    void setPreserveUserGeometry(bool shouldPreserve) noexcept { preserveUserGeometry = shouldPreserve; }
     void restoreBounds(juce::Rectangle<int> bounds) { setBounds(bounds); maximized = false; }
 
     void setThemePalette(const PPGUThemeManager::Palette& palette)
     {
+        // Keep the shared workspace chrome on the same theme typography contract
+        // as its panel content. The previous fixed-size default-font title made
+        // auxiliary window headers visibly diverge from the active skin.
+        if (palette.uiTypeface.isNotEmpty())
+        {
+            const auto weight = palette.typographyWeight.equalsIgnoreCase("normal")
+                ? juce::Font::plain : juce::Font::bold;
+            title.setFont(juce::Font(palette.uiTypeface,
+                                     14.0f * palette.fontScale,
+                                     weight)
+                              .withExtraKerningFactor(palette.letterSpacing));
+        }
+
         if (content != nullptr)
             if (auto* themed = dynamic_cast<PPGUThemeAwarePanel*>(content.get()))
                 themed->setThemePalette(palette);
@@ -79,10 +112,12 @@ public:
 
     void setPanelBounds(juce::Rectangle<int> bounds)
     {
+        // Layout passes must not silently cancel a user's maximized state.
+        // Keep the window fitted to the current viewport until Restore is used.
         if (maximized)
         {
-            maximized = false;
-            maximizeButton.setButtonText("□");
+            setBounds(owner.viewport.getViewArea());
+            return;
         }
         setBounds(bounds);
     }
@@ -105,7 +140,13 @@ public:
         if (draggingHeader)
         {
             auto bounds = dragStartBounds.translated(relative.x - dragStartScreen.x, relative.y - dragStartScreen.y);
-            bounds.setPosition(juce::jmax(0, bounds.getX()), juce::jmax(0, bounds.getY()));
+            const auto view = owner.viewport.getViewArea();
+            const int maxX = juce::jmax(view.getX(), view.getRight()
+                - juce::jmin(bounds.getWidth(), view.getWidth()));
+            const int maxY = juce::jmax(view.getY(), view.getBottom()
+                - juce::jmin(bounds.getHeight(), view.getHeight()));
+            bounds.setPosition(juce::jlimit(view.getX(), maxX, bounds.getX()),
+                               juce::jlimit(view.getY(), maxY, bounds.getY()));
             setBounds(bounds);
             owner.handleGeometryChanged(panelId);
         }
@@ -164,6 +205,13 @@ public:
         if (content != nullptr)
             content->setBounds(area);
         resizeCorner.setBounds(getWidth() - 18, getHeight() - 18, 18, 18);
+        const auto view = owner.viewport.getViewArea();
+        const int minimumWidth = static_cast<int>(minimum.width);
+        const int minimumHeight = static_cast<int>(minimum.height);
+        const int maximumWidth = juce::jmax(minimumWidth, view.getRight() - getX());
+        const int maximumHeight = juce::jmax(minimumHeight, view.getBottom() - getY());
+        boundsConstrainer.setSizeLimits(minimumWidth, minimumHeight,
+                                        maximumWidth, maximumHeight);
         owner.handleGeometryChanged(panelId);
     }
 
@@ -185,6 +233,8 @@ private:
     ppgu::ui::PanelSize desired;
     ppgu::ui::PanelSize minimum;
     std::unique_ptr<juce::Component> content;
+    std::function<void()> onClose;
+    bool closeNotified = false;
     juce::Label title;
     juce::TextButton closeButton, maximizeButton;
     juce::ComponentBoundsConstrainer boundsConstrainer;
@@ -194,6 +244,7 @@ private:
     juce::Point<int> dragStartScreen;
     bool draggingHeader = false;
     bool maximized = false;
+    bool preserveUserGeometry = false;
 };
 
 class PPGUMultiWindowWorkspace::TileSurface final : public juce::Component
@@ -227,8 +278,10 @@ PPGUMultiWindowWorkspace::PPGUMultiWindowWorkspace()
 
 PPGUMultiWindowWorkspace::~PPGUMultiWindowWorkspace()
 {
+    // The external PropertiesFile may already have been destroyed by the editor.
+    persistenceProperties = nullptr;
+    closeAllPanels();
     viewport.setViewedComponent(nullptr, false);
-    windows.clear();
     tileSurface.reset();
 }
 
@@ -250,16 +303,34 @@ bool PPGUMultiWindowWorkspace::openPanel(PanelSpec spec)
     auto bounds = juce::Rectangle<int>(nextCascadeOffset, nextCascadeOffset,
         static_cast<int>(window->getDesiredSize().width), static_cast<int>(window->getDesiredSize().height));
     nextCascadeOffset = (nextCascadeOffset + 34) % 170;
+    bool hasSavedGeometry = false;
     if (persistenceProperties != nullptr)
     {
         juce::StringArray values;
         values.addTokens(persistenceProperties->getValue(geometryKey(panelId, "bounds")), ",", "");
         if (values.size() == 4)
-            bounds = { values[0].getIntValue(), values[1].getIntValue(), values[2].getIntValue(), values[3].getIntValue() };
+        {
+            const auto savedX = values[0].getIntValue();
+            const auto savedY = values[1].getIntValue();
+            const auto savedWidth = values[2].getIntValue();
+            const auto savedHeight = values[3].getIntValue();
+            if (savedWidth >= static_cast<int>(window->getMinimumSize().width)
+                && savedHeight >= static_cast<int>(window->getMinimumSize().height)
+                && savedWidth <= 32768 && savedHeight <= 32768
+                && std::abs(static_cast<std::int64_t>(savedX)) <= 32768
+                && std::abs(static_cast<std::int64_t>(savedY)) <= 32768)
+            {
+                bounds = { savedX, savedY, savedWidth, savedHeight };
+                hasSavedGeometry = true;
+            }
+        }
     }
     window->setBounds(bounds);
     tileSurface->addAndMakeVisible(*window);
     windows.push_back(std::move(window));
+    windows.back()->setPreserveUserGeometry(hasSavedGeometry);
+    // Saved user geometry takes precedence over automatic placement for a
+    // single reopened panel. First-open panels continue through normal tiling.
     layoutPanels();
     viewport.setViewPosition(0, 0);
     return true;
@@ -272,6 +343,7 @@ bool PPGUMultiWindowWorkspace::closePanel(int id)
     if (it == windows.end())
         return false;
 
+    (*it)->notifyClosing();
     tileSurface->removeChildComponent(it->get());
     windows.erase(it);
     layoutPanels();
@@ -281,7 +353,10 @@ bool PPGUMultiWindowWorkspace::closePanel(int id)
 void PPGUMultiWindowWorkspace::closeAllPanels()
 {
     for (auto& window : windows)
+    {
+        window->notifyClosing();
         tileSurface->removeChildComponent(window.get());
+    }
     windows.clear();
     layoutPanels();
 }
@@ -309,9 +384,9 @@ void PPGUMultiWindowWorkspace::setPanelScale(float scale)
     layoutPanels();
 }
 
-void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* properties)
+void PPGUMultiWindowWorkspace::setPersistenceProperties(juce::PropertiesFile* settingsFile)
 {
-    persistenceProperties = properties;
+    persistenceProperties = settingsFile;
 }
 
 void PPGUMultiWindowWorkspace::setThemePalette(const PPGUThemeManager::Palette& palette)
@@ -375,6 +450,8 @@ void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
         return;
 
     const auto bounds = (*it)->getBounds();
+    if (!(*it)->isMaximized())
+        (*it)->setPreserveUserGeometry(true);
     if (persistenceProperties != nullptr && !(*it)->isMaximized())
     {
         persistenceProperties->setValue(geometryKey(id, "bounds"),
@@ -382,6 +459,24 @@ void PPGUMultiWindowWorkspace::handleGeometryChanged(int id)
             + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
         persistenceProperties->saveIfNeeded();
     }
+    // Keep the scrollable child surface large enough to contain manually
+    // resized/moved windows. The viewport still clips all content to the plugin
+    // editor boundary, while its scrollbars expose any intentional overflow.
+    const auto view = viewport.getViewArea();
+    int surfaceWidth = juce::jmax(1, view.getWidth());
+    int surfaceHeight = juce::jmax(1, view.getHeight());
+    for (const auto& window : windows)
+    {
+        const auto windowBounds = window->getBounds();
+        const auto right = static_cast<std::int64_t>(windowBounds.getRight()) + panelGap;
+        const auto bottom = static_cast<std::int64_t>(windowBounds.getBottom()) + panelGap;
+        surfaceWidth = juce::jmax(surfaceWidth, static_cast<int>(
+            juce::jlimit<std::int64_t>(1, std::numeric_limits<int>::max(), right)));
+        surfaceHeight = juce::jmax(surfaceHeight, static_cast<int>(
+            juce::jlimit<std::int64_t>(1, std::numeric_limits<int>::max(), bottom)));
+    }
+    tileSurface->setSize(surfaceWidth, surfaceHeight);
+
     // Manual drag/resize/maximize is user geometry, not a request to retile.
     // Automatic tiling runs only when the panel set or workspace size changes.
 }
@@ -415,6 +510,30 @@ void PPGUMultiWindowWorkspace::layoutPanels()
     const auto view = viewport.getViewArea();
     const int viewWidth = juce::jmax(1, view.getWidth());
     const int viewHeight = juce::jmax(1, view.getHeight());
+
+    if (windows.size() == 1 && windows.front()->shouldPreserveUserGeometry())
+    {
+        auto& window = *windows.front();
+        auto bounds = window.getBounds();
+        const int width = juce::jmax(static_cast<int>(window.getMinimumSize().width), bounds.getWidth());
+        const int height = juce::jmax(static_cast<int>(window.getMinimumSize().height), bounds.getHeight());
+        bounds.setSize(width, height);
+        const int maxX = juce::jmax(view.getX(), view.getRight() - juce::jmin(width, viewWidth));
+        const int maxY = juce::jmax(view.getY(), view.getBottom() - juce::jmin(height, viewHeight));
+        bounds.setPosition(juce::jlimit(view.getX(), maxX, bounds.getX()),
+                           juce::jlimit(view.getY(), maxY, bounds.getY()));
+        window.setPanelBounds(bounds);
+        tileSurface->setSize(juce::jmax(viewWidth, bounds.getRight() + panelGap),
+                             juce::jmax(viewHeight, bounds.getBottom() + panelGap));
+        if (persistenceProperties != nullptr)
+        {
+            persistenceProperties->setValue(geometryKey(window.getPanelId(), "bounds"),
+                juce::String(bounds.getX()) + "," + juce::String(bounds.getY()) + ","
+                + juce::String(bounds.getWidth()) + "," + juce::String(bounds.getHeight()));
+            persistenceProperties->saveIfNeeded();
+        }
+        return;
+    }
 
     std::vector<ppgu::ui::PanelRequest> requests;
     requests.reserve(windows.size());

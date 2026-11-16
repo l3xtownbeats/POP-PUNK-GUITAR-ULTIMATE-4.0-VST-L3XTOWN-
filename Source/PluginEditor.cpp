@@ -45,8 +45,8 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
 }
 }
 
-// Scrollable visual browser for the complete registry. Preview images are loaded
-// lazily by visible cards so opening the gallery does not decode all 102 PNGs.
+// Scrollable browser for entries in the active skin registry. Preview images are
+// decoded on demand by visible cards; archived legacy assets are not runtime themes.
 class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
@@ -57,19 +57,25 @@ public:
         juce::File preview;
         juce::Colour accent { 0xff00d9ff };
         bool active = false;
+        bool selected = false;
     };
 
     PPGUSkinGalleryPanel(std::vector<Skin> skinsIn,
                          PPGUThemeManager::Palette paletteIn,
-                         std::function<void(int)> applyIn)
-        : skins(std::move(skinsIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+                         int initialSelection,
+                         std::function<bool(int)> previewIn,
+                         std::function<void()> applyIn,
+                         std::function<void()> cancelIn)
+        : skins(std::move(skinsIn)), palette(std::move(paletteIn)),
+          selectedIndex(initialSelection), preview(std::move(previewIn)),
+          apply(std::move(applyIn)), cancel(std::move(cancelIn))
     {
         heading.setText("VISUAL SKIN GALLERY", juce::dontSendNotification);
         heading.setFont(makeThemeFont(palette, 17.0f, false, true));
         heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
         addAndMakeVisible(heading);
 
-        subtitle.setText("Browse the complete PPGU collection. Select a card to apply its visual system.",
+        subtitle.setText("Select a theme, preview it temporarily, then Apply or Back to restore.",
                          juce::dontSendNotification);
         subtitle.setFont(makeThemeFont(palette, 10.0f, false, false));
         subtitle.setColour(juce::Label::textColourId, palette.token("text_secondary"));
@@ -104,6 +110,39 @@ public:
         countLabel.setJustificationType(juce::Justification::centredRight);
         addAndMakeVisible(countLabel);
 
+        previewButton.setButtonText("PREVIEW");
+        applyButton.setButtonText("APPLY");
+        backButton.setButtonText("BACK");
+        for (auto* button : { &previewButton, &applyButton, &backButton })
+        {
+            button->setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+            button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+            button->setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+            addAndMakeVisible(*button);
+        }
+        previewButton.onClick = [this]
+        {
+            if (selectedIndex > 0 && preview)
+            {
+                const bool succeeded = preview(selectedIndex);
+                // Only the currently successful preview is eligible for Apply.
+                // A failed preview invalidates the previous preview transaction.
+                previewedIndex = succeeded ? selectedIndex : 0;
+                applyButton.setEnabled(succeeded);
+            }
+        };
+        applyButton.onClick = [this] { if (apply) apply(); };
+        backButton.onClick = [this] { if (cancel) cancel(); };
+
+        for (auto& skin : skins)
+            skin.selected = skin.index == selectedIndex;
+
+        // A gallery session starts with no preview transaction. The current
+        // theme is already active; Apply must remain unavailable until the user
+        // explicitly previews a valid selection in this session.
+        previewedIndex = 0;
+        applyButton.setEnabled(false);
+
         viewport.setViewedComponent(&grid, false);
         viewport.setOpaque(false);
         viewport.setScrollBarsShown(true, false);
@@ -136,6 +175,12 @@ public:
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
         familyFilter.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
         countLabel.setColour(juce::Label::textColourId, palette.token("accent"));
+        for (auto* button : { &previewButton, &applyButton, &backButton })
+        {
+            button->setColour(juce::TextButton::buttonColourId, palette.token("control_face"));
+            button->setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
+            button->setColour(juce::TextButton::buttonOnColourId, palette.token("accent"));
+        }
         rebuildCards();
         repaint();
     }
@@ -152,6 +197,12 @@ public:
         familyFilter.setBounds(filters.removeFromLeft(190).reduced(1, 2));
         countLabel.setBounds(filters);
         area.removeFromTop(4);
+        auto footer = area.removeFromBottom(38);
+        backButton.setBounds(footer.removeFromRight(92).reduced(1, 2));
+        footer.removeFromRight(8);
+        applyButton.setBounds(footer.removeFromRight(104).reduced(1, 2));
+        footer.removeFromRight(8);
+        previewButton.setBounds(footer.removeFromRight(112).reduced(1, 2));
         viewport.setBounds(area);
         rebuildCards();
     }
@@ -161,8 +212,8 @@ private:
     {
     public:
         Card(Skin itemIn, PPGUThemeManager::Palette paletteIn,
-             std::function<void(int)> applyIn)
-            : item(std::move(itemIn)), palette(std::move(paletteIn)), apply(std::move(applyIn))
+             std::function<void(int)> selectIn)
+            : item(std::move(itemIn)), palette(std::move(paletteIn)), select(std::move(selectIn))
         {
             setMouseCursor(juce::MouseCursor::PointingHandCursor);
         }
@@ -172,8 +223,9 @@ private:
             auto bounds = getLocalBounds().toFloat().reduced(1.0f);
             g.setColour(hovered ? palette.token("panel_elevated") : palette.token("panel"));
             g.fillRoundedRectangle(bounds, 9.0f);
-            g.setColour(item.active ? item.accent : palette.token("control_border"));
-            g.drawRoundedRectangle(bounds, 9.0f, item.active ? 1.8f : 1.0f);
+            g.setColour(item.selected || item.active ? item.accent : palette.token("control_border"));
+            g.drawRoundedRectangle(bounds, 9.0f,
+                                   item.selected ? 2.4f : (item.active ? 1.8f : 1.0f));
 
             auto previewArea = bounds.reduced(8.0f, 8.0f).removeFromTop(72.0f);
             if (item.preview.existsAsFile())
@@ -199,13 +251,14 @@ private:
             g.drawText(item.family + "  /  " + item.layout,
                        textArea.removeFromTop(14.0f), juce::Justification::centredLeft, true);
 
-            if (item.active)
+            if (item.selected || item.active)
             {
                 g.setColour(item.accent);
                 g.fillRoundedRectangle(getWidth() - 58.0f, 10.0f, 48.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(makeThemeFont(palette, 8.0f, false, true));
-                g.drawText("ACTIVE", getWidth() - 58, 10, 48, 17, juce::Justification::centred);
+                g.drawText(item.selected ? "SELECTED" : "ACTIVE",
+                           getWidth() - 58, 10, 48, 17, juce::Justification::centred);
             }
             else
             {
@@ -213,18 +266,20 @@ private:
                 g.fillRoundedRectangle(getWidth() - 54.0f, 10.0f, 44.0f, 17.0f, 5.0f);
                 g.setColour(palette.token("window_bg"));
                 g.setFont(makeThemeFont(palette, 8.0f, false, true));
-                g.drawText("APPLY", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
+                g.drawText("PREVIEW", getWidth() - 54, 10, 44, 17, juce::Justification::centred);
             }
         }
 
         void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+        int getIndex() const noexcept { return item.index; }
+        void setSelected(bool value) { item.selected = value; repaint(); }
 
         void mouseEnter(const juce::MouseEvent&) override { hovered = true; repaint(); }
         void mouseExit(const juce::MouseEvent&) override { hovered = false; repaint(); }
         void mouseUp(const juce::MouseEvent& event) override
         {
-            if (event.mouseWasClicked() && apply)
-                apply(item.index);
+            if (event.mouseWasClicked() && select)
+                select(item.index);
         }
 
     private:
@@ -241,7 +296,7 @@ private:
 
         Skin item;
         PPGUThemeManager::Palette palette;
-        std::function<void(int)> apply;
+        std::function<void(int)> select;
         bool hovered = false;
     };
 
@@ -252,6 +307,11 @@ private:
         {
             for (auto& card : cards)
                 card->setPalette(value);
+        }
+        void setSelectedIndex(int index)
+        {
+            for (auto& card : cards)
+                card->setSelected(card->getIndex() == index);
         }
         void clearCards() { cards.clear(); }
         void addCard(std::unique_ptr<Card> card)
@@ -301,7 +361,10 @@ private:
             const auto haystack = (item.name + " " + item.family + " " + item.layout).toLowerCase();
             if (query.isNotEmpty() && !haystack.contains(query))
                 continue;
-            grid.addCard(std::make_unique<Card>(item, palette, apply));
+            auto selectedItem = item;
+            selectedItem.selected = selectedItem.index == selectedIndex;
+            grid.addCard(std::make_unique<Card>(selectedItem, palette,
+                [this](int index) { selectSkin(index); }));
         }
 
         countLabel.setText(juce::String(grid.getCardCount()) + " / "
@@ -316,10 +379,24 @@ private:
         grid.resized();
     }
 
+    void selectSkin(int index)
+    {
+        if (std::none_of(skins.begin(), skins.end(),
+                         [index](const auto& skin) { return skin.index == index; }))
+            return;
+        selectedIndex = index;
+        grid.setSelectedIndex(index);
+        applyButton.setEnabled(index == previewedIndex);
+    }
+
     std::vector<Skin> skins;
     PPGUThemeManager::Palette palette;
-    std::function<void(int)> apply;
+    int selectedIndex = 0;
+    int previewedIndex = 0;
+    std::function<bool(int)> preview;
+    std::function<void()> apply, cancel;
     juce::Label heading, subtitle, countLabel;
+    juce::TextButton previewButton, applyButton, backButton;
     juce::TextEditor search;
     juce::ComboBox familyFilter;
     Grid grid;
@@ -379,7 +456,7 @@ public:
         };
         addAndMakeVisible(gapSlider);
 
-        restoreButton.setButtonText("RESTORE NEON STAGE DEFAULT");
+        restoreButton.setButtonText("RESTORE NEON FORGE DEFAULT");
         restoreButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
         restoreButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
         restoreButton.onClick = [this] { if (restoreTheme) restoreTheme(); };
@@ -452,6 +529,77 @@ private:
     juce::Label heading, description, scaleLabel, gapLabel;
     juce::Slider scaleSlider, gapSlider;
     juce::TextButton restoreButton, galleryButton;
+};
+
+// Factual product-information surface; intentionally contains no invented version/build metadata.
+class PPGUAboutPanel final : public juce::Component, public PPGUThemeAwarePanel
+{
+public:
+    explicit PPGUAboutPanel(PPGUThemeManager::Palette paletteIn)
+        : palette(std::move(paletteIn))
+    {
+        heading.setText("POP PUNK GUITAR ULTIMATE", juce::dontSendNotification);
+        heading.setFont(makeThemeFont(palette, 22.0f, true, true));
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addAndMakeVisible(heading);
+
+        identity.setText("NEON STAGE  /  VST3 INSTRUMENT", juce::dontSendNotification);
+        identity.setFont(makeThemeFont(palette, 11.0f, false, true));
+        identity.setColour(juce::Label::textColourId, palette.token("accent"));
+        addAndMakeVisible(identity);
+
+        description.setText(
+            "A dedicated pop-punk guitar instrument for tight rhythm parts, power chords, "
+            "palm-muted patterns, riffs and melodic hooks.",
+            juce::dontSendNotification);
+        description.setFont(makeThemeFont(palette, 12.0f));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        description.setJustificationType(juce::Justification::topLeft);
+        description.setMinimumHorizontalScale(0.85f);
+        addAndMakeVisible(description);
+
+        studio.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
+        studio.setFont(makeThemeFont(palette, 10.0f, false, true));
+        studio.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addAndMakeVisible(studio);
+    }
+
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        heading.setFont(makeThemeFont(palette, 22.0f, true, true));
+        identity.setFont(makeThemeFont(palette, 11.0f, false, true));
+        description.setFont(makeThemeFont(palette, 12.0f));
+        studio.setFont(makeThemeFont(palette, 10.0f, false, true));
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        identity.setColour(juce::Label::textColourId, palette.token("accent"));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        studio.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        auto bounds = getLocalBounds().toFloat().reduced(2.0f);
+        g.setColour(palette.token("accent").withAlpha(0.75f));
+        g.fillRoundedRectangle(bounds.removeFromTop(2.0f), 1.0f);
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(22);
+        area.removeFromTop(14);
+        heading.setBounds(area.removeFromTop(34));
+        area.removeFromTop(8);
+        identity.setBounds(area.removeFromTop(18));
+        area.removeFromTop(18);
+        description.setBounds(area.removeFromTop(70));
+        studio.setBounds(area.removeFromBottom(20));
+    }
+
+private:
+    PPGUThemeManager::Palette palette;
+    juce::Label heading, identity, description, studio;
 };
 
 // Import panel delegates to the existing asynchronous SFZ loader and reports its real result.
@@ -916,61 +1064,155 @@ private:
     int selectedGroup = 0;
 };
 
+class PPGUCircleOfFifths final : public juce::Component
+{
+public:
+    explicit PPGUCircleOfFifths(std::function<void(int)> onSelectIn)
+        : onSelect(std::move(onSelectIn))
+    {
+        setWantsKeyboardFocus(true);
+        setMouseClickGrabsKeyboardFocus(true);
+    }
+    void setSelectedRoot(int value) { selectedRoot = juce::jlimit(0, 11, value); repaint(); }
+    void paint(juce::Graphics& g) override
+    {
+        static const char* names[] = { "C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#", "F" };
+        const auto area = getLocalBounds().toFloat().reduced(24.0f);
+        const float radius = juce::jmin(area.getWidth(), area.getHeight()) * 0.39f;
+        const auto centre = area.getCentre();
+        g.setColour(palette.token("control_border").withAlpha(0.65f));
+        g.drawEllipse(centre.x - radius, centre.y - radius, radius * 2.0f, radius * 2.0f, 1.2f);
+        for (int i = 0; i < 12; ++i)
+        {
+            const float angle = juce::MathConstants<float>::twoPi * static_cast<float>(i) / 12.0f
+                              - juce::MathConstants<float>::halfPi;
+            const float x = centre.x + std::cos(angle) * radius;
+            const float y = centre.y + std::sin(angle) * radius;
+            // Circle slots are drawn in fifths order, while selectedRoot is a chromatic pitch class.
+            // Compare against the pitch class represented by this slot, not the slot index.
+            static const int fifthsRoots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+            const bool active = fifthsRoots[i] == selectedRoot;
+            const float node = active ? 29.0f : 24.0f;
+            g.setColour(active ? palette.token("accent") : palette.token("control_bg"));
+            g.fillEllipse(x - node * 0.5f, y - node * 0.5f, node, node);
+            g.setColour(active ? palette.token("window_bg") : palette.token("text_primary"));
+            g.setFont(makeThemeFont(palette, active ? 13.0f : 11.5f, false, true));
+            g.drawText(names[i], juce::Rectangle<int>(static_cast<int>(x - 22.0f), static_cast<int>(y - 11.0f), 44, 22),
+                       juce::Justification::centred);
+        }
+        g.setColour(palette.token("text_secondary"));
+        g.setFont(makeThemeFont(palette, 10.0f, false, true));
+        g.drawText("CIRCLE OF FIFTHS", getLocalBounds().removeFromTop(18), juce::Justification::centred);
+    }
+    bool keyPressed(const juce::KeyPress& key) override
+    {
+        static const int roots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+        const int code = key.getKeyCode();
+        if (code != juce::KeyPress::leftKey && code != juce::KeyPress::rightKey
+            && code != juce::KeyPress::upKey && code != juce::KeyPress::downKey)
+            return false;
+
+        const auto* found = std::find(roots, roots + 12, selectedRoot);
+        const int current = found == roots + 12 ? 0 : static_cast<int>(found - roots);
+        const int direction = (code == juce::KeyPress::rightKey || code == juce::KeyPress::downKey) ? 1 : -1;
+        selectedRoot = roots[(current + direction + 12) % 12];
+        if (onSelect)
+            onSelect(selectedRoot);
+        repaint();
+        return true;
+    }
+
+    void mouseDown(const juce::MouseEvent& e) override
+    {
+        grabKeyboardFocus();
+        static const int roots[] = { 0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5 };
+        const auto area = getLocalBounds().toFloat().reduced(24.0f);
+        const auto centre = area.getCentre();
+        const float radius = juce::jmin(area.getWidth(), area.getHeight()) * 0.39f;
+        const float dx = e.position.x - centre.x, dy = e.position.y - centre.y;
+        if (std::abs(std::sqrt(dx * dx + dy * dy) - radius) > 34.0f) return;
+        float angle = std::atan2(dy, dx) + juce::MathConstants<float>::halfPi;
+        if (angle < 0.0f) angle += juce::MathConstants<float>::twoPi;
+        const int index = juce::jlimit(0, 11, static_cast<int>(std::round(angle * 12.0f / juce::MathConstants<float>::twoPi)) % 12);
+        selectedRoot = roots[index];
+        if (onSelect) onSelect(selectedRoot);
+        repaint();
+    }
+    void setPalette(const PPGUThemeManager::Palette& value) { palette = value; repaint(); }
+private:
+    PPGUThemeManager::Palette palette;
+    std::function<void(int)> onSelect;
+    int selectedRoot = 0;
+};
+
 class PPGUAutoChordsPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
     explicit PPGUAutoChordsPanel(juce::AudioProcessorValueTreeState& state) : apvts(state)
     {
-        title.setText("AUTOCHORDS  /  HARMONY SETUP", juce::dontSendNotification);
-        title.setFont(makeThemeFont(palette, 20.0f, false, true));
-        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        title.setText("AUTOCHORDS  /  HARMONY WORKSPACE", juce::dontSendNotification);
         addAndMakeVisible(title);
-        stateLabel.setText("SETUP ONLY — MIDI CHORD GENERATION / CUSTOM MODE / PREVIEW ENGINE NOT CONNECTED", juce::dontSendNotification);
-        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
+        stateLabel.setText("HARMONY SETUP ONLY — MIDI GENERATION / PLAYBACK ENGINE NOT CONNECTED",
+                           juce::dontSendNotification);
         addAndMakeVisible(stateLabel);
-        offButton.setButtonText("AUTOCHORDS OFF");
+        offButton.setButtonText("MIDI GENERATION UNAVAILABLE");
         offButton.setEnabled(false);
-        offButton.setTooltip("The AutoChords MIDI-generation engine is not implemented yet.");
+        offButton.setTooltip("This workspace edits harmony choices only. No MIDI is generated or played.");
         addAndMakeVisible(offButton);
 
         keyBox.addItemList({ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }, 1);
         modeBox.addItemList({ "Chromatic", "Major", "Minor" }, 1);
-        patternBox.addItemList({ "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4",
-                                   "Pattern 5", "Pattern 6", "Pattern 7", "Pattern 8" }, 1);
         addAndMakeVisible(keyBox);
         addAndMakeVisible(modeBox);
-        addAndMakeVisible(patternBox);
         keyAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleRoot", keyBox);
         modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "scaleMode", modeBox);
-        patternAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, "patternSlot", patternBox);
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
+        keyBox.onChange = [this] { if (circleComponent) circleComponent->setSelectedRoot(keyBox.getSelectedId() - 1); refreshChordNames(); };
+        modeBox.onChange = [this] { refreshChordNames(); };
+
+        circleComponent = std::make_unique<PPGUCircleOfFifths>([this](int root)
         {
-            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
-            addAndMakeVisible(*label);
+            keyBox.setSelectedId(root + 1, juce::sendNotification);
+        });
+        circleComponent->setPalette(palette);
+        addAndMakeVisible(*circleComponent);
+
+        for (int i = 0; i < 8; ++i)
+        {
+            slotLabels[static_cast<size_t>(i)].setText("SLOT " + juce::String(i + 1), juce::dontSendNotification);
+            addAndMakeVisible(slotLabels[static_cast<size_t>(i)]);
+            auto& slot = chordSlots[static_cast<size_t>(i)];
+            slot.addItemList({ "I", "ii", "iii", "IV", "V", "vi", "vii°" }, 1);
+            slot.setSelectedId(i < 4 ? (i == 0 ? 1 : i == 1 ? 5 : i == 2 ? 6 : 4) : 1,
+                               juce::dontSendNotification);
+            slot.onChange = [this] { refreshChordNames(); };
+            addAndMakeVisible(slot);
         }
-        keyLabel.setText("KEY", juce::dontSendNotification);
-        modeLabel.setText("SCALE / QUALITY", juce::dontSendNotification);
-        patternLabel.setText("RHYTHM PATTERN SLOT", juce::dontSendNotification);
+        summary.setText({}, juce::dontSendNotification);
+        summary.setJustificationType(juce::Justification::centredLeft);
+        addAndMakeVisible(summary);
+        refreshChordNames();
     }
+
     void setThemePalette(const PPGUThemeManager::Palette& value) override
     {
         palette = value;
-        title.setFont(makeThemeFont(palette, 20.0f, false, true));
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
-            label->setFont(makeThemeFont(palette, 9.5f, false, true));
-        title.setColour(juce::Label::textColourId, palette.token("text_primary"));
-        stateLabel.setColour(juce::Label::textColourId, palette.token("warning"));
-        for (auto* label : { &keyLabel, &modeLabel, &patternLabel })
-            label->setColour(juce::Label::textColourId, palette.token("text_secondary"));
-        offButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
-        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_primary"));
-        for (auto* box : { &keyBox, &modeBox, &patternBox })
+        title.setFont(makeThemeFont(palette, 19.0f, false, true));
+        stateLabel.setFont(makeThemeFont(palette, 10.0f, false, true));
+        summary.setFont(makeThemeFont(palette, 12.0f, false, false));
+        for (auto* label : { &title, &stateLabel, &summary })
+            label->setColour(juce::Label::textColourId, label == &stateLabel
+                ? palette.token("warning") : palette.token("text_primary"));
+        for (auto& label : slotLabels)
         {
-            box->setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
-            box->setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
-            box->setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
-            box->setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+            label.setFont(makeThemeFont(palette, 9.5f, false, true));
+            label.setColour(juce::Label::textColourId, palette.token("text_secondary"));
         }
+        for (auto* box : { &keyBox, &modeBox })
+            styleBox(*box);
+        for (auto& box : chordSlots) styleBox(box);
+        offButton.setColour(juce::TextButton::buttonColourId, palette.token("panel_elevated"));
+        offButton.setColour(juce::TextButton::textColourOffId, palette.token("text_disabled"));
+        if (circleComponent) circleComponent->setPalette(palette);
         repaint();
     }
 
@@ -978,31 +1220,85 @@ public:
     {
         g.fillAll(palette.token("window_bg"));
         g.setColour(palette.token("control_border"));
-        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
+        g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12.0f), 10.0f, 1.0f);
+        auto left = getLocalBounds().removeFromLeft(getWidth() / 2).reduced(14);
+        g.setColour(palette.token("text_secondary"));
+        g.setFont(makeThemeFont(palette, 10.0f, false, true));
+        g.drawText("HARMONY KEY", left.removeFromTop(20), juce::Justification::centredLeft);
     }
+
     void resized() override
     {
-        auto area = getLocalBounds().reduced(24);
-        title.setBounds(area.removeFromTop(38));
-        stateLabel.setBounds(area.removeFromTop(32));
-        offButton.setBounds(area.removeFromTop(44).removeFromLeft(210).reduced(2));
-        area.removeFromTop(24);
-        keyLabel.setBounds(area.removeFromTop(22));
-        keyBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
-        modeLabel.setBounds(area.removeFromTop(22));
-        modeBox.setBounds(area.removeFromTop(44).removeFromLeft(260));
-        area.removeFromTop(20);
-        patternLabel.setBounds(area.removeFromTop(22));
-        patternBox.setBounds(area.removeFromTop(44).removeFromLeft(360));
+        auto area = getLocalBounds().reduced(22);
+        title.setBounds(area.removeFromTop(32));
+        stateLabel.setBounds(area.removeFromTop(26));
+        offButton.setBounds(area.removeFromTop(34).removeFromLeft(260));
+        area.removeFromTop(8);
+        auto columns = area;
+        auto left = columns.removeFromLeft(columns.getWidth() * 48 / 100);
+        columns.removeFromLeft(18);
+        auto right = columns;
+        auto keyRow = left.removeFromTop(34);
+        keyBox.setBounds(keyRow.removeFromLeft(keyRow.getWidth() / 2).reduced(2));
+        modeBox.setBounds(keyRow.reduced(2));
+        left.removeFromTop(8);
+        circleComponent->setBounds(left);
+        right.removeFromTop(4);
+        for (int i = 0; i < 8; ++i)
+        {
+            auto row = right.removeFromTop(36);
+            slotLabels[static_cast<size_t>(i)].setBounds(row.removeFromLeft(62));
+            chordSlots[static_cast<size_t>(i)].setBounds(row.reduced(2));
+            right.removeFromTop(4);
+        }
+        summary.setBounds(right.removeFromTop(54));
     }
+
 private:
+    void styleBox(juce::ComboBox& box)
+    {
+        box.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
+        box.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
+        box.setColour(juce::ComboBox::outlineColourId, palette.token("control_border"));
+        box.setColour(juce::ComboBox::arrowColourId, palette.token("accent"));
+    }
+    void refreshChordNames()
+    {
+        static const char* noteNames[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        static const int majorOffsets[] = { 0, 2, 4, 5, 7, 9, 11 };
+        static const int minorOffsets[] = { 0, 2, 3, 5, 7, 8, 10 };
+        const int root = juce::jlimit(0, 11, keyBox.getSelectedId() - 1);
+        const bool minor = modeBox.getSelectedId() == 3;
+        const auto* offsets = minor ? minorOffsets : majorOffsets;
+        juce::StringArray names;
+        for (auto& slot : chordSlots)
+        {
+            const int degree = juce::jlimit(0, 6, slot.getSelectedId() - 1);
+            const int note = (root + offsets[degree]) % 12;
+            const bool minorChord = minor ? (degree == 0 || degree == 3 || degree == 4)
+                                          : (degree == 1 || degree == 2 || degree == 5);
+            const bool diminished = minor ? degree == 1 : degree == 6;
+            names.add(juce::String(noteNames[note]) + (diminished ? "dim" : minorChord ? "m" : ""));
+        }
+        juce::String progression;
+        for (int i = 0; i < names.size(); ++i)
+        {
+            if (i > 0) progression += "   –   ";
+            progression += names[i];
+        }
+        summary.setText("PROGRESSION  →  " + progression, juce::dontSendNotification);
+        if (circleComponent) circleComponent->setSelectedRoot(root);
+    }
+
     PPGUThemeManager::Palette palette;
     juce::AudioProcessorValueTreeState& apvts;
-    juce::Label title, stateLabel, keyLabel, modeLabel, patternLabel;
+    juce::Label title, stateLabel, summary;
     juce::TextButton offButton;
-    juce::ComboBox keyBox, modeBox, patternBox;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keyAttachment, modeAttachment, patternAttachment;
+    juce::ComboBox keyBox, modeBox;
+    std::array<juce::Label, 8> slotLabels;
+    std::array<juce::ComboBox, 8> chordSlots;
+    std::unique_ptr<PPGUCircleOfFifths> circleComponent;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keyAttachment, modeAttachment;
 };
 }
 
@@ -1248,9 +1544,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     autoChordsButton.onClick = [this] { openAutoChordsPanel(); };
     addAndMakeVisible(autoChordsButton);
 
-    // Honest REV.18 entry points: no discovery, curator or About backend exists yet.
-    // Keep them visible and theme-aware, but disabled rather than simulating functionality.
-    for (auto* unavailable : { &autoSoundHunterButton, &curatorButton, &aboutButton })
+    // Discovery and Curator remain disabled until their real production backends exist.
+    for (auto* unavailable : { &autoSoundHunterButton, &curatorButton })
     {
         unavailable->setEnabled(false);
         unavailable->setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("lowlight"));
@@ -1259,7 +1554,14 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     autoSoundHunterButton.setTooltip("AUTO SOUND HUNTER is not implemented yet. No search or auto-import action is available.");
     curatorButton.setTooltip("CURATOR is not implemented yet. No asset is marked approved.");
-    aboutButton.setTooltip("ABOUT is intentionally disabled until its approved production content is implemented.");
+
+    // About is a factual, informational panel and does not imply unimplemented features.
+    aboutButton.setEnabled(true);
+    aboutButton.setTooltip("Open product information.");
+    aboutButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("panel_elevated"));
+    aboutButton.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+    aboutButton.onClick = [this] { openAboutPanel(); };
+    addAndMakeVisible(aboutButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -1306,8 +1608,11 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     addAndMakeVisible(*keyboard);
     performanceDisplay = std::make_unique<PPGUPerformanceDisplay>(processor);
     addAndMakeVisible(*performanceDisplay);
-    melodyTab.onClick = [this] { modeBox.setSelectedId(1); };
-    patternTab.onClick = [this] { modeBox.setSelectedId(2); };
+    // Explicitly notify the APVTS ComboBoxAttachment: setSelectedId() defaults to no notification.
+    // Without this, the visible MELODY/PATTERN tabs can change the ComboBox selection silently
+    // while the actual playMode parameter remains unchanged.
+    melodyTab.onClick = [this] { modeBox.setSelectedId(1, juce::sendNotificationSync); };
+    patternTab.onClick = [this] { modeBox.setSelectedId(2, juce::sendNotificationSync); };
     for (size_t i = 0; i < knobs.size(); ++i) {
         configureKnob(knobs[i], knobLabels[i], knobNames[i]);
         knobAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.parameters, parameterIDs[i], knobs[i]);
@@ -1354,6 +1659,7 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
 
 PopPunkGuitarUltimateAudioProcessorEditor::~PopPunkGuitarUltimateAudioProcessorEditor()
 {
+    shuttingDown = true;
     stopTimer();
     timerCallback();
     setLookAndFeel(nullptr);
@@ -1422,6 +1728,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+
+    // Branded top rail: purely graphical chrome behind the existing live buttons.
+    // No new action, parameter, or processor dependency is introduced here.
+    auto header = getLocalBounds().reduced(14).removeFromTop(48).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
+                                           header.getX(), header.getY(),
+                                           p.token("panel"), header.getRight(),
+                                           header.getBottom(), false));
+    g.fillRoundedRectangle(header, 9.0f);
+    g.setColour(p.token("control_border").withAlpha(0.8f));
+    g.drawRoundedRectangle(header.reduced(0.5f), 9.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.9f));
+    g.fillRoundedRectangle(header.getX() + 8.0f, header.getY() + 8.0f,
+                           2.0f, header.getHeight() - 16.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.22f));
+    g.drawHorizontalLine(static_cast<int>(header.getBottom() - 1.0f),
+                         header.getX() + 14.0f, header.getRight() - 14.0f);
+
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1434,16 +1758,44 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    drawPanel(g, area, "PLAYING CORE");
+    drawPanel(g, right, "FX CHAIN");
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
+    // NEON STAGE Playing Core hero artwork is loaded from the active skin manifest.
+    // It is a visual-only surface; all nine live controls remain separate JUCE components.
+    area.removeFromTop(48); // MELODY / PATTERN / sync row plus spacing.
+    auto heroSlot = area.removeFromTop(116).reduced(9, 5);
+    g.setColour(p.token("panel_elevated"));
+    g.fillRoundedRectangle(heroSlot.toFloat(), 8.0f);
+    if (!heroArtwork.isNull())
+    {
+        g.saveState();
+        g.reduceClipRegion(heroSlot);
+        g.drawImageWithin(heroArtwork, heroSlot.getX(), heroSlot.getY(),
+                          heroSlot.getWidth(), heroSlot.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+    else
+    {
+        // Honest visual fallback when a theme has no hero asset.
+        g.setColour(p.token("text_secondary").withAlpha(0.14f));
+        g.drawRoundedRectangle(heroSlot.toFloat().reduced(1.0f), 7.0f, 1.0f);
+        g.setColour(p.token("text_secondary").withAlpha(0.7f));
+        g.setFont(makeThemeFont(p, 10.0f, false, true));
+        g.drawText("ACTIVE SKIN ARTWORK", heroSlot.toNearestInt(),
+                   juce::Justification::centred);
+    }
+    g.setColour(p.token("accent").withAlpha(0.72f));
+    g.drawRoundedRectangle(heroSlot.toFloat().reduced(0.5f), 8.0f, 1.0f);
+
+    // Subtle technical grid, clipped to the central instrument zone.
+    g.saveState();
+    g.reduceClipRegion(area);
+    g.setColour(p.token("text_secondary").withAlpha(0.055f));
     for (int x = area.getX() + 16; x < area.getRight(); x += 32)
         g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    g.restoreState();
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1504,6 +1856,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+    // Dedicated NEON STAGE guitar-artwork strip; the approved nine APVTS knobs stay intact below.
+    centre.removeFromTop(116);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
     const int cols = 3;
@@ -1540,8 +1894,8 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getRuntimeSkinRoot() const
 {
 #if JUCE_WINDOWS
  HMODULE module=nullptr;auto address=reinterpret_cast<LPCWSTR>(reinterpret_cast<std::uintptr_t>(&getPluginModuleAnchor));
- DWORD flags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
- if(GetModuleHandleExW(flags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
+ DWORD moduleFlags=GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT;
+ if(GetModuleHandleExW(moduleFlags,address,&module)!=0&&module){std::array<wchar_t,32768> path{};DWORD n=GetModuleFileNameW(module,path.data(),(DWORD)path.size());
   if(n>0&&n<path.size()){juce::File f(fromWidePath(path.data(), static_cast<int>(n)));for(int i=0;i<8;++i){auto d=f.isDirectory()?f:f.getParentDirectory();if(d.getFileName().endsWithIgnoreCase(".vst3"))return d.getParentDirectory().getChildFile("Skins");f=d.getParentDirectory();}}}
 #endif
  auto exe=juce::File::getSpecialLocation(juce::File::currentExecutableFile);auto beside=exe.getParentDirectory().getChildFile("Skins");if(beside.isDirectory())return beside;
@@ -1567,33 +1921,26 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
     if (total64 < 1 || total64 > std::numeric_limits<int>::max()
         || total64 != static_cast<std::int64_t>(themes->size()))
         return 0;
-    const auto total = static_cast<int>(total64);
 
-    std::set<int> indices;
     std::set<std::string> ids;
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
             return 0;
-
         const auto indexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
         if ((!indexValue.isInt() && !indexValue.isInt64())
             || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
-            || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
-            return 0;
-
-        const auto index64 = indexValue.toString().getLargeIntValue();
-        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
-            || id.substring(5).getLargeIntValue() != index64
-            || !indices.insert(static_cast<int>(index64)).second
+            || !path.startsWith("Skin_") || !path.endsWith("/theme.json")
+            || !id.startsWith("skin-")
+            || id.substring(5).getLargeIntValue() != indexValue.toString().getLargeIntValue()
             || !ids.insert(id.toStdString()).second)
             return 0;
     }
 
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    return static_cast<int>(themes->size());
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
@@ -1611,33 +1958,37 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     if (themes == nullptr)
         return {};
 
-    for (const auto& entry : *themes)
-    {
-        if (!entry.isObject())
-            continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
-            continue;
+    if (index < 1 || index > static_cast<int>(themes->size()))
+        return {};
+    const auto& entry = themes->getReference(index - 1);
+    if (!entry.isObject())
+        return {};
 
-        const auto relativePath = entry.getProperty("path", "").toString();
-        if (relativePath.isEmpty() || relativePath.startsWith("/")
-            || relativePath.contains("..") || !relativePath.startsWith("Skin_")
-            || !relativePath.endsWith("/theme.json"))
-            return {};
+    const auto relativePath = entry.getProperty("path", "").toString();
+    if (relativePath.isEmpty() || relativePath.startsWith("/")
+        || relativePath.contains("..") || !relativePath.startsWith("Skin_")
+        || !relativePath.endsWith("/theme.json"))
+        return {};
 
-        const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
-        return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
-    }
-    return {};
+    const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
+    return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
     const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    int ordinal = 0;
+    const auto registry = juce::JSON::parse(runtimeSkinRoot.getChildFile("theme_manifest.json").loadFileAsString());
+    const auto* entries = registry.getProperty("themes", juce::var()).getArray();
+    if (entries != nullptr)
+        for (int i = 0; i < entries->size(); ++i)
+            if (entries->getReference(i).getProperty("id", "").toString() == id)
+            {
+                ordinal = i + 1;
+                break;
+            }
+    if (ordinal < 1 || ordinal > getSkinCount() || !loadSkinByIndex(ordinal, false))
     {
         themeManager.resetToDefault();
         applyPalette();
@@ -1668,9 +2019,10 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     if (!auxiliaryWorkspace->isPanelOpen(galleryPanelId))
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
-        const auto activeId = themeManager.getPalette().id;
-        const auto count = getSkinCount();
+        const auto originalSkinId = themeManager.getPalette().id;
+        const int count = getSkinCount();
         skins.reserve(static_cast<size_t>(juce::jmax(0, count)));
+        int originalOrdinal = 1;
 
         for (int index = 1; index <= count; ++index)
         {
@@ -1689,7 +2041,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
                 ? familyKey.replace("_", " ").toUpperCase()
                 : "LEGACY / CLUSTER " + legacyCluster;
 
-            juce::File preview;
+            juce::File previewFile;
             const auto assets = root.getProperty("assets", juce::var());
             auto previewRelative = assets.getProperty("preview", juce::var()).toString();
             if (previewRelative.isEmpty())
@@ -1699,7 +2051,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
                 const auto candidatePreview = manifest.getParentDirectory().getChildFile(previewRelative);
                 if (candidatePreview.isAChildOf(manifest.getParentDirectory())
                     && candidatePreview.existsAsFile())
-                    preview = candidatePreview;
+                    previewFile = candidatePreview;
             }
 
             PPGUSkinGalleryPanel::Skin item;
@@ -1709,35 +2061,80 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
             item.family = family;
             item.familyKey = familyKey.isNotEmpty() ? familyKey : "legacy";
             item.layout = root.getProperty("layout", "CLASSIC").toString().replace("_", " ");
-            item.preview = preview;
+            item.preview = previewFile;
             item.accent = candidate.getPalette().token("accent");
-            item.active = candidate.getPalette().id == activeId;
+            item.active = candidate.getPalette().id == originalSkinId;
+            if (item.active)
+                originalOrdinal = index;
             skins.push_back(std::move(item));
         }
 
-        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
         const auto gallerySkinCount = static_cast<int>(skins.size());
-        auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
-            std::move(skins), themeManager.getPalette(),
-            [safe](int index)
+        auto transactionResolved = std::make_shared<bool>(false);
+        auto previewSucceeded = std::make_shared<bool>(true);
+        juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
+
+        auto closeGallery = [safe]
+        {
+            juce::MessageManager::callAsync([safe]
             {
-                if (safe == nullptr)
+                if (safe == nullptr || safe->shuttingDown || safe->auxiliaryWorkspace == nullptr)
                     return;
-                safe->loadSkinByIndex(index, true);
-                if (safe->auxiliaryWorkspace != nullptr)
+                safe->auxiliaryWorkspace->closePanel(5);
+                if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
+                    safe->auxiliaryWorkspace->setVisible(false);
+            });
+        };
+
+        auto gallery = std::make_unique<PPGUSkinGalleryPanel>(
+            std::move(skins), themeManager.getPalette(), originalOrdinal,
+            [safe, originalOrdinal, previewSucceeded](int index)
+            {
+                if (safe == nullptr || safe->shuttingDown)
+                    return false;
+                *previewSucceeded = safe->loadSkinByIndex(index, false);
+                if (!*previewSucceeded)
                 {
-                    safe->auxiliaryWorkspace->closePanel(5);
-                    if (safe->auxiliaryWorkspace->getOpenPanelCount() == 0)
-                        safe->auxiliaryWorkspace->setVisible(false);
+                    // A malformed/missing skin must not leave the editor on the
+                    // ThemeManager fallback palette or preserve a stale Apply state.
+                    safe->loadSkinByIndex(originalOrdinal, false);
                 }
+                return *previewSucceeded;
+            },
+            [safe, originalOrdinal, transactionResolved, previewSucceeded, closeGallery]
+            {
+                if (safe == nullptr || safe->shuttingDown)
+                    return;
+                if (*previewSucceeded)
+                    safe->persistSkinPreference();
+                else
+                    safe->loadSkinByIndex(originalOrdinal, false);
+                *transactionResolved = true;
+                closeGallery();
+            },
+            [safe, originalOrdinal, transactionResolved, closeGallery]
+            {
+                if (safe == nullptr || safe->shuttingDown)
+                    return;
+                safe->loadSkinByIndex(originalOrdinal, false);
+                *transactionResolved = true;
+                closeGallery();
             });
 
         PPGUMultiWindowWorkspace::PanelSpec spec;
         spec.id = galleryPanelId;
         spec.title = "SKIN GALLERY  /  " + juce::String(gallerySkinCount) + " THEMES";
         spec.desired = { 940, 700 };
-        spec.minimum = { 500, 320 };
+        spec.minimum = { 500, 360 };
         spec.content = std::move(gallery);
+        spec.onClose = [safe, originalOrdinal, transactionResolved]
+        {
+            if (*transactionResolved)
+                return;
+            *transactionResolved = true;
+            if (safe != nullptr && !safe->shuttingDown)
+                safe->loadSkinByIndex(originalOrdinal, false);
+        };
         auxiliaryWorkspace->openPanel(std::move(spec));
     }
 
@@ -1753,11 +2150,11 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     constexpr int settingsPanelId = 6;
     if (!auxiliaryWorkspace->isPanelOpen(settingsPanelId))
     {
-        auto* properties = uiProperties.getUserSettings();
-        const auto panelScale = properties != nullptr
-            ? static_cast<float>(properties->getDoubleValue("workspacePanelScale", 1.0)) : 1.0f;
-        const auto panelGap = properties != nullptr
-            ? properties->getIntValue("workspacePanelGap", 12) : 12;
+        auto* settingsProperties = uiProperties.getUserSettings();
+        const auto panelScale = settingsProperties != nullptr
+            ? static_cast<float>(settingsProperties->getDoubleValue("workspacePanelScale", 1.0)) : 1.0f;
+        const auto panelGap = settingsProperties != nullptr
+            ? settingsProperties->getIntValue("workspacePanelGap", 12) : 12;
 
         juce::Component::SafePointer<PopPunkGuitarUltimateAudioProcessorEditor> safe(this);
         auto content = std::make_unique<PPGUSettingsPanel>(
@@ -1787,7 +2184,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             [safe]
             {
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(53, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {
@@ -1808,8 +2205,72 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::openAboutPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+
+    constexpr int aboutPanelId = 2103;
+    if (!auxiliaryWorkspace->isPanelOpen(aboutPanelId))
+    {
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = aboutPanelId;
+        spec.title = "ABOUT  /  POP PUNK GUITAR ULTIMATE";
+        spec.desired = { 620, 340 };
+        spec.minimum = { 420, 240 };
+        spec.content = std::make_unique<PPGUAboutPanel>(themeManager.getPalette());
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
+void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
+{
+    const auto paletteId = themeManager.getPalette().id;
+    const int skinIndex = paletteId.startsWith("skin-")
+        ? paletteId.substring(5).getIntValue() : 0;
+    const auto manifest = getSkinManifest(skinIndex);
+
+    if (!manifest.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+    const auto assets = theme.getProperty("assets", juce::var());
+    const auto relativePath = assets.getProperty("hero", "").toString();
+
+    if (relativePath.isEmpty() || relativePath.startsWith("/")
+        || relativePath.contains(".."))
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
+    if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    if (candidate == heroArtworkFile && !heroArtwork.isNull())
+        return;
+
+    heroArtworkFile = candidate;
+    heroArtwork = juce::ImageFileFormat::loadFrom(heroArtworkFile);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
+ refreshHeroArtwork();
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
@@ -1822,7 +2283,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
  presetSearch.setColour(juce::TextEditor::backgroundColourId,p.token("control_bg"));presetSearch.setColour(juce::TextEditor::textColourId,p.token("text_primary"));presetSearch.setColour(juce::TextEditor::outlineColourId,p.token("control_border"));presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.token("highlight"));presetSearch.setColour(juce::TextEditor::highlightColourId,p.token("accent").withAlpha(.3f));
  loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));settingsButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));settingsButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
- for (auto* unavailable : { &autoSoundHunterButton, &curatorButton, &aboutButton }) { unavailable->setColour(juce::TextButton::buttonColourId,p.token("lowlight")); unavailable->setColour(juce::TextButton::textColourOffId,p.token("text_disabled")); unavailable->setEnabled(false); }
+ for (auto* unavailable : { &autoSoundHunterButton, &curatorButton }) { unavailable->setColour(juce::TextButton::buttonColourId,p.token("lowlight")); unavailable->setColour(juce::TextButton::textColourOffId,p.token("text_disabled")); unavailable->setEnabled(false); }
+ aboutButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));aboutButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));aboutButton.setEnabled(true);
  for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b->setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b->setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b->setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
  for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.token("accent"));s.setColour(juce::Slider::rotarySliderOutlineColourId,p.token("control_border"));s.setColour(juce::Slider::thumbColourId,p.token("text_primary"));s.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));}
  for(auto& l:knobLabels){l.setFont(makeThemeFont(p,9.5f,false,true));l.setColour(juce::Label::textColourId,p.token("text_secondary"));}

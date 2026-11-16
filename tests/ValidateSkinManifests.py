@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-052"
+DEFAULT_ID = "skin-053"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -407,12 +407,12 @@ def main() -> int:
     indices = [entry.get("index") for entry in entries if isinstance(entry, dict)]
     if len(set(ids)) != expected_count:
         fail(errors, "SKIN/theme_manifest.json", "theme ids must be unique")
-    if sorted(indices) != list(range(1, expected_count + 1)):
-        fail(errors, "SKIN/theme_manifest.json", "indices must be unique and cover the registry range")
+    if len(set(indices)) != expected_count or any(not isinstance(i, int) or i < 1 for i in indices):
+        fail(errors, "SKIN/theme_manifest.json", "stable indices must be unique positive integers")
 
     by_index = {entry.get("index"): entry for entry in entries if isinstance(entry, dict)}
-    for index in range(1, expected_count + 1):
-        validate_theme(index, by_index.get(index, {}), errors)
+    for index, entry in by_index.items():
+        validate_theme(index, entry, errors)
 
     registered_folders = {
         Path(entry.get("path", "")).parent.name
@@ -421,13 +421,28 @@ def main() -> int:
     if len(registered_folders) != expected_count:
         fail(errors, "SKIN/theme_manifest.json", "registry paths must resolve to unique skin folders")
     actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
-    if actual_folders != registered_folders:
+    if not registered_folders.issubset(actual_folders):
         missing = sorted(registered_folders - actual_folders)
-        unregistered = sorted(actual_folders - registered_folders)
-        if missing:
-            fail(errors, "SKIN", "registered skin folders missing: " + ", ".join(missing))
-        if unregistered:
-            fail(errors, "SKIN", "unregistered skin folders present: " + ", ".join(unregistered))
+        fail(errors, "SKIN", "active registry skin folders missing: " + ", ".join(missing))
+
+    # The current source tree must contain only the sixteen approved factory-theme
+    # folders. Historical theme archives are intentionally absent from this branch.
+    legacy_archive = SKIN_ROOT / "isolated_legacy"
+    if legacy_archive.exists():
+        fail(errors, "SKIN/isolated_legacy", "retired historical theme archive must not exist in the current source tree")
+
+    approved_sequence = load_json(SKIN_ROOT / "approved_theme_sequence.json", errors)
+    approved_themes = approved_sequence.get("themes", []) if isinstance(approved_sequence, dict) else []
+    approved_folders = {
+        Path(item.get("path", "")).parent.name
+        for item in approved_themes if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
+    if len(approved_themes) != 16 or len(approved_folders) != 16:
+        fail(errors, "SKIN/approved_theme_sequence.json", "exactly 16 unique approved factory themes are required")
+    if actual_folders != approved_folders:
+        unexpected = sorted(actual_folders - approved_folders)
+        missing = sorted(approved_folders - actual_folders)
+        fail(errors, "SKIN", f"theme folders must match the approved 16-theme sequence; unexpected={unexpected}, missing={missing}")
 
     if errors:
         print(f"SKIN CONTRACT: FAIL ({len(errors)} issue(s))")
@@ -436,7 +451,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, exact folder parity, legacy and Skin Studio contracts, control maps, assets and contrast pairs verified.")
+    print(f"{len(approved_themes)} approved factory-theme folders verified; {expected_count} runtime registry entries; no historical archive; Skin Studio contracts, control maps, assets and contrast pairs verified.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 

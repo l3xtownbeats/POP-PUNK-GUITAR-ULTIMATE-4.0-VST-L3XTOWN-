@@ -1047,3 +1047,29 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 **Previous exact-SHA validation:** AUTO SOUND HUNTER rename commit `78f7a66e0e7e5805092dc694920091f69080faa4`, run `43692734450`: Windows VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS, interim package. FL Studio 20 host acceptance remains pending.
 
 **New commit SHA:** pending GitHub commit creation; append exact SHA and CI result after workflow completion.
+
+
+## 2026-11-15 — NEON STAGE auxiliary-window viewport geometry
+
+**Changed source commits:**
+- `5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c` — drag origin is clamped to the workspace viewport; resize limits are recalculated from the remaining viewport width/height.
+- `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9` — per-window user-geometry preservation; a single reopened/manual panel retains its saved size and position during subsequent workspace relayouts.
+
+First-open automatic layout remains unchanged. Existing viewport clipping/scrolling remains the fallback when minimum panel dimensions exceed a small workspace. No panel/control/parameter/FX/audio contracts changed.
+
+**Validation:** exact-HEAD Windows x64 workflow run `43726066887` was in progress when recorded. Build, CTest, pluginval Strictness 5, runtime window checks and FL Studio 20 host acceptance are pending; no pass is claimed.
+
+
+## 2026-11-16 — Exact-SHA Windows VST3 CI result
+
+Run `43726066887` validated source SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9`: Windows x64 Release VST3 build SUCCESS; CTest 12/12 PASS; pluginval Strictness 5 SUCCESS. The workflow's separate VST3-validator sub-check was skipped because its validator path was not configured. This does not establish FL Studio 20 host acceptance or runtime auxiliary-window geometry/skin readability. Interim artifact ID `14166697237` is explicitly CI-NOT-RELEASE and is not a final product release.
+
+
+## 2026-11-16 — 16-theme registry audit
+
+All 16 approved `theme.json` specifications exist and expose the same 21 palette-token keys. Static contrast preflight for the supplied text/accent/LCD color pairings returned at least 4.5:1; this is not rendered UI acceptance. Critical live boundary: `SKIN/theme_manifest.json` still has `totalSkins=1` and only `skin-053`. `getSkinCount()` / `getSkinManifest()` and the Gallery builder use that active registry, so the live Gallery currently contains one theme, not sixteen. SKIN-2..16 PNG preview/hero artwork and G1-G4/runtime promotion remain pending. Do not register or claim all 16 selectable until the asset/package/runtime gates pass. Preview/Apply/Back transaction callbacks are present in source.
+
+
+## 2026-11-16 — Skin Studio artwork pipeline gap
+
+Exact run `43726066887` logged 45 warnings: each SKIN-2…SKIN-16 is missing `preview.png` and `hero.png` and is not in the one-entry runtime registry. `T2_generate_missing_artwork.py` skips indices >=52, so its legacy-artwork CI step does not generate assets for Skin Studio. Active Skin Studio validators require 360x240 preview PNG and 800x450 hero PNG; `SKIN/ASSET_SPECIFICATIONS_RU.md` still documents conflicting 480x300 PNG / 1200x420 WebP sizes. Resolve this contract before producing assets. No generic poster placeholders or premature registry promotion.
