@@ -4131,3 +4131,10 @@ WINDOWS x64 BUILD / C++:
 - CTest result: 13/14 passed. Only failure was unrelated tests/TestSampleLibraryAuditPaths.py fixture: it used literal backslash-n characters instead of actual line breaks, causing the sample opcode parser to capture '*sine\\n'.
 - Fixed the test fixture to use actual newline escapes. Runtime sampler code was not changed.
 - Full workflow rerun is required to confirm 14/14 CTest; Windows package staging/strict audit/upload steps still require the new exact-head workflow run.
+
+
+2026-11-16 — TX-REV19-CTEST-RERUN-QUEUE-011
+
+- Rerun job 133191808665 is queued for workflow run 43833381428 after fixing the SFZ test fixture.
+- This rerun uses the original workflow definition (so it will not execute the newly added 16-only package step) but checks out the current working branch ref and re-runs the C++ build/CTest/strict audit/registry contract.
+- The updated Windows workflow now checks out exact PR head SHA and includes package_active_skins.py + combined VST3/Skins artifact; trigger that updated definition after the current rerun completes.
