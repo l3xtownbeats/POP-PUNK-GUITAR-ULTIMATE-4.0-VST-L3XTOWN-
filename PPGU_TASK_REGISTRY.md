@@ -198,3 +198,13 @@ The factory **Sample Library itself must be at least 10 GB**. 2.97 GB is the siz
 - When expanded assets are present, they may enhance or extend a preset; when absent, the preset must remain fully playable from the Standard library without missing-sample errors or silent notes.
 - Keep stable sample IDs and explicit Standard/Expanded availability metadata. Do not duplicate the whole Standard library inside the Expanded library unless a concrete technical requirement justifies it.
 - Acceptance must include a clean Standard-only install test: install only the Standard library, scan it, load and audition all 500 presets, and confirm there are no unresolved sample references. Expanded-library testing is additional, not a substitute.
+
+
+### Expanded Library purpose — sound variation, enhancement and optional preset-bank growth (2026-11-16)
+The Expanded Library (40 GB+) is an optional enhancement layer, not a second mandatory foundation:
+- It broadens sound selection and variation for existing factory presets, allowing richer alternate samples, takes, articulations, velocity/layer options and performance variations where supported.
+- It can improve perceived realism, depth and sound quality by providing higher-variety or additional recording material; it must not silently change the identity or break the Standard-only version of a preset.
+- It may also support an additional/expanded preset bank beyond the 500 Standard-baseline factory presets. Additional presets must be clearly identified as Expanded-dependent and must never be counted among the 500 Standard-compatible factory presets.
+- Existing 500 factory presets remain fully playable from Standard Library alone. Expanded assets may enrich/extend their available sound options, but absence of Expanded must preserve valid playback.
+- Keep the preset browser's existing MELODY/PATTERN views and approved UI structure; represent expanded availability through existing metadata/filtering mechanisms rather than inventing new controls or panels.
+- Expanded content must pass the same provenance, licensing, stable-ID, mapping, playback and performance validation as Standard content.
