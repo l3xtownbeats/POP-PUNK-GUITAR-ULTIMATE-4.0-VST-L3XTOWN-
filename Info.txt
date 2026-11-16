@@ -3184,7 +3184,7 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 
 Первый технический preflight по теме NEON STAGE / 16 factory skins:
 - Подтверждено наличие канонической ветки REV.19 и доступность исходников в ней.
-- `Source/PluginEditor.cpp`: runtime gallery и загрузчик сейчас используют `SKIN/theme_manifest.json`; `getSkinCount()` проверяет `totalSkins`, требует непрерывные индексы от 1 до total, а `loadSavedSkin()` извлекает числовой суффикс из stable ID как runtime index. Это несовместимо с утверждённой последовательностью из 16 тем, у которой ordinal 1…16 отделён от stable IDs/indices skin-053 и skin-103…skin-117.
+- `Source/PluginEditor.cpp`: runtime gallery и загрузчик используют `SKIN/theme_manifest.json`; логический ordinal записи отделён от неизменяемого stable ID/index. Сохранённый stable ID разрешается в ordinal через активный реестр, а возврат к теме по умолчанию использует ordinal SKIN-1.
 - `openSettingsPanel()` сбрасывает выбор к логическому ordinal SKIN-1; stable ID темы по умолчанию остаётся `skin-053`.
 - `.github/workflows/vst3-build.yml` валидирует старый 50-theme pack и при упаковке копирует темы из theme_manifest. До миграции реестра и workflow нельзя считать, что runtime package ограничен утверждёнными 16 темами.
 - В 16 theme JSON обнаружено 28 ключей controls: 27 пользовательских контролов плюс служебный sync_selector; compatibility flags сохраняют APVTS/layout/audio без изменений. Это структурная проверка JSON, не runtime parity PASS.
