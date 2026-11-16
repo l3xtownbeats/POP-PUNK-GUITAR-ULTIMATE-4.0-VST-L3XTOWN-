@@ -116,3 +116,17 @@
 | ENG-20 | AUTOMATED QUALITY TESTING | APPROVED REQUIREMENT | P1 | CTest/CI/host test strategy |
 
 Все записи отражают утверждение требований, не реализацию. Следующий технический рабочий пакет — MIDI ENGINE после завершения согласованной последовательности и проверки актуального source state.
+
+
+## 2026-11-16 — SIMPLE CORE / DUAL ENGINE implementation queue
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| ARCH-01 | Record user-ratified MELODY/PATTERN separation with one shared SamplerEngine and shared FX/resources | Approved requirement; recorded in INFO + master register | P1 | — |
+| ARCH-02 | Establish exact-SHA CPU/RAM/callback/voice/cache baseline | Not implemented / not measured | P1 | reproducible Windows test profile |
+| ARCH-03 | Extract MELODY orchestration from PluginProcessor into a small mode component without changing behavior | Not implemented | P1 | ARCH-02; MIDI/APVTS audit |
+| ARCH-04 | Extract PATTERN orchestration into a small mode component using the same SamplerEngine | Not implemented | P1 | ARCH-02; PatternScheduler audit |
+| ARCH-05 | Add MELODY/PATTERN isolation, mode-switch, note lifecycle and shared-sampler contract tests | Not implemented | P1 | ARCH-03; ARCH-04 |
+| ARCH-06 | Profile and optimize only measured hotspots; compare exact-SHA results | Not implemented | P2 | ARCH-05; Windows build/CTest |
+
+**Guardrails:** no second sampler, no duplicate sample banks/cache, no UI/layout changes, no APVTS/control-ID changes, no AUTOCHORDS routing into MELODY. Source implementation and all tests remain pending until completed and verified.
