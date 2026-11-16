@@ -184,3 +184,7 @@ Acceptance: unchanged approved UI; one source; exact 250+250; cached/indexed mod
 8. Resume the remaining master journal items in their recorded order; skins resume only after PRESETS and SAMPLES acceptance.
 
 **No completion claim:** these are the approved execution priorities and acceptance gates, not evidence that the library or 500 presets are complete.
+
+
+### Clarification — minimum factory Sample Library size (2026-11-16)
+The factory **Sample Library itself must be at least 10 GB**. 2.97 GB is the size of the previously reported portable QA build artifact, NOT the Sample Library size and NOT an acceptable library target. The 10 GB minimum applies to the actual factory-distributed sample content, excluding the plugin binary, source code, documents, tools, presets metadata and other package overhead. The intended library may exceed 10 GB whenever quality, variety and licensing justify it; no upper cap is imposed. The expanded library remains 40 GB+ as previously approved. Do not mark SAMPLES complete or report its size based on the overall QA artifact size.
