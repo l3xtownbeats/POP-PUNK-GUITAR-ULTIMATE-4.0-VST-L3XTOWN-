@@ -3099,3 +3099,20 @@ Safe next step:
 - Existing SKIN/theme_pack_manifest.json (merged 53–102) and SKIN/theme_manifest.json (runtime registry 1–102) were not modified.
 - Pack manifest generation is metadata-only. G1–G4 has NOT been run; the known absent preview/hero PNG checks mean the pack is not yet eligible for merge.
 - Commit: 79c76c50f10ebd8a396646fcbfe193557165ba1d.
+
+
+2026-11-16 — TX-NEON-STAGE-THEME-PARITY-GATE-001
+STATUS: APPROVED · LOCKED
+Canonical branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+
+Approved mandatory quality gate:
+- NEON STAGE is the single visual reference/master control specimen for validating every factory theme.
+- Every theme must be checked against the same NEON STAGE control-parity checklist before acceptance.
+- All themes must preserve the identical SIGNAL FORGE / CONTROL DECK capabilities, required control inventory, control identity, functional states, and honest availability states.
+- Theme-specific variation is permitted only in approved visual presentation: palette, materials, typography, decorative artwork, and asset references.
+- A theme must not be accepted if any required control is missing, obscured, unreadable, visually misrepresented, assigned a different role, or shown as functional when its runtime feature is unavailable.
+- Validation must include layout/readability at the supported interface size, control visibility and grouping, state clarity, disabled/unavailable-state clarity, asset integrity, and visual consistency with the approved NEON STAGE reference.
+- The 27-control contract remains unchanged; sync_selector remains a service/helper field, not an additional user-facing control.
+- This gate is mandatory for all existing and future factory themes, including themes 103–117. It does not authorize changes to APVTS IDs, audio behavior, layout ownership, or the approved control inventory.
+- Result for each theme must be recorded as PASS / FAIL / BLOCKED with evidence. No theme is marked PASS until its actual assets and runtime rendering have been inspected.
+- This decision adds a quality-assurance requirement only; it does not itself certify any theme or claim that validation has been run.
