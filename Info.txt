@@ -3481,3 +3481,35 @@ Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
 
 Skin_106 остаётся вне активного runtime registry. Не считать тему готовой до PNG/package integrity и G1–G4 acceptance.
 ==============================================================================
+
+
+============================================================================== 
+2026-11-16 — TX-REV19-PRIORITY-PRESETS-SAMPLES-BEFORE-SKINS-001
+==============================================================================
+
+ПОЛЬЗОВАТЕЛЬСКОЕ РЕШЕНИЕ: продолжать генеральный журнал по порядку, но сначала завершить два главных направления — FACTORY PRESETS и SAMPLES. Skin work приостановлена до приёмки обоих направлений.
+
+Утверждённая последовательность:
+1. SAMPLES: точная инвентаризация текущей Sample Library и Import Sample Guitar с сохранением всех существующих файлов.
+2. SAMPLES: повторный аудит WAV/FLAC/AIFF/прочих audio assets, SFZ references, лицензий, provenance, SHA-256, пропусков/дублей/повреждений.
+3. SAMPLES: стабильный registry и простой пользовательский процесс копирования в Import Sample Guitar → SCAN/RESCAN; без перезаписи/удаления старого содержимого.
+4. SAMPLES: реальное воспроизведение, SFZ mappings, streaming/cache, RAM/CPU/startup/dropout и human listening QA.
+5. PRESETS: безопасный no-loss аудит и переход от исторического каталога 300 к единому источнику 500 (ровно 250 MELODY + 250 PATTERN).
+6. PRESETS: schema/validator/index и два существующих браузерных представления без изменения внешнего интерфейса.
+7. PRESETS: связать каждый preset с проверенными sample IDs/mappings, провести playback/audition/save-load/performance QA; READY только по фактическому доказательству на каждую запись.
+8. После приёмки SAMPLES и PRESETS возобновить оставшиеся пункты генерального журнала, включая skins, в зафиксированном порядке.
+
+Сохраняются все ранее утверждённые ограничения:
+- единый физический источник factory presets; существующие браузеры MELODY/PATTERN — только два фильтрованных представления;
+- 500 factory targets = 250+250; старые 300 не удалять до аудита;
+- простая структура Samples/Sample Library и Samples/Import Sample Guitar;
+- factory library ориентир 10–12 GB и более по необходимости; expanded 40 GB+; жёсткого лимита нет;
+- потоковая загрузка и кэш, не загрузка всей библиотеки в RAM;
+- для каждого factory asset — provenance, SHA-256 и проверка прав на commercial embedding/raw redistribution;
+- неизвестная/неподходящая лицензия исключает asset из factory distribution;
+- UI, 27-control contract, APVTS IDs, seven approved FX bypass IDs, MIDI/DSP contracts не менять без отдельного утверждения.
+
+Скины не объявляются отменёнными: их работа приостанавливается до завершения двух приоритетных направлений.
+
+Статус: PRIORITY ORDER APPROVED AND RECORDED; IMPLEMENTATION / SAMPLE AUDIT / PRESET READINESS STILL IN PROGRESS.
+==============================================================================
