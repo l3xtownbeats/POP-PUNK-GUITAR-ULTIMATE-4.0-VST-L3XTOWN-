@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "contract": "PPGU SKIN STUDIO REV 14",
+  "status": "GENERATED_NOT_MERGED",
+  "startIndex": 103,
+  "endIndex": 117,
+  "totalSkins": 15,
+  "themes": [
+    {
+      "id": "skin-103",
+      "index": 103,
+      "name": "SKIN-2 — OBSIDIAN GOLD",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_103/theme.json",
+      "preview": "Skin_103/assets/preview.png",
+      "hero": "Skin_103/assets/hero.png"
+    },
+    {
+      "id": "skin-104",
+      "index": 104,
+      "name": "SKIN-3 — CARBON FORGE",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_104/theme.json",
+      "preview": "Skin_104/assets/preview.png",
+      "hero": "Skin_104/assets/hero.png"
+    },
+    {
+      "id": "skin-105",
+      "index": 105,
+      "name": "SKIN-4 — MIDNIGHT CRIMSON",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_105/theme.json",
+      "preview": "Skin_105/assets/preview.png",
+      "hero": "Skin_105/assets/hero.png"
+    },
+    {
+      "id": "skin-106",
+      "index": 106,
+      "name": "SKIN-5 — ARCTIC PLATINUM",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_106/theme.json",
+      "preview": "Skin_106/assets/preview.png",
+      "hero": "Skin_106/assets/hero.png"
+    },
+    {
+      "id": "skin-107",
+      "index": 107,
+      "name": "SKIN-6 — VIOLET NOIR",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_107/theme.json",
+      "preview": "Skin_107/assets/preview.png",
+      "hero": "Skin_107/assets/hero.png"
+    },
+    {
+      "id": "skin-108",
+      "index": 108,
+      "name": "SKIN-7 — TITANIUM STORM",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_108/theme.json",
+      "preview": "Skin_108/assets/preview.png",
+      "hero": "Skin_108/assets/hero.png"
+    },
+    {
+      "id": "skin-109",
+      "index": 109,
+      "name": "SKIN-8 — EMERALD CIRCUIT",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_109/theme.json",
+      "preview": "Skin_109/assets/preview.png",
+      "hero": "Skin_109/assets/hero.png"
+    },
+    {
+      "id": "skin-110",
+      "index": 110,
+      "name": "SKIN-9 — SOLAR FLARE",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_110/theme.json",
+      "preview": "Skin_110/assets/preview.png",
+      "hero": "Skin_110/assets/hero.png"
+    },
+    {
+      "id": "skin-111",
+      "index": 111,
+      "name": "SKIN-10 — DEEP OCEAN",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_111/theme.json",
+      "preview": "Skin_111/assets/preview.png",
+      "hero": "Skin_111/assets/hero.png"
+    },
+    {
+      "id": "skin-112",
+      "index": 112,
+      "name": "SKIN-11 — ROSE CHROME",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_112/theme.json",
+      "preview": "Skin_112/assets/preview.png",
+      "hero": "Skin_112/assets/hero.png"
+    },
+    {
+      "id": "skin-113",
+      "index": 113,
+      "name": "SKIN-12 — DESERT AMBER",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_113/theme.json",
+      "preview": "Skin_113/assets/preview.png",
+      "hero": "Skin_113/assets/hero.png"
+    },
+    {
+      "id": "skin-114",
+      "index": 114,
+      "name": "SKIN-13 — GLACIER TEAL",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_114/theme.json",
+      "preview": "Skin_114/assets/preview.png",
+      "hero": "Skin_114/assets/hero.png"
+    },
+    {
+      "id": "skin-115",
+      "index": 115,
+      "name": "SKIN-14 — PHANTOM GRAPHITE",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_115/theme.json",
+      "preview": "Skin_115/assets/preview.png",
+      "hero": "Skin_115/assets/hero.png"
+    },
+    {
+      "id": "skin-116",
+      "index": 116,
+      "name": "SKIN-15 — ULTRAVIOLET DRIVE",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_116/theme.json",
+      "preview": "Skin_116/assets/preview.png",
+      "hero": "Skin_116/assets/hero.png"
+    },
+    {
+      "id": "skin-117",
+      "index": 117,
+      "name": "SKIN-16 — VOLCANIC STEEL",
+      "family": "special",
+      "layout": "STUDIO_CONSOLE",
+      "path": "Skin_117/theme.json",
+      "preview": "Skin_117/assets/preview.png",
+      "hero": "Skin_117/assets/hero.png"
+    }
+  ]
+}
