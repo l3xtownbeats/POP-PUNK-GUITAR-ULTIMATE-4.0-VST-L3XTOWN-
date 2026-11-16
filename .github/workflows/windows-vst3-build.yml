@@ -74,10 +74,15 @@ jobs:
       - name: Run 16-skin registry and manifest contract
         run: python tests/ValidateSkinManifests.py
 
+      - name: Stage only the 16 active skins beside the VST3 bundle
+        run: python tools/package_active_skins.py --root SKIN --output build/PPGU_artefacts/Release/VST3/Skins
+
       - name: Upload Windows VST3 build artifact
         uses: actions/upload-artifact@v4
         with:
           name: PPGU-Windows-x64-VST3-REV19-16-SKINS
-          path: build/PPGU_artefacts/Release/VST3/*.vst3
+          path: |
+            build/PPGU_artefacts/Release/VST3/*.vst3
+            build/PPGU_artefacts/Release/VST3/Skins/**
           if-no-files-found: error
           retention-days: 14
