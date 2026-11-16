@@ -5,6 +5,7 @@ on:
     branches:
       - work/approved-16-skins-completion
     paths:
+      - .github/workflows/render-approved-skin-artwork.yml
       - tools/render_approved_skin_artwork.py
       - SKIN/approved_theme_sequence.json
       - SKIN/Skin_103/theme.json
