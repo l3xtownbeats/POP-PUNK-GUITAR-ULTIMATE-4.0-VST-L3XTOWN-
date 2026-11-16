@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render original gallery artwork for approved PPGU factory themes SKIN-2 through SKIN-4."""
+"""Render original gallery artwork for approved PPGU factory themes SKIN-2 through SKIN-5."""
 from __future__ import annotations
 import argparse, json, re, sys
 from pathlib import Path
@@ -15,6 +15,8 @@ THEMES = {
                "title": "CARBON FORGE", "tagline": "FORGED CARBON  •  SATIN TITANIUM"},
     "SKIN-4": {"stable_id": "skin-105", "index": 105, "folder": "Skin_105",
                "title": "MIDNIGHT CRIMSON", "tagline": "MIDNIGHT ENAMEL  •  RUBY METAL"},
+    "SKIN-5": { "stable_id": "skin-106", "index": 106, "folder": "Skin_106",
+               "title": "ARCTIC PLATINUM", "tagline": "FROSTED ARCTIC GLASS  •  SATIN PLATINUM" },
 }
 
 def rgb(value):
@@ -80,6 +82,13 @@ def render(size,p,theme):
             d.line((k,0,k+h,h),fill=(*glow,19),width=max(1,w//850))
         d.arc((int(w*.53),int(h*.12),int(w*.96),int(h*.92)),210,510,fill=(*accent,70),width=max(1,w//240))
         d.arc((int(w*.57),int(h*.16),int(w*.92),int(h*.88)),210,510,fill=(*glow,35),width=max(1,w//360))
+    elif theme=="SKIN-5":
+        for k in range(-h,w,max(22,w//26)):
+            d.line((k,0,k+h,h),fill=(*glow,24),width=max(1,w//950))
+        for n in range(5):
+            x=int(w*(.58+n*.075)); d.line((x,int(h*.23),x-int(w*.12),int(h*.82)),fill=(*border,42),width=max(1,w//500))
+        d.arc((int(w*.60),int(h*.10),int(w*.98),int(h*.88)),195,520,fill=(*accent,82),width=max(1,w//260))
+        d.arc((int(w*.64),int(h*.16),int(w*.94),int(h*.82)),195,520,fill=(*glow,48),width=max(1,w//380))
     else:
         for k in range(-h,w,max(18,w//24)): d.line((k,0,k+h,h),fill=(*glow,10),width=1)
     d.rounded_rectangle((pad,pad,w-pad,h-pad),radius=max(8,int(w*.025)),outline=(*border,220),width=max(1,w//360))
@@ -92,7 +101,7 @@ def render(size,p,theme):
     d.text((left,int(h*.405)),title[1],font=get_font(max(18,int(h*.085)),True),fill=(*accent,255))
     d.text((left,int(h*.57)),f"{theme}  /  FACTORY THEME",font=get_font(max(9,int(h*.032)),True),fill=(*secondary,245))
     d.text((left,int(h*.84)),THEMES[theme]["tagline"],font=get_font(max(8,int(h*.025))),fill=(*glow,235))
-    guitar(d,w,h,accent,glow,carbon=(theme in ("SKIN-3","SKIN-4")))
+    guitar(d,w,h,accent,glow,carbon=(theme in ("SKIN-3","SKIN-4","SKIN-5")))
     for x,y in ((pad+12,pad+12),(w-pad-12,pad+12),(pad+12,h-pad-12),(w-pad-12,h-pad-12)):
         d.ellipse((x-2,y-2,x+2,y+2),fill=(*glow,220))
     return im.convert("RGB")
