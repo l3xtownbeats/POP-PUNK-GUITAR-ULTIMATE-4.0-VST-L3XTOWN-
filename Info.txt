@@ -3278,3 +3278,50 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 - Следующая транзакция должна выполнять первый безопасный кодовый шаг, а не повторять этот аудит.
 
 ==============================================================================
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-SAMPLE-LIBRARY-AND-PRESETS-FOCUS-001
+STATUS: IN_PROGRESS · ACCEPTED FOR EXECUTION
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+
+Пользователь обозначил текущий приоритет разработки: заводские пресеты, пополнение и подготовка постоянной гитарной sample library. Работа принимается к исполнению в следующем порядке: сначала аудит, пополнение и техническая/правовая валидация заводской библиотеки; затем привязка и доведение заводских пресетов до реальной воспроизводимости на этих материалах.
+
+Уже утверждённые ограничения, обязательные для этого этапа:
+- Каталог `Samples/` сохраняется постоянно; запрещено удалять, очищать или заменять его пустой папкой. Допускаются только добавление новых материалов и безопасная реорганизация без потери данных.
+- Пользовательский/portable layout: `PPGU PORTABLE/Samples/Sample Library` и `Import Sample Guitar`. Старое обозначение `SOUNDBANK/` не является целевой структурой продукта и помечается SUPERSEDED.
+- Сканирование выполняется один раз с постоянной регистрацией и стабильными ID; при запуске и смене пресета не выполняется полный повторный scan. Повторная индексация/перепривязка — только по явной команде пользователя.
+- Сохранять аудио, SFZ mappings, license/attribution evidence, source manifests и SHA-256. Неизвестные/сомнительные дубликаты помещать в карантин; не удалять.
+- Загрузка/оценка образца не означает права на распространение. Для factory/portable payload нужны документированные права на commercial use, embedding in plugin и raw sample redistribution; неопределённые права — карантин, не включать в распространяемый набор.
+- Существующий SamplePool/SamplerEngine/SFZ/WAV/streaming/cache — единственная архитектура; второй sampler/search-import pipeline не создавать.
+- Заводские пресеты должны ссылаться на реальные library/profile IDs и mapped zones, а не на абсолютные локальные пути или только на словесные tonal descriptions.
+- Пресет получает READY только после разрешения всех sample references, проверки key/root/velocity/articulation mapping, реального audition/playback, уровня/FX и проверки сохранения/повторной загрузки.
+
+Фактическое состояние по проверенным файлам REV.19:
+- `presets/factory_bank_300.json` существует: 150 MELODY + 150 PATTERN = 300 catalog definitions. Первые записи прямо помечены как ожидающие plugin integration/sample validation; наличие JSON не доказывает playable readiness.
+- `tools/validate_factory_bank.py` проверяет структуру/поля каталога и минимум 150+150, но не проверяет реальные sample files, mapping или звучание.
+- `assets/sound_hunter/registry.json` существует, но содержит пустой массив assets. В текущем registry нет ни одного зарегистрированного approved asset.
+- `tools/validate_sound_asset_registry.py` и `tests/TestSoundAssetRegistry.py` обеспечивают policy/metadata gate и тесты, но сами не ищут, не скачивают и не прослушивают материалы.
+- `Source/Sampler/SamplePool.cpp/.h`, `SfzParser.cpp/.h` и streaming components существуют; это подтверждает наличие базового SFZ/WAV playback path, но не полную готовность библиотеки/пресетов.
+- `.github/workflows/vst3-build.yml` содержит CI download/restore pipeline для Meta Open Sound Steel/Nylon, FreePats Clean/Distortion/Direct/Jazz/Spanish Classical и Karoryfer Black And Green/Emilyguitar/Shinyguitar, сохраняет лицензии/SFZ и строит SHA-256 manifest. Это код workflow, а не доказательство успешного актуального скачивания/аудита/звучания на текущем HEAD.
+- `tools/audit_sample_library.py` выполняет read-only inventory и проверку разрешения SFZ sample references; отчёт также явно не доказывает license compatibility, guitar identity, audio quality или runtime playback.
+- Предыдущий исторический отчёт о 4,353 audio files / 103 SFZ / 11 license files с 18,973 unresolved references не переносится как актуальный PASS: его нужно повторить на текущем точном наборе библиотеки и устранить ошибки адресно.
+
+Порядок исполнения:
+1. Установить точный актуальный состав постоянной Sample Library и проверить сохранность существующего содержимого.
+2. Повторно выполнить инвентаризацию аудиофайлов, SFZ maps/references, лицензий, source provenance и SHA-256; выявить пропуски/дубли/битые файлы.
+3. Проверить по каждому source pack фактический scope лицензии и разрешение commercial embedding/raw redistribution; сомнительные элементы оставить в карантине.
+4. Довести регистрацию стабильных asset/library IDs и корректное импортирование без перезаписи оригиналов.
+5. Проверить SFZ key/root/velocity/round-robin/articulation mappings и runtime playback на реальных материалах; отдельно определить пробелы для Pattern performance/chord/strum recordings.
+6. После валидации библиотеки связать 150 MELODY + 150 PATTERN definitions с реальными sample profiles/zones, устранить пустые/неразрешённые зависимости и провести фактическое прослушивание/проверки.
+7. READY/VERIFIED назначать только по каждому реально проверенному пресету; не выдавать весь каталог за playable до проверки всех записей.
+
+Открытые расхождения, не скрывать:
+- `README.md` указывает target 250 MELODY + 250 PATTERN, тогда как мастер-спецификация, factory JSON и validator указывают 150 + 150 = 300. Количество 500 не считать утверждённым автоматически; требуется разрешить расхождение до изменения целевого каталога.
+- Старые CI references/cache keys и sample path labels содержат REV.18 naming; проверить и привести к portable REV.19 layout без удаления/перезаписи содержимого.
+- Полный актуальный asset audit, лицензирование, playback audition, factory preset-to-sample binding, FL Studio 20 acceptance и exact-SHA CI на текущем HEAD ещё не подтверждены.
+
+Эта запись фиксирует приоритет и принятый объём работ; не является заявлением о готовности библиотеки или пресетов. Следующий шаг — фактическая проверка актуального CI/sample-audit evidence и подготовка первого безопасного исправления/пополнения.
+
+==============================================================================
