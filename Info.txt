@@ -3824,3 +3824,51 @@ F. Запустить сборку и все проверки на точном 
 G. Только после прохождения критериев объявить NEON STAGE / SIGNAL FORGE CONTROL DECK полностью готовыми.
 
 РЕШЕНИЕ: ПОЛНАЯ РАБОЧАЯ РЕАЛИЗАЦИЯ ПРИНЯТА К ИСПОЛНЕНИЮ. ТЕКУЩИЙ СТАТУС — В РАБОТЕ; ЗАВЕРШЕНИЕ НЕ ЗАЯВЛЯТЬ ДО ПРОХОЖДЕНИЯ ВСЕХ КРИТЕРИЕВ.
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-FACTORY-PRESET-SAMPLE-LIBRARY-EXECUTION-START-002 — ПРЯМОЕ ПОРУЧЕНИЕ НА РЕАЛИЗАЦИЮ SAMPLE LIBRARY + FACTORY PRESETS
+
+СТАТУС: USER EXPLICITLY APPROVED · EXECUTION STARTED · IN_PROGRESS
+КАНОНИЧЕСКАЯ ВЕТКА: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+
+ПОЛЬЗОВАТЕЛЬ ПОДТВЕРДИЛ: выполнять всю ранее утверждённую и зафиксированную работу по заводским пресетам, библиотеке звуков, скачиванию исходных пакетов, наполнению библиотеки и интеграции в продукт. Повторное согласование уже утверждённых требований не требуется.
+
+ПОВТОРНАЯ ПРОВЕРКА ТЕКУЩЕГО СОСТОЯНИЯ REV.19:
+- Предыдущая запись TX-REV19-FACTORY-PRESET-SAMPLE-LIBRARY-EXECUTION-START-001 в текущем Info.txt не обнаружена; этот пункт является актуальной фиксацией поручения.
+- presets/factory_bank_300.json существует и содержит историческую базу 300 определений (150 MELODY + 150 PATTERN), не соответствующую утверждённой целевой базе 500 (250 + 250). Не считать эти определения готовыми playable presets.
+- assets/sound_hunter/registry.json существует, но assets=[]; подтверждённых asset records в registry нет.
+- .github/workflows/vst3-build.yml уже содержит workflow_dispatch и шаги получения кандидатов Meta Open Sound, FreePats и Karoryfer в каноническую папку Sample Library/, проверки лицензий/SFZ и аудита. Сам факт наличия workflow не доказывает, что workflow запускался или что библиотека уже загружена.
+- Workflow всё ещё содержит исторические REV.18 / 300 references. Не выполнять массовую замену до аудита downstream-проверок и release packaging.
+- Source/PluginProcessor.cpp содержит SFZ loading path через sampler.loadSfz и асинхронную загрузку. CMakeLists.txt включает factory_bank_300.json в PPGUData, однако в проверенных PluginProcessor.cpp/.h не обнаружен путь чтения PPGUData или разбора melodyPresets/patternPresets. Полная интеграция preset catalog не подтверждена.
+- Существующие WAV/SFZ sampler-компоненты не заменять и не дублировать; продолжать развитие на текущем SamplerEngine/SamplePool.
+
+ПОРЯДОК ИСПОЛНЕНИЯ:
+1. Получить фактический workflow run и его логи/артефакт; подтвердить скачивание, состав Sample Library, лицензии, SFZ references и SHA-256. Если запуск недоступен через подключённые GitHub actions, зафиксировать технический блокер, не заявлять о скачивании.
+2. Сверить фактические sample paths и SFZ maps с текущим sampler API; проверить существующие инструменты аудита и тесты.
+3. Заполнить Sound Hunter registry только реальными файлами с provenance, source revision, license evidence, локальным путём и вычисленным SHA-256; непроверенное держать вне GREEN.
+4. Подготовить mapping/артикуляции только на реально присутствующих и проверенных sample zones.
+5. Затем довести factory catalog до 250 MELODY + 250 PATTERN, каждая запись со stable ID, main mode, одной категорией PLAYING/PATTERN/ARTICULATIONS и проверяемыми ссылками на реальные аудиоресурсы/исполнение.
+6. Проследить реальный путь загрузки каталога в плагине и реализовать интеграцию без блокирующей работы в audio callback.
+7. Выполнить проверки: registry validator, sample audit, SFZ reference resolution, CTest, Windows x64 Release, pluginval и ручное прослушивание/проверку в FL Studio 20.
+
+ОГРАНИЧЕНИЯ:
+- Не подменять скачивание описанием или списком источников.
+- Не создавать фиктивные WAV, SFZ, hashes, license approvals, sample mappings, playback states или READY presets.
+- Не допускать в factory redistribution материалы без подтверждённых прав на commercial use, embedding, redistribution и sample-library redistribution.
+- Сохранять source LICENSE/README/SFZ/manifests и происхождение файлов.
+- Не смешивать factory Sample Library с пользовательским Import Sample Guitar.
+- Не нарушать 27-control contract, APVTS IDs и семь FX bypass IDs.
+- Все сетевые/файловые операции и подготовка данных выполняются вне audio callback.
+
+ТЕКУЩИЙ РЕЗУЛЬТАТ ЭТОЙ ПРОВЕРКИ: аудит файлов и путей выполнен; скачивание новых файлов, runtime playback нового набора и preset loader integration в рамках этой записи НЕ подтверждены.
+
+КРИТЕРИИ ПРИЁМКИ:
+- Фактические файлы Sample Library присутствуют в рабочей ветке/артефакте, перечислены в inventory, имеют SHA-256 и сохранённые license/provenance evidence.
+- Каждый asset имеет подтверждённый статус по лицензии, guitar identity и техническому screening; GREEN допускается только после всех gates.
+- 500 заводских пресетов реально загружаются, ссылаются на существующие sample/performance zones и воспроизводятся в соответствующих MELODY/PATTERN режимах.
+- Проверены MIDI/key/velocity/articulation mapping, preview/playback, эффекты, уровни, сохранение/перезагрузка.
+- Результаты тестов привязаны к конкретному commit SHA; неподтверждённые проверки не называются пройденными.
+
+РЕШЕНИЕ: ПОРУЧЕНИЕ ПРИНЯТО К ИСПОЛНЕНИЮ. РАБОТА ПРОДОЛЖАЕТСЯ ПО ЭТОЙ ПОСЛЕДОВАТЕЛЬНОСТИ.
