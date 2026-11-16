@@ -18,7 +18,7 @@ Status: working research register; candidates are NOT approved for product inclu
 - APPROVED: only after both license and audio review, plus uniqueness/provenance metadata.
 - REJECTED: incompatible rights, poor quality, duplicate content, or unsuitable material.
 
-## Electric guitar candidates
+## Canonical Factory sample tree (mandatory)\n\n```text\nSamples/\n└── Factory/\n    ├── Electric/\n    │   ├── Clean/\n    │   ├── Crunch/\n    │   ├── Overdrive/\n    │   ├── Distortion/\n    │   ├── High_Gain/\n    │   ├── DI/\n    │   ├── Rhythm/\n    │   ├── Lead/\n    │   └── Palm_Mute/\n    ├── Acoustic/\n    │   ├── Steel/\n    │   └── Nylon/\n    ├── Articulations/\n    │   ├── Sustain/\n    │   ├── Staccato/\n    │   ├── Harmonics/\n    │   └── Slides/\n    ├── Mapping/\n    ├── Velocity_Layers/\n    ├── Round_Robin/\n    └── Manifests/\n```\n\n`Electric/Rhythm` and `Electric/Lead` also contain the corresponding musical phrases; no parallel `Phrases/` tree is permitted. Mapping, velocity, round-robin, and manifests remain separate metadata/organization areas as specified.\n\n## Electric guitar candidates
 
 | Candidate | Source / official page | Formats / published details | License indication | Status / notes |
 |---|---|---|---|---|
@@ -27,9 +27,9 @@ Status: working research register; candidates are NOT approved for product inclu
 | FreePats FSBS Electric Guitar Direct | https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html | SFZ+WAV 153 MiB; raw DI/direct guitar | CC0-1.0 stated by source | FOUND; DI requires amp path; not a ready-mix source alone |
 | FreePats FSBS Electric Guitar Distorted #1 | https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html | SFZ+WAV 600 MiB; processed distorted/overdriven guitar | CC0-1.0 stated by source | FOUND; high-priority audio review |
 | FreePats FSBS Electric Guitar Distorted #2 | https://freepats.zenvoid.org/ElectricGuitar/distorted-electric-guitar.html | SFZ+WAV 245 MiB; second processed distortion variant | CC0-1.0 stated by source | FOUND; compare against #1 for genuine unique content |
-| Karoryfer Black and Green Guitars | https://shop.karoryfer.com/pages/free-black-and-green-guitars | About 500 MB, >1,500 samples; two hollowbody electrics; staccato, feedback, hammer-ons, behind-bridge plucks | CC0-1.0 listed by SFZ Instruments / Karoryfer free-samples page | FOUND; likely useful for articulation variety; indie/twangy character, audio review |
-| Karoryfer Shinyguitar | https://shop.karoryfer.com/pages/free-shinyguitar | About 352 MB; archtop electric guitar | CC0-1.0 listed by SFZ Instruments / Karoryfer free-samples page | FOUND; audio review; not assumed Pop Punk-ready |
-| Karoryfer Emilyguitar | https://shop.karoryfer.com/pages/free-emilyguitar | 323 WAV samples, 24-bit/44.1 kHz, about 98 MB; six SFZ mappings | CC0-1.0 per Karoryfer free-samples page | FOUND; general-purpose electric guitar; limited articulation design |
+| Karoryfer Black and Green Guitars | https://shop.karoryfer.com/pages/free-black-and-green-guitars | About 500 MB, >1,500 samples; two hollowbody electrics; staccato, feedback, hammer-ons, behind-bridge plucks | Karoryfer's official free-samples page states free sample libraries are CC0; verify the exact archive's included license on receipt | FOUND; likely useful for articulation variety; indie/twangy character, audio review |
+| Karoryfer Shinyguitar | https://shop.karoryfer.com/pages/free-shinyguitar | About 352 MB; archtop electric guitar | Karoryfer's official free-samples page states free sample libraries are CC0; verify exact archive license | FOUND; audio review; not assumed Pop Punk-ready |
+| Karoryfer Emilyguitar | https://shop.karoryfer.com/pages/free-emilyguitar | 323 WAV samples, 24-bit/44.1 kHz, about 98 MB; six SFZ mappings | Karoryfer's official free-samples page states free sample libraries are CC0; verify exact archive license | FOUND; general-purpose electric guitar; limited articulation design |
 | Blue Jeans And Moonbeams | https://sfzinstruments.github.io/guitars/ | Electric and acoustic guitar; SFZ Instruments catalog lists MIT | MIT listing needs repository/asset-level license and redistribution review | FOUND / LICENSE REVIEW; do not approve from index alone |
 | Standard Guitar (Unreal Instruments) | https://unreal-instruments.wixsite.com/unreal-instruments/standard-guitar | Multi-articulation electric guitar; catalog lists FLAC, 44.1 kHz, about 716 MB | Custom license | FOUND / LICENSE REVIEW; custom terms may not permit redistribution |
 | Metal GTX (Unreal Instruments) | https://sfzinstruments.github.io/guitars/ | Multi-articulation electric guitar; catalog lists about 1.3 GB | Custom license | FOUND / LICENSE REVIEW; custom terms required |
@@ -39,8 +39,8 @@ Status: working research register; candidates are NOT approved for product inclu
 
 | Candidate | Source | Formats / published details | License indication | Status / notes |
 |---|---|---|---|---|
-| Meta Open Sound Steel Guitar | https://github.com/facebookincubator/Meta-open-sound | WAV 24-bit/48 kHz, SFZ maps, note/velocity specification, SHA256SUMS | CC0-1.0 stated by Meta | FOUND; secondary acoustic; user's downloader was launched, completion not yet confirmed |
-| Meta Open Sound Nylon Guitar | https://github.com/facebookincubator/Meta-open-sound | WAV 24-bit/48 kHz, SFZ maps, note/velocity specification, SHA256SUMS | CC0-1.0 stated by Meta | FOUND; secondary acoustic; user's downloader was launched, completion not yet confirmed |
+| Meta Open Sound Steel Guitar | https://github.com/facebookincubator/Meta-open-sound | WAV 24-bit/48 kHz, SFZ maps, note/velocity specification, SHA256SUMS | CC0-1.0 stated by Meta | FOUND; user reports download completed; local archive checksum and extracted inventory still need confirmation |
+| Meta Open Sound Nylon Guitar | https://github.com/facebookincubator/Meta-open-sound | WAV 24-bit/48 kHz, SFZ maps, note/velocity specification, SHA256SUMS | CC0-1.0 stated by Meta | FOUND; user reports download completed; local archive checksum and extracted inventory still need confirmation |
 
 ## Leads not approved
 - Pianobook guitar instruments: use only as a discovery pool. Pianobook permits use in compositions but explicitly forbids selling or redistributing sample libraries that the user does not own; therefore individual packs are NOT eligible for bundling unless the uploader's separate license grants raw-sample redistribution.
@@ -81,6 +81,6 @@ New leads found during electric-guitar-first research. These are discovery resul
 - Multisampled playable instruments belong under `Samples/Factory/Electric/<ToneFamily>/` with their original SFZ/mapping files preserved alongside or in a matching `Mapping/` record.
 - DI sources belong under `Samples/Factory/Electric/DI/`; do not label them as ready-mix presets.
 - Finished processed clean/crunch/overdrive/distortion sources are preferred for immediate factory-preset usability; DI is a supplemental signal path.
-- Riffs/loops belong in a separate phrase pool (for example `Samples/Factory/Phrases/Electric/`), never mixed into note-by-note multisample mappings.
+- Riffs and musical phrases are classified inside the approved tree: rhythmic riffs/parts under `Samples/Factory/Electric/Rhythm/`; solo/lead phrases under `Samples/Factory/Electric/Lead/`. Do not create a separate `Phrases/` directory.
 - A royalty-free composition-use license is not sufficient for raw sample redistribution. Such candidates remain unapproved until the exact pack terms explicitly permit commercial redistribution/embedding in a VST.
 - Mirror repositories and alternate formats are not separate content by default. Compare SHA-256 at file level and count only unique audio.
