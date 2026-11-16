@@ -4,7 +4,7 @@
   "totalSkins": 16,
   "defaultSkin": "skin-053",
   "selector": "SKIN",
-  "status": "approved-16-factory-skins; artwork-and-runtime-acceptance-pending",
+  "status": "approved-16-factory-skins; artwork-assets-verified; SVG-runtime-layer-wiring-implemented-on-branch; Windows-build-and-host-acceptance-pending",
   "skinRange": {
     "first": 1,
     "last": 16
