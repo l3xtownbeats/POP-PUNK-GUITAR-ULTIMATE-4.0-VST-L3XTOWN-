@@ -1023,3 +1023,18 @@ Source commits:
 - a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 — preserve-user-geometry state and workspace layout declaration.
 
 STATUS: SOURCE IMPLEMENTED ONLY. A Windows x64 VST3 workflow was triggered for exact HEAD a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9 and was still in progress at the time of this journal update. No compile, CTest, pluginval or runtime pass is claimed yet. Required verification remains: first-open default placement; resize in both axes; drag at all viewport edges; close/reopen restoration; host editor smaller/larger; maximize/restore; overflow/scrolling; and FL Studio 20 host behavior. Multi-panel auto-tiling and visual readability of all sixteen themes remain separate acceptance checks.
+
+
+2026-11-16 — NEON STAGE: EXACT-SHA WINDOWS BUILD AND AUTOMATED VALIDATION RESULT
+
+Polled the completed GitHub Actions run 43726066887 for source SHA a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9. The workflow conclusion is SUCCESS. The Windows x64 Release VST3 target and test executables compiled successfully; CTest reports 12/12 tests passed (0 failed); pluginval Strictness 5 completed and ended in SUCCESS. The workflow located the VST3 bundle and uploaded an interim CI validation artifact.
+
+Important scope/limitations:
+- The workflow's VST3 validator sub-check was skipped because no validator executable path was configured; pluginval's own Strictness 5 suite passed.
+- This is automated Windows CI validation, not manual FL Studio 20 acceptance and not proof of GUI geometry behavior in a real host.
+- The artifact is explicitly named CI-NOT-RELEASE and must not be represented as the final product/release. Its package notes explicitly exclude certification of 1000 READY presets, full Sound Hunter clearance, final FX EDIT/Skin Gallery/Settings acceptance, CPU/RAM targets and release readiness.
+- The run built source SHA a41b472...; branch HEAD now includes subsequent documentation-only commits through ec61efbd4fb820683c77df97f658752c3c9ad542. No later source change is implied by those documentation commits.
+
+Artifact: POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-PORTABLE-CI-NOT-RELEASE, artifact ID 14166697237, SHA-256 b5e1e07a4d00aaead8e7fd55a7330e568d73eafa1dec2f8c31bf82313ba5629b. Artifact expires 2027-02-13. It is 1.66 GB and is retained as CI evidence, not promoted as a release.
+
+STATUS: WINDOWS X64 BUILD PASS · CTEST 12/12 PASS · PLUGINVAL STRICTNESS 5 PASS · MANUAL HOST/GUI ACCEPTANCE PENDING. Next NEON STAGE work remains the runtime visual/interaction audit of approved panels and all sixteen themes; only after NEON STAGE acceptance may the project proceed to the sound-library phase.
