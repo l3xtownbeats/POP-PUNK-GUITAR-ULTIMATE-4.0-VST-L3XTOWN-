@@ -269,6 +269,9 @@ bool PPGUMultiWindowWorkspace::openPanel(PanelSpec spec)
     tileSurface->addAndMakeVisible(*window);
     windows.push_back(std::move(window));
     layoutPanels();
+    // Seed a valid restore rectangle immediately, including panels that are
+    // maximized before the user ever drags or resizes them.
+    handleGeometryChanged(panelId);
     if (persistenceProperties != nullptr
         && persistenceProperties->getBoolValue(geometryKey(panelId, "maximized"), false))
         windows.back()->restoreMaximized(true);
