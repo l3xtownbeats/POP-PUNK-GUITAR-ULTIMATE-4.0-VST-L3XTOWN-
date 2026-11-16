@@ -87,8 +87,8 @@ void drawThemeArtworkLayers(juce::Graphics& g, juce::Rectangle<int> bounds,
 }
 }
 
-// Scrollable visual browser for the complete registry. Preview images are loaded
-// lazily by visible cards so opening the gallery does not decode all 102 PNGs.
+// Scrollable visual browser for the approved 16-skin factory registry. Preview images are
+// loaded lazily by visible cards so opening the gallery does not decode all 16 PNGs.
 class PPGUSkinGalleryPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
 public:
@@ -120,12 +120,8 @@ public:
         search.onTextChange = [this] { rebuildCards(); };
         addAndMakeVisible(search);
 
-        familyFilter.addItem("ALL FAMILIES", 1);
-        familyFilter.addItem("CARBON STUDIO", 2); familyFilter.addItem("NEON BASEMENT", 3);
-        familyFilter.addItem("CHROME PARADE", 4); familyFilter.addItem("WOOD SUMMER", 5);
-        familyFilter.addItem("VINTAGE TAPE", 6); familyFilter.addItem("SUNSET SUBURB", 7);
-        familyFilter.addItem("SPECIAL", 8); familyFilter.addItem("LEGACY THEMES", 9);
-        familyFilter.addItem("FAVORITES ONLY", 10);
+        familyFilter.addItem("ALL SKINS", 1);
+        familyFilter.addItem("FAVORITES ONLY", 2);
         familyFilter.setSelectedId(1, juce::dontSendNotification);
         familyFilter.setColour(juce::ComboBox::backgroundColourId, palette.token("control_bg"));
         familyFilter.setColour(juce::ComboBox::textColourId, palette.token("text_primary"));
@@ -368,15 +364,10 @@ private:
     {
         grid.clearCards(); visibleIndices.clear();
         const auto query = search.getText().trim().toLowerCase();
-        const int selectedFamily = familyFilter.getSelectedId();
-        const bool favoritesOnly = selectedFamily == 10;
-        const juce::StringArray families { "", "carbon_studio", "neon_basement", "chrome_parade",
-            "wood_summer", "vintage_tape", "sunset_suburb", "special", "legacy" };
-        const auto familyKey = selectedFamily > 1 && selectedFamily <= families.size()
-            ? families[selectedFamily - 1] : juce::String{};
+        const int selectedFilter = familyFilter.getSelectedId();
+        const bool favoritesOnly = selectedFilter == 2;
         for (const auto& item : skins)
         {
-            if (familyKey.isNotEmpty() && item.familyKey != familyKey) continue;
             const bool isFavorite = favorites.contains(item.id);
             if (favoritesOnly && !isFavorite) continue;
             auto cardItem = item; cardItem.favorite = isFavorite;
@@ -840,7 +831,7 @@ public:
             { "CABINET IR", "cabinetOn", { { "MIX", "cabinetMix" }, { "LOW CUT", "cabinetLowCut" }, { "HIGH CUT", "cabinetHighCut" } } }
         };
 
-        title.setText("NEON STAGE  /  FX EDIT", juce::dontSendNotification);
+        title.setText("SIGNAL FORGE  /  FX EDIT", juce::dontSendNotification);
         title.setFont(makeThemeFont(palette, 20.0f, false, true));
         title.setColour(juce::Label::textColourId, palette.token("accent"));
         addAndMakeVisible(title);
@@ -1253,7 +1244,7 @@ private:
 };
 }
 
-// Premium NEON STAGE shell. Visual theme code never touches processor/audio state.
+// Premium SIGNAL FORGE shell. Visual theme code never touches processor/audio state.
 
 namespace { void getPluginModuleAnchor() {} }
 
@@ -1732,7 +1723,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
         g.restoreState();
     }
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
+    // Subtle SIGNAL FORGE center identity; controls remain live JUCE components.
     auto badge = area.removeFromTop(3);
     g.setColour(p.token("accent"));
     g.fillRoundedRectangle(badge.toFloat(), 1.5f);
