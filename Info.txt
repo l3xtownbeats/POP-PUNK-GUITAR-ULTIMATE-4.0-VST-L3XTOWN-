@@ -3941,3 +3941,16 @@ G. Только после прохождения критериев объяв�
 
 ==============================================================================
 
+
+
+2026-11-16 — TX-REV19-NEON-STAGE-SVG-ASSET-RUNTIME-001
+
+СТАТУС: SVG ASSET LOADING AND PAINT INTEGRATION ADDED · BUILD / RUNTIME VERIFICATION PENDING
+
+- NEON STAGE theme effects.texture, effects.bezel и effects.crest теперь загружаются из путей относительно theme.json с проверкой на выход за каталог активного скина.
+- Texture и bezel используются в графической отрисовке основного окна; crest отображается в фирменной верхней панели.
+- Hero artwork остаётся отдельным изображением в PLAYING CORE.
+- Отсутствующие или некорректные ресурсы безопасно пропускаются; fallback hero сохраняется.
+- Все операции чтения SVG/PNG выполняются в UI-потоке при обновлении скина, не в audio callback.
+- Требуется exact-SHA Windows VST3 build, CTest, pluginval, runtime inspection, SVG safety validation и FL Studio 20 acceptance.
+
