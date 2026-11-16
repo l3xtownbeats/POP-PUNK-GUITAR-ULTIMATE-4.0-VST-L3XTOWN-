@@ -1747,31 +1747,39 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
         return 0;
     const auto total = static_cast<int>(total64);
 
-    std::set<int> indices;
+    std::set<int> ordinals;
+    std::set<int> stableIndices;
     std::set<std::string> ids;
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
             return 0;
 
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
         const auto indexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
-        if ((!indexValue.isInt() && !indexValue.isInt64())
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || (!indexValue.isInt() && !indexValue.isInt64())
             || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
 
+        const auto ordinal64 = ordinalValue.toString().getLargeIntValue();
         const auto index64 = indexValue.toString().getLargeIntValue();
-        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
+        if (ordinal64 < 1 || ordinal64 > total
+            || index64 < 52 || index64 > std::numeric_limits<int>::max()
+            || !id.startsWith("skin-")
             || id.substring(5).getLargeIntValue() != index64
-            || !indices.insert(static_cast<int>(index64)).second
+            || !ordinals.insert(static_cast<int>(ordinal64)).second
+            || !stableIndices.insert(static_cast<int>(index64)).second
             || !ids.insert(id.toStdString()).second)
             return 0;
     }
 
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    return static_cast<int>(ordinals.size()) == total
+        && static_cast<int>(stableIndices.size()) == total ? total : 0;
 }
 
 juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
@@ -1793,9 +1801,9 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     {
         if (!entry.isObject())
             continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || ordinalValue.toString().getLargeIntValue() != index)
             continue;
 
         const auto relativePath = entry.getProperty("path", "").toString();
@@ -1810,15 +1818,46 @@ juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index)
     return {};
 }
 
+int PopPunkGuitarUltimateAudioProcessorEditor::getSkinOrdinalForId(const juce::String& id) const
+{
+    if (id.isEmpty())
+        return 0;
+
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    if (!registryFile.existsAsFile())
+        return 0;
+
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return 0;
+
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != id)
+            continue;
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if (!ordinalValue.isInt() && !ordinalValue.isInt64())
+            return 0;
+        const auto ordinal = ordinalValue.toString().getLargeIntValue();
+        return ordinal >= 1 && ordinal <= getSkinCount() ? static_cast<int>(ordinal) : 0;
+    }
+    return 0;
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
     const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    const auto ordinal = getSkinOrdinalForId(id);
+    if (ordinal < 1 || !loadSkinByIndex(ordinal, false))
     {
-        themeManager.resetToDefault();
-        applyPalette();
+        if (!loadSkinByIndex(1, false))
+        {
+            themeManager.resetToDefault();
+            applyPalette();
+        }
     }
 }
 
@@ -1845,7 +1884,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
         const auto activeId = themeManager.getPalette().id;
-        const int activeIndex = activeId.startsWith("skin-") ? activeId.substring(5).getIntValue() : 0;
+        const int activeIndex = getSkinOrdinalForId(activeId);
         const auto count = getSkinCount();
         skins.reserve(static_cast<size_t>(juce::jmax(0, count)));
         for (int index = 1; index <= count; ++index)
@@ -1967,7 +2006,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             [safe]
             {
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(53, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {
