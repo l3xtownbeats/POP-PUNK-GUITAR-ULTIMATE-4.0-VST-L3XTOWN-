@@ -32,7 +32,7 @@ jobs:
           ref: 7.0.12
           path: JUCE
           persist-credentials: false
-      - name: Validate REV.19 active skin registry and isolated legacy archive
+      - name: Validate REV.19 active skin registry and approved 16-theme set
         shell: pwsh
         run: |
           python tests/ValidateSkinManifests.py
