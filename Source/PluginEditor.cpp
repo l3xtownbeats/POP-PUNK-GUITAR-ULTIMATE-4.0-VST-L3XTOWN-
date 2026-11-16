@@ -44,6 +44,47 @@ juce::Font makeThemeFont(const PPGUThemeManager::Palette& palette, float baseSiz
     return juce::Font(family, baseSize * palette.fontScale, style)
         .withExtraKerningFactor(palette.letterSpacing);
 }
+
+void drawThemeArtworkLayers(juce::Graphics& g, juce::Rectangle<int> bounds,
+                            const PPGUThemeManager::Palette& palette,
+                            float textureOpacity = 0.10f,
+                            float bezelOpacity = 0.32f,
+                            float crestOpacity = 0.035f)
+{
+    if (palette.textureArtwork.isValid() && textureOpacity > 0.0f)
+    {
+        g.saveState();
+        g.setOpacity(textureOpacity);
+        g.drawImageWithin(palette.textureArtwork, bounds.getX(), bounds.getY(),
+                         bounds.getWidth(), bounds.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+
+    if (palette.bezelArtwork.isValid() && bezelOpacity > 0.0f)
+    {
+        g.saveState();
+        g.setOpacity(bezelOpacity);
+        g.drawImageWithin(palette.bezelArtwork, bounds.getX(), bounds.getY(),
+                         bounds.getWidth(), bounds.getHeight(),
+                         juce::RectanglePlacement::stretchToFit);
+        g.restoreState();
+    }
+
+    if (palette.crestArtwork.isValid() && crestOpacity > 0.0f
+        && bounds.getWidth() >= 320 && bounds.getHeight() >= 220)
+    {
+        const auto crestWidth = juce::jmin(420, juce::jmax(1, bounds.getWidth() - 32));
+        const auto crestHeight = juce::jmin(148, juce::jmax(1, bounds.getHeight() - 32));
+        const auto crestBounds = bounds.withSizeKeepingCentre(crestWidth, crestHeight);
+        g.saveState();
+        g.setOpacity(crestOpacity);
+        g.drawImageWithin(palette.crestArtwork, crestBounds.getX(), crestBounds.getY(),
+                          crestBounds.getWidth(), crestBounds.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+}
 }
 
 // Scrollable visual browser for the complete registry. Preview images are loaded
@@ -150,6 +191,12 @@ public:
         applyButton.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
         applyButton.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
         grid.setPalette(palette); rebuildCards(); repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.11f, 0.30f, 0.025f);
     }
 
     bool keyPressed(const juce::KeyPress& key) override
@@ -455,6 +502,12 @@ public:
         repaint();
     }
 
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.12f, 0.34f, 0.04f);
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(12);
@@ -536,6 +589,12 @@ public:
         repaint();
     }
 
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.12f, 0.34f, 0.04f);
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(18);
@@ -581,6 +640,7 @@ public:
                                                palette.tokens.panel,
                                                bounds.getX(), bounds.getBottom(), false));
         g.fillRoundedRectangle(bounds, 9.0f);
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.045f, 0.0f, 0.0f);
         g.setColour(palette.tokens.controlBorder.withAlpha(0.9f));
         g.drawRoundedRectangle(bounds.reduced(0.5f), 9.0f, 1.0f);
         g.setColour(palette.tokens.accent);
@@ -860,6 +920,7 @@ public:
     void paint(juce::Graphics& g) override
     {
         g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.32f, 0.035f);
         auto area = getLocalBounds().toFloat().reduced(12.0f);
         g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(area, 10.0f, 1.0f);
@@ -1045,6 +1106,12 @@ public:
         apply.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
     }
 
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.30f, 0.035f);
+    }
+
     void resized() override
     {
         auto area = getLocalBounds().reduced(22);
@@ -1155,6 +1222,7 @@ public:
     void paint(juce::Graphics& g) override
     {
         g.fillAll(palette.token("window_bg"));
+        drawThemeArtworkLayers(g, getLocalBounds(), palette, 0.10f, 0.30f, 0.035f);
         g.setColour(palette.token("control_border"));
         g.drawRoundedRectangle(getLocalBounds().toFloat().reduced(12), 10, 1);
     }
