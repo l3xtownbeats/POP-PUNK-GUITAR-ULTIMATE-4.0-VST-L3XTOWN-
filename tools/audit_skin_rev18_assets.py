@@ -126,6 +126,7 @@ def main() -> int:
         sequence = json.loads((root / "approved_theme_sequence.json").read_text(encoding="utf-8"))
         registry = json.loads((root / "theme_manifest.json").read_text(encoding="utf-8"))
         schema = json.loads((root / "control_schema.json").read_text(encoding="utf-8"))
+        legacy_archive = json.loads((root / "archive" / "theme_manifest.legacy-102.json").read_text(encoding="utf-8"))
     except Exception as exc:
         print(f"FATAL: cannot read sequence/registry/control schema: {exc}")
         return 2
@@ -137,6 +138,13 @@ def main() -> int:
     if registry.get("totalSkins") != len(registry_entries):
         errors.append("registry totalSkins does not match themes array")
     registry_ids = {entry.get("id") for entry in registry_entries}
+    registry_by_id = {entry.get("id"): entry for entry in registry_entries if isinstance(entry, dict)}
+    if registry.get("totalSkins") != 16 or len(registry_entries) != 16:
+        errors.append("active registry must contain exactly the 16 approved factory themes")
+    if registry.get("defaultSkin") != "skin-053":
+        errors.append("active registry defaultSkin must be skin-053 (NEON STAGE)")
+    if legacy_archive.get("totalSkins") != 102 or len(legacy_archive.get("themes", [])) != 102:
+        errors.append("legacy archive must preserve all 102 prior registry entries")
     ordinals = [item.get("ordinal") for item in themes if isinstance(item, dict)]
     if ordinals != list(range(1, 17)):
         errors.append(f"approved sequence ordinals must be exactly 1..16, got {ordinals}")
@@ -247,10 +255,20 @@ def main() -> int:
                 except Exception as exc:
                     errors.append(f"{prefix}: invalid SVG {rel}: {exc}")
 
-        if stable_id not in registry_ids and item.get("ordinal", 0) == 1:
-            errors.append(f"{prefix}: canonical default missing from registry")
-        elif stable_id not in registry_ids:
-            warnings.append(f"{prefix}: not yet promoted into canonical registry (expected before PNG acceptance)")
+        registered = registry_by_id.get(stable_id)
+        if not isinstance(registered, dict):
+            errors.append(f"{prefix}: approved theme is missing from the active factory registry")
+        else:
+            for key, expected in (
+                ("ordinal", item.get("ordinal")),
+                ("index", index),
+                ("name", item.get("name")),
+                ("path", f"Skin_{index:03d}/theme.json"),
+                ("preview", f"Skin_{index:03d}/assets/preview.png"),
+                ("hero", f"Skin_{index:03d}/assets/hero.png"),
+            ):
+                if registered.get(key) != expected:
+                    errors.append(f"{prefix}: active registry {key} mismatch")
 
     if registry.get("defaultSkin") != "skin-053":
         warnings.append(f"registry default remains {registry.get('defaultSkin')!r}; no-loss SKIN-1 migration is still pending")
