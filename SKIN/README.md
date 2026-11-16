@@ -75,21 +75,21 @@ The following 16 names and their order are canonical. The stable IDs remain immu
 | Factory ordinal | Approved name | Stable ID / source folder | Current verified source state |
 |---:|---|---|---|
 | 01 | NEON STAGE | `skin-053` / `Skin_053` | Canonical visual baseline; preview/hero PNG present |
-| 02 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 03 | CARBON FORGE | `skin-104` / `Skin_104` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 04 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 05 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 06 | VIOLET NOIR | `skin-107` / `Skin_107` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 07 | TITANIUM STORM | `skin-108` / `Skin_108` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 08 | EMERALD CIRCUIT | `skin-109` / `Skin_109` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 09 | SOLAR FLARE | `skin-110` / `Skin_110` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 10 | DEEP OCEAN | `skin-111` / `Skin_111` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 11 | ROSE CHROME | `skin-112` / `Skin_112` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 12 | DESERT AMBER | `skin-113` / `Skin_113` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 13 | GLACIER TEAL | `skin-114` / `Skin_114` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 14 | PHANTOM GRAPHITE | `skin-115` / `Skin_115` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 15 | ULTRAVIOLET DRIVE | `skin-116` / `Skin_116` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
-| 16 | VOLCANIC STEEL | `skin-117` / `Skin_117` | Theme spec + 3 SVG foundations; preview/hero PNG missing |
+| 02 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 03 | CARBON FORGE | `skin-104` / `Skin_104` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 04 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 05 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 06 | VIOLET NOIR | `skin-107` / `Skin_107` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 07 | TITANIUM STORM | `skin-108` / `Skin_108` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 08 | EMERALD CIRCUIT | `skin-109` / `Skin_109` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 09 | SOLAR FLARE | `skin-110` / `Skin_110` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 10 | DEEP OCEAN | `skin-111` / `Skin_111` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 11 | ROSE CHROME | `skin-112` / `Skin_112` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 12 | DESERT AMBER | `skin-113` / `Skin_113` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 13 | GLACIER TEAL | `skin-114` / `Skin_114` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 14 | PHANTOM GRAPHITE | `skin-115` / `Skin_115` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 15 | ULTRAVIOLET DRIVE | `skin-116` / `Skin_116` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
+| 16 | VOLCANIC STEEL | `skin-117` / `Skin_117` | Theme spec + 3 SVG foundations + preview/hero PNG; strict asset audit PASS |
 
 ## Per-skin visual contract
 
@@ -103,9 +103,9 @@ The following 16 names and their order are canonical. The stable IDs remain immu
 
 1. **Theme specifications:** all 15 additional theme manifests exist; exact approved names, 21 palette tokens, control-map entries and individual art-direction descriptions have been checked.
 2. **Vector foundations:** all 45 SVG texture/bezel/crest files for SKIN 02–16 are present. SVG safety and final visual review remain part of acceptance.
-3. **Raster artwork:** all 30 required `assets/preview.png` (360×240) and `assets/hero.png` (800×450) files for SKIN 02–16 are currently missing. This is the immediate artwork blocker.
+3. **Raster artwork:** all 30 required `assets/preview.png` (360×240) and `assets/hero.png` (800×450) files for SKIN 02–16 have been generated and committed. The strict asset audit reports 0 errors and 0 warnings; PNG dimensions and CRC are verified.
 4. **Registry migration:** complete on the working branch. The active registry now contains exactly 16 factory themes; the former 102-entry registry and 50-theme pack are preserved in `SKIN/archive/`. Legacy source folders were not deleted.
 5. **Runtime mapping:** implemented on the working branch. The registry carries explicit logical ordinals 01–16 and immutable stable IDs `skin-053` and `skin-103…skin-117`; the editor resolves stable IDs to ordinals instead of parsing the ID suffix as a gallery index.
-6. **Acceptance:** run the read-only 16-theme asset audit, registry and control-map tests, Windows x64 VST3 build, full CTest, pluginval strictness 5, then manual FL Studio 20 preview/apply/cancel/persistence and audio-state invariance checks.
+6. **Acceptance:** the strict 16-theme asset audit and registry/control-map contract test pass. Still required: runtime visual-layer integration, package-content verification, Windows x64 VST3 build, full CTest, pluginval strictness 5, 100/125/150% DPI checks, then manual FL Studio 20 preview/apply/cancel/persistence and audio-state invariance checks.
 
-The 15 themes are **not** declared GRAPHICS COMPLETE, INTEGRATED, VERIFIED or APPROVED until their individual artwork, runtime and host gates pass. Existing legacy assets remain preserved in place and their former registry/pack manifests are archived.
+The 15 themes now have complete generated artwork asset packs and a passing strict asset audit. They are **not** declared runtime-integrated, host-verified or release-approved until the visual-layer, package, performance and host gates pass. Existing legacy assets remain preserved in place and their former registry/pack manifests are archived.
