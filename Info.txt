@@ -4054,3 +4054,20 @@ ASSET PACK ЗАВЕРШЁН И ПРОВЕРЕН:
 - WINDOWS x64 VST3 BUILD, FULL CTEST, PLUGINVAL STRICTNESS 5, DPI 100/125/150%, FL STUDIO 20 HOST ACCEPTANCE, 150 ms/ECO/MEMORY/1000-HOT-SWAP AND AUDIO-STATE INVARIANCE: PENDING.
 
 DRAFT PR #58 remains open and must not be merged as release-ready until all runtime/build/host gates pass. The current verified result is the 16-theme source/asset pack and contract audit, not a final tested VST3 release.
+
+
+2026-11-16 — TX-REV19-SVG-RUNTIME-LAYER-WIRING-005
+
+SVG ARTWORK LAYERS ВСТРОЕНЫ В UI SOURCE:
+- PPGUThemeManager::Palette теперь хранит reference-counted textureArtwork, bezelArtwork и crestArtwork.
+- ThemeManager::loadFromFile загружает три SVG текущей темы только на UI/message thread, проверяет относительные пути, размер файла, SVG root и запрещённые external/script/image references, затем rasterizes в ограниченные размеры: texture 512×512, bezel 800×450, crest 480×168.
+- Main SIGNAL FORGE console рисует texture background, panel texture/bezel overlays, crest watermark и outer bezel.
+- Общий drawThemeArtworkLayers подключён к Skin Gallery, FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PATTERN и PERFORMANCE. Контролы, APVTS attachments, hit targets и functional layout не менялись.
+- Удалены устаревшие family/legacy filters из active Skin Gallery; оставлены ALL SKINS и FAVORITES ONLY. Карточки показывают logical ordinal SKIN 01…16. Заголовок FX EDIT использует SIGNAL FORGE, а не имя default skin.
+- ThemeManagerTests.cpp обновлён: проверяет точное имя NEON STAGE, active registry total 16, и наличие всех трёх decoded SVG layers для каждой active темы.
+- Добавлен Windows workflow .github/workflows/windows-vst3-build.yml: checkout JUCE 7.0.12, Windows x64 CMake build, full CTest, strict asset audit, registry test и VST3 artifact upload. Workflow definition committed, но run для этого нового workflow пока не подтверждён.
+
+ОГРАНИЧЕНИЕ СТАТУСА:
+- SVG loading/drawing = IMPLEMENTED ON WORKING BRANCH.
+- C++ compile / JUCE SVG decode tests / Windows x64 VST3 / full CTest / pluginval / FL Studio 20 = PENDING; не объявлять runtime integration VERIFIED до успешного exact-SHA run.
+- Artwork asset pack remains verified by workflow 43831852908 (SUCCESS, 0 errors, 0 warnings); the later motif refinement for ARCTIC PLATINUM, VIOLET NOIR, GLACIER TEAL and ULTRAVIOLET DRIVE was regenerated and the asset/contract workflow rerun also completed SUCCESS.
