@@ -3999,3 +3999,16 @@ G. Только после прохождения критериев объяв�
 - Сохранять уже завершённые материалы и дорабатывать только реальные пробелы.
 
 РЕЗУЛЬТАТ: ПОЛНЫЙ СПИСОК 16 SKINS И СООТВЕТСТВИЕ SKIN 02–16 ИХ STABLE IDs ЗАФИКСИРОВАНЫ В ЕДИНОМ INFO. ТЕКУЩИЙ СТАТУС — МАНИФЕСТЫ И ПАЛИТРЫ НАЙДЕНЫ; ПОШАГОВЫЙ ARTWORK AUDIT И ИНДИВИДУАЛЬНАЯ ГРАФИЧЕСКАЯ ПРИЁМКА ПРОДОЛЖАЮТСЯ.
+
+
+2026-11-16 — TX-REV19-APPROVED-SKIN-NAME-AND-ASSET-AUDIT-CORRECTION-002
+
+ПРОВЕРКА ПОЛНОЙ ЛИНЕЙКИ SKIN 02–16 НА ВЕТКЕ work/approved-16-skins-completion:
+- Для всех 15 тем Skin_103…Skin_117 подтверждены точные утверждённые названия без добавочных префиксов: OBSIDIAN GOLD, CARBON FORGE, MIDNIGHT CRIMSON, ARCTIC PLATINUM, VIOLET NOIR, TITANIUM STORM, EMERALD CIRCUIT, SOLAR FLARE, DEEP OCEAN, ROSE CHROME, DESERT AMBER, GLACIER TEAL, PHANTOM GRAPHITE, ULTRAVIOLET DRIVE, VOLCANIC STEEL.
+- Во всех 15 theme.json подтверждены 21 palette token, 28 существующих записей control-map, reduceInEco=true, hotSwapFadeMs=150 и неизменные пути preview/hero/texture/bezel/crest.
+- Для каждой из 15 тем найдены все три отдельных SVG-ресурса: svg/texture.svg, svg/bezel.svg, svg/crest.svg. Итого подтверждены 45 SVG-файлов.
+- Повторная проверка точных путей SKIN/Skin_103…Skin_117/assets/preview.png и hero.png показала отсутствие всех 30 PNG-файлов. Они являются текущим главным блокером завершения artwork/галереи.
+- Имя SKIN-1 приведено к точному утверждённому NEON STAGE в Skin_053/theme.json, active registry entry и approved_theme_sequence.json. Runtime ThemeManager default label и asset audit validator синхронизированы с точным именем NEON STAGE.
+- Для SKIN 02–16 добавлены индивидуальные описания art direction в theme.json; это описание материалов, геометрии, фактуры и поведения акцентов, а не заявление о завершённом PNG artwork.
+
+ВАЖНО: это аудит файлов и нормализация спецификаций на рабочей ветке. Все 15 тем пока не готовы к runtime/release: PNG preview/hero отсутствуют, canonical active registry по-прежнему содержит 102 старые записи, stable-ID/ordinal runtime mapping ещё не мигрирован, runtime gallery и exact-SHA Windows VST3/CTest/pluginval/FL Studio 20 acceptance не пройдены. Старые 102 папки/ресурса не удалять; исключение из активной галереи выполнять только после резервного копирования и безопасной миграции registry/loader.
