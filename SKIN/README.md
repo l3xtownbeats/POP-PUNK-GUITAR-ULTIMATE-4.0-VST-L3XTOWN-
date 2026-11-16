@@ -54,7 +54,7 @@ The previous 102 registry entries and 50-theme pack are archived, not deleted. T
 
 ## Release package
 
-Workflow собирает sibling runtime folder `Skins/` рядом с VST3 bundle и включает canonical registry, legacy schema и REV14 control schema. Количество тем берётся из registry, а не из фиксированного числа. Полный ZIP публикуется только после Windows x64 Release, полного CTest, pluginval strictness 5 и успешной упаковки. Это всё ещё не заменяет ручную проверку загрузки/переключения в FL Studio 20.
+Windows workflow собирает sibling runtime folder `VST3/Skins/` рядом с VST3 bundle через `tools/package_active_skins.py`. Скрипт копирует только 16 folders, перечисленных active registry, и только их theme.json + preview/hero/texture/bezel/crest assets; архивные/legacy folders и 102 старые записи в runtime package не попадают. Полный ZIP публикуется только после Windows x64 Release, полного CTest, pluginval strictness 5 и успешной упаковки. Это всё ещё не заменяет ручную проверку загрузки/переключения в FL Studio 20.
 
 ## Artwork и host evidence
 
