@@ -5,7 +5,7 @@
   "name": "ROSE CHROME",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "ROSE CHROME: premium PPGU visual theme. black lacquer / rose-gold chrome. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Black lacquer with polished rose-gold chrome bevels, soft rose reflections and precision metallic arcs. The pink accent is elegant and controlled, used for active indicators rather than large bright panels. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#11090E",
     "panel": "#21131D",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Black lacquer with polished rose-gold chrome bevels, soft rose reflections and precision metallic arcs. The pink accent is elegant and controlled, used for active indicators rather than large bright panels.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 11
 }
