@@ -4040,7 +4040,7 @@ ASSET PACK ЗАВЕРШЁН И ПРОВЕРЕН:
 - GitHub Actions workflow run 43831852908 завершился SUCCESS.
 - Strict audit: 16 approved theme specs; active registry 16 entries; 0 errors, 0 warnings.
 - tests/ValidateSkinManifests.py: SKIN CONTRACT PASS; exact 16 factory themes, stable-ID/logical-ordinal mapping, source manifests, control maps, assets and contrast pairs verified; 102 legacy registry entries preserved in archive.
-- Визуально проверены previews OBSIDIAN GOLD, CARBON FORGE, MIDNIGHT CRIMSON, SOLAR FLARE и VOLCANIC STEEL: индивидуальные материалы/мотивы различаются, общая композиционная основа сохраняется.
+- Визуально проверены все 15 preview PNG SKIN 02–16: индивидуальные материалы/мотивы различаются, общая композиционная основа сохраняется. Дополнительно разведены близкие пары ARCTIC PLATINUM vs GLACIER TEAL (crystal facets vs branching frost fractures) и VIOLET NOIR vs ULTRAVIOLET DRIVE (smoked-glass vortex vs directional plasma speed trails).
 - Все 45 SVG texture/bezel/crest assets и все 30 PNG preview/hero assets присутствуют.
 
 ОБНОВЛЁННЫЙ СТАТУС:
