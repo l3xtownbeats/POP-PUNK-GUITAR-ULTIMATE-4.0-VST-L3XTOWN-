@@ -23,6 +23,9 @@ on:
       - SKIN/Skin_115/theme.json
       - SKIN/Skin_116/theme.json
       - SKIN/Skin_117/theme.json
+  pull_request:
+    branches:
+      - POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
   workflow_dispatch:
 
 permissions:
