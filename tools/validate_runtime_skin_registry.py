@@ -73,6 +73,8 @@ def validate_svg(path: Path) -> None:
             name, text = key.split("}")[-1].lower(), str(value).strip().lower()
             if name.startswith("on"):
                 fail(f"{path}: event handler attribute is forbidden")
+            if name == "xmlns":
+                continue
             if name in {"href", "src"} and text and not text.startswith("#"):
                 fail(f"{path}: external SVG resource reference is forbidden")
             if any(token in text for token in ("http://", "https://", "file://", "data:")):
