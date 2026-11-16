@@ -23,6 +23,30 @@ def digest(p):
 def norm(value):
     return value.replace("\\\\","/").replace("\\","/").strip()
 
+def suffix_key(value):
+    """Normalize a safe relative SFZ reference for unique suffix matching.
+
+    Some SFZ banks ship maps several directories below the sample root while
+    retaining references such as ../Samples/..., although the distributed
+    library stores the audio under Sample Library/Samples/.... The normal
+    path candidates are always checked first and must remain inside root.
+    This fallback only compares a normalized relative suffix and is accepted
+    only when it identifies exactly one indexed audio file.
+    """
+    parts=[]
+    for part in Path(norm(value)).parts:
+        if part in ("", ".", "/"):
+            continue
+        if part == "..":
+            if parts:
+                parts.pop()
+            # Leading parent components are omitted only for suffix matching;
+            # the caller separately enforces at least one safe in-root path.
+            continue
+        parts.append(part)
+    return "/".join(parts).casefold()
+
+
 def inside(root, candidate):
     try:
         candidate.relative_to(root)
@@ -98,8 +122,8 @@ def main():
                 continue
 
             if found is None:
-                suffix=(Path(default_path)/rel).as_posix() if default_path else rel.as_posix()
-                matches=suffix_index.get(suffix.casefold(),[])
+                suffix=suffix_key((Path(default_path)/rel).as_posix() if default_path else rel.as_posix())
+                matches=suffix_index.get(suffix,[])
                 if len(matches)==1:
                     found=matches[0]
                     resolved_via_fallback+=1

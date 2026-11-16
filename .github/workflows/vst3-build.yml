@@ -267,6 +267,10 @@ jobs:
             if ($actualHash -ne $manifestEntries[$relative]) { throw "SHA-256 mismatch for sample: $relative" }
           }
 
+      - name: Test sample inventory SFZ path normalization
+        shell: pwsh
+        run: python -m unittest tests/test_sample_inventory_audit.py
+
       - name: Audit canonical factory sample inventory and SFZ references
         shell: pwsh
         run: python tools/audit_sample_library.py --root 'Sample Library' --output build/sample_library_audit.json
