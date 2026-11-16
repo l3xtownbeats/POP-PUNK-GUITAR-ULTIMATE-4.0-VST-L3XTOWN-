@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_APPROVED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "status": "16_THEME_SEQUENCE_APPROVED; EXACT_NAMES_AND_INDIVIDUAL_ART_DIRECTION_NORMALIZED; ACTIVE_REGISTRY_MIGRATED_TO_16; RASTER_ARTWORK_AND_RUNTIME_QA_PENDING",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
   "rule": "The 16 approved logical SKIN names are canonical. Immutable stable IDs remain skin-053 and skin-103..skin-117. Legacy Skin_01..Skin_102 records/assets must be safely archived outside the active runtime gallery after a no-loss backup; do not delete or renumber source assets.",
@@ -152,7 +152,7 @@
       "status": "SPEC_AND_DISTINCT_SVG_ASSETS_CREATED_PNG_AND_RUNTIME_VALIDATION_PENDING"
     }
   ],
-  "sharedSystem": "All themes retain the shared NEON STAGE component design language; only palette/material tokens vary.",
+  "sharedSystem": "All 16 skins share the canonical SIGNAL FORGE functional structure and NEON STAGE component language; each skin has its own approved name, material identity, palette, texture, bezel, crest and individual art direction.",
   "constraints": [
     "No fake controls or functions.",
     "No Audio Engine, DSP, MIDI or APVTS changes.",
@@ -162,9 +162,10 @@
     "Runtime and release acceptance require packaged assets and VST3 validation."
   ],
   "pending": [
-    "PNG preview.png (360x240) and hero.png (800x450) for SKIN-2…SKIN-16",
-    "G1-G4 validation and PNG CRC checks",
-    "Canonical registry/gallery registration after assets pass",
-    "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance"
+    "Generate exact-size assets/preview.png (360x240) and assets/hero.png (800x450) for SKIN-2…SKIN-16 using the approved per-skin art direction.",
+    "Run strict SVG safety, PNG dimensions/CRC, palette contrast and control-map validation for all 16 skins.",
+    "Verify the 16-entry active registry and stable-ID/logical-ordinal mapping in the runtime gallery.",
+    "Run exact-SHA Windows x64 VST3 build, full CTest, pluginval strictness 5 and FL Studio 20 host acceptance.",
+    "Capture real VST3 host evidence for preview/apply/cancel/persistence and verify audio/parameter state invariance during skin changes."
   ]
 }
