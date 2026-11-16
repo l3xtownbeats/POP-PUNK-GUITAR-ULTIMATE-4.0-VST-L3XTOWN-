@@ -460,3 +460,26 @@ REAL-TIME AUDIO SAFETY; SAMPLE FIDELITY ENGINE; INTELLIGENT MEMORY MANAGEMENT; D
 - Current source audit confirms partial foundations and open requirements. In particular: section-first PATTERN model/state integration; AUTOCHORDS MIDI generation; PUNK GROUP playable path; gallery transaction; complete FX/UI parity; preset dependency/playability validation; import/sample lifecycle recovery; secure skin import; full component acceptance; measured performance and host tests remain open until implemented and evidenced.
 - This amendment updates the working checkpoint only. It does not silently change any approved product requirement, APVTS ID, control contract, skin identity, architecture or release gate.
 - Status: preflight evidence refreshed; implementation open.
+
+
+
+## 2026-11-16 — TX-REV19-CANONICAL-WORKLINE-001 — user-confirmed single source of truth
+
+**Canonical development/build/integration/test line:** `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`  
+**Verified source HEAD at decision time:** `1f58f25378992c0ddbfe5d0d38598a2034adb3e3`.
+
+REV.19 is the one active line for all new source changes, integration, documentation synchronization, Windows builds, tests and final packaging. REV.18 remains the previous approved baseline and historical source of compatible requirements; it is not a parallel active development line. REV.17 and earlier are archive/history only. Temporary documentation branches are not competing sources of truth; accepted decisions must be consolidated into REV.19.
+
+### Binding architecture for REV.19
+- SIMPLE CORE — MAXIMUM PERFORMANCE: keep the design understandable and minimal; no unnecessary engines, abstractions, managers or threads.
+- Separate MELODY and PATTERN musical responsibilities; AUTOCHORDS stays PATTERN-only.
+- Keep one shared low-level SamplerEngine/SamplePool/streaming/cache/voice-playback core and shared FX infrastructure.
+- No duplicated sample data, sampler instances or redundant effect chains.
+- Keep audio callback bounded and realtime-safe; heavy file and library work stays outside it.
+- Preserve approved UI/browser structure, APVTS IDs, stable control IDs, 27-control contract, seven approved FX bypass IDs and all accepted user-facing behavior.
+- Measure CPU, callback time, dropouts, RAM, voices, cache and loading before/after material optimizations.
+
+### Source evidence and open implementation
+At the recorded REV.19 HEAD, `PluginProcessor.h` declares one `SamplerEngine sampler` and one `PatternScheduler`. `PluginProcessor::processBlock` still contains the separate MELODY/PATTERN behavior branches. Dedicated orchestration classes for both modes were not found in the inspected processor header. Thus shared sampler infrastructure is present, while extraction of mode-specific orchestration remains open and must be done behavior-preservingly with tests.
+
+**Status:** REV.19 canonical line USER CONFIRMED; documentation consolidation committed; implementation/performance claims remain gated by source changes and exact-SHA tests.
