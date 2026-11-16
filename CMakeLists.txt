@@ -89,6 +89,9 @@ juce_generate_juce_header(PPGU)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 enable_testing()
 
+add_test(NAME ppgu_runtime_skin_registry_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/validate_runtime_skin_registry.py ${CMAKE_SOURCE_DIR}/SKIN)
+
 function(ppgu_add_test target source)
     add_executable(${target})
     target_sources(${target} PRIVATE ${source})
