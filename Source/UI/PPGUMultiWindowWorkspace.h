@@ -35,6 +35,7 @@ public:
     bool closePanel(int id);
     void closeAllPanels();
     bool isPanelOpen(int id) const noexcept;
+    bool focusPanel(int id);
     int getOpenPanelCount() const noexcept;
 
     void setPanelGap(int pixels);
