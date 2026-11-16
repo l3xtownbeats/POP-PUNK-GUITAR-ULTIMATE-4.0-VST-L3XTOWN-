@@ -4071,3 +4071,13 @@ SVG ARTWORK LAYERS ВСТРОЕНЫ В UI SOURCE:
 - SVG loading/drawing = IMPLEMENTED ON WORKING BRANCH.
 - C++ compile / JUCE SVG decode tests / Windows x64 VST3 / full CTest / pluginval / FL Studio 20 = PENDING; не объявлять runtime integration VERIFIED до успешного exact-SHA run.
 - Artwork asset pack remains verified by workflow 43831852908 (SUCCESS, 0 errors, 0 warnings); the later motif refinement for ARCTIC PLATINUM, VIOLET NOIR, GLACIER TEAL and ULTRAVIOLET DRIVE was regenerated and the asset/contract workflow rerun also completed SUCCESS.
+
+
+2026-11-16 — TX-REV19-WORKSPACE-CHROME-SKIN-LAYERS-006
+
+Дополнительно подключены material artwork layers к floating workspace chrome:
+- PPGUMultiWindowWorkspace::Window хранит shared Palette reference и рисует texture/bezel слои под header/content.
+- PPGUMultiWindowWorkspace background рисует низкоинтенсивную texture.
+- Существующие close/maximize/resize/drag controls и geometry persistence не изменялись.
+- Windows build workflow path filters включают PPGUMultiWindowWorkspace.cpp/.h.
+- C++/Windows build run, начатый до последнего workspace commit, не является проверкой этой последней правки; требуется новый exact-head run.
