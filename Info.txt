@@ -3424,4 +3424,14 @@ Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
 
 Следующий шаг: проверить точный текущий PR HEAD и дождаться CI на том же SHA; изучить полный unresolved report после исправления, не подавляя реальные missing WAV references.
 
-============================================================================== 
+==============================================================================
+
+## REV.19 — CI regression: устаревшие theme contract tests (2026-11-16)
+
+- Проверен Windows workflow run `43817371951` (commit `530358aed9d9dd4e5da450d21c2be595b355056c`): sample audit, SFZ normalization, конфигурация x64 Release и компиляция VST3/test targets прошли.
+- CTest завершился FAIL: 12/13 тестов прошли; `ppgu_theme_contracts` падал на четырёх проверках, которые требовали удалённые `SKIN/Skin_51` и `SKIN/Skin_052` и загрузку legacy manifest.
+- Это конфликт тестов с утверждённой REV.19 базой: в активном runtime registry оставлен только принятый `Skin_053`; старые каталоги не должны восстанавливаться ради устаревших тестов.
+- Обновлён `tests/ThemeManagerTests.cpp`: проверки переведены на текущий active registry и канонический `Skin_053`; сохранены проверки fallback, обязательных control IDs, отклонения лишних control IDs, invalid HEX, compatibility и malformed JSON.
+- Commit: `e5dcd3a28672515951cbcca9f873fcd23a86c8c0`.
+- Статус: ИЗМЕНЕНИЕ ВНЕСЕНО; повторный Windows CI на точном новом HEAD ещё не завершён. Не считать CTest/VST3/pluginval прошедшими до нового результата.
+
