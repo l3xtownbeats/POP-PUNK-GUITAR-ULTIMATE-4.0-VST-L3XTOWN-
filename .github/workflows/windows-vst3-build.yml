@@ -7,6 +7,10 @@ on:
     paths:
       - .github/workflows/windows-vst3-build.yml
       - CMakeLists.txt
+      - Source/**
+      - tests/**
+      - tools/**
+      - SKIN/**
       - Source/PluginEditor.cpp
       - Source/PluginEditor.h
       - Source/UI/ThemeManager.cpp
