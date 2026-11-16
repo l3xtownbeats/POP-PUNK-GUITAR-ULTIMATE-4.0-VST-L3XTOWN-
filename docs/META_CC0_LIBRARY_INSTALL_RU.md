@@ -7,7 +7,7 @@
 - **Meta Steel Guitar** — 375 WAV-сэмплов, E2–C6, 3 velocity layers.
 - **Meta Nylon Guitar** — 348 WAV-сэмплов, E2–B5, 3 динамических слоя.
 
-Обе инструментальные коллекции опубликованы под CC0 1.0 Universal. Скрипт сохраняет оригинальные SFZ-карты, LICENSE, manifest и SHA256SUMS, проверяет количество WAV, контрольные суммы и разрешимость OGG-ссылок в same-name WAV файлы.
+Обе инструментальные коллекции опубликованы под CC0 1.0 Universal. Скрипт выбирает строго закреплённые официальные WAV ZIP по точному имени, размеру и GitHub SHA-256 digest; перед распаковкой самостоятельно пересчитывает SHA-256 и размер архива. Затем сохраняет оригинальные SFZ-карты, LICENSE, manifest и SHA256SUMS, проверяет количество WAV, контрольные суммы файлов и разрешимость OGG-ссылок в same-name WAV файлы. Пины и исходные параметры также записаны в `assets/library/source_acquisition_manifest.json`.
 
 Официальные источники:
 - https://github.com/facebookincubator/Meta-open-sound
