@@ -5,7 +5,7 @@
   "name": "GLACIER TEAL",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "GLACIER TEAL: premium PPGU visual theme. frosted graphite / arctic teal. Preserves canonical NEON STAGE component language and existing control map.",
+  "description": "Frosted graphite with arctic-teal glass edges, ice-fracture geometry, crystalline micro-lines and cool aqua LEDs. The finish is crisp and translucent, with teal glow restricted to seams and active states. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#071112",
     "panel": "#102124",
@@ -349,7 +349,9 @@
     "Shared NEON STAGE design language and inherited control map retained; visual-only tokens/materials.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
     "PNG preview 360x240 and hero 800x450, G1–G4, registry/runtime integration and host validation pending.",
-    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending."
+    "Distinct texture.svg, bezel.svg and crest.svg assets are present. PNG preview/hero, G1-G4, runtime registration and host validation remain pending.",
+    "Individual approved art direction: Frosted graphite with arctic-teal glass edges, ice-fracture geometry, crystalline micro-lines and cool aqua LEDs. The finish is crisp and translucent, with teal glow restricted to seams and active states.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 13
 }
