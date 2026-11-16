@@ -76,6 +76,7 @@ def main():
     missing=[]
     resolved_via_fallback=0
     references=0
+    non_file_sample_opcodes=Counter()
     for sfz in maps:
         source=sfz.read_text(encoding="utf-8",errors="replace")
         assignments=[]
@@ -92,6 +93,11 @@ def main():
                 continue
             references+=1
             normalized=norm(raw)
+            # SFZ permits generator opcodes such as sample=*sine. These are
+            # not filesystem assets and must not be reported as missing WAVs.
+            if normalized.startswith("*"):
+                non_file_sample_opcodes[normalized] += 1
+                continue
             rel=Path(normalized)
             sfz_rel=sfz.relative_to(root).as_posix()
             # SFZ libraries commonly keep maps in nested folders and use safe
@@ -138,6 +144,7 @@ def main():
         "sfzSampleReferenceCount":references,
         "licenseFileCount":len(licenses),
         "resolvedByUniqueSuffixFallback":resolved_via_fallback,
+        "nonFileSampleOpcodes":dict(non_file_sample_opcodes),
         "banks":[{"directory":d.relative_to(root).as_posix(),"audioFilesRecursive":sum(1 for p in audio if d in p.parents or p.parent==d)} for d in dirs],
         "audio":[{"path":relative_by_path[p],"bytes":p.stat().st_size,"sha256":digest(p)} for p in audio],
         "sfzMappings":[p.relative_to(root).as_posix() for p in maps],
