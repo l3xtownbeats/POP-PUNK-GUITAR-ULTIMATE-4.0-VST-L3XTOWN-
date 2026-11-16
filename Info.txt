@@ -3072,3 +3072,22 @@ Parent file blob SHA: b581539182a917626e90e5c731324d688bb60786
 
 Статус: UI PARITY PREFLIGHT RECORDED / THEME REGISTRATION AND PNG GATES PENDING.
 ==============================================================================
+
+
+2026-11-16 — TX-UI-PARITY-PREFLIGHT-002
+Canonical branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+Repository: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
+
+Additional runtime/registry audit:
+- SKIN/theme_manifest.json declares totalSkins=102 and contains exactly 102 entries; its final entry is skin-102. No entries 103–117 are registered.
+- SKIN/Skin_103 through Skin_117 are present as theme JSON files, but the runtime gallery cannot discover them through the current registry until additive registry integration is performed.
+- Source/UI/ThemeManager.cpp contains validateSkinStudioManifest() and routes Skin Studio IDs (skin-052 and above) through it. It validates the 21-token palette, exactly 27 canonical control IDs plus sync_selector, the three asset path strings, visual-only compatibility flags, ECO flag, and 150 ms hot-swap value. Thus the new theme JSON shape is recognized by the runtime validator; the blocker is registry discovery and incomplete image assets, not a missing 27-control schema parser.
+- Source/UI/ThemeManager.cpp legacy assetSpec validation is a separate path for the legacy theme format (preview 480x300 PNG / hero 1200x420 WEBP). Do not apply those legacy dimensions to Skin Studio REV14 themes.
+- tools/validate_skin_pack.py is a pack-level validator for a declared pack. It requires 21 unique palette tokens, G1 contrast checks, exact 27 control IDs, 12x16 coordinates, 360x240 preview PNG, 800x450 hero PNG, and safe SVGs at texture.svg / bezel.svg / crest.svg. Current theme_pack_manifest.json describes the already-merged 53–102 pack, not the new 103–117 pack; it must not be repurposed or silently rewritten to register the new themes.
+- PPGU_UI_THEME_SPEC_FULL.txt is labeled REV18 and contains historical statements/requirements; current canonical REV19 branch and current schema/validator/source code remain authoritative where they differ. Review contradictions before treating that text as a current implementation contract.
+- No registry, theme, C++, or asset files were changed in this audit. No build, CTest, pluginval, or DAW-host test was run.
+
+Safe next step:
+1. Build a separate generated-not-merged pack manifest for indices 103–117 (status GENERATED_NOT_MERGED; range/count 103–117 / 15), without touching the merged 53–102 pack manifest.
+2. Audit all 15 folders for required PNG/SVG assets and run the existing G1–G4 validator against the generated pack. PNG artwork must be created/exported at the validator's runtime dimensions and meet the visual master-asset requirements separately.
+3. Only after the pack passes, perform an additive registry merge that preserves every existing ID 1–102 and sets the total to 117; then verify runtime gallery order/default selection and theme load behavior.
