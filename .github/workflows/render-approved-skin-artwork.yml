@@ -7,6 +7,9 @@ on:
     paths:
       - .github/workflows/render-approved-skin-artwork.yml
       - tools/render_approved_skin_artwork.py
+      - tools/package_active_skins.py
+      - tools/audit_skin_rev18_assets.py
+      - tests/ValidateSkinManifests.py
       - SKIN/approved_theme_sequence.json
       - SKIN/Skin_103/theme.json
       - SKIN/Skin_104/theme.json
@@ -57,6 +60,9 @@ jobs:
 
       - name: Validate active factory registry and legacy archive
         run: python tests/ValidateSkinManifests.py
+
+      - name: Verify 16-only runtime package staging
+        run: python tools/package_active_skins.py --root SKIN --output /tmp/ppgu-runtime-skins
 
       - name: Commit generated PNG assets
         shell: bash
