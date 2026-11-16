@@ -4030,3 +4030,27 @@ G. Только после прохождения критериев объяв�
 - 30 PNG preview/hero assets SKIN 02–16 пока отсутствуют. Добавлен детерминированный renderer tools/render_approved_skin_artwork.py и GitHub Actions workflow для генерации/строгой проверки этих файлов.
 - Draft PR #58 создан для изолированной проверки; он не является релизом и не должен сливаться до прохождения всех asset/runtime/build/host gates.
 - Не заявлять о прохождении C++ build, CTest, pluginval или FL Studio 20 host acceptance: эти проверки ещё не подтверждены.
+
+
+2026-11-16 — TX-REV19-16-SKIN-ASSET-PACK-CI-PASS-004
+
+ASSET PACK ЗАВЕРШЁН И ПРОВЕРЕН:
+- Для SKIN 02–16 сгенерированы и добавлены в рабочую ветку все 30 PNG: 15 preview.png 360×240 и 15 hero.png 800×450.
+- Генерация выполнена детерминированным per-skin renderer с индивидуальными материалами/мотивами; существующие файлы по умолчанию не перезаписываются.
+- GitHub Actions workflow run 43831852908 завершился SUCCESS.
+- Strict audit: 16 approved theme specs; active registry 16 entries; 0 errors, 0 warnings.
+- tests/ValidateSkinManifests.py: SKIN CONTRACT PASS; exact 16 factory themes, stable-ID/logical-ordinal mapping, source manifests, control maps, assets and contrast pairs verified; 102 legacy registry entries preserved in archive.
+- Визуально проверены previews OBSIDIAN GOLD, CARBON FORGE, MIDNIGHT CRIMSON, SOLAR FLARE и VOLCANIC STEEL: индивидуальные материалы/мотивы различаются, общая композиционная основа сохраняется.
+- Все 45 SVG texture/bezel/crest assets и все 30 PNG preview/hero assets присутствуют.
+
+ОБНОВЛЁННЫЙ СТАТУС:
+- THEME SPECS: VERIFIED.
+- INDIVIDUAL ART DIRECTION: RECORDED.
+- SVG FOUNDATIONS: VERIFIED.
+- PREVIEW/HERO PNG ASSET PACK: GENERATED + STRICT AUDIT PASS.
+- ACTIVE 16-ENTRY REGISTRY: IMPLEMENTED; old 102-entry registry and legacy 50-theme pack safely archived; old folders/assets preserved.
+- STABLE-ID ↔ LOGICAL-ORDINAL LOADER MAPPING: IMPLEMENTED ON WORKING BRANCH.
+- FULL SVG MATERIAL LAYER INTEGRATION ACROSS REAL JUCE UI: NOT YET VERIFIED/COMPLETE.
+- WINDOWS x64 VST3 BUILD, FULL CTEST, PLUGINVAL STRICTNESS 5, DPI 100/125/150%, FL STUDIO 20 HOST ACCEPTANCE, 150 ms/ECO/MEMORY/1000-HOT-SWAP AND AUDIO-STATE INVARIANCE: PENDING.
+
+DRAFT PR #58 remains open and must not be merged as release-ready until all runtime/build/host gates pass. The current verified result is the 16-theme source/asset pack and contract audit, not a final tested VST3 release.
