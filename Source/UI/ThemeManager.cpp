@@ -134,6 +134,77 @@ namespace
         return true;
     }
 
+    bool loadSafeSvgArtwork(const juce::File& themeRoot,
+                            const juce::String& relativePath,
+                            int width, int height,
+                            juce::Image& destination,
+                            juce::String& error)
+    {
+        if (relativePath.isEmpty() || relativePath.startsWith("/")
+            || relativePath.contains("..") || relativePath.contains(":")
+            || relativePath.contains("\\"))
+        {
+            error = "Theme SVG path is not a safe relative path";
+            return false;
+        }
+
+        const auto file = themeRoot.getChildFile(relativePath);
+        if (!file.existsAsFile() || !file.isAChildOf(themeRoot)
+            || file.getSize() <= 0 || file.getSize() > 256 * 1024)
+        {
+            error = "Theme SVG is missing, outside its theme folder, or exceeds the size limit";
+            return false;
+        }
+        if (file.isSymbolicLink() && !file.getLinkedTarget().isAChildOf(themeRoot))
+        {
+            error = "Theme SVG symbolic link escapes the theme folder";
+            return false;
+        }
+
+        const auto svgText = file.loadFileAsString();
+        if (svgText.isEmpty()
+            || svgText.containsIgnoreCase("<script")
+            || svgText.containsIgnoreCase("<foreignObject")
+            || svgText.containsIgnoreCase("<image")
+            || svgText.containsIgnoreCase("javascript:")
+            || svgText.containsIgnoreCase("http://")
+            || svgText.containsIgnoreCase("https://")
+            || svgText.containsIgnoreCase("xlink:href")
+            || svgText.containsIgnoreCase("<!DOCTYPE")
+            || svgText.containsIgnoreCase("<!ENTITY"))
+        {
+            error = "Theme SVG contains unsupported or external content";
+            return false;
+        }
+
+        auto xml = juce::XmlDocument::parse(svgText);
+        if (xml == nullptr || xml->getTagName() != "svg")
+        {
+            error = "Theme SVG could not be parsed as a safe SVG document";
+            return false;
+        }
+
+        auto drawable = juce::Drawable::createFromSVG(*xml);
+        if (drawable == nullptr)
+        {
+            error = "Theme SVG could not be rendered";
+            return false;
+        }
+
+        juce::Image rendered(juce::Image::ARGB, width, height, true);
+        juce::Graphics graphics(rendered);
+        drawable->drawWithin(graphics, rendered.getBounds().toFloat(),
+                             juce::RectanglePlacement::stretchToFit, 1.0f);
+        if (!rendered.isValid())
+        {
+            error = "Theme SVG produced an invalid artwork image";
+            return false;
+        }
+
+        destination = std::move(rendered);
+        return true;
+    }
+
     bool validateSkinStudioManifest(const juce::var& root,
                                     PPGUThemeManager::Palette& palette,
                                     juce::String& error)
@@ -642,7 +713,35 @@ bool PPGUThemeManager::loadFromFile(const juce::File& manifestFile)
         return false;
     }
 
-    return loadFromJson(manifestFile.loadFileAsString());
+    const auto jsonText = manifestFile.loadFileAsString();
+    if (!loadFromJson(jsonText))
+        return false;
+
+    const auto root = juce::JSON::parse(jsonText);
+    const auto id = root.getProperty("id", "").toString();
+    if (id.length() < 8)
+        return true; // Legacy themes do not define the three Skin Studio artwork layers.
+
+    const auto assets = root.getProperty("assets", juce::var());
+    const auto themeRoot = manifestFile.getParentDirectory();
+    auto candidate = activePalette;
+    juce::String error;
+
+    if (!loadSafeSvgArtwork(themeRoot, assets.getProperty("texture", "").toString(),
+                            512, 512, candidate.textureArtwork, error)
+        || !loadSafeSvgArtwork(themeRoot, assets.getProperty("bezel", "").toString(),
+                               800, 450, candidate.bezelArtwork, error)
+        || !loadSafeSvgArtwork(themeRoot, assets.getProperty("crest", "").toString(),
+                               480, 168, candidate.crestArtwork, error))
+    {
+        lastError = error.isNotEmpty() ? error : "Theme artwork loading failed";
+        resetToDefault();
+        return false;
+    }
+
+    activePalette = std::move(candidate);
+    lastError.clear();
+    return true;
 }
 
 void PPGUThemeManager::resetToDefault() noexcept
