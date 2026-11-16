@@ -176,7 +176,7 @@ def main() -> int:
 
         if theme.get("id") != stable_id or theme.get("index") != index:
             errors.append(f"{prefix}: manifest identity/index mismatch")
-        expected_name = item.get("name", "") if item.get("ordinal") == 1 else f"{label} — {item.get('name', '')}"
+        expected_name = item.get("name", "")
         if theme.get("name") != expected_name:
             errors.append(f"{prefix}: approved name mismatch (manifest={theme.get('name')!r}, sequence={expected_name!r})")
 
