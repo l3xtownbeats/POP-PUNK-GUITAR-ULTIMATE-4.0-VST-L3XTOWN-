@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "storageUnits": {
     "label": "GB",
@@ -9,26 +9,38 @@
   "factoryPresets": {
     "requiredPlayableCount": 500,
     "requiresBasicLibrary": true,
-    "requiresExpandedLibrary": false
+    "requiresExpandedLibrary": false,
+    "basicMustMeetQualityRequirements": true
   },
   "libraries": {
     "basic": {
       "id": "PPGU-BASIC",
       "displayName": "BASIC LIBRARY",
-      "targetBytes": 15000000000,
-      "targetGB": 15,
+      "minimumTargetBytes": 15000000000,
+      "minimumTargetGB": 15,
+      "targetIsHardMaximum": false,
+      "expandWhenRequiredForPresetQuality": true,
+      "expandWhenRequiredForCompleteGuitarArticulations": true,
+      "actualSizeDeterminedBy": [
+        "QUALITY_AND_REALISM_OF_GUITAR_AUDIO",
+        "COMPLETE_PLAYABLE_MAPPING_FOR_ALL_500_FACTORY_PRESETS",
+        "REQUIRED_ARTICULATIONS_VELOCITY_LAYERS_AND_ROUND_ROBIN_VARIATIONS",
+        "LICENSE_CLEARED_UNIQUE_AUDIO_CONTENT"
+      ],
       "distribution": "INCLUDED_IN_STANDARD_PRODUCT_PACKAGE",
       "mandatory": true,
       "independentlyPlayable": true,
-      "supportsFactoryPresetCount": 500
+      "supportsFactoryPresetCount": 500,
+      "mayExceedMinimumTarget": true,
+      "qualityMustNotBeReducedToMeetSizeTarget": true
     },
     "expanded": {
       "id": "PPGU-EXPANDED",
       "displayName": "EXPANDED LIBRARY",
-      "addonBytes": 15000000000,
-      "addonGB": 15,
-      "initialCombinedBytes": 30000000000,
-      "initialCombinedGB": 30,
+      "initialAddonTargetBytes": 15000000000,
+      "initialAddonTargetGB": 15,
+      "initialCombinedTargetBytes": 30000000000,
+      "initialCombinedTargetGB": 30,
       "distribution": "OPTIONAL_ADDITIVE_ADDON",
       "requiresBasic": true,
       "replacesBasic": false,
@@ -39,7 +51,8 @@
         "SOUND_QUALITY_AND_REALISM_ENHANCEMENT",
         "ADDITIONAL_ARTICULATIONS_AND_PERFORMANCES",
         "ADDITIONAL_FACTORY_PRESETS"
-      ]
+      ],
+      "note": "The 15 GB add-on and 30 GB combined total are initial targets. If BASIC exceeds 15 GB to meet approved quality requirements, EXPANDED remains additive and must not reduce or replace BASIC."
     }
   },
   "engine": {
@@ -56,11 +69,13 @@
     "preserveSha256Integrity": true
   },
   "releaseGates": {
-    "basicPackageMustContainAllRequiredAssets": true,
+    "basicPackageMustContainAtLeastMinimumTarget": true,
+    "basicMayExceedMinimumForQuality": true,
     "all500FactoryPresetsMustResolveAgainstBasic": true,
     "expandedMustNotBeRequiredForBasicPresetPlayback": true,
     "noPaddingOrDuplicateAudioToReachTargetSize": true,
     "noAssetMayBeRedistributedWithoutVerifiedRights": true,
-    "measuredPackageSizeMustBeReported": true
+    "measuredPackageSizeMustBeReported": true,
+    "doNotReduceAudioQualityToMeetNominalPackageSize": true
   }
 }
