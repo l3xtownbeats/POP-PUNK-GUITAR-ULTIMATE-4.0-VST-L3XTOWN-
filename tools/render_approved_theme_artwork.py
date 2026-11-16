@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render original gallery artwork for approved PPGU factory themes SKIN-2 and SKIN-3."""
+"""Render original gallery artwork for approved PPGU factory themes SKIN-2 through SKIN-4."""
 from __future__ import annotations
 import argparse, json, re, sys
 from pathlib import Path
@@ -13,6 +13,8 @@ THEMES = {
                "title": "OBSIDIAN GOLD", "tagline": "BLACK GLASS  •  CHAMPAGNE METAL"},
     "SKIN-3": {"stable_id": "skin-104", "index": 104, "folder": "Skin_104",
                "title": "CARBON FORGE", "tagline": "FORGED CARBON  •  SATIN TITANIUM"},
+    "SKIN-4": {"stable_id": "skin-105", "index": 105, "folder": "Skin_105",
+               "title": "MIDNIGHT CRIMSON", "tagline": "MIDNIGHT ENAMEL  •  RUBY METAL"},
 }
 
 def rgb(value):
@@ -73,6 +75,11 @@ def render(size,p,theme):
             d.line((k,0,k+h,h),fill=(*glow,17),width=max(1,w//900))
         for y in range(int(h*.23),int(h*.79),max(8,h//22)):
             d.line((int(w*.06),y,int(w*.93),y),fill=(*border,28),width=1)
+    elif theme=="SKIN-4":
+        for k in range(-h,w,max(14,w//30)):
+            d.line((k,0,k+h,h),fill=(*glow,19),width=max(1,w//850))
+        d.arc((int(w*.53),int(h*.12),int(w*.96),int(h*.92)),210,510,fill=(*accent,70),width=max(1,w//240))
+        d.arc((int(w*.57),int(h*.16),int(w*.92),int(h*.88)),210,510,fill=(*glow,35),width=max(1,w//360))
     else:
         for k in range(-h,w,max(18,w//24)): d.line((k,0,k+h,h),fill=(*glow,10),width=1)
     d.rounded_rectangle((pad,pad,w-pad,h-pad),radius=max(8,int(w*.025)),outline=(*border,220),width=max(1,w//360))
@@ -85,7 +92,7 @@ def render(size,p,theme):
     d.text((left,int(h*.405)),title[1],font=get_font(max(18,int(h*.085)),True),fill=(*accent,255))
     d.text((left,int(h*.57)),f"{theme}  /  FACTORY THEME",font=get_font(max(9,int(h*.032)),True),fill=(*secondary,245))
     d.text((left,int(h*.84)),THEMES[theme]["tagline"],font=get_font(max(8,int(h*.025))),fill=(*glow,235))
-    guitar(d,w,h,accent,glow,carbon=(theme=="SKIN-3"))
+    guitar(d,w,h,accent,glow,carbon=(theme in ("SKIN-3","SKIN-4")))
     for x,y in ((pad+12,pad+12),(w-pad-12,pad+12),(pad+12,h-pad-12),(w-pad-12,h-pad-12)):
         d.ellipse((x-2,y-2,x+2,y+2),fill=(*glow,220))
     return im.convert("RGB")

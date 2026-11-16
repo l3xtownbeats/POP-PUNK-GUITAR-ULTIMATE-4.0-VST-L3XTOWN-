@@ -33,7 +33,7 @@
       "stableId": "skin-104",
       "index": 104,
       "path": "Skin_104/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_RENDERER_ENABLED_EXACT_HEAD_CI_PENDING"
+      "status": "CI_RENDERED_AND_VALIDATED_PNG_NOT_COMMITTED_G1_G4_RUNTIME_PENDING"
     },
     {
       "ordinal": 4,
@@ -42,7 +42,7 @@
       "stableId": "skin-105",
       "index": 105,
       "path": "Skin_105/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "APPROVED_SPEC_AND_SVG_RENDERER_ENABLED_EXACT_HEAD_CI_PENDING"
     },
     {
       "ordinal": 5,

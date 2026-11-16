@@ -15,9 +15,9 @@ The distinction above is intentional: NEON STAGE names the overall interface sys
 | Logical ID | Factory theme | Stable ID / folder | Current status |
 |---|---|---|---|
 | SKIN-1 | NEON FORGE (DEFAULT) | `skin-053` / `Skin_053` | Existing canonical default |
-| SKIN-2 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Artwork renderer implemented; exact-SHA CI generated/validated PNGs; Git binaries and G1–G4/runtime acceptance pending |
-| SKIN-3 | CARBON FORGE | `skin-104` / `Skin_104` | Renderer extended; exact-SHA CI validation pending |
-| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Approved specification/SVG; finish artwork and acceptance |
+| SKIN-2 | OBSIDIAN GOLD | `skin-103` / `Skin_103` | Renderer and exact-SHA CI generation/PNG validation passed; PNGs not yet committed; G1–G4/runtime acceptance pending |
+| SKIN-3 | CARBON FORGE | `skin-104` / `Skin_104` | Renderer and exact-SHA CI generation/PNG validation passed; PNGs not yet committed; G1–G4/runtime acceptance pending |
+| SKIN-4 | MIDNIGHT CRIMSON | `skin-105` / `Skin_105` | Renderer extended; exact-SHA CI validation pending |
 | SKIN-5 | ARCTIC PLATINUM | `skin-106` / `Skin_106` | Approved specification/SVG; finish artwork and acceptance |
 | SKIN-6 | VIOLET NOIR | `skin-107` / `Skin_107` | Approved specification/SVG; finish artwork and acceptance |
 | SKIN-7 | TITANIUM STORM | `skin-108` / `Skin_108` | Approved specification/SVG; finish artwork and acceptance |

@@ -34,10 +34,10 @@ jobs:
       - name: Install approved theme artwork renderer dependency
         shell: pwsh
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Render and validate approved SKIN-2 and SKIN-3 artwork
+      - name: Render and validate approved SKIN-2 through SKIN-4 artwork
         shell: pwsh
         run: |
-          foreach ($theme in @('SKIN-2', 'SKIN-3')) {
+          foreach ($theme in @('SKIN-2', 'SKIN-3', 'SKIN-4')) {
             python tools/render_approved_theme_artwork.py --root SKIN --theme $theme
             if ($LASTEXITCODE -ne 0) { throw "$theme artwork rendering failed." }
             python tools/render_approved_theme_artwork.py --root SKIN --theme $theme --check
