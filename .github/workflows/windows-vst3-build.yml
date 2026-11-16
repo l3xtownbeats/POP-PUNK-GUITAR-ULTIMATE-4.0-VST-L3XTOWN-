@@ -11,6 +11,8 @@ on:
       - Source/PluginEditor.h
       - Source/UI/ThemeManager.cpp
       - Source/UI/ThemeManager.h
+      - Source/UI/PPGUMultiWindowWorkspace.cpp
+      - Source/UI/PPGUMultiWindowWorkspace.h
       - tests/ThemeManagerTests.cpp
       - SKIN/theme_manifest.json
       - SKIN/approved_theme_sequence.json
