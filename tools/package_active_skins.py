@@ -68,7 +68,7 @@ def main() -> int:
     runtime_registry = dict(registry)
     runtime_registry.pop("legacyRegistryArchive", None)
     (output / "theme_manifest.json").write_text(
-        json.dumps(runtime_registry, indent=2, ensure_ascii=False) + "\\n",
+        json.dumps(runtime_registry, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8")
     copy_one(root, output, "control_schema.json")
     copy_one(root, output, "approved_theme_sequence.json")
