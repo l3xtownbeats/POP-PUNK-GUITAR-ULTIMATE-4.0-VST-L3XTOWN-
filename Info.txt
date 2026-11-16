@@ -3177,3 +3177,42 @@ Approved mandatory quality gate:
 - This gate is mandatory for all existing and future factory themes, including themes 103–117. It does not authorize changes to APVTS IDs, audio behavior, layout ownership, or the approved control inventory.
 - Result for each theme must be recorded as PASS / FAIL / BLOCKED with evidence. No theme is marked PASS until its actual assets and runtime rendering have been inspected.
 - This decision adds a quality-assurance requirement only; it does not itself certify any theme or claim that validation has been run.
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-DOCUMENTATION-AUDIT-STRUCTURE-001
+STATUS: PRIMARY AUDIT / STRUCTURE BASELINE RECORDED · FULL RECONCILIATION IN PROGRESS
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+Parent HEAD before audit docs: 9def31f15dc9815b8b0a7863d93e702d3cf8ce08
+Audit map commit: 3cdc1b42889d6b3e30a65ffc4fc1b3e6a47df49d
+
+Пользователь поручил провести полный аудит и структуризацию всех требований, пунктов/подпунктов, этапов, функций, окон, панелей, описей и дополнительных компонентов, чтобы документация не была набором разрозненных и противоречивых записей.
+
+Выполнено на первом проходе:
+- Проверено дерево канонической REV.19 ветки: 958 файлов, включая документацию, журналы, реестры, UI source и theme assets.
+- Прочитаны ключевые документы: INFO, PPGU_TASK_REGISTRY, PPGU_JOURNAL, PPGU_WINDOWS_PANELS_INVENTORY, MASTER IMPLEMENTATION REGISTER, DEVELOPMENT CONTROL CENTER, MASTER PROMPT, MASTER PRODUCT SPEC, approved skin/mode acceptance и Multi-Window Workspace README.
+- Создана карта логической структуры продукта и план полной консолидации: docs/REV19_DOCUMENTATION_AUDIT_AND_STRUCTURE_RU.md.
+- Выявлены конкурирующие/устаревшие документальные источники, старые ссылки на REV.17/REV.18, смешанные исторические статусы в task registry/master register, недостаточный инвентарь окон и конфликт legacy theme files/registry с утверждённым набором 16 тем.
+
+Обязательные ограничения:
+- INFO остаётся единственным журналом.
+- Новые спецификации и инвентари допускаются как тематические документы, но не как конкурирующие журналы/источники решений.
+- Не удалять файлы/ресурсы массово до проверки зависимостей и доказательства, что они не нужны.
+- Не восстанавливать и не включать в разработку старые 102 темы.
+- Не объявлять полный аудит завершённым: пока выполнен первичный обзор дерева и ключевых документов, а не построчная сверка всех 958 файлов.
+- Никакие функции, окна или тесты не получили статус IMPLEMENTED/VERIFIED только из-за документационной структуризации.
+
+Следующие транзакции:
+DOC-01 — очистить и согласовать governance/master documents с REV.19;
+DOC-02 — завершить полную инвентаризацию требований, функций, контролов и окон;
+DOC-03 — выстроить декомпозицию этапов, подпунктов и зависимостей;
+DOC-04 — согласовать 16 тем, NEON STAGE parity и theme resource registry;
+DOC-05 — завершить паспорта окон/панелей и source-to-control mapping;
+DOC-06 — связать MELODY/PATTERN/PUNK GROUP/AUTOCHORDS, MIDI, sampler, FX и audio flow;
+DOC-07 — каталогизировать presets, Samples, Import и licensing;
+DOC-08 — собрать QA/build/host/performance/release evidence matrix.
+
+Текущий статус: STRUCTURE BASELINE RECORDED; DOC-01…DOC-08 OPEN. Следующая работа должна выполняться последовательно, с проверкой источников и удалением противоречий из активных документов, а не простым добавлением новых append-блоков.
+
+==============================================================================
