@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
   "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "status": "SKIN_1_NEON_STAGE_RUNTIME_REGISTERED; SKIN_2_TO_16_PENDING_INDIVIDUAL_ASSET_GATES",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
   "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
@@ -14,7 +14,7 @@
       "stableId": "skin-053",
       "index": 53,
       "path": "Skin_053/theme.json",
-      "status": "CANONICAL_DEFAULT"
+      "status": "RUNTIME_REGISTERED_AS_DEFAULT; BUILD_AND_RUNTIME_VERIFICATION_PENDING"
     },
     {
       "ordinal": 2,
@@ -162,9 +162,10 @@
     "Runtime and release acceptance require packaged assets and VST3 validation."
   ],
   "pending": [
-    "PNG preview.png (360x240) and hero.png (800x450) for SKIN-2…SKIN-16",
-    "G1-G4 validation and PNG CRC checks",
-    "Canonical registry/gallery registration after assets pass",
-    "Runtime asset loading and exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 host acceptance"
+    "SKIN-1 NEON STAGE exact-SHA Windows VST3 build, CTest, pluginval and FL Studio 20 verification",
+    "SKIN-2…SKIN-16 preview.png (360x240) and hero.png (800x450) assets",
+    "G1-G4 validation and PNG CRC checks for each candidate theme",
+    "Add each candidate to the runtime registry only after its own asset, control-parity and visual QA gates pass",
+    "Final runtime gallery, Preview/Apply/Cancel, persistence, skin-switch audio/state invariance and exact-SHA host acceptance"
   ]
 }
