@@ -3948,3 +3948,54 @@ G. Только после прохождения критериев объяв�
 - 500 пресетов объявляются готовыми только после создания, интеграции и проверки всех 250 MELODY + 250 PATTERN.
 
 РЕШЕНИЕ: SAMPLE LIBRARY + STYLE-BASED FACTORY PRESETS — ГЛАВНЫЙ ПРИОРИТЕТ ТЕКУЩЕГО ЭТАПА. РАБОТУ ВЕСТИ ПО ЭТОМУ ПРИОРИТЕТУ.
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-APPROVED-16-GRAPHIC-SKINS-ASSET-READINESS-AUDIT-001 — ФИКСАЦИЯ 16 УТВЕРЖДЁННЫХ GRAPHIC SKINS И ТЕКУЩЕЙ ГОТОВНОСТИ
+
+СТАТУС: НАЗВАНИЯ И ПОСЛЕДОВАТЕЛЬНОСТЬ ПОДТВЕРЖДЕНЫ ПОЛЬЗОВАТЕЛЕМ · МАНИФЕСТЫ SKIN 02–16 ПРОВЕРЕНЫ · ARTWORK / RUNTIME ACCEPTANCE В РАБОТЕ
+КАНОНИЧЕСКАЯ ВЕТКА: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+
+ЕДИНСТВЕННАЯ УТВЕРЖДЁННАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ:
+01 NEON STAGE — stable theme ID skin-053; logical gallery ordinal 01.
+02 OBSIDIAN GOLD — skin-103 / Skin_103.
+03 CARBON FORGE — skin-104 / Skin_104.
+04 MIDNIGHT CRIMSON — skin-105 / Skin_105.
+05 ARCTIC PLATINUM — skin-106 / Skin_106.
+06 VIOLET NOIR — skin-107 / Skin_107.
+07 TITANIUM STORM — skin-108 / Skin_108.
+08 EMERALD CIRCUIT — skin-109 / Skin_109.
+09 SOLAR FLARE — skin-110 / Skin_110.
+10 DEEP OCEAN — skin-111 / Skin_111.
+11 ROSE CHROME — skin-112 / Skin_112.
+12 DESERT AMBER — skin-113 / Skin_113.
+13 GLACIER TEAL — skin-114 / Skin_114.
+14 PHANTOM GRAPHITE — skin-115 / Skin_115.
+15 ULTRAVIOLET DRIVE — skin-116 / Skin_116.
+16 VOLCANIC STEEL — skin-117 / Skin_117.
+
+ПРОВЕРКА ИСХОДНИКОВ:
+- Найдены и прочитаны все 15 файлов SKIN/Skin_103…Skin_117/theme.json.
+- Все 15 манифестов содержат соответствующее утверждённое название, индивидуальное описание материала и собственную 21-token palette.
+- Каждый манифест описывает общую структуру контролов и три графических слоя texture / bezel / crest. Это индивидуальные исходные theme definitions, но само по себе не доказывает наличие завершённого artwork.
+- Фактически проверены SVG texture.svg, bezel.svg и crest.svg для Skin_103 и Skin_104; все три файла присутствуют в обеих папках.
+- Для Skin_103 и Skin_104 по указанным в манифестах путям assets/preview.png и assets/hero.png файлы не найдены. Полный asset audit остальных 13 тем ещё не завершён.
+- Активная runtime-регистрация SKIN 02–16 не подтверждена. По текущему плану интеграции NEON STAGE остаётся единственной активной темой до индивидуального прохождения asset и QA gates для каждой следующей темы.
+
+ОБЯЗАТЕЛЬНЫЙ ПЛАН ДАЛЬШЕ:
+1. Не пересоздавать существующие theme.json, palettes и artwork; сначала провести no-loss inventory всех 15 папок и их SVG/PNG ресурсов.
+2. Для каждого скина отдельно определить, какие элементы artwork уже существуют, какие отсутствуют и какие требуют доработки.
+3. Довести индивидуальные preview и hero artwork в утверждённом формате и размерах, сохранив характер конкретного скина; не подменять 15 тем одним универсальным изображением с разными цветами.
+4. Проверить SVG safety, PNG integrity/dimensions, контраст, manifest paths, 27-control parity и отсутствие визуального изменения функциональной компоновки.
+5. Включать каждый skin в runtime gallery только после его индивидуальной проверки; сохранять NEON STAGE как default.
+6. После интеграции провести preview/apply/back, persistence, resize/DPI, hot-swap и audio/state invariance checks на точном SHA.
+
+ОГРАНИЧЕНИЯ:
+- Не менять DSP, MIDI, sampler, presets, APVTS IDs/semantics, 27-control contract и семь утверждённых FX bypass IDs.
+- Не менять SIGNAL FORGE CONTROL DECK layout и функциональные зоны ради оформления.
+- Не удалять и не переименовывать утверждённые темы и их stable IDs.
+- Не объявлять GRAPHICS COMPLETE, INTEGRATED, VERIFIED или APPROVED на основании только manifest/palette.
+- Сохранять уже завершённые материалы и дорабатывать только реальные пробелы.
+
+РЕЗУЛЬТАТ: ПОЛНЫЙ СПИСОК 16 SKINS И СООТВЕТСТВИЕ SKIN 02–16 ИХ STABLE IDs ЗАФИКСИРОВАНЫ В ЕДИНОМ INFO. ТЕКУЩИЙ СТАТУС — МАНИФЕСТЫ И ПАЛИТРЫ НАЙДЕНЫ; ПОШАГОВЫЙ ARTWORK AUDIT И ИНДИВИДУАЛЬНАЯ ГРАФИЧЕСКАЯ ПРИЁМКА ПРОДОЛЖАЮТСЯ.
