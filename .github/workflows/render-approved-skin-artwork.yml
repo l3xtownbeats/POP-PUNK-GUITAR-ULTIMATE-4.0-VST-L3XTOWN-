@@ -55,6 +55,9 @@ jobs:
       - name: Validate all 16 approved theme assets
         run: python tools/audit_skin_rev18_assets.py --root SKIN --strict-assets
 
+      - name: Validate active factory registry and legacy archive
+        run: python tests/ValidateSkinManifests.py
+
       - name: Commit generated PNG assets
         shell: bash
         run: |
