@@ -728,3 +728,8 @@ Commit `5b7fdfe7cc754a5c50a16c9ab1d1248379b2e618` fixes a stale Apply state afte
 Implemented viewport-aware drag and resize limits, plus preservation of a user's saved geometry for a single reopened panel across subsequent workspace relayouts. First-open automatic layout remains active. Source commits: `5a327f8037ef6658b7d8d5e4074fad1c3dd45c4c`, `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9`.
 
 Exact-HEAD CI run `43726066887` (SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9`) was in progress at the time of this update. Runtime checks, CTest, pluginval Strictness 5 and FL Studio 20 acceptance are not yet verified.
+
+
+## 2026-11-16 — Windows VST3 automated validation
+
+Exact source SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9` passed GitHub Actions run `43726066887`: Windows x64 Release VST3 build, CTest 12/12, and pluginval Strictness 5. The additional VST3-validator sub-check was skipped (validator path not configured). Manual FL Studio 20 and GUI/geometry checks remain pending. Artifact `14166697237` is CI-NOT-RELEASE, not a final installer/release.
