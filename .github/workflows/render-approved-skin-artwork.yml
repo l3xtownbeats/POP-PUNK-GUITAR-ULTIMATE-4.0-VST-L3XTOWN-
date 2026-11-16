@@ -11,6 +11,8 @@ on:
       - tools/audit_skin_rev18_assets.py
       - tests/ValidateSkinManifests.py
       - SKIN/approved_theme_sequence.json
+      - SKIN/control_schema.json
+      - SKIN/archive/theme_manifest.legacy-102.json
       - SKIN/Skin_103/theme.json
       - SKIN/Skin_104/theme.json
       - SKIN/Skin_105/theme.json
