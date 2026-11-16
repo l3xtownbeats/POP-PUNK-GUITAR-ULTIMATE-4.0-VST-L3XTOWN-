@@ -71,3 +71,15 @@ There is no artificial product-level cap on the number of user BANKs or total li
 4. Каждый пресет проходит проверку: sample references разрешаются, ноты/velocity работают, звучание прослушано, уровни и FX согласованы, сохранение/загрузка проверены.
 5. Factory preset library остаётся закреплённой за проверенной заводской Sample Library. Новые банки и пресеты пополняются добавочно; уже утверждённые материалы не удаляются.
 
+
+
+## REV.19 — текущая проверка получения и подготовки библиотеки
+
+На REV.19 продолжается утверждённый этап наполнения единой заводской SAMPLE LIBRARY и последующего создания 500 заводских пресетов (250 MELODY + 250 PATTERN).
+
+- Список одиннадцати upstream-коллекций выше — перечень источников-кандидатов, а не утверждение, что каждый файл текущей ветки повторно загружен и прошёл все asset-level gates.
+- Workflow .github/workflows/vst3-build.yml содержит получение источников, сохранение SFZ/LICENSE и проверку sample inventory; push в Sample Library/ запускает его для текущей ветки.
+- Предыдущий успешный source-ingest commit 98e92674dfa2097e8ebd1caf34b97136fe06ee1a относится к историческому запуску. Он не заменяет проверку актуального REV.19 run/artifact.
+- Текущий registry assets/sound_hunter/registry.json остаётся единственным asset-level реестром допуска; пустой registry означает, что подтверждённые GREEN assets ещё не зарегистрированы.
+- До повторного получения актуального CI evidence не заявлять, что sample payload текущей REV.19 ветки скачан, включён в portable package или готов к использованию.
+- Не менять утверждённый порядок: сначала фактические аудиофайлы, лицензии, SHA-256, SFZ mapping и техническая проверка; затем реальные preset mappings и playable factory presets.
