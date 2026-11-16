@@ -1068,3 +1068,8 @@ Run `43726066887` validated source SHA `a41b4720d2f27ce8fd2b8ce2c8233e06d7eb7cf9
 ## 2026-11-16 — 16-theme registry audit
 
 All 16 approved `theme.json` specifications exist and expose the same 21 palette-token keys. Static contrast preflight for the supplied text/accent/LCD color pairings returned at least 4.5:1; this is not rendered UI acceptance. Critical live boundary: `SKIN/theme_manifest.json` still has `totalSkins=1` and only `skin-053`. `getSkinCount()` / `getSkinManifest()` and the Gallery builder use that active registry, so the live Gallery currently contains one theme, not sixteen. SKIN-2..16 PNG preview/hero artwork and G1-G4/runtime promotion remain pending. Do not register or claim all 16 selectable until the asset/package/runtime gates pass. Preview/Apply/Back transaction callbacks are present in source.
+
+
+## 2026-11-16 — Skin Studio artwork pipeline gap
+
+Exact run `43726066887` logged 45 warnings: each SKIN-2…SKIN-16 is missing `preview.png` and `hero.png` and is not in the one-entry runtime registry. `T2_generate_missing_artwork.py` skips indices >=52, so its legacy-artwork CI step does not generate assets for Skin Studio. Active Skin Studio validators require 360x240 preview PNG and 800x450 hero PNG; `SKIN/ASSET_SPECIFICATIONS_RU.md` still documents conflicting 480x300 PNG / 1200x420 WebP sizes. Resolve this contract before producing assets. No generic poster placeholders or premature registry promotion.
