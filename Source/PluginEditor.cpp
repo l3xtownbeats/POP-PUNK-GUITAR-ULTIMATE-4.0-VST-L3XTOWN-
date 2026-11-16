@@ -1978,9 +1978,19 @@ bool PopPunkGuitarUltimateAudioProcessorEditor::loadSkinByIndex(int index, bool 
     const auto manifest = getSkinManifest(index);
     const bool loaded = manifest.existsAsFile() && themeManager.loadFromFile(manifest);
     if (!loaded)
+    {
         themeManager.resetToDefault();
+        if (index != 1)
+        {
+            const auto defaultManifest = getSkinManifest(1);
+            if (defaultManifest.existsAsFile())
+                themeManager.loadFromFile(defaultManifest);
+        }
+        statusLabel.setText("SKIN LOAD FAILED  /  NEON STAGE RESTORED",
+                            juce::dontSendNotification);
+    }
     applyPalette();
-    if (save && loaded)
+    if (save)
         persistSkinPreference();
     return loaded;
 }
