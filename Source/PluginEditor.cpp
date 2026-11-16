@@ -497,6 +497,76 @@ private:
     juce::TextButton restoreButton, galleryButton;
 };
 
+class PPGUAboutPanel final : public juce::Component, public PPGUThemeAwarePanel
+{
+public:
+    explicit PPGUAboutPanel(PPGUThemeManager::Palette paletteIn)
+        : palette(std::move(paletteIn))
+    {
+        heading.setText("POP PUNK GUITAR ULTIMATE", juce::dontSendNotification);
+        heading.setFont(makeThemeFont(palette, 22.0f, true, true));
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addAndMakeVisible(heading);
+
+        identity.setText("NEON STAGE  /  VST3 INSTRUMENT", juce::dontSendNotification);
+        identity.setFont(makeThemeFont(palette, 11.0f, false, true));
+        identity.setColour(juce::Label::textColourId, palette.token("accent"));
+        addAndMakeVisible(identity);
+
+        description.setText(
+            "A dedicated pop-punk guitar instrument for tight rhythm parts, power chords, "
+            "palm-muted patterns, riffs and melodic hooks.",
+            juce::dontSendNotification);
+        description.setFont(makeThemeFont(palette, 12.0f));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        description.setJustificationType(juce::Justification::topLeft);
+        description.setMinimumHorizontalScale(0.85f);
+        addAndMakeVisible(description);
+
+        studio.setText("L3XTOWN AUDIO LAB", juce::dontSendNotification);
+        studio.setFont(makeThemeFont(palette, 10.0f, false, true));
+        studio.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        addAndMakeVisible(studio);
+    }
+
+    void setThemePalette(const PPGUThemeManager::Palette& value) override
+    {
+        palette = value;
+        heading.setFont(makeThemeFont(palette, 22.0f, true, true));
+        identity.setFont(makeThemeFont(palette, 11.0f, false, true));
+        description.setFont(makeThemeFont(palette, 12.0f));
+        studio.setFont(makeThemeFont(palette, 10.0f, false, true));
+        heading.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        identity.setColour(juce::Label::textColourId, palette.token("accent"));
+        description.setColour(juce::Label::textColourId, palette.token("text_secondary"));
+        studio.setColour(juce::Label::textColourId, palette.token("text_primary"));
+        repaint();
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        auto bounds = getLocalBounds().toFloat().reduced(2.0f);
+        g.setColour(palette.token("accent").withAlpha(0.75f));
+        g.fillRoundedRectangle(bounds.removeFromTop(2.0f), 1.0f);
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced(22);
+        area.removeFromTop(14);
+        heading.setBounds(area.removeFromTop(34));
+        area.removeFromTop(8);
+        identity.setBounds(area.removeFromTop(18));
+        area.removeFromTop(18);
+        description.setBounds(area.removeFromTop(70));
+        studio.setBounds(area.removeFromBottom(20));
+    }
+
+private:
+    PPGUThemeManager::Palette palette;
+    juce::Label heading, identity, description, studio;
+};
+
 // Import panel delegates to the existing asynchronous SFZ loader and reports its real result.
 class PPGUImportGuitarPanel final : public juce::Component, public PPGUThemeAwarePanel
 {
@@ -1426,9 +1496,8 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     autoChordsButton.onClick = [this] { openAutoChordsPanel(); };
     addAndMakeVisible(autoChordsButton);
 
-    // Honest REV.18 entry points: no discovery, curator or About backend exists yet.
-    // Keep them visible and theme-aware, but disabled rather than simulating functionality.
-    for (auto* unavailable : { &autoSoundHunterButton, &curatorButton, &aboutButton })
+    // Discovery and Curator remain visibly unavailable until their real production backends exist.
+    for (auto* unavailable : { &autoSoundHunterButton, &curatorButton })
     {
         unavailable->setEnabled(false);
         unavailable->setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("lowlight"));
@@ -1437,7 +1506,14 @@ PopPunkGuitarUltimateAudioProcessorEditor::PopPunkGuitarUltimateAudioProcessorEd
     }
     autoSoundHunterButton.setTooltip("AUTO SOUND HUNTER is not implemented yet. No search or auto-import action is available.");
     curatorButton.setTooltip("CURATOR is not implemented yet. No asset is marked approved.");
-    aboutButton.setTooltip("ABOUT is intentionally disabled until its approved production content is implemented.");
+
+    // ABOUT is a functional product-information panel.
+    aboutButton.setEnabled(true);
+    aboutButton.setTooltip("Open product information.");
+    aboutButton.setColour(juce::TextButton::buttonColourId, themeManager.getPalette().token("panel_elevated"));
+    aboutButton.setColour(juce::TextButton::textColourOffId, themeManager.getPalette().token("text_primary"));
+    aboutButton.onClick = [this] { openAboutPanel(); };
+    addAndMakeVisible(aboutButton);
     statusLabel.setText("NO LIBRARY LOADED  /  LOAD A LICENSED SFZ INSTRUMENT", juce::dontSendNotification);
     const auto savedSfzPath = processor.getCurrentSfzFilePath();
     if (savedSfzPath.isNotEmpty())
@@ -1600,6 +1676,24 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
 {
     const auto& p = themeManager.getPalette();
     g.fillAll(p.token("window_bg"));
+
+    // Branded top rail: purely graphical chrome behind the existing live buttons.
+    // No new action, parameter, or processor dependency is introduced here.
+    auto header = getLocalBounds().reduced(14).removeFromTop(48).toFloat();
+    g.setGradientFill(juce::ColourGradient(p.token("panel_elevated"),
+                                           header.getX(), header.getY(),
+                                           p.token("panel"), header.getRight(),
+                                           header.getBottom(), false));
+    g.fillRoundedRectangle(header, 9.0f);
+    g.setColour(p.token("control_border").withAlpha(0.8f));
+    g.drawRoundedRectangle(header.reduced(0.5f), 9.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.9f));
+    g.fillRoundedRectangle(header.getX() + 8.0f, header.getY() + 8.0f,
+                           2.0f, header.getHeight() - 16.0f, 1.0f);
+    g.setColour(p.token("accent").withAlpha(0.22f));
+    g.drawHorizontalLine(static_cast<int>(header.getBottom() - 1.0f),
+                         header.getX() + 14.0f, header.getRight() - 14.0f);
+
     auto area = getLocalBounds().reduced(14);
     area.removeFromTop(48);
     area.removeFromBottom(132);
@@ -1612,16 +1706,44 @@ void PopPunkGuitarUltimateAudioProcessorEditor::paint(juce::Graphics& g)
     auto right = area.removeFromRight(rightWidth);
     area.removeFromRight(gap);
     drawPanel(g, browser, "PRESET LIBRARY");
-    drawPanel(g, area, "GUITAR ENGINE  /  PERFORMANCE");
-    drawPanel(g, right, "SIGNAL CHAIN");
+    drawPanel(g, area, "PLAYING CORE");
+    drawPanel(g, right, "FX CHAIN");
 
-    // Subtle NEON STAGE center identity; controls remain live JUCE components.
-    auto badge = area.removeFromTop(3);
-    g.setColour(p.token("accent"));
-    g.fillRoundedRectangle(badge.toFloat(), 1.5f);
-    g.setColour(p.token("text_secondary").withAlpha(0.12f));
+    // NEON STAGE Playing Core hero artwork is loaded from the active skin manifest.
+    // It is a visual-only surface; all nine live controls remain separate JUCE components.
+    area.removeFromTop(48); // MELODY / PATTERN / sync row plus spacing.
+    auto heroSlot = area.removeFromTop(116).reduced(9, 5);
+    g.setColour(p.token("panel_elevated"));
+    g.fillRoundedRectangle(heroSlot.toFloat(), 8.0f);
+    if (!heroArtwork.isNull())
+    {
+        g.saveState();
+        g.reduceClipRegion(heroSlot);
+        g.drawImageWithin(heroArtwork, heroSlot.getX(), heroSlot.getY(),
+                          heroSlot.getWidth(), heroSlot.getHeight(),
+                          juce::RectanglePlacement::centred);
+        g.restoreState();
+    }
+    else
+    {
+        // Honest visual fallback when a theme has no hero asset.
+        g.setColour(p.token("text_secondary").withAlpha(0.14f));
+        g.drawRoundedRectangle(heroSlot.toFloat().reduced(1.0f), 7.0f, 1.0f);
+        g.setColour(p.token("text_secondary").withAlpha(0.7f));
+        g.setFont(makeThemeFont(p, 10.0f, false, true));
+        g.drawText("ACTIVE SKIN ARTWORK", heroSlot.toNearestInt(),
+                   juce::Justification::centred);
+    }
+    g.setColour(p.token("accent").withAlpha(0.72f));
+    g.drawRoundedRectangle(heroSlot.toFloat().reduced(0.5f), 8.0f, 1.0f);
+
+    // Subtle technical grid, clipped to the central instrument zone.
+    g.saveState();
+    g.reduceClipRegion(area);
+    g.setColour(p.token("text_secondary").withAlpha(0.055f));
     for (int x = area.getX() + 16; x < area.getRight(); x += 32)
         g.drawVerticalLine(x, (float)area.getY() + 8.0f, (float)area.getBottom() - 8.0f);
+    g.restoreState();
 }
 
 void PopPunkGuitarUltimateAudioProcessorEditor::resized()
@@ -1682,6 +1804,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::resized()
     patternTab.setBounds(modeRow.removeFromLeft(modeRow.getWidth() / 2).reduced(2, 3));
     modeBox.setBounds(modeRow.reduced(2, 3));
     centre.removeFromTop(6);
+    // Dedicated NEON STAGE guitar-artwork strip; the approved nine APVTS knobs stay intact below.
+    centre.removeFromTop(116);
     auto knobArea = centre;
     knobArea.removeFromBottom(42);
     const int cols = 3;
@@ -1730,95 +1854,113 @@ int PopPunkGuitarUltimateAudioProcessorEditor::getSkinCount() const
     const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
     if (!registryFile.existsAsFile())
         return 0;
-
     const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
     if (!registry.isObject())
         return 0;
-
     const auto totalValue = registry.getProperty("totalSkins", juce::var());
     const auto themesValue = registry.getProperty("themes", juce::var());
     const auto* themes = themesValue.getArray();
     if ((!totalValue.isInt() && !totalValue.isInt64()) || themes == nullptr)
         return 0;
-
     const auto total64 = totalValue.toString().getLargeIntValue();
     if (total64 < 1 || total64 > std::numeric_limits<int>::max()
         || total64 != static_cast<std::int64_t>(themes->size()))
         return 0;
     const auto total = static_cast<int>(total64);
-
-    std::set<int> indices;
+    std::set<int> ordinals;
+    std::set<std::int64_t> stableIndices;
     std::set<std::string> ids;
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
             return 0;
-
-        const auto indexValue = entry.getProperty("index", juce::var());
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        const auto stableIndexValue = entry.getProperty("index", juce::var());
         const auto id = entry.getProperty("id", "").toString();
         const auto path = entry.getProperty("path", "").toString();
-        if ((!indexValue.isInt() && !indexValue.isInt64())
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || (!stableIndexValue.isInt() && !stableIndexValue.isInt64())
             || id.isEmpty() || path.isEmpty()
             || path.startsWith("/") || path.contains("..")
             || !path.startsWith("Skin_") || !path.endsWith("/theme.json"))
             return 0;
-
-        const auto index64 = indexValue.toString().getLargeIntValue();
-        if (index64 < 1 || index64 > total || !id.startsWith("skin-")
-            || id.substring(5).getLargeIntValue() != index64
-            || !indices.insert(static_cast<int>(index64)).second
+        const auto ordinal64 = ordinalValue.toString().getLargeIntValue();
+        const auto stableIndex64 = stableIndexValue.toString().getLargeIntValue();
+        if (ordinal64 < 1 || ordinal64 > total || stableIndex64 < 52
+            || !id.startsWith("skin-")
+            || id.substring(5).getLargeIntValue() != stableIndex64
+            || !ordinals.insert(static_cast<int>(ordinal64)).second
+            || !stableIndices.insert(stableIndex64).second
             || !ids.insert(id.toStdString()).second)
             return 0;
     }
-
-    return static_cast<int>(indices.size()) == total ? total : 0;
+    return static_cast<int>(ordinals.size()) == total ? total : 0;
 }
 
-juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int index) const
+juce::File PopPunkGuitarUltimateAudioProcessorEditor::getSkinManifest(int ordinal) const
 {
-    if (index < 1)
+    if (ordinal < 1 || ordinal > getSkinCount())
         return {};
-
     const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
     if (!registryFile.existsAsFile())
         return {};
-
     const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
     const auto themesValue = registry.getProperty("themes", juce::var());
     const auto* themes = themesValue.getArray();
     if (themes == nullptr)
         return {};
-
     for (const auto& entry : *themes)
     {
         if (!entry.isObject())
             continue;
-        const auto indexValue = entry.getProperty("index", juce::var());
-        if ((!indexValue.isInt() && !indexValue.isInt64())
-            || indexValue.toString().getLargeIntValue() != index)
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if ((!ordinalValue.isInt() && !ordinalValue.isInt64())
+            || ordinalValue.toString().getLargeIntValue() != ordinal)
             continue;
-
         const auto relativePath = entry.getProperty("path", "").toString();
         if (relativePath.isEmpty() || relativePath.startsWith("/")
             || relativePath.contains("..") || !relativePath.startsWith("Skin_")
             || !relativePath.endsWith("/theme.json"))
             return {};
-
         const auto manifest = runtimeSkinRoot.getChildFile(relativePath);
         return manifest.isAChildOf(runtimeSkinRoot) ? manifest : juce::File{};
     }
     return {};
 }
 
+int PopPunkGuitarUltimateAudioProcessorEditor::getSkinOrdinalForId(const juce::String& id) const
+{
+    if (id.isEmpty() || getSkinCount() < 1)
+        return 0;
+    const auto registryFile = runtimeSkinRoot.getChildFile("theme_manifest.json");
+    const auto registry = juce::JSON::parse(registryFile.loadFileAsString());
+    const auto themesValue = registry.getProperty("themes", juce::var());
+    const auto* themes = themesValue.getArray();
+    if (themes == nullptr)
+        return 0;
+    for (const auto& entry : *themes)
+    {
+        if (!entry.isObject() || entry.getProperty("id", "").toString() != id)
+            continue;
+        const auto ordinalValue = entry.getProperty("ordinal", juce::var());
+        if (ordinalValue.isInt() || ordinalValue.isInt64())
+            return static_cast<int>(ordinalValue.toString().getLargeIntValue());
+    }
+    return 0;
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::loadSavedSkin()
 {
     auto* settings = uiProperties.getUserSettings();
     const auto id = settings ? settings->getValue("skinId", "skin-053") : juce::String("skin-053");
-    const auto index = id.startsWith("skin-") ? id.substring(5).getIntValue() : 0;
-    if (index < 1 || index > getSkinCount() || !loadSkinByIndex(index, false))
+    const auto ordinal = getSkinOrdinalForId(id);
+    if (ordinal < 1 || ordinal > getSkinCount() || !loadSkinByIndex(ordinal, false))
     {
-        themeManager.resetToDefault();
-        applyPalette();
+        if (!loadSkinByIndex(1, false))
+        {
+            themeManager.resetToDefault();
+            applyPalette();
+        }
     }
 }
 
@@ -1845,7 +1987,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     {
         std::vector<PPGUSkinGalleryPanel::Skin> skins;
         const auto activeId = themeManager.getPalette().id;
-        const int activeIndex = activeId.startsWith("skin-") ? activeId.substring(5).getIntValue() : 0;
+        const int activeIndex = getSkinOrdinalForId(activeId);
         const auto count = getSkinCount();
         skins.reserve(static_cast<size_t>(juce::jmax(0, count)));
         for (int index = 1; index <= count; ++index)
@@ -1925,6 +2067,28 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSkinGalleryPanel()
     auxiliaryWorkspace->setVisible(true); auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::openAboutPanel()
+{
+    if (auxiliaryWorkspace == nullptr)
+        return;
+
+    constexpr int aboutPanelId = 2103;
+    if (!auxiliaryWorkspace->isPanelOpen(aboutPanelId))
+    {
+        PPGUMultiWindowWorkspace::PanelSpec spec;
+        spec.id = aboutPanelId;
+        spec.title = "ABOUT  /  POP PUNK GUITAR ULTIMATE";
+        spec.desired = { 620, 340 };
+        spec.minimum = { 420, 240 };
+        spec.content = std::make_unique<PPGUAboutPanel>(themeManager.getPalette());
+        if (!auxiliaryWorkspace->openPanel(std::move(spec)))
+            return;
+    }
+
+    auxiliaryWorkspace->setVisible(true);
+    auxiliaryWorkspace->toFront(false);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
 {
     if (auxiliaryWorkspace == nullptr)
@@ -1967,7 +2131,7 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
             [safe]
             {
                 if (safe != nullptr)
-                    safe->loadSkinByIndex(53, true);
+                    safe->loadSkinByIndex(1, true);
             },
             [safe]
             {
@@ -1988,8 +2152,49 @@ void PopPunkGuitarUltimateAudioProcessorEditor::openSettingsPanel()
     auxiliaryWorkspace->toFront(false);
 }
 
+void PopPunkGuitarUltimateAudioProcessorEditor::refreshHeroArtwork()
+{
+    const auto paletteId = themeManager.getPalette().id;
+    const int skinIndex = getSkinOrdinalForId(paletteId);
+    const auto manifest = getSkinManifest(skinIndex);
+
+    if (!manifest.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto theme = juce::JSON::parse(manifest.loadFileAsString());
+    const auto assets = theme.getProperty("assets", juce::var());
+    const auto relativePath = assets.getProperty("hero", "").toString();
+
+    if (relativePath.isEmpty() || relativePath.startsWith("/")
+        || relativePath.contains(".."))
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    const auto candidate = manifest.getParentDirectory().getChildFile(relativePath);
+    if (!candidate.isAChildOf(manifest.getParentDirectory()) || !candidate.existsAsFile())
+    {
+        heroArtwork = {};
+        heroArtworkFile = {};
+        return;
+    }
+
+    if (candidate == heroArtworkFile && !heroArtwork.isNull())
+        return;
+
+    heroArtworkFile = candidate;
+    heroArtwork = juce::ImageFileFormat::loadFrom(heroArtworkFile);
+}
+
 void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
 {
+ refreshHeroArtwork();
  const auto& p=themeManager.getPalette();premiumLookAndFeel.setPalette(p);titleLabel.setFont(makeThemeFont(p, 28.0f, true, true));subtitleLabel.setFont(makeThemeFont(p, 9.5f, false, true));statusLabel.setFont(makeThemeFont(p, 11.0f));ampTitle.setFont(makeThemeFont(p, 15.0f, false, true));fxTitle.setFont(makeThemeFont(p, 15.0f, false, true));playbackTitle.setFont(makeThemeFont(p, 15.0f, false, true));if(performanceDisplay)performanceDisplay->setPalette(p);
  if (auxiliaryWorkspace != nullptr)
  {
@@ -2002,7 +2207,8 @@ void PopPunkGuitarUltimateAudioProcessorEditor::applyPalette()
  for(auto* b:{&presetBox,&categoryBox,&modeBox,&startModeBox}){b->setColour(juce::ComboBox::backgroundColourId,p.token("control_bg"));b->setColour(juce::ComboBox::textColourId,p.token("text_primary"));b->setColour(juce::ComboBox::outlineColourId,p.token("control_border"));b->setColour(juce::ComboBox::arrowColourId,p.token("accent"));}
  presetSearch.setColour(juce::TextEditor::backgroundColourId,p.token("control_bg"));presetSearch.setColour(juce::TextEditor::textColourId,p.token("text_primary"));presetSearch.setColour(juce::TextEditor::outlineColourId,p.token("control_border"));presetSearch.setColour(juce::TextEditor::focusedOutlineColourId,p.token("highlight"));presetSearch.setColour(juce::TextEditor::highlightColourId,p.token("accent").withAlpha(.3f));
  loadButton.setColour(juce::TextButton::buttonColourId,p.token("accent"));loadButton.setColour(juce::TextButton::textColourOffId,p.token("window_bg"));settingsButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));settingsButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated"));skinButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary"));skinButton.setTooltip("Active skin: "+p.name+"  /  Ctrl+K");
- for (auto* unavailable : { &autoSoundHunterButton, &curatorButton, &aboutButton }) { unavailable->setColour(juce::TextButton::buttonColourId,p.token("lowlight")); unavailable->setColour(juce::TextButton::textColourOffId,p.token("text_disabled")); unavailable->setEnabled(false); }
+ for (auto* unavailable : { &autoSoundHunterButton, &curatorButton }) { unavailable->setColour(juce::TextButton::buttonColourId,p.token("lowlight")); unavailable->setColour(juce::TextButton::textColourOffId,p.token("text_disabled")); unavailable->setEnabled(false); }
+ aboutButton.setColour(juce::TextButton::buttonColourId,p.token("panel_elevated")); aboutButton.setColour(juce::TextButton::textColourOffId,p.token("text_primary")); aboutButton.setEnabled(true);
  for(auto* b:{&melodyTab,&patternTab}){b->setColour(juce::TextButton::buttonColourId,p.token("control_bg"));b->setColour(juce::TextButton::buttonOnColourId,p.token("accent"));b->setColour(juce::TextButton::textColourOffId,p.token("text_primary"));b->setColour(juce::TextButton::textColourOnId,p.token("window_bg"));}
  for(auto& s:knobs){s.setColour(juce::Slider::rotarySliderFillColourId,p.token("accent"));s.setColour(juce::Slider::rotarySliderOutlineColourId,p.token("control_border"));s.setColour(juce::Slider::thumbColourId,p.token("text_primary"));s.setColour(juce::Slider::textBoxTextColourId,p.token("text_primary"));}
  for(auto& l:knobLabels){l.setFont(makeThemeFont(p,9.5f,false,true));l.setColour(juce::Label::textColourId,p.token("text_secondary"));}
