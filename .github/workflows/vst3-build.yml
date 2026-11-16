@@ -401,8 +401,8 @@ jobs:
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/README.md') -Destination (Join-Path $release 'Resources/SKINS_README.md')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/theme.schema.json') -Destination (Join-Path $release 'Resources/theme.schema.json')
           Copy-Item -LiteralPath (Join-Path $env:PROJECT_DIR 'SKIN/control_schema.json') -Destination (Join-Path $release 'Resources/control_schema.rev14.json')
-          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SAMPLE_SOURCES_AND_LICENSES_REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SOURCES_AND_LICENSES_REV18.txt')
-          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SHA256SUMS-POP-PUNK-REV18.txt') -Destination (Join-Path $release 'Resources/SOUNDBANK_SHA256SUMS_REV18.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SAMPLE_SOURCES_AND_LICENSES_REV18.txt') -Destination (Join-Path $release 'Resources/SAMPLE_LIBRARY_SOURCES_AND_LICENSES_REV18.txt')
+          Copy-Item -LiteralPath (Join-Path $release 'Sample Library/SHA256SUMS-POP-PUNK-REV18.txt') -Destination (Join-Path $release 'Resources/SAMPLE_LIBRARY_SHA256SUMS_REV18.txt')
 
           $skinRegistryPath = Join-Path $runtimeSkins 'theme_manifest.json'
           $skinRegistry = Get-Content -LiteralPath $skinRegistryPath -Raw | ConvertFrom-Json
