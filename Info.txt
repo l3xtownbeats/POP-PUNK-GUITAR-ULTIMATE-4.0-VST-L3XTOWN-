@@ -3435,3 +3435,15 @@ Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
 - Commit: `e5dcd3a28672515951cbcca9f873fcd23a86c8c0`.
 - Статус: ИЗМЕНЕНИЕ ВНЕСЕНО; повторный Windows CI на точном новом HEAD ещё не завершён. Не считать CTest/VST3/pluginval прошедшими до нового результата.
 
+## REV.19 — Windows x64 VST3 CI PASS after theme-contract repair (2026-11-16)
+
+- Successful workflow run: `43818620729` (run #2248), workflow `vst3-build.yml`.
+- Tested source commit: `e5dcd3a28672515951cbcca9f873fcd23a86c8c0`.
+- Active PR head at documentation update: `b993c2ff39a814a87aaf6c488ae0811ac31e978f`; comparison confirms the only commit after tested source is an `Info.txt`-only documentation update (no code/build inputs changed).
+- Windows 2022 x64 Release configure and VST3 build: PASS.
+- CTest: 13/13 PASS, including `ppgu_theme_contracts` and `ppgu_sound_asset_registry_contract`.
+- pluginval 1.0.4 Strictness 5: PASS; plugin scan, cold/warm open, editor, audio processing, state, automation, parameter and bus checks completed. The optional external VST3 validator was not configured and was skipped by pluginval.
+- Portable QA artifact: `POP-PUNK-GUITAR-ULTIMATE-PORTABLE-VST3-Windows-x64`, artifact ID `14204265969`, size `2,974,862,376` bytes; SHA-256 `699b01353b31f989bb7ddb0d70e4918ae972558b13cad98f0ccdaf1b36051d67`; retained until 2027-02-14.
+- Workflow explicitly labels this as an interim QA package, not a final REV.18 release. FL Studio 20 manual host acceptance remains outstanding.
+- PR #55 remains Draft/Open and unmerged. No claim is made that the exact documentation-only PR head has its own workflow run; all source/build files match the tested `e5dcd3a` tree.
+
