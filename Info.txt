@@ -3314,7 +3314,7 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 3. Проверить по каждому source pack фактический scope лицензии и разрешение commercial embedding/raw redistribution; сомнительные элементы оставить в карантине.
 4. Довести регистрацию стабильных asset/library IDs и корректное импортирование без перезаписи оригиналов.
 5. Проверить SFZ key/root/velocity/round-robin/articulation mappings и runtime playback на реальных материалах; отдельно определить пробелы для Pattern performance/chord/strum recordings.
-6. После валидации библиотеки связать 150 MELODY + 150 PATTERN definitions с реальными sample profiles/zones, устранить пустые/неразрешённые зависимости и провести фактическое прослушивание/проверки.
+6. После валидации библиотеки связать 250 MELODY + 250 PATTERN definitions с реальными sample profiles/zones, устранить пустые/неразрешённые зависимости и провести фактическое прослушивание/проверки.
 7. READY/VERIFIED назначать только по каждому реально проверенному пресету; не выдавать весь каталог за playable до проверки всех записей.
 
 Открытые расхождения, не скрывать:
@@ -3415,3 +3415,32 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 
 Это уточнение обязательное и имеет приоритет над любыми предложениями изменить внешний интерфейс ради организации пресетов. Реализация ещё не выполнена; статус — В РАБОТЕ.
 ==============================================================================
+
+
+==============================================================================
+2026-11-16 — TX-REV19-DOC01-GOV-ARCHIVE-001 — DOC-01 GOVERNANCE CLEANUP
+==============================================================================
+
+Тип: DOCUMENTATION / GOVERNANCE ONLY.
+Статус: IMPLEMENTED; DOC-01 remains IN_PROGRESS.
+Каноническая ветка: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03.
+Preflight HEAD: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
+Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
+
+Источник: прямое поручение пользователя последовательно завершить DOC-01…DOC-08; текущие канонические правила REV.19 в этом INFO.
+
+Зависимости: актуальный HEAD REV.19; проверка существующих master/governance/journal documents; последняя утверждённая база Info.
+
+Выполнено:
+- docs/PPGU_MASTER_IMPLEMENTATION_REGISTER_RU.md: добавлен актуальный REV.19 governance header с единственной веткой, единственным журналом, 27-control/7-bypass contract, 16 themes и точной целью 500 factory presets (250 MELODY + 250 PATTERN). Старое содержимое сохранено и явно отделено как HISTORICAL / NOT ACTIVE UNTIL ROW-BY-ROW REVIEW.
+- docs/PPGU_DEVELOPMENT_CONTROL_CENTER.md и docs/PPGU_MASTER_PROMPT_RU.md: помечены HISTORICAL / SUPERSEDED как действующие инструкции; содержимое не удалялось.
+- PPGU_JOURNAL.txt и CODE.txt: помечены вторичными историческими журналами; новые решения и статусы фиксируются только в Info.txt.
+- README_JOURNAL_CONTINUATION.md: помечен историческим пакетом прежнего multi-journal workflow; его append-инструкции неактивны.
+- Исправлена одна оставшаяся активная формулировка в sample/preset work order: 150+150 заменено на утверждённые 250+250. Исторические факты о существующем 300-definition каталоге оставлены как факты аудита, не как цель.
+- docs/REV19_DOCUMENTATION_AUDIT_AND_STRUCTURE_RU.md: внесён прогресс DOC-01, точный evidence commit и открытые остатки.
+
+Критерии приёмки: старые REV.17/18 governance-инструкции не выглядят действующими; единственный журнал — Info.txt; исторический материал сохранён; утверждённая цель пресетов в активном work order — 250+250; ни один статус реализации не повышен только из-за документации.
+
+Проверки / ограничения: документационные изменения сохранены в указанном commit. Build, CTest, pluginval, FL Studio host test и runtime-функции этим transaction не выполнялись и не заявляются. Полная построчная сверка старых master/task/spec документов остаётся открытой.
+
+Следующий шаг: продолжить DOC-01 с нормализации PPGU_TASK_REGISTRY и проверки оставшихся активных master/spec заголовков, затем перейти к DOC-02 по утверждённой последовательности.
