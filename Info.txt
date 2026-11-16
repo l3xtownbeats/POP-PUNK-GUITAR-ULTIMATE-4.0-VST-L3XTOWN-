@@ -3954,3 +3954,22 @@ G. Только после прохождения критериев объяв�
 - Все операции чтения SVG/PNG выполняются в UI-потоке при обновлении скина, не в audio callback.
 - Требуется exact-SHA Windows VST3 build, CTest, pluginval, runtime inspection, SVG safety validation и FL Studio 20 acceptance.
 
+
+
+2026-11-16 — TX-REV19-NEON-STAGE-RUNTIME-SKIN-VALIDATOR-001
+
+СТАТУС: ВАЛИДАТОР ДОБАВЛЕН В FEATURE BRANCH · EXACT-SHA CI RESULT PENDING
+
+- Добавлен tools/validate_runtime_skin_registry.py.
+- Валидатор проверяет только реально зарегистрированный runtime-префикс утверждённой последовательности из 16 тем; незарегистрированные темы не попадают в runtime и не требуют ложного PASS.
+- Для каждой активной темы проверяются stable ID/index/ordinal/path, 27 control IDs + sync_selector, 21 palette token, visual-only compatibility, ECO/hot-swap contracts, наличие preview/hero PNG, размеры 360x240 и 800x450, PNG CRC, а также безопасный SVG для texture/bezel/crest.
+- Старый validator 53–102 больше не используется как runtime acceptance gate; исторический pack manifest не переопределяет активный список тем.
+- Валидатор подключён в Windows workflow и как CTest contract.
+- Текущий PR #57: рабочая ветка work/rev19-neon-stage-integration-20261116; после этих изменений требуется проверка полного workflow и компиляции.
+
+НЕПОДТВЕРЖДЁННО:
+- Успешный Windows x64 VST3 build, CTest, pluginval и runtime launch.
+- Визуальная проверка всех 27 контролов и вспомогательных окон.
+- Preview/Apply/Cancel, сохранение/восстановление выбора, resize/DPI и skin-switch invariance.
+- FL Studio 20 host acceptance.
+
