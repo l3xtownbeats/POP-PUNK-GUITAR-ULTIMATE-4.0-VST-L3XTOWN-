@@ -66,4 +66,6 @@ jobs:
             exit 0
           fi
           git commit -m "artwork(skins): render approved SKIN 02-16 preview and hero assets"
+          git fetch origin work/approved-16-skins-completion
+          git rebase FETCH_HEAD
           git push origin HEAD:work/approved-16-skins-completion
