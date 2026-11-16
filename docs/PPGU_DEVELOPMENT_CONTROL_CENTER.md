@@ -363,3 +363,12 @@ The user explicitly approved this sequence: first establish and curate the perma
 - READY preset evidence requires resolved sample references, keyboard/velocity/articulation mapping, audible playback/audition, levels/FX and save/load verification.
 - Portable release `SOUNDBANK/` is copied from the canonical `Samples/` directory; CI guards missing/underfilled library state.
 - The policy does not override source licensing restrictions: commercial embedding and raw sample redistribution rights remain mandatory.
+
+
+## 2026-11-16 — REV.19 canonical workline (user-confirmed)
+
+All active development, integration, builds, tests and final packaging take place on `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03` only. REV.18 is the previous approved baseline/history; REV.17 and earlier are archive only. Do not maintain competing active lines for the same work.
+
+Architecture rule: SIMPLE CORE — MAXIMUM PERFORMANCE. Separate MELODY and PATTERN by musical responsibility, keep one shared SamplerEngine/SamplePool/streaming/cache/voice core and shared FX infrastructure, preserve approved UI/browser structure and control contracts. Keep realtime callback bounded. Measure before/after optimization.
+
+At inspected REV.19 source HEAD `1f58f25378992c0ddbfe5d0d38598a2034adb3e3`, one SamplerEngine and one PatternScheduler are processor members; MELODY/PATTERN are separate branches in processBlock, while dedicated orchestration components are still an implementation task. No performance gain is claimed until measured and tested on the exact resulting SHA.
