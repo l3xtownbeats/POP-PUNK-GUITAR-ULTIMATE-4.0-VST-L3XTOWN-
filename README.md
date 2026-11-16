@@ -133,7 +133,7 @@ A successful run on an older commit does not certify a newer commit. Release cla
 
 ## Project principles
 
-**One engine. Two playing modes. Two main windows. Real functionality over decorative controls.**
+**Two playing-mode engines. One shared audio core. Two main windows. Real functionality over decorative controls.**
 
 Preserve the approved architecture, MIDI/APVTS and preset-state compatibility. Improve existing components before proposing new ones. Keep audio processing real-time safe, control CPU/RAM, protect sample rights and validate every material change on the exact commit that contains it.
 
@@ -146,3 +146,12 @@ Preserve the approved architecture, MIDI/APVTS and preset-state compatibility. I
 **PLAY. CREATE. ROCK.**
 
 </div>
+
+
+## Canonical development line — REV.19
+
+All current development, integration, builds, tests and final packaging are performed on `POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03`. REV.18 is the previous approved baseline and historical source of compatible decisions; REV.17 and earlier are archive only. Accepted architecture and product decisions are consolidated in REV.19 so there is one active source of truth.
+
+**SIMPLE CORE — MAXIMUM PERFORMANCE:** separate MELODY and PATTERN by musical responsibility, retain one shared SamplerEngine/SamplePool/streaming/cache/voice core and shared FX infrastructure, avoid redundant layers and threads, keep the audio callback realtime-safe, and preserve the approved UI and control contracts. Performance improvements require comparable measurements and exact-SHA tests.
+
+Implementation status must be read from the current REV.19 source and CI evidence; this architecture statement is not a claim that all planned components or optimizations are already implemented.
