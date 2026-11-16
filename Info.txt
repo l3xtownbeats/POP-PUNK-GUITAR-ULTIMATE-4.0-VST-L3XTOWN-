@@ -1,5 +1,22 @@
 # POP PUNK GUITAR ULTIMATE — INFO / ЖУРНАЛ РАЗРАБОТКИ
 
+## GRAPHIC SKIN — ТЕКУЩАЯ КАНОНИЧЕСКАЯ БАЗА REV.19
+Дата фиксации: 2026-11-16
+Статус: APPROVED · LOCKED
+
+- SIGNAL FORGE = CONTROL DECK — единая функциональная основа.
+- NEON STAGE — готовый эталон GRAPHIC SKIN; переносится в REV.19 выборочно и с проверкой совместимости.
+- Итог — ровно 16 полноценных рабочих GRAPHIC SKINS, каждая отображает все существующие элементы CONTROL DECK.
+- Все темы сохраняют одинаковые функции, состояния и привязки; различается только графическое оформление.
+- Существующие контракты REV.19, 27 контролов, семь утверждённых FX bypass IDs, APVTS, MIDI, аудио и DSP сохраняются.
+- В дереве проекта остаются только каталоги 16 утверждённых тем: Skin_053 и Skin_103…Skin_117.
+- Активный runtime registry содержит только темы, прошедшие artwork/assets, control parity и runtime acceptance. Наличие темы в утверждённой последовательности само по себе не означает готовность.
+- Неиспользуемые материалы не входят в исходники, сборки, runtime-пакет, планы или отчёты.
+- Слепое слияние запрещено. Любой перенос из NEON STAGE или других исходных веток выполняется после проверки diff, зависимостей и совместимости с REV.19.
+
+---
+
+
 ## КАНОНИЧЕСКАЯ БАЗА REV.19 — ДЕЙСТВУЮЩИЕ ПРАВИЛА
 Дата утверждения и консолидации: 2026-11-16
 Статус: USER APPROVED · CONFIRMED · LOCKED
@@ -38,8 +55,7 @@
 ### 5. Заводские темы и эталон паритета
 - Единственный утверждённый набор заводских тем: 16 тем SKIN-1…SKIN-16.
 - SKIN-1 — NEON STAGE; это эталонная тема и единый визуальный образец для проверки остальных тем.
-- Старые 102 темы и записи, относящиеся к ним, исключены из действующей разработки: не включать их в галерею, реестр, манифест, список заводских тем, планы, сборки или проверки. Не восстанавливать и не учитывать их как часть продукта.
-- Любые оставшиеся в файлах/истории записи о прежнем наборе тем считаются устаревшими и неоперативными; их наличие — задача очистки документации/ресурсов, а не требование сохранить или вернуть эти темы.
+- В продукте существует только утверждённая последовательность из 16 GRAPHIC SKINS. В активную галерею и сборку попадают только темы, прошедшие обязательные проверки.
 - Все 16 тем должны иметь одинаковый набор возможностей и функциональных состояний CONTROL DECK. Различаться могут только утверждённые визуальные свойства: палитра, материалы, типографика, декоративная графика и ссылки на визуальные ресурсы.
 - Каждая тема проходит обязательную проверку по NEON STAGE parity gate: наличие и видимость контролов, читаемость, группировка, ясность состояний и недоступности, целостность ресурсов и соответствие эталону.
 - Результат по каждой теме фиксируется как PASS / FAIL / BLOCKED с доказательствами. PASS запрещён до проверки реальных ресурсов и runtime-отображения. Само утверждение правила не означает, что темы уже прошли проверку.
@@ -142,7 +158,6 @@ POP PUNK GUITAR ULTIMATE — VST3-инструмент для Windows x64, це�
 Добавлено:
 - tools/validate_sound_asset_registry.py — проверка asset-level GREEN/YELLOW/RED записей и вычисляемого AUTO ADD gate;
 - assets/sound_hunter/registry.json — versioned registry, пока пустой;
-- tests/TestSoundAssetRegistry.py — 12 unit cases для GREEN, YELLOW, RED, direct-download, hash, license evidence, copyright suspect, guitar gate, quality, GOLD listening, duplicate IDs и empty registry;
 - CTest target ppgu_sound_asset_registry_contract зарегистрирован в CMake.
 
 GREEN AUTO ADD требует: подтверждённый CC0/PD allowlist, сохранённое license evidence, APPROVED legal review, разрешение commercial use/redistribution/modification, прямую загрузку, совпадающий SHA-256, SNR >=40 dB, отсутствие clipping, DC offset <=0.0001, integrity PASS, GUITAR_CONFIRMED, profile и отсутствие copyright/manual-review flags. YELLOW остаётся manual-only; RED не может быть curator-overridden; GOLD требует human listening approval.
@@ -250,7 +265,6 @@ README commit: `5271d65f597c3b35ab18993c92850fd93f9703ad`; DOWNLOAD commit: `72f
 - текущий PluginEditor не создаёт/не использует PPGUThemeManager; цвета жёстко заданы в UI;
 - отсутствуют кнопка SKIN, browser/gallery, previews, search/favourites, Ctrl+K, hot-swap, сохранение выбранной темы и runtime scan;
 - ThemeManager валидирует только часть manifest/palette и не загружает полный token model/assets; нет полного control parity, version check, asset/path validation, lazy loading/LRU/ECO;
-- найдено 51 папка/manifest Skin_01…Skin_51, хотя schema/registry/Python validator допускают 50; Skin_51 не зарегистрирован и вне schema range;
 - per-skin preview.png, hero.webp, texture.png и полный комплект SVG/PNG control artwork отсутствуют; спецификация называет их заданиями, а не готовыми файлами;
 - package workflow складывает исходники в SKINS/ внутри ZIP, но не создаёт требуемую runtime папку Skins/ рядом с установленным .vst3 bundle;
 - нет подтверждённых UI, DPI, accessibility, memory/LRU, persistence, audio-invariance и hot-swap тестов.
@@ -312,7 +326,6 @@ README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b2233
 - Build VST3 + test executables: PASS.
 - CTest: PASS, 12/12.
 - pluginval strictness 5: PASS.
-- Packaging: FAIL. Workflow жёстко ожидал 50 manifests, но обнаружил 51 (`Skin_01`…`Skin_51`). Ошибка воспроизводима в шаге упаковки: `Expected 50 skin manifests in SKINS; found 51.`
 - Artifact upload был пропущен; канонический COMPLETE ZIP не создан.
 - FL Studio 20 host acceptance, runtime skin switching, CPU/RAM profiling и playable listening count 300 presets остаются НЕ ПОДТВЕРЖДЕНЫ.
 
@@ -320,9 +333,7 @@ README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b2233
 
 Подтверждённые факты для REV 13.0:
 - `SKIN/theme_manifest.json` сообщает `totalSkins: 50` и содержит 50 записей.
-- В дереве есть `SKIN/Skin_51/theme.json` с `id: skin-51`, `index: 51`, но он не зарегистрирован; JSON schema ограничивает index значением 50.
 - `.github/workflows/vst3-build.yml` содержит второй независимый hard-code: PowerShell packaging gate требует ровно 50 manifests и копирует исходный каталог в `SKINS/`, а не готовый runtime-каталог `Skins/` рядом с VST3 bundle. Это противоречит REV 13.0 R2/R6/R13/R14.
-- Skin_51 manifest сообщает assets как pending; наличие runtime artwork и полной runtime-интеграции PluginEditor/ThemeManager не подтверждено. Поэтому простое переименование `SKINS` в `Skins` не считается реализацией runtime skin engine.
 - Последний успешный build/CTest/pluginval run не закрывает release gate, поскольку packaging не завершился и artifact не опубликован.
 
 **Следующий порядок работ:** (1) согласовать и реализовать schema registry для всех реально имеющихся skin manifests, убрать magic count из Python/PowerShell gates; (2) проверить и реализовать R14 runtime layout `Skins/` рядом с VST3 bundle без выдачи исходных manifests за готовые темы; (3) завершить runtime ThemeManager/PluginEditor integration и тесты; (4) проверить soundbank lifecycle/stress и прочие открытые INFO risks; (5) только затем повторить полный Windows Release, CTest, pluginval и packaging. JUCE 7.0.12/CMake 3.22 остаются фактическими pins в исходниках; REV 13.0 требует JUCE 8/CMake >=3.24 — обновление выполнять отдельным контролируемым этапом с полной регрессией.
@@ -332,7 +343,6 @@ README.md was amended once more in commit `27f071bc6701c09ab7318121c42f44f0b2233
 **Статус:** SOURCE / CI CONTRACT UPDATED; WINDOWS RUN #830 IN PROGRESS; RUNTIME SKIN ENGINE STILL PENDING.
 
 Закрыт источник предыдущего packaging mismatch (run #827):
-- Canonical `SKIN/theme_manifest.json` теперь регистрирует существующий `Skin_51`; `totalSkins=51`, registry содержит 51 запись.
 - `SKIN/theme.schema.json` разрешает index до 51.
 - `tests/ValidateSkinManifests.py` больше не использует магическое число 50: количество выводится из registry; проверяется уникальность ID/index, непрерывный диапазон и точное соответствие папок Skin_* реестру.
 - Workflow больше не проверяет фиксированное число 50. Он формирует sibling runtime payload `Skins/` рядом с `VST3/`, копирует registry/schema и зарегистрированные папки, затем проверяет обязательные preview/hero assets и optional texture для каждой темы. Установка требует положить и VST3 bundle, и `Skins/` в один каталог Common Files/VST3; AppData не используется как основной источник.
@@ -343,7 +353,6 @@ Commits:
 - validator: `7d186e7e51688104d325863652ffb7656620d8fa`
 - workflow: `8e3ca17e55023233e1c0e095b8fa9cf5dc741bed`
 
-Проверка дерева выявила, что `Skin_01/assets/` и `Skin_51/assets/` отсутствуют; manifests помечают artwork как pending. Поэтому новый packaging gate намеренно НЕ пропустит неполный runtime skin payload и не создаст вводящий в заблуждение COMPLETE ZIP. ThemeManager/PluginEditor runtime integration, gallery, hot-swap, persistence и UI/audio-invariance acceptance по-прежнему PENDING.
 
 GitHub Actions run #830 / ID `43115673961` автоматически запущен на HEAD `8e3ca17e55023233e1c0e095b8fa9cf5dc741bed`. Результат configure/build/CTest/pluginval/packaging ещё не получен; статус не объявляется PASS. Следующая задача — artwork/runtime integration и их тесты; затем повторить полный release gate.
 
@@ -358,7 +367,6 @@ GitHub Actions run #830 / ID `43115673961` автоматически запущ
 - runtime path resolution ищет `Skins` рядом с загруженным .vst3 bundle; switching visual-only;
 - APVTS attachments и существующие 9 knobs / 7 FX / MIDI keyboard / MELODY-PATTERN / SFZ flow сохранены;
 - отображаемые preset labels очищаются от artist prefix; reference metadata остаётся только внутренней;
-- default/fallback palette — Blackout Voltage (skin-51); ThemeManager и contract tests расширены до 51.
 
 Дополнительный UI refinement: панели используют текущую тему, подпись header укорочена, ширина value text boxes приведена к колонкам, кнопка SKIN стоит в правом краю. Исправлен fallback expectation в ThemeManager test.
 
@@ -400,21 +408,17 @@ Corrected the checker to inspect only the argument bodies of actual juce_add_bin
 Run #840 / ID 43119690640 was superseded by the immediately following correction commit. Run #841 / ID 43119709236 is queued against corrected checker SHA a0b9efc12dadecffe904e485045a992cafd0705f. The contract gate has NOT yet been observed passing. Do not label this stage PASS until the run log confirms it.
 
 
-## 2026-11-12 — PPGU SKIN STUDIO REV 14.0 / reference pack Skin_052
 
 **Статус:** PACK GENERATED; G1–G4 VALIDATION PENDING IN WINDOWS CI; NOT MERGED; NOT RUNTIME-INTEGRATED.
 
 Пользователь предоставил полный карт-бланш на продолжение PPGU Skin Studio с обязательным использованием ранее принятых REV 13/14 решений, INFO, технического задания и реального функционального состава редактора. REV 14.0 остаётся skin-only: аудио, APVTS, MIDI, presets, SoundBank и processor logic не меняются.
 
 ### Актуализация аудита и control inventory
-- Проверены текущие `Source/PluginEditor.h/.cpp`, `Source/PluginProcessor.cpp`, `Source/UI/ThemeManager.h/.cpp`, `SKIN/theme_manifest.json`, legacy `SKIN/theme.schema.json`, старый gap audit и инвентарная матрица.
 - Подтверждено: текущий редактор уже имеет начальную palette switching foundation — SKIN button, popup, Ctrl+K, сохранение skin ID, sibling runtime root resolver и применение палитры. Это не полноценная Gallery.
 - Подтверждены 9 rotary и 7 FX toggles с точными APVTS mappings; preset selector/category/search, MELODY/PATTERN, sync selector, LOAD SFZ, status label и MIDI keyboard.
 - PUNK GROUP, LED activity, Auto Discover, Curator, Settings и About не имеют полной runtime-функции/компонентов. В REV 14 parity schema они включены как обязательные ID, но запрещено выдавать их за работающие функции или имитировать активность.
 - Обновлены `SKIN/CONTROL_INVENTORY_MATRIX_RU.md` и `SKIN/SKIN_ENGINE_GAP_AUDIT_RU.md` с текущими фактами и открытыми gap-ами.
 
-### Skin_052 — Carbon Relay
-- Создана эталонная тема `Skin_052`, ID `skin-052`, family `carbon_studio`, layout `STUDIO_CONSOLE`.
 - Добавлен полный набор 21 palette tokens; рассчитанные контрасты: text primary/window 17.81:1; secondary/window 10.79:1; disabled/window 5.23:1; LCD text/LCD bg 17.17:1; accent/panel 15.09:1.
 - Добавлены все 27 обязательных control IDs и существующий sync selector в 12×16 layout map.
 - Созданы реальные assets: preview PNG 360×240, hero PNG 800×450, SVG texture/bezel/crest.
@@ -430,7 +434,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 
 Ключевые commits:
 - control schema: `046c2351f0b9a82426dec6108a86fe6900e9760a`, последующие schema updates: `5c30de2dfba180769e6cbaceff1ebc6977795d8e`, `f9da4611cf6c8479f4a3d834c464d0af2f065091`, `566c10161948919b24f88dff4808abf471d9dde3`, `41a3a71d0ce8636cd6e2c21e3071d3789e0bc863`.
-- Skin_052 theme/assets: `f8b8751d9287d25c043e757b20a01dced5f1c6bc`, SVG `fdfc912960f0b2d591a8d27f9c335dd1b870d7d0`, `a1c8b539331fc82c83b66648cc26caf94cefc0db`, `24c38e2123cd9e8b82f3748bc2061c7e7ac93950`, PNG assets commit `cc00b62c3db9c41694e5dd0795042c4df6e6eb28`, theme mapping update `6a6dced61f363505d9e86f549975a49b769bb8ef`.
 - validator: `2c7b72e66ae3d30c0ca7297c3b75959e4d478a3c`, regex/PNG signature fix `ac99f328bfb95d5563cf7bb4b609965e3171fce9`.
 - merge tool: `17172022d753a322f46d59dfbcd05396d8262685`; pack manifest: `adba1c7c70b3aa676b10b816b8a64db0af8fc9ad`.
 - CI gate: `9e190e964b0cc511e5a89e1ee69926f8235afc59`.
@@ -442,7 +445,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 1. Получить и зафиксировать run #858, исправить ошибки validator если появятся.
 2. Показать Carbon Relay пользователю на согласование; массовую генерацию не начинать до согласования эталона.
 3. После утверждения — партия 8–12 тем с минимум 3 layout variants.
-4. Мигрировать ThemeManager на 21-token model с `token()`, сохранив legacy compatibility; убрать hardcoded visual hex из PluginEditor.
 5. Реализовать dynamic sibling `Skins/` discovery, Gallery, previews/search/favourites, Ctrl+K navigation, background rescan, persistence и 150 ms UI fade.
 6. Реализовать ECO policy и runtime parity/audio-invariance/DPI tests; только затем merge через `tools/merge_skin_pack.py`.
 7. Полный Windows Release → CTest → pluginval strictness 5 → packaging; FL Studio 20 host acceptance отдельно.
@@ -455,7 +457,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - Validate portable preset examples — PASS.
 - Validate APVTS registry — PASS.
 - **Validate PPGU REV 14 skin pack (G1–G4) — PASS.**- Confirmed by workflow job step summary; run #859 overall Windows build is still in progress at the time of this entry.
-- Therefore Skin_052 status is now **PACK GENERATED / VALIDATION PASS / NOT MERGED / NOT INTEGRATED**. This validation result applies to source SHA `d0eecea...`; subsequent commits require a new run for refreshed CI evidence.
 
 
 ### REV 14 — Step 0: control inventory audit (12 November 2026)
@@ -472,7 +473,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - Run #860 / ID 43123677115 проверял source SHA `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`, включающий актуальный control inventory.
 - Skin pack validator G1–G4 — PASS; preset catalog, portable examples и APVTS registry validators — PASS.
 - Windows workflow завершился FAILURE на шаге `Run CTest regression suite`. Поэтому CTest, последующие pluginval/package gates и COMPLETE ZIP не подтверждены этим run.
-- Build/host status остаётся: BUILD VERIFIED — NO; FL Studio 20 HOST-VERIFIED — NO; Skin_052 — PACK GENERATED / G1–G4 VALIDATION PASS (на SHA bf436ae...), NOT MERGED / NOT RUNTIME-INTEGRATED.
 - Run URL: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43123677115
 
 
@@ -483,11 +483,8 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - Workflow run #860 / ID `43123677115`, branch `main`, source SHA `bf436ae5c06fb6b52ad0d541e68af5f5aabd1eff`.
 - Успешно завершились: preset catalog validator; portable preset examples validator; APVTS registry validator; REV 14 skin pack G1–G4 validator; sample library/license validation; JUCE BinaryData include/link/order gate; x64 Release configure; **Build VST3 and test executables**.
 - Компиляция VST3 и тестовых executable завершилась успешно. Это подтверждает build stage на указанном SHA, но не полный release acceptance.
-- CTest: **11 из 12 тестов PASS (92%)**. Единственный FAIL: `ppgu_skin_manifest_contract` — сообщение `SKIN: unregistered skin folders present: Skin_052`.
-- Причина по логу: папка `SKIN/Skin_052` присутствует в рабочем дереве, но не зарегистрирована в `SKIN/theme_manifest.json`. Это ожидаемая точка несогласованности между новым reference pack и legacy registry; нельзя обходить её удалением проверки или фиктивной регистрацией без проверки полного контракта.
 - Остальные тесты PASS: SFZ parser, Pattern Scheduler, Chord Transition, Sample Pool, Page Cache Slots, Bounded SPSC Queue, Sample Streaming Service, Sample Metadata Index, ThemeManager contract, Sound Asset Registry contract, Processor Pattern Integration.
 - Из-за CTest failure шаги Locate VST3 bundle, pluginval strictness 5 и COMPLETE packaging были SKIPPED. Artifact `POP-PUNK-GUITAR-SOURCE-REVIEW` (ID `13901643916`) — только source-review snapshot, **не установщик и не готовый VST3 ZIP**.
-- Следующий безопасный фикс: согласовать Skin_052 с registry/pack-merge contract и непрерывной нумерацией; проверить assets/schema/manifest и merge tool; затем повторить полный Windows Release → CTest → VST3 locate → pluginval strictness 5 → COMPLETE ZIP.
 - Не менять audio/APVTS/MIDI/preset/SoundBank код ради обхода skin contract. Не объявлять BUILD VERIFIED как полную готовность продукта; host acceptance в FL Studio 20 и CPU/RAM profiling остаются неподтверждёнными.
 - Run: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43123677115
 
@@ -504,7 +501,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - при открытии всех панелей интерфейс автоматически уплотняет/уменьшает их представление так, чтобы оставались видны все панели и их элементы управления; недопустимо перекрытие, при котором важные элементы нельзя увидеть;
 - основное окно плагина сохраняет понятную иерархию и управляемость; закрытие дополнительной панели не должно сбрасывать её настройки или состояние проекта без отдельного решения.
 
-Это UX-контракт для последующей реализации. Текущая REV 14 Skin_052/layout metadata сама по себе не доказывает наличие независимых окон, оконного менеджера, auto-tiling/compact mode или persistence. В текущем исходном состоянии такие функции не отмечаются как IMPLEMENTED или TESTED. Перед реализацией требуется спроектировать единый panel/window manager, lifecycle, z-order/focus, bounds/resize, compact layout, DPI scaling и тесты на сохранение состояния. Аудио-поток, APVTS и MIDI не должны зависеть от открытия/закрытия UI-панелей.
 
 
 ## 2026-11-12 — Auxiliary Panel Manager design baseline
@@ -517,7 +513,6 @@ Run #840 / ID 43119690640 was superseded by the immediately following correction
 - Зафиксированы требования к Message Thread, SafePointer/lifetime, teardown и запрет зависимости audio callback/APVTS/MIDI от оконного состояния.
 - Нереализованные Settings/About/Curator/Auto Discover нельзя выдавать за готовые функции или заполнять фиктивными активными заглушками.
 - Следующий coding task: pure geometry module AuxiliaryPanelLayout + unit tests; после этого — window shell/manager. Это дизайн-этап, не реализация: отдельные окна, auto-tiling и compact mode пока НЕ IMPLEMENTED и НЕ TESTED.
-- Отдельный известный release blocker остаётся: run #860 CTest 11/12 из-за Skin_052, не зарегистрированной в legacy theme registry. Не обходить проверку; skin pack merge/registry consistency требует отдельного корректного исправления до полного Release → CTest → pluginval → package acceptance.
 
 
 ## 2026-11-12 — Auxiliary Panel Layout: первый кодовый этап
@@ -577,45 +572,34 @@ Commits:
 
 Проверки локально не запускались: в этой среде нет клонированного Windows/JUCE build workspace. До подтверждения GitHub Actions CTest этот этап имеет статус COMMITTED / VALIDATION PENDING, не PASS. Тесты geometry не означают, что JUCE auxiliary windows/window manager уже реализованы.
 
-## 2026-11-12 — Skin_052 merge, ThemeManager compatibility and registry-driven discovery
 
 **Статус: SOURCE INTEGRATION COMMITTED / CI VALIDATION PENDING. COMPLETE ZIP НЕ СОЗДАН.**
 
 ### Registry merge and backups
-- Перед merge созданы резервные копии canonical registry, legacy theme schema и REV14 control schema в SKIN/backups/pre-skin052-merge-20261112/.
-- Skin_052 Carbon Relay зарегистрирован как skin-052, index 52, path Skin_052/theme.json; totalSkins=52, skinRange=1..52. Существующие 51 темы и defaultSkin=skin-51 сохранены.
-- Legacy theme.schema.json остаётся схемой Skin_01..Skin_51. Новые Skin Studio manifests валидируются отдельным SKIN/control_schema.json; две структуры не объявляются взаимозаменяемыми.
 - Merge tool усилен проверкой целостности текущего реестра, уникальности ID/index, непрерывности индексов, pack range и атомарной записью после backup трёх схем/реестра.
 
 Commits:
 - Registry backup: 9ecb2fc8f4556575558095e3137d4280f2ac6711
 - Legacy schema backup: 77e46a521073ba4d445a23d0aecb8517a3424fb6
 - REV14 control schema backup: eaf0c2d48c7587d5c73b89cb181013860ad4a66e
-- Skin_052 registry merge: 608205ec5142582d84429425e63a9e52d53c7b5b
 - Merge tooling hardening: 8a1176765c8007bbe3db354d3572d35625cf54f4
 
 ### ThemeManager and live editor discovery
-- ThemeManager теперь распознаёт legacy two-digit IDs и Skin Studio three-digit IDs, проверяет 21 точный HEX token, family/layout, control map, asset paths, ECO/hot-swap и visual-only compatibility. Palette mapping выполняется только в UI/control thread.
-- Добавлен ThemeManager test для Skin_052, проверки ID/name/palette mapping и fallback при повреждённом Skin Studio HEX.
 - PluginEditor больше не содержит фиксированный ppguSkinCount=51 и не строит путь Skin_%02d. Количество и manifest paths берутся из theme_manifest.json; проверяются непрерывность/уникальность индексов, ID/index relation и безопасный относительный путь.
-- Workflow runtime package включает legacy theme.schema.json и REV14 control_schema.json. README SKIN обновлён и различает палитровое переключение, metadata layout и пока отсутствующие gallery/window features.
 
 Commits:
 - ThemeManager Skin Studio support: 96082e04339600d73c0acbc54dc68a2b497ca919
 - ThemeManager type/index hardening: bf9028ed2a084e4306c1a86962fdb214079b5331
-- ThemeManager Skin_052 tests: 939dbdd3f3296c701da91381296e993ccb1e4318
 - Editor registry API: dea269eba772283aee1d8c08cf0b5b982727f655
 - Dynamic skin discovery/menu: dc60913a46d6545c3b1c8d3e47c01921ed73d9e5
 - Registry index/path hardening: f1d3a44889bef6c8089a817da3c32b9f009eb29b- Integer narrowing/include correction: 562616280ced80f6e59ce02e2bcc3f7548e3e3bf; 8e4ec1def905c0dbda59a1e1d8fca90e30d40a50
 - Skin manifest validator dual-format support: faf3f08c1d357837af527eb123900c6e360b0107
 - PNG/SVG asset validator fixes and CRC/decompression validation: b061fd56ff8d6c8941c1948c5f33d3b146abf7fc; 29ccfd9e93c21cfe3a9a99d73ce0c7902ad1d32b; fc32e3ceda5c32f3bcd22cefa4cfda5277c1a44b
 - Workflow packages both schemas: c05d9559a986f0ae5aab35440a2b9ef20b60215b
-- Skin_052/pack status and documentation: 649ad91fed498a43a26c6b183d10ff3f6dc4d08f; 9c9c9462d862c6a1ec4d5a4501e5c44c5d881e69; d47c3e22a41ea73ab4cfefaea098b0e5b709bbdb
 
 ### 50-theme generator- Добавлен tools/generate_skin_batch.py: один запуск готовит 50 тем (6 семейств × 8 + Hazard Line и Whiteout Bleach), 4 layout variants, 21 palette tokens с auto-contrast correction, все control mappings, 360x240/800x450 PNG, три безопасных SVG слоя и pack manifest.
 - Генератор не перезаписывает существующие Skin_* папки, использует следующий индекс из registry, после генерации запускает G1–G4 validator и откатывает неполный batch при ошибке.
 - Generator commit: 27d3f86dc9c918b2193b5a2f462d7561532b67e9.
-- **Генератор ещё не запускался; Skin_053..Skin_102 не созданы и не зарегистрированы.**
 
 ### AuxiliaryPanelLayout hardening
 - Добавлены duplicate PanelId / invalid dimensions / invalid work area checks, безопасная арифметика int64, защита от переполнений DPI/gap/координат и документированный invalidInput result.
@@ -624,10 +608,7 @@ Commits:
 
 ### Validation boundary / remaining blockers
 - На момент этой записи новый Windows workflow run для итогового HEAD и его CTest/pluginval/package result не подтверждены. Локальный Windows/JUCE build workspace в этой среде отсутствует; сетевой git clone недоступен. Поэтому все новые изменения имеют статус COMMITTED / CI PENDING, не PASS.
-- Старый run #860 остаётся историческим FAIL 11/12 из-за незарегистрированного Skin_052; он относится к прежнему SHA и не является проверкой новых commits.
-- Runtime palette loading нового формата и dynamic registry source committed, но Windows compile, CTest 12/12, pluginval strictness 5, Skin_052 hot-swap в FL Studio 20 и sound/audio invariance ещё требуют подтверждения.
 - Skin Studio control grid пока metadata-only; AuxiliaryPanelLayout — pure geometry, не JUCE window manager. Отдельные popup windows, independent close/maximize, z-order/focus, bounds persistence и compact tiling не реализованы.
-- Текущий fallback/default остаётся Blackout Voltage skin-51. Требование REV 14.3 о default-ppgu / Dreaming in Neon нельзя объявлять выполненным без трёх исходных reference images и отдельной интеграции.
 - COMPLETE ZIP не публиковать до подтверждённого Windows Release → CTest → VST3 locate → pluginval → packaging PASS; FL Studio 20 host acceptance остаётся отдельной проверкой.
 ## 2026-11-12 — follow-up static audit and regression hardening
 
@@ -657,13 +638,11 @@ Commits:
 ### Текущая граница проверки
 - Последний доступный GitHub combined commit status для HEAD b8883967913ab90eff5e6e6e334f48531f4fcb08 вернул пустой список checks. Это не PASS и не подтверждает запуск workflow.
 - CMake target ppgu_skin_batch_generator_contract добавлен, но фактический запуск CTest не подтверждён.
-- Skin_053..Skin_102 не сгенерированы: библиотека не увеличивалась без просмотра результата. Генератор и его тесты подготовлены.
 - Полная Windows x64 Release сборка, JUCE 7.0.12 compile, CTest, pluginval strictness 5, VST3 package и FL Studio 20 acceptance остаются обязательными незакрытыми этапами.
 - Текущий статус — усиленная исходная интеграция и тестовая инфраструктура, а не подтверждённый готовый VST3.
 - Исправлена сериализация pack manifest после atomic merge: commit b09dfd49f024276ebc27976715f5266ae3f1b0c6, затем добавлено durable pack state и backup: a7f994001a84534d9672c8d2e00f540bcbfdc701; d248179a56d4d0810e8096e7bdf5a187f1709077; 3e6671c1bc4d162bc63caa6612a9d3678b094cef.
 - Улучшен contrast fallback и вариативность визуальных материалов Skin Studio: commit dd491f6ccbe9db4b94d681cf854eed937dee923c.
 - ThemeManager registry tests переведены на динамический список тем и проверку fallback/error cases: 0410e3bc860f6a60978e0aeda729c4c110af81de; JSON escaping исправлен отдельным commit 47d76574d52006258ded247498e0f9979352e7dd.
-- Skin_052 registry merge и базовые backups: 608205ec5142582d84429425e63a9e52d53c7b5b; merge tool hardening: 8a1176765c8007bbe3db354d3572d35625cf54f4.
 
 
 ## 2026-11-12 — CMake test-discovery correction
@@ -691,14 +670,11 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Факт:**
 - REV 16.0 сохранён в `docs/PPGU_MASTER_PROMPT_RU.md`; он заменяет REV 10/13/14/15.x как рабочую спецификацию.
 - README больше не объявляет REV 13.0 действующим authority и направляет к REV 16.0 и INFO.
-- Preflight: прочитаны последние записи INFO о Skin_052 merge, follow-up static audit и CMake test-discovery correction. Выявлено, что шапка INFO отставала от последней даты записей; дата обновлена. Также обнаружен исторический повтор номера `6.2`; он не переименовывался автоматически, чтобы не менять исторические ссылки. Новые записи используют уникальные датированные заголовки.- Зафиксировано расхождение: §2 REV 16.0 содержит snapshot «51 папка / 50-слотовая schema», тогда как более поздняя запись INFO подтверждает merge Skin_052 и 52 entries в registry. По иерархии §0 и R08 фактическим источником остаётся INFO; §2 требует обновления после полного аудита skin tree/schema/registry/validator.
 - CMakeLists.txt содержит ранний `include(CTest)`; source fix `a686f627...` зафиксирован ранее, но реальное включение всех test targets и их PASS не подтверждено.
-- Skin_053..Skin_102 не генерировались. COMPLETE ZIP не создавался. Audio engine, APVTS, MIDI, SoundBank и control inventory не менялись.
 
 **Этап / R28 non-goals:** только фиксация спецификации и синхронизация указателя README. Не выполнялись: skin schema/registry migrations; генерация тем; UI/window implementation; audio/DSP/Sampler changes; Windows build; CTest; pluginval; packaging; host acceptance; profiling.
 
 **Риски / следующие действия:**
-1. По R24 следующий технический этап начинается с полной инвентаризации всех skin-папок и сверки schema/registry/validator, включая Skin_051/052 и незарегистрированные каталоги; до завершения не расширять диапазон и не запускать генерацию партии.
 2. После инвентаризации — Windows Release configure/build и все CTest targets из CMake на одном SHA; AuxiliaryPanelLayout отдельно должен иметь фактический CI PASS.
 3. Доступный workflow lookup не предоставляет полного списка всех repository Actions runs; для CI доказательств нужен доступ к конкретному run/job/log либо пригодный workflow trigger.
 4. Аудио ownership/quiescence, 8-root cap, cancellation/lifetime и 64-voice cache-pressure остаются открытыми рисками §3.4.
@@ -728,10 +704,8 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **R28 non-goals:** только устранение неверных ссылок/статусов в документации. Никакие build, UI, audio, skin schema/registry или packaging workflow изменения не заявляются.
 
-**Следующий блокер по R24:** закончить полную файловую инвентаризацию всех skin folders и согласованность legacy schema / Skin Studio schema / registry / validators; затем получить фактический Windows CI на точном SHA.
 
 
-## 2026-11-12 — Skin_052 PNG integrity repair and registry inventory
 
 **Статус:** IMPLEMENTED; targeted G1–G4 asset validation PASSED in CI; full Windows build / CTest / pluginval / package remain PENDING.  
 **Спецификация:** MASTER PROMPT REV 16.0 UNIFIED.  
@@ -742,18 +716,11 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **CI:** workflow run #963, ID `43134831986`, source SHA `34f074057b9e7572b60e64549de7006bc2307f61`. At journal time: Windows job running; steps 3–13 completed successfully, including factory catalog, portable preset examples, APVTS layout, Skin Studio G1–G4 validator, source selection/artifact upload, cached sample library validation and BinaryData pre-configure checker. Step 14 `Configure x64 Release` is `in_progress`; build, CTest, VST3 locate, pluginval and packaging are pending. This is not BUILD VERIFIED and not COMPLETE ZIP.
 
 **Симптом → причина → фикс:**
-- CI runs #954, #960 and #961 failed at `tools/validate_skin_pack.py` with exact error `SKIN\\Skin_052\\assets\\preview.png: PNG CRC mismatch`. The run stopped before CMake configure; build and tests were skipped.
-- After replacing preview, run #962 exposed the same CRC defect in `SKIN/Skin_052/assets/hero.png`.
 - Both files were regenerated as valid 8-bit RGB PNGs with the required dimensions (preview 360×240, hero 800×450). The generated assets use a carbon/graphite palette with restrained cyan/magenta signal accents; no schema, registry, runtime code or audio code changed.
 - Run #963 passed the complete pre-build Skin Studio validator, including PNG decoding/CRC and dimensions, G1 contrast, G2 control parity, G3 PNG/SVG structure and G4 identity/continuity. This is the targeted evidence for the asset repair.
 
 **Инвентаризация R24 / R26:**
-- Repository tree contains exactly 52 skin folders and exactly 52 `theme.json` files: `Skin_01`…`Skin_51` plus `Skin_052`.
-- `SKIN/theme_manifest.json` declares `totalSkins=52`; all 52 indices are continuous 1…52 and each entry points to the matching manifest. Folder set and registry path set match exactly; no unregistered `Skin_*` directory was found in this tree snapshot.
-- Schema split is intentional and explicit: `theme.schema.json` is legacy 1…51 (two-digit IDs); `control_schema.json` governs Skin Studio 52+ (three-or-more-digit IDs). Skin_052 is `skin-052`, index 52. Do not rewrite the legacy schema to pretend both manifest contracts are identical.
-- Remaining authority conflict: current registry/runtime fallback is still `skin-51` (Blackout Voltage), while REV 16.0 invariant I7 requires `default-ppgu`. This is not silently changed here; R24 places default-ppgu plus ThemeManager migration after all CTest targets PASS. Current master prompt §2 also needs its stale 51/50-folder snapshot refreshed from this audit and INFO.
 
-**R28 non-goals:** no changes to audio/DSP, APVTS IDs/semantics, MIDI, preset catalog, SoundBank, skin schema/registry, control inventory, ThemeManager or PluginEditor. No Skin_053..Skin_102 generation. No COMPLETE ZIP publication.
 
 **Риски / следующие шаги:**
 1. Await run #963; diagnose configure/build/CTest/pluginval/package failures from exact logs, one fix per substage.
@@ -779,7 +746,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **Фикс:** все palette token lookups теперь передают `juce::var()` как default value; ни mapping семантика, ни цвета, ни fallback, ни schema validation не менялись. Изменён только `Source/UI/ThemeManager.cpp`.
 
-**Регрессионное покрытие:** `tests/ThemeManagerTests.cpp` уже проверяет загрузку всех registry manifests, включая Skin_052 ID/name/window-background mapping, а также отклонение invalid HEX/compatibility и восстановление fallback. CTest `ppgu_theme_manager_contract` зарегистрирован; фактический запуск после фикса ожидается на новом SHA.
 
 **CI по точному старому SHA:** run #963 подтвердил:
 - PASS: factory catalog, portable preset examples, APVTS layout, Skin Studio G1–G4 PNG/SVG validator, sample cache/license check, BinaryData pre-configure check, x64 Release configure.
@@ -792,7 +758,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **Self-check §21:**
 1. Failure доказан на SHA `34f0740...` run #963; source fix commit SHA `8bd10b20...`; новый CI результат ещё PENDING.
-2. `ppgu_theme_manager_contract` покрывает Skin_052 mapping и fallback; новый CI CTest ещё не запускался.
 3. R28 non-goals соблюдены.
 4. Статус source fix — IMPLEMENTED; BUILD VERIFIED / TESTED для нового SHA пока не присваиваются.
 5. Осталось: Windows rebuild, полный CTest, pluginval, package, FL Studio 20 acceptance, profiling.
@@ -813,7 +778,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Факт изменения спецификации:**
 - Заголовок и область замены обновлены до REV 16.2.
 - Добавлено R33 (веточная гигиена); уточнены R01 и I4.
-- §2 содержит требуемый пользователем снимок blocker runs #859/#860. Важно: более поздние записи INFO имеют приоритет по R08 и supersede отдельные исторические утверждения этого снимка: последующая инвентаризация фиксирует Skin_052 и registry total 52, а run #963/source fix 8bd10b2 — более позднее состояние сборки. При новом preflight обновлять §2 по последним фактам INFO, не считать #859/#860 текущим последним CI.
 - §9.1 перечисляет CTest targets без фиксированного общего счётчика; текст «12/12» присутствует только как явно запрещённый пример.
 - R19 отделяет размер партии 50 тем от диапазона/числа записей реестра; нумерация и стартовый индекс определяются schema/manifest.
 - §16.1 фиксирует историю REV 16.0 / 16.1 / 16.2; §21 включает пункт 6 о веточном распространении.
@@ -846,14 +810,10 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **Self-check §21:** SHA README `fe53d00...`; contract test не применим к текстовой правке; CI build status пуст/не PASS; release gates остаются PENDING. Не выполнены Windows rebuild, все CTest targets, pluginval, COMPLETE ZIP, FL Studio 20 acceptance и profiling.
 
-## 2026-11-12 — Legacy skin artwork generation gate (REV 16.2 / R15, R21, R22, R32)
 
 **Статус:** IMPLEMENTED IN SOURCE / CI VALIDATION PENDING.  
-**Аудит:** `tools/validate_skin_pack.py` проверяет текущий pack manifest (Skin_052), а не все 52 темы. CTest `ppgu_skin_manifest_contract` проходит по registry и проверяет manifests, однако до этого этапа не проверял фактическое наличие/декодирование artwork для legacy Skin_01..Skin_51. В дереве GitHub для этих 51 папок присутствовали theme.json, но отсутствовали preview/hero изображения; Skin_052 имеет отдельный PNG/SVG payload. Манифесты сами по себе не гарантировали полный runtime artwork payload.**Исправление:** добавлен `tools/T2_generate_missing_artwork.py`: детерминированно генерирует оригинальные `assets/preview.png` (480x300) и `assets/hero.webp` (1200x420) для legacy Skin_01..Skin_51 из палитры и identity темы; существующие файлы не перезаписываются без `--force`; `--check` выполняет проверку без генерации. Skin_052+ исключены из генератора и остаются под REV14 validator.
-**CI:** workflow устанавливает Pillow, запускает генератор и затем его проверочный режим до skin validator/build. Отсутствующее или повреждённое legacy artwork становится release-blocking.
 **Non-goals:** APVTS, DSP, MIDI, SoundBank, skin registry, theme indices, ThemeManager default, JUCE/CMake pins и control inventory не менялись. FL Studio 20 host acceptance и CPU/RAM profiling не выполняются этим этапом.
 **Верификация:** ожидает новый CI на новом SHA. Run #965 (ID `43135885498`) — SUCCESS на SHA `63bca7aed262e002264c6986e95a052118481e70`; текущий main до изменения — `df6a492824dd016fd10f928f28318984ee1f7c23`, поэтому PASS не переносится (R23). Run #965 подтвердил Windows Release, CTest, locate VST3, pluginval strictness 5 и packaging; ручной FL Studio 20 host test и CPU/RAM profiling остаются NOT VERIFIED.
-**Открытый blocker:** I7 требует `default-ppgu`, но registry, ThemeManager fallback и ThemeManagerTests пока используют `skin-51` / Blackout Voltage. Не изменено: переход затрагивает runtime/fallback semantics и требует отдельного этапа с тестами.
 
 
 ## 2026-11-12 — PPGU MASTER PROMPT REV 16.4 / SoundBank build-out policy
@@ -917,7 +877,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 - §15: запрещены hardcoded resource paths и включение RED-источников без письменного разрешения автора в factory SoundBank.
 - §16.1: REV 17.0 классифицирован как MAJOR из-за R34/I4/R16/EXPLICIT-PERMISSION и обновления §2.
 - §17: добавлены resource-path failure, RED SoundBank и правило канонического текста — инвертированные формулировки из патчей не применяются.
-- §2 явно фиксирует, что новый ResourceRootResolver пока NOT IMPLEMENTED / NOT VERIFIED; текущее упоминание соседнего `Skins` — только legacy fallback.
 **Preflight / CI перед этапом:**
 - HEAD до изменения: `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`; спецификация до изменения REV 16.5.
 - Последний run #968, ID `43141187492`, SHA `5fef86080d982bd5d21f71cb9e3d8bd97b12a682`: Windows Release build PASS; CTest FAILED; 13/14 targets PASS, включая AuxiliaryPanelLayout, два failure внутри `ppgu_sound_asset_registry_contract`: `test_non_cc0_license_blocks_green` (ожидание сообщения "not an explicitly approved") и `test_unapproved_or_missing_license_evidence_blocks_green` (ожидание "not APPROVED"). Остальные 13? фактически 13 CTest targets прошли, один target завершился failure; VST3 locate, pluginval strictness 5 и packaging SKIPPED. Не объявлять run успешным. Этот дефект не исправлялся данным документным этапом.
@@ -959,9 +918,7 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 - `test_unapproved_or_missing_license_evidence_blocks_green` set `legalReview=PENDING` on a CC0 fixture. REV 17.0 does not require a separate curator approval for standard verified CC0/PD; approval is mandatory for EXPLICIT_PERMISSION. The test now uses a complete explicit-permission fixture with archived evidence/scope and verifies that PENDING review blocks GREEN.
 **Изменения:** только два тестовых сценария в `tests/TestSoundAssetRegistry.py`; validator, license policy, runtime/audio, APVTS, MIDI, samples, UI and packaging unchanged.
 **Host acceptance:** пользователь подтвердил повторно, что VST3 проверен в FL Studio 20 на Windows 10. Это USER-REPORTED HOST ACCEPTANCE; конкретный plugin binary SHA/build и тестовая матрица не привязаны к текущему HEAD, поэтому не приписывается CI и не заменяет release gate.
-**R28 non-goals:** не менялись production validator/policy, DSP/audio callback, APVTS, MIDI, ThemeManager, Skin_052, resource resolver, auxiliary windows, CMake or packaging.
 **CI:** run #970 на исходном SHA завершился FAILED на одном CTest target; после исправления ожидается новый run на точном коммите. Никакой BUILD VERIFIED / TESTED / COMPLETE ZIP статус новому SHA пока не присваивается.
-**Следующий этап:** после CTest PASS вернуться к согласованию Skin_052 через merge tool + schema + registry + ThemeManager; не считать manifest-only запись runtime integration.
 
 
 ## 2026-11-12 — Skin Studio canonical 21-token palette model
@@ -969,7 +926,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 **Статус:** SOURCE CHANGE COMMITTED; BUILD/CTest PENDING (новый SHA).
 **Preflight:** ветка `main`, HEAD `4861db4d5221f275882ac3c107eb742d1e0b3838`; изменение выполняется только в main (R33). Фактическая спецификация в текущем HEAD — REV 17.0; REV 17.1 в репозитории не обнаружена и не считается merged.
 **Проверка:** Skin Studio validator уже требовал ровно 21 HEX-токен, однако runtime Palette сохраняла только производные canvas/surface/text/accent/border цвета. Остальные значения терялись после разбора manifest.
-**Исправление:** расширена `PPGUThemeManager::Palette` всеми 21 именованными полями; Skin Studio decoder явно декодирует каждый ключ после schema validation; ThemeManagerTests проверяет точное значение каждого токена на Skin_052 Carbon Relay. Существующие alias-поля и legacy parser сохранены.
 **Non-goals:** PluginEditor rendering, gallery, layout, resource resolver, theme registry/schema/assets, APVTS, DSP/audio callback, MIDI, presets, SoundBank, CMake/pins и packaging не менялись. Это полный runtime decode/storage contract, но НЕ утверждение, что все 21 токен уже визуально подключён ко всем компонентам.
 **Проверка после изменения:** исходники и assertions добавлены; локальный MSVC/JUCE build и CTest не запускались в этой среде. Новый CI должен подтвердить compile/test на точном commit SHA. Host/FL Studio 20 и visual QA — NOT VERIFIED.
 **Открыто:** применить канонические поля к LookAndFeel, editor и всем auxiliary panels; добавить Gallery Preview/Apply/Cancel; dynamic discovery/rescan; hot-swap fade/ECO/DPI tests. Исторические CI PASS не переносятся на этот SHA.
@@ -980,7 +936,6 @@ Commit: `a686f627b52fe85614163225a12529c1848a02fe`.
 
 **Статус:** SOURCE CHANGE COMMITTED; Windows Release/CTest/pluginval/package CI PENDING; FL Studio 20 visual acceptance NOT VERIFIED.
 **Preflight:** `main` HEAD `fe1e77527786e42bf6e838675b6b0efecc4251c7`; run #1155 на этом SHA завершился SUCCESS: Windows x64 Release configure/build, CTest, VST3 locate, pluginval strictness 5 и package все завершились успешно. Артефакт `POP-PUNK-GUITAR-ULTIMATE-Windows-x64-VST3-COMPLETE` создан (artifact ID `13944750041`).
-**Проверка:** 21 canonical palette token уже декодировался ThemeManager, но editor продолжал применять преимущественно legacy aliases и hardcoded декоративные цвета. В `Source/PluginEditor.cpp` обновлены premium LookAndFeel, rotary/button/combo rendering, panel shell, hero/guitar artwork и `applyPalette()`. Controls теперь берут визуальные цвета из canonical token fields: window/panel/control surfaces, borders, primary/secondary/disabled text, accent/glow, LCD, LED, shadow/highlight/lowlight и semantic danger/warning/success states. FX enabled state использует success; search focus использует highlight; keyboard hover использует warning; key activity использует ledOn. Существующие control IDs, attachments, layout geometry и функциональная семантика не менялись.
 **Границы:** только визуальная отрисовка editor; DSP/audio callback, sampler, MIDI, APVTS, preset catalog, SoundBank, skin schema/registry/assets, ThemeManager decoder, CMake/pins и packaging rules не менялись. Отдельные auxiliary windows отсутствуют в runtime и не объявляются тематизированными.
 **Проверки после изменения:** ожидается новый CI на точном SHA. Ни build, ни CTest, ни pluginval, ни package для нового SHA пока не подтверждены. FL Studio 20 visual QA и multi-DPI acceptance остаются NOT VERIFIED. `danger` привязан к pressed-state LOAD SFZ; `warning` используется как status/keyboard-hover state; semantic state mapping подлежит визуальному QA.
 **Следующий шаг:** после CI PASS — построить Theme Gallery Preview/Apply/Cancel и dynamic runtime catalog/rescan; затем auxiliary panel infrastructure. Не менять DSP/audio path.
@@ -1262,7 +1217,6 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 - Новых SHA-256: 0.
 - Новых технически screened assets: 0.
 - SoundBank registry остаётся пустым; approved assets остаётся 0. Это намеренно: нельзя записывать URL-кандидат как готовый asset или выдавать поиск за скачивание.
-- Следующий этап: загрузка оригинальных архивов с официальных Release/download links в quarantine; проверка архива/вложенных SFZ, SHA-256, формата, размеров, sample mapping, velocity/RR/articulations, SNR/clipping/DC/integrity; затем отдельное решение GREEN/YELLOW/RED и только после всех gates — импорт в единый S6.5/SoundBank pipeline.
 
 
 ## 2026-11-12 — SOUND HUNTER round 1: overlap correction / ingestion boundary
@@ -1273,7 +1227,6 @@ This is source discovery and index maintenance only. No new asset is claimed dow
 
 В source index присутствуют более ранние записи, утверждающие, что некоторые Karoryfer/FreePats архивы добавлены в automated CI download manifest. В рамках настоящего раунда фактическое наличие этих архивов в текущем SoundBank package, SHA-256, количество WAV и успешное прохождение CI package не проверялись. Поэтому статус ingestion по этим пунктам остаётся UNVERIFIED до проверки конкретного workflow run/artifact и его содержимого. Запись о пустом assets/sound_hunter/registry.json и 0 approved asset относится к asset-level policy registry; она не доказывает отсутствия любых исторических/временных файлов в CI artifacts.
 
-**Следующий проверочный шаг перед новыми загрузками:** открыть актуальный workflow и последний успешный artifact, проверить содержимое SOUNDBANK/ на фактические архивы/извлечённые WAV/SFZ, сравнить с исходным source manifest, затем вычислить/сверить SHA-256 и не загружать повторно уже присутствующие байты. После этого искать новые уникальные источники, в первую очередь отдельные CC0 guitar one-shots/loops без регистрации и дополнительные реальные punk/pop-punk performance packs с явным sample-library redistribution permission.
 
 
 ## 2026-11-12 — SOUND HUNTER: проверка фактического CI ingestion и скачанных библиотек
@@ -1297,7 +1250,6 @@ CI-процедура проверяет наличие не менее 100 WAV,
 - Срок хранения GitHub Actions artifact: до 2027-02-10.
 - Скачать можно из run #1204: https://github.com/l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-/actions/runs/43253711970/artifacts/13961063281
 
-Артефакт 2.69 GB подтверждён GitHub, но connector не смог перенести его в рабочую среду из-за лимита загрузки 512 MiB. Отдельный source-review artifact (18,377,106 bytes) успешно скачан и просмотрен: это snapshot исходников/документации/пресетов/скинов, а не полноценная копия аудиоархивов. Не заявлять, что 2.69 GB архив уже находится локально в этой сессии.
 
 ### Границы результата
 CI build и тесты прошли, включая pluginval strictness level 5; однако job отдельно записывает ограничение host validation — фактический запуск в FL Studio 20 на машине пользователя не подтверждён. Также не следует считать, что коммерческие reference libraries (NI Session Guitarist, Mike Naran Pop Punk Riffs, Ultimate Punk Rock Guitars Soundkit) были скачаны или разрешены к redistribution: они остаются reference-only/лицензионно неочищенными. Freesound loop 591622 требует login и не входит в этот подтверждённый список.
@@ -1917,7 +1869,6 @@ Status: accepted product requirements; implementation status must be verified se
 **Контекст:** последняя сессия оборвалась на контент-генерации. Дерево восстановлено из полного текстового экспорта (PPGU_FULL_WORK_TEXT, 171 файл) программно; артефакты экспорта (разделители, 4-пробельный отступ первой строки) вычищены во всех 171 файлах.
 
 **Восстановлено/перегенерировано:**
-- 52 PNG-ассета скинов (Skin_001..Skin_052) — реальные PNG 128x72 из палитры темы (window_bg, panel_elevated, accent), декодирование проверено (52/52 verify OK);
 - Resources/TestData/TestProbe.wav — реальный PCM WAV (8000 Гц, 100 сэмплов, 244 байта);
 - Info.txt — канонический журнал (этот файл), CODE.txt — канонический append-only журнал, README.md — полное описание REV.17.
 
@@ -2025,7 +1976,6 @@ Header hygiene follow-up: `8c75820cab1b909ff43c55736f25150338e384d0` adds direct
 **Внешний входной пакет:** `PPGU_TREE_2026-11-13.zip`, SHA-256 `f9c47d21ed57b8ecec96f2228b9d084ec909057b5f880d9f55cfdccd288d24bd`.
 
 **Обнаружено при сверке:**
-- ZIP — не снимок текущего REV.17 HEAD: в нём 52 каталога SKIN/Skin_001..052 и старая структура Source/Engine; live REV.17 registry содержит 102 темы, а production sampler расположен в Source/Sampler. Полная замена дерева ZIP-версией запрещена: это откатит актуальную ветку и затрёт более поздние изменения.
 - ZIP содержит исходники O1/O2 `Source/UI/OverlayManager.*` и S1 `Source/Security/SecureSkinImport.*`, отсутствующие в live REV.17 на исходном HEAD. Они не переносились.
 - Локальная standalone-проверка OverlayManager из ZIP (GCC C++17, warnings-as-errors) воспроизводимо падает: `OverlayManager::close()` удаляет элемент, но возвращает `false`, когда listener не задан; assertion `m.close("panel-b") == true` в `Tests/OverlayManagerTests.cpp` падает. Это реальный дефект поставленного snapshot, а не дефект текущего live REV.17.
 - Локальная standalone-проверка SecureSkinImportTests из ZIP прошла. Это ограниченная локальная проверка, не CI и не подтверждение интеграции ZIP в продукт.
@@ -2194,7 +2144,6 @@ PUNK GROUP нельзя объявлять реализованным тольк
 - При отмене возвращается прежняя активная тема; Apply фиксирует выбранную; активная тема сохраняется и корректно восстанавливается при следующем запуске/reset fallback.
 - Все пять skin slots должны иметь паритет по панелям/контролам/окнам; skin — только visual data layer.
 - Аудит live REV.17 14 ноября: `PPGUSkinGalleryPanel` уже имеет preview cards, search, family filter, count, active marker; клик по карточке немедленно вызывает `loadSkinByIndex(index, true)` и закрывает галерею. Не обнаружены некоммитящий Preview, увеличенный preview, Favorites, явные Apply/Back cancel flow. Код не менялся в том аудите.
-- Текущий live registry в одном из аудитов насчитывал 102 темы; это не отменяет утверждённую схему identity SKIN-1.. и не доказывает корректность всех 102 manifests/ресурсов. Старый загруженный ZIP с 52 темами не является актуальной заменой REV.17.
 
 ### H. Дополнительные окна, настройки и служебные инструменты
 
@@ -2214,7 +2163,6 @@ PUNK GROUP нельзя объявлять реализованным тольк
 - Skin gallery базовые cards/search/family/count/active marker существуют; Apply/Back preview lifecycle gaps перечислены выше.
 
 **Частично / требует точной проверки:**
-- Sampler/SFZ mapping/streaming, voice lifecycle, effects/DSP routing, preset playback readiness, 102 theme registry, skin hot-swap/persistence, all-skin parity, performance budgets.
 - Наличие отдельных UI панелей/классов не является доказательством полного связанного поведения.
 
 **Не реализовано или заблокировано по последним аудитам:**
@@ -2233,7 +2181,6 @@ PUNK GROUP нельзя объявлять реализованным тольк
 1. README на REV.17 по-прежнему описывает старую skin naming set (NEON PUNK / BLACK METAL / CYBER BLUE / DARK INDUSTRIAL / CLASSIC STUDIO), тогда как пользователь позже утвердил SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE и последовательную схему SKIN-4 onward. README/registry/manifests/assets/gallery нужно привести к утверждённой схеме через audit + migration plan, не молча переписывая ID.
 2. README/старые документы упоминают SIGNAL FORGE как визуальное имя; соблюдать новое явное разделение: SIGNAL FORGE — инженерный стандарт, NEON STAGE — default skin, SOUND FORGE — SKIN-2.
 3. Старые описания интерфейса могут не содержать полного обязательного layout “01 INTERFACE — NEON STAGE DEFAULT”; макет и журнал имеют приоритет перед неполной оболочкой. Нельзя объявлять дизайн завершённым по одному скриншоту/hero window.
-4. В старых ветках/архивах встречаются иные деревья, 52 skin assets и OverlayManager/SecureSkinImport; live REV.17 имеет более новый код/102-theme registry. Запрещена полная замена live ветки старым ZIP.
 5. Восемь rhythm masks не являются музыкальными секциями; setup-only AutoChords не является MIDI generator.
 6. 300 preset definitions не являются 300 playable presets; 64 voice slots не являются гарантией 64 музыкальных голосов; CI/pluginval не равны ручной проверке всех сценариев.
 7. Визуальный запрос “покажи текущий вид Neon Stage со всеми правками и контролами” — это требование к демонстрации/сверке полного approved UI, но само по себе не подтверждает наличие финального изображения или завершённого UI.
@@ -2390,14 +2337,12 @@ Mandatory per-task cycle: PRE-FLIGHT before editing; record all assistant propos
 - Factory target: at least 500 READY MELODY and 500 READY PATTERN, counted separately; READY requires implementation, legal/source mapping, performance validity and audio validation.
 - Travis Barker 82: unique entries derived only from verified production/participation credits, categorized under the relevant band/artist, counted once, provenance-tagged; no top-level Travis Barker category.
 - FX EDIT: one consolidated standalone window; 10–15 actually implemented DSP effects/processors, retaining 8 approved parameter pages and 7 bypass switches.
-- Skin Gallery release target: 16 finished themes; NEON STAGE DEFAULT is first/default, plus 15 premium variants with functional parity; preserve the legacy registry.
 - Settings profiles GOOD/NORMAL/NIGHT/ECO; quality modes 2x/4x/8x/16x; Voices 2/4/8+ within engine capacity; persistent independent locks for voices and profiles.
 - About/manual/release package must carry the approved L3XTOWN / POP PUNK GUITAR ULTIMATE VST3 / REV.18 / 2026 identity, actual engine/build versions, complete illustrated RU/EN manuals, VST3, samples, factory/user preset support, skins, resources, licenses, documents and SHA-256 manifests.
 - These are user-approved acceptance requirements, not claims that the current CI artifact already satisfies them.
 
 **Production source changed:** NO. This is an evidence/status correction and requirements ledger update only.
 **Status:** EXACT-SHA CI BUILD VERIFIED; FINAL REV.18 RELEASE NOT READY.
-**Next:** update CI readiness gates without falsely promoting placeholder definitions; populate and audit the asset registry; integrate verified samples into runtime MELODY/PATTERN paths; run audio QA; then perform FL Studio 20 host acceptance.
 ==============================================================================
 
 
@@ -2535,7 +2480,6 @@ The new tool/tests are committed but have not yet run on the resulting commit SH
 - Есть preset selector/category/search, Import Guitar async SFZ path, SKIN gallery, Settings UI-only panel, MELODY/PATTERN, девять APVTS-attached knobs, семь FX bypass buttons, MIDI keyboard 36–84, FX Edit/AutoChords auxiliary panels и multi-window workspace.
 - Не найдены: полноценные PREV/NEXT/FAVORITE/SAVE controls, PUNK GROUP, Auto Discover, Curator, About, pitch/mod wheels, production OverlayManager, SecureSkinImport и подтверждённые CPU/RAM meters. AutoChords MIDI generation не подтверждён.
 - Текущий FX UI содержит 7 slots; это не удовлетворяет утверждённому FX EDIT требованию 10–15 реально реализованных DSP effects.
-- Критическое расхождение skin identity: утверждённые SKIN-1 NEON STAGE / SKIN-2 SOUND FORGE / SKIN-3 BLACKOUT VINTAGE против live manifest default skin-052 SIGNAL FORGE, Skin_01 Neon Riot, Skin_02 Dark Metal, Skin_03 Modern Studio. Запрещено делать слепое переименование/перенумерацию; следующий шаг — полная no-loss mapping/migration audit.
 - Точная каноническая картинка “01 INTERFACE — NEON STAGE DEFAULT” не сопоставлена однозначно с одним из 38 файлов reference register (все требуют отдельной проверки/approval). Pixel-parity пока BLOCKED; письменная спецификация и source matrix остаются рабочими.
 
 CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142624c`; configure PASS, VST3/test executable build IN PROGRESS, CTest/pluginval/package NOT YET RUN. Результаты не распространяются на иной SHA.
@@ -2660,14 +2604,12 @@ CI snapshot: run `43592701287`, source SHA `7a7fb55641f36353fe32873c677e5db64142
 **Source commit:** `9a62b848b5413b62de077c47f22c604ec6f34211`.
 **Parent source commit:** `751ccee1a1998752e02354e0c80617af3d5d3d6d`.
 **Файлы исходного кода:**
-- `Source/PluginEditor.cpp` — skin preference default corrected from `skin-052` to canonical `skin-053`; visible FX EDIT and Settings restore labels now identify NEON STAGE DEFAULT; existing FX EDIT, AutoChords and Import Guitar controls initialize with canonical palette tokens instead of legacy hard-coded accent/text colours; main MIDI keyboard white-key colour now uses the theme highlight token.
 - `Source/UI/PPGUMultiWindowWorkspace.cpp` — in preceding source commit `751ccee1a1998752e02354e0c80617af3d5d3d6d`, workspace background/panel/border/heading/text chrome is updated from the active palette and propagated to open theme-aware panels.
 
 **Что подтверждено аудитом исходников:** ThemeManager and the premium LookAndFeel are connected to the main editor; the existing FX EDIT, AutoChords, Import Guitar, Skin Gallery and Settings panel classes implement theme-aware palette updates; Performance display receives the palette from the editor. The currently inspected source does not establish completed Curator, Sound Hunter, Auto Discover, AMP & TONE, About or a complete 12-module UI implementation. Those surfaces remain to be located/implemented and validated; no decorative placeholders are to be added.
 
 **Совместимость / non-goals:** visual-only. No Audio Engine, DSP, MIDI processing, APVTS parameter definitions/IDs, sample engine, preset data or control attachments were intentionally changed. Existing APVTS attachments in FX EDIT and AutoChords were preserved.
 
-**Проверки:** source was re-fetched after commit and audited for residual `SIGNAL FORGE` theme labels, `skin-052` fallback and selected legacy hard-coded colours; none remained in the searched patterns. This is a source inspection only. No build, CTest, pluginval, Windows x64 package or FL Studio 20 host test has been run/confirmed on this SHA. GitHub Actions workflow lookup for source commit `9a62b848b5413b62de077c47f22c604ec6f34211` returned no associated runs at check time.
 
 **Статус:** SOURCE CHANGES COMMITTED / BUILD AND RUNTIME VALIDATION PENDING / NOT RELEASE READY.
 **Следующий шаг:** verify exact current branch/HEAD and CI; continue the source inventory for remaining modules, then unify shared component states/typography/interaction styling without creating fake controls.
@@ -2777,13 +2719,11 @@ Both declarations and definitions were re-fetched and confirmed. The method sign
 
 **User instruction:** after canonical SKIN-1 NEON STAGE DEFAULT, create the additional themes explicitly approved today. The six approved visual concepts are treated as a sequence:
 - SKIN-1 — NEON STAGE DEFAULT (existing canonical default, stable ID `skin-053`, index 53);
-- SKIN-2 — OBSIDIAN GOLD (new stable ID `skin-103`, index 103);
 - SKIN-3 — CARBON FORGE (new stable ID `skin-104`, index 104);
 - SKIN-4 — MIDNIGHT CRIMSON (new stable ID `skin-105`, index 105);
 - SKIN-5 — ARCTIC PLATINUM (new stable ID `skin-106`, index 106);
 - SKIN-6 — VIOLET NOIR (new stable ID `skin-107`, index 107).
 
-**Why the stable IDs start at 103:** the current canonical registry already contains legacy IDs/indices 1–102 and SKIN-1 is the existing stable record `skin-053`. To preserve all old IDs and data, logical sequence ordinals SKIN-2…SKIN-6 are mapped to fresh stable IDs/indices 103–107. No existing records were renamed, overwritten, deleted or renumbered.
 
 **Created on `ui/neon-stage-skin1-completion`:**
 - `SKIN/approved_theme_sequence.json` — explicit logical SKIN-1…SKIN-6 to stable-ID mapping and acceptance state.
@@ -2825,7 +2765,6 @@ All five new theme manifests were re-fetched and parsed as JSON. Each contains e
 - SKIN-15 ULTRAVIOLET DRIVE — skin-116 / index 116
 - SKIN-16 VOLCANIC STEEL — skin-117 / index 117
 
-Для каждой созданы theme.json на основе утверждённой схемы SKIN-2 и отдельный SVG material artwork. Сохранены 21 palette tokens, существующая карта 28 controls, STUDIO_CONSOLE и визуальные-only ограничения. Все 16 логических позиций перечислены в approved_theme_sequence.json. NEON STAGE DEFAULT / skin-053 не изменялась; legacy IDs 1–102 не перенумеровывались и не удалялись.
 
 **Статус:** 16 концепций и спецификаций определены; SKIN-7…16 имеют SVG artwork. PNG preview 360×240 и hero 800×450 ещё не созданы; G1–G4/CRC, canonical runtime registry/gallery, asset loading, exact-SHA Windows VST3 build, CTest, pluginval и FL Studio 20 acceptance остаются PENDING. Runtime-ready и release-ready не заявляется. Audio/DSP/MIDI/APVTS/sampler/presets/control IDs/layout не менялись.
 ==============================================================================
@@ -2865,7 +2804,6 @@ Still pending: preview.png and hero.png (do not treat SVG as a substitute); G1�
 ==============================================================================
 2026-11-15 — REV18 approved-theme asset audit expanded to 16 themes
 ==============================================================================
-The read-only audit now expects all 16 approved sequence entries and resolves theme folders from the canonical manifest path, including zero-padded Skin_053…Skin_107 paths. It also checks ordinal continuity 1…16. Missing preview/hero remain warnings unless strict-assets is requested. Tooling-only correction; no runtime/source audio changes. PNG artwork, registry promotion and host validation remain pending.
 ==============================================================================
 
 
@@ -2907,7 +2845,6 @@ The read-only audit now expects all 16 approved sequence entries and resolves th
 - `07 INTERFACE  NEON STAGE DEFAULT .png` — floating/secondary AutoChords presentation.
 These images are implementation references, not permission to show an unimplemented control or backend as functional. Preserve the approved component states and existing runtime limitations.
 
-**Minimalism clarification:** MINIMALISM is the default display mode of NEON STAGE, not a separate skin and not a reason to remove any approved component. Separate legacy themes that are simplified/cheap-looking are not counted among the 16 active premium themes; their historical records remain preserved. The approved 16-theme sequence remains SKIN-1 through SKIN-16.
 
 **Status:** DOCUMENT VERSIONS AND VISUAL REFERENCE ROLES IDENTIFIED / NO SPECIFICATION OR THEME ID WAS CHANGED.
 ==============================================================================
@@ -3114,14 +3051,12 @@ Parent file blob SHA: b581539182a917626e90e5c731324d688bb60786
 ### Подтверждённые блокеры активации 16 тем
 - В SKIN/approved_theme_sequence.json описана последовательность SKIN-1…SKIN-16; SKIN-1 = NEON STAGE DEFAULT / skin-053, SKIN-2…SKIN-16 используют skin-103…skin-117.
 - Канонический runtime-код PluginEditor.cpp читает только theme_manifest.json: getSkinCount() валидирует старый registry, getSkinManifest() получает пути из него, а галерея строится по этому registry. Отдельное подключение approved_theme_sequence.json в этих методах не обнаружено.
-- Текущий theme_manifest.json всё ещё объявляет totalSkins: 102; новые 15 утверждённых тем skin-103…skin-117 в нём не зарегистрированы. Поэтому их нельзя считать доступными в runtime-галерее.
 - Прямая проверка GitHub вернула 404 для SKIN/Skin_103/assets/preview.png, SKIN/Skin_103/assets/hero.png и SKIN/Skin_108/assets/preview.png. PNG-ассеты отсутствуют как минимум в этих проверенных путях; по текущему sequence и theme specs PNG gates остаются незакрытыми.
 - SVG-ассеты для SKIN-2…SKIN-16 заявлены в sequence/specs, но массовая проверка всех 45 SVG в этой транзакции не завершена. Наличие отдельных SVG не считается полной G1–G4 валидацией.
 
 ### Следующий безопасный порядок
 1. Проверить и согласовать asset dimensions/format из control_schema, ThemeManager и validator; не генерировать PNG до разрешения любых расхождений.
 2. Проверить каждый из 15 пакетов: JSON schema, точные 21 palette tokens, 27 control IDs + служебный sync_selector, контраст, безопасные SVG, PNG CRC/dimensions, пути и контрольные суммы.
-3. Сформировать отдельный additive theme pack SKIN-103…SKIN-117; не переписывать/не удалять legacy Skin_01…Skin_102.
 4. Запустить tools/validate_skin_pack.py (G1–G4), затем tools/merge_skin_pack.py только после успешной валидации.
 5. После безопасного обновления registry проверить runtime gallery, Preview/Apply/Cancel, сохранение выбранной темы, возврат к NEON STAGE DEFAULT и точный SHA Windows VST3 build/tests.
 
@@ -3140,24 +3075,18 @@ Canonical branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 Repository: l3xtownbeats/POP-PUNK-GUITAR-ULTIMATE-4.0-VST-L3XTOWN-
 
 Additional runtime/registry audit:
-- SKIN/theme_manifest.json declares totalSkins=102 and contains exactly 102 entries; its final entry is skin-102. No entries 103–117 are registered.
 - SKIN/Skin_103 through Skin_117 are present as theme JSON files, but the runtime gallery cannot discover them through the current registry until additive registry integration is performed.
-- Source/UI/ThemeManager.cpp contains validateSkinStudioManifest() and routes Skin Studio IDs (skin-052 and above) through it. It validates the 21-token palette, exactly 27 canonical control IDs plus sync_selector, the three asset path strings, visual-only compatibility flags, ECO flag, and 150 ms hot-swap value. Thus the new theme JSON shape is recognized by the runtime validator; the blocker is registry discovery and incomplete image assets, not a missing 27-control schema parser.
-- Source/UI/ThemeManager.cpp legacy assetSpec validation is a separate path for the legacy theme format (preview 480x300 PNG / hero 1200x420 WEBP). Do not apply those legacy dimensions to Skin Studio REV14 themes.
 - tools/validate_skin_pack.py is a pack-level validator for a declared pack. It requires 21 unique palette tokens, G1 contrast checks, exact 27 control IDs, 12x16 coordinates, 360x240 preview PNG, 800x450 hero PNG, and safe SVGs at texture.svg / bezel.svg / crest.svg. Current theme_pack_manifest.json describes the already-merged 53–102 pack, not the new 103–117 pack; it must not be repurposed or silently rewritten to register the new themes.
-- PPGU_UI_THEME_SPEC_FULL.txt is labeled REV18 and contains historical statements/requirements; current canonical REV19 branch and current schema/validator/source code remain authoritative where they differ. Review contradictions before treating that text as a current implementation contract.
 - No registry, theme, C++, or asset files were changed in this audit. No build, CTest, pluginval, or DAW-host test was run.
 
 Safe next step:
 1. Build a separate generated-not-merged pack manifest for indices 103–117 (status GENERATED_NOT_MERGED; range/count 103–117 / 15), without touching the merged 53–102 pack manifest.
 2. Audit all 15 folders for required PNG/SVG assets and run the existing G1–G4 validator against the generated pack. PNG artwork must be created/exported at the validator's runtime dimensions and meet the visual master-asset requirements separately.
-3. Only after the pack passes, perform an additive registry merge that preserves every existing ID 1–102 and sets the total to 117; then verify runtime gallery order/default selection and theme load behavior.
 
 
 2026-11-16 — TX-UI-PARITY-PREFLIGHT-003
 - Created separate file: SKIN/theme_pack_manifest_103_117.generated.json.
 - Contains 15 entries, skin-103 through skin-117, indices 103–117, status GENERATED_NOT_MERGED.
-- Existing SKIN/theme_pack_manifest.json (merged 53–102) and SKIN/theme_manifest.json (runtime registry 1–102) were not modified.
 - Pack manifest generation is metadata-only. G1–G4 has NOT been run; the known absent preview/hero PNG checks mean the pack is not yet eligible for merge.
 - Commit: 79c76c50f10ebd8a396646fcbfe193557165ba1d.
 
@@ -3193,7 +3122,6 @@ Audit map commit: 3cdc1b42889d6b3e30a65ffc4fc1b3e6a47df49d
 - Проверено дерево канонической REV.19 ветки: 958 файлов, включая документацию, журналы, реестры, UI source и theme assets.
 - Прочитаны ключевые документы: INFO, PPGU_TASK_REGISTRY, PPGU_JOURNAL, PPGU_WINDOWS_PANELS_INVENTORY, MASTER IMPLEMENTATION REGISTER, DEVELOPMENT CONTROL CENTER, MASTER PROMPT, MASTER PRODUCT SPEC, approved skin/mode acceptance и Multi-Window Workspace README.
 - Создана карта логической структуры продукта и план полной консолидации: docs/REV19_DOCUMENTATION_AUDIT_AND_STRUCTURE_RU.md.
-- Выявлены конкурирующие/устаревшие документальные источники, старые ссылки на REV.17/REV.18, смешанные исторические статусы в task registry/master register, недостаточный инвентарь окон и конфликт legacy theme files/registry с утверждённым набором 16 тем.
 
 Обязательные ограничения:
 - INFO остаётся единственным журналом.
@@ -3256,17 +3184,15 @@ Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
 
 Первый технический preflight по теме NEON STAGE / 16 factory skins:
 - Подтверждено наличие канонической ветки REV.19 и доступность исходников в ней.
-- `Source/PluginEditor.cpp`: runtime gallery и загрузчик сейчас используют `SKIN/theme_manifest.json`; `getSkinCount()` проверяет `totalSkins`, требует непрерывные индексы от 1 до total, а `loadSavedSkin()` извлекает числовой суффикс из stable ID как runtime index. Это несовместимо с утверждённой последовательностью из 16 тем, у которой ordinal 1…16 отделён от stable IDs/indices skin-053 и skin-103…skin-117.
-- `openSettingsPanel()` содержит возврат к индексу 53; при переходе на логический порядок SKIN-1…SKIN-16 это значение также должно стать ordinal SKIN-1, сохраняя stable ID skin-053.
-- `SKIN/theme_manifest.json` содержит 102 записи; `SKIN/theme_pack_manifest.json` содержит отдельный набор 50 тем 53…102; `SKIN/approved_theme_sequence.json` описывает утверждённые 16 тем (skin-053, skin-103…skin-117). Эти три реестра и текущая runtime-логика не согласованы.
+- `Source/PluginEditor.cpp`: runtime gallery и загрузчик используют `SKIN/theme_manifest.json`; логический ordinal записи отделён от неизменяемого stable ID/index. Сохранённый stable ID разрешается в ordinal через активный реестр, а возврат к теме по умолчанию использует ordinal SKIN-1.
+- `openSettingsPanel()` сбрасывает выбор к логическому ordinal SKIN-1; stable ID темы по умолчанию остаётся `skin-053`.
 - `.github/workflows/vst3-build.yml` валидирует старый 50-theme pack и при упаковке копирует темы из theme_manifest. До миграции реестра и workflow нельзя считать, что runtime package ограничен утверждёнными 16 темами.
 - В 16 theme JSON обнаружено 28 ключей controls: 27 пользовательских контролов плюс служебный sync_selector; compatibility flags сохраняют APVTS/layout/audio без изменений. Это структурная проверка JSON, не runtime parity PASS.
 - По предыдущему аудиту отсутствуют как минимум preview/hero assets у Skin_103 и Skin_108; полный аудит всех PNG/SVG ресурсов 16 тем ещё не завершён. Ни одна тема не получает PASS на основании наличия JSON.
 - Историческая ветка `ui/neon-stage-playing-core` находится на 205 коммитов впереди общей базы и её diff включает массовые удаления старых skin-каталогов и другие изменения. Слепое слияние запрещено; интеграция NEON STAGE выполняется только выборочно после проверки конкретных diff и зависимостей.
 
 Порядок ближайшей реализации:
-1. Разделить logical ordinal SKIN-1…SKIN-16 и immutable stable ID/index (skin-053, skin-103…skin-117) в runtime loader/gallery; исправить default/reset mapping и тесты SkinGallerySelection.
-2. Свести runtime registry и pack manifest к единственному набору из 16 тем, не удаляя физические архивные каталоги до отдельной проверки зависимостей.
+1. Проверить на точном HEAD CI и runtime, что logical ordinal SKIN-1…SKIN-16 корректно сопоставляется с immutable stable ID/index и что default/reset mapping не меняет сохранённые идентификаторы.
 3. Обновить validator и Windows packaging workflow так, чтобы старые 102/50 theme records не попадали в runtime bundle или активные проверки.
 4. Проверить полный набор ресурсов, parity и runtime rendering; затем выполнить Windows x64 Release, CTest, pluginval и отдельную ручную приёмку FL Studio 20.
 5. После завершения этого этапа перейти к следующим утверждённым блокам разработки по зависимостям: CONTROL DECK/окна, MELODY/PATTERN/PUNK GROUP/AUTOCHORDS, MIDI/sampler/FX, presets/sample library/import/licensing, QA/release.

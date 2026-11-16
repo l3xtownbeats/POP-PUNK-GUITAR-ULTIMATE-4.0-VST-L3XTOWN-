@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
   "product": "POP PUNK GUITAR ULTIMATE",
-  "contract": "PPGU REV18 sequential approved theme sequence",
-  "status": "16_THEME_SEQUENCE_DEFINED; SKIN_1_CANONICAL; SKIN_2_TO_16_SPECS_AND_DISTINCT_SVG_ASSETS_CREATED; PNG_GATES_AND_RUNTIME_REGISTRATION_PENDING",
+  "contract": "PPGU REV.19 approved 16 GRAPHIC SKIN sequence",
+  "status": "16_APPROVED_GRAPHIC_SKINS; NEON_STAGE_REFERENCE; SKIN_1_ACTIVE; SKIN_2_TO_16_PENDING_ACCEPTANCE",
   "defaultLogicalSkin": "SKIN-1",
   "defaultStableId": "skin-053",
-  "rule": "Logical SKIN numbering is independent of immutable legacy registry indices. Existing Skin_01..Skin_102 records are preserved; the new approved sequence uses fresh stable IDs/indices beginning at 103.",
+  "rule": "The product contains exactly the 16 approved GRAPHIC SKINS listed below. Stable IDs and folder names are immutable. Only a skin that passes artwork, assets, SIGNAL FORGE control parity and runtime acceptance may enter the active runtime registry. Unapproved and unused theme material is not part of the project.",
   "themes": [
     {
       "ordinal": 1,

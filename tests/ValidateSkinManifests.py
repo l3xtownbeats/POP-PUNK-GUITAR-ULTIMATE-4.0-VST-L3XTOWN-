@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKIN_ROOT = ROOT / "SKIN"
 REGISTRY_PATH = SKIN_ROOT / "theme_manifest.json"
-DEFAULT_ID = "skin-052"
+DEFAULT_ID = "skin-053"
 
 GROUP_KEYS = {
     "canvas": ("base", "inset"),
@@ -268,120 +268,6 @@ def validate_skin_studio_theme(index: int, registry_entry: dict, errors: list[st
         fail(errors, where, "registry hero path does not match manifest")
 
 
-def validate_theme(index: int, registry_entry: dict, errors: list[str]) -> None:
-    if index >= 52:
-        validate_skin_studio_theme(index, registry_entry, errors)
-        return
-
-    folder = f"Skin_{index:02d}"
-    path = SKIN_ROOT / folder / "theme.json"
-    data = load_json(path, errors)
-    if not isinstance(data, dict):
-        return
-    where = f"SKIN/{folder}/theme.json"
-
-    expected_id = f"skin-{index:02d}"
-    for key, expected in (("schemaVersion", "1.0.0"), ("id", expected_id), ("index", index)):
-        if data.get(key) != expected:
-            fail(errors, where, f"{key} must equal {expected!r}")
-
-    for key in ("name", "description", "cluster", "identity", "tokens", "assets", "assetSpec", "compatibility", "validation"):
-        if key not in data:
-            fail(errors, where, f"missing top-level field {key}")
-
-    if data.get("cluster") not in ("A", "B", "C"):
-        fail(errors, where, "cluster must be A, B or C")
-
-    identity = data.get("identity")
-    if not isinstance(identity, dict) or any(not isinstance(identity.get(k), str) or not identity[k].strip()
-                                             for k in ("material", "lighting", "mood")):
-        fail(errors, where, "identity requires non-empty material, lighting and mood strings")
-
-    tokens = data.get("tokens")
-    if not isinstance(tokens, dict):
-        fail(errors, where, "tokens must be an object")
-        return
-
-    for group, keys in GROUP_KEYS.items():
-        value = tokens.get(group)
-        if not isinstance(value, dict):
-            fail(errors, where, f"missing token group/object {group}")
-            continue
-        missing = [key for key in keys if key not in value]
-        if missing:
-            fail(errors, where, f"{group} missing keys: {', '.join(missing)}")
-
-    buttons = tokens.get("buttons", {})
-    if isinstance(buttons, dict):
-        for button_name in ("primary", "secondary"):
-            button = buttons.get(button_name)
-            if not isinstance(button, dict):
-                fail(errors, where, f"buttons.{button_name} must be an object")
-            else:
-                missing = [key for key in BUTTON_KEYS if key not in button]
-                if missing:
-                    fail(errors, where, f"buttons.{button_name} missing: {', '.join(missing)}")
-
-    validate_colour_tree(tokens, where, errors)
-
-    compatibility = data.get("compatibility", {})
-    for key in ("apvtsChanges", "layoutChanges", "audioChanges"):
-        if compatibility.get(key) is not False:
-            fail(errors, where, f"compatibility.{key} must be false")
-
-    texture = tokens.get("texture", {})
-    if isinstance(texture, dict):
-        intensity = texture.get("intensity")
-        if not isinstance(intensity, (int, float)) or not 0.0 <= intensity <= 1.0:
-            fail(errors, where, "texture.intensity must be within 0..1")
-    lighting = tokens.get("lighting", {})
-    if isinstance(lighting, dict):
-        intensity = lighting.get("glowIntensity")
-        if not isinstance(intensity, (int, float)) or not 0.0 <= intensity <= 1.0:
-            fail(errors, where, "lighting.glowIntensity must be within 0..1")
-
-    assets = data.get("assets", {})
-    if not isinstance(assets, dict):
-        fail(errors, where, "assets must be an object")
-    else:
-        for key, expected in (("preview", "assets/preview.png"), ("hero", "assets/hero.webp")):
-            if assets.get(key) != expected:
-                fail(errors, where, f"assets.{key} must be {expected!r}")
-        texture_asset = assets.get("texture")
-        if texture_asset is not None and texture_asset != "assets/texture.png":
-            fail(errors, where, "assets.texture must be null or assets/texture.png")
-
-    specs = data.get("assetSpec", {})
-    for key, width, height, fmt in (("preview", 480, 300, "png"), ("hero", 1200, 420, "webp")):
-        spec = specs.get(key) if isinstance(specs, dict) else None
-        if not isinstance(spec, dict) or (spec.get("width"), spec.get("height"), spec.get("format")) != (width, height, fmt):
-            fail(errors, where, f"assetSpec.{key} must specify {width}x{height} {fmt}")
-
-    # Text accessibility: the two primary reading combinations and primary button label.
-    typography = tokens.get("typography", {})
-    canvas = tokens.get("canvas", {})
-    surfaces = tokens.get("surfaces", {})
-    if isinstance(typography, dict) and isinstance(canvas, dict) and HEX.fullmatch(str(typography.get("primary", ""))) and HEX.fullmatch(str(canvas.get("base", ""))):
-        ratio = contrast(typography["primary"], canvas["base"])
-        if ratio < 4.5:
-            fail(errors, where, f"primary text/canvas contrast {ratio:.2f}:1 is below 4.5:1")
-    if isinstance(typography, dict) and isinstance(surfaces, dict) and HEX.fullmatch(str(typography.get("secondary", ""))) and HEX.fullmatch(str(surfaces.get("primary", ""))):
-        ratio = contrast(typography["secondary"], surfaces["primary"])
-        if ratio < 4.5:
-            fail(errors, where, f"secondary text/card contrast {ratio:.2f}:1 is below 4.5:1")
-    primary_button = buttons.get("primary", {}) if isinstance(buttons, dict) else {}
-    if isinstance(primary_button, dict) and HEX.fullmatch(str(primary_button.get("foreground", ""))) and HEX.fullmatch(str(primary_button.get("background", ""))):
-        ratio = contrast(primary_button["foreground"], primary_button["background"])
-        if ratio < 4.5:
-            fail(errors, where, f"primary button text contrast {ratio:.2f}:1 is below 4.5:1")
-
-    # Registry entry must point to the corresponding canonical manifest.
-    if registry_entry.get("id") != expected_id or registry_entry.get("index") != index:
-        fail(errors, where, "registry id/index does not match manifest")
-    if registry_entry.get("path") != f"{folder}/theme.json":
-        fail(errors, where, "registry path does not match canonical manifest path")
-
-
 def main() -> int:
     errors: list[str] = []
     registry = load_json(REGISTRY_PATH, errors)
@@ -407,27 +293,52 @@ def main() -> int:
     indices = [entry.get("index") for entry in entries if isinstance(entry, dict)]
     if len(set(ids)) != expected_count:
         fail(errors, "SKIN/theme_manifest.json", "theme ids must be unique")
-    if sorted(indices) != list(range(1, expected_count + 1)):
-        fail(errors, "SKIN/theme_manifest.json", "indices must be unique and cover the registry range")
+    if len(set(indices)) != expected_count or any(not isinstance(i, int) or isinstance(i, bool) or i < 1 for i in indices):
+        fail(errors, "SKIN/theme_manifest.json", "stable indices must be unique positive integers")
 
-    by_index = {entry.get("index"): entry for entry in entries if isinstance(entry, dict)}
-    for index in range(1, expected_count + 1):
-        validate_theme(index, by_index.get(index, {}), errors)
-
-    registered_folders = {
-        Path(entry.get("path", "")).parent.name
-        for entry in entries if isinstance(entry, dict) and isinstance(entry.get("path"), str)
+    # Validate active entries against the approved 16-theme sequence.
+    sequence = load_json(SKIN_ROOT / "approved_theme_sequence.json", errors)
+    sequence_entries = sequence.get("themes", []) if isinstance(sequence, dict) else []
+    approved = {
+        item.get("stableId"): item for item in sequence_entries
+        if isinstance(item, dict) and isinstance(item.get("stableId"), str)
     }
-    if len(registered_folders) != expected_count:
-        fail(errors, "SKIN/theme_manifest.json", "registry paths must resolve to unique skin folders")
+    if len(approved) != 16 or len(sequence_entries) != 16:
+        fail(errors, "SKIN/approved_theme_sequence.json", "the approved sequence must contain exactly 16 unique themes")
+
+    registered_folders = set()
+    for ordinal, entry in enumerate(entries, start=1):
+        if not isinstance(entry, dict):
+            fail(errors, "SKIN/theme_manifest.json", "registry entries must be objects")
+            continue
+        stable_id = entry.get("id")
+        approved_entry = approved.get(stable_id)
+        if approved_entry is None:
+            fail(errors, "SKIN/theme_manifest.json", f"unapproved theme identity: {stable_id!r}")
+            continue
+        if (entry.get("index") != approved_entry.get("index")
+            or entry.get("path") != approved_entry.get("path")
+            or approved_entry.get("ordinal") != ordinal):
+            fail(errors, "SKIN/theme_manifest.json", f"registry order/identity mismatch at ordinal {ordinal}")
+        stable_index = entry.get("index")
+        if isinstance(stable_index, int) and not isinstance(stable_index, bool):
+            validate_skin_studio_theme(stable_index, entry, errors)
+        registered_folders.add(Path(entry.get("path", "")).parent.name)
+
+    expected_folders = {
+        Path(item.get("path", "")).parent.name
+        for item in sequence_entries if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
     actual_folders = {path.name for path in SKIN_ROOT.glob("Skin_*") if path.is_dir()}
-    if actual_folders != registered_folders:
-        missing = sorted(registered_folders - actual_folders)
-        unregistered = sorted(actual_folders - registered_folders)
+    if actual_folders != expected_folders:
+        missing = sorted(expected_folders - actual_folders)
+        unexpected = sorted(actual_folders - expected_folders)
         if missing:
-            fail(errors, "SKIN", "registered skin folders missing: " + ", ".join(missing))
-        if unregistered:
-            fail(errors, "SKIN", "unregistered skin folders present: " + ", ".join(unregistered))
+            fail(errors, "SKIN", "approved theme folders missing: " + ", ".join(missing))
+        if unexpected:
+            fail(errors, "SKIN", "folders outside the approved 16-theme set: " + ", ".join(unexpected))
+    if not registered_folders.issubset(expected_folders):
+        fail(errors, "SKIN/theme_manifest.json", "runtime registry contains a folder outside the approved sequence")
 
     if errors:
         print(f"SKIN CONTRACT: FAIL ({len(errors)} issue(s))")
@@ -436,7 +347,7 @@ def main() -> int:
         return 1
 
     print("SKIN CONTRACT: PASS")
-    print(f"{expected_count} registry manifests, exact folder parity, legacy and Skin Studio contracts, control maps, assets and contrast pairs verified.")
+    print(f"{expected_count} active registry manifests, approved 16-theme folder set, stable identity/ordinal mapping, control maps, assets and contrast pairs verified.")
     print("Note: this is a focused project-contract validator, not a full JSON Schema Draft 2020-12 engine.")
     return 0
 
