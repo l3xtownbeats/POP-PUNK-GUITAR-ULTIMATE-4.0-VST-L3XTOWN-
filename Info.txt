@@ -3034,3 +3034,41 @@ PR #54 `NEON STAGE: integrate active-skin Playing Core artwork`:
 
 **Статус:** целевой состав и Sample layout USER CONFIRMED / REQUIREMENT RECORDED. Это не утверждение, что полный portable package уже собран или что все sample assets/лицензии/пути прошли проверку. Для этого нужны exact-package inventory и validation на фактически собранном артефакте.
 ==============================================================================
+==============================================================================
+2026-11-16 — TX-UI-PARITY-PREFLIGHT-001 — SIGNAL FORGE / NEON STAGE / 16 skins
+==============================================================================
+Branch: POP-PUNK-GUITAR-ULTIMATE-VST-REV.19-Build.03
+Parent file blob SHA: b581539182a917626e90e5c731324d688bb60786
+
+Проведён read-only аудит канонической REV.19 линии перед продолжением UI-работ.
+
+### Подтверждено чтением исходников и спецификаций
+- SKIN/control_schema.json определяет 27 обязательных control-ID.
+- Source/UI/ThemeManager.cpp проверяет ровно эти 27 ID и отдельный служебный sync_selector (итого 28 записей в skin control map). Это служебное поле не добавляет 28-й пользовательский контрол и не меняет 27-control contract.
+- Все 15 файлов SKIN/Skin_103/theme.json … SKIN/Skin_117/theme.json существуют в REV.19.
+- В каждом из этих 15 theme.json присутствуют все 27 обязательных control-ID; отсутствующих ID не найдено. Во всех 15 присутствует дополнительный обязательный служебный sync_selector.
+- Все 15 тем используют общий STUDIO_CONSOLE layout; это согласуется с принципом визуального единообразия, но само по себе ещё не доказывает runtime parity.
+- Для SKIN-2…SKIN-16 в манифестах заявлены PNG assets/preview.png и assets/hero.png.
+
+### Подтверждённые блокеры активации 16 тем
+- В SKIN/approved_theme_sequence.json описана последовательность SKIN-1…SKIN-16; SKIN-1 = NEON STAGE DEFAULT / skin-053, SKIN-2…SKIN-16 используют skin-103…skin-117.
+- Канонический runtime-код PluginEditor.cpp читает только theme_manifest.json: getSkinCount() валидирует старый registry, getSkinManifest() получает пути из него, а галерея строится по этому registry. Отдельное подключение approved_theme_sequence.json в этих методах не обнаружено.
+- Текущий theme_manifest.json всё ещё объявляет totalSkins: 102; новые 15 утверждённых тем skin-103…skin-117 в нём не зарегистрированы. Поэтому их нельзя считать доступными в runtime-галерее.
+- Прямая проверка GitHub вернула 404 для SKIN/Skin_103/assets/preview.png, SKIN/Skin_103/assets/hero.png и SKIN/Skin_108/assets/preview.png. PNG-ассеты отсутствуют как минимум в этих проверенных путях; по текущему sequence и theme specs PNG gates остаются незакрытыми.
+- SVG-ассеты для SKIN-2…SKIN-16 заявлены в sequence/specs, но массовая проверка всех 45 SVG в этой транзакции не завершена. Наличие отдельных SVG не считается полной G1–G4 валидацией.
+
+### Следующий безопасный порядок
+1. Проверить и согласовать asset dimensions/format из control_schema, ThemeManager и validator; не генерировать PNG до разрешения любых расхождений.
+2. Проверить каждый из 15 пакетов: JSON schema, точные 21 palette tokens, 27 control IDs + служебный sync_selector, контраст, безопасные SVG, PNG CRC/dimensions, пути и контрольные суммы.
+3. Сформировать отдельный additive theme pack SKIN-103…SKIN-117; не переписывать/не удалять legacy Skin_01…Skin_102.
+4. Запустить tools/validate_skin_pack.py (G1–G4), затем tools/merge_skin_pack.py только после успешной валидации.
+5. После безопасного обновления registry проверить runtime gallery, Preview/Apply/Cancel, сохранение выбранной темы, возврат к NEON STAGE DEFAULT и точный SHA Windows VST3 build/tests.
+
+### Ограничения и статус
+- Исходники C++ и runtime registry в этой preflight-транзакции не менялись.
+- Не изменялись APVTS IDs, 27-control contract, семь FX bypass IDs, layout, DSP, MIDI, sampler или sample library.
+- Сборка, CTest, pluginval и FL Studio 20 host acceptance не запускались; статус прохождения не заявляется.
+- Это аудит готовности и блокеров, а не заявление о завершённой реализации 16 тем.
+
+Статус: UI PARITY PREFLIGHT RECORDED / THEME REGISTRATION AND PNG GATES PENDING.
+==============================================================================
