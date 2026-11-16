@@ -20,7 +20,7 @@
 
 Gallery preview/search/filter/active marker/click-to-apply и stable-ID persistence реализованы. Полная keyboard navigation, background rescan, подтверждённый 150 ms fade и ECO policy остаются NOT VERIFIED / NOT IMPLEMENTED.
 
-## 2. Обязательные REV 14 control IDs
+## 2. Обязательный контракт 27 control IDs (без изменений APVTS)
 
 | Control ID | Реальный компонент / APVTS | Реальная функция | Статус |
 |---|---|---|---|
