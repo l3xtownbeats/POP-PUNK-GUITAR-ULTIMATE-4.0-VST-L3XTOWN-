@@ -51,7 +51,7 @@
       "stableId": "skin-106",
       "index": 106,
       "path": "Skin_106/theme.json",
-      "status": "APPROVED_SPEC_AND_SVG_CREATED"
+      "status": "RENDERER_IMPLEMENTED_EXACT_HEAD_CI_PENDING"
     },
     {
       "ordinal": 6,
