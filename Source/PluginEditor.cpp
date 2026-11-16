@@ -1104,6 +1104,7 @@ public:
         }
         apply.setColour(juce::TextButton::buttonColourId, palette.token("accent"));
         apply.setColour(juce::TextButton::textColourOffId, palette.token("window_bg"));
+        repaint();
     }
 
     void paint(juce::Graphics& g) override
