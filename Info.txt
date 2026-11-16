@@ -3907,3 +3907,37 @@ G. Только после прохождения критериев объяв�
 - После прохождения аудита должны выполняться Windows x64 Release build, полный CTest, pluginval и portable package steps.
 
 РЕЗУЛЬТАТ: ПЕРВАЯ КОНКРЕТНАЯ ПРИЧИНА БЛОКИРОВКИ CI НАЙДЕНА И ИСПРАВЛЕНА В КОДЕ. ПОВТОРНАЯ ПРОВЕРКА — В РАБОТЕ.
+
+
+==============================================================================
+
+2026-11-16 — TX-REV19-NEON-STAGE-ORDINAL-RUNTIME-REGISTRY-001
+
+СТАТУС: ИЗМЕНЕНИЯ ВНЕСЕНЫ В FEATURE BRANCH · BUILD / RUNTIME VERIFICATION PENDING
+Рабочая ветка: work/rev19-neon-stage-integration-20261116
+База: bdbb4a03dd7d78f587ae00e619673524c80298dc
+
+ЦЕЛЬ:
+- Интегрировать NEON STAGE как SKIN-1 / DEFAULT в актуальный REV.19.
+- Постепенно добавлять SKIN-2…SKIN-16 только после индивидуального прохождения asset, parity и visual QA gates.
+- Не возвращать старые 102 записи в активную галерею.
+
+ИЗМЕНЕНИЯ:
+1. Runtime registry ограничен одной активной темой: NEON STAGE (stable ID skin-053, immutable theme index 53, logical ordinal 1).
+2. Runtime-код разделяет logical ordinal и immutable stable ID/index. Gallery selection, saved-skin restore, hero artwork lookup и Reset to Default используют ordinal; исходный theme.json сохраняет ID/index 53.
+3. NEON STAGE закреплён как тема по умолчанию и единственная тема, доступная в галерее до прохождения следующих тем.
+4. SKIN-2…SKIN-16 остаются в утверждённой последовательности и спецификациях, но не регистрируются в runtime до прохождения индивидуальных gates.
+5. 27-control/APVTS IDs, семь FX bypass IDs, DSP, MIDI, sampler и audio callback contracts не менялись.
+
+ПРОВЕРКИ:
+- Выполнена структурная проверка внесённых исходных изменений.
+- Windows VST3 build, CTest, pluginval, runtime gallery interaction, Preview/Apply/Cancel, save/restore, PNG CRC/dimensions и FL Studio 20 acceptance ещё не выполнены.
+- Это промежуточная интеграция runtime registry, а не заявление о готовности NEON STAGE на 100%.
+
+СЛЕДУЮЩИЙ ЭТАП:
+- Подключить skin assets к каждому соответствующему графическому компоненту SIGNAL FORGE / CONTROL DECK.
+- Проверить все 27 control surfaces, семь FX bypass states, auxiliary panels, resize/DPI и theme hot-swap.
+- Запустить exact-SHA build/tests; затем добавлять следующие темы по одной после прохождения G1–G4 и runtime checks.
+
+==============================================================================
+
