@@ -267,7 +267,8 @@ private:
             g.setColour(palette.token("text_primary")); g.setFont(makeThemeFont(palette, 12.5f, false, true));
             g.drawText(item.name, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
             g.setColour(palette.token("text_secondary")); g.setFont(makeThemeFont(palette, 9.0f));
-            g.drawText(item.family + "  /  " + item.layout, textArea.removeFromTop(14.0f),
+            g.drawText("SKIN " + juce::String(item.index).paddedLeft('0', 2)
+                           + "  /  " + item.layout, textArea.removeFromTop(14.0f),
                        juce::Justification::centredLeft, true);
             const auto tag = item.active ? juce::String("ACTIVE")
                 : (selected ? juce::String("SELECTED") : juce::String("PREVIEW"));
