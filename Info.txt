@@ -4113,3 +4113,9 @@ RUNTIME PACKAGE ИЗОЛИРОВАН ОТ LEGACY:
 - loadSavedSkin упрощён: stable ID разрешается в ordinal, затем выполняется один безопасный load attempt; двойная загрузка default устранена.
 - APVTS, processor, MIDI, sampler, DSP и audio callback не изменялись.
 - Ошибка default NEON STAGE manifest всё ещё оставляет встроенный palette fallback без artwork — это последний резервный путь при повреждении самой default темы.
+
+
+2026-11-16 — TX-REV19-SVG-TEST-INITIALIZATION-009
+
+- ThemeManagerTests now creates juce::ScopedJuceInitialiser_GUI before decoding SVG assets, so the headless Windows contract test initializes JUCE GUI/font facilities explicitly.
+- This test change is newer than the currently running C++ build attempt; include it in the next exact-head Windows run.
