@@ -141,11 +141,11 @@ Settings is no longer a deferred/absent panel in this branch. `settingsButton` o
 ## Оставшиеся runtime implementation gaps
 
 1. Gallery теперь имеет 16 active entries и PNG previews, но реальный host capture каждого skin ещё не выполнен.
-2. SVG texture/bezel/crest foundations присутствуют, однако отдельные runtime material layers ещё не подтверждены как реально отрисовываемые на всех существующих поверхностях. Не маркировать их как integrated до реализации и проверки.
+2. SVG texture/bezel/crest loading и drawing добавлены в рабочую ветку: ThemeManager безопасно декодирует три слоя в reference-counted juce::Image на UI thread; main console, gallery, FX EDIT, AUTOCHORDS, IMPORT GUITAR, SETTINGS, PATTERN и PERFORMANCE используют общий drawThemeArtworkLayers helper или эквивалентный paint path. C++ compile и host capture ещё не пройдены, поэтому runtime rendering остаётся IMPLEMENTED-ON-BRANCH / BUILD-VERIFICATION-PENDING.
 3. Полная очистка hardcoded visual colours в основном PluginEditor и всех открытых auxiliary panels не подтверждена; использовать 21-token palette, не менять функциональные bounds/hit targets/attachments.
 4. Package step должен копировать только 16 folders, перечисленных active registry; архивные/legacy folders не должны становиться runtime gallery entries или попадать в активный catalog.
 5. 150 ms hot-swap fade, ECO policy, image memory budget/LRU и safe background asset loading требуют отдельной реализации/измерения. Никакого I/O, allocation, locking или GUI work в audio callback.
 6. Runtime parity остаётся ровно по утверждённым 27 required control IDs. Дополнительный `sync_selector` metadata entry не является новым control ID. Не активировать фиктивные LED/Auto Discover/Curator/About элементы.
 7. Обязательны Windows x64 VST3 build, полный CTest, pluginval strictness 5, DPI 100/125/150%, FL Studio 20 preview/apply/cancel/persistence, repeated hot-swap test и audio-buffer/parameter-state equivalence.
 
-**Статус:** THEME SPECS + SVG + PNG ASSET PACK = VERIFIED BY CI. ACTIVE REGISTRY + STABLE-ID/ORDINAL MAPPING = IMPLEMENTED ON WORKING BRANCH. FULL VISUAL-LAYER INTEGRATION / WINDOWS BUILD / HOST ACCEPTANCE = PENDING.
+**Статус:** THEME SPECS + SVG + PNG ASSET PACK = VERIFIED BY CI. ACTIVE REGISTRY + STABLE-ID/ORDINAL MAPPING = IMPLEMENTED ON WORKING BRANCH. SVG LAYER LOADING/DRAWING = IMPLEMENTED ON WORKING BRANCH, C++ BUILD NOT YET VERIFIED. WINDOWS VST3 / FULL CTEST / PLUGINVAL / HOST ACCEPTANCE = PENDING.
