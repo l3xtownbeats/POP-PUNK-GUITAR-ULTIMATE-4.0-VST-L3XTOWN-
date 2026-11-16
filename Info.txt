@@ -3091,3 +3091,11 @@ Safe next step:
 1. Build a separate generated-not-merged pack manifest for indices 103–117 (status GENERATED_NOT_MERGED; range/count 103–117 / 15), without touching the merged 53–102 pack manifest.
 2. Audit all 15 folders for required PNG/SVG assets and run the existing G1–G4 validator against the generated pack. PNG artwork must be created/exported at the validator's runtime dimensions and meet the visual master-asset requirements separately.
 3. Only after the pack passes, perform an additive registry merge that preserves every existing ID 1–102 and sets the total to 117; then verify runtime gallery order/default selection and theme load behavior.
+
+
+2026-11-16 — TX-UI-PARITY-PREFLIGHT-003
+- Created separate file: SKIN/theme_pack_manifest_103_117.generated.json.
+- Contains 15 entries, skin-103 through skin-117, indices 103–117, status GENERATED_NOT_MERGED.
+- Existing SKIN/theme_pack_manifest.json (merged 53–102) and SKIN/theme_manifest.json (runtime registry 1–102) were not modified.
+- Pack manifest generation is metadata-only. G1–G4 has NOT been run; the known absent preview/hero PNG checks mean the pack is not yet eligible for merge.
+- Commit: 79c76c50f10ebd8a396646fcbfe193557165ba1d.
