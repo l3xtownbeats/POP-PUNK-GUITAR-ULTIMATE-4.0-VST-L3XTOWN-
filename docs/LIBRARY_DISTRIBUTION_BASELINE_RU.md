@@ -56,3 +56,22 @@ Manual assignment of every individual WAV is not required. A review step is stil
 ## 6. Supersession
 
 This approved baseline supersedes historical fixed library-size caps. BASIC is included, independently playable, and has a 15 GB minimum target with no hard maximum where quality requires more. EXPANDED is an optional additive library with an initial +15 GB target, also expandable. User libraries remain separately managed and bounded by available system resources rather than a product-imposed size cap.
+
+
+## 7. Quality-first sample replacement and disk-space optimization
+
+The library is allowed to improve over time by replacing an existing guitar sample with a demonstrably better one. The objective is not to accumulate every version: it is to keep the best verified material needed by the presets while avoiding unnecessary disk usage.
+
+A replacement is permitted only after comparing the candidate against the current asset and confirming that it preserves or improves:
+- audible quality, realism, usable signal/noise and mix readiness;
+- note/root-key and playable-range coverage;
+- velocity layers and dynamic response;
+- round-robin variation and articulation coverage;
+- all preset mappings and the intended sound of every affected preset;
+- commercial embedding/redistribution rights and provenance.
+
+When a replacement is accepted, update stable asset references and affected preset mappings as one consistent change. The superseded sample should no longer be included in the shipped library once no preset or supported feature depends on it. Keep the required license, attribution, source and checksum metadata; do not retain redundant audio copies in the installed package merely for historical reasons. Never delete user-imported source files.
+
+Exact duplicates are detected by SHA-256. Potentially equivalent recordings are additionally identified using audio fingerprints, but acoustic similarity alone must not trigger automatic deletion: a human review is required to ensure that useful round-robin, velocity, articulation or tonal variation is not lost. Only the best verified canonical asset for an equivalent use case is shipped.
+
+A smaller file is not automatically a better replacement. Lossless or more efficient encoding may be used only when the audible quality, playback compatibility and required mapping coverage are preserved. No replacement may reduce quality or make any of the 500 BASIC factory presets incomplete.
