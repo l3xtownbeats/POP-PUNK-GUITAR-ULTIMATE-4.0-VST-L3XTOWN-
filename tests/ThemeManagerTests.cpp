@@ -138,15 +138,15 @@ int main()
 
     const auto skin52Manifest = skinRoot.getChildFile("Skin_052").getChildFile("theme.json");
     const auto skin52Json = skin52Manifest.loadFileAsString();
-    expect(skin52Json.isNotEmpty(), "Skin_052 manifest readable");
+    expect(skin52Json.isNotEmpty(), "archived Skin_052 compatibility manifest readable");
     const bool skin52Loaded = manager.loadFromFile(skin52Manifest);
-    expect(skin52Loaded, "Skin Studio 052 manifest accepted"
+    expect(skin52Loaded, "archived Skin_052 compatibility manifest accepted"
            + (skin52Loaded ? juce::String{} : ": " + manager.getLastError()));
     if (skin52Loaded)
     {
-        expect(manager.getPalette().id == "skin-052", "Skin_052 ID matches three-digit index");
-        expect(manager.getPalette().name == "SIGNAL FORGE", "Skin_052 SIGNAL FORGE name is decoded");
-        expect(!manager.getPalette().usedFallback, "Skin_052 does not use fallback");
+        expect(manager.getPalette().id == "skin-052", "archived Skin_052 stable ID remains readable");
+        expect(manager.getPalette().name == "SIGNAL FORGE", "archived Skin_052 historical label is decoded (not an active factory skin)");
+        expect(!manager.getPalette().usedFallback, "archived Skin_052 compatibility manifest does not use fallback");
         expect(manager.getPalette().canvas == juce::Colour(0xff0b0f12),
                "Skin_052 window background is mapped");
 
