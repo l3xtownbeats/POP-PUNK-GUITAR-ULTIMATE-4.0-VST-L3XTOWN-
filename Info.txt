@@ -3396,3 +3396,32 @@ Evidence commit: 0380a3460ecfad05be4e23cbb749c8a3303c3fee.
 ВАЖНО: это утверждённая цель и отсутствие искусственного лимита, а не заявление о том, что библиотека уже собрана в таком объёме. Фактический размер, состав, лицензирование, playback и производительность фиксируются только после реального получения и проверки файлов.
 
 ============================================================================== 
+
+
+============================================================================== 
+2026-11-16 — TX-REV19-SFZ-BUILTIN-SAMPLE-TOKENS-001 — AUDIT FIX
+==============================================================================
+
+СТАТУС: IMPLEMENTED IN SOURCE · CI VALIDATION PENDING
+ВЕТКА: integration/rev19-skin-registry-ordinal-20261116
+Предыдущая известная проблема: run 43815128513 на source commit 4be179863498efda0457664a129b5776b430c872 завершился FAIL на sample inventory audit: 106 unresolved references. Повторяющиеся записи `sample=*sine` в Karoryfer Black and Green feedback maps были ошибочно приняты за пути к WAV.
+
+Выполнено:
+- `tools/audit_sample_library.py`: добавлен явный allowlist SFZ built-in sample/generator tokens: `*silence`, `*sine`, `*triangle`, `*saw`, `*square`, `*noise`.
+- Известные встроенные генераторы учитываются отдельным счётчиком `resolvedBuiltinSampleTokenCount` и не считаются отсутствующими файлами.
+- Неизвестные `*tokens` не добавляются в allowlist и не игнорируются: они продолжают попадать в unresolved report.
+- Добавлены unit tests на allowlist, регистр и запрет blanket-ignore неизвестных токенов.
+
+Коммиты:
+- Audit implementation: `efbfeec4493e22276417001624ac575f4e193a23`.
+- Unit tests: `530358aed9d9dd4e5da450d21c2be595b355056c`.
+
+Ограничения:
+- Полный audit ещё не перезапущен на этом HEAD; число оставшихся unresolved неизвестно.
+- Этот точечный фикс не подтверждает, что все 106 предыдущих записей устранены: остальные SFZ references должны оставаться видимыми и быть разобраны по причинам.
+- Windows VST3 configure/build, CTest, pluginval, packaging и FL Studio acceptance не выполнялись/не подтверждены этим изменением.
+- PR #55 остаётся Draft/Open и не объединяется.
+
+Следующий шаг: проверить точный текущий PR HEAD и дождаться CI на том же SHA; изучить полный unresolved report после исправления, не подавляя реальные missing WAV references.
+
+============================================================================== 
