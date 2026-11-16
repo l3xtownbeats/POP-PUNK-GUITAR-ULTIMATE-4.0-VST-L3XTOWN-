@@ -342,13 +342,13 @@
     "layoutChanges": false,
     "audioChanges": false
   },
-  "designStatus": "APPROVED_THEME_SPEC_VECTOR_ARTWORK_PENDING_PNG_AND_RUNTIME_VALIDATION",
+  "designStatus": "VECTOR_ARTWORK_REFINED_PNG_PREVIEW_HERO_AND_RUNTIME_VALIDATION_PENDING",
   "notes": [
     "Approved concept recorded 2026-11-15. Logical sequence is SKIN-5; stable registry identity is skin-106 / index 106.",
     "Existing legacy theme IDs and indices are preserved; no renumbering or overwriting.",
     "Shared NEON STAGE design-system component language is retained; this theme changes visual tokens/materials only.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
-    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending."
+    "SKIN-5 ARCTIC PLATINUM vector artwork refined: brushed satin-platinum frame, frosted-glass etched texture and unique Arctic crest. PNG preview/hero package assets and G1-G4 runtime acceptance remain pending."
   ],
   "ordinal": 5
 }
