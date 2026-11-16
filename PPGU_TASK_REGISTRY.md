@@ -147,3 +147,40 @@ Guardrails: no second sampler; no duplicate sample bank/cache; no UI/browser lay
 | PSET-09 | Avoid repeated filesystem scans; keep indexing off audio thread; measure lookup/switch latency | NOT IMPLEMENTED | P1 | PSET-07; performance harness |
 
 Acceptance: unchanged approved UI; one source; exact 250+250; cached/indexed mode filtering; no full scan per browser action/preset selection; no blocking or disk I/O in audio callback. Requirement approval is not implementation completion.
+
+
+## 2026-11-16 — REV.19 PRIORITY OVERRIDE: FACTORY PRESETS + SAMPLES FIRST
+
+Пользовательское решение: дальнейшее исполнение общего журнала ведётся последовательно, но до возвращения к SKIN-1…SKIN-16 необходимо завершить два основных направления продукта — FACTORY PRESETS и SAMPLES. Работа над скинами приостановлена; новые skin increments не начинать, пока эти два направления не пройдут свои критерии готовности.
+
+| ID | Workstream | Priority | Required completion evidence |
+|---|---|---|---|
+| PSET-01 | Factory preset source/catalog audit and safe migration from legacy 300 to one unified source of 500 | P1 / FIRST | No-loss audit; stable unique IDs; exact 250 MELODY + 250 PATTERN; schema/validator aligned |
+| PSET-02 | Factory preset metadata/index and existing browser integration | P1 | One internal source; cached metadata index; two filtered views; unchanged approved UI; no full scan on each selection; no audio-thread I/O |
+| PSET-03 | Sample/profile dependency mapping and real playable preset implementation | P1 | Each preset maps to approved sample/library IDs and valid key/root/velocity/articulation data; runtime playback, audition, save/load and performance evidence per preset |
+| SAMP-01 | Establish exact current Sample Library and Import Sample Guitar inventory | P1 / FIRST | Actual paths, counts, sizes, formats, existing-content preservation and duplicate/corruption report |
+| SAMP-02 | Full sample/SFZ/provenance/license/SHA-256 audit | P1 | Every factory asset traceable; commercial embedding/raw redistribution rights verified; unresolved references and ambiguous licenses isolated |
+| SAMP-03 | Complete stable registry and safe import/scan behavior | P1 | Copy-to-Import → SCAN/RESCAN → available; no overwrite/delete of existing content; stable IDs; scan off audio thread |
+| SAMP-04 | Runtime playback and performance validation | P1 | SFZ/key/root/velocity/round-robin/articulation mappings; streaming/cache/RAM/startup/callback/dropout tests; real listening QA |
+
+### Locked product decisions carried forward
+- Exactly 500 factory preset targets: 250 MELODY + 250 PATTERN; one unified physical source, two existing browser views.
+- Existing legacy 300 definitions are preserved until audited and migrated; no blind deletion or overwrite.
+- Sample layout remains simple: `PPGU PORTABLE/Samples/Sample Library/` and `PPGU PORTABLE/Samples/Import Sample Guitar/`.
+- User import remains ordinary file copy followed by SCAN/RESCAN; imported material is not silently copied into or mixed with the factory redistributable set.
+- Factory Sample Library target is 10–12 GB or more if needed; expanded library 40 GB+; no hard upper size cap. Do not trade sample quality/diversity for an arbitrary cap.
+- Streaming and cache are required; library size must not imply loading all audio into RAM.
+- Every factory sample requires provenance, SHA-256 and explicit license review for commercial embedding and redistribution. Unclear rights = exclude from factory distribution.
+- Only genuinely playable, listened-to and validated presets can be marked READY. A JSON count is not readiness.
+
+### Execution order
+1. SAMP-01 current inventory and preservation audit.
+2. SAMP-02 licensing, provenance, checksums and SFZ reference audit; repair real missing references only after verifying intended assets.
+3. SAMP-03 stable registry and safe simple import/scan behavior.
+4. SAMP-04 actual streaming/playback and resource validation.
+5. PSET-01 audit and no-loss consolidation of legacy 300 into the single 500-entry target.
+6. PSET-02 schema/validator/index and existing browser views, with no UI redesign.
+7. PSET-03 map, implement and audition presets against the verified library; READY evidence per preset.
+8. Resume the remaining master journal items in their recorded order; skins resume only after PRESETS and SAMPLES acceptance.
+
+**No completion claim:** these are the approved execution priorities and acceptance gates, not evidence that the library or 500 presets are complete.
