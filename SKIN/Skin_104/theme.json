@@ -5,7 +5,7 @@
   "name": "CARBON FORGE",
   "family": "special",
   "layout": "STUDIO_CONSOLE",
-  "description": "CARBON FORGE: approved sequential PPGU visual theme. forged carbon / titanium and satin metal. Preserves the canonical shared component language and existing control map.",
+  "description": "Forged carbon weave beneath smoked resin, satin titanium rails, directional machining marks and layered carbon-fibre geometry. Cool steel highlights remain restrained so the surface reads as engineered hardware, not a colour swap. Preserves the canonical NEON STAGE component language, shared layout and existing control map.",
   "palette": {
     "window_bg": "#080E12",
     "panel": "#121C22",
@@ -348,7 +348,9 @@
     "Existing legacy theme IDs and indices are preserved; no renumbering or overwriting.",
     "Shared NEON STAGE design-system component language is retained; this theme changes visual tokens/materials only.",
     "No APVTS, control IDs, layout geometry, DSP, audio, MIDI, sampler or preset behavior changes.",
-    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending."
+    "PNG preview.png and hero.png artwork plus G1-G4/package/runtime validation are pending.",
+    "Individual approved art direction: Forged carbon weave beneath smoked resin, satin titanium rails, directional machining marks and layered carbon-fibre geometry. Cool steel highlights remain restrained so the surface reads as engineered hardware, not a colour swap.",
+    "Visual-only skin. Do not alter APVTS, DSP, MIDI, the 27-control contract, seven FX bypass IDs or functional layout."
   ],
   "ordinal": 3
 }
