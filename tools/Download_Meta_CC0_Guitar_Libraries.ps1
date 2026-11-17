@@ -8,8 +8,8 @@ $ErrorActionPreference = 'Stop'
 
 $repo = 'facebookincubator/Meta-open-sound'
 $releases = @(
-    @{ Tag = 'meta-steel-guitar-v1.0.0'; Folder = 'Meta-Steel-Guitar'; ExpectedWav = 375 },
-    @{ Tag = 'meta-nylon-guitar-v1.0.0'; Folder = 'Meta-Nylon-Guitar'; ExpectedWav = 348 }
+    @{ Tag = 'meta-steel-guitar-v1.0.0'; Folder = 'Meta-Steel-Guitar'; ExpectedWav = 375; AssetName = 'meta-open-sound-meta-steel-guitar-wav.zip'; ExpectedBytes = 663385210; ExpectedSha256 = 'caaa8a9c07217f4a82d1dfd9f5657c286155464b66bf4dd27797811c2558a909' },
+    @{ Tag = 'meta-nylon-guitar-v1.0.0'; Folder = 'Meta-Nylon-Guitar'; ExpectedWav = 348; AssetName = 'meta-open-sound-meta-nylon-guitar-wav.zip'; ExpectedBytes = 423127309; ExpectedSha256 = 'e7fa168b97a72ecc1257917f85cb524fe7c2e1f098dfdcaf8f5c0e29cabe768e' }
 )
 $headers = @{ 'User-Agent' = 'POP-PUNK-GUITAR-ULTIMATE-library-installer' }
 
@@ -88,16 +88,20 @@ try {
     foreach ($item in $releases) {
         Write-Host "Resolving official release $($item.Tag) ..."
         $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases/tags/$($item.Tag)" -Headers $headers
-        $asset = @($release.assets | Where-Object { $_.name -match '(?i)wav.*\.zip$' } |
-            Sort-Object -Property size -Descending | Select-Object -First 1)
-        if ($asset.Count -eq 0) { throw "No official WAV ZIP asset found for $($item.Tag)" }
+        $asset = @($release.assets | Where-Object { $_.name -ceq $item.AssetName })
+        if ($asset.Count -ne 1) { throw "Expected exactly one pinned WAV ZIP '$($item.AssetName)' for $($item.Tag); found $($asset.Count)" }
+        if ([int64]$asset[0].size -ne [int64]$item.ExpectedBytes) { throw "Release asset size changed for $($item.AssetName); review the source manifest before updating the pin." }
+        if ([string]$asset[0].digest -ne "sha256:$($item.ExpectedSha256)") { throw "GitHub release digest changed for $($item.AssetName); refusing unreviewed source update." }
 
         $zipPath = Join-Path $tempRoot $asset[0].name
         $extractPath = Join-Path $tempRoot $item.Folder
         New-Item -ItemType Directory -Force -Path $extractPath | Out-Null
 
-        Write-Host "Downloading $($asset[0].name) ..."
+        Write-Host "Downloading pinned source asset $($asset[0].name) ..."
         Invoke-WebRequest -Uri $asset[0].browser_download_url -OutFile $zipPath -Headers $headers
+        $archiveHash = (Get-FileHash -LiteralPath $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($archiveHash -ne $item.ExpectedSha256) { throw "Downloaded archive SHA256 mismatch: $($item.AssetName)" }
+        if ((Get-Item -LiteralPath $zipPath).Length -ne [int64]$item.ExpectedBytes) { throw "Downloaded archive byte count mismatch: $($item.AssetName)" }
         Expand-Archive -LiteralPath $zipPath -DestinationPath $extractPath -Force
 
         $sfz = Get-ChildItem -LiteralPath $extractPath -Filter '*.sfz' -File -Recurse | Select-Object -First 1

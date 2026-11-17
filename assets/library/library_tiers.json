@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.2.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "storageUnits": {
+    "label": "GB",
+    "definition": "DECIMAL",
+    "bytesPerGB": 1000000000
+  },
+  "factoryPresets": {
+    "requiredPlayableCount": 500,
+    "requiresBasicLibrary": true,
+    "requiresExpandedLibrary": false,
+    "basicMustMeetQualityRequirements": true
+  },
+  "libraries": {
+    "basic": {
+      "id": "PPGU-BASIC",
+      "displayName": "BASIC LIBRARY",
+      "minimumTargetBytes": 15000000000,
+      "minimumTargetGB": 15,
+      "targetIsHardMaximum": false,
+      "expandWhenRequiredForPresetQuality": true,
+      "expandWhenRequiredForCompleteGuitarArticulations": true,
+      "actualSizeDeterminedBy": [
+        "QUALITY_AND_REALISM_OF_GUITAR_AUDIO",
+        "COMPLETE_PLAYABLE_MAPPING_FOR_ALL_500_FACTORY_PRESETS",
+        "REQUIRED_ARTICULATIONS_VELOCITY_LAYERS_AND_ROUND_ROBIN_VARIATIONS",
+        "LICENSE_CLEARED_UNIQUE_AUDIO_CONTENT"
+      ],
+      "distribution": "INCLUDED_IN_STANDARD_PRODUCT_PACKAGE",
+      "mandatory": true,
+      "independentlyPlayable": true,
+      "supportsFactoryPresetCount": 500,
+      "mayExceedMinimumTarget": true,
+      "qualityMustNotBeReducedToMeetSizeTarget": true,
+      "qualityReplacementPolicy": {
+        "enabled": true,
+        "allowReplacingExistingSamplesWithHigherQualityAlternatives": true,
+        "goal": "IMPROVE_OR_MAINTAIN_AUDIBLE_QUALITY_WHILE_REDUCING_INSTALLED_DISK_FOOTPRINT",
+        "replacementMustPreserveOrImprove": [
+          "NOTE_AND_ROOT_KEY_COVERAGE",
+          "VELOCITY_LAYERS_AND_DYNAMIC_RESPONSE",
+          "ROUND_ROBIN_VARIATION",
+          "ARTICULATIONS_AND_PLAYING_TECHNIQUES",
+          "SAMPLE_RATE_BIT_DEPTH_AND_USABLE_SIGNAL_QUALITY",
+          "PRESET_TONE_AND_MIX_READINESS",
+          "LICENSE_AND_REDISTRIBUTION_RIGHTS"
+        ],
+        "compareBeforeReplacement": true,
+        "requireVerifiedListeningOrObjectiveQualityEvidence": true,
+        "requireMappingAndPresetDependencyAudit": true,
+        "requireNewAssetChecksumAndLicenseRecord": true,
+        "updateStableAssetReferencesAtomically": true,
+        "removeSupersededAssetFromShippedPackageAfterAcceptance": true,
+        "retainOnlyRequiredProvenanceMetadata": true,
+        "neverDeleteUserImportedSourceFiles": true,
+        "neverReplaceWithLowerQualityOrIncompleteCoverage": true,
+        "allowLosslessOrMoreEfficientEncodingOnlyWhenQualityIsPreserved": true
+      }
+    },
+    "expanded": {
+      "id": "PPGU-EXPANDED",
+      "displayName": "EXPANDED LIBRARY",
+      "initialAddonTargetBytes": 15000000000,
+      "initialAddonTargetGB": 15,
+      "initialCombinedTargetBytes": 30000000000,
+      "initialCombinedTargetGB": 30,
+      "distribution": "OPTIONAL_ADDITIVE_ADDON",
+      "requiresBasic": true,
+      "replacesBasic": false,
+      "expandable": true,
+      "maximumBytes": null,
+      "purposes": [
+        "ADDITIONAL_TONE_VARIATIONS",
+        "SOUND_QUALITY_AND_REALISM_ENHANCEMENT",
+        "ADDITIONAL_ARTICULATIONS_AND_PERFORMANCES",
+        "ADDITIONAL_FACTORY_PRESETS"
+      ],
+      "note": "The 15 GB add-on and 30 GB combined total are initial targets. If BASIC exceeds 15 GB to meet approved quality requirements, EXPANDED remains additive and must not reduce or replace BASIC."
+    }
+  },
+  "engine": {
+    "sampleDiscovery": "AUTOMATIC",
+    "sampleAnalysis": "AUTOMATIC",
+    "sampleClassification": "AUTOMATIC_WITH_CONFIDENCE_AND_REVIEW_GATES",
+    "sampleDistribution": "AUTOMATIC_BY_PRESET_AND_PLAYBACK_NEEDS",
+    "manualPerSampleAssignmentRequired": false,
+    "indexingAndHashingThread": "BACKGROUND_WORKER",
+    "audioCallbackDiskIoAllowed": false,
+    "audioCallbackBlockingAllowed": false,
+    "audioCallbackUnboundedAllocationAllowed": false,
+    "preserveSourceLicenseAndProvenance": true,
+    "preserveSha256Integrity": true,
+    "duplicateManagement": {
+      "detectExactDuplicatesBySha256": true,
+      "detectPotentialAudioDuplicatesByAcousticFingerprint": true,
+      "acousticMatchesRequireReviewBeforeRemoval": true,
+      "deduplicateShippedPayload": true,
+      "doNotCountDuplicatesTowardLibrarySize": true,
+      "keepOneBestVerifiedCanonicalAssetPerEquivalentUseCase": true
+    }
+  },
+  "releaseGates": {
+    "basicPackageMustContainAtLeastMinimumTarget": true,
+    "basicMayExceedMinimumForQuality": true,
+    "all500FactoryPresetsMustResolveAgainstBasic": true,
+    "expandedMustNotBeRequiredForBasicPresetPlayback": true,
+    "noPaddingOrDuplicateAudioToReachTargetSize": true,
+    "noAssetMayBeRedistributedWithoutVerifiedRights": true,
+    "measuredPackageSizeMustBeReported": true,
+    "doNotReduceAudioQualityToMeetNominalPackageSize": true,
+    "supersededAssetsMustNotRemainInShippedPayloadAfterApprovedReplacement": true,
+    "replacementMustNotBreakAnyFactoryPresetMapping": true,
+    "noLowerQualityReplacement": true
+  }
+}

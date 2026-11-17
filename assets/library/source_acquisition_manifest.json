@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "product": "POP PUNK GUITAR ULTIMATE",
+  "acquisitionStatus": "SOURCE_RELEASES_PINNED_PAYLOAD_NOT_YET_DOWNLOADED_OR_INTEGRATED",
+  "units": {
+    "bytes": "integer",
+    "sampleCounts": "source-declared WAV files"
+  },
+  "policy": {
+    "licenseRequired": "CC0-1.0 or separately verified redistribution permission",
+    "requireOfficialRelease": true,
+    "requirePinnedArchiveSha256": true,
+    "verifyArchiveBeforeExtraction": true,
+    "verifyPerFileSha256FromUpstreamManifest": true,
+    "quarantineUnclearRightsOrMappings": true,
+    "noTestsBeforeAllAudioAnd500PresetsIntegrated": true
+  },
+  "sources": [
+    {
+      "sourceId": "META-STEEL-GUITAR-1.0.0",
+      "publisher": "Meta Creative Audio",
+      "repository": "https://github.com/facebookincubator/Meta-open-sound",
+      "releaseTag": "meta-steel-guitar-v1.0.0",
+      "assetName": "meta-open-sound-meta-steel-guitar-wav.zip",
+      "downloadUrl": "https://github.com/facebookincubator/Meta-open-sound/releases/download/meta-steel-guitar-v1.0.0/meta-open-sound-meta-steel-guitar-wav.zip",
+      "archiveBytes": 663385210,
+      "archiveSha256": "caaa8a9c07217f4a82d1dfd9f5657c286155464b66bf4dd27797811c2558a909",
+      "license": "CC0-1.0",
+      "declaredWavCount": 375,
+      "declaredRange": "E2-C6",
+      "declaredLayers": 3,
+      "sourceFormat": "24-bit / 48 kHz WAV",
+      "mapping": "Official SFZ + collection manifest",
+      "knownLimitations": [
+        "Acoustic steel-string guitar, not an electric pop-punk guitar",
+        "No palm-muted layer or round-robin variation is claimed until verified in the downloaded collection"
+      ],
+      "acquisitionState": "PINNED_NOT_DOWNLOADED"
+    },
+    {
+      "sourceId": "META-NYLON-GUITAR-1.0.0",
+      "publisher": "Meta Creative Audio",
+      "repository": "https://github.com/facebookincubator/Meta-open-sound",
+      "releaseTag": "meta-nylon-guitar-v1.0.0",
+      "assetName": "meta-open-sound-meta-nylon-guitar-wav.zip",
+      "downloadUrl": "https://github.com/facebookincubator/Meta-open-sound/releases/download/meta-nylon-guitar-v1.0.0/meta-open-sound-meta-nylon-guitar-wav.zip",
+      "archiveBytes": 423127309,
+      "archiveSha256": "e7fa168b97a72ecc1257917f85cb524fe7c2e1f098dfdcaf8f5c0e29cabe768e",
+      "license": "CC0-1.0",
+      "declaredWavCount": 348,
+      "declaredRange": "E2-B5",
+      "declaredLayers": 3,
+      "sourceFormat": "24-bit / 48 kHz WAV",
+      "mapping": "Official SFZ + collection manifest",
+      "knownLimitations": [
+        "Nylon-string classical acoustic guitar, not an electric pop-punk guitar",
+        "Source documentation states no palm-muted layer, no release samples and no round-robin variation"
+      ],
+      "acquisitionState": "PINNED_NOT_DOWNLOADED"
+    }
+  ],
+  "nextGates": [
+    "Download exact pinned release assets using tools/Download_Meta_CC0_Guitar_Libraries.ps1",
+    "Verify downloaded archive SHA-256 and byte size against this manifest",
+    "Verify extracted per-file SHA256SUMS, LICENSE, SFZ and manifest",
+    "Audit every SFZ region and source WAV metadata before stable asset registration",
+    "Integrate these as acoustic source families only; do not mislabel them as electric guitar",
+    "Continue sourcing licensed natural electric guitar and purpose-recorded pop-punk performance material"
+  ]
+}
