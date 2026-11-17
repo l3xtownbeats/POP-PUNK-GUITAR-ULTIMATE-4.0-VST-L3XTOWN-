@@ -33,6 +33,30 @@ int main()
     CHECK(parsed.regions[1].loopMode == "one_shot");
     CHECK(parsed.regions[2].lowVelocity == 91 && parsed.regions[2].highVelocity == 127);
 
+    // All enharmonic spellings used by guitar libraries must resolve to MIDI
+    // keys without dropping flat-named samples or changing their octave.
+    const auto enharmonic = parseText(
+        "<region> sample=db4.wav key=Db4\\n"
+        "<region> sample=cs4.wav key=C#4\\n"
+        "<region> sample=eb4.wav key=Eb4\\n"
+        "<region> sample=ds4.wav key=D#4\\n"
+        "<region> sample=fb4.wav key=Fb4\\n"
+        "<region> sample=e4.wav key=E4\\n"
+        "<region> sample=cb4.wav key=Cb4\\n"
+        "<region> sample=b3.wav key=B3\\n"
+        "<region> sample=es4.wav key=E#4\\n"
+        "<region> sample=f4.wav key=F4\\n"
+        "<region> sample=bs4.wav key=B#4\\n"
+        "<region> sample=c5.wav key=C5\\n", base);
+    CHECK(enharmonic.succeeded());
+    CHECK(enharmonic.regions.size() == 12);
+    CHECK(enharmonic.regions[0].rootKey == 61 && enharmonic.regions[1].rootKey == 61);
+    CHECK(enharmonic.regions[2].rootKey == 63 && enharmonic.regions[3].rootKey == 63);
+    CHECK(enharmonic.regions[4].rootKey == 64 && enharmonic.regions[5].rootKey == 64);
+    CHECK(enharmonic.regions[6].rootKey == 59 && enharmonic.regions[7].rootKey == 59);
+    CHECK(enharmonic.regions[8].rootKey == 65 && enharmonic.regions[9].rootKey == 65);
+    CHECK(enharmonic.regions[10].rootKey == 72 && enharmonic.regions[11].rootKey == 72);
+
     const auto rrMetadata = parseText(
         "<group> group=12 seq_length=3\n"
         "<region> sample=rr1.wav key=60 seq_position=1\n"
