@@ -85,19 +85,45 @@ bool parseKey(const std::string& text, int& value)
 {
     if (parseInteger(text, value)) return value >= 0 && value <= 127;
     if (text.size() < 2) return false;
-    static const std::string names[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-    std::string note = text.substr(0, text.size() - 1);
+
+    const char letter = static_cast<char>(std::toupper(static_cast<unsigned char>(text[0])));
+    int semitone = -1;
+    switch (letter)
+    {
+        case 'C': semitone = 0; break;
+        case 'D': semitone = 2; break;
+        case 'E': semitone = 4; break;
+        case 'F': semitone = 5; break;
+        case 'G': semitone = 7; break;
+        case 'A': semitone = 9; break;
+        case 'B': semitone = 11; break;
+        default: return false;
+    }
+
+    std::size_t octaveStart = 1;
+    if (octaveStart < text.size() && (text[octaveStart] == '#' || text[octaveStart] == 'b'
+                                      || text[octaveStart] == 'B'))
+    {
+        if (text[octaveStart] == '#') ++semitone;
+        else --semitone;
+        ++octaveStart;
+    }
+
     int octave = 0;
-    if (!parseInteger(text.substr(text.size() - 1), octave)) return false;
-    for (int i = 0; i < 12; ++i)
-        if (note == names[i])
-        {
-            const int midi = (octave + 1) * 12 + i;
-            if (midi < 0 || midi > 127) return false;
-            value = midi;
-            return true;
-        }
-    return false;
+    try
+    {
+        std::size_t used = 0;
+        octave = std::stoi(text.substr(octaveStart), &used);
+        if (used != text.size() - octaveStart) return false;
+    }
+    catch (...) { return false; }
+
+    // Compute from the written natural note and accidental so enharmonic
+    // spellings (Cb, B#, E#, Fb, sharps and flats) map to the correct MIDI key.
+    const int midi = (octave + 1) * 12 + semitone;
+    if (midi < 0 || midi > 127) return false;
+    value = midi;
+    return true;
 }
 
 bool pathStaysInside(const std::filesystem::path& base, const std::filesystem::path& candidate)
