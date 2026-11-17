@@ -2926,3 +2926,23 @@ These images are implementation references, not permission to show an unimplemen
 **Статус:** ПОЛЬЗОВАТЕЛЕМ УТВЕРЖДЕНО / ПОДТВЕРЖДЕНО / ЗАФИКСИРОВАНО. Это архитектурный и процессный стандарт, а не заявление о завершении реализации или прохождении тестов.
 ==============================================================================
 
+
+==============================================================================
+2026-11-17 — TX-REV18-GLM-001 — USER APPROVED GUITAR LIBRARY MANAGER CONTRACT
+==============================================================================
+
+**Decision / approval:** user confirmed REV.18 as the active working line and approved the extended library-classification scope, explicitly including LOOP GUITAR, SAMPLE MELODY, SAMPLE MELODY PATTERNS, styles/genres, notes, keys/scales, chords/voicings, instrument/tone families and preset-ready asset mapping. Detailed engineering decisions are delegated to the assistant within existing approved architecture and safety/license boundaries.
+
+**Specification:** docs/REV18_GUITAR_LIBRARY_MANAGER_IMPORT_CLASSIFIER_PRESET_CONTRACT_RU.md
+**Implementation work branch:** work/rev18-guitar-library-manager (based on POP-PUNK-GUITAR-ULTIMATE-VST-REV.18).
+**Initial specification commit:** 731ca122f80cf5e31135c20357a11edfa0233398; readback blob 44e587e5fba579df6cdb1e73227b672bb714a6ee.
+
+**Approved workflow:** user imports complete libraries into IMPORT SAMPLES GUITAR; plugin Import Guitar controls scan/analyze/sort/commit; eligible material is transactionally added to existing BASIC LIBRARY/SoundBank; unresolved, unknown, partial, unsupported or rights-blocked material remains reviewable in intake; demonstrably corrupt/unreadable material is quarantined with reason. After destination hashes, SFZ references and index commit are verified, only the corresponding working intake copies may be removed. Original source libraries remain preserved outside intake. Never delete the only source copy.
+
+**Approved classification coverage:** electric/acoustic/steel/nylon guitar and tone roles; all 12 pitch classes/enharmonic names and MIDI note ranges; major/minor/modes/chromatic/unknown tonalities; triads, power chords, suspended, diminished/augmented, 7ths/extended/add chords, inversions, voicings and partial guitar shapes; articulations and performance techniques; single notes, multisamples, velocity/RR layers, chords, loops, riffs, fills, transitions, arpeggios, sample melodies, sample melody patterns, rhythm/strum patterns, chord progressions, audio-vs-MIDI representation; multi-label style profiles including existing PP-ROOT / PP-NEO2000 / PP-MODERN / PP-EMO and broader pop-punk/rock/acoustic/emo/alternative families. Unknown/low-confidence classification is never itself a rejection reason.
+
+**Architecture invariants:** extend existing Import Guitar / S6 / S6.5 / SoundBank index / SamplePool / SFZ / preset architecture; do not create a parallel discovery or sampler pipeline. All scanning, file I/O, decoding, hashing and classification run outside audio callback on bounded cancellable workers. Stable asset IDs and versioned index references feed preset selection; only assets with compatible playback routes, cleared rights and validation may become factory-preset ingredients. A WAV loop is not automatically a MIDI pattern. Classification is not proof of playback support, quality or license.
+
+**Branch preflight note:** REV.17 ↔ REV.18 compare observed divergence (REV.18 ahead 130 / behind 16 at this snapshot; merge base 9dea73597cfd7b383f1e8bf77d773abea13498b0). Per user approval REV.18 is the active work line for this task, but it is not silently declared release/canonical or merged into REV.17. A dedicated work branch was created from REV.18 to isolate the implementation/audit transaction.
+
+**Status:** USER APPROVED / SPECIFICATION COMMITTED AND READ BACK / SOURCE AUDIT NOT YET PERFORMED / NO PRODUCTION CODE, TESTS, BUILD OR HOST VERIFICATION CLAIMED.
