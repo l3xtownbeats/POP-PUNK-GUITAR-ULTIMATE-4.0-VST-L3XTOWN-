@@ -1047,3 +1047,16 @@ Updated tools/audit_skin_rev18_assets.py: supports all 16 approved themes; check
 **Previous exact-SHA validation:** AUTO SOUND HUNTER rename commit `78f7a66e0e7e5805092dc694920091f69080faa4`, run `43692734450`: Windows VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS, interim package. FL Studio 20 host acceptance remains pending.
 
 **New commit SHA:** pending GitHub commit creation; append exact SHA and CI result after workflow completion.
+
+2026-11-17 — TX-REV18-GLM-001 — Guitar Library Manager requirements baseline
+
+Branch: work/rev18-guitar-library-manager (based on POP-PUNK-GUITAR-ULTIMATE-VST-REV.18).
+Specification commit: 731ca122f80cf5e31135c20357a11edfa0233398.
+Specification path: docs/REV18_GUITAR_LIBRARY_MANAGER_IMPORT_CLASSIFIER_PRESET_CONTRACT_RU.md
+Readback blob: 44e587e5fba579df6cdb1e73227b672bb714a6ee
+
+Recorded user-approved scope: plugin-controlled IMPORT SAMPLES GUITAR workflow; automatic classification of electric/acoustic/steel/nylon guitar sounds, all notes/keys/scales/chord families/voicings, articulations, single notes, multisamples, loops, LOOP GUITAR, riffs, SAMPLE MELODY, SAMPLE MELODY PATTERNS, audio/MIDI patterns, chord/rhythm progressions and multi-label style profiles. Unknown/partial material must be retained for review rather than falsely rejected. Corrupt files alone go to QUARANTINE on objective integrity/readability failure. Accepted working copies leave intake only after verified transactional publication; immutable source libraries are preserved.
+
+Architecture constraints: extend existing Import Guitar/S6/S6.5/SoundBank/SamplePool/SFZ/preset path; no duplicate import/discovery/sampler pipeline; bounded workers outside audio callback; stable asset IDs and versioned index; provenance/license/quality gates; no claims that this specification is implementation.
+
+Change class: documentation/specification and task registration only. Production C++, tests, CMake, audio, DSP, MIDI, APVTS, presets, SoundBank runtime and UI source unchanged. No build, CTest, pluginval, package or FL Studio 20 host test was run for this documentation transaction.
