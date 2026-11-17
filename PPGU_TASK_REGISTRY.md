@@ -134,3 +134,11 @@
 
 **Authority:** docs/REV18_GUITAR_LIBRARY_MANAGER_IMPORT_CLASSIFIER_PRESET_CONTRACT_RU.md.
 **Scope note:** this is a requirements/design approval, not implementation evidence. No production source or tests changed in TX-REV18-GLM-001.
+### GLM-01 audit snapshot — 2026-11-17
+- PluginEditor Import Guitar panel currently exposes LOAD SFZ only and delegates to the existing async SFZ loader.
+- AUTO SOUND HUNTER and CURATOR entry points are explicitly disabled; no discovery/classification backend is present in the inspected editor path.
+- Processor exposes a single-worker async SFZ load path; this is a bank loader, not a recursive library classifier/sorter.
+- SFZ parser supports core sample/key/velocity/group/round-robin/loop metadata, but unsupported opcodes are warned/ignored; note-name parsing previously lacked flats. A focused flat/enharmonic parsing fix and tests are now committed, validation pending.
+- Sound Hunter registry is currently empty (assets=[]). No legal cleared assets were found in the inspected registry.
+- Factory preset catalog currently reads preset metadata and applies parameters; the inspected code does not yet establish stable sample-asset dependencies for preset recall.
+- These are scoped observations from inspected files, not a full repository audit. Continue inspecting the full S6/S6.5/index/preset/test dependency chain before designing runtime integration.
