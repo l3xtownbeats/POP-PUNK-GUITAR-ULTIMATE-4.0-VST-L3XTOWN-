@@ -116,3 +116,21 @@
 | ENG-20 | AUTOMATED QUALITY TESTING | APPROVED REQUIREMENT | P1 | CTest/CI/host test strategy |
 
 Все записи отражают утверждение требований, не реализацию. Следующий технический рабочий пакет — MIDI ENGINE после завершения согласованной последовательности и проверки актуального source state.
+
+## 2026-11-17 — TX-REV18-GLM-001 — Guitar Library Manager / Import Classifier / Preset Asset Contract
+
+| ID | Task | Status | Priority | Dependencies |
+|---|---|---|---|---|
+| GLM-01 | Audit existing Import Guitar / S6 / S6.5 / SoundBank / SFZ / SamplePool / preset source and tests | REQUIRED | P1 | REV18 source preflight |
+| GLM-02 | Unified metadata model: instrument, notes, key/scale, chords, voicings, articulation, asset role, genre/style | APPROVED / DESIGNED | P1 | GLM-01 |
+| GLM-03 | LOOP GUITAR catalog and audio-loop metadata | APPROVED / DESIGNED | P1 | GLM-01, loop playback capability |
+| GLM-04 | SAMPLE MELODY and SAMPLE MELODY PATTERNS classification (audio vs MIDI distinct) | APPROVED / DESIGNED | P1 | GLM-01, playback route audit |
+| GLM-05 | Transactional IMPORT SAMPLES GUITAR staging / sort / verify / intake cleanup | APPROVED / DESIGNED | P1 | GLM-01, GLM-06 |
+| GLM-06 | Preserve unknown/partial assets; objective corruption quarantine; no false musical rejection | APPROVED / DESIGNED | P1 | GLM-02 |
+| GLM-07 | Asset-level provenance/license/quality gate and rights ledger | REQUIRED | P1 | existing GREEN/YELLOW/RED policy |
+| GLM-08 | Versioned index extension and stable asset IDs for preset authoring/recall | APPROVED / DESIGNED | P1 | GLM-01, GLM-07 |
+| GLM-09 | Plugin Import Guitar UI connected to bounded background worker, progress/cancel/resume | REQUIRED | P1 | GLM-01, GLM-05 |
+| GLM-10 | Exact-SHA tests, Windows build, CTest, pluginval and FL Studio 20 acceptance | REQUIRED | P1 | GLM-01..09 |
+
+**Authority:** docs/REV18_GUITAR_LIBRARY_MANAGER_IMPORT_CLASSIFIER_PRESET_CONTRACT_RU.md.
+**Scope note:** this is a requirements/design approval, not implementation evidence. No production source or tests changed in TX-REV18-GLM-001.
