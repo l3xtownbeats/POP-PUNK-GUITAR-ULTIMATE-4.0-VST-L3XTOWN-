@@ -341,3 +341,15 @@ User clarification: downloading is allowed when lawful and compliant with source
 The AUTO SOUND HUNTER naming correction on SHA `78f7a66e0e7e5805092dc694920091f69080faa4` passed workflow run `43692734450`: Windows x64 VST3 build success, CTest 12/12, pluginval strictness 5 SUCCESS and interim CI packaging. FL Studio 20 manual host acceptance remains outstanding.
 
 The approved UI specification is `PPGU_UI_THEME_SPEC_FULL.txt` v1.3, with `01 INTERFACE  NEON STAGE DEFAULT .png` as canonical main-interface reference and 02–07 as supporting module/workspace references. The REV18 16-theme audit is now hardened and integrated into the Windows workflow; local tests 9/9 pass, audit 0 errors / 45 expected warnings. Missing preview/hero PNGs and registry promotion for SKIN-2..SKIN-16 remain open. No registry migration, theme activation or release acceptance has been performed.
+
+## 2026-11-17 — TX-REV18-GLM-001 — user-approved Guitar Library Manager scope
+
+**User decision:** REV.18 approved as the active working line for this task. The user also approved the full extension covering LOOP GUITAR, SAMPLE MELODY, SAMPLE MELODY PATTERNS, styles/genres, guitar/acoustic/electric instrument families, notes, tonalities, chords/voicings, articulations and preset-ready indexing.
+
+**Branch disposition:** work/rev18-guitar-library-manager created from POP-PUNK-GUITAR-ULTIMATE-VST-REV.18. REV.17/REV.18 compare snapshot: REV.18 ahead 130 / behind 16, merge base 9dea73597cfd7b383f1e8bf77d773abea13498b0. This approval authorizes work on REV.18; it does not authorize wholesale merge into REV.17 or a release/canonical declaration.
+
+**Specification:** docs/REV18_GUITAR_LIBRARY_MANAGER_IMPORT_CLASSIFIER_PRESET_CONTRACT_RU.md (commit 731ca122f80cf5e31135c20357a11edfa0233398, readback blob 44e587e5fba579df6cdb1e73227b672bb714a6ee).
+
+**Architecture:** plugin Import Guitar is the user-facing entry point for IMPORT SAMPLES GUITAR; extend the existing S6/S6.5/SoundBank/index/SFZ/SamplePool/preset architecture, with bounded background work outside audio callback. No parallel importer or sampler. Preserve originals; only clear successfully committed working copies after hash/reference/index verification. Unknown/partial/unsupported/license-blocked items remain reviewable; objectively corrupt/unreadable items are quarantined. Stable asset IDs and versioned metadata support preset authoring/recall. Audio loops and MIDI patterns remain distinct.
+
+**Status:** APPROVED / DESIGNED. Source-level preflight is the next task. No production source or tests changed and no implementation/build/test/host acceptance is claimed.
