@@ -1060,3 +1060,13 @@ Recorded user-approved scope: plugin-controlled IMPORT SAMPLES GUITAR workflow; 
 Architecture constraints: extend existing Import Guitar/S6/S6.5/SoundBank/SamplePool/SFZ/preset path; no duplicate import/discovery/sampler pipeline; bounded workers outside audio callback; stable asset IDs and versioned index; provenance/license/quality gates; no claims that this specification is implementation.
 
 Change class: documentation/specification and task registration only. Production C++, tests, CMake, audio, DSP, MIDI, APVTS, presets, SoundBank runtime and UI source unchanged. No build, CTest, pluginval, package or FL Studio 20 host test was run for this documentation transaction.
+2026-11-17 — TX-REV18-GLM-002 — SFZ enharmonic note-name support
+
+Branch: work/rev18-guitar-library-manager.
+Source commit: bb93d84ae9e52654814613d7b78ea1452c3e5d89.
+Test commit: 772f68e9cca9ca474d2d5657d208def490e8ba66.
+Changed paths: Source/Sampler/SfzParser.cpp (parseKey); tests/SfzParserTests.cpp (enharmonic fixtures).
+Behavior: SFZ key parser now accepts natural, sharp and flat spellings with octave-aware MIDI conversion, including Cb/B, B#/C, E#/F and Fb/E enharmonic pairs. Numeric MIDI keys remain supported.
+Readback: parser blob dc4ce85112ae35ccd3f2e05f317c22778766ff52; test blob 6baa265437327f57ff29589f85546301aa010f0f.
+Validation: source and tests fetched back from branch and inspected. No local build or test execution. Exact-SHA Windows CI/CTest/pluginval and FL Studio 20 host acceptance pending. Do not label TESTED.
+Safety: no audio callback, SamplePool ownership, APVTS, MIDI routing, DSP or preset-state changes.
