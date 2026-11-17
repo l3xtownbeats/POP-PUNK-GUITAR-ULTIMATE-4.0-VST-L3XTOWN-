@@ -2946,3 +2946,18 @@ These images are implementation references, not permission to show an unimplemen
 **Branch preflight note:** REV.17 ↔ REV.18 compare observed divergence (REV.18 ahead 130 / behind 16 at this snapshot; merge base 9dea73597cfd7b383f1e8bf77d773abea13498b0). Per user approval REV.18 is the active work line for this task, but it is not silently declared release/canonical or merged into REV.17. A dedicated work branch was created from REV.18 to isolate the implementation/audit transaction.
 
 **Status:** USER APPROVED / SPECIFICATION COMMITTED AND READ BACK / SOURCE AUDIT NOT YET PERFORMED / NO PRODUCTION CODE, TESTS, BUILD OR HOST VERIFICATION CLAIMED.
+==============================================================================
+2026-11-17 — TX-REV18-GLM-002 — SFZ ENHARMONIC NOTE-NAME SUPPORT
+==============================================================================
+
+**Source changes:**
+- Source/Sampler/SfzParser.cpp — parseKey now accepts natural notes, sharps and flats (including enharmonic spellings such as Db/C#, Eb/D#, Cb/B, E#/F and B#/C), with octave-aware MIDI conversion and range validation.
+- tests/SfzParserTests.cpp — added regression fixtures covering enharmonic pairs and octave-boundary accidentals.
+
+**Exact commits:** parser fix bb93d84ae9e52654814613d7b78ea1452c3e5d89; test addition 772f68e9cca9ca474d2d5657d208def490e8ba66. Readback blobs: parser dc4ce85112ae35ccd3f2e05f317c22778766ff52; tests 6baa265437327f57ff29589f85546301aa010f0f.
+
+**Reason:** existing SFZ key parser accepted MIDI numbers and sharp note names but not flat spellings, risking avoidable failures for valid libraries whose SFZ uses Db/Eb/Gb/Ab/Bb or enharmonic labels.
+
+**Verification boundary:** both files were fetched back from the work branch and inspected. No local compiler/test execution is available in this transaction. Workflow lookup for this commit returned no PR-triggered runs; this does not establish that push CI did not run. Therefore source fix is COMMITTED / READ-BACK VERIFIED; CTest/build/pluginval/host validation remain PENDING.
+
+**Non-goals:** no changes to audio callback, SamplePool ownership, APVTS, MIDI routing, preset state, DSP or SFZ playback semantics. This is a focused SFZ note-name compatibility fix, not the complete library manager.
