@@ -408,3 +408,99 @@ A full release is accepted only when automated tests demonstrate, at minimum: su
 
 ### 18.2 Version labelling
 A scan-only prototype may be distributed only if explicitly labelled SCAN-ONLY / NOT THE COMPLETE MANAGER. It must never be presented as the finished Library Manager requested by the user. The final product must combine scanning, analysis, classification, physical distribution, database generation, reporting, and GitHub handoff in one coherent application.
+
+## 19. Maximum modernization roadmap before finalization
+
+The following capabilities are required to make the manager dependable for large, mixed-source guitar libraries. They extend the existing approved workflow and do not alter the fixed Samples root structure.
+
+### 19.1 Multi-stage, resumable pipeline
+Implement explicit stages with persisted state and progress:
+DISCOVER → INVENTORY → ARCHIVE_INSPECTION → AUDIO_PROBE → SFZ_PARSE → DEPENDENCY_GRAPH → HASH/FINGERPRINT → LICENSE_REVIEW → CLASSIFY → VALIDATE → PREVIEW → TRANSACTIONAL_DISTRIBUTION → RECONCILE → EXPORT.
+- Each stage stores its result and can resume after a crash without repeating completed expensive work.
+- Incremental scans use size, timestamps, file identity, and checksum policy; metadata changes invalidate affected results.
+- Full rescan remains available and can detect external changes.
+- Cancellation and pause are safe at stage and transaction boundaries.
+
+### 19.2 Dependency graph and atomic library units
+- Model each source library as a bundle graph of maps, samples, includes, presets, documentation, licenses, impulse responses, and shared dependencies.
+- Determine safe move units from dependency relationships. Never split a package if that would break a map or shared dependency.
+- Detect one sample referenced by multiple SFZ maps and preserve all relationships.
+- Where safe classification differs within a bundle, use a documented policy: keep the bundle intact and route it to REVIEW/Other rather than breaking dependencies automatically.
+- Record provenance: source archive, original relative path, parent bundle, and final destination.
+
+### 19.3 Audio analysis and format support
+- Build a decoder/probe abstraction with explicit capability reporting for WAV PCM/float, AIFF, FLAC, Ogg Vorbis, MP3, and other formats actually supported by the shipped libraries.
+- Never label a format analyzed if only its extension or metadata was read.
+- Analyze channels, sample rate, bit depth/codec, duration, peak, RMS, DC offset, clipping, silence, leading/trailing silence, transient/onset profile, and optional loudness/crest factor. Store method, sample coverage, and confidence.
+- Use deterministic bounded sampling for fast scans and optional full-file analysis for final validation.
+- Preserve original audio; any generated proxy, waveform, fingerprint, or normalized derivative is separate and never replaces the source.
+- Reject unsupported or corrupt files safely to Other/review with precise reason; do not call them critical errors if safely accounted for.
+
+### 19.4 Classification quality and explainability
+- Separate confirmed metadata, parsed SFZ facts, measurable audio facts, filename hints, model estimates, and human approvals.
+- Every tag includes source, confidence, and timestamp. User corrections override automatic hints but remain auditable.
+- Add a review queue for ambiguous instrument, tone, genre, role, technique, articulation, and mapping.
+- Offer confidence thresholds and conservative defaults; uncertain tags remain UNKNOWN rather than fabricated.
+- Build a rule-test corpus from real, licensed or user-provided samples and measure false-positive/false-negative rates before promoting new rules.
+
+### 19.5 SFZ parser correctness
+- Replace regex-only parsing with a tokenizer/parser that respects comments, quotes, scopes, inherited opcodes, control/global/group/region/header sections, includes, default_path, wildcard expansion, and documented supported macros.
+- Parse opcode values and ranges into typed fields; retain raw source text and source line numbers.
+- Support and test common sampler opcodes; unknown opcodes are reported, not silently ignored.
+- Validate sample path resolution, key and velocity ranges, root keys, offsets, loop bounds, sequence groups, switch keys, crossfades, and inherited values.
+- Generate normalized maps only as separate derivative files and keep an exact source map.
+
+### 19.6 Database and schema governance
+- Use SQLite as the canonical local database with foreign keys, transactions, indexes, schema migrations, WAL-safe access, and integrity checks; export JSON/CSV for portability and review.
+- Stable asset IDs must persist across rescans and path changes; IDs must not be randomly regenerated per scan or depend only on absolute paths.
+- Keep separate Library, Bundle, Asset, AudioFacts, SFZMap, Region, Dependency, Tag, LicenseEvidence, ScanRun, Operation, and PresetReference records.
+- Store only relative paths beneath Samples; no machine-specific absolute paths in the portable manifest.
+- Include schema version, migration history, and a read-only export contract for the future VST3.
+- Database rebuild from verified inventory must be possible without losing user-approved tags or audit history.
+
+### 19.7 Safe distribution and recovery
+- Treat a library bundle as an atomic transaction where required by the dependency graph.
+- Preview shows exact source, destination, reason, eligibility, and estimated bytes before execution.
+- Use no-overwrite semantics and deterministic collision handling; never silently merge two unrelated packages.
+- Across volumes: copy to a staging destination, flush, verify every file hash and dependency, commit destination, update DB, then remove source only after reconciliation.
+- Same-volume moves still require journaled intent, post-move verification, and database reconciliation.
+- Add rollback/recovery UI that explains which operations can be reversed and preserves any pre-existing destination.
+- Check free space, path length, access rights, locked files, reparse points, and destination writeability before committing.
+- Maintain a transaction journal and immutable operation IDs.
+
+### 19.8 Operator experience
+- Main dashboard: source inventory, eligible count, excluded count, review queue, bytes, estimated duration, current stage, and last run.
+- Provide preview, execute, pause, resume, cancel, retry, rollback, open report, export, and integrity-check actions.
+- Display a per-library result card with final destination and a short human-readable reason.
+- Provide a diagnostics bundle with logs, app version, OS/runtime version, capabilities, and sanitized error details.
+- Logs rotate and are bounded; reports remain persistent and searchable.
+- Support Unicode, long paths, DST/time-zone-safe timestamps, locked files, removable/network storage, and paths containing spaces.
+
+### 19.9 Security and privacy
+- Treat archives and text metadata as untrusted input. Defend against zip-slip, archive bombs, malformed metadata, path traversal, symlink/reparse escapes, and hostile filenames.
+- Never execute scripts, installers, macros, or binaries found inside imported libraries.
+- Sanitize HTML reports and CSV formula-leading values.
+- Do not upload audio samples, license-restricted files, personal absolute paths, usernames, secrets, or tokens to GitHub.
+- GitHub publishing is opt-in, previews exact changed files, uses secure credential storage, and verifies remote commit/content after upload.
+
+### 19.10 Quality gates and finalization
+- Maintain automated unit, integration, fault-injection, and Windows end-to-end tests.
+- Test real-world fixtures: large libraries, nested archives, unusual WAV chunks, RF64, PCM/float, malformed SFZ, inherited opcodes, missing samples, duplicate maps, shared samples, Unicode/long paths, permissions, locked files, low disk, interrupted copy, and DB failures.
+- Run static analysis and PowerShell 5.1 compatibility checks. Include a self-test mode that uses generated temporary fixtures only.
+- Final release gate: clean install/portable launch on Windows 10 x64; full dry-run; real distribution test on disposable fixture; recovery test; report export; GitHub handoff test; VST3 manifest validation.
+- Every feature is labelled IMPLEMENTED, UNIT-TESTED, INTEGRATION-TESTED, or WINDOWS-VERIFIED. No feature is called complete based on a specification or static inspection alone.
+
+## 20. Findings from the v1.5 source audit that must be corrected
+The existing v1.5 PowerShell source is a scan prototype, not the complete manager. The following concrete issues are recorded for implementation:
+- It performs no physical distribution and has no transactional move/rollback pipeline.
+- It uses regex-only SFZ inspection and does not implement full SFZ scope/inheritance semantics; comment stripping can also mis-handle comment-like characters inside quoted values.
+- RF64 is accepted as a container signature but the parser reads ordinary 32-bit chunk sizes; RF64 ds64 handling is not implemented.
+- WAV signal analysis currently samples only integer PCM; IEEE float metadata is accepted but signal metrics are not calculated for float samples.
+- Audio extensions beyond WAV are inventoried but not decoded/analyzed by the current script.
+- The duplicate index is scoped to one scan run and duplicate handling is informational only; there is no persistent duplicate resolution policy.
+- Asset records generate a fresh random LibraryId per file, so library identity is not stable between files or scans.
+- The current database is a JSON snapshot, not a transactional relational asset registry; it lacks migration and referential-integrity controls.
+- The current library-level licence field remains UNKNOWN and the approval CSV is only a template; no evidence parser or explicit approval workflow is connected to distribution.
+- Classification is filename/folder hinting only and must not be represented as audio-based instrument/genre recognition.
+- The current self-test covers only a small WAV/SFZ happy path; it does not validate error recovery, move safety, dependency graphs, or Windows end-to-end behavior.
+These are implementation defects/limitations, not user mistakes. A release must close them or clearly label the relevant feature as not implemented.
