@@ -256,3 +256,23 @@ Never display "everything checked" or "COMPLETE" unless the report's accounting 
 
 ### 15.5 Safe cleanup of Import Sample Guitar
 Successfully processed source items may be removed from Import Sample Guitar only after their destination files, checksums, dependencies, and database records have been verified and the report records the outcome. Unknown-license, unsupported, corrupt, incomplete, or otherwise rejected materials must be routed to Other with their original files and supporting context preserved. Any item that cannot be safely moved must remain in Import Sample Guitar and force INCOMPLETE status. Never delete source material as a substitute for successful classification or verification.
+
+### 15.6 Normal exclusions are not critical errors
+
+The user-facing completion report must distinguish ordinary library curation from genuine processing failures.
+
+Files that do not belong in the factory guitar library (irrelevant formats, unrelated content, non-guitar material, junk, unsupported or unusable samples, incomplete/unmapped content, and materials whose license does not permit factory redistribution) are normal exclusions or review items. They must NOT inflate the critical-error count merely because they were correctly rejected.
+
+For a fully completed run, the preferred summary is:
+- eligible items successfully validated and placed in FACTORY: count;
+- non-eligible / irrelevant / junk items excluded or routed to Other: count;
+- items awaiting manual license or technical review: count;
+- genuinely failed processing operations: count;
+- critical errors: 0, provided no actual integrity, database, filesystem, data-loss, or reconciliation failure occurred.
+
+The report must include a concise plain-language confirmation, for example:
+"Сканирование и распределение завершено. В FACTORY добавлено: N файлов / M библиотек. Не добавлено в заводскую библиотеку как неподходящие материалы или мусор: K файлов (перечень доступен в отчёте). Критических ошибок: 0."
+
+Do not call excluded items "errors" when the scanner successfully identified and safely excluded them. Do not hide real failures: unreadable files, checksum mismatches, failed moves, unresolved dependencies, database write failures, or unaccounted inputs must remain visible as processing failures and prevent a COMPLETE status where they compromise correctness.
+
+The top-level status may be COMPLETE WITH EXCLUSIONS when all discovered inputs have been accounted for, all eligible materials passed required checks and were safely placed, and all excluded items are safely retained in Other or otherwise accounted for. Use INCOMPLETE only for genuinely unfinished/unaccounted processing, not merely because irrelevant files were excluded.
