@@ -386,3 +386,25 @@ The post-scan results must be easy for the user to deliver for review. Support b
 - Do not claim PowerShell-to-GitHub publishing is configured or tested until it has been run successfully in the user's Windows environment.
 
 The user may choose either handoff method per scan. Both must produce the same scan ID, report contents, and metadata version so results remain traceable.
+
+## 18. Mandatory end-to-end operation: scan, classify, and physically distribute
+
+The deliverable is a complete operational Library Manager, not a scan-only report generator. A release presented as the full manager MUST perform the complete approved workflow on the user's real Import Sample Guitar contents:
+
+1. Inventory every file and library bundle recursively.
+2. Analyze audio, SFZ maps, dependencies, metadata, hashes, license evidence, and classification confidence.
+3. Decide and record a justified outcome for every discovered item.
+4. Physically relocate eligible, validated, redistribution-permitted library bundles/assets into the approved FACTORY structure, preserving dependencies and relative relationships.
+5. Physically relocate irrelevant, junk, unsupported, incomplete, duplicate-review, or non-redistributable/review-required materials into Other when safe, preserving source structure and evidence. Items that cannot safely be moved remain in Import with an explicit reason.
+6. Register FACTORY assets in the canonical database and generate the VST3 manifest using stable IDs and relative paths.
+7. Verify destination existence, checksums, SFZ references, database records, and full inventory reconciliation before considering source items processed.
+8. Remove successfully relocated source items from Import only after verification. Never delete as a shortcut; never overwrite existing files; never discard originals on error.
+9. Produce the completion certificate and full reports, including exact FACTORY and Other counts, unresolved items, normal exclusions, and genuine technical failures.
+
+A preview/dry-run is a safety feature, not a substitute for execution. The manager must provide a clearly labelled EXECUTE DISTRIBUTION action after preview, with explicit confirmation. A user-selected automatic mode may run the same safe transaction pipeline. The first-run default must be conservative, but the program must not be described as complete until actual relocation and verification are implemented and tested.
+
+### 18.1 Release acceptance criteria
+A full release is accepted only when automated tests demonstrate, at minimum: successful FACTORY relocation of a valid permitted sample bundle; safe routing of irrelevant files to Other; SFZ dependency preservation; collision handling without overwrite; exact duplicate handling without data loss; interruption recovery; rollback on failed verification; database registration; empty Import for fully accounted successful inputs; and accurate completion report counts. Windows 10 x64 execution must be verified before claiming Windows-ready status.
+
+### 18.2 Version labelling
+A scan-only prototype may be distributed only if explicitly labelled SCAN-ONLY / NOT THE COMPLETE MANAGER. It must never be presented as the finished Library Manager requested by the user. The final product must combine scanning, analysis, classification, physical distribution, database generation, reporting, and GitHub handoff in one coherent application.
