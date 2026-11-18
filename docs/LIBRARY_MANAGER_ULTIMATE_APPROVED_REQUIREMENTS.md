@@ -276,3 +276,51 @@ The report must include a concise plain-language confirmation, for example:
 Do not call excluded items "errors" when the scanner successfully identified and safely excluded them. Do not hide real failures: unreadable files, checksum mismatches, failed moves, unresolved dependencies, database write failures, or unaccounted inputs must remain visible as processing failures and prevent a COMPLETE status where they compromise correctness.
 
 The top-level status may be COMPLETE WITH EXCLUSIONS when all discovered inputs have been accounted for, all eligible materials passed required checks and were safely placed, and all excluded items are safely retained in Other or otherwise accounted for. Use INCOMPLETE only for genuinely unfinished/unaccounted processing, not merely because irrelevant files were excluded.
+
+## 16. Additional engineering safeguards and capabilities (approved design baseline)
+
+The following additions strengthen the manager without changing the approved Samples root structure.
+
+### 16.1 Per-file accounting and library bundles
+- Track both source-library bundles and individual files. Every discovered file receives a stable inventory record and exactly one final outcome.
+- Preserve the complete relative directory structure of a library bundle when relocating it, especially SFZ maps, includes, samples, impulse responses, metadata, documentation, and license evidence.
+- Do not split a dependent SFZ package into unrelated destinations. A bundle is the atomic relocation unit whenever dependencies are shared.
+- Detect nested archives and archive path traversal (zip-slip); never extract outside a controlled staging directory. Enforce configurable size/file-count limits and detect archive bombs.
+- Detect symlinks, junctions, reparse points, hard links, and paths escaping the Import root. Never follow an escaping link.
+
+### 16.2 Accurate classification and evidence
+- Separate observed facts, parsed metadata, signal-analysis estimates, filename/folder hints, and manual decisions. Every inferred tag stores provenance and confidence.
+- Never infer a specific guitar type, genre, playing technique, chord, string, fret position, or articulation solely from a filename and present it as confirmed.
+- Add audio fingerprinting for near-duplicate discovery as a review aid; SHA-256 remains the exact-duplicate identity. Never auto-delete or silently collapse assets.
+- Audio analysis may estimate silence, clipping, peak/RMS, loudness, duration, spectral centroid, onset/transient density, and channel correlation. Estimates must be labelled as estimates and must not overclaim genre or instrument identity.
+- Preserve source sample rate, bit depth, channel count, encoding, duration, and any conversion history. Never convert originals during intake.
+
+### 16.3 Robust SFZ and dependency handling
+- Parse SFZ with a tested tokenizer/state model rather than a single regular expression. Support common opcodes and explicitly report unsupported directives.
+- Resolve default_path, relative sample paths, #include, wildcards, supported macros, and path case differences according to documented support. Do not silently ignore unsupported constructs.
+- Validate all referenced files, key/velocity ranges, sequence/round-robin groups, offsets, loops, and region bounds where applicable.
+- Preserve original SFZ and dependency package; if a path rewrite is needed, write a separately verified normalized copy and record source-to-normalized mapping.
+
+### 16.4 Transactional relocation and recovery
+- Provide preview/dry-run and explicit execution. Use same-volume atomic moves where safe; across volumes use copy -> flush -> verify size and SHA-256 -> commit destination -> only then remove source.
+- Never overwrite an existing destination. Resolve collisions by stable fingerprint and still verify the final path.
+- Write a durable transaction journal before each operation. Support restart/recovery and rollback without destroying pre-existing content.
+- Do not remove source items until destination files, dependencies, database records, and report outcomes are verified.
+- Reconcile the complete pre-scan inventory against final locations. Any unaccounted item prevents a COMPLETE status.
+
+### 16.5 Database and VST3 hand-off
+- Use a versioned, migration-aware database (SQLite preferred for concurrent reads and indexed queries; JSON/CSV remain export formats).
+- Stable asset IDs must not depend only on a path. Preserve source identity and content hash; model multiple SFZ regions as mappings to assets.
+- Publish a manifest/schema contract for the VST3 loader, including relative paths, sample metadata, regions, tags, license status, readiness, and preset references.
+- Write database updates atomically and keep backups/migrations. Never replace a valid database with a partial scan result.
+- Add an integrity command that verifies database records against actual files and checks for orphan files, missing files, duplicate IDs, and broken SFZ dependencies.
+
+### 16.6 Operational quality
+- Provide a real Windows desktop UI with cancellation, pause/resume, progress by stage, live counts, logs, report opening, and retry of safe failed operations.
+- Support Unicode paths, long paths, locked files, low disk space, access denied, network/removable volumes, and interrupted shutdown.
+- Add structured JSON and CSV reports plus a readable HTML report. Reports must distinguish normal exclusions from technical failures and critical errors.
+- Add automated tests for WAV/AIFF/FLAC metadata, malformed/truncated files, SFZ parsing, archives, Unicode/long paths, duplicate handling, collisions, interrupted transactions, rollback, and full inventory reconciliation.
+- Clearly label capability maturity: implemented, unit-tested, integration-tested, and verified on Windows/DAW. Never claim DAW verification based only on unit tests.
+
+### 16.7 Normal exclusions remain non-critical
+Correctly identifying and excluding junk, unrelated or unsuitable material is normal curation, not a critical error. Report the excluded count and reasons separately. Critical errors remain zero when no actual integrity, database, filesystem, data-loss, or reconciliation failure occurred.
