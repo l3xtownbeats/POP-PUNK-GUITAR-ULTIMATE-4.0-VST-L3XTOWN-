@@ -214,3 +214,45 @@ Requirements:
 
 This section makes the plugin's import button and add-library workflow first-class entry points to the exact same scanner mechanism used by the standalone manager.
 
+## 15. Mandatory scan completion certificate and reconciliation report
+
+A scan is not considered complete merely because the progress bar reaches 100% or the scanner finishes traversing folders. After every scan/import/distribution run, the Library Manager MUST produce a persistent, human-readable completion report that proves what was discovered, analyzed, validated, classified, moved, and left unresolved.
+
+### 15.1 Required summary
+The report must include:
+- run ID, start/end timestamps, elapsed time, scanner/database schema versions, selected Samples root;
+- libraries/archives/directories discovered;
+- total files discovered, supported files, unsupported files, files actually analyzed, files skipped (with reason);
+- WAV/audio validation counts, SFZ/map counts, resolved and missing sample references;
+- detected note/key ranges, velocity layers, round-robin groups, articulations and techniques only where verified;
+- exact-duplicate SHA-256 groups and audio-similarity candidates, clearly distinguished;
+- license states: verified for permitted use, prohibited, unknown, and review required;
+- counts and byte totals successfully placed in FACTORY, placed in Other, already correctly registered, and not moved;
+- every warning, error, skipped item, and unresolved item with library name, relative path, reason, and current location;
+- final verification results, including file existence, checksum, SFZ dependency resolution, database registration/stable IDs, and plugin-readiness checks where implemented.
+
+### 15.2 Full accounting / reconciliation
+Every discovered input item must end in exactly one explicit outcome: successfully registered and placed in FACTORY; quarantined/placed in Other; recognized as an already-processed item; or unresolved and retained in Import Sample Guitar. No item may silently disappear from the report or be counted as successful merely because it was encountered.
+
+The report must reconcile totals and show why discovered, analyzed, classified, moved, skipped, and unresolved counts differ. Folder emptiness alone is not proof of successful processing.
+
+### 15.3 Completion states
+- COMPLETE: all discovered items have an accounted-for outcome, all required analysis and post-move verification passed, and no unresolved items remain in Import Sample Guitar. Items intentionally classified to Other may still exist; their reasons must be listed.
+- COMPLETE WITH WARNINGS: all items are accounted for and safely placed, but warnings/review items remain (for example unknown licenses, unsupported formats, or incomplete sample coverage). Such items must not be presented as FACTORY-ready.
+- INCOMPLETE: scan interrupted, errors prevented full analysis or safe placement, reconciliation failed, or unresolved items remain in Import Sample Guitar. The report must identify the exact remaining items and preserve them in place.
+- FAILED: a fatal error prevented a trustworthy report or safe completion; preserve prior valid state and all unprocessed source materials.
+
+### 15.4 User-facing confirmation
+At the end of each run, show a clear summary in the manager UI/console and save a detailed report (human-readable plus machine-readable, e.g. JSON/CSV). Provide OPEN REPORT and, where safe, RETRY FAILED/REVIEW ITEMS actions. The confirmation must explicitly state:
+- what was scanned;
+- what was analyzed and validated;
+- how many items were placed in FACTORY and why;
+- how many were placed in Other and why;
+- what was not processed and why;
+- whether post-move checks passed;
+- whether the run is COMPLETE, COMPLETE WITH WARNINGS, INCOMPLETE, or FAILED.
+
+Never display "everything checked" or "COMPLETE" unless the report's accounting and required verification checks substantiate that statement. Distinguish implemented, unit-tested, integration-tested, and verified in a real Windows/DAW environment.
+
+### 15.5 Safe cleanup of Import Sample Guitar
+Successfully processed source items may be removed from Import Sample Guitar only after their destination files, checksums, dependencies, and database records have been verified and the report records the outcome. Unknown-license, unsupported, corrupt, incomplete, or otherwise rejected materials must be routed to Other with their original files and supporting context preserved. Any item that cannot be safely moved must remain in Import Sample Guitar and force INCOMPLETE status. Never delete source material as a substitute for successful classification or verification.
