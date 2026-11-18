@@ -188,3 +188,29 @@ No library release, preset dependency, or project milestone may be declared comp
 User approval received: **“Утверждаю подтверждаю фиксирую”** (2026-11-18).
 
 This specification is the approved baseline. Any change to the folder layout, preservation rules, classification contract, database identity model, compatibility gates, or licensing restrictions requires explicit user approval.
+
+## 14. In-plugin scanner: identical workflow and triggers
+
+The scanner exposed inside the VST3 must be the same Library Manager engine, not a reduced second implementation and not a separate set of classification rules.
+
+The in-plugin scanner must be callable through:
+- An explicit **SCAN / IMPORT GUITAR LIBRARY** button.
+- Adding or selecting guitar sound libraries/files through the plugin's import workflow. The user action must initiate the same discovery, validation, classification, registration, and compatibility checks.
+- Re-scan / refresh when the user requests it, including after files have been added or relocated.
+
+The in-plugin workflow is:
+`USER ADDS LIBRARY OR PRESSES SCAN → SHARED SCANNER ENGINE → ANALYZE → CLASSIFY → REGISTER IN SHARED DATABASE → VERIFY FILES AND MAPPINGS → UPDATE PLUGIN LIBRARY VIEW → REPORT RESULT`
+
+Requirements:
+- Standalone manager and in-plugin scanner use the same engine, schema/version, stable IDs, metadata, classification, license policy, and READY gate.
+- A library imported from the plugin must become visible to the standalone manager, and vice versa, because both use the same project root and shared database.
+- The plugin must show scan progress, current item/library, warnings, errors, and a final summary. It must not imply success when only the file selection dialog completed.
+- Scanning, hashing, audio analysis, archive extraction, database writes, and filesystem changes run outside the audio callback on worker threads/processes.
+- Existing assets and presets must not be invalidated by rescanning. Use stable IDs, transactional database updates, journaling, and safe publication of completed scan results.
+- If the user adds one file or one library, perform an incremental scan where possible, while checking dependencies and affected mappings. Provide a full rescan command for recovery.
+- After import, run the same VST3 compatibility checks: resolve the registered asset, validate SFZ/WAV mappings and note/velocity coverage, and perform supported playback probes before marking the imported content READY.
+- If a scan fails or is interrupted, preserve the previous valid library state and allow retry/resume. Never silently replace a working mapping with an incomplete one.
+- The plugin's library browser must refresh from the shared database after a successful scan and clearly distinguish READY, PARTIAL, and ERROR/REVIEW_REQUIRED assets.
+
+This section makes the plugin's import button and add-library workflow first-class entry points to the exact same scanner mechanism used by the standalone manager.
+
