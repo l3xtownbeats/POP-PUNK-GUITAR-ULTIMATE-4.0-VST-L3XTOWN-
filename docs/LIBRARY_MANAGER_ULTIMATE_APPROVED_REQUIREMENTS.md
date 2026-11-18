@@ -365,3 +365,24 @@ After the user supplies or publishes scan results:
 6. Record the exact scan package version and Git commit used for integration.
 
 A scan is not considered integrated merely because reports were generated or uploaded. The VST3 handoff must be reviewed against the real scan outputs.
+
+### 17.4 Two supported user-to-assistant handoff methods
+
+The post-scan results must be easy for the user to deliver for review. Support both methods:
+
+**Method A — upload a text report/package**
+- The manager generates a human-readable UTF-8 TXT or Markdown summary that the user can upload directly into the ChatGPT conversation.
+- Also generate machine-readable JSON and CSV for complete structured analysis. The human-readable document must not replace the detailed machine-readable exports.
+- Split large reports into clearly numbered parts or separate files, with a manifest explaining each file and the scan ID/version.
+- The report must include counts, classification outcomes, exclusions, errors/warnings, SFZ dependency findings, asset IDs, and FACTORY readiness. Do not include audio payloads or secrets.
+- The user may upload the report directly here; the assistant should review it and identify corrections, missing data, and next integration steps.
+
+**Method B — PowerShell / GitHub connection**
+- Provide an optional PowerShell handoff script for Windows that packages only approved metadata/report files and can publish them to the configured GitHub repository using an authenticated Git workflow or GitHub CLI/API.
+- The script must first show a preview of files and destinations and require explicit user confirmation before publishing.
+- Never embed a personal access token in the script, report, command history, or repository. Prefer Git Credential Manager, GitHub CLI authentication (gh auth login), or another secure credential store. Never ask the user to paste tokens into ChatGPT.
+- The script must verify repository owner/name, branch, destination path, current Git state, and upload result; it must not overwrite unrelated files or commit original audio libraries.
+- Include an offline export mode so the user can still upload the generated text/report files manually if GitHub authentication or network access is unavailable.
+- Do not claim PowerShell-to-GitHub publishing is configured or tested until it has been run successfully in the user's Windows environment.
+
+The user may choose either handoff method per scan. Both must produce the same scan ID, report contents, and metadata version so results remain traceable.
