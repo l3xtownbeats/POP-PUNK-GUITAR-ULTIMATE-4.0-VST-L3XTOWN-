@@ -324,3 +324,44 @@ The following additions strengthen the manager without changing the approved Sam
 
 ### 16.7 Normal exclusions remain non-critical
 Correctly identifying and excluding junk, unrelated or unsuitable material is normal curation, not a critical error. Report the excluded count and reasons separately. Critical errors remain zero when no actual integrity, database, filesystem, data-loss, or reconciliation failure occurred.
+
+## 17. Post-scan handoff to GitHub and library integration review
+
+After the user runs the scanner on their actual Windows library, the manager must produce a portable, shareable analysis package so the results can be reviewed and used for the VST3 integration work.
+
+### 17.1 Required export package
+Create a timestamped export folder containing, at minimum:
+- Full inventory CSV and JSON (one row/record per discovered item, with stable IDs and final outcomes).
+- Audio metadata and technical validation report.
+- SFZ instrument/region map, resolved dependency report, missing-reference report, and unsupported-opcode report.
+- Classification catalogue with tags, confidence, and provenance.
+- Exact duplicate groups (SHA-256) and separately labelled possible-similarity groups.
+- License evidence/status and redistribution eligibility; unknown or restricted licenses must be clearly flagged.
+- FACTORY runtime manifest with stable asset IDs, relative final paths, note/velocity mappings, articulations, RR/groups, readiness state, and Melody/Pattern eligibility.
+- Exclusions/Other report with exact counts and reasons.
+- Completion certificate and reconciliation summary.
+- Database export and schema/version information; include SQLite only if it contains no machine-specific transient paths/secrets and is safe to share.
+- Scanner version, configuration, timestamps, operating environment, and test/validation capability status.
+
+### 17.2 GitHub handoff
+The user must be able to provide the generated export package to the assistant for review, and the project repository must contain the resulting machine-readable library catalogue and integration contract needed by the VST3.
+
+When the user explicitly authorizes or provides a connected GitHub workflow, publish the appropriate reports/manifests/database schema and integration documentation to the approved project repository. Do not assume the scanner can authenticate to GitHub or push automatically unless that capability has actually been configured and tested.
+
+Before publishing:
+- Exclude original WAV/SFZ/audio libraries and any copyrighted or license-restricted sample payloads unless redistribution is expressly permitted.
+- Do not publish personal machine absolute paths, usernames, secrets, access tokens, or private filesystem details.
+- Prefer relative FACTORY paths and stable asset IDs.
+- Review export size and repository suitability; large SQLite files may be better supplied separately by the user rather than committed.
+- Preserve a clear distinction between local full database and repository-safe metadata exports.
+
+### 17.3 Review and integration loop
+After the user supplies or publishes scan results:
+1. Inspect the inventory, report, SFZ maps, classification evidence, exclusions, and readiness manifest.
+2. Identify misclassifications, unresolved dependencies, unsupported content, and missing metadata.
+3. Refine scanner rules only where evidence supports the change; never silently relabel uncertain material as confirmed.
+4. Produce and verify the canonical FACTORY catalogue and VST3 data contract.
+5. Use actual asset IDs and validated mappings as the source for factory preset creation.
+6. Record the exact scan package version and Git commit used for integration.
+
+A scan is not considered integrated merely because reports were generated or uploaded. The VST3 handoff must be reviewed against the real scan outputs.
