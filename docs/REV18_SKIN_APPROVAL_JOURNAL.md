@@ -28,3 +28,18 @@ This approval records the visual direction and asset handoff. It does not claim 
 ## Change control
 
 Future visual revisions must preserve this approval record and the binding guardrails unless the user explicitly approves a superseding decision.
+
+## OBSIDIAN SKIN-2 — PREMIUM LUXURY CREATIVE DIRECTION CONFIRMATION
+
+- Decision: APPROVED / CONFIRMED / FIXED BY USER.
+- Product: POP PUNK GUITAR ULTIMATE 4.0.
+- Theme: OBSIDIAN SKIN-2.
+- Visual direction: original premium/luxury commercial design, created as an independent identity; it must not imitate or reuse the NEON STAGE visual style.
+- User confirmation: “ПОТВЕРЖДАЮ ФИКСИРУЮ” (2026-11-19).
+- Creative latitude: the design may use an original composition and signature details, while maintaining an equally expensive, polished, modern, stylish, commercially desirable presentation.
+- Material and finish direction: deep obsidian, graphite, satin black metal, brushed or polished metal, restrained silver/chrome accents, refined typography, precise control surfaces and restrained status illumination.
+- Explicit exclusions: no acid neon palette, no loud saturated glow, no cyberpunk/gamer styling, and no visual cloning of NEON STAGE.
+- Product impression: a premium professional studio instrument / flagship commercial VST, with a clean and expressive CONTROL DECK.
+- Functional/UI constraints remain unchanged: preserve the REV.18 authoritative control bindings, 27-control parity contract, 9 rotary bindings and 7 FX bypass IDs; do not invent IDs or depict unsupported features as functional.
+- This approval confirms the visual direction only. It does not claim runtime implementation, schema validation, VST3 build completion, or FL Studio 20 host testing.
+- This entry supplements the previous OBSIDIAN approval; it does not replace or rewrite the original decision history.
