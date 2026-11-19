@@ -43,3 +43,12 @@ Future visual revisions must preserve this approval record and the binding guard
 - Functional/UI constraints remain unchanged: preserve the REV.18 authoritative control bindings, 27-control parity contract, 9 rotary bindings and 7 FX bypass IDs; do not invent IDs or depict unsupported features as functional.
 - This approval confirms the visual direction only. It does not claim runtime implementation, schema validation, VST3 build completion, or FL Studio 20 host testing.
 - This entry supplements the previous OBSIDIAN approval; it does not replace or rewrite the original decision history.
+
+## GLOBAL VISUAL QUALITY STANDARD — NEXT 15 THEMES
+
+- User clarification / confirmed direction (2026-11-19): NEON STAGE is the quality and premium-finish reference sample.
+- All 15 subsequent themes must look expensive, polished, modern, stylish, and commercially competitive at the same perceived quality level as NEON STAGE.
+- NEON STAGE is a benchmark for visual quality, finish, clarity, detail, and commercial appeal — not a requirement to copy its exact palette, layout, motifs, or visual identity.
+- Each subsequent theme must have its own recognizable art direction while maintaining the same high-end production value.
+- OBSIDIAN SKIN-2 remains its own premium identity; do not interpret the earlier “do not copy NEON STAGE” note as “do not match NEON STAGE's premium quality”.
+- This clarification supersedes any conflicting interpretation in the earlier OBSIDIAN notes. Functional REV.18 bindings, parity requirements, and unsupported-feature restrictions remain unchanged.
