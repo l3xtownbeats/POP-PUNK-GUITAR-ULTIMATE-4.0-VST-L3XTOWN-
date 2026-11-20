@@ -32,3 +32,34 @@ Use the user's supplied 1402x1122 screenshot as the visual source of truth. Pres
 - Verify all 300 presets can be enumerated, selected, saved/restored and produce valid parameter states.
 - Verify no decorative control is presented as functional unless wired.
 - Build the VST3 with Visual Studio 2022 x64, run pluginval strictness 5, then test in FL Studio 20. Record each result separately; CI success alone is not proof of DAW validation.
+## AutoChords — expanded PPGU scale note list
+
+AutoChords is intended to be more flexible than a small fixed chord-choice list.
+
+### AutoChords ON
+- The user selects a key/root and scale (at minimum Major and Minor; Chromatic remains available as a mode).
+- Display the complete ordered set of notes in the selected scale, with all scale degrees available for selection. Do not show only a few preset chords.
+- For a seven-note diatonic scale, expose all seven degrees and their resulting chord options/qualities (including the diminished degree where applicable).
+- The selected degree/chord must provide the corresponding MIDI note set to the Pattern performance engine; preserve the selected Pattern rhythm/loop and its timing.
+- Use context-appropriate enharmonic spelling: e.g. Bb in flat-oriented keys and A# in sharp-oriented keys. The spelling changes the display name, not the MIDI pitch.
+
+### AutoChords OFF
+- PATTERN accepts the full 12-semitone chromatic input range without scale filtering or automatic remapping.
+- Every MIDI pitch class remains playable: C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B.
+- Display a consistent sharp/flat spelling appropriate to the selected key context; both names must resolve to the same MIDI note where enharmonic.
+- Disabling AutoChords must not disable Pattern playback, keyswitches, or the full MIDI note range.
+
+### Acceptance
+- Switching key/scale refreshes the complete note/degree list and its chord choices.
+- Major and Minor scales are checked across all 12 roots; the UI displays the expected notes and diatonic chord qualities.
+- AutoChords OFF accepts all 12 pitch classes in Pattern and does not quantize/filter notes to the selected key.
+- Verify MIDI output and Pattern playback in FL Studio 20; unit tests for scale-note and diatonic-chord generation do not replace host testing.
+- AutoChords is not complete until the visible selector/list, MIDI generation, Pattern integration, state recall and tests are all implemented.
+
+## Pattern loop acceptance — full source or extracted fragment
+
+- A complete original WAV may be used as a Pattern performance when it contains a stable repeating musical drawing and its loop transition is verified clean/seamless.
+- A full-source loop may use sample range 0 .. frame_count; a shorter extracted loop is optional when the source also contains changing sections, fills, intros, or outros that do not belong in the repeated pattern.
+- Retain exact sample boundaries, beat grid, attacks/strokes, harmonic/chord events, articulation data and tempo/meter evidence or explicit UNKNOWN values.
+- Never extract fragments solely because the source is a complete WAV. Preserve the whole source when it is already a suitable repeating performance.
+- A full loop does not remove the need for reviewed note/chord zones when the player is expected to change harmony interactively; do not pitch-shift one full-band recording as a substitute for those zones.
