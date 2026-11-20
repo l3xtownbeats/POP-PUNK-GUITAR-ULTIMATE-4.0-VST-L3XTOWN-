@@ -16,3 +16,25 @@
 Это правило применяется ко всем последующим командам пользователя «БАЗА» в проекте POP PUNK GUITAR ULTIMATE и ко всем утверждаемым в таком контексте требованиям. Оно не отменяет необходимость независимой реализации, лицензионных проверок, регрессионных тестов и честного подтверждения фактической готовности.
 
 Статус: USER-APPROVED OPERATING RULE / JOURNALED. Само добавление этого правила не означает, что все ранее утверждённые, но ещё не реализованные функции продукта уже реализованы; они подлежат последовательному выполнению и проверке.
+
+
+2026-11-20 — BASE-AUTOCHORDS-TONAL-CONTRACT-001 — ТОНАЛЬНАЯ МОДЕЛЬ И ХРОМАТИЧЕСКИЙ ВВОД
+
+УТВЕРЖДЕНО ПОЛЬЗОВАТЕЛЕМ КОМАНДОЙ «БАЗА». Обязательные продуктовые инварианты:
+- AutoChords ON: выбранная тональность предоставляет все семь ступеней; модель возвращает семь pitch classes и диатонические качества аккордов, а пользователь может сформировать аккорд из MIDI-нот/интервалов, а не только выбрать готовый preset.
+- AutoChords OFF в PATTERN: доступны все 12 хроматических pitch classes; поддерживаются sharp/flat enharmonic labels; MIDI notes 0..127 не фильтруются тональностью или состоянием AutoChords.
+- MELODY остаётся отдельным режимом; группировка одиночных нот и мелодических фраз должна быть раздельной, с сохранением точных границ нот, velocity и музыкальных метаданных.
+
+РЕАЛИЗАЦИЯ ЭТАПА 1:
+- Добавлен header-only Source/Performance/TonalHarmonyModel.h: major/natural-minor scale degree model, полный chromatic note catalog, sharp/flat spelling, diatonic triad qualities и построение chord voicings для Major/Minor/Diminished/Augmented/Sus2/Sus4/Dominant7/Major7/Minor7/Power.
+- Добавлен tests/TonalHarmonyModelTests.cpp с проверками семи ступеней, диатонических качеств, chord construction, всех 12 нот, enharmonic labels, unrestricted MIDI acceptance и границ MIDI.
+- Новый test target зарегистрирован в CMake.
+- Это самостоятельный engine contract slice; UI/processor routing ещё не подключены. MELODY note/phrase grouping с сохранением note boundaries/velocity/metadata остаётся следующим обязательным этапом. Нельзя считать весь пользовательский контракт реализованным только по этому этапу.
+
+Статусы:
+APPROVED: YES
+JOURNALED: YES
+IMPLEMENTED: TONAL MODEL CONTRACT SLICE
+TESTED: pending CI/build execution
+UI / PROCESSOR INTEGRATION: NOT YET IMPLEMENTED
+MELODY GROUPING: NOT YET IMPLEMENTED
