@@ -170,6 +170,7 @@ endfunction()
 
 ppgu_add_header_test(ppgu_pattern_scheduler_tests tests/PatternSchedulerTests.cpp)
 ppgu_add_header_test(ppgu_auto_chord_engine_tests tests/AutoChordEngineTests.cpp)
+ppgu_add_header_test(ppgu_tonal_harmony_model_tests tests/TonalHarmonyModelTests.cpp)
 ppgu_add_header_test(ppgu_chord_transition_policy_tests tests/ChordTransitionPolicyTests.cpp)
 ppgu_add_header_test(ppgu_circle_of_fifths_tests tests/CircleOfFifthsTests.cpp)
 ppgu_add_header_test(ppgu_queue_tests tests/BoundedSpscQueueTests.cpp)
